@@ -1,0 +1,32 @@
+{
+  "name": "ai-dev",
+  "description": "UNQUALIFIED AI development candidate: RV64, one core, native TFR tensor arithmetic and STD scalar FPU. Configuration checks are not GPU execution or physical performance evidence.",
+  "xlen": 64,
+  "core": {
+    "VX_CFG_NUM_WARPS": 8,
+    "VX_CFG_NUM_THREADS": 8,
+    "VX_CFG_ISSUE_WIDTH": 2,
+    "VX_CFG_NUM_ALU_BLOCKS": 1,
+    "VX_CFG_NUM_LSU_BLOCKS": 1,
+    "VX_CFG_NUM_FPU_BLOCKS": 1,
+    "VX_CFG_FPU_TYPE": "STD",
+    "VX_CFG_EXT_TCU_ENABLE": true,
+    "VX_CFG_TCU_TYPE": "TFR",
+    "VX_CFG_TCU_FP16_ENABLE": true,
+    "VX_CFG_TCU_WGMMA_ENABLE": true
+  },
+  "chip": {
+    "VX_CFG_NUM_CLUSTERS": 1,
+    "VX_CFG_NUM_CORES": 1
+  },
+  "sources": {
+    "baseline": "Source design basis: da55a516a48b49013724f697d3c12a48932b449f. See docs/project/configurations.md; this profile has no measured reference block.",
+    "xlen": "Select the RV64 leg permitted by ci/testcases/tensor_wg.yaml defaults; this choice is a candidate for qualification, not an accepted ODR-001 decision.",
+    "VX_CFG_NUM_WARPS, VX_CFG_NUM_THREADS, VX_CFG_ISSUE_WIDTH": "8 warps, 8 threads and issue width 2 from tensor_wg:sgemm_tcu_wg-2, an inherited SimX-only FP16 case.",
+    "VX_CFG_NUM_ALU_BLOCKS, VX_CFG_NUM_LSU_BLOCKS, VX_CFG_NUM_FPU_BLOCKS": "One block per listed unit as explicitly pinned by tensor_wg:sgemm_tcu_wg-2. Tensor blocks remain derived as 2 because VX_tcu_block.sv requires NUM_TCU_BLOCKS == ISSUE_WIDTH.",
+    "VX_CFG_FPU_TYPE": "STD is the native scalar-FPU option used by config2:dogfood-2. Pinning it here prevents an ambient SV_DPI setting from selecting scalar DPI; this combination still needs independent execution qualification.",
+    "VX_CFG_EXT_TCU_ENABLE, VX_CFG_TCU_WGMMA_ENABLE": "Enabled explicitly by tensor_wg:sgemm_tcu_wg-2; the global VX_config.toml defaults remain disabled.",
+    "VX_CFG_TCU_TYPE, VX_CFG_TCU_FP16_ENABLE": "Pin the inherited VX_config.toml native TFR and FP16-enabled defaults; support and numerical semantics must still be proven in P01/P02.",
+    "VX_CFG_NUM_CLUSTERS, VX_CFG_NUM_CORES": "Pin the one-cluster, one-core VX_config.toml defaults to keep the candidate bounded. All unlisted configuration values remain revision-dependent defaults."
+  }
+}

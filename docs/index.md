@@ -1,4 +1,22 @@
-# Vortex Documentation
+# AI-GPU documentation
+
+AI-GPU has two complementary documentation sets: the development plans and
+evidence under [`docs/project/`](project/index.md), and the inherited Vortex
+technical reference below. A planned capability is not an implemented or
+qualified result; consult the current status and evidence before making a claim.
+
+## AI-GPU project entry points
+
+- [Project documentation hub](project/index.md): reader-specific paths and the complete project index
+- [Goal and scope](project/charter.md): what AI-GPU aims to build and what the initial milestone excludes
+- [Roadmap](../ROADMAP.md): phases, dependencies and acceptance, with [canonical gates](project/roadmap.json)
+- [Current status](project/status.md) and [backlog](project/backlog.md): observed progress, blockers and the next bounded work item
+- [Developer guide](project/developer-guide.md): source-only checks, execution prerequisites and resource safeguards
+- [Acceptance and evidence](project/acceptance.md): what phase completion actually requires
+
+The sections below preserve the Vortex setup, architecture, development and
+implemented-subsystem references. Use the project developer guide to choose a
+bounded task before following a toolchain, simulation or hardware-build recipe.
 
 ## Getting Started
 

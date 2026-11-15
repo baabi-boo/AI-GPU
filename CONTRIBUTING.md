@@ -1,95 +1,140 @@
-# Contributing to Vortex
+# Contributing to AI-GPU
 
-Thanks for your interest in Vortex! Contributions of all sizes are welcome —
-bug reports, documentation fixes, new backends, RTL features, runtime work,
-or test coverage.
+AI-GPU develops a programmable AI accelerator on the inherited Vortex stack.
+Contributions should advance a bounded, testable capability while preserving
+upstream engineering, licensing and attribution. This guide applies to human
+contributors and coding agents; [AGENTS.md](AGENTS.md) contains the engineering
+invariants.
 
-## Getting in touch
+## 1. Choose a bounded work item
 
-The Vortex community lives at <https://vortex.cc.gatech.edu/community>.
-Start there for questions, design discussions, and to find out what others
-are working on before you sink time into a large change.
+Read [current status](docs/project/status.md), the [roadmap](ROADMAP.md),
+[backlog](docs/project/backlog.md) and [acceptance policy](docs/project/acceptance.md)
+against the current checkout. Do not infer completion from an old conversation.
 
-## Reporting bugs
+Use this fork's [issue forms](https://github.com/baabi-boo/AI-GPU/issues/new/choose)
+for defects, phase work and evidence submissions. Identify the relevant work item,
+phase/acceptance IDs and [requirements](docs/project/requirements.md). State the
+goal, non-goals, affected contracts, dependencies, proposed owner and exit evidence.
+Discuss changes to architecture, numerical bounds or platform scope before
+implementation; freeze acceptance bounds before measuring a candidate.
 
-Open an issue at <https://github.com/vortexgpgpu/vortex/issues> with:
+For a defect, provide the exact revision/configuration, a small reproducer,
+expected and actual behavior, commands, observed outcomes and sanitized logs.
+Follow [SECURITY.md](SECURITY.md) for suspected vulnerabilities. Do not post
+credentials, signed URLs, private memory, restricted IP or unlicensed fixtures.
 
-- **What you ran** — the exact `./configure` flags, `make` target, and
-  driver (`simx`, `rtlsim`, `xrt`, `opae`).
-- **What you expected vs. what happened** — include the failing log,
-  not just the final error line. Trim long traces but keep the surrounding
-  context so we can reproduce.
-- **Your environment** — OS, toolchain revision (`cat VERSION`), and
-  whether you built the toolchain from `ci/toolchain_install.sh` or
-  pulled the prebuilt drop.
-- **A minimal reproducer**, if you have one — ideally a single
-  `ci/blackbox.sh` invocation or a small kernel under `tests/`.
+## 2. Work in the correct repository and environment
 
-For suspected hangs, run with `DEBUG=3` and attach the trace; for
-correctness issues, attach both the failing run and a known-good run
-(e.g. with a smaller config or a different driver) so we can diff them.
+The target is **`baabi-boo/AI-GPU`**, whose existing default branch is **`master`**.
+Do not accidentally submit AI-GPU changes to upstream Vortex. External
+contributions use an authorized fork or permitted topic branch and a pull request
+targeting this repository's `master`; private-repository access and fork policy
+must be respected.
 
-## Submitting changes
+Inspect the current branch, source revision, remote identity and local changes
+before updating or creating a task branch. Preserve unrelated work. Keep commits
+focused and explain why a change is needed, including the affected contract and
+its evidence. Do not rename the default branch, force-push over others' work or
+treat this guide as permission for direct publication.
 
-External contributions go through GitHub pull requests against
-`master`:
+Use the [developer guide](docs/project/developer-guide.md) to choose tools and a
+resource budget. Before expensive work, account for downloads, unpacked tools,
+builds, traces, available disk/RAM, nested build jobs and retention. Use dedicated
+versioned tool directories and separate build trees. Missing tools, licenses,
+hardware access or budget are explicit blockers. Repository work does not
+authorize purchases, paid services, commercial IP or manufacturing commitments.
 
-1. Fork the repo and branch from `master`.
-2. Build out-of-tree and run the regression suite for the area you
-   touched before submitting. See [docs/testing.md](docs/testing.md)
-   for the full test catalog and
-   [docs/continuous_integration.md](docs/continuous_integration.md)
-   for how CI wires the same suite up under GitHub Actions:
+## 3. Run the checks appropriate to the change
 
-   ```bash
-   mkdir build && cd build
-   ../configure --tooldir=$HOME/tools
-   make -s
-   ./ci/regression.sh --unittest
-   ./ci/regression.sh --riscv
-   ./ci/regression.sh --kernel
-   ./ci/regression.sh --regression
-   ```
+Project governance runs from the **source root**, without GPU dependencies:
 
-   For HW changes also run `./ci/regression.sh --synthesis`;
-   for runtime/driver work, run the test groups that exercise your
-   backend (e.g. `--opencl`, `--vulkan`, `--cache`, `--cupbop`,
-   `--hip`, `--gem5`, `--vm`, `--scope`).
-3. Keep the PR focused. Unrelated cleanups belong in their own PR so
-   reviewers can evaluate each change on its own merits.
-4. Match the surrounding code style — Vortex doesn't enforce a strict
-   formatter, but new code should look at home next to the file it
-   sits in (C++17 in `sw/` and `sim/`, SystemVerilog conventions in
-   `hw/rtl/`, Python in `ci/`).
-5. Write commit messages that explain **why**, not just what. A diff
-   already shows the what.
+```sh
+python3 ci/project/preflight.py --tier governance
+python3 ci/project/check_project.py
+python3 -m unittest discover -s ci/project -p 'test_*.py'
+git diff --check
+```
 
-## Adding tests
+These validate structure, metadata and governance tooling. They do not demonstrate
+GPU correctness, performance, physical memory access or hardware readiness.
+The lightweight project workflow is additive; inherited GPU CI remains separate.
 
-Every functional change should land with a test, ideally one that
-would have caught the bug or that exercises the new path:
+GPU/kernel/RTL tests run from a **freshly configured out-of-tree build**, using
+its generated scripts and matching application/backend `CONFIGS`. Reconfigure
+after source or build/configuration changes; never patch generated headers to
+hide mismatches. See [verification](docs/project/verification.md),
+[CI guidance](docs/continuous_integration.md) and the
+[test catalog](ci/testcases/). The current generated regression selector is
+`./ci/regression.sh --test '<marker expression>'`; select and record a bounded
+matrix rather than copying obsolete per-suite flags or launching every test.
 
-- **RISC-V kernels** → `tests/regression/<name>/` (host + kernel +
-  Makefile). Wire it into `tests/regression/Makefile` (`all`,
-  `run-simx`, `run-rtlsim`, `clean`) and add a corresponding entry
-  in [ci/regression.sh.in](ci/regression.sh.in) so CI picks it up.
-- **Host-side / runtime unit tests** → `tests/unittest/`
-  (`./ci/regression.sh --unittest` builds and runs them).
-- **RTL unit tests (Verilator)** → `hw/unittest/<block>/` for
-  block-level testbenches (cache, cp_*, tcu_fedp, raster_core, etc.).
-  Add a subdir with `Makefile` + C++ harness following the
-  surrounding convention; `--unittest` also runs `make -C hw/unittest`.
-- **RTL behavior at the system level** → an `rtlsim` run of an
-  existing kernel with a config that triggers the path, added to the
-  relevant test group.
+| Change | Coverage to add or preserve |
+|---|---|
+| Governance tooling | Standard-library positive/negative tests in `ci/project/`, including failure behavior |
+| Native kernels/operators | Focused host/kernel tests under `tests/regression/`, supported inputs and explicit rejection cases |
+| Runtime/driver behavior | Applicable host/runtime unit and integration tests, including error paths and resource lifetime |
+| RTL behavior | Unit tests under `hw/unittest/`, applicable processor/full-AFU integration and timing-model evidence |
+| Catalog/build integration | Register cases in the applicable `ci/testcases/` catalog and build rules; reconfigure before execution |
 
-If a feature is intentionally incomplete and a test is expected to
-fail, document the failure mode in
-[ci/regression{32,64}_failures.md](ci/regression64_failures.md)
-rather than disabling the test silently.
+A functional change needs a test that exposes its failure or new behavior.
+Native tensor arithmetic and software-delegating DPI are different evidence;
+processor `rtlsim` does not cover the full AFU, and XRT `hw_emu` is not a physical
+FPGA. Record exact driver, arithmetic backend, inputs, reference and tolerances.
+Never use hidden CPU fallback, altered goldens or weaker tests to claim success.
 
-## Licensing
+## 4. Review the diff and its evidence
 
-Vortex is released under the Apache License 2.0 (see [LICENSE](LICENSE)).
-By submitting a contribution you agree that it may be released under
-the same terms.
+Apply the normative [review policy](docs/review/code-review-policy.md) and the
+repository's [code-review skill](.agents/skills/code-review/SKILL.md). Classify
+the actual base-to-head diff with `ci/change_impact.py`; the classifier is
+advisory, not approval. For changes to `.github/**` or `.gitattributes`, rerun
+the **base revision's** classifier locally as the policy requires; do not trust
+the modified workflow's own summary.
+
+R2 requires review of every changed hunk and maintainer approval. R3 additionally
+requires an independent review agent that did not author the change, the relevant
+contract evidence, and maintainer approval recorded in the pull request.
+An agent review cannot invent human approval or grant its own waiver.
+Use the [pull-request template](.github/pull_request_template.md) to record
+impact, affected consumers, tests, limitations and unresolved findings.
+
+Preserve these inherited obligations:
+
+- No silenced tests, wider tolerances, smaller workloads or removed coverage to
+  conceal a failure; document the root cause and follow the review policy.
+- Golden baselines are regenerated only through the prescribed human-run,
+  reviewed commands, named in the commit message; agents and CI do not regenerate them.
+- Cycle-moving RTL and SimX changes land together with applicable parity and
+  performance/logic-depth evidence. Do not replace a regression with an unrelated gain.
+- Toolchain pins move only after matching prebuilt artifacts exist. Installed
+  APIs, ISA/configuration and cross-layer contracts require their consumers' evidence.
+- Retain the original README illustration and embed, upstream copyright/license
+  notices, existing functionality and the software/hardware isolation boundaries.
+
+## 5. Leave a reproducible handoff
+
+Use the [evidence format](docs/project/evidence/README.md) and
+[handoff template](docs/project/handoff.example.md). Record the exact tested
+revision/configuration, tool/submodule identities, commands, exit results,
+artifact hashes, actual reviewer and explicit not-runs. A missing or blocked run
+is not a pass; report local and hosted CI results separately.
+
+Update relevant phase evidence, [status](docs/project/status.md) and
+[backlog](docs/project/backlog.md) with remaining blockers and one bounded next
+action. Complete a phase only when its dependencies and every acceptance gate
+have compatible passing evidence and required decisions. Templates and agent
+counts cannot substitute for evidence.
+
+Before publication, verify the target, current remote head, user authorization,
+maintainer approval and branch rules. Preserve concurrent changes and use the
+authorized review/merge workflow. After publication, read back the actual branch
+revision and report it accurately; a local commit or intended push is not delivery.
+
+## Licensing and attribution
+
+The inherited project is [Vortex](https://github.com/vortexgpgpu/vortex), released
+under [Apache License 2.0](LICENSE). Contributions must preserve existing notices
+and be offered under compatible project terms. Keep third-party code, fixtures,
+models and tool/IP material traceable to their own licenses; the repository's
+license does not automatically grant redistribution rights to those materials.

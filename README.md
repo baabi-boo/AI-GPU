@@ -2,163 +2,153 @@
   <img src="docs/assets/img/vortex_framework_stack.svg" alt="Vortex framework stack" width="100%">
 </p>
 
-# Vortex GPGPU
+# AI-GPU
 
-Vortex is a full-stack open-source RISC-V GPGPU. Vortex supports multiple **backend drivers**, including our C++ simulator (simx), an RTL simulator, and physical Xilinx and Altera FPGAs-- all controlled by a single driver script. The chosen driver determines the corresponding code invoked to run Vortex. Generally, developers will prototype their intended design in simx, before completing going forward with an RTL implementation. Alternatively, you can get up and running by selecting a driver of your choice and running a demo program.
+A Vortex-derived, programmable AI-accelerator project: **prove the math, run useful
+models, validate real hardware, then evaluate custom silicon.**
 
-## Website
-Vortex news can be found on its [website](https://vortexgpgpu.github.io/index.html)
+In plain language, this repository contains the blueprints and software for a
+parallel math engine. The development goal is to turn those building blocks into
+a dependable system that runs AI models—not merely add more cores or rename a
+simulator configuration. “NVIDIA-style” describes the ambition of programmable
+compute, specialized matrix units, fast memory and usable software. It does not
+mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
-## Citation
-```
-@inproceedings{10.1145/3466752.3480128,
-	author = {Tine, Blaise and Yalamarthy, Krishna Praveen and Elsabbagh, Fares and Hyesoon, Kim},
-	title = {Vortex: Extending the RISC-V ISA for GPGPU and 3D-Graphics},
-	year = {2021},
-	isbn = {9781450385572},
-	publisher = {Association for Computing Machinery},
-	address = {New York, NY, USA},
-	url = {https://doi.org/10.1145/3466752.3480128},
-	doi = {10.1145/3466752.3480128},
-	abstract = {The importance of open-source hardware and software has been increasing. However, despite GPUs being one of the more popular accelerators across various applications, there is very little open-source GPU infrastructure in the public domain. We argue that one of the reasons for the lack of open-source infrastructure for GPUs is rooted in the complexity of their ISA and software stacks. In this work, we first propose an ISA extension to RISC-V that supports GPGPUs and graphics. The main goal of the ISA extension proposal is to minimize the ISA changes so that the corresponding changes to the open-source ecosystem are also minimal, which makes for a sustainable development ecosystem. To demonstrate the feasibility of the minimally extended RISC-V ISA, we implemented the complete software and hardware stacks of Vortex on FPGA. Vortex is a PCIe-based soft GPU that supports OpenCL and OpenGL. Vortex can be used in a variety of applications, including machine learning, graph analytics, and graphics rendering. Vortex can scale up to 32 cores on an Altera Stratix 10 FPGA, delivering a peak performance of 25.6 GFlops at 200 Mhz.},
-	booktitle = {MICRO-54: 54th Annual IEEE/ACM International Symposium on Microarchitecture},
-	pages = {754–766},
-	numpages = {13},
-	keywords = {reconfigurable computing, memory systems., computer graphics},
-	location = {Virtual Event, Greece},
-	series = {MICRO '21}
-}
-```
+**Current stage: P00 — project foundation, in progress.** The authoritative
+[status](docs/project/status.md) and [phase gates](docs/project/roadmap.json)
+separate accepted evidence from planned work. Repository setup is not GPU
+qualification; P01–P11 require their own results.
 
-## Specifications
+## Start here
 
-- Support RISC-V RV32IMAFC and RV64IMAFDC
+- Understand the goal: [project charter](docs/project/charter.md).
+- See the development sequence: [roadmap](ROADMAP.md).
+- Pick the next bounded task: [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
+- Begin contributing: [developer guide](docs/project/developer-guide.md), [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md).
+- Find everything else: [project documentation](docs/project/index.md) and [technical documentation](docs/index.md).
 
-- Microarchitecture:
-    - configurable number of cores, warps, and threads.
-    - configurable number of ALU, FPU, LSU, and SFU units per core.
-    - graphics fixed-function pipeline (rasterizer, texture units, output mergers).
-    - hardware ray-tracing unit (BVH traversal, ray-box and ray-triangle intersection).
-    - tensor cores with WGMMA and 2:4 structured sparsity support.
-    - hardware-accelerated command processor and kernel management unit.
-    - configurable pipeline issue width.
-    - optional local memory, L1, L2, and L3 caches.
-- Software:
-    - OpenCL 1.2
-    - Vulkan
-    - HIP
-- Supported FPGAs:
-    - Altera Arria 10
-    - Altera Stratix 10
-    - Xilinx Alveo U50, U55C, U250, U280
-    - Xilinx Alveo V80 (Versal, via the SLASH platform — see [setup guide](docs/xilinx_slash_setup.md))
-    - Xilinx Versal VCK5000
+## What exists, and what must be built
 
-## Directory structure
+The inherited [Vortex](https://github.com/vortexgpgpu/vortex) source provides a
+substantial foundation. The [baseline audit](docs/project/baseline.md) identifies
+the exact starting revision and evidence boundaries.
 
-- `doc`: [Documentation](docs/index.md).
-- `hw`: Hardware sources.
-- `sw`: Software sources (kernel, runtime, and drivers).
-- `sim`: Simulators repository.
-- `tests`: Tests repository.
-- `ci`: Continuous integration scripts.
-- `miscs`: Miscellaneous resources.
-- `VX_config.toml` / `VX_types.toml`: Hardware configuration system.
+| Area | Inherited building blocks | AI-GPU development work |
+|---|---|---|
+| Compute | RISC-V parallel cores; WMMA/WGMMA tensor units and structured sparsity | Reproduce a supported native configuration and prove its numerical behavior |
+| Memory and platform | Caches, shared memory, asynchronous tile copies and FPGA integration | Measure useful data movement, usable external memory and real-board behavior |
+| Software | Native tensor kernels, GEMM/attention examples, host runtime and existing OpenCL/basic HIP routes | Build a reusable operator library, a tiny-model executor, then Python/custom-op integration |
+| Verification | Simulators, RTL tests and regression catalogs | Attach reproducible results to every claimed capability and preserve inherited gates |
 
-## Quick Start
-If you are interested in a stable release of Vortex, you can download the latest release [here](https://github.com/vortexgpgpu/vortex/releases/latest). Otherwise, you can pull the most recent, but (potentially) unstable version as shown below. The following steps demonstrate how to build and run Vortex with the default driver: SimX. If you are interested in a different backend, look [here](docs/simulation.md).
+Source presence is not a fresh passing test. Tensor acceleration is not enabled
+in the inherited default configuration, and format definitions do not establish
+support on every arithmetic backend. Existing graphics and ray-tracing sources,
+tests, licenses and illustrations remain preserved.
 
-### Supported OS Platforms
-- Ubuntu 22.04
-- Centos 7
-### Toolchain Dependencies
-The following dependencies will be fetched prebuilt by `toolchain_install.sh`.
-- [POCL](http://portablecl.org/)
-- [LLVM](https://llvm.org/)
-- [RISCV-GNU-TOOLCHAIN](https://github.com/riscv-collab/riscv-gnu-toolchain)
-- [Verilator](https://www.veripool.org/verilator)
-- [cvfpu](https://github.com/openhwgroup/cvfpu.git)
-- [SoftFloat](https://github.com/ucb-bar/berkeley-softfloat-3.git)
-- [Ramulator](https://github.com/CMU-SAFARI/ramulator.git)
-- [Yosys](https://github.com/YosysHQ/yosys)
-- [CIRCT](https://github.com/llvm/circt) (Vortex's fork)
-- [Mesa](https://www.mesa3d.org/)
-- [chipStar](https://github.com/CHIP-Star/chipStar)
-### Install Vortex codebase
+The current HIP route does not expose Vortex-specific tensor intrinsics, so the
+first model uses the existing **native kernel and runtime path**. A new HIP
+compiler is not its prerequisite. A PyTorch custom-op bridge is a later bounded
+integration—not a complete framework device backend.
+
+## The first useful milestone
+
+Run one small, fixed, redistributable AI model through native operators. Compare
+its intermediate layers and final output against a frozen CPU reference, and
+retain traces proving where each accelerated operation executed. Unsupported
+operations must be explicit; silent CPU fallback cannot satisfy an accelerator
+claim. This is the P04 target, after the baseline and numerical gates.
+
+Then reproduce the workload on a selected physical FPGA: a reconfigurable chip
+that lets the design be tested before manufacturing a custom chip. Real memory,
+host transfers and measured behavior are P07 obligations. No board, memory
+capacity, clock speed, process node or manufacturing order is approved by this
+README.
+
+## Development roadmap
+
+The plan contains **12 phases and 36 acceptance gates**. Each phase has an owner
+role, dependencies, work packages, deliverables, required evidence and stop rules.
+Exact dependencies and completion records live in the
+[machine-readable roadmap](docs/project/roadmap.json); see [ROADMAP.md](ROADMAP.md)
+for the full reader-facing guide.
+
+| Phases | Outcome to earn |
+|---|---|
+| P00–P02 | An auditable project, reproducible baseline and verified tensor arithmetic contract |
+| P03–P05 | Reusable AI operators, end-to-end tiny-model inference and a tested Python/custom-op route |
+| P06–P08 | Measured optimization, a physical FPGA prototype and a hardened experimental release |
+| P09 | Separately demonstrated training and multi-device research |
+| P10–P11 | Approved ASIC feasibility, then funded manufacturing and measured silicon bring-up |
+
+P09 is not a prerequisite for a bounded inference ASIC. P10/P11 require qualified
+hardware/IP/foundry work and explicit human funding and manufacturing decisions;
+simulation or a generated layout file cannot replace them.
+
+## Quick start: lightweight repository checks
+
+For a new checkout, use authorized access to this repository's existing `master`
+branch. Python 3.12 matches the lightweight CI environment; these checks use the
+standard library and Git, without GPU toolchains or initialized submodules.
+
+**Before this setup is merged:** check out the pull request's head branch instead
+of `master` in the clone command below. The new governance files are available
+on the review branch; `master` receives them only after the approved merge.
+
 ```sh
-	git clone --depth=1 --recursive https://github.com/vortexgpgpu/vortex.git
-	cd vortex
-```
-### Install system dependencies
-```sh
-# ensure dependent libraries are present
-sudo ./ci/install_dependencies.sh
-```
-### Configure your build folder
-```sh
-    mkdir build
-    cd build
-    # for 32bit
-    ../configure --xlen=32 --tooldir=$HOME/tools
-    # for 64bit
-    ../configure --xlen=64 --tooldir=$HOME/tools
-```
-### Install prebuilt toolchain
-```sh
-   ./ci/toolchain_install.sh
+git clone --branch master https://github.com/baabi-boo/AI-GPU.git
+cd AI-GPU
+python3 ci/project/preflight.py --tier governance
+python3 ci/project/check_project.py
+python3 -m unittest discover -s ci/project -p 'test_*.py'
 ```
 
-### Building and installing Vortex
-```sh
-make -s
-make install
-export VORTEX_PATH=$(pwd)/install
-export PKG_CONFIG_PATH=$VORTEX_PATH/lib/pkgconfig:$PKG_CONFIG_PATH
-```
-`make install` lays out a sysroot under `$VORTEX_PATH` containing the
-public headers, libraries, and `vortex-runtime.pc` / `vortex-kernel.pc`
-pkg-config files. Downstream tools (mesa-vortex, pocl-vortex,
-chipstar) integrate with Vortex exclusively through `$VORTEX_PATH` and
-pkg-config — the same shape as the CUDA, ROCm and oneAPI SDKs. The
-source tree (`$VORTEX_HOME`) and build tree (`$VORTEX_BUILD_DIR`) are
-internal to Vortex and not exposed to consumers. Override the install
-root with `../configure --prefix=<path>` or `--installdir=<path>` (default `<build>/install`).
+These commands inspect prerequisites, validate project metadata/links/evidence,
+and test the governance tools. **They do not build or run the GPU.** Missing GPU
+dependencies are reported separately. Follow the [developer guide](docs/project/developer-guide.md)
+before downloads or execution: approve a disk/RAM/job budget, use pinned tools
+and separate build directories, and start with bounded cases. Do not begin with
+an unrestricted toolchain install or full synthesis sweep.
 
-### Quick demo running vecadd OpenCL kernel on 2 cores
-```sh
-./ci/blackbox.sh --cores=2 --app=vecadd
-```
+## Evidence and engineering rules
 
-### Compiler Toolchain (VOLT)
+- Keep source inspection, simulation, native RTL verification, physical FPGA
+  measurements and silicon measurements distinct. DPI software arithmetic and
+  XRT `hw_emu` are not proof of a physical native accelerator.
+- Freeze numerical and benchmark contracts before measurement; retain failures,
+  exact revisions/configurations, commands, logs, hashes and limitations.
+- Preserve existing tests, tolerances and golden data. Use independent review
+  where required; update status and the next action with every milestone.
+- Commercial GPU names in inherited simulation profiles are configuration labels,
+  not evidence that AI-GPU matches those products.
 
-Vortex's compiler toolchain is **[VOLT](https://github.com/vortexgpgpu/Volt)** (Vortex-Optimized Lightweight Toolchain), an LLVM-based SIMT compiler for the Vortex GPU. To build the toolchain locally instead of using the prebuilt one, follow the instructions in the [VOLT repo](https://github.com/vortexgpgpu/Volt). Its design is described in the [VOLT paper (CC '26)](https://dl.acm.org/doi/10.1145/3771775.3786275).
+| Engineering topic | Guide |
+|---|---|
+| Scope and traceability | [Requirements](docs/project/requirements.md), [decisions](docs/project/decisions.md), [risks](docs/project/risks.md) |
+| Implementation direction | [Architecture](docs/project/architecture.md), [software](docs/project/software.md), [hardware](docs/project/hardware.md) |
+| Development configuration | [Unqualified native AI profile](docs/project/configurations.md); no global default or hardware qualification changes |
+| Qualification | [Acceptance](docs/project/acceptance.md), [verification](docs/project/verification.md), [benchmarks](docs/project/benchmarks.md), [evidence format](docs/project/evidence/README.md) |
+| Safe delivery | [Release policy](docs/project/releases.md), [security policy](SECURITY.md), [review policy](docs/review/code-review-policy.md) |
+| Repository operation | [CI contract](docs/project/ci-contract.md), [maintainer checklist](docs/project/maintainer-checklist.md), [changelog](CHANGELOG.md) |
 
-### Common Developer Tips
-- Building Vortex 64-bit requires setting --xlen=64 configure option.
-```sh
-../configure --xlen=64 --tooldir=$HOME/tools
-```
-- No shell environment setup is required. `../configure` bakes the full
-  toolchain layout (paths, XCONFIGS, every tool binary) into the build
-  dir's `config.mk` and domain `common.mk` files. Make recipes invoke
-  tools by absolute path (`$(VERILATOR_PATH)/bin/verilator` etc.), so
-  multiple Vortex trees on the same machine can coexist without any
-  `~/.bashrc` sourcing.
-- Making changes to Makefiles in your source tree, editing `VX_config.toml` (or any `*.toml`), or adding new folders will require executing the "configure" script again without any options to get changes propagated to your build folder.
-```sh
-../configure
-```
-- Always make sure your build is up to date before running any test or app: re-run `../configure` from your build folder first. `configure` regenerates `<build>/sw/VX_config.h` and `<build>/hw/*.vh` from `VX_config.toml` (only when the toml is newer). The simulator and RTL `#include` this generated header, so a stale header makes them compile against old config values and silently diverge from the toml. `VX_config.toml` is the single source of truth — never paper over a divergence by hardcoding `-DVX_CFG_*` flags in a Makefile; re-`configure` instead.
-- To debug the GPU, the simulation can generate a runtime trace for analysis. See /docs/debugging.md for more information.
-```sh
-./ci/blackbox.sh --app=demo --debug=3
-```
-- Running the CI suite locally: the test catalog lives in `ci/testcases/` and runs
-  through pytest via the `regression.sh` wrapper (from your build folder). See
-  [docs/continuous_integration.md](docs/continuous_integration.md) for details.
-```sh
-./ci/regression.sh --all               # full catalog
-./ci/regression.sh --test regression   # one category
-```
-- For additional information, check out the [documentation](docs/index.md)
+## Repository map
+
+`hw/` contains hardware sources and implementation flows; `sw/` contains kernel,
+runtime and driver code; `sim/` contains simulators; `tests/` and `ci/` hold tests
+and automation. `profiles/`, `VX_config.toml` and `VX_types.toml` configure the
+machine. `docs/project/` holds plans and evidence; `docs/designs/` describes the
+inherited implemented subsystems. See the [codebase guide](docs/codebase.md).
+
+## License and upstream credit
+
+AI-GPU builds on the work of the [Vortex contributors](https://github.com/vortexgpgpu/vortex)
+under [Apache License 2.0](LICENSE), with third-party licenses and notices retained.
+The original illustration above is preserved; it is a design illustration, not
+a photograph or proof of manufactured AI-GPU hardware.
+
+Foundational research: B. Tine et al., *Vortex: Extending the RISC-V ISA for GPGPU
+and 3D-Graphics*, MICRO-54 (2021), pp. 754–766,
+[doi:10.1145/3466752.3480128](https://doi.org/10.1145/3466752.3480128).
+See the [upstream website](https://vortexgpgpu.github.io/index.html) and
+[technical references](docs/references.md). Historical upstream results are not
+measurements of this fork.
 

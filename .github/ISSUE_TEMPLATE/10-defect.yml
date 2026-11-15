@@ -1,0 +1,83 @@
+name: Reproducible defect
+description: Report a source, simulation, runtime or hardware defect with a bounded reproducer.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For suspected vulnerabilities, follow [SECURITY.md](https://github.com/baabi-boo/AI-GPU/blob/master/SECURITY.md) before posting details. Do not include secrets, signed URLs, private memory or restricted IP.
+        A source observation is useful even when execution is `not_run`; say so explicitly. Keep simulator, native RTL, emulation and physical results separate.
+  - type: input
+    id: revision
+    attributes:
+      label: Source revision
+      description: Full 40-character commit; identify any local modifications separately.
+      placeholder: Commit SHA and clean/modified state
+    validations:
+      required: true
+  - type: dropdown
+    id: execution
+    attributes:
+      label: Observed execution scope
+      options:
+        - Source or governance only
+        - SimX
+        - Processor RTL (rtlsim)
+        - Full XRT integration or hardware emulation
+        - Physical FPGA
+        - Fabricated silicon
+        - Other or unknown
+    validations:
+      required: true
+  - type: textarea
+    id: configuration
+    attributes:
+      label: Configuration and environment
+      description: Name XLEN, profile/CONFIGS, tool/submodule versions, workload shapes/dtypes and arithmetic backend (TFR, DPI or other). For hardware, include target, board/platform and bitstream identity; unknown is acceptable.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Smallest reproducer
+      description: Exact working directory, commands, inputs/seed and authorized fixture links. GPU commands run from the configured build tree; governance checks run from the source root. Do not require large downloads without explaining them.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+      description: State the contract or reference, observed output/error and frequency. Include numerical differences where relevant; do not change tolerances or golden data to hide the failure.
+    validations:
+      required: true
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: Reproducer outcome
+      options:
+        - fail
+        - not_run
+        - blocked
+        - pass (command succeeds but behavior is wrong)
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and untested cases
+      description: Sanitized logs, observed exit codes and artifact hashes or stable authorized links. Explain missing runs, blockers and whether CPU fallback or DPI was involved. A zero exit code alone does not prove numerical correctness.
+    validations:
+      required: true
+  - type: input
+    id: traceability
+    attributes:
+      label: Related work (if known)
+      description: Requirement, phase/acceptance IDs, prior issue or first affected commit.
+      placeholder: RQ-004; P01-A02; issue link
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: Disclosure check
+      options:
+        - label: I have removed sensitive material and used the security reporting policy for suspected vulnerabilities.
+          required: true
