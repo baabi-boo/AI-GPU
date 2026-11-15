@@ -296,6 +296,14 @@ jobs:
         run: |
           cd build${{ matrix.xlen }}
           chmod -R +x .
+          # The long model-parity and performance-gate shards compile large
+          # WGMMA RTL models. Cap Verilator's independent C++ build jobs on
+          # hosted runners to reduce peak RAM use; this does not alter the
+          # simulated hardware, test cases, or performance baselines.
+          if [[ "${{ matrix.category }}" == "model_parity" || "${{ matrix.category }}" == "perf_gate" ]]; then
+            export THREADS=2
+            echo "RTL gate Verilator build concurrency: $THREADS"
+          fi
           # The planner owns what a cell selects, so the cell runs exactly the
           # cases it was planned (and, if sharded, split) from.
           EXPR=$(python3 ci/testcase.py expr --cell="${{ matrix.category }}" --driver="${{ matrix.driver }}")

@@ -78,6 +78,16 @@ the whole upstream SST Elements collection exhausts the hosted runner's disk
 before tests execute. If future tests begin using external SST elements, add a
 reviewed, narrowly scoped dependency and disk budget for those components.
 
+The `model_parity` and `perf_gate` cells include exceptionally large WGMMA RTL
+models. On hosted runners, their `Run cell` step exports `THREADS=2`, limiting
+the parallel Verilator C++ compilation workers (which otherwise default to the
+visible CPU count). All other categories keep their inherited default. This is
+a **host resource safeguard**, not a reduction in test coverage: the catalog,
+RTL configuration, workload inputs, cycle goldens, tolerances and 180-minute
+cell timeout remain unchanged. A job that ends with a runner shutdown signal
+and exit 143 has not demonstrated a passing performance or parity assertion;
+review the logs and retry the exact cell before claiming the GPU CI gate passed.
+
 Review Actions availability, account limits and the selected resource budget
 before publishing or manually dispatching expensive work. Inspect the actual
 planned matrix and cache state; do not infer them from a README edit. Manual
