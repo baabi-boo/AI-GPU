@@ -82,7 +82,9 @@ sst()
     make -C sim/simx USE_SST=1
     make -C tests/kernel
 
-    cp sim/simx/libvortex.so $SST_ELEMENTS_HOME/lib/sst-elements-library/   # alternatively - $ sst --add-lib-path `pwd` myConfig.py
+    SST_LIBDIR="$SST_ELEMENTS_HOME/lib/sst-elements-library"
+    mkdir -p "$SST_LIBDIR"
+    cp sim/simx/libvortex.so "$SST_LIBDIR/"
 
     BUILD_DIR=$(pwd)
 
@@ -106,7 +108,7 @@ sst()
         echo "=== sst: $kern ==="
         VORTEX_TEST_DIR=$BUILD_DIR/tests/kernel/$kern \
         VORTEX_TEST_KERNEL=$vxbin \
-            command sst ci/sst_run_hostless_app.py
+            command sst --add-lib-path "$SST_LIBDIR" ci/sst_run_hostless_app.py
     done
 
     echo "sst tests done!"

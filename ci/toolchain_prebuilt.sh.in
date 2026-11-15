@@ -175,12 +175,11 @@ gem5()
     mv gem5.tar.bz2 ./gem5/$OSVERSION
 }
 
-# SST is intentionally NOT prebuilt — autoconf bakes the install $prefix
-# into multiple absolute-path references (sstsimulator.conf path + the
-# sst wrapper's locator for libexec/sstsim.x), so a tarball produced on
-# one machine doesn't relocate cleanly to another. SST is built from
-# source by ci/sst_install.sh, which now also runs an aggressive
-# strip+prune pass that drops the install from ~2.9 GB to ~36 MB.
+# SST core is intentionally NOT prebuilt — autoconf bakes the install $prefix
+# into multiple absolute-path references (sstsimulator.conf and the wrapper's
+# libexec locator). ci/sst_install.sh builds and strips core at the final
+# prefix; the Vortex element is built separately by SimX. Upstream SST Elements
+# plugins are not needed by the hostless Vortex tests.
 
 show_usage()
 {

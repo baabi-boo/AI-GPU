@@ -69,6 +69,15 @@ indeterminate change base can also broaden driver selection. A documentation
 change therefore does not guarantee a small inherited run. The five-minute
 governance timeout does not bound other workflows, downloads or test matrices.
 
+The `full` setup profile builds the pinned SST **core** from source, because its
+installation embeds absolute prefix paths. The hostless integration uses only
+the locally built `vortex.VortexGPGPU` plugin; it does not depend on upstream
+SST Elements libraries. The setup reserves the existing plugin directory, and
+the regression runner supplies it to `sst --add-lib-path` explicitly. Building
+the whole upstream SST Elements collection exhausts the hosted runner's disk
+before tests execute. If future tests begin using external SST elements, add a
+reviewed, narrowly scoped dependency and disk budget for those components.
+
 Review Actions availability, account limits and the selected resource budget
 before publishing or manually dispatching expensive work. Inspect the actual
 planned matrix and cache state; do not infer them from a README edit. Manual

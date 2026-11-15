@@ -18,7 +18,6 @@ set -e
 
 OPENMPI_416=https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.6.tar.gz  # version dependency
 SST_CORE_1510=https://github.com/sstsimulator/sst-core/releases/download/v15.1.0_Final/sstcore-15.1.0.tar.gz
-SST_ELEMENTS_1510=https://github.com/sstsimulator/sst-elements/releases/download/v15.1.0_Final/sstelements-15.1.0.tar.gz
 TOOLDIR=${TOOLDIR:=@TOOLDIR@}
 
 DEBIAN_FRONTEND=noninteractive sudo apt install openmpi-bin openmpi-common libtool libtool-bin autoconf python3 python3-dev automake build-essential git
@@ -60,51 +59,23 @@ rm -r $SST_CORE_ROOT
 
 export PATH=$SST_CORE_HOME/bin:$PATH
 
-cd $TOOLDIR
-wget $SST_ELEMENTS_1510
-tar -xvzf sstelements-15.1.0.tar.gz
-rm sstelements-15.1.0.tar.gz
-cd sst-elements
-
-mkdir -p $TOOLDIR/sst-install/sst-elements
+# Vortex's hostless SST runner instantiates only vortex.VortexGPGPU, supplied
+# by the local SimX build. It does not use the upstream SST Elements plugins,
+# whose full source build exhausts a hosted CI runner's disk before tests run.
+# Retain the existing landing directory for the Vortex plugin and load it
+# explicitly with sst --add-lib-path from ci/regression.sh.
 export SST_ELEMENTS_HOME=$TOOLDIR/sst-install/sst-elements
-export SST_ELEMENTS_ROOT=$TOOLDIR/sst-elements
+mkdir -p "$SST_ELEMENTS_HOME/lib/sst-elements-library"
 
-./configure --prefix=$SST_ELEMENTS_HOME --with-sst-core=$SST_CORE_HOME
-make -j2 all
-make install
-
-rm -r $SST_ELEMENTS_ROOT
-
-# Slim the install for caching:
-#  - strip debug from every .so (sst-elements/.../libmemHierarchy.so alone is
-#    354 MB unstripped, 7 MB stripped; the bin/sst CLI shrinks ~25x).
-#  - drop every prebuilt sst-elements *.so. Vortex's sst_run_*.py only ever
-#    instantiates sst.Component("...", "vortex.VortexGPGPU"), which comes
-#    from libvortex.so — that is built per-Vortex-tree and dropped into
-#    sst-elements-library/ at the end of sw/runtime/simx build. Keep an
-#    empty sst-elements-library/ dir as the landing zone.
-#  - drop dev-only artifacts (libtool .la, static .a, sst-elements/include,
-#    share/doc) — none are used at run time OR at libvortex.so build time.
-#  - KEEP $SST_CORE_HOME/include: sim/simx/sst/vortex_*.cpp includes
-#    <sst/core/component.h>, <sst/core/interfaces/stdMem.h>, and
-#    <sst/core/sst_config.h> — these are pulled in via `sst-config
-#    --ELEMENT_CXXFLAGS` when sw/runtime/simx is built with USE_SST=1.
-#    sst-elements headers are not referenced from Vortex sources.
-echo "stripping SST binaries and pruning prebuilt sst-elements .so files..."
-# Strip every ELF — .so libraries AND libexec/*.x (sstsim.x, sstinfo.x are
-# ~300 MB unstripped each, ~6 MB after strip). Match by ELF magic rather
-# than extension because libexec/*.x doesn't end in .so.
-find "$SST_CORE_HOME" "$SST_ELEMENTS_HOME" -type f \
+# Slim the installed SST core before caching it. Keep headers used by the
+# Vortex wrapper through `sst-config --ELEMENT_CXXFLAGS` (USE_SST=1).
+# Strip every ELF, including libexec/*.x, which does not end in .so.
+echo "stripping installed SST core binaries..."
+find "$SST_CORE_HOME" -type f \
     -exec sh -c 'head -c 4 "$1" 2>/dev/null | grep -q ".ELF"' _ {} \; \
     -exec strip --strip-debug --strip-unneeded {} + 2>/dev/null || true
-ELEMENTS_LIB_DIR="$SST_ELEMENTS_HOME/lib/sst-elements-library"
-if [ -d "$ELEMENTS_LIB_DIR" ]; then
-    rm -f "$ELEMENTS_LIB_DIR"/*.so "$ELEMENTS_LIB_DIR"/*.so.* "$ELEMENTS_LIB_DIR"/*.la
-fi
-find "$SST_CORE_HOME" "$SST_ELEMENTS_HOME" -type f \( -name '*.a' -o -name '*.la' \) -delete 2>/dev/null || true
-rm -rf "$SST_ELEMENTS_HOME/include" \
-       "$SST_CORE_HOME/share/doc" "$SST_ELEMENTS_HOME/share/doc"
+find "$SST_CORE_HOME" -type f \( -name '*.a' -o -name '*.la' \) -delete 2>/dev/null || true
+rm -rf "$SST_CORE_HOME/share/doc"
 
 # GitHub Actions: propagate to subsequent steps. Mirrors the per-tool
 # pattern used by gem5_install.sh.in + mesa_install.sh.in — no global
@@ -122,13 +93,12 @@ fi
 if [ -n "$GITHUB_PATH" ]; then
     echo "$MPIHOME/bin"           >> "$GITHUB_PATH"
     echo "$SST_CORE_HOME/bin"     >> "$GITHUB_PATH"
-    echo "$SST_ELEMENTS_HOME/bin" >> "$GITHUB_PATH"
 fi
 
 echo ""
-echo "SST installed at $TOOLDIR/sst-install (OpenMPI: $MPIHOME)"
+echo "SST core installed at $SST_CORE_HOME (OpenMPI: $MPIHOME)"
 echo "  outside CI: source the paths into your shell ad-hoc:"
-echo "    export PATH=$MPIHOME/bin:$SST_CORE_HOME/bin:$SST_ELEMENTS_HOME/bin:\$PATH"
+echo "    export PATH=$MPIHOME/bin:$SST_CORE_HOME/bin:\$PATH"
 echo "    export SST_CORE_HOME=$SST_CORE_HOME SST_ELEMENTS_HOME=$SST_ELEMENTS_HOME"
 
 

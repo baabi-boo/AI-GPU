@@ -64,14 +64,14 @@ promises that workflow outcomes remain unchanged.
 
 | Check | Observed result | Scope / remaining work |
 |---|---|---|
-| `python3 -I -S -B -m unittest discover -s ci/project -p 'test_*.py'` | 180 tests passed: 51 validator, 42 preflight, 11 profile, 24 adversarial, 18 repository-contract and 34 Markdown-edge tests | Repeated in an exact clean checkout with standard-library-only Python; no GPU execution |
+| `python3 -I -S -B -m unittest discover -s ci/project -p 'test_*.py'` | Foundation snapshot: 180 tests passed. Local CI-repair candidate: 185 tests passed, including five SST source/launcher contract checks | Source-only testing; does not execute GPU kernels or the external SST build |
 | `python3 ci/project/preflight.py --tier governance --min-free-gib 1` | Passed | GPU dependencies are optional for this tier; this is not an approved execution budget |
 | `python3 ci/project/check_project.py` | Passed at the exact published source revision | Source-only metadata, links and integrity; not GPU truth or approval |
 | `python3 ci/change_impact.py lint-policy` | Passed | Inherited policy structure only |
 | `python3 ci/testcase.py lint` | Passed: 945 cases across 28 categories | Catalog validation, not 945 executed GPU tests |
 | Protected illustration SHA-256 | Matched the baseline | Image bytes remain unchanged |
 | GitHub Project Governance workflow | Review-branch push/PR and merged `master` run passed | [Default-branch run](https://github.com/baabi-boo/AI-GPU/actions/runs/43662715598); source-only prerequisite, validator and unit tests succeeded |
-| Inherited GitHub GPU CI | In progress at the merge observation | Automatically triggered existing workflow; not claimed passed or treated as acceptance of the AI candidate |
+| Inherited GitHub GPU CI | [Latest pre-repair `master` run](https://github.com/baabi-boo/AI-GPU/actions/runs/43663216211) failed | Setup exhausted runner disk while compiling unused upstream SST Elements plugins; the `build` and `tests` jobs were skipped. The bounded core-only source change requires a new hosted CI run; no GPU pass is claimed here |
 | Locally launched GPU build/workloads, XRT emulation, synthesis, physical FPGA and silicon tests | Not run | These belong to separately gated execution phases; no local toolchain download or hardware purchase occurred |
 
 ## What remains before GPU execution
@@ -86,7 +86,7 @@ promises that workflow outcomes remain unchanged.
    Role names do not assert that staff, budgets or approvals already exist.
 3. **Evidence continuity:** later GPU work must retain exact source/configuration
    identities, raw results, hashes and independent reviews; do not promote the
-   inherited running CI or source-only P00 evidence to a P01 pass. The earlier
+   inherited failing CI or source-only P00 evidence to a P01 pass. The earlier
    [blocked delivery record](evidence/setup-delivery.json) remains historical
    evidence of the pre-merge state, superseded by the accepted delivery record.
 
