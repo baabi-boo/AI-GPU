@@ -69,6 +69,16 @@ indeterminate change base can also broaden driver selection. A documentation
 change therefore does not guarantee a small inherited run. The five-minute
 governance timeout does not bound other workflows, downloads or test matrices.
 
+To avoid overwhelming hosted runners when a cold toolchain cache expands a
+push or PR into a large matrix, inherited CI limits the test matrix to **eight
+simultaneous cells**, while retaining the full planned set of cells, case
+selection, assertions, and timeouts. It also groups runs by event and ref:
+new push/PR runs cancel superseded runs in that group; scheduled and manually
+dispatched runs are not automatically interrupted. These scheduling controls
+cannot guarantee runner availability or fix a failed GPU assertion. A job with
+no assigned runner and no executed steps is an infrastructure failure, not a
+failed GPU testcase; check account limits and re-run once capacity is available.
+
 The `full` setup profile builds the pinned SST **core** from source, because its
 installation embeds absolute prefix paths. The hostless integration uses only
 the locally built `vortex.VortexGPGPU` plugin; it does not depend on upstream

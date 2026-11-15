@@ -9,6 +9,12 @@
 
 name: CI
 
+# Keep superseded updates and the large test matrix from competing for the
+# same hosted-runner capacity. This does not change test selection or gates.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
+
 on:
   push:
   pull_request:
@@ -250,6 +256,7 @@ jobs:
     name: tests (${{ matrix.category }}, ${{ matrix.driver }}, ${{ matrix.xlen }}${{ matrix.shards && format(', {0}/{1}', matrix.shard, matrix.shards) || '' }})
     strategy:
       fail-fast: false
+      max-parallel: 8
       matrix:
         include: ${{ fromJSON(needs.plan.outputs.cells) }}
     runs-on: ubuntu-22.04

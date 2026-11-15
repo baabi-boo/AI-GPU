@@ -74,6 +74,26 @@ promises that workflow outcomes remain unchanged.
 | Inherited GitHub GPU CI | [Follow-up `master` run](https://github.com/baabi-boo/AI-GPU/actions/runs/43671896012): setup and both XLEN builds passed; GPU matrix still running at the November 15 checkpoint | The SST disk exhaustion is resolved. Two sparse-WGMMA `perf_gate` / `model_parity` shards were interrupted by hosted runner shutdowns (exit 143), not by recorded test assertions. A scoped Verilator build-concurrency safeguard has been added for subsequent validation; a full GPU pass is **not** claimed |
 | Locally launched GPU build/workloads, XRT emulation, synthesis, physical FPGA and silicon tests | Not run | These belong to separately gated execution phases; no local toolchain download or hardware purchase occurred |
 
+## CI runner-queue mitigation checkpoint (2026-11-15)
+
+At the November 15 06:13 UTC observation, [master CI run
+43680345927](https://github.com/baabi-boo/AI-GPU/actions/runs/43680345927)
+failed before its `plan` and `change-impact` jobs received runners (runner ID
+zero, no executed steps); `setup`, `build` and `tests` were skipped. The earlier
+[full-coverage run
+43671896012](https://github.com/baabi-boo/AI-GPU/actions/runs/43671896012)
+had planned 125 jobs, and many were likewise left without runners, making
+runner-queue contention plausible but not proven. Neither run supplies a clean
+GPU gate result.
+
+The CI definition now bounds test-matrix dispatch to eight concurrent cells and
+cancels superseded push/PR runs of the same event and ref. It does not remove
+any test cases or change goldens. **Hosted validation remains outstanding:**
+check whether GitHub assigns runners to the next push run, inspect actual
+`Run cell` failures separately, and review Actions account/resource limits if
+jobs still terminate without executing steps. Keep P01 blocked until its
+independent native and RTL evidence exists.
+
 ## What remains before GPU execution
 
 1. **P01 prerequisites:** the inspected execution checkout had five uninitialized
