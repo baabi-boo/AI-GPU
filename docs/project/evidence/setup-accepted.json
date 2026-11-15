@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "record_id": "foundation-delivery-accepted-106b0194",
+  "kind": "governance",
+  "outcome": "pass",
+  "evidence_level": "source_present",
+  "scope": "P00-A03: independently reviewed repository foundation was merged into baabi-boo/AI-GPU's actual default branch, master, after the user's explicit merge authorization. GitHub readback verified the merged PR, master ref, merge parents and preserved README/SVG. This is governance delivery only.",
+  "source_revision": "106b01945d102eec169e68400b2cb8df985236cb",
+  "configuration": "GitHub PR #1; base master da55a516a48b49013724f697d3c12a48932b449f; reviewed head bebef861742165db1d0d78352ac008b079a35fdd; merge tree 83cbd5a642516185cae5bd4cb17e2a373b00c93d.",
+  "acceptance_ids": [
+    "P00-A03"
+  ],
+  "commands": [
+    {
+      "command": "From source root after confirmed GitHub readback: python3 -I -S -B -m json.tool docs/project/evidence/setup-merged.json",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "From source root after P00 evidence attachment: python3 -I -S -B ci/project/check_project.py",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/project/evidence/setup-merged.json",
+      "sha256": "aadd88d60da206d6913f971ca482b4ee03c19175b1201db46c64789a6234ddb7"
+    },
+    {
+      "path": "docs/project/agent-execution.json",
+      "sha256": "f096ec9a082486af43f72fa685c67997eea53dbd85ae76192cd91cb4d1977d90"
+    }
+  ],
+  "limitations": [
+    "Passing this gate verifies approved repository delivery and review provenance, not AI arithmetic, GPU builds, full AFU integration, physical FPGA or silicon.",
+    "The inherited GPU CI was still in progress at the recorded post-merge observation; it is not counted passed or treated as AI-profile qualification.",
+    "The earlier blocked delivery record is preserved as historical evidence, not rewritten.",
+    "The new status/evidence attachment is a later documentation-only commit; it must be verified on master separately.",
+    "Future P01 execution requires a toolchain/submodule/platform and explicit resource/access budget, not supplied by this merge."
+  ],
+  "reviewer": "Codex coordinator /root; explicit repository-owner merge instruction recorded in PR #1, with six independent final source reviewers previously documented in setup-review.md."
+}

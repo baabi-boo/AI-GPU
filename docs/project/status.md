@@ -1,8 +1,9 @@
 # Current project status
 
-**Checkpoint: repository foundation is published for review; approval and merge
-are pending.** [Pull request 1](https://github.com/baabi-boo/AI-GPU/pull/1) targets
-the existing `master` branch from `ai-gpu-project-setup`.
+**Checkpoint: P00 repository foundation is accepted on the default branch
+`master`.** [Pull request 1](https://github.com/baabi-boo/AI-GPU/pull/1) was
+explicitly authorized by the maintainer, merged and verified. P01 is the next
+phase; it has **not** started.
 The live phase state and gate references are canonical in
 [roadmap.json](roadmap.json). This page explains the current handoff; it is not
 independent proof that a phase or GPU workload passed.
@@ -11,7 +12,7 @@ independent proof that a phase or GPU workload passed.
 
 | Area | Current state | Meaning |
 |---|---|---|
-| P00 — project foundation | `in_progress` | P00-A01/A02 have scoped passing evidence; P00-A03 remains blocked pending actual maintainer approval and intended default-branch delivery |
+| P00 — project foundation | `complete` | All three source-level gates have compatible evidence; independent reviews, explicit user authorization and verified default-branch delivery are recorded |
 | P01–P11 | `not_started` | Their qualification work and acceptance evidence have not been completed by this setup |
 | Inherited Vortex implementation | `source_present` | GPU RTL, native tensor kernels, runtime, simulators and FPGA flows are inherited source, not new measured AI-GPU results |
 | Physical hardware / custom silicon | Not qualified | No board has been selected or measured, and no fabrication commitment has been made |
@@ -19,14 +20,16 @@ independent proof that a phase or GPU workload passed.
 The source baseline is `da55a516a48b49013724f697d3c12a48932b449f` in
 `baabi-boo/AI-GPU`, whose default branch is **`master`**. See the
 [baseline inventory](baseline.md) for provenance, source boundaries and the
-protected illustration checksum. The published and locally tested source
+protected illustration checksum. The reviewed and locally tested source
 candidate is **`5a97e59ed95163c585106250194f816353d6ca4e`**, tree
-`9f65ae6e2bce7adeaec2432c11756510028c8bc0`. Its tree exactly matches the reviewed
-local candidate; the [review record](evidence/setup-review.md) explains that
-mapping and the earlier immutable snapshots. The evidence attachment is a
-later metadata-only update; its latest delivered revision is the PR head.
-Review-branch readback is verified. **Human approval and a merge into `master`
-have not occurred.**
+`9f65ae6e2bce7adeaec2432c11756510028c8bc0`. The reviewed PR head was
+`bebef861742165db1d0d78352ac008b079a35fdd`. The verified merge commit is
+**`106b01945d102eec169e68400b2cb8df985236cb`**, whose tree preserves the
+complete reviewed changes. See the [accepted delivery record](evidence/setup-accepted.json),
+[merge observation](evidence/setup-merged.json) and
+[review record](evidence/setup-review.md) for exact provenance. The later
+documentation-only closure commit records this acceptance; it is not a new GPU
+qualification result.
 
 ## What has been prepared
 
@@ -55,8 +58,9 @@ The [source validation report](evidence/setup-validation.json) and
 [command log](evidence/setup-validation.log) identify the exact published source
 candidate tested with a clean worktree. The [review record](evidence/setup-review.md)
 retains earlier failures, repairs and independent clean-checkout checks. The
-[publication observation](evidence/setup-publication.json) is a timestamped
-snapshot, not a promise that later workflow outcomes remain unchanged.
+[publication observation](evidence/setup-publication.json) and later
+[merge observation](evidence/setup-merged.json) are timestamped snapshots, not
+promises that workflow outcomes remain unchanged.
 
 | Check | Observed result | Scope / remaining work |
 |---|---|---|
@@ -66,34 +70,29 @@ snapshot, not a promise that later workflow outcomes remain unchanged.
 | `python3 ci/change_impact.py lint-policy` | Passed | Inherited policy structure only |
 | `python3 ci/testcase.py lint` | Passed: 945 cases across 28 categories | Catalog validation, not 945 executed GPU tests |
 | Protected illustration SHA-256 | Matched the baseline | Image bytes remain unchanged |
-| Initial GitHub Project Governance workflow | Push and PR runs passed | [PR run](https://github.com/baabi-boo/AI-GPU/actions/runs/43661346807); prerequisite, validator and unit-test steps succeeded on the source candidate |
-| Inherited GitHub GPU CI | In progress at the publication observation | Automatically triggered existing workflows; not claimed passed or treated as acceptance of the AI candidate |
+| GitHub Project Governance workflow | Review-branch push/PR and merged `master` run passed | [Default-branch run](https://github.com/baabi-boo/AI-GPU/actions/runs/43662715598); source-only prerequisite, validator and unit tests succeeded |
+| Inherited GitHub GPU CI | In progress at the merge observation | Automatically triggered existing workflow; not claimed passed or treated as acceptance of the AI candidate |
 | Locally launched GPU build/workloads, XRT emulation, synthesis, physical FPGA and silicon tests | Not run | These belong to separately gated execution phases; no local toolchain download or hardware purchase occurred |
 
-## What prevents acceptance now
+## What remains before GPU execution
 
-1. **Approval and delivery:** PR 1 is published, but actual maintainer approval
-   for the R3 CI change is pending. Assess applicable checks, record approval,
-   then verify an authorized merge/default-branch readback and attach a new
-   delivery report. Agent review, a green governance job and review-branch
-   publication cannot supply that approval. The current
-   [delivery report](evidence/setup-delivery.json) is explicitly blocked.
-2. **Evidence continuity:** retain hashes and exact-revision outcomes when
-   final metadata or subsequent code changes are delivered. Do not silently
-   relabel historical observations or mark a running/cancelled job passed.
-3. **P01 prerequisites:** the inspected checkout has five uninitialized
+1. **P01 prerequisites:** the inspected execution checkout had five uninitialized
    submodules and lacks the required RISC-V/LLVM/Verilator environment. XRT
    emulation additionally requires an identified platform and vendor tools.
    Missing access remains a blocker, not a substitute pass.
-4. **Engineering decisions:** the supported numerical/configuration subset,
+2. **Engineering decisions:** the supported numerical/configuration subset,
    tiny-model fixture, physical board, performance/resource targets and any
    funded silicon program remain governed by the [decision log](decisions.md).
    Role names do not assert that staff, budgets or approvals already exist.
+3. **Evidence continuity:** later GPU work must retain exact source/configuration
+   identities, raw results, hashes and independent reviews; do not promote the
+   inherited running CI or source-only P00 evidence to a P01 pass. The earlier
+   [blocked delivery record](evidence/setup-delivery.json) remains historical
+   evidence of the pre-merge state, superseded by the accepted delivery record.
 
 ## Next bounded action
 
-**First obtain approval and finish P00; then begin P01's reproducible baseline
-packet (P01-T01, followed by P01-T02).** Assign an
+**Begin P01's reproducible baseline packet (P01-T01, followed by P01-T02).** Assign an
 actual verification owner and freeze one small native configuration and catalog
 matrix before downloading tools or launching builds. Record the source/tree,
 submodule commits, tool bundle identities, formats, dimensions, arithmetic

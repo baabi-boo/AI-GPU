@@ -10,8 +10,11 @@ Use the [acceptance policy](../acceptance.md) before producing a real report.
 - [Source validation](setup-validation.json) supports P00-A01/A02 at the exact
   published source candidate; [command log](setup-validation.log) retains actual
   exits, including the separately blocked simulation prerequisite screen.
-- [Delivery record](setup-delivery.json) leaves P00-A03 **blocked** pending real
-  maintainer approval and authorized default-branch delivery.
+- [Accepted delivery](setup-accepted.json) supports P00-A03 after explicit
+  maintainer authorization and verified merge into `master`; the
+  [merge observation](setup-merged.json) preserves the exact GitHub readback.
+  The earlier [blocked delivery record](setup-delivery.json) is retained as
+  historical evidence, not rewritten to look like an earlier success.
 - [Independent reviews](setup-review.md) retain failures, corrections, scopes,
   exact snapshots and advisory dispositions.
 - [Publication observation](setup-publication.json) records the review branch,

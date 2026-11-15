@@ -11,11 +11,6 @@ Use authorized access to the private target repository. Its default branch is
 `master`; do not substitute the upstream Vortex repository or rename the branch.
 For a new checkout:
 
-While reviewing this setup **before merge**, replace `master` in the clone
-command with the pull request's head branch. The new `ci/project/` commands do
-not exist on the unchanged default branch until the approved merge. Check the
-PR's exact head revision before recording review evidence.
-
 ```sh
 git clone --branch master https://github.com/baabi-boo/AI-GPU.git
 cd AI-GPU

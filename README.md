@@ -14,7 +14,7 @@ simulator configuration. “NVIDIA-style” describes the ambition of programmab
 compute, specialized matrix units, fast memory and usable software. It does not
 mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
-**Current stage: P00 — project foundation, in progress.** The authoritative
+**Current stage: P00 — project foundation accepted; P01 baseline work is next.** The authoritative
 [status](docs/project/status.md) and [phase gates](docs/project/roadmap.json)
 separate accepted evidence from planned work. Repository setup is not GPU
 qualification; P01–P11 require their own results.
@@ -89,10 +89,6 @@ simulation or a generated layout file cannot replace them.
 For a new checkout, use authorized access to this repository's existing `master`
 branch. Python 3.12 matches the lightweight CI environment; these checks use the
 standard library and Git, without GPU toolchains or initialized submodules.
-
-**Before this setup is merged:** check out the pull request's head branch instead
-of `master` in the clone command below. The new governance files are available
-on the review branch; `master` receives them only after the approved merge.
 
 ```sh
 git clone --branch master https://github.com/baabi-boo/AI-GPU.git
