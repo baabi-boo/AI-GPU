@@ -64,14 +64,14 @@ promises that workflow outcomes remain unchanged.
 
 | Check | Observed result | Scope / remaining work |
 |---|---|---|
-| `python3 -I -S -B -m unittest discover -s ci/project -p 'test_*.py'` | Foundation snapshot: 180 tests passed. Local CI-repair candidate: 185 tests passed, including five SST source/launcher contract checks | Source-only testing; does not execute GPU kernels or the external SST build |
+| `python3 -I -S -B -m unittest discover -s ci/project -p 'test_*.py'` | Foundation snapshot: 180 tests passed. Local CI-repair candidate: 187 tests passed, including five SST source/launcher and two RTL resource-budget contract checks | Source-only testing; does not execute GPU kernels or the external SST build |
 | `python3 ci/project/preflight.py --tier governance --min-free-gib 1` | Passed | GPU dependencies are optional for this tier; this is not an approved execution budget |
 | `python3 ci/project/check_project.py` | Passed at the exact published source revision | Source-only metadata, links and integrity; not GPU truth or approval |
 | `python3 ci/change_impact.py lint-policy` | Passed | Inherited policy structure only |
 | `python3 ci/testcase.py lint` | Passed: 945 cases across 28 categories | Catalog validation, not 945 executed GPU tests |
 | Protected illustration SHA-256 | Matched the baseline | Image bytes remain unchanged |
 | GitHub Project Governance workflow | Review-branch push/PR and merged `master` run passed | [Default-branch run](https://github.com/baabi-boo/AI-GPU/actions/runs/43662715598); source-only prerequisite, validator and unit tests succeeded |
-| Inherited GitHub GPU CI | [Latest pre-repair `master` run](https://github.com/baabi-boo/AI-GPU/actions/runs/43663216211) failed | Setup exhausted runner disk while compiling unused upstream SST Elements plugins; the `build` and `tests` jobs were skipped. The bounded core-only source change requires a new hosted CI run; no GPU pass is claimed here |
+| Inherited GitHub GPU CI | [Follow-up `master` run](https://github.com/baabi-boo/AI-GPU/actions/runs/43671896012): setup and both XLEN builds passed; GPU matrix still running at the November 15 checkpoint | The SST disk exhaustion is resolved. Two sparse-WGMMA `perf_gate` / `model_parity` shards were interrupted by hosted runner shutdowns (exit 143), not by recorded test assertions. A scoped Verilator build-concurrency safeguard has been added for subsequent validation; a full GPU pass is **not** claimed |
 | Locally launched GPU build/workloads, XRT emulation, synthesis, physical FPGA and silicon tests | Not run | These belong to separately gated execution phases; no local toolchain download or hardware purchase occurred |
 
 ## What remains before GPU execution
