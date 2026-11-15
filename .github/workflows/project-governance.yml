@@ -73,5 +73,7 @@ jobs:
         run: python3 ci/project/preflight.py --tier governance
       - name: Validate project structure and evidence
         run: python3 ci/project/check_project.py
+      - name: Check published baseline packet consistency
+        run: python3 ci/project/check_baseline_packets.py
       - name: Test governance tooling
         run: python3 -m unittest discover -s ci/project -p 'test_*.py'
