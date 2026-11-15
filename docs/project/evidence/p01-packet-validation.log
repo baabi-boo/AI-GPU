@@ -1,0 +1,93 @@
+AI-GPU immutable release validation: assignment 47 / wave 8
+Started UTC: 2026-11-15T23:01:13.199890+00:00
+Source root: /workspace/scratch/ababb3c055d3/packet-release-check
+PYTHONDONTWRITEBYTECODE=1; GIT_OPTIONAL_LOCKS=0
+Python: 3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]
+Scope: source-root governance, baseline-packet consistency, and synthetic tooling tests only.
+Native GPU builds/execution intentionally omitted: no changed GPU code; no downloads, edits, commits, or publication.
+Before commit: 22c545c632628f9da9f18ccf8fb512a8bfac7f81
+Before tree: ba797a53cbef12d1dd2e00cee3b8d487824fe7e1
+Before HEAD detached: yes
+Before tracked/untracked status: clean (empty git status --porcelain=v1 --untracked-files=all)
+Before free_disk_bytes: 57104658432
+Before available_memory_bytes: 9446739968
+
+Command: python3 ci/project/preflight.py --tier governance
+Command started UTC: 2026-11-15T23:01:13.214016+00:00
+Preflight: pass (governance)
+Source: 22c545c632628f9da9f18ccf8fb512a8bfac7f81 (tracked changes: False)
+Pins: VORTEX_VERSION=3.0, TOOLCHAIN_REV=v3.0.2, GEM5_REV=v25.0.0.1, FIRESIM_REV=57bb93f1e23daf46198659ddd93608f70121fee0
+Tool git: available (required)
+Tool make: available (optional)
+Tool host_cxx: available (optional)
+Tool cmake: available (optional)
+Tool riscv_compiler: missing (optional)
+Tool llvm_clang: missing (optional)
+Tool verilator: missing (optional)
+Tool vivado: missing (optional)
+Tool vitis_linker: missing (optional)
+Tool xrt_inventory: missing (optional)
+Tool yosys: missing (optional)
+Tool circt_verilog: missing (optional)
+Tool circt_opt: missing (optional)
+Tool firtool: missing (optional)
+Submodule third_party/cocogfx: not_initialized b1befdb36df8af7ac9e2c96acaf81957aab5d107
+Submodule third_party/cvfpu: not_initialized 79e453139072df42c9ec8f697132ba485d74e23d
+Submodule third_party/hardfloat: not_initialized aaf5736dffa521603b681fd5853760c671446c85
+Submodule third_party/ramulator: not_initialized e62c84a6f0e06566ba6e182d308434b4532068a5
+Submodule third_party/softfloat: not_initialized b51ef8f3201669b2288104c28546fc72532a1ea4
+Resources: free disk=57104658432 bytes; available RAM=9433944064 bytes
+Protected illustration: unchanged
+Warning: submodules are not fully verified/initialized; not required for governance
+Limitation: Read-only offline prerequisite screen; no installer, download, build, test workload or cleanup ran.
+Limitation: Tool availability means executable names are on PATH, not verified versions or Vortex target support.
+Limitation: Configured tools outside PATH are not searched; activate the intended environment before this screen.
+Limitation: Toolchain tags are source pins, not verification of installed binaries, libraries or bundle hashes.
+Limitation: Working-tree status covers tracked files only; inventory untracked inputs before recording evidence.
+Limitation: Resource values are a snapshot, not a build budget; nested builds may exceed an outer job limit.
+Limitation: Linux MemAvailable may describe host RAM rather than a container/cgroup limit; verify the effective allocation separately.
+Limitation: No board, license, platform, PDK, IP, physical measurement, funding or manufacturing approval is certified.
+Command exit_code: 0
+Command elapsed_seconds: 0.115162
+
+Command: python3 ci/project/check_project.py
+Command started UTC: 2026-11-15T23:01:13.329238+00:00
+Project governance validation passed (structure and metadata only; no GPU execution certified).
+Command exit_code: 0
+Command elapsed_seconds: 0.207407
+
+Command: python3 ci/project/check_baseline_packets.py
+Command started UTC: 2026-11-15T23:01:13.536771+00:00
+{"outcome": "pass", "packets": {"clean-build": {"native_matrix_records_consistent": false, "outcome": "pass", "path": "docs/project/evidence/p01/clean-build", "published_integrity": "verified", "require_native_records": false, "run_outcome": "pass"}, "native": {"native_matrix_records_consistent": true, "outcome": "pass", "path": "docs/project/evidence/p01/native", "published_integrity": "verified", "require_native_records": true, "run_outcome": "pass"}}, "phase_complete": false, "raw_log_bytes_verified": false, "redaction_relationship_verified": false, "schema_version": 1, "scope": "Published evidence consistency only; no project-gate acceptance."}
+Command exit_code: 0
+Command elapsed_seconds: 0.188477
+
+Command: python3 -m unittest discover -s ci/project -p 'test_*.py'
+Command started UTC: 2026-11-15T23:01:13.725304+00:00
+..........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................begin sst tests...
+=== sst: hello ===
+=== sst: fibonacci ===
+sst tests done!
+.....
+----------------------------------------------------------------------
+Ran 591 tests in 58.595s
+
+OK
+Command exit_code: 0
+Command elapsed_seconds: 58.974252
+
+After commit: 22c545c632628f9da9f18ccf8fb512a8bfac7f81
+After tree: ba797a53cbef12d1dd2e00cee3b8d487824fe7e1
+After HEAD detached: yes
+After tracked/untracked status: clean (empty git status --porcelain=v1 --untracked-files=all)
+After free_disk_bytes: 57104642048
+After available_memory_bytes: 9421787136
+Free disk delta bytes: -16384
+Complete suite invocations: 1
+Unittest summary records: 1
+Total unittest test count: 591
+Unittest result: OK
+Commands passed: 4/4
+Total elapsed_seconds: 59.514207
+Finished UTC: 2026-11-15T23:02:12.714330+00:00
+Overall release validation: PASS

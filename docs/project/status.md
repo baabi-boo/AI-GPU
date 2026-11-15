@@ -98,6 +98,36 @@ The [implementation review](evidence/p01-review.md) records concrete findings,
 independent corrections and acceptance reviews. The [P01 handoff](p01-handoff.md)
 records the delivered scope and remaining vendor-integration obligation.
 
+## Offline packet verification continuation
+
+The published [offline packet verifier](p01-packet-verification.md) implements
+P01-T06 evidence checks: original-byte verification, a separate unsigned
+inventory, and an explicit published-export mode. It also adds a bounded
+[CI consistency check](../../ci/project/check_baseline_packets.py) for the
+retained native and clean-build exports. Run from the source root:
+
+```sh
+python3 ci/project/check_baseline_packets.py
+python3 ci/project/baseline_packet.py verify-export docs/project/evidence/p01/native \
+  --require-native-records
+```
+
+The [packet continuation handoff](p01-packet-handoff.md) records the initial
+`e9c9ac0` checkpoint, incorporation of baseline delivery `25ca2e6`, and published
+implementation [22c545c](https://github.com/baabi-boo/AI-GPU/commit/22c545c632628f9da9f18ccf8fb512a8bfac7f81).
+Its immutable release checkout passed all 591 governance/tooling tests, the
+project checker, preflight and both published-packet checks. The handoff records
+exact identities, independent review and hosted CI observations. This
+continuation performed no new GPU execution and grants no new acceptance.
+The six-case and clean-build evidence above remain the reviewed execution record;
+P01-A01/A02 remain accepted and P01-A03 remains blocked. Published verification
+checks public bytes and retained records, without proving original log bytes or
+the asserted redaction relationship.
+
+The separate [packet continuation ledger](p01-packet-agent-execution.json)
+records this delivery's actual assignments and dispositions. The original P00
+and P01 execution ledgers remain separate historical records.
+
 ## Next bounded action
 
 **Resolve P01-T05's qualified vendor `hw_emu` environment/platform blocker.**

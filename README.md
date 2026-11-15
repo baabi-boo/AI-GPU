@@ -32,6 +32,7 @@ P00 remains complete, P01 remains incomplete, and P02 has not started.
 - Pick the next bounded task: [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
 - Reproduce the current phase: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
 - Continue from the recorded checkpoint: [P01 handoff](docs/project/p01-handoff.md).
+- Check retained evidence: [packet verification guide](docs/project/p01-packet-verification.md) and [packet continuation handoff](docs/project/p01-packet-handoff.md).
 - Begin contributing: [developer guide](docs/project/developer-guide.md), [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md).
 - Find everything else: [project documentation](docs/project/index.md) and [technical documentation](docs/index.md).
 
@@ -125,14 +126,29 @@ identifies the minimal immutable tool bundles; the
 bounded logs and failure checkpoints.
 
 Follow the [runbook](docs/project/p01-baseline-runbook.md) for preparation and
-execution. The current source-root suite passes 346 tooling/governance tests;
-those tests do not establish a numerical baseline. The attention kernel uses
+execution. The reviewed baseline delivery records 346 passing tooling/governance
+tests; those tests do not establish a numerical baseline. The attention kernel uses
 shared-memory operands for both GEMMs; its original matrix prose is corrected
 by the [operand coverage erratum](docs/project/evidence/p01/attention-operand-erratum.md).
 P01 also requires full XRT `hw_emu` integration; unavailable vendor tools or a
 missing platform remain an explicit blocker to phase closure. A supplemental
 16-point integer demo passed through the full-AFU vendor-free `xrtsim` model;
 that result does not close the vendor-emulation gate.
+
+The offline [packet verifier](docs/project/p01-packet-verification.md) checks
+retained evidence without running a GPU. Use `verify` and `seal` for original
+bytes, or explicit `verify-export` for a published derivative. From the source
+root, check the published native and clean-build packets together with:
+
+```sh
+python3 ci/project/check_baseline_packets.py
+```
+
+This consistency check is also part of Project Governance CI. It retains
+`phase_complete: false` and does not prove original log bytes or their redaction
+relationship. The [continuation handoff](docs/project/p01-packet-handoff.md)
+tracks the packet implementation's validation, independent review and publication
+state separately from the accepted execution evidence.
 
 ## Evidence and engineering rules
 
