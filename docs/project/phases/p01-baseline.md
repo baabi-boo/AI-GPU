@@ -3,6 +3,25 @@
 Live status and authoritative gates are in [roadmap.json](../roadmap.json).
 Dependency: **P00**. Accountable role: **Verification lead**.
 
+## Implementation checkpoint
+
+P01 is `in_progress`; its acceptance evidence array is still empty. The
+[runbook](../p01-baseline-runbook.md) now connects an immutable
+[toolchain lock](../../../ci/project/p01_toolchain.lock.json), verified
+[bootstrap](../../../ci/project/baseline_bootstrap.py), frozen
+[six-case native matrix](../../../ci/project/p01_baseline.json) and bounded
+[execution runner](../../../ci/project/baseline.py). Provenance, configuration,
+process-limit and failure-retention tests exercise this tooling independently of
+GPU workloads.
+
+The clean execution source is `03181532b81fe95b1cfeac2ffb25d8597af689b2`.
+Pinned submodules/tools and dependency, kernel-library and runtime builds are
+prepared. An initial FP16 SimX build failed in the pinned spdlog/fmt dependency
+under GCC 14.2 before the workload ran; its failure is retained while a verified
+host compiler is prepared. Native numerical results and their review remain
+outstanding. Full vendor XRT `hw_emu` is blocked by missing tools/platform, so
+neither processor RTL nor supplemental `xrtsim` can close P01-A03.
+
 ## Goal and boundary
 
 Reproduce inherited AI building blocks on pinned configurations before changing
@@ -37,8 +56,9 @@ Physical-board performance and new model/framework features are later work.
 6. **Publish the baseline packet:** retain commands, logs, results, discrepancies,
    applicable parity evidence and explicit coverage gaps for review.
 
-The current generated runner uses `--test` marker expressions. After setup and
-budget review, these are catalog slice examples, **not a claim they have run**:
+Use the frozen matrix and its runner for the bounded P01 packet. The inherited
+generated regression runner also accepts `--test` marker expressions. These
+remain broader catalog slice examples, **not a claim they have run**:
 
 ```sh
 # Run from the configured build tree, not the source root.

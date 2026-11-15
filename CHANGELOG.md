@@ -4,6 +4,29 @@ This log records project changes, not hardware qualification. Accepted scope and
 evidence remain in [project status](docs/project/status.md) and the
 [canonical roadmap](docs/project/roadmap.json).
 
+## Unreleased — P01 reproducible baseline
+
+### Added
+
+- A frozen six-case RV64 matrix pairing native FP16/BF16 GEMM and small TF32
+  attention on SimX and processor RTL, with explicit TFR tensor and STD scalar
+  arithmetic and unchanged inherited reference tolerances.
+- An immutable minimal toolchain lock and bounded bootstrap with archive hashes,
+  safe extraction, installation receipts and verification of retained tools.
+- Read-only source/tool/build provenance checks and a sequential execution runner
+  with configuration hashes, command logs, resource limits, failure retention and
+  atomic progress records; independent positive and negative tests cover the tools.
+- A [P01 reproduction runbook](docs/project/p01-baseline-runbook.md) covering
+  pinned dependencies, bounded builds, the six-case matrix and integration scope.
+
+### Qualification state
+
+P01 is in progress. The initial GCC 14.2 SimX compile failure in pinned spdlog/fmt
+is retained; it is not a numerical result. Host-compiler reproduction and the
+six native cases are being completed before a reviewed acceptance packet is
+attached. Vendor XRT `hw_emu` remains blocked by unavailable tools/platform.
+No P01 gate, physical hardware or silicon qualification follows from the tooling.
+
 ## Unreleased — development foundation
 
 ### Added

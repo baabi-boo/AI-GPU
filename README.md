@@ -14,16 +14,19 @@ simulator configuration. “NVIDIA-style” describes the ambition of programmab
 compute, specialized matrix units, fast memory and usable software. It does not
 mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
-**Current stage: P00 — project foundation accepted; P01 baseline work is next.** The authoritative
-[status](docs/project/status.md) and [phase gates](docs/project/roadmap.json)
-separate accepted evidence from planned work. Repository setup is not GPU
-qualification; P01–P11 require their own results.
+**Current stage: P01 — reproducible baseline in progress.** P00 is accepted;
+the frozen native matrix, pinned tool bootstrap and bounded execution runner are
+implemented. Native execution and its reviewed evidence packet are underway.
+The authoritative [status](docs/project/status.md) and
+[phase gates](docs/project/roadmap.json) separate implementation from acceptance;
+no P01 gate is accepted yet.
 
 ## Start here
 
 - Understand the goal: [project charter](docs/project/charter.md).
 - See the development sequence: [roadmap](ROADMAP.md).
 - Pick the next bounded task: [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
+- Reproduce the current phase: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
 - Begin contributing: [developer guide](docs/project/developer-guide.md), [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md).
 - Find everything else: [project documentation](docs/project/index.md) and [technical documentation](docs/index.md).
 
@@ -104,6 +107,22 @@ dependencies are reported separately. Follow the [developer guide](docs/project/
 before downloads or execution: approve a disk/RAM/job budget, use pinned tools
 and separate build directories, and start with bounded cases. Do not begin with
 an unrestricted toolchain install or full synthesis sweep.
+
+## P01 baseline implementation
+
+The [frozen RV64 matrix](ci/project/p01_baseline.json) pairs FP16 and BF16 GEMM
+and a small TF32 attention workload on SimX and processor RTL. It explicitly
+selects TFR tensor and STD scalar arithmetic, preserving the existing numerical
+references and tolerances. The [toolchain lock](ci/project/p01_toolchain.lock.json)
+identifies the minimal immutable tool bundles; the
+[bootstrap](ci/project/baseline_bootstrap.py) verifies their identities, and the
+[runner](ci/project/baseline.py) retains configuration hashes, command results,
+bounded logs and failure checkpoints.
+
+Follow the [runbook](docs/project/p01-baseline-runbook.md) for preparation and
+execution. Passing tooling tests does not establish a numerical baseline.
+P01 also requires full XRT `hw_emu` integration; unavailable vendor tools or a
+missing platform remain an explicit blocker to phase closure.
 
 ## Evidence and engineering rules
 

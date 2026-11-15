@@ -3,20 +3,24 @@
 This is the actionable queue, not a second completion ledger. Live phase status,
 dependencies and authoritative acceptance text are in [roadmap.json](roadmap.json);
 the current handoff is in [status](status.md). Keep work-item IDs stable when
-adding issue links or evidence. Role names below are **unassigned responsibilities**:
-name an actual owner before starting work, and never imply staff or approval exists.
+adding issue links or evidence. Role names below describe responsibilities;
+the active execution owner is recorded in [status](status.md). Later-phase roles
+remain unassigned until an actual owner is identified.
 
 ## Start here: reproduce, then extend
 
-**Next bounded action: P01-T01, followed by P01-T02.** Produce an environment and
-provenance manifest plus a reviewed native test matrix. Do not begin by adding
-cores, advertising a memory capacity, replacing HIP, or downloading large models.
-P01 execution requires accepted P00 and an approved resource/access budget.
+**Next bounded action: finish P01-T03 with the verified host compiler, then run
+P01-T04's frozen six-case matrix.** The environment inventory, immutable toolchain
+lock, native matrix and bounded runner are implemented. The clean execution
+checkout has its pinned submodules and minimal RV64 tools; dependency, kernel
+library and runtime builds have passed. The first FP16 SimX attempt stopped at a
+GCC 14.2 spdlog/fmt compilation diagnostic before numerical execution. Retain that
+failure, record the replacement compiler identity and use a fresh build directory.
 
-The setup checkout had uninitialized third-party submodules and lacked the GPU
-toolchain; no GPU workload or vendor-license/platform qualification was performed.
-Recheck the actual execution environment rather than treating that snapshot as a
-permanent property of the repository. These source-root observations are cheap:
+Follow the [P01 runbook](p01-baseline-runbook.md). The two-worker budget, 15 GiB
+disk reserve and per-command memory/log/time limits remain part of the packet.
+No P01 acceptance gate is closed by this implementation checkpoint. Check the
+actual execution state rather than carrying forward an earlier setup snapshot:
 
 ```sh
 git status --short
@@ -29,11 +33,17 @@ python3 ci/project/preflight.py --tier simulation --json
 A blocked simulation preflight is a list of prerequisites, not permission to
 install everything automatically. The [developer guide](developer-guide.md)
 defines separate tool directories, build trees, resource checks and safe cleanup.
-All commands in this backlog are instructions, not claims of completed execution.
+Commands in this backlog are instructions; observed outcomes and current blockers
+belong in [status](status.md) and the reviewed phase evidence.
 
 ## Priority 1 — P01 baseline work
 
 Short `Txx` dependency references use the work item's own phase prefix.
+
+T01/T02 now have executable tooling and a frozen contract. T03/T04 are being
+executed; T05 is blocked by missing vendor `hw_emu` tools/platform. T06 must retain
+the compiler failure, review each required result, and attach compatible evidence
+before any acceptance or phase-completion change.
 
 | Work item | Deliverable and completion check | Prerequisite / accountable role | Gate supported |
 |---|---|---|---|
@@ -44,16 +54,23 @@ Short `Txx` dependency references use the work item's own phase prefix.
 | **P01-T05 — Full AFU integration** | Pin an available XRT emulation platform/tool environment, then prove DMA, launch and completion through full `hw_emu`. Publish its logs and configuration, or an explicit blocked record when unavailable. Processor-only `rtlsim` does not close this item. | T03/T04 plus platform/license access; FPGA platform lead | P01-A03 |
 | **P01-T06 — Reviewed baseline packet** | Assemble hashes, exact commands/results, native/DPI distinctions, failures and limitations; obtain independent review, attach each satisfied gate, and update status plus the next task. Close P01 only when all three gates pass. | T01–T05 evidence; verification lead / maintainer | P01-A01, P01-A02, P01-A03 |
 
-### Catalog selection is deliberate
+### Frozen catalog-derived matrix
 
-The following are **starting points for P01-T02**, not an accepted matrix or test
-results. Read their actual configuration and inherited application defaults:
+[`p01_baseline.json`](../../ci/project/p01_baseline.json) is the execution contract.
+Its strict [loader](../../ci/project/baseline_matrix.py) checks paired coverage,
+native arithmetic, dimensions and inherited numerical tolerances. Both drivers
+use the same explicit configuration for each workload; native RTL coverage added
+by the matrix is identified as derived coverage, without changing inherited cases.
 
-| Starting point | What to inspect |
+| Catalog source | Frozen P01 coverage |
 |---|---|
-| [`tensor.yaml`](../../ci/testcases/tensor.yaml): `sgemm_tcu-3`, `sgemm_tcu-4` | SimX FP16/BF16-to-FP32 patterns; identify or add the matching bounded native-RTL coverage. Nearby DPI cases are not substitutes. |
-| [`tensor_wg.yaml`](../../ci/testcases/tensor_wg.yaml): `flash_attn_tcu_wg-fp16` | Native tensor-attention SimX path, precision, dimensions and application-supplied feature flags. |
-| Same catalog: `flash_attn_tcu_wg-rtlsim` | Existing RV64 small attention case (`-N 32 -D 16 -c 8 -t 8`); record its actual format and native backend, and the documented parity applicability limit. |
+| [`tensor.yaml`](../../ci/testcases/tensor.yaml): `sgemm_tcu-3` | FP16-to-FP32 GEMM, `64 × 64 × 64`, on SimX and processor RTL |
+| Same catalog: `sgemm_tcu-4` | BF16-to-FP32 GEMM, `64 × 64 × 64`, on SimX and processor RTL; the existing DPI RTL case is not a substitute |
+| [`tensor_wg.yaml`](../../ci/testcases/tensor_wg.yaml): `flash_attn_tcu_wg-rtlsim` | RV64 TF32-to-FP32 attention, `-N 32 -D 16 -c 8 -t 8`, on both drivers; no FP16 attention result is implied |
+
+Use [baseline.py](../../ci/project/baseline.py) to plan and execute these six
+cases after following the runbook. A plan or a partial selected run cannot close
+P01. Preserve the separate native processor and full-AFU integration obligations.
 
 After the environment is prepared, inspect selection from the **configured build
 tree**, without running the workloads:
