@@ -1,0 +1,59 @@
+name: Phase work proposal
+description: Propose a bounded task with dependencies, acceptance evidence and an explicit resource budget.
+title: "[Work] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Start with the [roadmap](https://github.com/baabi-boo/AI-GPU/blob/master/docs/project/roadmap.json), [requirements](https://github.com/baabi-boo/AI-GPU/blob/master/docs/project/requirements.md) and [acceptance policy](https://github.com/baabi-boo/AI-GPU/blob/master/docs/project/acceptance.md).
+        This is a proposal, not phase acceptance, an owner assignment, or authorization to buy hardware, licenses or manufacturing services.
+  - type: input
+    id: traceability
+    attributes:
+      label: Phase, acceptance and requirement IDs
+      description: Use existing canonical IDs. If changing the contract, identify the affected IDs and propose a reviewed change explicitly.
+      placeholder: P01; P01-A01; RQ-003
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Goal, deliverables and non-goals
+      description: What concrete problem does this task solve? Name the smallest useful deliverable and what this task will not claim or implement.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Prerequisites and blockers
+      description: Link dependency phases, issues, decisions and existing evidence. Name missing tools, fixtures, platform access or approvals; do not assume dependencies have passed.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Verification and exit evidence
+      description: Define tests, configurations/backends, frozen numerical or resource bounds, negative cases and expected evidence artifacts. Explain how each named gate will be demonstrated without weakening inherited tests.
+    validations:
+      required: true
+  - type: textarea
+    id: ownership
+    attributes:
+      label: Affected components, ownership and review
+      description: List files/subsystems and contracts touched, proposed accountable role/person, independent review needs and coordination risks. Proposed ownership is not an assignment or approval.
+    validations:
+      required: true
+  - type: textarea
+    id: budget
+    attributes:
+      label: Resource and authority budget
+      description: State expected downloads, disk/RAM, job limits, run duration and retained artifacts. Identify hardware, license or paid-service needs and who must authorize them. Use “none; source-only” when applicable, or identify an unresolved budget as a blocker.
+    validations:
+      required: true
+  - type: textarea
+    id: handoff
+    attributes:
+      label: Completion and handoff plan
+      description: Name status/backlog/evidence records to update and the next bounded task. How will another contributor reproduce or resume the work?
+    validations:
+      required: true

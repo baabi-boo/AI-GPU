@@ -1,5 +1,45 @@
 # Changelog
 
+This log records project changes, not hardware qualification. Accepted scope and
+evidence remain in [project status](docs/project/status.md) and the
+[canonical roadmap](docs/project/roadmap.json).
+
+## Unreleased — development foundation
+
+### Added
+
+- A project charter, architecture direction, traceable requirements, risk and
+  decision registers, and a 12-phase roadmap with explicit acceptance evidence.
+- Native software, physical FPGA and separately authorized silicon development
+  plans; numerical, benchmark, verification, security and release policies.
+- Standard-library project validation, read-only prerequisite/resource checks,
+  positive/negative unit tests and an additive lightweight governance workflow.
+- Structured issue forms, a resumable handoff template and an execution ledger
+  that records completed assignments without treating agent counts as GPU proof.
+- An opt-in, **unqualified** `ai-dev` configuration candidate and source-only
+  configuration tests. It selects no physical board or measured performance target.
+- A [maintainer adoption checklist](docs/project/maintainer-checklist.md) for
+  repository permissions, review, CI, security reporting and release decisions.
+
+### Changed and preserved
+
+- Reworked the README, project navigation, contribution guide, pull-request
+  template and agent instructions around bounded, evidence-backed development.
+- Preserved the original README illustration and embed, upstream attribution,
+  licenses, GPU/runtime/simulator implementation, inherited workflows, test
+  catalogs, golden data, toolchain pins and global hardware defaults.
+
+This is an unreleased development setup, not a completed GPU or qualified source,
+simulation, FPGA or silicon release. The candidate profile has not earned GPU
+execution acceptance. No CUDA/NVIDIA equivalence, hardware measurements, purchases
+or manufacturing commitments follow from these changes. Check current status for
+the actual review, approval, publication and phase-completion state.
+
+## Inherited Vortex history
+
+The entries below are preserved from the Vortex baseline. Their versions and
+historical results describe upstream work, not newly qualified AI-GPU releases.
+
 All notable changes to Vortex are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 follows the version pins recorded in [VERSION](VERSION) (`VORTEX_VERSION`,

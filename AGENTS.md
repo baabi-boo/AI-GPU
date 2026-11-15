@@ -1,6 +1,19 @@
-# AGENTS Guide for Vortex GPGPU Development
+# AGENTS Guide for AI-GPU Development
 
-This is the canonical entry point for **both human contributors and AI coding agents** working on Vortex. It captures the *rules* — invariants, conventions, and footguns — that every change should respect. Build/test/debug *recipes* live in the topic docs linked below.
+This is the canonical entry point for **both human contributors and AI coding agents** working on AI-GPU, a Vortex-derived programmable AI-accelerator project. It preserves the inherited Vortex engineering invariants below. Build/test/debug *recipes* live in the topic docs linked below.
+
+## AI-GPU project contract
+
+- **Read before choosing work:** [project status](docs/project/status.md), [roadmap](ROADMAP.md), [machine-readable phase gates](docs/project/roadmap.json), [backlog](docs/project/backlog.md), and [acceptance policy](docs/project/acceptance.md). Inspect the current commit and local edits; do not rely on an old conversation as project state.
+- **Advance evidence, not claims.** A design file, simulation, native RTL test, physical FPGA measurement, and silicon measurement are different evidence levels. A DPI arithmetic model is not a native datapath test; `hw_emu` is not physical FPGA hardware. Never mark a gate passed when its tests did not run.
+- **Start with the existing native path.** Reuse the tensor hardware, `vx_tensor.h`, native runtime, simulators and test catalog. Basic HIP support does not establish CUDA binary compatibility or tensor-intrinsic access through chipStar. Framework, training and multi-device claims require their own evidence.
+- **Keep the project resumable.** Every milestone change updates its phase evidence, current status, remaining blockers and next bounded action. Plans live under `docs/project/`; implemented subsystem contracts remain under `docs/designs/`. A setup milestone is not completion of GPU development.
+- **Preserve provenance and assets.** Retain Apache-2.0 licensing and upstream attribution. Keep `docs/assets/img/vortex_framework_stack.svg` byte-for-byte and embedded in the README unless the user explicitly approves replacing it. Do not rename the repository's default branch or remove inherited functionality as a cosmetic change.
+- **Budget before expensive work.** Follow [developer resource guidance](docs/project/developer-guide.md). Inspect free disk and available memory before downloads/builds; use bounded jobs and separate build directories. Do not delete user data or install a whole toolchain merely to validate documentation. Hardware access, commercial IP, foundry services and spending require explicit authority.
+- **Use narrow ownership and independent review.** Parallel agents own disjoint files; record actual completed work, not requested agent counts. Changes to enforcement or external contracts require independent review under the inherited policy. Do not weaken gates, change golden data, or self-authorize a waiver.
+- **Deliver honestly.** State exact tested revision/configuration, commands, results, omissions and blockers. Check the remote head before publication, preserve concurrent work, and use only the authorized target repository. No force push or unrequested changes to upstream repositories.
+
+Project governance checks (`python3 ci/project/check_project.py` and `python3 -m unittest discover -s ci/project -p 'test_*.py'`) run from the **source root**, without a GPU build tree. They validate project metadata/tooling only. The inherited build-tree rule below continues to apply to GPU/kernel/RTL tests.
 
 ---
 
@@ -76,7 +89,7 @@ See [docs/bug_fixes.md](docs/bug_fixes.md) for the full rationale and examples. 
 See [docs/testing.md](docs/testing.md) and [docs/debugging.md](docs/debugging.md) for recipes. The rules:
 
 - **All test commands run from `build/`.** The generated `ci/` scripts assume it.
-- **`CONFIGS` must match on both sides.** `blackbox.sh` only rebuilds the driver. If your test was compiled with `-DVX_CFG_NUM_THREADS=4`, blackbox can't fix that — rebuild the app first:
+- **`CONFIGS` must match on both sides.** `blackbox.sh` passes the effective flags to the application's `runtime-<driver>` and `run-<driver>` targets. Native regression rules track resolved flags in `config.stamp` and rebuild affected host/kernel outputs. This does not replace regenerating stale configuration headers or checking custom/prebuilt application rules. When rebuilding manually, use the same configuration for application and backend:
   ```bash
   make -C tests/regression/<app> clean
   CONFIGS="-DVX_CFG_NUM_THREADS=8 -DVX_CFG_EXT_TCU_ENABLE" make -C tests/regression/<app>
@@ -170,4 +183,4 @@ This file is versioned alongside the code and evolves with it. Both humans and a
 - **Add a rule** when you discover a footgun the next contributor will hit. Include the *why*.
 - **Update or remove a rule** that's gone stale. A stale rule is worse than no rule.
 - **Don't duplicate** content from the topic docs in `docs/`. AGENTS.md links; the topic doc explains.
-- **Branch-specific addenda are forbidden.** No branch-local `AGENTS.md` variants: if a rule is general, promote it here; project-tracking details stay out of the repo docs.
+- **Branch-specific agent rules are forbidden.** No branch-local `AGENTS.md` variants: promote general rules here. This project's requested plans, status, acceptance evidence and handoff records live in `docs/project/`, separate from implemented subsystem specifications.

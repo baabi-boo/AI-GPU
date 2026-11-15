@@ -1,0 +1,76 @@
+name: Evidence review
+description: Submit a scoped result for review without treating an issue or template as automatic acceptance.
+title: "[Evidence] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use the [evidence report contract](https://github.com/baabi-boo/AI-GPU/blob/master/docs/project/evidence/README.md) and [acceptance policy](https://github.com/baabi-boo/AI-GPU/blob/master/docs/project/acceptance.md).
+        Submission does not close a phase. Unexecuted templates, DPI arithmetic, emulation and physical hardware are not interchangeable evidence. Do not attach secrets, signed URLs, restricted IP or large generated files.
+  - type: input
+    id: traceability
+    attributes:
+      label: Acceptance and requirement IDs
+      description: List each canonical gate and requirement addressed; explain partial coverage below.
+      placeholder: P01-A02; RQ-004
+    validations:
+      required: true
+  - type: input
+    id: revision
+    attributes:
+      label: Exact tested revision
+      description: Full 40-character source commit. Disclose local changes; a different or guessed SHA cannot identify the tested tree.
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Report and artifact manifest
+      description: Link the proposed report/PR and repository-relative record path. Include artifact paths or stable authorized references with SHA-256 hashes and provenance. A report.example.json file is not acceptance evidence.
+    validations:
+      required: true
+  - type: dropdown
+    id: evidence_level
+    attributes:
+      label: Claimed evidence level
+      description: Select only the level supported within the declared scope; a higher level does not prove unrelated obligations.
+      options:
+        - source_present
+        - simulated
+        - rtl_verified
+        - fpga_measured
+        - silicon_measured
+    validations:
+      required: true
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: Recorded outcome
+      options:
+        - pass
+        - fail
+        - not_run
+        - blocked
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Configuration and claim boundary
+      description: Name workload/fixtures, tool versions, driver and arithmetic backend, native versus DPI, permitted host work/fallback and exact tested configurations. Physical results need device/platform/bitstream or silicon identity; hw_emu is not physical FPGA evidence.
+    validations:
+      required: true
+  - type: textarea
+    id: commands
+    attributes:
+      label: Commands and observed results
+      description: Provide exact invocations, working directories, outcomes and observed exit codes, with raw-log references. For not_run, give no invented exit code; explain blockers. Report correctness separately from command success and performance.
+    validations:
+      required: true
+  - type: textarea
+    id: limitations
+    attributes:
+      label: Limitations, failures and review status
+      description: List untested cases, failed checks, partial gate coverage, unresolved decisions and actual reviewer/disposition (or pending). Do not invent maintainer, procurement or manufacturing approval. State the next action needed before acceptance.
+    validations:
+      required: true

@@ -1,0 +1,433 @@
+{
+  "schema_version": 1,
+  "project": "AI-GPU",
+  "repository": "baabi-boo/AI-GPU",
+  "default_branch": "master",
+  "baseline_commit": "da55a516a48b49013724f697d3c12a48932b449f",
+  "evidence_levels": [
+    "source_present",
+    "simulated",
+    "rtl_verified",
+    "fpga_measured",
+    "silicon_measured"
+  ],
+  "status_values": [
+    "not_started",
+    "in_progress",
+    "blocked",
+    "complete"
+  ],
+  "protected_assets": [
+    {
+      "path": "docs/assets/img/vortex_framework_stack.svg",
+      "sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4"
+    }
+  ],
+  "required_documents": [
+    "docs/project/charter.md",
+    "docs/project/baseline.md",
+    "docs/project/requirements.md",
+    "docs/project/architecture.md",
+    "docs/project/acceptance.md",
+    "docs/project/benchmarks.md",
+    "docs/project/developer-guide.md",
+    "docs/project/risks.md",
+    "docs/project/hardware.md",
+    "docs/project/software.md",
+    "docs/project/verification.md",
+    "docs/project/releases.md",
+    "docs/project/status.md",
+    "docs/project/backlog.md",
+    "docs/project/decisions.md",
+    "docs/project/index.md",
+    "docs/project/configurations.md",
+    "docs/project/maintainer-checklist.md",
+    "docs/project/ci-contract.md"
+  ],
+  "phases": [
+    {
+      "id": "P00",
+      "title": "Project foundation",
+      "status": "in_progress",
+      "depends_on": [],
+      "accountable_role": "Project maintainer",
+      "goal": "Set a truthful, enforceable development contract before claiming new AI capability.",
+      "document": "docs/project/phases/p00-foundation.md",
+      "acceptance": [
+        {
+          "id": "P00-A01",
+          "criterion": "Navigation, scope, evidence vocabulary and ownership roles are documented; the original README image is preserved byte-for-byte.",
+          "verification": "Repository inspection, link checks and image checksum",
+          "evidence_level": "source_present"
+        },
+        {
+          "id": "P00-A02",
+          "criterion": "Offline roadmap validation and its positive/negative unit tests pass without a GPU toolchain.",
+          "verification": "python3 ci/project/check_project.py; python3 -m unittest discover -s ci/project -p 'test_*.py'",
+          "evidence_level": "source_present"
+        },
+        {
+          "id": "P00-A03",
+          "criterion": "Independent reviews are resolved and the delivered commit is verified on the intended repository and branch.",
+          "verification": "Review ledger, git diff and GitHub branch readback",
+          "evidence_level": "source_present"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "id": "P01",
+      "title": "Reproducible baseline",
+      "status": "not_started",
+      "depends_on": [
+        "P00"
+      ],
+      "accountable_role": "Verification lead",
+      "goal": "Reproduce inherited capabilities on pinned configurations; inherited source is not a new measurement.",
+      "document": "docs/project/phases/p01-baseline.md",
+      "acceptance": [
+        {
+          "id": "P01-A01",
+          "criterion": "A clean checkout reproduces a pinned toolchain, submodules, generated configuration and build with full command provenance.",
+          "verification": "Clean-room build log and tool/config hashes",
+          "evidence_level": "simulated"
+        },
+        {
+          "id": "P01-A02",
+          "criterion": "Native FP16/BF16 tensor GEMM and supported small attention cases pass CPU-reference checks on SimX and native rtlsim; DPI runs are separately labelled.",
+          "verification": "Named existing catalog cases, raw logs, reference tolerances and backend record",
+          "evidence_level": "rtl_verified"
+        },
+        {
+          "id": "P01-A03",
+          "criterion": "Full AFU integration is exercised on XRT hardware emulation where available; unavailable integration is explicitly blocked, never passed.",
+          "verification": "XRT hw_emu report including DMA, launch and completion",
+          "evidence_level": "rtl_verified"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "id": "P02",
+      "title": "Tensor numerical contract",
+      "status": "not_started",
+      "depends_on": [
+        "P01"
+      ],
+      "accountable_role": "Compute architecture lead",
+      "goal": "Define and prove the exact arithmetic behavior of the first supported AI configuration.",
+      "document": "docs/project/phases/p02-tensor.md",
+      "acceptance": [
+        {
+          "id": "P02-A01",
+          "criterion": "Versioned format/backend contracts specify rounding, accumulation, exceptional values, overflow, underflow and tolerances before evaluation.",
+          "verification": "Reviewed numeric contract and deterministic fixture manifest",
+          "evidence_level": "source_present"
+        },
+        {
+          "id": "P02-A02",
+          "criterion": "Native FP16/BF16-to-FP32 arithmetic passes normal, edge, cancellation and layout tests; unsupported formats fail explicitly.",
+          "verification": "Reference comparisons on SimX and native RTL, not a DPI replacement",
+          "evidence_level": "rtl_verified"
+        },
+        {
+          "id": "P02-A03",
+          "criterion": "WGMMA synchronization, metadata, multi-warp and backpressure cases preserve correctness with no unexplained model divergence.",
+          "verification": "Concurrency tests and model-parity evidence or documented applicability limits",
+          "evidence_level": "rtl_verified"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "id": "P03",
+      "title": "AI operator library",
+      "status": "not_started",
+      "depends_on": [
+        "P02"
+      ],
+      "accountable_role": "Kernel and runtime lead",
+      "goal": "Expose stable native AI operators without requiring a new HIP toolchain.",
+      "document": "docs/project/phases/p03-operators.md",
+      "acceptance": [
+        {
+          "id": "P03-A01",
+          "criterion": "A versioned operator manifest covers matmul/GEMV, reductions, softmax, normalization, activations, layout/casts and attention with supported dtype/shape/layout ranges.",
+          "verification": "Operator manifest, ABI review and explicit unsupported-operation tests",
+          "evidence_level": "source_present"
+        },
+        {
+          "id": "P03-A02",
+          "criterion": "Every supported operator passes deterministic and edge-case CPU-reference checks through real device launches; CPU fallback is explicit and separately reported.",
+          "verification": "Per-operator numerical reports and dispatch traces on SimX/native RTL",
+          "evidence_level": "rtl_verified"
+        },
+        {
+          "id": "P03-A03",
+          "criterion": "Buffer bounds, queue/event lifetimes, transfer errors and repeated allocation/free behavior pass host integration tests.",
+          "verification": "Negative tests and leak/resource accounting logs",
+          "evidence_level": "simulated"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "id": "P04",
+      "title": "Tiny-model inference",
+      "status": "not_started",
+      "depends_on": [
+        "P03"
+      ],
+      "accountable_role": "Model runtime lead",
+      "goal": "Execute a fixed, redistributable tiny model end-to-end through native AI operators.",
+      "document": "docs/project/phases/p04-inference.md",
+      "acceptance": [
+        {
+          "id": "P04-A01",
+          "criterion": "Model, tokenizer if needed, weights or generator, seeds, shapes and licenses are fixed and reproducible without large proprietary downloads.",
+          "verification": "Small fixture manifest with hashes and license/provenance",
+          "evidence_level": "source_present"
+        },
+        {
+          "id": "P04-A02",
+          "criterion": "An end-to-end tiny transformer or equivalently specified network matches its frozen CPU reference, with layer-level and final-output tolerances locked before the run.",
+          "verification": "Deterministic native-runtime model report and intermediate comparisons",
+          "evidence_level": "simulated"
+        },
+        {
+          "id": "P04-A03",
+          "criterion": "Device traces prove the declared accelerated operators ran on Vortex; transfer costs and any allowed host work are reported separately.",
+          "verification": "Dispatch and transfer traces plus latency breakdown",
+          "evidence_level": "simulated"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "id": "P05",
+      "title": "Python and framework integration",
+      "status": "not_started",
+      "depends_on": [
+        "P04"
+      ],
+      "accountable_role": "Framework integration lead",
+      "goal": "Let Python users invoke the proven runtime while clearly separating a custom-op bridge from a full device backend.",
+      "document": "docs/project/phases/p05-framework.md",
+      "acceptance": [
+        {
+          "id": "P05-A01",
+          "criterion": "A thin Python binding supports the declared dtypes, shapes, strides, lifetimes and explicit errors; package installation works in a clean environment.",
+          "verification": "Binding tests, packaging smoke and dependency lock/provenance",
+          "evidence_level": "simulated"
+        },
+        {
+          "id": "P05-A02",
+          "criterion": "A supported PyTorch custom-op path reproduces the native tiny-model result without silent CPU fallback or unsupported autograd claims.",
+          "verification": "Framework-to-device trace and numerical comparison",
+          "evidence_level": "simulated"
+        },
+        {
+          "id": "P05-A03",
+          "criterion": "The compatibility matrix names tested framework versions, operators and limitations; CUDA binary compatibility is not implied.",
+          "verification": "Versioned matrix and failure-mode tests",
+          "evidence_level": "source_present"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "id": "P06",
+      "title": "Memory and performance scaling",
+      "status": "not_started",
+      "depends_on": [
+        "P04"
+      ],
+      "accountable_role": "Performance and memory lead",
+      "goal": "Measure and improve useful work per second, byte and joule without confusing simulation with physical speed.",
+      "document": "docs/project/phases/p06-performance.md",
+      "acceptance": [
+        {
+          "id": "P06-A01",
+          "criterion": "A frozen workload/configuration suite records cycles, transfers, cache/local-memory use and computation counts with warm-up and repeat policy.",
+          "verification": "Reproducible benchmark manifests, raw samples and analysis",
+          "evidence_level": "simulated"
+        },
+        {
+          "id": "P06-A02",
+          "criterion": "Each optimization preserves numeric contracts and inherited performance gates; native RTL and SimX changes remain synchronized.",
+          "verification": "Before/after data, correctness and applicable parity/gate results",
+          "evidence_level": "rtl_verified"
+        },
+        {
+          "id": "P06-A03",
+          "criterion": "The chosen scale/configuration fits explicit resource and timing budgets; predicted and measured quantities are separated.",
+          "verification": "Synthesis/resource reports and documented target budget",
+          "evidence_level": "rtl_verified"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "id": "P07",
+      "title": "Physical FPGA prototype",
+      "status": "not_started",
+      "depends_on": [
+        "P04",
+        "P06"
+      ],
+      "accountable_role": "FPGA platform lead",
+      "goal": "Prove real compute, real external DRAM and real host transfers on one selected supported board.",
+      "document": "docs/project/phases/p07-fpga.md",
+      "acceptance": [
+        {
+          "id": "P07-A01",
+          "criterion": "A board/platform/tool license decision is recorded; firmware, memory map, toolchain, bitstream hash and achieved clock are pinned.",
+          "verification": "Board readiness record and reproducible implementation report",
+          "evidence_level": "source_present"
+        },
+        {
+          "id": "P07-A02",
+          "criterion": "Physical hardware (not hw_emu) passes DMA, bank/address boundary, tensor, attention and the tiny-model tests against frozen references.",
+          "verification": "XRT --driver=xrt --target=hw with a matching TARGET=hw bitstream, or equivalent physical-board logs with device identity",
+          "evidence_level": "fpga_measured"
+        },
+        {
+          "id": "P07-A03",
+          "criterion": "A one-hour initial soak completes with no unexplained numerical, transfer or reset errors; throughput, power and temperature are measured or explicitly unavailable.",
+          "verification": "Timestamped soak and telemetry report; failures block exit",
+          "evidence_level": "fpga_measured"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "id": "P08",
+      "title": "Reliability and release hardening",
+      "status": "not_started",
+      "depends_on": [
+        "P05",
+        "P07"
+      ],
+      "accountable_role": "Release and reliability lead",
+      "goal": "Turn a proven prototype into a reproducible, supportable experimental release.",
+      "document": "docs/project/phases/p08-reliability.md",
+      "acceptance": [
+        {
+          "id": "P08-A01",
+          "criterion": "Error propagation, resource exhaustion, malformed requests, reset/recovery and memory isolation are tested against an explicit threat/failure model.",
+          "verification": "Fault-injection results and resolved critical findings",
+          "evidence_level": "fpga_measured"
+        },
+        {
+          "id": "P08-A02",
+          "criterion": "A 24-hour physical soak passes the declared workload matrix with zero unexplained errors; known limitations are published.",
+          "verification": "Raw soak logs, telemetry and issue disposition",
+          "evidence_level": "fpga_measured"
+        },
+        {
+          "id": "P08-A03",
+          "criterion": "Versioned installation artifacts, source/license inventory, compatibility matrix and release evidence are reproducible and reviewed.",
+          "verification": "Clean install/reproduction report and signed-off experimental release checklist",
+          "evidence_level": "source_present"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "id": "P09",
+      "title": "Training and multi-device research",
+      "status": "not_started",
+      "depends_on": [
+        "P08"
+      ],
+      "accountable_role": "Research lead",
+      "goal": "Investigate training and cooperating accelerators as separately demonstrated capabilities.",
+      "document": "docs/project/phases/p09-research.md",
+      "acceptance": [
+        {
+          "id": "P09-A01",
+          "criterion": "A small training workload matches reference gradients and convergence under predeclared precision and optimizer settings.",
+          "verification": "Training numerical and convergence evidence",
+          "evidence_level": "fpga_measured"
+        },
+        {
+          "id": "P09-A02",
+          "criterion": "Two-device transport and collectives pass correctness, ordering, failure and recovery tests before any scaling claim.",
+          "verification": "Physical topology and collective-test report",
+          "evidence_level": "fpga_measured"
+        },
+        {
+          "id": "P09-A03",
+          "criterion": "Scaling and communication costs are measured on declared hardware; unsupported NVLink/CUDA equivalence claims are absent.",
+          "verification": "Single/multi-device comparative measurements",
+          "evidence_level": "fpga_measured"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "id": "P10",
+      "title": "ASIC feasibility and sign-off planning",
+      "status": "not_started",
+      "depends_on": [
+        "P08"
+      ],
+      "accountable_role": "Silicon program lead",
+      "goal": "Make an evidence-backed go/no-go decision for a bounded inference ASIC; training research is not a prerequisite.",
+      "document": "docs/project/phases/p10-asic.md",
+      "acceptance": [
+        {
+          "id": "P10-A01",
+          "criterion": "Foundry/PDK, SRAM macros, PCIe and memory controller/PHY IP, packaging and tool licenses have qualified owners and written availability/cost evidence.",
+          "verification": "Reviewed feasibility package and dependency register",
+          "evidence_level": "source_present"
+        },
+        {
+          "id": "P10-A02",
+          "criterion": "The target configuration has complete physical-design, DFT, timing, power-integrity and verification plans with no black-box memory assumptions presented as sign-off.",
+          "verification": "PPA reports labelled as estimates plus qualified sign-off checklist",
+          "evidence_level": "source_present"
+        },
+        {
+          "id": "P10-A03",
+          "criterion": "Budget, schedule, procurement, ownership and external partners are explicitly approved before tapeout commitments.",
+          "verification": "Recorded human go/no-go approval; no automated spending",
+          "evidence_level": "source_present"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "id": "P11",
+      "title": "Funded silicon realization and bring-up",
+      "status": "not_started",
+      "depends_on": [
+        "P10"
+      ],
+      "accountable_role": "Silicon bring-up lead",
+      "goal": "Fabricate and validate a funded design only after actual manufacturing sign-off.",
+      "document": "docs/project/phases/p11-silicon.md",
+      "acceptance": [
+        {
+          "id": "P11-A01",
+          "criterion": "Foundry-qualified verification, DFT and physical sign-off complete with reviewed exceptions and an explicitly approved manufacturing release.",
+          "verification": "Sign-off reports and authorized tapeout record",
+          "evidence_level": "source_present"
+        },
+        {
+          "id": "P11-A02",
+          "criterion": "Packaged silicon and its board pass power/clock/reset, memory training, host enumeration, DMA and core/tensor tests.",
+          "verification": "Lab measurements with device/board revisions and failure records",
+          "evidence_level": "silicon_measured"
+        },
+        {
+          "id": "P11-A03",
+          "criterion": "The frozen model suite runs on silicon; measured frequency, capacity, performance, power and yield limits are published honestly.",
+          "verification": "Silicon acceptance report and release decision",
+          "evidence_level": "silicon_measured"
+        }
+      ],
+      "evidence": []
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+name: Project Governance
+
+on:
+  push:
+    paths:
+      - '.github/workflows/project-governance.yml'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+      - 'ci/project/**'
+      - 'ci/gen_config.py'
+      - 'docs/project/**'
+      - 'docs/index.md'
+      - 'docs/assets/img/vortex_framework_stack.svg'
+      - 'profiles/**'
+      - 'README.md'
+      - 'ROADMAP.md'
+      - 'AGENTS.md'
+      - 'CONTRIBUTING.md'
+      - 'SECURITY.md'
+      - 'CHANGELOG.md'
+      - 'LICENSE'
+      - 'VERSION'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - '.gitmodules'
+  pull_request:
+    paths:
+      - '.github/workflows/project-governance.yml'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+      - 'ci/project/**'
+      - 'ci/gen_config.py'
+      - 'docs/project/**'
+      - 'docs/index.md'
+      - 'docs/assets/img/vortex_framework_stack.svg'
+      - 'profiles/**'
+      - 'README.md'
+      - 'ROADMAP.md'
+      - 'AGENTS.md'
+      - 'CONTRIBUTING.md'
+      - 'SECURITY.md'
+      - 'CHANGELOG.md'
+      - 'LICENSE'
+      - 'VERSION'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - '.gitmodules'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: project-governance-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  governance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          submodules: false
+          lfs: false
+          persist-credentials: false
+      - name: Verify system Python 3.12
+        run: python3 -c 'import sys; assert sys.version_info[:2] == (3, 12), sys.version; print(sys.version)'
+      - name: Inspect governance prerequisites
+        run: python3 ci/project/preflight.py --tier governance
+      - name: Validate project structure and evidence
+        run: python3 ci/project/check_project.py
+      - name: Test governance tooling
+        run: python3 -m unittest discover -s ci/project -p 'test_*.py'
