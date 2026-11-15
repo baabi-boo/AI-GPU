@@ -199,14 +199,47 @@ executed GPU workloads, synthesis, physical hardware or remote publication.
 Later delivery/evidence metadata is outside this frozen review and receives a
 separate coordinator check and independent follow-up before publication.
 
+## Metadata and published-source provenance
+
+After the frozen final reviews, `/root/w10_a06` independently reviewed the
+three-file ledger/narrative/status update at local commit
+`a0c31b1044d33c74b5e2f0b5362d31298426efb0`, tree
+`9f65ae6e2bce7adeaec2432c11756510028c8bc0`. The first 54 ledger entries were
+unchanged; the six real final completions produced exactly 60 agents. The
+reviewer observed all 180 tests, the project checker, metadata/count/phase-state
+assertions and whitespace pass on the clean commit. No actionable findings
+were reported. Implementation, checks, workflows, profiles and contracts did
+not change in that metadata update.
+
+The configured GitHub connection published source candidate
+`5a97e59ed95163c585106250194f816353d6ca4e` on `ai-gpu-project-setup`, with the
+**identical tree** `9f65ae6e2bce7adeaec2432c11756510028c8bc0`. GitHub's commit
+metadata differs from the local review history; the tree comparison is exact.
+The coordinator reconstructed the published Git commit metadata locally,
+verified its Git SHA-1 exactly, retained the local review history, and reran the
+source-only checks with that published commit as HEAD and a clean worktree.
+The [validation log](setup-validation.log) records actual commands and exits;
+the [publication observation](setup-publication.json) records branch/PR/image
+readback and the observed hosted job states. Historical local review commit IDs
+identify the retained local audit history, not additional published commits.
+
+[Pull request 1](https://github.com/baabi-boo/AI-GPU/pull/1) is open against
+`master`. Both initial Project Governance runs passed, including the PR run's
+prerequisite, validator and unit-test steps. Inherited GPU CI was still running
+at that observation; it was not called passed. The original SVG fetched from
+the review branch exactly matched the local protected baseline content.
+The final evidence/delivery packet is metadata-only and is independently
+checked before its publication; its disposition is retained with the PR.
+
 ## Remaining closure obligations
 
-1. Check the final ledger and delivery/evidence metadata added after the frozen
-   source review; retain its exact revision and independent disposition.
-2. Attach compatible hash-checked evidence for the P00 gates actually supported
-   by those observations. Preserve failures and not-runs in the record.
-3. Publish only to the authorized repository and verify the remote branch/PR;
-   obtain the required real maintainer approval before default-branch merge.
+1. Preserve the exact-revision validation, hashes, independent review and
+   remote readback when the evidence-only packet is published. Do not recast
+   later hosted outcomes as part of an earlier observation.
+2. Assess applicable hosted checks and obtain actual maintainer approval
+   recorded in the PR before merging to the unchanged default branch.
+3. Verify the authorized merge/default-branch readback and attach a new delivery
+   record; the present blocked delivery record does not claim that result.
 4. Keep P00 `in_progress` until all its obligations are met. P01–P11 remain
    separately gated; no result here qualifies the opt-in AI profile, a tiny
    model, native tensor numerical behavior, physical performance or silicon.

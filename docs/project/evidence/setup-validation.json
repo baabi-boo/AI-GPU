@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "record_id": "foundation-governance-5a97e59e",
+  "kind": "governance",
+  "outcome": "pass",
+  "evidence_level": "source_present",
+  "scope": "P00 documentation/scope/navigation and original-image preservation, plus source-only governance/configuration checks at the exact published candidate. This does not qualify GPU execution or hardware.",
+  "source_revision": "5a97e59ed95163c585106250194f816353d6ca4e",
+  "configuration": "Clean source root of published tree 9f65ae6e2bce7adeaec2432c11756510028c8bc0. Python 3.12.14; new governance/profile checks use -I -S -B. Inherited policy/catalog lints use the existing installed environment. No GPU toolchain or initialized submodules.",
+  "acceptance_ids": [
+    "P00-A01",
+    "P00-A02"
+  ],
+  "commands": [
+    {
+      "command": "From repository source root: git rev-parse HEAD HEAD^{tree}",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "From repository source root: python3 -I -S -B -c 'import sys; print(sys.version.split()[0]); print(\"isolated=%s no_site=%s no_user_site=%s ignore_environment=%s dont_write_bytecode=%s\" % (sys.flags.isolated, sys.flags.no_site, sys.flags.no_user_site, sys.flags.ignore_environment, sys.flags.dont_write_bytecode))'",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "From repository source root: python3 -I -S -B -m unittest discover -s ci/project -p 'test_*.py'",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "From repository source root: python3 -I -S -B ci/project/check_project.py",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "From repository source root: python3 -I -S -B ci/project/preflight.py --tier governance --min-free-gib 1",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "From repository source root: python3 -I -B ci/change_impact.py lint-policy",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "From repository source root: python3 -I -B ci/testcase.py lint",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "From repository source root: python3 -I -S -B ci/gen_config.py --config VX_config.toml --profile ai-dev --profile-xlen",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "From repository source root: python3 -I -S -B ci/gen_config.py --config VX_config.toml --profile ai-dev --xlen 64 --merge-configs --cflags='-DITYPE=fp16 -DOTYPE=fp32 -DWGMMA_NRC=16'",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "From repository source root: sha256sum docs/assets/img/vortex_framework_stack.svg",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "From repository source root: git diff --check da55a516a48b49013724f697d3c12a48932b449f HEAD",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "From repository source root: git status --porcelain=v1 --untracked-files=all",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/project/evidence/setup-validation.log",
+      "sha256": "e84f51b842d8927ac8bef8ec20c54fdda0392746a0f95946782a5f662a777535"
+    },
+    {
+      "path": "docs/project/evidence/setup-review.md",
+      "sha256": "8e4b197d77c217b2666c376e67425f70eeaaa83690f1b2016419520cfd7bef34"
+    },
+    {
+      "path": "docs/project/agent-execution.json",
+      "sha256": "f096ec9a082486af43f72fa685c67997eea53dbd85ae76192cd91cb4d1977d90"
+    }
+  ],
+  "limitations": [
+    "180 tests exercise governance, configuration plumbing and isolated fixtures, not GPU kernels or physical hardware.",
+    "Catalog lint inspected 945 case definitions; it did not execute 945 GPU tests.",
+    "Simulation preflight returned blocked with exit 1 for missing tools and five uninitialized submodules; the raw observation is retained in the log, not counted as a passing GPU test.",
+    "ai-dev remains an unqualified candidate. No native arithmetic/model/AFU/FPGA/silicon result is established.",
+    "Markdown checks support a bounded subset, not full GitHub/CommonMark rendering or CSS visibility. Review remains required.",
+    "This report is attached in a later metadata-only commit. It identifies the exact tested source candidate, not a self-referential claim about the attachment commit.",
+    "P00-A03, maintainer approval and default-branch delivery remain blocked; no waiver or spending authorization is granted."
+  ],
+  "reviewer": "Codex coordinator /root, reviewing observed logs and integrity; independent source and initial-metadata dispositions are recorded in setup-review.md."
+}

@@ -5,6 +5,20 @@ reviewable records. [report.example.json](report.example.json) is an **unexecute
 template**: it is not proof and must never be referenced as phase evidence.
 Use the [acceptance policy](../acceptance.md) before producing a real report.
 
+## Foundation setup records
+
+- [Source validation](setup-validation.json) supports P00-A01/A02 at the exact
+  published source candidate; [command log](setup-validation.log) retains actual
+  exits, including the separately blocked simulation prerequisite screen.
+- [Delivery record](setup-delivery.json) leaves P00-A03 **blocked** pending real
+  maintainer approval and authorized default-branch delivery.
+- [Independent reviews](setup-review.md) retain failures, corrections, scopes,
+  exact snapshots and advisory dispositions.
+- [Publication observation](setup-publication.json) records the review branch,
+  PR, protected SVG readback and hosted statuses at the stated observation time.
+
+These source-level setup records do not qualify any GPU or hardware phase.
+
 ## Roadmap reference
 
 Each entry in a phase's `evidence` array has exactly this shape:

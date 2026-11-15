@@ -1,6 +1,8 @@
 # Current project status
 
-**Checkpoint: repository foundation is a review candidate, not yet accepted.**
+**Checkpoint: repository foundation is published for review; approval and merge
+are pending.** [Pull request 1](https://github.com/baabi-boo/AI-GPU/pull/1) targets
+the existing `master` branch from `ai-gpu-project-setup`.
 The live phase state and gate references are canonical in
 [roadmap.json](roadmap.json). This page explains the current handoff; it is not
 independent proof that a phase or GPU workload passed.
@@ -9,7 +11,7 @@ independent proof that a phase or GPU workload passed.
 
 | Area | Current state | Meaning |
 |---|---|---|
-| P00 — project foundation | `in_progress` | Independent source review and repairs are complete; final evidence/publication checks and actual maintainer approval remain |
+| P00 — project foundation | `in_progress` | P00-A01/A02 have scoped passing evidence; P00-A03 remains blocked pending actual maintainer approval and intended default-branch delivery |
 | P01–P11 | `not_started` | Their qualification work and acceptance evidence have not been completed by this setup |
 | Inherited Vortex implementation | `source_present` | GPU RTL, native tensor kernels, runtime, simulators and FPGA flows are inherited source, not new measured AI-GPU results |
 | Physical hardware / custom silicon | Not qualified | No board has been selected or measured, and no fabrication commitment has been made |
@@ -17,9 +19,14 @@ independent proof that a phase or GPU workload passed.
 The source baseline is `da55a516a48b49013724f697d3c12a48932b449f` in
 `baabi-boo/AI-GPU`, whose default branch is **`master`**. See the
 [baseline inventory](baseline.md) for provenance, source boundaries and the
-protected illustration checksum. That baseline SHA does not identify the new
-setup files. Exact reviewed and delivered revisions belong in the final evidence
-packet. Publication and required maintainer approval have **not yet been verified**.
+protected illustration checksum. The published and locally tested source
+candidate is **`5a97e59ed95163c585106250194f816353d6ca4e`**, tree
+`9f65ae6e2bce7adeaec2432c11756510028c8bc0`. Its tree exactly matches the reviewed
+local candidate; the [review record](evidence/setup-review.md) explains that
+mapping and the earlier immutable snapshots. The evidence attachment is a
+later metadata-only update; its latest delivered revision is the PR head.
+Review-branch readback is verified. **Human approval and a merge into `master`
+have not occurred.**
 
 ## What has been prepared
 
@@ -44,31 +51,36 @@ evidence or maintainer approval and do not determine phase status.
 
 ## Checks observed during integration
 
-These observations include exact clean-checkout checks at the repaired snapshot
-`d577267a8d7eb0b786faf47fe2aeb6acf0d66e56`; see the
-[review record](evidence/setup-review.md) for original failures, corrections and
-scope. Later integration edits still require final verification before P00 closes.
+The [source validation report](evidence/setup-validation.json) and
+[command log](evidence/setup-validation.log) identify the exact published source
+candidate tested with a clean worktree. The [review record](evidence/setup-review.md)
+retains earlier failures, repairs and independent clean-checkout checks. The
+[publication observation](evidence/setup-publication.json) is a timestamped
+snapshot, not a promise that later workflow outcomes remain unchanged.
 
 | Check | Observed result | Scope / remaining work |
 |---|---|---|
 | `python3 -I -S -B -m unittest discover -s ci/project -p 'test_*.py'` | 180 tests passed: 51 validator, 42 preflight, 11 profile, 24 adversarial, 18 repository-contract and 34 Markdown-edge tests | Repeated in an exact clean checkout with standard-library-only Python; no GPU execution |
 | `python3 ci/project/preflight.py --tier governance --min-free-gib 1` | Passed | GPU dependencies are optional for this tier; this is not an approved execution budget |
-| `python3 ci/project/check_project.py` | Passed after navigation integration | Earlier missing documents and the inherited dead contribution link were resolved; final exact-revision review remains pending |
+| `python3 ci/project/check_project.py` | Passed at the exact published source revision | Source-only metadata, links and integrity; not GPU truth or approval |
 | `python3 ci/change_impact.py lint-policy` | Passed | Inherited policy structure only |
 | `python3 ci/testcase.py lint` | Passed: 945 cases across 28 categories | Catalog validation, not 945 executed GPU tests |
 | Protected illustration SHA-256 | Matched the baseline | Image bytes remain unchanged |
-| GitHub-hosted workflow execution | Not run for this setup checkpoint | Local checks do not establish a green hosted run |
-| GPU build, SimX/native RTL workloads, XRT emulation, synthesis, physical FPGA and silicon tests | Not run | These belong to their separately gated execution phases |
+| Initial GitHub Project Governance workflow | Push and PR runs passed | [PR run](https://github.com/baabi-boo/AI-GPU/actions/runs/43661346807); prerequisite, validator and unit-test steps succeeded on the source candidate |
+| Inherited GitHub GPU CI | In progress at the publication observation | Automatically triggered existing workflows; not claimed passed or treated as acceptance of the AI candidate |
+| Locally launched GPU build/workloads, XRT emulation, synthesis, physical FPGA and silicon tests | Not run | These belong to separately gated execution phases; no local toolchain download or hardware purchase occurred |
 
 ## What prevents acceptance now
 
-1. **P00 evidence:** final independent source review is complete. Check the
-   later metadata and retain the final exact-revision results under the
-   [evidence policy](evidence/README.md).
-2. **Approval and delivery:** publish a reviewed pull request, obtain actual
-   maintainer approval for the R3 CI change, and verify authorized publication on
-   the intended branch. Agent review and local tests cannot supply that approval.
-   An intended push or a local commit is not delivery evidence.
+1. **Approval and delivery:** PR 1 is published, but actual maintainer approval
+   for the R3 CI change is pending. Assess applicable checks, record approval,
+   then verify an authorized merge/default-branch readback and attach a new
+   delivery report. Agent review, a green governance job and review-branch
+   publication cannot supply that approval. The current
+   [delivery report](evidence/setup-delivery.json) is explicitly blocked.
+2. **Evidence continuity:** retain hashes and exact-revision outcomes when
+   final metadata or subsequent code changes are delivered. Do not silently
+   relabel historical observations or mark a running/cancelled job passed.
 3. **P01 prerequisites:** the inspected checkout has five uninitialized
    submodules and lacks the required RISC-V/LLVM/Verilator environment. XRT
    emulation additionally requires an identified platform and vendor tools.
@@ -80,7 +92,8 @@ scope. Later integration edits still require final verification before P00 close
 
 ## Next bounded action
 
-**First finish P00; then begin P01's reproducible baseline packet.** Assign an
+**First obtain approval and finish P00; then begin P01's reproducible baseline
+packet (P01-T01, followed by P01-T02).** Assign an
 actual verification owner and freeze one small native configuration and catalog
 matrix before downloading tools or launching builds. Record the source/tree,
 submodule commits, tool bundle identities, formats, dimensions, arithmetic

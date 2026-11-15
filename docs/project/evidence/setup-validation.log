@@ -1,0 +1,291 @@
+AI-GPU foundation source-only validation
+Source revision: 5a97e59ed95163c585106250194f816353d6ca4e
+Tree: 9f65ae6e2bce7adeaec2432c11756510028c8bc0
+Context: clean source root of the exact published commit; Python 3.12.14.
+GPU tools/submodules are not initialized. Expected simulation preflight blocking is not a GPU test result.
+No commands in this log built or executed the GPU. Hosted results are in setup-publication.json.
+
+Command: git rev-parse HEAD HEAD^{tree}
+Observed exit code: 0
+Observed outcome: pass
+5a97e59ed95163c585106250194f816353d6ca4e
+9f65ae6e2bce7adeaec2432c11756510028c8bc0
+
+Command: python3 -I -S -B -c 'import sys; print(sys.version.split()[0]); print("isolated=%s no_site=%s no_user_site=%s ignore_environment=%s dont_write_bytecode=%s" % (sys.flags.isolated, sys.flags.no_site, sys.flags.no_user_site, sys.flags.ignore_environment, sys.flags.dont_write_bytecode))'
+Observed exit code: 0
+Observed outcome: pass
+3.12.14
+isolated=1 no_site=1 no_user_site=1 ignore_environment=1 dont_write_bytecode=1
+
+Command: python3 -I -S -B -m unittest discover -s ci/project -p 'test_*.py'
+Observed exit code: 0
+Observed outcome: pass
+....................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 180 tests in 0.460s
+
+OK
+
+Command: python3 -I -S -B ci/project/check_project.py
+Observed exit code: 0
+Observed outcome: pass
+Project governance validation passed (structure and metadata only; no GPU execution certified).
+
+Command: python3 -I -S -B ci/project/preflight.py --tier governance --min-free-gib 1
+Observed exit code: 0
+Observed outcome: pass
+Preflight: pass (governance)
+Source: 5a97e59ed95163c585106250194f816353d6ca4e (tracked changes: False)
+Pins: VORTEX_VERSION=3.0, TOOLCHAIN_REV=v3.0.2, GEM5_REV=v25.0.0.1, FIRESIM_REV=57bb93f1e23daf46198659ddd93608f70121fee0
+Tool git: available (required)
+Tool make: available (optional)
+Tool host_cxx: available (optional)
+Tool cmake: missing (optional)
+Tool riscv_compiler: missing (optional)
+Tool llvm_clang: missing (optional)
+Tool verilator: missing (optional)
+Tool vivado: missing (optional)
+Tool vitis_linker: missing (optional)
+Tool xrt_inventory: missing (optional)
+Tool yosys: missing (optional)
+Tool circt_verilog: missing (optional)
+Tool circt_opt: missing (optional)
+Tool firtool: missing (optional)
+Submodule third_party/cocogfx: not_initialized b1befdb36df8af7ac9e2c96acaf81957aab5d107
+Submodule third_party/cvfpu: not_initialized 79e453139072df42c9ec8f697132ba485d74e23d
+Submodule third_party/hardfloat: not_initialized aaf5736dffa521603b681fd5853760c671446c85
+Submodule third_party/ramulator: not_initialized e62c84a6f0e06566ba6e182d308434b4532068a5
+Submodule third_party/softfloat: not_initialized b51ef8f3201669b2288104c28546fc72532a1ea4
+Resources: free disk=60179165184 bytes; available RAM=9070546944 bytes
+Protected illustration: unchanged
+Warning: submodules are not fully verified/initialized; not required for governance
+Limitation: Read-only offline prerequisite screen; no installer, download, build, test workload or cleanup ran.
+Limitation: Tool availability means executable names are on PATH, not verified versions or Vortex target support.
+Limitation: Configured tools outside PATH are not searched; activate the intended environment before this screen.
+Limitation: Toolchain tags are source pins, not verification of installed binaries, libraries or bundle hashes.
+Limitation: Working-tree status covers tracked files only; inventory untracked inputs before recording evidence.
+Limitation: Resource values are a snapshot, not a build budget; nested builds may exceed an outer job limit.
+Limitation: Linux MemAvailable may describe host RAM rather than a container/cgroup limit; verify the effective allocation separately.
+Limitation: No board, license, platform, PDK, IP, physical measurement, funding or manufacturing approval is certified.
+
+Command: python3 -I -B ci/change_impact.py lint-policy
+Observed exit code: 0
+Observed outcome: pass
+OK: policy v3: 9 path rules, 14 detectors, 5 evidence checks
+
+Command: python3 -I -B ci/testcase.py lint
+Observed exit code: 0
+Observed outcome: pass
+OK: 945 test cases across 28 categories
+
+Command: python3 -I -S -B ci/gen_config.py --config VX_config.toml --profile ai-dev --profile-xlen
+Observed exit code: 0
+Observed outcome: pass
+64
+
+Command: python3 -I -S -B ci/gen_config.py --config VX_config.toml --profile ai-dev --xlen 64 --merge-configs --cflags='-DITYPE=fp16 -DOTYPE=fp32 -DWGMMA_NRC=16'
+Observed exit code: 0
+Observed outcome: pass
+-DVX_PROFILE=ai-dev -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_FPU_TYPE=STD -DVX_CFG_ISSUE_WIDTH=2 -DVX_CFG_NUM_ALU_BLOCKS=1 -DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_FPU_BLOCKS=1 -DVX_CFG_NUM_LSU_BLOCKS=1 -DVX_CFG_NUM_THREADS=8 -DVX_CFG_NUM_WARPS=8 -DVX_CFG_TCU_FP16_ENABLE -DVX_CFG_TCU_TYPE=TFR -DVX_CFG_TCU_WGMMA_ENABLE -DITYPE=fp16 -DOTYPE=fp32 -DWGMMA_NRC=16
+
+Command: sha256sum docs/assets/img/vortex_framework_stack.svg
+Observed exit code: 0
+Observed outcome: pass
+db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4  docs/assets/img/vortex_framework_stack.svg
+
+Command: git diff --check da55a516a48b49013724f697d3c12a48932b449f HEAD
+Observed exit code: 0
+Observed outcome: pass
+(no output)
+
+Command: git status --porcelain=v1 --untracked-files=all
+Observed exit code: 0
+Observed outcome: pass
+(no output)
+
+Command: python3 -I -S -B ci/project/preflight.py --tier simulation --json
+Observed exit code: 1
+Observed outcome: blocked
+{
+  "asset": {
+    "actual_sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+    "expected_sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+    "matches": true,
+    "path": "docs/assets/img/vortex_framework_stack.svg"
+  },
+  "blockers": [
+    "required PATH tool missing: cmake",
+    "required PATH tool missing: riscv_compiler",
+    "required PATH tool missing: llvm_clang",
+    "required PATH tool missing: verilator",
+    "submodule third_party/cocogfx: not_initialized",
+    "submodule third_party/cvfpu: not_initialized",
+    "submodule third_party/hardfloat: not_initialized",
+    "submodule third_party/ramulator: not_initialized",
+    "submodule third_party/softfloat: not_initialized"
+  ],
+  "limitations": [
+    "Read-only offline prerequisite screen; no installer, download, build, test workload or cleanup ran.",
+    "Tool availability means executable names are on PATH, not verified versions or Vortex target support.",
+    "Configured tools outside PATH are not searched; activate the intended environment before this screen.",
+    "Toolchain tags are source pins, not verification of installed binaries, libraries or bundle hashes.",
+    "Working-tree status covers tracked files only; inventory untracked inputs before recording evidence.",
+    "Resource values are a snapshot, not a build budget; nested builds may exceed an outer job limit.",
+    "Linux MemAvailable may describe host RAM rather than a container/cgroup limit; verify the effective allocation separately.",
+    "No board, license, platform, PDK, IP, physical measurement, funding or manufacturing approval is certified.",
+    "Simulation tool screen combines native SimX and processor RTL prerequisites; it is not a SimX-only minimum."
+  ],
+  "outcome": "blocked",
+  "pins": {
+    "FIRESIM_REV": "57bb93f1e23daf46198659ddd93608f70121fee0",
+    "GEM5_REV": "v25.0.0.1",
+    "TOOLCHAIN_REV": "v3.0.2",
+    "VORTEX_VERSION": "3.0"
+  },
+  "resources": {
+    "available_ram_bytes": 9081729024,
+    "free_disk_bytes": 60179165184,
+    "minimum_free_gib": null
+  },
+  "schema_version": 1,
+  "source": {
+    "python_version": "3.12.14",
+    "revision": "5a97e59ed95163c585106250194f816353d6ca4e",
+    "tracked_changes": false
+  },
+  "submodules": {
+    "declared_count": 5,
+    "entries": [
+      {
+        "path": "third_party/cocogfx",
+        "revision": "b1befdb36df8af7ac9e2c96acaf81957aab5d107",
+        "status": "not_initialized"
+      },
+      {
+        "path": "third_party/cvfpu",
+        "revision": "79e453139072df42c9ec8f697132ba485d74e23d",
+        "status": "not_initialized"
+      },
+      {
+        "path": "third_party/hardfloat",
+        "revision": "aaf5736dffa521603b681fd5853760c671446c85",
+        "status": "not_initialized"
+      },
+      {
+        "path": "third_party/ramulator",
+        "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+        "status": "not_initialized"
+      },
+      {
+        "path": "third_party/softfloat",
+        "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4",
+        "status": "not_initialized"
+      }
+    ],
+    "errors": []
+  },
+  "tier": "simulation",
+  "tools": {
+    "circt_opt": {
+      "available": false,
+      "candidates": [
+        "circt-opt"
+      ],
+      "required": false
+    },
+    "circt_verilog": {
+      "available": false,
+      "candidates": [
+        "circt-verilog"
+      ],
+      "required": false
+    },
+    "cmake": {
+      "available": false,
+      "candidates": [
+        "cmake"
+      ],
+      "required": true
+    },
+    "firtool": {
+      "available": false,
+      "candidates": [
+        "firtool"
+      ],
+      "required": false
+    },
+    "git": {
+      "available": true,
+      "candidates": [
+        "git"
+      ],
+      "required": true
+    },
+    "host_cxx": {
+      "available": true,
+      "candidates": [
+        "g++",
+        "clang++"
+      ],
+      "required": true
+    },
+    "llvm_clang": {
+      "available": false,
+      "candidates": [
+        "clang"
+      ],
+      "required": true
+    },
+    "make": {
+      "available": true,
+      "candidates": [
+        "make"
+      ],
+      "required": true
+    },
+    "riscv_compiler": {
+      "available": false,
+      "candidates": [
+        "riscv64-unknown-elf-gcc",
+        "riscv32-unknown-elf-gcc"
+      ],
+      "required": true
+    },
+    "verilator": {
+      "available": false,
+      "candidates": [
+        "verilator"
+      ],
+      "required": true
+    },
+    "vitis_linker": {
+      "available": false,
+      "candidates": [
+        "v++"
+      ],
+      "required": false
+    },
+    "vivado": {
+      "available": false,
+      "candidates": [
+        "vivado"
+      ],
+      "required": false
+    },
+    "xrt_inventory": {
+      "available": false,
+      "candidates": [
+        "xbutil"
+      ],
+      "required": false
+    },
+    "yosys": {
+      "available": false,
+      "candidates": [
+        "yosys"
+      ],
+      "required": false
+    }
+  },
+  "warnings": []
+}
