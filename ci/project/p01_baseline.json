@@ -223,7 +223,7 @@
       },
       "catalog_source": "ci/testcases/tensor_wg.yaml",
       "catalog_id": "flash_attn_tcu_wg-rtlsim",
-      "derivation": "RV64 small attention catalog shape with explicit TF32, RS operand mode, NRC=8, four threads/warps/issue slots and one scalar execution block of each kind. STD scalar arithmetic and the same-shape SimX twin are explicit derived coverage.",
+      "derivation": "RV64 small attention catalog shape with explicit TF32, NRC=8, four threads/warps/issue slots and one scalar execution block of each kind. The kernel uses SS operands for both GEMMs; WGMMA_RS is retained in the command but is unused by this kernel. STD scalar arithmetic and the same-shape SimX twin are explicit derived coverage.",
       "reference": {
         "seed": 50,
         "oracle": "tests/regression/flash_attn_tcu_wg/main.cpp",
@@ -275,7 +275,7 @@
       },
       "catalog_source": "ci/testcases/tensor_wg.yaml",
       "catalog_id": "flash_attn_tcu_wg-rtlsim",
-      "derivation": "RV64 small attention catalog shape with explicit TF32, RS operand mode, NRC=8, four threads/warps/issue slots and one scalar execution block of each kind. STD scalar arithmetic and the same-shape SimX twin are explicit derived coverage.",
+      "derivation": "RV64 small attention catalog shape with explicit TF32, NRC=8, four threads/warps/issue slots and one scalar execution block of each kind. The kernel uses SS operands for both GEMMs; WGMMA_RS is retained in the command but is unused by this kernel. STD scalar arithmetic and the same-shape SimX twin are explicit derived coverage.",
       "reference": {
         "seed": 50,
         "oracle": "tests/regression/flash_attn_tcu_wg/main.cpp",

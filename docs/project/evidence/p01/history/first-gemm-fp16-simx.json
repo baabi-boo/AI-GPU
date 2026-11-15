@@ -1,0 +1,266 @@
+{
+  "source": {
+    "revision": "03181532b81fe95b1cfeac2ffb25d8597af689b2",
+    "tree": "1d281d25f72787ed3545285580b4c390d2f7eb3a",
+    "dirty": false,
+    "changed_paths": [],
+    "untracked_paths": [],
+    "submodules": {
+      "entries": [
+        {
+          "path": "third_party/cocogfx",
+          "revision": "b1befdb36df8af7ac9e2c96acaf81957aab5d107",
+          "status": "initialized"
+        },
+        {
+          "path": "third_party/cvfpu",
+          "revision": "79e453139072df42c9ec8f697132ba485d74e23d",
+          "status": "initialized"
+        },
+        {
+          "path": "third_party/cvfpu/src/common_cells",
+          "revision": "6aeee85d0a34fedc06c14f04fd6363c9f7b4eeea",
+          "status": "initialized"
+        },
+        {
+          "path": "third_party/cvfpu/src/fpu_div_sqrt_mvp",
+          "revision": "86e1f558b3c95e91577c41b2fc452c86b04e85ac",
+          "status": "initialized"
+        },
+        {
+          "path": "third_party/cvfpu/tb/flexfloat",
+          "revision": "28be2d4fbf41b38fc37763bb6e90a1c88f6aaa61",
+          "status": "initialized"
+        },
+        {
+          "path": "third_party/hardfloat",
+          "revision": "aaf5736dffa521603b681fd5853760c671446c85",
+          "status": "initialized"
+        },
+        {
+          "path": "third_party/ramulator",
+          "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+          "status": "initialized"
+        },
+        {
+          "path": "third_party/softfloat",
+          "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4",
+          "status": "initialized"
+        }
+      ],
+      "declared_count": 5,
+      "errors": []
+    },
+    "pins": {
+      "VORTEX_VERSION": "3.0",
+      "TOOLCHAIN_REV": "v3.0.2",
+      "GEM5_REV": "v25.0.0.1",
+      "FIRESIM_REV": "57bb93f1e23daf46198659ddd93608f70121fee0"
+    },
+    "blockers": [],
+    "inputs": [
+      {
+        "path": "VERSION",
+        "sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+        "size_bytes": 112
+      },
+      {
+        "path": ".gitmodules",
+        "sha256": "632677b727feb911c5d2fa9d2991d9f87434fc83d99fc4ae15ee8e4556ecbabb",
+        "size_bytes": 575
+      },
+      {
+        "path": "configure",
+        "sha256": "39a7a1fe4caeb4db06fcdac544e99d700857795b94a7bbd4e5396a9028edbefa",
+        "size_bytes": 11382
+      },
+      {
+        "path": "config.mk.in",
+        "sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+        "size_bytes": 3264
+      },
+      {
+        "path": "VX_config.toml",
+        "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+        "size_bytes": 30127
+      },
+      {
+        "path": "VX_types.toml",
+        "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+        "size_bytes": 36543
+      },
+      {
+        "path": "ci/gen_config.py",
+        "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+        "size_bytes": 60839
+      },
+      {
+        "path": "ci/blackbox.sh",
+        "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+        "size_bytes": 9153
+      }
+    ],
+    "outcome": "pass"
+  },
+  "case": {
+    "id": "gemm-fp16-simx",
+    "app": "sgemm_tcu",
+    "driver": "simx",
+    "configs": [
+      "-DVX_CFG_NUM_CLUSTERS=1",
+      "-DVX_CFG_NUM_CORES=1",
+      "-DVX_CFG_NUM_WARPS=4",
+      "-DVX_CFG_NUM_THREADS=8",
+      "-DVX_CFG_ISSUE_WIDTH=2",
+      "-DVX_CFG_EXT_TCU_ENABLE",
+      "-DVX_CFG_TCU_TYPE_TFR",
+      "-DVX_CFG_FPU_TYPE_STD",
+      "-DITYPE=fp16",
+      "-DOTYPE=fp32",
+      "-DVX_CFG_TCU_FP16_ENABLE"
+    ],
+    "args": [
+      "-m",
+      "64",
+      "-n",
+      "64",
+      "-k",
+      "64"
+    ],
+    "input_dtype": "fp16",
+    "output_dtype": "fp32",
+    "arithmetic": {
+      "tensor": "TFR",
+      "scalar": "STD"
+    },
+    "catalog_source": "ci/testcases/tensor.yaml",
+    "catalog_id": "sgemm_tcu-3",
+    "derivation": "RV64 bounded variant of the named SimX catalog case. The matrix pins clusters, cores, warps, native TFR tensor and STD scalar arithmetic, format enable and 64x64x64 dimensions; the rtlsim twin is explicit additional native coverage.",
+    "reference": {
+      "seed": 50,
+      "oracle": "tests/regression/sgemm_tcu/main.cpp",
+      "comparison": "CPU double accumulation of converted input products; abs((actual-reference)/reference) < 0.01, with exact zero pairs accepted.",
+      "tolerances": {
+        "relative_error_strict_max": 0.01,
+        "zero_pair_equal": true
+      }
+    }
+  },
+  "matrix_sha256": "f0ad2390b983c3e9a0804fc6309d22bb85ba23ba39635309e0193c9a54d6df97",
+  "command": [
+    "./ci/blackbox.sh",
+    "--driver=simx",
+    "--app=sgemm_tcu",
+    "--args=-m 64 -n 64 -k 64"
+  ],
+  "outcome": "fail",
+  "exit_code": 2,
+  "reason": "nonzero_exit",
+  "duration_seconds": 3.327629,
+  "log_sha256": "82162d69cc9724950baeb0a6d9fe3e0d41d39361be0b7edadf91fb94812d895f",
+  "log_size_bytes": 4873,
+  "peak_rss_bytes": 325066752,
+  "cleanup_complete": true,
+  "limitations": [
+    "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+    "Process-group RSS can count shared pages more than once and excludes page cache.",
+    "Reported peak RSS is the highest sample and may miss peaks between polls.",
+    "No container/cgroup memory limit is inferred by this process monitor.",
+    "Descendants that deliberately leave the process group are outside its containment."
+  ],
+  "reference_pass_marker": false,
+  "build": {
+    "xlen": 64,
+    "profile": "",
+    "os_bundle": "ubuntu/focal",
+    "identity_matches": true,
+    "generated": [
+      {
+        "path": ".config.stamp",
+        "sha256": "abb8f33fc75c138eef776a65545da7fd75d7ec9a23b913f1d06706ade574d629",
+        "size_bytes": 408
+      },
+      {
+        "path": "config.mk",
+        "sha256": "6332f84d277f5c7dbc200579bbeb350aa63041e5d59c73584c1bd2079633ffd5",
+        "size_bytes": 3390
+      },
+      {
+        "path": "sw/VX_config.h",
+        "sha256": "f3cb3f0794318bd031aa2492ed48fc9a516785b13358cb3482c7323dda37872b",
+        "size_bytes": 36239
+      },
+      {
+        "path": "sw/VX_types.h",
+        "sha256": "5d6e9d58fd7aad098761dce9973310f7a302ac0364bc3a8117a525c74da5f4f0",
+        "size_bytes": 22153
+      },
+      {
+        "path": "hw/VX_config.vh",
+        "sha256": "ae0d0729b61e6cdb1520cf3eb571329867f73b545f0b5920ae1813ff01a75ca5",
+        "size_bytes": 36066
+      },
+      {
+        "path": "hw/VX_types.vh",
+        "sha256": "1896f4b7c3872b40bd0f953e0f200ffa143da631f49150399ca098cc7f5cb120",
+        "size_bytes": 22924
+      },
+      {
+        "path": "ci/blackbox.sh",
+        "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+        "size_bytes": 9153
+      }
+    ],
+    "source_inputs": [
+      {
+        "path": "VERSION",
+        "sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+        "size_bytes": 112
+      },
+      {
+        "path": ".gitmodules",
+        "sha256": "632677b727feb911c5d2fa9d2991d9f87434fc83d99fc4ae15ee8e4556ecbabb",
+        "size_bytes": 575
+      },
+      {
+        "path": "configure",
+        "sha256": "39a7a1fe4caeb4db06fcdac544e99d700857795b94a7bbd4e5396a9028edbefa",
+        "size_bytes": 11382
+      },
+      {
+        "path": "config.mk.in",
+        "sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+        "size_bytes": 3264
+      },
+      {
+        "path": "VX_config.toml",
+        "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+        "size_bytes": 30127
+      },
+      {
+        "path": "VX_types.toml",
+        "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+        "size_bytes": 36543
+      },
+      {
+        "path": "ci/gen_config.py",
+        "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+        "size_bytes": 60839
+      },
+      {
+        "path": "ci/blackbox.sh",
+        "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+        "size_bytes": 9153
+      }
+    ],
+    "blockers": [],
+    "limitations": [
+      "Generated file hashes and freshness are recorded; successful compilation and execution require separate command results."
+    ],
+    "outcome": "pass"
+  },
+  "backend_config": {
+    "sha256": "050e256cc496203c62851a860e5250ab85b31b311b35b34c17fd4d083b2c2ac3",
+    "contents": "-std=c++17 -Wall -Wextra -Wfatal-errors -Werror -fPIC -I$SOURCE/sim/simx -I$SOURCE/sim/simx/dxa -I$SOURCE/sim/simx/tex -I$SOURCE/sim/simx/om -I$SOURCE/sim/simx/raster -I$SOURCE/sim/simx/rtu -I$SOURCE/sim/simx/kmu -I$SOURCE/sim/simx/mem -I$SOURCE/sim/simx/dtm -I$SOURCE/sw/common -I$SOURCE/sim/common -I$INITIAL_BUILD/sw -I$INITIAL_BUILD/hw -I$SOURCE/third_party -I$SOURCE/third_party/softfloat/source/include -I$SOURCE/third_party/ramulator/ext/spdlog/include -I$SOURCE/third_party/ramulator/ext/yaml-cpp/include -I$SOURCE/third_party/ramulator/src -DVX_CFG_XLEN=64 -DVX_CFG_XLEN_64 -DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=8 -DVX_CFG_ISSUE_WIDTH=2 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=fp16 -DOTYPE=fp32 -DVX_CFG_TCU_FP16_ENABLE -I$SOURCE/sim/simx/tcu -O2 -DNDEBUG -MMD -MP -MF $INITIAL_BUILD/sw/runtime/simx_config.stamp\n"
+  }
+}

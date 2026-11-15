@@ -1,0 +1,29 @@
+CONFIGS=-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=4 -DVX_CFG_ISSUE_WIDTH=4 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=tf32 -DOTYPE=fp32 -DVX_CFG_NUM_ALU_BLOCKS=1 -DVX_CFG_NUM_LSU_BLOCKS=1 -DVX_CFG_NUM_FPU_BLOCKS=1 -DVX_CFG_TCU_TF32_ENABLE -DVX_CFG_TCU_WGMMA_ENABLE -DWGMMA_NRC=8 -DWGMMA_RS
+Running: CONFIGS="-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=4 -DVX_CFG_ISSUE_WIDTH=4 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=tf32 -DOTYPE=fp32 -DVX_CFG_NUM_ALU_BLOCKS=1 -DVX_CFG_NUM_LSU_BLOCKS=1 -DVX_CFG_NUM_FPU_BLOCKS=1 -DVX_CFG_TCU_TF32_ENABLE -DVX_CFG_TCU_WGMMA_ENABLE -DWGMMA_NRC=8 -DWGMMA_RS" make -C "./ci/../tests/regression/flash_attn_tcu_wg" runtime-rtlsim > /dev/null
+Running: OPTS="-N 32 -D 16 -c 8 -t 8" CONFIGS="-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=4 -DVX_CFG_ISSUE_WIDTH=4 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=tf32 -DOTYPE=fp32 -DVX_CFG_NUM_ALU_BLOCKS=1 -DVX_CFG_NUM_LSU_BLOCKS=1 -DVX_CFG_NUM_FPU_BLOCKS=1 -DVX_CFG_TCU_TF32_ENABLE -DVX_CFG_TCU_WGMMA_ENABLE -DWGMMA_NRC=8 -DWGMMA_RS" make -C "./ci/../tests/regression/flash_attn_tcu_wg" run-rtlsim
+make: Entering directory '$BUILD/tests/regression/flash_attn_tcu_wg'
+CONFIGS="-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=4 -DVX_CFG_ISSUE_WIDTH=4 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=tf32 -DOTYPE=fp32 -DVX_CFG_NUM_ALU_BLOCKS=1 -DVX_CFG_NUM_LSU_BLOCKS=1 -DVX_CFG_NUM_FPU_BLOCKS=1 -DVX_CFG_TCU_TF32_ENABLE -DVX_CFG_TCU_WGMMA_ENABLE -DWGMMA_NRC=8 -DWGMMA_RS -DVX_CFG_TCU_WGMMA_ENABLE"     make -C $BUILD/sw/runtime/stub DESTDIR=$BUILD/sw/runtime
+make[1]: Entering directory '$BUILD/sw/runtime/stub'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '$BUILD/sw/runtime/stub'
+CONFIGS="-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=4 -DVX_CFG_ISSUE_WIDTH=4 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=tf32 -DOTYPE=fp32 -DVX_CFG_NUM_ALU_BLOCKS=1 -DVX_CFG_NUM_LSU_BLOCKS=1 -DVX_CFG_NUM_FPU_BLOCKS=1 -DVX_CFG_TCU_TF32_ENABLE -DVX_CFG_TCU_WGMMA_ENABLE -DWGMMA_NRC=8 -DWGMMA_RS -DVX_CFG_TCU_WGMMA_ENABLE"     make -C $BUILD/sw/runtime/rtlsim DESTDIR=$BUILD/sw/runtime
+make[1]: Entering directory '$BUILD/sw/runtime/rtlsim'
+DESTDIR=$BUILD/sw/runtime make -C $BUILD/sim/rtlsim $BUILD/sw/runtime/librtlsim.so
+make[2]: Entering directory '$BUILD/sim/rtlsim'
+make[2]: Leaving directory '$BUILD/sim/rtlsim'
+make[1]: Leaving directory '$BUILD/sw/runtime/rtlsim'
+LD_LIBRARY_PATH=$BUILD/sw/runtime: VORTEX_DRIVER=rtlsim ./flash_attn_tcu_wg -N 32 -D 16 -c 8 -t 8
+flash_attn_tcu_wg: seq_len=32 head_dim=16 ITYPE=tf32 OTYPE=fp32 NRC=8
+WGMMA geometry: tcM=2 tcN=2 xtileM=4 xtileN=8 tileK=4
+CONFIGS: num_threads=4, num_warps=4, num_cores=1, num_clusters=1, socket_size=1, local_mem_base=0x1fffc0000, num_barriers=8
+block_size_r=16 (4 warps) block_size_c=8 head_dim_tile=8 lmem=3520
+[VXDRV] Warning: CP has not retired a command in 10s.
+[VXDRV]   Q_SEQNUM=27 target=28 CP_CTRL=0x00000001 CP_STATUS=0x00000001 Q_ERROR=0x00000000
+[VXDRV]   RING_BASE=0x000055876abcb440 HEAD_ADDR=0x000055876abdb4c0 CMPL_ADDR=0x000055876abdb5c0
+[VXDRV]   RING_SIZE_LOG2=16 Q_CONTROL=0x00000001 Q_TAIL=0x0000000000000700
+[VXDRV]   The ring was accepted but nothing is executing. Set VORTEX_CP_POLL_TIMEOUT_S=<sec> to abort instead of spinning.
+Elapsed: 37478 ms
+worst absolute error: 5.29e-05 (atol=0.001, rtol=0.001)
+PASSED!
+PERF: instrs=125985, cycles=360406, IPC=0.350
+make: Leaving directory '$BUILD/tests/regression/flash_attn_tcu_wg'

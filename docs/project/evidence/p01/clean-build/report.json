@@ -1,0 +1,2281 @@
+{
+  "blockers": [],
+  "budget": {
+    "jobs": 2,
+    "max_log_bytes": 16777216,
+    "max_rss_bytes": 6442450944,
+    "min_free_bytes": 16106127360,
+    "timeout_seconds": 1800
+  },
+  "build_before": {
+    "outcome": "not_run",
+    "reason": "fresh build will be configured"
+  },
+  "build_configured": {
+    "blockers": [],
+    "build_inputs": [
+      {
+        "path": "ci/gen_config.py",
+        "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+        "size_bytes": 60839
+      },
+      {
+        "path": "sw/kernel/Makefile",
+        "sha256": "b1c359421ca2b1b8c31b9dc98893fac772daa239e236e9d1c9225a1eb431238c",
+        "size_bytes": 2432
+      },
+      {
+        "path": "sw/runtime/common.mk",
+        "sha256": "2af4343c0738db4a665c96e24f90f78912302b20597dda74d9592afb6676736e",
+        "size_bytes": 618
+      },
+      {
+        "path": "sw/runtime/stub/Makefile",
+        "sha256": "e6aae339e07e2a3086cc0334c9353001521f774afdc9e921acf1e126b115b941",
+        "size_bytes": 2931
+      },
+      {
+        "path": "sw/runtime/simx/Makefile",
+        "sha256": "c59dfb1850b0e19c77edc8cbc1fc1c96df11f5779724efefde437b83003bb97c",
+        "size_bytes": 1712
+      },
+      {
+        "path": "sw/runtime/rtlsim/Makefile",
+        "sha256": "4c9a1b7c64d40a9726d1aafda30b416ebb08fde10d3f4dbde584c76aa45e03d3",
+        "size_bytes": 1795
+      },
+      {
+        "path": "sim/common.mk",
+        "sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+        "size_bytes": 170
+      },
+      {
+        "path": "sim/simx/Makefile",
+        "sha256": "7cd1d4b53dd08f07d529094575722b2d23735b8164ff46c28a3be4ec694e857f",
+        "size_bytes": 10455
+      },
+      {
+        "path": "sim/rtlsim/Makefile",
+        "sha256": "1aec44b214468ac620917f89ae15ec3bffe6ed71b82f794d53db301748ec2e9c",
+        "size_bytes": 10714
+      },
+      {
+        "path": "sim/rtlsim/verilator.vlt",
+        "sha256": "245094b0792abe64ec4e4320095b8eee37f9cb2efa48f12369e1f492f653baea",
+        "size_bytes": 608
+      },
+      {
+        "path": "tests/regression/common.mk",
+        "sha256": "4164a783137b2f6e594ff3795f5911233227c3e4bfcb0319095cd6e78acf9b56",
+        "size_bytes": 14342
+      },
+      {
+        "path": "tests/regression/sgemm_tcu/Makefile",
+        "sha256": "5b0cc565b886eec4bda8b2eddc5eb7b282d6d006aa7d4dbdc31c3c730b432c67",
+        "size_bytes": 561
+      },
+      {
+        "path": "tests/regression/flash_attn_tcu_wg/Makefile",
+        "sha256": "2c609667964a90bb6f33c48444491de708308dc4f1e17f5fc7fe131a73751c00",
+        "size_bytes": 1095
+      }
+    ],
+    "generated": [
+      {
+        "path": ".config.stamp",
+        "sha256": "7c7f1a541b33f09ed6f11aed150d191cb24e59d808a5305efbdb00f2ebb87646",
+        "size_bytes": 430
+      },
+      {
+        "path": "config.mk",
+        "sha256": "889417faf9a9e4b1f6dac04b4b04bee39f03d753fef7d626fd04b43a5bd33de9",
+        "size_bytes": 3401
+      },
+      {
+        "path": "sw/VX_config.h",
+        "sha256": "f3cb3f0794318bd031aa2492ed48fc9a516785b13358cb3482c7323dda37872b",
+        "size_bytes": 36239
+      },
+      {
+        "path": "sw/VX_types.h",
+        "sha256": "5d6e9d58fd7aad098761dce9973310f7a302ac0364bc3a8117a525c74da5f4f0",
+        "size_bytes": 22153
+      },
+      {
+        "path": "hw/VX_config.vh",
+        "sha256": "ae0d0729b61e6cdb1520cf3eb571329867f73b545f0b5920ae1813ff01a75ca5",
+        "size_bytes": 36066
+      },
+      {
+        "path": "hw/VX_types.vh",
+        "sha256": "1896f4b7c3872b40bd0f953e0f200ffa143da631f49150399ca098cc7f5cb120",
+        "size_bytes": 22924
+      },
+      {
+        "path": "ci/blackbox.sh",
+        "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+        "size_bytes": 9153
+      }
+    ],
+    "identity_matches": true,
+    "limitations": [
+      "Generated headers and the native baseline build recipes are compared with source; successful compilation and execution require separate command results."
+    ],
+    "os_bundle": "ubuntu/focal",
+    "outcome": "pass",
+    "profile": "",
+    "source_build_inputs": [
+      {
+        "path": "ci/gen_config.py",
+        "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+        "size_bytes": 60839
+      },
+      {
+        "path": "sw/kernel/Makefile",
+        "sha256": "b1c359421ca2b1b8c31b9dc98893fac772daa239e236e9d1c9225a1eb431238c",
+        "size_bytes": 2432
+      },
+      {
+        "path": "sw/runtime/common.mk",
+        "sha256": "2af4343c0738db4a665c96e24f90f78912302b20597dda74d9592afb6676736e",
+        "size_bytes": 618
+      },
+      {
+        "path": "sw/runtime/stub/Makefile",
+        "sha256": "e6aae339e07e2a3086cc0334c9353001521f774afdc9e921acf1e126b115b941",
+        "size_bytes": 2931
+      },
+      {
+        "path": "sw/runtime/simx/Makefile",
+        "sha256": "c59dfb1850b0e19c77edc8cbc1fc1c96df11f5779724efefde437b83003bb97c",
+        "size_bytes": 1712
+      },
+      {
+        "path": "sw/runtime/rtlsim/Makefile",
+        "sha256": "4c9a1b7c64d40a9726d1aafda30b416ebb08fde10d3f4dbde584c76aa45e03d3",
+        "size_bytes": 1795
+      },
+      {
+        "path": "sim/common.mk",
+        "sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+        "size_bytes": 170
+      },
+      {
+        "path": "sim/simx/Makefile",
+        "sha256": "7cd1d4b53dd08f07d529094575722b2d23735b8164ff46c28a3be4ec694e857f",
+        "size_bytes": 10455
+      },
+      {
+        "path": "sim/rtlsim/Makefile",
+        "sha256": "1aec44b214468ac620917f89ae15ec3bffe6ed71b82f794d53db301748ec2e9c",
+        "size_bytes": 10714
+      },
+      {
+        "path": "sim/rtlsim/verilator.vlt.in",
+        "sha256": "fc877bfb369afbe82da6d6e6eeee6389d55a74d262da32bd1522d3c508a397a2",
+        "size_bytes": 404
+      },
+      {
+        "path": "tests/regression/common.mk",
+        "sha256": "4164a783137b2f6e594ff3795f5911233227c3e4bfcb0319095cd6e78acf9b56",
+        "size_bytes": 14342
+      },
+      {
+        "path": "tests/regression/sgemm_tcu/Makefile",
+        "sha256": "5b0cc565b886eec4bda8b2eddc5eb7b282d6d006aa7d4dbdc31c3c730b432c67",
+        "size_bytes": 561
+      },
+      {
+        "path": "tests/regression/flash_attn_tcu_wg/Makefile",
+        "sha256": "2c609667964a90bb6f33c48444491de708308dc4f1e17f5fc7fe131a73751c00",
+        "size_bytes": 1095
+      }
+    ],
+    "source_inputs": [
+      {
+        "path": "VERSION",
+        "sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+        "size_bytes": 112
+      },
+      {
+        "path": ".gitmodules",
+        "sha256": "632677b727feb911c5d2fa9d2991d9f87434fc83d99fc4ae15ee8e4556ecbabb",
+        "size_bytes": 575
+      },
+      {
+        "path": "configure",
+        "sha256": "39a7a1fe4caeb4db06fcdac544e99d700857795b94a7bbd4e5396a9028edbefa",
+        "size_bytes": 11382
+      },
+      {
+        "path": "config.mk.in",
+        "sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+        "size_bytes": 3264
+      },
+      {
+        "path": "VX_config.toml",
+        "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+        "size_bytes": 30127
+      },
+      {
+        "path": "VX_types.toml",
+        "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+        "size_bytes": 36543
+      },
+      {
+        "path": "ci/gen_config.py",
+        "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+        "size_bytes": 60839
+      },
+      {
+        "path": "ci/blackbox.sh",
+        "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+        "size_bytes": 9153
+      }
+    ],
+    "xlen": 64
+  },
+  "cases": [
+    {
+      "app": "sgemm_tcu",
+      "args": [
+        "-m",
+        "64",
+        "-n",
+        "64",
+        "-k",
+        "64"
+      ],
+      "arithmetic": {
+        "scalar": "STD",
+        "tensor": "TFR"
+      },
+      "artifacts": [],
+      "binary_identities": [
+        {
+          "path": "tests/regression/sgemm_tcu/sgemm_tcu",
+          "sha256": "3425a3029dd384f38b2e66be28c84b20e1a9c0c6251355da8b6d908a52c3127a",
+          "size_bytes": 87088
+        },
+        {
+          "path": "tests/regression/sgemm_tcu/kernel.vxbin",
+          "sha256": "d01e13ceb3e5469ba2cf8ee60da00852d227891789d6600efc4fe1d0e3f8ba1f",
+          "size_bytes": 4656
+        },
+        {
+          "path": "sw/runtime/libvortex-simx.so",
+          "sha256": "f7bc11cdfe0c51f86de098c41b6289165f8f328b3d7cea20a46a003a744a9f2e",
+          "size_bytes": 120464
+        },
+        {
+          "path": "sw/runtime/libsimx.so",
+          "sha256": "6eb2c2fa6504a8ee0dbdd6c6d074e51f21f284dfb7c31f10418e4e938f3b4385",
+          "size_bytes": 4246944
+        }
+      ],
+      "build_after": {
+        "blockers": [],
+        "build_inputs": [
+          {
+            "path": "ci/gen_config.py",
+            "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+            "size_bytes": 60839
+          },
+          {
+            "path": "sw/kernel/Makefile",
+            "sha256": "b1c359421ca2b1b8c31b9dc98893fac772daa239e236e9d1c9225a1eb431238c",
+            "size_bytes": 2432
+          },
+          {
+            "path": "sw/runtime/common.mk",
+            "sha256": "2af4343c0738db4a665c96e24f90f78912302b20597dda74d9592afb6676736e",
+            "size_bytes": 618
+          },
+          {
+            "path": "sw/runtime/stub/Makefile",
+            "sha256": "e6aae339e07e2a3086cc0334c9353001521f774afdc9e921acf1e126b115b941",
+            "size_bytes": 2931
+          },
+          {
+            "path": "sw/runtime/simx/Makefile",
+            "sha256": "c59dfb1850b0e19c77edc8cbc1fc1c96df11f5779724efefde437b83003bb97c",
+            "size_bytes": 1712
+          },
+          {
+            "path": "sw/runtime/rtlsim/Makefile",
+            "sha256": "4c9a1b7c64d40a9726d1aafda30b416ebb08fde10d3f4dbde584c76aa45e03d3",
+            "size_bytes": 1795
+          },
+          {
+            "path": "sim/common.mk",
+            "sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+            "size_bytes": 170
+          },
+          {
+            "path": "sim/simx/Makefile",
+            "sha256": "7cd1d4b53dd08f07d529094575722b2d23735b8164ff46c28a3be4ec694e857f",
+            "size_bytes": 10455
+          },
+          {
+            "path": "sim/rtlsim/Makefile",
+            "sha256": "1aec44b214468ac620917f89ae15ec3bffe6ed71b82f794d53db301748ec2e9c",
+            "size_bytes": 10714
+          },
+          {
+            "path": "sim/rtlsim/verilator.vlt",
+            "sha256": "245094b0792abe64ec4e4320095b8eee37f9cb2efa48f12369e1f492f653baea",
+            "size_bytes": 608
+          },
+          {
+            "path": "tests/regression/common.mk",
+            "sha256": "4164a783137b2f6e594ff3795f5911233227c3e4bfcb0319095cd6e78acf9b56",
+            "size_bytes": 14342
+          },
+          {
+            "path": "tests/regression/sgemm_tcu/Makefile",
+            "sha256": "5b0cc565b886eec4bda8b2eddc5eb7b282d6d006aa7d4dbdc31c3c730b432c67",
+            "size_bytes": 561
+          },
+          {
+            "path": "tests/regression/flash_attn_tcu_wg/Makefile",
+            "sha256": "2c609667964a90bb6f33c48444491de708308dc4f1e17f5fc7fe131a73751c00",
+            "size_bytes": 1095
+          }
+        ],
+        "generated": [
+          {
+            "path": ".config.stamp",
+            "sha256": "7c7f1a541b33f09ed6f11aed150d191cb24e59d808a5305efbdb00f2ebb87646",
+            "size_bytes": 430
+          },
+          {
+            "path": "config.mk",
+            "sha256": "889417faf9a9e4b1f6dac04b4b04bee39f03d753fef7d626fd04b43a5bd33de9",
+            "size_bytes": 3401
+          },
+          {
+            "path": "sw/VX_config.h",
+            "sha256": "f3cb3f0794318bd031aa2492ed48fc9a516785b13358cb3482c7323dda37872b",
+            "size_bytes": 36239
+          },
+          {
+            "path": "sw/VX_types.h",
+            "sha256": "5d6e9d58fd7aad098761dce9973310f7a302ac0364bc3a8117a525c74da5f4f0",
+            "size_bytes": 22153
+          },
+          {
+            "path": "hw/VX_config.vh",
+            "sha256": "ae0d0729b61e6cdb1520cf3eb571329867f73b545f0b5920ae1813ff01a75ca5",
+            "size_bytes": 36066
+          },
+          {
+            "path": "hw/VX_types.vh",
+            "sha256": "1896f4b7c3872b40bd0f953e0f200ffa143da631f49150399ca098cc7f5cb120",
+            "size_bytes": 22924
+          },
+          {
+            "path": "ci/blackbox.sh",
+            "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+            "size_bytes": 9153
+          }
+        ],
+        "identity_matches": true,
+        "limitations": [
+          "Generated headers and the native baseline build recipes are compared with source; successful compilation and execution require separate command results."
+        ],
+        "os_bundle": "ubuntu/focal",
+        "outcome": "pass",
+        "profile": "",
+        "source_build_inputs": [
+          {
+            "path": "ci/gen_config.py",
+            "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+            "size_bytes": 60839
+          },
+          {
+            "path": "sw/kernel/Makefile",
+            "sha256": "b1c359421ca2b1b8c31b9dc98893fac772daa239e236e9d1c9225a1eb431238c",
+            "size_bytes": 2432
+          },
+          {
+            "path": "sw/runtime/common.mk",
+            "sha256": "2af4343c0738db4a665c96e24f90f78912302b20597dda74d9592afb6676736e",
+            "size_bytes": 618
+          },
+          {
+            "path": "sw/runtime/stub/Makefile",
+            "sha256": "e6aae339e07e2a3086cc0334c9353001521f774afdc9e921acf1e126b115b941",
+            "size_bytes": 2931
+          },
+          {
+            "path": "sw/runtime/simx/Makefile",
+            "sha256": "c59dfb1850b0e19c77edc8cbc1fc1c96df11f5779724efefde437b83003bb97c",
+            "size_bytes": 1712
+          },
+          {
+            "path": "sw/runtime/rtlsim/Makefile",
+            "sha256": "4c9a1b7c64d40a9726d1aafda30b416ebb08fde10d3f4dbde584c76aa45e03d3",
+            "size_bytes": 1795
+          },
+          {
+            "path": "sim/common.mk",
+            "sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+            "size_bytes": 170
+          },
+          {
+            "path": "sim/simx/Makefile",
+            "sha256": "7cd1d4b53dd08f07d529094575722b2d23735b8164ff46c28a3be4ec694e857f",
+            "size_bytes": 10455
+          },
+          {
+            "path": "sim/rtlsim/Makefile",
+            "sha256": "1aec44b214468ac620917f89ae15ec3bffe6ed71b82f794d53db301748ec2e9c",
+            "size_bytes": 10714
+          },
+          {
+            "path": "sim/rtlsim/verilator.vlt.in",
+            "sha256": "fc877bfb369afbe82da6d6e6eeee6389d55a74d262da32bd1522d3c508a397a2",
+            "size_bytes": 404
+          },
+          {
+            "path": "tests/regression/common.mk",
+            "sha256": "4164a783137b2f6e594ff3795f5911233227c3e4bfcb0319095cd6e78acf9b56",
+            "size_bytes": 14342
+          },
+          {
+            "path": "tests/regression/sgemm_tcu/Makefile",
+            "sha256": "5b0cc565b886eec4bda8b2eddc5eb7b282d6d006aa7d4dbdc31c3c730b432c67",
+            "size_bytes": 561
+          },
+          {
+            "path": "tests/regression/flash_attn_tcu_wg/Makefile",
+            "sha256": "2c609667964a90bb6f33c48444491de708308dc4f1e17f5fc7fe131a73751c00",
+            "size_bytes": 1095
+          }
+        ],
+        "source_inputs": [
+          {
+            "path": "VERSION",
+            "sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+            "size_bytes": 112
+          },
+          {
+            "path": ".gitmodules",
+            "sha256": "632677b727feb911c5d2fa9d2991d9f87434fc83d99fc4ae15ee8e4556ecbabb",
+            "size_bytes": 575
+          },
+          {
+            "path": "configure",
+            "sha256": "39a7a1fe4caeb4db06fcdac544e99d700857795b94a7bbd4e5396a9028edbefa",
+            "size_bytes": 11382
+          },
+          {
+            "path": "config.mk.in",
+            "sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+            "size_bytes": 3264
+          },
+          {
+            "path": "VX_config.toml",
+            "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+            "size_bytes": 30127
+          },
+          {
+            "path": "VX_types.toml",
+            "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+            "size_bytes": 36543
+          },
+          {
+            "path": "ci/gen_config.py",
+            "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+            "size_bytes": 60839
+          },
+          {
+            "path": "ci/blackbox.sh",
+            "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+            "size_bytes": 9153
+          }
+        ],
+        "xlen": 64
+      },
+      "build_before": {
+        "blockers": [],
+        "build_inputs": [
+          {
+            "path": "ci/gen_config.py",
+            "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+            "size_bytes": 60839
+          },
+          {
+            "path": "sw/kernel/Makefile",
+            "sha256": "b1c359421ca2b1b8c31b9dc98893fac772daa239e236e9d1c9225a1eb431238c",
+            "size_bytes": 2432
+          },
+          {
+            "path": "sw/runtime/common.mk",
+            "sha256": "2af4343c0738db4a665c96e24f90f78912302b20597dda74d9592afb6676736e",
+            "size_bytes": 618
+          },
+          {
+            "path": "sw/runtime/stub/Makefile",
+            "sha256": "e6aae339e07e2a3086cc0334c9353001521f774afdc9e921acf1e126b115b941",
+            "size_bytes": 2931
+          },
+          {
+            "path": "sw/runtime/simx/Makefile",
+            "sha256": "c59dfb1850b0e19c77edc8cbc1fc1c96df11f5779724efefde437b83003bb97c",
+            "size_bytes": 1712
+          },
+          {
+            "path": "sw/runtime/rtlsim/Makefile",
+            "sha256": "4c9a1b7c64d40a9726d1aafda30b416ebb08fde10d3f4dbde584c76aa45e03d3",
+            "size_bytes": 1795
+          },
+          {
+            "path": "sim/common.mk",
+            "sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+            "size_bytes": 170
+          },
+          {
+            "path": "sim/simx/Makefile",
+            "sha256": "7cd1d4b53dd08f07d529094575722b2d23735b8164ff46c28a3be4ec694e857f",
+            "size_bytes": 10455
+          },
+          {
+            "path": "sim/rtlsim/Makefile",
+            "sha256": "1aec44b214468ac620917f89ae15ec3bffe6ed71b82f794d53db301748ec2e9c",
+            "size_bytes": 10714
+          },
+          {
+            "path": "sim/rtlsim/verilator.vlt",
+            "sha256": "245094b0792abe64ec4e4320095b8eee37f9cb2efa48f12369e1f492f653baea",
+            "size_bytes": 608
+          },
+          {
+            "path": "tests/regression/common.mk",
+            "sha256": "4164a783137b2f6e594ff3795f5911233227c3e4bfcb0319095cd6e78acf9b56",
+            "size_bytes": 14342
+          },
+          {
+            "path": "tests/regression/sgemm_tcu/Makefile",
+            "sha256": "5b0cc565b886eec4bda8b2eddc5eb7b282d6d006aa7d4dbdc31c3c730b432c67",
+            "size_bytes": 561
+          },
+          {
+            "path": "tests/regression/flash_attn_tcu_wg/Makefile",
+            "sha256": "2c609667964a90bb6f33c48444491de708308dc4f1e17f5fc7fe131a73751c00",
+            "size_bytes": 1095
+          }
+        ],
+        "generated": [
+          {
+            "path": ".config.stamp",
+            "sha256": "7c7f1a541b33f09ed6f11aed150d191cb24e59d808a5305efbdb00f2ebb87646",
+            "size_bytes": 430
+          },
+          {
+            "path": "config.mk",
+            "sha256": "889417faf9a9e4b1f6dac04b4b04bee39f03d753fef7d626fd04b43a5bd33de9",
+            "size_bytes": 3401
+          },
+          {
+            "path": "sw/VX_config.h",
+            "sha256": "f3cb3f0794318bd031aa2492ed48fc9a516785b13358cb3482c7323dda37872b",
+            "size_bytes": 36239
+          },
+          {
+            "path": "sw/VX_types.h",
+            "sha256": "5d6e9d58fd7aad098761dce9973310f7a302ac0364bc3a8117a525c74da5f4f0",
+            "size_bytes": 22153
+          },
+          {
+            "path": "hw/VX_config.vh",
+            "sha256": "ae0d0729b61e6cdb1520cf3eb571329867f73b545f0b5920ae1813ff01a75ca5",
+            "size_bytes": 36066
+          },
+          {
+            "path": "hw/VX_types.vh",
+            "sha256": "1896f4b7c3872b40bd0f953e0f200ffa143da631f49150399ca098cc7f5cb120",
+            "size_bytes": 22924
+          },
+          {
+            "path": "ci/blackbox.sh",
+            "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+            "size_bytes": 9153
+          }
+        ],
+        "identity_matches": true,
+        "limitations": [
+          "Generated headers and the native baseline build recipes are compared with source; successful compilation and execution require separate command results."
+        ],
+        "os_bundle": "ubuntu/focal",
+        "outcome": "pass",
+        "profile": "",
+        "source_build_inputs": [
+          {
+            "path": "ci/gen_config.py",
+            "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+            "size_bytes": 60839
+          },
+          {
+            "path": "sw/kernel/Makefile",
+            "sha256": "b1c359421ca2b1b8c31b9dc98893fac772daa239e236e9d1c9225a1eb431238c",
+            "size_bytes": 2432
+          },
+          {
+            "path": "sw/runtime/common.mk",
+            "sha256": "2af4343c0738db4a665c96e24f90f78912302b20597dda74d9592afb6676736e",
+            "size_bytes": 618
+          },
+          {
+            "path": "sw/runtime/stub/Makefile",
+            "sha256": "e6aae339e07e2a3086cc0334c9353001521f774afdc9e921acf1e126b115b941",
+            "size_bytes": 2931
+          },
+          {
+            "path": "sw/runtime/simx/Makefile",
+            "sha256": "c59dfb1850b0e19c77edc8cbc1fc1c96df11f5779724efefde437b83003bb97c",
+            "size_bytes": 1712
+          },
+          {
+            "path": "sw/runtime/rtlsim/Makefile",
+            "sha256": "4c9a1b7c64d40a9726d1aafda30b416ebb08fde10d3f4dbde584c76aa45e03d3",
+            "size_bytes": 1795
+          },
+          {
+            "path": "sim/common.mk",
+            "sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+            "size_bytes": 170
+          },
+          {
+            "path": "sim/simx/Makefile",
+            "sha256": "7cd1d4b53dd08f07d529094575722b2d23735b8164ff46c28a3be4ec694e857f",
+            "size_bytes": 10455
+          },
+          {
+            "path": "sim/rtlsim/Makefile",
+            "sha256": "1aec44b214468ac620917f89ae15ec3bffe6ed71b82f794d53db301748ec2e9c",
+            "size_bytes": 10714
+          },
+          {
+            "path": "sim/rtlsim/verilator.vlt.in",
+            "sha256": "fc877bfb369afbe82da6d6e6eeee6389d55a74d262da32bd1522d3c508a397a2",
+            "size_bytes": 404
+          },
+          {
+            "path": "tests/regression/common.mk",
+            "sha256": "4164a783137b2f6e594ff3795f5911233227c3e4bfcb0319095cd6e78acf9b56",
+            "size_bytes": 14342
+          },
+          {
+            "path": "tests/regression/sgemm_tcu/Makefile",
+            "sha256": "5b0cc565b886eec4bda8b2eddc5eb7b282d6d006aa7d4dbdc31c3c730b432c67",
+            "size_bytes": 561
+          },
+          {
+            "path": "tests/regression/flash_attn_tcu_wg/Makefile",
+            "sha256": "2c609667964a90bb6f33c48444491de708308dc4f1e17f5fc7fe131a73751c00",
+            "size_bytes": 1095
+          }
+        ],
+        "source_inputs": [
+          {
+            "path": "VERSION",
+            "sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+            "size_bytes": 112
+          },
+          {
+            "path": ".gitmodules",
+            "sha256": "632677b727feb911c5d2fa9d2991d9f87434fc83d99fc4ae15ee8e4556ecbabb",
+            "size_bytes": 575
+          },
+          {
+            "path": "configure",
+            "sha256": "39a7a1fe4caeb4db06fcdac544e99d700857795b94a7bbd4e5396a9028edbefa",
+            "size_bytes": 11382
+          },
+          {
+            "path": "config.mk.in",
+            "sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+            "size_bytes": 3264
+          },
+          {
+            "path": "VX_config.toml",
+            "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+            "size_bytes": 30127
+          },
+          {
+            "path": "VX_types.toml",
+            "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+            "size_bytes": 36543
+          },
+          {
+            "path": "ci/gen_config.py",
+            "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+            "size_bytes": 60839
+          },
+          {
+            "path": "ci/blackbox.sh",
+            "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+            "size_bytes": 9153
+          }
+        ],
+        "xlen": 64
+      },
+      "configs": [
+        "-DVX_CFG_NUM_CLUSTERS=1",
+        "-DVX_CFG_NUM_CORES=1",
+        "-DVX_CFG_NUM_WARPS=4",
+        "-DVX_CFG_NUM_THREADS=8",
+        "-DVX_CFG_ISSUE_WIDTH=2",
+        "-DVX_CFG_EXT_TCU_ENABLE",
+        "-DVX_CFG_TCU_TYPE_TFR",
+        "-DVX_CFG_FPU_TYPE_STD",
+        "-DITYPE=fp16",
+        "-DOTYPE=fp32",
+        "-DVX_CFG_TCU_FP16_ENABLE"
+      ],
+      "configuration_artifacts": [
+        {
+          "path": "artifacts/gemm-fp16-simx-tests_regression_sgemm_tcu_config.stamp",
+          "redaction": "source/build/tool/output roots replaced by symbolic labels",
+          "sha256": "e098d94faab37eb6be89d2216f10a338d52984a6234159ea75c01e7a74bf8a1f",
+          "size_bytes": 15610,
+          "source": {
+            "path": "tests/regression/sgemm_tcu/config.stamp",
+            "sha256": "2c62222824973bfb06e504aa2835d7d8e1961af143959c1f5ca9bdc16b71e704",
+            "size_bytes": 16210
+          }
+        },
+        {
+          "path": "artifacts/gemm-fp16-simx-sw_runtime_simx_config.stamp",
+          "redaction": "source/build/tool/output roots replaced by symbolic labels",
+          "sha256": "0804b9dee6dc0a116c72725f277ce8da47c0909fb876d17545ad24daf39f39e4",
+          "size_bytes": 883,
+          "source": {
+            "path": "sw/runtime/simx_config.stamp",
+            "sha256": "d8caf1264cba86e26b0167df8e7ffe4b2a086ff6e93ef39512ce8731f8d63ee1",
+            "size_bytes": 1755
+          }
+        },
+        {
+          "path": "artifacts/gemm-fp16-simx-sw_runtime_simx_rt_config.stamp",
+          "redaction": "source/build/tool/output roots replaced by symbolic labels",
+          "sha256": "4549a431437283a691857b8f29467ca256d410cd2cb13066206f841983010dd9",
+          "size_bytes": 7733,
+          "source": {
+            "path": "sw/runtime/simx_rt_config.stamp",
+            "sha256": "ce9682b21891474c6383b3b49ad440b7009dcc1599bf084dda540034d271233a",
+            "size_bytes": 8061
+          }
+        }
+      ],
+      "dependencies_after": {
+        "artifacts": [
+          {
+            "path": "third_party/softfloat/build/Linux-x86_64-GCC/softfloat.a",
+            "sha256": "5bd6e703aaacc9f57d50e0bd4adf4b9bbe5a06294b170312f8ff82b48971ad6e",
+            "size_bytes": 492514
+          },
+          {
+            "path": "third_party/ramulator/libramulator.so",
+            "sha256": "4c774218ea94d799e76f4457fda366f4ac5899054a33f4ff42a639e479a09216",
+            "size_bytes": 5903224
+          },
+          {
+            "path": "third_party/ramulator_ext/libramulator-vortex.so",
+            "sha256": "8187eab137187204fc0ad93f127f981c70e616c00aba35834dc28b8e7b39fd8f",
+            "size_bytes": 678208
+          }
+        ],
+        "blockers": [],
+        "outcome": "pass"
+      },
+      "dependencies_at_launch": {
+        "artifacts": [
+          {
+            "path": "third_party/softfloat/build/Linux-x86_64-GCC/softfloat.a",
+            "sha256": "5bd6e703aaacc9f57d50e0bd4adf4b9bbe5a06294b170312f8ff82b48971ad6e",
+            "size_bytes": 492514
+          },
+          {
+            "path": "third_party/ramulator/libramulator.so",
+            "sha256": "4c774218ea94d799e76f4457fda366f4ac5899054a33f4ff42a639e479a09216",
+            "size_bytes": 5903224
+          },
+          {
+            "path": "third_party/ramulator_ext/libramulator-vortex.so",
+            "sha256": "8187eab137187204fc0ad93f127f981c70e616c00aba35834dc28b8e7b39fd8f",
+            "size_bytes": 678208
+          }
+        ],
+        "blockers": [],
+        "outcome": "pass"
+      },
+      "dependencies_before": {
+        "artifacts": [
+          {
+            "path": "third_party/softfloat/build/Linux-x86_64-GCC/softfloat.a",
+            "sha256": "5bd6e703aaacc9f57d50e0bd4adf4b9bbe5a06294b170312f8ff82b48971ad6e",
+            "size_bytes": 492514
+          },
+          {
+            "path": "third_party/ramulator/libramulator.so",
+            "sha256": "4c774218ea94d799e76f4457fda366f4ac5899054a33f4ff42a639e479a09216",
+            "size_bytes": 5903224
+          },
+          {
+            "path": "third_party/ramulator_ext/libramulator-vortex.so",
+            "sha256": "8187eab137187204fc0ad93f127f981c70e616c00aba35834dc28b8e7b39fd8f",
+            "size_bytes": 678208
+          }
+        ],
+        "blockers": [],
+        "outcome": "pass"
+      },
+      "driver": "simx",
+      "id": "gemm-fp16-simx",
+      "native_flags_verified": true,
+      "outcome": "pass",
+      "reason": null,
+      "reference": {
+        "comparison": "CPU double accumulation of converted input products; abs((actual-reference)/reference) < 0.01, with exact zero pairs accepted.",
+        "oracle": "tests/regression/sgemm_tcu/main.cpp",
+        "seed": 50,
+        "tolerances": {
+          "relative_error_strict_max": 0.01,
+          "zero_pair_equal": true
+        }
+      },
+      "reference_marker_verified": true,
+      "source_after": {
+        "blockers": [],
+        "changed_paths": [],
+        "dirty": false,
+        "inputs": [
+          {
+            "path": "VERSION",
+            "sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+            "size_bytes": 112
+          },
+          {
+            "path": ".gitmodules",
+            "sha256": "632677b727feb911c5d2fa9d2991d9f87434fc83d99fc4ae15ee8e4556ecbabb",
+            "size_bytes": 575
+          },
+          {
+            "path": "configure",
+            "sha256": "39a7a1fe4caeb4db06fcdac544e99d700857795b94a7bbd4e5396a9028edbefa",
+            "size_bytes": 11382
+          },
+          {
+            "path": "config.mk.in",
+            "sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+            "size_bytes": 3264
+          },
+          {
+            "path": "VX_config.toml",
+            "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+            "size_bytes": 30127
+          },
+          {
+            "path": "VX_types.toml",
+            "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+            "size_bytes": 36543
+          },
+          {
+            "path": "ci/gen_config.py",
+            "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+            "size_bytes": 60839
+          },
+          {
+            "path": "ci/blackbox.sh",
+            "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+            "size_bytes": 9153
+          }
+        ],
+        "outcome": "pass",
+        "pins": {
+          "FIRESIM_REV": "57bb93f1e23daf46198659ddd93608f70121fee0",
+          "GEM5_REV": "v25.0.0.1",
+          "TOOLCHAIN_REV": "v3.0.2",
+          "VORTEX_VERSION": "3.0"
+        },
+        "revision": "03181532b81fe95b1cfeac2ffb25d8597af689b2",
+        "submodules": {
+          "declared_count": 5,
+          "entries": [
+            {
+              "path": "third_party/cocogfx",
+              "revision": "b1befdb36df8af7ac9e2c96acaf81957aab5d107",
+              "status": "initialized"
+            },
+            {
+              "path": "third_party/cvfpu",
+              "revision": "79e453139072df42c9ec8f697132ba485d74e23d",
+              "status": "initialized"
+            },
+            {
+              "path": "third_party/cvfpu/src/common_cells",
+              "revision": "6aeee85d0a34fedc06c14f04fd6363c9f7b4eeea",
+              "status": "initialized"
+            },
+            {
+              "path": "third_party/cvfpu/src/fpu_div_sqrt_mvp",
+              "revision": "86e1f558b3c95e91577c41b2fc452c86b04e85ac",
+              "status": "initialized"
+            },
+            {
+              "path": "third_party/cvfpu/tb/flexfloat",
+              "revision": "28be2d4fbf41b38fc37763bb6e90a1c88f6aaa61",
+              "status": "initialized"
+            },
+            {
+              "path": "third_party/hardfloat",
+              "revision": "aaf5736dffa521603b681fd5853760c671446c85",
+              "status": "initialized"
+            },
+            {
+              "path": "third_party/ramulator",
+              "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+              "status": "initialized"
+            },
+            {
+              "path": "third_party/softfloat",
+              "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4",
+              "status": "initialized"
+            }
+          ],
+          "errors": []
+        },
+        "tree": "1d281d25f72787ed3545285580b4c390d2f7eb3a",
+        "untracked_paths": []
+      },
+      "source_before": {
+        "blockers": [],
+        "changed_paths": [],
+        "dirty": false,
+        "inputs": [
+          {
+            "path": "VERSION",
+            "sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+            "size_bytes": 112
+          },
+          {
+            "path": ".gitmodules",
+            "sha256": "632677b727feb911c5d2fa9d2991d9f87434fc83d99fc4ae15ee8e4556ecbabb",
+            "size_bytes": 575
+          },
+          {
+            "path": "configure",
+            "sha256": "39a7a1fe4caeb4db06fcdac544e99d700857795b94a7bbd4e5396a9028edbefa",
+            "size_bytes": 11382
+          },
+          {
+            "path": "config.mk.in",
+            "sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+            "size_bytes": 3264
+          },
+          {
+            "path": "VX_config.toml",
+            "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+            "size_bytes": 30127
+          },
+          {
+            "path": "VX_types.toml",
+            "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+            "size_bytes": 36543
+          },
+          {
+            "path": "ci/gen_config.py",
+            "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+            "size_bytes": 60839
+          },
+          {
+            "path": "ci/blackbox.sh",
+            "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+            "size_bytes": 9153
+          }
+        ],
+        "outcome": "pass",
+        "pins": {
+          "FIRESIM_REV": "57bb93f1e23daf46198659ddd93608f70121fee0",
+          "GEM5_REV": "v25.0.0.1",
+          "TOOLCHAIN_REV": "v3.0.2",
+          "VORTEX_VERSION": "3.0"
+        },
+        "revision": "03181532b81fe95b1cfeac2ffb25d8597af689b2",
+        "submodules": {
+          "declared_count": 5,
+          "entries": [
+            {
+              "path": "third_party/cocogfx",
+              "revision": "b1befdb36df8af7ac9e2c96acaf81957aab5d107",
+              "status": "initialized"
+            },
+            {
+              "path": "third_party/cvfpu",
+              "revision": "79e453139072df42c9ec8f697132ba485d74e23d",
+              "status": "initialized"
+            },
+            {
+              "path": "third_party/cvfpu/src/common_cells",
+              "revision": "6aeee85d0a34fedc06c14f04fd6363c9f7b4eeea",
+              "status": "initialized"
+            },
+            {
+              "path": "third_party/cvfpu/src/fpu_div_sqrt_mvp",
+              "revision": "86e1f558b3c95e91577c41b2fc452c86b04e85ac",
+              "status": "initialized"
+            },
+            {
+              "path": "third_party/cvfpu/tb/flexfloat",
+              "revision": "28be2d4fbf41b38fc37763bb6e90a1c88f6aaa61",
+              "status": "initialized"
+            },
+            {
+              "path": "third_party/hardfloat",
+              "revision": "aaf5736dffa521603b681fd5853760c671446c85",
+              "status": "initialized"
+            },
+            {
+              "path": "third_party/ramulator",
+              "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+              "status": "initialized"
+            },
+            {
+              "path": "third_party/softfloat",
+              "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4",
+              "status": "initialized"
+            }
+          ],
+          "errors": []
+        },
+        "tree": "1d281d25f72787ed3545285580b4c390d2f7eb3a",
+        "untracked_paths": []
+      },
+      "tooling_after": {
+        "blockers": [],
+        "checkout": {
+          "dirty": true,
+          "revision": "e9c9ac01f93b0d84915340999100260f2599ec44",
+          "tree": "fbafa8e643aa935a1103e0d49ce2268b32f12c1e"
+        },
+        "files": [
+          {
+            "path": "baseline.py",
+            "sha256": "d26202d38a27b5ab0a52e735edb5682a8be8b9771624c69c724dbeb7e2c58610",
+            "size_bytes": 27600
+          },
+          {
+            "path": "baseline_inventory.py",
+            "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+            "size_bytes": 20466
+          },
+          {
+            "path": "baseline_matrix.py",
+            "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+            "size_bytes": 8890
+          },
+          {
+            "path": "baseline_process.py",
+            "sha256": "d011171fc41734fa323127a70acc13e7b7a5a7949372e808655af1b535cdaca2",
+            "size_bytes": 12542
+          },
+          {
+            "path": "baseline_host.py",
+            "sha256": "96bc0d25b1ec0509937c83d1de50db0a0125ca2acda405467e28d9e37dfb5ccb",
+            "size_bytes": 6107
+          },
+          {
+            "path": "preflight.py",
+            "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+            "size_bytes": 15124
+          }
+        ],
+        "limitations": [
+          "Helper content hashes and retained sources identify the executing instrumentation independently of the GPU source checkout."
+        ],
+        "outcome": "pass"
+      },
+      "tooling_before": {
+        "blockers": [],
+        "checkout": {
+          "dirty": true,
+          "revision": "e9c9ac01f93b0d84915340999100260f2599ec44",
+          "tree": "fbafa8e643aa935a1103e0d49ce2268b32f12c1e"
+        },
+        "files": [
+          {
+            "path": "baseline.py",
+            "sha256": "d26202d38a27b5ab0a52e735edb5682a8be8b9771624c69c724dbeb7e2c58610",
+            "size_bytes": 27600
+          },
+          {
+            "path": "baseline_inventory.py",
+            "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+            "size_bytes": 20466
+          },
+          {
+            "path": "baseline_matrix.py",
+            "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+            "size_bytes": 8890
+          },
+          {
+            "path": "baseline_process.py",
+            "sha256": "d011171fc41734fa323127a70acc13e7b7a5a7949372e808655af1b535cdaca2",
+            "size_bytes": 12542
+          },
+          {
+            "path": "baseline_host.py",
+            "sha256": "96bc0d25b1ec0509937c83d1de50db0a0125ca2acda405467e28d9e37dfb5ccb",
+            "size_bytes": 6107
+          },
+          {
+            "path": "preflight.py",
+            "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+            "size_bytes": 15124
+          }
+        ],
+        "limitations": [
+          "Helper content hashes and retained sources identify the executing instrumentation independently of the GPU source checkout."
+        ],
+        "outcome": "pass"
+      }
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "$SOURCE/configure",
+        "--xlen=64",
+        "--osversion=ubuntu/focal",
+        "--tooldir=$TOOLS"
+      ],
+      "cleanup_complete": true,
+      "cwd": "$BUILD",
+      "duration_seconds": 3.23394,
+      "environment": {
+        "CCACHE_DISABLE": "1",
+        "MAKEFLAGS": "-j2",
+        "OBJCACHE": "",
+        "THREADS": "2"
+      },
+      "exit_code": 0,
+      "id": "configure",
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ],
+      "log": "logs/configure.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_size_bytes": 0,
+      "outcome": "pass",
+      "peak_rss_bytes": 17956864,
+      "reason": null
+    },
+    {
+      "argv": [
+        "make",
+        "-j2",
+        "-C",
+        "sw/kernel"
+      ],
+      "cleanup_complete": true,
+      "cwd": "$BUILD",
+      "duration_seconds": 0.504301,
+      "environment": {
+        "CCACHE_DISABLE": "1",
+        "MAKEFLAGS": "-j2",
+        "OBJCACHE": "",
+        "THREADS": "2"
+      },
+      "exit_code": 0,
+      "id": "kernel-library",
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ],
+      "log": "logs/kernel-library.log",
+      "log_sha256": "00929693bace6189f4c28f27361a1b79e29b0866d53f7059a7bd809f04393d07",
+      "log_size_bytes": 110201,
+      "outcome": "pass",
+      "peak_rss_bytes": 29757440,
+      "reason": null
+    },
+    {
+      "argv": [
+        "make",
+        "-j2",
+        "-C",
+        "sw/runtime/stub"
+      ],
+      "cleanup_complete": true,
+      "cwd": "$BUILD",
+      "duration_seconds": 9.907702,
+      "environment": {
+        "CCACHE_DISABLE": "1",
+        "MAKEFLAGS": "-j2",
+        "OBJCACHE": "",
+        "THREADS": "2"
+      },
+      "exit_code": 0,
+      "id": "runtime-stub",
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ],
+      "log": "logs/runtime-stub.log",
+      "log_sha256": "670064bf20c279b7d0faa6d025796ecfff17b2856319b6beac4a84f4ea8312a0",
+      "log_size_bytes": 9205,
+      "outcome": "pass",
+      "peak_rss_bytes": 208449536,
+      "reason": null
+    },
+    {
+      "argv": [
+        "$SOURCE/configure",
+        "--xlen=64",
+        "--osversion=ubuntu/focal",
+        "--tooldir=$TOOLS"
+      ],
+      "cleanup_complete": true,
+      "cwd": "$BUILD",
+      "duration_seconds": 1.040964,
+      "environment": {
+        "CCACHE_DISABLE": "1",
+        "MAKEFLAGS": "-j2",
+        "OBJCACHE": "",
+        "THREADS": "2"
+      },
+      "exit_code": 0,
+      "id": "gemm-fp16-simx-configure",
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ],
+      "log": "logs/gemm-fp16-simx-configure.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_size_bytes": 0,
+      "outcome": "pass",
+      "peak_rss_bytes": 3272704,
+      "reason": null
+    },
+    {
+      "argv": [
+        "./ci/blackbox.sh",
+        "--driver=simx",
+        "--app=sgemm_tcu",
+        "--args=-m 64 -n 64 -k 64"
+      ],
+      "cleanup_complete": true,
+      "cwd": "$BUILD",
+      "duration_seconds": 50.032115,
+      "environment": {
+        "CCACHE_DISABLE": "1",
+        "CONFIGS": "-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=8 -DVX_CFG_ISSUE_WIDTH=2 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=fp16 -DOTYPE=fp32 -DVX_CFG_TCU_FP16_ENABLE",
+        "MAKEFLAGS": "-j2",
+        "OBJCACHE": "",
+        "THREADS": "2"
+      },
+      "exit_code": 0,
+      "id": "gemm-fp16-simx",
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ],
+      "log": "logs/gemm-fp16-simx.log",
+      "log_sha256": "0e53cde8df6b12bde40441fa980f0d169803d4a22c91c89528ad7fbed884be9d",
+      "log_size_bytes": 55911,
+      "outcome": "pass",
+      "peak_rss_bytes": 853872640,
+      "reason": null
+    }
+  ],
+  "coverage": {
+    "full_matrix_selected": false,
+    "full_native_matrix_passed": false,
+    "required_ids": [
+      "gemm-fp16-simx",
+      "gemm-fp16-rtlsim",
+      "gemm-bf16-simx",
+      "gemm-bf16-rtlsim",
+      "attention-tf32-simx",
+      "attention-tf32-rtlsim"
+    ],
+    "selected_ids": [
+      "gemm-fp16-simx"
+    ]
+  },
+  "dependencies": [
+    {
+      "path": "third_party/softfloat/build/Linux-x86_64-GCC/softfloat.a",
+      "sha256": "5bd6e703aaacc9f57d50e0bd4adf4b9bbe5a06294b170312f8ff82b48971ad6e",
+      "size_bytes": 492514
+    },
+    {
+      "path": "third_party/ramulator/libramulator.so",
+      "sha256": "4c774218ea94d799e76f4457fda366f4ac5899054a33f4ff42a639e479a09216",
+      "size_bytes": 5903224
+    },
+    {
+      "path": "third_party/ramulator_ext/libramulator-vortex.so",
+      "sha256": "8187eab137187204fc0ad93f127f981c70e616c00aba35834dc28b8e7b39fd8f",
+      "size_bytes": 678208
+    }
+  ],
+  "dependencies_after": {
+    "artifacts": [
+      {
+        "path": "third_party/softfloat/build/Linux-x86_64-GCC/softfloat.a",
+        "sha256": "5bd6e703aaacc9f57d50e0bd4adf4b9bbe5a06294b170312f8ff82b48971ad6e",
+        "size_bytes": 492514
+      },
+      {
+        "path": "third_party/ramulator/libramulator.so",
+        "sha256": "4c774218ea94d799e76f4457fda366f4ac5899054a33f4ff42a639e479a09216",
+        "size_bytes": 5903224
+      },
+      {
+        "path": "third_party/ramulator_ext/libramulator-vortex.so",
+        "sha256": "8187eab137187204fc0ad93f127f981c70e616c00aba35834dc28b8e7b39fd8f",
+        "size_bytes": 678208
+      }
+    ],
+    "blockers": [],
+    "outcome": "pass"
+  },
+  "dependencies_before_execution": {
+    "artifacts": [
+      {
+        "path": "third_party/softfloat/build/Linux-x86_64-GCC/softfloat.a",
+        "sha256": "5bd6e703aaacc9f57d50e0bd4adf4b9bbe5a06294b170312f8ff82b48971ad6e",
+        "size_bytes": 492514
+      },
+      {
+        "path": "third_party/ramulator/libramulator.so",
+        "sha256": "4c774218ea94d799e76f4457fda366f4ac5899054a33f4ff42a639e479a09216",
+        "size_bytes": 5903224
+      },
+      {
+        "path": "third_party/ramulator_ext/libramulator-vortex.so",
+        "sha256": "8187eab137187204fc0ad93f127f981c70e616c00aba35834dc28b8e7b39fd8f",
+        "size_bytes": 678208
+      }
+    ],
+    "blockers": [],
+    "outcome": "pass"
+  },
+  "dependencies_planned": {
+    "artifacts": [
+      {
+        "path": "third_party/softfloat/build/Linux-x86_64-GCC/softfloat.a",
+        "sha256": "5bd6e703aaacc9f57d50e0bd4adf4b9bbe5a06294b170312f8ff82b48971ad6e",
+        "size_bytes": 492514
+      },
+      {
+        "path": "third_party/ramulator/libramulator.so",
+        "sha256": "4c774218ea94d799e76f4457fda366f4ac5899054a33f4ff42a639e479a09216",
+        "size_bytes": 5903224
+      },
+      {
+        "path": "third_party/ramulator_ext/libramulator-vortex.so",
+        "sha256": "8187eab137187204fc0ad93f127f981c70e616c00aba35834dc28b8e7b39fd8f",
+        "size_bytes": 678208
+      }
+    ],
+    "blockers": [],
+    "outcome": "pass"
+  },
+  "finished_at": "2026-11-15T22:20:34+00:00",
+  "host_after": {
+    "blockers": [],
+    "host": {
+      "libc": {
+        "name": "glibc",
+        "version": "2.41"
+      },
+      "machine": "x86_64",
+      "system": "Linux"
+    },
+    "limitations": [
+      "Host identities are observations, not a compiler compatibility or workload pass.",
+      "Executable hashes do not inventory every host header, shared library or compiler support file.",
+      "Compiler selection comes from the supplied PATH; no tool is installed or replaced.",
+      "The C++ frontend is identified by the driver's cc1plus path and file hash; its version is not probed separately.",
+      "The pinned dependency stack requires actual compilation checks; a version number alone cannot qualify it."
+    ],
+    "outcome": "pass",
+    "tools": {
+      "as": {
+        "command": "as",
+        "resolved_name": "x86_64-linux-gnu-as",
+        "sha256": "07dd8551ea0aa065975e4dddb8e1bb7dc308d12d54eca22c3858db79467c7cb9",
+        "size_bytes": 795184,
+        "version": "GNU assembler (GNU Binutils for Debian) 2.44"
+      },
+      "cc1plus": {
+        "command": "cc1plus",
+        "reported_by": "g++ -print-prog-name=cc1plus",
+        "resolved_name": "cc1plus",
+        "sha256": "bf57f3b614cb0999bf97ce879c57ee7221431d70cb20a4f751436fd099b17159",
+        "size_bytes": 27771288
+      },
+      "cmake": {
+        "command": "cmake",
+        "resolved_name": "cmake",
+        "sha256": "68c00d5a234063aa98a002bb08c5f6653c3473ce7860f0ab8d8d672a62cef32b",
+        "size_bytes": 329,
+        "version": "cmake version 4.4.5"
+      },
+      "g++": {
+        "command": "g++",
+        "resolved_name": "x86_64-linux-gnu-g++-11",
+        "sha256": "58d358c7d7192b2e0fb3382b1006c1144b528076c5f4ea6d5d582a725526fc73",
+        "size_bytes": 916160,
+        "version": "g++ (Debian 11.3.0-12) 11.3.0"
+      },
+      "gcc": {
+        "command": "gcc",
+        "resolved_name": "x86_64-linux-gnu-gcc-11",
+        "sha256": "9e5b07c122ff64546e157e735167e7c4d53654836340c6c53d91cb9104a897e1",
+        "size_bytes": 916160,
+        "version": "gcc (Debian 11.3.0-12) 11.3.0"
+      },
+      "ld": {
+        "command": "ld",
+        "resolved_name": "x86_64-linux-gnu-ld.bfd",
+        "sha256": "d2766988b6a1b1d1518cdc09242e726d1f24e151e16410ada3092b11ffd9081b",
+        "size_bytes": 1861256,
+        "version": "GNU ld (GNU Binutils for Debian) 2.44"
+      },
+      "make": {
+        "command": "make",
+        "resolved_name": "make",
+        "sha256": "8a229baf64671988cfb5af43ba3070c6ce7214cf32bcf96155115559d1466fa7",
+        "size_bytes": 278448,
+        "version": "GNU Make 4.4.1"
+      },
+      "python3": {
+        "command": "python3",
+        "resolved_name": "python3.12",
+        "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+        "size_bytes": 30894944,
+        "version": "Python 3.12.14"
+      }
+    }
+  },
+  "host_before": {
+    "blockers": [],
+    "host": {
+      "libc": {
+        "name": "glibc",
+        "version": "2.41"
+      },
+      "machine": "x86_64",
+      "system": "Linux"
+    },
+    "limitations": [
+      "Host identities are observations, not a compiler compatibility or workload pass.",
+      "Executable hashes do not inventory every host header, shared library or compiler support file.",
+      "Compiler selection comes from the supplied PATH; no tool is installed or replaced.",
+      "The C++ frontend is identified by the driver's cc1plus path and file hash; its version is not probed separately.",
+      "The pinned dependency stack requires actual compilation checks; a version number alone cannot qualify it."
+    ],
+    "outcome": "pass",
+    "tools": {
+      "as": {
+        "command": "as",
+        "resolved_name": "x86_64-linux-gnu-as",
+        "sha256": "07dd8551ea0aa065975e4dddb8e1bb7dc308d12d54eca22c3858db79467c7cb9",
+        "size_bytes": 795184,
+        "version": "GNU assembler (GNU Binutils for Debian) 2.44"
+      },
+      "cc1plus": {
+        "command": "cc1plus",
+        "reported_by": "g++ -print-prog-name=cc1plus",
+        "resolved_name": "cc1plus",
+        "sha256": "bf57f3b614cb0999bf97ce879c57ee7221431d70cb20a4f751436fd099b17159",
+        "size_bytes": 27771288
+      },
+      "cmake": {
+        "command": "cmake",
+        "resolved_name": "cmake",
+        "sha256": "68c00d5a234063aa98a002bb08c5f6653c3473ce7860f0ab8d8d672a62cef32b",
+        "size_bytes": 329,
+        "version": "cmake version 4.4.5"
+      },
+      "g++": {
+        "command": "g++",
+        "resolved_name": "x86_64-linux-gnu-g++-11",
+        "sha256": "58d358c7d7192b2e0fb3382b1006c1144b528076c5f4ea6d5d582a725526fc73",
+        "size_bytes": 916160,
+        "version": "g++ (Debian 11.3.0-12) 11.3.0"
+      },
+      "gcc": {
+        "command": "gcc",
+        "resolved_name": "x86_64-linux-gnu-gcc-11",
+        "sha256": "9e5b07c122ff64546e157e735167e7c4d53654836340c6c53d91cb9104a897e1",
+        "size_bytes": 916160,
+        "version": "gcc (Debian 11.3.0-12) 11.3.0"
+      },
+      "ld": {
+        "command": "ld",
+        "resolved_name": "x86_64-linux-gnu-ld.bfd",
+        "sha256": "d2766988b6a1b1d1518cdc09242e726d1f24e151e16410ada3092b11ffd9081b",
+        "size_bytes": 1861256,
+        "version": "GNU ld (GNU Binutils for Debian) 2.44"
+      },
+      "make": {
+        "command": "make",
+        "resolved_name": "make",
+        "sha256": "8a229baf64671988cfb5af43ba3070c6ce7214cf32bcf96155115559d1466fa7",
+        "size_bytes": 278448,
+        "version": "GNU Make 4.4.1"
+      },
+      "python3": {
+        "command": "python3",
+        "resolved_name": "python3.12",
+        "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+        "size_bytes": 30894944,
+        "version": "Python 3.12.14"
+      }
+    }
+  },
+  "host_before_execution": {
+    "blockers": [],
+    "host": {
+      "libc": {
+        "name": "glibc",
+        "version": "2.41"
+      },
+      "machine": "x86_64",
+      "system": "Linux"
+    },
+    "limitations": [
+      "Host identities are observations, not a compiler compatibility or workload pass.",
+      "Executable hashes do not inventory every host header, shared library or compiler support file.",
+      "Compiler selection comes from the supplied PATH; no tool is installed or replaced.",
+      "The C++ frontend is identified by the driver's cc1plus path and file hash; its version is not probed separately.",
+      "The pinned dependency stack requires actual compilation checks; a version number alone cannot qualify it."
+    ],
+    "outcome": "pass",
+    "tools": {
+      "as": {
+        "command": "as",
+        "resolved_name": "x86_64-linux-gnu-as",
+        "sha256": "07dd8551ea0aa065975e4dddb8e1bb7dc308d12d54eca22c3858db79467c7cb9",
+        "size_bytes": 795184,
+        "version": "GNU assembler (GNU Binutils for Debian) 2.44"
+      },
+      "cc1plus": {
+        "command": "cc1plus",
+        "reported_by": "g++ -print-prog-name=cc1plus",
+        "resolved_name": "cc1plus",
+        "sha256": "bf57f3b614cb0999bf97ce879c57ee7221431d70cb20a4f751436fd099b17159",
+        "size_bytes": 27771288
+      },
+      "cmake": {
+        "command": "cmake",
+        "resolved_name": "cmake",
+        "sha256": "68c00d5a234063aa98a002bb08c5f6653c3473ce7860f0ab8d8d672a62cef32b",
+        "size_bytes": 329,
+        "version": "cmake version 4.4.5"
+      },
+      "g++": {
+        "command": "g++",
+        "resolved_name": "x86_64-linux-gnu-g++-11",
+        "sha256": "58d358c7d7192b2e0fb3382b1006c1144b528076c5f4ea6d5d582a725526fc73",
+        "size_bytes": 916160,
+        "version": "g++ (Debian 11.3.0-12) 11.3.0"
+      },
+      "gcc": {
+        "command": "gcc",
+        "resolved_name": "x86_64-linux-gnu-gcc-11",
+        "sha256": "9e5b07c122ff64546e157e735167e7c4d53654836340c6c53d91cb9104a897e1",
+        "size_bytes": 916160,
+        "version": "gcc (Debian 11.3.0-12) 11.3.0"
+      },
+      "ld": {
+        "command": "ld",
+        "resolved_name": "x86_64-linux-gnu-ld.bfd",
+        "sha256": "d2766988b6a1b1d1518cdc09242e726d1f24e151e16410ada3092b11ffd9081b",
+        "size_bytes": 1861256,
+        "version": "GNU ld (GNU Binutils for Debian) 2.44"
+      },
+      "make": {
+        "command": "make",
+        "resolved_name": "make",
+        "sha256": "8a229baf64671988cfb5af43ba3070c6ce7214cf32bcf96155115559d1466fa7",
+        "size_bytes": 278448,
+        "version": "GNU Make 4.4.1"
+      },
+      "python3": {
+        "command": "python3",
+        "resolved_name": "python3.12",
+        "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+        "size_bytes": 30894944,
+        "version": "Python 3.12.14"
+      }
+    }
+  },
+  "integration": {
+    "driver": "xrt",
+    "exit_code": null,
+    "gate": "P01-A03",
+    "outcome": "blocked",
+    "reason": "A separately qualified vendor tool/platform environment and full AFU run are required; this runner does not execute them.",
+    "target": "hw_emu"
+  },
+  "limitations": [
+    "A passing plan is a prerequisite screen, not a GPU execution result.",
+    "Selected-case success does not accept P01; independent review and full XRT hw_emu remain required.",
+    "Processor rtlsim bypasses the AFU and is not XRT hw_emu or physical FPGA evidence.",
+    "SimX arithmetic is software simulation; TFR/STD identify the paired native RTL configuration.",
+    "The runner does not install dependencies or certify a container/cgroup memory allocation.",
+    "Raw local command logs can contain source/build/tool paths; review and redact paths before publication."
+  ],
+  "matrix": {
+    "id": "p01-native-rv64-v1",
+    "sha256": "d2f570fa241dff720446809e572efecbaed56cc7d14365bf096859d1d764b61f",
+    "size_bytes": 9455
+  },
+  "mode": "run",
+  "outcome": "pass",
+  "phase_complete": false,
+  "resources": {
+    "build_free_disk_bytes": 57690591232,
+    "effective_cgroup_limit_bytes": null,
+    "host_available_ram_bytes": 9257357312,
+    "output_free_disk_bytes": 57690591232,
+    "source_free_disk_bytes": 57690591232,
+    "tools_free_disk_bytes": 57690591232
+  },
+  "schema_version": 1,
+  "scope": "Frozen P01 native software-simulation and processor-RTL baseline",
+  "source_before": {
+    "blockers": [],
+    "changed_paths": [],
+    "dirty": false,
+    "inputs": [
+      {
+        "path": "VERSION",
+        "sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+        "size_bytes": 112
+      },
+      {
+        "path": ".gitmodules",
+        "sha256": "632677b727feb911c5d2fa9d2991d9f87434fc83d99fc4ae15ee8e4556ecbabb",
+        "size_bytes": 575
+      },
+      {
+        "path": "configure",
+        "sha256": "39a7a1fe4caeb4db06fcdac544e99d700857795b94a7bbd4e5396a9028edbefa",
+        "size_bytes": 11382
+      },
+      {
+        "path": "config.mk.in",
+        "sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+        "size_bytes": 3264
+      },
+      {
+        "path": "VX_config.toml",
+        "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+        "size_bytes": 30127
+      },
+      {
+        "path": "VX_types.toml",
+        "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+        "size_bytes": 36543
+      },
+      {
+        "path": "ci/gen_config.py",
+        "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+        "size_bytes": 60839
+      },
+      {
+        "path": "ci/blackbox.sh",
+        "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+        "size_bytes": 9153
+      }
+    ],
+    "outcome": "pass",
+    "pins": {
+      "FIRESIM_REV": "57bb93f1e23daf46198659ddd93608f70121fee0",
+      "GEM5_REV": "v25.0.0.1",
+      "TOOLCHAIN_REV": "v3.0.2",
+      "VORTEX_VERSION": "3.0"
+    },
+    "revision": "03181532b81fe95b1cfeac2ffb25d8597af689b2",
+    "submodules": {
+      "declared_count": 5,
+      "entries": [
+        {
+          "path": "third_party/cocogfx",
+          "revision": "b1befdb36df8af7ac9e2c96acaf81957aab5d107",
+          "status": "initialized"
+        },
+        {
+          "path": "third_party/cvfpu",
+          "revision": "79e453139072df42c9ec8f697132ba485d74e23d",
+          "status": "initialized"
+        },
+        {
+          "path": "third_party/cvfpu/src/common_cells",
+          "revision": "6aeee85d0a34fedc06c14f04fd6363c9f7b4eeea",
+          "status": "initialized"
+        },
+        {
+          "path": "third_party/cvfpu/src/fpu_div_sqrt_mvp",
+          "revision": "86e1f558b3c95e91577c41b2fc452c86b04e85ac",
+          "status": "initialized"
+        },
+        {
+          "path": "third_party/cvfpu/tb/flexfloat",
+          "revision": "28be2d4fbf41b38fc37763bb6e90a1c88f6aaa61",
+          "status": "initialized"
+        },
+        {
+          "path": "third_party/hardfloat",
+          "revision": "aaf5736dffa521603b681fd5853760c671446c85",
+          "status": "initialized"
+        },
+        {
+          "path": "third_party/ramulator",
+          "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+          "status": "initialized"
+        },
+        {
+          "path": "third_party/softfloat",
+          "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4",
+          "status": "initialized"
+        }
+      ],
+      "errors": []
+    },
+    "tree": "1d281d25f72787ed3545285580b4c390d2f7eb3a",
+    "untracked_paths": []
+  },
+  "started_at": "2026-11-15T22:19:27+00:00",
+  "state": "finished",
+  "tooling_after": {
+    "blockers": [],
+    "checkout": {
+      "dirty": true,
+      "revision": "e9c9ac01f93b0d84915340999100260f2599ec44",
+      "tree": "fbafa8e643aa935a1103e0d49ce2268b32f12c1e"
+    },
+    "files": [
+      {
+        "path": "baseline.py",
+        "sha256": "d26202d38a27b5ab0a52e735edb5682a8be8b9771624c69c724dbeb7e2c58610",
+        "size_bytes": 27600
+      },
+      {
+        "path": "baseline_inventory.py",
+        "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+        "size_bytes": 20466
+      },
+      {
+        "path": "baseline_matrix.py",
+        "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+        "size_bytes": 8890
+      },
+      {
+        "path": "baseline_process.py",
+        "sha256": "d011171fc41734fa323127a70acc13e7b7a5a7949372e808655af1b535cdaca2",
+        "size_bytes": 12542
+      },
+      {
+        "path": "baseline_host.py",
+        "sha256": "96bc0d25b1ec0509937c83d1de50db0a0125ca2acda405467e28d9e37dfb5ccb",
+        "size_bytes": 6107
+      },
+      {
+        "path": "preflight.py",
+        "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+        "size_bytes": 15124
+      }
+    ],
+    "limitations": [
+      "Helper content hashes and retained sources identify the executing instrumentation independently of the GPU source checkout."
+    ],
+    "outcome": "pass"
+  },
+  "tooling_before": {
+    "blockers": [],
+    "checkout": {
+      "dirty": true,
+      "revision": "e9c9ac01f93b0d84915340999100260f2599ec44",
+      "tree": "fbafa8e643aa935a1103e0d49ce2268b32f12c1e"
+    },
+    "files": [
+      {
+        "path": "baseline.py",
+        "sha256": "d26202d38a27b5ab0a52e735edb5682a8be8b9771624c69c724dbeb7e2c58610",
+        "size_bytes": 27600
+      },
+      {
+        "path": "baseline_inventory.py",
+        "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+        "size_bytes": 20466
+      },
+      {
+        "path": "baseline_matrix.py",
+        "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+        "size_bytes": 8890
+      },
+      {
+        "path": "baseline_process.py",
+        "sha256": "d011171fc41734fa323127a70acc13e7b7a5a7949372e808655af1b535cdaca2",
+        "size_bytes": 12542
+      },
+      {
+        "path": "baseline_host.py",
+        "sha256": "96bc0d25b1ec0509937c83d1de50db0a0125ca2acda405467e28d9e37dfb5ccb",
+        "size_bytes": 6107
+      },
+      {
+        "path": "preflight.py",
+        "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+        "size_bytes": 15124
+      }
+    ],
+    "limitations": [
+      "Helper content hashes and retained sources identify the executing instrumentation independently of the GPU source checkout."
+    ],
+    "outcome": "pass"
+  },
+  "tooling_before_execution": {
+    "blockers": [],
+    "checkout": {
+      "dirty": true,
+      "revision": "e9c9ac01f93b0d84915340999100260f2599ec44",
+      "tree": "fbafa8e643aa935a1103e0d49ce2268b32f12c1e"
+    },
+    "files": [
+      {
+        "path": "baseline.py",
+        "sha256": "d26202d38a27b5ab0a52e735edb5682a8be8b9771624c69c724dbeb7e2c58610",
+        "size_bytes": 27600
+      },
+      {
+        "path": "baseline_inventory.py",
+        "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+        "size_bytes": 20466
+      },
+      {
+        "path": "baseline_matrix.py",
+        "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+        "size_bytes": 8890
+      },
+      {
+        "path": "baseline_process.py",
+        "sha256": "d011171fc41734fa323127a70acc13e7b7a5a7949372e808655af1b535cdaca2",
+        "size_bytes": 12542
+      },
+      {
+        "path": "baseline_host.py",
+        "sha256": "96bc0d25b1ec0509937c83d1de50db0a0125ca2acda405467e28d9e37dfb5ccb",
+        "size_bytes": 6107
+      },
+      {
+        "path": "preflight.py",
+        "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+        "size_bytes": 15124
+      }
+    ],
+    "limitations": [
+      "Helper content hashes and retained sources identify the executing instrumentation independently of the GPU source checkout."
+    ],
+    "outcome": "pass"
+  },
+  "tooling_snapshots": [
+    {
+      "path": "artifacts/tooling/baseline.py",
+      "sha256": "d26202d38a27b5ab0a52e735edb5682a8be8b9771624c69c724dbeb7e2c58610",
+      "size_bytes": 27600
+    },
+    {
+      "path": "artifacts/tooling/baseline_inventory.py",
+      "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+      "size_bytes": 20466
+    },
+    {
+      "path": "artifacts/tooling/baseline_matrix.py",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "size_bytes": 8890
+    },
+    {
+      "path": "artifacts/tooling/baseline_process.py",
+      "sha256": "d011171fc41734fa323127a70acc13e7b7a5a7949372e808655af1b535cdaca2",
+      "size_bytes": 12542
+    },
+    {
+      "path": "artifacts/tooling/baseline_host.py",
+      "sha256": "96bc0d25b1ec0509937c83d1de50db0a0125ca2acda405467e28d9e37dfb5ccb",
+      "size_bytes": 6107
+    },
+    {
+      "path": "artifacts/tooling/preflight.py",
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+      "size_bytes": 15124
+    }
+  ],
+  "tools_after": {
+    "blockers": [],
+    "bundle_manifest": {
+      "os_bundle": "ubuntu/focal",
+      "parts": [
+        {
+          "git_blob_sha": "bbb700890895a9b6f4146e81592e4f6e6c7d193c",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partaa",
+          "sha256": "ab28ceb0ae80c6bfbdac9b076dbe3759c9c5db95021b3e48d34378e84d4752df",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "78ba76bcf7d1a70216025836b1f463706728d7c0",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partab",
+          "sha256": "10b8dae14cb80c4b8d6596b2782bdefef74654876b7b274a879d2c7384493257",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "30d1fe5b0c5aae5e12b600a2e88bbe68720f6e61",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partac",
+          "sha256": "313a00282ed986fbcbb61c337565e61a777b5731ece961c38b87b5fe8063743b",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "569317e074d217166a332d7191d633410bfa0630",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partad",
+          "sha256": "a34dea811924209fdfdc8ffe1416f879ede25a12033a84903a01b0c6b48db4af",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "f8b39c4fb1c8c262bb5342646d5753861abfb08e",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partae",
+          "sha256": "b42f48dabf7dff376ae9139c8c3a7c2540c16a0005b874a8bd788451a107b68c",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "5e711209ed941ce451bd6af821c20e9a2def04e9",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partaf",
+          "sha256": "9721e46ead97abbc6df4f8d401dd5173ecfc30568a51d8eec932bcd006345634",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "70dc901836ae6f675450b378329bfd47cdc3b242",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partag",
+          "sha256": "d27f0a280598e321589f61d1494a656407930d6fbe16d0605fe3599db802fb0e",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "a30c7e4ea3ece265f83b9c706ca72e69b146a055",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partah",
+          "sha256": "850d7172ef0e1375afcbe2dc50ba1c75ee63bf0c1dc0ef79b9d8ac05328ac888",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "0a337c825511c30d542a699c616169e9557c76a8",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partai",
+          "sha256": "11a127da65c44fa7291768afd37576c358e56fccf76a5056c3f7b18f769507bf",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "74bbe40cd944651d176dcb1a7b6800d6acd806e2",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partaj",
+          "sha256": "00bb22c0e299f37fd9414cd01a35a9069d5645201b224864f896d7fadfaadb61",
+          "size_bytes": 25429755
+        },
+        {
+          "git_blob_sha": "0908060db6b56c1166e4c7bb5eb0d2ee7a65bd0a",
+          "path": "llvm-vortex/ubuntu/focal/llvm-vortex.tar.bz2.partaa",
+          "sha256": "86ccab079ac36eb49930e567a48ecf09948794dbcd399ddac799de3cfcca6c16",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "79aa94687a1410b505d989e8c7a8fc0f610330a4",
+          "path": "llvm-vortex/ubuntu/focal/llvm-vortex.tar.bz2.partab",
+          "sha256": "8a85add28eab14b308bafdd56a2d91c42d9ea6d95b09b493cb3855aebecd9ef8",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "dfae5174d27f9b1098ae0cbde3f0550d83571c8d",
+          "path": "llvm-vortex/ubuntu/focal/llvm-vortex.tar.bz2.partac",
+          "sha256": "a1b7b9f1850beda9d63d0e73cc52cda3077e75800094d65e86d650fb46f120e0",
+          "size_bytes": 3995814
+        },
+        {
+          "git_blob_sha": "200a4537bdf4e0966573db04450516e172adcf9e",
+          "path": "verilator/ubuntu/focal/verilator.tar.bz2.partaa",
+          "sha256": "86c4c27d0bd3a3c9a15cbaedb8fe9300a7d1bdb2832ea0a09e05119013145107",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "adc21c845102aee3a57c91ba6840730467349776",
+          "path": "verilator/ubuntu/focal/verilator.tar.bz2.partab",
+          "sha256": "18a5b91e268cdbe1b9bf4952d99ce44413d862d639ad6cce6d1687d7b5dfee76",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "b0e3c51d9e3c820ae661aada62e55fe9fc30a44d",
+          "path": "verilator/ubuntu/focal/verilator.tar.bz2.partac",
+          "sha256": "afc602c835532b7d350cbd6ce9fa2005b4fcd28e95de8dde252ad1375c751fae",
+          "size_bytes": 9023495
+        },
+        {
+          "git_blob_sha": "dcc666d6656e43b93310d4d872ca662af61a1e4c",
+          "path": "libc64/libc64.tar.bz2",
+          "sha256": "8945c302b88779c5d2888e8a70f511d3fa3eafb9a82a04e118d2e81fdec31575",
+          "size_bytes": 799142
+        },
+        {
+          "git_blob_sha": "6b7bddd72edcd5b822319345fae4be545d95f5d1",
+          "path": "libcrt64/libcrt64.tar.bz2",
+          "sha256": "2a3aaa6d1c0d4bd312249933783d88914444b9c0b51b8912c3a34525347d6ed9",
+          "size_bytes": 50923
+        }
+      ],
+      "repository": "vortexgpgpu/vortex-toolchain-prebuilt",
+      "revision": "e3db4bcdf819a17f618ad9fc2472f8f7dea3192b",
+      "sha256": "63771ba8d9ff691b3867ed96be7b058ed5eae1368789575f4964e38f8718a405",
+      "size_bytes": 5008,
+      "tag": "v3.0.2"
+    },
+    "libraries": [
+      {
+        "path": "libc64/lib/libc.a",
+        "sha256": "7eb0e3b5bdc7397b6fa4d93637b29379d01107111148e8f0372a5c999e359a94",
+        "size_bytes": 4040594
+      },
+      {
+        "path": "libc64/lib/libm.a",
+        "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5",
+        "size_bytes": 8
+      },
+      {
+        "path": "libcrt64/lib/baremetal/libclang_rt.builtins-riscv64.a",
+        "sha256": "3879b774af20a252d708fb4486eb8ef7acd567ddc900d54ef866858cad436f16",
+        "size_bytes": 335280
+      }
+    ],
+    "limitations": [
+      "Installed file hashes and archive identities are observations; this inventory does not re-extract archives to prove their relationship."
+    ],
+    "os_bundle": "ubuntu/focal",
+    "outcome": "pass",
+    "toolchain_commit": "e3db4bcdf819a17f618ad9fc2472f8f7dea3192b",
+    "toolchain_tag": "v3.0.2",
+    "tools": {
+      "llvm_clang": {
+        "path": "llvm-vortex/bin/clang",
+        "sha256": "92f2fbf93bb013f414871b9dde08174f42832b169389f59cd373451d373cf3cf",
+        "size_bytes": 189776,
+        "version": "clang version 20.1.8 (http<path> f44a6bb2af4c62847585305bbdc760fbe0e3645f)"
+      },
+      "riscv_gcc": {
+        "path": "riscv64-gnu-toolchain/bin/riscv64-unknown-elf-gcc",
+        "sha256": "1d45ae00898529ef4781942ffa2ac403abc2fe2dc559b4eb01014d170d52e408",
+        "size_bytes": 7775360,
+        "version": "riscv64-unknown-elf-gcc (g2ee5e430018-dirty) 12.2.0"
+      },
+      "verilator": {
+        "path": "verilator/bin/verilator",
+        "sha256": "fb2cc573b1055cf096c90e1efc9966fe56bdb4b265c83590cf2a49f7a0defcdf",
+        "size_bytes": 32093,
+        "version": "Verilator 5.050 2026-07-01 rev v5.050"
+      },
+      "verilator_binary": {
+        "path": "verilator/bin/verilator_bin",
+        "sha256": "40a25f2221a514b53ccf4f1ca459f3b9f3060cb0bafd1d8b8f41016664c90586",
+        "size_bytes": 19505384,
+        "version": "Verilator 5.050 2026-07-01 rev v5.050"
+      }
+    }
+  },
+  "tools_before": {
+    "blockers": [],
+    "bundle_manifest": {
+      "os_bundle": "ubuntu/focal",
+      "parts": [
+        {
+          "git_blob_sha": "bbb700890895a9b6f4146e81592e4f6e6c7d193c",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partaa",
+          "sha256": "ab28ceb0ae80c6bfbdac9b076dbe3759c9c5db95021b3e48d34378e84d4752df",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "78ba76bcf7d1a70216025836b1f463706728d7c0",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partab",
+          "sha256": "10b8dae14cb80c4b8d6596b2782bdefef74654876b7b274a879d2c7384493257",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "30d1fe5b0c5aae5e12b600a2e88bbe68720f6e61",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partac",
+          "sha256": "313a00282ed986fbcbb61c337565e61a777b5731ece961c38b87b5fe8063743b",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "569317e074d217166a332d7191d633410bfa0630",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partad",
+          "sha256": "a34dea811924209fdfdc8ffe1416f879ede25a12033a84903a01b0c6b48db4af",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "f8b39c4fb1c8c262bb5342646d5753861abfb08e",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partae",
+          "sha256": "b42f48dabf7dff376ae9139c8c3a7c2540c16a0005b874a8bd788451a107b68c",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "5e711209ed941ce451bd6af821c20e9a2def04e9",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partaf",
+          "sha256": "9721e46ead97abbc6df4f8d401dd5173ecfc30568a51d8eec932bcd006345634",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "70dc901836ae6f675450b378329bfd47cdc3b242",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partag",
+          "sha256": "d27f0a280598e321589f61d1494a656407930d6fbe16d0605fe3599db802fb0e",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "a30c7e4ea3ece265f83b9c706ca72e69b146a055",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partah",
+          "sha256": "850d7172ef0e1375afcbe2dc50ba1c75ee63bf0c1dc0ef79b9d8ac05328ac888",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "0a337c825511c30d542a699c616169e9557c76a8",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partai",
+          "sha256": "11a127da65c44fa7291768afd37576c358e56fccf76a5056c3f7b18f769507bf",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "74bbe40cd944651d176dcb1a7b6800d6acd806e2",
+          "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partaj",
+          "sha256": "00bb22c0e299f37fd9414cd01a35a9069d5645201b224864f896d7fadfaadb61",
+          "size_bytes": 25429755
+        },
+        {
+          "git_blob_sha": "0908060db6b56c1166e4c7bb5eb0d2ee7a65bd0a",
+          "path": "llvm-vortex/ubuntu/focal/llvm-vortex.tar.bz2.partaa",
+          "sha256": "86ccab079ac36eb49930e567a48ecf09948794dbcd399ddac799de3cfcca6c16",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "79aa94687a1410b505d989e8c7a8fc0f610330a4",
+          "path": "llvm-vortex/ubuntu/focal/llvm-vortex.tar.bz2.partab",
+          "sha256": "8a85add28eab14b308bafdd56a2d91c42d9ea6d95b09b493cb3855aebecd9ef8",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "dfae5174d27f9b1098ae0cbde3f0550d83571c8d",
+          "path": "llvm-vortex/ubuntu/focal/llvm-vortex.tar.bz2.partac",
+          "sha256": "a1b7b9f1850beda9d63d0e73cc52cda3077e75800094d65e86d650fb46f120e0",
+          "size_bytes": 3995814
+        },
+        {
+          "git_blob_sha": "200a4537bdf4e0966573db04450516e172adcf9e",
+          "path": "verilator/ubuntu/focal/verilator.tar.bz2.partaa",
+          "sha256": "86c4c27d0bd3a3c9a15cbaedb8fe9300a7d1bdb2832ea0a09e05119013145107",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "adc21c845102aee3a57c91ba6840730467349776",
+          "path": "verilator/ubuntu/focal/verilator.tar.bz2.partab",
+          "sha256": "18a5b91e268cdbe1b9bf4952d99ce44413d862d639ad6cce6d1687d7b5dfee76",
+          "size_bytes": 52428800
+        },
+        {
+          "git_blob_sha": "b0e3c51d9e3c820ae661aada62e55fe9fc30a44d",
+          "path": "verilator/ubuntu/focal/verilator.tar.bz2.partac",
+          "sha256": "afc602c835532b7d350cbd6ce9fa2005b4fcd28e95de8dde252ad1375c751fae",
+          "size_bytes": 9023495
+        },
+        {
+          "git_blob_sha": "dcc666d6656e43b93310d4d872ca662af61a1e4c",
+          "path": "libc64/libc64.tar.bz2",
+          "sha256": "8945c302b88779c5d2888e8a70f511d3fa3eafb9a82a04e118d2e81fdec31575",
+          "size_bytes": 799142
+        },
+        {
+          "git_blob_sha": "6b7bddd72edcd5b822319345fae4be545d95f5d1",
+          "path": "libcrt64/libcrt64.tar.bz2",
+          "sha256": "2a3aaa6d1c0d4bd312249933783d88914444b9c0b51b8912c3a34525347d6ed9",
+          "size_bytes": 50923
+        }
+      ],
+      "repository": "vortexgpgpu/vortex-toolchain-prebuilt",
+      "revision": "e3db4bcdf819a17f618ad9fc2472f8f7dea3192b",
+      "sha256": "63771ba8d9ff691b3867ed96be7b058ed5eae1368789575f4964e38f8718a405",
+      "size_bytes": 5008,
+      "tag": "v3.0.2"
+    },
+    "libraries": [
+      {
+        "path": "libc64/lib/libc.a",
+        "sha256": "7eb0e3b5bdc7397b6fa4d93637b29379d01107111148e8f0372a5c999e359a94",
+        "size_bytes": 4040594
+      },
+      {
+        "path": "libc64/lib/libm.a",
+        "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5",
+        "size_bytes": 8
+      },
+      {
+        "path": "libcrt64/lib/baremetal/libclang_rt.builtins-riscv64.a",
+        "sha256": "3879b774af20a252d708fb4486eb8ef7acd567ddc900d54ef866858cad436f16",
+        "size_bytes": 335280
+      }
+    ],
+    "limitations": [
+      "Installed file hashes and archive identities are observations; this inventory does not re-extract archives to prove their relationship."
+    ],
+    "os_bundle": "ubuntu/focal",
+    "outcome": "pass",
+    "toolchain_commit": "e3db4bcdf819a17f618ad9fc2472f8f7dea3192b",
+    "toolchain_tag": "v3.0.2",
+    "tools": {
+      "llvm_clang": {
+        "path": "llvm-vortex/bin/clang",
+        "sha256": "92f2fbf93bb013f414871b9dde08174f42832b169389f59cd373451d373cf3cf",
+        "size_bytes": 189776,
+        "version": "clang version 20.1.8 (http<path> f44a6bb2af4c62847585305bbdc760fbe0e3645f)"
+      },
+      "riscv_gcc": {
+        "path": "riscv64-gnu-toolchain/bin/riscv64-unknown-elf-gcc",
+        "sha256": "1d45ae00898529ef4781942ffa2ac403abc2fe2dc559b4eb01014d170d52e408",
+        "size_bytes": 7775360,
+        "version": "riscv64-unknown-elf-gcc (g2ee5e430018-dirty) 12.2.0"
+      },
+      "verilator": {
+        "path": "verilator/bin/verilator",
+        "sha256": "fb2cc573b1055cf096c90e1efc9966fe56bdb4b265c83590cf2a49f7a0defcdf",
+        "size_bytes": 32093,
+        "version": "Verilator 5.050 2026-07-01 rev v5.050"
+      },
+      "verilator_binary": {
+        "path": "verilator/bin/verilator_bin",
+        "sha256": "40a25f2221a514b53ccf4f1ca459f3b9f3060cb0bafd1d8b8f41016664c90586",
+        "size_bytes": 19505384,
+        "version": "Verilator 5.050 2026-07-01 rev v5.050"
+      }
+    }
+  }
+}

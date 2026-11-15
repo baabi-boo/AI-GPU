@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "id": "p01-native-rv64-v1",
+  "xlen": 64,
+  "toolchain_tag": "v3.0.2",
+  "toolchain_commit": "e3db4bcdf819a17f618ad9fc2472f8f7dea3192b",
+  "os_bundle": "ubuntu/focal",
+  "cases": [
+    {
+      "id": "gemm-fp16-simx",
+      "app": "sgemm_tcu",
+      "driver": "simx",
+      "configs": [
+        "-DVX_CFG_NUM_CLUSTERS=1",
+        "-DVX_CFG_NUM_CORES=1",
+        "-DVX_CFG_NUM_WARPS=4",
+        "-DVX_CFG_NUM_THREADS=8",
+        "-DVX_CFG_ISSUE_WIDTH=2",
+        "-DVX_CFG_EXT_TCU_ENABLE",
+        "-DVX_CFG_TCU_TYPE_TFR",
+        "-DVX_CFG_FPU_TYPE_STD",
+        "-DITYPE=fp16",
+        "-DOTYPE=fp32",
+        "-DVX_CFG_TCU_FP16_ENABLE"
+      ],
+      "args": [
+        "-m",
+        "64",
+        "-n",
+        "64",
+        "-k",
+        "64"
+      ],
+      "input_dtype": "fp16",
+      "output_dtype": "fp32",
+      "arithmetic": {
+        "tensor": "TFR",
+        "scalar": "STD"
+      },
+      "catalog_source": "ci/testcases/tensor.yaml",
+      "catalog_id": "sgemm_tcu-3",
+      "derivation": "RV64 bounded variant of the named SimX catalog case. The matrix pins clusters, cores, warps, native TFR tensor and STD scalar arithmetic, format enable and 64x64x64 dimensions; the rtlsim twin is explicit additional native coverage.",
+      "reference": {
+        "seed": 50,
+        "oracle": "tests/regression/sgemm_tcu/main.cpp",
+        "comparison": "CPU double accumulation of converted input products; abs((actual-reference)/reference) < 0.01, with exact zero pairs accepted.",
+        "tolerances": {
+          "relative_error_strict_max": 0.01,
+          "zero_pair_equal": true
+        }
+      }
+    },
+    {
+      "id": "gemm-fp16-rtlsim",
+      "app": "sgemm_tcu",
+      "driver": "rtlsim",
+      "configs": [
+        "-DVX_CFG_NUM_CLUSTERS=1",
+        "-DVX_CFG_NUM_CORES=1",
+        "-DVX_CFG_NUM_WARPS=4",
+        "-DVX_CFG_NUM_THREADS=8",
+        "-DVX_CFG_ISSUE_WIDTH=2",
+        "-DVX_CFG_EXT_TCU_ENABLE",
+        "-DVX_CFG_TCU_TYPE_TFR",
+        "-DVX_CFG_FPU_TYPE_STD",
+        "-DITYPE=fp16",
+        "-DOTYPE=fp32",
+        "-DVX_CFG_TCU_FP16_ENABLE"
+      ],
+      "args": [
+        "-m",
+        "64",
+        "-n",
+        "64",
+        "-k",
+        "64"
+      ],
+      "input_dtype": "fp16",
+      "output_dtype": "fp32",
+      "arithmetic": {
+        "tensor": "TFR",
+        "scalar": "STD"
+      },
+      "catalog_source": "ci/testcases/tensor.yaml",
+      "catalog_id": "sgemm_tcu-3",
+      "derivation": "RV64 bounded variant of the named SimX catalog case. The matrix pins clusters, cores, warps, native TFR tensor and STD scalar arithmetic, format enable and 64x64x64 dimensions; the rtlsim twin is explicit additional native coverage.",
+      "reference": {
+        "seed": 50,
+        "oracle": "tests/regression/sgemm_tcu/main.cpp",
+        "comparison": "CPU double accumulation of converted input products; abs((actual-reference)/reference) < 0.01, with exact zero pairs accepted.",
+        "tolerances": {
+          "relative_error_strict_max": 0.01,
+          "zero_pair_equal": true
+        }
+      }
+    },
+    {
+      "id": "gemm-bf16-simx",
+      "app": "sgemm_tcu",
+      "driver": "simx",
+      "configs": [
+        "-DVX_CFG_NUM_CLUSTERS=1",
+        "-DVX_CFG_NUM_CORES=1",
+        "-DVX_CFG_NUM_WARPS=4",
+        "-DVX_CFG_NUM_THREADS=16",
+        "-DVX_CFG_ISSUE_WIDTH=1",
+        "-DVX_CFG_EXT_TCU_ENABLE",
+        "-DVX_CFG_TCU_TYPE_TFR",
+        "-DVX_CFG_FPU_TYPE_STD",
+        "-DITYPE=bf16",
+        "-DOTYPE=fp32",
+        "-DVX_CFG_TCU_FP16_ENABLE"
+      ],
+      "args": [
+        "-m",
+        "64",
+        "-n",
+        "64",
+        "-k",
+        "64"
+      ],
+      "input_dtype": "bf16",
+      "output_dtype": "fp32",
+      "arithmetic": {
+        "tensor": "TFR",
+        "scalar": "STD"
+      },
+      "catalog_source": "ci/testcases/tensor.yaml",
+      "catalog_id": "sgemm_tcu-4",
+      "derivation": "RV64 bounded variant of the named SimX catalog case. The matrix pins clusters, cores, warps, native TFR tensor and STD scalar arithmetic, format enable and 64x64x64 dimensions; the rtlsim twin is explicit additional native coverage.",
+      "reference": {
+        "seed": 50,
+        "oracle": "tests/regression/sgemm_tcu/main.cpp",
+        "comparison": "CPU double accumulation of converted input products; abs((actual-reference)/reference) < 0.01, with exact zero pairs accepted.",
+        "tolerances": {
+          "relative_error_strict_max": 0.01,
+          "zero_pair_equal": true
+        }
+      }
+    },
+    {
+      "id": "gemm-bf16-rtlsim",
+      "app": "sgemm_tcu",
+      "driver": "rtlsim",
+      "configs": [
+        "-DVX_CFG_NUM_CLUSTERS=1",
+        "-DVX_CFG_NUM_CORES=1",
+        "-DVX_CFG_NUM_WARPS=4",
+        "-DVX_CFG_NUM_THREADS=16",
+        "-DVX_CFG_ISSUE_WIDTH=1",
+        "-DVX_CFG_EXT_TCU_ENABLE",
+        "-DVX_CFG_TCU_TYPE_TFR",
+        "-DVX_CFG_FPU_TYPE_STD",
+        "-DITYPE=bf16",
+        "-DOTYPE=fp32",
+        "-DVX_CFG_TCU_FP16_ENABLE"
+      ],
+      "args": [
+        "-m",
+        "64",
+        "-n",
+        "64",
+        "-k",
+        "64"
+      ],
+      "input_dtype": "bf16",
+      "output_dtype": "fp32",
+      "arithmetic": {
+        "tensor": "TFR",
+        "scalar": "STD"
+      },
+      "catalog_source": "ci/testcases/tensor.yaml",
+      "catalog_id": "sgemm_tcu-4",
+      "derivation": "RV64 bounded variant of the named SimX catalog case. The matrix pins clusters, cores, warps, native TFR tensor and STD scalar arithmetic, format enable and 64x64x64 dimensions; the rtlsim twin is explicit additional native coverage.",
+      "reference": {
+        "seed": 50,
+        "oracle": "tests/regression/sgemm_tcu/main.cpp",
+        "comparison": "CPU double accumulation of converted input products; abs((actual-reference)/reference) < 0.01, with exact zero pairs accepted.",
+        "tolerances": {
+          "relative_error_strict_max": 0.01,
+          "zero_pair_equal": true
+        }
+      }
+    },
+    {
+      "id": "attention-tf32-simx",
+      "app": "flash_attn_tcu_wg",
+      "driver": "simx",
+      "configs": [
+        "-DVX_CFG_NUM_CLUSTERS=1",
+        "-DVX_CFG_NUM_CORES=1",
+        "-DVX_CFG_NUM_WARPS=4",
+        "-DVX_CFG_NUM_THREADS=4",
+        "-DVX_CFG_ISSUE_WIDTH=4",
+        "-DVX_CFG_EXT_TCU_ENABLE",
+        "-DVX_CFG_TCU_TYPE_TFR",
+        "-DVX_CFG_FPU_TYPE_STD",
+        "-DITYPE=tf32",
+        "-DOTYPE=fp32",
+        "-DVX_CFG_NUM_ALU_BLOCKS=1",
+        "-DVX_CFG_NUM_LSU_BLOCKS=1",
+        "-DVX_CFG_NUM_FPU_BLOCKS=1",
+        "-DVX_CFG_TCU_TF32_ENABLE",
+        "-DVX_CFG_TCU_WGMMA_ENABLE",
+        "-DWGMMA_NRC=8",
+        "-DWGMMA_RS"
+      ],
+      "args": [
+        "-N",
+        "32",
+        "-D",
+        "16",
+        "-c",
+        "8",
+        "-t",
+        "8"
+      ],
+      "input_dtype": "tf32",
+      "output_dtype": "fp32",
+      "arithmetic": {
+        "tensor": "TFR",
+        "scalar": "STD"
+      },
+      "catalog_source": "ci/testcases/tensor_wg.yaml",
+      "catalog_id": "flash_attn_tcu_wg-rtlsim",
+      "derivation": "RV64 small attention catalog shape with explicit TF32, NRC=8, four threads/warps/issue slots and one scalar execution block of each kind. The kernel uses SS operands for both GEMMs; WGMMA_RS is retained in the command but is unused by this kernel. STD scalar arithmetic and the same-shape SimX twin are explicit derived coverage.",
+      "reference": {
+        "seed": 50,
+        "oracle": "tests/regression/flash_attn_tcu_wg/main.cpp",
+        "comparison": "CPU double softmax(QK^T)V reference with quantized Q/K/V and P; abs(actual-reference) <= atol + rtol*abs(reference).",
+        "tolerances": {
+          "atol": 0.001,
+          "rtol": 0.001
+        }
+      }
+    },
+    {
+      "id": "attention-tf32-rtlsim",
+      "app": "flash_attn_tcu_wg",
+      "driver": "rtlsim",
+      "configs": [
+        "-DVX_CFG_NUM_CLUSTERS=1",
+        "-DVX_CFG_NUM_CORES=1",
+        "-DVX_CFG_NUM_WARPS=4",
+        "-DVX_CFG_NUM_THREADS=4",
+        "-DVX_CFG_ISSUE_WIDTH=4",
+        "-DVX_CFG_EXT_TCU_ENABLE",
+        "-DVX_CFG_TCU_TYPE_TFR",
+        "-DVX_CFG_FPU_TYPE_STD",
+        "-DITYPE=tf32",
+        "-DOTYPE=fp32",
+        "-DVX_CFG_NUM_ALU_BLOCKS=1",
+        "-DVX_CFG_NUM_LSU_BLOCKS=1",
+        "-DVX_CFG_NUM_FPU_BLOCKS=1",
+        "-DVX_CFG_TCU_TF32_ENABLE",
+        "-DVX_CFG_TCU_WGMMA_ENABLE",
+        "-DWGMMA_NRC=8",
+        "-DWGMMA_RS"
+      ],
+      "args": [
+        "-N",
+        "32",
+        "-D",
+        "16",
+        "-c",
+        "8",
+        "-t",
+        "8"
+      ],
+      "input_dtype": "tf32",
+      "output_dtype": "fp32",
+      "arithmetic": {
+        "tensor": "TFR",
+        "scalar": "STD"
+      },
+      "catalog_source": "ci/testcases/tensor_wg.yaml",
+      "catalog_id": "flash_attn_tcu_wg-rtlsim",
+      "derivation": "RV64 small attention catalog shape with explicit TF32, NRC=8, four threads/warps/issue slots and one scalar execution block of each kind. The kernel uses SS operands for both GEMMs; WGMMA_RS is retained in the command but is unused by this kernel. STD scalar arithmetic and the same-shape SimX twin are explicit derived coverage.",
+      "reference": {
+        "seed": 50,
+        "oracle": "tests/regression/flash_attn_tcu_wg/main.cpp",
+        "comparison": "CPU double softmax(QK^T)V reference with quantized Q/K/V and P; abs(actual-reference) <= atol + rtol*abs(reference).",
+        "tolerances": {
+          "atol": 0.001,
+          "rtol": 0.001
+        }
+      }
+    }
+  ]
+}

@@ -18,14 +18,35 @@ evidence remain in [project status](docs/project/status.md) and the
   atomic progress records; independent positive and negative tests cover the tools.
 - A [P01 reproduction runbook](docs/project/p01-baseline-runbook.md) covering
   pinned dependencies, bounded builds, the six-case matrix and integration scope.
+- A preserved, independently checked history of provisioning and failed attempts,
+  source/tool/helper provenance, and a [P01 handoff](docs/project/p01-handoff.md).
+
+### Corrected
+
+- Reject changed immutable-manifest content and duplicate JSON fields; verify
+  generated inputs and dependency/helper/host stability; retain cancellation
+  received at command completion.
+- Separate pinned instrumentation and GPU source in reproduction instructions,
+  and select CMake's host compilers explicitly.
+- Document the attention kernel's actual SS operand coverage: the recorded
+  `WGMMA_RS` macro is unused by this kernel. Historical matrix bytes and executed
+  flags remain preserved with an explicit coverage erratum.
 
 ### Qualification state
 
-P01 is in progress. The initial GCC 14.2 SimX compile failure in pinned spdlog/fmt
-is retained; it is not a numerical result. Host-compiler reproduction and the
-six native cases are being completed before a reviewed acceptance packet is
-attached. Vendor XRT `hw_emu` remains blocked by unavailable tools/platform.
-No P01 gate, physical hardware or silicon qualification follows from the tooling.
+P01-A01 and P01-A02 are accepted after independent review. All six frozen
+FP16/BF16 GEMM and TF32 attention executions pass their unchanged CPU references
+on SimX and native processor RTL. A fresh generated FP16 SimX build passes, and
+a supplemental full-AFU `xrtsim` integer smoke passes all 16 reference points.
+The initial GCC 14 spdlog/fmt and missing-`ccache` build failures remain preserved.
+All 346 source-root project/tooling tests pass. Two compile workers were used;
+the highest sampled process-group RSS was about 3.25 GiB, and 53.48 GiB of disk
+space remained free after execution, with no recorded budget stop.
+
+P01 remains **blocked** solely on P01-A03's unavailable qualified vendor XRT
+`hw_emu` environment/platform; supplemental `xrtsim` cannot close that gate.
+P02 remains not started. No physical FPGA or silicon qualification follows from
+these results. See the [accepted reports and handoff](docs/project/p01-handoff.md).
 
 ## Unreleased — development foundation
 

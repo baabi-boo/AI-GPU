@@ -1,0 +1,571 @@
+{
+  "schema_version": 1,
+  "purpose": "P01 reproducible baseline implementation and independent reviews; assignment counts are not hardware acceptance evidence.",
+  "requested": {
+    "agents": 60,
+    "waves": 10
+  },
+  "max_concurrent_subagents": 3,
+  "execution": "Six distinct agents per logical wave, scheduled with at most three subagents active at a time. Only completed assignments are listed.",
+  "completion": {
+    "state": "complete",
+    "agents": 60,
+    "waves": 10
+  },
+  "completed": [
+    {
+      "wave": 1,
+      "agent": "/root/w01a_phase_scope",
+      "status": "complete",
+      "task": "Audit the next phase and its acceptance boundaries",
+      "deliverables": [],
+      "integration": "Confirmed accepted P00 and selected P01 reproducible baseline work. Identified three independent gates, with vendor hw_emu required separately; implementation and tooling checks alone cannot close P01."
+    },
+    {
+      "wave": 1,
+      "agent": "/root/w01b_build_feasibility",
+      "status": "complete",
+      "task": "Determine the minimal pinned RV64 tool and build requirements",
+      "deliverables": [],
+      "integration": "Resolved the minimal five-component tool set and eighteen archive parts, native TFR/STD selectors, mandatory dependencies and nested compiler-job controls. Informed the bounded setup and two-worker execution plan; no build was run by this assignment."
+    },
+    {
+      "wave": 1,
+      "agent": "/root/w01c_baseline_catalog",
+      "status": "complete",
+      "task": "Audit supported numerical cases and inherited references",
+      "deliverables": [],
+      "integration": "Provided candidate GEMM/attention geometry, source references, seeds and unchanged tolerances. The implemented FP16 case later selected catalog issue width two; the initial attention RS description was subsequently corrected by the w08e operand review."
+    },
+    {
+      "wave": 1,
+      "agent": "/root/w01d_evidence_architecture",
+      "status": "complete",
+      "task": "Design the matrix, execution packet and acceptance-record separation",
+      "deliverables": [],
+      "integration": "Defined strict command/path validation, downstream shell-evaluation safeguards, failure-preserving checkpoints and separate reviewed gate reports. Identified the blocked-RTL schema requirement and the need to preserve the P00 ledger."
+    },
+    {
+      "wave": 1,
+      "agent": "/root/w01e_ci_review",
+      "status": "complete",
+      "task": "Review CI integration and inherited workflow cost",
+      "deliverables": [],
+      "integration": "Confirmed existing governance discovery covers additive ci/project tooling and tests without workflow changes. Kept the global catalog and inherited CI selection unchanged, and distinguished exact-head hosted status from P01 numerical evidence."
+    },
+    {
+      "wave": 1,
+      "agent": "/root/w01f_resource_policy",
+      "status": "complete",
+      "task": "Review resource observations and bounded process requirements",
+      "deliverables": [],
+      "integration": "Established two nested compile workers, disk/log/RSS budgets, process-group cleanup and explicit unknown cgroup visibility. The implementation reports sampled budgets rather than hard resource quotas; no large hardware build was requested by this review."
+    },
+    {
+      "wave": 2,
+      "agent": "/root/w02a_matrix",
+      "status": "complete",
+      "task": "Implement the frozen six-case matrix and strict loader",
+      "deliverables": [
+        "ci/project/p01_baseline.json",
+        "ci/project/baseline_matrix.py"
+      ],
+      "integration": "Implemented deterministic selection, exact executable configurations and oracle constraints, strict JSON and safe command generation. Configuration generation confirmed TFR/STD selection; later w08e identified a descriptive attention operand-mode error without changing executable fields."
+    },
+    {
+      "wave": 2,
+      "agent": "/root/w02b_inventory",
+      "status": "complete",
+      "task": "Implement source, tool, build and artifact provenance",
+      "deliverables": [
+        "ci/project/baseline_inventory.py"
+      ],
+      "integration": "Added clean source/gitlink inventories, pinned archive and installed-file identities, bounded version probes and safe artifact hashing. Subsequent independent tests and reviews tightened generated-file, manifest-trust and duplicate-field validation."
+    },
+    {
+      "wave": 2,
+      "agent": "/root/w02c_process_limits",
+      "status": "complete",
+      "task": "Implement bounded failure-preserving process execution",
+      "deliverables": [
+        "ci/project/baseline_process.py"
+      ],
+      "integration": "Added exclusive bounded logs, sampled disk/RSS checks, timeouts, process-group termination and retained exit reasons. Tiny subprocess checks passed; the later completion-boundary signal finding was fixed and independently closed in waves five and six."
+    },
+    {
+      "wave": 2,
+      "agent": "/root/w02d_matrix_tests",
+      "status": "complete",
+      "task": "Independently test matrix and command contracts",
+      "deliverables": [
+        "ci/project/test_baseline_matrix.py"
+      ],
+      "integration": "Added nineteen tests covering actual configuration generation, native selector requirements, paired coverage, oracle constants, invalid JSON and shell-token rejection. These are tooling checks and do not qualify a GPU execution."
+    },
+    {
+      "wave": 2,
+      "agent": "/root/w02e_inventory_tests",
+      "status": "complete",
+      "task": "Independently test provenance and build validation",
+      "deliverables": [
+        "ci/project/test_baseline_inventory.py"
+      ],
+      "integration": "Added twenty-six initial tests and exposed make override/include acceptance and prevalidation FIFO reads. Root corrected both defects; the regressions passed without weakening acceptance or numerical tolerances."
+    },
+    {
+      "wave": 2,
+      "agent": "/root/w02f_process_tests",
+      "status": "complete",
+      "task": "Independently test process limits and descendant cleanup",
+      "deliverables": [
+        "ci/project/test_baseline_process.py"
+      ],
+      "integration": "Added nineteen initial tests with tiny real subprocesses and controlled resource observations. Verified retained exits/logs, output caps, timeouts, signal handling and orphan cleanup; later completion-boundary coverage is recorded separately."
+    },
+    {
+      "wave": 3,
+      "agent": "/root/w03a_orchestrator",
+      "status": "complete",
+      "task": "Implement the plan/run baseline CLI",
+      "deliverables": [
+        "ci/project/baseline.py"
+      ],
+      "integration": "Added sequential generated-build execution, fresh output protection, configuration/reference-marker checks and atomic progress records. Read-only planning passed; selected-case success and vendor integration remain explicitly separate from phase acceptance."
+    },
+    {
+      "wave": 3,
+      "agent": "/root/w03b_bootstrap",
+      "status": "complete",
+      "task": "Implement the minimal pinned toolchain bootstrap",
+      "deliverables": [
+        "ci/project/baseline_bootstrap.py"
+      ],
+      "integration": "Added streamed part verification, safe bounded extraction, cache binding, non-overwrite behavior and installation receipts. Miniature archive checks passed; actual large tools were provisioned earlier and are not attributed to this installer."
+    },
+    {
+      "wave": 3,
+      "agent": "/root/w03c_xrt_scope",
+      "status": "complete",
+      "task": "Determine full-AFU simulator scope and vendor-emulation prerequisites",
+      "deliverables": [],
+      "integration": "Identified the vendor-free xrtsim path, a bounded integer-demo recipe and missing UUID header prerequisite. Documented local-shim limitations and the distinct blocked vendor hw_emu obligation; no supplemental workload ran in this assignment."
+    },
+    {
+      "wave": 3,
+      "agent": "/root/w03d_orchestrator_tests",
+      "status": "complete",
+      "task": "Independently test orchestration and failure outcomes",
+      "deliverables": [
+        "ci/project/test_baseline.py"
+      ],
+      "integration": "Added twenty-one tests and exposed contradictory resolved DPI aliases alongside native suffix flags. Root added FPU/TCU alias consistency checks; the regression and all twenty-one tests then passed."
+    },
+    {
+      "wave": 3,
+      "agent": "/root/w03e_bootstrap_tests",
+      "status": "complete",
+      "task": "Independently test download, extraction and receipt behavior",
+      "deliverables": [
+        "ci/project/test_baseline_bootstrap.py"
+      ],
+      "integration": "Added twenty-five initial standard-library tests using miniature archives and mocked HTTP. Covered cache/receipt identity, redirects, corruption, unsafe members, resource failures and preservation; no real bundle installation or GPU qualification was claimed."
+    },
+    {
+      "wave": 3,
+      "agent": "/root/w03f_runbook",
+      "status": "complete",
+      "task": "Write the initial P01 reproduction guide",
+      "deliverables": [
+        "docs/project/p01-baseline-runbook.md"
+      ],
+      "integration": "Documented pinned source/tools, explicit setup, nested two-worker dependency builds, plan/run syntax, budgets and evidence boundaries. Retained the observed GCC 14 failure and deferred compiler compatibility and numerical acceptance to actual results."
+    },
+    {
+      "wave": 4,
+      "agent": "/root/w04a_host_identity",
+      "status": "complete",
+      "task": "Implement PATH-selected host tool identity",
+      "deliverables": [
+        "ci/project/baseline_host.py"
+      ],
+      "integration": "Added bounded compiler/binutils/Python/optional-CMake observations and cc1plus hashing without exposing private host or environment fields. Actual GCC 14 and dedicated GCC 11 inventories passed as identity observations, not compatibility qualification."
+    },
+    {
+      "wave": 4,
+      "agent": "/root/w04b_runner_review",
+      "status": "complete",
+      "task": "Independently review runner provenance",
+      "deliverables": [],
+      "integration": "Reproduced three F2 gaps: altered newer generated contents, ignored dependency drift and missing independent executing-helper identity. Corrections were assigned to w04e/w04f and independently closed by w06c; no numerical pass followed from this review."
+    },
+    {
+      "wave": 4,
+      "agent": "/root/w04c_phase_progress",
+      "status": "complete",
+      "task": "Update the P01 implementation checkpoint and project status",
+      "deliverables": [
+        "README.md",
+        "CHANGELOG.md",
+        "docs/project/status.md",
+        "docs/project/backlog.md",
+        "docs/project/phases/p01-baseline.md",
+        "docs/project/roadmap.json"
+      ],
+      "integration": "Marked only P01 in progress and described implemented tooling, retained failures and outstanding execution. Kept acceptance definitions, P00 evidence and later phase states unchanged; final results and publication state remained for later integration."
+    },
+    {
+      "wave": 4,
+      "agent": "/root/w04d_host_tests",
+      "status": "complete",
+      "task": "Independently test host identity semantics",
+      "deliverables": [
+        "ci/project/test_baseline_host.py"
+      ],
+      "integration": "Added nineteen tests for selected PATH behavior, binary/frontend identities, malformed probes, drift, bounded subprocesses and omission of private paths. Confirmed the frontend is hashed without being executed."
+    },
+    {
+      "wave": 4,
+      "agent": "/root/w04e_build_identity_fix",
+      "status": "complete",
+      "task": "Validate generated and copied build contents against source",
+      "deliverables": [
+        "ci/project/baseline_inventory.py",
+        "ci/project/test_baseline_build_identity.py",
+        "ci/project/test_baseline_inventory.py"
+      ],
+      "integration": "Regenerate four headers for exact comparison and check thirteen copied build inputs. Added ten regressions plus faithful existing fixtures; actual clean-build inventory passed without mutating the inspected tree. W06c supplied independent closure."
+    },
+    {
+      "wave": 4,
+      "agent": "/root/w04f_runner_identity_fix",
+      "status": "complete",
+      "task": "Record and recheck dependency, helper and host identities",
+      "deliverables": [
+        "ci/project/baseline.py",
+        "ci/project/test_baseline_identity.py",
+        "ci/project/test_baseline.py"
+      ],
+      "integration": "Added before/after dependency and host checks, independent six-helper hashes/snapshots and thirteen regressions. Preserved explicit cache-free compilation settings; all 152 then-current baseline tests passed, and w06c independently closed the findings."
+    },
+    {
+      "wave": 5,
+      "agent": "/root/w05a_archive_review",
+      "status": "complete",
+      "task": "Independently review bootstrap and immutable-manifest trust",
+      "deliverables": [],
+      "integration": "Reproduced acceptance of substituted archive identities under unchanged immutable labels. Requested a trusted content anchor; reviewed extraction boundaries and metadata from the two small real archives without downloading or extracting the large toolchain."
+    },
+    {
+      "wave": 5,
+      "agent": "/root/w05b_native_semantics",
+      "status": "complete",
+      "task": "Review native selectors, reference semantics and partial evidence",
+      "deliverables": [],
+      "integration": "Confirmed inherited GEMM references, BF16 native format enablement and TFR/STD configuration boundaries for the then-recorded partial FP16 evidence. Its initial RS attention description is superseded by the later w08e SS dispatch proof; no complete matrix was accepted."
+    },
+    {
+      "wave": 5,
+      "agent": "/root/w05c_process_review",
+      "status": "complete",
+      "task": "Independently review process cleanup and cancellation",
+      "deliverables": [],
+      "integration": "Reproduced a lost SIGTERM at successful stdout completion, which could allow a subsequent command to start. W05e fixed the accepted F2 issue and w06b verified the old/new behavior; sampled resource limitations remained explicit."
+    },
+    {
+      "wave": 5,
+      "agent": "/root/w05d_manifest_anchor",
+      "status": "complete",
+      "task": "Bind supplied manifests to the reviewed immutable lock",
+      "deliverables": [
+        "ci/project/baseline_inventory.py",
+        "ci/project/baseline_bootstrap.py",
+        "ci/project/test_baseline_inventory.py",
+        "ci/project/test_baseline_bootstrap.py"
+      ],
+      "integration": "Added a shared canonical trusted digest and production-anchor regressions rejecting changed archive identities and self-consistent synthetic receipts. Twenty-eight bootstrap and twenty-seven then-current inventory tests passed; the real lock bytes remained unchanged."
+    },
+    {
+      "wave": 5,
+      "agent": "/root/w05e_cancellation_fix",
+      "status": "complete",
+      "task": "Preserve cancellation at command completion",
+      "deliverables": [
+        "ci/project/baseline_process.py",
+        "ci/project/test_baseline_process.py"
+      ],
+      "integration": "Check pending signals through output drain, final wait and handler restoration. Six new SIGINT/SIGTERM boundary subcases failed the old helper and passed the correction; all twenty process tests passed before independent closure."
+    },
+    {
+      "wave": 5,
+      "agent": "/root/w05f_runbook_host",
+      "status": "complete",
+      "task": "Document compatible host compiler and stage-specific provenance",
+      "deliverables": [
+        "docs/project/p01-baseline-runbook.md"
+      ],
+      "integration": "Added verified GNU 11 package facts, compiler selection and direct compilation settings. Preserved GCC 14 dependency provenance, both build failures and the limited known FP16 results; the standalone RTL retry observation was handed to root for evidence review."
+    },
+    {
+      "wave": 6,
+      "agent": "/root/w06a_manifest_fix_review",
+      "status": "complete",
+      "task": "Independently review the manifest anchor correction",
+      "deliverables": [],
+      "integration": "Confirmed the original manifest-forgery fix and scoped test-anchor restoration. Found a remaining inventory duplicate-JSON-field inconsistency, reproduced at top level and nested archive objects; w06d fixed it and w07a independently closed it."
+    },
+    {
+      "wave": 6,
+      "agent": "/root/w06b_cancel_fix_review",
+      "status": "complete",
+      "task": "Independently close the completion-cancellation defect",
+      "deliverables": [],
+      "integration": "All twenty process tests passed. Independently reconstructed the original helper with its exact old hash and confirmed all six new signal subcases fail there; no remaining F2/F3 finding was found in this scope."
+    },
+    {
+      "wave": 6,
+      "agent": "/root/w06c_generated_fix_review",
+      "status": "complete",
+      "task": "Independently close generated/dependency/helper provenance findings",
+      "deliverables": [],
+      "integration": "Closed all three w04b findings using six focused regressions, read-only actual build inventory and matching GCC 11 host observations. Verified thirteen copied inputs and separate dirty-instrumentation versus clean GPU-source identity."
+    },
+    {
+      "wave": 6,
+      "agent": "/root/w06d_strict_manifest_fix",
+      "status": "complete",
+      "task": "Reject duplicate inventory manifest properties",
+      "deliverables": [
+        "ci/project/baseline_inventory.py",
+        "ci/project/test_baseline_inventory.py"
+      ],
+      "integration": "Added nested object duplicate rejection and two production-lock regressions with four formerly failing subcases. Twenty-nine inventory and twenty-eight bootstrap tests passed; trusted anchor and lock bytes were preserved. W07a supplied independent closure."
+    },
+    {
+      "wave": 6,
+      "agent": "/root/w06e_existing_run_audit",
+      "status": "complete",
+      "task": "Audit retained failures and partial numerical results",
+      "deliverables": [],
+      "integration": "Verified historical logs, configuration snapshots and archived instrumentation. Preserved outer RTL exit two versus nested error 127 and four unrun cases; required the stabilized packet rather than retroactive provenance for acceptance."
+    },
+    {
+      "wave": 6,
+      "agent": "/root/w06f_evidence_schema_plan",
+      "status": "complete",
+      "task": "Plan evidence-schema and execution-ledger integration",
+      "deliverables": [],
+      "integration": "Specified the exact thirteen-field report contract, separate passing/blocked records, original-to-published hash semantics and independent reviewer requirements. Required a separate actual P01 ledger while preserving the hash-addressed P00 ledger."
+    },
+    {
+      "wave": 7,
+      "agent": "/root/w07a_strict_manifest_closure",
+      "status": "complete",
+      "task": "Independently close duplicate-manifest rejection",
+      "deliverables": [],
+      "integration": "Both parsers rejected conflicting and identical duplicate properties while equivalent canonical ordering remained valid. Focused regressions passed, and all six active helper snapshots matched their committed e9c9ac0 bytes; no numerical result was inferred."
+    },
+    {
+      "wave": 7,
+      "agent": "/root/w07b_historical_packet",
+      "status": "complete",
+      "task": "Package compact historical execution and provisioning evidence",
+      "deliverables": [
+        "docs/project/evidence/p01/history-manifest.json",
+        "docs/project/evidence/p01/history/README.md",
+        "docs/project/evidence/p01/history/native-run/report.json",
+        "docs/project/evidence/p01/history/runner-start-source.zip"
+      ],
+      "integration": "Created a manifest-indexed thirty-five-file packet of 607812 bytes, including thirty-three original artifacts. Preserved failed/unrun outcomes and old instrumentation, with deterministic path redaction and original/published hashes; w08b independently reviewed integrity."
+    },
+    {
+      "wave": 7,
+      "agent": "/root/w07c_preservation_review",
+      "status": "complete",
+      "task": "Review source preservation and base-policy change impact",
+      "deliverables": [],
+      "integration": "Confirmed preserved native/source/golden/P00 Git objects, protected SVG and README embedding. The original classifier returned R1. Flagged stale phase-guide checkpoint prose for final documentation integration without accepting a gate."
+    },
+    {
+      "wave": 7,
+      "agent": "/root/w07d_provisioning_review",
+      "status": "complete",
+      "task": "Audit actual provisioning and exact reproduction boundaries",
+      "deliverables": [],
+      "integration": "Confirmed tool/package/dependency identities and stage-specific compiler provenance. Found separate-checkout and CMake compiler-selection documentation gaps, clarified Python capability, and recommended a fresh selected-case generated build for A01; w07f/w08c addressed the guide findings."
+    },
+    {
+      "wave": 7,
+      "agent": "/root/w07e_gemm_execution_review",
+      "status": "complete",
+      "task": "Review the first three completed final-run GEMM results",
+      "deliverables": [],
+      "integration": "Independently verified FP16 SimX/RTL and BF16 SimX logs, nine configuration snapshots, native selectors and unchanged references. BF16 RTL and attention were still unrun at observation; this scoped review did not accept the full matrix."
+    },
+    {
+      "wave": 7,
+      "agent": "/root/w07f_runbook_reproduction_fix",
+      "status": "complete",
+      "task": "Correct pinned-checkout and host-compiler reproduction commands",
+      "deliverables": [
+        "docs/project/p01-baseline-runbook.md"
+      ],
+      "integration": "Separated pinned instrumentation and GPU source, selected explicit GNU 11 CMake compilers in a fresh cache and required the tested Python extraction capability. Five shell blocks and nine relative links passed; no build recipe was executed by this assignment."
+    },
+    {
+      "wave": 8,
+      "agent": "/root/w08a_vendor_blocker_record",
+      "status": "complete",
+      "task": "Record actual missing vendor hw_emu prerequisites",
+      "deliverables": [
+        "docs/project/evidence/p01/vendor-prerequisites.json",
+        "docs/project/evidence/p01-xrt-blocked.json"
+      ],
+      "integration": "Observed absent vendor executables/configuration/standard roots and no emulation artifacts in the scoped source scan. Created a valid blocked A03 record with actual probe exit zero and unexecuted hw_emu exit null; license readiness remains unverified."
+    },
+    {
+      "wave": 8,
+      "agent": "/root/w08b_history_integrity_review",
+      "status": "complete",
+      "task": "Independently verify historical packet integrity and privacy scope",
+      "deliverables": [],
+      "integration": "Replayed thirty-three original/exported identities, fourteen redactions and nineteen byte copies; checked seven logs, three configurations and seven archive members. Historical failures and three original trailing-space log lines were preserved; scoped private-path/token scans found no matches."
+    },
+    {
+      "wave": 8,
+      "agent": "/root/w08c_runbook_closure",
+      "status": "complete",
+      "task": "Independently close reproduction-guide findings",
+      "deliverables": [],
+      "integration": "Verified pinned checkout separation, explicit CMake compilers, Python capability, shell syntax and links. A bounded actual plan exited zero without creating build/output directories, changing clean source or executing any of its six not_run cases."
+    },
+    {
+      "wave": 8,
+      "agent": "/root/w08d_xrtsim_harness",
+      "status": "complete",
+      "task": "Prepare bounded supplemental full-AFU execution instrumentation",
+      "deliverables": [],
+      "integration": "Prepared the scratch run_p01_xrtsim.py harness with fixed source/compiler/header identities, fresh paths, bounded sequential commands and reference/configuration checks. Syntax and source-file checks passed; the harness was not executed by this assignment and cannot accept vendor A03."
+    },
+    {
+      "wave": 8,
+      "agent": "/root/w08e_attention_contract_review",
+      "status": "complete",
+      "task": "Review attention operand dispatch and numerical contract",
+      "deliverables": [],
+      "integration": "Proved that both attention GEMMs use SS descriptors and the recorded WGMMA_RS macro is inert. Root accepted a metadata-only correction and historical erratum, scheduled after the active run; executable fields/tolerances remain unchanged and no attention execution was accepted by this assignment."
+    },
+    {
+      "wave": 8,
+      "agent": "/root/w08f_packet_exporter",
+      "status": "complete",
+      "task": "Prepare a failure-preserving completed-packet exporter",
+      "deliverables": [],
+      "integration": "Prepared scratch export_p01_packet.py with completion checks, safe fresh destinations, path redaction and raw-to-published hashes. Eight tiny fixture checks and an active-packet inventory passed; no actual packet was exported by this assignment."
+    },
+    {
+      "wave": 9,
+      "agent": "/root/w09a_execution_ledger",
+      "status": "complete",
+      "task": "Assemble the independently reconciled first eight-wave ledger",
+      "deliverables": [
+        "docs/project/p01-agent-execution.json"
+      ],
+      "integration": "Recorded only 48 then-completed assignments, verified six per wave and preserved the P00 ledger; root appends later actual completions."
+    },
+    {
+      "wave": 9,
+      "agent": "/root/w09b_supplemental_harness_review",
+      "status": "complete",
+      "task": "Independently review supplemental execution and export instrumentation",
+      "deliverables": [],
+      "integration": "Found the narrow worker-stamp substring defect; root corrected it and ten full stamp fixtures independently closed it before execution. Exporter completion, failure retention and raw-to-published mappings passed scoped review."
+    },
+    {
+      "wave": 9,
+      "agent": "/root/w09c_test_contract_review",
+      "status": "complete",
+      "task": "Review test contracts and fixture isolation",
+      "deliverables": [],
+      "integration": "Verified all eight test files against the committed checkpoint; nine selected regressions and three intentionally failing fixture cleanup checks passed without leaking anchors, mocks, environment or signal handlers."
+    },
+    {
+      "wave": 9,
+      "agent": "/root/w09d_phase_handoff_docs",
+      "status": "complete",
+      "task": "Synchronize phase status, backlog and the execution handoff",
+      "deliverables": [
+        "README.md",
+        "CHANGELOG.md",
+        "docs/project/status.md",
+        "docs/project/backlog.md",
+        "docs/project/phases/p01-baseline.md",
+        "docs/project/p01-handoff.md"
+      ],
+      "integration": "Finalized six owned documents after the actual execution and independent A01/A02 recommendations; preserved failures, separate source/helper identities, SS scope and the remaining vendor A03 blocker."
+    },
+    {
+      "wave": 9,
+      "agent": "/root/w09e_native_acceptance_review",
+      "status": "complete",
+      "task": "Independently review all six completed numerical results",
+      "deliverables": [],
+      "integration": "Recommended scoped P01-A02 pass after checking fifteen command logs, eighteen configurations, six helper snapshots, stable identities, twenty-four binary observations and all forty-one exported artifacts; confirmed description-only SS correction."
+    },
+    {
+      "wave": 9,
+      "agent": "/root/w09f_clean_build_acceptance_review",
+      "status": "complete",
+      "task": "Independently review the fresh generated-build result",
+      "deliverables": [],
+      "integration": "Observed build/output absent before execution, then passed 235 assertions across five successful commands, source/tool/host/dependency stability, generated inputs, configurations, binaries and sixteen exported artifacts; recommended scoped P01-A01 pass with reused dependencies explicitly qualified."
+    },
+    {
+      "wave": 10,
+      "agent": "/root/w10a_locked_archive_compatibility",
+      "status": "complete",
+      "task": "Verify strict extraction compatibility of the actual locked archives",
+      "deliverables": [],
+      "integration": "Verified all eighteen cached part identities and all five archives: 6,273 members, 187 symlinks and fourteen hardlinks passed production metadata/filter/order checks without extraction, installation or a fabricated receipt."
+    },
+    {
+      "wave": 10,
+      "agent": "/root/w10b_xrtsim_evidence_review",
+      "status": "complete",
+      "task": "Independently review the completed supplemental AFU smoke",
+      "deliverables": [],
+      "integration": "Passed 1,173 assertions across four successful commands, three effective stamps, nine identity checkpoints, four live binaries and forty-three exported artifacts. Accepted the sixteen-point integer xrtsim scope while retaining vendor A03 blocked."
+    },
+    {
+      "wave": 10,
+      "agent": "/root/w10c_acceptance_record_review",
+      "status": "complete",
+      "task": "Audit final acceptance reports and phase dispositions",
+      "deliverables": [],
+      "integration": "Validated exact report schemas, 151 direct artifact references, twenty-four underlying logs and fifteen passing invocations; confirmed scoped A01/A02 pass, A03/P01 blocked, unchanged later phases and description-only SS correction."
+    },
+    {
+      "wave": 10,
+      "agent": "/root/w10d_ledger_review",
+      "status": "complete",
+      "task": "Independently reconcile the first nine completed waves",
+      "deliverables": [],
+      "integration": "Verified fifty-four actual completed identities, six per wave, all matching notes and existing deliverable paths; confirmed no premature final-wave count and unchanged P00 ledger, and provided final sixty-entry checks."
+    },
+    {
+      "wave": 10,
+      "agent": "/root/w10e_release_integrity",
+      "status": "complete",
+      "task": "Review complete release preservation, links, commands and privacy",
+      "deliverables": [],
+      "integration": "Verified protected source/pins/goldens/workflows/P00/asset identities, 244 relative links, ten shell blocks and scoped text/ZIP privacy checks. Confirmed four faithful raw-evidence whitespace exceptions and honest observed hosted CI status."
+    },
+    {
+      "wave": 10,
+      "agent": "/root/w10f_delivery_readiness",
+      "status": "complete",
+      "task": "Independently review the final staged release candidate",
+      "deliverables": [],
+      "integration": "Passed 460 assertions over the staged 161-path candidate, acceptance hashes, export mappings, raw logs, helper snapshots, final tooling tests and archive audit. Found no release blocker and required actual final sixty-entry completion, hash refresh, expected-head publication and remote readback."
+    }
+  ]
+}

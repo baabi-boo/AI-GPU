@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "outcome": "pass",
+  "source_revision": "03181532b81fe95b1cfeac2ffb25d8597af689b2",
+  "record_id": "P01-A01-clean-generated-rv64-20261115",
+  "kind": "simulation",
+  "evidence_level": "simulated",
+  "scope": "Clean generated application/simulator build from pinned clean GPU source, with successful FP16-to-FP32 64x64x64 GEMM CPU reference on SimX. Previously built dependency libraries are explicitly pinned and retain their original provenance.",
+  "configuration": "RV64 ubuntu/focal; reviewed runtime helpers at e9c9ac01f93b0d84915340999100260f2599ec44; fresh build64-p01-clean-simx; GNU 11.3 host; immutable v3.0.2 tool bundles; selected gemm-fp16-simx, TFR/STD paired configuration; two compile workers.",
+  "acceptance_ids": [
+    "P01-A01"
+  ],
+  "commands": [
+    {
+      "command": "cd \"$BUILD\" && CCACHE_DISABLE=1 MAKEFLAGS=-j2 OBJCACHE='' THREADS=2 \"$SOURCE/configure\" --xlen=64 --osversion=ubuntu/focal \"--tooldir=$TOOLS\"",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cd \"$BUILD\" && CCACHE_DISABLE=1 MAKEFLAGS=-j2 OBJCACHE='' THREADS=2 make -j2 -C sw/kernel",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cd \"$BUILD\" && CCACHE_DISABLE=1 MAKEFLAGS=-j2 OBJCACHE='' THREADS=2 make -j2 -C sw/runtime/stub",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cd \"$BUILD\" && CCACHE_DISABLE=1 MAKEFLAGS=-j2 OBJCACHE='' THREADS=2 \"$SOURCE/configure\" --xlen=64 --osversion=ubuntu/focal \"--tooldir=$TOOLS\"",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cd \"$BUILD\" && CCACHE_DISABLE=1 CONFIGS='-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=8 -DVX_CFG_ISSUE_WIDTH=2 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=fp16 -DOTYPE=fp32 -DVX_CFG_TCU_FP16_ENABLE' MAKEFLAGS=-j2 OBJCACHE='' THREADS=2 ./ci/blackbox.sh --driver=simx --app=sgemm_tcu '--args=-m 64 -n 64 -k 64'",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/gemm-fp16-simx-sw_runtime_simx_config.stamp",
+      "sha256": "0804b9dee6dc0a116c72725f277ce8da47c0909fb876d17545ad24daf39f39e4"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/gemm-fp16-simx-sw_runtime_simx_rt_config.stamp",
+      "sha256": "4549a431437283a691857b8f29467ca256d410cd2cb13066206f841983010dd9"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/gemm-fp16-simx-tests_regression_sgemm_tcu_config.stamp",
+      "sha256": "e098d94faab37eb6be89d2216f10a338d52984a6234159ea75c01e7a74bf8a1f"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/tooling/baseline.py",
+      "sha256": "d26202d38a27b5ab0a52e735edb5682a8be8b9771624c69c724dbeb7e2c58610"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/tooling/baseline_host.py",
+      "sha256": "96bc0d25b1ec0509937c83d1de50db0a0125ca2acda405467e28d9e37dfb5ccb"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/tooling/baseline_inventory.py",
+      "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/tooling/baseline_matrix.py",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/tooling/baseline_process.py",
+      "sha256": "d011171fc41734fa323127a70acc13e7b7a5a7949372e808655af1b535cdaca2"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/tooling/preflight.py",
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/logs/configure.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/logs/gemm-fp16-simx-configure.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/logs/gemm-fp16-simx.log",
+      "sha256": "97b396e642e78953dd3e5eab1af55b475cad9e09acd5c809ad995d4ea26f558a"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/logs/kernel-library.log",
+      "sha256": "0f58d2c63a9d152b98e450e06b7b90ceb0b42e768cc8f0f1daa87babff0bcf74"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/logs/runtime-stub.log",
+      "sha256": "060ad6e1a6332aef0b0996ace11c011ea9cb52afffe3014448ed2f0318db9040"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/matrix.json",
+      "sha256": "d2f570fa241dff720446809e572efecbaed56cc7d14365bf096859d1d764b61f"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/report.json",
+      "sha256": "3ab2ab91da405ecb7a2b3a9f15fa2776fc06afa29803b4199527cad3d99f29b8"
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/export-manifest.json",
+      "sha256": "11550c8857d99b9ec1d2c98c36e4de8d6115e9feb656378b5aef609388787a6e"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/first-gemm-fp16-simx.json",
+      "sha256": "1027dbe4a46141029a8ecd6fb8e74f35e81d0189bd87f5b15831d54c167d2e5d"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/first-gemm-fp16-simx.log",
+      "sha256": "ac42bc986a5f1c03bb9d4aa08f3745661b511366dbee48b17e04a27665eb87a1"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/artifacts/gemm-fp16-simx-sw_runtime_simx_config.stamp",
+      "sha256": "0804b9dee6dc0a116c72725f277ce8da47c0909fb876d17545ad24daf39f39e4"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/artifacts/gemm-fp16-simx-sw_runtime_simx_rt_config.stamp",
+      "sha256": "4549a431437283a691857b8f29467ca256d410cd2cb13066206f841983010dd9"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/artifacts/gemm-fp16-simx-tests_regression_sgemm_tcu_config.stamp",
+      "sha256": "e098d94faab37eb6be89d2216f10a338d52984a6234159ea75c01e7a74bf8a1f"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/logs/configure.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/logs/gemm-fp16-rtlsim-configure.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/logs/gemm-fp16-rtlsim.log",
+      "sha256": "5f7031ad45079cdfe15992ca2475ddce3f7917a23eaff2782dfdf91d418a5a26"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/logs/gemm-fp16-simx-configure.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/logs/gemm-fp16-simx.log",
+      "sha256": "a59cb8ead4ebca0c94d69ef7d31ff4ebabe43a3624d0cb0329bd578fd67808e7"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/logs/kernel-library.log",
+      "sha256": "0f58d2c63a9d152b98e450e06b7b90ceb0b42e768cc8f0f1daa87babff0bcf74"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/logs/runtime-stub.log",
+      "sha256": "060ad6e1a6332aef0b0996ace11c011ea9cb52afffe3014448ed2f0318db9040"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/matrix.json",
+      "sha256": "f0ad2390b983c3e9a0804fc6309d22bb85ba23ba39635309e0193c9a54d6df97"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/report.json",
+      "sha256": "df3a67a315d244dba291c2b4a03429e0c81216c5158498a8b0f889a65dfaccd9"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/bootstrap-source.py.txt",
+      "sha256": "2556bceaf2456033d298eddfc3dc5c57499cc1fe716e1d4104ca0ba4175cfabc"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/bootstrap.log",
+      "sha256": "9af62fcb7a9f4b8c1578de2de6591473464b450a2140d76a78e5492a7d8bb23b"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/clean-kernel-runtime.json",
+      "sha256": "4757fb18634ce2ce210dbbb658664af41223703f35fd9fde472021bfa8dc76a3"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/clean-kernel.log",
+      "sha256": "7cc07f2b06c65fe9bf9b7f970201fe66d6d18b143b2250fd8037ea37f2c310fa"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/clean-ramulator-build.log",
+      "sha256": "70933563813591f17c38c333cc86ca33b8bb6c31a8efb3115288bf6e8c081434"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/clean-ramulator-configure.log",
+      "sha256": "e4d9f0654137a073cf1ab7fe2216cc07bfc0e84d7531ef8822004b6b14191e69"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/clean-runtime.log",
+      "sha256": "5aa99f218e73ffcce168995c4b6046e5ca97f9e851feb199e8dbce4a9286f599"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/clean-submodules.log",
+      "sha256": "a62815ac758b14bb06fe2d9299cf321f2a725910aa2596ddd14fcfc46c13b380"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/clean-third-party.log",
+      "sha256": "27ed26ce99d678575e150c7f40c9e03349bf1211fb6dc16c0abfb655b7953f41"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/host-native-tools.json",
+      "sha256": "3495e83840b4990515a14bad01e8617e0ba5c43b041b8859a9ccc99e16d43049"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/host-packages.json",
+      "sha256": "022f1badad9fcbb1865cc76ece98047dd97d0050ce0bc09d59c69b4875faa8ec"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/initial-preflight.json",
+      "sha256": "aa87d808ec994447db03bacaac67cf8be8a3f1cc7ab7c1796e5f663459db18e1"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/initial-provenance.json",
+      "sha256": "f9ed5149b7490085a19df25f68fb03e8c6a259b368e2002e94e515452d1f4b88"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/ramulator-dependencies.json",
+      "sha256": "2a9e0febe6165526c5ad4e61e26d466cea6a65db5c9f9526c4a011ea5f278ba0"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/tool-bundles.json",
+      "sha256": "63771ba8d9ff691b3867ed96be7b058ed5eae1368789575f4964e38f8718a405"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/retry-gemm-fp16-rtlsim.json",
+      "sha256": "53b633e0de05bf367ae093bf1b08a82ba72f85d8595a460eae13cacbcd933a87"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/retry-gemm-fp16-rtlsim.log",
+      "sha256": "9042ec40ea6d68892d624c933967466b74842d7d989186886b201fd42d61b7a9"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/runner-start-source.json",
+      "sha256": "25ddbe3a1c3b470b85c13873b9a5ff4b4b7a997a568b401c4f00719fbc4de2f4"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/runner-start-source.zip",
+      "sha256": "c4827650c39755fc4e68e0c0c80c31ac33acf911fb5a55cad5f36877ae304489"
+    },
+    {
+      "path": "docs/project/evidence/p01/history-manifest.json",
+      "sha256": "b15afc043d2f2b6071979e4c75cff6f251e26c63f81c974398a82055a624b56d"
+    },
+    {
+      "path": "docs/project/evidence/p01/history/README.md",
+      "sha256": "22e2c3e0eab43744424105430673422c5eea179e9ab47b7b5ba9242a402d5401"
+    },
+    {
+      "path": "ci/project/p01_toolchain.lock.json",
+      "sha256": "63771ba8d9ff691b3867ed96be7b058ed5eae1368789575f4964e38f8718a405"
+    },
+    {
+      "path": "docs/project/evidence/p01-review.md",
+      "sha256": "5e13eb45cd7c5104ba0dd1809774e1ead79cd3ef8822e091d915aa1df14bf37a"
+    },
+    {
+      "path": "docs/project/evidence/p01/resource-observation.json",
+      "sha256": "05d03a3f890612276e0643b5d6987c9c1c9914fea04878cbfd770c674647248a"
+    },
+    {
+      "path": "docs/project/evidence/p01/execution-summary.json",
+      "sha256": "04a28ab8c683322dff4ae7511692894eb181b5e5f2cfc4b7747f129a8a6737e7"
+    },
+    {
+      "path": "docs/project/evidence/p01/attention-operand-erratum.md",
+      "sha256": "97cbf494e39d256c46c076817a09591e6b472f41eda16fe56177c03df62d3c04"
+    },
+    {
+      "path": "docs/project/evidence/p01/matrix-description-correction.json",
+      "sha256": "4d58c79254de8dbf17fb1331f38d1925e852cdc4645582cea18ad0f978108860"
+    },
+    {
+      "path": "docs/project/p01-agent-execution.json",
+      "sha256": "88c901f88a81dc0f55b46bccede6512d8cb26fb19f79afc0d093a030ce65e208"
+    },
+    {
+      "path": "docs/project/evidence/p01/tooling-validation.json",
+      "sha256": "a4e0420e825b12480743d984d68060f1a55fcc431d15738e5e3e5d4c75b061fc"
+    },
+    {
+      "path": "docs/project/evidence/p01/tooling-validation.log",
+      "sha256": "a5b169867d8cfffeaa7e5dd597959f183450ceaca1ea7834a02146b00c56898e"
+    },
+    {
+      "path": "docs/project/evidence/p01/toolchain-archive-compatibility.json",
+      "sha256": "1206a02111c71f938c1ac28c5fb0e08530f4ca05f99da69a39a7112b4ae53656"
+    },
+    {
+      "path": "docs/project/evidence/p01/toolchain-archive-compatibility-export.json",
+      "sha256": "951a06ba4b96c92a570d29efced7c59092f20b349d8af3493282fd07df95ccc2"
+    }
+  ],
+  "limitations": [
+    "This proves a clean generated application/simulator build; it reuses hash-recorded dependency libraries originally built with GCC 14.2 and prebuilt device tools. It is not a hermetic or bit-identical rebuild of every dependency/tool.",
+    "Only one numerical case is selected in this fresh-build packet; its full-native-matrix flags and phase_complete correctly remain false.",
+    "SimX executes software arithmetic and this report does not establish native RTL, AFU integration, physical FPGA or silicon results.",
+    "Historical failures are retained as diagnostic artifacts; they are not passing commands of this clean-build report.",
+    "Raw nested hashes retain their original byte meaning; export manifests map them to published artifacts. Compiled binaries and installed archives are identity observations rather than payloads in the repository.",
+    "Resource budgets are polled, not hard quotas or cgroup certification."
+  ],
+  "reviewer": "/root/w09f_clean_build_acceptance_review; /root integration; /root/w10c_acceptance_record_review (record integrity)"
+}

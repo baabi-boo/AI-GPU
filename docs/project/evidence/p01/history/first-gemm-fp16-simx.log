@@ -1,0 +1,37 @@
+CONFIGS=-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=8 -DVX_CFG_ISSUE_WIDTH=2 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=fp16 -DOTYPE=fp32 -DVX_CFG_TCU_FP16_ENABLE
+Running: CONFIGS="-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=8 -DVX_CFG_ISSUE_WIDTH=2 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=fp16 -DOTYPE=fp32 -DVX_CFG_TCU_FP16_ENABLE" make -C "./ci/../tests/regression/sgemm_tcu" runtime-simx > /dev/null
+In file included from $SOURCE/third_party/ramulator/ext/spdlog/include/spdlog/fmt/fmt.h:27,
+                 from $SOURCE/third_party/ramulator/ext/spdlog/include/spdlog/common.h:45,
+                 from $SOURCE/third_party/ramulator/ext/spdlog/include/spdlog/spdlog.h:12,
+                 from $SOURCE/third_party/ramulator/src/base/base.h:11,
+                 from $SOURCE/sim/common/dram_sim.cpp:32:
+$SOURCE/third_party/ramulator/ext/spdlog/include/spdlog/fmt/bundled/core.h: In instantiation of ‘constexpr fmt::v9::detail::value<Context> fmt::v9::detail::make_value(T&&) [with Context = fmt::v9::basic_format_context<fmt::v9::appender, char>; T = fmt::v9::basic_string_view<char>&]’:
+$SOURCE/third_party/ramulator/ext/spdlog/include/spdlog/fmt/bundled/core.h:1777:29:   required from ‘constexpr fmt::v9::detail::value<Context> fmt::v9::detail::make_arg(T&&) [with bool IS_PACKED = true; Context = fmt::v9::basic_format_context<fmt::v9::appender, char>; type <anonymous> = fmt::v9::detail::type::string_type; T = fmt::v9::basic_string_view<char>&; typename std::enable_if<IS_PACKED, int>::type <anonymous> = 0]’
+ 1777 |   return make_value<Context>(val);
+      |          ~~~~~~~~~~~~~~~~~~~^~~~~
+$SOURCE/third_party/ramulator/ext/spdlog/include/spdlog/fmt/bundled/core.h:1901:77:   required from ‘constexpr fmt::v9::format_arg_store<Context, Args>::format_arg_store(T&& ...) [with T = {fmt::v9::basic_string_view<char>&, const char (&)[3]}; Context = fmt::v9::basic_format_context<fmt::v9::appender, char>; Args = {fmt::v9::basic_string_view<char>, char [3]}]’
+ 1899 |         data_{detail::make_arg<
+      |               ~~~~~~~~~~~~~~~~~                                              
+ 1900 |             is_packed, Context,
+      |             ~~~~~~~~~~~~~~~~~~~                                              
+ 1901 |             detail::mapped_type_constant<remove_cvref_t<T>, Context>::value>(
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+ 1902 |             FMT_FORWARD(args))...} {
+      |             ~~~~~~~~~~~~~~~~~~                                               
+$SOURCE/third_party/ramulator/ext/spdlog/include/spdlog/fmt/bundled/core.h:1918:31:   required from ‘OutputIt fmt::v9::format_to(OutputIt, format_string<T ...>, T&& ...) [with OutputIt = appender; T = {basic_string_view<char>&, const char (&)[3]}; typename std::enable_if<detail::is_output_iterator<OutputIt, char>::value, int>::type <anonymous> = 0; format_string<T ...> = basic_format_string<char, basic_string_view<char>&, const char (&)[3]>]’
+ 1918 |   return {FMT_FORWARD(args)...};
+      |                               ^
+$SOURCE/third_party/ramulator/ext/spdlog/include/spdlog/fmt/bundled/format-inl.h:65:14:   required from here
+   65 |     format_to(it, FMT_STRING("{}{}"), message, SEP);
+      |     ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+$SOURCE/third_party/ramulator/ext/spdlog/include/spdlog/fmt/bundled/core.h:3235:52:   in ‘constexpr’ expansion of ‘fmt::v9::make_format_args<>(args#0, args#1)’
+$SOURCE/third_party/ramulator/ext/spdlog/include/spdlog/fmt/bundled/core.h:1735:15: error: possibly dangling reference to a temporary [-Werror=dangling-reference]
+ 1735 |   const auto& arg = arg_mapper<Context>().map(FMT_FORWARD(val));
+      |               ^~~
+compilation terminated due to -Wfatal-errors.
+cc1plus: all warnings being treated as errors
+make[2]: *** [Makefile:196: $INITIAL_BUILD/sw/runtime/obj/sim_common/dram_sim.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [Makefile:38: $INITIAL_BUILD/sw/runtime/libsimx.so] Error 2
+make: *** [../common.mk:241: runtime-simx] Error 2
+Error building driver: simx (via ./ci/../tests/regression/sgemm_tcu)

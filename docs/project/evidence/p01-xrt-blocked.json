@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "record_id": "P01-A03-vendor-hw-emu-blocked-20261115",
+  "kind": "rtl",
+  "outcome": "blocked",
+  "evidence_level": "rtl_verified",
+  "scope": "P01-A03 remains blocked: qualified vendor XRT hw_emu was not executed because required tools/platform artifacts are unavailable. A separate vendor-free full-AFU integer xrtsim smoke passed, but does not satisfy the vendor emulation obligation.",
+  "source_revision": "03181532b81fe95b1cfeac2ffb25d8597af689b2",
+  "configuration": "Required driver=xrt and target=hw_emu on an identified compatible vendor release and supported platform, with matching vortex_afu.xclbin and emconfig.json. Those prerequisites are unavailable or unverified; no vendor execution configuration was accepted. The intended bounded follow-up is the existing RV64 demo smoke with native STD scalar arithmetic after the platform/tool identities and resource budget are fixed. Supplemental observed configuration: RV64 xrt/xrtsim, one core/cluster, four warps/threads, issue width one, native STD selected, integer demo -n1 with sixteen points; exact helper/header/harness identities retained.",
+  "acceptance_ids": [
+    "P01-A03"
+  ],
+  "commands": [
+    {
+      "command": "Read-only prerequisite screen from $INSTRUMENTATION: python3 $WORKSPACE/agent-notes/w08a_probe.py --source $SOURCE --observed-at \"2026-11-15 22:05:49 UTC\"; exact probe source and observations are retained in docs/project/evidence/p01/vendor-prerequisites.json.",
+      "result": "blocked",
+      "exit_code": 0
+    },
+    {
+      "command": "cd \"$BUILD\" && CCACHE_DISABLE=1 CPLUS_INCLUDE_PATH=\"$HOST_HEADERS\" MAKEFLAGS=-j2 OBJCACHE='' THREADS=2 \"$SOURCE/configure\" --xlen=64 --osversion=ubuntu/focal \"--tooldir=$TOOLS\"",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cd \"$BUILD\" && CCACHE_DISABLE=1 CPLUS_INCLUDE_PATH=\"$HOST_HEADERS\" MAKEFLAGS=-j2 OBJCACHE='' THREADS=2 make -j2 -C sw/kernel",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cd \"$BUILD\" && CCACHE_DISABLE=1 CPLUS_INCLUDE_PATH=\"$HOST_HEADERS\" MAKEFLAGS=-j2 OBJCACHE='' THREADS=2 make -j2 -C sw/runtime/stub",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cd \"$BUILD\" && CCACHE_DISABLE=1 CONFIGS='-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=4 -DVX_CFG_ISSUE_WIDTH=1 -DVX_CFG_FPU_TYPE_STD' CPLUS_INCLUDE_PATH=\"$HOST_HEADERS\" MAKEFLAGS=-j2 OBJCACHE='' THREADS=2 ./ci/blackbox.sh --driver=xrt --target=xrtsim --app=demo --args=-n1",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "NOT EXECUTED: from a configured dedicated vendor build, CONFIGS='-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=4 -DVX_CFG_ISSUE_WIDTH=1 -DVX_CFG_FPU_TYPE_STD' ./ci/blackbox.sh --driver=xrt --target=hw_emu --app=demo --args='-n1'; prerequisite vendor build/platform and matching artifacts must be established first.",
+      "result": "blocked",
+      "exit_code": null
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/project/evidence/p01/vendor-prerequisites.json",
+      "sha256": "0110c86889873ace1b5aa9acaeeeea3bd863cf007e67f735e2fed619fe413c6d"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/effective-sw_runtime_xrt_config.stamp.txt",
+      "sha256": "f4e56e5e666a71726e3eb6f799dbe1a70f1a3fd9b1eec2c4d3becaa4ca50a8b9"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/effective-sw_runtime_xrtsim_config.stamp.txt",
+      "sha256": "adcb905ddf4fd62f811b432cb96e4789801fb4e88d74f8b3fafdf58913d57d58"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/effective-tests_regression_demo_config.stamp.txt",
+      "sha256": "6a2fab3910802bb4938db31491bb00f79925680be813a238ada4d9db77fbaf99"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-.config.stamp.txt",
+      "sha256": "d87099012ae08d2aa9e12952fbcda202887807853d7aa2963c14ce3e456a7722"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-ci_blackbox.sh.txt",
+      "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-config.mk.txt",
+      "sha256": "048a29981a88ba0c361368cb65cdd712b06081526e98afff760c9a4f068b3850"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-hw_VX_config.vh.txt",
+      "sha256": "ae0d0729b61e6cdb1520cf3eb571329867f73b545f0b5920ae1813ff01a75ca5"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-hw_VX_types.vh.txt",
+      "sha256": "1896f4b7c3872b40bd0f953e0f200ffa143da631f49150399ca098cc7f5cb120"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-sim_xrtsim_Makefile.txt",
+      "sha256": "a948bbc99029e75664b0c5b68c12e77d4dec8b890f8ea1b1a1d6c8e9bf2d975d"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-sim_xrtsim_verilator.vlt.txt",
+      "sha256": "11a783daaf834836739f365cc7cf84e37ca593f4390ee349e5dc6e8bcde75685"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-sw_VX_config.h.txt",
+      "sha256": "f3cb3f0794318bd031aa2492ed48fc9a516785b13358cb3482c7323dda37872b"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-sw_VX_types.h.txt",
+      "sha256": "5d6e9d58fd7aad098761dce9973310f7a302ac0364bc3a8117a525c74da5f4f0"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-sw_runtime_xrt_Makefile.txt",
+      "sha256": "89dded3790a87aa3aeeea5b1dfdfb638380efeb4dd5821610b48972a348f5b5b"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-tests_regression_demo_Makefile.txt",
+      "sha256": "9b236ee1aafa211af3c51c62803e2143610d44d9aa70831cf8a6551200b6b10a"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/harness-run_p01_xrtsim.py.txt",
+      "sha256": "dbcfa4dbcb875385facd98f50a429923d0b21b812d030c28cd7ebb7d514d9d6e"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/header-uuid-header.json.txt",
+      "sha256": "4b6ca9acf51fbc861a4f3e42e0a312fa1e75d513ed1454883b311cadb2f6687b"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/header-uuid_uuid.h.txt",
+      "sha256": "0f29b583df138cd9a123aa03498c8a049b71a1afcc0ff90a6dbaac44514385a4"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-hw_rtl_afu_common_VX_afu_wrap.sv.txt",
+      "sha256": "310869020d10bbceae796b556f82b9741982ed6001907a5a55e01e10d8d93915"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-hw_rtl_afu_xrt_vortex_afu.v.txt",
+      "sha256": "764ce5a8dc03e76b6b101f53cf8249673f6714683e542cbac7059811f753cd3a"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sim_xrtsim_Makefile.txt",
+      "sha256": "a948bbc99029e75664b0c5b68c12e77d4dec8b890f8ea1b1a1d6c8e9bf2d975d"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sim_xrtsim_verilator.vlt.in.txt",
+      "sha256": "fc877bfb369afbe82da6d6e6eeee6389d55a74d262da32bd1522d3c508a397a2"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sim_xrtsim_vortex_afu_shim.sv.txt",
+      "sha256": "d1bf51a2201682665fd8b24256be9e455ffdb0136c7898dd4b0cd400d09dd063"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sim_xrtsim_xrt_c.cpp.txt",
+      "sha256": "cc12cd7d56b2f1abecbd91659e27dd430b4490d889f046ec33dd71d8996bf501"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sim_xrtsim_xrt_c.h.txt",
+      "sha256": "172f674f2e9feb39a291c0a6305d7c9c7a552b19f12391daf50554338dd51c65"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sim_xrtsim_xrt_sim.cpp.txt",
+      "sha256": "0720c6603046ee7700fd693d060b834f582be8a74dedd0086acc80d7b0ff8458"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sim_xrtsim_xrt_sim.h.txt",
+      "sha256": "b658f15c5f6afc5cc48c06cf579816b318f5066e09a5e1a1e2306d3a75bb146b"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sw_runtime_xrt_Makefile.txt",
+      "sha256": "89dded3790a87aa3aeeea5b1dfdfb638380efeb4dd5821610b48972a348f5b5b"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sw_runtime_xrt_vortex.cpp.txt",
+      "sha256": "0f5e4079b6888a3fd0502da40f3d7f76b5a9e6bb178de9516fed7874f64bff45"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-tests_regression_demo_Makefile.txt",
+      "sha256": "9b236ee1aafa211af3c51c62803e2143610d44d9aa70831cf8a6551200b6b10a"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-tests_regression_demo_common.h.txt",
+      "sha256": "c2d393eeda07d29785adc3994bc3e1c32cf590ad3f7ee263a77066e60135ff0c"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-tests_regression_demo_kernel.cpp.txt",
+      "sha256": "d9cf321928d9941326fe89b2eceb1c899cf599eb3f3ff533d5c08b57202479da"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-tests_regression_demo_main.cpp.txt",
+      "sha256": "3acf2f35753aaae65b8f9e69640d407ba7fcf2cb7bbdc5557e6fdec9e8e3cf27"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/tooling/baseline.py",
+      "sha256": "d26202d38a27b5ab0a52e735edb5682a8be8b9771624c69c724dbeb7e2c58610"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/tooling/baseline_host.py",
+      "sha256": "96bc0d25b1ec0509937c83d1de50db0a0125ca2acda405467e28d9e37dfb5ccb"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/tooling/baseline_inventory.py",
+      "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/tooling/baseline_matrix.py",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/tooling/baseline_process.py",
+      "sha256": "d011171fc41734fa323127a70acc13e7b7a5a7949372e808655af1b535cdaca2"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/tooling/preflight.py",
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/logs/configure.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/logs/demo-xrtsim.log",
+      "sha256": "ba492556e6dd84d058e43904554e8875beb421f96c5ec3496e730a1ea7485bc8"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/logs/kernel-library.log",
+      "sha256": "0f58d2c63a9d152b98e450e06b7b90ceb0b42e768cc8f0f1daa87babff0bcf74"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/logs/runtime-stub.log",
+      "sha256": "060ad6e1a6332aef0b0996ace11c011ea9cb52afffe3014448ed2f0318db9040"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/report.json",
+      "sha256": "0906deee4b803862bce8f231d0d2d0269b798adc0017a5fbd2ecd01d834b36aa"
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/export-manifest.json",
+      "sha256": "7f7f3a053e65bd76d00b5fabd1d743c812c3112c6590b767cb8f8243f6702c99"
+    }
+  ],
+  "limitations": [
+    "The rtl/rtl_verified vocabulary identifies the required gate type for schema compatibility; outcome=blocked is explicit and does not certify RTL verification.",
+    "Absence was observed on the current PATH, selected standard roots, environment presence checks and the source/generated-build artifact scan; unrelated locations and external artifact stores were not inspected.",
+    "License entitlement and vendor release/platform compatibility remain unverified. No license server probe, vendor install, purchase or vendor tool invocation occurred.",
+    "The read-only screen completed with exit 0, but the planned hw_emu workload did not execute and has exit_code=null.",
+    "Processor rtlsim bypasses the AFU. Vendor-free full-AFU xrtsim uses a local shim and cannot satisfy this vendor hw_emu obligation.",
+    "No physical FPGA or silicon result is established, and this blocked record cannot close P01-A03 or the P01 phase.",
+    "The successful supplemental xrt/xrtsim commands do not execute vendor hw_emu; the planned vendor command remains blocked with exit null.",
+    "The local XRT C shim makes xrtBOSync a no-op and does not qualify vendor runtime/platform behavior, PCIe, physical-driver coherence, or comprehensive AXI ordering/backpressure.",
+    "Native STD was selected for the integer smoke; no floating-point or tensor numerical qualification follows from that demo.",
+    "The supplemental packet received independent completed-result review by /root/w10b_xrtsim_evidence_review; raw-to-published hashes preserve original observations."
+  ],
+  "reviewer": "/root/w08a_vendor_blocker_record \u2014 actual prerequisite observation and blocked-scope review; no human approval or waiver represented; /root/w10b_xrtsim_evidence_review (supplemental packet); /root integration; /root/w10c_acceptance_record_review (record integrity)"
+}

@@ -7,12 +7,14 @@ passing results belong in reviewed [evidence records](evidence/README.md).
 
 ## 1. Freeze the checkout and execution budget
 
-Use a clean checkout of `baabi-boo/AI-GPU`, with the exact source revision recorded
-before building. For reproduction, use the `source_revision` in the reviewed
-packet; for a new packet, record the chosen revision of `master`. The runner's
-`--source` option can point to a separate immutable worktree while development
-continues elsewhere. Keep the runner and matrix revisions as well as the GPU
-source revision in the packet.
+Keep two pinned checkouts: one for the baseline instrumentation and one for the
+GPU source it executes. This continuation uses instrumentation commit
+`e9c9ac01f93b0d84915340999100260f2599ec44` and GPU source commit
+`03181532b81fe95b1cfeac2ffb25d8597af689b2`. The older GPU revision does not contain
+`ci/project/baseline.py`; invoke that helper from the instrumentation checkout
+and pass the GPU worktree through `--source`. Keep both revisions and their
+content identities in the packet. For a later packet, explicitly record its
+chosen revisions instead of silently substituting the current `master`.
 
 Choose absolute paths without spaces, shell metacharacters or symlink traversal.
 The examples below require replacing `/absolute/dedicated/p01` with a directory
@@ -22,25 +24,40 @@ directory. Result directories must be new; never reuse a previous run's output.
 
 ```sh
 AI_GPU_WORK=/absolute/dedicated/p01
+AI_GPU_INSTRUMENTATION="$AI_GPU_WORK/instrumentation"
+AI_GPU_INSTRUMENTATION_REV=e9c9ac01f93b0d84915340999100260f2599ec44
 AI_GPU_SOURCE="$AI_GPU_WORK/source"
+AI_GPU_SOURCE_REV=03181532b81fe95b1cfeac2ffb25d8597af689b2
 AI_GPU_TOOLS="$AI_GPU_WORK/tools-v3.0.2"
 AI_GPU_CACHE="$AI_GPU_WORK/download-cache"
 AI_GPU_SETUP="$AI_GPU_WORK/setup-logs"
 AI_GPU_HOST_BIN="$AI_GPU_WORK/host-gcc11/usr/bin"
 AI_GPU_BUILD="$AI_GPU_SOURCE/build64-p01-gcc11"
 mkdir -p "$AI_GPU_WORK" "$AI_GPU_SETUP"
-git clone --depth 1 --branch master https://github.com/baabi-boo/AI-GPU.git "$AI_GPU_SOURCE"
+git clone --depth 1 --branch master https://github.com/baabi-boo/AI-GPU.git "$AI_GPU_INSTRUMENTATION"
+git -C "$AI_GPU_INSTRUMENTATION" fetch --depth 1 origin "$AI_GPU_INSTRUMENTATION_REV"
+git -C "$AI_GPU_INSTRUMENTATION" checkout --detach "$AI_GPU_INSTRUMENTATION_REV"
+git -C "$AI_GPU_INSTRUMENTATION" fetch --depth 1 origin "$AI_GPU_SOURCE_REV"
+git -C "$AI_GPU_INSTRUMENTATION" worktree add --detach "$AI_GPU_SOURCE" "$AI_GPU_SOURCE_REV"
+git -C "$AI_GPU_INSTRUMENTATION" rev-parse HEAD 'HEAD^{tree}'
+git -C "$AI_GPU_INSTRUMENTATION" status --porcelain
 cd "$AI_GPU_SOURCE"
-git rev-parse HEAD HEAD^{tree}
+git rev-parse HEAD 'HEAD^{tree}'
 git status --porcelain
 git submodule update --init --recursive --depth 1
 git submodule status --recursive
 ```
 
-Do not use `git submodule update --remote`. Preserve the resolved recursive
-gitlinks, all command exits and source cleanliness. Generated third-party build
-outputs are ignored by their repositories; changes to tracked inputs still
-block the baseline.
+Check each command's exit before continuing, and verify both observed HEADs
+equal their selected revisions. Do not use `git submodule update --remote`.
+Preserve the resolved recursive gitlinks, all command exits and source
+cleanliness. Generated third-party build outputs are ignored by their
+repositories; changes to tracked inputs still block the baseline.
+
+The six-case invocation for this continuation reuses a generated build from the
+earlier FP16 attempts. The recipe below starts with a new GPU worktree and build
+directory. A separate fresh-build smoke can establish clean generated-build
+provenance; it must not be presented as a second complete numerical matrix.
 
 The default execution budget is **two compile workers**, **15 GiB free-disk
 reserve**, **6 GiB sampled process-group RSS**, **16 MiB per command log**, and
@@ -52,9 +69,13 @@ Whole-GPU synthesis or Beacon is outside this recipe.
 
 ## 2. Prepare the minimal tools
 
-The host needs Git, Python with the runner's standard-library requirements,
-GNU Make, a compatible C/C++ compiler, and CMake for Ramulator. Its host code
-requires C++20. Follow the [installation guide](../install_vortex.md) for host
+The host needs Git, Python, GNU Make, a compatible C/C++ compiler, and CMake for
+Ramulator. Use Python 3.12 or newer for this recipe; the bootstrap requires
+`tarfile.data_filter` when validating extracted members. The recorded host uses
+Python **3.12.14** and CMake **4.4.5**; its CMake 4 configuration explicitly sets
+`CMAKE_POLICY_VERSION_MINIMUM=3.5` below. Check the Python capability before
+installation. Host code requires C++20. Follow the
+[installation guide](../install_vortex.md) for host
 headers and libraries. Direct baseline execution does not require pytest,
 OpenCL, HIP, graphics, gem5, FireSim, synthesis tools or an FPGA. The separate
 catalog pytest harness needs its own pytest/PyYAML environment.
@@ -87,6 +108,7 @@ export PATH="$AI_GPU_HOST_BIN:$PATH"
 export CCACHE_DISABLE=1
 export OBJCACHE=''
 command -v gcc g++ cpp
+python3 -c 'import sys, tarfile; assert sys.version_info >= (3, 12); assert callable(getattr(tarfile, "data_filter", None)); print(sys.version)'
 gcc --version > "$AI_GPU_SETUP/host-gcc-version.txt"
 g++ --version > "$AI_GPU_SETUP/host-gxx-version.txt"
 cmake --version > "$AI_GPU_SETUP/host-cmake-version.txt"
@@ -106,8 +128,12 @@ The first successful FP16 SimX execution had this compiler provenance:
 | Native simulator, runtime and application host code | Host Debian GCC 11.3.0-12 |
 | RISC-V device kernel | Pinned RISC-V GNU 12.2.0 and Vortex LLVM 20.1.8 |
 
-The GNU 11 recipe selects that compiler from setup onward for a new run. It
-does not relabel the existing dependency libraries as GNU 11 builds. The
+For a new run, the PATH selection and explicit CMake compiler arguments below
+select GNU 11 from dependency setup onward. CMake may otherwise find the system
+`c++` or `cc` even when `g++` and `gcc` resolve to this prefix. Retain its compiler
+identification and cache, and check them before building. This recipe does not
+relabel the recorded dependency libraries as GNU 11 builds or promise identical
+dependency binaries after changing their compiler. The
 prebuilt Verilator identifies version 5.050 and its own producing compiler as
 Ubuntu GCC 11.4.0; that is separate from the compiler selected for this run's
 generated simulator code.
@@ -121,6 +147,7 @@ Selecting that bundle on another Linux distribution does not qualify that host;
 the actual executable/library identities and successful build must be retained.
 
 ```sh
+cd "$AI_GPU_INSTRUMENTATION"
 python3 ci/project/baseline_bootstrap.py install \
   --tool-dir "$AI_GPU_TOOLS" --cache-dir "$AI_GPU_CACHE" \
   --manifest ci/project/p01_toolchain.lock.json --min-free-gib 15 \
@@ -144,22 +171,32 @@ must retain its own provenance; do not fabricate this installer's receipt for it
 
 ## 3. Build the source dependencies with two workers
 
-Run from the generated build directory. Configure also identifies the dedicated
-tool path; it does not install dependencies or qualify a workload.
+Run from the fresh generated build directory. The Ramulator build/cache path
+must also be absent before its first configuration; if the guard below fails,
+stop and choose a fresh source worktree rather than reusing a cache from another
+compiler. Configure also identifies the dedicated tool path; it does not
+install dependencies or qualify a workload.
 
 ```sh
 mkdir -p "$AI_GPU_BUILD"
 cd "$AI_GPU_BUILD"
 ../configure --xlen=64 --osversion=ubuntu/focal --tooldir="$AI_GPU_TOOLS"
+test ! -e ../third_party/ramulator/build
 cmake -S ../third_party/ramulator -B ../third_party/ramulator/build \
   -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+  -DCMAKE_C_COMPILER="$AI_GPU_HOST_BIN/gcc" \
+  -DCMAKE_CXX_COMPILER="$AI_GPU_HOST_BIN/g++" \
   > "$AI_GPU_SETUP/ramulator-configure.log" 2>&1
+cmake -N -LA ../third_party/ramulator/build \
+  > "$AI_GPU_SETUP/ramulator-cache.txt"
 timeout --kill-after=5s 1200 cmake --build ../third_party/ramulator/build --parallel 2 \
   > "$AI_GPU_SETUP/ramulator-build.log" 2>&1
 make -j2 -C ../third_party softfloat ramulator \
   > "$AI_GPU_SETUP/third-party-build.log" 2>&1
 ```
 
+Check the configure log's compiler identification and the retained cache's
+`CMAKE_CXX_COMPILER` against the selected GNU 11 executable before the build.
 Stop at any failure. Prebuilding Ramulator explicitly is necessary because the
 inherited `third_party/Makefile` invokes its missing-library build with `-j4`;
 an outer `make -j2` does not constrain that nested command. Once the library
@@ -184,12 +221,12 @@ Retain equivalent observations for all three; stop and investigate a mismatch.
 
 ## 4. Inspect the plan, then run the frozen cases
 
-Return to the checkout containing the versioned baseline tools. `plan` is
-read-only and prints prerequisites, identities, selection and blockers. It does
-not build, install, execute a GPU kernel or accept a phase gate.
+Return to the pinned instrumentation checkout containing the baseline tools.
+`plan` is read-only and prints prerequisites, identities, selection and blockers.
+It does not build, install, execute a GPU kernel or accept a phase gate.
 
 ```sh
-cd "$AI_GPU_SOURCE"
+cd "$AI_GPU_INSTRUMENTATION"
 python3 ci/project/baseline.py plan \
   --source "$AI_GPU_SOURCE" --build-dir "$AI_GPU_BUILD" \
   --tool-dir "$AI_GPU_TOOLS" --bundle-manifest ci/project/p01_toolchain.lock.json \
@@ -250,6 +287,15 @@ For diagnosis, repeat `--case` with exact IDs, for example
 `--case gemm-fp16-simx`. A selected subset is identified in the report and cannot
 stand in for the complete six-case matrix. Never reduce case dimensions or
 loosen a tolerance after observing a failure.
+
+For separate clean generated-build evidence, use a previously nonexistent build
+and output directory, for example `--build-dir "$AI_GPU_SOURCE/build64-p01-clean"`
+with `--case gemm-fp16-simx --output "$AI_GPU_WORK/native-clean-smoke-01"`.
+Retain the resulting configure, kernel/runtime, simulator/application build and
+reference records. If that smoke reuses already-built dependency libraries,
+keep their original hashes, compiler identities and build logs; it is not a
+hermetic rebuild of every dependency or prebuilt tool. Neither this recipe nor
+an unexecuted smoke command establishes a passing result.
 
 ## 5. Retain failures and review acceptance separately
 

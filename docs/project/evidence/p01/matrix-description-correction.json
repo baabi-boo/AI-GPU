@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "scope": "Description-only correction; original executed matrix snapshots remain unchanged. Actual attention operand mode is SS.",
+  "original_matrix_sha256": "f0ad2390b983c3e9a0804fc6309d22bb85ba23ba39635309e0193c9a54d6df97",
+  "corrected_matrix_sha256": "d2f570fa241dff720446809e572efecbaed56cc7d14365bf096859d1d764b61f",
+  "changed_fields": [
+    {
+      "case_id": "attention-tf32-simx",
+      "field": "derivation",
+      "before": "RV64 small attention catalog shape with explicit TF32, RS operand mode, NRC=8, four threads/warps/issue slots and one scalar execution block of each kind. STD scalar arithmetic and the same-shape SimX twin are explicit derived coverage.",
+      "after": "RV64 small attention catalog shape with explicit TF32, NRC=8, four threads/warps/issue slots and one scalar execution block of each kind. The kernel uses SS operands for both GEMMs; WGMMA_RS is retained in the command but is unused by this kernel. STD scalar arithmetic and the same-shape SimX twin are explicit derived coverage."
+    },
+    {
+      "case_id": "attention-tf32-rtlsim",
+      "field": "derivation",
+      "before": "RV64 small attention catalog shape with explicit TF32, RS operand mode, NRC=8, four threads/warps/issue slots and one scalar execution block of each kind. STD scalar arithmetic and the same-shape SimX twin are explicit derived coverage.",
+      "after": "RV64 small attention catalog shape with explicit TF32, NRC=8, four threads/warps/issue slots and one scalar execution block of each kind. The kernel uses SS operands for both GEMMs; WGMMA_RS is retained in the command but is unused by this kernel. STD scalar arithmetic and the same-shape SimX twin are explicit derived coverage."
+    }
+  ],
+  "all_other_fields_identical": true,
+  "source_review": "/root/w08e_attention_contract_review",
+  "integration_review": "/root",
+  "erratum": "docs/project/evidence/p01/attention-operand-erratum.md"
+}

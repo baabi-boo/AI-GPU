@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "scope": "Named ordinary numerical baseline and separately scoped supplemental observations; this summary does not close vendor hw_emu or the whole phase.",
+  "gpu_source_revision": "03181532b81fe95b1cfeac2ffb25d8597af689b2",
+  "instrumentation_revision": "e9c9ac01f93b0d84915340999100260f2599ec44",
+  "executed_matrix_sha256": "f0ad2390b983c3e9a0804fc6309d22bb85ba23ba39635309e0193c9a54d6df97",
+  "current_matrix_sha256": "d2f570fa241dff720446809e572efecbaed56cc7d14365bf096859d1d764b61f",
+  "attention_operand_mode": "SS; original RS description corrected by external erratum without changing execution fields",
+  "cases": [
+    {
+      "id": "gemm-fp16-simx",
+      "app": "sgemm_tcu",
+      "driver": "simx",
+      "args": [
+        "-m",
+        "64",
+        "-n",
+        "64",
+        "-k",
+        "64"
+      ],
+      "arithmetic": {
+        "scalar": "STD",
+        "tensor": "TFR"
+      },
+      "outcome": "pass",
+      "reference_marker_verified": true,
+      "bounded_build_and_run_seconds": 0.840592,
+      "highest_sampled_process_group_rss_bytes": 20054016,
+      "command_exit_code": 0,
+      "raw_log_sha256": "ac8d23380dfb91b2c2a5a48a7943b607407fb14b86fee89ef6770f51508bad4a"
+    },
+    {
+      "id": "gemm-fp16-rtlsim",
+      "app": "sgemm_tcu",
+      "driver": "rtlsim",
+      "args": [
+        "-m",
+        "64",
+        "-n",
+        "64",
+        "-k",
+        "64"
+      ],
+      "arithmetic": {
+        "scalar": "STD",
+        "tensor": "TFR"
+      },
+      "outcome": "pass",
+      "reference_marker_verified": true,
+      "bounded_build_and_run_seconds": 12.090699,
+      "highest_sampled_process_group_rss_bytes": 28131328,
+      "command_exit_code": 0,
+      "raw_log_sha256": "a579dc26b4d24a80a5a69f0ba9f1c21440ffd41831f72977c05f0059d39f9080"
+    },
+    {
+      "id": "gemm-bf16-simx",
+      "app": "sgemm_tcu",
+      "driver": "simx",
+      "args": [
+        "-m",
+        "64",
+        "-n",
+        "64",
+        "-k",
+        "64"
+      ],
+      "arithmetic": {
+        "scalar": "STD",
+        "tensor": "TFR"
+      },
+      "outcome": "pass",
+      "reference_marker_verified": true,
+      "bounded_build_and_run_seconds": 50.296714,
+      "highest_sampled_process_group_rss_bytes": 853397504,
+      "command_exit_code": 0,
+      "raw_log_sha256": "a9e85031ea4fd72cbce7b9bb5c9551a5ce02c30468cd99b32d52633ecfad1719"
+    },
+    {
+      "id": "gemm-bf16-rtlsim",
+      "app": "sgemm_tcu",
+      "driver": "rtlsim",
+      "args": [
+        "-m",
+        "64",
+        "-n",
+        "64",
+        "-k",
+        "64"
+      ],
+      "arithmetic": {
+        "scalar": "STD",
+        "tensor": "TFR"
+      },
+      "outcome": "pass",
+      "reference_marker_verified": true,
+      "bounded_build_and_run_seconds": 742.177018,
+      "highest_sampled_process_group_rss_bytes": 3494166528,
+      "command_exit_code": 0,
+      "raw_log_sha256": "3c6d876d8abbe5847e377379b6eafca3fed5c87f2b24edf1ca1c10c8094ee03a"
+    },
+    {
+      "id": "attention-tf32-simx",
+      "app": "flash_attn_tcu_wg",
+      "driver": "simx",
+      "args": [
+        "-N",
+        "32",
+        "-D",
+        "16",
+        "-c",
+        "8",
+        "-t",
+        "8"
+      ],
+      "arithmetic": {
+        "scalar": "STD",
+        "tensor": "TFR"
+      },
+      "outcome": "pass",
+      "reference_marker_verified": true,
+      "bounded_build_and_run_seconds": 54.730764,
+      "highest_sampled_process_group_rss_bytes": 854478848,
+      "command_exit_code": 0,
+      "raw_log_sha256": "9620f570eb4f980da0917eb8c9a4ed23729924ab40174e44bd8e89da203fc2be"
+    },
+    {
+      "id": "attention-tf32-rtlsim",
+      "app": "flash_attn_tcu_wg",
+      "driver": "rtlsim",
+      "args": [
+        "-N",
+        "32",
+        "-D",
+        "16",
+        "-c",
+        "8",
+        "-t",
+        "8"
+      ],
+      "arithmetic": {
+        "scalar": "STD",
+        "tensor": "TFR"
+      },
+      "outcome": "pass",
+      "reference_marker_verified": true,
+      "bounded_build_and_run_seconds": 337.065831,
+      "highest_sampled_process_group_rss_bytes": 2295332864,
+      "command_exit_code": 0,
+      "raw_log_sha256": "271cd02d59864c4ac1f59ea3bd79ce89fc08088804b97e47f27a3699c92b4b01"
+    }
+  ],
+  "additional_observations": {
+    "clean_generated_fp16_simx": "pass",
+    "supplemental_integer_demo_xrtsim": "pass",
+    "vendor_xrt_hw_emu": "blocked",
+    "physical_hardware": "not_run"
+  },
+  "phase_complete": false
+}

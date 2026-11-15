@@ -1,0 +1,144 @@
+{
+  "blockers": [
+    "Required vendor executables were not found on the observed PATH.",
+    "Vendor installation and platform configuration variables were unset, and inspected standard installation roots were absent.",
+    "No supported platform (.xpfm), matching .xclbin or emconfig.json was identified in the clean source worktree and generated builds.",
+    "Vendor release compatibility and license readiness have not been established."
+  ],
+  "command_presence_on_inherited_path": {
+    "emconfigutil": false,
+    "platforminfo": false,
+    "v++": false,
+    "vitis": false,
+    "vivado": false,
+    "xbmgmt": false,
+    "xbutil": false
+  },
+  "environment_presence": {
+    "EMCONFIG_PATH": {
+      "nonempty": false,
+      "present": false
+    },
+    "FPGA_BIN_DIR": {
+      "nonempty": false,
+      "present": false
+    },
+    "PLATFORM": {
+      "nonempty": false,
+      "present": false
+    },
+    "XCLBIN_PATH": {
+      "nonempty": false,
+      "present": false
+    },
+    "XILINX_VITIS": {
+      "nonempty": false,
+      "present": false
+    },
+    "XILINX_VIVADO": {
+      "nonempty": false,
+      "present": false
+    },
+    "XILINX_XRT": {
+      "nonempty": false,
+      "present": false
+    }
+  },
+  "gpu_source_clean": true,
+  "gpu_source_revision": "03181532b81fe95b1cfeac2ffb25d8597af689b2",
+  "license_readiness": "unverified; no license server or entitlement probe was performed",
+  "limitations": [
+    "Absence on the observed PATH and standard roots does not prove a vendor installation cannot exist elsewhere.",
+    "Environment variable values and full PATH are intentionally not retained.",
+    "The file scan covers only the source worktree and its generated builds; external artifact stores were not queried.",
+    "No vendor hw_emu build, DMA, launch, completion or CPU-reference execution was performed.",
+    "Processor rtlsim and vendor-free full-AFU xrtsim cannot substitute for the required vendor hw_emu gate.",
+    "This prerequisite screen does not establish a license entitlement, physical FPGA operation or silicon result."
+  ],
+  "matching_hw_emu_artifacts_identified": false,
+  "observed_at_utc": "2026-11-15 22:05:49 UTC",
+  "observer": "/root/w08a_vendor_blocker_record",
+  "outcome": "blocked",
+  "probe_execution": {
+    "command": "python3 $WORKSPACE/agent-notes/w08a_probe.py --source $SOURCE --observed-at \"2026-11-15 22:05:49 UTC\"",
+    "exit_code": 0,
+    "reproduction": "Materialize the exact source string as w08a_probe.py and supply the clean source worktree and current observation timestamp. The command only reads environment presence, filesystem metadata and source identities.",
+    "source": "import argparse\nimport hashlib\nimport json\nimport os\nfrom pathlib import Path\nimport shutil\nimport subprocess\n\nparser = argparse.ArgumentParser()\nparser.add_argument('--source', type=Path, required=True)\nparser.add_argument('--observed-at', required=True)\nargs = parser.parse_args()\nsource = args.source.resolve(strict=True)\ncommands = ('vivado', 'v++', 'vitis', 'xbutil', 'xbmgmt', 'emconfigutil', 'platforminfo')\nvariables = ('XILINX_XRT', 'XILINX_VITIS', 'XILINX_VIVADO', 'PLATFORM', 'FPGA_BIN_DIR', 'XCLBIN_PATH', 'EMCONFIG_PATH')\nroots = ('/opt/Xilinx', '/opt/xilinx', '/tools/Xilinx', '/opt/amd', '/opt/xilinx/xrt', '/usr/local/xilinx/xrt', '/opt/xilinx/platforms')\nsource_revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source, text=True).strip()\nsource_clean = not subprocess.check_output(['git', 'status', '--porcelain=v1', '--untracked-files=all'], cwd=source, text=True)\nscan_argv = ['rg', '--files', '--hidden', '--no-ignore', '-g', '!.git/**', '-g', '*.xpfm', '-g', '*.xclbin', '-g', 'emconfig.json', '.']\nscan = subprocess.run(scan_argv, cwd=source, capture_output=True, text=True, timeout=20)\nif scan.returncode not in (0, 1):\n    raise RuntimeError('source artifact scan failed')\nmatches = sorted(line.removeprefix('./') for line in scan.stdout.splitlines())\ninputs = ('hw/syn/xilinx/xrt/Makefile', 'tests/regression/common.mk', 'sw/runtime/xrt/Makefile')\nreport = {\n    'schema_version': 1,\n    'observed_at_utc': args.observed_at,\n    'scope': 'Read-only prerequisite observations in the current execution environment. No vendor tool or emulation workload was launched.',\n    'gpu_source_revision': source_revision,\n    'gpu_source_clean': source_clean,\n    'command_presence_on_inherited_path': {name: shutil.which(name) is not None for name in commands},\n    'environment_presence': {name: {'present': name in os.environ, 'nonempty': bool(os.environ.get(name))} for name in variables},\n    'standard_install_root_presence': {name: {'exists': Path(name).exists(), 'is_directory': Path(name).is_dir()} for name in roots},\n    'source_and_generated_build_artifact_scan': {\n        'working_directory': '$SOURCE', 'argv': scan_argv, 'exit_code': scan.returncode,\n        'matching_relative_paths': matches,\n        'scope': 'The clean source worktree and its generated build directories, including ignored files; no scan of unrelated user directories or external storage.'\n    },\n    'source_requirement_files': [{'path': name, 'sha256': hashlib.sha256((source/name).read_bytes()).hexdigest()} for name in inputs],\n    'vendor_release_identified': False,\n    'supported_platform_identified': False,\n    'matching_hw_emu_artifacts_identified': False,\n    'license_readiness': 'unverified; no license server or entitlement probe was performed',\n    'outcome': 'blocked',\n    'limitations': [\n        'Absence on the observed PATH and standard roots does not prove a vendor installation cannot exist elsewhere.',\n        'Environment variable values and full PATH are intentionally not retained.',\n        'The file scan covers only the source worktree and its generated builds; external artifact stores were not queried.',\n        'No vendor hw_emu build, DMA, launch, completion or CPU-reference execution was performed.',\n        'Processor rtlsim and vendor-free full-AFU xrtsim cannot substitute for the required vendor hw_emu gate.',\n        'This prerequisite screen does not establish a license entitlement, physical FPGA operation or silicon result.'\n    ]\n}\nif any(report['command_presence_on_inherited_path'].values()) or any(x['exists'] for x in report['standard_install_root_presence'].values()) or any(x['nonempty'] for x in report['environment_presence'].values()) or matches:\n    report['requires_follow_up'] = 'Some candidate prerequisite was observed; inspect it before claiming vendor availability.'\nprint(json.dumps(report, indent=2, sort_keys=True))\n",
+    "source_sha256": "a472b053b2aabba9f45217e2ba445286f3128d95e41a24f7672699b5ead87df5",
+    "working_directory": "$INSTRUMENTATION"
+  },
+  "schema_version": 1,
+  "scope": "Read-only prerequisite observations in the current execution environment. No vendor tool or emulation workload was launched.",
+  "source_and_generated_build_artifact_scan": {
+    "argv": [
+      "rg",
+      "--files",
+      "--hidden",
+      "--no-ignore",
+      "-g",
+      "!.git/**",
+      "-g",
+      "*.xpfm",
+      "-g",
+      "*.xclbin",
+      "-g",
+      "emconfig.json",
+      "."
+    ],
+    "exit_code": 1,
+    "matching_relative_paths": [],
+    "scope": "The clean source worktree and its generated build directories, including ignored files; no scan of unrelated user directories or external storage.",
+    "working_directory": "$SOURCE"
+  },
+  "source_requirement_files": [
+    {
+      "path": "hw/syn/xilinx/xrt/Makefile",
+      "sha256": "b784d5f21a5064b6e10a5bde113bfdc422823116af58a5676a9a72e666479de3"
+    },
+    {
+      "path": "tests/regression/common.mk",
+      "sha256": "4164a783137b2f6e594ff3795f5911233227c3e4bfcb0319095cd6e78acf9b56"
+    },
+    {
+      "path": "sw/runtime/xrt/Makefile",
+      "sha256": "89dded3790a87aa3aeeea5b1dfdfb638380efeb4dd5821610b48972a348f5b5b"
+    }
+  ],
+  "source_requirements": [
+    "hw/syn/xilinx/xrt/Makefile requires PLATFORM and XILINX_VITIS, invokes platforminfo, the vendor v++ linker and Vivado, and creates matching vortex_afu.xclbin and emconfig.json artifacts.",
+    "tests/regression/common.mk explicitly selects XCL_EMULATION_MODE=hw_emu and matching XCLBIN_PATH/EMCONFIG_PATH for the hw_emu target.",
+    "sw/runtime/xrt/Makefile selects the local XRTSIM shim only for TARGET=xrtsim; that vendor-free path does not qualify vendor hw_emu."
+  ],
+  "standard_install_root_presence": {
+    "/opt/Xilinx": {
+      "exists": false,
+      "is_directory": false
+    },
+    "/opt/amd": {
+      "exists": false,
+      "is_directory": false
+    },
+    "/opt/xilinx": {
+      "exists": false,
+      "is_directory": false
+    },
+    "/opt/xilinx/platforms": {
+      "exists": false,
+      "is_directory": false
+    },
+    "/opt/xilinx/xrt": {
+      "exists": false,
+      "is_directory": false
+    },
+    "/tools/Xilinx": {
+      "exists": false,
+      "is_directory": false
+    },
+    "/usr/local/xilinx/xrt": {
+      "exists": false,
+      "is_directory": false
+    }
+  },
+  "supported_platform_identified": false,
+  "vendor_release_identified": false
+}

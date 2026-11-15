@@ -1,0 +1,292 @@
+#!/usr/bin/env python3
+# Licensed under the Apache License, Version 2.0.
+"""Bounded supplemental full-AFU smoke; never substitutes for vendor hw_emu."""
+
+import hashlib
+import json
+import os
+from pathlib import Path
+import sys
+
+
+WORK = Path(__file__).resolve().parent
+INSTRUMENTATION = WORK / "AI-GPU"
+sys.path.insert(0, str(INSTRUMENTATION / "ci/project"))
+import baseline as runner
+from baseline_host import collect_host
+from baseline_inventory import collect_build, collect_source, collect_tools, hash_artifacts
+from baseline_process import GIB, MIB, run_bounded
+
+
+SOURCE_REVISION = "03181532b81fe95b1cfeac2ffb25d8597af689b2"
+HELPER_REVISION = "e9c9ac01f93b0d84915340999100260f2599ec44"
+HEADER_SHA256 = "0f29b583df138cd9a123aa03498c8a049b71a1afcc0ff90a6dbaac44514385a4"
+HOST_COMPILERS = {
+    "gcc": "9e5b07c122ff64546e157e735167e7c4d53654836340c6c53d91cb9104a897e1",
+    "g++": "58d358c7d7192b2e0fb3382b1006c1144b528076c5f4ea6d5d582a725526fc73",
+}
+SOURCE = WORK / "AI-GPU-baseline"
+BUILD = SOURCE / "build64-p01-xrtsim"
+OUTPUT = WORK / "p01-xrtsim-run"
+TOOLS = WORK / "tools-v3.0.2"
+HEADERS = WORK / "host-headers"
+LOCK = INSTRUMENTATION / "ci/project/p01_toolchain.lock.json"
+PATHS = {"source": SOURCE, "build": BUILD, "tools": TOOLS, "output": OUTPUT}
+CONFIGS = " ".join((
+    "-DVX_CFG_NUM_CLUSTERS=1", "-DVX_CFG_NUM_CORES=1",
+    "-DVX_CFG_NUM_WARPS=4", "-DVX_CFG_NUM_THREADS=4",
+    "-DVX_CFG_ISSUE_WIDTH=1", "-DVX_CFG_FPU_TYPE_STD",
+))
+COPIES = {
+    "sw/runtime/xrt/Makefile": "sw/runtime/xrt/Makefile",
+    "sim/xrtsim/Makefile": "sim/xrtsim/Makefile",
+    "sim/xrtsim/verilator.vlt": "sim/xrtsim/verilator.vlt.in",
+    "tests/regression/demo/Makefile": "tests/regression/demo/Makefile",
+}
+SOURCE_FILES = list(COPIES.values()) + [
+    "sw/runtime/xrt/vortex.cpp", "sim/xrtsim/vortex_afu_shim.sv",
+    "sim/xrtsim/xrt_c.cpp", "sim/xrtsim/xrt_c.h",
+    "sim/xrtsim/xrt_sim.cpp", "sim/xrtsim/xrt_sim.h",
+    "hw/rtl/afu/xrt/vortex_afu.v", "hw/rtl/afu/common/VX_afu_wrap.sv",
+    "tests/regression/demo/main.cpp", "tests/regression/demo/kernel.cpp",
+    "tests/regression/demo/common.h",
+]
+STAMPS = ["tests/regression/demo/config.stamp", "sw/runtime/xrt_config.stamp",
+          "sw/runtime/xrtsim_config.stamp"]
+MARKERS = ["upload source buffer0", "upload source buffer1", "load kernel module",
+           "launch kernel", "download destination buffer", "wait for completion",
+           "verify result", "PASSED!"]
+SELF_IDENTITY = hash_artifacts(WORK, [Path(__file__).name])[0]
+
+
+class StopCommand(Exception):
+    pass
+
+
+def snapshot(root, names, prefix):
+    result = []
+    for identity in hash_artifacts(root, names):
+        if identity["size_bytes"] > MIB:
+            raise ValueError("snapshot input exceeds one MiB")
+        data = (root / identity["path"]).read_bytes()
+        if hashlib.sha256(data).hexdigest() != identity["sha256"]:
+            raise ValueError("snapshot input changed while reading")
+        name = "artifacts/" + prefix + identity["path"].replace("/", "_") + ".txt"
+        with (OUTPUT / name).open("x", encoding="utf-8") as stream:
+            stream.write(runner._redact(data.decode("utf-8"), PATHS))
+        result.append({**hash_artifacts(OUTPUT, [name])[0], "source": identity,
+                       "redaction": "source/build/tool/output prefixes replaced"})
+    return result
+
+
+def build_identity():
+    observed = collect_build(BUILD, SOURCE)
+    if observed["outcome"] != "pass":
+        raise ValueError("generated baseline build identity failed")
+    observed["supplemental_build_inputs"] = hash_artifacts(BUILD, list(COPIES))
+    for destination, origin in COPIES.items():
+        expected = (SOURCE / origin).read_text(encoding="utf-8")
+        if origin.endswith(".in"):
+            expected = expected.replace("@VORTEX_HOME@", str(SOURCE))
+        if (BUILD / destination).read_text(encoding="utf-8") != expected:
+            raise ValueError("supplemental copied input mismatch: " + destination)
+    return observed
+
+
+def two_compile_workers(text):
+    tokens = text.split()
+    positions = [index for index, token in enumerate(tokens) if token.startswith("-j")]
+    return (len(positions) == 1 and tokens[positions[0]] == "-j"
+            and positions[0] + 1 < len(tokens) and tokens[positions[0] + 1] == "2")
+
+
+def capture_effective_configuration():
+    expected = runner._defines(CONFIGS)
+    for identity in hash_artifacts(BUILD, STAMPS):
+        if identity["size_bytes"] > MIB:
+            raise ValueError("effective configuration exceeds one MiB")
+        text = (BUILD / identity["path"]).read_text(encoding="utf-8")
+        defines = runner._defines(text)
+        if any(defines.get(key) != value for key, value in expected.items()):
+            raise ValueError("effective application/runtime/model configuration mismatch")
+        if (defines.get("VX_CFG_XLEN") != "64"
+                or defines.get("VX_CFG_FPU_TYPE", "STD") != "STD"
+                or any(key.startswith("VX_CFG_FPU_TYPE_") and key != "VX_CFG_FPU_TYPE_STD"
+                       for key in defines)
+                or "VX_CFG_EXT_TCU_ENABLE" in defines):
+            raise ValueError("effective RV64/native scalar/no-tensor contract mismatch")
+        if identity["path"].endswith("/xrt_config.stamp") and "XRTSIM" not in defines:
+            raise ValueError("runtime did not select the local XRT shim")
+        if identity["path"].endswith("/xrtsim_config.stamp"):
+            if "NOXRT" not in defines or not two_compile_workers(text):
+                raise ValueError("AFU model did not select NOXRT/two compile workers")
+    return snapshot(BUILD, STAMPS, "effective-")
+
+
+def main():
+    report = {
+        "schema_version": 1, "scope": "Supplemental vendor-free full-AFU integer demo",
+        "supplemental": True, "qualifies_P01_A03": False, "phase_complete": False,
+        "driver": "xrt", "target": "xrtsim", "configs": CONFIGS,
+        "args": ["-n1"], "expected_points": 16, "seed": 50,
+        "arithmetic": {"scalar": "STD", "tensor": "not enabled or exercised"},
+        "reviewed_helpers_revision": HELPER_REVISION, "harness": SELF_IDENTITY,
+        "state": "preflight", "outcome": "not_run", "commands": [], "checks": [],
+        "started_at": runner._now(), "finished_at": None,
+        "budget": {"jobs": 2, "timeout_seconds": 1800, "min_free_bytes": 15 * GIB,
+                   "max_rss_bytes": 6 * GIB, "max_log_bytes": 16 * MIB},
+        "limitations": [
+            "This local XRT C shim and full-AFU Verilator smoke cannot accept vendor hw_emu gate P01-A03.",
+            "The shim's xrtBOSync is a no-op; vendor runtime, PCIe, platform timing and driver coherence are not qualified.",
+            "The always-ready simulated AXI slave does not qualify comprehensive backpressure, ordering, DMA boundary or contention behavior.",
+            "Integer demo reference success is not tensor/FP arithmetic edge qualification, physical FPGA execution or silicon evidence.",
+            "The fresh generated build reuses separately hash-recorded dependency libraries originally built with GCC 14.2.",
+            "Process-group memory and disk budgets are polled; no cgroup allocation or hard resource quota is certified.",
+            "Tool and host hashes cover the recorded primary files, not every shared library or system header.",
+            "Raw command logs can contain workspace paths; publication must retain raw-to-sanitized hash mappings.",
+        ],
+    }
+    created = False
+    environment = runner.clean_environment(jobs=2)
+    environment["PATH"] = ":".join((str(WORK / "host-gcc11/usr/bin"),
+                                    str(WORK / "baseline-venv/bin"), environment["PATH"]))
+    environment["CPLUS_INCLUDE_PATH"] = str(HEADERS)
+
+    def checkpoint():
+        runner._checkpoint(OUTPUT, report, PATHS)
+
+    def stable(label):
+        observed = {
+            "stage": label, "source": collect_source(SOURCE),
+            "tools": collect_tools(TOOLS, LOCK), "host": collect_host(environment),
+            "dependencies": runner._dependency_identity(SOURCE),
+            "tooling": runner.collect_tooling(),
+            "header": hash_artifacts(HEADERS, ["uuid/uuid.h"])[0],
+            "harness": hash_artifacts(WORK, [Path(__file__).name])[0],
+        }
+        report["checks"].append(observed)
+        if (not runner._same_source(report["source_before"], observed["source"])
+                or observed["tools"] != report["tools_before"]
+                or observed["host"] != report["host_before"]
+                or observed["dependencies"] != report["dependencies_before"]
+                or observed["tooling"]["outcome"] != "pass"
+                or observed["tooling"]["files"] != report["tooling_before"]["files"]
+                or observed["header"] != report["header_before"]
+                or observed["harness"] != SELF_IDENTITY):
+            raise ValueError("source/tool/host/dependency/helper/header/harness identity drift")
+
+    def command(name, argv, configured=False):
+        stable("before-" + name)
+        current = dict(environment)
+        if configured:
+            current["CONFIGS"] = CONFIGS
+        entry = {"id": name, "argv": argv, "cwd": "$BUILD", "outcome": "not_run",
+                 "log": "logs/" + name + ".log",
+                 "environment": {key: current[key] for key in (
+                     "MAKEFLAGS", "THREADS", "CCACHE_DISABLE", "OBJCACHE", "CPLUS_INCLUDE_PATH")}}
+        if configured:
+            entry["environment"]["CONFIGS"] = CONFIGS
+        report["commands"].append(entry)
+        report["active_command"] = name
+        checkpoint()
+        entry.update(run_bounded(argv, BUILD, current, OUTPUT / entry["log"],
+                                 timeout_seconds=1800, min_free_bytes=15 * GIB,
+                                 max_rss_bytes=6 * GIB, max_log_bytes=16 * MIB,
+                                 resource_paths=(SOURCE, TOOLS, OUTPUT)))
+        report.pop("active_command", None)
+        stable("after-" + name)
+        checkpoint()
+        if entry["outcome"] != "pass":
+            report["outcome"] = entry["outcome"]
+            report["reason"] = name + ": " + str(entry.get("reason"))
+            raise StopCommand()
+
+    try:
+        for path in (WORK, INSTRUMENTATION, SOURCE, TOOLS, HEADERS, LOCK):
+            runner._path(path, exists=True)
+        for path in (BUILD, OUTPUT):
+            runner._path(path)
+            if os.path.lexists(path):
+                raise ValueError("build and output must both be fresh; refusing an existing path")
+        OUTPUT.mkdir(mode=0o700)
+        created = True
+        (OUTPUT / "logs").mkdir()
+        (OUTPUT / "artifacts").mkdir()
+        report["source_before"] = collect_source(SOURCE)
+        report["tools_before"] = collect_tools(TOOLS, LOCK)
+        report["host_before"] = collect_host(environment)
+        report["dependencies_before"] = runner._dependency_identity(SOURCE)
+        report["tooling_before"] = runner.collect_tooling()
+        report["header_before"] = hash_artifacts(HEADERS, ["uuid/uuid.h"])[0]
+        report["source_files"] = hash_artifacts(SOURCE, SOURCE_FILES)
+        if (report["source_before"]["revision"] != SOURCE_REVISION
+                or report["source_before"]["dirty"]
+                or report["header_before"]["sha256"] != HEADER_SHA256
+                or any(report[key]["outcome"] != "pass" for key in (
+                    "source_before", "tools_before", "host_before", "dependencies_before", "tooling_before"))):
+            raise ValueError("pinned prerequisites are unavailable or disagree with the frozen identities")
+        if any(report["host_before"]["tools"][name]["sha256"] != digest
+               for name, digest in HOST_COMPILERS.items()):
+            raise ValueError("host compiler differs from the recorded GNU 11 installation")
+        for identity in report["tooling_before"]["files"]:
+            committed = runner._git(INSTRUMENTATION, "show", HELPER_REVISION + ":ci/project/" + identity["path"])
+            if hashlib.sha256(committed).hexdigest() != identity["sha256"]:
+                raise ValueError("runtime helper differs from its reviewed committed bytes")
+        report["tooling_snapshots"] = runner._snapshot_tooling(OUTPUT, report["tooling_before"])
+        report["source_snapshots"] = snapshot(SOURCE, SOURCE_FILES, "source-")
+        report["header_snapshots"] = snapshot(HEADERS, ["uuid/uuid.h"], "header-")
+        report["header_provenance"] = snapshot(WORK / "baseline-runs", ["uuid-header.json"], "header-")
+        report["harness_snapshot"] = snapshot(WORK, [Path(__file__).name], "harness-")
+        report["state"] = "running"
+        checkpoint()
+        BUILD.mkdir(mode=0o700)
+        command("configure", [str(SOURCE / "configure"), "--xlen=64",
+                              "--osversion=ubuntu/focal", "--tooldir=" + str(TOOLS)])
+        report["build_before"] = build_identity()
+        command("kernel-library", ["make", "-j2", "-C", "sw/kernel"])
+        command("runtime-stub", ["make", "-j2", "-C", "sw/runtime/stub"])
+        report["build_at_launch"] = build_identity()
+        command("demo-xrtsim", ["./ci/blackbox.sh", "--driver=xrt", "--target=xrtsim",
+                                "--app=demo", "--args=-n1"], configured=True)
+        report["build_after"] = build_identity()
+        report["configuration_artifacts"] = capture_effective_configuration()
+        report["generated_snapshots"] = snapshot(BUILD, [
+            ".config.stamp", "config.mk", "sw/VX_config.h", "sw/VX_types.h",
+            "hw/VX_config.vh", "hw/VX_types.vh", "ci/blackbox.sh", *COPIES], "generated-")
+        report["binary_identities"] = hash_artifacts(BUILD, [
+            "tests/regression/demo/demo", "tests/regression/demo/kernel.vxbin",
+            "sw/runtime/libvortex-xrt.so", "sw/runtime/libxrtsim.so"])
+        log = OUTPUT / "logs/demo-xrtsim.log"
+        lines = log.read_text(encoding="utf-8", errors="replace").splitlines()
+        positions = [lines.index(marker) for marker in MARKERS]
+        if (any(lines.count(marker) != 1 for marker in MARKERS)
+                or positions != sorted(positions)
+                or "data type: integer" not in lines or "number of points: 16" not in lines
+                or not runner.reference_passed(log)):
+            raise ValueError("integer reference or ordered DMA/launch/completion markers are absent or ambiguous")
+        report["reference_marker_verified"] = True
+        report["ordered_stage_markers"] = MARKERS
+        report["native_scalar_flags_verified"] = True
+        stable("final")
+        report["outcome"] = "pass"
+    except StopCommand:
+        pass
+    except (OSError, ValueError, RuntimeError, UnicodeError, KeyError) as error:
+        report["outcome"] = "fail" if report["commands"] else "blocked"
+        report["reason"] = str(error)
+    except KeyboardInterrupt:
+        report["outcome"] = "fail"
+        report["reason"] = "execution interrupted"
+    finally:
+        report["state"] = "finished"
+        report["finished_at"] = runner._now()
+        report.pop("active_command", None)
+        if created:
+            checkpoint()
+    print(json.dumps({key: runner._redact(report.get(key), PATHS) for key in (
+        "outcome", "reason", "supplemental", "qualifies_P01_A03", "state", "finished_at")}, indent=2))
+    return 0 if report["outcome"] == "pass" else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

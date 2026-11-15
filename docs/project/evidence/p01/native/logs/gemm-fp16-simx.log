@@ -1,0 +1,40 @@
+CONFIGS=-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=8 -DVX_CFG_ISSUE_WIDTH=2 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=fp16 -DOTYPE=fp32 -DVX_CFG_TCU_FP16_ENABLE
+Running: CONFIGS="-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=8 -DVX_CFG_ISSUE_WIDTH=2 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=fp16 -DOTYPE=fp32 -DVX_CFG_TCU_FP16_ENABLE" make -C "./ci/../tests/regression/sgemm_tcu" runtime-simx > /dev/null
+Running: OPTS="-m 64 -n 64 -k 64" CONFIGS="-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=8 -DVX_CFG_ISSUE_WIDTH=2 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=fp16 -DOTYPE=fp32 -DVX_CFG_TCU_FP16_ENABLE" make -C "./ci/../tests/regression/sgemm_tcu" run-simx
+make: Entering directory '$BUILD/tests/regression/sgemm_tcu'
+CONFIGS="-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=8 -DVX_CFG_ISSUE_WIDTH=2 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=fp16 -DOTYPE=fp32 -DVX_CFG_TCU_FP16_ENABLE"     make -C $BUILD/sw/runtime/stub DESTDIR=$BUILD/sw/runtime
+make[1]: Entering directory '$BUILD/sw/runtime/stub'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '$BUILD/sw/runtime/stub'
+CONFIGS="-DVX_CFG_NUM_CLUSTERS=1 -DVX_CFG_NUM_CORES=1 -DVX_CFG_NUM_WARPS=4 -DVX_CFG_NUM_THREADS=8 -DVX_CFG_ISSUE_WIDTH=2 -DVX_CFG_EXT_TCU_ENABLE -DVX_CFG_TCU_TYPE_TFR -DVX_CFG_FPU_TYPE_STD -DITYPE=fp16 -DOTYPE=fp32 -DVX_CFG_TCU_FP16_ENABLE"     make -C $BUILD/sw/runtime/simx DESTDIR=$BUILD/sw/runtime
+make[1]: Entering directory '$BUILD/sw/runtime/simx'
+DESTDIR=$BUILD/sw/runtime make -C $BUILD/sim/simx $BUILD/sw/runtime/libsimx.so
+make[2]: Entering directory '$BUILD/sim/simx'
+make[2]: Leaving directory '$BUILD/sim/simx'
+make[1]: Leaving directory '$BUILD/sw/runtime/simx'
+LD_LIBRARY_PATH=$BUILD/sw/runtime: VORTEX_DRIVER=simx ./sgemm_tcu -m 64 -n 64 -k 64
+open device connection
+input data type: fp16 (id=2)
+output data type: fp32 (id=0)
+WMMA Core Dimension: M=4, N=2, K=2
+WMMA Tile Dimension: M=8, N=8, K=16
+matrix A: 64x64
+matrix B: 64x64
+matrix C: 64x64
+allocate device memory
+A_addr=0x30000
+B_addr=0x32000
+C_addr=0x34000
+upload matrix A buffer
+upload matrix B buffer
+load kernel module
+[iter 0] launch kernel
+[iter 0] download destination buffer
+[iter 0] wait for completion
+[iter 0] Elapsed time: 188 ms
+[iter 0] verify result
+[iter 0] match (0 errors)
+cleanup
+PERF: instrs=19104, cycles=29871, IPC=0.640
+PASSED!
+make: Leaving directory '$BUILD/tests/regression/sgemm_tcu'

@@ -9,18 +9,20 @@ remain unassigned until an actual owner is identified.
 
 ## Start here: reproduce, then extend
 
-**Next bounded action: finish P01-T03 with the verified host compiler, then run
-P01-T04's frozen six-case matrix.** The environment inventory, immutable toolchain
-lock, native matrix and bounded runner are implemented. The clean execution
-checkout has its pinned submodules and minimal RV64 tools; dependency, kernel
-library and runtime builds have passed. The first FP16 SimX attempt stopped at a
-GCC 14.2 spdlog/fmt compilation diagnostic before numerical execution. Retain that
-failure, record the replacement compiler identity and use a fresh build directory.
+**Next bounded action: resolve P01-T05's vendor `hw_emu` prerequisite blocker.**
+P01-A01's clean generated-build and P01-A02's complete six-case native numerical
+packet are independently reviewed and accepted. The environment inventory,
+immutable toolchain lock, native matrix and bounded runner are implemented.
+FP16/BF16 GEMM and TF32 attention pass on both SimX and native processor RTL;
+the fresh FP16 SimX build and supplemental full-AFU integer `xrtsim` smoke also
+pass. Identify a qualified vendor release and supported platform, freeze their
+identities and resource budget, then obtain the required DMA/launch/completion
+evidence. Preserve the earlier GCC 14 spdlog/fmt and missing-`ccache` failures.
 
 Follow the [P01 runbook](p01-baseline-runbook.md). The two-worker budget, 15 GiB
 disk reserve and per-command memory/log/time limits remain part of the packet.
-No P01 acceptance gate is closed by this implementation checkpoint. Check the
-actual execution state rather than carrying forward an earlier setup snapshot:
+P01 remains blocked on A03 and P02 remains not started. Check the actual
+execution state and accepted reports before extending the baseline:
 
 ```sh
 git status --short
@@ -40,10 +42,14 @@ belong in [status](status.md) and the reviewed phase evidence.
 
 Short `Txx` dependency references use the work item's own phase prefix.
 
-T01/T02 now have executable tooling and a frozen contract. T03/T04 are being
-executed; T05 is blocked by missing vendor `hw_emu` tools/platform. T06 must retain
-the compiler failure, review each required result, and attach compatible evidence
-before any acceptance or phase-completion change.
+T01/T02 have executable tooling and a frozen contract. T03/T04 are supported by
+the accepted [clean-build](evidence/p01-build.json) and
+[six-case numerical](evidence/p01-native.json) reports. T06 has retained and
+independently reviewed the compact packet, historical failures and attention SS
+coverage correction. T05 remains [blocked](evidence/p01-xrt-blocked.json) by
+missing vendor `hw_emu` tools/platform. No phase-completion change is justified
+while T05 remains blocked. The [handoff](p01-handoff.md) records exact source/tool
+identities, review boundaries and the next integration obligation.
 
 | Work item | Deliverable and completion check | Prerequisite / accountable role | Gate supported |
 |---|---|---|---|

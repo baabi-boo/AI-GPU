@@ -5,7 +5,8 @@ Dependency: **P00**. Accountable role: **Verification lead**.
 
 ## Implementation checkpoint
 
-P01 is `in_progress`; its acceptance evidence array is still empty. The
+P01 is `blocked` on vendor hardware emulation. Its acceptance evidence records
+passing A01/A02 reports and the explicitly blocked A03 report. The
 [runbook](../p01-baseline-runbook.md) now connects an immutable
 [toolchain lock](../../../ci/project/p01_toolchain.lock.json), verified
 [bootstrap](../../../ci/project/baseline_bootstrap.py), frozen
@@ -14,13 +15,23 @@ P01 is `in_progress`; its acceptance evidence array is still empty. The
 process-limit and failure-retention tests exercise this tooling independently of
 GPU workloads.
 
-The clean execution source is `03181532b81fe95b1cfeac2ffb25d8597af689b2`.
-Pinned submodules/tools and dependency, kernel-library and runtime builds are
-prepared. An initial FP16 SimX build failed in the pinned spdlog/fmt dependency
-under GCC 14.2 before the workload ran; its failure is retained while a verified
-host compiler is prepared. Native numerical results and their review remain
-outstanding. Full vendor XRT `hw_emu` is blocked by missing tools/platform, so
-neither processor RTL nor supplemental `xrtsim` can close P01-A03.
+The clean execution source is `03181532b81fe95b1cfeac2ffb25d8597af689b2`, with
+instrumentation at `e9c9ac01f93b0d84915340999100260f2599ec44`. The verified GNU 11
+host compiler, pinned submodules/tools and dependency, kernel-library and runtime
+builds are prepared. All six FP16/BF16 GEMM and TF32 attention cases pass their
+unchanged CPU references on SimX and native processor RTL. A separate fresh
+generated FP16 SimX build also passes. Independent reviews accept
+[P01-A01](../evidence/p01-build.json) and [P01-A02](../evidence/p01-native.json).
+The supplemental full-AFU vendor-free `xrtsim` smoke passes its 16-point integer
+reference; it remains separate from the required vendor integration.
+
+The initial GCC 14 spdlog/fmt and missing-`ccache` compilation failures are
+preserved in the [historical packet](../evidence/p01/history/README.md). The
+attention kernel uses SS operands for both GEMMs; read the original matrix
+descriptions with the [coverage erratum](../evidence/p01/attention-operand-erratum.md).
+Full vendor XRT `hw_emu` is blocked by missing tools/platform, so neither
+processor RTL nor supplemental `xrtsim` can close P01-A03. See the
+[handoff](../p01-handoff.md) for the current execution and publication checkpoint.
 
 ## Goal and boundary
 
@@ -75,11 +86,11 @@ RV32 instruction-count parity applies to its soft-float behavior.
 
 ## Deliverables and exit acceptance
 
-| Gate | Required deliverable and proof | Evidence level |
-|---|---|---|
-| `P01-A01` | Clean-build recipe and successful build logs with pinned tools, submodules and generated configuration hashes. | `simulated` |
-| `P01-A02` | Native FP16/BF16 tensor GEMM and supported small attention reference results on SimX and native RTL, with exact cases/configurations. | `rtl_verified` |
-| `P01-A03` | Full XRT `hw_emu` integration report covering DMA, launch and completion; unavailable integration remains blocked, not passed. | `rtl_verified` |
+| Gate | Required deliverable and proof | Evidence level | Disposition |
+|---|---|---|---|
+| `P01-A01` | Clean-build recipe and successful build logs with pinned tools, submodules and generated configuration hashes. | `simulated` | [Accepted](../evidence/p01-build.json); fresh generated build with separately pinned reused dependencies |
+| `P01-A02` | Native FP16/BF16 tensor GEMM and supported small attention reference results on SimX and native RTL, with exact cases/configurations. | `rtl_verified` | [Accepted](../evidence/p01-native.json); all six reference checks pass |
+| `P01-A03` | Full XRT `hw_emu` integration report covering DMA, launch and completion; unavailable integration remains blocked, not passed. | `rtl_verified` | [Blocked](../evidence/p01-xrt-blocked.json); qualified vendor tools/platform unavailable |
 
 ## Evidence distinctions and stop rules
 

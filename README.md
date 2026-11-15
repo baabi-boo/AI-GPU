@@ -14,12 +14,16 @@ simulator configuration. “NVIDIA-style” describes the ambition of programmab
 compute, specialized matrix units, fast memory and usable software. It does not
 mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
-**Current stage: P01 — reproducible baseline in progress.** P00 is accepted;
-the frozen native matrix, pinned tool bootstrap and bounded execution runner are
-implemented. Native execution and its reviewed evidence packet are underway.
+**Current stage: P01 — reproducible baseline, blocked on vendor hardware
+emulation.** The baseline tooling is implemented, all six FP16/BF16 GEMM and
+TF32 attention executions pass on SimX and native processor RTL, and the fresh
+generated-build check passes. [P01-A01](docs/project/evidence/p01-build.json)
+and [P01-A02](docs/project/evidence/p01-native.json) are accepted after independent
+review. [P01-A03](docs/project/evidence/p01-xrt-blocked.json) remains blocked by
+missing qualified vendor XRT `hw_emu` tools/platform.
 The authoritative [status](docs/project/status.md) and
 [phase gates](docs/project/roadmap.json) separate implementation from acceptance;
-no P01 gate is accepted yet.
+P00 remains complete, P01 remains incomplete, and P02 has not started.
 
 ## Start here
 
@@ -27,6 +31,7 @@ no P01 gate is accepted yet.
 - See the development sequence: [roadmap](ROADMAP.md).
 - Pick the next bounded task: [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
 - Reproduce the current phase: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
+- Continue from the recorded checkpoint: [P01 handoff](docs/project/p01-handoff.md).
 - Begin contributing: [developer guide](docs/project/developer-guide.md), [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md).
 - Find everything else: [project documentation](docs/project/index.md) and [technical documentation](docs/index.md).
 
@@ -120,9 +125,14 @@ identifies the minimal immutable tool bundles; the
 bounded logs and failure checkpoints.
 
 Follow the [runbook](docs/project/p01-baseline-runbook.md) for preparation and
-execution. Passing tooling tests does not establish a numerical baseline.
+execution. The current source-root suite passes 346 tooling/governance tests;
+those tests do not establish a numerical baseline. The attention kernel uses
+shared-memory operands for both GEMMs; its original matrix prose is corrected
+by the [operand coverage erratum](docs/project/evidence/p01/attention-operand-erratum.md).
 P01 also requires full XRT `hw_emu` integration; unavailable vendor tools or a
-missing platform remain an explicit blocker to phase closure.
+missing platform remain an explicit blocker to phase closure. A supplemental
+16-point integer demo passed through the full-AFU vendor-free `xrtsim` model;
+that result does not close the vendor-emulation gate.
 
 ## Evidence and engineering rules
 

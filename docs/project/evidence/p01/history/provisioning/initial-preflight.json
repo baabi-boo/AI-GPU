@@ -1,0 +1,183 @@
+{
+  "asset": {
+    "actual_sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+    "expected_sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+    "matches": true,
+    "path": "docs/assets/img/vortex_framework_stack.svg"
+  },
+  "blockers": [
+    "required PATH tool missing: cmake",
+    "required PATH tool missing: riscv_compiler",
+    "required PATH tool missing: llvm_clang",
+    "required PATH tool missing: verilator",
+    "submodule third_party/cocogfx: not_initialized",
+    "submodule third_party/cvfpu: not_initialized",
+    "submodule third_party/hardfloat: not_initialized",
+    "submodule third_party/ramulator: not_initialized",
+    "submodule third_party/softfloat: not_initialized"
+  ],
+  "limitations": [
+    "Read-only offline prerequisite screen; no installer, download, build, test workload or cleanup ran.",
+    "Tool availability means executable names are on PATH, not verified versions or Vortex target support.",
+    "Configured tools outside PATH are not searched; activate the intended environment before this screen.",
+    "Toolchain tags are source pins, not verification of installed binaries, libraries or bundle hashes.",
+    "Working-tree status covers tracked files only; inventory untracked inputs before recording evidence.",
+    "Resource values are a snapshot, not a build budget; nested builds may exceed an outer job limit.",
+    "Linux MemAvailable may describe host RAM rather than a container/cgroup limit; verify the effective allocation separately.",
+    "No board, license, platform, PDK, IP, physical measurement, funding or manufacturing approval is certified.",
+    "Simulation tool screen combines native SimX and processor RTL prerequisites; it is not a SimX-only minimum."
+  ],
+  "outcome": "blocked",
+  "pins": {
+    "FIRESIM_REV": "57bb93f1e23daf46198659ddd93608f70121fee0",
+    "GEM5_REV": "v25.0.0.1",
+    "TOOLCHAIN_REV": "v3.0.2",
+    "VORTEX_VERSION": "3.0"
+  },
+  "resources": {
+    "available_ram_bytes": 9521197056,
+    "free_disk_bytes": 62216716288,
+    "minimum_free_gib": 15.0
+  },
+  "schema_version": 1,
+  "source": {
+    "python_version": "3.12.14",
+    "revision": "03181532b81fe95b1cfeac2ffb25d8597af689b2",
+    "tracked_changes": false
+  },
+  "submodules": {
+    "declared_count": 5,
+    "entries": [
+      {
+        "path": "third_party/cocogfx",
+        "revision": "b1befdb36df8af7ac9e2c96acaf81957aab5d107",
+        "status": "not_initialized"
+      },
+      {
+        "path": "third_party/cvfpu",
+        "revision": "79e453139072df42c9ec8f697132ba485d74e23d",
+        "status": "not_initialized"
+      },
+      {
+        "path": "third_party/hardfloat",
+        "revision": "aaf5736dffa521603b681fd5853760c671446c85",
+        "status": "not_initialized"
+      },
+      {
+        "path": "third_party/ramulator",
+        "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+        "status": "not_initialized"
+      },
+      {
+        "path": "third_party/softfloat",
+        "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4",
+        "status": "not_initialized"
+      }
+    ],
+    "errors": []
+  },
+  "tier": "simulation",
+  "tools": {
+    "circt_opt": {
+      "available": false,
+      "candidates": [
+        "circt-opt"
+      ],
+      "required": false
+    },
+    "circt_verilog": {
+      "available": false,
+      "candidates": [
+        "circt-verilog"
+      ],
+      "required": false
+    },
+    "cmake": {
+      "available": false,
+      "candidates": [
+        "cmake"
+      ],
+      "required": true
+    },
+    "firtool": {
+      "available": false,
+      "candidates": [
+        "firtool"
+      ],
+      "required": false
+    },
+    "git": {
+      "available": true,
+      "candidates": [
+        "git"
+      ],
+      "required": true
+    },
+    "host_cxx": {
+      "available": true,
+      "candidates": [
+        "g++",
+        "clang++"
+      ],
+      "required": true
+    },
+    "llvm_clang": {
+      "available": false,
+      "candidates": [
+        "clang"
+      ],
+      "required": true
+    },
+    "make": {
+      "available": true,
+      "candidates": [
+        "make"
+      ],
+      "required": true
+    },
+    "riscv_compiler": {
+      "available": false,
+      "candidates": [
+        "riscv64-unknown-elf-gcc",
+        "riscv32-unknown-elf-gcc"
+      ],
+      "required": true
+    },
+    "verilator": {
+      "available": false,
+      "candidates": [
+        "verilator"
+      ],
+      "required": true
+    },
+    "vitis_linker": {
+      "available": false,
+      "candidates": [
+        "v++"
+      ],
+      "required": false
+    },
+    "vivado": {
+      "available": false,
+      "candidates": [
+        "vivado"
+      ],
+      "required": false
+    },
+    "xrt_inventory": {
+      "available": false,
+      "candidates": [
+        "xbutil"
+      ],
+      "required": false
+    },
+    "yosys": {
+      "available": false,
+      "candidates": [
+        "yosys"
+      ],
+      "required": false
+    }
+  },
+  "warnings": []
+}

@@ -1,0 +1,68 @@
+{
+  "outcome": "pass",
+  "exit_code": 0,
+  "reason": null,
+  "duration_seconds": 353.821074,
+  "log_sha256": "4a79058bed2da91875f80cfff8ed27da80edc9301e41fc2c9c9f2dc332fb1dbc",
+  "log_size_bytes": 4208,
+  "peak_rss_bytes": 2828828672,
+  "cleanup_complete": true,
+  "limitations": [
+    "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+    "Process-group RSS can count shared pages more than once and excludes page cache.",
+    "Reported peak RSS is the highest sample and may miss peaks between polls.",
+    "No container/cgroup memory limit is inferred by this process monitor.",
+    "Descendants that deliberately leave the process group are outside its containment."
+  ],
+  "case": {
+    "id": "gemm-fp16-rtlsim",
+    "app": "sgemm_tcu",
+    "driver": "rtlsim",
+    "configs": [
+      "-DVX_CFG_NUM_CLUSTERS=1",
+      "-DVX_CFG_NUM_CORES=1",
+      "-DVX_CFG_NUM_WARPS=4",
+      "-DVX_CFG_NUM_THREADS=8",
+      "-DVX_CFG_ISSUE_WIDTH=2",
+      "-DVX_CFG_EXT_TCU_ENABLE",
+      "-DVX_CFG_TCU_TYPE_TFR",
+      "-DVX_CFG_FPU_TYPE_STD",
+      "-DITYPE=fp16",
+      "-DOTYPE=fp32",
+      "-DVX_CFG_TCU_FP16_ENABLE"
+    ],
+    "args": [
+      "-m",
+      "64",
+      "-n",
+      "64",
+      "-k",
+      "64"
+    ],
+    "input_dtype": "fp16",
+    "output_dtype": "fp32",
+    "arithmetic": {
+      "tensor": "TFR",
+      "scalar": "STD"
+    },
+    "catalog_source": "ci/testcases/tensor.yaml",
+    "catalog_id": "sgemm_tcu-3",
+    "derivation": "RV64 bounded variant of the named SimX catalog case. The matrix pins clusters, cores, warps, native TFR tensor and STD scalar arithmetic, format enable and 64x64x64 dimensions; the rtlsim twin is explicit additional native coverage.",
+    "reference": {
+      "seed": 50,
+      "oracle": "tests/regression/sgemm_tcu/main.cpp",
+      "comparison": "CPU double accumulation of converted input products; abs((actual-reference)/reference) < 0.01, with exact zero pairs accepted.",
+      "tolerances": {
+        "relative_error_strict_max": 0.01,
+        "zero_pair_equal": true
+      }
+    }
+  },
+  "command": [
+    "./ci/blackbox.sh",
+    "--driver=rtlsim",
+    "--app=sgemm_tcu",
+    "--args=-m 64 -n 64 -k 64"
+  ],
+  "reference_pass_marker": true
+}

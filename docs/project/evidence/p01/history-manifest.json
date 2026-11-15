@@ -1,0 +1,428 @@
+{
+  "schema_version": 1,
+  "scope": "Sanitized historical P01 observations and provisioning provenance. This manifest is not a project acceptance report.",
+  "gpu_source_revision": "03181532b81fe95b1cfeac2ffb25d8597af689b2",
+  "sanitization": {
+    "method": "Decode UTF-8 text, replace the following literal prefixes in listed order, encode UTF-8 without any other change. Copy the inspected ZIP byte-for-byte. RAW_WORKSPACE is the local execution workspace prefix, omitted from publication.",
+    "rules": [
+      {
+        "source_prefix": "${RAW_WORKSPACE}/AI-GPU-baseline/build64-p01-gcc11",
+        "replacement": "$BUILD"
+      },
+      {
+        "source_prefix": "${RAW_WORKSPACE}/AI-GPU-baseline/build64-p01",
+        "replacement": "$INITIAL_BUILD"
+      },
+      {
+        "source_prefix": "${RAW_WORKSPACE}/AI-GPU-baseline",
+        "replacement": "$SOURCE"
+      },
+      {
+        "source_prefix": "${RAW_WORKSPACE}/p01-native-run",
+        "replacement": "$HISTORICAL_OUTPUT"
+      },
+      {
+        "source_prefix": "${RAW_WORKSPACE}/baseline-venv",
+        "replacement": "$VENV"
+      },
+      {
+        "source_prefix": "${RAW_WORKSPACE}/tools-v3.0.2",
+        "replacement": "$TOOLS"
+      },
+      {
+        "source_prefix": "${RAW_WORKSPACE}/host-gcc11",
+        "replacement": "$HOST_GCC11"
+      },
+      {
+        "source_prefix": "${RAW_WORKSPACE}/AI-GPU",
+        "replacement": "$INSTRUMENTATION"
+      },
+      {
+        "source_prefix": "${RAW_WORKSPACE}",
+        "replacement": "$WORKSPACE"
+      }
+    ],
+    "nested_hash_policy": "Every hash and size inside copied historical JSON retains its original raw meaning. The artifacts list maps original bytes to published bytes. No outcome, exit code, warning, numerical tolerance or provenance identity is rewritten."
+  },
+  "artifacts": [
+    {
+      "source_path": "baseline-runs/first-gemm-fp16-simx.json",
+      "path": "docs/project/evidence/p01/history/first-gemm-fp16-simx.json",
+      "source_size_bytes": 10161,
+      "source_sha256": "62709c638fbca5f763566e0d50db3d8f369c3764f72a57c03f0cb2d82ef83194",
+      "size_bytes": 9346,
+      "sha256": "1027dbe4a46141029a8ecd6fb8e74f35e81d0189bd87f5b15831d54c167d2e5d",
+      "transformation": "literal_path_redaction",
+      "purpose": "Initial FP16 SimX compilation failure: outer exit 2, no numerical pass."
+    },
+    {
+      "source_path": "baseline-runs/first-gemm-fp16-simx.log",
+      "path": "docs/project/evidence/p01/history/first-gemm-fp16-simx.log",
+      "source_size_bytes": 4873,
+      "source_sha256": "82162d69cc9724950baeb0a6d9fe3e0d41d39361be0b7edadf91fb94812d895f",
+      "size_bytes": 4303,
+      "sha256": "ac42bc986a5f1c03bb9d4aa08f3745661b511366dbee48b17e04a27665eb87a1",
+      "transformation": "literal_path_redaction",
+      "purpose": "Retained GCC 14 dangling-reference compilation failure."
+    },
+    {
+      "source_path": "p01-native-run/artifacts/gemm-fp16-simx-sw_runtime_simx_config.stamp",
+      "path": "docs/project/evidence/p01/history/native-run/artifacts/gemm-fp16-simx-sw_runtime_simx_config.stamp",
+      "source_size_bytes": 883,
+      "source_sha256": "0804b9dee6dc0a116c72725f277ce8da47c0909fb876d17545ad24daf39f39e4",
+      "size_bytes": 883,
+      "sha256": "0804b9dee6dc0a116c72725f277ce8da47c0909fb876d17545ad24daf39f39e4",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Historical failed all-six invocation: FP16 SimX passed, first RTL build failed, remaining four cases not run; preserve original relative log/config paths."
+    },
+    {
+      "source_path": "p01-native-run/artifacts/gemm-fp16-simx-sw_runtime_simx_rt_config.stamp",
+      "path": "docs/project/evidence/p01/history/native-run/artifacts/gemm-fp16-simx-sw_runtime_simx_rt_config.stamp",
+      "source_size_bytes": 7733,
+      "source_sha256": "4549a431437283a691857b8f29467ca256d410cd2cb13066206f841983010dd9",
+      "size_bytes": 7733,
+      "sha256": "4549a431437283a691857b8f29467ca256d410cd2cb13066206f841983010dd9",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Historical failed all-six invocation: FP16 SimX passed, first RTL build failed, remaining four cases not run; preserve original relative log/config paths."
+    },
+    {
+      "source_path": "p01-native-run/artifacts/gemm-fp16-simx-tests_regression_sgemm_tcu_config.stamp",
+      "path": "docs/project/evidence/p01/history/native-run/artifacts/gemm-fp16-simx-tests_regression_sgemm_tcu_config.stamp",
+      "source_size_bytes": 15610,
+      "source_sha256": "e098d94faab37eb6be89d2216f10a338d52984a6234159ea75c01e7a74bf8a1f",
+      "size_bytes": 15610,
+      "sha256": "e098d94faab37eb6be89d2216f10a338d52984a6234159ea75c01e7a74bf8a1f",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Historical failed all-six invocation: FP16 SimX passed, first RTL build failed, remaining four cases not run; preserve original relative log/config paths."
+    },
+    {
+      "source_path": "p01-native-run/logs/configure.log",
+      "path": "docs/project/evidence/p01/history/native-run/logs/configure.log",
+      "source_size_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Historical failed all-six invocation: FP16 SimX passed, first RTL build failed, remaining four cases not run; preserve original relative log/config paths."
+    },
+    {
+      "source_path": "p01-native-run/logs/gemm-fp16-rtlsim-configure.log",
+      "path": "docs/project/evidence/p01/history/native-run/logs/gemm-fp16-rtlsim-configure.log",
+      "source_size_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Historical failed all-six invocation: FP16 SimX passed, first RTL build failed, remaining four cases not run; preserve original relative log/config paths."
+    },
+    {
+      "source_path": "p01-native-run/logs/gemm-fp16-rtlsim.log",
+      "path": "docs/project/evidence/p01/history/native-run/logs/gemm-fp16-rtlsim.log",
+      "source_size_bytes": 5788,
+      "source_sha256": "57ed46967cfda7b42f538886b0cb8072d5cdc9951d5f9faf44d0f82e0be11df1",
+      "size_bytes": 3699,
+      "sha256": "5f7031ad45079cdfe15992ca2475ddce3f7917a23eaff2782dfdf91d418a5a26",
+      "transformation": "literal_path_redaction",
+      "purpose": "Historical failed all-six invocation: FP16 SimX passed, first RTL build failed, remaining four cases not run; preserve original relative log/config paths."
+    },
+    {
+      "source_path": "p01-native-run/logs/gemm-fp16-simx-configure.log",
+      "path": "docs/project/evidence/p01/history/native-run/logs/gemm-fp16-simx-configure.log",
+      "source_size_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Historical failed all-six invocation: FP16 SimX passed, first RTL build failed, remaining four cases not run; preserve original relative log/config paths."
+    },
+    {
+      "source_path": "p01-native-run/logs/gemm-fp16-simx.log",
+      "path": "docs/project/evidence/p01/history/native-run/logs/gemm-fp16-simx.log",
+      "source_size_bytes": 55751,
+      "source_sha256": "bc5b9ec647ded8de851a233b3f4aed8beb706a7a62e14ff333ac31c8c0f0601c",
+      "size_bytes": 52065,
+      "sha256": "a59cb8ead4ebca0c94d69ef7d31ff4ebabe43a3624d0cb0329bd578fd67808e7",
+      "transformation": "literal_path_redaction",
+      "purpose": "Historical failed all-six invocation: FP16 SimX passed, first RTL build failed, remaining four cases not run; preserve original relative log/config paths."
+    },
+    {
+      "source_path": "p01-native-run/logs/kernel-library.log",
+      "path": "docs/project/evidence/p01/history/native-run/logs/kernel-library.log",
+      "source_size_bytes": 110051,
+      "source_sha256": "1be710cbbf755729e8427748362c9130d2dd8fc7524aec4be35e79327d496fc4",
+      "size_bytes": 106477,
+      "sha256": "0f58d2c63a9d152b98e450e06b7b90ceb0b42e768cc8f0f1daa87babff0bcf74",
+      "transformation": "literal_path_redaction",
+      "purpose": "Historical failed all-six invocation: FP16 SimX passed, first RTL build failed, remaining four cases not run; preserve original relative log/config paths."
+    },
+    {
+      "source_path": "p01-native-run/logs/runtime-stub.log",
+      "path": "docs/project/evidence/p01/history/native-run/logs/runtime-stub.log",
+      "source_size_bytes": 9180,
+      "source_sha256": "7addbdf8b7337b8214c50eabbafe299e5da856a3395f86a324045c2f7d7e22e9",
+      "size_bytes": 8165,
+      "sha256": "060ad6e1a6332aef0b0996ace11c011ea9cb52afffe3014448ed2f0318db9040",
+      "transformation": "literal_path_redaction",
+      "purpose": "Historical failed all-six invocation: FP16 SimX passed, first RTL build failed, remaining four cases not run; preserve original relative log/config paths."
+    },
+    {
+      "source_path": "p01-native-run/matrix.json",
+      "path": "docs/project/evidence/p01/history/native-run/matrix.json",
+      "source_size_bytes": 9269,
+      "source_sha256": "f0ad2390b983c3e9a0804fc6309d22bb85ba23ba39635309e0193c9a54d6df97",
+      "size_bytes": 9269,
+      "sha256": "f0ad2390b983c3e9a0804fc6309d22bb85ba23ba39635309e0193c9a54d6df97",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Historical failed all-six invocation: FP16 SimX passed, first RTL build failed, remaining four cases not run; preserve original relative log/config paths."
+    },
+    {
+      "source_path": "p01-native-run/report.json",
+      "path": "docs/project/evidence/p01/history/native-run/report.json",
+      "source_size_bytes": 61676,
+      "source_sha256": "df3a67a315d244dba291c2b4a03429e0c81216c5158498a8b0f889a65dfaccd9",
+      "size_bytes": 61676,
+      "sha256": "df3a67a315d244dba291c2b4a03429e0c81216c5158498a8b0f889a65dfaccd9",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Historical failed all-six invocation: FP16 SimX passed, first RTL build failed, remaining four cases not run; preserve original relative log/config paths."
+    },
+    {
+      "source_path": "bootstrap_p01.py",
+      "path": "docs/project/evidence/p01/history/provisioning/bootstrap-source.py.txt",
+      "source_size_bytes": 4447,
+      "source_sha256": "46dfdcf0a508a64880446d5ba56105718bf89aab26c6bc9a1e0cc9662cd7fa12",
+      "size_bytes": 4426,
+      "sha256": "2556bceaf2456033d298eddfc3dc5c57499cc1fe716e1d4104ca0ba4175cfabc",
+      "transformation": "literal_path_redaction",
+      "purpose": "Snapshot of the earlier provisioning script actually used; only its workspace root literal is sanitized. This is historical text, not the supported production installer or an installation receipt."
+    },
+    {
+      "source_path": "baseline-runs/bootstrap.log",
+      "path": "docs/project/evidence/p01/history/provisioning/bootstrap.log",
+      "source_size_bytes": 1614,
+      "source_sha256": "9af62fcb7a9f4b8c1578de2de6591473464b450a2140d76a78e5492a7d8bb23b",
+      "size_bytes": 1614,
+      "sha256": "9af62fcb7a9f4b8c1578de2de6591473464b450a2140d76a78e5492a7d8bb23b",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Original tool provisioning command output; predates the production bootstrap."
+    },
+    {
+      "source_path": "baseline-runs/clean-kernel-runtime.json",
+      "path": "docs/project/evidence/p01/history/provisioning/clean-kernel-runtime.json",
+      "source_size_bytes": 1691,
+      "source_sha256": "4757fb18634ce2ce210dbbb658664af41223703f35fd9fde472021bfa8dc76a3",
+      "size_bytes": 1691,
+      "sha256": "4757fb18634ce2ce210dbbb658664af41223703f35fd9fde472021bfa8dc76a3",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Observed initial kernel/runtime build exits and sampled resources."
+    },
+    {
+      "source_path": "baseline-runs/clean-kernel.log",
+      "path": "docs/project/evidence/p01/history/provisioning/clean-kernel.log",
+      "source_size_bytes": 109871,
+      "source_sha256": "021e1edfe30242f86efa1664a2a83afed058e3ea5d15c6ade5bd79a2fba6f250",
+      "size_bytes": 106717,
+      "sha256": "7cc07f2b06c65fe9bf9b7f970201fe66d6d18b143b2250fd8037ea37f2c310fa",
+      "transformation": "literal_path_redaction",
+      "purpose": "Initial kernel-library build output referenced by clean-kernel-runtime.json."
+    },
+    {
+      "source_path": "baseline-runs/clean-ramulator-build.log",
+      "path": "docs/project/evidence/p01/history/provisioning/clean-ramulator-build.log",
+      "source_size_bytes": 10229,
+      "source_sha256": "ee614e072c0b7401b927ad628a741557a02df905ec435ee80dae9e50eb1cc2d8",
+      "size_bytes": 10189,
+      "sha256": "70933563813591f17c38c333cc86ca33b8bb6c31a8efb3115288bf6e8c081434",
+      "transformation": "literal_path_redaction",
+      "purpose": "Historical two-worker memory-model dependency build output."
+    },
+    {
+      "source_path": "baseline-runs/clean-ramulator-configure.log",
+      "path": "docs/project/evidence/p01/history/provisioning/clean-ramulator-configure.log",
+      "source_size_bytes": 1265,
+      "source_sha256": "47e4acf9d5036b8b015084650e5e34a03518d282c9ff6ba46449e78775b4c3ca",
+      "size_bytes": 1225,
+      "sha256": "e4d9f0654137a073cf1ab7fe2216cc07bfc0e84d7531ef8822004b6b14191e69",
+      "transformation": "literal_path_redaction",
+      "purpose": "Dependency configuration identifying host GNU 14.2.0."
+    },
+    {
+      "source_path": "baseline-runs/clean-runtime.log",
+      "path": "docs/project/evidence/p01/history/provisioning/clean-runtime.log",
+      "source_size_bytes": 9150,
+      "source_sha256": "9670d9aa01521ba61174f2cdf38c488ffa454d625550968d83d7c42ac140fd62",
+      "size_bytes": 8205,
+      "sha256": "5aa99f218e73ffcce168995c4b6046e5ca97f9e851feb199e8dbce4a9286f599",
+      "transformation": "literal_path_redaction",
+      "purpose": "Initial runtime-stub build output referenced by clean-kernel-runtime.json."
+    },
+    {
+      "source_path": "baseline-runs/clean-submodules.log",
+      "path": "docs/project/evidence/p01/history/provisioning/clean-submodules.log",
+      "source_size_bytes": 2807,
+      "source_sha256": "93948a4cffd7902c2fe2815750b9be4570ffc579b145d61f9364f9bd64892b8b",
+      "size_bytes": 2487,
+      "sha256": "a62815ac758b14bb06fe2d9299cf321f2a725910aa2596ddd14fcfc46c13b380",
+      "transformation": "literal_path_redaction",
+      "purpose": "Clean execution-checkout recursive submodule setup output."
+    },
+    {
+      "source_path": "baseline-runs/clean-third-party.log",
+      "path": "docs/project/evidence/p01/history/provisioning/clean-third-party.log",
+      "source_size_bytes": 103803,
+      "source_sha256": "63567da2ffd1f7c0ce6d6160fa1cb65c03bfe982e237e6b0ed61ea4bcfce0289",
+      "size_bytes": 103563,
+      "sha256": "27ed26ce99d678575e150c7f40c9e03349bf1211fb6dc16c0abfb655b7953f41",
+      "transformation": "literal_path_redaction",
+      "purpose": "Historical SoftFloat and memory-model extension build output."
+    },
+    {
+      "source_path": "baseline-runs/host-native-tools.json",
+      "path": "docs/project/evidence/p01/history/provisioning/host-native-tools.json",
+      "source_size_bytes": 1094,
+      "source_sha256": "3495e83840b4990515a14bad01e8617e0ba5c43b041b8859a9ccc99e16d43049",
+      "size_bytes": 1094,
+      "sha256": "3495e83840b4990515a14bad01e8617e0ba5c43b041b8859a9ccc99e16d43049",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Observed GCC 11 native compiler/frontend and binutils identities."
+    },
+    {
+      "source_path": "baseline-runs/host-packages.json",
+      "path": "docs/project/evidence/p01/history/provisioning/host-packages.json",
+      "source_size_bytes": 2894,
+      "source_sha256": "022f1badad9fcbb1865cc76ece98047dd97d0050ce0bc09d59c69b4875faa8ec",
+      "size_bytes": 2894,
+      "sha256": "022f1badad9fcbb1865cc76ece98047dd97d0050ce0bc09d59c69b4875faa8ec",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Verified Debian GCC 11 package and package-index identities."
+    },
+    {
+      "source_path": "baseline-runs/initial-preflight.json",
+      "path": "docs/project/evidence/p01/history/provisioning/initial-preflight.json",
+      "source_size_bytes": 4984,
+      "source_sha256": "aa87d808ec994447db03bacaac67cf8be8a3f1cc7ab7c1796e5f663459db18e1",
+      "size_bytes": 4984,
+      "sha256": "aa87d808ec994447db03bacaac67cf8be8a3f1cc7ab7c1796e5f663459db18e1",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Historical prerequisite/resource observations; not acceptance or current cgroup qualification."
+    },
+    {
+      "source_path": "baseline-runs/initial-provenance.json",
+      "path": "docs/project/evidence/p01/history/provisioning/initial-provenance.json",
+      "source_size_bytes": 13664,
+      "source_sha256": "f9ed5149b7490085a19df25f68fb03e8c6a259b368e2002e94e515452d1f4b88",
+      "size_bytes": 13664,
+      "sha256": "f9ed5149b7490085a19df25f68fb03e8c6a259b368e2002e94e515452d1f4b88",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Historical source/tool/generated-build inventory; predates later provenance hardening."
+    },
+    {
+      "source_path": "baseline-runs/ramulator-dependencies.json",
+      "path": "docs/project/evidence/p01/history/provisioning/ramulator-dependencies.json",
+      "source_size_bytes": 175,
+      "source_sha256": "2a9e0febe6165526c5ad4e61e26d466cea6a65db5c9f9526c4a011ea5f278ba0",
+      "size_bytes": 175,
+      "sha256": "2a9e0febe6165526c5ad4e61e26d466cea6a65db5c9f9526c4a011ea5f278ba0",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Fetched Ramulator dependency revisions."
+    },
+    {
+      "source_path": "baseline-runs/tool-bundles.json",
+      "path": "docs/project/evidence/p01/history/provisioning/tool-bundles.json",
+      "source_size_bytes": 5008,
+      "source_sha256": "63771ba8d9ff691b3867ed96be7b058ed5eae1368789575f4964e38f8718a405",
+      "size_bytes": 5008,
+      "sha256": "63771ba8d9ff691b3867ed96be7b058ed5eae1368789575f4964e38f8718a405",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Immutable archive-part identities observed during original provisioning."
+    },
+    {
+      "source_path": "baseline-runs/retry-gemm-fp16-rtlsim.json",
+      "path": "docs/project/evidence/p01/history/retry-gemm-fp16-rtlsim.json",
+      "source_size_bytes": 2215,
+      "source_sha256": "53b633e0de05bf367ae093bf1b08a82ba72f85d8595a460eae13cacbcd933a87",
+      "size_bytes": 2215,
+      "sha256": "53b633e0de05bf367ae093bf1b08a82ba72f85d8595a460eae13cacbcd933a87",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Separate FP16 native processor-RTL retry observation, not a full acceptance packet."
+    },
+    {
+      "source_path": "baseline-runs/retry-gemm-fp16-rtlsim.log",
+      "path": "docs/project/evidence/p01/history/retry-gemm-fp16-rtlsim.log",
+      "source_size_bytes": 4208,
+      "source_sha256": "4a79058bed2da91875f80cfff8ed27da80edc9301e41fc2c9c9f2dc332fb1dbc",
+      "size_bytes": 3264,
+      "sha256": "9042ec40ea6d68892d624c933967466b74842d7d989186886b201fd42d61b7a9",
+      "transformation": "literal_path_redaction",
+      "purpose": "Successful FP16 processor-RTL retry; retains the 10-second command-processor warning."
+    },
+    {
+      "source_path": "baseline-runs/runner-start-source.json",
+      "path": "docs/project/evidence/p01/history/runner-start-source.json",
+      "source_size_bytes": 1115,
+      "source_sha256": "25ddbe3a1c3b470b85c13873b9a5ff4b4b7a997a568b401c4f00719fbc4de2f4",
+      "size_bytes": 1115,
+      "sha256": "25ddbe3a1c3b470b85c13873b9a5ff4b4b7a997a568b401c4f00719fbc4de2f4",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Historical instrumentation archive member identities, not finalized runner identities."
+    },
+    {
+      "source_path": "baseline-runs/runner-start-source.zip",
+      "path": "docs/project/evidence/p01/history/runner-start-source.zip",
+      "source_size_bytes": 26714,
+      "source_sha256": "c4827650c39755fc4e68e0c0c80c31ac33acf911fb5a55cad5f36877ae304489",
+      "size_bytes": 26714,
+      "sha256": "c4827650c39755fc4e68e0c0c80c31ac33acf911fb5a55cad5f36877ae304489",
+      "transformation": "byte_preserving_copy",
+      "purpose": "Seven exact historical helper/matrix/lock files retained byte-for-byte."
+    }
+  ],
+  "historical_archive_members": [
+    {
+      "path": "ci/project/baseline.py",
+      "size_bytes": 21987,
+      "sha256": "6ef231840f4951980ea59f0c68f8fbe9f4b2cec6828f6bd01a38238b0bcad997"
+    },
+    {
+      "path": "ci/project/baseline_inventory.py",
+      "size_bytes": 16474,
+      "sha256": "65a6a0254a687f15efe7756a77c8c45f3567dd08c77b45e075d44a871f8861fe"
+    },
+    {
+      "path": "ci/project/baseline_matrix.py",
+      "size_bytes": 8890,
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc"
+    },
+    {
+      "path": "ci/project/baseline_process.py",
+      "size_bytes": 12163,
+      "sha256": "1adacc045ec1600f53f6dcd39c75bfa643fa012bb73679ef7b20c8c4f0bfa266"
+    },
+    {
+      "path": "ci/project/preflight.py",
+      "size_bytes": 15124,
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032"
+    },
+    {
+      "path": "ci/project/p01_baseline.json",
+      "size_bytes": 9269,
+      "sha256": "f0ad2390b983c3e9a0804fc6309d22bb85ba23ba39635309e0193c9a54d6df97"
+    },
+    {
+      "path": "ci/project/p01_toolchain.lock.json",
+      "size_bytes": 5008,
+      "sha256": "63771ba8d9ff691b3867ed96be7b058ed5eae1368789575f4964e38f8718a405"
+    }
+  ],
+  "authored_context": {
+    "path": "docs/project/evidence/p01/history/README.md",
+    "size_bytes": 4634,
+    "sha256": "22e2c3e0eab43744424105430673422c5eea179e9ab47b7b5ba9242a402d5401"
+  },
+  "limitations": [
+    "The historical all-six invocation failed and left four cases unrun; these files do not accept P01-A02.",
+    "The standalone RTL retry lacks the finalized runner provenance snapshots; no later checks are attributed to it.",
+    "SimX is a software model and processor rtlsim bypasses the AFU; vendor XRT hw_emu remains unexecuted.",
+    "Initial provisioning predates the production bootstrap and has no receipt from that later installer.",
+    "Nested raw hashes and sampled resource observations retain their historical scope; compiled binary/tool archives are not included."
+  ]
+}
