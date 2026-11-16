@@ -47,6 +47,8 @@ WMMA_CASES = (
 )
 FEDP_CASES = (
     ("unsupported-format-gap", ["--fmt=6"], "Unsupported source format"),
+    ("unsupported-fp32", ["--fmt=0"], "Source format is unavailable in the configured DUT backend"),
+    ("unsupported-int32", ["--fmt=16"], "Source format is unavailable in the configured DUT backend"),
     ("sparsity-out-of-range", ["--sparsity=101"], "--sparsity"),
     ("scale-out-of-range", ["--sfa=256"], "--sfa"),
     ("exponent-out-of-range", ["--ext=9"], "--ext"),
@@ -59,6 +61,22 @@ FEDP_SCALE_CASES = (
 WMMA_TFR_NO_TF32_CASES = (
     ("unsupported-tfr-fp32", ["--fmt=0", "--features=zeros", "--tests=1"], "FP32"),
     ("disabled-tfr-tf32", ["--fmt=1", "--features=zeros", "--tests=1"], "TF32"),
+)
+FEDP_NO_TF32_FP8_MX_CASES = (
+    ("disabled-tfr-tf32", ["--fmt=1", "--features=normals", "--sparsity=100", "--tests=1"],
+     "Source format is unavailable in the configured DUT backend"),
+    ("disabled-tfr-fp8", ["--fmt=4", "--features=normals", "--sparsity=100", "--tests=1"],
+     "Source format is unavailable in the configured DUT backend"),
+    ("disabled-tfr-bf8", ["--fmt=5", "--features=normals", "--sparsity=100", "--tests=1"],
+     "Source format is unavailable in the configured DUT backend"),
+    ("disabled-tfr-mxfp8", ["--fmt=8", "--features=normals", "--sparsity=100", "--tests=1"],
+     "MX source formats require VX_CFG_TCU_MX_ENABLE in the DUT build"),
+    ("disabled-tfr-mxbf8", ["--fmt=9", "--features=normals", "--sparsity=100", "--tests=1"],
+     "MX source formats require VX_CFG_TCU_MX_ENABLE in the DUT build"),
+    ("disabled-tfr-mxfp4", ["--fmt=10", "--features=normals", "--sparsity=100", "--tests=1"],
+     "MX source formats require VX_CFG_TCU_MX_ENABLE in the DUT build"),
+    ("disabled-tfr-nvfp4", ["--fmt=11", "--features=normals", "--sparsity=100", "--tests=1"],
+     "MX source formats require VX_CFG_TCU_MX_ENABLE in the DUT build"),
 )
 
 
@@ -111,11 +129,15 @@ def run_command(argv, cwd):
     return process.returncode, output.decode("utf-8", errors="replace"), reason
 
 
-def check_family(family, binary, work, *, wmma_tfr_no_tf32=False):
+def check_family(family, binary, work, *, wmma_tfr_no_tf32=False,
+                 fedp_no_tf32_fp8_mx=False):
     cases = (("help", ["--help"], "Usage:"),) + COMMON_CASES
     cases += WMMA_CASES if family == "WMMA" else FEDP_CASES
     if family == "FEDP":
         cases += FEDP_SCALE_CASES
+        if fedp_no_tf32_fp8_mx:
+            cases += FEDP_NO_TF32_FP8_MX_CASES
+            print("FEDP profile: TFR with TF32, FP8 and MX disabled (caller-selected)")
     elif wmma_tfr_no_tf32:
         cases += WMMA_TFR_NO_TF32_CASES
         print("WMMA profile: TFR with TF32 disabled (caller-selected)")
@@ -155,9 +177,13 @@ def main(argv=None):
     parser.add_argument("--fedp", type=executable, help="absolute path to generated tcu_fedp")
     parser.add_argument("--wmma-tfr-no-tf32", action="store_true",
                         help="add format-rejection checks for a TFR WMMA build with TF32 disabled")
+    parser.add_argument("--fedp-no-tf32-fp8-mx", action="store_true",
+                        help="add format-rejection checks for a TFR FEDP build with TF32, FP8 and MX disabled")
     args = parser.parse_args(argv)
     if args.wmma_tfr_no_tf32 and not args.wmma:
         parser.error("--wmma-tfr-no-tf32 requires --wmma")
+    if args.fedp_no_tf32_fp8_mx and not args.fedp:
+        parser.error("--fedp-no-tf32-fp8-mx requires --fedp")
     if not args.wmma and not args.fedp:
         parser.error("at least one of --wmma or --fedp is required")
     if os.name != "posix":
@@ -170,7 +196,8 @@ def main(argv=None):
             work = Path(directory) / family.lower()
             work.mkdir()
             count, failed = check_family(family, binary, work,
-                                        wmma_tfr_no_tf32=args.wmma_tfr_no_tf32)
+                                        wmma_tfr_no_tf32=args.wmma_tfr_no_tf32,
+                                        fedp_no_tf32_fp8_mx=args.fedp_no_tf32_fp8_mx)
             total += count
             failures += failed
     print(f"Total: {total - failures}/{total} CLI checks passed; no numerical coverage claimed")

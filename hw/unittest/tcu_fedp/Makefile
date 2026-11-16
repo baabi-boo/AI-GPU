@@ -16,6 +16,7 @@ SRC_DIR := $(VORTEX_HOME)/hw/unittest/$(PROJECT)
 LDFLAGS += $(THIRD_PARTY_DIR)/softfloat/build/Linux-x86_64-GCC/softfloat.a
 
 CXXFLAGS := -I$(SRC_DIR) -I$(VORTEX_HOME)/hw/unittest/common -I$(SW_COMMON_DIR)
+CXXFLAGS += -I$(ROOT_DIR)/sw -I$(ROOT_DIR)/hw
 CXXFLAGS += -I/$(THIRD_PARTY_DIR)/softfloat/source/include
 
 CONFIGS += -DSIMULATION -DSV_DPI -DVX_CFG_EXT_TCU_ENABLE

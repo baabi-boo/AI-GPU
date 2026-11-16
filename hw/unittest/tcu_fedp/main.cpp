@@ -11,6 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "VX_config.h"
+
 #if defined(VX_CFG_TCU_TYPE_TFR)
 #include "VVX_tcu_fedp_tfr.h"
 #define MODULE VVX_tcu_fedp_tfr
@@ -279,6 +281,67 @@ static int float_fmt_width(int exp_bits, int sig_bits) {
 
 // Block-scaled (MX/NV) formats carry the 2nd MSB of the format code.
 static bool is_mx_fmt(uint32_t fmt) { return (fmt & 0x18) == 0x8; }
+
+// Match the product selectors and feature guards of each FEDP backend.
+static bool supports_source_format(uint32_t fmt) {
+  switch (fmt) {
+#if defined(VX_CFG_TCU_TF32_ENABLE) && (defined(VX_CFG_TCU_TYPE_TFR) \
+    || defined(VX_CFG_TCU_TYPE_DPI) || defined(VX_CFG_TCU_TYPE_BHF))
+  case 1: // TF32
+    return true;
+#endif
+#if defined(VX_CFG_TCU_TYPE_BHF) || defined(VX_CFG_TCU_TYPE_DSP) \
+    || (defined(VX_CFG_TCU_FP16_ENABLE) && (defined(VX_CFG_TCU_TYPE_TFR) \
+        || defined(VX_CFG_TCU_TYPE_DPI) || defined(VX_CFG_TCU_TYPE_FPNEW)))
+  case 2: // FP16
+    return true;
+#endif
+#if defined(VX_CFG_TCU_FP16_ENABLE) && (defined(VX_CFG_TCU_TYPE_TFR) \
+    || defined(VX_CFG_TCU_TYPE_DPI) || defined(VX_CFG_TCU_TYPE_BHF) \
+    || defined(VX_CFG_TCU_TYPE_DSP) || defined(VX_CFG_TCU_TYPE_FPNEW))
+  case 3: // BF16
+    return true;
+#endif
+#if defined(VX_CFG_TCU_FP8_ENABLE) && (defined(VX_CFG_TCU_TYPE_TFR) \
+    || defined(VX_CFG_TCU_TYPE_DPI) || defined(VX_CFG_TCU_TYPE_BHF))
+  case 4: // FP8
+  case 5: // BF8
+    return true;
+#endif
+#if defined(VX_CFG_TCU_MX_ENABLE) && (defined(VX_CFG_TCU_TYPE_TFR) \
+    || defined(VX_CFG_TCU_TYPE_DPI))
+#ifdef VX_CFG_TCU_FP8_ENABLE
+  case 8: // MXFP8
+  case 9: // MXBF8
+    return true;
+#endif
+#ifdef VX_CFG_TCU_FP4_ENABLE
+#ifdef VX_CFG_TCU_MXFP4_ENABLE
+  case 10: // MXFP4
+    return true;
+#endif
+#ifdef VX_CFG_TCU_NVFP4_ENABLE
+  case 11: // NVFP4
+    return true;
+#endif
+#endif
+#endif
+#if defined(VX_CFG_TCU_TYPE_DSP) || (defined(VX_CFG_TCU_INT8_ENABLE) \
+    && (defined(VX_CFG_TCU_TYPE_TFR) || defined(VX_CFG_TCU_TYPE_DPI)))
+  case 17: // INT8
+  case 18: // UINT8
+    return true;
+#endif
+#if defined(VX_CFG_TCU_TYPE_DSP) || (defined(VX_CFG_TCU_INT4_ENABLE) \
+    && (defined(VX_CFG_TCU_TYPE_TFR) || defined(VX_CFG_TCU_TYPE_DPI)))
+  case 19: // INT4
+  case 20: // UINT4
+    return true;
+#endif
+  default:
+    return false;
+  }
+}
 
 #ifndef SF
 #define SF 1
@@ -693,8 +756,9 @@ public:
 
       int32_t c_value = generate_int_value(true, 32, c_enable ? test_id : -1);
 
-      if (config_.test_id >= 0 && test_id != config_.test_id)
+      if (config_.test_id >= 0 && test_id != config_.test_id) {
         continue;
+      }
 
       // Pack into VX_CFG_XLEN words
       uint32_t a_packed[NUM_REGS], b_packed[NUM_REGS];
@@ -738,15 +802,18 @@ public:
         return false;
       }
       ++tests_done_;
-      if (config_.test_id >= 0)
+      if (config_.test_id >= 0) {
         break;
+      }
     }
 
     return true;
   }
 
   bool test_floating_points(const std::vector<std::string> &features_to_test) {
-    if (features_to_test.empty()) return false;
+    if (features_to_test.empty()) {
+      return false;
+    }
 
     // Calculate how many elements we can fit in NUM_REGS VX_CFG_XLEN words
     int element_bits = float_fmt_width(config_.exp_bits, config_.sig_bits);
@@ -907,8 +974,9 @@ public:
         return false;
       }
       ++tests_done_;
-      if (config_.test_id >= 0)
+      if (config_.test_id >= 0) {
         break;
+      }
     }
 
     return true;
@@ -944,12 +1012,14 @@ public:
 
 static uint64_t parse_unsigned(const std::string &text, const char *option,
                                uint64_t maximum, int base = 10) {
-  if (text.empty() || text.front() < '0' || text.front() > '9')
+  if (text.empty() || text.front() < '0' || text.front() > '9') {
     throw std::invalid_argument(std::string(option) + " requires an unsigned integer");
+  }
   size_t consumed = 0;
   uint64_t value = std::stoull(text, &consumed, base);
-  if (consumed != text.size() || value > maximum)
+  if (consumed != text.size() || value > maximum) {
     throw std::invalid_argument(std::string(option) + " has an invalid integer or exceeds its range");
+  }
   return value;
 }
 
@@ -958,7 +1028,7 @@ static void print_usage(const char *program) {
             << "  --no-fused       Use discrete reference multiplication and addition\n"
             << "  --no-trace       Disable VCD tracing\n"
             << "  --features=LIST  Features separated by spaces, commas or semicolons\n"
-            << "  --fmt=<id>       Source format code (0-5, 8-11, 16-20)\n"
+            << "  --fmt=<id>       Source format code (1-5, 8-11, 17-20; requires DUT support)\n"
             << "  --ext=<bits>     Exponent bits for the reference format\n"
             << "  --sig=<bits>     Significand bits for the reference format\n"
             << "  --frm=RNE        Fixed DUT rounding mode\n"
@@ -1028,51 +1098,70 @@ TestConfig parse_args(int argc, char **argv) {
     }
   }
 
-  if (config_.num_tests == 0)
+  if (config_.num_tests == 0) {
     throw std::invalid_argument("--tests must be positive");
-  if (config_.test_id >= 0 && uint32_t(config_.test_id) >= config_.num_tests)
+  }
+  if (config_.test_id >= 0 && uint32_t(config_.test_id) >= config_.num_tests) {
     throw std::invalid_argument("--test must be smaller than --tests");
-  if (config_.test_features.empty())
+  }
+  if (config_.test_features.empty()) {
     throw std::invalid_argument("--features must select at least one feature");
+  }
   for (const auto &feature : config_.test_features) {
     if (feature != "infinities" && feature != "nans" && feature != "subnormals"
-        && feature != "normals" && feature != "zeros")
+        && feature != "normals" && feature != "zeros") {
       throw std::invalid_argument("Unknown feature: " + feature);
+    }
   }
-  if (config_.frm != RoundingMode::RNE)
+  if (config_.frm != RoundingMode::RNE) {
     throw std::invalid_argument("The DUT supports only --frm=RNE");
-  if (config_.W == 0)
+  }
+  if (config_.W == 0) {
     throw std::invalid_argument("--W must be positive");
+  }
   if (!((config_.fmt_s <= 5) || (config_.fmt_s >= 8 && config_.fmt_s <= 11)
-        || (config_.fmt_s >= 16 && config_.fmt_s <= 20)))
+        || (config_.fmt_s >= 16 && config_.fmt_s <= 20))) {
     throw std::invalid_argument("Unsupported source format");
-  if ((config_.sf_a >= 0 || config_.sf_b >= 0) && !is_mx_fmt(config_.fmt_s))
+  }
+  if ((config_.sf_a >= 0 || config_.sf_b >= 0) && !is_mx_fmt(config_.fmt_s)) {
     throw std::invalid_argument("--sfa and --sfb require an MX source format");
+  }
 #ifndef VX_CFG_TCU_MX_ENABLE
-  if (is_mx_fmt(config_.fmt_s))
+  if (is_mx_fmt(config_.fmt_s)) {
     throw std::invalid_argument("MX source formats require VX_CFG_TCU_MX_ENABLE in the DUT build");
+  }
 #endif
+  if (!supports_source_format(config_.fmt_s)) {
+    throw std::invalid_argument("Source format is unavailable in the configured DUT backend");
+  }
 
   if (config_.fmt_s >= 16) {
     config_.fmt_d = 16;
-    if (config_.exp_bits != 0 || config_.sig_bits != 0)
+    if (config_.exp_bits != 0 || config_.sig_bits != 0) {
       throw std::invalid_argument("Integer formats do not accept exponent or significand bits");
+    }
   } else {
-    if (config_.exp_bits == 0 && config_.sig_bits == 0)
+    if (config_.exp_bits == 0 && config_.sig_bits == 0) {
       init_default_fp_format(config_.fmt_s, &config_.exp_bits, &config_.sig_bits);
-    if (config_.exp_bits == 0 || 1 + config_.exp_bits + config_.sig_bits > 32)
+    }
+    if (config_.exp_bits == 0 || 1 + config_.exp_bits + config_.sig_bits > 32) {
       throw std::invalid_argument("The reference format requires an exponent and at most 32 bits");
+    }
 #ifdef USE_FEDP
-    if (config_.sig_bits == 0 || config_.sig_bits > 10)
+    if (config_.sig_bits == 0 || config_.sig_bits > 10) {
       throw std::invalid_argument("The FEDP reference supports 1-10 significand bits");
+    }
     unsigned headroom = 0;
-    for (unsigned terms = 2 * NUM_REGS; terms != 0; terms >>= 1)
+    for (unsigned terms = 2 * NUM_REGS; terms != 0; terms >>= 1) {
       ++headroom;
+    }
     const unsigned accumulator_bits = config_.W + 2 + headroom;
-    if (accumulator_bits < 27 || accumulator_bits > 32)
+    if (accumulator_bits < 27 || accumulator_bits > 32) {
       throw std::invalid_argument("The FEDP reference requires a 27-32 bit accumulator; use the DUT window");
-    if (!config_.fused)
+    }
+    if (!config_.fused) {
       throw std::invalid_argument("--no-fused is unavailable with the FEDP reference");
+    }
 #endif
   }
   return config_;
@@ -1084,8 +1173,9 @@ int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     std::cout << "Using configuration: " << config << std::endl;
     Testbench testbench(config);
-    if (!testbench.run_tests())
+    if (!testbench.run_tests()) {
       return 1;
+    }
     return 0;
   } catch (const std::exception &error) {
     std::cerr << "Error: " << error.what() << std::endl;
