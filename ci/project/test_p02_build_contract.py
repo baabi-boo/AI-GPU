@@ -71,13 +71,17 @@ class TensorContractBuildTests(unittest.TestCase):
         self.env["P02_TEST_COMPILER"] = self.compiler
         self.commands = 0
 
-    def make(self, *, flags="-std=c++17", fails=False):
+    def make(self, *, flags="-std=c++17", configs=CONFIGS, fails=False):
         self.commands += 1
         log = self.unit / ("make-" + str(self.commands) + ".log")
+        command = ["make", "--no-print-directory", "-j1", "THREADS=1",
+                   "SRCS=" + str(self.guard)]
+        if configs is not None:
+            command.append("CONFIGS=" + configs)
+        if flags is not None:
+            command.append("CXXFLAGS=" + flags)
         result = run_bounded(
-            ["make", "--no-print-directory", "-j1", "THREADS=1",
-             "CONFIGS=" + CONFIGS, "SRCS=" + str(self.guard),
-             "CXXFLAGS=" + flags, "all"],
+            command + ["all"],
             self.unit, self.env, log, timeout_seconds=60,
             min_free_bytes=GIB, max_log_bytes=MIB, max_rss_bytes=GIB,
             resource_paths=(self.base,),
@@ -91,6 +95,31 @@ class TensorContractBuildTests(unittest.TestCase):
 
     def invocations(self):
         return len((self.unit / "verilator-invocations").read_text().splitlines())
+
+    def test_profile_enum_selectors_reach_cpp_and_preserve_raw_guards(self):
+        run_host_command(
+            [str(SOURCE / "configure"), "--xlen=64", "--profile=p02-tfr",
+             "--osversion=ubuntu/focal", "--tooldir=" + str(self.base / "tools")],
+            cwd=self.build, env=self.env, timeout=60,
+        )
+        self.guard.write_text(
+            '#include "VX_config.h"\n'
+            "#if !defined(VX_CFG_TCU_TYPE_TFR) || !defined(VX_CFG_FPU_TYPE_STD)\n"
+            "#error unresolved_profile_enum\n#endif\n"
+            "#if VX_CFG_NUM_THREADS != 4 || !defined(VX_CFG_TCU_FP16_ENABLE)\n"
+            "#error wrong_profile_configuration\n#endif\n"
+            "#ifdef VX_CFG_TCU_FP8_ENABLE\n#error disabled_format_enabled\n#endif\n"
+            "#ifdef SV_DPI\n#error forbidden_raw_define\n#endif\n"
+            "int main() { return 0; }\n", encoding="utf-8",
+        )
+        self.make(flags=None, configs=None)
+        cflags = (self.unit / "config.stamp").read_text().splitlines()[0]
+        self.assertIn("-DVX_CFG_TCU_TYPE=TFR", cflags)
+        self.assertIn("-DVX_CFG_TCU_TYPE_TFR", cflags)
+        self.assertIn("-DVX_CFG_TCU_FP8_DISABLE", cflags)
+        self.assertIn("-DSIMULATION", cflags)
+        output = self.make(flags=None, configs="-DSV_DPI", fails=True)
+        self.assertIn("forbidden_raw_define", output)
 
     def test_generated_rtl_and_verilator_inputs_reach_outer_build(self):
         self.make()

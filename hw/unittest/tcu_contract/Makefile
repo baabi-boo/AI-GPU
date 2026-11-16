@@ -63,6 +63,9 @@ OPTS ?= --format=all
 
 include ../common.mk
 
+# Raw profile enums do not define the selector macros used by the C++ guards.
+CXXFLAGS += $(XCONFIGS)
+
 .PHONY: model run-model clean-model FORCE
 
 $(DESTDIR)/$(PROJECT): $(FIXTURE_HEADER) $(ROOT_DIR)/sw/VX_config.h $(ROOT_DIR)/hw/VX_config.vh \
