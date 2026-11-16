@@ -890,20 +890,20 @@ int main(int argc, char *argv[]) {
 #endif
 
     std::cout << "[iter " << iter << "] verify result" << std::endl;
-    size_t iter_errors = 0;
     if (fixture != nullptr) {
-      iter_errors = p02::report_result(*fixture, h_C_bits, iter, MAX_ERRORS);
+      size_t fixture_errors = p02::report_result(*fixture, h_C_bits, iter, MAX_ERRORS);
+      printf("[iter %u] %s (%zu errors)\n", iter, fixture_errors ? "MISMATCH" : "match", fixture_errors);
+      errors += fixture_errors;
     } else {
-      int random_errors = 0;
+      int iter_errors = 0;
       for (uint32_t i = 0; i < h_ref.size(); ++i) {
-        if (!Comparator<vt::OTYPE>::compare(h_C[i], h_ref[i], i, random_errors)) {
-          ++random_errors;
+        if (!Comparator<vt::OTYPE>::compare(h_C[i], h_ref[i], i, iter_errors)) {
+          ++iter_errors;
         }
       }
-      iter_errors = random_errors;
+      printf("[iter %u] %s (%d errors)\n", iter, iter_errors ? "MISMATCH" : "match", iter_errors);
+      errors += iter_errors;
     }
-    printf("[iter %u] %s (%zu errors)\n", iter, iter_errors ? "MISMATCH" : "match", iter_errors);
-    errors += iter_errors;
 
     // cumulative counters: a cycle count that stops advancing across
     // iterations means the device is no longer retiring work
