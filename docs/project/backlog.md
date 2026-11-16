@@ -15,11 +15,12 @@ packet are independently reviewed and accepted. The environment inventory,
 immutable toolchain lock, native matrix and bounded runner are implemented.
 FP16/BF16 GEMM and TF32 attention pass on both SimX and native processor RTL;
 the fresh FP16 SimX build and supplemental full-AFU integer `xrtsim` smoke also
-pass. Identify a qualified vendor release and supported platform, freeze their
-identities and resource budget, and retain an actual matching build packet with
-production provenance. Check the selected execution route's manifest, review
-its inputs and obtain the required DMA/launch/completion evidence through
-bounded supervised execution.
+pass. Identify a compatible vendor release and supported platform whose required
+compiler, simulator, runtime and build inputs fit the recorded resource budget.
+Freeze their identities and retain matching build artifacts with producer
+commands, input hashes and exit results. Independently review the execution
+runner's own manifest/receipt before bounded supervised DMA/launch/completion
+execution.
 Preserve the earlier GCC 14 spdlog/fmt and missing-`ccache` failures.
 
 Follow the [P01 runbook](p01-baseline-runbook.md). The two-worker budget, 15 GiB
@@ -29,7 +30,8 @@ P01-T05 `probe`/`plan`/`run` route. Its strict receipt and artifact checks prepa
 the missing vendor run; they do not replace it or grant acceptance.
 It requires its own manifest/receipt, CLI budgets and fresh build directory;
 there is no automatic adapter from the read-only `hwemu.py` candidate.
-P01 remains blocked on A03 and P02 remains not started. Check the actual
+P00 remains complete, P01 remains blocked on A03, and P02–P11 remain
+`not_started`. Check the actual
 execution state and accepted reports before extending the baseline:
 
 ```sh
@@ -45,6 +47,31 @@ install everything automatically. The [developer guide](developer-guide.md)
 defines separate tool directories, build trees, resource checks and safe cleanup.
 Commands in this backlog are instructions; observed outcomes and current blockers
 belong in [status](status.md) and the reviewed phase evidence.
+
+### Supplemental local AFU/RTL qualification continuation
+
+The [local qualification guide](p01-local-qualification.md) provides the
+implemented [runner](../../ci/project/local_qualification.py) for generated-build
+XRT/local-`xrtsim` full-AFU applications and focused RTL unit harnesses. Fixed
+integer, reopen and AXI-memory cases plus explicitly selected FP16/BF16 GEMM
+retain their source-backed checks and inherited reference tolerances. This
+continuation resolves the stencil block-size parser, child temporary-directory
+placement and helper-drift diagnostics. At frozen source `7e4ac585`, all eight
+selected cases pass across 32 monitored commands; the separate tooling suite
+passes 1,260 tests in 293.241 seconds.
+
+Use the [qualification handoff](p01-local-qualification-handoff.md) for exact
+scoped results, test counts, tested revisions, retained failures and not-runs.
+CP/LLC unit-oracle hardening is implemented at `143c69fe`: all 37 original
+assertions and six functions remain, three isolated mutation faults are
+detected, and both unit selections pass in a fresh five-command packet. Its
+focused CI guardrail test also passes after the reviewed five-to-ten-minute
+governance timeout change. The full tooling suite and eight-case matrix were
+not rerun at this follow-up revision.
+Local shim memory and DPI-assisted integer arithmetic remain explicit limits.
+This supplemental route does not satisfy vendor P01-T05/P01-A03 or authorize
+later-phase work; the qualified vendor release/platform and matching build
+provenance remain the next bounded obligation.
 
 ## Priority 1 — P01 baseline work
 
@@ -77,7 +104,7 @@ establish the frozen configuration. Exact kernel ISA/ABI and generated-runtime
 linker checks accompany the correction. Real compiler and generated-Make oracles,
 negative cases and runner-boundary tests support the implementation; the
 [verification record](evidence/p01-compiler-records/verification.json) and
-[current handoff](p01-compiler-records-handoff.md) retain its tested identity,
+[compiler-record handoff](p01-compiler-records-handoff.md) retain its tested identity,
 review and delivery state.
 
 This completes a bounded T05 tooling correction. Actual producer records,
@@ -92,7 +119,7 @@ unchanged.
 | **P01-T02 — Native matrix** | Freeze a small list of catalog IDs, XLEN, TFR/native versus DPI, dtypes/accumulation, warp geometry, dimensions, reference checks and expected failures. Record the full effective application/backend configuration and review any coverage gaps before adding cases. | T01; compute architecture lead with verification lead | P01-A02 |
 | **P01-T03 — Clean build** | Prepare only the approved pinned dependencies, initialize exact submodules, configure a dedicated out-of-tree variant and build the selected path. Retain command exits, tool identities and generated-config hashes; reproduce from a clean checkout. | T01/T02 and resource/access approval; build/toolchain lead | P01-A01 |
 | **P01-T04 — Native numerical baseline** | Run selected cases one at a time on SimX and matching native processor RTL. Preserve CPU-reference checks, output logs, exact numerics and applicable parity evidence. Add a focused regression for a missing required combination; do not alter inherited cases to reduce coverage. | T03; verification lead | P01-A02 |
-| **P01-T05 — Full AFU integration** | Qualify the vendor release/platform, retain an actual matching build packet, check its strict manifest and review the candidate before bounded supervised `hw_emu` execution. Prove DMA, launch and completion with retained logs/configuration, or preserve an explicit blocked record. Planning and processor-only `rtlsim` do not close this item. | T03/T04 plus platform/license access; FPGA platform lead | P01-A03 |
+| **P01-T05 — Full AFU integration** | Qualify the vendor release/platform, retain an actual matching build packet, check its strict manifest and review the candidate before bounded supervised `hw_emu` execution. Prove DMA, launch and completion with retained logs/configuration, or preserve an explicit blocked record. Planning, processor-only `rtlsim` and supplemental local AFU/unit results do not close this item. | T03/T04 plus platform/license access; FPGA platform lead | P01-A03 |
 | **P01-T06 — Reviewed baseline packet** | Assemble hashes, exact commands/results, native/DPI distinctions, failures and limitations; obtain independent review, attach each satisfied gate, and update status plus the next task. Close P01 only when all three gates pass. | T01–T05 evidence; verification lead / maintainer | P01-A01, P01-A02, P01-A03 |
 
 ### Frozen catalog-derived matrix

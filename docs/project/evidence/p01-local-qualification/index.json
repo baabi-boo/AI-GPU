@@ -1,0 +1,216 @@
+{
+  "finalized_agent_notes": 60,
+  "historical_identity_audit": "identities/b09d.json",
+  "identity_caveat": "The dated prepared-object audit is not a fresh remote-ref read or evidence of publication.",
+  "native_attempts": [
+    {
+      "command_logs_verified": 15,
+      "directory": "native-attempts/local-afu-9532327-failed",
+      "id": "failed953",
+      "omitted_packet_files": [],
+      "protected_json_fields_checked": 1666,
+      "raw_packet_files": 114,
+      "raw_report_sha256": "94945483a8e98ffd3bbcecc9cc7d834e83854fd4be50dec9269dac40db108fac",
+      "reported_outcome": "fail",
+      "retained_sidecar_files": 7,
+      "source_revision": "9532327e6006e0b6b09bae761745bc0d36a79b1e",
+      "source_tree": "aeedbf4d7a042e86ec8d1326370a87dd73587494",
+      "text_snapshots_verified": 98,
+      "unreferenced_packet_files_retained": []
+    },
+    {
+      "command_logs_verified": 32,
+      "directory": "native-attempts/local-afu-7e4ac58-retry",
+      "id": "retry7e4",
+      "omitted_packet_files": [],
+      "protected_json_fields_checked": 2880,
+      "raw_packet_files": 219,
+      "raw_report_sha256": "2eff867a0acddc669e134720c3d927a9c757722a8d178ccb70a8c5d88186df18",
+      "reported_outcome": "pass",
+      "retained_sidecar_files": 7,
+      "source_revision": "7e4ac5851f1f71d292ed1802c3f92456d96faf8d",
+      "source_tree": "89c28a445e0e269e53b36213a04e593f9e76b6d2",
+      "text_snapshots_verified": 186,
+      "unreferenced_packet_files_retained": []
+    }
+  ],
+  "nonqualification_extras": [
+    {
+      "id": "n8-diagnostic",
+      "kind": "nonqualification small-shape diagnostic",
+      "observed_exit": 0,
+      "qualifies_P01_A03": false,
+      "qualifies_frozen_axi_case": false,
+      "report": "extras/diagnostic-stencil-n8/record.json",
+      "reported_outcome": "pass",
+      "source_revision": "7e4ac5851f1f71d292ed1802c3f92456d96faf8d"
+    },
+    {
+      "id": "preservation-audit",
+      "kind": "read-only source preservation audit; no execution",
+      "report": "extras/preservation/b09c-final.json",
+      "reported_outcome": "pass",
+      "source_revision": "143c69fe284bc2a1628721cf8a4237ac82d2547d",
+      "source_tree": "e8bfd26fccec91bfbcf50242d197217c64d7078e"
+    },
+    {
+      "full_suite_executed": false,
+      "id": "ci-guardrail",
+      "kind": "single targeted host tooling test; not a full suite",
+      "observed_exit": 0,
+      "report": "extras/ci-guardrail/record.json",
+      "source_revision": "143c69fe284bc2a1628721cf8a4237ac82d2547d"
+    },
+    {
+      "cases": [],
+      "command_logs_verified": 5,
+      "expected_nonzero_exits_are_qualification_passes": false,
+      "id": "cp-setup-failure",
+      "kind": "nonqualification mutation evidence",
+      "metadata_only_failure": true,
+      "report": "extras/cp-mutations/setup-failure/report.json",
+      "reported_outcome": "fail",
+      "source_revision": "7e4ac5851f1f71d292ed1802c3f92456d96faf8d"
+    },
+    {
+      "cases": [
+        {
+          "command_outcome": "pass",
+          "expectation_met": true,
+          "expected_exit": 0,
+          "expected_marker": "PASSED",
+          "expected_mutation_hits": 0,
+          "name": "old-normal",
+          "observed_exit": 0,
+          "observed_mutation_hits": 0
+        },
+        {
+          "command_outcome": "pass",
+          "expectation_met": true,
+          "expected_exit": 0,
+          "expected_marker": "PASSED",
+          "expected_mutation_hits": 0,
+          "name": "new-normal",
+          "observed_exit": 0,
+          "observed_mutation_hits": 0
+        },
+        {
+          "command_outcome": "pass",
+          "expectation_met": true,
+          "expected_exit": 0,
+          "expected_marker": "PASSED",
+          "expected_mutation_hits": 5,
+          "name": "old-drop-all",
+          "observed_exit": 0,
+          "observed_mutation_hits": 5
+        },
+        {
+          "command_outcome": "fail",
+          "expectation_met": true,
+          "expected_exit": 1,
+          "expected_marker": "exactly two DMA read responses must complete",
+          "expected_mutation_hits": 2,
+          "name": "new-drop-all",
+          "observed_exit": 1,
+          "observed_mutation_hits": 2
+        },
+        {
+          "command_outcome": "pass",
+          "expectation_met": true,
+          "expected_exit": 0,
+          "expected_marker": "PASSED",
+          "expected_mutation_hits": 1,
+          "name": "old-drop-later",
+          "observed_exit": 0,
+          "observed_mutation_hits": 1
+        },
+        {
+          "command_outcome": "fail",
+          "expectation_met": true,
+          "expected_exit": 1,
+          "expected_marker": "DMA read completions missing",
+          "expected_mutation_hits": 1,
+          "name": "new-drop-later",
+          "observed_exit": 1,
+          "observed_mutation_hits": 1
+        },
+        {
+          "command_outcome": "pass",
+          "expectation_met": true,
+          "expected_exit": 0,
+          "expected_marker": "PASSED",
+          "expected_mutation_hits": 1,
+          "name": "old-corrupt-first",
+          "observed_exit": 0,
+          "observed_mutation_hits": 1
+        },
+        {
+          "command_outcome": "fail",
+          "expectation_met": true,
+          "expected_exit": 1,
+          "expected_marker": "burst write value mismatch",
+          "expected_mutation_hits": 1,
+          "name": "new-corrupt-first",
+          "observed_exit": 1,
+          "observed_mutation_hits": 1
+        }
+      ],
+      "command_logs_verified": 34,
+      "expected_nonzero_exits_are_qualification_passes": false,
+      "id": "cp-proof",
+      "kind": "nonqualification mutation evidence",
+      "metadata_only_failure": false,
+      "report": "extras/cp-mutations/proof/report.json",
+      "reported_outcome": "pass",
+      "source_revision": "7e4ac5851f1f71d292ed1802c3f92456d96faf8d"
+    }
+  ],
+  "phase_complete": false,
+  "prepared_code_mapping": "identities/prepared-code-mapping.json",
+  "qualifies_P01_A03": false,
+  "raw_commit_objects": [
+    {
+      "git_commit_sha1": "143c69fe284bc2a1628721cf8a4237ac82d2547d",
+      "path": "identities/143c69f.commit",
+      "raw_sha256": "da13df3d30c635fea1c642e99a22c8941efb079211950d24c6dc66aa17bd8119",
+      "raw_size_bytes": 596
+    },
+    {
+      "git_commit_sha1": "7e4ac5851f1f71d292ed1802c3f92456d96faf8d",
+      "path": "identities/7e4ac58.commit",
+      "raw_sha256": "7d5972533a7e207c27494f322894ee800651ec9662127d0dd7a4ae3abd64aa50",
+      "raw_size_bytes": 266
+    },
+    {
+      "git_commit_sha1": "9532327e6006e0b6b09bae761745bc0d36a79b1e",
+      "path": "identities/9532327.commit",
+      "raw_sha256": "e9623b8c27ee4851ea9ef94444a1e32dbc1e052480feff769ff6100fafd12ac2",
+      "raw_size_bytes": 578
+    }
+  ],
+  "scope": "final",
+  "two_unit_followup": {
+    "case_outcomes": {
+      "cp-llc-port": "pass",
+      "mm-axi-arb": "pass"
+    },
+    "cases": [
+      "cp-llc-port",
+      "mm-axi-arb"
+    ],
+    "command_logs_verified": 5,
+    "directory": "local-units-followup",
+    "full_suite_executed": false,
+    "id": "units",
+    "kind": "two affected units only",
+    "launcher_exit": 0,
+    "raw_report_sha256": "74ec643d147a6ffb167381bbf9795e78a295b5368ac1b6e2b9d49eff0e721c3c",
+    "report": "local-units-followup/report.redacted.json",
+    "reported_outcome": "pass",
+    "source_revision": "143c69fe284bc2a1628721cf8a4237ac82d2547d",
+    "source_tree": "e8bfd26fccec91bfbcf50242d197217c64d7078e",
+    "text_snapshots_verified": 52,
+    "unreferenced_text_files_retained": []
+  },
+  "vendor_execution_performed": false
+}

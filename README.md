@@ -23,7 +23,7 @@ review. [P01-A03](docs/project/evidence/p01-xrt-blocked.json) remains blocked by
 missing qualified vendor XRT `hw_emu` tools/platform.
 The authoritative [status](docs/project/status.md) and
 [phase gates](docs/project/roadmap.json) separate implementation from acceptance;
-P00 remains complete, P01 remains incomplete, and P02 has not started.
+P00 remains complete, P01 remains incomplete, and P02–P11 remain `not_started`.
 
 ## Start here
 
@@ -31,7 +31,11 @@ P00 remains complete, P01 remains incomplete, and P02 has not started.
 - See the development sequence: [roadmap](ROADMAP.md).
 - Pick the next bounded task: [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
 - Reproduce the current phase: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
-- Continue from the latest tooling checkpoint:
+- Follow supplemental local coverage: [P01 local qualification](docs/project/p01-local-qualification.md)
+  and [handoff](docs/project/p01-local-qualification-handoff.md) cover vendor-free
+  full-AFU `xrtsim` and focused unit checks; vendor `hw_emu` remains a separate
+  P01-A03 requirement.
+- Review the earlier compiler-record tooling checkpoint:
   [compiler-record handoff](docs/project/p01-compiler-records-handoff.md); the
   accepted numerical baseline remains in the [P01 handoff](docs/project/p01-handoff.md).
 - Check retained evidence: [packet verification guide](docs/project/p01-packet-verification.md) and [packet continuation handoff](docs/project/p01-packet-handoff.md).

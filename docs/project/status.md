@@ -5,7 +5,7 @@ All six frozen numerical executions pass from a clean GPU source checkout.
 The fresh generated FP16 SimX build and supplemental full-AFU integer `xrtsim`
 smoke also pass. Independent reviews accept the clean-build and native numerical
 packets. Qualified vendor tools/platform are still missing for P01-A03. P00
-remains complete and P02 remains not started.
+remains complete and P02–P11 remain `not_started`.
 [roadmap.json](roadmap.json) remains authoritative for phase state and evidence;
 the linked reports define the exact accepted scope.
 
@@ -23,7 +23,48 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest tooling continuation — compiler records
+## Latest continuation — supplemental local AFU/RTL qualification
+
+The [local qualification guide](p01-local-qualification.md) documents the
+[bounded runner](../../ci/project/local_qualification.py) for real execution
+through the XRT runtime, local `libxrtsim` shim and full AFU RTL, alongside
+focused CP/LLC-port and AXI-arbiter RTL unit harnesses. Its fixed application
+cases cover integer transfers/launch, cold and warm reopen, and reordered AXI
+memory traffic; FP16/BF16 GEMM are explicit selections with the frozen P01
+configurations and reference tolerances. Separate generated build trees and
+retained source, tool, dependency and configuration identities bound each run.
+
+The frozen source `7e4ac5851f1f71d292ed1802c3f92456d96faf8d` completed
+**all eight selected cases and 32 monitored commands**, including both native
+TFR FP16/BF16-to-FP32 GEMMs. The same source passed **1,260 tooling tests in
+293.241 seconds**. It fixes the stencil application's advertised block-size
+option, rejects zero geometry before device work, places child compiler
+temporary files on the monitored build filesystem, and retains accurate
+helper-drift and process-launch diagnostics. The
+[qualification handoff](p01-local-qualification-handoff.md) and
+[evidence index](evidence/p01-local-qualification/README.md) retain the exact
+commands, finished packets, configuration reviews and failed attempts.
+
+The subsequent source `143c69fe284bc2a1628721cf8a4237ac82d2547d` strengthens
+the CP/LLC test oracle while preserving its six functions and all 37 original
+assertions. Both affected unit selections pass in a **fresh five-command
+packet**. Paired isolated mutation proofs detect three faults that the original
+harness missed. That follow-up also raises the governance job timeout from five
+to ten minutes with matching policy text; its focused CI guardrail test passes.
+The full tooling suite and eight-case matrix were **not rerun at this later
+revision**. The handoff retains source-to-GitHub mappings and points to
+commit-scoped delivery and hosted CI checks.
+
+The local shim uses modeled host/device memory and retains DPI-assisted integer
+multiply/divide. STD floating-point and TFR tensor claims are limited to each
+retained configuration; local AFU/unit evidence does not qualify vendor
+loading/platform semantics, physical cache coherence or physical hardware.
+P00 remains `complete`, P01-A01/A02 retain their accepted historical reports,
+P01-A03 remains blocked on vendor `hw_emu`, and P02–P11 remain `not_started`.
+
+<a id="latest-tooling-continuation--compiler-records"></a>
+
+## Earlier tooling continuation — compiler records
 
 The shared [compiler-record validator](p01-compiler-records.md) resolves the
 preparation planner's F1 glob ambiguity and the XRT execution inspector's
@@ -53,7 +94,7 @@ The identical implementation tree is published on `master` as
 the [publication map](evidence/p01-compiler-records/publication-map.json) retains
 the original local commit bytes and exact remote tree/parent verification.
 
-Use the [current handoff](p01-compiler-records-handoff.md) for review dispositions,
+Use the [compiler-record handoff](p01-compiler-records-handoff.md) for review dispositions,
 delivery state and the continuation's actual assignment record. This work
 preserves the accepted numerical packets and establishes no new GPU, vendor
 `hw_emu` or physical-device result. P01-A03 remains blocked and P02 remains
@@ -243,13 +284,14 @@ all existing accepted native evidence and phase states remain unchanged.
 ## Next bounded action
 
 **Resolve P01-T05's qualified vendor `hw_emu` environment/platform blocker.**
-Identify a compatible vendor release and supported platform, freeze their
-identities and resource budget, then retain an actual matching build packet with
-producer commands, results and artifacts. Prepare and independently review the
-execution runner's own manifest/receipt, then run the required
-DMA/launch/completion smoke under bounded supervision through the
-[vendor integration guide](p01-xrt-integration.md). Stop while any prerequisite is absent;
-the supplemental `xrtsim` pass cannot close P01-A03. The accepted numerical
+Identify a compatible vendor release and supported platform whose required
+compiler, simulator, runtime and build inputs fit the recorded resource budget.
+Freeze those identities and retain an actual matching build packet with producer
+commands, input hashes, exit results and generated artifacts. Prepare and
+independently review the execution runner's own manifest/receipt, then run the
+required DMA/launch/completion smoke under bounded supervision through the
+[vendor integration guide](p01-xrt-integration.md). Stop while any prerequisite is
+absent; supplemental local AFU or unit results cannot close P01-A03. The accepted numerical
 matrix and fresh selected-case build remain separate packets with explicit
 dependency provenance. Follow the
 [backlog](backlog.md), [P01 guide](phases/p01-baseline.md) and
@@ -296,6 +338,6 @@ or integration evidence into a passing gate.
 The historical [P01 execution ledger](p01-agent-execution.json) records **60 completed
 distinct agent assignments across 10 logical waves**, scheduled with at most three
 subagents active concurrently for the accepted baseline delivery. It does not
-count assignments in the current hardware-emulation preparation. The original
+count assignments in later hardware-emulation or local-qualification continuations. The original
 P00 ledger remains unchanged. The completed historical assignments support that
 implementation and review; vendor A03 remains blocked independently of agent count.

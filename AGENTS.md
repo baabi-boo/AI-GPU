@@ -28,7 +28,7 @@ Validate runtime, kernel and host compiler records independently through the
 expand retained stamp text to establish configuration coverage. Preserve source
 snapshots of the validator and its transitive local helpers in execution packets.
 See the [compiler-record contract](docs/project/p01-compiler-records.md) and
-[current tooling handoff](docs/project/p01-compiler-records-handoff.md).
+[compiler-record handoff](docs/project/p01-compiler-records-handoff.md).
 
 ---
 
@@ -53,6 +53,7 @@ See the [compiler-record contract](docs/project/p01-compiler-records.md) and
 ### Simulation & test
 - [docs/simulation.md](docs/simulation.md) — driver modes (simx, rtlsim, opae, xrt) and blackbox usage
 - [docs/testing.md](docs/testing.md) — test and regression flow
+- [P01 local qualification](docs/project/p01-local-qualification.md) and [handoff](docs/project/p01-local-qualification-handoff.md) — supplemental vendor-free full-AFU `xrtsim` and focused unit checks; vendor `hw_emu` remains the separate P01-A03 gate
 - [docs/debugging.md](docs/debugging.md) — debug traces (`--debug`), VCD (`--vcd`), scope, trace_csv
 - [docs/kernel_debugging.md](docs/kernel_debugging.md) — debug-mode hardware support (GDB/OpenOCD)
 - [docs/perfetto_analysis.md](docs/perfetto_analysis.md) — Perfetto trace and analysis

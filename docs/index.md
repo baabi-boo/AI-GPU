@@ -13,6 +13,9 @@ qualified result; consult the current status and evidence before making a claim.
 - [Current status](project/status.md) and [backlog](project/backlog.md): observed progress, blockers and the next bounded work item
 - [Developer guide](project/developer-guide.md): source-only checks, execution prerequisites and resource safeguards
 - [Acceptance and evidence](project/acceptance.md): what phase completion actually requires
+- [P01 local qualification](project/p01-local-qualification.md) and [handoff](project/p01-local-qualification-handoff.md):
+  supplemental vendor-free full-AFU `xrtsim` and focused unit checks, separate
+  from the vendor `hw_emu` gate (`P01-A03`)
 
 The sections below preserve the Vortex setup, architecture, development and
 implemented-subsystem references. Use the project developer guide to choose a
