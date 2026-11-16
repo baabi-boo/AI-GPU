@@ -1,8 +1,9 @@
 # P02 — Tensor numerical contract
 
 **Goal:** define and prove the arithmetic behavior of the first supported AI
-configuration. This phase is `in_progress` through accepted baseline evidence;
-no P02 exit gate is accepted yet.
+configuration. This phase remains `in_progress`. P02-T01 is complete with
+[P02-A01 source-level evidence](../evidence/p02-numerics/acceptance.json);
+P02-A02 and P02-A03 remain pending.
 The live status, dependencies and authoritative gate text are in
 [roadmap.json](../roadmap.json); the accountable role is Compute architecture lead.
 
@@ -13,8 +14,9 @@ The live status, dependencies and authoritative gate text are in
   [roadmap](../roadmap.json) records these as machine-checked
   `entry_acceptances`. P01's vendor integration gate P01-A03 is **not an entry
   prerequisite**; it remains blocked and must pass before P01/P07 closure.
-- Use the [P02 staged-entry handoff](../p02-entry-handoff.md) for accepted inputs,
-  remaining contract decisions and the first bounded deliverable.
+- Use the [P02 numerical handoff](../p02-numerics-handoff.md) for the implemented
+  contract, actual results and remaining work. The
+  [staged-entry handoff](../p02-entry-handoff.md) preserves the entry decision.
 - Start with the declared FP16/BF16 inputs and FP32 accumulation. Other formats,
   sparsity and block scaling require their own support decisions and evidence.
 - Reuse the [tensor design](../../designs/tensor_core_wgmma_engine.md),
@@ -24,6 +26,15 @@ The live status, dependencies and authoritative gate text are in
   universal IEEE behavior. A DPI C-arithmetic run is not native RTL proof.
 
 ## Ordered work packages
+
+Items 1–3 are implemented in the [v1 numerical contract](../../designs/tensor_numerics_v1.md),
+[manifest](../../../ci/project/p02_tensor_contract.json) and
+[p02-tfr profile](../../../profiles/p02-tfr.json). The
+[evidence packet](../evidence/p02-numerics/README.md) binds reviewed source to
+98 native leaf cases, the same 98 stalled cases with 306 hold checks, 98 host
+model-function cases, 47 compiler cases and 1,343 offline tests. The 20 matrix
+layout fixtures are source data; their application adapter and processor
+execution remain item 4 work. WGMMA compiler checks do not satisfy item 5.
 
 1. Freeze one baseline configuration: XLEN, native arithmetic backend, enabled
    formats, tensor/WGMMA switches, warp geometry, local memory and tile layouts.
@@ -67,7 +78,13 @@ native test, stale configuration or unreviewed tolerance change. In particular,
 resolve NVFP4 subnormal-scale semantics before advertising that mode; exclusion
 must be explicit, not a hidden fallback. Do not convert a missing run to a pass.
 
-Hand P03 the supported configuration, immutable numerical contracts, fixture
-manifest and evidence references. Record unresolved combinations in
-[status](../status.md) and [backlog](../backlog.md); the next bounded action is to
-map the accepted tensor signatures into a versioned native operator interface.
+The next bounded action is P02-T02: connect the frozen matrix fixtures to the
+WMMA regression and run matching full SimX/native processor normal, edge,
+cancellation, layout and K-traversal cases. Follow with WGMMA metadata,
+synchronization, multi-warp and backpressure proof. Direct leaf stalls and
+host model-function calls do not replace those runs.
+
+After every P02 exit gate is accepted, hand P03 the supported configuration,
+immutable numerical contracts, fixture manifest and evidence references for
+the native operator interface. Until then P03 remains `not_started`. Record
+unresolved combinations in [status](../status.md) and [backlog](../backlog.md).

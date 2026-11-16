@@ -15,6 +15,9 @@ compute, specialized matrix units, fast memory and usable software. It does not
 mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
 **Current development stage: P02 — tensor numerical contract (`in_progress`).**
+P02-T01 is complete: the versioned native FP16/BF16 contract and independent
+fixtures have [source-level P02-A01 evidence](docs/project/evidence/p02-numerics/acceptance.json).
+Whole-processor layout execution and WGMMA concurrency remain P02-A02/A03 work.
 The accepted P01 clean-build (`A01`) and native numerical (`A02`) results now
 unlock software/RTL development without waiting for a vendor FPGA emulator.
 **P01 remains `blocked` on `A03`**, and that proof is required before the
@@ -33,10 +36,10 @@ P00 is complete, P01 is blocked, P02 is in progress, and P03–P11 are not start
 
 - Understand the goal: [project charter](docs/project/charter.md).
 - See the development sequence: [roadmap](ROADMAP.md).
-- Continue the numerical track: [P02 entry handoff](docs/project/p02-entry-handoff.md).
-- Reproduce the new contract and fixtures: [P02 numerical handoff](docs/project/p02-numerics-handoff.md).
+- Continue the numerical track: [P02 numerical handoff](docs/project/p02-numerics-handoff.md).
+- Review the accepted contract and checks: [P02 evidence](docs/project/evidence/p02-numerics/README.md).
 - Pick the next bounded task: [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
-- Reproduce the current phase: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
+- Reproduce the accepted baseline: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
 - Follow current supplemental work: [P01 tensor-oracle hardening](docs/project/p01-tensor-oracles.md)
   and its [evidence index](docs/project/evidence/p01-tensor-oracles/README.md).
 - Follow earlier supplemental local coverage: [P01 local qualification](docs/project/p01-local-qualification.md)
@@ -134,7 +137,7 @@ before downloads or execution: approve a disk/RAM/job budget, use pinned tools
 and separate build directories, and start with bounded cases. Do not begin with
 an unrestricted toolchain install or full synthesis sweep.
 
-## P02 numerical contract implementation
+## P02 numerical contract milestone
 
 The [v1 specification](docs/designs/tensor_numerics_v1.md) defines native TFR
 FP16/BF16-to-FP32 arithmetic for a fixed four-product unit profile. Its
@@ -157,6 +160,24 @@ checks cover the leaf pipeline. Native WMMA/WGMMA C++ contexts now reject input
 formats absent from the compiled TFR configuration; this compile-boundary check
 does not create a hardware trap for unsupported raw instructions.
 
+Formal validation used clean source
+[`a25321496d802f43830c1658487f1adf79c838c3`](https://github.com/baabi-boo/AI-GPU/commit/a25321496d802f43830c1658487f1adf79c838c3):
+
+| Check | Observed result | Scope |
+|---|---|---|
+| Full offline suite | 1,343 tests passed; zero failures, errors or skips | Project tooling, source contracts and host model-function checks |
+| Native TFR leaf | 98 dense cases and the same 98 stalled cases passed; 306 hold checks passed | Exact-bit direct FEDP RTL, without DPI arithmetic |
+| Production model function | 98 cases passed | Host `TfrFedp`; full SimX processor execution remains separate |
+| Actual RISC-V API matrix | 47 cases passed: 17 positive compilations and 30 intended rejections | Both WMMA and WGMMA contexts, 94 context checks |
+| Existing native kernels | Four FP16/BF16 WMMA/WGMMA objects compiled | Compile-only; WGMMA overrides are outside the ordinary profile |
+
+The [evidence packet](docs/project/evidence/p02-numerics/README.md) preserves
+the initial stall-context failure and the first clean profile-build failure,
+their corrections, independent reviews and exact source/tool/configuration
+identities. The profile build now passes resolved enum selectors to C++ while
+preserving raw disabling and diagnostic flags. Production arithmetic, inherited
+goldens and accepted P01 tolerances remain unchanged.
+
 ```sh
 python3 ci/project/p02_fixture_oracle.py --check
 python3 ci/project/p02_layout_fixture_oracle.py --check
@@ -164,8 +185,11 @@ python3 -m unittest discover -s ci/project -p 'test_p02_*.py'
 ```
 
 See the [numerical handoff](docs/project/p02-numerics-handoff.md) for reviewed
-execution results, evidence boundaries and the remaining whole-processor and
-WGMMA work. P02 stays `in_progress` until every exit obligation is satisfied.
+execution results and evidence boundaries. The next bounded task is P02-T02:
+connect the layout fixtures to the existing matrix regression and execute
+matching configurations on full SimX and native processor RTL, then qualify
+WGMMA synchronization, metadata, multiple warps and backpressure. P02 stays
+`in_progress` until every exit obligation is satisfied.
 
 ## P01 supplemental tensor-oracle hardening
 

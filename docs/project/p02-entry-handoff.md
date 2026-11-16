@@ -1,12 +1,13 @@
 # P02 staged-entry handoff — native numerical development
 
-The numerical implementation now continues in the
-[P02 numerical handoff](p02-numerics-handoff.md). This document preserves the
-staged-entry decision and the work it originally unlocked; consult the current
-[status](status.md) for accepted results and the next task.
+P02-T01 is now complete; its [source-level P02-A01 record](evidence/p02-numerics/acceptance.json)
+and actual checks are described in the [P02 numerical handoff](p02-numerics-handoff.md).
+This document preserves the staged-entry decision and the work it originally
+unlocked. P02-T02 whole-processor and WGMMA proof is the next work; consult
+the current [status](status.md) for accepted scope and remaining gates.
 
 **Decision:** [ADR-004](decisions.md#adr-004--staged-native-development-entry-with-vendor-integration-retained),
-2026-11-16. This handoff is the current entry point for the unblocked workstream.
+2026-11-16. This handoff records the entry decision for the unblocked workstream.
 The canonical state and exact acceptance contract remain in
 [roadmap.json](roadmap.json). The earlier P01 handoffs are historical execution
 packets, not current sequencing instructions.
@@ -40,7 +41,11 @@ can close; physical FPGA measurements have their own separate acceptance.
 - No paid cloud, tool download, physical board, license acquisition or broad
   synthesis job is authorized by a phase dependency change.
 
-## First bounded deliverable: P02-T01
+## Original first bounded deliverable: P02-T01
+
+The following contract work is now implemented and reviewed. Its source-level
+acceptance does not close P02-A02/A03; their remaining execution work is in the
+[numerical handoff](p02-numerics-handoff.md#next-bounded-action).
 
 1. Freeze exactly one first native FP16/BF16-input, FP32-accumulation tensor
    configuration, including XLEN, backend (`TFR`, not DPI), tile geometry,

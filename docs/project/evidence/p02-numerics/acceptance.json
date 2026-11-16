@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "record_id": "p02-a01-tfr-contract-v1-a253214",
+  "kind": "design_review",
+  "outcome": "pass",
+  "evidence_level": "source_present",
+  "scope": "Reviewed version-1 native TFR FP16/BF16-to-FP32 numerical source contract, support boundaries, independent deterministic fixtures and predeclared exact-bit comparisons. The 98 arithmetic fixtures and 20 matrix-memory layout fixtures were frozen before qualifying evaluation. Supplemental observations comprise direct native FEDP leaf RTL, separate host TfrFedp consumption, actual RISC-V API/consumer compilation, and source-root governance/tooling checks; those observations do not promote this A01 design-review record to whole-processor or WGMMA acceptance.",
+  "source_revision": "a25321496d802f43830c1658487f1adf79c838c3",
+  "configuration": "Tested source tree 7e459269e22f90691cf410e42068982f5a8c7a2d. Contract ci/project/p02_tensor_contract.json and docs/designs/tensor_numerics_v1.md, version p02-tfr-fp16-bf16-v1. Direct native leaf: RV64 context, T4, N=2 packed 32-bit words/four scalar products plus FP32 C, W=25, alignment=26, accumulator=30, latency=4, USE_DSP=0, LANE_MASK=1, valid mask 0x1111, FP16/BF16 49 cases each; no SV_DPI, fast-math or tracing. Separate application profile profiles/p02-tfr.json: one cluster/core, four warps of four threads, issue width one, native TFR/STD, ordinary dense WMMA; A row-major, B column-major, C/D row-major, zero initial C, KUNROLL=1, tile 8x4x8 elements. Twenty integer-exact source layouts cover 8x4x8 and 16x8x16 shapes. API matrix uses its separate fresh empty-profile RV64 build and 47 exact configurations; four kernel objects use freshly configured p02-tfr builds, with WGMMA overrides explicitly outside profile qualification. Exact generated configuration, tool/header identities, arguments and bounds are retained in the bundled formal manifests.",
+  "acceptance_ids": [
+    "P02-A01"
+  ],
+  "commands": [
+    {
+      "command": "cwd=${WORK}/build-unit-formal-v2; argv=[\"${SOURCE}/configure\", \"--xlen=64\", \"--profile=p02-tfr\", \"--tooldir=${RISCV_TOOLS}\", \"--osversion=ubuntu/focal\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a31-v2-configure.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-unit-formal-v2/hw/unittest/tcu_contract; argv=[\"make\", \"-j2\", \"THREADS=2\", \"VERILATOR_PATH=${VERILATOR}\", \"all\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a31-v2-build-native.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-unit-formal-v2/hw/unittest/tcu_contract; argv=[\"make\", \"-j1\", \"THREADS=2\", \"VERILATOR_PATH=${VERILATOR}\", \"model\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a31-v2-build-model.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-unit-formal-v2/hw/unittest/tcu_contract; argv=[\"./tcu_contract\", \"--format=all\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a31-v2-run-native-dense.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-unit-formal-v2/hw/unittest/tcu_contract; argv=[\"./tcu_contract\", \"--format=all\", \"--stalls\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a31-v2-run-native-stalls.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-unit-formal-v2/hw/unittest/tcu_contract; argv=[\"./tfr_model\", \"--format=all\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a31-v2-run-model.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-formal-api; argv=[\"${SOURCE}/configure\", \"--xlen=64\", \"--profile=\", \"--tooldir=${RISCV_TOOLS}\", \"--osversion=ubuntu/focal\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a35-configure-api.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-formal-api; argv=[\"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3\", \"${SOURCE}/ci/project/p02_api_compile.py\", \"--build-dir\", \"${WORK}/build-formal-api\", \"--tools-dir\", \"${RISCV_TOOLS}\", \"--output\", \"${WORK}/formal-api\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a35-api-matrix.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-formal-wmma-fp16; argv=[\"${SOURCE}/configure\", \"--xlen=64\", \"--profile=p02-tfr\", \"--tooldir=${RISCV_TOOLS}\", \"--osversion=ubuntu/focal\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a35-configure-wmma-fp16.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-formal-wmma-fp16/tests/regression/sgemm_tcu; argv=[\"make\", \"-j1\", \"-f\", \"Makefile\", \"-f\", \"${WORK}/formal-compiler/object-only.mk\", \"kernel-inputs\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"CONFIGS\": \"-DITYPE=fp16 -DOTYPE=fp32 -DKUNROLL=1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a35-probe-wmma-fp16.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-formal-wmma-fp16/tests/regression/sgemm_tcu; argv=[\"make\", \"-j1\", \"-f\", \"Makefile\", \"-f\", \"${WORK}/formal-compiler/object-only.mk\", \"kernel.o\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"CONFIGS\": \"-DITYPE=fp16 -DOTYPE=fp32 -DKUNROLL=1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a35-compile-wmma-fp16.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-formal-wmma-bf16; argv=[\"${SOURCE}/configure\", \"--xlen=64\", \"--profile=p02-tfr\", \"--tooldir=${RISCV_TOOLS}\", \"--osversion=ubuntu/focal\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a35-configure-wmma-bf16.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-formal-wmma-bf16/tests/regression/sgemm_tcu; argv=[\"make\", \"-j1\", \"-f\", \"Makefile\", \"-f\", \"${WORK}/formal-compiler/object-only.mk\", \"kernel-inputs\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"CONFIGS\": \"-DITYPE=bf16 -DOTYPE=fp32 -DKUNROLL=1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a35-probe-wmma-bf16.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-formal-wmma-bf16/tests/regression/sgemm_tcu; argv=[\"make\", \"-j1\", \"-f\", \"Makefile\", \"-f\", \"${WORK}/formal-compiler/object-only.mk\", \"kernel.o\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"CONFIGS\": \"-DITYPE=bf16 -DOTYPE=fp32 -DKUNROLL=1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a35-compile-wmma-bf16.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-formal-wgmma-fp16; argv=[\"${SOURCE}/configure\", \"--xlen=64\", \"--profile=p02-tfr\", \"--tooldir=${RISCV_TOOLS}\", \"--osversion=ubuntu/focal\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a35-configure-wgmma-fp16.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-formal-wgmma-fp16/tests/regression/sgemm_tcu_wg; argv=[\"make\", \"-j1\", \"-f\", \"Makefile\", \"-f\", \"${WORK}/formal-compiler/object-only.mk\", \"kernel-inputs\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"CONFIGS\": \"-DITYPE=fp16 -DOTYPE=fp32 -DKUNROLL=1 -DVX_CFG_TCU_WGMMA_ENABLE -DVX_CFG_NUM_WARPS=4 -DVX_CFG_ISSUE_WIDTH=4 -DWGMMA_RS\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a35-probe-wgmma-fp16.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-formal-wgmma-fp16/tests/regression/sgemm_tcu_wg; argv=[\"make\", \"-j1\", \"-f\", \"Makefile\", \"-f\", \"${WORK}/formal-compiler/object-only.mk\", \"kernel.o\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"CONFIGS\": \"-DITYPE=fp16 -DOTYPE=fp32 -DKUNROLL=1 -DVX_CFG_TCU_WGMMA_ENABLE -DVX_CFG_NUM_WARPS=4 -DVX_CFG_ISSUE_WIDTH=4 -DWGMMA_RS\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a35-compile-wgmma-fp16.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-formal-wgmma-bf16; argv=[\"${SOURCE}/configure\", \"--xlen=64\", \"--profile=p02-tfr\", \"--tooldir=${RISCV_TOOLS}\", \"--osversion=ubuntu/focal\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a35-configure-wgmma-bf16.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-formal-wgmma-bf16/tests/regression/sgemm_tcu_wg; argv=[\"make\", \"-j1\", \"-f\", \"Makefile\", \"-f\", \"${WORK}/formal-compiler/object-only.mk\", \"kernel-inputs\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"CONFIGS\": \"-DITYPE=bf16 -DOTYPE=fp32 -DKUNROLL=1 -DVX_CFG_TCU_WGMMA_ENABLE -DVX_CFG_NUM_WARPS=4 -DVX_CFG_ISSUE_WIDTH=4 -DWGMMA_RS\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a35-probe-wgmma-bf16.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/build-formal-wgmma-bf16/tests/regression/sgemm_tcu_wg; argv=[\"make\", \"-j1\", \"-f\", \"Makefile\", \"-f\", \"${WORK}/formal-compiler/object-only.mk\", \"kernel.o\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"CONFIGS\": \"-DITYPE=bf16 -DOTYPE=fp32 -DKUNROLL=1 -DVX_CFG_TCU_WGMMA_ENABLE -DVX_CFG_NUM_WARPS=4 -DVX_CFG_ISSUE_WIDTH=4 -DWGMMA_RS\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a35-compile-wgmma-bf16.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${SOURCE}; argv=[\"python3\", \"ci/project/preflight.py\", \"--tier\", \"governance\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"MAKEFLAGS\": \"-j1\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a36-preflight.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${SOURCE}; argv=[\"python3\", \"ci/project/check_project.py\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"MAKEFLAGS\": \"-j1\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a36-project.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${SOURCE}; argv=[\"python3\", \"ci/project/check_baseline_packets.py\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"MAKEFLAGS\": \"-j1\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a36-baseline-packets.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${SOURCE}; argv=[\"python3\", \"ci/project/p02_fixture_oracle.py\", \"--check\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"MAKEFLAGS\": \"-j1\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a36-leaf-fixtures.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${SOURCE}; argv=[\"python3\", \"ci/project/p02_layout_fixture_oracle.py\", \"--check\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"MAKEFLAGS\": \"-j1\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a36-layout-fixtures.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${SOURCE}; argv=[\"python3\", \"-I\", \"${WORK}/formal-governance/base-change_impact.py\", \"--repo\", \"${SOURCE}\", \"--policy\", \"${WORK}/formal-governance/base-change-impact.yaml\", \"explain\", \"--base\", \"49ec3060f4787c9b650acdc26f12dab6acfcbcb9\", \"--head\", \"a25321496d802f43830c1658487f1adf79c838c3\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a36-change-impact.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${SOURCE}; argv=[\"python3\", \"-m\", \"unittest\", \"discover\", \"-s\", \"ci/project\", \"-p\", \"test_*.py\"]; environment_overrides={\"CCACHE_DISABLE\": \"1\", \"LC_ALL\": \"C\", \"MAKEFLAGS\": \"-j1\", \"OBJCACHE\": \"\", \"PYTHONDONTWRITEBYTECODE\": \"1\", \"TMPDIR\": \"${WORK}/tmp\"}; retained execution record=reports/w06a36-full-suite.json in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/designs/tensor_numerics_v1.md",
+      "sha256": "2d7d3f18728fe77dd96a7de0c05c9550f2c2446ef7bee4fb0740fe8d367a06a2"
+    },
+    {
+      "path": "ci/project/p02_tensor_contract.json",
+      "sha256": "e4e5d54f5d83cd66d37201689427746aa3d1326b05b39ae021299ea22c1411ac"
+    },
+    {
+      "path": "ci/project/p02_fixture_oracle.py",
+      "sha256": "12e546864a4fef5b05e10c7a04b1006bcd59376e5921ea1221c4d42668490145"
+    },
+    {
+      "path": "ci/project/fixtures/p02_tfr_v1.json",
+      "sha256": "0d8b173af178875274a7bf29886a51838be8cdb54224d55353959a639a5ea6c3"
+    },
+    {
+      "path": "hw/unittest/common/p02_tfr_vectors.h",
+      "sha256": "1ab08b7b4896523b2e0891f42d82ad8c989c04ecf04f9b0d2ec73c2bdf139a2f"
+    },
+    {
+      "path": "ci/project/p02_layout_fixture_oracle.py",
+      "sha256": "34e78c0313e2b032930615f02a790729d1c49293349728b55f7d04a29a2568a7"
+    },
+    {
+      "path": "ci/project/fixtures/p02_layout_v1.json",
+      "sha256": "0543f9f4208de3ff4743fe1894d97ccf3b8cca4707e9a26acd1f3dde884725b2"
+    },
+    {
+      "path": "profiles/p02-tfr.json",
+      "sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102"
+    },
+    {
+      "path": "hw/unittest/tcu_contract/Makefile",
+      "sha256": "f15acf2b08f784210543ecdffd7ac90ef5d0a6f539c5a034d8610767025ba61d"
+    },
+    {
+      "path": "hw/unittest/tcu_contract/main.cpp",
+      "sha256": "42385dbf17556e1376e261d2459a7e158bc4a64bb0c218cae7c6c7fa01490e80"
+    },
+    {
+      "path": "sw/kernel/include/vx_tensor.h",
+      "sha256": "fb5cec2bdf57567e0b466440b95d3b452962baf21e5273437cef747b871b6133"
+    },
+    {
+      "path": "ci/project/p02_api_compile.py",
+      "sha256": "c1555624ffd2803a3d3ac4c7e04aaaafc6d3909cd6f45fa5f91e64fd8f0f2e0c"
+    },
+    {
+      "path": "ci/project/test_p02_api_compile.py",
+      "sha256": "a58ba118ab7fbf5a53eb386890649b7a911c3180b365019b62010b321ddeb3c7"
+    },
+    {
+      "path": "ci/project/test_p02_tensor_contract.py",
+      "sha256": "b97cbb62cad87ad74dd9b0264cfbda5c49b62ea2ab4921e8bd926085786b33d8"
+    },
+    {
+      "path": "ci/project/test_p02_layout_contract.py",
+      "sha256": "fab92b02406557cfc5a1f38788b6f5b1f074e95960b890bf9c9e26edac58aa36"
+    },
+    {
+      "path": "ci/project/test_p02_build_contract.py",
+      "sha256": "a27c28e6fb6bd1df0ac7dc9c9c3beff04f5916038c79cb8f12e7cbb74f5bac3f"
+    },
+    {
+      "path": "docs/project/evidence/p02-numerics/summary.json",
+      "sha256": "2b83f4c8275a85863a13d91b003ecc1e00de2abf1677c5584ab2a4023f10b229"
+    },
+    {
+      "path": "docs/project/evidence/p02-numerics/inventory.json",
+      "sha256": "ba42c6b26c78dfbc19735b72fa8091a3c7d07a2b9f12d1d50de2ffaa46c49b6d"
+    },
+    {
+      "path": "docs/project/evidence/p02-numerics/evidence-bundle.json.gz",
+      "sha256": "39e0504628c4d12e0699cd56add73237f6e3fd18010c65a9696b2e6775f2fdf9"
+    },
+    {
+      "path": "docs/project/evidence/p02-numerics/review-addendum.json",
+      "sha256": "d33fade8780abd3f03e0c6db6eff7f460c8d2c67f4c563be8883c6a64d16df96"
+    }
+  ],
+  "limitations": [
+    "P02-A01 source contract only. P02 remains in_progress; P02-A02 and P02-A03 are not accepted, and P03 remains not_started.",
+    "The 20 matrix layout fixtures are independently checked source data. The sgemm_tcu JSON fixture-input adapter and matched full SimX/native processor execution remain unimplemented/unrun in this continuation.",
+    "Native execution covers the direct VX_tcu_fedp_tfr leaf only. Separate host TfrFedp invocation is not full SimX processor execution. The stall invocation repeats the same 98 dense fixtures; it adds 98 stalled evaluations and 306 output-hold checks, not 98 new independent fixture inputs.",
+    "No WGMMA synchronization, metadata, multi-warp, backpressure or timing-model parity qualification is supplied. Four consumer objects establish compilation only; WGMMA uses explicit overrides outside the ordinary application profile.",
+    "Thirty negative API compiler invocations correctly exit 1 with the intended static assertions. The enclosing 47-case runner exits 0 after judging those expected rejections. They are not compiler exit-zero passes; raw unsupported instructions do not acquire a hardware trap.",
+    "No full-AFU, vendor hw_emu, physical FPGA, silicon, performance, power or framework compatibility qualification is established. P01-A03 remains blocked and its P07 dependency is preserved.",
+    "Historical failures remain retained: the original dirty-source stall/context construction failure, and clean candidate 135cfec14d1fed0b4e950bc243e69a91879e4275 profile-selector build failure. Corrected clean-source passes at a25321496d802f43830c1658487f1adf79c838c3 do not rewrite them. Pre-fix main.cpp bytes for the first stall failure were not retained; no corrected hash is attributed to that failed source.",
+    "Both fast-math build rejections are intentional. The original native build already rejected the forbidden flag; no stale-object bypass was reproduced.",
+    "Published evidence normalizes machine paths. Original embedded SHA-256 fields identify raw bytes; inventory.json and each bundled published_sha256 identify normalized exported bytes. System/resource header bodies and tool executables are not redistributed; selected dependency identities remain recorded.",
+    "Resource limits are sampled process-group budgets, not hard cgroup/filesystem quotas. The full-suite outer-group RSS is not an aggregate peak over nested helpers. All formal commands report cleanup complete; the two-worker and 15 GiB reserve policy remains explicit.",
+    "This record establishes no hosted-CI result, maintainer waiver or human approval. Agent reviews are scoped engineering reviews; the user separately authorized implementation and publication to master."
+  ],
+  "reviewer": "Independent source reviews: /root/w05a25_math_fixture_closure, /root/w05a26_layout_profile_review, /root/w05a27_native_build_closure, /root/w05a28_compiler_provenance_review, /root/w05a29_a01_contract_review, /root/w05a30_r3_integration_review, /root/w06a34_profile_build_review. Independent exported-packet review: /root/w07a40_packet_integrity_review. Independent acceptance-scope review: /root/w07a41_acceptance_scope_review."
+}

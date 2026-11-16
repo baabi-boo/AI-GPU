@@ -1,0 +1,169 @@
+{
+  "acceptance_granted_by_export": false,
+  "acceptance_scope_for_separate_review": [
+    "P02-A01"
+  ],
+  "api": {
+    "cases": 47,
+    "contexts_per_case": 2,
+    "expected_assertion_rejections_exit_one": 30,
+    "positive_compiler_exit_zero": 17
+  },
+  "archive_packaging_cap_bytes": 2097152,
+  "bundle_sha256": "39e0504628c4d12e0699cd56add73237f6e3fd18010c65a9696b2e6775f2fdf9",
+  "bundle_size_bytes": 1190216,
+  "consumer_objects": 4,
+  "consumer_scope": "Compilation only; WGMMA uses explicit overrides outside p02-tfr qualification.",
+  "digest_policy": "Every pre-existing sha256/log_sha256/record_sha256 field inside embedded records still identifies ORIGINAL RAW BYTES. It is never rewritten to claim that normalized bytes are original. Use each bundled file's published_sha256 and inventory.json to check the normalized content. The exporter checks retained raw log bindings before normalization.",
+  "export_complete": true,
+  "file_count": 694,
+  "formal_manifest_paths": [
+    "formal-native-v2/manifest.json",
+    "formal-compiler/manifest.json",
+    "formal-api/report.json",
+    "formal-governance/manifest.json"
+  ],
+  "governance_results": {
+    "limitations": [
+      "This packet does not execute a full SimX processor, native RTL, WGMMA, vendor emulator or physical device.",
+      "Host model/function tests are not whole-processor SimX execution.",
+      "Passing fixture checks reproduce the frozen bytes; they do not qualify matrix execution.",
+      "The full unittest suite includes expected negative subprocess cases; a passing suite does not mean every deliberately rejected child invocation exited zero.",
+      "Governance preflight does not search configured tools outside PATH and does not require initialized GPU submodules.",
+      "Baseline packet consistency checks do not reverify raw unpublished log bytes or the raw-to-published redaction relationship.",
+      "Resource limits are polled budgets; peaks between samples and descendants leaving the monitored process group are outside the monitor guarantee.",
+      "Reported suite RSS is the outer monitored process group, not an aggregate peak across nested host-test helpers that create and bound separate process groups.",
+      "Executable hashes identify the observed host tools; this packet does not claim a complete host-system dependency inventory.",
+      "No phase acceptance, maintainer approval, waiver or hosted CI result is established by this packet."
+    ],
+    "outcome": "pass",
+    "resource_budget": {
+      "full_suite_timeout_seconds": 1200,
+      "makeflags": "-j1",
+      "max_log_mib": 16,
+      "max_rss_gib_per_bounded_command": 6,
+      "min_free_disk_gib": 15,
+      "note": "The shared wrapper records the session jobs ceiling as two; this sequential suite was assigned one host compile worker.",
+      "other_timeout_seconds": 120,
+      "session_compile_worker_ceiling": 2,
+      "this_assignment_host_compile_workers": 1
+    },
+    "resource_observations": {
+      "free_disk_bytes_after": 43965190144,
+      "free_disk_bytes_before": 44190236672,
+      "largest_log_bytes": 2276,
+      "longest_command_seconds": 370.001081,
+      "max_sampled_rss_bytes": 91238400
+    },
+    "unit_test_summary": {
+      "errors": 0,
+      "failures": 0,
+      "reported_duration_seconds": 369.31,
+      "skipped": 0,
+      "status": "OK",
+      "tests_run": 1343,
+      "unittest_summary_count": 1
+    }
+  },
+  "history_manifest_paths": [
+    "formal-history/failure-disposition.json",
+    "formal-native/manifest.json",
+    "formal-native/fix-diagnostic.json",
+    "formal-integrity/manifest.json"
+  ],
+  "inventory_sha256": "ba42c6b26c78dfbc19735b72fa8091a3c7d07a2b9f12d1d50de2ffaa46c49b6d",
+  "limitations": [
+    "Header bodies/toolchains and executables are excluded; identity manifests retain their hashes.",
+    "Dirty-tree diagnostics retain their historical state; only corrected formal records claim the clean candidate.",
+    "The original stall failure lacks a preserved pre-fix harness byte snapshot; no corrected hash is substituted.",
+    "Leaf enable stalls do not establish WGMMA or whole-processor layout correctness."
+  ],
+  "native_case_counts": {
+    "w06a31-v2-run-model/model_dense": {
+      "bf16": 49,
+      "fp16": 49,
+      "unique_fixture_ids": 98
+    },
+    "w06a31-v2-run-native-dense/unit_dense": {
+      "bf16": 49,
+      "fp16": 49,
+      "unique_fixture_ids": 98
+    },
+    "w06a31-v2-run-native-stalls/unit_dense": {
+      "bf16": 49,
+      "fp16": 49,
+      "unique_fixture_ids": 98
+    },
+    "w06a31-v2-run-native-stalls/unit_stall": {
+      "bf16": 49,
+      "fp16": 49,
+      "unique_fixture_ids": 98
+    }
+  },
+  "native_counts": [
+    {
+      "backend": "native_tfr",
+      "command": "w06a31-v2-run-native-dense",
+      "enabled_cycles": 101,
+      "executed": 98,
+      "failed": 0,
+      "hold_checks": 0,
+      "hold_failures": 0,
+      "mode": "unit_dense",
+      "passed": 98,
+      "selected": 98,
+      "stall_cycles": 0,
+      "status": "pass"
+    },
+    {
+      "backend": "native_tfr",
+      "command": "w06a31-v2-run-native-stalls",
+      "enabled_cycles": 101,
+      "executed": 98,
+      "failed": 0,
+      "hold_checks": 0,
+      "hold_failures": 0,
+      "mode": "unit_dense",
+      "passed": 98,
+      "selected": 98,
+      "stall_cycles": 0,
+      "status": "pass"
+    },
+    {
+      "backend": "native_tfr",
+      "command": "w06a31-v2-run-native-stalls",
+      "enabled_cycles": 101,
+      "executed": 98,
+      "failed": 0,
+      "hold_checks": 306,
+      "hold_failures": 0,
+      "mode": "unit_stall",
+      "passed": 98,
+      "selected": 98,
+      "stall_cycles": 153,
+      "status": "pass"
+    },
+    {
+      "backend": "tfr_model",
+      "command": "w06a31-v2-run-model",
+      "enabled_cycles": 0,
+      "executed": 98,
+      "failed": 0,
+      "hold_checks": 0,
+      "hold_failures": 0,
+      "mode": "model_dense",
+      "passed": 98,
+      "selected": 98,
+      "stall_cycles": 0,
+      "status": "pass"
+    }
+  ],
+  "not_accepted_by_this_packet": [
+    "P02-A02",
+    "P02-A03",
+    "P01-A03"
+  ],
+  "schema_version": 1,
+  "source_revision": "a25321496d802f43830c1658487f1adf79c838c3",
+  "source_tree": "7e459269e22f90691cf410e42068982f5a8c7a2d"
+}

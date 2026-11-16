@@ -1,6 +1,13 @@
 # Current project status
 
-**P02 is `in_progress` through a user-directed, evidence-based staged entry.**
+**P02-T01 is complete and P02-A01 has reviewed source-level evidence.**
+The [contract acceptance record](evidence/p02-numerics/acceptance.json) and
+[numerical handoff](p02-numerics-handoff.md) cover the implemented contract,
+98 independent arithmetic fixtures, 20 source layout fixtures and bounded
+verification. P02 remains `in_progress`: A02's whole-processor arithmetic/layout
+coverage and A03's WGMMA concurrency obligations remain pending.
+
+P02 entered development through the user-directed staged-entry decision.
 P01-A01 and P01-A02 are accepted, while P01 itself remains blocked on vendor
 `hw_emu` (P01-A03). This blocks completion of P01 and acceptance of P07,
 **not** the P02–P06 software/RTL development chain.
@@ -19,7 +26,7 @@ the linked reports define the exact accepted scope.
 |---|---|---|
 | P00 — project foundation | `complete` | Its three source-level acceptance gates and verified default-branch delivery remain preserved |
 | P01 — reproducible baseline | `blocked` | A01 clean-build and A02 six-case numerical reports accepted; A03 vendor integration is still required before P07 |
-| P02 — tensor numerical contract | `in_progress` | Entry unlocked by accepted P01-A01/A02; P02-A01/A02/A03 not yet accepted |
+| P02 — tensor numerical contract | `in_progress` | T01 complete; A01 source contract accepted; A02 full-processor arithmetic/layout and A03 WGMMA concurrency remain pending |
 | P03–P11 | `not_started` | Later software, hardware and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -28,7 +35,39 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — staged numerical development entry
+## Latest continuation — P02 contract and executable fixtures
+
+Formal validation used clean source
+`a25321496d802f43830c1658487f1adf79c838c3`, tree
+`7e459269e22f90691cf410e42068982f5a8c7a2d`. The
+[evidence packet](evidence/p02-numerics/README.md) retains exact commands,
+configuration, selected compiler-header identities, logs, source hashes,
+independent reviews and failed attempts.
+
+| Result | Demonstrated scope |
+|---|---|
+| 1,343 offline tests passed; zero failures, errors or skips | Project tooling, contract checks and host model-function tests |
+| 98 native dense and the same 98 stalled fixtures passed, with 306 hold checks | Direct native TFR FEDP leaf, exact FP32 bits, without DPI arithmetic |
+| 98 production-model fixtures passed | Host `TfrFedp` calls; no full SimX processor run |
+| 47 actual RISC-V compiler cases passed: 17 positive, 30 intended rejections | Disabled-format and output-contract checks in both WMMA/WGMMA contexts, 94 context checks |
+| Four existing FP16/BF16 WMMA/WGMMA kernel objects compiled | Compile-only integration; WGMMA uses explicit overrides outside the ordinary profile |
+
+The runnable `p02-tfr` profile and 20 matrix-memory fixtures freeze the first
+ordinary WMMA application geometry and layouts. The matrix fixture adapter and
+their full-processor execution remain outstanding. Leaf enable stalls do not
+establish WGMMA synchronization, metadata handling, multiple warps or backpressure.
+
+The first clean candidate `135cfec14d1fed0b4e950bc243e69a91879e4275`
+failed native harness compilation because raw profile enum flags did not supply
+the resolved C++ selectors. The corrected Makefile uses the established resolved
+flag path, and a real-profile regression preserves raw rejection guards. An
+earlier dirty-source stall run exposed a shared Verilator-context lifecycle bug;
+each DUT now owns its context. Both failures remain retained with their exact
+provenance limits. Production arithmetic, inherited goldens and P01 evidence
+were preserved. The [agent ledger](evidence/p02-numerics/agent-execution.json)
+records collaboration separately from qualification.
+
+## Preserved sequencing decision — staged numerical development entry
 
 On 2026-11-16 the user directed an execution-sequencing change to avoid making
 vendor-only tools a prerequisite for native AI software development. The
@@ -37,7 +76,8 @@ accepted P01-A01/A02 evidence records, with P00 complete. The governance
 validator requires passing, compatible evidence for **every** named entry
 acceptance before a phase may be `in_progress` or `complete`. A missing,
 blocked or failed record will reject the transition. P02's existing three
-acceptance obligations are unchanged and none is claimed accepted.
+acceptance obligations were unchanged and none was claimed accepted by that
+entry decision. The later P02-A01 source result is recorded above.
 
 **P01-A03 stays blocked and required.** P07 now also depends on full P01
 completion, so an FPGA prototype cannot be declared complete without the
@@ -349,13 +389,16 @@ all existing accepted native evidence and phase states remain unchanged.
 
 ## Next bounded action
 
-**P02-T01: freeze the first native FP16/BF16-to-FP32 numerical contract and
-deterministic fixture manifest.** Begin with the accepted P01 configuration,
-its independent tensor-oracle work and the existing numerical references.
-Document supported layouts, rounding/accumulation/exception behavior,
-unsupported inputs and unchanged tolerances before running new acceptance
-cases. Obtain independent review; P02-A01 remains unaccepted until that happens.
-Follow the [P02 entry handoff](p02-entry-handoff.md),
+**P02-T02: connect the frozen matrix fixtures to the existing WMMA regression
+and execute them on matching full SimX and native processor RTL configurations.**
+Implement explicit fixture selection and exact-bit output checking for both
+formats; exercise compact layouts, tile boundaries and multi-instruction K
+accumulation together with normal, edge and cancellation cases. Preserve the
+reviewed v1 arithmetic rules and all inherited tolerances. Then qualify WGMMA
+descriptor/metadata handling, synchronization, multiple warps and backpressure
+with applicable model-parity evidence. Neither the leaf run nor kernel
+compilation satisfies those remaining gates.
+Follow the [P02 numerical handoff](p02-numerics-handoff.md),
 [P02 phase guide](phases/p02-tensor.md), [backlog](backlog.md), and
 [acceptance policy](acceptance.md).
 

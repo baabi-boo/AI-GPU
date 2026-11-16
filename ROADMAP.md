@@ -117,8 +117,12 @@ document or governance check cannot stand in for unexecuted GPU tests.
 ## Where to start, and how to continue
 
 Read [status](docs/project/status.md), then the
-[ordered backlog](docs/project/backlog.md). With P01-A01/A02 accepted, the active
-bounded task is **P02-T01: freeze the first FP16/BF16-to-FP32 numerical contract**.
+[ordered backlog](docs/project/backlog.md). **P02-T01 is complete and P02-A01 is
+accepted at source scope.** The active bounded task is **P02-T02: connect the
+frozen matrix fixtures to the WMMA regression and verify them on full SimX and
+native processor RTL**, followed by the WGMMA concurrency obligations. Use the
+[numerical handoff](docs/project/p02-numerics-handoff.md) and
+[reviewed contract evidence](docs/project/evidence/p02-numerics/acceptance.json).
 The missing vendor platform remains a separate P01-T05/P07 dependency; resolve
 tools, access and a disk/RAM/job/time budget before any substantial build.
 

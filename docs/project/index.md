@@ -12,7 +12,7 @@ that a GPU workload or physical device has passed its checks.
 | What are we building? | [Plain-language overview](../../README.md), [charter](charter.md) | [Roadmap](../../ROADMAP.md), [current status](status.md) |
 | What should I work on next? | [Developer guide](developer-guide.md), [backlog](backlog.md) | [Architecture](architecture.md), [contribution process](../../CONTRIBUTING.md), [agent rules](../../AGENTS.md) |
 | How can P02 progress without vendor FPGA tools? | [P02 staged-entry handoff](p02-entry-handoff.md), [numerical phase guide](phases/p02-tensor.md) | [Staging decision ADR-004](decisions.md#adr-004--staged-native-development-entry-with-vendor-integration-retained), [roadmap gates](roadmap.json) |
-| What arithmetic is the next AI configuration built on? | [TFR numerical contract v1](../designs/tensor_numerics_v1.md), [numerical handoff](p02-numerics-handoff.md) | [Frozen contract manifest](../../ci/project/p02_tensor_contract.json), [independent fixtures](../../ci/project/fixtures/p02_tfr_v1.json) |
+| What arithmetic is the next AI configuration built on? | [TFR numerical contract v1](../designs/tensor_numerics_v1.md), [numerical handoff](p02-numerics-handoff.md) | [P02 evidence](evidence/p02-numerics/README.md), [frozen contract manifest](../../ci/project/p02_tensor_contract.json), [independent fixtures](../../ci/project/fixtures/p02_tfr_v1.json) |
 | What would prove this works? | [Acceptance policy](acceptance.md), [verification strategy](verification.md) | [Evidence format](evidence/README.md), [benchmark protocol](benchmarks.md), [review policy](../review/code-review-policy.md) |
 | How do I prepare the remaining P01 vendor integration? | [hw_emu runbook](p01-hwemu-runbook.md), [manifest contract](p01-hwemu-manifest.md) | [Preparation handoff](p01-hwemu-handoff.md), [current status](status.md) |
 | How do I run the prepared integer integration smoke? | [Vendor XRT integration guide](p01-xrt-integration.md), with its separate manifest/receipt contract | [Vendor integration handoff](p01-xrt-handoff.md), [current status](status.md) |
@@ -36,7 +36,8 @@ unexecuted template as a completion record.
 - [Current status](status.md): observed results, blockers and the next bounded action.
 - [P02 entry handoff](p02-entry-handoff.md): accepted baseline inputs, nonblocking native work and deferred vendor-emulation scope.
 - [P02 numerical handoff](p02-numerics-handoff.md): versioned TFR semantics,
-  independent bit-exact fixtures, compile-time format rejection and execution boundaries.
+  completed P02-T01, independent bit-exact fixtures, actual checks and the next
+  whole-processor/WGMMA proof. P02 remains `in_progress`.
 - [Backlog](backlog.md): ordered work items with deliverables and gate mappings.
 - [P01 hw_emu preparation](p01-hwemu-runbook.md): read-only inventory and candidate
   planning, the corrected XRT hook and lean opt-in tracing; P01-A03 remains blocked.
@@ -106,6 +107,13 @@ qualified specialists, physical implementation evidence and explicit human
 funding/manufacturing decisions; a roadmap does not authorize purchases.
 
 ## Evidence and continuation records
+
+- [P02 numerical evidence](evidence/p02-numerics/README.md): clean-source
+  native leaf, production model-function, compiler and 1,343-test results,
+  independent reviews and retained failures; [P02-A01](evidence/p02-numerics/acceptance.json)
+  is a source-level contract result. P02-A02/A03 remain pending.
+- [P02 collaboration ledger](evidence/p02-numerics/agent-execution.json): this
+  continuation's assignments and outcomes, separate from GPU qualification.
 
 - [P01 tensor-oracle hardening](p01-tensor-oracles.md): current supplemental
   comparator, fixture and selection/replay corrections; its

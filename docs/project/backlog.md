@@ -7,15 +7,22 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Start here: numerical development unlocked; vendor work retained
+## Start here: P02-T01 complete; whole-processor proof next
 
-**Next bounded action: P02-T01 — freeze the FP16/BF16-to-FP32 numerical
-contract and supported fixture matrix.** The [P02 entry handoff](p02-entry-handoff.md)
-explains the accepted baseline inputs, exact next work and current limitations.
-P02 is now `in_progress` based on accepted P01-A01/A02 evidence. The vendor
-P01-T05/P01-A03 obligation still blocks **P01 completion and P07**, but no
-longer prevents P02's native software/RTL development. This is a changed phase
-dependency, not a passing hardware-emulation result or tolerance waiver.
+**Next bounded action: P02-T02 — add a matrix-fixture input adapter and run
+the frozen FP16/BF16 cases on matching full SimX and native processor RTL.**
+The [P02 numerical handoff](p02-numerics-handoff.md) records completed T01 work,
+[source-level A01 evidence](evidence/p02-numerics/acceptance.json), exact tested
+source and remaining obligations. The contract has 98 independent arithmetic
+fixtures and 20 source layout fixtures. Direct native leaf/model checks and
+compiler checks pass; the layout fixtures still need actual matrix application
+execution. Cover tile boundaries, K accumulation, normal, edge and cancellation
+cases, then WGMMA synchronization, metadata, multiple warps and backpressure.
+
+P02 remains `in_progress`; A02/A03 are pending and P03 is `not_started`.
+The vendor P01-T05/P01-A03 obligation still blocks **P01 completion and P07**.
+The preserved [entry decision](p02-entry-handoff.md) permits native development
+without turning the missing vendor result into a pass.
 
 **Parallel hardware action: resolve P01-T05's vendor `hw_emu` prerequisites.**
 P01-A01's clean generated-build and P01-A02's complete six-case native numerical
@@ -180,14 +187,15 @@ remains an unqualified candidate until its selected configuration earns evidence
 
 ## Priority 2 — Active native AI software track
 
-P02 entry is open and its numerical contract is now in progress. P03 onward
-remain gated on their parent phases, and preparation does not count as
-acceptance. Detailed work packages remain in the phase guides.
+P02-T01 is complete with reviewed source-level P02-A01 evidence. P02-T02 is
+active: leaf arithmetic and compiler checks are available, while full-processor
+layout execution and WGMMA concurrency remain unqualified. P03 onward remain
+gated on their parent phases. Detailed work packages remain in the phase guides.
 
 | Work item | First bounded deliverable | Entry / accountable role | Gates |
 |---|---|---|---|
-| **P02-T01 — Arithmetic contract** | Version FP16/BF16-to-FP32 native semantics, supported layouts and independent fixtures; preserve/freeze tolerances before evaluation. | P00 plus accepted P01-A01/A02; compute architecture lead | P02-A01 |
-| **P02-T02 — Arithmetic and concurrency proof** | Add normal/edge/cancellation cases and WGMMA synchronization/backpressure coverage; retain native RTL and applicable parity evidence. | T01; verification lead | P02-A02, P02-A03 |
+| **P02-T01 — Arithmetic contract — complete** | Reviewed v1 FP16/BF16-to-FP32 semantics, runnable T4 application profile, 98 independent arithmetic fixtures and 20 layout fixtures; frozen comparisons and inherited tolerances preserved. | P00 plus accepted P01-A01/A02; compute architecture lead | [P02-A01 source evidence](evidence/p02-numerics/acceptance.json) |
+| **P02-T02 — Arithmetic and concurrency proof — active** | Add the matrix-fixture adapter; execute matching full SimX/native processor normal, edge, cancellation and layout checks. Then qualify WGMMA metadata, synchronization, multiple warps and backpressure with applicable parity evidence. | T01; verification lead | P02-A02, P02-A03 remain pending |
 | **P03-T01 — Operator contract** | Define the smallest model-relevant operator/signature matrix and explicit rejection/error/ownership rules over the existing native runtime. | P02; kernel and runtime lead | P03-A01 |
 | **P03-T02 — Operator implementations and lifetime tests** | Reuse inherited kernels; independently verify each advertised operator, dispatch, bounds, queue/event lifetime and failure cleanup. | T01; kernel and runtime lead | P03-A02, P03-A03 |
 | **P04-T01 — Fixed tiny model** | Freeze a redistributable model or deterministic generator, hashes, inputs, licenses and layer/reference outputs; map every operation to the accepted library. | P03; model runtime lead | P04-A01 |
