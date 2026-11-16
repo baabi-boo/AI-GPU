@@ -104,6 +104,14 @@ funding/manufacturing decisions; a roadmap does not authorize purchases.
   bounded host/kernel build and explicit `hw_emu` smoke execution.
 - [Vendor integration handoff](p01-xrt-handoff.md): implementation, actual checks,
   remaining prerequisites and publication state for the P01-T05 continuation.
+- [Vendor tooling review](p01-xrt-review.md): concrete findings, corrections and
+  independently checked evidence boundaries.
+- [Merged vendor tooling verification](evidence/p01-xrt-merge/merge-verification.json):
+  the exact combined implementation, 1,075 passing tests and preserved concurrent work.
+- [Original vendor tooling verification](evidence/p01-xrt-tooling/verification.json):
+  historical 875-test result and blocked prerequisite observations at the original runner revision.
+- [Vendor tooling execution ledger](p01-xrt-agent-execution.json): actual agent
+  assignments and outcomes, separate from accelerator qualification.
 - [Evidence guide](evidence/README.md): record fields, artifact integrity and retention.
 - [Acceptance report template](evidence/report.example.json): **unexecuted**, not proof.
 - [Benchmark specification template](evidence/benchmark.example.json): **unmeasured**

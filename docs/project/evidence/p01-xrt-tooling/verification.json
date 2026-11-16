@@ -1,0 +1,1098 @@
+{
+  "schema_version": 1,
+  "type": "toolchain_verification",
+  "record_id": "p01-xrt-tooling-42e36724",
+  "project": "AI-GPU",
+  "phase": "P01",
+  "evidence_level": "source_present",
+  "scope": "Retained source-level XRT tooling test, read-only CLI and advisory change-impact observations for the frozen implementation candidate. This is an unsigned tooling-verification inventory, not a roadmap acceptance report or a GPU execution packet.",
+  "source_revision": "42e36724a2f2a02766b26de8deb9b04b7557fa27",
+  "source_tree": "c0f28a660c0a5c8b16d3f82adee06d104668d4e5",
+  "code_revision": "42e36724a2f2a02766b26de8deb9b04b7557fa27",
+  "code_tree": "c0f28a660c0a5c8b16d3f82adee06d104668d4e5",
+  "classification_base_revision": "91b82fe300f94ab0a70dd0e0e4a69a0e23b16101",
+  "packet_assembled_at_utc": "2026-11-16T00:40:31.792269+00:00",
+  "phase_complete": false,
+  "acceptance": "not_evaluated",
+  "acceptance_ids": [],
+  "acceptance_gate_status": {
+    "P01-A03": "blocked"
+  },
+  "vendor_hw_emu_executed": false,
+  "gpu_workload_executed_by_these_checks": false,
+  "physical_fpga_executed": false,
+  "silicon_executed": false,
+  "gpu_driver": "not_applicable",
+  "arithmetic_implementation": "not_applicable",
+  "commands": [
+    {
+      "id": "full_project_tooling_suite",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/project",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "command": "python3 -m unittest discover -s ci/project -p 'test_*.py' -v",
+      "cwd": "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+      "result": "pass",
+      "exit_code": 0,
+      "metadata": "p01-xrt-full-tests.json",
+      "combined_log": "p01-xrt-full-tests.log",
+      "started_at_utc": "2026-11-16T00:29:34.078112+00:00",
+      "finished_at_utc": "2026-11-16T00:31:12.941418+00:00",
+      "wall_elapsed_seconds": 98.862,
+      "unittest_reported_seconds": 98.655,
+      "tests_run": 875,
+      "passed": 875,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "expected_failures": 0,
+      "unexpected_successes": 0,
+      "count_basis": "875 verbose test entries and the terminal unittest summary. One SST fixture emits intervening lines before its separate ok; 874 entries end with inline ok. Final summary is plain OK, without skip/failure annotations.",
+      "scope": "Source-root Python project/tooling tests. Local configure, CPU ELF, process and Git fixtures are tooling checks; synthetic GPU-shaped records are fixture data.",
+      "captured_environment": "The suite metadata does not record interpreter identity or a full environment inventory; the separate CLI interpreter record is not substituted for it."
+    },
+    {
+      "id": "vendor_prerequisite_probe",
+      "argv": [
+        "python3",
+        "ci/project/xrt_baseline.py",
+        "probe"
+      ],
+      "command": "python3 ci/project/xrt_baseline.py probe",
+      "cwd": "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "result": "blocked",
+      "exit_code": 1,
+      "expected_blocked": true,
+      "metadata": "p01-xrt-probe-metadata.json",
+      "stdout": "p01-xrt-probe.json",
+      "stderr": "p01-xrt-probe.stderr.txt",
+      "started_at_utc": "2026-11-16T00:33:47.489340+00:00",
+      "finished_at_utc": "2026-11-16T00:33:47.556538+00:00",
+      "blockers": [
+        "required vendor executable is absent from PATH: v++",
+        "required vendor executable is absent from PATH: vivado",
+        "required vendor executable is absent from PATH: emconfigutil",
+        "required vendor executable is absent from PATH: platforminfo",
+        "required vendor executable is absent from PATH: xsim",
+        "required vendor root is unset or unavailable: XILINX_VITIS",
+        "required vendor root is unset or unavailable: XILINX_VIVADO",
+        "required vendor root is unset or unavailable: XILINX_XRT",
+        "a pinned platform/artifact manifest and independently reviewed build receipt are required"
+      ],
+      "phase_complete": false,
+      "acceptance": "not_evaluated"
+    },
+    {
+      "id": "unmodified_example_manifest_plan",
+      "argv": [
+        "python3",
+        "ci/project/xrt_baseline.py",
+        "plan",
+        "--source",
+        "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+        "--build-dir",
+        "/workspace/scratch/4f0bc2b9a6f1/w07-a38-cli-7_u75w06/build",
+        "--tool-dir",
+        "/workspace/scratch/4f0bc2b9a6f1/w07-a38-cli-7_u75w06/tools",
+        "--manifest",
+        "/workspace/scratch/4f0bc2b9a6f1/AI-GPU/ci/project/p01_xrt_environment.example.json",
+        "--bundle-manifest",
+        "/workspace/scratch/4f0bc2b9a6f1/AI-GPU/ci/project/p01_toolchain.lock.json",
+        "--output",
+        "/workspace/scratch/4f0bc2b9a6f1/w07-a38-cli-7_u75w06/output"
+      ],
+      "command": "python3 ci/project/xrt_baseline.py plan --source /workspace/scratch/4f0bc2b9a6f1/AI-GPU --build-dir /workspace/scratch/4f0bc2b9a6f1/w07-a38-cli-7_u75w06/build --tool-dir /workspace/scratch/4f0bc2b9a6f1/w07-a38-cli-7_u75w06/tools --manifest /workspace/scratch/4f0bc2b9a6f1/AI-GPU/ci/project/p01_xrt_environment.example.json --bundle-manifest /workspace/scratch/4f0bc2b9a6f1/AI-GPU/ci/project/p01_toolchain.lock.json --output /workspace/scratch/4f0bc2b9a6f1/w07-a38-cli-7_u75w06/output",
+      "cwd": "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "result": "blocked",
+      "exit_code": 1,
+      "expected_blocked": true,
+      "metadata": "p01-xrt-example-plan-metadata.json",
+      "stdout": "p01-xrt-example-plan.json",
+      "stderr": "p01-xrt-example-plan.stderr.txt",
+      "started_at_utc": "2026-11-16T00:33:47.874505+00:00",
+      "finished_at_utc": "2026-11-16T00:33:47.939780+00:00",
+      "blockers": [
+        "source.revision must be a lowercase hexadecimal digest"
+      ],
+      "phase_complete": false,
+      "acceptance": "not_evaluated"
+    },
+    {
+      "id": "immutable_base_classify",
+      "argv": [
+        "python3",
+        "-I",
+        "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change_impact.py",
+        "--repo",
+        "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+        "--policy",
+        "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change-impact.yaml",
+        "classify",
+        "--base",
+        "91b82fe300f94ab0a70dd0e0e4a69a0e23b16101",
+        "--head",
+        "42e36724a2f2a02766b26de8deb9b04b7557fa27",
+        "--event",
+        "push",
+        "--format",
+        "json"
+      ],
+      "command": "python3 -I /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change_impact.py --repo /workspace/scratch/4f0bc2b9a6f1/AI-GPU --policy /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change-impact.yaml classify --base 91b82fe300f94ab0a70dd0e0e4a69a0e23b16101 --head 42e36724a2f2a02766b26de8deb9b04b7557fa27 --event push --format json",
+      "cwd": "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+      "result": "pass",
+      "exit_code": 0,
+      "combined_log": "p01-xrt-change-impact.log",
+      "scope": "Advisory classifier operation using immutable-base source and policy; not a GPU test or acceptance decision."
+    },
+    {
+      "id": "immutable_base_explain",
+      "argv": [
+        "python3",
+        "-I",
+        "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change_impact.py",
+        "--repo",
+        "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+        "--policy",
+        "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change-impact.yaml",
+        "explain",
+        "--base",
+        "91b82fe300f94ab0a70dd0e0e4a69a0e23b16101",
+        "--head",
+        "42e36724a2f2a02766b26de8deb9b04b7557fa27",
+        "--event",
+        "push"
+      ],
+      "command": "python3 -I /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change_impact.py --repo /workspace/scratch/4f0bc2b9a6f1/AI-GPU --policy /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change-impact.yaml explain --base 91b82fe300f94ab0a70dd0e0e4a69a0e23b16101 --head 42e36724a2f2a02766b26de8deb9b04b7557fa27 --event push",
+      "cwd": "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+      "result": "pass",
+      "exit_code": 0,
+      "combined_log": "p01-xrt-change-impact.log",
+      "scope": "Advisory classifier operation using immutable-base source and policy; not a GPU test or acceptance decision."
+    },
+    {
+      "id": "classifier_help",
+      "argv": [
+        "python3",
+        "-I",
+        "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change_impact.py",
+        "--repo",
+        "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+        "--policy",
+        "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change-impact.yaml",
+        "--help"
+      ],
+      "command": "python3 -I /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change_impact.py --repo /workspace/scratch/4f0bc2b9a6f1/AI-GPU --policy /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change-impact.yaml --help",
+      "cwd": "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+      "result": "pass",
+      "exit_code": 0,
+      "combined_log": "p01-xrt-change-impact.help.log",
+      "scope": "Advisory classifier operation using immutable-base source and policy; not a GPU test or acceptance decision."
+    },
+    {
+      "id": "classifier_classify_help",
+      "argv": [
+        "python3",
+        "-I",
+        "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change_impact.py",
+        "--repo",
+        "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+        "--policy",
+        "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change-impact.yaml",
+        "classify",
+        "--help"
+      ],
+      "command": "python3 -I /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change_impact.py --repo /workspace/scratch/4f0bc2b9a6f1/AI-GPU --policy /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change-impact.yaml classify --help",
+      "cwd": "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+      "result": "pass",
+      "exit_code": 0,
+      "combined_log": "p01-xrt-change-impact.help.log",
+      "scope": "Advisory classifier operation using immutable-base source and policy; not a GPU test or acceptance decision."
+    },
+    {
+      "id": "classifier_explain_help",
+      "argv": [
+        "python3",
+        "-I",
+        "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change_impact.py",
+        "--repo",
+        "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+        "--policy",
+        "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change-impact.yaml",
+        "explain",
+        "--help"
+      ],
+      "command": "python3 -I /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change_impact.py --repo /workspace/scratch/4f0bc2b9a6f1/AI-GPU --policy /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change-impact.yaml explain --help",
+      "cwd": "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+      "result": "pass",
+      "exit_code": 0,
+      "combined_log": "p01-xrt-change-impact.help.log",
+      "scope": "Advisory classifier operation using immutable-base source and policy; not a GPU test or acceptance decision."
+    }
+  ],
+  "change_impact": {
+    "class": "R2",
+    "indeterminate": false,
+    "policy_version": 3,
+    "base": "91b82fe300f94ab0a70dd0e0e4a69a0e23b16101",
+    "head": "42e36724a2f2a02766b26de8deb9b04b7557fa27",
+    "diff_base": "91b82fe300f94ab0a70dd0e0e4a69a0e23b16101",
+    "event": "push",
+    "changed_paths": 32,
+    "per_file_classes": {
+      "R0": 7,
+      "R1": 24,
+      "R2": 1
+    },
+    "reasons": [
+      "path:sw-stack"
+    ],
+    "contracts": [],
+    "evidence_reminders": [
+      {
+        "severity": "info",
+        "paths": [
+          "sw/runtime/xrt/xrt.ini.in"
+        ],
+        "detail": "configure copies these into the build tree: re-run configure before testing",
+        "check": "configure-copied",
+        "min_class": "R1"
+      }
+    ],
+    "classifier_and_policy_from_base": true,
+    "base_blob_sha256_values_rechecked_during_assembly": true,
+    "provenance": "p01-xrt-change-impact.provenance.json",
+    "limit": "This R2 classification covers only base...candidate. Later documentation changes require their own final review/checks; classifier success neither waives review nor accepts P01-A03."
+  },
+  "artifacts": [
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-full-tests.log",
+      "source_path_at_capture": "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-full-tests.log",
+      "sha256": "315fec98d22dba69021802e1390972e977223fd77c04263489dd9596c535bde8",
+      "size_bytes": 143949,
+      "transformation": "byte_preserving_copy",
+      "source_bytes_equal_retained": true
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-full-tests.json",
+      "source_path_at_capture": "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-full-tests.json",
+      "sha256": "07cb61ecf6224c2c30856a2bd0264e09ed9632c4ba01dae8a2d0f38bb2ac2311",
+      "size_bytes": 546,
+      "transformation": "byte_preserving_copy",
+      "source_bytes_equal_retained": true
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-probe.json",
+      "source_path_at_capture": "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-probe.json",
+      "sha256": "4e22bbd06ea68d9ece66e950020c64a58bbab1a75f1cb658b61c5a4558d08b9d",
+      "size_bytes": 1862,
+      "transformation": "byte_preserving_copy",
+      "source_bytes_equal_retained": true
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-probe-metadata.json",
+      "source_path_at_capture": "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-probe-metadata.json",
+      "sha256": "af136c26fa6e7698b287862267412294e518e6eba06ada0cc896194236891e5c",
+      "size_bytes": 10625,
+      "transformation": "byte_preserving_copy",
+      "source_bytes_equal_retained": true
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-probe.stderr.txt",
+      "source_path_at_capture": "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-probe.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "transformation": "byte_preserving_copy",
+      "source_bytes_equal_retained": true
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-example-plan.json",
+      "source_path_at_capture": "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-example-plan.json",
+      "sha256": "b3654e582911fd5d56909a9dda96d2c7fcada65f89dc1f7b734f15ab71787c7a",
+      "size_bytes": 172,
+      "transformation": "byte_preserving_copy",
+      "source_bytes_equal_retained": true
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-example-plan-metadata.json",
+      "source_path_at_capture": "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-example-plan-metadata.json",
+      "sha256": "5bdf13ff0ffd42cd3e1d7e2325dc2fd9aa90385097fbce938b62e4ffc2e011dc",
+      "size_bytes": 9401,
+      "transformation": "byte_preserving_copy",
+      "source_bytes_equal_retained": true
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-example-plan.stderr.txt",
+      "source_path_at_capture": "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-example-plan.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "transformation": "byte_preserving_copy",
+      "source_bytes_equal_retained": true
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-change-impact.json",
+      "source_path_at_capture": "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.json",
+      "sha256": "dede14308f43dfa8424d97fc27dc7fea902949f0c95b67ac6ba4609be4bb39e9",
+      "size_bytes": 5481,
+      "transformation": "byte_preserving_copy",
+      "source_bytes_equal_retained": true
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-change-impact.log",
+      "source_path_at_capture": "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.log",
+      "sha256": "a8868ce9d8801db1f072f02fff6a04f6dc66517de6ed0f05edfc66becaddcc4d",
+      "size_bytes": 8200,
+      "transformation": "byte_preserving_copy",
+      "source_bytes_equal_retained": true
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-change-impact.provenance.json",
+      "source_path_at_capture": "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.provenance.json",
+      "sha256": "f1babdcafd2607ef92e3c844bed189952c68532827665d10271b041bf975af2a",
+      "size_bytes": 1255,
+      "transformation": "byte_preserving_copy",
+      "source_bytes_equal_retained": true
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-change-impact.explain.txt",
+      "source_path_at_capture": "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.explain.txt",
+      "sha256": "27276fa64b57752dde01a94193bcde97b9d0d60483ba2e45eeba86156e83d8ad",
+      "size_bytes": 1772,
+      "transformation": "byte_preserving_copy",
+      "source_bytes_equal_retained": true
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-change-impact.help.log",
+      "source_path_at_capture": "/workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.help.log",
+      "sha256": "68110577947709959ef0b6f88c74dc77857eaaaf04fc282089a2f58738116aba",
+      "size_bytes": 2601,
+      "transformation": "byte_preserving_copy",
+      "source_bytes_equal_retained": true
+    }
+  ],
+  "source_files": [
+    {
+      "path": "VX_config.toml",
+      "role": "configuration_or_build_input",
+      "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+      "size_bytes": 30127,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "VX_types.toml",
+      "role": "configuration_or_build_input",
+      "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+      "size_bytes": 36543,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/blackbox.sh",
+      "role": "production",
+      "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+      "size_bytes": 9153,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/gen_config.py",
+      "role": "production",
+      "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+      "size_bytes": 60839,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/baseline.py",
+      "role": "production",
+      "sha256": "d26202d38a27b5ab0a52e735edb5682a8be8b9771624c69c724dbeb7e2c58610",
+      "size_bytes": 27600,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/baseline_bootstrap.py",
+      "role": "production",
+      "sha256": "86112ec88d5f064ad87054362bae1bf5124b01195070f09c9e5b0735be58fe73",
+      "size_bytes": 18148,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/baseline_host.py",
+      "role": "production",
+      "sha256": "96bc0d25b1ec0509937c83d1de50db0a0125ca2acda405467e28d9e37dfb5ccb",
+      "size_bytes": 6107,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/baseline_inventory.py",
+      "role": "production",
+      "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+      "size_bytes": 20466,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/baseline_matrix.py",
+      "role": "production",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "size_bytes": 8890,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/baseline_packet.py",
+      "role": "production",
+      "sha256": "6af2e68466dc7e553b2e29b02a5f96f3e362a2ae9c42c713d9897f14970f766d",
+      "size_bytes": 5188,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/baseline_packet_contract.py",
+      "role": "production",
+      "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+      "size_bytes": 53680,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/baseline_packet_export.py",
+      "role": "production",
+      "sha256": "8db34a5d452f6bb548bc9edefd2d8c87a94f6f7383db0dc6b52331d0f5a9094a",
+      "size_bytes": 10744,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/baseline_packet_export_fixture.py",
+      "role": "test_support",
+      "sha256": "75140aeef12e43adb24c31ec443d46804ab8e0c08aa63e02c084e4f8ef8964f9",
+      "size_bytes": 5658,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/baseline_packet_fixture.py",
+      "role": "test_support",
+      "sha256": "ad110cdd6bf126c66191dc86781e41395d47242969419d8298ef5f4182454210",
+      "size_bytes": 18543,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/baseline_packet_io.py",
+      "role": "production",
+      "sha256": "53ac39e541628a68b3d405201734195e8ed606b26eab5ee72746e96b3148515d",
+      "size_bytes": 14315,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/baseline_process.py",
+      "role": "production",
+      "sha256": "d011171fc41734fa323127a70acc13e7b7a5a7949372e808655af1b535cdaca2",
+      "size_bytes": 12542,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/check_baseline_packets.py",
+      "role": "production",
+      "sha256": "4dbadb63a11b88ce161c6c9ea28035d91896a969cb53e1258deea155ede81bf6",
+      "size_bytes": 2755,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/check_project.py",
+      "role": "production",
+      "sha256": "6300f51f8cef2c4b8e0f05938591a39870c563b91b56a20f8eeec097d4685f96",
+      "size_bytes": 33823,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/p01_baseline.json",
+      "role": "configuration_or_build_input",
+      "sha256": "d2f570fa241dff720446809e572efecbaed56cc7d14365bf096859d1d764b61f",
+      "size_bytes": 9455,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/p01_toolchain.lock.json",
+      "role": "configuration_or_build_input",
+      "sha256": "63771ba8d9ff691b3867ed96be7b058ed5eae1368789575f4964e38f8718a405",
+      "size_bytes": 5008,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/p01_xrt_environment.example.json",
+      "role": "configuration_or_build_input",
+      "sha256": "cb344c631fab0ff8b6de1d371d7b16aaf39f729a9596e6161d2908c3c1a02fcc",
+      "size_bytes": 2835,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/preflight.py",
+      "role": "production",
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+      "size_bytes": 15124,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_adversarial.py",
+      "role": "test",
+      "sha256": "c164eee08fabae777da4911e94f946436e03d4ae31bc3f6af8a2eda4235c27e2",
+      "size_bytes": 11914,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_ai_profile.py",
+      "role": "test",
+      "sha256": "08ea17af65a18f76c02c4f5c653d797acdb67d904377885dec0728c251ad8606",
+      "size_bytes": 6289,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline.py",
+      "role": "test",
+      "sha256": "b8ee37e8399101204de49b74b9328237050afff8474ddddc6e4c067cf58f3d53",
+      "size_bytes": 20439,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_bootstrap.py",
+      "role": "test",
+      "sha256": "db659d91f65fd84f0c21d714bcd6dab3c8535d404c25c57b186c5a4e708ff22f",
+      "size_bytes": 25592,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_build_identity.py",
+      "role": "test",
+      "sha256": "8b6abc8be99aa7446752c14727a174fc8d1a18e4400a321c7e741d16f44fa6b2",
+      "size_bytes": 5689,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_host.py",
+      "role": "test",
+      "sha256": "14bd671e4b6648236e5a0467b006d93777b13a3e9be41622839c00448887e45d",
+      "size_bytes": 12350,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_identity.py",
+      "role": "test",
+      "sha256": "8df7a925213ff6ec781efe43fd94c5a42483f1625ed7170f6f0030d96f52e732",
+      "size_bytes": 8768,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_inventory.py",
+      "role": "test",
+      "sha256": "c119616ef68a0ef87e40e1918868abe7f8dd45c4850c1900b75ad01392ea8ce4",
+      "size_bytes": 21098,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_matrix.py",
+      "role": "test",
+      "sha256": "7a81eb4adebce109257f556933baba45e9e76e819e0c232196be449cc6596f79",
+      "size_bytes": 14061,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_packet.py",
+      "role": "test",
+      "sha256": "1856f8d897619cdb9b0d5e3cfad21a6b72f6ea0c63758be70f1affb135b366a7",
+      "size_bytes": 23819,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_packet_ci.py",
+      "role": "test",
+      "sha256": "88b7eb30a23256fbbbda65f5239fd0480179ccda06ac747cef83a2f8398e214c",
+      "size_bytes": 17779,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_packet_containment.py",
+      "role": "test",
+      "sha256": "9fdda9eb5e4f4ed819bfff1ab66328be3f3298c3daa8dbd5bb08154a6bc06e15",
+      "size_bytes": 7893,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_packet_contract.py",
+      "role": "test",
+      "sha256": "c7332237517c7e3cfd529dfadfa6bb8c2a7128e6bdf10a43f2b274317aa87ce6",
+      "size_bytes": 34505,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_packet_export.py",
+      "role": "test",
+      "sha256": "91db2d1b0c26e1cc956c1fe26e120f5f5941c1c4672d7b0b8d75d379f64c94ff",
+      "size_bytes": 29347,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_packet_interruptions.py",
+      "role": "test",
+      "sha256": "f0af2cf0fad38313942aef862ff34f6a657250930e6808efc8f87a69d55d41a1",
+      "size_bytes": 17823,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_packet_io.py",
+      "role": "test",
+      "sha256": "a556edc1856d352d0fdc8ef848f239862e191aa978d456cf896bae807a019e14",
+      "size_bytes": 23921,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_packet_matrix_versions.py",
+      "role": "test",
+      "sha256": "9136afb9fc4bf928d7a88f3c246181bfa73e0182b245876fc08521740eae04dd",
+      "size_bytes": 14361,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_packet_operands.py",
+      "role": "test",
+      "sha256": "58cfc09f4a2ff3bd7bbe42ca75cb394398bcc4c77b1ddc9ea73f842754da0159",
+      "size_bytes": 9239,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_packet_provenance.py",
+      "role": "test",
+      "sha256": "a39f11c68d92fb283ad6fc3c07be0230875fba6eb82a89ed3ac05dda14552ec2",
+      "size_bytes": 11073,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_packet_stamps.py",
+      "role": "test",
+      "sha256": "4355a8de61e779af490cfd037fdcc06e18ae69b74d2bed8d669f0d640ccb3ed9",
+      "size_bytes": 9340,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_packet_xlen.py",
+      "role": "test",
+      "sha256": "77f9f888c3f2dbca22b6ee561227d092b9a0ad954769f947755daf4b626d56b9",
+      "size_bytes": 8149,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_baseline_process.py",
+      "role": "test",
+      "sha256": "f9a9b2a62d0dbdfb7408bc868214ad943a56f614dd0139c56b97a3026d871762",
+      "size_bytes": 14605,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_check_project.py",
+      "role": "test",
+      "sha256": "45a0da3b2cc48aa205dbdba77bc6ebeda4a61b2fa803e7adfabc71a9c0f8ecd0",
+      "size_bytes": 22981,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_markdown_edges.py",
+      "role": "test",
+      "sha256": "9c1b1011f5b2c6b752f0b00ea85fed313f6f1387faadf928b6096da7bf897bbe",
+      "size_bytes": 9992,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_preflight.py",
+      "role": "test",
+      "sha256": "d7395d0f2bc13fdbf487e529206f4fa52f9bb29ece5e6c620bd02c6ef7fa0238",
+      "size_bytes": 20766,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_repository_contract.py",
+      "role": "test",
+      "sha256": "d33874e5ae25e0cef11c6d90b6b4d700155064b68868b20b5c342f50738477ae",
+      "size_bytes": 13554,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_rtl_gate_resources.py",
+      "role": "test",
+      "sha256": "859d4711f8c3aea69504b26d4489771104de091cd58c99e17f146299af80ad6e",
+      "size_bytes": 1394,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_sst_setup.py",
+      "role": "test",
+      "sha256": "eaf96f8286b1b8674667f57f03d6c26eeeb84b2adfb9f77ec54ee4d55908c682",
+      "size_bytes": 4408,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_baseline.py",
+      "role": "test",
+      "sha256": "2806476e102f03c3c276e477a15fab04297dca5c45060f531d0640412dc89493",
+      "size_bytes": 27088,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_boundaries.py",
+      "role": "test",
+      "sha256": "78678ceece201afe15c5a045a3fe5f842d028699597fd19988fa0831c2ed0bb8",
+      "size_bytes": 24729,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_cancellation.py",
+      "role": "test",
+      "sha256": "66aae27da0a4edaaecf47def347cd8ba38d77146812302f995f2a4cec119325b",
+      "size_bytes": 11083,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_configuration.py",
+      "role": "test",
+      "sha256": "6619f5e297875c711e091dbe2d2622abd9d8d8dbf296d92d41aa75fc8b1ebfb3",
+      "size_bytes": 1562,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_contract.py",
+      "role": "test",
+      "sha256": "9b9950aa8311e1d3f9fc0d0a40bef51e125fc424d6e561124aae76955a41fa05",
+      "size_bytes": 18004,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_drift.py",
+      "role": "test",
+      "sha256": "4f681fd320294e58d07626aef031a735062a2a423f1c043e0300faf06d87b1b8",
+      "size_bytes": 11888,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_elf_compatibility.py",
+      "role": "test",
+      "sha256": "60bc723aa0b1510501e2227eca0fac19ad17ed957004189638c6b18b8ce6530b",
+      "size_bytes": 11249,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_generated_build.py",
+      "role": "test",
+      "sha256": "f4051d11ee0702d8642056c0e08d50d422f62d92d4d7e3e7f5181a9077775a23",
+      "size_bytes": 6438,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_inventory.py",
+      "role": "test",
+      "sha256": "288ce8671713c3dd431c89cc028420399900e67e75b8b86b5566800b4a747495",
+      "size_bytes": 18406,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_path_revalidation.py",
+      "role": "test",
+      "sha256": "06f581ef092b26c79d0616d0d8d785313c6ce5d7d75cce694b7674cacf0e5a0f",
+      "size_bytes": 16354,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_resources.py",
+      "role": "test",
+      "sha256": "6d476f5caeafe0b95b6416f1f08a09ed91e7a3d54f64e5160e3cc4303091e385",
+      "size_bytes": 12058,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_runtime.py",
+      "role": "test",
+      "sha256": "5a20a31205d7a75cd31740f1ef880908c503d40f7d6f7acdc8e551f7c050934a",
+      "size_bytes": 19468,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_runtime_integration.py",
+      "role": "test",
+      "sha256": "6116ad423bb04aa70c40783f3414e53dd90384b0d842ebf71e22171ab8392faf",
+      "size_bytes": 16578,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_source.py",
+      "role": "test",
+      "sha256": "3bd52ac539032655acf496d80406a83b6c84fd8f2230f7f9814f5f9f05b3f869",
+      "size_bytes": 11904,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/test_xrt_tool_selection.py",
+      "role": "test",
+      "sha256": "c03cf170047263756c4b2955aaf37ec685ba39aa92c778b55d9bccda91bb492d",
+      "size_bytes": 12758,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/xrt_baseline.py",
+      "role": "production",
+      "sha256": "64331fe543a09a5c293a28cc7643c4afc5e0bfa2c49a62705d669589d9f36a98",
+      "size_bytes": 32631,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/xrt_contract.py",
+      "role": "production",
+      "sha256": "a3573322fa97c163110dd14e02fa88174436c732a2c4cdff1e66d93c9ff1e574",
+      "size_bytes": 11721,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/xrt_inventory.py",
+      "role": "production",
+      "sha256": "8d14e1424c30cf30486ba1b94b0ec3b960534b6e0649d7877ca970a91092f244",
+      "size_bytes": 13919,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/xrt_runtime.py",
+      "role": "production",
+      "sha256": "6f3d10e2b55b9175538467b0645c04c7e749977ad4ed19fa1140fac0c4b77b84",
+      "size_bytes": 16716,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/xrt_signals.py",
+      "role": "production",
+      "sha256": "a9531608094a233e5336a35e9fa7ebd028aaa3fc6dd7d3ed0f6f4d3f83a94fb8",
+      "size_bytes": 730,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/xrt_source.py",
+      "role": "production",
+      "sha256": "217e6bdd85870e09774c1dccdda26cd3e90656ea62f795925d46b2f06a069456",
+      "size_bytes": 7716,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "ci/project/xrt_test_support.py",
+      "role": "test_support",
+      "sha256": "f50a502ed7048ce6b2ba65c8a29c2233e9117199bc9c340e66d9e3f05b1c26c2",
+      "size_bytes": 5163,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "config.mk.in",
+      "role": "configuration_or_build_input",
+      "sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+      "size_bytes": 3264,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "configure",
+      "role": "configuration_or_build_input",
+      "sha256": "39a7a1fe4caeb4db06fcdac544e99d700857795b94a7bbd4e5396a9028edbefa",
+      "size_bytes": 11382,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "sim/common.mk",
+      "role": "configuration_or_build_input",
+      "sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+      "size_bytes": 170,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "sim/rtlsim/Makefile",
+      "role": "configuration_or_build_input",
+      "sha256": "1aec44b214468ac620917f89ae15ec3bffe6ed71b82f794d53db301748ec2e9c",
+      "size_bytes": 10714,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "sim/rtlsim/verilator.vlt.in",
+      "role": "configuration_or_build_input",
+      "sha256": "fc877bfb369afbe82da6d6e6eeee6389d55a74d262da32bd1522d3c508a397a2",
+      "size_bytes": 404,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "sim/simx/Makefile",
+      "role": "configuration_or_build_input",
+      "sha256": "7cd1d4b53dd08f07d529094575722b2d23735b8164ff46c28a3be4ec694e857f",
+      "size_bytes": 10455,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "sw/kernel/Makefile",
+      "role": "configuration_or_build_input",
+      "sha256": "b1c359421ca2b1b8c31b9dc98893fac772daa239e236e9d1c9225a1eb431238c",
+      "size_bytes": 2432,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "sw/runtime/common.mk",
+      "role": "configuration_or_build_input",
+      "sha256": "2af4343c0738db4a665c96e24f90f78912302b20597dda74d9592afb6676736e",
+      "size_bytes": 618,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "sw/runtime/rtlsim/Makefile",
+      "role": "configuration_or_build_input",
+      "sha256": "4c9a1b7c64d40a9726d1aafda30b416ebb08fde10d3f4dbde584c76aa45e03d3",
+      "size_bytes": 1795,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "sw/runtime/simx/Makefile",
+      "role": "configuration_or_build_input",
+      "sha256": "c59dfb1850b0e19c77edc8cbc1fc1c96df11f5779724efefde437b83003bb97c",
+      "size_bytes": 1712,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "sw/runtime/stub/Makefile",
+      "role": "configuration_or_build_input",
+      "sha256": "e6aae339e07e2a3086cc0334c9353001521f774afdc9e921acf1e126b115b941",
+      "size_bytes": 2931,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "sw/runtime/xrt/Makefile",
+      "role": "configuration_or_build_input",
+      "sha256": "89dded3790a87aa3aeeea5b1dfdfb638380efeb4dd5821610b48972a348f5b5b",
+      "size_bytes": 1892,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "sw/runtime/xrt/vortex.cpp",
+      "role": "production",
+      "sha256": "0f5e4079b6888a3fd0502da40f3d7f76b5a9e6bb178de9516fed7874f64bff45",
+      "size_bytes": 11568,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "sw/runtime/xrt/xrt.ini.in",
+      "role": "configuration_or_build_input",
+      "sha256": "a6ab6c6725332503762a95f53ab68dacf8b9a06715ec431a854878b471eb83f5",
+      "size_bytes": 184,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "sw/runtime/xrt/xsim.tcl",
+      "role": "configuration_or_build_input",
+      "sha256": "874c3153a6f43fb66cb478c52b0438855e2b516aba72f23ceb074ccaf9442058",
+      "size_bytes": 651,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "tests/regression/common.mk",
+      "role": "configuration_or_build_input",
+      "sha256": "4164a783137b2f6e594ff3795f5911233227c3e4bfcb0319095cd6e78acf9b56",
+      "size_bytes": 14342,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "tests/regression/demo/Makefile",
+      "role": "configuration_or_build_input",
+      "sha256": "9b236ee1aafa211af3c51c62803e2143610d44d9aa70831cf8a6551200b6b10a",
+      "size_bytes": 256,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "tests/regression/demo/common.h",
+      "role": "production",
+      "sha256": "c2d393eeda07d29785adc3994bc3e1c32cf590ad3f7ee263a77066e60135ff0c",
+      "size_bytes": 245,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "tests/regression/demo/kernel.cpp",
+      "role": "production",
+      "sha256": "d9cf321928d9941326fe89b2eceb1c899cf599eb3f3ff533d5c08b57202479da",
+      "size_bytes": 764,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "tests/regression/demo/main.cpp",
+      "role": "production",
+      "sha256": "3acf2f35753aaae65b8f9e69640d407ba7fcf2cb7bbdc5557e6fdec9e8e3cf27",
+      "size_bytes": 8257,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "tests/regression/flash_attn_tcu_wg/Makefile",
+      "role": "configuration_or_build_input",
+      "sha256": "2c609667964a90bb6f33c48444491de708308dc4f1e17f5fc7fe131a73751c00",
+      "size_bytes": 1095,
+      "worktree_matches_candidate": true
+    },
+    {
+      "path": "tests/regression/sgemm_tcu/Makefile",
+      "role": "configuration_or_build_input",
+      "sha256": "5b0cc565b886eec4bda8b2eddc5eb7b282d6d006aa7d4dbdc31c3c730b432c67",
+      "size_bytes": 561,
+      "worktree_matches_candidate": true
+    }
+  ],
+  "source_inventory": {
+    "revision": "42e36724a2f2a02766b26de8deb9b04b7557fa27",
+    "count": 94,
+    "coverage": "Every tracked file under ci/project at the candidate, plus 26 explicitly listed configure/generator/native-build/XRT/demo inputs. This is a selected input inventory, not a full dependency, vendor-installation, submodule, binary or environment inventory.",
+    "method": "SHA-256 and byte size computed from git show <candidate>:<path>; every listed working-tree file was byte-compared to that candidate blob during packet assembly.",
+    "code_and_tests_match_candidate_at_assembly": true,
+    "metadata_helper_hashes_match_candidate": true,
+    "later_documentation_not_in_this_tested_identity": true
+  },
+  "protected_asset": {
+    "path": "docs/assets/img/vortex_framework_stack.svg",
+    "sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+    "size_bytes": 48225,
+    "candidate_and_worktree_bytes_equal": true,
+    "matches_candidate_roadmap_expected_sha256": true,
+    "candidate_readme_references_asset": true,
+    "observation_command": "sha256sum docs/assets/img/vortex_framework_stack.svg",
+    "observation_exit_code": 0
+  },
+  "retention_checks": {
+    "raw_file_count": 13,
+    "raw_total_size_bytes": 185864,
+    "all_copies_byte_equal": true,
+    "stdout_stderr_hashes_match_original_cli_metadata": true,
+    "raw_json_reserialized": false,
+    "raw_metadata_paths_rewritten": false,
+    "sensitive_content_screen": "Inspected JSON fields, command/help/provenance records and all nonstandard suite-log lines; screened every raw file for credential material, signed URLs, personal home paths, email addresses and license-setting values. No raw environment dump, credential, license content or personal user data was observed. The explicit safe PYTHONDONTWRITEBYTECODE override and generic scratch/runtime paths remain unchanged.",
+    "authentication_limit": "These unsigned hashes verify retained bytes against the inspected local captures; they do not authenticate a producer or independently prove that recorded events occurred."
+  },
+  "final_documentation_checks": {
+    "status": "not_recorded_in_this_packet",
+    "revision": null,
+    "reason": "This packet and accompanying review/handoff documentation are added after the recorded candidate test run. A later final-documentation check must record its own revision, commands and results; it must not relabel the 875-test run as a test of the later documentation commit."
+  },
+  "publication": {
+    "status": "not_observed_by_this_packet",
+    "revision": null,
+    "limit": "No remote publication, merged state or completed assignment total is asserted."
+  },
+  "limitations": [
+    "875 passing Python tests, including synthetic runner/packet fixtures, do not establish a vendor hw_emu run, native GPU arithmetic correctness, DMA/launch/completion on a qualified platform, physical FPGA operation, silicon measurements or accelerator performance.",
+    "The read-only probe found all five named vendor executables absent and all three vendor roots unavailable; a pinned platform/artifact manifest and independently reviewed build receipt are still required. P01-A03 is blocked.",
+    "The plan used the unchanged example manifest and stopped on the placeholder source.revision digest. It did not produce a ready plan or qualify any source/tool/platform/artifact combination.",
+    "The two CLI captures have identical before/after index hashes and metadata fingerprints. The filesystem observations exclude .git and access times and do not hash every file; no process execution trace was collected.",
+    "The original scratch paths in raw metadata and command logs are historical provenance. Temporary CLI directories were removed after capture and need not exist. Packet-relative retained paths are supplied by this inventory; raw files are not sanitized or rewritten.",
+    "The suite capture contains the exact command, candidate revision/tree, elapsed time, test count, exit status and verbose output, but not a complete interpreter/dependency/environment inventory.",
+    "The classifier was executed from immutable base snapshots; its R2 result is advisory and applies to the recorded 32-path base-to-candidate delta. Later metadata changes, final changed-hunk review and publication are separate observations.",
+    "The selected source hashes bind production, test-support, test and configuration bytes to the candidate. A matching hash does not establish vendor compatibility, license entitlement, receipt truthfulness, complete ELF loadability or completeness of an external tool installation.",
+    "This packet is assembled after the candidate run and does not rerun the suite, configure or any build. Later documentation can change while implementation/test/configuration identities stay frozen. Final documentation checks are not recorded here.",
+    "No self-referential manifest or attachment-commit hash is included. The manifest is unsigned and does not certify a full publication tree or an assignment-completion total.",
+    "Existing P01-A01/A02 acceptance records remain separate; this packet evaluates no acceptance gate and does not complete P01 or start a later phase."
+  ]
+}

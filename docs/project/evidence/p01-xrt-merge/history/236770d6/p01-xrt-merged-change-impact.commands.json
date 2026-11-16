@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "base": "91b82fe300f94ab0a70dd0e0e4a69a0e23b16101",
+  "head": "236770d6083ae88749e1830dd08eb72ee4327f97",
+  "tree": "449e538d1066df343b501ab365fa521cb2cdc2fa",
+  "execution_owner": "/root/w09_a53_merge_evidence",
+  "scope": "Read-only advisory classifier and explanation, using immutable base revision files; no test, build, vendor or GPU execution.",
+  "commands": [
+    {
+      "name": "classify",
+      "command": [
+        "python3",
+        "-I",
+        "/workspace/scratch/4f0bc2b9a6f1/agent-notes/w09_a53_draft/base-classifier/change_impact.py",
+        "--repo",
+        "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+        "--policy",
+        "/workspace/scratch/4f0bc2b9a6f1/agent-notes/w09_a53_draft/base-classifier/change-impact.yaml",
+        "classify",
+        "--base",
+        "91b82fe300f94ab0a70dd0e0e4a69a0e23b16101",
+        "--head",
+        "236770d6083ae88749e1830dd08eb72ee4327f97",
+        "--event",
+        "push",
+        "--format",
+        "json"
+      ],
+      "cwd": "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+      "started_at": "2026-11-16T01:00:03.051158+00:00",
+      "finished_at": "2026-11-16T01:00:03.223794+00:00",
+      "elapsed_seconds": 0.172625,
+      "exit_code": 0,
+      "stdout": "p01-xrt-merged-change-impact.json",
+      "stderr": "p01-xrt-merged-change-impact.classify.stderr.txt"
+    },
+    {
+      "name": "explain",
+      "command": [
+        "python3",
+        "-I",
+        "/workspace/scratch/4f0bc2b9a6f1/agent-notes/w09_a53_draft/base-classifier/change_impact.py",
+        "--repo",
+        "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+        "--policy",
+        "/workspace/scratch/4f0bc2b9a6f1/agent-notes/w09_a53_draft/base-classifier/change-impact.yaml",
+        "explain",
+        "--base",
+        "91b82fe300f94ab0a70dd0e0e4a69a0e23b16101",
+        "--head",
+        "236770d6083ae88749e1830dd08eb72ee4327f97",
+        "--event",
+        "push"
+      ],
+      "cwd": "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+      "started_at": "2026-11-16T01:00:03.051725+00:00",
+      "finished_at": "2026-11-16T01:00:03.223656+00:00",
+      "elapsed_seconds": 0.171917,
+      "exit_code": 0,
+      "stdout": "p01-xrt-merged-change-impact.explain.txt",
+      "stderr": "p01-xrt-merged-change-impact.explain.stderr.txt"
+    }
+  ]
+}

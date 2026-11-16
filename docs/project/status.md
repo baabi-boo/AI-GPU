@@ -164,6 +164,20 @@ build receipt, fresh host/kernel build and tracing-disabled direct launch.
 Independent tooling tests exercise blocked prerequisites, provenance drift,
 configuration mismatches, process failures and reference-result handling.
 The [continuation handoff](p01-xrt-handoff.md) records verification and delivery.
+The [review record](p01-xrt-review.md) documents the corrected findings; the
+separate [execution ledger](p01-xrt-agent-execution.json) records **60 completed
+assignments in ten waves of six**, without counting or changing the historical
+P00/P01 and concurrent preparation assignments.
+
+The combined implementation at `ae27591d1e4b7c9f2ec802c75fd6556b95a0483b`
+passed **1,075 tooling tests, with zero failures, errors or skips**. The
+[merge verification packet](evidence/p01-xrt-merge/merge-verification.json)
+retains the exact source identity, test log and immutable-base R2 classification.
+The working tree was clean before and after that run, and all 92 recorded
+selected source hashes stayed unchanged. Later documentation and delivery
+records are separate from this tested source checkpoint. The original
+[875-test packet](evidence/p01-xrt-tooling/verification.json) and intermediate
+1,071-test result remain historical observations at their own revisions.
 
 The two tools have separate manifest, receipt and report schemas; their shared
 `schema_version: 1` does not make inputs interchangeable. The XRT runner requires

@@ -1,0 +1,363 @@
+{
+  "schema_version": 1,
+  "record_id": "p01-xrt-merged-tooling-verification",
+  "kind": "governance",
+  "outcome": "pass",
+  "evidence_level": "source_present",
+  "scope": "Local source-root tooling verification after preserving the bounded XRT runner, concurrent hwemu preparation and subsequent Git configuration isolation fix; no vendor or GPU execution.",
+  "source_revision": "ae27591d1e4b7c9f2ec802c75fd6556b95a0483b",
+  "source_tree": "9d2be910dd14ce4e6fabf2e30e4d84db98d835c7",
+  "merge_parents": [
+    {
+      "role": "first_xrt_hwemu_integration",
+      "revision": "236770d6083ae88749e1830dd08eb72ee4327f97",
+      "tree": "449e538d1066df343b501ab365fa521cb2cdc2fa"
+    },
+    {
+      "role": "concurrent_hwemu_git_configuration_fix",
+      "revision": "e9e36c1cdccf975e330d9a9d2d67f3df9e50ba98",
+      "tree": "1f0f72dbf0d3e755b11e06bb80794ae3a11fe346"
+    }
+  ],
+  "parent_merge_base": "81e35e97d2fa410bbfbb970b53ccc179b0aa8d27",
+  "integration_history": [
+    {
+      "revision": "236770d6083ae88749e1830dd08eb72ee4327f97",
+      "tree": "449e538d1066df343b501ab365fa521cb2cdc2fa",
+      "parents": [
+        "42e36724a2f2a02766b26de8deb9b04b7557fa27",
+        "81e35e97d2fa410bbfbb970b53ccc179b0aa8d27"
+      ],
+      "parent_merge_base": "91b82fe300f94ab0a70dd0e0e4a69a0e23b16101",
+      "scope": "Initial integration of the bounded XRT runner and concurrent read-only hwemu preparation."
+    },
+    {
+      "revision": "ae27591d1e4b7c9f2ec802c75fd6556b95a0483b",
+      "tree": "9d2be910dd14ce4e6fabf2e30e4d84db98d835c7",
+      "parents": [
+        "236770d6083ae88749e1830dd08eb72ee4327f97",
+        "e9e36c1cdccf975e330d9a9d2d67f3df9e50ba98"
+      ],
+      "parent_merge_base": "81e35e97d2fa410bbfbb970b53ccc179b0aa8d27",
+      "scope": "Preserve the later concurrent hwemu Git-configuration isolation fix and four regressions."
+    }
+  ],
+  "configuration": "Python unittest discovery from the source root; retained raw command metadata supplies the exact invocation and timestamps.",
+  "acceptance_ids": [],
+  "commands": [
+    {
+      "command": "python3 -m unittest discover -s ci/project -p 'test_*.py' -v",
+      "working_directory": "repository source root",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -I /workspace/scratch/4f0bc2b9a6f1/agent-notes/w09_a53_draft/base-classifier/change_impact.py --repo /workspace/scratch/4f0bc2b9a6f1/AI-GPU --policy /workspace/scratch/4f0bc2b9a6f1/agent-notes/w09_a53_draft/base-classifier/change-impact.yaml classify --base 91b82fe300f94ab0a70dd0e0e4a69a0e23b16101 --head ae27591d1e4b7c9f2ec802c75fd6556b95a0483b --event push --format json",
+      "working_directory": "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+      "result": "pass",
+      "exit_code": 0,
+      "scope": "Advisory change-impact classification; no test or acceptance outcome."
+    },
+    {
+      "command": "python3 -I /workspace/scratch/4f0bc2b9a6f1/agent-notes/w09_a53_draft/base-classifier/change_impact.py --repo /workspace/scratch/4f0bc2b9a6f1/AI-GPU --policy /workspace/scratch/4f0bc2b9a6f1/agent-notes/w09_a53_draft/base-classifier/change-impact.yaml explain --base 91b82fe300f94ab0a70dd0e0e4a69a0e23b16101 --head ae27591d1e4b7c9f2ec802c75fd6556b95a0483b --event push",
+      "working_directory": "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+      "result": "pass",
+      "exit_code": 0,
+      "scope": "Advisory change-impact classification; no test or acceptance outcome."
+    }
+  ],
+  "suite": {
+    "execution_owner": "/root",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "ci/project",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "tests_run": 1075,
+    "tests_passed": 1075,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "expected_failures": 0,
+    "unexpected_successes": 0,
+    "started_at": "2026-11-16T01:05:12.345327+00:00",
+    "finished_at": "2026-11-16T01:07:19.931192+00:00",
+    "unittest_seconds": 127.156,
+    "recorded_elapsed_seconds": 127.569,
+    "worktree_clean_before": true,
+    "worktree_clean_after": true,
+    "selected_source_files_unchanged": true,
+    "selected_source_file_count": 92,
+    "selected_source_hashes_match_tested_commit": true,
+    "merged_configuration_tests_ok": 4,
+    "concurrent_git_configuration_tests_ok": 4,
+    "raw_log": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-tests.log",
+    "original_metadata": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-tests.json",
+    "artifact_copy_policy": "Original log and metadata copied byte-for-byte; no edits, redaction or test rerun by the evidence assembler."
+  },
+  "merge_resolution": {
+    "xrt_runner_helpers": {
+      "unchanged_from_revision": "42e36724a2f2a02766b26de8deb9b04b7557fa27",
+      "files": [
+        "ci/project/xrt_baseline.py",
+        "ci/project/xrt_contract.py",
+        "ci/project/xrt_inventory.py",
+        "ci/project/xrt_runtime.py",
+        "ci/project/xrt_signals.py",
+        "ci/project/xrt_source.py",
+        "ci/project/xrt_test_support.py"
+      ]
+    },
+    "hwemu_modules": {
+      "identical_to_revision": "e9e36c1cdccf975e330d9a9d2d67f3df9e50ba98",
+      "files": [
+        "ci/project/hwemu.py",
+        "ci/project/hwemu_build.py",
+        "ci/project/hwemu_contract.py",
+        "ci/project/hwemu_fixture.py",
+        "ci/project/hwemu_inventory.py",
+        "ci/project/hwemu_io.py",
+        "ci/project/hwemu_plan.py",
+        "ci/project/hwemu_source.py"
+      ]
+    },
+    "shared_generated_configuration": {
+      "unchanged_from_revision": "81e35e97d2fa410bbfbb970b53ccc179b0aa8d27",
+      "files": [
+        {
+          "path": "sw/runtime/xrt/xrt.ini.in",
+          "git_blob": "953cf8c7bb3f68fe95ccce361ec638034f99ffe6",
+          "sha256": "af582631ae82f0a368b4e485e94daf69c2fe8511345577780d04c94f22e9b4a3"
+        },
+        {
+          "path": "sw/runtime/xrt/xsim.tcl",
+          "git_blob": "1e3b3e9fb573ed8598fd2ba04aaee351bf17cfa4",
+          "sha256": "453ba15e63ad906671c401ae8d62bc4ce8022dda41b91a9b651d451e3ba85f89"
+        }
+      ]
+    },
+    "configuration_test_consolidation": {
+      "path": "ci/project/test_xrt_configuration.py",
+      "first_parent_tests": 1,
+      "second_parent_tests": 4,
+      "merged_tests": 4,
+      "sha256": "2218354ccbc01882bcd58ec54bcc7c2463b566a4a221b6631aefa21d56121965",
+      "review": "Assignment 50 consolidated duplicate hook-resolution coverage while preserving all assertions.",
+      "preserved_checks": [
+        "Exact existing tracked Tcl hook; no unexpanded @ character in generated INI.",
+        "Console runtime logging; debug off; profile and timeline false; data-transfer trace off.",
+        "Zero waveform logging for unset, empty, 0, false, true, 01, trailing-space 1 and Tcl-looking input.",
+        "Exact string 1 requests exactly one recursive log_wave -r * call.",
+        "Fresh isolated RV64 configure with explicit unused tools/install paths; unavailable Tcl remains an explicit skip."
+      ]
+    },
+    "concurrent_git_configuration_fix": {
+      "source_revision": "e9e36c1cdccf975e330d9a9d2d67f3df9e50ba98",
+      "production_path": "ci/project/hwemu_source.py",
+      "behavior": "Metadata probes force GIT_CONFIG_NOSYSTEM=1 and GIT_CONFIG_GLOBAL=os.devnull while retaining repository/worktree configuration and explicit includes for safety inspection.",
+      "regression_path": "ci/project/test_hwemu_git_environment.py",
+      "regression_sha256": "eb2c35818cd581b537379a1ef4b20f904052a013b11484dbdd3a236b93497349",
+      "regression_methods": [
+        "test_machine_filters_do_not_block_but_repository_include_still_does",
+        "test_default_home_and_xdg_filters_do_not_block_source",
+        "test_repository_worktree_and_included_filters_still_fail_closed",
+        "test_repository_worktree_and_included_partial_clones_still_fail_closed"
+      ],
+      "test_execution_result": "All four regression methods report ok in the primary combined-suite log."
+    }
+  },
+  "historical_verifications": [
+    {
+      "record": "docs/project/evidence/p01-xrt-tooling/verification.json",
+      "source_revision": "42e36724a2f2a02766b26de8deb9b04b7557fa27",
+      "source_tree": "c0f28a660c0a5c8b16d3f82adee06d104668d4e5",
+      "tests_run": 875,
+      "boundary": "Separate historical pre-merge snapshot; this packet does not overwrite or reattribute it."
+    },
+    {
+      "source_revision": "236770d6083ae88749e1830dd08eb72ee4327f97",
+      "source_tree": "449e538d1066df343b501ab365fa521cb2cdc2fa",
+      "tests_run": 1071,
+      "skips": 0,
+      "exit_code": 0,
+      "unittest_seconds": 121.926,
+      "recorded_elapsed_seconds": 122.255,
+      "raw_log": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-tests.log",
+      "original_metadata": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-tests.json",
+      "change_impact": {
+        "class": "R2",
+        "changed_paths": 58,
+        "class_counts": {
+          "R0": 11,
+          "R1": 45,
+          "R2": 2
+        },
+        "record": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.json"
+      },
+      "boundary": "Intermediate integration result; the later Git-configuration isolation fix and its four regression tests were not present in this tested commit."
+    }
+  ],
+  "change_impact": {
+    "base_revision": "91b82fe300f94ab0a70dd0e0e4a69a0e23b16101",
+    "head_revision": "ae27591d1e4b7c9f2ec802c75fd6556b95a0483b",
+    "policy_source": "Immutable base revision; classifier, machine policy and normative review policy were extracted with Git and their SHA-256 values rechecked after execution.",
+    "policy_version": 3,
+    "event": "push",
+    "class": "R2",
+    "indeterminate": false,
+    "changed_paths": 59,
+    "class_counts": {
+      "R0": 11,
+      "R1": 46,
+      "R2": 2
+    },
+    "R2_paths": [
+      "sw/runtime/xrt/xrt.ini.in",
+      "sw/runtime/xrt/xsim.tcl"
+    ],
+    "contracts": [],
+    "evidence_checks": [
+      {
+        "severity": "info",
+        "paths": [
+          "sw/runtime/xrt/xrt.ini.in"
+        ],
+        "detail": "configure copies these into the build tree: re-run configure before testing",
+        "check": "configure-copied",
+        "min_class": "R1"
+      }
+    ],
+    "classify_exit_code": 0,
+    "explain_exit_code": 0,
+    "boundary": "Advisory classification only; no waiver, source acceptance, test result or maintainer approval follows from classifier success."
+  },
+  "boundaries": {
+    "hwemu_and_xrt_schema_compatibility": false,
+    "hwemu_candidate_consumed_by_xrt_runner": false,
+    "shared_schema_version_is_schema_identity": false,
+    "hwemu_launch_ready": false,
+    "vendor_execution_performed": false,
+    "gpu_execution_performed": false,
+    "phase_complete": false,
+    "acceptance": "not_evaluated",
+    "P00": "complete",
+    "P01_A01": "accepted_historical_evidence_unchanged",
+    "P01_A02": "accepted_historical_evidence_unchanged",
+    "P01_A03": "blocked",
+    "P01": "blocked",
+    "P02": "not_started",
+    "sixty_assignment_completion_claimed": false,
+    "hosted_ci_observed": false,
+    "publication_observed": false
+  },
+  "open_findings": [
+    {
+      "id": "hwemu-F1-compiler-glob",
+      "severity": "F1",
+      "status": "open_unwaived",
+      "scope": "Unquoted glob characters in manually written compiler-stamp operands are not expanded by the read-only hwemu inspector; require the documented follow-up, actual producer records and effective-invocation review before execution-contract promotion."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/README.md",
+      "sha256": "f039d75c4716f97d4bab0685056cf222b36a44a1b827724165aa7d70c659b634"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/merge-source-comparison.json",
+      "sha256": "c05b1ea9c1e75d2eceb4f144610238f47471244a2775bd59462950fd6cd04910"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.classify.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.commands.json",
+      "sha256": "841bea5b8bbd28ef29e24b3b48094e9f8a1638361d34172dfec4d88af36d6f55"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.explain.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.explain.txt",
+      "sha256": "bd8dcf7ffc109a93e2dd2388698d5ebc5fa85f251d42f2f412aa1f7c6f613b41"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.json",
+      "sha256": "79e30b16879d2cd19010bebee703918b92222593a38435dbc487219a03f74375"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.log",
+      "sha256": "20800dbc0874936190a011205be52cab45cdd9369eae43aa849940a6f3ed4339"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.provenance.json",
+      "sha256": "3fc3c1f06e8d7a75f53cc102d62ed0a6285378316d12c77cd3634c28a45fc2b8"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-tests.json",
+      "sha256": "a3213a179fcffb667b878a833275f471ab7d87128ee5138f71efb41fb15d83c5"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-tests.log",
+      "sha256": "626b54728a6e6cf42bacfda749aecc9e448f2a36f8ba031fb45ea1a10e2666c7"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/merge-source-comparison.json",
+      "sha256": "747b38681555cb298440c479389bbb3ac01ee530476575cb4155c2132ba39932"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-change-impact.classify.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-change-impact.commands.json",
+      "sha256": "78f373bff22d912846d66792c1345093e225e7fe3c3d09b9a1b31aca0b767988"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-change-impact.explain.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-change-impact.explain.txt",
+      "sha256": "7892ce214eb8041ec0738237450682523365d4d4d3f8664af1c6ebe1481f7ae6"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-change-impact.json",
+      "sha256": "5eca2d24b7a0000defa3d1919190221cc1672f7c5c50c052f1428b66ddce1bb7"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-change-impact.log",
+      "sha256": "3ba86a79f92607c21a906a295290be942f5b42ab3da4c0a94d3060f2cd0ea9c7"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-change-impact.provenance.json",
+      "sha256": "1f5a5bb91975bea0eb91c0ae7db0dd77dc4dd865075cc53ecd070c8cca384733"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-tests.json",
+      "sha256": "eb31db797e036b17e00fe12694416de865bb52b8af36fc939a50573024f87a05"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-tests.log",
+      "sha256": "a8e9249faec9aba5edc19e8a40b90dd3ec4e756c8a0abe6b3c245e20de89722f"
+    }
+  ],
+  "limitations": [
+    "The two routes retain independent strict manifest/receipt/report schemas, build assumptions and budgets. The XRT runner uses fixed commands and requires its own reviewed inputs and fresh build; no adapter or automatic plan promotion exists.",
+    "The shared generated INI and Tcl retain the concurrent default-off configuration and exact waveform opt-in. The bounded runner retains its distinct no-hook tracing-disabled smoke INI and direct launch.",
+    "Tooling tests and merge inspection do not qualify vendor tools/platforms, establish GPU numerical results, or satisfy P01-A03. No new physical FPGA, performance or silicon measurement is claimed.",
+    "This local packet does not establish remote publication, hosted CI success, maintainer approval, or completion of 60 assignments.",
+    "The original run metadata does not inventory the complete interpreter/dependency environment; selected source-file hashes and exact invocation are retained."
+  ],
+  "reviewer": "Agent /root/w09_a53_merge_evidence: retained-log and immutable-merge inspection; no maintainer approval or acceptance decision.",
+  "observed_at_utc": "2026-11-16T01:09:55.187741+00:00"
+}

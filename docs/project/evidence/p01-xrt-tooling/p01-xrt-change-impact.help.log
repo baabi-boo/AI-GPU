@@ -1,0 +1,53 @@
+$ python3 -I /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change_impact.py --repo /workspace/scratch/4f0bc2b9a6f1/AI-GPU --policy /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change-impact.yaml --help
+usage: change_impact.py [-h] [--policy POLICY] [--repo REPO]
+                        {classify,explain,replay,lint-policy} ...
+
+Vortex change-impact classifier (advisory)
+
+positional arguments:
+  {classify,explain,replay,lint-policy}
+    classify            classify the diff base...head
+    explain             per-file trace of a classification, or the rules a
+                        path meets
+    replay              classify every non-merge commit of a range
+    lint-policy         validate the policy file
+
+options:
+  -h, --help            show this help message and exit
+  --policy POLICY
+  --repo REPO
+Exit: 0
+
+$ python3 -I /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change_impact.py --repo /workspace/scratch/4f0bc2b9a6f1/AI-GPU --policy /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change-impact.yaml classify --help
+usage: change_impact.py classify [-h] --base BASE --head HEAD
+                                 [--event {push,pull_request,replay}]
+                                 [--check-remote]
+                                 [--format {text,json,markdown}]
+                                 [--policy-note POLICY_NOTE]
+
+options:
+  -h, --help            show this help message and exit
+  --base BASE
+  --head HEAD
+  --event {push,pull_request,replay}
+  --check-remote        resolve a moved TOOLCHAIN_REV against the prebuilt
+                        repository
+  --format {text,json,markdown}
+  --policy-note POLICY_NOTE
+                        appended to the markdown footer
+Exit: 0
+
+$ python3 -I /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change_impact.py --repo /workspace/scratch/4f0bc2b9a6f1/AI-GPU --policy /workspace/scratch/4f0bc2b9a6f1/validation/p01-xrt-change-impact.base-uwqlhacn/change-impact.yaml explain --help
+usage: change_impact.py explain [-h] [--base BASE] [--head HEAD]
+                                [--event {push,pull_request,replay}]
+                                [--check-remote] [--path PATH [PATH ...]]
+
+options:
+  -h, --help            show this help message and exit
+  --base BASE
+  --head HEAD
+  --event {push,pull_request,replay}
+  --check-remote        resolve a moved TOOLCHAIN_REV against the prebuilt
+                        repository
+  --path PATH [PATH ...]
+Exit: 0

@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "base": "91b82fe300f94ab0a70dd0e0e4a69a0e23b16101",
+  "head": "ae27591d1e4b7c9f2ec802c75fd6556b95a0483b",
+  "tree": "9d2be910dd14ce4e6fabf2e30e4d84db98d835c7",
+  "execution_owner": "/root/w09_a53_merge_evidence",
+  "scope": "Read-only advisory classifier and explanation, using immutable base revision files; no test, build, vendor or GPU execution.",
+  "commands": [
+    {
+      "name": "classify",
+      "command": [
+        "python3",
+        "-I",
+        "/workspace/scratch/4f0bc2b9a6f1/agent-notes/w09_a53_draft/base-classifier/change_impact.py",
+        "--repo",
+        "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+        "--policy",
+        "/workspace/scratch/4f0bc2b9a6f1/agent-notes/w09_a53_draft/base-classifier/change-impact.yaml",
+        "classify",
+        "--base",
+        "91b82fe300f94ab0a70dd0e0e4a69a0e23b16101",
+        "--head",
+        "ae27591d1e4b7c9f2ec802c75fd6556b95a0483b",
+        "--event",
+        "push",
+        "--format",
+        "json"
+      ],
+      "cwd": "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+      "started_at": "2026-11-16T01:06:45.279750+00:00",
+      "finished_at": "2026-11-16T01:06:45.427157+00:00",
+      "elapsed_seconds": 0.147395,
+      "exit_code": 0,
+      "stdout": "p01-xrt-ae27591-change-impact.json",
+      "stderr": "p01-xrt-ae27591-change-impact.classify.stderr.txt"
+    },
+    {
+      "name": "explain",
+      "command": [
+        "python3",
+        "-I",
+        "/workspace/scratch/4f0bc2b9a6f1/agent-notes/w09_a53_draft/base-classifier/change_impact.py",
+        "--repo",
+        "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+        "--policy",
+        "/workspace/scratch/4f0bc2b9a6f1/agent-notes/w09_a53_draft/base-classifier/change-impact.yaml",
+        "explain",
+        "--base",
+        "91b82fe300f94ab0a70dd0e0e4a69a0e23b16101",
+        "--head",
+        "ae27591d1e4b7c9f2ec802c75fd6556b95a0483b",
+        "--event",
+        "push"
+      ],
+      "cwd": "/workspace/scratch/4f0bc2b9a6f1/AI-GPU",
+      "started_at": "2026-11-16T01:06:45.279992+00:00",
+      "finished_at": "2026-11-16T01:06:45.386879+00:00",
+      "elapsed_seconds": 0.106878,
+      "exit_code": 0,
+      "stdout": "p01-xrt-ae27591-change-impact.explain.txt",
+      "stderr": "p01-xrt-ae27591-change-impact.explain.stderr.txt"
+    }
+  ]
+}
