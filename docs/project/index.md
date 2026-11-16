@@ -12,6 +12,7 @@ that a GPU workload or physical device has passed its checks.
 | What are we building? | [Plain-language overview](../../README.md), [charter](charter.md) | [Roadmap](../../ROADMAP.md), [current status](status.md) |
 | What should I work on next? | [Developer guide](developer-guide.md), [backlog](backlog.md) | [Architecture](architecture.md), [contribution process](../../CONTRIBUTING.md), [agent rules](../../AGENTS.md) |
 | What would prove this works? | [Acceptance policy](acceptance.md), [verification strategy](verification.md) | [Evidence format](evidence/README.md), [benchmark protocol](benchmarks.md), [review policy](../review/code-review-policy.md) |
+| How do I prepare the remaining P01 vendor integration? | [hw_emu runbook](p01-hwemu-runbook.md), [manifest contract](p01-hwemu-manifest.md) | [Preparation handoff](p01-hwemu-handoff.md), [current status](status.md) |
 | How does this become real hardware? | [Hardware plan](hardware.md), [physical FPGA phase](phases/p07-fpga.md) | [Risks](risks.md), [decisions](decisions.md), [ASIC feasibility](phases/p10-asic.md) |
 
 Before continuing existing work, check the current source revision and local
@@ -29,6 +30,10 @@ unexecuted template as a completion record.
   criteria, evidence levels, live status and evidence references.
 - [Current status](status.md): observed results, blockers and the next bounded action.
 - [Backlog](backlog.md): ordered work items with deliverables and gate mappings.
+- [P01 hw_emu preparation](p01-hwemu-runbook.md): read-only inventory and candidate
+  planning, the corrected XRT hook and lean opt-in tracing; P01-A03 remains blocked.
+- [P01 hw_emu manifest contract](p01-hwemu-manifest.md): strict source/build,
+  artifact/receipt and resource consistency checks; a plan is not an execution.
 - [Decisions](decisions.md): accepted setup directions and unresolved choices.
 - [Risk register](risks.md): triggers, mitigations, responsibilities and stop gates.
 
@@ -100,6 +105,13 @@ funding/manufacturing decisions; a roadmap does not authorize purchases.
   experiment planning, not an acceptance report.
 - [Handoff template](handoff.example.md): exact source, actual outcomes, limitations,
   publication state and the next action.
+- [P01 baseline handoff](p01-handoff.md): accepted historical clean-build/native
+  execution scope and the separate vendor-integration obligation.
+- [P01 packet handoff](p01-packet-handoff.md): historical offline-verification
+  delivery and its recorded checks, separate from GPU execution evidence.
+- [P01 hw_emu preparation handoff](p01-hwemu-handoff.md): current preparation,
+  remaining qualified vendor release/platform and actual build-packet needs,
+  followed by bounded supervised execution. P02 remains `not_started`.
 - [Agent execution ledger](agent-execution.json): completed setup assignments;
   worker counts are not GPU qualification evidence.
 

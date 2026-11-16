@@ -16,8 +16,10 @@ immutable toolchain lock, native matrix and bounded runner are implemented.
 FP16/BF16 GEMM and TF32 attention pass on both SimX and native processor RTL;
 the fresh FP16 SimX build and supplemental full-AFU integer `xrtsim` smoke also
 pass. Identify a qualified vendor release and supported platform, freeze their
-identities and resource budget, then obtain the required DMA/launch/completion
-evidence. Preserve the earlier GCC 14 spdlog/fmt and missing-`ccache` failures.
+identities and resource budget, and retain an actual matching build packet with
+production provenance. Check its manifest, review the candidate and obtain the
+required DMA/launch/completion evidence through bounded supervised execution.
+Preserve the earlier GCC 14 spdlog/fmt and missing-`ccache` failures.
 
 Follow the [P01 runbook](p01-baseline-runbook.md). The two-worker budget, 15 GiB
 disk reserve and per-command memory/log/time limits remain part of the packet.
@@ -51,13 +53,30 @@ missing vendor `hw_emu` tools/platform. No phase-completion change is justified
 while T05 remains blocked. The [handoff](p01-handoff.md) records exact source/tool
 identities, review boundaries and the next integration obligation.
 
+T05 now has read-only [inventory/planning tooling](../../ci/project/hwemu.py),
+a [vendor-emulation runbook](p01-hwemu-runbook.md), a strict
+[manifest/receipt contract](p01-hwemu-manifest.md) and a
+[preparation handoff](p01-hwemu-handoff.md). Source, submodule, generated-build,
+artifact and resource checks describe a candidate without launching it or
+qualifying the vendor environment. The XRT source hook path is corrected and
+waveform collection is opt-in. This preparation supplies no new GPU/vendor or
+physical result; `planned` does not close T05 or P01-A03.
+
+Before promoting a candidate to an executable contract, the verification owner
+must resolve the reviewed F1 follow-up for unquoted glob characters in manually
+written compiler-stamp operands. For example, an unusual matching filename can
+change how an include operand consumes a following flag. The current inspector
+does not expand globs or grant launch readiness; require actual producer records
+and review the effective invocation before supervised execution. Track this
+alongside the required vendor/platform qualification, without changing P01 gates.
+
 | Work item | Deliverable and completion check | Prerequisite / accountable role | Gate supported |
 |---|---|---|---|
 | **P01-T01 — Environment manifest** | Record exact source/tree and dirty state, all submodule commits, source pins and resolved tool/bundle identities, host/tool availability, effective RAM, free-disk reserve, job/runtime limits and retained-artifact budget. Missing access or licenses remain named blockers. | P00 accepted; verification lead | P01-A01 |
 | **P01-T02 — Native matrix** | Freeze a small list of catalog IDs, XLEN, TFR/native versus DPI, dtypes/accumulation, warp geometry, dimensions, reference checks and expected failures. Record the full effective application/backend configuration and review any coverage gaps before adding cases. | T01; compute architecture lead with verification lead | P01-A02 |
 | **P01-T03 — Clean build** | Prepare only the approved pinned dependencies, initialize exact submodules, configure a dedicated out-of-tree variant and build the selected path. Retain command exits, tool identities and generated-config hashes; reproduce from a clean checkout. | T01/T02 and resource/access approval; build/toolchain lead | P01-A01 |
 | **P01-T04 — Native numerical baseline** | Run selected cases one at a time on SimX and matching native processor RTL. Preserve CPU-reference checks, output logs, exact numerics and applicable parity evidence. Add a focused regression for a missing required combination; do not alter inherited cases to reduce coverage. | T03; verification lead | P01-A02 |
-| **P01-T05 — Full AFU integration** | Pin an available XRT emulation platform/tool environment, then prove DMA, launch and completion through full `hw_emu`. Publish its logs and configuration, or an explicit blocked record when unavailable. Processor-only `rtlsim` does not close this item. | T03/T04 plus platform/license access; FPGA platform lead | P01-A03 |
+| **P01-T05 — Full AFU integration** | Qualify the vendor release/platform, retain an actual matching build packet, check its strict manifest and review the candidate before bounded supervised `hw_emu` execution. Prove DMA, launch and completion with retained logs/configuration, or preserve an explicit blocked record. Planning and processor-only `rtlsim` do not close this item. | T03/T04 plus platform/license access; FPGA platform lead | P01-A03 |
 | **P01-T06 — Reviewed baseline packet** | Assemble hashes, exact commands/results, native/DPI distinctions, failures and limitations; obtain independent review, attach each satisfied gate, and update status plus the next task. Close P01 only when all three gates pass. | T01–T05 evidence; verification lead / maintainer | P01-A01, P01-A02, P01-A03 |
 
 ### Frozen catalog-derived matrix

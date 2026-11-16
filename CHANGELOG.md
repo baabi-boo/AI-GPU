@@ -4,6 +4,34 @@ This log records project changes, not hardware qualification. Accepted scope and
 evidence remain in [project status](docs/project/status.md) and the
 [canonical roadmap](docs/project/roadmap.json).
 
+## Unreleased — P01 vendor hardware-emulation preparation
+
+### Added
+
+- Read-only [hwemu.py](ci/project/hwemu.py) inventory and candidate planning with
+  a strict inert manifest, bounded file-identity checks, a matching retained
+  receipt, source/submodule and generated-build consistency checks, and resource
+  observations. Planning does not execute vendor tools or the candidate workload.
+- A [hw_emu runbook](docs/project/p01-hwemu-runbook.md),
+  [manifest contract](docs/project/p01-hwemu-manifest.md) and
+  [preparation handoff](docs/project/p01-hwemu-handoff.md) for P01-T05.
+
+### Corrected
+
+- Point the XRT INI at the actual `sw/runtime/xrt/xsim.tcl` source hook. Use lean
+  tracing defaults and require an explicit debug configuration plus
+  `VORTEX_XRT_WAVEFORM=1` for waveform collection.
+
+### Qualification state
+
+A successful plan establishes input consistency, with launch readiness, vendor
+qualification, execution and phase completion still false. P01-A03 remains
+blocked and P02 remains `not_started`; accepted P01-A01/A02 evidence is unchanged.
+These changes establish no new GPU, vendor-emulation or physical-device result.
+The next action is a qualified vendor release/platform and actual matching build
+packet, followed by candidate review and bounded supervised DMA/launch/completion
+execution. Historical test totals below belong to their recorded deliveries.
+
 ## Unreleased — P01 reproducible baseline
 
 ### Added
@@ -39,7 +67,8 @@ FP16/BF16 GEMM and TF32 attention executions pass their unchanged CPU references
 on SimX and native processor RTL. A fresh generated FP16 SimX build passes, and
 a supplemental full-AFU `xrtsim` integer smoke passes all 16 reference points.
 The initial GCC 14 spdlog/fmt and missing-`ccache` build failures remain preserved.
-All 346 source-root project/tooling tests pass. Two compile workers were used;
+That historical baseline revision passed all 346 source-root project/tooling
+tests. Two compile workers were used;
 the highest sampled process-group RSS was about 3.25 GiB, and 53.48 GiB of disk
 space remained free after execution, with no recorded budget stop.
 
