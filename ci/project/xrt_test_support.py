@@ -14,6 +14,20 @@ FIXTURE_CONFIGS = [
 ]
 
 
+def compiler_stamps(build):
+    """Model the generated record layout without claiming compiler execution."""
+    flags = " ".join(("-DVX_CFG_XLEN=64", "-DVX_CFG_XLEN_64", *FIXTURE_CONFIGS))
+    return {
+        "runtime": flags + " -std=c++17 -fPIC -O2 -DNDEBUG\n",
+        "demo": "\n".join((
+            "-march=rv64imafd -mabi=lp64d " + flags + " -O3 -DNDEBUG",
+            flags + " -std=c++17 -O2 -DNDEBUG",
+            "-L" + str(Path(build) / "sw/runtime") + " -lvortex",
+            "",
+        )),
+    }
+
+
 def identity(path):
     path = Path(path)
     contents = path.read_bytes()

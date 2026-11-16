@@ -10,7 +10,7 @@ import unittest
 from unittest import mock
 
 import xrt_inventory
-from xrt_test_support import FIXTURE_CONFIGS, VendorFixture, identity, write_file
+from xrt_test_support import VendorFixture, compiler_stamps, identity, write_file
 
 
 class InventoryFixture(unittest.TestCase):
@@ -278,11 +278,15 @@ class GeneratedBuildInventoryTests(InventoryFixture):
 class EffectiveConfigurationTests(InventoryFixture):
     def setUp(self):
         super().setUp()
-        self.flags = "-DVX_CFG_XLEN=64 " + " ".join(FIXTURE_CONFIGS)
         self.stamps = (self.fixture.build / "tests/regression/demo/config.stamp",
                        self.fixture.build / "sw/runtime/xrt_config.stamp")
-        for path in self.stamps:
-            write_file(path, self.flags + "\n")
+        stamps = compiler_stamps(self.fixture.build)
+        self.original_stamps = {self.stamps[0]: stamps["demo"],
+                                self.stamps[1]: stamps["runtime"]}
+        self.compiler_records = ((self.stamps[1], 0), (self.stamps[0], 0),
+                                 (self.stamps[0], 1))
+        for path, contents in self.original_stamps.items():
+            write_file(path, contents)
         self.binaries = [self.fixture.build / relative for relative in (
             "tests/regression/demo/demo", "tests/regression/demo/kernel.vxbin",
             "sw/runtime/libvortex.so", "sw/runtime/libvortex-xrt.so")]
@@ -292,41 +296,62 @@ class EffectiveConfigurationTests(InventoryFixture):
     def inspect_effective(self):
         return xrt_inventory.inspect_effective(self.fixture.build)
 
+    def assert_record_blocked(self, path, index, transform, reason):
+        original = self.original_stamps[path]
+        records = original.split("\n")
+        records[index] = transform(records[index])
+        write_file(path, "\n".join(records))
+        try:
+            report = self.inspect_effective()
+            self.assertBlocked(report, reason)
+            self.assertFalse(report["native_flags_verified"])
+        finally:
+            write_file(path, original)
+        self.assertEqual(self.inspect_effective()["outcome"], "pass")
+
     def test_exact_vendor_flags_and_outputs_are_identified(self):
         report = self.inspect_effective()
         self.assertEqual(report["outcome"], "pass", report)
         self.assertTrue(report["native_flags_verified"])
         self.assertEqual(len(report["identities"]), 6)
 
-    def test_simulation_runtime_definitions_are_rejected_in_either_stamp(self):
-        for path in self.stamps:
+    def test_simulation_runtime_definitions_are_rejected_in_every_compiler_record(self):
+        for path, index in self.compiler_records:
             for flag in ("-DXRTSIM", "-DXRTSIM=0", "-D XRTSIM", "-D XRTSIM=1",
                          '"-DXRTSIM"', "-D 'XRTSIM'"):
-                with self.subTest(path=path, flag=flag):
-                    write_file(path, self.flags + " " + flag + "\n")
-                    self.assertBlocked(self.inspect_effective(), "simulation")
-                    write_file(path, self.flags + "\n")
+                with self.subTest(path=path, record=index, flag=flag):
+                    self.assert_record_blocked(path, index, lambda line: line + " " + flag,
+                                               "shim")
 
     def test_joined_and_spaced_configuration_undefines_are_rejected(self):
-        for flag in ("-UVX_CFG_FPU_TYPE_STD", "-U VX_CFG_FPU_TYPE_STD", "-U XRTSIM"):
-            with self.subTest(flag=flag):
-                write_file(self.stamps[0], self.flags + " " + flag + "\n")
-                self.assertBlocked(self.inspect_effective(), "undefine")
+        for path, index in self.compiler_records:
+            for flag, reason in (("-UVX_CFG_FPU_TYPE_STD", "undefines"),
+                                 ("-U VX_CFG_FPU_TYPE_STD", "undefines"),
+                                 ("-U XRTSIM", "shim")):
+                with self.subTest(path=path, record=index, flag=flag):
+                    self.assert_record_blocked(path, index, lambda line: line + " " + flag,
+                                               reason)
 
     def test_wrong_xlen_geometry_and_conflicting_definitions_are_rejected(self):
-        for flags in (self.flags.replace("XLEN=64", "XLEN=32"),
-                      self.flags.replace("NUM_THREADS=4", "NUM_THREADS=8"),
-                      self.flags + " -DVX_CFG_NUM_THREADS=8"):
-            with self.subTest(flags=flags):
-                write_file(self.stamps[1], flags + "\n")
-                self.assertBlocked(self.inspect_effective(), "configuration")
+        mutations = (
+            (lambda line: line.replace("XLEN=64", "XLEN=32"), "configuration"),
+            (lambda line: line.replace("NUM_THREADS=4", "NUM_THREADS=8"), "configuration"),
+            (lambda line: line + " -DVX_CFG_NUM_THREADS=8", "conflicting defines"),
+        )
+        for path, index in self.compiler_records:
+            for mutation, reason in mutations:
+                with self.subTest(path=path, record=index, reason=reason):
+                    self.assert_record_blocked(path, index, mutation, reason)
 
     def test_dpi_or_other_scalar_arithmetic_is_rejected(self):
-        for flag in ("-DVX_CFG_TCU_TYPE_DPI", "-DVX_CFG_TCU_TYPE=DPI",
-                     "-DVX_CFG_FPU_TYPE_DPI", "-DVX_CFG_FPU_TYPE=DSP"):
-            with self.subTest(flag=flag):
-                write_file(self.stamps[0], self.flags + " " + flag + "\n")
-                self.assertBlocked(self.inspect_effective(), "non-native arithmetic")
+        for path, index in self.compiler_records:
+            for flag, reason in (("-DVX_CFG_TCU_TYPE_DPI", "nonnative tensor"),
+                                 ("-DVX_CFG_TCU_TYPE=DPI", "nonnative tensor"),
+                                 ("-DVX_CFG_FPU_TYPE_DPI", "nonnative scalar"),
+                                 ("-DVX_CFG_FPU_TYPE=DSP", "native STD scalar")):
+                with self.subTest(path=path, record=index, flag=flag):
+                    self.assert_record_blocked(path, index, lambda line: line + " " + flag,
+                                               reason)
 
     def test_each_output_binary_is_required(self):
         for path in self.binaries:

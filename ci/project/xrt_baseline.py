@@ -27,8 +27,10 @@ from xrt_signals import terminate_as_interrupt
 
 HERE = Path(__file__).resolve().parent
 TOOLING_FILES = (
-    "xrt_baseline.py", "xrt_contract.py", "xrt_inventory.py", "xrt_runtime.py", "xrt_signals.py", "xrt_source.py", "baseline_host.py",
-    "baseline_inventory.py", "baseline_process.py", "preflight.py",
+    "xrt_baseline.py", "xrt_contract.py", "xrt_inventory.py", "xrt_runtime.py",
+    "xrt_signals.py", "xrt_source.py", "compiler_records.py",
+    "baseline_packet_contract.py", "baseline_matrix.py", "baseline_packet_io.py",
+    "baseline_host.py", "baseline_inventory.py", "baseline_process.py", "preflight.py",
 )
 TOOL_BINARIES = {**BASE_TOOL_BINARIES, "llvm_clangxx": "llvm-vortex/bin/clang++"}
 LICENSE_KEYS = ("XILINXD_LICENSE_FILE", "LM_LICENSE_FILE")

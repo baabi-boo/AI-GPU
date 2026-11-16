@@ -4,11 +4,10 @@
 import configparser
 import os
 from pathlib import Path
-import re
-import shlex
 import shutil
 
 from baseline_inventory import collect_build
+from compiler_records import validate_records
 from xrt_contract import (CONFIGS, decode_json, file_identity, read_verified,
                           safe_path, validate_manifest, validate_receipt)
 from xrt_source import collect_source
@@ -215,55 +214,24 @@ def inspect_build(build, source):
     return _finish(report)
 
 
-def _defines(text):
-    values = {}
-    tokens = iter(shlex.split(text))
-    for token in tokens:
-        if token in ("-D", "-U"):
-            operation = token
-            token = next(tokens, "")
-        elif token.startswith(("-D", "-U")):
-            operation, token = token[:2], token[2:]
-        else:
-            continue
-        name, _, value = token.partition("=")
-        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", name):
-            raise ValueError("configuration stamp contains a malformed preprocessor option")
-        if operation == "-U":
-            if name.startswith("VX_CFG_") or name == "XRTSIM":
-                raise ValueError("configuration-undefine flags appear in vendor build")
-            continue
-        if name in values and values[name] != value:
-            raise ValueError("configuration stamp contains conflicting definitions")
-        values[name] = value
-    return values
-
-
 def inspect_effective(build):
-    """Reject simulation-only runtime flags and retain produced binary identities."""
+    """Validate each compiler record and retain stamp and produced binary identities."""
     build = safe_path(str(build))
     report = {"blockers": [], "identities": {}, "native_flags_verified": False}
-    expected = _defines(" ".join(CONFIGS))
-    expected["VX_CFG_XLEN"] = "64"
+    stamps = {}
     for relative in STAMP_FILES:
         try:
             contents, identity = _read(build / relative)
-            text = contents.decode("utf-8")
-            observed = _defines(text)
-            if any(observed.get(name) != value for name, value in expected.items()):
-                raise ValueError("effective configuration differs from the frozen RV64 smoke")
-            if "XRTSIM" in observed:
-                raise ValueError("simulation or configuration-undefine flags appear in vendor build")
-            if (observed.get("VX_CFG_FPU_TYPE", "STD") != "STD"
-                    or any(name.startswith("VX_CFG_FPU_TYPE_") and name != "VX_CFG_FPU_TYPE_STD"
-                           for name in observed)
-                    or observed.get("VX_CFG_TCU_TYPE", "TFR") != "TFR"
-                    or any(name.startswith("VX_CFG_TCU_TYPE_") and name != "VX_CFG_TCU_TYPE_TFR"
-                           for name in observed)):
-                raise ValueError("non-native arithmetic appears in the effective configuration")
             report["identities"][relative] = identity
+            stamps[relative] = contents.decode("utf-8")
         except (OSError, ValueError, RuntimeError, UnicodeError) as error:
             report["blockers"].append(relative + ": " + str(error))
+    if not report["blockers"]:
+        try:
+            validate_records(stamps["sw/runtime/xrt_config.stamp"],
+                             stamps["tests/regression/demo/config.stamp"], str(build), CONFIGS)
+        except ValueError as error:
+            report["blockers"].append("effective compiler records: " + str(error))
     for relative in BINARY_FILES:
         try:
             report["identities"][relative] = file_identity(build / relative)

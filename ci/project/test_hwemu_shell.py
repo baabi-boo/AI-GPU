@@ -4,7 +4,7 @@
 import unittest
 from unittest import mock
 
-from hwemu_build import _configuration_flags
+from compiler_records import validate_records
 from hwemu_contract import CONFIGS
 
 
@@ -33,7 +33,7 @@ class CompilerShellSyntaxTests(unittest.TestCase):
         runtime, kernel, host = records
         demo = "\n".join((kernel, host, "-L" + BUILD + "/sw/runtime -lvortex"))
         with mock.patch("subprocess.Popen", side_effect=AssertionError("must remain inert")):
-            return _configuration_flags(runtime + "\n", demo + "\n", BUILD)
+            return validate_records(runtime + "\n", demo + "\n", BUILD, CONFIGS)
 
     def reject_record(self, index, transform):
         records = list(RECORDS)
@@ -68,7 +68,7 @@ class CompilerShellSyntaxTests(unittest.TestCase):
 
     def test_quoted_and_escaped_shell_literals_are_conservatively_rejected(self):
         for index, name in enumerate(NAMES):
-            for operator in ";&|<>$`":
+            for operator in ";&|<>$`*?[]{}()~":
                 literals = (
                     "'-DNOTE=" + operator + "'", '"-I.' + operator + '"',
                     "-I.\\" + operator,
@@ -76,6 +76,38 @@ class CompilerShellSyntaxTests(unittest.TestCase):
                 for literal in literals:
                     with self.subTest(record=name, literal=literal):
                         self.reject_record(index, lambda line: line + " " + literal)
+
+    def test_pathname_patterns_cannot_change_compiler_argument_boundaries(self):
+        for index, name in enumerate(NAMES):
+            for pattern in ("-I*", "-I?", "-I[-]", "-Wp,-I,*",
+                            "-Xpreprocessor -I -Xpreprocessor ?"):
+                with self.subTest(record=name, pattern=pattern):
+                    self.reject_record(index, lambda line: pattern + " " + line)
+
+    def test_only_line_feeds_separate_compiler_records(self):
+        runtime, kernel, host = RECORDS
+        linker = "-L" + BUILD + "/sw/runtime -lvortex"
+        for separator in ("\r", "\r\n", "\v", "\f", "\x85", "\u2028", "\u2029"):
+            with self.subTest(separator=repr(separator)):
+                demo = separator.join((kernel, host, linker)) + "\n"
+                with self.assertRaisesRegex(ValueError, "record separators"):
+                    validate_records(runtime + "\n", demo, BUILD, CONFIGS)
+
+    def test_control_bytes_cannot_hide_in_any_compiler_record(self):
+        for index, name in enumerate(NAMES):
+            for character in ("\0", "\r", "\v", "\f", "\x1f", "\x7f", "\x85",
+                              "\u00a0", "\u2028", "\u2029"):
+                with self.subTest(record=name, character=repr(character)):
+                    self.reject_record(index, lambda line: line + " -Ipath" + character)
+
+    def test_host_records_reject_verilator_transports_and_free_sources(self):
+        for index in (0, 2):
+            for suffix in ("-CFLAGS '" + MACROS + "'", "--CFLAGS='" + MACROS + "'",
+                           "-MAKEFLAGS OPT_FAST=-O3", "--MAKEFLAGS=OPT_GLOBAL=-O2",
+                           "--cc", "--language 1800-2017", "unretained.cpp",
+                           "unretained.o", "''"):
+                with self.subTest(record=NAMES[index], suffix=suffix):
+                    self.reject_record(index, lambda line: line + " " + suffix)
 
     def test_unbound_placeholders_cannot_consume_kernel_architecture(self):
         for variable in ("SOURCE", "BUILD", "TOOLS", "OUTPUT"):
@@ -94,6 +126,7 @@ class CompilerShellSyntaxTests(unittest.TestCase):
     def test_native_records_and_ordinary_quoted_or_split_flags_remain_valid(self):
         variants = (
             RECORDS,
+            tuple(line.replace(" ", "\t") for line in RECORDS),
             tuple(" ".join("'" + word + "'" for word in line.split()) for line in RECORDS),
             tuple(" ".join("-D " + word[2:] if word.startswith("-D") else word
                            for word in line.split()).replace(

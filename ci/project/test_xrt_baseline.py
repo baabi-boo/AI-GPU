@@ -14,7 +14,8 @@ from unittest import mock
 
 import xrt_baseline
 import xrt_inventory
-from xrt_test_support import FIXTURE_CONFIGS, VendorFixture, identity, write_file
+from xrt_test_support import (FIXTURE_CONFIGS, VendorFixture, compiler_stamps,
+                              identity, write_file)
 
 
 HERE = Path(__file__).resolve().parent
@@ -144,11 +145,11 @@ class RunnerFixture(unittest.TestCase):
             write_file(build / "tests/regression/demo/demo", "INERT HOST BINARY", executable=True)
             write_file(build / "tests/regression/demo/kernel.vxbin", "INERT KERNEL BINARY")
             write_file(build / "tests/regression/demo/config.stamp",
-                       "-DVX_CFG_XLEN=64 " + " ".join(FIXTURE_CONFIGS) + "\n")
+                       compiler_stamps(build)["demo"])
         if stage == "vendor-runtime":
             write_file(build / "sw/runtime/libvortex-xrt.so", "INERT VENDOR RUNTIME")
             write_file(build / "sw/runtime/xrt_config.stamp",
-                       "-DVX_CFG_XLEN=64 " + " ".join(FIXTURE_CONFIGS) + "\n")
+                       compiler_stamps(build)["runtime"])
 
     def fake_command(self, argv, cwd, environment, log, **budget):
         stage = log.stem
@@ -430,12 +431,15 @@ class XrtRunTests(RunnerFixture):
     def test_non_native_effective_flags_block_smoke(self):
         def contaminate(stage):
             if stage == "vendor-runtime":
-                with (self.fixture.build / "sw/runtime/xrt_config.stamp").open("a") as stream:
-                    stream.write(" -DXRTSIM -DVX_CFG_FPU_TYPE_DPI\n")
+                stamp = self.fixture.build / "sw/runtime/xrt_config.stamp"
+                write_file(stamp, stamp.read_text().rstrip("\n")
+                           + " -DXRTSIM -DVX_CFG_FPU_TYPE_DPI\n")
         self.after_stage = contaminate
         report = self.run_fixture()
         self.assertEqual(report["outcome"], "fail")
         self.assertEqual([call["id"] for call in self.calls], list(STAGES[:5]))
+        self.assertTrue(any("shim" in item
+                            for item in report["effective_before"]["blockers"]))
         self.assertIsNone(report["integration"]["exit_code"])
         self.assertFinished(report)
 
