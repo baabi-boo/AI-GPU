@@ -116,9 +116,12 @@ struct Bench {
     Cache             cache;
 
     uint64_t dma_writes   = 0;   // DMA writes the port accepted
+    uint64_t dma_reads_submitted = 0;  // DMA reads the port accepted
+    uint64_t dma_reads_completed = 0;  // responses accepted by the DMA
     uint64_t fence_tokens = 0;
     uint64_t starts       = 0;
     std::deque<CacheRsp> dma_rsps;
+    std::deque<CacheRsp> dma_read_results;
 
     Bench() {
         idle_inputs();
@@ -162,6 +165,9 @@ struct Bench {
         if (sim->req_valid && sim->req_ready && sim->req_rw) {
             ++dma_writes;
         }
+        if (sim->req_valid && sim->req_ready && !sim->req_rw) {
+            ++dma_reads_submitted;
+        }
         if (sim->mem_req_valid && sim->mem_req_ready) {
             CacheReq r;
             r.rw    = sim->mem_req_rw;
@@ -190,6 +196,8 @@ struct Bench {
             EXPECT(sim->rsp_tag == dma_rsps.front().tag, "DMA response tag mismatch");
             EXPECT(sim->rsp_data[0] == dma_rsps.front().data, "DMA response data mismatch");
             dma_rsps.pop_front();
+            dma_read_results.push_back({sim->rsp_data[0], sim->rsp_tag});
+            ++dma_reads_completed;
         }
 
         tick = sim.step(tick, 2);
@@ -258,6 +266,11 @@ static void test_launch_without_writes(Bench& b) {
 }
 
 static void test_reads(Bench& b) {
+    // These expectations come from the submitted reads, not cache responses.
+    const CacheRsp expected[] = {{0xcafe0007, 3}, {0xcafe0009, 5}};
+    const uint64_t submitted_before = b.dma_reads_submitted;
+    const uint64_t completed_before = b.dma_reads_completed;
+    const auto results_before = b.dma_read_results.size();
     b.cache.accept = true;
     b.cache.mem[DATA_LINE + 7] = 0xcafe0007;
     b.cache.mem[DATA_LINE + 9] = 0xcafe0009;
@@ -265,6 +278,13 @@ static void test_reads(Bench& b) {
     b.dma_req(false, DATA_LINE + 9, 0, 5);
     b.run(10);
     EXPECT(b.dma_rsps.empty(), "DMA read responses missing");
+    EXPECT(b.dma_reads_submitted == submitted_before + 2, "exactly two DMA reads must be submitted");
+    EXPECT(b.dma_reads_completed == completed_before + 2, "exactly two DMA read responses must complete");
+    for (int i = 0; i < 2; ++i) {
+        const CacheRsp& actual = b.dma_read_results[results_before + i];
+        EXPECT(actual.tag == expected[i].tag, "submitted DMA read response tag mismatch");
+        EXPECT(actual.data == expected[i].data, "submitted DMA read response data mismatch");
+    }
     uint64_t tokens = b.fence_tokens;
     EXPECT(b.launch(), "DMA reads must not hold the launch");
     b.run(4);
@@ -308,12 +328,14 @@ static void test_fence_clears(Bench& b) {
 }
 
 static void test_write_bursts(Bench& b) {
+    std::unordered_map<uint32_t, uint32_t> expected_writes;
     for (int round = 0; round < 8; ++round) {
         b.cache.service = 1 + (round % 4);
         b.cache.accept  = true;
         b.cache.period  = 5 + round;
         b.cache.duty    = 1 + (round % 3);
         for (int i = 0; i < 6; ++i) {
+            expected_writes.emplace(DATA_LINE + 32 * round + i, 0x20000000 + 16 * round + i);
             b.dma_req(true, DATA_LINE + 32 * round + i, 0x20000000 + 16 * round + i, i & 0xf);
         }
         b.cache.period = 0;
@@ -332,7 +354,13 @@ static void test_write_bursts(Bench& b) {
         b.run(4);
         EXPECT(!b.sim->busy, "port busy after a burst launch");
     }
-    // Every written line reads back through the port.
+    // Check every burst address/value against the submitted writes.
+    for (const auto& expected : expected_writes) {
+        auto it = b.cache.mem.find(expected.first);
+        EXPECT(it != b.cache.mem.end(), "burst write address missing");
+        EXPECT(it->second == expected.second, "burst write value mismatch");
+    }
+    // Exercise the existing final-line read through the port.
     b.cache.accept  = true;
     b.cache.service = 1;
     b.dma_req(false, DATA_LINE + 32 * 7 + 5, 0, 2);
@@ -387,6 +415,7 @@ int main(int argc, char** argv) {
     test_write_bursts(b);
     test_attributes(b);
 
+    EXPECT(b.dma_reads_completed == b.dma_reads_submitted, "DMA read completions missing");
     EXPECT(b.cache.input.empty() && b.cache.rsps.empty(), "cache traffic left over");
     std::printf("PASSED\n");
     return 0;
