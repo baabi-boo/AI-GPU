@@ -55,6 +55,16 @@ The full tooling suite and eight-case matrix were **not rerun at this later
 revision**. The handoff retains source-to-GitHub mappings and points to
 commit-scoped delivery and hosted CI checks.
 
+The initial published-head governance run at `1b1bf572` then found one stale
+test expectation: five minutes instead of the reviewed ten-minute job budget.
+The exact one-line correction at local source `420937e` (GitHub `f269505c`)
+passed the full 1,260-test tooling suite again in **257.346 seconds**, with
+clean, unchanged source and completed cleanup. The
+[separate CI follow-up](evidence/p01-local-qualification/ci-followup/README.md)
+preserves the failed hosted run, correction review, fresh full-suite evidence
+and source mapping. Native results retain their earlier revisions; the original
+sealed archive and 60-agent ledger remain unchanged.
+
 The local shim uses modeled host/device memory and retains DPI-assisted integer
 multiply/divide. STD floating-point and TFR tensor claims are limited to each
 retained configuration; local AFU/unit evidence does not qualify vendor

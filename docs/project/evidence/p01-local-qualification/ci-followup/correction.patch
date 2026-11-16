@@ -1,0 +1,13 @@
+diff --git a/ci/project/test_baseline_packet_ci.py b/ci/project/test_baseline_packet_ci.py
+index 42445a9..ec232a4 100644
+--- a/ci/project/test_baseline_packet_ci.py
++++ b/ci/project/test_baseline_packet_ci.py
+@@ -345,7 +345,7 @@ class BaselinePacketCIWorkflowTests(unittest.TestCase):
+         self.assertEqual(re.findall(r"(?m)^([ \t]*)permissions:", workflow), [""])
+         self.assertRegex(workflow, r"(?m)^permissions:\n  contents: read$")
+         self.assertEqual(re.findall(r"(?m)^    runs-on: (.+)$", workflow), ["ubuntu-24.04"])
+-        self.assertEqual(re.findall(r"(?m)^    timeout-minutes: (.+)$", workflow), ["5"])
++        self.assertEqual(re.findall(r"(?m)^    timeout-minutes: (.+)$", workflow), ["10"])
+         self.assertIn("assert sys.version_info[:2] == (3, 12)", workflow)
+         for option in ("submodules", "lfs", "persist-credentials"):
+             self.assertRegex(workflow, r"(?m)^          " + option + ": false$")

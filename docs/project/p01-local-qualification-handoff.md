@@ -3,10 +3,16 @@
 **All eight selected local AFU/RTL cases passed at frozen source `7e4ac585`,
 across 32 monitored commands. A later clean two-unit follow-up passed at
 `143c69fe`, across five commands, with the strengthened CP/LLC oracle.** The
-1,260-test tooling-suite result belongs to `7e4ac585`; that full suite and the
+original 1,260-test tooling-suite result belongs to `7e4ac585`; that full suite and the
 eight-case matrix were not rerun at the follow-up revision. This supplemental
 work leaves P01-A03 blocked on qualified vendor `hw_emu` and P02–P11
 `not_started`.
+
+After initial publication, a separate workflow-contract correction at `420937e`
+passed all 1,260 tooling tests again in 257.346 seconds. The
+[CI follow-up](evidence/p01-local-qualification/ci-followup/README.md) retains the
+hosted failure that exposed the stale timeout expectation and the complete new
+local result. It does not relabel or repeat the native executions above.
 
 Use the [qualification guide](p01-local-qualification.md) for reproduction and
 the [evidence index](evidence/p01-local-qualification/README.md) for the finished
@@ -296,6 +302,30 @@ workspace verification additionally reconstructs the declared transformations.
 The manifest is unsigned and does not authenticate execution. Binary models,
 compiled applications and kernel images retain identities but are not copied
 into this text packet.
+
+## Publication follow-up — exact governance timeout assertion
+
+The first published-head [governance run](https://github.com/baabi-boo/AI-GPU/actions/runs/43804865837)
+at `1b1bf572` completed 1,260 tests in 197.634 seconds with one failure: an
+existing workflow-contract assertion still expected five minutes after the
+reviewed workflow budget changed to ten. The complete failed log and terminal
+run/job metadata are retained in the separate
+[CI follow-up evidence](evidence/p01-local-qualification/ci-followup/README.md).
+
+Local source `420937ede5c72653cf4abc7042caf9bec19c88b2`, corresponding to
+[GitHub `f269505c`](https://github.com/baabi-boo/AI-GPU/commit/f269505cd15b69c853c04fd0b9c3d0adae7d81a1),
+changes only that exact assertion from five to ten. Its source tree is
+`726d6e77166e1e47a0ee8e271696a5982c3b0e90`. The workflow and all other guardrails
+remain unchanged. Independent review confirms exact equality is preserved.
+
+The clean corrected source completed **1,260 tests, zero failures/errors/skips,
+in 257.346 seconds**, with exit zero, completed cleanup and all 104 source-input
+hashes unchanged. The follow-up retains the full result, log, original commit
+bytes, source mapping and independent completion review. Its later hosted result
+belongs to the GitHub commit containing these files and must be read from that
+commit's checks. The original nine evidence files, archive and 60-note ledger
+remain byte-for-byte unchanged; this correction reuses existing agents and
+records their later work separately.
 
 ## Preserved acceptance and next bounded action
 

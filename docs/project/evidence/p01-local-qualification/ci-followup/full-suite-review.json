@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "review": "B10F supplemental clean full-suite execution",
+  "logical_agent_task": "$AGENT_TREE/b10f_final_readiness",
+  "new_distinct_assignment": false,
+  "reviewed_at": "2026-11-16T04:45:01.346788+00:00",
+  "outcome": "pass",
+  "source_freeze_can_release": true,
+  "reason": "Hosted governance at delivered 1b1bf572 found the remaining stale five-minute assertion. This authorized full-suite follow-up exercises the single test expectation correction to the already reviewed ten-minute workflow budget.",
+  "execution": {
+    "outer_command": [
+      "python3",
+      "-B",
+      "$WORKSPACE/work-notes/blockers/run_clean_suite.py",
+      "420937ede5c72653cf4abc7042caf9bec19c88b2",
+      "full-suite-420937e"
+    ],
+    "outer_exit_code_observed": 0,
+    "test_command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "ci/project",
+      "-p",
+      "test_*.py"
+    ],
+    "started_at": "2026-11-16T04:40:00.509850+00:00",
+    "finished_at": "2026-11-16T04:44:18.276664+00:00",
+    "source_revision": "420937ede5c72653cf4abc7042caf9bec19c88b2",
+    "source_tree": "726d6e77166e1e47a0ee8e271696a5982c3b0e90",
+    "revision_after": "420937ede5c72653cf4abc7042caf9bec19c88b2",
+    "current_revision": "420937ede5c72653cf4abc7042caf9bec19c88b2",
+    "current_tree": "726d6e77166e1e47a0ee8e271696a5982c3b0e90",
+    "commit_parent": "1b1bf5727c7a75deae1568b22c9d128e92ddc2d5",
+    "status_before": "",
+    "status_after": "",
+    "current_status": "",
+    "tests_run": 1260,
+    "test_seconds": 257.346,
+    "result_lines": [
+      "Ran 1260 tests in 257.346s",
+      "OK"
+    ],
+    "process_result": {
+      "outcome": "pass",
+      "exit_code": 0,
+      "reason": null,
+      "process_started": true,
+      "duration_seconds": 257.709009,
+      "log_sha256": "f3db0262962a49de735e24faed50426157e05385d0be6000120511f586536f97",
+      "log_size_bytes": 1440,
+      "peak_rss_bytes": 94474240,
+      "cleanup_complete": true,
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ]
+    },
+    "source_input_count": 104,
+    "source_files_unchanged": true,
+    "before_after_and_current_hashes_equal": true
+  },
+  "bounds": {
+    "timeout_seconds": 900,
+    "max_sampled_process_group_rss_bytes": 1073741824,
+    "max_log_bytes": 4194304,
+    "min_free_bytes": 16106127360,
+    "poll_wait_seconds_max": 30
+  },
+  "identities": {
+    "raw_record": "$WORKSPACE/work-notes/blockers/full-suite-420937e.json",
+    "raw_record_sha256": "d9de4b3df45cfd191bab0749ebe01c152d43d521647f351f89c6120d2ba7f387",
+    "raw_record_bytes": 24486,
+    "log": "$WORKSPACE/work-notes/blockers/full-suite-420937e.log",
+    "log_sha256": "f3db0262962a49de735e24faed50426157e05385d0be6000120511f586536f97",
+    "log_bytes": 1440,
+    "runner_sha256": "ebac4a060d091a4407bcf5441aa08bf71ba9d9f80277880ce50b30dc4ecfcec1",
+    "changed_test_sha256": "4c4cc89a58f29ce03132c085736c612318f24413dca46d6de61b21e795575e1b",
+    "governance_workflow_sha256": "e6dd26899acee948d5f497f58ae5007703eea9caa62eebb45388ade2ca3b0fd8",
+    "source_inventory_sha256": "a1dbfed3670d3bc4ec592ef54425fa373fade1119ffb562a4fa74e17fd1e3c87"
+  },
+  "changed_source_diff": "diff --git a/ci/project/test_baseline_packet_ci.py b/ci/project/test_baseline_packet_ci.py\nindex 42445a9..ec232a4 100644\n--- a/ci/project/test_baseline_packet_ci.py\n+++ b/ci/project/test_baseline_packet_ci.py\n@@ -345,7 +345,7 @@ class BaselinePacketCIWorkflowTests(unittest.TestCase):\n         self.assertEqual(re.findall(r\"(?m)^([ \\t]*)permissions:\", workflow), [\"\"])\n         self.assertRegex(workflow, r\"(?m)^permissions:\\n  contents: read$\")\n         self.assertEqual(re.findall(r\"(?m)^    runs-on: (.+)$\", workflow), [\"ubuntu-24.04\"])\n-        self.assertEqual(re.findall(r\"(?m)^    timeout-minutes: (.+)$\", workflow), [\"5\"])\n+        self.assertEqual(re.findall(r\"(?m)^    timeout-minutes: (.+)$\", workflow), [\"10\"])\n         self.assertIn(\"assert sys.version_info[:2] == (3, 12)\", workflow)\n         for option in (\"submodules\", \"lfs\", \"persist-credentials\"):\n             self.assertRegex(workflow, r\"(?m)^          \" + option + \": false$\")",
+  "checks": {
+    "finished_pass": true,
+    "exact_source_revision_before_after_now": true,
+    "exact_source_tree": true,
+    "clean_before_after_now": true,
+    "104_source_inputs_before_after_now_match": true,
+    "plain_1260_test_success": true,
+    "bounded_process_success": true,
+    "log_digest_matches": true,
+    "log_bytes_match": true,
+    "only_committed_change_is_expected_test": true,
+    "sealed_b10f_note_unchanged": true,
+    "sealed_b10f_json_unchanged": true
+  },
+  "scope_boundary": "This is a fresh local governance/tooling full-suite result at 420937ede5c72653cf4abc7042caf9bec19c88b2 only. No native eight-case, two-unit, vendor hw_emu, FPGA or silicon workload was rerun by this task. Previous qualification packets retain their original tested identities; P01-A03 and phase status are unchanged. Hosted CI for any subsequent publication remains a separate observation.",
+  "actions": {
+    "authorized_full_suite_runs": 1,
+    "repository_edits": false,
+    "sealed_note_edits": false,
+    "new_agents": false,
+    "remote_writes": false,
+    "supplemental_outputs": [
+      "full-suite-420937e.json",
+      "full-suite-420937e.log",
+      "ci-followup-full-suite-review.json"
+    ]
+  }
+}
