@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "id": "p01-xrt-hw-emu-demo-v1",
+  "driver": "xrt",
+  "target": "hw_emu",
+  "source": {
+    "revision": "REPLACE_WITH_OBSERVED_40_HEX_COMMIT",
+    "tree": "REPLACE_WITH_OBSERVED_40_HEX_TREE"
+  },
+  "configuration": {
+    "xlen": 64,
+    "configs": [
+      "-DVX_CFG_NUM_CLUSTERS=1",
+      "-DVX_CFG_NUM_CORES=1",
+      "-DVX_CFG_NUM_WARPS=4",
+      "-DVX_CFG_NUM_THREADS=4",
+      "-DVX_CFG_ISSUE_WIDTH=1",
+      "-DVX_CFG_FPU_TYPE_STD"
+    ],
+    "app": "demo",
+    "args": [
+      "-n1"
+    ],
+    "expected_points": 16
+  },
+  "platform": {
+    "name": "REPLACE_WITH_QUALIFIED_PLATFORM_NAME",
+    "file": {
+      "path": "/REPLACE_WITH_REAL_CANONICAL_PLATFORM/platform.xpfm",
+      "sha256": "REPLACE_WITH_OBSERVED_SHA256",
+      "size_bytes": 0
+    }
+  },
+  "vendor": {
+    "release": "REPLACE_WITH_QUALIFIED_RELEASE",
+    "vitis_root": "/REPLACE_WITH_REAL_CANONICAL_VITIS_ROOT",
+    "vivado_root": "/REPLACE_WITH_REAL_CANONICAL_VIVADO_ROOT",
+    "xrt_root": "/REPLACE_WITH_REAL_CANONICAL_XRT_ROOT",
+    "files": {
+      "vpp": {
+        "path": "/REPLACE_WITH_REAL_CANONICAL_VITIS_ROOT/bin/v++",
+        "sha256": "REPLACE_WITH_OBSERVED_SHA256",
+        "size_bytes": 0
+      },
+      "vivado": {
+        "path": "/REPLACE_WITH_REAL_CANONICAL_VIVADO_ROOT/bin/vivado",
+        "sha256": "REPLACE_WITH_OBSERVED_SHA256",
+        "size_bytes": 0
+      },
+      "emconfigutil": {
+        "path": "/REPLACE_WITH_REAL_CANONICAL_VITIS_ROOT/bin/emconfigutil",
+        "sha256": "REPLACE_WITH_OBSERVED_SHA256",
+        "size_bytes": 0
+      },
+      "platforminfo": {
+        "path": "/REPLACE_WITH_REAL_CANONICAL_VITIS_ROOT/bin/platforminfo",
+        "sha256": "REPLACE_WITH_OBSERVED_SHA256",
+        "size_bytes": 0
+      },
+      "xrt_header": {
+        "path": "/REPLACE_WITH_REAL_CANONICAL_XRT_ROOT/include/experimental/xrt_device.h",
+        "sha256": "REPLACE_WITH_OBSERVED_SHA256",
+        "size_bytes": 0
+      },
+      "xrt_coreutil": {
+        "path": "/REPLACE_WITH_REAL_CANONICAL_XRT_ROOT/lib/libxrt_coreutil.so",
+        "sha256": "REPLACE_WITH_OBSERVED_SHA256",
+        "size_bytes": 0
+      }
+    }
+  },
+  "artifacts": {
+    "xclbin": {
+      "path": "/REPLACE_WITH_REAL_PREPARED_ARTIFACTS/vortex_afu.xclbin",
+      "sha256": "REPLACE_WITH_OBSERVED_SHA256",
+      "size_bytes": 0
+    },
+    "emconfig": {
+      "path": "/REPLACE_WITH_REAL_PREPARED_ARTIFACTS/emconfig.json",
+      "sha256": "REPLACE_WITH_OBSERVED_SHA256",
+      "size_bytes": 0
+    }
+  },
+  "build_receipt": {
+    "path": "/REPLACE_WITH_REAL_BUILD_RECORDS/build-receipt.json",
+    "sha256": "REPLACE_WITH_OBSERVED_SHA256",
+    "size_bytes": 0
+  },
+  "qualification_review": {
+    "path": "/REPLACE_WITH_REAL_BUILD_RECORDS/independent-qualification-review.txt",
+    "sha256": "REPLACE_WITH_OBSERVED_SHA256",
+    "size_bytes": 0
+  }
+}

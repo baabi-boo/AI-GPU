@@ -8,6 +8,11 @@ evidence remain in [project status](docs/project/status.md) and the
 
 ### Added
 
+- A separate vendor XRT `hw_emu` smoke runner with read-only prerequisite checks,
+  strict source/platform/artifact receipt binding, bounded fresh host/kernel
+  builds, tracing-disabled execution, retained checkpoints and independent
+  failure-case tests. This tooling does not grant vendor qualification or close
+  P01-A03; see the [integration guide](docs/project/p01-xrt-integration.md).
 - A frozen six-case RV64 matrix pairing native FP16/BF16 GEMM and small TF32
   attention on SimX and processor RTL, with explicit TFR tensor and STD scalar
   arithmetic and unchanged inherited reference tolerances.
@@ -23,6 +28,8 @@ evidence remain in [project status](docs/project/status.md) and the
 
 ### Corrected
 
+- The generated XRT configuration now points to the tracked pre-simulation Tcl
+  script under `sw/runtime/xrt/`; a fresh generated-build regression covers it.
 - Reject changed immutable-manifest content and duplicate JSON fields; verify
   generated inputs and dependency/helper/host stability; retain cancellation
   received at command completion.

@@ -15,6 +15,12 @@ This is the canonical entry point for **both human contributors and AI coding ag
 
 Project governance checks (`python3 ci/project/check_project.py` and `python3 -m unittest discover -s ci/project -p 'test_*.py'`) run from the **source root**, without a GPU build tree. They validate project metadata/tooling only. The inherited build-tree rule below continues to apply to GPU/kernel/RTL tests.
 
+For the bounded vendor integration smoke, follow the [XRT integration guide](docs/project/p01-xrt-integration.md).
+The generic blackbox driver resets an inherited `TARGET`, and the generated
+`run-xrt` recipe assigns its own `XRT_INI_PATH`; exporting those variables alone
+does not select or bound that path. Keep the vendor runner's direct launch and
+retained tracing-disabled INI distinct from the inherited debug recipe.
+
 ---
 
 ## 1. Documentation Map

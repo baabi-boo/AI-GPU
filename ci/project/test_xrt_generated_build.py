@@ -1,0 +1,131 @@
+# Licensed under the Apache License, Version 2.0.
+"""Exercise complete XRT build inventory against an actual generated tree."""
+
+import hashlib
+import os
+from pathlib import Path
+import subprocess
+import tempfile
+import unittest
+
+import xrt_inventory
+
+
+ROOT = Path(__file__).resolve().parents[2]
+GENERATED_FILES = (
+    ".config.stamp", "config.mk", "sw/VX_config.h", "sw/VX_types.h",
+    "hw/VX_config.vh", "hw/VX_types.vh", "ci/blackbox.sh",
+)
+NATIVE_COPIES = {
+    "ci/gen_config.py": "ci/gen_config.py",
+    "sw/kernel/Makefile": "sw/kernel/Makefile",
+    "sw/runtime/common.mk": "sw/runtime/common.mk",
+    "sw/runtime/stub/Makefile": "sw/runtime/stub/Makefile",
+    "sw/runtime/simx/Makefile": "sw/runtime/simx/Makefile",
+    "sw/runtime/rtlsim/Makefile": "sw/runtime/rtlsim/Makefile",
+    "sim/common.mk": "sim/common.mk",
+    "sim/simx/Makefile": "sim/simx/Makefile",
+    "sim/rtlsim/Makefile": "sim/rtlsim/Makefile",
+    "sim/rtlsim/verilator.vlt": "sim/rtlsim/verilator.vlt.in",
+    "tests/regression/common.mk": "tests/regression/common.mk",
+    "tests/regression/sgemm_tcu/Makefile": "tests/regression/sgemm_tcu/Makefile",
+    "tests/regression/flash_attn_tcu_wg/Makefile": "tests/regression/flash_attn_tcu_wg/Makefile",
+}
+XRT_COPIES = (
+    "sw/runtime/xrt/Makefile", "tests/regression/demo/Makefile",
+    "sw/runtime/common.mk", "tests/regression/common.mk",
+)
+XRT_SOURCES = (
+    "sw/runtime/xrt/vortex.cpp", "sw/runtime/xrt/xsim.tcl",
+    "tests/regression/demo/main.cpp", "tests/regression/demo/kernel.cpp",
+    "tests/regression/demo/common.h",
+)
+
+
+def identity(path):
+    contents = path.read_bytes()
+    return {"sha256": hashlib.sha256(contents).hexdigest(),
+            "size_bytes": len(contents)}
+
+
+class GeneratedXrtBuildIntegrationTests(unittest.TestCase):
+    def assert_native_identities(self, root, records, expected_paths):
+        self.assertCountEqual((record["path"] for record in records), expected_paths)
+        for record in records:
+            self.assertEqual(record, {"path": record["path"],
+                                      **identity(root / record["path"])})
+
+    def test_real_configure_inventory_and_tamper_detection(self):
+        with tempfile.TemporaryDirectory(prefix="ai-gpu-xrt-inventory-") as directory:
+            base = Path(directory)
+            build = base / "build64"
+            build.mkdir()
+            result = subprocess.run(
+                [str(ROOT / "configure"), "--xlen=64", "--osversion=ubuntu/focal",
+                 "--profile=", "--tooldir=" + str(base / "unused-tools"),
+                 "--prefix=" + str(base / "unused-install")],
+                cwd=build, capture_output=True, text=True, timeout=60,
+            )
+            self.assertEqual(result.returncode, 0, (result.stdout + result.stderr)[-4096:])
+
+            report = xrt_inventory.inspect_build(build, ROOT)
+            self.assertEqual(report["outcome"], "pass", report)
+            self.assertEqual(report["blockers"], [])
+            native = report["base"]
+            self.assertEqual(native["outcome"], "pass", native)
+            self.assertTrue(native["identity_matches"], native)
+            self.assertEqual((native["xlen"], native["profile"], native["os_bundle"]),
+                             (64, "", "ubuntu/focal"))
+            self.assert_native_identities(build, native["generated"], GENERATED_FILES)
+            self.assert_native_identities(build, native["build_inputs"], NATIVE_COPIES)
+            self.assert_native_identities(ROOT, native["source_build_inputs"],
+                                          NATIVE_COPIES.values())
+
+            expected_xrt = {relative: identity(build / relative) for relative in XRT_COPIES}
+            expected_xrt["sw/runtime/xrt/xrt.ini"] = identity(build / "sw/runtime/xrt/xrt.ini")
+            for relative in (*XRT_COPIES, *XRT_SOURCES, "sw/runtime/xrt/xrt.ini.in"):
+                expected_xrt["source:" + relative] = identity(ROOT / relative)
+            self.assertEqual(report["identities"], expected_xrt)
+
+            mutations = (
+                ("sw/runtime/xrt/Makefile", b"\nCXXFLAGS += -DXRTSIM\n", "pass"),
+                ("sw/VX_config.h", b"\n#undef VX_CFG_NUM_THREADS\n"
+                 b"#define VX_CFG_NUM_THREADS 1024\n", "blocked"),
+                ("config.mk", None, "blocked"),
+            )
+            for relative, suffix, native_outcome in mutations:
+                with self.subTest(tampered=relative):
+                    path = build / relative
+                    original = path.read_bytes()
+                    timestamps = path.stat()
+                    tampered = (original + suffix if suffix is not None else
+                                original.replace(b"XLEN ?= 64", b"XLEN ?= 32"))
+                    self.assertNotEqual(tampered, original)
+                    try:
+                        path.write_bytes(tampered)
+                        # Unchanged mtimes must not conceal changed generated bytes.
+                        os.utime(path, ns=(timestamps.st_atime_ns, timestamps.st_mtime_ns))
+                        rejected = xrt_inventory.inspect_build(build, ROOT)
+                        self.assertEqual(rejected["outcome"], "blocked", rejected)
+                        self.assertEqual(rejected["base"]["outcome"], native_outcome, rejected)
+                        if native_outcome == "pass":
+                            self.assertIn(relative + ": generated input differs from the current source",
+                                          rejected["blockers"])
+                            self.assertNotIn(relative, rejected["identities"])
+                        else:
+                            self.assertFalse(rejected["base"]["identity_matches"])
+                            self.assertTrue(rejected["base"]["blockers"], rejected)
+                            self.assertTrue(set(rejected["base"]["blockers"]).issubset(
+                                rejected["blockers"]), rejected)
+                    finally:
+                        path.write_bytes(original)
+                        os.utime(path, ns=(timestamps.st_atime_ns, timestamps.st_mtime_ns))
+
+            restored = xrt_inventory.inspect_build(build, ROOT)
+            self.assertEqual(restored["outcome"], "pass", restored)
+            self.assertFalse((base / "unused-tools").exists())
+            self.assertFalse((base / "unused-install").exists())
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -94,6 +94,10 @@ funding/manufacturing decisions; a roadmap does not authorize purchases.
 
 ## Evidence and continuation records
 
+- [Vendor XRT integration](p01-xrt-integration.md): prepared-artifact manifest,
+  bounded host/kernel build and explicit `hw_emu` smoke execution.
+- [Vendor integration handoff](p01-xrt-handoff.md): implementation, actual checks,
+  remaining prerequisites and publication state for the P01-T05 continuation.
 - [Evidence guide](evidence/README.md): record fields, artifact integrity and retention.
 - [Acceptance report template](evidence/report.example.json): **unexecuted**, not proof.
 - [Benchmark specification template](evidence/benchmark.example.json): **unmeasured**

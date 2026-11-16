@@ -33,6 +33,7 @@ P00 remains complete, P01 remains incomplete, and P02 has not started.
 - Reproduce the current phase: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
 - Continue from the recorded checkpoint: [P01 handoff](docs/project/p01-handoff.md).
 - Check retained evidence: [packet verification guide](docs/project/p01-packet-verification.md) and [packet continuation handoff](docs/project/p01-packet-handoff.md).
+- Prepare the remaining integration run: [vendor XRT guide](docs/project/p01-xrt-integration.md).
 - Begin contributing: [developer guide](docs/project/developer-guide.md), [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md).
 - Find everything else: [project documentation](docs/project/index.md) and [technical documentation](docs/index.md).
 
@@ -149,6 +150,22 @@ This consistency check is also part of Project Governance CI. It retains
 relationship. The [continuation handoff](docs/project/p01-packet-handoff.md)
 tracks the packet implementation's validation, independent review and publication
 state separately from the accepted execution evidence.
+
+The [vendor integration runner](ci/project/xrt_baseline.py) adds the next P01-T05
+execution path. It checks a pinned platform, vendor runtime, matching emulation
+artifacts and a reviewed build receipt, creates a fresh host/kernel build, then
+runs the fixed 16-point integer demo through XRT `hw_emu`. It records bounded
+commands, configuration and reference results while keeping acceptance separate.
+The [guide](docs/project/p01-xrt-integration.md) explains the manifest and budgets.
+Inspect the local prerequisites without invoking vendor tools with:
+
+```sh
+python3 ci/project/xrt_baseline.py probe
+```
+
+Missing prerequisites produce a blocked result and nonzero exit. The development
+environment lacks the required vendor installation and platform artifacts, so
+this tooling delivery does not close P01-A03 or begin P02 qualification.
 
 ## Evidence and engineering rules
 

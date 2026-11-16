@@ -128,12 +128,28 @@ The separate [packet continuation ledger](p01-packet-agent-execution.json)
 records this delivery's actual assignments and dispositions. The original P00
 and P01 execution ledgers remain separate historical records.
 
+## Vendor integration tooling continuation
+
+The [vendor XRT runner](../../ci/project/xrt_baseline.py) now implements the
+prepared-artifact P01-T05 route. Its [guide](p01-xrt-integration.md) defines the
+fixed RV64 integer smoke, pinned platform/runtime/artifact manifest, reviewed
+build receipt, fresh host/kernel build and tracing-disabled direct launch.
+Independent tooling tests exercise blocked prerequisites, provenance drift,
+configuration mismatches, process failures and reference-result handling.
+The [continuation handoff](p01-xrt-handoff.md) records verification and delivery.
+
+The current environment still lacks the vendor executables, vendor roots and
+qualified platform/artifact packet. No vendor `hw_emu` job ran in this
+continuation. Passing tooling tests or a read-only plan does not accept P01-A03;
+all existing accepted native evidence and phase states remain unchanged.
+
 ## Next bounded action
 
 **Resolve P01-T05's qualified vendor `hw_emu` environment/platform blocker.**
 Identify a compatible vendor release and supported platform, freeze their
 identities and resource budget, then build matching emulation artifacts and run
-the required DMA/launch/completion smoke. Stop while any prerequisite is absent;
+the required DMA/launch/completion smoke through the
+[vendor integration guide](p01-xrt-integration.md). Stop while any prerequisite is absent;
 the supplemental `xrtsim` pass cannot close P01-A03. The accepted numerical
 matrix and fresh selected-case build remain separate packets with explicit
 dependency provenance. Follow the

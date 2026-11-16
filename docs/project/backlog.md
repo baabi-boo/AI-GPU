@@ -21,6 +21,9 @@ evidence. Preserve the earlier GCC 14 spdlog/fmt and missing-`ccache` failures.
 
 Follow the [P01 runbook](p01-baseline-runbook.md). The two-worker budget, 15 GiB
 disk reserve and per-command memory/log/time limits remain part of the packet.
+The [vendor integration guide](p01-xrt-integration.md) now provides the executable
+P01-T05 `probe`/`plan`/`run` route. Its strict receipt and artifact checks prepare
+the missing vendor run; they do not replace it or grant acceptance.
 P01 remains blocked on A03 and P02 remains not started. Check the actual
 execution state and accepted reports before extending the baseline:
 
