@@ -1,8 +1,10 @@
 #include "common.h"
+#include "p02_fixture_adapter.h"
 #include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <iostream>
+#include <limits>
 #include <rvfloats.h>
 #include <string.h>
 #include <tensor_cfg.h>
@@ -489,6 +491,8 @@ uint32_t xn = 64;
 uint32_t xk = 64;
 uint32_t xr = 1; // repeat count: relaunch the same kernel N times on one device session
 bool xz = false;  // bf8: zeros next to small values in K pairs of A row 0
+bool xhelp = false;
+const p02::Fixture* fixture = nullptr;
 
 vx_device_h device = nullptr;
 vx_buffer_h A_buffer = nullptr;
@@ -504,37 +508,86 @@ kernel_arg_t kernel_arg = {};
 
 static void show_usage() {
   std::cout << "Vortex Sgemm TCU Test." << std::endl;
-  std::cout << "Usage: [-m: m] [-n N] [-k: K] [-r: repeat] [-z: bf8 zero pairs] [-h: help]" << std::endl;
+  std::cout << "Usage: [-m M] [-n N] [-k K] [-r repeat] [-z] [-h]" << std::endl;
+  std::cout << "       -f fixture_id [-r repeat]" << std::endl;
+  std::cout << "-z selects bf8 zero pairs; -f cannot be combined with -m, -n, -k or -z." << std::endl;
 }
 
-static void parse_args(int argc, char **argv) {
+static bool parse_positive_u32(const char* text, uint32_t* value) {
+  if (text == nullptr || *text == '\0') {
+    return false;
+  }
+  uint32_t parsed = 0;
+  for (const char* digit = text; *digit != '\0'; ++digit) {
+    if (*digit < '0' || *digit > '9'
+        || parsed > (UINT32_MAX - uint32_t(*digit - '0')) / 10) {
+      return false;
+    }
+    parsed = parsed * 10 + uint32_t(*digit - '0');
+  }
+  if (parsed == 0) {
+    return false;
+  }
+  *value = parsed;
+  return true;
+}
+
+static bool parse_args(int argc, char **argv) {
+  const char* fixture_id = nullptr;
+  bool dimensions_given = false;
+  opterr = 0;
   int c;
-  while ((c = getopt(argc, argv, "m:n:k:r:i:o:hsz")) != -1) {
+  while ((c = getopt(argc, argv, "+m:n:k:r:f:hz")) != -1) {
     switch (c) {
     case 'm':
-      xm = atoi(optarg);
-      break;
     case 'n':
-      xn = atoi(optarg);
-      break;
     case 'k':
-      xk = atoi(optarg);
+      dimensions_given = true;
+      if (!parse_positive_u32(optarg, c == 'm' ? &xm : (c == 'n' ? &xn : &xk))) {
+        std::cerr << "Error: -" << char(c) << " requires a positive uint32 integer!" << std::endl;
+        return false;
+      }
       break;
     case 'r':
-      xr = atoi(optarg);
+      if (!parse_positive_u32(optarg, &xr)) {
+        std::cerr << "Error: -r requires a positive uint32 repeat count!" << std::endl;
+        return false;
+      }
+      break;
+    case 'f':
+      if (fixture_id != nullptr || optarg == nullptr || *optarg == '\0') {
+        std::cerr << "Error: -f requires exactly one nonempty fixture ID!" << std::endl;
+        return false;
+      }
+      fixture_id = optarg;
       break;
     case 'z':
       xz = true;
       break;
     case 'h':
-      show_usage();
-      exit(0);
+      xhelp = true;
       break;
     default:
-      show_usage();
-      exit(-1);
+      std::cerr << "Error: unknown option or missing option argument!" << std::endl;
+      return false;
     }
   }
+  if (optind != argc) {
+    std::cerr << "Error: positional arguments are not supported!" << std::endl;
+    return false;
+  }
+  if (fixture_id != nullptr) {
+    if (dimensions_given || xz) {
+      std::cerr << "Error: -f cannot be combined with -m, -n, -k or -z!" << std::endl;
+      return false;
+    }
+    fixture = p02::find_fixture(fixture_id);
+    if (fixture == nullptr) {
+      std::cerr << "Error: unknown or ambiguous fixture ID '" << fixture_id << "'!" << std::endl;
+      return false;
+    }
+  }
+  return true;
 }
 
 void cleanup() {
@@ -554,11 +607,67 @@ void cleanup() {
 }
 
 int main(int argc, char *argv[]) {
-  parse_args(argc, argv);
+  if (!parse_args(argc, argv)) {
+    show_usage();
+    return -1;
+  }
+  if (xhelp) {
+    show_usage();
+    return 0;
+  }
+  if (fixture != nullptr) {
+    if (const char* error = p02::fixture_error(*fixture)) {
+      std::cerr << "Error: " << error << "!" << std::endl;
+      return -1;
+    }
+    xm = fixture->m;
+    xn = fixture->n;
+    xk = fixture->k;
+  }
   if (xz && !std::is_same<vt::ITYPE, vt::bf8>::value) {
     std::cout << "Error: -z requires ITYPE=bf8!" << std::endl;
     return -1;
   }
+
+  uint32_t M = xm;
+  uint32_t N = xn;
+  uint32_t K = xk;
+
+  if ((M % cfg::tileM) != 0) {
+    std::cout << "Error: M must be a multiple of tensor tileM=" << cfg::tileM << "!" << std::endl;
+    return -1;
+  }
+
+  if ((N % cfg::tileN) != 0) {
+    std::cout << "Error: N must be a multiple of tensor tileN=" << cfg::tileN << "!" << std::endl;
+    return -1;
+  }
+
+  if ((K % cfg::tileK) != 0) {
+    std::cout << "Error: K must be a multiple of tensor tileK=" << cfg::tileK << "!" << std::endl;
+    return -1;
+  }
+
+  const uint64_t elementsA = uint64_t(M) * K;
+  const uint64_t elementsB = uint64_t(K) * N;
+  const uint64_t elementsC = uint64_t(M) * N;
+  const size_t max_bytes = std::numeric_limits<size_t>::max();
+  if (elementsA > max_bytes / sizeof(itype_t)
+      || elementsB > max_bytes / sizeof(itype_t)
+      || elementsC > max_bytes / sizeof(otype_t)) {
+    std::cerr << "Error: matrix byte count exceeds the host address space!" << std::endl;
+    return -1;
+  }
+  // Host loops and offsets use uint32_t, including expanded sub-byte K indices.
+  constexpr uint32_t subbytes = vt::ITYPE::bits < 8 ? 8 / vt::ITYPE::bits : 1;
+  if (elementsA > UINT32_MAX / subbytes || elementsB > UINT32_MAX / subbytes
+      || elementsC > UINT32_MAX) {
+    std::cerr << "Error: matrix elements exceed the uint32 indexing range!" << std::endl;
+    return -1;
+  }
+  const size_t sizeA = static_cast<size_t>(elementsA);
+  const size_t sizeB = static_cast<size_t>(elementsB);
+  const size_t sizeC = static_cast<size_t>(elementsC);
 
   std::srand(50);
 
@@ -582,31 +691,24 @@ int main(int argc, char *argv[]) {
   RT_CHECK(vx_device_query(device, VX_CAPS_NUM_THREADS, &NT));
   if (NT != VX_CFG_NUM_THREADS) {
     std::cout << "Error: device warp size (" << NT << ") must match VX_CFG_NUM_THREADS=" << VX_CFG_NUM_THREADS << "!" << std::endl;
+    cleanup();
     return -1;
   }
-
-  uint32_t M = xm;
-  uint32_t N = xn;
-  uint32_t K = xk;
-
-  if ((M % cfg::tileM) != 0) {
-    std::cout << "Error: M must be a multiple of tensor tileM=" << cfg::tileM << "!" << std::endl;
-    return -1;
+  if (fixture != nullptr) {
+    uint64_t clusters, cores, warps, issue_width;
+    RT_CHECK(vx_device_query(device, VX_CAPS_NUM_CLUSTERS, &clusters));
+    RT_CHECK(vx_device_query(device, VX_CAPS_NUM_CORES, &cores));
+    RT_CHECK(vx_device_query(device, VX_CAPS_NUM_WARPS, &warps));
+    RT_CHECK(vx_device_query(device, VX_CAPS_ISSUE_WIDTH, &issue_width));
+    if (clusters != 1 || cores != 1 || warps != 4 || issue_width != 1
+        || VX_ISA_ARCH(isa_flags) != 64 || (isa_flags & VX_ISA_EXT_LMEM) == 0
+        || (isa_flags & VX_ISA_EXT_LDST_MATRIX) != 0) {
+      std::cerr << "Error: device capabilities do not match the p02-tfr fixture profile!" << std::endl;
+      cleanup();
+      return -1;
+    }
   }
 
-  if ((N % cfg::tileN) != 0) {
-    std::cout << "Error: N must be a multiple of tensor tileN=" << cfg::tileN << "!" << std::endl;
-    return -1;
-  }
-
-  if ((K % cfg::tileK) != 0) {
-    std::cout << "Error: K must be a multiple of tensor tileK=" << cfg::tileK << "!" << std::endl;
-    return -1;
-  }
-
-  size_t sizeA = M * K;
-  size_t sizeB = K * N;
-  size_t sizeC = M * N;
   uint32_t grid_dim[2]  = {N / cfg::tileN, M / cfg::tileM};
   uint32_t block_dim[2] = {(uint32_t)NT, 1};
 
@@ -639,59 +741,69 @@ int main(int argc, char *argv[]) {
 
   std::cout << "A_addr=0x" << std::hex << kernel_arg.A_addr << std::endl;
   std::cout << "B_addr=0x" << std::hex << kernel_arg.B_addr << std::endl;
-  std::cout << "C_addr=0x" << std::hex << kernel_arg.C_addr << std::endl;
+  std::cout << "C_addr=0x" << std::hex << kernel_arg.C_addr << std::dec << std::endl;
 
-  // generate source data
-  std::vector<itype_t> h_A(sizeA);
-  std::vector<itype_t> h_B(sizeB);
-  for (uint32_t i = 0; i < sizeA; ++i) {
-    h_A[i] = generate_A_value<vt::ITYPE>();
-  }
-  for (uint32_t i = 0; i < sizeB; ++i) {
-    h_B[i] = generate_B_value<vt::ITYPE>();
-  }
-  if constexpr (std::is_same<vt::ITYPE, vt::bf8>::value) {
-    if (xz) {
-      // Row 0 of A is 0 at even k and 1.75 * 2^-11 at odd k; B is 57344 in
-      // even rows and 1.75 * 2^-11 in odd rows. The zero products must not
-      // set the exponent of their K pair.
-      for (uint32_t k = 0; k < K; ++k)
-        h_A[k] = (k & 1) ? 0x13 : 0x00;
-      for (uint32_t i = 0; i < sizeB; ++i)
-        h_B[i] = ((i / N) & 1) ? 0x13 : 0x7b;
+  // Upload storage must outlive the asynchronous writes.
+  std::vector<itype_t> h_A;
+  std::vector<itype_t> h_B;
+  std::vector<uint8_t> h_A_packed;
+  std::vector<uint8_t> h_B_col;
+  if (fixture != nullptr) {
+    h_A_packed = p02::packed_bytes(fixture->a_words, fixture->a_count);
+    h_B_col = p02::packed_bytes(fixture->b_words, fixture->b_count);
+  } else {
+    h_A.resize(sizeA);
+    h_B.resize(sizeB);
+    for (uint32_t i = 0; i < sizeA; ++i) {
+      h_A[i] = generate_A_value<vt::ITYPE>();
     }
-  }
-
-  // h_B_col must outlive the async write below — declared at function scope
-  // to cover both sub-byte (1 B/elem) and wide-element layouts.
-  std::vector<uint8_t> h_B_col(sizeB * sizeof(itype_t));
-  {
-    std::cout << "upload matrix A buffer" << std::endl;
-    RT_CHECK(vx_enqueue_write(queue, A_buffer, 0, h_A.data(),
-                              sizeA * sizeof(itype_t), 0, nullptr, nullptr));
-  }
-
-  {
-    std::cout << "upload matrix B buffer" << std::endl;
+    for (uint32_t i = 0; i < sizeB; ++i) {
+      h_B[i] = generate_B_value<vt::ITYPE>();
+    }
+    if constexpr (std::is_same<vt::ITYPE, vt::bf8>::value) {
+      if (xz) {
+        // Row 0 of A is 0 at even k and 1.75 * 2^-11 at odd k; B is 57344 in
+        // even rows and 1.75 * 2^-11 in odd rows. The zero products must not
+        // set the exponent of their K pair.
+        for (uint32_t k = 0; k < K; ++k) {
+          h_A[k] = (k & 1) ? 0x13 : 0x00;
+        }
+        for (uint32_t i = 0; i < sizeB; ++i) {
+          h_B[i] = ((i / N) & 1) ? 0x13 : 0x7b;
+        }
+      }
+    }
+    h_B_col.resize(sizeB * sizeof(itype_t));
     if constexpr (std::is_same<vt::ITYPE, vt::int4>::value ||
                   std::is_same<vt::ITYPE, vt::uint4>::value) {
-      // sub-byte matrix B must be in col-major format
       convert_row_to_col_major_4bit(h_B_col.data(), N, 2 * K, (uint8_t*)h_B.data());
-      RT_CHECK(vx_enqueue_write(queue, B_buffer, 0, h_B_col.data(),
-                                sizeB, 0, nullptr, nullptr));
     } else {
       convert_row_to_col_major((itype_t*)h_B_col.data(), h_B.data(), K, N);
-      RT_CHECK(vx_enqueue_write(queue, B_buffer, 0, h_B_col.data(),
-                                sizeB * sizeof(itype_t), 0, nullptr, nullptr));
     }
   }
+
+  const void* a_data = fixture != nullptr
+      ? static_cast<const void*>(h_A_packed.data()) : static_cast<const void*>(h_A.data());
+  std::cout << "upload matrix A buffer" << std::endl;
+  RT_CHECK(vx_enqueue_write(queue, A_buffer, 0, a_data,
+                            sizeA * sizeof(itype_t), 0, nullptr, nullptr));
+  std::cout << "upload matrix B buffer" << std::endl;
+  RT_CHECK(vx_enqueue_write(queue, B_buffer, 0, h_B_col.data(),
+                            sizeB * sizeof(itype_t), 0, nullptr, nullptr));
 
   std::cout << "load kernel module" << std::endl;
   RT_CHECK(vx_module_load_file(device, kernel_file, &module_));
   RT_CHECK(vx_module_get_kernel(module_, "main", &kernel));
 
   // Host result buffers — must outlive the async reads enqueued below.
-  std::vector<otype_t> h_C(sizeC);
+  std::vector<otype_t> h_C(fixture != nullptr ? 0 : sizeC);
+  std::vector<uint32_t> h_C_bits(fixture != nullptr ? sizeC : 0);
+  std::vector<uint32_t> h_C_poison(h_C_bits.size());
+  if (fixture != nullptr) {
+    for (size_t i = 0; i < sizeC; ++i) {
+      h_C_poison[i] = fixture->expected[i] ^ uint32_t(1);
+    }
+  }
 #ifdef PROFILE_ENABLE
   std::vector<uint32_t> h_cycles(num_blocks);
 #endif
@@ -709,25 +821,39 @@ int main(int argc, char *argv[]) {
   li.block_dim[1] = block_dim[1];
 
   // reference is input-invariant across repeats — compute once
-  std::vector<otype_t> h_ref(sizeC);
-  matmul_cpu(h_ref.data(), h_A.data(), h_B.data(), M, N, K);
+  std::vector<otype_t> h_ref;
+  if (fixture == nullptr) {
+    h_ref.resize(sizeC);
+    matmul_cpu(h_ref.data(), h_A.data(), h_B.data(), M, N, K);
+  }
 
   // Every iteration recomputes the same result from the same inputs, so a
   // mismatch on a later iteration means device state leaked across launches.
-  int errors = 0;
+  uint64_t errors = 0;
   for (uint32_t iter = 0; iter < xr; ++iter) {
-    std::fill(h_C.begin(), h_C.end(), otype_t(0));
+    vx_event_h poison_ev = nullptr;
+    if (fixture != nullptr) {
+      // Poison both destinations so a missed write or read cannot reuse a pass.
+      h_C_bits = h_C_poison;
+      RT_CHECK(vx_enqueue_write(queue, C_buffer, 0, h_C_poison.data(),
+                                sizeC * sizeof(uint32_t), 0, nullptr, &poison_ev));
+    } else {
+      std::fill(h_C.begin(), h_C.end(), otype_t(0));
+    }
 
     auto time_start = std::chrono::high_resolution_clock::now();
 
     std::cout << "[iter " << iter << "] launch kernel" << std::endl;
     vx_event_h launch_ev = nullptr;
-    RT_CHECK(vx_enqueue_launch(queue, &li, 0, nullptr, &launch_ev));
+    RT_CHECK(vx_enqueue_launch(queue, &li, poison_ev != nullptr ? 1 : 0,
+                               poison_ev != nullptr ? &poison_ev : nullptr, &launch_ev));
 
     // read results back — chained after the launch on the same queue
     std::cout << "[iter " << iter << "] download destination buffer" << std::endl;
     vx_event_h read_ev = nullptr;
-    RT_CHECK(vx_enqueue_read(queue, h_C.data(), C_buffer, 0,
+    void* c_data = fixture != nullptr
+        ? static_cast<void*>(h_C_bits.data()) : static_cast<void*>(h_C.data());
+    RT_CHECK(vx_enqueue_read(queue, c_data, C_buffer, 0,
                              sizeC * sizeof(otype_t), 1, &launch_ev, &read_ev));
 #ifdef PROFILE_ENABLE
     vx_event_h cyc_ev = nullptr;
@@ -744,6 +870,9 @@ int main(int argc, char *argv[]) {
 #endif
     vx_event_release(read_ev);
     vx_event_release(launch_ev);
+    if (poison_ev != nullptr) {
+      vx_event_release(poison_ev);
+    }
 
     auto time_end = std::chrono::high_resolution_clock::now();
     double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count();
@@ -761,13 +890,19 @@ int main(int argc, char *argv[]) {
 #endif
 
     std::cout << "[iter " << iter << "] verify result" << std::endl;
-    int iter_errors = 0;
-    for (uint32_t i = 0; i < h_ref.size(); ++i) {
-      if (!Comparator<vt::OTYPE>::compare(h_C[i], h_ref[i], i, iter_errors)) {
-        ++iter_errors;
+    size_t iter_errors = 0;
+    if (fixture != nullptr) {
+      iter_errors = p02::report_result(*fixture, h_C_bits, iter, MAX_ERRORS);
+    } else {
+      int random_errors = 0;
+      for (uint32_t i = 0; i < h_ref.size(); ++i) {
+        if (!Comparator<vt::OTYPE>::compare(h_C[i], h_ref[i], i, random_errors)) {
+          ++random_errors;
+        }
       }
+      iter_errors = random_errors;
     }
-    printf("[iter %u] %s (%d errors)\n", iter, iter_errors ? "MISMATCH" : "match", iter_errors);
+    printf("[iter %u] %s (%zu errors)\n", iter, iter_errors ? "MISMATCH" : "match", iter_errors);
     errors += iter_errors;
 
     // cumulative counters: a cycle count that stops advancing across
