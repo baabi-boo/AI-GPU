@@ -126,6 +126,7 @@ def clean_environment(paths, jobs=2, environ=None):
         result.pop(key, None)
     result.update({
         "PATH": path, "PYTHONDONTWRITEBYTECODE": "1",
+        "TMPDIR": str(paths["build"] / "tmp"),
         "THIRD_PARTY_DIR": str(paths["dependencies"] / "third_party"),
         "CPLUS_INCLUDE_PATH": str(paths["headers"]),
     })
@@ -311,9 +312,9 @@ def execute_run(args, report, paths=None):
 
     def stable(label):
         observed = _inputs(paths, environment)
-        helpers = _helpers()
+        helpers = collect_helpers()
         result = {"stage": label, "inputs_match": observed == report["inputs_before"],
-                  "helpers_match": helpers == report["helpers_before"]}
+                  "helpers_match": helpers == report["helpers_before"] == LOADED_HELPERS}
         report["checks"].append(result)
         if not result["inputs_match"] or not result["helpers_match"] or observed.get("outcome") != "pass":
             report["drift_observation"] = {"inputs": observed, "helpers": helpers}
@@ -362,6 +363,7 @@ def execute_run(args, report, paths=None):
         _snapshot(paths["source"], hash_artifacts(paths["source"], source_files),
                   output, "source", report, budget)
         paths["build"].mkdir(mode=0o700)
+        (paths["build"] / "tmp").mkdir(mode=0o700)
         for group, selected in _groups(cases).items():
             build = paths["build"] / group
             build.mkdir(mode=0o700)

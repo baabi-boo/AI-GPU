@@ -229,7 +229,10 @@ def collect_helpers():
         if len(observed) >= MAX_HELPERS or total > MAX_HELPER_BYTES:
             raise ValueError("local helper closure exceeds its file or byte limit")
         observed[name] = hashlib.sha256(contents).hexdigest()
-        tree = ast.parse(contents, filename=name)
+        try:
+            tree = ast.parse(contents, filename=name)
+        except SyntaxError as error:
+            raise ValueError("local helper has invalid Python syntax: " + name) from error
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 modules = [alias.name for alias in node.names]

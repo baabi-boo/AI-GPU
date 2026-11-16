@@ -211,10 +211,14 @@ class PathBudgetEnvironmentTests(unittest.TestCase):
         self.assertEqual(current["CCACHE_DISABLE"], "1")
         self.assertEqual(current["OBJCACHE"], "")
         self.assertEqual(current["PYTHONDONTWRITEBYTECODE"], "1")
+        self.assertEqual(current["TMPDIR"], str(paths["build"] / "tmp"))
+        self.assertNotIn("TMP", current)
+        self.assertNotIn("TEMP", current)
+        self.assertFalse(paths["build"].exists())
         self.assertEqual(current["THIRD_PARTY_DIR"], str(paths["dependencies"] / "third_party"))
         self.assertEqual(current["CPLUS_INCLUDE_PATH"], str(paths["headers"]))
         self.assertEqual(set(hostile).intersection(current),
-                         {"PATH", "HOME", "MAKEFLAGS", "THIRD_PARTY_DIR", "CPLUS_INCLUDE_PATH"})
+                         {"PATH", "HOME", "TMPDIR", "MAKEFLAGS", "THIRD_PARTY_DIR", "CPLUS_INCLUDE_PATH"})
 
     def test_empty_or_relative_path_entries_fail_before_any_launch(self):
         paths = runner.resolve_paths(self.args)
@@ -401,6 +405,10 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(tree_identity(self.fixture.base), before)
         self.assertFalse(self.fixture.args.output.exists())
         self.assertFalse(self.fixture.args.build_root.exists())
+        temporary = self.fixture.args.build_root / "tmp"
+        self.assertEqual(report["environment"]["TMPDIR"], str(temporary))
+        self.assertFalse(temporary.exists())
+        self.assertEqual(report["inputs_before"]["host"]["outcome"], "pass")
         self.process.assert_not_called()
         self.assertEqual(report["commands"], [])
         self.assertEqual(report["state"], "planned")
@@ -408,6 +416,67 @@ class RunnerTests(unittest.TestCase):
         self.assertFalse(report["workload_command_started"])
         self.assertTrue(all(case["outcome"] == "not_run" for case in report["cases"]))
         self.assertNotPromoted(report)
+
+    def test_every_command_uses_private_build_temp_despite_hostile_inheritance(self):
+        self.fixture.args.case = ["demo", "cp-llc-port"]
+        temporary = self.fixture.args.build_root / "tmp"
+        inherited = self.fixture.base / "hostile-temp"
+        write(inherited / "owned", "must remain unchanged\n")
+        roots = (inherited, self.fixture.source, self.fixture.tools,
+                 self.fixture.dependencies, self.fixture.headers)
+        before = {root: tree_identity(root) for root in roots}
+
+        def command(argv, build, environment, log, **budget):
+            self.assertEqual(environment["TMPDIR"], str(temporary))
+            self.assertNotIn("TMP", environment)
+            self.assertNotIn("TEMP", environment)
+            self.assertEqual(temporary.resolve(strict=True), temporary)
+            self.assertTrue(temporary.is_dir())
+            self.assertEqual(temporary.stat().st_mode & 0o777, 0o700)
+            self.assertEqual(temporary.stat().st_dev, self.fixture.args.build_root.stat().st_dev)
+            self.assertIn(temporary.parent, budget["resource_paths"])
+            self.assertEqual(list(temporary.iterdir()), [])
+            child = subprocess.run(
+                [sys.executable, "-I", "-S", "-B", "-c",
+                 "import tempfile\nfrom pathlib import Path\n"
+                 "with tempfile.NamedTemporaryFile() as stream:\n"
+                 "    print(Path(stream.name).parent)\n"],
+                env=environment, check=True, capture_output=True, text=True, timeout=5,
+            )
+            self.assertEqual(child.stdout.strip(), str(temporary))
+            return self.fixture.command(argv, build, environment, log, **budget)
+
+        self.process.side_effect = command
+        with mock.patch.dict(os.environ, {"TMPDIR": str(inherited),
+                                          "TMP": str(self.fixture.source),
+                                          "TEMP": str(self.fixture.tools)}):
+            report = self.run_fixture()
+        self.assertRetained(report, "pass")
+        self.assertEqual(len(self.fixture.calls), 9)
+        self.assertTrue(temporary.is_dir())
+        self.assertEqual(list(temporary.iterdir()), [])
+        for entry in report["commands"]:
+            self.assertEqual(entry["environment"]["TMPDIR"], str(temporary))
+        self.assertEqual({root: tree_identity(root) for root in roots}, before)
+
+    def test_existing_temp_tree_after_planning_prevents_launch(self):
+        for kind in ("directory", "input-symlink"):
+            with self.subTest(kind=kind):
+                self.fixture.fresh_paths()
+                report = self.plan()
+                self.fixture.args.build_root.mkdir()
+                temporary = self.fixture.args.build_root / "tmp"
+                if kind == "directory":
+                    temporary.mkdir()
+                    write(temporary / "owned", "must remain unchanged\n")
+                else:
+                    temporary.symlink_to(self.fixture.source, target_is_directory=True)
+                before = tree_identity(self.fixture.base)
+                with self.assertRaisesRegex(ValueError, "fresh output and build roots"):
+                    self.run_fixture(report)
+                self.assertEqual(tree_identity(self.fixture.base), before)
+                self.assertFalse(self.fixture.args.output.exists())
+        self.process.assert_not_called()
 
     def test_blocked_input_inventory_prevents_output_creation_and_launch(self):
         (self.fixture.headers / "uuid/uuid.h").unlink()

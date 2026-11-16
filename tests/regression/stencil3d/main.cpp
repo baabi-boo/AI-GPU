@@ -169,7 +169,7 @@ static void show_usage()
 static void parse_args(int argc, char **argv)
 {
     int c;
-    while ((c = getopt(argc, argv, "n:t:k:h")) != -1)
+    while ((c = getopt(argc, argv, "n:b:k:h")) != -1)
     {
         switch (c)
         {
@@ -190,6 +190,12 @@ static void parse_args(int argc, char **argv)
             show_usage();
             exit(-1);
         }
+    }
+
+    if (size == 0 || block_size == 0)
+    {
+        printf("Error: matrix size and block size must be nonzero\n");
+        exit(-1);
     }
 }
 

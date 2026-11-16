@@ -65,6 +65,104 @@ print(json.dumps({"changed_helper_rejected": True, "restored_plan": restored["ou
 '''
 
 
+MALFORMED_HELPER_PROBE = r'''
+from contextlib import redirect_stdout
+from io import StringIO
+import json
+import os
+from pathlib import Path
+import shutil
+import sys
+import unittest
+from unittest import mock
+
+helpers = Path(sys.argv[1])
+sys.path.insert(0, str(helpers))
+import local_qualification as runner
+import local_qualification_cases as cases
+import local_qualification_inventory as inventory
+
+check = unittest.TestCase()
+for module in (runner, cases, inventory):
+    check.assertEqual(Path(module.__file__).parent, helpers)
+sys.path.append(sys.argv[2])
+from test_local_qualification_runner import RunnerFixture
+
+stage = sys.argv[3]
+base = helpers.parent / ("malformed-" + stage)
+base.mkdir()
+fixture = RunnerFixture(base)
+helper = helpers / "local_qualification_cases.py"
+original = helper.read_bytes()
+malformed = original + b"\ndef invalid_helper(:\n"
+reason = "local helper has invalid Python syntax: " + helper.name
+capacity = type(shutil.disk_usage(base))(64 * runner.GIB, runner.GIB, 63 * runner.GIB)
+with mock.patch.dict(os.environ, fixture.environment, clear=True), \
+        mock.patch.object(shutil, "disk_usage", return_value=capacity), \
+        mock.patch.object(runner, "run_bounded", side_effect=fixture.command) as process, \
+        mock.patch.object(runner, "verify_log", wraps=runner.verify_log) as oracle:
+    try:
+        if stage == "plan":
+            fixture.args.mode = "plan"
+            helper.write_bytes(malformed)
+            with check.assertRaisesRegex(ValueError, reason):
+                runner.plan_run(fixture.args, fixture.paths)
+            argv = [fixture.args.mode]
+            for name, value in vars(fixture.args).items():
+                if name not in ("mode", "case"):
+                    argv.extend(("--" + name.replace("_", "-"), str(value)))
+            argv.extend(("--case", "cp-llc-port"))
+            with redirect_stdout(StringIO()) as output:
+                check.assertEqual(runner.main(argv), 1)
+            report = json.loads(output.getvalue())
+            check.assertEqual(report["blockers"], [reason])
+            check.assertFalse(fixture.args.output.exists())
+        else:
+            report = runner.plan_run(fixture.args, fixture.paths)
+            check.assertEqual(report["outcome"], "pass", report["blockers"])
+            if stage == "preflight":
+                helper.write_bytes(malformed)
+            else:
+                fixture.after_command = lambda name, build: (
+                    helper.write_bytes(malformed) if name == stage else None)
+            report = runner.execute_run(fixture.args, report, fixture.paths)
+            retained = json.loads((fixture.args.output / "report.json").read_text())
+            check.assertEqual(retained, report)
+            check.assertEqual(report["state"], "finished")
+            check.assertEqual(report["reason"], reason)
+            check.assertNotIn("active_command", report)
+            check.assertNotIn("observations", report["cases"][0])
+            expected = [] if stage == "preflight" else ["units-configure"]
+            if stage == "cp-llc-port-run":
+                expected.extend(("cp-llc-port-build", "cp-llc-port-run"))
+            check.assertEqual([entry["id"] for entry in report["commands"]], expected)
+            check.assertEqual(process.call_count, len(expected))
+            check.assertEqual(report["cases"][0]["outcome"],
+                              "fail" if stage == "cp-llc-port-run" else "not_run")
+            if expected:
+                check.assertEqual(report["commands"][-1]["outcome"], "pass")
+                snapshot = next(item for item in report["snapshots"]
+                                if item["source"]["path"] == helper.name)
+                check.assertEqual((fixture.args.output / snapshot["retained"]["path"]).read_bytes(),
+                                  original)
+        blocked = stage in ("plan", "preflight")
+        check.assertEqual(report["outcome"], "blocked" if blocked else "fail")
+        check.assertIs(report.get("execution_performed", False), not blocked)
+        check.assertIs(report.get("workload_command_started", False), stage == "cp-llc-port-run")
+        for key in ("workload_execution_verified", "qualifies_P01_A03",
+                    "vendor_execution_performed", "phase_complete"):
+            check.assertIs(report.get(key, False), False, key)
+        if blocked:
+            process.assert_not_called()
+            check.assertFalse(fixture.args.build_root.exists())
+        oracle.assert_not_called()
+    finally:
+        helper.write_bytes(original)
+print(json.dumps({"stage": stage, "outcome": report["outcome"], "reason": reason,
+                  "workload_execution_verified": report.get("workload_execution_verified", False)}))
+'''
+
+
 class QualificationIdentityTests(unittest.TestCase):
     def setUp(self):
         temporary = tempfile.TemporaryDirectory(prefix="local-qualification-identity-")
@@ -138,6 +236,31 @@ class QualificationIdentityTests(unittest.TestCase):
         self.process.assert_not_called()
         self.assertFalse(self.fixture.args.output.exists())
         self.assertFalse(self.fixture.args.build_root.exists())
+
+    def malformed_helper_probe(self, stage):
+        result = subprocess.run(
+            [sys.executable, "-I", "-S", "-B", "-c", MALFORMED_HELPER_PROBE,
+             str(self.fixture.helpers), str(Path(__file__).resolve().parent), stage],
+            env=self.fixture.environment, capture_output=True, text=True, timeout=30,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(json.loads(result.stdout), {
+            "stage": stage, "outcome": "blocked" if stage in ("plan", "preflight") else "fail",
+            "reason": "local helper has invalid Python syntax: local_qualification_cases.py",
+            "workload_execution_verified": False,
+        })
+        self.process.assert_not_called()
+
+    def test_malformed_helper_after_real_import_blocks_planning(self):
+        self.malformed_helper_probe("plan")
+
+    def test_malformed_helper_after_planning_retains_blocked_preflight(self):
+        self.malformed_helper_probe("preflight")
+
+    def test_malformed_helper_after_command_retains_failure_without_verification(self):
+        for command in ("units-configure", "cp-llc-port-run"):
+            with self.subTest(command=command):
+                self.malformed_helper_probe(command)
 
     def test_prelaunch_blocked_configure_does_not_claim_execution(self):
         blocked = self.block_before_launch("units-configure")
