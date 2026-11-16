@@ -33,7 +33,8 @@ P00 remains complete, P01 remains incomplete, and P02 has not started.
 - Reproduce the current phase: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
 - Continue from the recorded checkpoint: [P01 handoff](docs/project/p01-handoff.md).
 - Check retained evidence: [packet verification guide](docs/project/p01-packet-verification.md) and [packet continuation handoff](docs/project/p01-packet-handoff.md).
-- Prepare the remaining integration run: [vendor XRT guide](docs/project/p01-xrt-integration.md).
+- Inspect vendor preparation inputs: [hw_emu runbook](docs/project/p01-hwemu-runbook.md), [manifest contract](docs/project/p01-hwemu-manifest.md) and [preparation handoff](docs/project/p01-hwemu-handoff.md).
+- Use the prepared-artifact execution route: [vendor XRT guide](docs/project/p01-xrt-integration.md).
 - Begin contributing: [developer guide](docs/project/developer-guide.md), [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md).
 - Find everything else: [project documentation](docs/project/index.md) and [technical documentation](docs/index.md).
 
@@ -127,8 +128,9 @@ identifies the minimal immutable tool bundles; the
 bounded logs and failure checkpoints.
 
 Follow the [runbook](docs/project/p01-baseline-runbook.md) for preparation and
-execution. The reviewed baseline delivery records 346 passing tooling/governance
-tests; those tests do not establish a numerical baseline. The attention kernel uses
+execution. The historical reviewed baseline delivery records 346 passing
+tooling/governance tests; that count describes its recorded revision, and those
+tests do not establish a numerical baseline. The attention kernel uses
 shared-memory operands for both GEMMs; its original matrix prose is corrected
 by the [operand coverage erratum](docs/project/evidence/p01/attention-operand-erratum.md).
 P01 also requires full XRT `hw_emu` integration; unavailable vendor tools or a
@@ -151,17 +153,48 @@ relationship. The [continuation handoff](docs/project/p01-packet-handoff.md)
 tracks the packet implementation's validation, independent review and publication
 state separately from the accepted execution evidence.
 
-The [vendor integration runner](ci/project/xrt_baseline.py) adds the next P01-T05
-execution path. It checks a pinned platform, vendor runtime, matching emulation
-artifacts and a reviewed build receipt, creates a fresh host/kernel build, then
-runs the fixed 16-point integer demo through XRT `hw_emu`. It records bounded
-commands, configuration and reference results while keeping acceptance separate.
-The [guide](docs/project/p01-xrt-integration.md) explains the manifest and budgets.
-Inspect the local prerequisites without invoking vendor tools with:
+## P01 vendor hardware-emulation preparation
+
+The read-only [hwemu.py](ci/project/hwemu.py) `inventory` and `plan` commands
+report prerequisites and check a strict input manifest. Planning checks source
+and submodule state, an existing generated build, file identities, the retained
+build receipt and declared resource bounds. It launches no workload and does
+not enforce execution budgets. A `planned` result describes one candidate
+integer smoke; it keeps execution, launch readiness, vendor qualification and
+P01-A03 acceptance unearned. Follow the
+[runbook](docs/project/p01-hwemu-runbook.md) and
+[manifest contract](docs/project/p01-hwemu-manifest.md).
+
+The XRT INI now references the actual `sw/runtime/xrt/xsim.tcl` hook and uses
+lean tracing defaults. Waveform collection requires an explicit debug
+configuration and `VORTEX_XRT_WAVEFORM=1`. These source changes establish no new
+GPU, vendor-emulation or physical-device result. The next action is to qualify a
+vendor release/platform, retain an actual matching build packet, then review
+and execute the DMA/launch/completion smoke under bounded supervision. P01-A03
+remains blocked and P02 remains `not_started`; the
+[preparation handoff](docs/project/p01-hwemu-handoff.md) records this continuation.
+
+### Prepared-artifact execution runner
+
+The separate [vendor integration runner](ci/project/xrt_baseline.py) implements
+a prepared-artifact P01-T05 execution route. It checks a pinned platform, vendor
+runtime, matching emulation artifacts and a strict reviewed build receipt,
+creates a fresh host/kernel build, then runs the fixed 16-point integer demo
+through XRT `hw_emu`. It records bounded commands, configuration and reference
+results while keeping acceptance separate. The
+[guide](docs/project/p01-xrt-integration.md) explains its manifest and budgets.
+Inspect local prerequisites without invoking vendor tools with:
 
 ```sh
 python3 ci/project/xrt_baseline.py probe
 ```
+
+The two routes have separate manifest, receipt and report schemas, even though
+both use `schema_version: 1`. There is no automatic adapter or promotion from
+a preparation plan to execution. `xrt_baseline.py` requires its own independently
+reviewed inputs and constructs fixed commands instead of consuming a `hwemu.py`
+candidate. The preparation planner's compiler-glob follow-up remains in the
+[backlog](docs/project/backlog.md).
 
 Missing prerequisites produce a blocked result and nonzero exit. The development
 environment lacks the required vendor installation and platform artifacts, so

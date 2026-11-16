@@ -7,6 +7,17 @@ builds a fresh RV64 integer application and vendor runtime, and executes one
 must already exist. The runner does not install vendor software, synthesize an
 image, download a platform or authorize licensed access.
 
+The separate [read-only preparation route](p01-hwemu-runbook.md) uses
+`hwemu.py inventory` to report prerequisites and `plan` to inspect an existing
+generated build. This runner requires a fresh build directory and its own
+independently reviewed manifest and build receipt. The routes have distinct
+manifest, receipt and report schemas despite both using `schema_version: 1`;
+there is no automatic adapter or promotion from a preparation plan to execution.
+The runner constructs fixed commands and does not consume the preparation
+planner's candidate commands or budget; execution budgets come from this runner's
+own CLI. That planner's compiler-glob follow-up remains unwaived in the
+[backlog](backlog.md).
+
 **P00 remains complete; P01-A01/A02 remain accepted; P01-A03 and P01 remain
 blocked; P02 remains not started.** No vendor `hw_emu` job has run in this
 tooling continuation. This runbook, a successful plan, and tooling tests do not
@@ -465,8 +476,12 @@ data_transfer_trace=off
 stall_trace=off
 ```
 
-It contains no pre-simulation Tcl hook. The inherited generated template is
-retained and checked separately; it is not the selected smoke configuration.
+It contains no pre-simulation Tcl hook. The generated template is retained and
+checked separately; its debug/profiling defaults are also off, and its tracked
+`xsim.tcl` hook collects waveforms only with explicit debug configuration plus
+`VORTEX_XRT_WAVEFORM=1`. The generic `run-xrt` recipe still assigns its own
+`XRT_INI_PATH`. The runner's direct launch selects the retained smoke INI above;
+exporting that path alone does not override the generic recipe.
 AMD/Xilinx's [XRT INI documentation](https://xilinx.github.io/XRT/master/html/xrt_ini.html)
 describes `XRT_INI_PATH`; the
 [2021.1 INI reference](https://xilinx.github.io/XRT/2021.1/html/xrt_ini.html)

@@ -19,7 +19,9 @@ For the bounded vendor integration smoke, follow the [XRT integration guide](doc
 The generic blackbox driver resets an inherited `TARGET`, and the generated
 `run-xrt` recipe assigns its own `XRT_INI_PATH`; exporting those variables alone
 does not select or bound that path. Keep the vendor runner's direct launch and
-retained tracing-disabled INI distinct from the inherited debug recipe.
+retained tracing-disabled INI distinct from the generated `run-xrt` recipe.
+The generated debug/profiling defaults are off; waveform capture requires
+explicit debug configuration and `VORTEX_XRT_WAVEFORM=1`.
 
 ---
 

@@ -57,7 +57,7 @@ Attention uses SS operands for both GEMMs. The unused `WGMMA_RS` command macro
 does not establish RS coverage; the [erratum](evidence/p01/attention-operand-erratum.md)
 preserves and corrects the original matrix's descriptive error.
 
-## Reviewed execution packet
+## Historical reviewed execution packet
 
 The GPU source checkout is pinned to
 **`03181532b81fe95b1cfeac2ffb25d8597af689b2`**, separately from the evolving
@@ -78,7 +78,7 @@ tag `v3.0.2` resolves to immutable commit
 | Frozen six-case numerical matrix | [P01-A02 accepted](evidence/p01-native.json): all six cases pass; review reconciled 15 command logs, 18 configuration snapshots and 41 exported artifacts |
 | Separate fresh generated-build smoke | [P01-A01 accepted](evidence/p01-build.json): fresh FP16 SimX generated build, five successful commands and zero reference errors; reused dependency libraries remain explicitly pinned |
 | Supplemental full-AFU `xrtsim` smoke | [Pass](evidence/p01/xrtsim/report.json): four successful commands and all 16 integer reference points; vendor `hw_emu` remains a separate obligation |
-| Source-root project/tooling checks | 346 tests and governance validation pass; these checks do not certify numerical execution |
+| Historical source-root project/tooling checks | The reviewed baseline revision passed 346 tests and governance validation; this is not the current continuation's test count and does not certify numerical execution |
 | Full vendor XRT `hw_emu` | Blocked by missing vendor tools/platform; no P01-A03 pass is claimed |
 | Synthesis, physical FPGA and silicon qualification | Not performed by this baseline continuation |
 
@@ -86,8 +86,8 @@ The execution budget uses two compile workers, a 15 GiB free-disk reserve,
 6 GiB sampled process-group RSS and bounded logs/time. Host available-memory
 observations do not certify a cgroup limit; the execution environment does not
 expose that limit. Keep this limitation in the packet.
-The final [resource observation](evidence/p01/resource-observation.json) records
-no budget stops, a highest sampled process-group RSS of **3,494,166,528 bytes
+The baseline's final [resource observation](evidence/p01/resource-observation.json)
+records no budget stops, a highest sampled process-group RSS of **3,494,166,528 bytes
 (about 3.25 GiB)**, and **53.48 GiB free disk** after all three packets completed.
 Simulation durations and these host-resource measurements do not establish
 physical accelerator performance.
@@ -115,8 +115,8 @@ python3 ci/project/baseline_packet.py verify-export docs/project/evidence/p01/na
 The [packet continuation handoff](p01-packet-handoff.md) records the initial
 `e9c9ac0` checkpoint, incorporation of baseline delivery `25ca2e6`, and published
 implementation [22c545c](https://github.com/baabi-boo/AI-GPU/commit/22c545c632628f9da9f18ccf8fb512a8bfac7f81).
-Its immutable release checkout passed all 591 governance/tooling tests, the
-project checker, preflight and both published-packet checks. The handoff records
+That historical immutable release checkout passed all 591 governance/tooling
+tests, the project checker, preflight and both published-packet checks. The handoff records
 exact identities, independent review and hosted CI observations. This
 continuation performed no new GPU execution and grants no new acceptance.
 The six-case and clean-build evidence above remain the reviewed execution record;
@@ -125,8 +125,35 @@ checks public bytes and retained records, without proving original log bytes or
 the asserted redaction relationship.
 
 The separate [packet continuation ledger](p01-packet-agent-execution.json)
-records this delivery's actual assignments and dispositions. The original P00
-and P01 execution ledgers remain separate historical records.
+records that historical delivery's actual assignments and dispositions. The
+original P00 and P01 execution ledgers remain separate historical records.
+
+## Vendor hardware-emulation preparation
+
+The [hw_emu runbook](p01-hwemu-runbook.md),
+[manifest contract](p01-hwemu-manifest.md) and
+[preparation handoff](p01-hwemu-handoff.md) describe the read-only P01-T05
+preparation route. Its implemented source includes:
+
+- Read-only [inventory and planning commands](../../ci/project/hwemu.py).
+  Inventory reports local prerequisites without invoking vendor tools. Planning
+  validates a strict inert manifest, file hashes and a matching retained receipt,
+  clean source/submodule identities, existing generated-build copies and compiler
+  records, lean XRT settings and bounded input/resource observations.
+- The corrected XRT INI hook path, `sw/runtime/xrt/xsim.tcl`, with debug mode off
+  and the inherited profiling/trace options disabled. Waveforms require explicit
+  debug configuration plus
+  `VORTEX_XRT_WAVEFORM=1`; the environment flag alone does not enable debug mode.
+
+A successful plan establishes input consistency only. It retains
+`launch_ready: false`, `vendor_qualification_verified: false`,
+`execution_performed: false`, `phase_complete: false` and P01-A03
+`acceptance_outcome: blocked`. The planner launches no workload and does not
+enforce the candidate's execution budget. Actual vendor compatibility, artifact
+production provenance and separately supervised execution still require review.
+This continuation establishes no new GPU execution, vendor-emulation result or
+physical measurement. P01-A01/A02 retain their accepted historical evidence;
+P01-A03 remains blocked and P02 remains `not_started`.
 
 ## Vendor integration tooling continuation
 
@@ -138,6 +165,15 @@ Independent tooling tests exercise blocked prerequisites, provenance drift,
 configuration mismatches, process failures and reference-result handling.
 The [continuation handoff](p01-xrt-handoff.md) records verification and delivery.
 
+The two tools have separate manifest, receipt and report schemas; their shared
+`schema_version: 1` does not make inputs interchangeable. The XRT runner requires
+its own independently reviewed manifest/receipt and a fresh build directory,
+constructs fixed commands and does not consume a `hwemu.py` candidate. There is
+no automatic adapter or promotion from a preparation plan to execution. The
+read-only planner's F1 compiler-glob follow-up remains unwaived in the
+[backlog](backlog.md); adding the separate runner does not close it or grant the
+candidate launch readiness.
+
 The current environment still lacks the vendor executables, vendor roots and
 qualified platform/artifact packet. No vendor `hw_emu` job ran in this
 continuation. Passing tooling tests or a read-only plan does not accept P01-A03;
@@ -147,8 +183,10 @@ all existing accepted native evidence and phase states remain unchanged.
 
 **Resolve P01-T05's qualified vendor `hw_emu` environment/platform blocker.**
 Identify a compatible vendor release and supported platform, freeze their
-identities and resource budget, then build matching emulation artifacts and run
-the required DMA/launch/completion smoke through the
+identities and resource budget, then retain an actual matching build packet with
+producer commands, results and artifacts. Prepare and independently review the
+execution runner's own manifest/receipt, then run the required
+DMA/launch/completion smoke under bounded supervision through the
 [vendor integration guide](p01-xrt-integration.md). Stop while any prerequisite is absent;
 the supplemental `xrtsim` pass cannot close P01-A03. The accepted numerical
 matrix and fresh selected-case build remain separate packets with explicit
@@ -176,9 +214,10 @@ The [accepted delivery record](evidence/setup-accepted.json),
 Their historical checks and workflow observations do not qualify P01.
 The original [P00 agent ledger](agent-execution.json) records its 60 completed
 assignments across 10 waves; it is not the ledger for this P01 continuation.
-The separate [P01 ledger](p01-agent-execution.json) records actual completed
-assignments as this continuation progresses; requested totals do not establish
-completion or hardware evidence.
+The separate historical [P01 ledger](p01-agent-execution.json) records the baseline
+delivery's completed assignments. Neither historical ledger counts the current
+hardware-emulation preparation; requested totals do not establish completion or
+hardware evidence.
 The protected README illustration, upstream attribution and inherited golden
 results remain preserved; see the [baseline inventory](baseline.md).
 
@@ -191,10 +230,11 @@ review findings, publication state and one next bounded action. Update status
 and phase evidence together. Preserve failures and never convert missing native
 or integration evidence into a passing gate.
 
-## Completed P01 collaboration
+## Preserved baseline collaboration history
 
-The separate [P01 execution ledger](p01-agent-execution.json) records **60 completed
+The historical [P01 execution ledger](p01-agent-execution.json) records **60 completed
 distinct agent assignments across 10 logical waves**, scheduled with at most three
-subagents active concurrently. The original P00 ledger remains unchanged. The
-completed assignments support the implementation and review; vendor A03 remains
-blocked independently of the agent count.
+subagents active concurrently for the accepted baseline delivery. It does not
+count assignments in the current hardware-emulation preparation. The original
+P00 ledger remains unchanged. The completed historical assignments support that
+implementation and review; vendor A03 remains blocked independently of agent count.

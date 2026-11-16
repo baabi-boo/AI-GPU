@@ -14,7 +14,9 @@
 # limitations under the License.
 #
 
-log_wave -r *
+if {[info exists ::env(VORTEX_XRT_WAVEFORM)] && $::env(VORTEX_XRT_WAVEFORM) eq "1"} {
+    log_wave -r *
+}
 
 #open_vcd xsim_dump.vcd
 #log_vcd /*
