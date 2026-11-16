@@ -336,6 +336,27 @@ or rerun the suite.
 
 ## Source control and publication boundary
 
+The terminal HTTPS push could not obtain credentials. The authorized GitHub
+connection imported the reviewed objects with new commit metadata instead.
+The [publication identity map](p01-xrt-publication-map.json) retains exact raw
+local commit bytes and verifies the following GitHub tree and ordered-parent
+identities through API readback:
+
+| Local execution or assembly checkpoint | Corresponding GitHub commit | Identical tree |
+|---|---|---|
+| `42e36724a2f2a02766b26de8deb9b04b7557fa27` | `9ed4c00749d8c637262cc24ef92c0ce97da395f2` | `c0f28a660c0a5c8b16d3f82adee06d104668d4e5` |
+| `236770d6083ae88749e1830dd08eb72ee4327f97` | `7c8d67861b714fd047c26d7b106b0ab27b1207aa` | `449e538d1066df343b501ab365fa521cb2cdc2fa` |
+| `ae27591d1e4b7c9f2ec802c75fd6556b95a0483b` | `827dc664dc464c7a370dd9211deabfac4e8524ee` | `9d2be910dd14ce4e6fabf2e30e4d84db98d835c7` |
+| `91d52abdf41b6994e4184b7a4566fa055649e6e7` | `7a1993c6d4eae77b14f9a6302b91026a0595073a` | `25486f2c1d769ad924a3b9ecbc68e38adf54bd16` |
+| `4f8e862c50976047feebc6bc55ec2dda2ccf9cbe` | `deca8022327199039946585c7c1397de5b60f512` | `ac4d458491d15f4a96ff7c192b646291f6da1844` |
+
+The actual test executions remain bound to their original local checkpoint IDs,
+trees and timestamps. The mapped GitHub commits preserve file-tree content and
+merge ancestry; they are not represented as commits on which those earlier
+commands ran. The final mapping and explanation are subsequent documentation.
+An XRT manifest/receipt still requires its exact reviewed source revision; this
+map does not make revisions interchangeable or automatically qualify an input.
+
 The original runner, preserved concurrent work and both integration checkpoints
 are locally available at the exact identities above. This handoff records the
 combined XRT continuation **before observed publication**. No push, remote

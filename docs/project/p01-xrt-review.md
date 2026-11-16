@@ -140,6 +140,17 @@ delta from `ae27591d` consists of those two documents. It changes none of the
 production or test identities in the 1,075-test run; the two independent
 continuations' assignment ledgers remain separate.
 
+The same A60 performed a publication-transport follow-up after the terminal
+could not obtain HTTPS credentials. Independent GitHub readbacks verified all
+five imported commits' exact trees and ordered mapped parents. The
+[publication map](p01-xrt-publication-map.json) retains raw local commit bytes;
+their lengths, SHA-256 values and Git object SHA-1 identities reproduce every
+original local checkpoint. The actual test runs retain their original local
+revision/tree and timestamps, and the map does not authorize manifest or receipt
+revision substitution. No identity blocker was found. This follow-up is neither
+an additional agent nor a new test execution; object-import verification remains
+separate from the later branch update and hosted checks.
+
 The two tools remain independent. `hwemu.py` planning inspects its own existing
 build and emits a candidate with `launch_ready=false`; the XRT runner requires
 its own reviewed manifest/receipt and a fresh build, constructs fixed commands

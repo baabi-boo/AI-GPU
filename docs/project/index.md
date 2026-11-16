@@ -112,6 +112,8 @@ funding/manufacturing decisions; a roadmap does not authorize purchases.
   historical 875-test result and blocked prerequisite observations at the original runner revision.
 - [Vendor tooling execution ledger](p01-xrt-agent-execution.json): actual agent
   assignments and outcomes, separate from accelerator qualification.
+- [Vendor tooling publication identities](p01-xrt-publication-map.json): exact
+  local execution checkpoints and their content-identical GitHub commits.
 - [Evidence guide](evidence/README.md): record fields, artifact integrity and retention.
 - [Acceptance report template](evidence/report.example.json): **unexecuted**, not proof.
 - [Benchmark specification template](evidence/benchmark.example.json): **unmeasured**

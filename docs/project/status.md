@@ -178,6 +178,9 @@ selected source hashes stayed unchanged. Later documentation and delivery
 records are separate from this tested source checkpoint. The original
 [875-test packet](evidence/p01-xrt-tooling/verification.json) and intermediate
 1,071-test result remain historical observations at their own revisions.
+The [publication map](p01-xrt-publication-map.json) distinguishes these local
+execution identities from API-created GitHub commits with identical trees;
+the actual test runs are not relabelled as later executions.
 
 The two tools have separate manifest, receipt and report schemas; their shared
 `schema_version: 1` does not make inputs interchangeable. The XRT runner requires
