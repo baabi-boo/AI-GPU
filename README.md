@@ -15,9 +15,9 @@ compute, specialized matrix units, fast memory and usable software. It does not
 mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
 **Current stage: P01 — reproducible baseline, blocked on vendor hardware
-emulation.** The baseline tooling is implemented, all six FP16/BF16 GEMM and
-TF32 attention executions pass on SimX and native processor RTL, and the fresh
-generated-build check passes. [P01-A01](docs/project/evidence/p01-build.json)
+emulation.** The baseline tooling is implemented. Its accepted historical
+six-case FP16/BF16 GEMM and TF32 attention matrix passed on SimX and native
+processor RTL, and its fresh generated-build check passed. [P01-A01](docs/project/evidence/p01-build.json)
 and [P01-A02](docs/project/evidence/p01-native.json) are accepted after independent
 review. [P01-A03](docs/project/evidence/p01-xrt-blocked.json) remains blocked by
 missing qualified vendor XRT `hw_emu` tools/platform.
@@ -31,7 +31,9 @@ P00 remains complete, P01 remains incomplete, and P02–P11 remain `not_started`
 - See the development sequence: [roadmap](ROADMAP.md).
 - Pick the next bounded task: [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
 - Reproduce the current phase: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
-- Follow supplemental local coverage: [P01 local qualification](docs/project/p01-local-qualification.md)
+- Follow current supplemental work: [P01 tensor-oracle hardening](docs/project/p01-tensor-oracles.md)
+  and its [evidence index](docs/project/evidence/p01-tensor-oracles/README.md).
+- Follow earlier supplemental local coverage: [P01 local qualification](docs/project/p01-local-qualification.md)
   and [handoff](docs/project/p01-local-qualification-handoff.md) cover vendor-free
   full-AFU `xrtsim` and focused unit checks; vendor `hw_emu` remains a separate
   P01-A03 requirement.
@@ -104,8 +106,11 @@ simulation or a generated layout file cannot replace them.
 ## Quick start: lightweight repository checks
 
 For a new checkout, use authorized access to this repository's existing `master`
-branch. Python 3.12 matches the lightweight CI environment; these checks use the
-standard library and Git, without GPU toolchains or initialized submodules.
+branch. Python 3.12 matches the lightweight CI environment. Use Linux, Python's
+standard library and Git. The full unit suite also needs a native C++17 compiler
+with UBSan support/runtime libraries and at least 1 GiB free temporary storage
+for bounded tensor host-oracle checks. GPU toolchains and initialized submodules
+are not required.
 
 ```sh
 git clone --branch master https://github.com/baabi-boo/AI-GPU.git
@@ -116,11 +121,25 @@ python3 -m unittest discover -s ci/project -p 'test_*.py'
 ```
 
 These commands inspect prerequisites, validate project metadata/links/evidence,
-and test the governance tools. **They do not build or run the GPU.** Missing GPU
+and test the governance tools and bounded tensor host oracles.
+**They do not build or run the GPU.** Missing GPU
 dependencies are reported separately. Follow the [developer guide](docs/project/developer-guide.md)
 before downloads or execution: approve a disk/RAM/job budget, use pinned tools
 and separate build directories, and start with bounded cases. Do not begin with
 an unrestricted toolchain install or full synthesis sweep.
+
+## P01 supplemental tensor-oracle hardening
+
+The [tensor-oracle guide](docs/project/p01-tensor-oracles.md) covers class-aware
+nonfinite comparison, overflow-safe ULP distances, FP32 accumulator bit preservation,
+independent FP16/BF16 fixtures and modular integer reference arithmetic. Strict
+CLI validation rejects empty or disabled-format selections, and selected random
+cases replay the full run's input stream. The
+[evidence index](docs/project/evidence/p01-tensor-oracles/README.md) binds results to source.
+
+Matrix/full-suite source: `ca8686d668ed9f2ff733ce7e3c12dd458b9776d8`; native matrix: **pass — nine builds, 62 commands and 95 CLI checks**;
+full tooling suite: **1,272 tests passed, zero failures/errors/skips in 336.269 seconds**. This is supplemental P01 evidence;
+P01-A03 remains blocked and P02–P11 remain `not_started`.
 
 ## P01 baseline implementation
 

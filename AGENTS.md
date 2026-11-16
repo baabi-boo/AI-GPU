@@ -53,6 +53,7 @@ See the [compiler-record contract](docs/project/p01-compiler-records.md) and
 ### Simulation & test
 - [docs/simulation.md](docs/simulation.md) — driver modes (simx, rtlsim, opae, xrt) and blackbox usage
 - [docs/testing.md](docs/testing.md) — test and regression flow
+- [P01 tensor-oracle hardening](docs/project/p01-tensor-oracles.md) — comparator, independent fixture, integer-reference and strict selection/replay contracts; see the [evidence index](docs/project/evidence/p01-tensor-oracles/README.md) for source-bound results
 - [P01 local qualification](docs/project/p01-local-qualification.md) and [handoff](docs/project/p01-local-qualification-handoff.md) — supplemental vendor-free full-AFU `xrtsim` and focused unit checks; vendor `hw_emu` remains the separate P01-A03 gate
 - [docs/debugging.md](docs/debugging.md) — debug traces (`--debug`), VCD (`--vcd`), scope, trace_csv
 - [docs/kernel_debugging.md](docs/kernel_debugging.md) — debug-mode hardware support (GDB/OpenOCD)

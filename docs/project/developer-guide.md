@@ -26,9 +26,12 @@ follow [CONTRIBUTING.md](../../CONTRIBUTING.md) for review and delivery.
 
 ## 2. Run the lightweight checks first
 
-These commands run from the **source root**, with Python's standard library and
-Git available. They do not require a RISC-V compiler, Verilator, initialized
-submodules, vendor tools or an FPGA. The CI workflow defines its Python version.
+These commands run from the **source root** on Linux, with Python's standard
+library and Git available. The unit suite also requires a native C++17 compiler
+(`c++`, `g++` or `clang++` on `PATH`) with UBSan support and runtime libraries for
+bounded tensor-oracle host tests. No RISC-V compiler, Verilator, initialized
+submodules, vendor tools or FPGA is needed. The CI workflow defines its Python
+version.
 
 ```sh
 python3 ci/project/preflight.py --tier governance
@@ -40,14 +43,16 @@ git diff --check
 Preflight is read-only: it reports prerequisites, resource availability and asset
 integrity; it never installs, builds or cleans. Use `--json` for machine-readable
 output, `--root PATH` to inspect a different checkout, and `--min-free-gib N` only
-after choosing a justified disk reserve. A passing governance check validates
-project structure, not GPU correctness or hardware readiness.
+after choosing a justified disk reserve. Governance preflight inventories host
+compilers as optional and does not test C++17 or UBSan support; its success alone
+does not establish readiness to run the full unit suite. These checks do not
+establish GPU correctness or hardware readiness.
 
 ## 3. Choose an execution budget before downloading
 
 | Work tier | Prerequisites to resolve | Budget and stop condition |
 |---|---|---|
-| Governance | Python, Git and this source tree | Small local checks; no GPU downloads |
+| Governance | Python, Git, Linux host with native C++17/UBSan, and this source tree | Small local checks and bounded host tests; at least 1 GiB free on temporary storage; no GPU downloads |
 | Simulation / processor RTL | Supported Linux host, compiler/build dependencies, pinned tools, required submodules; Verilator for RTL | Inventory downloads, unpacked tools, objects, traces and available RAM before selecting cases |
 | FPGA integration / physical FPGA | Vendor compiler/runtime, licensed tool access where required, exact platform/shell; authorized board access for hardware | Approve disk, RAM, jobs, runtime and output retention per target; stop when the reserve is threatened |
 | ASIC analysis / realization | Explicit flow, libraries/PDK/IP access, compute budget and the separate human decisions in P10/P11 | No automatic foundry, IP, spending or manufacturing commitment |

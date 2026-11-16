@@ -22,14 +22,23 @@ python3 -m unittest discover -s ci/project -p 'test_*.py'
 |---|---|---|
 | Preflight | Read-only source/pin, tool, submodule, resource and image inventory | Missing GPU tools/submodules are optional for governance; presence alone does not prove a usable execution environment |
 | Project validator | Roadmap structure, dependency/gate references, evidence metadata and hashes, protected image, and scoped local documentation links | It does not execute recorded commands, authenticate a measurement or grant approval |
-| Unit suite | Positive/negative governance fixtures, cross-document contracts and source-only configuration plumbing | These are not GPU workloads, native RTL tests or physical measurements |
+| Unit suite | Positive/negative governance fixtures, cross-document contracts, source-only configuration plumbing and bounded host tensor-oracle tests | These do not execute GPU workloads or native RTL, or provide physical measurements |
 
-The commands use Python's standard library and Git. They need no initialized GPU
-submodules, RISC-V compiler, Verilator, vendor tools or board. The workflow uses
+The Python tooling uses Python's standard library and Git. The unit suite also
+requires a Linux host and a native C++17 compiler (`c++`, `g++` or `clang++` on
+`PATH`) with UndefinedBehaviorSanitizer (UBSan) support and runtime libraries.
+Tensor host tests compile and run in temporary directories under explicit time
+and resource budgets. No initialized GPU submodules, RISC-V compiler, Verilator,
+vendor tools or board are needed. The workflow uses
 GitHub-hosted `ubuntu-24.04`, explicitly checks system **Python 3.12**, and has a
 **ten-minute job timeout**. It does not install GPU dependencies. Checkout still
 requires ordinary GitHub access; the local validation commands themselves are
-offline. Follow the [developer guide](developer-guide.md) for other tiers.
+offline. Follow the [developer guide](developer-guide.md) for resource requirements
+and other tiers.
+
+Governance preflight inventories host compilers as optional and does not test
+C++17 or UBSan support. Its success alone does not establish readiness to run
+the full unit suite.
 
 Documentation checks deliberately support a bounded Markdown subset. They are
 not a complete GitHub/CommonMark renderer, HTML sanitizer, or proof of browser
@@ -121,7 +130,7 @@ run, or unexecuted template is not execution evidence. Preserve failures and
 state which later steps did not run when an earlier check stopped the job.
 
 Governance evidence can support P00 only within its scope. It cannot establish
-native arithmetic correctness, full AFU integration, physical FPGA operation,
+native RTL arithmetic correctness, full AFU integration, physical FPGA operation,
 silicon measurements or fabrication authority. Apply [acceptance](acceptance.md)
 before attaching reports or completing a phase; update status and the next
 bounded action together. No CI badge alone closes the development roadmap.

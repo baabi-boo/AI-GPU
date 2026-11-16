@@ -4,6 +4,22 @@ This log records project changes, not hardware qualification. Accepted scope and
 evidence remain in [project status](docs/project/status.md) and the
 [canonical roadmap](docs/project/roadmap.json).
 
+## Unreleased — P01 supplemental tensor-oracle hardening
+
+- Correct FP32 nonfinite classification and use overflow-safe finite ULP distances.
+- Preserve the FEDP accumulator's FP32 C bits in both DUT inputs and the reference.
+- Add independent packed FP16/BF16 fixtures for layout, accumulation and edge cases.
+- Define integer dot-product references with modular 32-bit accumulation.
+- Reject malformed CLI values, empty selections and formats disabled in the DUT;
+  reproduce selected random cases from the full run's input stream.
+
+The [guide](docs/project/p01-tensor-oracles.md) and
+[evidence index](docs/project/evidence/p01-tensor-oracles/README.md) retain the scope.
+Matrix/full-suite source: `ca8686d668ed9f2ff733ce7e3c12dd458b9776d8`; native matrix: **pass — nine builds, 62 commands and 95 CLI checks**;
+full tooling suite: **1,272 tests passed, zero failures/errors/skips in 336.269 seconds**. Earlier failed attempts remain retained.
+Accepted historical P01-A01/A02 reports are unchanged; P01-A03 remains blocked
+on vendor `hw_emu`, P01 remains incomplete and P02–P11 remain `not_started`.
+
 ## Unreleased — P01 vendor integration tooling
 
 ### Added

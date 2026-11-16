@@ -1,10 +1,11 @@
 # Current project status
 
 **P01-A01 and P01-A02 are accepted; P01 remains blocked on vendor `hw_emu`.**
-All six frozen numerical executions pass from a clean GPU source checkout.
-The fresh generated FP16 SimX build and supplemental full-AFU integer `xrtsim`
-smoke also pass. Independent reviews accept the clean-build and native numerical
-packets. Qualified vendor tools/platform are still missing for P01-A03. P00
+At the accepted historical revision, all six frozen numerical executions pass
+from a clean GPU source checkout. The fresh generated FP16 SimX build and
+supplemental full-AFU integer `xrtsim` smoke also pass. Independent reviews accept
+the clean-build and native numerical packets. Qualified vendor tools/platform
+are still missing for P01-A03. P00
 remains complete and P02–P11 remain `not_started`.
 [roadmap.json](roadmap.json) remains authoritative for phase state and evidence;
 the linked reports define the exact accepted scope.
@@ -23,7 +24,38 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — supplemental local AFU/RTL qualification
+## Latest continuation — supplemental tensor-oracle hardening
+
+The [tensor-oracle guide](p01-tensor-oracles.md) and
+[evidence index](evidence/p01-tensor-oracles/README.md) describe this supplemental
+P01 correction and retain each execution's exact source and configuration.
+
+- Class-aware NaN/infinity handling and overflow-safe finite ULP distances prevent
+  nonfinite mismatches and signed overflow from producing false comparisons.
+- FEDP preserves the FP32 accumulator C bits; independent packed FP16/BF16
+  fixtures check operand layout, accumulation and numerical edge cases.
+- Integer references use modular 32-bit arithmetic. Strict CLI checks reject
+  malformed, empty and disabled-format selections; seeded single-case replay
+  consumes the same input stream as the corresponding full run.
+
+Matrix/full-suite source: **`ca8686d668ed9f2ff733ce7e3c12dd458b9776d8`**. Native matrix: **pass — nine builds, 62 commands and 95 CLI checks**.
+Full tooling suite: **1,272 tests passed, zero failures/errors/skips in 336.269 seconds**. The earlier `20ea50d` native-matrix
+attempt failed during compilation on a GCC diagnostic; retain that failure
+separately from later retries and the accepted historical baseline.
+
+P00 remains `complete`, accepted historical P01-A01/A02 reports are unchanged,
+P01-A03 remains blocked on vendor `hw_emu`, and P02–P11 remain `not_started`.
+These checks do not complete P01 or qualify physical hardware.
+
+<a id="latest-continuation--supplemental-local-afurtl-qualification"></a>
+
+The later host-only diagnostic correction at `a25ee6663e37d5fe28e7a6fd40b3857083ddeecc`
+preserves nonzero-exit context when child output contains invalid UTF-8. All 12
+tensor host groups and the actual malformed-output negative control pass there.
+Native consumer/configuration hashes remain identical to the matrix source; the
+nine-build matrix and full-suite results above retain their original revision.
+
+## Earlier continuation — supplemental local AFU/RTL qualification
 
 The [local qualification guide](p01-local-qualification.md) documents the
 [bounded runner](../../ci/project/local_qualification.py) for real execution

@@ -48,6 +48,18 @@ defines separate tool directories, build trees, resource checks and safe cleanup
 Commands in this backlog are instructions; observed outcomes and current blockers
 belong in [status](status.md) and the reviewed phase evidence.
 
+### Current supplemental P01 tensor-oracle hardening
+
+Use the [tensor-oracle guide](p01-tensor-oracles.md) and
+[evidence index](evidence/p01-tensor-oracles/README.md) to review comparator and
+accumulator corrections, independent FP16/BF16 fixtures, modular integer references
+and strict selection/replay checks. Retain failed attempts and exact selections;
+empty runs or disabled formats cannot establish coverage.
+
+Matrix/full-suite source: `ca8686d668ed9f2ff733ce7e3c12dd458b9776d8`; native matrix: **pass — nine builds, 62 commands and 95 CLI checks**;
+full tooling suite: **1,272 tests passed, zero failures/errors/skips in 336.269 seconds**. This supplemental work leaves the
+P01-T05/P01-A03 vendor blocker and P02–P11 `not_started` state unchanged.
+
 ### Supplemental local AFU/RTL qualification continuation
 
 The [local qualification guide](p01-local-qualification.md) provides the
