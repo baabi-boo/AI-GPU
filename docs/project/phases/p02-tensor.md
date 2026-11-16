@@ -1,14 +1,20 @@
 # P02 — Tensor numerical contract
 
 **Goal:** define and prove the arithmetic behavior of the first supported AI
-configuration. This is planned verification work, not a new claim of correctness.
+configuration. This phase is `in_progress` through accepted baseline evidence;
+no P02 exit gate is accepted yet.
 The live status, dependencies and authoritative gate text are in
 [roadmap.json](../roadmap.json); the accountable role is Compute architecture lead.
 
 ## Entry and boundaries
 
-- P01 must be complete with reproducible source, toolchain, configuration and
-  native arithmetic evidence. Resolve or explicitly block missing prerequisites.
+- P00 must be complete and P01-A01 (reproducible build) plus P01-A02 (native
+  numerical baseline) must each have passing, reviewed evidence. The canonical
+  [roadmap](../roadmap.json) records these as machine-checked
+  `entry_acceptances`. P01's vendor integration gate P01-A03 is **not an entry
+  prerequisite**; it remains blocked and must pass before P01/P07 closure.
+- Use the [P02 staged-entry handoff](../p02-entry-handoff.md) for accepted inputs,
+  remaining contract decisions and the first bounded deliverable.
 - Start with the declared FP16/BF16 inputs and FP32 accumulation. Other formats,
   sparsity and block scaling require their own support decisions and evidence.
 - Reuse the [tensor design](../../designs/tensor_core_wgmma_engine.md),

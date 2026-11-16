@@ -14,8 +14,12 @@ simulator configuration. “NVIDIA-style” describes the ambition of programmab
 compute, specialized matrix units, fast memory and usable software. It does not
 mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
-**Current stage: P01 — reproducible baseline, blocked on vendor hardware
-emulation.** The baseline tooling is implemented. Its accepted historical
+**Current development stage: P02 — tensor numerical contract (`in_progress`).**
+The accepted P01 clean-build (`A01`) and native numerical (`A02`) results now
+unlock software/RTL development without waiting for a vendor FPGA emulator.
+**P01 remains `blocked` on `A03`**, and that proof is required before the
+physical-FPGA stage (P07) can close. The baseline tooling is implemented. Its
+accepted historical
 six-case FP16/BF16 GEMM and TF32 attention matrix passed on SimX and native
 processor RTL, and its fresh generated-build check passed. [P01-A01](docs/project/evidence/p01-build.json)
 and [P01-A02](docs/project/evidence/p01-native.json) are accepted after independent
@@ -23,12 +27,13 @@ review. [P01-A03](docs/project/evidence/p01-xrt-blocked.json) remains blocked by
 missing qualified vendor XRT `hw_emu` tools/platform.
 The authoritative [status](docs/project/status.md) and
 [phase gates](docs/project/roadmap.json) separate implementation from acceptance;
-P00 remains complete, P01 remains incomplete, and P02–P11 remain `not_started`.
+P00 is complete, P01 is blocked, P02 is in progress, and P03–P11 are not started.
 
 ## Start here
 
 - Understand the goal: [project charter](docs/project/charter.md).
 - See the development sequence: [roadmap](ROADMAP.md).
+- Continue the numerical track: [P02 entry handoff](docs/project/p02-entry-handoff.md).
 - Pick the next bounded task: [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
 - Reproduce the current phase: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
 - Follow current supplemental work: [P01 tensor-oracle hardening](docs/project/p01-tensor-oracles.md)
@@ -36,7 +41,7 @@ P00 remains complete, P01 remains incomplete, and P02–P11 remain `not_started`
 - Follow earlier supplemental local coverage: [P01 local qualification](docs/project/p01-local-qualification.md)
   and [handoff](docs/project/p01-local-qualification-handoff.md) cover vendor-free
   full-AFU `xrtsim` and focused unit checks; vendor `hw_emu` remains a separate
-  P01-A03 requirement.
+  P01-A03 requirement, not an entry requirement for P02.
 - Review the earlier compiler-record tooling checkpoint:
   [compiler-record handoff](docs/project/p01-compiler-records-handoff.md); the
   accepted numerical baseline remains in the [P01 handoff](docs/project/p01-handoff.md).
@@ -139,7 +144,7 @@ cases replay the full run's input stream. The
 
 Matrix/full-suite source: `ca8686d668ed9f2ff733ce7e3c12dd458b9776d8`; native matrix: **pass — nine builds, 62 commands and 95 CLI checks**;
 full tooling suite: **1,272 tests passed, zero failures/errors/skips in 336.269 seconds**. This is supplemental P01 evidence;
-P01-A03 remains blocked and P02–P11 remain `not_started`.
+the later staging decision opened P02 without accepting P01-A03.
 
 ## P01 baseline implementation
 
@@ -196,7 +201,7 @@ configuration and `VORTEX_XRT_WAVEFORM=1`. These source changes establish no new
 GPU, vendor-emulation or physical-device result. The next action is to qualify a
 vendor release/platform, retain an actual matching build packet, then review
 and execute the DMA/launch/completion smoke under bounded supervision. P01-A03
-remains blocked and P02 remains `not_started`; the
+remains blocked; P02 was `not_started` at that earlier checkpoint. The
 [preparation handoff](docs/project/p01-hwemu-handoff.md) records this continuation.
 
 ### Prepared-artifact execution runner
@@ -241,7 +246,8 @@ The identical source tree is published as
 
 Missing prerequisites produce a blocked result and nonzero exit. The development
 environment lacks the required vendor installation and platform artifacts, so
-this tooling delivery does not close P01-A03 or begin P02 qualification.
+this earlier tooling delivery did not close P01-A03 or begin P02 qualification;
+the subsequent staged-entry decision is recorded in [ADR-004](docs/project/decisions.md#adr-004--staged-native-development-entry-with-vendor-integration-retained).
 
 ## Evidence and engineering rules
 

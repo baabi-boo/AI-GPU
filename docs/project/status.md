@@ -1,12 +1,15 @@
 # Current project status
 
-**P01-A01 and P01-A02 are accepted; P01 remains blocked on vendor `hw_emu`.**
+**P02 is `in_progress` through a user-directed, evidence-based staged entry.**
+P01-A01 and P01-A02 are accepted, while P01 itself remains blocked on vendor
+`hw_emu` (P01-A03). This blocks completion of P01 and acceptance of P07,
+**not** the P02–P06 software/RTL development chain.
 At the accepted historical revision, all six frozen numerical executions pass
 from a clean GPU source checkout. The fresh generated FP16 SimX build and
 supplemental full-AFU integer `xrtsim` smoke also pass. Independent reviews accept
 the clean-build and native numerical packets. Qualified vendor tools/platform
-are still missing for P01-A03. P00
-remains complete and P02–P11 remain `not_started`.
+are still missing for P01-A03. P00 remains complete, P02 is in progress,
+and P03–P11 remain `not_started`.
 [roadmap.json](roadmap.json) remains authoritative for phase state and evidence;
 the linked reports define the exact accepted scope.
 
@@ -15,14 +18,34 @@ the linked reports define the exact accepted scope.
 | Area | Current state | Meaning |
 |---|---|---|
 | P00 — project foundation | `complete` | Its three source-level acceptance gates and verified default-branch delivery remain preserved |
-| P01 — reproducible baseline | `blocked` | A01 clean-build and A02 six-case numerical reports accepted; A03 vendor integration is the remaining blocker |
-| P02–P11 | `not_started` | Later numerical, software, hardware and silicon gates have not been earned |
+| P01 — reproducible baseline | `blocked` | A01 clean-build and A02 six-case numerical reports accepted; A03 vendor integration is still required before P07 |
+| P02 — tensor numerical contract | `in_progress` | Entry unlocked by accepted P01-A01/A02; P02-A01/A02/A03 not yet accepted |
+| P03–P11 | `not_started` | Later software, hardware and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
 
 Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
+
+## Latest continuation — staged numerical development entry
+
+On 2026-11-16 the user directed an execution-sequencing change to avoid making
+vendor-only tools a prerequisite for native AI software development. The
+[machine-readable roadmap](roadmap.json) now permits P02 entry based on both
+accepted P01-A01/A02 evidence records, with P00 complete. The governance
+validator requires passing, compatible evidence for **every** named entry
+acceptance before a phase may be `in_progress` or `complete`. A missing,
+blocked or failed record will reject the transition. P02's existing three
+acceptance obligations are unchanged and none is claimed accepted.
+
+**P01-A03 stays blocked and required.** P07 now also depends on full P01
+completion, so an FPGA prototype cannot be declared complete without the
+vendor integration result and later actual physical measurements. The
+[staging handoff](p02-entry-handoff.md) records the next work, and
+[ADR-004](decisions.md#adr-004--staged-native-development-entry-with-vendor-integration-retained)
+records the decision. Historical evidence, failed attempts, vendor runbooks
+and source-level numerical tolerances were not changed by this decision.
 
 ## Latest continuation — supplemental tensor-oracle hardening
 
@@ -43,9 +66,10 @@ Full tooling suite: **1,272 tests passed, zero failures/errors/skips in 336.269 
 attempt failed during compilation on a GCC diagnostic; retain that failure
 separately from later retries and the accepted historical baseline.
 
-P00 remains `complete`, accepted historical P01-A01/A02 reports are unchanged,
-P01-A03 remains blocked on vendor `hw_emu`, and P02–P11 remain `not_started`.
-These checks do not complete P01 or qualify physical hardware.
+At that tensor-oracle execution checkpoint, P00 was `complete`, the historical
+P01-A01/A02 reports were unchanged, P01-A03 was blocked, and P02–P11 were
+`not_started`. Those checks do not complete P01 or qualify physical hardware;
+the newer staged-entry decision is described above.
 
 <a id="latest-continuation--supplemental-local-afurtl-qualification"></a>
 
@@ -325,19 +349,21 @@ all existing accepted native evidence and phase states remain unchanged.
 
 ## Next bounded action
 
-**Resolve P01-T05's qualified vendor `hw_emu` environment/platform blocker.**
-Identify a compatible vendor release and supported platform whose required
-compiler, simulator, runtime and build inputs fit the recorded resource budget.
-Freeze those identities and retain an actual matching build packet with producer
-commands, input hashes, exit results and generated artifacts. Prepare and
-independently review the execution runner's own manifest/receipt, then run the
-required DMA/launch/completion smoke under bounded supervision through the
-[vendor integration guide](p01-xrt-integration.md). Stop while any prerequisite is
-absent; supplemental local AFU or unit results cannot close P01-A03. The accepted numerical
-matrix and fresh selected-case build remain separate packets with explicit
-dependency provenance. Follow the
-[backlog](backlog.md), [P01 guide](phases/p01-baseline.md) and
+**P02-T01: freeze the first native FP16/BF16-to-FP32 numerical contract and
+deterministic fixture manifest.** Begin with the accepted P01 configuration,
+its independent tensor-oracle work and the existing numerical references.
+Document supported layouts, rounding/accumulation/exception behavior,
+unsupported inputs and unchanged tolerances before running new acceptance
+cases. Obtain independent review; P02-A01 remains unaccepted until that happens.
+Follow the [P02 entry handoff](p02-entry-handoff.md),
+[P02 phase guide](phases/p02-tensor.md), [backlog](backlog.md), and
 [acceptance policy](acceptance.md).
+
+**Parallel blocked hardware task:** P01-T05 still needs a qualified vendor
+release/platform, matching prepared `hw_emu` artifact packet and actual reviewed
+DMA/launch/completion smoke through the [vendor integration guide](p01-xrt-integration.md).
+Do not spend money, install oversized vendor tooling, claim an A03 pass or close
+P01 without the missing evidence. This work must be completed before P07.
 
 ## Preserved P00 history
 

@@ -207,6 +207,87 @@ class RoadmapTests(ProjectFixture):
         self.data["phases"].extend([self.phase("P01", ["P00"]), self.phase("P02", ["P01"])])
         self.assertEqual([], self.roadmap_errors())
 
+    def test_accepts_staged_entry_with_blocked_upstream_phase(self):
+        """Native proof may start P02 while vendor A03 still blocks P01."""
+        foundation = self.data["phases"][0]
+        foundation["status"] = "complete"
+        self.attach_report(foundation)
+        baseline = self.phase("P01", ["P00"])
+        baseline["status"] = "blocked"
+        self.attach_report(baseline)
+        numerical = self.phase("P02", ["P00"])
+        numerical["status"] = "in_progress"
+        numerical["entry_acceptances"] = ["P01-A01"]
+        self.data["phases"].extend([baseline, numerical])
+        self.assertEqual([], self.roadmap_errors())
+
+        # A downstream phase can eventually close on its own criteria even if
+        # the separate vendor gate keeps the upstream phase blocked.
+        numerical["status"] = "complete"
+        self.attach_report(numerical)
+        self.assertEqual([], self.roadmap_errors())
+
+        # Entry authorization is also revoked for a nominally completed phase
+        # when its prerequisite evidence disappears.
+        baseline["evidence"] = []
+        self.assertTrue(any("P02: entry acceptance P01-A01 is not accepted" in error
+                            for error in self.roadmap_errors()))
+
+    def test_rejects_missing_or_blocked_staged_entry_evidence(self):
+        baseline = self.phase("P01", ["P00"])
+        baseline["status"] = "blocked"
+        self.attach_report(baseline)
+        baseline["acceptance"].append({
+            "id": "P01-A02", "criterion": "Native numerical result",
+            "verification": "Native reference comparison", "evidence_level": "source_present",
+        })
+        numerical = self.phase("P02", ["P00"])
+        numerical["entry_acceptances"] = ["P01-A01", "P01-A02"]
+        numerical["status"] = "in_progress"
+        self.data["phases"].extend([baseline, numerical])
+        self.assertTrue(any("P02: entry acceptance P01-A02 is not accepted" in error
+                            for error in self.roadmap_errors()))
+
+        # Explicitly blocked report must not be promoted to entry evidence.
+        blocked = json.loads((self.root / "docs/project/evidence/p01.json").read_text())
+        blocked.update(record_id="test-P01-A02-blocked", outcome="blocked",
+                       acceptance_ids=["P01-A02"])
+        self.save_json("docs/project/evidence/p01-a02-blocked.json", blocked)
+        baseline["evidence"].append({
+            "acceptance_id": "P01-A02", "record": "docs/project/evidence/p01-a02-blocked.json",
+        })
+        self.assertTrue(any("P02: entry acceptance P01-A02 is not accepted" in error
+                            for error in self.roadmap_errors()))
+
+        # Once independently verified, both required acceptance results are
+        # recognized without asserting that all of P01 is complete.
+        blocked["outcome"] = "pass"
+        self.save_json("docs/project/evidence/p01-a02-blocked.json", blocked)
+        self.assertEqual([], self.roadmap_errors())
+
+    def test_rejects_invalid_entry_dependencies_and_cycles(self):
+        baseline = self.phase("P01", ["P00"])
+        self.data["phases"].append(baseline)
+        for required in (["P99-A01"], ["P01-A01", "P01-A01"],
+                         ["P01-A01", 3], "P01-A01", []):
+            with self.subTest(required=required):
+                baseline["entry_acceptances"] = required
+                self.assert_invalid(self.roadmap_errors())
+        baseline["entry_acceptances"] = ["P00-A01"]
+        self.data["phases"][0]["entry_acceptances"] = ["P01-A01"]
+        self.assertTrue(any("dependency cycle" in error
+                            for error in self.roadmap_errors()))
+
+    def test_p07_completion_requires_p01_completion(self):
+        baseline = self.phase("P01", ["P00"])
+        baseline["status"] = "blocked"
+        prototype = self.phase("P07", ["P01"])
+        prototype["status"] = "complete"
+        self.attach_report(prototype)
+        self.data["phases"].extend([baseline, prototype])
+        self.assertTrue(any("P07: complete phase has incomplete dependency P01" in error
+                            for error in self.roadmap_errors()))
+
     def test_rejects_missing_documents(self):
         self.data["required_documents"].append("docs/project/missing.md")
         self.assert_invalid(self.roadmap_errors())

@@ -90,6 +90,44 @@ architecture, but does not bypass P10/P11 entry criteria. P09 training and
 multi-device research can proceed separately and is not required for a bounded
 inference ASIC. See [hardware](hardware.md) and [risks](risks.md).
 
+## ADR-004 — Staged native development entry with vendor integration retained
+
+**Status:** user-directed development sequencing decision, 2026-11-16.
+This authorizes the roadmap dependency change; it is **not** an acceptance
+waiver, hardware qualification, tool purchase or test result.
+
+**Problem:** P01-A01 and P01-A02 are already backed by independently reviewed
+clean-build and native numerical results. P01-A03 requires a qualified vendor
+Vitis/Vivado/XRT platform unavailable to the current development environment.
+The original all-of-P01 dependency prevented unrelated numerical and operator
+work despite its satisfied native prerequisites.
+
+**Decision:** leave P01-A03 in P01 unchanged and blocked. Make P02 depend on
+completed P00 and on the **specific accepted P01-A01/A02 evidence**, not on
+completion of P01-A03. Introduce machine-validated `entry_acceptances`: each
+required ID must resolve to a compatible, genuinely passing report before
+P02 may be `in_progress` or `complete`; adding a text claim is insufficient.
+Require full P01 completion as an additional dependency for P07's final
+acceptance, retaining the vendor full-AFU `hw_emu` obligation before declaring
+the physical FPGA phase complete. P02/P03/P04/P05/P06 do **not** inherit a
+hardware-vendor dependency that their declared native/simulated criteria do not
+need. Every phase's own acceptance obligations remain unchanged.
+
+**Alternatives considered:** (1) buy/provision expensive vendor infrastructure
+before any more native development; (2) delete or label A03 passed without
+running it; (3) silently replace vendor `hw_emu` with `xrtsim`. The latter two
+would misrepresent evidence, and the first would block otherwise independent
+native software progress without improving P02's numerical contract.
+
+**Scope and consequences:** 12 phases and all 36 acceptance IDs remain. P01 is
+`blocked`, P02 has begun and its three gates remain unaccepted, P03–P11 are
+`not_started`. Vendor XRT P01-T05 remains an independently funded/qualified
+workstream. No new tool, platform, board, dataset or numerical tolerance was
+approved or modified. If accepted A01/A02 evidence is invalidated, the offline
+validator will reject P02's in-progress/complete state. P07 acceptance requires
+P01 completion and its own physical FPGA measurements. Follow the
+[handoff](p02-entry-handoff.md) and [acceptance policy](acceptance.md).
+
 ## Open decisions
 
 All entries below are **unresolved**. Owner columns identify accountable roles,

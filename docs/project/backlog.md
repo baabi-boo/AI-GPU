@@ -7,9 +7,17 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Start here: reproduce, then extend
+## Start here: numerical development unlocked; vendor work retained
 
-**Next bounded action: resolve P01-T05's vendor `hw_emu` prerequisite blocker.**
+**Next bounded action: P02-T01 — freeze the FP16/BF16-to-FP32 numerical
+contract and supported fixture matrix.** The [P02 entry handoff](p02-entry-handoff.md)
+explains the accepted baseline inputs, exact next work and current limitations.
+P02 is now `in_progress` based on accepted P01-A01/A02 evidence. The vendor
+P01-T05/P01-A03 obligation still blocks **P01 completion and P07**, but no
+longer prevents P02's native software/RTL development. This is a changed phase
+dependency, not a passing hardware-emulation result or tolerance waiver.
+
+**Parallel hardware action: resolve P01-T05's vendor `hw_emu` prerequisites.**
 P01-A01's clean generated-build and P01-A02's complete six-case native numerical
 packet are independently reviewed and accepted. The environment inventory,
 immutable toolchain lock, native matrix and bounded runner are implemented.
@@ -30,8 +38,8 @@ P01-T05 `probe`/`plan`/`run` route. Its strict receipt and artifact checks prepa
 the missing vendor run; they do not replace it or grant acceptance.
 It requires its own manifest/receipt, CLI budgets and fresh build directory;
 there is no automatic adapter from the read-only `hwemu.py` candidate.
-P00 remains complete, P01 remains blocked on A03, and P02–P11 remain
-`not_started`. Check the actual
+P00 remains complete, P01 remains blocked on A03, P02 is `in_progress`, and
+P03–P11 remain `not_started`. Check the actual
 execution state and accepted reports before extending the baseline:
 
 ```sh
@@ -57,8 +65,9 @@ and strict selection/replay checks. Retain failed attempts and exact selections;
 empty runs or disabled formats cannot establish coverage.
 
 Matrix/full-suite source: `ca8686d668ed9f2ff733ce7e3c12dd458b9776d8`; native matrix: **pass — nine builds, 62 commands and 95 CLI checks**;
-full tooling suite: **1,272 tests passed, zero failures/errors/skips in 336.269 seconds**. This supplemental work leaves the
-P01-T05/P01-A03 vendor blocker and P02–P11 `not_started` state unchanged.
+full tooling suite: **1,272 tests passed, zero failures/errors/skips in 336.269 seconds**. At that checkpoint,
+P01-T05/P01-A03 remained blocked and P02–P11 were `not_started`. The later
+staged-entry decision opens P02 without changing those test outcomes.
 
 ### Supplemental local AFU/RTL qualification continuation
 
@@ -81,9 +90,11 @@ focused CI guardrail test also passes after the reviewed five-to-ten-minute
 governance timeout change. The full tooling suite and eight-case matrix were
 not rerun at this follow-up revision.
 Local shim memory and DPI-assisted integer arithmetic remain explicit limits.
-This supplemental route does not satisfy vendor P01-T05/P01-A03 or authorize
-later-phase work; the qualified vendor release/platform and matching build
-provenance remain the next bounded obligation.
+This supplemental route does not satisfy vendor P01-T05/P01-A03 or itself
+authorize later-phase work. The separately accepted P01-A01/A02 reports now
+authorize **P02 entry only**, through the machine-validated staged-entry rule;
+qualified vendor release/platform and matching build provenance remain needed
+before P01 completion/P07.
 
 ## Priority 1 — P01 baseline work
 
@@ -167,14 +178,15 @@ runs a **slice**, potentially many cases; it is not automatically a bounded smok
 test. Do not use `--all` as the first baseline run. Any proposed `ai-dev` profile
 remains an unqualified candidate until its selected configuration earns evidence.
 
-## Priority 2 — Native AI software after the baseline
+## Priority 2 — Active native AI software track
 
-These items are planned and obey their parent phase's entry gates; preparation
-does not count as acceptance. Detailed work packages remain in the phase guides.
+P02 entry is open and its numerical contract is now in progress. P03 onward
+remain gated on their parent phases, and preparation does not count as
+acceptance. Detailed work packages remain in the phase guides.
 
 | Work item | First bounded deliverable | Entry / accountable role | Gates |
 |---|---|---|---|
-| **P02-T01 — Arithmetic contract** | Version FP16/BF16-to-FP32 native semantics, supported layouts and independent fixtures; freeze tolerances before evaluation. | P01; compute architecture lead | P02-A01 |
+| **P02-T01 — Arithmetic contract** | Version FP16/BF16-to-FP32 native semantics, supported layouts and independent fixtures; preserve/freeze tolerances before evaluation. | P00 plus accepted P01-A01/A02; compute architecture lead | P02-A01 |
 | **P02-T02 — Arithmetic and concurrency proof** | Add normal/edge/cancellation cases and WGMMA synchronization/backpressure coverage; retain native RTL and applicable parity evidence. | T01; verification lead | P02-A02, P02-A03 |
 | **P03-T01 — Operator contract** | Define the smallest model-relevant operator/signature matrix and explicit rejection/error/ownership rules over the existing native runtime. | P02; kernel and runtime lead | P03-A01 |
 | **P03-T02 — Operator implementations and lifetime tests** | Reuse inherited kernels; independently verify each advertised operator, dispatch, bounds, queue/event lifetime and failure cleanup. | T01; kernel and runtime lead | P03-A02, P03-A03 |
@@ -191,7 +203,7 @@ bridge is not a full device backend, CUDA compatibility, autograd or training.
 | Queue | First decision or deliverable | Entry / accountable role |
 |---|---|---|
 | **P06-T01 — Measured optimization** | Freeze benchmarks and resource targets; optimize a demonstrated bottleneck with before/after correctness and performance evidence. | P04; performance and memory lead; [P06 gates](phases/p06-performance.md) |
-| **P07-T01 — One physical FPGA** | Obtain an authorized board/platform decision; prove usable memory, DMA and the model on `hw`, followed by the specified initial soak. | P04/P06; FPGA platform lead; [P07 gates](phases/p07-fpga.md) |
+| **P07-T01 — One physical FPGA** | Obtain an authorized board/platform decision; prove usable memory, DMA and the model on `hw`, followed by the specified initial soak. | P01/P04/P06; FPGA platform lead; [P07 gates](phases/p07-fpga.md) |
 | **P08-T01 — Experimental release qualification** | Freeze a threat/failure model, test recovery/isolation, complete the specified physical soak and reproduce the release packet. | P05/P07; reliability and release lead; [P08 gates](phases/p08-reliability.md) |
 | **P09-T01 — Optional research branch** | Select a bounded training/gradient workload and two-device transport experiment; obtain physical correctness evidence before scaling claims. | P08; research lead; [P09 gates](phases/p09-research.md) |
 | **P10-T01 — ASIC feasibility decision** | Qualify PDK/macros/IP/package/tool access and owners; develop sign-off, cost and risk evidence for a human go/no-go decision. | P08; silicon program lead; [P10 gates](phases/p10-asic.md) |

@@ -44,6 +44,24 @@ claim about the whole GPU. A completed phase can be reopened when its contract
 changes or new evidence invalidates a result. Preserve the previous record and
 explain the new blocker rather than rewriting history.
 
+### Staged development entry versus phase acceptance
+
+The optional `entry_acceptances` array in `roadmap.json` names specific,
+reviewed acceptance results from another phase that must already have valid
+passing evidence before this phase can be marked `in_progress` or `complete`.
+The validator checks their real evidence references; missing, malformed, failed,
+`not_run` and `blocked` reports cannot authorize entry. These prerequisite
+acceptances do **not** change the source phase's status or waive its other
+acceptance criteria. Full `depends_on` phase dependencies still govern **phase
+completion**, while preparatory planning can proceed before those dependencies
+close. The graph checks both dependency types for cycles.
+
+In the current program, P02 uses P00 completion plus accepted P01-A01/A02 to
+start native numerical development even while P01-A03 vendor hardware
+emulation remains blocked. P07 additionally depends on P01 completion, so
+P07 cannot be accepted until P01-A03 eventually passes. This is an explicit
+sequencing decision, not new GPU or physical hardware evidence.
+
 Evidence reports and individual commands use `pass`, `fail`, `not_run` or
 `blocked`. `not_run` means no execution occurred. `blocked` identifies the
 missing prerequisite; neither counts as a pass. A nonzero unexpected exit or an

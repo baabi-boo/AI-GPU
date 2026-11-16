@@ -552,12 +552,16 @@ def validate_roadmap(data, root):
     if not isinstance(phases, list) or not phases:
         errors.append("roadmap.phases: expected a nonempty list")
         return errors
-    phase_map, criteria, dependencies = {}, {}, {}
+    phase_map, criteria, dependencies, entry_acceptances = {}, {}, {}, {}
     phase_keys = ("id", "title", "status", "depends_on", "accountable_role", "goal",
                   "document", "acceptance", "evidence")
     for index, phase in enumerate(phases):
         where = f"roadmap.phases[{index}]"
-        if not _object(phase, phase_keys, where, errors):
+        # Entry acceptances let a workstream depend on *proven* results of an
+        # unfinished phase. They never convert blocked results into passes.
+        keys = phase_keys + (("entry_acceptances",) if isinstance(phase, dict)
+                             and "entry_acceptances" in phase else ())
+        if not _object(phase, keys, where, errors):
             continue
         phase_id = phase.get("id")
         if not isinstance(phase_id, str) or not PHASE_ID.fullmatch(phase_id):
@@ -572,6 +576,10 @@ def validate_roadmap(data, root):
         if phase.get("status") not in STATUSES:
             errors.append(f"{phase_id}.status: unsupported status")
         dependencies[phase_id] = _strings(phase.get("depends_on"), phase_id + ".depends_on", errors)
+        entry_acceptances[phase_id] = (
+            _strings(phase["entry_acceptances"], phase_id + ".entry_acceptances", errors, True)
+            if "entry_acceptances" in phase else []
+        )
         _repo_path(phase.get("document"), root, phase_id + ".document", errors)
         acceptance = phase.get("acceptance")
         if not isinstance(acceptance, list) or not acceptance:
@@ -595,6 +603,13 @@ def validate_roadmap(data, root):
             if criterion.get("evidence_level") not in LEVELS:
                 errors.append(f"{context}.evidence_level: unsupported evidence level")
 
+    for phase_id, required_ids in entry_acceptances.items():
+        for required_id in required_ids:
+            if required_id not in criteria:
+                errors.append(f"{phase_id}: unknown entry acceptance {required_id}")
+            elif required_id.startswith(phase_id + "-"):
+                errors.append(f"{phase_id}: cannot require its own acceptance for entry")
+
     for phase_id, deps in dependencies.items():
         for dependency in deps:
             if dependency not in phase_map:
@@ -610,7 +625,10 @@ def validate_roadmap(data, root):
         if phase_id in visited:
             return
         active.add(phase_id)
-        for dependency in dependencies.get(phase_id, []):
+        entry_phases = [criterion_id.split("-", 1)[0]
+                        for criterion_id in entry_acceptances.get(phase_id, [])
+                        if criterion_id in criteria]
+        for dependency in dependencies.get(phase_id, []) + entry_phases:
             if dependency in phase_map:
                 visit(dependency)
         active.remove(phase_id)
@@ -619,7 +637,7 @@ def validate_roadmap(data, root):
     for phase_id in phase_map:
         visit(phase_id)
 
-    reports, record_ids = {}, {}
+    reports, record_ids, passed_acceptances = {}, {}, set()
     for phase_id, phase in phase_map.items():
         references = phase.get("evidence")
         if not isinstance(references, list):
@@ -670,10 +688,16 @@ def validate_roadmap(data, root):
                 errors.append(f"{where}: evidence level is insufficient for {criterion_id}")
             if valid and compatible and report.get("outcome") == "pass":
                 covered.add(criterion_id)
+                passed_acceptances.add(criterion_id)
         if phase.get("status") == "complete":
             for criterion_id in criteria:
                 if criterion_id.startswith(phase_id + "-") and criterion_id not in covered:
                     errors.append(f"{phase_id}: complete phase lacks passing evidence for {criterion_id}")
+    for phase_id, required_ids in entry_acceptances.items():
+        if phase_map[phase_id].get("status") in ("in_progress", "complete"):
+            for required_id in required_ids:
+                if required_id not in passed_acceptances:
+                    errors.append(f"{phase_id}: entry acceptance {required_id} is not accepted")
     return errors
 
 

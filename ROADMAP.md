@@ -35,19 +35,25 @@ and [architecture](docs/project/architecture.md) for scope and existing foundati
 
 ## Dependencies, not a calendar promise
 
-Arrows mean prerequisite acceptance. Preparatory investigation may inform later
-decisions, but it does not bypass a phase's exit gates.
+Solid arrows mean full phase completion is required **for downstream closure**.
+Preparatory work can precede closure. The dotted P01-to-P02
+arrow is narrower: only **accepted P01-A01 and P01-A02 evidence** is needed to
+start P02. P01-A03 stays blocked and is required to complete P01 before P07
+can be accepted;
+this staging decision does not waive integration proof or later exit gates.
 
 ```mermaid
 flowchart TD
     P00["P00 Foundation"] --> P01["P01 Reproducible baseline"]
-    P01 --> P02["P02 Numerical contract"]
+    P00 --> P02["P02 Numerical contract"]
+    P01 -. "A01/A02 accepted" .-> P02
     P02 --> P03["P03 Native operators"]
     P03 --> P04["P04 Tiny-model inference"]
     P04 --> P05["P05 Python and framework"]
     P04 --> P06["P06 Memory and performance"]
     P04 --> P07["P07 Physical FPGA"]
     P06 --> P07
+    P01 --> P07
     P05 --> P08["P08 Reliability and release"]
     P07 --> P08
     P08 --> P09["P09 Optional training and multi-device research"]
@@ -70,13 +76,13 @@ The summaries below do not replace the exact criteria in the canonical manifest.
 | Phase | What we build or establish | Requires | What closes the phase |
 |---|---|---|---|
 | [P00 — Project foundation](docs/project/phases/p00-foundation.md) | A clear, resumable development contract | None | Complete navigation and preserved image; passing offline validation/tests; resolved independent review and verified publication |
-| [P01 — Reproducible baseline](docs/project/phases/p01-baseline.md) | Proof that the chosen inherited configuration builds and runs | P00 | Pinned clean build; native FP16/BF16 GEMM and supported attention reference checks; full XRT hardware-emulation integration evidence |
-| [P02 — Tensor numerical contract](docs/project/phases/p02-tensor.md) | Defined arithmetic and supported formats | P01 | Reviewed numerical rules; native edge/layout tests; WGMMA synchronization/backpressure and applicable parity evidence |
+| [P01 — Reproducible baseline](docs/project/phases/p01-baseline.md) | Proof that the chosen inherited configuration builds and runs | P00 | Pinned clean build; native FP16/BF16 GEMM and supported attention reference checks; full XRT hardware-emulation integration evidence (still blocked) |
+| [P02 — Tensor numerical contract](docs/project/phases/p02-tensor.md) | Defined arithmetic and supported formats | P00 plus accepted P01-A01/A02 | Reviewed numerical rules; native edge/layout tests; WGMMA synchronization/backpressure and applicable parity evidence |
 | [P03 — AI operator library](docs/project/phases/p03-operators.md) | Reusable native AI operations and safe runtime wrappers | P02 | Versioned operator/support manifest; independent reference checks with dispatch traces; buffer/lifetime/error tests |
 | [P04 — Tiny-model inference](docs/project/phases/p04-inference.md) | One complete fixed model on the native path | P03 | Reproducible licensed fixture; matching intermediate/final outputs; traced device work and separately reported host work/transfers |
 | [P05 — Python and framework integration](docs/project/phases/p05-framework.md) | A thin Python binding and scoped PyTorch custom operators | P04 | Binding/lifetime/install tests; model agreement and device dispatch; tested-version/operator compatibility matrix |
 | [P06 — Memory and performance scaling](docs/project/phases/p06-performance.md) | Evidence-led optimization of useful work and data movement | P04 | Frozen benchmark records; correctness-preserving before/after results and applicable gates; explicit resource/timing budgets |
-| [P07 — Physical FPGA prototype](docs/project/phases/p07-fpga.md) | One real board running the native model with real DRAM and host transfers | P04, P06 | Recorded target/bitstream/achieved clock; physical DMA/memory/compute/model tests; one-hour initial soak without unexplained errors |
+| [P07 — Physical FPGA prototype](docs/project/phases/p07-fpga.md) | One real board running the native model with real DRAM and host transfers | P01, P04, P06 | Recorded target/bitstream/achieved clock; physical DMA/memory/compute/model tests; one-hour initial soak without unexplained errors |
 | [P08 — Reliability and release hardening](docs/project/phases/p08-reliability.md) | A reproducible, bounded experimental release | P05, P07 | Physical fault/recovery/isolation tests; 24-hour physical soak; reviewed reproducible artifacts, licenses and compatibility evidence |
 | [P09 — Training and multi-device research](docs/project/phases/p09-research.md) | Separately qualified training and two-device operation | P08; explicitly activated research scope | Physical gradient/convergence proof; collective ordering/failure/recovery tests; measured communication and scaling costs |
 | [P10 — ASIC feasibility and sign-off planning](docs/project/phases/p10-asic.md) | An evidence-backed decision on a bounded inference chip | P08 | Qualified PDK/macros/interface IP/package/tool availability; complete sign-off plans; human-approved scope, budget, ownership and partners |
@@ -92,7 +98,8 @@ configuration, backend, commands, results, artifact hashes and limitations.
 
 - A DPI arithmetic simulation cannot prove the native tensor datapath.
 - Processor-only `rtlsim` cannot replace full AFU integration; `hw_emu` cannot
-  replace a physical FPGA run. Missing required integration remains blocked.
+  replace a physical FPGA run. Missing vendor integration remains blocked under
+  P01-A03 and bars P07, but no longer bars the evidenced P02 software track.
 - A custom-op bridge does not establish a complete PyTorch device backend,
   autograd, arbitrary model support or CUDA binary compatibility.
 - More cores, a named commercial-GPU simulation profile or theoretical peak
@@ -110,10 +117,10 @@ document or governance check cannot stand in for unexecuted GPU tests.
 ## Where to start, and how to continue
 
 Read [status](docs/project/status.md), then the
-[ordered backlog](docs/project/backlog.md). After P00 acceptance, the first bounded
-tasks are **P01-T01: environment/provenance manifest** and **P01-T02: a reviewed,
-small native test matrix**. Resolve tools, platform access and a disk/RAM/job/time
-budget before any substantial download or build.
+[ordered backlog](docs/project/backlog.md). With P01-A01/A02 accepted, the active
+bounded task is **P02-T01: freeze the first FP16/BF16-to-FP32 numerical contract**.
+The missing vendor platform remains a separate P01-T05/P07 dependency; resolve
+tools, access and a disk/RAM/job/time budget before any substantial build.
 
 Use the [developer guide](docs/project/developer-guide.md) for safe setup,
 [requirements](docs/project/requirements.md) for traceability,

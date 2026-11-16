@@ -119,4 +119,7 @@ checks for execution. Retain failures and blocked work under the
 
 Handoff to [P02](p02-tensor.md): a reviewed baseline packet, supported native
 configuration matrix, known arithmetic limitations and the first numerical
-contract work item. No FPGA or silicon claim follows from this phase.
+contract work item. **P02 now has staged entry** from accepted P01-A01/A02
+even though P01-A03 still blocks completion of P01 (and thus P07 acceptance).
+See the [P02 entry handoff](../p02-entry-handoff.md). No FPGA or silicon claim
+follows from this phase.

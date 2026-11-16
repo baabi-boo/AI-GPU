@@ -7,8 +7,11 @@ or successful execution. Live state and canonical gates are in
 
 ## Entry and boundaries
 
-- P04 native tiny-model inference and P06 memory/performance scaling must be
-  accepted. P05 may proceed separately; Python is not required for this native demo.
+- P01's complete baseline (including genuine vendor XRT `hw_emu` P01-A03),
+  P04 native tiny-model inference and P06 memory/performance scaling must be
+  accepted **before P07 can close**. Preparatory platform research may occur
+  earlier without claiming an accepted result. P05 may proceed separately;
+  Python is not required for this native demo.
 - Record authorized board/host access, compatible platform/firmware, tool and
   runtime versions, required licenses, power/cooling and a reviewed build budget.
   Missing access or authority is a blocker, not permission to purchase hardware.

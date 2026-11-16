@@ -22,9 +22,10 @@ Sharing this validator does not make their manifests, receipts or reports
 interchangeable.
 
 **P00 remains complete; P01-A01/A02 remain accepted; P01-A03 and P01 remain
-blocked; P02 remains not started.** No vendor `hw_emu` job has run in this
-tooling continuation. This runbook, a successful plan, and tooling tests do not
-change those states. A real successful smoke supplies a candidate
+blocked. P02 is now in progress under the separate staged-entry contract.**
+No vendor `hw_emu` job ran in this tooling continuation. This runbook, a
+successful plan, and tooling tests do not change P01's blocked state. A real
+successful smoke supplies a candidate
 integration result for independent review under the
 [acceptance policy](acceptance.md). Follow [status](status.md), the
 [P01 guide](phases/p01-baseline.md) and [roadmap.json](roadmap.json) for the

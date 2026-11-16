@@ -250,4 +250,6 @@ clean-build packets without altering their claims.
 release/platform and actual matching build packet, then the verification owner
 reviews the candidate, executes the bounded DMA/launch/completion smoke and
 retains its logs and reference result. Keep P01-A03 blocked until that execution
-and independent acceptance review are complete. P02 remains dependent on P01.
+and independent acceptance review are complete. **P02 now proceeds from accepted
+P01-A01/A02 evidence** under [ADR-004](decisions.md#adr-004--staged-native-development-entry-with-vendor-integration-retained);
+P07 still requires full P01 completion for its own acceptance.
