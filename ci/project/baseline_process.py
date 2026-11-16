@@ -151,6 +151,7 @@ def run_bounded(argv, cwd, env, log_path, *, timeout_seconds=1800,
     working, logfile, paths = _validate_inputs(argv, cwd, env, log_path, resource_paths)
     started = time.monotonic()
     result = {"outcome": "blocked", "exit_code": None, "reason": None,
+              "process_started": False,
               "duration_seconds": 0.0, "log_sha256": None, "log_size_bytes": 0,
               "peak_rss_bytes": 0, "cleanup_complete": True,
               "limitations": list(LIMITATIONS)}
@@ -231,6 +232,7 @@ def run_bounded(argv, cwd, env, log_path, *, timeout_seconds=1800,
                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 start_new_session=True, close_fds=True, bufsize=0,
             )
+            result["process_started"] = True
         except OSError:
             reason = "launch_failed"
         if process is not None:
