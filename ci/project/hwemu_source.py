@@ -88,8 +88,11 @@ def _git(root, command, deadline):
         raise ValueError("unsupported source observation")
     environment = {key: value for key, value in os.environ.items()
                    if not key.startswith("GIT_")}
+    # Machine/user defaults must not affect observation. Repository/worktree
+    # configuration and its explicit includes remain subject to the safety probe.
     environment.update(GIT_OPTIONAL_LOCKS="0", GIT_NO_LAZY_FETCH="1",
-                       GIT_NO_REPLACE_OBJECTS="1", GIT_TERMINAL_PROMPT="0")
+                       GIT_NO_REPLACE_OBJECTS="1", GIT_TERMINAL_PROMPT="0",
+                       GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_GLOBAL=os.devnull)
     code, output = _probe(
         ["git", "--no-pager", "--no-optional-locks", "-c", "core.fsmonitor=false",
          "-c", "core.untrackedCache=false", "-C", str(root), *command],

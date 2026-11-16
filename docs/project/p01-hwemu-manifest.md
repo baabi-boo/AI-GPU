@@ -125,9 +125,19 @@ dependency.
 Only fixed local Git metadata queries run: `config`, `rev-parse`, `ls-files`
 and `ls-tree`. The observer does not use `git status`, a submodule helper or a
 checkout/conversion command. It disables Git's filesystem monitor, untracked
-cache, optional locks, replacement objects and lazy object fetches, and rejects
-configured `filter.*.clean`/`filter.*.process`, partial-clone or promisor
-settings. Checkout conversions are not applied to the raw-byte comparison.
+cache, optional locks, replacement objects and lazy object fetches. Every query
+discards inherited `GIT_*` values, then supplies fixed
+`GIT_CONFIG_NOSYSTEM=1` and `GIT_CONFIG_GLOBAL=os.devnull` (`/dev/null` on
+POSIX). System configuration and default HOME/XDG global configuration
+are therefore excluded. Repository configuration, enabled worktree
+configuration, their explicit includes and matching conditional includes remain
+visible. The observer rejects `filter.*.clean`/`filter.*.process`,
+`extensions.partialclone` and `remote.*.promisor` settings in those remaining
+scopes. A file excluded as a machine/user default is still checked if repository
+or worktree configuration includes it. Caller-supplied Git configuration paths
+cannot override the fixed isolation settings.
+
+Checkout conversions are not applied to the raw-byte comparison.
 Line-ending, encoding or other normalized checkouts whose bytes differ from
 the recorded blobs cannot qualify. Hidden index entries, including
 assume-unchanged and skip-worktree entries, and sparse index representations

@@ -21,6 +21,23 @@ evidence remain in [project status](docs/project/status.md) and the
 - Point the XRT INI at the actual `sw/runtime/xrt/xsim.tcl` source hook. Use lean
   tracing defaults and require an explicit debug configuration plus
   `VORTEX_XRT_WAVEFORM=1` for waveform collection.
+- Isolate each source-observer Git query from system and default HOME/XDG global
+  configuration using fixed `GIT_CONFIG_NOSYSTEM=1` and
+  `GIT_CONFIG_GLOBAL=os.devnull` after removing inherited `GIT_*` values.
+  Repository/worktree configuration, explicit includes and matching conditional
+  includes remain checked; unsafe filters and partial-clone/promisor settings in
+  those scopes still block observation. Four regressions cover the corrected
+  scope without executing configured filters.
+
+### Validation and delivery
+
+The corrected local suite passed 792 tests with zero skips. The initial published
+implementation's [Project Governance run](https://github.com/baabi-boo/AI-GPU/actions/runs/43781442015)
+remains a retained failure: 788 tests, 164 failure records and no skips. Controlled
+reproductions prove the configuration-scope defect and its correction; the
+hosted runner's actual configuration was not captured. Correction publication
+and hosted recovery remain pending in the
+[handoff](docs/project/p01-hwemu-handoff.md#publication-record).
 
 ### Qualification state
 
