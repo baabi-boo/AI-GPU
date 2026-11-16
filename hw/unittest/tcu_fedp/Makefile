@@ -98,3 +98,6 @@ endif
 OPTS ?= --fmt=2
 
 include ../common.mk
+
+$(DESTDIR)/$(PROJECT): $(VORTEX_HOME)/hw/unittest/common/fp32_compare.h
+$(DESTDIR)/$(PROJECT): $(VORTEX_HOME)/hw/unittest/common/int_dot_reference.h

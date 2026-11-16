@@ -30,17 +30,22 @@
 
 #include <bitset>
 #include <cassert>
+#include <charconv>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <iomanip>
 #include <iostream>
+#include <limits>
 #include <memory>
 #include <random>
 #include <sstream>
+#include <stdexcept>
 #include <vector>
 
 #include "VX_config.h"
+#include "fp32_compare.h"
+#include "tensor_exact_cases.h"
 #include "softfloat_ext.h"
 #include <bitmanip.h>
 #ifdef USE_FEDP
@@ -80,6 +85,30 @@ constexpr uint32_t TCU_FP32_ID = 0;
 constexpr uint32_t TCU_TF32_ID = 1;
 constexpr uint32_t TCU_FP16_ID = 2;
 constexpr uint32_t TCU_BF16_ID = 3;
+
+static bool supports_source_format(uint32_t fmt) {
+  switch (fmt) {
+#if defined(VX_CFG_TCU_TF32_ENABLE) && (defined(VX_CFG_TCU_TYPE_TFR) \
+    || defined(VX_CFG_TCU_TYPE_DPI) || defined(VX_CFG_TCU_TYPE_BHF))
+  case TCU_TF32_ID:
+    return true;
+#endif
+#if defined(VX_CFG_TCU_TYPE_BHF) || defined(VX_CFG_TCU_TYPE_DSP) \
+    || (defined(VX_CFG_TCU_FP16_ENABLE) && (defined(VX_CFG_TCU_TYPE_TFR) \
+        || defined(VX_CFG_TCU_TYPE_DPI) || defined(VX_CFG_TCU_TYPE_FPNEW)))
+  case TCU_FP16_ID:
+    return true;
+#endif
+#if defined(VX_CFG_TCU_FP16_ENABLE) && (defined(VX_CFG_TCU_TYPE_TFR) \
+    || defined(VX_CFG_TCU_TYPE_DPI) || defined(VX_CFG_TCU_TYPE_BHF) \
+    || defined(VX_CFG_TCU_TYPE_DSP) || defined(VX_CFG_TCU_TYPE_FPNEW))
+  case TCU_BF16_ID:
+    return true;
+#endif
+  default:
+    return false;
+  }
+}
 
 // WMMA op_type (INST_TCU_WMMA = 4'h0 from VX_gpu_pkg.sv)
 constexpr uint32_t INST_TCU_WMMA = 0;
@@ -185,16 +214,6 @@ static std::vector<float> wmma_ref(
         }
     }
     return result;
-}
-
-// ---- Approximate equality (ULP-based) --------------------------------------
-static int approx_equal(float a, float b) {
-    if (std::isnan(a) && std::isnan(b)) return 0;
-    if (std::isinf(a) && std::isinf(b))
-        return (std::signbit(a) == std::signbit(b)) ? 0 : 1;
-    uint32_t xa = bit_cast<uint32_t>(a) ^ 0x80000000u;
-    uint32_t xb = bit_cast<uint32_t>(b) ^ 0x80000000u;
-    return (int)(xa - xb);
 }
 
 // ---- Float printing --------------------------------------------------------
@@ -344,7 +363,22 @@ public:
                   << " VX_CFG_NUM_THREADS=" << VX_CFG_NUM_THREADS
                   << "\n";
 
-        // directed vectors for this format and tile shape
+        uint32_t exact_done = 0;
+        if (VX_CFG_NUM_THREADS <= 64
+            && (cfg_.fmt_s == TCU_FP16_ID || cfg_.fmt_s == TCU_BF16_ID)) {
+            for (const auto &v : tensor_test::exact_cases(
+                     cfg_.fmt_s, TCU_TC_M, TCU_TC_N, TCU_TC_K)) {
+                if (!check_expected(v.rs1, v.rs2, v.rs3, fi, v.expected, 0,
+                                    "Exact (" + v.name + ")")) {
+                    return false;
+                }
+                ++exact_done;
+            }
+        }
+        if (exact_done != 0) {
+            std::cout << exact_done << " independent exact test(s) PASSED!\n";
+        }
+
         uint32_t directed_done = 0;
         for (const auto &v : kDirected) {
             if (v.fmt != cfg_.fmt_s || v.num_threads != VX_CFG_NUM_THREADS)
@@ -357,17 +391,21 @@ public:
             ++directed_done;
         }
         if (directed_done != 0) {
-            std::cout << directed_done << " directed test(s) PASSED!\n";
+            std::cout << directed_done << " modeled directed test(s) PASSED!\n";
         }
         if (cfg_.directed_only) {
+            if (exact_done + directed_done == 0) {
+                std::cerr << "No directed tests match this format and thread count\n";
+                return false;
+            }
+            std::cout << "Coverage: exact=" << exact_done
+                      << " modeled-directed=" << directed_done << " random=0\n";
+            std::cout << "Simulation completed in " << cycle_ << " cycles\n";
             return true;
         }
 
         uint32_t tests_done = 0;
         for (uint32_t test_id = 0; test_id < cfg_.num_tests; test_id++) {
-            if (cfg_.test_id >= 0 && (int)test_id != cfg_.test_id)
-                continue;
-
             // Select feature to test
             size_t feat_idx = test_id % cfg_.features.size();
             const std::string &feat = cfg_.features[feat_idx];
@@ -392,19 +430,33 @@ public:
                 rs3[t] = gen_fp_value("normals", 8, 23, test_id * VX_CFG_NUM_THREADS + t + 1, rng_);
             }
 
+            // Reproduce the full run's random stream before selecting a case.
+            if (cfg_.test_id >= 0 && test_id != static_cast<uint32_t>(cfg_.test_id)) {
+                continue;
+            }
+
             std::ostringstream label;
             label << "Test #" << test_id << " (" << feat << ")";
             if (!this->check(rs1, rs2, rs3, fi, label.str()))
                 return false;
 
             tests_done++;
+            if (cfg_.test_id >= 0) {
+                break;
+            }
         }
 
+        if (tests_done == 0) {
+            std::cerr << "No random tests were executed\n";
+            return false;
+        }
         if (cfg_.test_id >= 0) {
             std::cout << "Test #" << cfg_.test_id << " PASSED!\n";
         } else {
             std::cout << tests_done << " test(s) PASSED!\n";
         }
+        std::cout << "Coverage: exact=" << exact_done
+                  << " modeled-directed=" << directed_done << " random=" << tests_done << "\n";
         std::cout << "Simulation completed in " << cycle_ << " cycles\n";
         return true;
     }
@@ -413,20 +465,38 @@ private:
     // Drive one packet and compare every thread against the reference.
     bool check(const std::vector<uint32_t> &rs1, const std::vector<uint32_t> &rs2,
                const std::vector<uint32_t> &rs3, const FmtInfo &fi, const std::string &label) {
-        std::vector<float> expected = wmma_ref(rs1, rs2, rs3, fi, cfg_.window);
-        std::vector<uint32_t> result = drive_and_collect(rs1, rs2, rs3, fi);
+        const auto reference = wmma_ref(rs1, rs2, rs3, fi, cfg_.window);
+        std::vector<uint32_t> expected;
+        expected.reserve(reference.size());
+        for (float value : reference) {
+            expected.push_back(bit_cast<uint32_t>(value));
+        }
+        return check_expected(rs1, rs2, rs3, fi, expected,
+                              static_cast<uint32_t>(cfg_.ulp), label);
+    }
+
+    bool check_expected(const std::vector<uint32_t> &rs1, const std::vector<uint32_t> &rs2,
+                        const std::vector<uint32_t> &rs3, const FmtInfo &fi,
+                        const std::vector<uint32_t> &expected, uint32_t max_ulps,
+                        const std::string &label) {
+        if (rs1.size() != VX_CFG_NUM_THREADS || rs2.size() != VX_CFG_NUM_THREADS
+            || rs3.size() != VX_CFG_NUM_THREADS || expected.size() != VX_CFG_NUM_THREADS) {
+            throw std::invalid_argument("WMMA fixture lane count differs from the configured shape");
+        }
+        const auto result = drive_and_collect(rs1, rs2, rs3, fi);
         bool pass = true;
         for (int t = 0; t < VX_CFG_NUM_THREADS; t++) {
             float act = bit_cast<float>(result[t]);
-            int delta = approx_equal(act, expected[t]);
-            if (std::abs(delta) > cfg_.ulp) {
+            const auto comparison = test_fp32::compare_bits(
+                result[t], expected[t], max_ulps);
+            if (!comparison.equal) {
                 if (pass) {
                     std::cout << label << " FAILED:\n";
                 }
                 std::cout << "  thread=" << t
-                          << "  expected="; print_float("", expected[t], false);
+                          << "  expected="; print_float("", bit_cast<float>(expected[t]), false);
                 std::cout << "  actual=";  print_float("", act, false);
-                std::cout << "  delta=" << delta << "\n";
+                std::cout << "  delta=" << comparison.ulps << "\n";
                 pass = false;
             }
         }
@@ -581,64 +651,132 @@ private:
 };
 
 // ---- Command-line parsing --------------------------------------------------
+template <typename T>
+static T parse_number(const std::string &text, T minimum, T maximum, const char *option) {
+  T value{};
+  const auto parsed = std::from_chars(text.data(), text.data() + text.size(), value);
+  if (parsed.ec != std::errc{} || parsed.ptr != text.data() + text.size()
+      || value < minimum || value > maximum) {
+    throw std::invalid_argument(std::string(option) + " requires an integer in ["
+        + std::to_string(minimum) + ", " + std::to_string(maximum) + "]");
+  }
+  return value;
+}
+
+static void print_usage(const char *program) {
+  std::cout << "Usage: " << program << " [options]\n"
+            << "  --fmt=<id>        Source format (1=tf32,2=fp16,3=bf16; requires compiled support)\n"
+            << "  --frm=RNE         WMMA rounding mode (only RNE is driven)\n"
+            << "  --tests=<N>       Positive random test count (default 1000)\n"
+            << "  --test=<id>       Run a random test by id, less than --tests\n"
+            << "  --seed=<N>        Unsigned random seed\n"
+            << "  --ulp=<N>         Nonnegative ULP tolerance (default 1)\n"
+            << "  --W=25            Fixed TFR accumulator window\n"
+            << "  --directed        Run only matching directed vectors\n"
+            << "  --no-trace        Disable waveform output\n"
+            << "  --features=LIST   Comma-separated infinities,nans,subnormals,normals,zeros\n"
+            << "  --trace-start=N   Start waveform trace at timestamp N\n"
+            << "  --trace-end=N     Stop waveform trace at timestamp N\n"
+            << "  --help            Show this help message\n";
+}
+
 static TestConfig parse_args(int argc, char **argv) {
-    TestConfig cfg;
-    for (int i = 1; i < argc; i++) {
-        std::string arg = argv[i];
-        if (arg == "--no-trace") {
-            cfg.enable_trace = false;
-        } else if (arg.substr(0, 6) == "--fmt=") {
-            cfg.fmt_s = std::stoi(arg.substr(6));
-        } else if (arg.substr(0, 6) == "--frm=") {
-            cfg.frm = frm_from_string(arg.substr(6));
-        } else if (arg.substr(0, 8) == "--tests=") {
-            cfg.num_tests = std::stoi(arg.substr(8));
-        } else if (arg.substr(0, 7) == "--test=") {
-            cfg.test_id = std::stoi(arg.substr(7));
-        } else if (arg.substr(0, 7) == "--seed=") {
-            cfg.random_seed = std::stoi(arg.substr(7));
-        } else if (arg.substr(0, 6) == "--ulp=") {
-            cfg.ulp = std::stoi(arg.substr(6));
-        } else if (arg == "--directed") {
-            cfg.directed_only = true;
-        } else if (arg.substr(0, 4) == "--W=") {
-            cfg.window = std::stoi(arg.substr(4));
-        } else if (arg.substr(0, 14) == "--trace-start=") {
-            cfg.trace_start = std::stoull(arg.substr(14));
-        } else if (arg.substr(0, 12) == "--trace-end=") {
-            cfg.trace_end = std::stoull(arg.substr(12));
-        } else if (arg.substr(0, 11) == "--features=") {
-            cfg.features.clear();
-            std::stringstream ss(arg.substr(11));
-            std::string item;
-            while (std::getline(ss, item, ',')) cfg.features.push_back(item);
-        } else {
-            std::cout << "Usage: " << argv[0] << " [options]\n"
-                      << "  --fmt=<id>        Source format (1=tf32,2=fp16,3=bf16)\n"
-                      << "  --frm=<mode>      Rounding mode (RNE,RTZ,RDN,RUP,RMM)\n"
-                      << "  --tests=<N>       Number of test cases (default 1000)\n"
-                      << "  --test=<id>       Run a single test by id\n"
-                      << "  --seed=<N>        Random seed\n"
-                      << "  --ulp=<N>         ULP tolerance (default 1)\n"
-                      << "  --W=<N>           TFR accumulator window of the FEDP model (default 25)\n"
-                      << "  --directed        Run only the directed vectors\n"
-                      << "  --no-trace        Disable VCD output\n"
-                      << "  --features=LIST   Comma-separated list of features to test\n"
-                      << "  --trace-start=N   Start VCD trace at timestamp N\n"
-                      << "  --trace-end=N     Stop VCD trace at timestamp N\n";
-            std::exit(0);
+  TestConfig cfg;
+  for (int i = 1; i < argc; i++) {
+    const std::string arg = argv[i];
+    if (arg == "--help") {
+      print_usage(argv[0]);
+      std::exit(0);
+    } else if (arg == "--no-trace") {
+      cfg.enable_trace = false;
+    } else if (arg.substr(0, 6) == "--fmt=") {
+      cfg.fmt_s = parse_number<uint32_t>(arg.substr(6), 0, 3, "--fmt");
+    } else if (arg.substr(0, 6) == "--frm=") {
+      cfg.frm = frm_from_string(arg.substr(6));
+    } else if (arg.substr(0, 8) == "--tests=") {
+      cfg.num_tests = parse_number<uint32_t>(arg.substr(8), 1,
+          std::numeric_limits<int32_t>::max(), "--tests");
+    } else if (arg.substr(0, 7) == "--test=") {
+      cfg.test_id = parse_number<int32_t>(arg.substr(7), -1,
+          std::numeric_limits<int32_t>::max(), "--test");
+    } else if (arg.substr(0, 7) == "--seed=") {
+      cfg.random_seed = parse_number<unsigned>(arg.substr(7), 0,
+          std::numeric_limits<unsigned>::max(), "--seed");
+    } else if (arg.substr(0, 6) == "--ulp=") {
+      cfg.ulp = parse_number<int>(arg.substr(6), 0, std::numeric_limits<int>::max(), "--ulp");
+    } else if (arg == "--directed") {
+      cfg.directed_only = true;
+    } else if (arg.substr(0, 4) == "--W=") {
+      cfg.window = parse_number<int>(arg.substr(4), 1, std::numeric_limits<int>::max(), "--W");
+    } else if (arg.substr(0, 14) == "--trace-start=") {
+      cfg.trace_start = parse_number<uint64_t>(arg.substr(14), 0,
+          std::numeric_limits<uint64_t>::max(), "--trace-start");
+    } else if (arg.substr(0, 12) == "--trace-end=") {
+      cfg.trace_end = parse_number<uint64_t>(arg.substr(12), 0,
+          std::numeric_limits<uint64_t>::max(), "--trace-end");
+    } else if (arg.substr(0, 11) == "--features=") {
+      const auto features = arg.substr(11);
+      if (features.empty() || features.back() == ',') {
+        throw std::invalid_argument("--features requires a nonempty list without empty entries");
+      }
+      cfg.features.clear();
+      std::stringstream ss(features);
+      std::string item;
+      while (std::getline(ss, item, ',')) {
+        if (item != "infinities" && item != "nans" && item != "subnormals"
+            && item != "normals" && item != "zeros") {
+          throw std::invalid_argument("Unknown floating-point feature: " + item);
         }
+        cfg.features.push_back(item);
+      }
+    } else {
+      throw std::invalid_argument("Unknown option: " + arg + "; use --help");
     }
-    return cfg;
+  }
+  if (cfg.frm != RoundingMode::RNE) {
+    throw std::invalid_argument("WMMA tests support only --frm=RNE");
+  }
+  if (cfg.window != 25) {
+#ifdef USE_FEDP
+    throw std::invalid_argument("--W must be 25 to match the fixed WMMA accumulator window");
+#else
+    throw std::invalid_argument("--W does not configure this non-TFR reference; retain the default 25");
+#endif
+  }
+  if (cfg.trace_start > cfg.trace_end) {
+    throw std::invalid_argument("--trace-start must not exceed --trace-end");
+  }
+  if (cfg.test_id >= 0 && static_cast<uint32_t>(cfg.test_id) >= cfg.num_tests) {
+    throw std::invalid_argument("--test must be less than --tests");
+  }
+  if (cfg.directed_only && cfg.test_id >= 0) {
+    throw std::invalid_argument("--directed cannot be combined with --test");
+  }
+  if (!supports_source_format(cfg.fmt_s)) {
+    if (cfg.fmt_s == TCU_FP32_ID) {
+      throw std::invalid_argument("--fmt=0 selects FP32, which this WMMA backend does not implement");
+    }
+    const char *formats[] = {"FP32", "TF32", "FP16", "BF16"};
+    throw std::invalid_argument("--fmt=" + std::to_string(cfg.fmt_s) + " selects "
+        + formats[cfg.fmt_s] + ", which is unavailable in this compiled WMMA configuration");
+  }
+  return cfg;
 }
 
 int main(int argc, char **argv) {
+  TestConfig cfg;
+  try {
+    cfg = parse_args(argc, argv);
+  } catch (const std::exception &error) {
+    std::cerr << "Invalid test configuration: " << error.what() << '\n';
+    return 2;
+  }
+  try {
     Verilated::commandArgs(argc, argv);
-    TestConfig cfg = parse_args(argc, argv);
-
     Testbench tb(cfg);
-    if (!tb.run_tests()) {
-        return 1;
-    }
-    return 0;
+    return tb.run_tests() ? 0 : 1;
+  } catch (const std::exception &error) {
+    std::cerr << "Test execution failed: " << error.what() << '\n';
+    return 1;
+  }
 }

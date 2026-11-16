@@ -46,6 +46,8 @@
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
+#include <limits>
+#include <stdexcept>
 #include <map>
 #include <memory>
 #include <random>
@@ -54,6 +56,8 @@
 #include <string>
 #include <bitmanip.h>
 #include "softfloat_ext.h"
+#include "fp32_compare.h"
+#include "int_dot_reference.h"
 
 #ifdef USE_FEDP
 #include "fedp.h"
@@ -374,31 +378,6 @@ static float dot_product(const uint32_t* A, const uint32_t* B, uint32_t C, int n
 }
 #endif
 
-static int32_t dot_product(const int32_t *a, const int32_t *b, int32_t c, uint32_t n) {
-  int32_t acc(0);
-  for (size_t i = 0; i < n; i++) {
-    acc += a[i] * b[i];
-  }
-  acc += c;
-  return acc;
-}
-
-static int approximately_equal(float a, float b) {
-  if (std::isnan(a) && std::isnan(b))
-    return 0;
-
-  if (std::isinf(a) && std::isinf(b))
-    return (std::signbit(a) == std::signbit(b)) ? 0 : 1;
-
-  uint32_t xa, xb;
-  std::memcpy(&xa, &a, sizeof(a));
-  std::memcpy(&xb, &b, sizeof(b));
-  uint32_t oa = xa ^ 0x80000000u;
-  uint32_t ob = xb ^ 0x80000000u;
-  int delta = oa - ob;
-  return delta;
-}
-
 static inline uint32_t pack_fp_bits(uint32_t sign, uint32_t exp, uint32_t frac, uint32_t exp_bits, uint32_t sig_bits) {
   const uint32_t S = 1u;
   const uint32_t W = S + exp_bits + sig_bits;
@@ -429,6 +408,7 @@ private:
 #endif
   TestConfig config_;
   uint64_t cycle_count_;
+  uint32_t tests_done_ = 0;
   std::mt19937 rng_;
 
   void tick() {
@@ -713,6 +693,9 @@ public:
 
       int32_t c_value = generate_int_value(true, 32, c_enable ? test_id : -1);
 
+      if (config_.test_id >= 0 && test_id != config_.test_id)
+        continue;
+
       // Pack into VX_CFG_XLEN words
       uint32_t a_packed[NUM_REGS], b_packed[NUM_REGS];
       pack_elements(a_values, element_bits, NUM_REGS, a_packed);
@@ -741,8 +724,9 @@ public:
       dut_->enable = 0;
       tick();
 
-      int32_t dut_result = dut_->d_val;
-      int32_t expected = dot_product((const int32_t *)a_values.data(), (const int32_t *)b_values.data(), c_value, total_elements);
+      const uint32_t dut_result = dut_->d_val;
+      const uint32_t expected = test_integer::dot_product_bits(
+          a_values.data(), b_values.data(), static_cast<uint32_t>(c_value), total_elements);
 
       if (dut_result != expected) {
         std::cout << "Test:" << test_id << " failed:" << std::endl;
@@ -753,13 +737,16 @@ public:
         print_format("  actual=", dut_result, true);
         return false;
       }
+      ++tests_done_;
+      if (config_.test_id >= 0)
+        break;
     }
 
     return true;
   }
 
   bool test_floating_points(const std::vector<std::string> &features_to_test) {
-    if (features_to_test.empty()) return true;
+    if (features_to_test.empty()) return false;
 
     // Calculate how many elements we can fit in NUM_REGS VX_CFG_XLEN words
     int element_bits = float_fmt_width(config_.exp_bits, config_.sig_bits);
@@ -772,13 +759,12 @@ public:
 
     const uint32_t NT = config_.num_tests;
     const uint32_t NF = features_to_test.size();
-    const uint32_t tests_per_feature = (NT + NF - 1) / NF;
+    const uint32_t tests_per_feature = NT / NF + (NT % NF != 0);
 
   #ifdef USE_FEDP
     TfrFedp fedp(config_.exp_bits, config_.sig_bits, (int)config_.frm, config_.W, config_.renorm);
   #endif
 
-    uint32_t skipped = 0;
     std::uniform_int_distribution<int> sparsity_dist(0, 99);
 
     for (int test_id = 0; test_id < NT; test_id++) {
@@ -811,10 +797,8 @@ public:
         b_values_float[i] = cvt_custom_to_f32(b_value_hex[i], config_.exp_bits, config_.sig_bits, (int)config_.frm, nullptr);
       }
 
-      float c_value_float = generate_fp_value(c_enable ? feature : "normals", 8, 23, test_id);
-
-      uint32_t c_value_hex;
-      std::memcpy(&c_value_hex, &c_value_float, sizeof(float));
+      uint32_t c_value_hex = generate_fp_value(c_enable ? feature : "normals", 8, 23, test_id);
+      float c_value_float = bit_cast<float>(c_value_hex);
 
       // Block scales, one per scale slot; lane l (two per register) takes
       // slot l * SF / lanes, as the datapath maps them.
@@ -888,8 +872,9 @@ public:
         c_value_hex, total_elements, config_.exp_bits, config_.sig_bits, config_.fused);
     #endif
 
-      int delta = approximately_equal(dut_result, expected);
-      if (abs(delta) > config_.ulp) {
+      const auto comparison = test_fp32::compare_bits(
+          dut_result_bits, bit_cast<uint32_t>(expected), uint32_t(config_.ulp));
+      if (!comparison.equal) {
         std::cout << "Test #" << test_id << " (" << feature << ") failed:" << std::endl;
 
         std::cout << "  scenario='[";
@@ -918,19 +903,19 @@ public:
         }
         print_float("  expected=", expected, true);
         print_float("  actual=", dut_result, true);
-        std::cout << "  delta=" << delta << std::endl;
+        std::cout << "  delta=" << comparison.ulps << std::endl;
         return false;
       }
-    }
-
-    if (skipped > 0) {
-      std::cout << "  Skipped " << skipped << " invalid test(s) that produced NaN or Inf" << std::endl;
+      ++tests_done_;
+      if (config_.test_id >= 0)
+        break;
     }
 
     return true;
   }
 
   bool run_tests() {
+    tests_done_ = 0;
     this->reset();
 
     if (config_.fmt_s >= 16) {
@@ -943,118 +928,167 @@ public:
       }
     }
 
+    if (tests_done_ == 0) {
+      std::cerr << "Error: no test cases executed" << std::endl;
+      return false;
+    }
     if (config_.test_id >= 0) {
       std::cout << "Test #" << config_.test_id << " PASSED!" << std::endl;
-    } else {
-      std::cout << config_.num_tests << " test(s) PASSED!" << std::endl;
     }
+    std::cout << tests_done_ << " test(s) PASSED!" << std::endl;
 
     std::cout << "Simulation completed in " << cycle_count_ << " cycles" << std::endl;
     return true;
   }
 };
 
+static uint64_t parse_unsigned(const std::string &text, const char *option,
+                               uint64_t maximum, int base = 10) {
+  if (text.empty() || text.front() < '0' || text.front() > '9')
+    throw std::invalid_argument(std::string(option) + " requires an unsigned integer");
+  size_t consumed = 0;
+  uint64_t value = std::stoull(text, &consumed, base);
+  if (consumed != text.size() || value > maximum)
+    throw std::invalid_argument(std::string(option) + " has an invalid integer or exceeds its range");
+  return value;
+}
+
+static void print_usage(const char *program) {
+  std::cout << "Usage: " << program << " [options]\n"
+            << "  --no-fused       Use discrete reference multiplication and addition\n"
+            << "  --no-trace       Disable VCD tracing\n"
+            << "  --features=LIST  Features separated by spaces, commas or semicolons\n"
+            << "  --fmt=<id>       Source format code (0-5, 8-11, 16-20)\n"
+            << "  --ext=<bits>     Exponent bits for the reference format\n"
+            << "  --sig=<bits>     Significand bits for the reference format\n"
+            << "  --frm=RNE        Fixed DUT rounding mode\n"
+            << "  --W=<value>      Reference accumulator window width (1-53)\n"
+            << "  --renorm         Renormalize reference products\n"
+            << "  --ulp=<value>    Finite FP32 ULP tolerance (default 1)\n"
+            << "  --sparsity=<%>   Percentage of zero inputs (0-100)\n"
+            << "  --sfa=<byte>     Fixed MX A block scale (decimal, octal or hexadecimal)\n"
+            << "  --sfb=<byte>     Fixed MX B block scale (decimal, octal or hexadecimal)\n"
+            << "  --seed=<value>   Random seed\n"
+            << "  --tests=<count>  Positive number of cases (default 100000)\n"
+            << "  --test=<id>      Run the selected zero-based case\n"
+            << "  --help           Show this help message\n";
+}
+
 TestConfig parse_args(int argc, char **argv) {
   TestConfig config_;
+  const auto int_max = uint64_t(std::numeric_limits<int>::max());
 
   for (int i = 1; i < argc; i++) {
     std::string arg = argv[i];
-    if (arg == "--no-trace") {
+    if (arg == "--help") {
+      print_usage(argv[0]);
+      std::exit(0);
+    } else if (arg == "--no-trace") {
       config_.enable_tracing = false;
     } else if (arg == "--no-fused") {
       config_.fused = false;
     } else if (arg.substr(0, 11) == "--features=") {
       config_.test_features.clear();
-      std::string features_str = arg.substr(11);
-      std::stringstream ss(features_str);
-      std::string str = ss.str();
+      std::string str = arg.substr(11);
       size_t pos = 0;
       while ((pos = str.find_first_not_of(" ,;", pos)) != std::string::npos) {
         auto end = str.find_first_of(" ,;", pos);
-        auto item = str.substr(pos, end - pos);
-        config_.test_features.push_back(item);
+        config_.test_features.push_back(str.substr(pos, end - pos));
         pos = end;
       }
     } else if (arg.substr(0, 6) == "--fmt=") {
-      config_.fmt_s = std::stoi(arg.substr(6));
+      config_.fmt_s = parse_unsigned(arg.substr(6), "--fmt", 20);
     } else if (arg.substr(0, 6) == "--ext=") {
-      config_.exp_bits = std::stoi(arg.substr(6));
+      config_.exp_bits = parse_unsigned(arg.substr(6), "--ext", 8);
     } else if (arg.substr(0, 6) == "--sig=") {
-      config_.sig_bits = std::stoi(arg.substr(6));
+      config_.sig_bits = parse_unsigned(arg.substr(6), "--sig", 23);
     } else if (arg.substr(0, 6) == "--frm=") {
       config_.frm = frm_from_string(arg.substr(6));
     } else if (arg.substr(0, 4) == "--W=") {
-      config_.W = std::stoi(arg.substr(4));
+      config_.W = parse_unsigned(arg.substr(4), "--W", 53);
     } else if (arg == "--renorm") {
       config_.renorm = true;
     } else if (arg.substr(0, 6) == "--ulp=") {
-      config_.ulp = std::stoi(arg.substr(6));
+      config_.ulp = parse_unsigned(arg.substr(6), "--ulp", int_max);
     } else if (arg.substr(0, 11) == "--sparsity=") {
-      config_.sparsity = std::stoi(arg.substr(11));
+      config_.sparsity = parse_unsigned(arg.substr(11), "--sparsity", 100);
     } else if (arg.substr(0, 8) == "--tests=") {
-      config_.num_tests = std::stoi(arg.substr(8));
+      config_.num_tests = parse_unsigned(arg.substr(8), "--tests", int_max);
     } else if (arg.substr(0, 7) == "--test=") {
-      config_.test_id = std::stoi(arg.substr(7));
+      config_.test_id = parse_unsigned(arg.substr(7), "--test", int_max);
     } else if (arg.substr(0, 6) == "--sfa=") {
-      config_.sf_a = std::stoi(arg.substr(6), nullptr, 0);
+      config_.sf_a = parse_unsigned(arg.substr(6), "--sfa", 255, 0);
     } else if (arg.substr(0, 6) == "--sfb=") {
-      config_.sf_b = std::stoi(arg.substr(6), nullptr, 0);
+      config_.sf_b = parse_unsigned(arg.substr(6), "--sfb", 255, 0);
     } else if (arg.substr(0, 7) == "--seed=") {
-      config_.random_seed = std::stoi(arg.substr(7));
+      config_.random_seed = parse_unsigned(arg.substr(7), "--seed",
+                                           std::numeric_limits<unsigned>::max());
     } else {
-      std::cout << "Usage: " << argv[0] << " [options]" << std::endl;
-      std::cout << "Options:" << std::endl;
-      std::cout << "  --no-fused       Enable discrete Mul and Add pipeline" << std::endl;
-      std::cout << "  --no-trace       Disable VCD tracing" << std::endl;
-      std::cout << "  --features=LIST  Semicolon-separated list of features to test (default: infinities;nans;subnormals;normals;zeros)" << std::endl;
-      std::cout << "  --fmt=<id>       Set source format code" << std::endl;
-      std::cout << "  --ext=BITS       Exponent bits for custom format" << std::endl;
-      std::cout << "  --sig=BITS       Significand bits for custom format" << std::endl;
-      std::cout << "  --frm=MODE       Rounding mode (RNE, RZ, RU, RD, RM)" << std::endl;
-      std::cout << "  --W <value>      Accumulator window width W" << std::endl;
-      std::cout << "  --renorm         Renormalize product" << std::endl;
-      std::cout << "  --ulp=<value>    Adjust floats precision error bits" << std::endl;
-      std::cout << "  --sparsity=<%>   Percentage of zero inputs (0-100)" << std::endl;
-      std::cout << "  --seed <value>   Set random seed" << std::endl;
-      std::cout << "  --tests <count>  Number of tests to run (default: 100000)" << std::endl;
-      std::cout << "  --test <id>      Run the specified test only" << std::endl;
-      std::cout << "  --help           Show this help message" << std::endl;
-      exit(0);
+      throw std::invalid_argument("Unknown option: " + arg);
     }
   }
+
+  if (config_.num_tests == 0)
+    throw std::invalid_argument("--tests must be positive");
+  if (config_.test_id >= 0 && uint32_t(config_.test_id) >= config_.num_tests)
+    throw std::invalid_argument("--test must be smaller than --tests");
+  if (config_.test_features.empty())
+    throw std::invalid_argument("--features must select at least one feature");
+  for (const auto &feature : config_.test_features) {
+    if (feature != "infinities" && feature != "nans" && feature != "subnormals"
+        && feature != "normals" && feature != "zeros")
+      throw std::invalid_argument("Unknown feature: " + feature);
+  }
+  if (config_.frm != RoundingMode::RNE)
+    throw std::invalid_argument("The DUT supports only --frm=RNE");
+  if (config_.W == 0)
+    throw std::invalid_argument("--W must be positive");
+  if (!((config_.fmt_s <= 5) || (config_.fmt_s >= 8 && config_.fmt_s <= 11)
+        || (config_.fmt_s >= 16 && config_.fmt_s <= 20)))
+    throw std::invalid_argument("Unsupported source format");
+  if ((config_.sf_a >= 0 || config_.sf_b >= 0) && !is_mx_fmt(config_.fmt_s))
+    throw std::invalid_argument("--sfa and --sfb require an MX source format");
+#ifndef VX_CFG_TCU_MX_ENABLE
+  if (is_mx_fmt(config_.fmt_s))
+    throw std::invalid_argument("MX source formats require VX_CFG_TCU_MX_ENABLE in the DUT build");
+#endif
 
   if (config_.fmt_s >= 16) {
-    // Integer formats
     config_.fmt_d = 16;
-    if (config_.exp_bits != 0 || config_.sig_bits != 0) {
-      std::cerr << "Error: Exponent and significand bits should not be set for integer formats" << std::endl;
-      exit(1);
-    }
+    if (config_.exp_bits != 0 || config_.sig_bits != 0)
+      throw std::invalid_argument("Integer formats do not accept exponent or significand bits");
   } else {
-    // Floating-point formats
-    if (config_.exp_bits == 0 && config_.sig_bits == 0) {
+    if (config_.exp_bits == 0 && config_.sig_bits == 0)
       init_default_fp_format(config_.fmt_s, &config_.exp_bits, &config_.sig_bits);
-    }
-
-    // Validate parameters
-    int total_bits = 1 + config_.exp_bits + config_.sig_bits;
-    if (total_bits > 32) {
-      std::cout << "Error: Total bits (1 + exp_bits + sig_bits) cannot exceed 32" << std::endl;
-      exit(1);
-    }
+    if (config_.exp_bits == 0 || 1 + config_.exp_bits + config_.sig_bits > 32)
+      throw std::invalid_argument("The reference format requires an exponent and at most 32 bits");
+#ifdef USE_FEDP
+    if (config_.sig_bits == 0 || config_.sig_bits > 10)
+      throw std::invalid_argument("The FEDP reference supports 1-10 significand bits");
+    unsigned headroom = 0;
+    for (unsigned terms = 2 * NUM_REGS; terms != 0; terms >>= 1)
+      ++headroom;
+    const unsigned accumulator_bits = config_.W + 2 + headroom;
+    if (accumulator_bits < 27 || accumulator_bits > 32)
+      throw std::invalid_argument("The FEDP reference requires a 27-32 bit accumulator; use the DUT window");
+    if (!config_.fused)
+      throw std::invalid_argument("--no-fused is unavailable with the FEDP reference");
+#endif
   }
-
   return config_;
 }
 
 int main(int argc, char **argv) {
-  Verilated::commandArgs(argc, argv);
-  TestConfig config = parse_args(argc, argv);
-  std::cout << "Using configuration: " << config << std::endl;
-  Testbench testbench(config);
-  if (!testbench.run_tests()) {
+  try {
+    TestConfig config = parse_args(argc, argv);
+    Verilated::commandArgs(argc, argv);
+    std::cout << "Using configuration: " << config << std::endl;
+    Testbench testbench(config);
+    if (!testbench.run_tests())
+      return 1;
+    return 0;
+  } catch (const std::exception &error) {
+    std::cerr << "Error: " << error.what() << std::endl;
     return 1;
   }
-
-  return 0;
 }
