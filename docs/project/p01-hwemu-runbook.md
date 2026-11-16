@@ -32,11 +32,17 @@ The source observer requires ordinary, fully present index entries and exact
 tracked bytes. All 19 source paths consumed by the inspector must also be
 recorded as regular blobs in both `HEAD` and the index; ignored or untracked
 copies and staged-only additions do not qualify. This membership check covers
-the inspector's inputs, not every build dependency. Configured clean/process
-filters, partial-clone/promisor settings, assume-unchanged/skip-worktree entries
-and sparse index entries are unsupported. Checkout normalization that changes
-blob bytes can therefore block an otherwise apparently clean checkout. Ignored
-untracked contents are outside this cleanliness check; explicitly declared
+the inspector's inputs, not every build dependency. Each Git query strips
+inherited `GIT_*` values and sets `GIT_CONFIG_NOSYSTEM=1` plus
+`GIT_CONFIG_GLOBAL=os.devnull` (`/dev/null` on POSIX). System and
+default HOME/XDG global configuration are excluded; repository configuration,
+enabled worktree configuration, explicit includes and matching conditional
+includes remain checked. Clean/process filters and partial-clone/promisor
+settings in those local/include scopes are unsupported, even when an include
+points to an otherwise excluded machine/user file. Assume-unchanged/skip-worktree
+entries and sparse index entries are also unsupported. Checkout normalization
+that changes blob bytes can therefore block an otherwise apparently clean
+checkout. Ignored untracked contents are outside this cleanliness check; explicitly declared
 files still need their own checks. See the [source contract](p01-hwemu-manifest.md#2-paths-source-state-and-directory-separation)
 for tracked symlinks and recursive submodules.
 
@@ -206,6 +212,12 @@ The source-root test suite uses synthetic vendor files and actual temporary
 configuration/Git observations. Synthetic xclbins, releases and receipts are
 test fixtures, never acceptance evidence. Tcl tests report an explicit skip if
 the interpreter is unavailable; a skip does not verify hook execution.
+
+The Git-scope regressions use owned system/user configurations and real Git to
+check isolation while retaining rejection of repository/worktree and included
+unsafe settings. Their local pass does not establish hosted CI recovery; the
+[handoff](p01-hwemu-handoff.md#publication-record) preserves the original hosted
+failure and records later observations separately.
 
 ```sh
 python3 -m unittest discover -s ci/project -p 'test_hwemu*.py'
