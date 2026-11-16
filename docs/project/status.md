@@ -23,6 +23,49 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
+## Latest tooling continuation — compiler records
+
+The shared [compiler-record validator](p01-compiler-records.md) resolves the
+preparation planner's F1 glob ambiguity and the XRT execution inspector's
+operand and record-aggregation gaps. It checks the runtime, kernel and host
+compiler records independently, consumes option operands before crediting macro
+definitions, requires the kernel's direct RV64 ISA/ABI selections, and preserves
+the exact generated-runtime linker binding. Shell expansion syntax, unsupported
+compiler transports and non-LF record separators cannot qualify a candidate.
+The execution runner rejects invalid records before smoke launch and rejects
+later configuration drift before recording success.
+
+The clean implementation commit
+**`f11190c87778ef049237650bbba4234ca62026b2`**, tree
+`36335b94da7392e4c5fd24618d4ce85addbf2d20`, passed **1,120 tooling tests,
+with zero failures, errors or skips**. The baseline at `9740532` passed 1,075
+tests; the continuation adds 45 tests, including real compiler-preprocessor
+oracles, actual Make-generated stamp compatibility, file-backed rejection cases,
+runner failure handling and retained-helper provenance. The working tree was
+clean before and after the full run, and all captured project Python source
+hashes remained unchanged. The
+[verification packet](evidence/p01-compiler-records/verification.json) retains
+the exact commands, source identities and results; subsequent documentation and
+publication records do not relabel that execution as a test of another revision.
+
+The identical implementation tree is published on `master` as
+[`623544c`](https://github.com/baabi-boo/AI-GPU/commit/623544cdd51f9c70a4e2fcef29ed3b56d8cce3fe);
+the [publication map](evidence/p01-compiler-records/publication-map.json) retains
+the original local commit bytes and exact remote tree/parent verification.
+
+Use the [current handoff](p01-compiler-records-handoff.md) for review dispositions,
+delivery state and the continuation's actual assignment record. This work
+preserves the accepted numerical packets and establishes no new GPU, vendor
+`hw_emu` or physical-device result. P01-A03 remains blocked and P02 remains
+`not_started`; the next bounded action remains vendor/platform qualification.
+
+The [completed execution ledger](p01-compiler-records-agent-execution.json)
+records 60 distinct assignments in ten logical waves. Hosted
+[Project Governance](https://github.com/baabi-boo/AI-GPU/actions/runs/43790120429)
+also passed all 1,120 tests on the published implementation. Its
+[observation](evidence/p01-compiler-records/code-ci-final.json) keeps the general
+CI workflow's still-queued state separate from that successful result.
+
 ## Implemented P01 work
 
 The [P01 runbook](p01-baseline-runbook.md) supplies the reproduction sequence.
@@ -187,9 +230,10 @@ The two tools have separate manifest, receipt and report schemas; their shared
 its own independently reviewed manifest/receipt and a fresh build directory,
 constructs fixed commands and does not consume a `hwemu.py` candidate. There is
 no automatic adapter or promotion from a preparation plan to execution. The
-read-only planner's F1 compiler-glob follow-up remains unwaived in the
-[backlog](backlog.md); adding the separate runner does not close it or grant the
-candidate launch readiness.
+later [compiler-record continuation](p01-compiler-records.md) resolves the
+read-only planner's F1 compiler-glob follow-up and strengthens both inspectors.
+That correction does not grant a preparation candidate launch readiness or
+replace the execution runner's independent input review.
 
 The current environment still lacks the vendor executables, vendor roots and
 qualified platform/artifact packet. No vendor `hw_emu` job ran in this

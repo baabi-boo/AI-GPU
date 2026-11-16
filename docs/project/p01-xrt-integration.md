@@ -15,8 +15,11 @@ manifest, receipt and report schemas despite both using `schema_version: 1`;
 there is no automatic adapter or promotion from a preparation plan to execution.
 The runner constructs fixed commands and does not consume the preparation
 planner's candidate commands or budget; execution budgets come from this runner's
-own CLI. That planner's compiler-glob follow-up remains unwaived in the
-[backlog](backlog.md).
+own CLI. Both routes now use the
+[shared compiler-record contract](p01-compiler-records.md), which resolves the
+planner's compiler-glob follow-up and validates each execution record separately.
+Sharing this validator does not make their manifests, receipts or reports
+interchangeable.
 
 **P00 remains complete; P01-A01/A02 remain accepted; P01-A03 and P01 remain
 blocked; P02 remains not started.** No vendor `hw_emu` job has run in this
@@ -400,10 +403,30 @@ Every Make invocation receives `-j1`/`-j2`, `TARGET=hw_emu`, the exact frozen
 `CONFIGS`, `JOBS` and `IMPL_MAX_THREADS`. The runner does not call the inherited
 `run-xrt` target or `blackbox.sh` for the smoke, and never uses the receipt as
 an executable command list. Generated headers, copied build inputs and source
-bindings are inspected; effective application/runtime stamps must match RV64
-and the frozen configuration, without `XRTSIM`, configuration undefines or
-non-native arithmetic substitutions. The generated XRT INI must select the
-tracked source's `xsim.tcl`, even though the smoke uses its own no-trace INI.
+bindings are inspected. The [shared validator](p01-compiler-records.md) requires
+one runtime compiler record and three ordered demo records: kernel, host and
+linker. Every compilation record independently establishes the frozen
+configuration, `VX_CFG_XLEN=64` and `VX_CFG_XLEN_64=1`, without `XRTSIM`, protected
+configuration undefines or non-native arithmetic substitutions. Include and
+dependency-output operands cannot contribute definitions; definitions from one
+record cannot fill another record's omissions.
+
+The kernel must select exactly one direct `-march=rv64imafd` and `-mabi=lp64d`;
+consumed or forwarded selections do not qualify. Host/runtime records cannot
+select these kernel ISA/ABI flags. The linker must contain exactly
+`-L<build>/sw/runtime -lvortex`. Ordinary quoting, split definitions and supported
+preprocessor forwarding remain valid, while response files, Verilator/Make
+transports, unsupported options and free source operands are rejected.
+
+Only LF separates records; spaces, tabs and blank lines are allowed. CRLF,
+other controls and Unicode whitespace separators are rejected. Shell operators,
+dollar signs, backticks, glob characters (`*`, `?`, `[` and `]`), braces,
+parentheses and tilde are excluded even when quoted or escaped. Inspection never
+expands patterns. A failed effective-record check prevents smoke launch; changed
+or invalid records after execution prevent a successful final packet.
+
+The generated XRT INI must select the tracked source's `xsim.tcl`, even though
+the smoke uses its own no-trace INI.
 
 The child environment retains only `PATH`, `HOME`, `XILINXD_LICENSE_FILE` and
 `LM_LICENSE_FILE` from the caller, then sets controlled locale, target,
@@ -545,9 +568,15 @@ Retained paths, once their respective stages are reached, are:
 | `artifacts/qualification_review` | Original qualification-review text |
 | `artifacts/emconfig.json` | Original matching emulation configuration |
 | `artifacts/build-logs/0.log`, `1.log`, … | Receipt-linked original build logs in receipt command order, starting at index zero |
-| `artifacts/tooling/` | Snapshots of all `TOOLING_FILES`: `xrt_baseline.py`, `xrt_contract.py`, `xrt_inventory.py`, `xrt_runtime.py`, `xrt_signals.py`, `xrt_source.py`, `baseline_host.py`, `baseline_inventory.py`, `baseline_process.py` and `preflight.py` |
+| `artifacts/tooling/` | Snapshots of all `TOOLING_FILES`: `xrt_baseline.py`, `xrt_contract.py`, `xrt_inventory.py`, `xrt_runtime.py`, `xrt_signals.py`, `xrt_source.py`, `compiler_records.py`, `baseline_packet_contract.py`, `baseline_matrix.py`, `baseline_packet_io.py`, `baseline_host.py`, `baseline_inventory.py`, `baseline_process.py` and `preflight.py` |
 | `artifacts/xrt.ini` | Selected no-trace smoke INI |
 | Generated snapshots under `artifacts/` | The two effective configuration stamps, `.config.stamp`, `config.mk`, generated XRT INI and the four generated configuration/type headers; original relative paths have `/` replaced by `_` |
+
+The tooling snapshots include the shared validator and its complete local
+import dependency chain. Their hashes identify source bytes and detect drift;
+they do not attest the Python interpreter, loaded code objects or bytecode caches.
+Valid compiler records and matching hashes also do not prove which inputs
+produced a binary or authenticate producer statements.
 
 Copied input records include retained-byte hashes in `report.retained`; the
 smoke INI has its own `smoke_ini` identity. Generated snapshots are copied after

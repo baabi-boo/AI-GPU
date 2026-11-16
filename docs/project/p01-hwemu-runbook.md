@@ -116,13 +116,27 @@ rechecks retained inputs before returning a candidate. It never executes text
 from the manifest or calls the generated runner. The CLI prints its report
 without writing output files.
 
+The [shared compiler-record contract](p01-compiler-records.md) requires one
+runtime record and three ordered demo records: kernel, host and linker. Only
+LF separates records; spaces, tabs and blank lines are allowed. CRLF, bare CR,
+other controls and Unicode whitespace separators are rejected. Each compilation
+record independently establishes the frozen configuration and both RV64 macro
+selectors; include/dependency operands cannot supply definitions.
+
 The demo kernel record must contain exactly one effective direct
 `-march=rv64imafd` and `-mabi=lp64d`. RV64 macros alone do not establish a kernel
 compiler target. Required options hidden in another option's operand or a
-preprocessor stream cannot satisfy this check. Compiler records containing shell
-operators, dollar signs or backticks are unsupported, including quoted or escaped
-literals in this bounded contract. The host/runtime records retain their native
-host compiler scope.
+preprocessor stream cannot satisfy this check. Host/runtime records cannot
+select these kernel ISA/ABI flags. All compiler roles reject response files,
+Verilator/Make transports, unsupported options and free source operands.
+
+Shell operators, dollar signs, backticks, glob characters (`*`, `?`, `[` and
+`]`), braces, parentheses and tilde are excluded from record text even when
+quoted or escaped. The inspector does not expand patterns. Ordinary quoting,
+split definitions and supported preprocessor forwarding remain valid. The
+linker record must select exactly `-L<build.root>/sw/runtime -lvortex`.
+These checks resolve the former compiler-glob ambiguity; successful planning
+still grants no launch readiness or vendor qualification.
 
 | Result | Exit | Meaning |
 |---|---|---|

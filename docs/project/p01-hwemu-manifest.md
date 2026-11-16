@@ -221,27 +221,40 @@ to `ubuntu/focal`, PROFILE to empty, PREFIX to `build.root` + `/install`, source
 build and tool paths to the manifest, and all four pins to the source `VERSION`.
 Unresolved template substitutions are rejected.
 
-Compiler stamps must establish the frozen flags plus `VX_CFG_XLEN=64` and
-`VX_CFG_XLEN_64=1`, without conflicting XLEN or nonnative scalar/tensor
-selectors. This check does not authenticate a compiler or prove that it ran.
+The planner and execution runner use the same
+[compiler-record validator](../../ci/project/compiler_records.py), described in
+[the compiler-record contract](p01-compiler-records.md). The runtime stamp has
+one nonempty record; the demo stamp has three, ordered as kernel, host and
+linker. Only LF separates records. Spaces, tabs and blank lines are allowed;
+CRLF, bare CR, other controls and Unicode whitespace separators are rejected.
+
+Every runtime, kernel and host compilation record must independently establish
+the frozen flags plus `VX_CFG_XLEN=64` and `VX_CFG_XLEN_64=1`, without conflicting
+XLEN or nonnative scalar/tensor selectors. Definitions consumed as include or
+dependency-output operands do not count, and combining incomplete records cannot
+supply missing definitions. Ordinary quoting, split definitions and supported
+preprocessor forwarding remain valid. This check does not authenticate a
+compiler or prove that it ran.
+
 The kernel record additionally requires exactly one effective direct
 `-march=rv64imafd` and `-mabi=lp64d`. Missing, repeated, conflicting or consumed
 options cannot qualify the target; preprocessor streams cannot establish driver
-ISA/ABI selections. Free source operands and unsupported compiler transports
-are rejected in that record. Shell operators (`;`, `&`, `|`, `<`, `>`) and
-expansion syntax (dollar signs and backticks) are unsupported throughout
-compiler records, including quoted or escaped literals.
+ISA/ABI selections. Host/runtime records cannot select these kernel ISA/ABI
+flags. All three compiler roles reject response files, Verilator/Make flag
+transports, unsupported compiler options and free source operands.
 
-The inspector does not evaluate glob expansion against a compilation directory.
-Unquoted glob characters in unusual hand-written operands remain a tracked
-[review follow-up](backlog.md); use retained producer records and independently
-review the effective invocation before any separately supervised execution.
-Host/runtime records do not require kernel ISA/ABI options.
+All record text excludes shell operators (`;`, `&`, `|`, `<`, `>`), dollar
+signs, backticks, glob characters (`*`, `?`, `[` and `]`), braces, parentheses
+and tilde, including quoted or escaped appearances. The inspector never expands
+patterns against a compilation directory. This resolves the former compiler-glob
+follow-up while preserving the need for actual producer records and independent
+review of the effective invocation before separately supervised execution.
+
 The demo linker record must normalize to exactly two shell words, in order:
 `-L` concatenated with `build.root` + `/sw/runtime` as one word, then `-lvortex`.
 Quoting those same words is allowed; extra library paths, linker scripts,
-plugins or other flags are rejected for this bounded smoke. This is the
-planner's contract, not a change to the inherited Makefile's general options.
+plugins or other flags are rejected for this bounded smoke. This bounded
+inspection contract does not change the inherited Makefile's general options.
 The INI requires exactly the Runtime, Emulation and Debug sections: console
 runtime logging, debug mode off, the declared source `xsim.tcl` hook, profile
 and timeline trace false, and data-transfer trace off. Defaults or extra

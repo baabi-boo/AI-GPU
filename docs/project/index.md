@@ -14,6 +14,7 @@ that a GPU workload or physical device has passed its checks.
 | What would prove this works? | [Acceptance policy](acceptance.md), [verification strategy](verification.md) | [Evidence format](evidence/README.md), [benchmark protocol](benchmarks.md), [review policy](../review/code-review-policy.md) |
 | How do I prepare the remaining P01 vendor integration? | [hw_emu runbook](p01-hwemu-runbook.md), [manifest contract](p01-hwemu-manifest.md) | [Preparation handoff](p01-hwemu-handoff.md), [current status](status.md) |
 | How do I run the prepared integer integration smoke? | [Vendor XRT integration guide](p01-xrt-integration.md), with its separate manifest/receipt contract | [Vendor integration handoff](p01-xrt-handoff.md), [current status](status.md) |
+| How are recorded compiler flags checked? | [Shared compiler-record contract](p01-compiler-records.md) | [Current tooling handoff](p01-compiler-records-handoff.md), [current status](status.md) |
 | How does this become real hardware? | [Hardware plan](hardware.md), [physical FPGA phase](phases/p07-fpga.md) | [Risks](risks.md), [decisions](decisions.md), [ASIC feasibility](phases/p10-asic.md) |
 
 Before continuing existing work, check the current source revision and local
@@ -100,6 +101,10 @@ funding/manufacturing decisions; a roadmap does not authorize purchases.
 
 ## Evidence and continuation records
 
+- [Compiler-record contract](p01-compiler-records.md): independent runtime,
+  kernel and host checks, exact linker binding and retained helper source snapshots.
+- [Compiler-record handoff](p01-compiler-records-handoff.md): latest tooling
+  corrections, exact tested revision and remaining vendor-integration obligation.
 - [Vendor XRT integration](p01-xrt-integration.md): prepared-artifact manifest,
   bounded host/kernel build and explicit `hw_emu` smoke execution.
 - [Vendor integration handoff](p01-xrt-handoff.md): implementation, actual checks,

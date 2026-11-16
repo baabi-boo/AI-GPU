@@ -23,6 +23,13 @@ retained tracing-disabled INI distinct from the generated `run-xrt` recipe.
 The generated debug/profiling defaults are off; waveform capture requires
 explicit debug configuration and `VORTEX_XRT_WAVEFORM=1`.
 
+Validate runtime, kernel and host compiler records independently through the
+[shared validator](ci/project/compiler_records.py); never combine records or
+expand retained stamp text to establish configuration coverage. Preserve source
+snapshots of the validator and its transitive local helpers in execution packets.
+See the [compiler-record contract](docs/project/p01-compiler-records.md) and
+[current tooling handoff](docs/project/p01-compiler-records-handoff.md).
+
 ---
 
 ## 1. Documentation Map

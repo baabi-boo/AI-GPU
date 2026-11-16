@@ -68,16 +68,23 @@ qualifying the vendor environment. The XRT source hook path is corrected and
 waveform collection is opt-in. This preparation supplies no new GPU/vendor or
 physical result; `planned` does not close T05 or P01-A03.
 
-The following F1 follow-up belongs to the `hwemu.py` planner. The separate
-execution runner does not close it or promote its candidate to launch readiness.
+The reviewed **F1 compiler-glob follow-up is resolved** by the shared
+[compiler-record validator](p01-compiler-records.md). It rejects pathname patterns
+instead of expanding them and checks actual compiler option boundaries. The XRT
+execution inspector now checks each runtime, kernel and host record independently;
+definitions consumed as operands or supplied only by another record cannot
+establish the frozen configuration. Exact kernel ISA/ABI and generated-runtime
+linker checks accompany the correction. Real compiler and generated-Make oracles,
+negative cases and runner-boundary tests support the implementation; the
+[verification record](evidence/p01-compiler-records/verification.json) and
+[current handoff](p01-compiler-records-handoff.md) retain its tested identity,
+review and delivery state.
 
-Before promoting a candidate to an executable contract, the verification owner
-must resolve the reviewed F1 follow-up for unquoted glob characters in manually
-written compiler-stamp operands. For example, an unusual matching filename can
-change how an include operand consumes a following flag. The current inspector
-does not expand globs or grant launch readiness; require actual producer records
-and review the effective invocation before supervised execution. Track this
-alongside the required vendor/platform qualification, without changing P01 gates.
+This completes a bounded T05 tooling correction. Actual producer records,
+vendor/platform qualification and independently reviewed effective invocations
+remain required before supervised execution. The preparation candidate gains no
+launch readiness, T05 remains blocked on vendor integration, and P01 gates remain
+unchanged.
 
 | Work item | Deliverable and completion check | Prerequisite / accountable role | Gate supported |
 |---|---|---|---|

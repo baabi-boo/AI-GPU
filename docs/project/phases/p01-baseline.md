@@ -33,6 +33,13 @@ Full vendor XRT `hw_emu` is blocked by missing tools/platform, so neither
 processor RTL nor supplemental `xrtsim` can close P01-A03. See the
 [handoff](../p01-handoff.md) for the current execution and publication checkpoint.
 
+The latest compiler-record tooling has a separate
+[contract](../p01-compiler-records.md) and
+[handoff](../p01-compiler-records-handoff.md). Preparation and execution use the
+shared validator for independent runtime, kernel and host records and preserve
+its transitive helper source snapshots. This tooling correction leaves the
+accepted numerical evidence and the P01-A03 vendor blocker unchanged.
+
 ## Goal and boundary
 
 Reproduce inherited AI building blocks on pinned configurations before changing

@@ -31,7 +31,9 @@ P00 remains complete, P01 remains incomplete, and P02 has not started.
 - See the development sequence: [roadmap](ROADMAP.md).
 - Pick the next bounded task: [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
 - Reproduce the current phase: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
-- Continue from the recorded checkpoint: [P01 handoff](docs/project/p01-handoff.md).
+- Continue from the latest tooling checkpoint:
+  [compiler-record handoff](docs/project/p01-compiler-records-handoff.md); the
+  accepted numerical baseline remains in the [P01 handoff](docs/project/p01-handoff.md).
 - Check retained evidence: [packet verification guide](docs/project/p01-packet-verification.md) and [packet continuation handoff](docs/project/p01-packet-handoff.md).
 - Inspect vendor preparation inputs: [hw_emu runbook](docs/project/p01-hwemu-runbook.md), [manifest contract](docs/project/p01-hwemu-manifest.md) and [preparation handoff](docs/project/p01-hwemu-handoff.md).
 - Use the prepared-artifact execution route: [vendor XRT guide](docs/project/p01-xrt-integration.md).
@@ -193,8 +195,26 @@ The two routes have separate manifest, receipt and report schemas, even though
 both use `schema_version: 1`. There is no automatic adapter or promotion from
 a preparation plan to execution. `xrt_baseline.py` requires its own independently
 reviewed inputs and constructs fixed commands instead of consuming a `hwemu.py`
-candidate. The preparation planner's compiler-glob follow-up remains in the
-[backlog](docs/project/backlog.md).
+candidate.
+
+The shared [compiler-record validator](docs/project/p01-compiler-records.md)
+resolves the preparation planner's compiler-glob follow-up and strengthens the
+execution runner. Runtime, kernel and host records must each establish the
+frozen configuration; an apparent definition consumed as an include operand
+does not count. The kernel must select the exact RV64 ISA/ABI, and the linker
+must select the generated runtime. Ambiguous shell syntax and unsupported
+record separators are rejected before launch.
+
+The clean implementation checkpoint `f11190c87778ef049237650bbba4234ca62026b2`
+passed **1,120 tooling tests, with zero failures, errors or skips**, including
+real compiler-preprocessor checks, fresh Make-generated stamps, launch-blocking
+regressions and helper-snapshot checks. The
+[verification record](docs/project/evidence/p01-compiler-records/verification.json)
+and [handoff](docs/project/p01-compiler-records-handoff.md) retain the tested
+identity and evidence boundaries. These tooling results establish no new GPU
+or vendor-emulation execution.
+The identical source tree is published as
+[`623544c`](https://github.com/baabi-boo/AI-GPU/commit/623544cdd51f9c70a4e2fcef29ed3b56d8cce3fe).
 
 Missing prerequisites produce a blocked result and nonzero exit. The development
 environment lacks the required vendor installation and platform artifacts, so

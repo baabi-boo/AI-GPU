@@ -1,0 +1,8 @@
+tree 36335b94da7392e4c5fd24618d4ce85addbf2d20
+parent 97405322dfcb2944d50eb285008725f79eb733d8
+author Codex <codex@openai.com> 1794794101 -0700
+committer Codex <codex@openai.com> 1794794101 -0700
+
+fix(p01): validate each vendor compiler record before launch
+
+Share strict operand-aware compiler validation between preparation and XRT execution. Reject shell expansion, non-LF record boundaries, opaque transports and incorrect kernel ISA/ABI; require every compiler record to establish the frozen configuration and the linker to select the generated runtime. Retain all new helper dependencies in run evidence. Add actual compiler and generated-Make oracles, file-backed negative cases, orchestration guards and snapshot drift checks. Preserve historical packet parsing and accepted GPU evidence; vendor hw_emu remains blocked.

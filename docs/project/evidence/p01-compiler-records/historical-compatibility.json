@@ -1,0 +1,1462 @@
+{
+  "schema_version": 1,
+  "observed_at_utc": "2026-11-16T01:54:55.839887+00:00",
+  "base_revision": "97405322dfcb2944d50eb285008725f79eb733d8",
+  "observed_head": "97405322dfcb2944d50eb285008725f79eb733d8",
+  "scope": "Historical published packet consistency and raw-byte preservation only; no new GPU execution, original raw-log verification, or gate acceptance.",
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "ci/project/check_baseline_packets.py"
+      ],
+      "exit_code": 0,
+      "outcome": "pass",
+      "native_published_integrity": "verified",
+      "clean_build_published_integrity": "verified"
+    },
+    {
+      "argv": [
+        "python3",
+        "ci/project/baseline_packet.py",
+        "verify-export",
+        "docs/project/evidence/p01/native",
+        "--require-native-records"
+      ],
+      "exit_code": 0,
+      "outcome": "pass",
+      "native_matrix_records_consistent": true,
+      "requirement_satisfied": true
+    },
+    {
+      "argv": [
+        "python3",
+        "ci/project/baseline_packet.py",
+        "verify-export",
+        "docs/project/evidence/p01/clean-build"
+      ],
+      "exit_code": 0,
+      "outcome": "pass",
+      "native_matrix_records_consistent": false,
+      "requirement_satisfied": true
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--exit-code",
+        "--name-status",
+        "97405322dfcb2944d50eb285008725f79eb733d8",
+        "--",
+        "docs/project/evidence",
+        "ci/baselines",
+        "ci/project/baseline_packet_contract.py",
+        "ci/project/p01_baseline.json",
+        "ci/project/p01_toolchain.lock.json",
+        "docs/assets/img/vortex_framework_stack.svg"
+      ],
+      "exit_code": 0,
+      "output": ""
+    }
+  ],
+  "phase_complete": false,
+  "raw_log_bytes_verified": false,
+  "redaction_relationship_verified": false,
+  "protected_scopes": [
+    "docs/project/evidence",
+    "ci/baselines",
+    "ci/project/baseline_packet_contract.py",
+    "ci/project/p01_baseline.json",
+    "ci/project/p01_toolchain.lock.json",
+    "docs/assets/img/vortex_framework_stack.svg"
+  ],
+  "protected_file_count": 228,
+  "protected_size_bytes": 3681678,
+  "protected_files_byte_identical": true,
+  "mismatches": [],
+  "protected_files": [
+    {
+      "path": "ci/baselines/perf/core.json",
+      "git_blob": "f914b97a05158361068728a579921e4314866419",
+      "sha256": "2e0b69c0f92401bee05c2cda7ec79f2ec49e6dc17f711da546efdbd34382e182",
+      "size_bytes": 4110
+    },
+    {
+      "path": "ci/baselines/perf/dxa.json",
+      "git_blob": "e2859a3f5e6910c4a7762c824a813c7fc959f16a",
+      "sha256": "648909a52e523874fe1008c76b6bb93d9b84583a28f2fba42782423c977280b7",
+      "size_bytes": 3851
+    },
+    {
+      "path": "ci/baselines/perf/graphics.json",
+      "git_blob": "de58e1480b6151f9edc55da507a9a60b73153b0c",
+      "sha256": "752b2e428f01f4d1393ae91a10f561b1bfe9a2ed2b08f4116b9059cb2019397d",
+      "size_bytes": 3119
+    },
+    {
+      "path": "ci/baselines/perf/raytracing.json",
+      "git_blob": "993e67ac73fed612330cd416811168e9c323d818",
+      "sha256": "e7190d40dd242e3947cc4f5e568573cd0f52a6e71f21b2bc412eadd75b68d260",
+      "size_bytes": 906
+    },
+    {
+      "path": "ci/baselines/perf/tensor.json",
+      "git_blob": "6a2c4225af6b7cb498875c7f70d51bc907b52f16",
+      "sha256": "74bfbe74c0165a4e1263ab58355700c03466f7ca2e982dc2bb25dfe084d17246",
+      "size_bytes": 1995
+    },
+    {
+      "path": "ci/baselines/perf/tensor_mx.json",
+      "git_blob": "8435035c31a1eef5b0df1c27f385ab7668222d72",
+      "sha256": "005c317cdcb33245e7c73cfa8a4ae15b8092bd93520700fa9d67e95488852326",
+      "size_bytes": 396
+    },
+    {
+      "path": "ci/baselines/perf/tensor_sp.json",
+      "git_blob": "96c94b4422566b7bcb18d3a868216b3ab0047127",
+      "sha256": "10fa4e21a4e411cb6105708ee76c9cc56a67edcd422e6d3a7fd521a9ffe21c88",
+      "size_bytes": 337
+    },
+    {
+      "path": "ci/baselines/perf/tensor_wg.json",
+      "git_blob": "33107d60b128db6a153c4a3b77a5e62ab78351b2",
+      "sha256": "c6c3fd75ed3befed6eaad836dff8ba85192b38eec8350939e441ae8d0978f073",
+      "size_bytes": 1536
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/core.json",
+      "git_blob": "d77308c7c064d908211981de949d8d6766788b3e",
+      "sha256": "9d44a8cb4df9968fcba2f06068891ca64619b56b15263feb3369487bd6585788",
+      "size_bytes": 28970
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/dxa.json",
+      "git_blob": "5ab16b9eaa593353f1327c36024a1418d97331fd",
+      "sha256": "b704ffb416f1e117104b970e89a75d4e256c95ab1b5895451370bdaef99734b8",
+      "size_bytes": 2328
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/graphics.json",
+      "git_blob": "6eaf5e90b98391a232e1f7d0aadea65643512ab2",
+      "sha256": "99b4e2ffdc4c5ef52f01d3eecd5414d1a00d4100bb0ffd45d3a9bdf66e2994b3",
+      "size_bytes": 30678
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/tensor.json",
+      "git_blob": "36d6b1775224175a70a66068d0ae7dd351cdb134",
+      "sha256": "7c20e2fdeab2bc597641354c138d79a4e054c1b42a9e4856d88ff157a65ef969",
+      "size_bytes": 12461
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/vm.json",
+      "git_blob": "2cf7e28295f8efeca22f9965d06bc24bb9b91821",
+      "sha256": "74e984dd4e3f1aeb406046ba9ef58efecebc84d856e4bce2abd0a056c04dff00",
+      "size_bytes": 8367
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/core.json",
+      "git_blob": "eb957311658017c086daae526d2fda779df21c08",
+      "sha256": "35c440089e5b5ea68ffb36c9d063237f2fbb2da7f8026519c969accafc452c0b",
+      "size_bytes": 31559
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/dxa.json",
+      "git_blob": "e1017968eecfbd76b739bf68377eed9378735a14",
+      "sha256": "7a6a523cbaf3f4dc1e8ba423262d6d26a6b1b2ff58e711e748b3167f4043ee7a",
+      "size_bytes": 5735
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/graphics.json",
+      "git_blob": "8353c8aebee7b3bce4850e5787a4b9df3cff987f",
+      "sha256": "bfb045d843d0d08e29ea0a507584d9a21e1afd50cc54f472781615a5c2a8aec7",
+      "size_bytes": 31793
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/mufu.json",
+      "git_blob": "33021e13b650281b929a5728e1daf07b296fce87",
+      "sha256": "1f7a375f75ec05aa8885d19b2684aa74586dfa6fabbff9a34039c4796b56f567",
+      "size_bytes": 5693
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/tensor.json",
+      "git_blob": "d1eb396511a3961bd3c9641178c195c91d110fa0",
+      "sha256": "81b645180b72327c9bf44777f2914bc9b2378c9dabd87ab32f05d78e0d8f6f18",
+      "size_bytes": 15655
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/vm.json",
+      "git_blob": "932071afc54ca0a27d443e8f4a2bfb317ba7c2ae",
+      "sha256": "aecb3717cec9d0b58e184718fdfcf2894d562f72f55b7bdb96b915e303d7600f",
+      "size_bytes": 6057
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/core.json",
+      "git_blob": "7d640d4ff2678455b6a2672900285782f401a601",
+      "sha256": "3d73cbaee0c1b903340c9752b0079bc3073a4c3edfdffe579cdcbf99e5006bf3",
+      "size_bytes": 2373
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/dxa.json",
+      "git_blob": "b981098265e8a99cc5def5be00c21c4cd8475277",
+      "sha256": "aa249a7f621768ac02f1d0f85ef4a5eea9d95d32fb6a566ca4adc599a43729aa",
+      "size_bytes": 549
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/graphics.json",
+      "git_blob": "dc5d66875ae7919d10c9a5fade7aa8d989e5d6e1",
+      "sha256": "1f43cf0ea627b32525f77fbdd0e2dc70eac6fc93a525d1d60200eb95be995370",
+      "size_bytes": 2841
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/mufu.json",
+      "git_blob": "30d74945a11f9ca87916f1ede315e80902f4e78b",
+      "sha256": "2b84aa5d1a201b1239755fd3ec4e147f7b3bc6f64041034ba4f413a61f16ffa9",
+      "size_bytes": 548
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/tensor.json",
+      "git_blob": "b59fd0922155fa8550e08115389eeba9db36741e",
+      "sha256": "01cf957355f05b63dc98b19ca4a69899b0c26383ef86025a24513c1a07d4eadd",
+      "size_bytes": 1154
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/vm.json",
+      "git_blob": "80a9234b8f1c97b99684a9616b7de64155c80f25",
+      "sha256": "9ce940cfcdef1bc0f8554de0da13231eda3125bc5a014e7596c83bf0a46372bc",
+      "size_bytes": 599
+    },
+    {
+      "path": "ci/project/baseline_packet_contract.py",
+      "git_blob": "731eeecacc4fbc200e3bca1f73133496c869f382",
+      "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+      "size_bytes": 53680
+    },
+    {
+      "path": "ci/project/p01_baseline.json",
+      "git_blob": "62543bc70bb48fb7911bb9cd1349d8a94dd81a36",
+      "sha256": "d2f570fa241dff720446809e572efecbaed56cc7d14365bf096859d1d764b61f",
+      "size_bytes": 9455
+    },
+    {
+      "path": "ci/project/p01_toolchain.lock.json",
+      "git_blob": "335e36f03395daa934d722576d3a0e14adc506ee",
+      "sha256": "63771ba8d9ff691b3867ed96be7b058ed5eae1368789575f4964e38f8718a405",
+      "size_bytes": 5008
+    },
+    {
+      "path": "docs/assets/img/vortex_framework_stack.svg",
+      "git_blob": "92cb193580afd5b6d19e859c9736bd5ee5994cbd",
+      "sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+      "size_bytes": 48225
+    },
+    {
+      "path": "docs/project/evidence/README.md",
+      "git_blob": "4fd815c38050864fa1464ebd969caa0ab4e1c1d5",
+      "sha256": "3ffde993f4347b62a3e90c4379cdc19f24a5c86df057c2154db98b327e3ab3d2",
+      "size_bytes": 6033
+    },
+    {
+      "path": "docs/project/evidence/benchmark.example.json",
+      "git_blob": "0205c632861692aee443879343807679977ff11e",
+      "sha256": "eb8057cbf81c127f3928c147688a2316536c4efc89dd4d1b0c090f4e31671ffe",
+      "size_bytes": 1991
+    },
+    {
+      "path": "docs/project/evidence/p01-build.json",
+      "git_blob": "4117d302daf962e697d6a7786ffa31eae5d363e3",
+      "sha256": "7c31c2c58fce7e3f9fe2229f9dcc4d1ede8aa2c1ee7afb4b9714a67ef9ae38a0",
+      "size_bytes": 14472
+    },
+    {
+      "path": "docs/project/evidence/p01-native.json",
+      "git_blob": "489f893c436c808ba175a7b50fa295abb5c231d5",
+      "sha256": "7cf5ae93704e22fa9172ac2eb8dd93275ab312a1dc39e689d907f8e08b38b026",
+      "size_bytes": 14190
+    },
+    {
+      "path": "docs/project/evidence/p01-packet-validation.log",
+      "git_blob": "4177728bb3c9cb9359765562fc34c3c177fc0bfe",
+      "sha256": "3b5901b5944e910ce8155625c4e10fae0b21fefbda4838f41caed0675b437313",
+      "size_bytes": 5844
+    },
+    {
+      "path": "docs/project/evidence/p01-review.md",
+      "git_blob": "3d608aa4b29b89d72c412554597d6fee3327e41a",
+      "sha256": "5e13eb45cd7c5104ba0dd1809774e1ead79cd3ef8822e091d915aa1df14bf37a",
+      "size_bytes": 10871
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-blocked.json",
+      "git_blob": "9d10f198bfbd663d202bd2ea28ad334490511c65",
+      "sha256": "c480d1eb390a237b5e33c55b2115f3a43e997207a9122c319264671284e82551",
+      "size_bytes": 13336
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/README.md",
+      "git_blob": "be81805d21e600a8931710879ac03e642b9614b8",
+      "sha256": "f039d75c4716f97d4bab0685056cf222b36a44a1b827724165aa7d70c659b634",
+      "size_bytes": 6271
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/merge-source-comparison.json",
+      "git_blob": "45ed79a577757edc1a4efe0dbff0776dacbec6c5",
+      "sha256": "c05b1ea9c1e75d2eceb4f144610238f47471244a2775bd59462950fd6cd04910",
+      "size_bytes": 5538
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.classify.stderr.txt",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.commands.json",
+      "git_blob": "c64e063c18d503af686c9a69325066d3c96bd325",
+      "sha256": "841bea5b8bbd28ef29e24b3b48094e9f8a1638361d34172dfec4d88af36d6f55",
+      "size_bytes": 2306
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.explain.stderr.txt",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.explain.txt",
+      "git_blob": "a7cfd77ae7af2236ac864c2e8005db0b8aa504d8",
+      "sha256": "bd8dcf7ffc109a93e2dd2388698d5ebc5fa85f251d42f2f412aa1f7c6f613b41",
+      "size_bytes": 3061
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.json",
+      "git_blob": "2675b855fe0ff2f74d9a43263bb38c35488bbf73",
+      "sha256": "79e30b16879d2cd19010bebee703918b92222593a38435dbc487219a03f74375",
+      "size_bytes": 9391
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.log",
+      "git_blob": "cceebcf1940c6a3276abb41572f86155377fd8d1",
+      "sha256": "20800dbc0874936190a011205be52cab45cdd9369eae43aa849940a6f3ed4339",
+      "size_bytes": 13396
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-change-impact.provenance.json",
+      "git_blob": "878097cc3b23035e0511397c1b78e3362f50cffd",
+      "sha256": "3fc3c1f06e8d7a75f53cc102d62ed0a6285378316d12c77cd3634c28a45fc2b8",
+      "size_bytes": 1308
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-tests.json",
+      "git_blob": "f4e8d935028beffc67fc839144e70cc865d5ab92",
+      "sha256": "a3213a179fcffb667b878a833275f471ab7d87128ee5138f71efb41fb15d83c5",
+      "size_bytes": 10714
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/history/236770d6/p01-xrt-merged-tests.log",
+      "git_blob": "ff30724cc13d08650bd98894a729bb2769127037",
+      "sha256": "626b54728a6e6cf42bacfda749aecc9e448f2a36f8ba031fb45ea1a10e2666c7",
+      "size_bytes": 175665
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/merge-source-comparison.json",
+      "git_blob": "3bf68614f05103a57f366127ecb9042c70d6ff75",
+      "sha256": "747b38681555cb298440c479389bbb3ac01ee530476575cb4155c2132ba39932",
+      "size_bytes": 11531
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/merge-verification.json",
+      "git_blob": "ab642816d8d36ab7966cc84e70944ede5e40710f",
+      "sha256": "25ea7af25c1987e06205918a705e4dacfcf269dd759563fd66454ea102f5f1c6",
+      "size_bytes": 16830
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-change-impact.classify.stderr.txt",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-change-impact.commands.json",
+      "git_blob": "554117b347c328c52f80cdf35238b219aafa15fc",
+      "sha256": "78f373bff22d912846d66792c1345093e225e7fe3c3d09b9a1b31aca0b767988",
+      "size_bytes": 2310
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-change-impact.explain.stderr.txt",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-change-impact.explain.txt",
+      "git_blob": "d246767cfd09a88d0eaf5689aa40d1ea9e282b5b",
+      "sha256": "7892ce214eb8041ec0738237450682523365d4d4d3f8664af1c6ebe1481f7ae6",
+      "size_bytes": 3121
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-change-impact.json",
+      "git_blob": "4e22862f753dc2f48ab3ef2ad643c5fc6185dfdf",
+      "sha256": "5eca2d24b7a0000defa3d1919190221cc1672f7c5c50c052f1428b66ddce1bb7",
+      "size_bytes": 9547
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-change-impact.log",
+      "git_blob": "cf38d4871839984277acba0ba54a95d3d4ee7dda",
+      "sha256": "3ba86a79f92607c21a906a295290be942f5b42ab3da4c0a94d3060f2cd0ea9c7",
+      "size_bytes": 13612
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-change-impact.provenance.json",
+      "git_blob": "dc6360717637d4b7e3208c178aa3bf26717b2c1a",
+      "sha256": "1f5a5bb91975bea0eb91c0ae7db0dd77dc4dd865075cc53ecd070c8cca384733",
+      "size_bytes": 1308
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-tests.json",
+      "git_blob": "ba49588ebf4cb60113959c25381b97866e13c083",
+      "sha256": "eb31db797e036b17e00fe12694416de865bb52b8af36fc939a50573024f87a05",
+      "size_bytes": 10831
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-merge/p01-xrt-ae27591-tests.log",
+      "git_blob": "cc59cda45e3f64a5542dead5151d9ebd3ed74eb9",
+      "sha256": "a8e9249faec9aba5edc19e8a40b90dd3ec4e756c8a0abe6b3c245e20de89722f",
+      "size_bytes": 176403
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/README.md",
+      "git_blob": "b1c2c37e18e87847e4d48c2f7fa71f99f56b6f5f",
+      "sha256": "ee4315696137f690505cdb54ae7c8b8e5b53981b741e00b4e038729a6cd2eb7c",
+      "size_bytes": 10130
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-change-impact.explain.txt",
+      "git_blob": "8e8df3b123b71c91c59627dda520786eb3e2e718",
+      "sha256": "27276fa64b57752dde01a94193bcde97b9d0d60483ba2e45eeba86156e83d8ad",
+      "size_bytes": 1772
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-change-impact.help.log",
+      "git_blob": "798211247faa84b82efbaef704fc878f07081a82",
+      "sha256": "68110577947709959ef0b6f88c74dc77857eaaaf04fc282089a2f58738116aba",
+      "size_bytes": 2601
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-change-impact.json",
+      "git_blob": "ec93903c3fe7c80dc28a51815125837afd7684df",
+      "sha256": "dede14308f43dfa8424d97fc27dc7fea902949f0c95b67ac6ba4609be4bb39e9",
+      "size_bytes": 5481
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-change-impact.log",
+      "git_blob": "ceb9607b229de64ff10b763b98e1cac020616a7f",
+      "sha256": "a8868ce9d8801db1f072f02fff6a04f6dc66517de6ed0f05edfc66becaddcc4d",
+      "size_bytes": 8200
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-change-impact.provenance.json",
+      "git_blob": "cb85c1b05c2e8f606ad23e6bded1f203de743fcb",
+      "sha256": "f1babdcafd2607ef92e3c844bed189952c68532827665d10271b041bf975af2a",
+      "size_bytes": 1255
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-example-plan-metadata.json",
+      "git_blob": "4b44c305396065c1ca08eaff27ef7b76b61ad4ee",
+      "sha256": "5bdf13ff0ffd42cd3e1d7e2325dc2fd9aa90385097fbce938b62e4ffc2e011dc",
+      "size_bytes": 9401
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-example-plan.json",
+      "git_blob": "a97cf7a4f1130d96c37312053f02a1e0a84e674c",
+      "sha256": "b3654e582911fd5d56909a9dda96d2c7fcada65f89dc1f7b734f15ab71787c7a",
+      "size_bytes": 172
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-example-plan.stderr.txt",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-full-tests.json",
+      "git_blob": "c77e955854f5a617c04b80f594482a422ef397c1",
+      "sha256": "07cb61ecf6224c2c30856a2bd0264e09ed9632c4ba01dae8a2d0f38bb2ac2311",
+      "size_bytes": 546
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-full-tests.log",
+      "git_blob": "450b94373d81fae18dcba10a612033af6863166e",
+      "sha256": "315fec98d22dba69021802e1390972e977223fd77c04263489dd9596c535bde8",
+      "size_bytes": 143949
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-probe-metadata.json",
+      "git_blob": "5f0ced25578b8844848368f5e7ad95adbd0374c9",
+      "sha256": "af136c26fa6e7698b287862267412294e518e6eba06ada0cc896194236891e5c",
+      "size_bytes": 10625
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-probe.json",
+      "git_blob": "02ad9d94ef2c6139b033c8863c1bdf204109856c",
+      "sha256": "4e22bbd06ea68d9ece66e950020c64a58bbab1a75f1cb658b61c5a4558d08b9d",
+      "size_bytes": 1862
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/p01-xrt-probe.stderr.txt",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-tooling/verification.json",
+      "git_blob": "e07c230778df730263853af69f98689fac0ea258",
+      "sha256": "e2a3c44fedd1920824f930a18e96200d1d028f016f50169bcf613b900d27e677",
+      "size_bytes": 46172
+    },
+    {
+      "path": "docs/project/evidence/p01/attention-operand-erratum.md",
+      "git_blob": "d924ac88fb759bffec70039ebd079ac609711675",
+      "sha256": "97cbf494e39d256c46c076817a09591e6b472f41eda16fe56177c03df62d3c04",
+      "size_bytes": 1764
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/gemm-fp16-simx-sw_runtime_simx_config.stamp",
+      "git_blob": "e0885b39797b250f5ca0c14194edad4c2c19b12a",
+      "sha256": "0804b9dee6dc0a116c72725f277ce8da47c0909fb876d17545ad24daf39f39e4",
+      "size_bytes": 883
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/gemm-fp16-simx-sw_runtime_simx_rt_config.stamp",
+      "git_blob": "88ee08e749423719c06a6c41b3c4c60d32c5398b",
+      "sha256": "4549a431437283a691857b8f29467ca256d410cd2cb13066206f841983010dd9",
+      "size_bytes": 7733
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/gemm-fp16-simx-tests_regression_sgemm_tcu_config.stamp",
+      "git_blob": "03673806a5982b246c2055b4f8e6e5fda0f99c90",
+      "sha256": "e098d94faab37eb6be89d2216f10a338d52984a6234159ea75c01e7a74bf8a1f",
+      "size_bytes": 15610
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/tooling/baseline.py",
+      "git_blob": "e249977c83805a52e142c983e9fcc191352eda90",
+      "sha256": "d26202d38a27b5ab0a52e735edb5682a8be8b9771624c69c724dbeb7e2c58610",
+      "size_bytes": 27600
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/tooling/baseline_host.py",
+      "git_blob": "ab4391b835927295878d98eb9d9bf1c7ca0cfc4a",
+      "sha256": "96bc0d25b1ec0509937c83d1de50db0a0125ca2acda405467e28d9e37dfb5ccb",
+      "size_bytes": 6107
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/tooling/baseline_inventory.py",
+      "git_blob": "e2c546357d6d0adc8466f4705e166b5b47ee75f1",
+      "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+      "size_bytes": 20466
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/tooling/baseline_matrix.py",
+      "git_blob": "686827a391b1a52f7ac001954fd4141a3aa02ed3",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "size_bytes": 8890
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/tooling/baseline_process.py",
+      "git_blob": "452ee37703a49571090ed4bda29c0b2bbfcb4017",
+      "sha256": "d011171fc41734fa323127a70acc13e7b7a5a7949372e808655af1b535cdaca2",
+      "size_bytes": 12542
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/artifacts/tooling/preflight.py",
+      "git_blob": "411bad774d14a2046d5c0fb2c4930bb00be28b7d",
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+      "size_bytes": 15124
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/export-manifest.json",
+      "git_blob": "9bf1cbdb1f2e2d13dc0747c75d1cf009d3582ac5",
+      "sha256": "11550c8857d99b9ec1d2c98c36e4de8d6115e9feb656378b5aef609388787a6e",
+      "size_bytes": 9824
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/logs/configure.log",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/logs/gemm-fp16-simx-configure.log",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/logs/gemm-fp16-simx.log",
+      "git_blob": "71dda79298f5520307da74c0efac16594239c29d",
+      "sha256": "97b396e642e78953dd3e5eab1af55b475cad9e09acd5c809ad995d4ea26f558a",
+      "size_bytes": 52065
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/logs/kernel-library.log",
+      "git_blob": "b68711c49f7577859ccf54f0f205152b1c81f526",
+      "sha256": "0f58d2c63a9d152b98e450e06b7b90ceb0b42e768cc8f0f1daa87babff0bcf74",
+      "size_bytes": 106477
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/logs/runtime-stub.log",
+      "git_blob": "1373bc43e640617ff521ec7d90e155950d6d47a2",
+      "sha256": "060ad6e1a6332aef0b0996ace11c011ea9cb52afffe3014448ed2f0318db9040",
+      "size_bytes": 8165
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/matrix.json",
+      "git_blob": "62543bc70bb48fb7911bb9cd1349d8a94dd81a36",
+      "sha256": "d2f570fa241dff720446809e572efecbaed56cc7d14365bf096859d1d764b61f",
+      "size_bytes": 9455
+    },
+    {
+      "path": "docs/project/evidence/p01/clean-build/report.json",
+      "git_blob": "5eac0889ddc689d0919c82f648b05100162c0926",
+      "sha256": "3ab2ab91da405ecb7a2b3a9f15fa2776fc06afa29803b4199527cad3d99f29b8",
+      "size_bytes": 83647
+    },
+    {
+      "path": "docs/project/evidence/p01/execution-summary.json",
+      "git_blob": "e98bd7ef2108255e0db39b72233c44a8776729d1",
+      "sha256": "04a28ab8c683322dff4ae7511692894eb181b5e5f2cfc4b7747f129a8a6737e7",
+      "size_bytes": 4441
+    },
+    {
+      "path": "docs/project/evidence/p01/history-manifest.json",
+      "git_blob": "9586b97b715ff9f9315a4ad76b149a1d2c4f15bd",
+      "sha256": "b15afc043d2f2b6071979e4c75cff6f251e26c63f81c974398a82055a624b56d",
+      "size_bytes": 22708
+    },
+    {
+      "path": "docs/project/evidence/p01/history/README.md",
+      "git_blob": "ef25ff4db975a63cf3cf1d37aaf886cda9f2e93c",
+      "sha256": "22e2c3e0eab43744424105430673422c5eea179e9ab47b7b5ba9242a402d5401",
+      "size_bytes": 4634
+    },
+    {
+      "path": "docs/project/evidence/p01/history/first-gemm-fp16-simx.json",
+      "git_blob": "4396c0ca014ad0fb51deb5295dba2ff81dc251c6",
+      "sha256": "1027dbe4a46141029a8ecd6fb8e74f35e81d0189bd87f5b15831d54c167d2e5d",
+      "size_bytes": 9346
+    },
+    {
+      "path": "docs/project/evidence/p01/history/first-gemm-fp16-simx.log",
+      "git_blob": "c25e72642b6a24c52703df5336cac103d20a88b7",
+      "sha256": "ac42bc986a5f1c03bb9d4aa08f3745661b511366dbee48b17e04a27665eb87a1",
+      "size_bytes": 4303
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/artifacts/gemm-fp16-simx-sw_runtime_simx_config.stamp",
+      "git_blob": "e0885b39797b250f5ca0c14194edad4c2c19b12a",
+      "sha256": "0804b9dee6dc0a116c72725f277ce8da47c0909fb876d17545ad24daf39f39e4",
+      "size_bytes": 883
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/artifacts/gemm-fp16-simx-sw_runtime_simx_rt_config.stamp",
+      "git_blob": "88ee08e749423719c06a6c41b3c4c60d32c5398b",
+      "sha256": "4549a431437283a691857b8f29467ca256d410cd2cb13066206f841983010dd9",
+      "size_bytes": 7733
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/artifacts/gemm-fp16-simx-tests_regression_sgemm_tcu_config.stamp",
+      "git_blob": "03673806a5982b246c2055b4f8e6e5fda0f99c90",
+      "sha256": "e098d94faab37eb6be89d2216f10a338d52984a6234159ea75c01e7a74bf8a1f",
+      "size_bytes": 15610
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/logs/configure.log",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/logs/gemm-fp16-rtlsim-configure.log",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/logs/gemm-fp16-rtlsim.log",
+      "git_blob": "9b3c053bf6ea4a7eeacf409f2435d8c25a477dcb",
+      "sha256": "5f7031ad45079cdfe15992ca2475ddce3f7917a23eaff2782dfdf91d418a5a26",
+      "size_bytes": 3699
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/logs/gemm-fp16-simx-configure.log",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/logs/gemm-fp16-simx.log",
+      "git_blob": "95398a1310942385619b516027ed624bbdca8aa9",
+      "sha256": "a59cb8ead4ebca0c94d69ef7d31ff4ebabe43a3624d0cb0329bd578fd67808e7",
+      "size_bytes": 52065
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/logs/kernel-library.log",
+      "git_blob": "b68711c49f7577859ccf54f0f205152b1c81f526",
+      "sha256": "0f58d2c63a9d152b98e450e06b7b90ceb0b42e768cc8f0f1daa87babff0bcf74",
+      "size_bytes": 106477
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/logs/runtime-stub.log",
+      "git_blob": "1373bc43e640617ff521ec7d90e155950d6d47a2",
+      "sha256": "060ad6e1a6332aef0b0996ace11c011ea9cb52afffe3014448ed2f0318db9040",
+      "size_bytes": 8165
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/matrix.json",
+      "git_blob": "1f5881593d88348a06008b825525faf7bf097070",
+      "sha256": "f0ad2390b983c3e9a0804fc6309d22bb85ba23ba39635309e0193c9a54d6df97",
+      "size_bytes": 9269
+    },
+    {
+      "path": "docs/project/evidence/p01/history/native-run/report.json",
+      "git_blob": "81ce6a540c23001d8f191e4332a6ecd07eef7075",
+      "sha256": "df3a67a315d244dba291c2b4a03429e0c81216c5158498a8b0f889a65dfaccd9",
+      "size_bytes": 61676
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/bootstrap-source.py.txt",
+      "git_blob": "136d6a7e668c54a6aafc91a8056fcc9d636ee69d",
+      "sha256": "2556bceaf2456033d298eddfc3dc5c57499cc1fe716e1d4104ca0ba4175cfabc",
+      "size_bytes": 4426
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/bootstrap.log",
+      "git_blob": "b63cb7d64d9501bb8acc68f74e2b6148f9f57f3f",
+      "sha256": "9af62fcb7a9f4b8c1578de2de6591473464b450a2140d76a78e5492a7d8bb23b",
+      "size_bytes": 1614
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/clean-kernel-runtime.json",
+      "git_blob": "be1b534d480c32d0ad8a79ab2b16c19a6be31dfd",
+      "sha256": "4757fb18634ce2ce210dbbb658664af41223703f35fd9fde472021bfa8dc76a3",
+      "size_bytes": 1691
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/clean-kernel.log",
+      "git_blob": "edf23acb8561c11abd9ccc4f930f8bd5848529db",
+      "sha256": "7cc07f2b06c65fe9bf9b7f970201fe66d6d18b143b2250fd8037ea37f2c310fa",
+      "size_bytes": 106717
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/clean-ramulator-build.log",
+      "git_blob": "29a456ee73e006a96539a9f201f792157894d3ab",
+      "sha256": "70933563813591f17c38c333cc86ca33b8bb6c31a8efb3115288bf6e8c081434",
+      "size_bytes": 10189
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/clean-ramulator-configure.log",
+      "git_blob": "bcdf0405d695f4b39e6a314df914b95f78a6a6f7",
+      "sha256": "e4d9f0654137a073cf1ab7fe2216cc07bfc0e84d7531ef8822004b6b14191e69",
+      "size_bytes": 1225
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/clean-runtime.log",
+      "git_blob": "300bd0390c4004989693cb569be6a3a61a407eaa",
+      "sha256": "5aa99f218e73ffcce168995c4b6046e5ca97f9e851feb199e8dbce4a9286f599",
+      "size_bytes": 8205
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/clean-submodules.log",
+      "git_blob": "22c795abfa5922205e3ba0df215a7f7e9aa03f8b",
+      "sha256": "a62815ac758b14bb06fe2d9299cf321f2a725910aa2596ddd14fcfc46c13b380",
+      "size_bytes": 2487
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/clean-third-party.log",
+      "git_blob": "750160cc2cc41e81dd2581d57b6c3b36cfab6b49",
+      "sha256": "27ed26ce99d678575e150c7f40c9e03349bf1211fb6dc16c0abfb655b7953f41",
+      "size_bytes": 103563
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/host-native-tools.json",
+      "git_blob": "fe4033bcfb46dd4e87f7383055440b5d61b0a765",
+      "sha256": "3495e83840b4990515a14bad01e8617e0ba5c43b041b8859a9ccc99e16d43049",
+      "size_bytes": 1094
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/host-packages.json",
+      "git_blob": "45094e7e093e520cf57cfa882e62866124809f66",
+      "sha256": "022f1badad9fcbb1865cc76ece98047dd97d0050ce0bc09d59c69b4875faa8ec",
+      "size_bytes": 2894
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/initial-preflight.json",
+      "git_blob": "58383e2a427ececb500b0dc54810a7141515a5e9",
+      "sha256": "aa87d808ec994447db03bacaac67cf8be8a3f1cc7ab7c1796e5f663459db18e1",
+      "size_bytes": 4984
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/initial-provenance.json",
+      "git_blob": "d72a382d2716a237f61f28aff7c4c68aeb9f21cb",
+      "sha256": "f9ed5149b7490085a19df25f68fb03e8c6a259b368e2002e94e515452d1f4b88",
+      "size_bytes": 13664
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/ramulator-dependencies.json",
+      "git_blob": "87fdc36be4641be4f370628b30aa356bd53e9376",
+      "sha256": "2a9e0febe6165526c5ad4e61e26d466cea6a65db5c9f9526c4a011ea5f278ba0",
+      "size_bytes": 175
+    },
+    {
+      "path": "docs/project/evidence/p01/history/provisioning/tool-bundles.json",
+      "git_blob": "335e36f03395daa934d722576d3a0e14adc506ee",
+      "sha256": "63771ba8d9ff691b3867ed96be7b058ed5eae1368789575f4964e38f8718a405",
+      "size_bytes": 5008
+    },
+    {
+      "path": "docs/project/evidence/p01/history/retry-gemm-fp16-rtlsim.json",
+      "git_blob": "7365552b327b06305660751d2460cfa8c79426e0",
+      "sha256": "53b633e0de05bf367ae093bf1b08a82ba72f85d8595a460eae13cacbcd933a87",
+      "size_bytes": 2215
+    },
+    {
+      "path": "docs/project/evidence/p01/history/retry-gemm-fp16-rtlsim.log",
+      "git_blob": "855ac4cc74e49663182b80b6fab363d70216d3c8",
+      "sha256": "9042ec40ea6d68892d624c933967466b74842d7d989186886b201fd42d61b7a9",
+      "size_bytes": 3264
+    },
+    {
+      "path": "docs/project/evidence/p01/history/runner-start-source.json",
+      "git_blob": "a79f1faba245d8778c37d29934ef1b0f0ff500be",
+      "sha256": "25ddbe3a1c3b470b85c13873b9a5ff4b4b7a997a568b401c4f00719fbc4de2f4",
+      "size_bytes": 1115
+    },
+    {
+      "path": "docs/project/evidence/p01/history/runner-start-source.zip",
+      "git_blob": "4314cb95801f498daffdba1587452a78ab86fabe",
+      "sha256": "c4827650c39755fc4e68e0c0c80c31ac33acf911fb5a55cad5f36877ae304489",
+      "size_bytes": 26714
+    },
+    {
+      "path": "docs/project/evidence/p01/matrix-description-correction.json",
+      "git_blob": "b40675318eb7a34a751ffabcd7d773e49561023d",
+      "sha256": "4d58c79254de8dbf17fb1331f38d1925e852cdc4645582cea18ad0f978108860",
+      "size_bytes": 1951
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/attention-tf32-rtlsim-sw_runtime_rtlsim_config.stamp",
+      "git_blob": "ae41aef403c25cdc88515f673c19d0496946be02",
+      "sha256": "314d1b8cc7ec0e11c9c33d0426814e0b9deeb05c15bc379c1b7d04fcf38d3d2b",
+      "size_bytes": 1957
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/attention-tf32-rtlsim-sw_runtime_rtlsim_rt_config.stamp",
+      "git_blob": "932c641adcc28104f793f483370a3f0cf031a111",
+      "sha256": "5c7e0f9711163c7bc5f475faef4dba3c79ab695e5d1d4372cf106a277d8f43c0",
+      "size_bytes": 7939
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/attention-tf32-rtlsim-tests_regression_flash_attn_tcu_wg_config.stamp",
+      "git_blob": "914eb6ea3a936906e2d063ebd764475634b02b13",
+      "sha256": "0fd44c2d7bbdca521a252b327a4e663705e4c413991be9e02982ddcd7a5d37b6",
+      "size_bytes": 16098
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/attention-tf32-simx-sw_runtime_simx_config.stamp",
+      "git_blob": "12e99a2e754935a6872be08922915b1dc0371643",
+      "sha256": "3f902e3ccc0b626c35b428513b28691307b53fc9954bbb1ec3a3f48dea794e5d",
+      "size_bytes": 1038
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/attention-tf32-simx-sw_runtime_simx_rt_config.stamp",
+      "git_blob": "b9b3a5ea9d8a1855eabf2bf48d980703159b02db",
+      "sha256": "3eaa9249ad3d05020f468dba8baf6c6c0976e9df200b81ce15bc653cb8867387",
+      "size_bytes": 7939
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/attention-tf32-simx-tests_regression_flash_attn_tcu_wg_config.stamp",
+      "git_blob": "914eb6ea3a936906e2d063ebd764475634b02b13",
+      "sha256": "0fd44c2d7bbdca521a252b327a4e663705e4c413991be9e02982ddcd7a5d37b6",
+      "size_bytes": 16098
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/gemm-bf16-rtlsim-sw_runtime_rtlsim_config.stamp",
+      "git_blob": "80c64af92c2246860ee345a9bc662f51bada981c",
+      "sha256": "0ec366b3bd1cc2fdabce44d93659ef002007a1adc825e99737648c210d9504c7",
+      "size_bytes": 1649
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/gemm-bf16-rtlsim-sw_runtime_rtlsim_rt_config.stamp",
+      "git_blob": "e938ef279891f6aaad2f45779de887118aeb1599",
+      "sha256": "e94284f5b17c9c51533578fa4cf9ff0e2740178622080b15fbf7063db899245f",
+      "size_bytes": 7744
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/gemm-bf16-rtlsim-tests_regression_sgemm_tcu_config.stamp",
+      "git_blob": "b2f939cb8bdd8622fb7d61d42457220026a74b93",
+      "sha256": "07cc58d78a7079ee509c9c2dbd7f4ebbc029bafe04bafb8a3863e61c869bcd04",
+      "size_bytes": 15632
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/gemm-bf16-simx-sw_runtime_simx_config.stamp",
+      "git_blob": "0c82a8e32405200de83c45c4cd88cb978d629ae0",
+      "sha256": "303b8a7681016f7ade771134333887602b6b4c290b46ee5d75d7d37c52e9f4cd",
+      "size_bytes": 884
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/gemm-bf16-simx-sw_runtime_simx_rt_config.stamp",
+      "git_blob": "2874e1e52cb45b0d218d81b92aaab08323974a73",
+      "sha256": "ca9aca3738def6a246791893be503459b9ebda964916563a319929accdf67c7b",
+      "size_bytes": 7744
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/gemm-bf16-simx-tests_regression_sgemm_tcu_config.stamp",
+      "git_blob": "b2f939cb8bdd8622fb7d61d42457220026a74b93",
+      "sha256": "07cc58d78a7079ee509c9c2dbd7f4ebbc029bafe04bafb8a3863e61c869bcd04",
+      "size_bytes": 15632
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/gemm-fp16-rtlsim-sw_runtime_rtlsim_config.stamp",
+      "git_blob": "c615396d00dcc2c247b53523b68eee50a9612894",
+      "sha256": "8d3e0d2afb7b7a68d97c85067c7ce5916d2247e32904cef4b6e0594fcad64d69",
+      "size_bytes": 1647
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/gemm-fp16-rtlsim-sw_runtime_rtlsim_rt_config.stamp",
+      "git_blob": "48886ca1457b21f2ba18f8a26e429aae648a3682",
+      "sha256": "9dca75c1c07760f4307fe803f42e88ba6181fc55fcfa8d8e1b843dcb2ba16c87",
+      "size_bytes": 7733
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/gemm-fp16-rtlsim-tests_regression_sgemm_tcu_config.stamp",
+      "git_blob": "03673806a5982b246c2055b4f8e6e5fda0f99c90",
+      "sha256": "e098d94faab37eb6be89d2216f10a338d52984a6234159ea75c01e7a74bf8a1f",
+      "size_bytes": 15610
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/gemm-fp16-simx-sw_runtime_simx_config.stamp",
+      "git_blob": "e0885b39797b250f5ca0c14194edad4c2c19b12a",
+      "sha256": "0804b9dee6dc0a116c72725f277ce8da47c0909fb876d17545ad24daf39f39e4",
+      "size_bytes": 883
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/gemm-fp16-simx-sw_runtime_simx_rt_config.stamp",
+      "git_blob": "88ee08e749423719c06a6c41b3c4c60d32c5398b",
+      "sha256": "4549a431437283a691857b8f29467ca256d410cd2cb13066206f841983010dd9",
+      "size_bytes": 7733
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/gemm-fp16-simx-tests_regression_sgemm_tcu_config.stamp",
+      "git_blob": "03673806a5982b246c2055b4f8e6e5fda0f99c90",
+      "sha256": "e098d94faab37eb6be89d2216f10a338d52984a6234159ea75c01e7a74bf8a1f",
+      "size_bytes": 15610
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/tooling/baseline.py",
+      "git_blob": "e249977c83805a52e142c983e9fcc191352eda90",
+      "sha256": "d26202d38a27b5ab0a52e735edb5682a8be8b9771624c69c724dbeb7e2c58610",
+      "size_bytes": 27600
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/tooling/baseline_host.py",
+      "git_blob": "ab4391b835927295878d98eb9d9bf1c7ca0cfc4a",
+      "sha256": "96bc0d25b1ec0509937c83d1de50db0a0125ca2acda405467e28d9e37dfb5ccb",
+      "size_bytes": 6107
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/tooling/baseline_inventory.py",
+      "git_blob": "e2c546357d6d0adc8466f4705e166b5b47ee75f1",
+      "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+      "size_bytes": 20466
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/tooling/baseline_matrix.py",
+      "git_blob": "686827a391b1a52f7ac001954fd4141a3aa02ed3",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "size_bytes": 8890
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/tooling/baseline_process.py",
+      "git_blob": "452ee37703a49571090ed4bda29c0b2bbfcb4017",
+      "sha256": "d011171fc41734fa323127a70acc13e7b7a5a7949372e808655af1b535cdaca2",
+      "size_bytes": 12542
+    },
+    {
+      "path": "docs/project/evidence/p01/native/artifacts/tooling/preflight.py",
+      "git_blob": "411bad774d14a2046d5c0fb2c4930bb00be28b7d",
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+      "size_bytes": 15124
+    },
+    {
+      "path": "docs/project/evidence/p01/native/export-manifest.json",
+      "git_blob": "7df3e27cb3fdb71134ab4640d9feaf56382b2f84",
+      "sha256": "4b5bb980a035abb93a2c1bf4e9c72def70ef1d0d6a6ac87dc0adc9b67c8fbd86",
+      "size_bytes": 21944
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/attention-tf32-rtlsim-configure.log",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/attention-tf32-rtlsim.log",
+      "git_blob": "6c2de7499fd86b7458266d48916d002f001dc4a1",
+      "sha256": "7051bc72be481c801d34a5380a2fc0b09c95eacb4430fb5d28f98df68ec909c2",
+      "size_bytes": 3764
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/attention-tf32-simx-configure.log",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/attention-tf32-simx.log",
+      "git_blob": "ef72ad46ee999ed88d9011db800b73c9b44a2216",
+      "sha256": "bbf450a5116423565c3a653b4a4b54257b1e8fd308ad87014e6e40a93ad011be",
+      "size_bytes": 54054
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/configure.log",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/gemm-bf16-rtlsim-configure.log",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/gemm-bf16-rtlsim.log",
+      "git_blob": "51788e4b862fa001f8f0e4f1c7838ce9fc15d2f5",
+      "sha256": "580422fe06c0ff61d4676131deae2a542e376ae75270056cc413466ea8f6eee8",
+      "size_bytes": 2829
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/gemm-bf16-simx-configure.log",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/gemm-bf16-simx.log",
+      "git_blob": "71f73cde43f78c64773b57c118633d6ffc651ab0",
+      "sha256": "0c1b48c73fbf27c856b3df0eb947115f37310e17719d39dbbe99247f4c502e89",
+      "size_bytes": 52136
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/gemm-fp16-rtlsim-configure.log",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/gemm-fp16-rtlsim.log",
+      "git_blob": "c20d15d1023e70186910b44d24f90696b3bba02a",
+      "sha256": "372549f04dee5ed501b495cf2f1b24e6a2e4925ce07909f5ea438a513d6fdd0e",
+      "size_bytes": 3264
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/gemm-fp16-simx-configure.log",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/gemm-fp16-simx.log",
+      "git_blob": "92a785b71e63e249c3e87084a4342e35c1992390",
+      "sha256": "31d9596e14fd8d3910ca36eaf83576914b463e5975bcd5022585860a780ab225",
+      "size_bytes": 2678
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/kernel-library.log",
+      "git_blob": "5a443f1693f1122e2e14e4a78ed2a3d0cd8b6aaf",
+      "sha256": "a9077ddf7282029318f72a3266e73937023298c910e52c708e9a02a646d4bceb",
+      "size_bytes": 123
+    },
+    {
+      "path": "docs/project/evidence/p01/native/logs/runtime-stub.log",
+      "git_blob": "a71b99eb93fd21589563f74053a2144adf6f2cdb",
+      "sha256": "8b35a77763fcf0187cedd91b6c4aa054927da320bd163e0cc876ce5b21be5ff8",
+      "size_bytes": 135
+    },
+    {
+      "path": "docs/project/evidence/p01/native/matrix.json",
+      "git_blob": "1f5881593d88348a06008b825525faf7bf097070",
+      "sha256": "f0ad2390b983c3e9a0804fc6309d22bb85ba23ba39635309e0193c9a54d6df97",
+      "size_bytes": 9269
+    },
+    {
+      "path": "docs/project/evidence/p01/native/report.json",
+      "git_blob": "4036426588e3aed98e2f0e8b6a97593cff42c912",
+      "sha256": "acf8855d504d5b0d8c7e425e4fc27c2c84a57a6ca3c5f5abbc7d953fdf6f9167",
+      "size_bytes": 269673
+    },
+    {
+      "path": "docs/project/evidence/p01/resource-observation.json",
+      "git_blob": "df019847c06374e94eabe0396a7afc9575aed785",
+      "sha256": "05d03a3f890612276e0643b5d6987c9c1c9914fea04878cbfd770c674647248a",
+      "size_bytes": 1285
+    },
+    {
+      "path": "docs/project/evidence/p01/toolchain-archive-compatibility-export.json",
+      "git_blob": "894d4185ed3ab3fa5d2cf61350ce92ce6067b472",
+      "sha256": "951a06ba4b96c92a570d29efced7c59092f20b349d8af3493282fd07df95ccc2",
+      "size_bytes": 657
+    },
+    {
+      "path": "docs/project/evidence/p01/toolchain-archive-compatibility.json",
+      "git_blob": "2d2263c5ca1716ce14eb409e3a4fce6d38fc4b84",
+      "sha256": "1206a02111c71f938c1ac28c5fb0e08530f4ca05f99da69a39a7112b4ae53656",
+      "size_bytes": 8829
+    },
+    {
+      "path": "docs/project/evidence/p01/tooling-validation.json",
+      "git_blob": "0afb82b480e9f541ab4bcce93b4467a08a1f6a3e",
+      "sha256": "a4e0420e825b12480743d984d68060f1a55fcc431d15738e5e3e5d4c75b061fc",
+      "size_bytes": 4870
+    },
+    {
+      "path": "docs/project/evidence/p01/tooling-validation.log",
+      "git_blob": "63ea89d526c87feaa0b9c72a2420083828439fe6",
+      "sha256": "a5b169867d8cfffeaa7e5dd597959f183450ceaca1ea7834a02146b00c56898e",
+      "size_bytes": 177
+    },
+    {
+      "path": "docs/project/evidence/p01/vendor-prerequisites.json",
+      "git_blob": "75c16b4ff254f9affb6077c839e229bce3bac710",
+      "sha256": "0110c86889873ace1b5aa9acaeeeea3bd863cf007e67f735e2fed619fe413c6d",
+      "size_bytes": 9106
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/effective-sw_runtime_xrt_config.stamp.txt",
+      "git_blob": "ecf4fc174237e5845d4e55e1d430097b48ef5009",
+      "sha256": "f4e56e5e666a71726e3eb6f799dbe1a70f1a3fd9b1eec2c4d3becaa4ca50a8b9",
+      "size_bytes": 7466
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/effective-sw_runtime_xrtsim_config.stamp.txt",
+      "git_blob": "49b9be40b62c9f1a372be6616bad26bc476fb2a6",
+      "sha256": "adcb905ddf4fd62f811b432cb96e4789801fb4e88d74f8b3fafdf58913d57d58",
+      "size_bytes": 1477
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/effective-tests_regression_demo_config.stamp.txt",
+      "git_blob": "36ee5f9be5d1a2debbed098ad6cb4957dda5beb9",
+      "sha256": "6a2fab3910802bb4938db31491bb00f79925680be813a238ada4d9db77fbaf99",
+      "size_bytes": 15254
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-.config.stamp.txt",
+      "git_blob": "5b24b79ce3b160addb28d827051ff48077289224",
+      "sha256": "d87099012ae08d2aa9e12952fbcda202887807853d7aa2963c14ce3e456a7722",
+      "size_bytes": 224
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-ci_blackbox.sh.txt",
+      "git_blob": "99a926e5020f9f72cf863351ffa23adc0f1beb27",
+      "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+      "size_bytes": 9153
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-config.mk.txt",
+      "git_blob": "23f864fb1052ae8d43ad9f6a1cc8eb82a8b88828",
+      "sha256": "048a29981a88ba0c361368cb65cdd712b06081526e98afff760c9a4f068b3850",
+      "size_bytes": 3259
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-hw_VX_config.vh.txt",
+      "git_blob": "e59796dd398fe68ae14d5fb3dc0efe4109141f29",
+      "sha256": "ae0d0729b61e6cdb1520cf3eb571329867f73b545f0b5920ae1813ff01a75ca5",
+      "size_bytes": 36066
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-hw_VX_types.vh.txt",
+      "git_blob": "ad2b5a6fb6687b5de043e60f49b6fd784658cefe",
+      "sha256": "1896f4b7c3872b40bd0f953e0f200ffa143da631f49150399ca098cc7f5cb120",
+      "size_bytes": 22924
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-sim_xrtsim_Makefile.txt",
+      "git_blob": "a535c48241008b0038534fb000034f6551e8dc0f",
+      "sha256": "a948bbc99029e75664b0c5b68c12e77d4dec8b890f8ea1b1a1d6c8e9bf2d975d",
+      "size_bytes": 10473
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-sim_xrtsim_verilator.vlt.txt",
+      "git_blob": "67b284f19a57b73b04c451acfc303223d0f521ba",
+      "sha256": "11a783daaf834836739f365cc7cf84e37ca593f4390ee349e5dc6e8bcde75685",
+      "size_bytes": 368
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-sw_VX_config.h.txt",
+      "git_blob": "f923aca887cff5f30eb7eb52c6a9777312572c9a",
+      "sha256": "f3cb3f0794318bd031aa2492ed48fc9a516785b13358cb3482c7323dda37872b",
+      "size_bytes": 36239
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-sw_VX_types.h.txt",
+      "git_blob": "8154474459cd69ecbae138ffa3a1d5e8ec652c33",
+      "sha256": "5d6e9d58fd7aad098761dce9973310f7a302ac0364bc3a8117a525c74da5f4f0",
+      "size_bytes": 22153
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-sw_runtime_xrt_Makefile.txt",
+      "git_blob": "a5a5958303d6b2a647e75a4853e17120a2fce19e",
+      "sha256": "89dded3790a87aa3aeeea5b1dfdfb638380efeb4dd5821610b48972a348f5b5b",
+      "size_bytes": 1892
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/generated-tests_regression_demo_Makefile.txt",
+      "git_blob": "13330bcccbfca31437544eb95bc9cd50f9a8c63a",
+      "sha256": "9b236ee1aafa211af3c51c62803e2143610d44d9aa70831cf8a6551200b6b10a",
+      "size_bytes": 256
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/harness-run_p01_xrtsim.py.txt",
+      "git_blob": "1c0d836208d2ae78959d7517c22716c7539fbc61",
+      "sha256": "dbcfa4dbcb875385facd98f50a429923d0b21b812d030c28cd7ebb7d514d9d6e",
+      "size_bytes": 15417
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/header-uuid-header.json.txt",
+      "git_blob": "d4d81e025ca2c69e321e1d0f34f89c59ed7e0ca8",
+      "sha256": "4b6ca9acf51fbc861a4f3e42e0a312fa1e75d513ed1454883b311cadb2f6687b",
+      "size_bytes": 308
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/header-uuid_uuid.h.txt",
+      "git_blob": "2e0f70aa9cfbfe0e260cf9b449080f01077ab987",
+      "sha256": "0f29b583df138cd9a123aa03498c8a049b71a1afcc0ff90a6dbaac44514385a4",
+      "size_bytes": 4331
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-hw_rtl_afu_common_VX_afu_wrap.sv.txt",
+      "git_blob": "4a38fbff28bd1cf749f1168cde6d75f2074d81e7",
+      "sha256": "310869020d10bbceae796b556f82b9741982ed6001907a5a55e01e10d8d93915",
+      "size_bytes": 63376
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-hw_rtl_afu_xrt_vortex_afu.v.txt",
+      "git_blob": "05863d8791a1d5b7aa407a5e672c4734f8085b82",
+      "sha256": "764ce5a8dc03e76b6b101f53cf8249673f6714683e542cbac7059811f753cd3a",
+      "size_bytes": 4211
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sim_xrtsim_Makefile.txt",
+      "git_blob": "a535c48241008b0038534fb000034f6551e8dc0f",
+      "sha256": "a948bbc99029e75664b0c5b68c12e77d4dec8b890f8ea1b1a1d6c8e9bf2d975d",
+      "size_bytes": 10473
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sim_xrtsim_verilator.vlt.in.txt",
+      "git_blob": "61f3e1e58ff8c734837e51d9e8a40ca4cfba1845",
+      "sha256": "fc877bfb369afbe82da6d6e6eeee6389d55a74d262da32bd1522d3c508a397a2",
+      "size_bytes": 404
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sim_xrtsim_vortex_afu_shim.sv.txt",
+      "git_blob": "d6a453507dd01e7f6695d794c76033364153acea",
+      "sha256": "d1bf51a2201682665fd8b24256be9e455ffdb0136c7898dd4b0cd400d09dd063",
+      "size_bytes": 3871
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sim_xrtsim_xrt_c.cpp.txt",
+      "git_blob": "845fc709d2e02283b7ec7b0bf65a57a146f6f041",
+      "sha256": "cc12cd7d56b2f1abecbd91659e27dd430b4490d889f046ec33dd71d8996bf501",
+      "size_bytes": 5590
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sim_xrtsim_xrt_c.h.txt",
+      "git_blob": "69fbce1a08d72b7ab436ac5672112a4cfe724c24",
+      "sha256": "172f674f2e9feb39a291c0a6305d7c9c7a552b19f12391daf50554338dd51c65",
+      "size_bytes": 3785
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sim_xrtsim_xrt_sim.cpp.txt",
+      "git_blob": "d1d0e349fc9b68afbc197079ca523c80293b8542",
+      "sha256": "0720c6603046ee7700fd693d060b834f582be8a74dedd0086acc80d7b0ff8458",
+      "size_bytes": 38619
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sim_xrtsim_xrt_sim.h.txt",
+      "git_blob": "7e97a716cd9fd6006cce788d381c526b5b304a4b",
+      "sha256": "b658f15c5f6afc5cc48c06cf579816b318f5066e09a5e1a1e2306d3a75bb146b",
+      "size_bytes": 1634
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sw_runtime_xrt_Makefile.txt",
+      "git_blob": "a5a5958303d6b2a647e75a4853e17120a2fce19e",
+      "sha256": "89dded3790a87aa3aeeea5b1dfdfb638380efeb4dd5821610b48972a348f5b5b",
+      "size_bytes": 1892
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-sw_runtime_xrt_vortex.cpp.txt",
+      "git_blob": "4125eac91e56525c4eb707bb5ba6e99b5b00f8d3",
+      "sha256": "0f5e4079b6888a3fd0502da40f3d7f76b5a9e6bb178de9516fed7874f64bff45",
+      "size_bytes": 11568
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-tests_regression_demo_Makefile.txt",
+      "git_blob": "13330bcccbfca31437544eb95bc9cd50f9a8c63a",
+      "sha256": "9b236ee1aafa211af3c51c62803e2143610d44d9aa70831cf8a6551200b6b10a",
+      "size_bytes": 256
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-tests_regression_demo_common.h.txt",
+      "git_blob": "fc2d9221d99b1ed217e82bd46b61786739e60007",
+      "sha256": "c2d393eeda07d29785adc3994bc3e1c32cf590ad3f7ee263a77066e60135ff0c",
+      "size_bytes": 245
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-tests_regression_demo_kernel.cpp.txt",
+      "git_blob": "a4f5467bb4e12a6bcb9e9da2e05f312f6dffb8b9",
+      "sha256": "d9cf321928d9941326fe89b2eceb1c899cf599eb3f3ff533d5c08b57202479da",
+      "size_bytes": 764
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/source-tests_regression_demo_main.cpp.txt",
+      "git_blob": "b59869a27ed80a97790648327db7ea534f5d4e0f",
+      "sha256": "3acf2f35753aaae65b8f9e69640d407ba7fcf2cb7bbdc5557e6fdec9e8e3cf27",
+      "size_bytes": 8257
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/tooling/baseline.py",
+      "git_blob": "e249977c83805a52e142c983e9fcc191352eda90",
+      "sha256": "d26202d38a27b5ab0a52e735edb5682a8be8b9771624c69c724dbeb7e2c58610",
+      "size_bytes": 27600
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/tooling/baseline_host.py",
+      "git_blob": "ab4391b835927295878d98eb9d9bf1c7ca0cfc4a",
+      "sha256": "96bc0d25b1ec0509937c83d1de50db0a0125ca2acda405467e28d9e37dfb5ccb",
+      "size_bytes": 6107
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/tooling/baseline_inventory.py",
+      "git_blob": "e2c546357d6d0adc8466f4705e166b5b47ee75f1",
+      "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+      "size_bytes": 20466
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/tooling/baseline_matrix.py",
+      "git_blob": "686827a391b1a52f7ac001954fd4141a3aa02ed3",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "size_bytes": 8890
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/tooling/baseline_process.py",
+      "git_blob": "452ee37703a49571090ed4bda29c0b2bbfcb4017",
+      "sha256": "d011171fc41734fa323127a70acc13e7b7a5a7949372e808655af1b535cdaca2",
+      "size_bytes": 12542
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/artifacts/tooling/preflight.py",
+      "git_blob": "411bad774d14a2046d5c0fb2c4930bb00be28b7d",
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+      "size_bytes": 15124
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/export-manifest.json",
+      "git_blob": "55438e9ac38bd4489ef7371dd3c1a4b87c3d86d1",
+      "sha256": "7f7f3a053e65bd76d00b5fabd1d743c812c3112c6590b767cb8f8243f6702c99",
+      "size_bytes": 22558
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/logs/configure.log",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/logs/demo-xrtsim.log",
+      "git_blob": "388aa1190024c4eb8efb34a658f6ebdcd4ed7bc7",
+      "sha256": "ba492556e6dd84d058e43904554e8875beb421f96c5ec3496e730a1ea7485bc8",
+      "size_bytes": 50646
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/logs/kernel-library.log",
+      "git_blob": "b68711c49f7577859ccf54f0f205152b1c81f526",
+      "sha256": "0f58d2c63a9d152b98e450e06b7b90ceb0b42e768cc8f0f1daa87babff0bcf74",
+      "size_bytes": 106477
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/logs/runtime-stub.log",
+      "git_blob": "1373bc43e640617ff521ec7d90e155950d6d47a2",
+      "sha256": "060ad6e1a6332aef0b0996ace11c011ea9cb52afffe3014448ed2f0318db9040",
+      "size_bytes": 8165
+    },
+    {
+      "path": "docs/project/evidence/p01/xrtsim/report.json",
+      "git_blob": "59bad36173dcc487bcd65d9aa3ac7f150b92def2",
+      "sha256": "0906deee4b803862bce8f231d0d2d0269b798adc0017a5fbd2ecd01d834b36aa",
+      "size_bytes": 226578
+    },
+    {
+      "path": "docs/project/evidence/report.example.json",
+      "git_blob": "1069853d053e31cd93b0637695753c28c22ed836",
+      "sha256": "5226cdf5953e3e9150fc1cc64c6323d38b4039954b1bb12be0638f1a55bd13e4",
+      "size_bytes": 1035
+    },
+    {
+      "path": "docs/project/evidence/setup-accepted.json",
+      "git_blob": "3cdddd4fdfc38b8e31ed553d376f375f98a22865",
+      "sha256": "1879f316e4f9aa0dd68ab98ecaf354859d9935260e832c61c820fcf8ee87ba69",
+      "size_bytes": 2371
+    },
+    {
+      "path": "docs/project/evidence/setup-delivery.json",
+      "git_blob": "82c8417f4bc757c56f207c8086264fb89e40b43a",
+      "sha256": "cf11de50c74000b98989fa0fe164895f658cbc2ad9d200c6c610465fe584ef78",
+      "size_bytes": 1639
+    },
+    {
+      "path": "docs/project/evidence/setup-merged.json",
+      "git_blob": "894fff49c642ba1c0fac9b8900d82647c381e699",
+      "sha256": "aadd88d60da206d6913f971ca482b4ee03c19175b1201db46c64789a6234ddb7",
+      "size_bytes": 2446
+    },
+    {
+      "path": "docs/project/evidence/setup-publication.json",
+      "git_blob": "762a28f7ccbd19f695fb576ca47ddc716164b970",
+      "sha256": "44896629fc02448170f329e706560bb65801e633657fc109a92e6aab18e1213a",
+      "size_bytes": 4596
+    },
+    {
+      "path": "docs/project/evidence/setup-review.md",
+      "git_blob": "3dd9ab9141ad2619c8ad05449b35596d278638ad",
+      "sha256": "8e4b197d77c217b2666c376e67425f70eeaaa83690f1b2016419520cfd7bef34",
+      "size_bytes": 19281
+    },
+    {
+      "path": "docs/project/evidence/setup-validation.json",
+      "git_blob": "0901cf259a6c7442ff10bd260ab57616976093b3",
+      "sha256": "a5d4f47850b49434e164162ee3f5bb7a7fb625e0d59f738c9b25376cab3f40fa",
+      "size_bytes": 4671
+    },
+    {
+      "path": "docs/project/evidence/setup-validation.log",
+      "git_blob": "0443f6ed3caf7b13ff064d039608a49966248b31",
+      "sha256": "e84f51b842d8927ac8bef8ec20c54fdda0392746a0f95946782a5f662a777535",
+      "size_bytes": 10609
+    }
+  ],
+  "worktree_changes": [
+    " M ci/project/hwemu_build.py",
+    " M ci/project/test_hwemu_shell.py",
+    " M ci/project/test_xrt_baseline.py",
+    " M ci/project/test_xrt_inventory.py",
+    " M ci/project/xrt_baseline.py",
+    " M ci/project/xrt_inventory.py",
+    " M ci/project/xrt_test_support.py",
+    "?? ci/project/compiler_records.py",
+    "?? ci/project/test_compiler_records_generated.py",
+    "?? ci/project/test_compiler_records_oracle.py",
+    "?? ci/project/test_xrt_compiler_execution.py",
+    "?? ci/project/test_xrt_compiler_provenance.py",
+    "?? ci/project/test_xrt_compiler_records.py"
+  ]
+}
