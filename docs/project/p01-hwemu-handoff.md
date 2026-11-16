@@ -13,8 +13,8 @@ reports. The [roadmap](roadmap.json) remains authoritative.
 | Starting revision | `91b82fe300f94ab0a70dd0e0e4a69a0e23b16101` |
 | Integration owner | Primary coding agent `/root` |
 | Initial implementation publication | [`81e35e97d2fa410bbfbb970b53ccc179b0aa8d27`](https://github.com/baabi-boo/AI-GPU/commit/81e35e97d2fa410bbfbb970b53ccc179b0aa8d27), tree `dd72cfa527ad47a7cd967336528a7de1c00aa90b` |
-| Git-configuration correction publication | Pending commit/tree and remote readback |
-| Current release state | Initial implementation published; correction locally validated and independently reviewed; correction publication and hosted recovery pending |
+| Git-configuration correction publication | [`e9e36c1cdccf975e330d9a9d2d67f3df9e50ba98`](https://github.com/baabi-boo/AI-GPU/commit/e9e36c1cdccf975e330d9a9d2d67f3df9e50ba98), tree `1f0f72dbf0d3e755b11e06bb80794ae3a11fe346` |
+| Current release state | Corrected implementation published; hosted Governance passed; all 60 assignments completed; main CI remains unverified at the recorded queue checkpoint |
 | Vendor / physical execution | Not run; required tools and platform are absent |
 
 The requested collaboration is recorded separately in the
@@ -119,7 +119,7 @@ The corrected 792-test run likewise recorded identical before/after hashes for
 Each digest is SHA-256 of compact sorted-key JSON mapping source-relative paths
 to their SHA-256 content hashes. Neither content set includes this evolving
 handoff or other documentation/accounting changes. The publication record below
-separates the initial published identities from the pending corrected publication
+separates the initial published identities from the corrected publication
 and its hosted observations.
 
 The standalone fixture check observed about 50.63 GiB of free disk and 7.57 GiB
@@ -186,8 +186,9 @@ the fixture's conditional-include visibility assertion was finalized.
 The controlled configuration-scope defect and its local correction are proven.
 The original hosted log did **not** print the runner's actual system/global
 configuration, so attribution of that exact hosted failure to those settings
-remains a supported hypothesis. Local review and the corrected suite do not
-establish hosted recovery; the original failed run remains preserved below.
+remains a supported hypothesis. Local review and the corrected suite alone do not
+establish hosted recovery. The separate successful hosted result below does;
+the original failed run remains preserved.
 
 ## Resources and preservation
 
@@ -206,6 +207,14 @@ continuations' execution ledgers, phase roadmap/dependencies, golden data, pins
 and shared baseline/preflight/verifier code are unchanged. All new delivery
 files are UTF-8 text; no vendor packages, binaries, logs or disposable fixtures
 are part of the change.
+
+The final preservation audit at `2026-11-16T00:55:44Z` found exactly 34 delivery
+paths: seven inherited modifications and 27 additions, with 3,171 untouched base
+leaf identities. All 161 accepted artifact references matched again. The
+repository occupied 356,073,472 allocated bytes (about 340 MiB), the whole
+workspace 358,006,784 bytes, and available disk was 54,328,709,120 bytes
+(about 50.60 GiB). The owned standalone fixtures were absent. Subsequent changes
+are limited to this handoff and the current continuation ledger.
 
 The protected illustration remains byte-identical and embedded in the README:
 `docs/assets/img/vortex_framework_stack.svg`, SHA-256
@@ -238,15 +247,59 @@ runner's filter configuration. These initial observations remain part of the
 history even after later successful checks; neither run is recorded here as a
 pass.
 
-### Correction and final delivery — pending
+### Corrected implementation and hosted recovery
 
-The Git-configuration correction is independently reviewed and locally validated
-at the exact content hashes above. Its publication commit/tree and remote
-readback are **pending**. Subsequent hosted runs must be bound to that exact
-published correction before recovery can be recorded. Final completed-agent
-accounting and any later documentation/accounting publication are also
-**pending** and must be filled only after they occur. This checkpoint does not
-claim all 60 assignments completed or final delivery achieved.
+The correction was published through a non-force update with the expected
+previous branch head, then `master` was read back as
+[`e9e36c1cdccf975e330d9a9d2d67f3df9e50ba98`](https://github.com/baabi-boo/AI-GPU/commit/e9e36c1cdccf975e330d9a9d2d67f3df9e50ba98).
+Its tree is `1f0f72dbf0d3e755b11e06bb80794ae3a11fe346` and sole parent is
+`81e35e97d2fa410bbfbb970b53ccc179b0aa8d27`. The API-created tree exactly matched
+the staged tree. Before publication, all 68 committed code blobs matched the
+corrected local suite and the immutable commit was classified with the base
+policy: incremental R1, cumulative R2, with no R3 detector. Independent remote
+readback at `2026-11-16T01:00:50Z` confirmed these identities again.
+
+| Corrected hosted observation for `e9e36c1cdccf975e330d9a9d2d67f3df9e50ba98` | Observed outcome |
+|---|---|
+| [Project Governance run 43783361663](https://github.com/baabi-boo/AI-GPU/actions/runs/43783361663), push / attempt 1, [job 133025419808](https://github.com/baabi-boo/AI-GPU/actions/runs/43783361663/job/133025419808) | Completed **success**, updated `2026-11-16T01:00:36Z`; all steps passed, **792 tests in 103.159 seconds**, zero failures, errors or skips |
+| [Main CI run 43783361665](https://github.com/baabi-boo/AI-GPU/actions/runs/43783361665), push / attempt 1 | **Queued** at `2026-11-16T01:01:16.337Z`; plan and change-impact queued with no steps started; setup/build/tests not yet materialized, matrix and final outcome unverified |
+
+The completed corrected Governance log reports `OK` on Git 2.56.1 and Python
+3.12.3. Its SHA-256 is `b2553e302b59d2a192705754133b5de4aaf0f598b47d3f3c5f1c708fc9e3f20d`.
+This is observed hosted recovery on the same relevant Git version reported by
+the failed run. The initial failure note, JSON and decoded log remain unchanged;
+the correction observation is a follow-up to assignment 49, not another agent.
+The main-CI follow-up likewise does not turn a queue observation into a pass.
+
+The corrected standalone CLI also passed with owned machine/default-user Git
+filter settings under actual workspace resources, then blocked when the same
+configuration was explicitly included by the source repository. Both calls
+preserved inputs and index state, and no filter or vendor canary executed.
+Its compact observation summary has SHA-256
+`de1a3e5d58c2b45e1982df4e19c65e4384204551adfbefdb215577650d042a80`.
+
+### Completed collaboration and final record
+
+All **60 distinct assignments completed in ten logical waves of six**, using
+bounded batches under the three-worker concurrency limit. The final ledger
+check verifies exactly 60 unique task names, six assignments in every wave and
+54 matching retained note hashes. Assignments 1–6 use their explicit
+conversation/coordinator evidence basis. Coordinator work, follow-up observations
+and failed spawn attempts are not counted as additional agents. The earlier
+failed Governance record and both original CI observation files remain intact.
+
+Assignment 60 independently accepted the published correction and this final
+handoff's implementation, verification, preservation and hosted-recovery claims.
+No new finding or unresolved F2/F3 finding remains; the compiler-glob F1 and
+qualified vendor-execution obligations remain explicitly recorded above. Agent
+review does not grant hardware acceptance or replace the maintainer's authority.
+
+The final completion record changes only this handoff and the current
+continuation ledger. All 68 implementation/test file identities remain those of
+the published correction and its successful hosted Governance run. The Git
+history of these two documents identifies the accounting revision separately
+from that tested implementation. Final publication uses the same expected-parent,
+non-force update and remote-readback checks.
 
 ## Next bounded action
 
