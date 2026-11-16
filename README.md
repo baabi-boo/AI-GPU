@@ -34,6 +34,7 @@ P00 is complete, P01 is blocked, P02 is in progress, and P03–P11 are not start
 - Understand the goal: [project charter](docs/project/charter.md).
 - See the development sequence: [roadmap](ROADMAP.md).
 - Continue the numerical track: [P02 entry handoff](docs/project/p02-entry-handoff.md).
+- Reproduce the new contract and fixtures: [P02 numerical handoff](docs/project/p02-numerics-handoff.md).
 - Pick the next bounded task: [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
 - Reproduce the current phase: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
 - Follow current supplemental work: [P01 tensor-oracle hardening](docs/project/p01-tensor-oracles.md)
@@ -132,6 +133,39 @@ dependencies are reported separately. Follow the [developer guide](docs/project/
 before downloads or execution: approve a disk/RAM/job budget, use pinned tools
 and separate build directories, and start with bounded cases. Do not begin with
 an unrestricted toolchain install or full synthesis sweep.
+
+## P02 numerical contract implementation
+
+The [v1 specification](docs/designs/tensor_numerics_v1.md) defines native TFR
+FP16/BF16-to-FP32 arithmetic for a fixed four-product unit profile. Its
+[machine manifest](ci/project/p02_tensor_contract.json) binds 98 deterministic
+fixtures to an independent integer/rational producer and strict bit comparisons.
+The contract describes the fixed alignment window, RNE rounding, cancellation,
+input subnormals, signed output flush-to-zero, infinities and canonical NaNs.
+It does not promise an exact real dot product or universal IEEE behavior.
+
+The runnable [p02-tfr profile](profiles/p02-tfr.json) also freezes one core,
+four warps of four threads, native TFR/STD arithmetic and the ordinary
+`8 x 4 x 8` WMMA tile. Twenty independently generated
+[matrix-layout fixtures](ci/project/fixtures/p02_layout_v1.json) define compact
+row-major A, column-major B and row-major output across single and multiple
+tiles. Their source-level checks do not claim that those matrices ran on a GPU.
+
+The [unit harness](hw/unittest/tcu_contract/main.cpp) checks those constants on
+native TFR RTL and separately on the production model function. Its enable-stall
+checks cover the leaf pipeline. Native WMMA/WGMMA C++ contexts now reject input
+formats absent from the compiled TFR configuration; this compile-boundary check
+does not create a hardware trap for unsupported raw instructions.
+
+```sh
+python3 ci/project/p02_fixture_oracle.py --check
+python3 ci/project/p02_layout_fixture_oracle.py --check
+python3 -m unittest discover -s ci/project -p 'test_p02_*.py'
+```
+
+See the [numerical handoff](docs/project/p02-numerics-handoff.md) for reviewed
+execution results, evidence boundaries and the remaining whole-processor and
+WGMMA work. P02 stays `in_progress` until every exit obligation is satisfied.
 
 ## P01 supplemental tensor-oracle hardening
 

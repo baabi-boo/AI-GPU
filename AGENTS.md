@@ -24,6 +24,14 @@ retained tracing-disabled INI distinct from the generated `run-xrt` recipe.
 The generated debug/profiling defaults are off; waveform capture requires
 explicit debug configuration and `VORTEX_XRT_WAVEFORM=1`.
 
+For P02 numerical work, start with the [numerical handoff](docs/project/p02-numerics-handoff.md)
+and the [versioned TFR contract](docs/designs/tensor_numerics_v1.md). Regenerate
+independent fixtures only through their reviewed producer; never substitute the
+production model for their expected bits. Keep raw-bit, leaf RTL, model-function,
+full-processor and WGMMA results separately scoped. Disable a boolean format
+bank with its `VX_CFG_*_DISABLE` override: `VX_CFG_*_ENABLE=0` still defines a
+macro and can retain an `ifdef`-selected datapath.
+
 Validate runtime, kernel and host compiler records independently through the
 [shared validator](ci/project/compiler_records.py); never combine records or
 expand retained stamp text to establish configuration coverage. Preserve source

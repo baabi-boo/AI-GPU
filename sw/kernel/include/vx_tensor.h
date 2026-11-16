@@ -38,6 +38,54 @@ static inline __attribute__((always_inline)) smem_matrix_desc vx_make_smem_desc(
 
 namespace detail {
 
+#ifdef VX_CFG_TCU_TYPE_TFR
+  constexpr bool tfr_input_enabled(uint32_t format) {
+    switch (format) {
+#ifdef VX_CFG_TCU_FP16_ENABLE
+    case fp16::id:
+    case bf16::id:
+      return true;
+#endif
+#ifdef VX_CFG_TCU_TF32_ENABLE
+    case tf32::id:
+      return true;
+#endif
+#ifdef VX_CFG_TCU_FP8_ENABLE
+    case fp8::id:
+    case bf8::id:
+      return true;
+#ifdef VX_CFG_TCU_MX_ENABLE
+    case mxfp8::id:
+    case mxbf8::id:
+      return true;
+#ifdef VX_CFG_TCU_FP4_ENABLE
+#ifdef VX_CFG_TCU_MXFP4_ENABLE
+    case mxfp4::id:
+      return true;
+#endif
+#ifdef VX_CFG_TCU_NVFP4_ENABLE
+    case nvfp4::id:
+      return true;
+#endif
+#endif
+#endif
+#endif
+#ifdef VX_CFG_TCU_INT8_ENABLE
+    case int8::id:
+    case uint8::id:
+      return true;
+#endif
+#ifdef VX_CFG_TCU_INT4_ENABLE
+    case int4::id:
+    case uint4::id:
+      return true;
+#endif
+    default:
+      return false;
+    }
+  }
+#endif
+
   enum class frag_use_t { matrix_a, matrix_b, accumulator };
 
   template <typename F, std::size_t... Is>
@@ -224,6 +272,10 @@ public:
 
   static_assert(tcu_output_valid(It::id, Ot::id),
                 "TCU output type must be fp32 (int32 for integer inputs)");
+#ifdef VX_CFG_TCU_TYPE_TFR
+  static_assert(detail::tfr_input_enabled(It::id),
+                "TCU input format is not enabled in the native TFR configuration");
+#endif
 
   using input_t  = typename It::dtype;
   using output_t = typename Ot::dtype;
@@ -870,6 +922,10 @@ template <uint32_t NT,
 struct wgmma_context {
   static_assert(tcu_output_valid(It::id, Ot::id),
                 "TCU output type must be fp32 (int32 for integer inputs)");
+#ifdef VX_CFG_TCU_TYPE_TFR
+  static_assert(detail::tfr_input_enabled(It::id),
+                "TCU input format is not enabled in the native TFR configuration");
+#endif
 
 private:
   static constexpr uint32_t NRA = 4;

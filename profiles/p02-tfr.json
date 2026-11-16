@@ -1,0 +1,51 @@
+{
+  "name": "p02-tfr",
+  "description": "UNQUALIFIED P02 source contract: RV64, one core, four warps of four threads, ordinary dense FP16/BF16 WMMA with native TFR and STD arithmetic. Profile resolution and host layout fixtures are not GPU execution evidence.",
+  "xlen": 64,
+  "core": {
+    "VX_CFG_NUM_WARPS": 4,
+    "VX_CFG_NUM_THREADS": 4,
+    "VX_CFG_ISSUE_WIDTH": 1,
+    "VX_CFG_NUM_ALU_BLOCKS": 1,
+    "VX_CFG_NUM_LSU_BLOCKS": 1,
+    "VX_CFG_NUM_FPU_BLOCKS": 1,
+    "VX_CFG_FPU_TYPE": "STD",
+    "VX_CFG_EXT_TCU_ENABLE": true,
+    "VX_CFG_TCU_TYPE": "TFR",
+    "VX_CFG_TCU_PE_RATIO": 1,
+    "VX_CFG_TCU_LATENCY": 4,
+    "VX_CFG_TCU_USE_DSP": 0,
+    "VX_CFG_TCU_FP16_ENABLE": true,
+    "VX_CFG_TCU_TF32_ENABLE": false,
+    "VX_CFG_TCU_FP8_ENABLE": false,
+    "VX_CFG_TCU_FP4_ENABLE": false,
+    "VX_CFG_TCU_INT8_ENABLE": false,
+    "VX_CFG_TCU_INT4_ENABLE": false,
+    "VX_CFG_TCU_MX_ENABLE": false,
+    "VX_CFG_TCU_MXFP4_ENABLE": false,
+    "VX_CFG_TCU_NVFP4_ENABLE": false,
+    "VX_CFG_TCU_SPARSE_ENABLE": false,
+    "VX_CFG_TCU_DSM_ENABLE": false,
+    "VX_CFG_TCU_WGMMA_ENABLE": false,
+    "VX_CFG_LMEM_ENABLE": true,
+    "VX_CFG_EXT_LDST_MATRIX_ENABLE": false
+  },
+  "chip": {
+    "VX_CFG_NUM_CLUSTERS": 1,
+    "VX_CFG_NUM_CORES": 1
+  },
+  "sources": {
+    "baseline": "Source inspection: 49ec3060f4787c9b650acdc26f12dab6acfcbcb9. Bounded P02 configuration, with no performance reference or execution qualification.",
+    "xlen": "RV64 application/backend contract; configure --xlen=64 and use the identical p02-tfr hardware profile for both. ITYPE=fp16 or bf16, OTYPE=fp32 and KUNROLL=1 are application definitions, not hardware profile knobs.",
+    "VX_CFG_NUM_CLUSTERS, VX_CFG_NUM_CORES, VX_CFG_NUM_WARPS, VX_CFG_NUM_THREADS, VX_CFG_ISSUE_WIDTH": "Pin one cluster, one core, four warps, four threads and issue width one. sw/common/tensor_cfg.h derives ordinary WMMA tcM/tcN/tcK=2/2/2 words and tileM/tileN/tileK=8/4/8 elements for either 16-bit input format with NR=8, DK=DP=0, XB=4.",
+    "VX_CFG_NUM_ALU_BLOCKS, VX_CFG_NUM_LSU_BLOCKS, VX_CFG_NUM_FPU_BLOCKS": "Pin one block per unit; NUM_TCU_BLOCKS remains derived from issue width one and NUM_TCU_LANES from four threads, as required by the native tensor path.",
+    "VX_CFG_FPU_TYPE, VX_CFG_EXT_TCU_ENABLE, VX_CFG_TCU_TYPE": "Select the native STD scalar and TFR tensor implementations explicitly; no ambient SV_DPI selection changes these backends.",
+    "VX_CFG_TCU_PE_RATIO, VX_CFG_TCU_LATENCY, VX_CFG_TCU_USE_DSP": "Freeze the P02 four-product FEDP profile at PE ratio one, four enabled pipeline advances and USE_DSP=0. These are configuration values, not measured application timing.",
+    "VX_CFG_TCU_FP16_ENABLE": "The shared 16-bit bank enables both FP16 and BF16; there is no separate BF16-enable knob in VX_config.toml.",
+    "VX_CFG_TCU_TF32_ENABLE, VX_CFG_TCU_FP8_ENABLE, VX_CFG_TCU_FP4_ENABLE, VX_CFG_TCU_INT8_ENABLE, VX_CFG_TCU_INT4_ENABLE, VX_CFG_TCU_MX_ENABLE, VX_CFG_TCU_MXFP4_ENABLE, VX_CFG_TCU_NVFP4_ENABLE": "Disable every other selectable tensor-format/scaling bank using the existing profile booleans, which merge as *_DISABLE flags.",
+    "VX_CFG_TCU_SPARSE_ENABLE, VX_CFG_TCU_DSM_ENABLE, VX_CFG_TCU_WGMMA_ENABLE": "Dense ordinary WMMA only; disable sparse metadata, distributed shared memory and warp-group paths explicitly.",
+    "VX_CFG_TCU_FEDP2K": "Required OFF: inherit the checked false default in VX_config.toml and require its generated macro to be absent. The existing profile schema cannot represent false for this non-_ENABLE flag; writing integer zero would define it and activate #ifdef paths. No FEDP2K override is permitted within this contract.",
+    "VX_CFG_LMEM_ENABLE": "Keep local memory explicitly enabled for the native application/runtime path; matrix operands in this contract use the ordinary sgemm_tcu pointers, not a shared-memory matrix descriptor.",
+    "VX_CFG_EXT_LDST_MATRIX_ENABLE": "Disable matrix load/store instructions so sgemm_tcu uses the ordinary fragment load/store path. All unlisted configuration values remain revision-dependent defaults."
+  }
+}

@@ -1,5 +1,10 @@
 # P02 staged-entry handoff — native numerical development
 
+The numerical implementation now continues in the
+[P02 numerical handoff](p02-numerics-handoff.md). This document preserves the
+staged-entry decision and the work it originally unlocked; consult the current
+[status](status.md) for accepted results and the next task.
+
 **Decision:** [ADR-004](decisions.md#adr-004--staged-native-development-entry-with-vendor-integration-retained),
 2026-11-16. This handoff is the current entry point for the unblocked workstream.
 The canonical state and exact acceptance contract remain in

@@ -1,0 +1,574 @@
+{
+  "schema_version": 1,
+  "contract_id": "p02-tfr-fp16-bf16-v1",
+  "contract_version": 1,
+  "work_package": "P02-T01",
+  "specification": "docs/designs/tensor_numerics_v1.md",
+  "source_inspection_revision": "49ec3060f4787c9b650acdc26f12dab6acfcbcb9",
+  "claim_scope": "Source-defined dense FEDP arithmetic, separate four-thread WMMA application configuration and independent compact matrix-memory layout fixtures; execution results and phase acceptance require separate reviewed evidence.",
+  "phase_complete": false,
+  "profile": {
+    "id": "p02-tfr-rv64-n2-v1",
+    "xlen": 64,
+    "threads": 4,
+    "arithmetic_backend": "TFR",
+    "packed_words": 2,
+    "word_bits": 32,
+    "elements_per_word": 2,
+    "products": 4,
+    "window_bits": 25,
+    "aligned_magnitude_bits": 26,
+    "accumulator_bits": 30,
+    "internal_exponent_bits": 10,
+    "latency": 4,
+    "use_dsp": 0,
+    "rounding": "RNE",
+    "dense": true,
+    "scaled": false,
+    "wgmma": false,
+    "sparse": false,
+    "dsm": false,
+    "fedp2k": false,
+    "memory_scope": "Direct packed FEDP inputs; local memory and matrix loaders are not exercised.",
+    "geometry_scope": "One output from four products plus C; separate from the actual P02 WMMA application geometry and historical P01 application profiles.",
+    "role": "Direct-input FEDP leaf diagnostic profile, separate from the WMMA application profile."
+  },
+  "application_profile": {
+    "id": "p02-tfr-rv64-t4-wmma-v1",
+    "name": "p02-tfr",
+    "path": "profiles/p02-tfr.json",
+    "sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+    "identity_status": "source_bytes_frozen_review_recorded_separately",
+    "evidence_level": "source_present",
+    "execution_claimed": false,
+    "application": "tests/regression/sgemm_tcu",
+    "kernel_source": "tests/regression/sgemm_tcu/kernel.cpp",
+    "host_source": "tests/regression/sgemm_tcu/main.cpp",
+    "configuration": {
+      "xlen": 64,
+      "clusters": 1,
+      "cores": 1,
+      "warps": 4,
+      "threads": 4,
+      "issue_width": 1,
+      "tensor_backend": "TFR",
+      "scalar_backend": "STD",
+      "tcu_latency": 4,
+      "use_dsp": 0,
+      "pe_ratio": 1
+    },
+    "features": {
+      "local_memory": true,
+      "ldst_matrix": false,
+      "wgmma": false,
+      "dsm": false,
+      "sparse": false,
+      "fedp2k": false,
+      "block_scaling": false,
+      "enabled_tensor_formats": [
+        "fp16",
+        "bf16"
+      ]
+    },
+    "geometry": {
+      "wmma_template": {
+        "NT": 4,
+        "NR": 8,
+        "DK": 0,
+        "DP": 0,
+        "XB": 4
+      },
+      "tc_words": {
+        "m": 2,
+        "n": 2,
+        "k": 2
+      },
+      "tile_words": {
+        "m": 8,
+        "n": 4,
+        "k": 4
+      },
+      "tile_elements": {
+        "m": 8,
+        "n": 4,
+        "k": 8
+      },
+      "steps": {
+        "m": 4,
+        "n": 2,
+        "k": 2
+      },
+      "fragment_registers": {
+        "a": 8,
+        "b": 4,
+        "c": 8
+      },
+      "input_elements_per_word": 2,
+      "products_per_fedp": 4
+    },
+    "layout": {
+      "a": "row_major",
+      "b": "col_major",
+      "output": "row_major",
+      "leading_dimensions": {
+        "lda": "K",
+        "ldb": "K",
+        "ldc": "N"
+      },
+      "element_addresses": {
+        "a": "m*K+k",
+        "b": "n*K+k",
+        "output": "m*N+n"
+      },
+      "input_element_bytes": 2,
+      "output_element_bytes": 4,
+      "initial_accumulator_bits": "00000000",
+      "kunroll": 1,
+      "dimensions": "Positive M,N,K with M divisible by 8, N by 4 and K by 8; complete compact tiles only.",
+      "tile_origins": "m=8*blockIdx.y, n=4*blockIdx.x; K visits 0,8,...,K-8.",
+      "unsupported": [
+        "padding",
+        "arbitrary_strides",
+        "partial_tiles",
+        "nonzero_initial_matrix_c",
+        "transposed_application_operands"
+      ]
+    },
+    "configurations": [
+      {
+        "configuration_id": "p02-tfr-rv64-t4-wmma-v1/fp16-fp32-kunroll1",
+        "application_configuration_id": "p02-tfr-rv64-t4-wmma-v1/fp16-fp32-kunroll1",
+        "backend_configuration_id": "p02-tfr-rv64-t4-wmma-v1/fp16-fp32-kunroll1",
+        "profile_path": "profiles/p02-tfr.json",
+        "format_flags": [
+          "-DITYPE=fp16",
+          "-DOTYPE=fp32",
+          "-DKUNROLL=1"
+        ]
+      },
+      {
+        "configuration_id": "p02-tfr-rv64-t4-wmma-v1/bf16-fp32-kunroll1",
+        "application_configuration_id": "p02-tfr-rv64-t4-wmma-v1/bf16-fp32-kunroll1",
+        "backend_configuration_id": "p02-tfr-rv64-t4-wmma-v1/bf16-fp32-kunroll1",
+        "profile_path": "profiles/p02-tfr.json",
+        "format_flags": [
+          "-DITYPE=bf16",
+          "-DOTYPE=fp32",
+          "-DKUNROLL=1"
+        ]
+      }
+    ],
+    "matching_rule": "Application and backend share the identical profile bytes and format-flag configuration identity; retain and compare actual resolved generated configuration and compiler records. No ambient feature override is in scope.",
+    "inherited_constraints": {
+      "source": "VX_config.toml",
+      "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+      "required_false_defaults": [
+        "VX_CFG_TCU_FEDP2K"
+      ],
+      "required_absent_generated_macros": [
+        "VX_CFG_TCU_FEDP2K"
+      ],
+      "reason": "The profile schema cannot pin false for this non-_ENABLE option. Defining it to zero enables #ifdef paths, so require the revision-bound false default and no override."
+    },
+    "fixture_input_adapter": "pending; existing sgemm_tcu generates inputs and does not read the layout JSON"
+  },
+  "supported_formats": [
+    {
+      "input": "fp16",
+      "input_format_id": 2,
+      "output": "fp32",
+      "output_format_id": 0,
+      "exponent_bits": 5,
+      "fraction_bits": 10,
+      "exponent_bias": 15,
+      "enable_macro": "VX_CFG_TCU_FP16_ENABLE"
+    },
+    {
+      "input": "bf16",
+      "input_format_id": 3,
+      "output": "fp32",
+      "output_format_id": 0,
+      "exponent_bits": 8,
+      "fraction_bits": 7,
+      "exponent_bias": 127,
+      "enable_macro": "VX_CFG_TCU_FP16_ENABLE"
+    }
+  ],
+  "backends": {
+    "native_tfr": {
+      "role": "native RTL unit consumer",
+      "source": "hw/rtl/tcu/tfr/VX_tcu_fedp_tfr.sv",
+      "harness": "hw/unittest/tcu_contract/main.cpp",
+      "modes": [
+        "unit_dense",
+        "unit_stall"
+      ]
+    },
+    "tfr_model": {
+      "role": "production software model consumer; not a full SimX processor execution",
+      "source": "sw/common/fedp.h",
+      "simx_integration": "sim/simx/tcu/tcu_unit.cpp",
+      "modes": [
+        "model_dense"
+      ]
+    },
+    "excluded": [
+      "DPI",
+      "DSP",
+      "BHF",
+      "FPNEW"
+    ]
+  },
+  "arithmetic": {
+    "input_quantization": "none; raw FP16/BF16 words and raw FP32 C are supplied",
+    "packing": "lane i uses word i//2, bits 16*(i%2)+15 through 16*(i%2), paired A[i] with B[i]",
+    "product_rounding": "none before alignment",
+    "common_quantum": "2^(max effective term exponent - 24), equivalently 2^(RTL maximum exponent - 284)",
+    "alignment": "truncate each unsigned magnitude right shift, then apply sign; shift distances >=26 produce zero magnitude",
+    "accumulation": "exact sum of four aligned signed products and aligned C in 30 bits",
+    "sticky": "global OR of every nonzero discarded lane tail; tails retain no sign and do not cancel",
+    "final_rounding": "nearest, ties to even, on retained normalized window plus global sticky",
+    "zero_sum_bits": "00000000",
+    "negative_underflow_bits": "80000000",
+    "canonical_nan_bits": "7fc00000",
+    "nan_conditions": [
+      "any NaN operand including C",
+      "infinity times zero",
+      "opposite signed infinite terms"
+    ],
+    "infinity": "propagate unique infinite sign after NaN precedence",
+    "overflow": "signed infinity when rounded biased exponent >=255",
+    "underflow": "signed zero when rounded biased exponent <=0; no output subnormal encoding",
+    "input_subnormals": "preserved during decode with exponent field replaced by 1 and no hidden bit; not renormalized before maximum-exponent selection",
+    "architectural_exception_flags": "not specified or claimed by this contract",
+    "exact_real_dot_equivalence": false,
+    "whole_gemm_single_rounding": false
+  },
+  "fixtures": {
+    "path": "ci/project/fixtures/p02_tfr_v1.json",
+    "generated_header": "hw/unittest/common/p02_tfr_vectors.h",
+    "producer": {
+      "path": "ci/project/p02_fixture_oracle.py",
+      "version": 1,
+      "method": "independent integer and rational implementation of the specified fixed window",
+      "production_arithmetic_used_for_expected_outputs": false
+    },
+    "identity_status": "producer_bytes_frozen_review_recorded_separately",
+    "case_count": 98,
+    "case_count_by_format": {
+      "fp16": 49,
+      "bf16": 49
+    },
+    "sha256": "0d8b173af178875274a7bf29886a51838be8cdb54224d55353959a639a5ea6c3",
+    "generated_header_sha256": "1ab08b7b4896523b2e0891f42d82ad8c989c04ecf04f9b0d2ec73c2bdf139a2f",
+    "producer_sha256": "12e546864a4fef5b05e10c7a04b1006bcd59376e5921ea1221c4d42668490145",
+    "freeze_requirement": "Review final producer and artifact identities before acceptance evaluation; hashes were recorded only after producer bytes were available.",
+    "check_command": "python3 ci/project/p02_fixture_oracle.py --check",
+    "corpus_extension": {
+      "unchanged_previous_case_count": 96,
+      "previous_case_count_by_format": {
+        "fp16": 48,
+        "bf16": 48
+      },
+      "added_case_ids": [
+        "fp16_zero_times_max_exponent",
+        "bf16_zero_times_max_exponent"
+      ],
+      "prior_diagnostic_scope": "Any retained 96-case leaf diagnostic remains scoped to its original corpus and tested revision; it does not establish execution of the added pair or the application layout cases."
+    }
+  },
+  "layout_fixtures": {
+    "contract_id": "p02-wmma-layout-v1",
+    "contract_version": 1,
+    "path": "ci/project/fixtures/p02_layout_v1.json",
+    "sha256": "0543f9f4208de3ff4743fe1894d97ccf3b8cca4707e9a26acd1f3dde884725b2",
+    "producer": {
+      "path": "ci/project/p02_layout_fixture_oracle.py",
+      "version": 1,
+      "method": "integer encodings and direct integer matrix multiplication",
+      "production_model_used": false
+    },
+    "producer_sha256": "34e78c0313e2b032930615f02a790729d1c49293349728b55f7d04a29a2568a7",
+    "application_profile_id": "p02-tfr-rv64-t4-wmma-v1",
+    "application_profile_path": "profiles/p02-tfr.json",
+    "application_profile_sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+    "identity_status": "producer_and_profile_bytes_frozen_review_recorded_separately",
+    "evidence_level": "source_present",
+    "source_only": true,
+    "execution_claimed": false,
+    "case_count": 20,
+    "case_count_by_format": {
+      "fp16": 10,
+      "bf16": 10
+    },
+    "case_count_by_family": {
+      "cancellation": 4,
+      "dense_boundaries": 4,
+      "k_onehot": 12
+    },
+    "configuration_ids": {
+      "fp16": "p02-tfr-rv64-t4-wmma-v1/fp16-fp32-kunroll1",
+      "bf16": "p02-tfr-rv64-t4-wmma-v1/bf16-fp32-kunroll1"
+    },
+    "fixture_profile": "Compact matrix memories and exact-integer products for the frozen four-thread WMMA geometry; initial C=0, KUNROLL=1, no padding, arbitrary strides or tails.",
+    "packing": {
+      "input_element_bits": 16,
+      "input_word_bits": 32,
+      "elements_per_word": 2,
+      "memory_byte_order": "little_endian",
+      "input_order": "Consecutive memory elements occupy low then high 16 bits of each word.",
+      "a_words": "Complete row-major M*K input memory; lda=K elements.",
+      "b_words": "Complete column-major K*N input memory; ldb=K elements.",
+      "expected": "Complete row-major M*N FP32 output bits; ldc=N elements.",
+      "hex_encoding": "Eight lowercase hexadecimal digits per 32-bit word, without a prefix."
+    },
+    "coverage": {
+      "shapes_mnk": [
+        [
+          8,
+          4,
+          8
+        ],
+        [
+          16,
+          8,
+          16
+        ]
+      ],
+      "onehot_k_indices": [
+        0,
+        3,
+        4,
+        7,
+        8,
+        15
+      ],
+      "boundaries": "First/last rows and columns, adjacent packed halves, four-product groups, and M=8/N=4/K=8 tile boundaries.",
+      "cancellation": "Nonzero first-half sums cancel across FEDP boundaries and, for K=16, across K tiles; even rows produce +0 and odd rows retain a nonzero residual."
+    },
+    "exactness": {
+      "input_values": "Small integers exactly representable in both FP16 and BF16.",
+      "product_and_prefix_sum_abs_strict_max": 4096,
+      "reason": "Every product and prefix sum is integral and below 2^12 in magnitude; each four-product fixed-window quantum divides every term exactly, and FP32 represents each sum exactly.",
+      "comparison": "uint32_bit_equality",
+      "zero_result_bits": "00000000",
+      "whole_gemm_single_rounding_claimed": false
+    },
+    "comparison": {
+      "method": "uint32_bit_equality",
+      "expected_field": "expected",
+      "bit_width": 32,
+      "absolute_tolerance": 0,
+      "relative_tolerance": 0,
+      "ulp_tolerance": 0,
+      "signed_zero_equal": false,
+      "zero_result_bits": "00000000"
+    },
+    "fixture_input_adapter": "pending; existing sgemm_tcu generates its inputs and does not read this JSON",
+    "execution_limits": "The producer does not execute or validate vx_tensor.h gather/scatter, memory operations, SimX, RTL or GPU instructions. Existing sgemm_tcu does not consume these fixtures. Matrix-layout execution requires a separate adapter and reviewed source-bound application/backend evidence.",
+    "freeze_requirement": "Review final layout artifact, producer and application profile bytes before acceptance evaluation; recorded hashes identify source artifacts only.",
+    "check_command": "python3 ci/project/p02_layout_fixture_oracle.py --check"
+  },
+  "comparison": {
+    "method": "uint32_bit_equality",
+    "expected_field": "expected",
+    "bit_width": 32,
+    "absolute_tolerance": 0,
+    "relative_tolerance": 0,
+    "ulp_tolerance": 0,
+    "signed_zero_equal": false,
+    "nan_payloads_equal": false,
+    "expected_nan_bits": "7fc00000"
+  },
+  "coverage": {
+    "fixture_categories": [
+      "cancellation",
+      "extreme_exponent",
+      "infinity",
+      "input_subnormal",
+      "invalid",
+      "nan",
+      "normal",
+      "output_ftz",
+      "overflow",
+      "packed_onehot",
+      "rounding_sticky",
+      "rounding_tie",
+      "tiny_term",
+      "zero"
+    ],
+    "overflow_applicability": "Finite-input overflow is exercised for BF16; FP16 checks finite-range preservation because four finite FP16 products cannot overflow finite FP32 C.",
+    "unit_requirements": [
+      "ordinary_products_and_nonzero_c",
+      "four_packed_lane_positions",
+      "fp32_c_precision",
+      "signed_zeros",
+      "round_to_nearest_even_ties",
+      "rounding_carry",
+      "input_subnormals",
+      "output_ftz",
+      "alignment_gap_and_global_sticky",
+      "cancellation",
+      "finite_extremes_and_overflow",
+      "nan_and_infinity",
+      "zero_products_do_not_raise_alignment_exponent"
+    ],
+    "execution_claimed_here": false,
+    "separate_pending_execution": [
+      "full SimX application comparison",
+      "native processor RTL application comparison",
+      "fixture-input adapter for the independent compact matrix-memory layout corpus",
+      "matrix layout, leading dimension and tile boundary execution",
+      "long K chains with instruction rounding boundaries",
+      "unsupported-format failures at the tested API boundary",
+      "WGMMA synchronization, metadata, multi-warp and backpressure"
+    ],
+    "fixture_category_counts": {
+      "cancellation": 8,
+      "extreme_exponent": 6,
+      "infinity": 8,
+      "input_subnormal": 10,
+      "invalid": 6,
+      "nan": 8,
+      "normal": 10,
+      "output_ftz": 6,
+      "overflow": 4,
+      "packed_onehot": 8,
+      "rounding_sticky": 4,
+      "rounding_tie": 10,
+      "tiny_term": 6,
+      "zero": 4
+    }
+  },
+  "unsupported": {
+    "input_formats": [
+      "fp32",
+      "tf32",
+      "fp8",
+      "bf8",
+      "mxfp8",
+      "mxbf8",
+      "mxfp4",
+      "nvfp4",
+      "i32",
+      "i8",
+      "u8",
+      "i4",
+      "u4"
+    ],
+    "features": [
+      "sparsity",
+      "block_scaling",
+      "WGMMA",
+      "DSM",
+      "FEDP2K",
+      "alternate_rounding_modes",
+      "other_FEDP_widths",
+      "other_accumulator_widths"
+    ],
+    "tooling_response": "Unknown formats, case IDs, malformed operands and configuration substitutions must fail explicitly; no fallback.",
+    "native_api_guard": {
+      "status": "source_present_compile_matrix_evidence_pending",
+      "boundary": "compile-time TFR WMMA/WGMMA format enable checks at template instantiation",
+      "source": "sw/kernel/include/vx_tensor.h",
+      "predicate": "detail::tfr_input_enabled",
+      "source_inspection_observation": "The baseline revision checks output compatibility but lacks a general enabled-format guard; this continuation adds the TFR guard."
+    },
+    "raw_instruction_response": "outside contract; no trap, runtime rejection or numerical result is promised",
+    "raw_instruction_rejection_claimed": false,
+    "fmt_d_rejection_claimed": false,
+    "historical_p01_tf32_evidence_preserved": true
+  },
+  "preserved_p01": {
+    "manifest": "ci/project/p01_baseline.json",
+    "modified": false,
+    "gemm_profiles": [
+      {
+        "format": "fp16",
+        "case_ids": [
+          "gemm-fp16-simx",
+          "gemm-fp16-rtlsim"
+        ],
+        "threads": 8,
+        "issue_width": 2,
+        "warps": 4,
+        "cores": 1,
+        "clusters": 1,
+        "packed_words_per_fedp": 2,
+        "products_per_fedp": 4,
+        "wmma_tile_elements": [
+          8,
+          8,
+          16
+        ]
+      },
+      {
+        "format": "bf16",
+        "case_ids": [
+          "gemm-bf16-simx",
+          "gemm-bf16-rtlsim"
+        ],
+        "threads": 16,
+        "issue_width": 1,
+        "warps": 4,
+        "cores": 1,
+        "clusters": 1,
+        "packed_words_per_fedp": 4,
+        "products_per_fedp": 8,
+        "wmma_tile_elements": [
+          16,
+          8,
+          16
+        ]
+      }
+    ],
+    "gemm_common": {
+      "xlen": 64,
+      "tensor_backend": "TFR",
+      "scalar_backend": "STD",
+      "dimensions": [
+        64,
+        64,
+        64
+      ],
+      "seed": 50,
+      "a_layout": "row_major",
+      "b_layout": "col_major",
+      "output_layout": "row_major",
+      "reference": "CPU double accumulation of converted input products",
+      "comparison": "abs((actual-reference)/reference) < 0.01, with exact zero pairs accepted",
+      "tolerances": {
+        "relative_error_strict_max": 0.01,
+        "zero_pair_equal": true
+      }
+    },
+    "attention": {
+      "case_ids": [
+        "attention-tf32-simx",
+        "attention-tf32-rtlsim"
+      ],
+      "contract_coverage": false,
+      "comparison": "abs(actual-reference) <= atol + rtol*abs(reference)",
+      "tolerances": {
+        "atol": 0.001,
+        "rtol": 0.001
+      }
+    }
+  },
+  "reproduction": {
+    "source_root": [
+      "python3 ci/project/p02_fixture_oracle.py --check",
+      "python3 ci/project/p02_layout_fixture_oracle.py --check",
+      "python3 -m unittest discover -s ci/project -p 'test_p02_tensor_contract.py' -v",
+      "python3 ci/project/check_project.py"
+    ],
+    "configured_rv64_build_directory": [
+      "make -C hw/unittest/tcu_contract THREADS=2",
+      "make -C hw/unittest/tcu_contract run OPTS='--format=all'",
+      "make -C hw/unittest/tcu_contract run OPTS='--format=all --stalls'",
+      "make -C hw/unittest/tcu_contract model",
+      "make -C hw/unittest/tcu_contract run-model OPTS='--format=all'"
+    ],
+    "commands_are_execution_evidence": false
+  }
+}
