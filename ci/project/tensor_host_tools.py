@@ -15,7 +15,7 @@ def run_host_command(argv, *, cwd, env, timeout, max_output_bytes=MIB):
         min_free_bytes=GIB, max_log_bytes=max_output_bytes,
         max_rss_bytes=GIB, resource_paths=(working,),
     )
-    output = log.read_text(encoding="utf-8") if log.exists() else ""
+    output = log.read_text(encoding="utf-8", errors="replace") if log.exists() else ""
     if result["outcome"] != "pass" or not result["cleanup_complete"]:
         raise AssertionError(
             "Host command failed: " + str(result["reason"])
