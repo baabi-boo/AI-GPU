@@ -756,9 +756,15 @@ static TestConfig parse_args(int argc, char **argv) {
     if (cfg.fmt_s == TCU_FP32_ID) {
       throw std::invalid_argument("--fmt=0 selects FP32, which this WMMA backend does not implement");
     }
-    const char *formats[] = {"FP32", "TF32", "FP16", "BF16"};
+    const char *format_name = "unknown";
+    switch (cfg.fmt_s) {
+    case TCU_TF32_ID: format_name = "TF32"; break;
+    case TCU_FP16_ID: format_name = "FP16"; break;
+    case TCU_BF16_ID: format_name = "BF16"; break;
+    default: break;
+    }
     throw std::invalid_argument("--fmt=" + std::to_string(cfg.fmt_s) + " selects "
-        + formats[cfg.fmt_s] + ", which is unavailable in this compiled WMMA configuration");
+        + format_name + ", which is unavailable in this compiled WMMA configuration");
   }
   return cfg;
 }
