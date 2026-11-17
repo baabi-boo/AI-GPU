@@ -103,9 +103,9 @@ module VX_tcu_wgmma_top import VX_gpu_pkg::*, VX_tcu_pkg::*; (
     VX_commit_if commit_if[4]();
     VX_lsu_sched_if tcu_mem_if[1]();
     VX_mem_bus_if #(
-        .DATA_SIZE (LMEM_DMA_DATA_SIZE),
+        .DATA_SIZE  (LMEM_DMA_DATA_SIZE),
         .ADDR_WIDTH (LMEM_DMA_ADDR_WIDTH),
-        .TAG_WIDTH (TCU_LMEM_TAG_W),
+        .TAG_WIDTH  (TCU_LMEM_TAG_W),
         .ATTR_WIDTH (LMEM_DMA_ATTR_W)
     ) tcu_lmem_if();
 
