@@ -167,6 +167,14 @@ VL_FLAGS += $(CONFIGS) $(filter -DVX_CFG_TCU_TYPE_% -DVX_CFG_FPU_TYPE_%,$(XCONFI
 VL_FLAGS += $(RTL_INCLUDE)
 VL_FLAGS += $(RTL_PKGS)
 VL_FLAGS += $(RTL_PRE_SRCS)
+# Bind the scoreboard monitor only for explicitly requested witness builds.
+P02_WGMMA_WITNESS_FLAGS := $(filter -DP02_WGMMA_WITNESS -DP02_WGMMA_WITNESS=%,$(CONFIGS))
+ifneq (,$(P02_WGMMA_WITNESS_FLAGS))
+ifneq (,$(filter-out -DP02_WGMMA_WITNESS -DP02_WGMMA_WITNESS=1,$(P02_WGMMA_WITNESS_FLAGS)))
+$(error P02_WGMMA_WITNESS must be enabled with a bare define or literal 1)
+endif
+VL_FLAGS += $(SRC_DIR)/p02_wgmma_scoreboard_monitor.sv
+endif
 VL_FLAGS += --cc $(TOP) --top-module $(TOP)
 
 # Extract RTL directories from include directories

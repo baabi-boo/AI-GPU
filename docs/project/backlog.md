@@ -7,19 +7,36 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Start here: P02-T01 complete; whole-processor proof next
+## Start here: ordinary WMMA accepted; WGMMA concurrency remains active
 
-**Next bounded action: P02-T02 — add a matrix-fixture input adapter and run
-the frozen FP16/BF16 cases on matching full SimX and native processor RTL.**
-The [P02 numerical handoff](p02-numerics-handoff.md) records completed T01 work,
-[source-level A01 evidence](evidence/p02-numerics/acceptance.json), exact tested
-source and remaining obligations. The contract has 98 independent arithmetic
-fixtures and 20 source layout fixtures. Direct native leaf/model checks and
-compiler checks pass; the layout fixtures still need actual matrix application
-execution. Cover tile boundaries, K accumulation, normal, edge and cancellation
-cases, then WGMMA synchronization, metadata, multiple warps and backpressure.
+**Next bounded acceptance work: P02-T02 — freeze and review one WGMMA matrix
+covering synchronization, metadata, multiple warps and backpressure.** Run the
+reviewed selection on matching SimX/native RTL and retain applicable model-parity
+evidence or a documented applicability limit. P02-T02 remains active for A03.
 
-P02 remains `in_progress`; A02/A03 are pending and P03 is `not_started`.
+The [ordinary WMMA handoff](p02-wmma-handoff.md) and
+[P02-A02 record](evidence/p02-wmma/acceptance.json) bind full-processor checks to
+clean source `58faf6d68879e1db92122df493172eab59c02458`: 88 cases, 176
+case/backend executions, 352 launches and 14,336 exact output words passed.
+The 20 original layout cases are unchanged; 68 numerical cases cover normal,
+edge, cancellation and K-traversal behavior. The scope remains RV64 ordinary
+FP16/BF16-to-FP32 WMMA, initial C = +0, K = 8 or 16 and an `8 x 4 x 8` tile.
+Native TFR tensor and STD scalar floating-point paths are checked; integer DPI
+helpers remain. The separate actual API matrix met 47 expectations across 94
+WMMA/WGMMA contexts, including 30 intended compiler rejections.
+
+The first 1,448-test offline run retained one source-contract failure. The
+reporting-only child `c9cf9ba0730f236e110a1d48a54d8f47a9faf9af` restores the
+legacy random-path report. Its exact patch passed the focused test and 15 adapter
+tests. Its full suite passed all 1,448 tests, and the rebuilt hosts repeated
+all 352 launches and 14,336 exact comparisons successfully. The independent
+recovery review and passing hosted CI are recorded in [status](status.md),
+with the original fresh processor revision retained separately.
+The earlier [numerical handoff](p02-numerics-handoff.md) and
+[A01 record](evidence/p02-numerics/acceptance.json) retain the completed T01
+contract and original leaf/model/compiler evidence.
+
+P02 remains `in_progress`; A02 is accepted, A03 is pending and P03 is `not_started`.
 The vendor P01-T05/P01-A03 obligation still blocks **P01 completion and P07**.
 The preserved [entry decision](p02-entry-handoff.md) permits native development
 without turning the missing vendor result into a pass.
@@ -187,15 +204,16 @@ remains an unqualified candidate until its selected configuration earns evidence
 
 ## Priority 2 — Active native AI software track
 
-P02-T01 is complete with reviewed source-level P02-A01 evidence. P02-T02 is
-active: leaf arithmetic and compiler checks are available, while full-processor
-layout execution and WGMMA concurrency remain unqualified. P03 onward remain
-gated on their parent phases. Detailed work packages remain in the phase guides.
+P02-T01 is complete with reviewed source-level P02-A01 evidence. P02-A02 has
+accepted full-processor ordinary WMMA arithmetic/layout and API rejection
+evidence. P02-T02 remains active for P02-A03 WGMMA concurrency, metadata and
+backpressure proof. P03 onward remain gated on their parent phases. Detailed
+work packages remain in the phase guides.
 
 | Work item | First bounded deliverable | Entry / accountable role | Gates |
 |---|---|---|---|
 | **P02-T01 — Arithmetic contract — complete** | Reviewed v1 FP16/BF16-to-FP32 semantics, runnable T4 application profile, 98 independent arithmetic fixtures and 20 layout fixtures; frozen comparisons and inherited tolerances preserved. | P00 plus accepted P01-A01/A02; compute architecture lead | [P02-A01 source evidence](evidence/p02-numerics/acceptance.json) |
-| **P02-T02 — Arithmetic and concurrency proof — active** | Add the matrix-fixture adapter; execute matching full SimX/native processor normal, edge, cancellation and layout checks. Then qualify WGMMA metadata, synchronization, multiple warps and backpressure with applicable parity evidence. | T01; verification lead | P02-A02, P02-A03 remain pending |
+| **P02-T02 — Arithmetic and concurrency proof — active** | Ordinary WMMA adapter and matched full SimX/native processor arithmetic/layout checks are accepted. Complete WGMMA metadata, synchronization, multiple warps and backpressure proof with applicable parity evidence. | T01; verification lead | [P02-A02 accepted](evidence/p02-wmma/acceptance.json); P02-A03 pending |
 | **P03-T01 — Operator contract** | Define the smallest model-relevant operator/signature matrix and explicit rejection/error/ownership rules over the existing native runtime. | P02; kernel and runtime lead | P03-A01 |
 | **P03-T02 — Operator implementations and lifetime tests** | Reuse inherited kernels; independently verify each advertised operator, dispatch, bounds, queue/event lifetime and failure cleanup. | T01; kernel and runtime lead | P03-A02, P03-A03 |
 | **P04-T01 — Fixed tiny model** | Freeze a redistributable model or deterministic generator, hashes, inputs, licenses and layer/reference outputs; map every operation to the accepted library. | P03; model runtime lead | P04-A01 |

@@ -32,6 +32,10 @@ full-processor and WGMMA results separately scoped. Disable a boolean format
 bank with its `VX_CFG_*_DISABLE` override: `VX_CFG_*_ENABLE=0` still defines a
 macro and can retain an `ifdef`-selected datapath.
 
+For WGMMA protocol qualification, follow the [WGMMA handoff](docs/project/p02-wgmma-handoff.md).
+Keep directed native-unit pressure, full-processor metadata ordering, exact
+arithmetic and paired performance evidence separately scoped.
+
 Validate runtime, kernel and host compiler records independently through the
 [shared validator](ci/project/compiler_records.py); never combine records or
 expand retained stamp text to establish configuration coverage. Preserve source

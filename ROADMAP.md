@@ -117,12 +117,17 @@ document or governance check cannot stand in for unexecuted GPU tests.
 ## Where to start, and how to continue
 
 Read [status](docs/project/status.md), then the
-[ordered backlog](docs/project/backlog.md). **P02-T01 is complete and P02-A01 is
-accepted at source scope.** The active bounded task is **P02-T02: connect the
-frozen matrix fixtures to the WMMA regression and verify them on full SimX and
-native processor RTL**, followed by the WGMMA concurrency obligations. Use the
-[numerical handoff](docs/project/p02-numerics-handoff.md) and
-[reviewed contract evidence](docs/project/evidence/p02-numerics/acceptance.json).
+[ordered backlog](docs/project/backlog.md). **P02-T01 is complete, P02-A01 is
+accepted at source scope, and P02-A02 is accepted for full-processor ordinary
+WMMA arithmetic and layout checks.** P02-T02 remains active for **P02-A03:
+WGMMA synchronization, metadata, multiple warps and backpressure**, with matching
+SimX/native RTL and applicable model-parity evidence or a documented
+applicability limit. Close the reporting-child validation and delivery recorded
+in status before the next GPU acceptance run. Use the
+[ordinary WMMA handoff](docs/project/p02-wmma-handoff.md) and
+[reviewed processor evidence](docs/project/evidence/p02-wmma/acceptance.json);
+the [earlier contract evidence](docs/project/evidence/p02-numerics/acceptance.json)
+retains its original scope. P02 remains `in_progress` and P03 `not_started`.
 The missing vendor platform remains a separate P01-T05/P07 dependency; resolve
 tools, access and a disk/RAM/job/time budget before any substantial build.
 

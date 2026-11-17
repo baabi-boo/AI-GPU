@@ -2,8 +2,9 @@
 
 **Goal:** define and prove the arithmetic behavior of the first supported AI
 configuration. This phase remains `in_progress`. P02-T01 is complete with
-[P02-A01 source-level evidence](../evidence/p02-numerics/acceptance.json);
-P02-A02 and P02-A03 remain pending.
+[P02-A01 source-level evidence](../evidence/p02-numerics/acceptance.json).
+[P02-A02 ordinary WMMA evidence](../evidence/p02-wmma/acceptance.json) is
+accepted; P02-T02 remains active for P02-A03 WGMMA concurrency proof.
 The live status, dependencies and authoritative gate text are in
 [roadmap.json](../roadmap.json); the accountable role is Compute architecture lead.
 
@@ -32,9 +33,11 @@ Items 1–3 are implemented in the [v1 numerical contract](../../designs/tensor_
 [p02-tfr profile](../../../profiles/p02-tfr.json). The
 [evidence packet](../evidence/p02-numerics/README.md) binds reviewed source to
 98 native leaf cases, the same 98 stalled cases with 306 hold checks, 98 host
-model-function cases, 47 compiler cases and 1,343 offline tests. The 20 matrix
-layout fixtures are source data; their application adapter and processor
-execution remain item 4 work. WGMMA compiler checks do not satisfy item 5.
+model-function cases, 47 compiler cases and 1,343 offline tests at the original
+A01 checkpoint. The later [ordinary WMMA packet](../evidence/p02-wmma/README.md)
+adds the application adapter and matched processor execution for the 20 unchanged
+layout cases plus 68 independent numerical cases, satisfying A02's ordinary WMMA
+scope. Item 5 remains active; WGMMA compiler checks do not satisfy it.
 
 1. Freeze one baseline configuration: XLEN, native arithmetic backend, enabled
    formats, tensor/WGMMA switches, warp geometry, local memory and tile layouts.
@@ -55,6 +58,34 @@ execution remain item 4 work. WGMMA compiler checks do not satisfy item 5.
 6. Compare SimX and native RTL; localize the first unexplained divergence.
    Keep timing-model changes paired with RTL changes and use applicable inherited
    parity/logic gates without widening their tolerances or editing golden data.
+
+## Accepted ordinary WMMA scope
+
+Clean source `58faf6d68879e1db92122df493172eab59c02458`, tree
+`cd35869ee89cb42685e9bac367667a7dffbe1b1d`, passed all **176 case/backend
+executions, 352 launches and 14,336 exact FP32 output-word checks**. There are
+88 source cases, 44 per format, each run twice on both full SimX and native
+processor `rtlsim`. Independent integer/rational expected words cover ordinary,
+edge, cancellation, tile-layout and K-traversal cases. The separate actual
+RISC-V API matrix met 47 expectations in 94 WMMA/WGMMA contexts: 17 successful
+compilations and 30 intended rejections. These rejections prove the public C++
+boundary; they do not establish traps for unsupported raw instructions.
+
+The unchanged RV64 `p02-tfr` application profile limits this result to dense
+ordinary WMMA with FP16/BF16 inputs, FP32 accumulation/output, initial C = +0,
+K = 8 or 16, `KUNROLL=1` and the `8 x 4 x 8` tile. A is row-major, B is
+column-major and C/D are row-major. Native RTL uses TFR tensor and STD scalar
+floating-point arithmetic; integer DPI helpers remain. Processor `rtlsim`
+bypasses the AFU, so this record adds no vendor `hw_emu`, physical-device,
+WGMMA concurrency or timing-model parity qualification.
+
+The [handoff](../p02-wmma-handoff.md) preserves the initial SimX selector failure
+and the first full offline run's one source-contract failure in 1,448 tests.
+The reporting-only child `c9cf9ba0730f236e110a1d48a54d8f47a9faf9af` has focused
+source-contract and 15-test adapter passes on its exact patch; its full-suite
+rerun passed all 1,448 tests, and the rebuilt hosts repeated all 352 launches
+and 14,336 exact comparisons successfully; see [status](../status.md).
+Those child checks preserve the formal processor result's original source identity.
 
 ## Deliverables and acceptance
 
@@ -78,11 +109,12 @@ native test, stale configuration or unreviewed tolerance change. In particular,
 resolve NVFP4 subnormal-scale semantics before advertising that mode; exclusion
 must be explicit, not a hidden fallback. Do not convert a missing run to a pass.
 
-The next bounded action is P02-T02: connect the frozen matrix fixtures to the
-WMMA regression and run matching full SimX/native processor normal, edge,
-cancellation, layout and K-traversal cases. Follow with WGMMA metadata,
-synchronization, multi-warp and backpressure proof. Direct leaf stalls and
-host model-function calls do not replace those runs.
+P02-T02 remains active for A03. After closing the reporting-child validation
+and delivery recorded in status, freeze and independently review a bounded
+WGMMA selection for metadata dependencies, synchronization, multiple warps and
+backpressure. Execute matching SimX/native RTL and retain applicable model-parity
+evidence or a documented applicability limit. The ordinary WMMA result, direct
+leaf stalls and host model-function calls do not replace that concurrency proof.
 
 After every P02 exit gate is accepted, hand P03 the supported configuration,
 immutable numerical contracts, fixture manifest and evidence references for

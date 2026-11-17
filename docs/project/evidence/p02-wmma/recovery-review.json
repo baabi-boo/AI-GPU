@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/w01_a04",
+  "review_kind": "independent_recovery_and_acceptance_scope_review",
+  "outcome": "pass_for_bounded_P02_A02_evidence",
+  "disposition": "GO for scoped P02-A02 acceptance after the publication-only corrections below; no new GPU execution, phase closure, human approval or waiver is supplied.",
+  "source_binding": {
+    "formal_revision": "58faf6d68879e1db92122df493172eab59c02458",
+    "formal_tree": "cd35869ee89cb42685e9bac367667a7dffbe1b1d",
+    "host_supplement_revision": "c9cf9ba0730f236e110a1d48a54d8f47a9faf9af",
+    "host_supplement_tree": "df62aa14b7dee5e02ad85027ac0e3225d1d8e4a1",
+    "child_changed_paths": [
+      "tests/regression/sgemm_tcu/main.cpp"
+    ],
+    "child_fresh_backend_build": false
+  },
+  "verified": [
+    {
+      "check": "Retained-original and normalized-export bundle verification",
+      "outcome": "pass",
+      "original_members": 1426,
+      "published_members": 1426,
+      "bundle_sha256": "a4e95bfe1043c3964d9017c1f89d37a04bccfff93d8b6b341adbbeeb2a38e36d",
+      "method": "package_wmma_evidence.py verify against original roots, then verify --published-only against final-docs packet; both exit 0"
+    },
+    {
+      "check": "All acceptance artifacts",
+      "outcome": "pass",
+      "method": "Recomputed every artifact SHA256 using staged documents or current c9cf9ba source, with zero missing or mismatched artifact entries"
+    },
+    {
+      "check": "Independent original log replay",
+      "outcome": "pass",
+      "command_logs_hashed": 209,
+      "case_backend_pairs": 176,
+      "launches": 352,
+      "exact_FP32_words": 14336,
+      "method": "Independent JSON loop parsed every P02_RESULT log record; checked case, format, dimensions, iteration ordering, zero mismatches, all actual_bits equal frozen independent fixture expected bits; checked all command exit codes"
+    },
+    {
+      "check": "Independent child-host log replay",
+      "outcome": "pass",
+      "command_logs_hashed": 184,
+      "case_backend_pairs": 176,
+      "launches": 352,
+      "exact_FP32_words": 14336,
+      "method": "Same independent log replay; child host source kept separate from original retained kernels/backends"
+    },
+    {
+      "check": "Actual API compiler evidence",
+      "outcome": "pass",
+      "cases": 47,
+      "positive_compiles": 17,
+      "intended_rejections": 30,
+      "context_checks": 94,
+      "source_revision": "58faf6d68879e1db92122df493172eab59c02458",
+      "boundary": "RV64 C++ syntax/template boundary, not runtime raw-instruction traps"
+    },
+    {
+      "check": "Child offline suite",
+      "outcome": "pass",
+      "tests": 1448,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "seconds": 589.248,
+      "source_revision": "c9cf9ba0730f236e110a1d48a54d8f47a9faf9af",
+      "source_stable": true
+    },
+    {
+      "check": "Hosted affected scaled-format compatibility",
+      "outcome": "pass",
+      "run_id": 43982209402,
+      "source_revision": "c9cf9ba0730f236e110a1d48a54d8f47a9faf9af",
+      "jobs": [
+        133706496073,
+        133706496047
+      ],
+      "all_category_cases_passed_per_XLEN": 20,
+      "XLENs": [
+        32,
+        64
+      ],
+      "changed_case_XLEN_obligations": 20,
+      "method": "Read root-retrieved raw job logs: checkout SHA is explicit, all ten changed case IDs are PASSED in each XLEN, each job ends with 20 passed. This is tolerance-based catalog compatibility, not extra exact A02 arithmetic qualification."
+    },
+    {
+      "check": "Hosted Project Governance",
+      "outcome": "pass",
+      "run_id": 43982209440,
+      "job_id": 133701244900,
+      "method": "Root-retrieved GitHub observation records completed/success governance and all validation/test steps."
+    }
+  ],
+  "hosted_log_original_sha256": {
+    "32": "6801d55c458dd2c7d4812d704863fa9b17ef2d3f26dadd10f432f87e2fbf1782",
+    "64": "f1644cbfbb91221cec5374085cb2b7b15c5b7c2a2b7830aa932913ab22ff4e87"
+  },
+  "open_qualification_findings": [],
+  "publication_corrections": [
+    {
+      "severity": "F2",
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "finding": "Staged acceptance.json still has outcome blocked and reviewer pending while staged status/README already say accepted.",
+      "required_action": "Record this actual independent review, set only the scoped A02 acceptance disposition consistently, and keep P02 in_progress/A03 pending/P03 not_started."
+    },
+    {
+      "severity": "F1",
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "finding": "Staged status.md lines 79-83 retain pending/in-progress template prose wrapped around substituted passing-result sentences.",
+      "required_action": "Replace the malformed paragraphs with clean observed-result prose preserving the two revisions and unchanged-backend scope."
+    },
+    {
+      "severity": "F1",
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "finding": "Staged packet links to absent ci-recovery.json, final independent review and final agent-execution.json.",
+      "required_action": "Publish actual current CI recovery observation/log identities and this review; preserve prior 51-agent core checkpoint honestly, and identify any separately reconstructed prior assignment completion rather than inventing a prior 60-agent total. Do not count earlier agents toward the current requested 60."
+    }
+  ],
+  "scope_limits": [
+    "Ordinary dense/unscaled FP16/BF16 to FP32, RV64 p02-tfr, tile8x4x8, initialC+0, K8/16, compact row-major A/column-major B/row-major output only.",
+    "TFR tensor and STD scalar floating-point arithmetic are native. Inherited integer multiply/divide DPI helpers remain; no universal DPI-free claim.",
+    "The original fresh backend/kernel execution belongs to58faf6d. The c9cf9ba supplement rebuilds hosts and proves reused nonhost artifacts stable; it is not a fresh child backend build.",
+    "K16 cases distinguish tile reversal but not independently rounded tile partial sums; arbitrary initial C, K>16, strides/tails and other layouts remain unqualified.",
+    "A02 acceptance does not finish P02-T02, accept A03, close P02, begin P03, or change P01-A03/P07 obligations.",
+    "No full-AFU/vendor hw_emu, physical FPGA/silicon, performance, timing parity or WGMMA concurrency claim.",
+    "Observed hosted tensor_mx and governance success is scoped; the first jobs page does not establish whole general CI success."
+  ]
+}

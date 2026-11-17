@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "record_id": "p02-a02-wmma-58faf6d-c9cf9ba",
+  "kind": "rtl",
+  "outcome": "pass",
+  "evidence_level": "rtl_verified",
+  "scope": "Bounded P02-A02 ordinary dense WMMA FP16/BF16-to-FP32 acceptance. Original clean-source full SimX and processor-only rtlsim results exactly match all uint32 outputs of 88 independent fixtures, with native TFR tensor and STD scalar floating-point datapaths and inherited integer multiply/divide DPI helpers. The corrected child hosts independently repeat all 352 launches and 14336 output comparisons using proven unchanged original backends and kernels. Actual RISC-V C++ rejection, host boundary tests and the complete passing 1448-test child suite support the stated input and tooling boundaries.",
+  "source_revision": "58faf6d68879e1db92122df493172eab59c02458",
+  "configuration": "Original tested tree cd35869ee89cb42685e9bac367667a7dffbe1b1d; profiles/p02-tfr.json, p02-tfr-rv64-t4-wmma-v1/{fp16,bf16}-fp32-kunroll1. RV64, one cluster/core, four warps of four threads, issue width one, TFR tensor/STD scalar FP, TCU_LATENCY=4, USE_DSP=0, element tile 8x4x8, four products per FEDP, initial C=+0, K=8/16, KUNROLL=1. All exact commands, generated headers, separate host/kernel/runtime/backend compiler records, selected inputs and logs are retained in formal-matrix-packet/report.json and companion members of evidence-bundle.json.gz. Separate API configuration is explicit empty-profile RV64, eight-thread WMMA/WGMMA class instantiation; see formal-api/report.json. Child c9cf9ba0730f236e110a1d48a54d8f47a9faf9af, tree df62aa14b7dee5e02ad85027ac0e3225d1d8e4a1, changes only tests/regression/sgemm_tcu/main.cpp legacy int/%d reporting; completed rebuilt-host/proven-unchanged-backend supplemental results are identified in summary.json with their own source/build provenance. Final clean-child c9cf9ba host supplement passes 184 commands, 176 case/backend executions, 352 launches and 14336 exact words, with four rebuilt hosts and 108 unchanged nonhost artifact identities. The complete child-source offline suite passes 1448 tests. Original backend/kernel build provenance remains 58faf6d; no fresh child backend build is claimed.",
+  "acceptance_ids": [
+    "P02-A02"
+  ],
+  "commands": [
+    {
+      "command": "cwd=${WORK}/formal-matrix-builds/simx-fp16/tests/regression/sgemm_tcu; argv=[\"/usr/bin/make\",\"--no-print-directory\",\"-j2\",\"THREADS=2\",\"VERILATOR_PATH=${TOOLS}/verilator\",\"run-simx\",\"OPTS=-f fp16-numerical-cancel_large_with_tiny -r 2\"]; environment={\"CCACHE_DISABLE\":\"1\",\"CMAKE_BUILD_PARALLEL_LEVEL\":\"2\",\"CONFIGS\":\"-DITYPE=fp16 -DOTYPE=fp32 -DKUNROLL=1\",\"HOME\":\"${WORK}/formal-matrix-builds/home\",\"LANG\":\"C\",\"LC_ALL\":\"C\",\"MAKEFLAGS\":\"-j2\",\"OBJCACHE\":\"\",\"PATH\":\"${WORK}/host-bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/bin:/bin\",\"PYTHONDONTWRITEBYTECODE\":\"1\",\"PYTHONUTF8\":\"1\",\"THREADS\":\"2\",\"TMPDIR\":\"${WORK}/formal-matrix-builds/tmp\",\"TZ\":\"UTC\"}; retained exact execution record=formal-matrix-packet/report.json commands[id=simx-fp16-fp16-numerical-cancel_large_with_tiny] and formal-matrix-packet/logs/simx-fp16-fp16-numerical-cancel_large_with_tiny.log in evidence-bundle.json.gz; complete 209-command matrix is retained there",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/formal-matrix-builds/simx-bf16/tests/regression/sgemm_tcu; argv=[\"/usr/bin/make\",\"--no-print-directory\",\"-j2\",\"THREADS=2\",\"VERILATOR_PATH=${TOOLS}/verilator\",\"run-simx\",\"OPTS=-f bf16-numerical-cancel_large_with_tiny -r 2\"]; environment={\"CCACHE_DISABLE\":\"1\",\"CMAKE_BUILD_PARALLEL_LEVEL\":\"2\",\"CONFIGS\":\"-DITYPE=bf16 -DOTYPE=fp32 -DKUNROLL=1\",\"HOME\":\"${WORK}/formal-matrix-builds/home\",\"LANG\":\"C\",\"LC_ALL\":\"C\",\"MAKEFLAGS\":\"-j2\",\"OBJCACHE\":\"\",\"PATH\":\"${WORK}/host-bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/bin:/bin\",\"PYTHONDONTWRITEBYTECODE\":\"1\",\"PYTHONUTF8\":\"1\",\"THREADS\":\"2\",\"TMPDIR\":\"${WORK}/formal-matrix-builds/tmp\",\"TZ\":\"UTC\"}; retained exact execution record=formal-matrix-packet/report.json commands[id=simx-bf16-bf16-numerical-cancel_large_with_tiny] and formal-matrix-packet/logs/simx-bf16-bf16-numerical-cancel_large_with_tiny.log in evidence-bundle.json.gz; complete 209-command matrix is retained there",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/formal-matrix-builds/rtlsim-fp16/tests/regression/sgemm_tcu; argv=[\"/usr/bin/make\",\"--no-print-directory\",\"-j2\",\"THREADS=2\",\"VERILATOR_PATH=${TOOLS}/verilator\",\"run-rtlsim\",\"OPTS=-f fp16-numerical-cancel_large_with_tiny -r 2\"]; environment={\"CCACHE_DISABLE\":\"1\",\"CMAKE_BUILD_PARALLEL_LEVEL\":\"2\",\"CONFIGS\":\"-DITYPE=fp16 -DOTYPE=fp32 -DKUNROLL=1\",\"HOME\":\"${WORK}/formal-matrix-builds/home\",\"LANG\":\"C\",\"LC_ALL\":\"C\",\"MAKEFLAGS\":\"-j2\",\"OBJCACHE\":\"\",\"PATH\":\"${WORK}/host-bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/bin:/bin\",\"PYTHONDONTWRITEBYTECODE\":\"1\",\"PYTHONUTF8\":\"1\",\"THREADS\":\"2\",\"TMPDIR\":\"${WORK}/formal-matrix-builds/tmp\",\"TZ\":\"UTC\"}; retained exact execution record=formal-matrix-packet/report.json commands[id=rtlsim-fp16-fp16-numerical-cancel_large_with_tiny] and formal-matrix-packet/logs/rtlsim-fp16-fp16-numerical-cancel_large_with_tiny.log in evidence-bundle.json.gz; complete 209-command matrix is retained there",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/formal-matrix-builds/rtlsim-bf16/tests/regression/sgemm_tcu; argv=[\"/usr/bin/make\",\"--no-print-directory\",\"-j2\",\"THREADS=2\",\"VERILATOR_PATH=${TOOLS}/verilator\",\"run-rtlsim\",\"OPTS=-f bf16-numerical-cancel_large_with_tiny -r 2\"]; environment={\"CCACHE_DISABLE\":\"1\",\"CMAKE_BUILD_PARALLEL_LEVEL\":\"2\",\"CONFIGS\":\"-DITYPE=bf16 -DOTYPE=fp32 -DKUNROLL=1\",\"HOME\":\"${WORK}/formal-matrix-builds/home\",\"LANG\":\"C\",\"LC_ALL\":\"C\",\"MAKEFLAGS\":\"-j2\",\"OBJCACHE\":\"\",\"PATH\":\"${WORK}/host-bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/bin:/bin\",\"PYTHONDONTWRITEBYTECODE\":\"1\",\"PYTHONUTF8\":\"1\",\"THREADS\":\"2\",\"TMPDIR\":\"${WORK}/formal-matrix-builds/tmp\",\"TZ\":\"UTC\"}; retained exact execution record=formal-matrix-packet/report.json commands[id=rtlsim-bf16-bf16-numerical-cancel_large_with_tiny] and formal-matrix-packet/logs/rtlsim-bf16-bf16-numerical-cancel_large_with_tiny.log in evidence-bundle.json.gz; complete 209-command matrix is retained there",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${WORK}/formal-api-build; argv=[\"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3\",\"${SOURCE}/ci/project/p02_api_compile.py\",\"--build-dir\",\"${WORK}/formal-api-build\",\"--tools-dir\",\"${TOOLS}\",\"--output\",\"${WORK}/formal-api\"]; environment_overrides={\"LC_ALL\":\"C\",\"PYTHONDONTWRITEBYTECODE\":\"1\"}; retained exact execution record=reports/formal-api-matrix.json; complete 150 nested command records in formal-api/report.json and its retained logs in evidence-bundle.json.gz",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${SOURCE}; argv=[\"python3\",\"-m\",\"unittest\",\"-v\",\"test_local_qualification_cases.CaseSourceContractTests.test_synthetic_oracles_match_original_source_output_and_reference_checks\"]; recorded_test_environment_context={\"PATH_prefix\":\"${WORK}/host-bin\",\"PYTHONPATH\":\"${SOURCE}/ci/project\",\"TMPDIR\":\"${WORK}/tmp\"}; retained exact execution record=reviews/w07_a02_legacy_report_fix.json validation.commands and corresponding focused/adapter log; tested source was the original commit plus the exact uncommitted main.cpp patch, now byte-identical to child c9cf9ba0730f236e110a1d48a54d8f47a9faf9af",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${SOURCE}; argv=[\"python3\",\"-m\",\"unittest\",\"-v\",\"test_p02_wmma_adapter\"]; recorded_test_environment_context={\"PATH_prefix\":\"${WORK}/host-bin\",\"PYTHONPATH\":\"${SOURCE}/ci/project\",\"TMPDIR\":\"${WORK}/tmp\"}; retained exact execution record=reviews/w07_a02_legacy_report_fix.json validation.commands and corresponding focused/adapter log; tested source was the original commit plus the exact uncommitted main.cpp patch, now byte-identical to child c9cf9ba0730f236e110a1d48a54d8f47a9faf9af",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "{\"argv\": [\"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3\", \"-B\", \"${WORK}/w07_a03_host_revalidation.py\", \"run\", \"--expected-revision\", \"c9cf9ba0730f236e110a1d48a54d8f47a9faf9af\", \"--output\", \"${WORK}/host-revalidation-packet\"], \"cwd\": \"${WORK}\", \"environment_overrides\": {\"LC_ALL\": \"C\", \"PYTHONDONTWRITEBYTECODE\": \"1\"}, \"retained_member\": \"reports/host-revalidation-execution.json\"}",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "{\"argv\": [\"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3\", \"${WORK}/run_offline_suite_v2.py\"], \"cwd\": \"${SOURCE}\", \"environment_overrides\": {\"LC_ALL\": \"C\", \"PYTHONDONTWRITEBYTECODE\": \"1\"}, \"retained_member\": \"reports/final-source-offline-suite.json\"}",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "ci/project/fixtures/p02_wmma_numerical_v1.json",
+      "sha256": "4102d74024e92e9887d7324b9326c0d6ad1fff206b5fad33f45c530d5bd03a73"
+    },
+    {
+      "path": "ci/project/fixtures/p02_wmma_runtime_stub.cpp",
+      "sha256": "ac4ce9c8d360ce3ff262e025f2be6e5752f0e08a8ebca2918b1bfbf487afa8f2"
+    },
+    {
+      "path": "ci/project/p02_matrix.py",
+      "sha256": "e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17"
+    },
+    {
+      "path": "ci/project/p02_matrix_records.py",
+      "sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9"
+    },
+    {
+      "path": "ci/project/p02_wmma_fixtures.py",
+      "sha256": "4a672a5d3357f220120f43e5f5d7e880f7d0ba36df380d69cd1873ea4879835e"
+    },
+    {
+      "path": "ci/project/p02_wmma_numerical_fixture_oracle.py",
+      "sha256": "083450dc11712e5fc6dce7d19fb854bd9ef25b738347efd56bd07e81b079570b"
+    },
+    {
+      "path": "ci/project/test_p02_matrix.py",
+      "sha256": "356243605158c48d7a6ab3f6b1e83d0ee017eef9a95b34c02b6b8e4924013f78"
+    },
+    {
+      "path": "ci/project/test_p02_simx_config.py",
+      "sha256": "ae6a576670ab27804cd141b767439db5cb9690841748d2a757f1b45c5f196c60"
+    },
+    {
+      "path": "ci/project/test_p02_tensor_catalog.py",
+      "sha256": "3a17ff2c6c3c38ab97f8ca7a5e534db62099c2deb3ef9277d4a16e9c3e023306"
+    },
+    {
+      "path": "ci/project/test_p02_wmma_adapter.py",
+      "sha256": "8fd64af8b61ddd3e81345793df580bae66c769b0ce3ae4eec53fa02fe4ff3533"
+    },
+    {
+      "path": "ci/project/test_p02_wmma_fixtures.py",
+      "sha256": "e09bfc37cfa1eec5794445a0381d5b2f075cc9f06a134fd86b920a95921faf67"
+    },
+    {
+      "path": "ci/testcases/tensor_mx.yaml",
+      "sha256": "7769e7c9eabdb86a05acd29899b598eab458a513cc432cb79414cc05129c9ef9"
+    },
+    {
+      "path": "sim/simx/Makefile",
+      "sha256": "c719966647f32fef5421dd798a89d3eeddccd692e7c61046e5744b7a8e722403"
+    },
+    {
+      "path": "tests/regression/sgemm_tcu/Makefile",
+      "sha256": "120d6f4e9b643bad7dac7ed5cd6bf05513972073585230fc6a5b805668676bf3"
+    },
+    {
+      "path": "tests/regression/sgemm_tcu/main.cpp",
+      "sha256": "5e7a584ae8d45d210e8827d36cdd10b6ac760a18cd454ce23bab883942514b27"
+    },
+    {
+      "path": "tests/regression/sgemm_tcu/p02_fixture_adapter.h",
+      "sha256": "a21cc05c03536906ec69951550e02aa0c86004514bb81f6ed03101fe984feb3b"
+    },
+    {
+      "path": "tests/regression/sgemm_tcu/p02_fixtures.h",
+      "sha256": "1e692ad5d14e895286e57e45bf9d1730cf2380a33ccbaa486c601db838daa64e"
+    },
+    {
+      "path": "profiles/p02-tfr.json",
+      "sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102"
+    },
+    {
+      "path": "ci/project/p02_tensor_contract.json",
+      "sha256": "e4e5d54f5d83cd66d37201689427746aa3d1326b05b39ae021299ea22c1411ac"
+    },
+    {
+      "path": "docs/designs/tensor_numerics_v1.md",
+      "sha256": "2d7d3f18728fe77dd96a7de0c05c9550f2c2446ef7bee4fb0740fe8d367a06a2"
+    },
+    {
+      "path": "ci/project/fixtures/p02_tfr_v1.json",
+      "sha256": "0d8b173af178875274a7bf29886a51838be8cdb54224d55353959a639a5ea6c3"
+    },
+    {
+      "path": "ci/project/fixtures/p02_layout_v1.json",
+      "sha256": "0543f9f4208de3ff4743fe1894d97ccf3b8cca4707e9a26acd1f3dde884725b2"
+    },
+    {
+      "path": "sw/kernel/include/vx_tensor.h",
+      "sha256": "fb5cec2bdf57567e0b466440b95d3b452962baf21e5273437cef747b871b6133"
+    },
+    {
+      "path": "docs/project/evidence/p02-wmma/summary.json",
+      "sha256": "e086ddc342a78cb2b7aa97c6d58e8b03b10164cad9ea57c8219932adcacdb773"
+    },
+    {
+      "path": "docs/project/evidence/p02-wmma/inventory.json",
+      "sha256": "54524f1e99bda6c451c2bdc356144248e60da15a4655fdb289c199cc20980ba9"
+    },
+    {
+      "path": "docs/project/evidence/p02-wmma/evidence-bundle.json.gz",
+      "sha256": "a4e95bfe1043c3964d9017c1f89d37a04bccfff93d8b6b341adbbeeb2a38e36d"
+    },
+    {
+      "path": "docs/project/evidence/p02-wmma/recovery-review.json",
+      "sha256": "8bfa9ab6fe1cf7e087a2d8ffd5f7c20bbf809946edb9eb915831536356636b2e"
+    },
+    {
+      "path": "docs/project/evidence/p02-wmma/ci-recovery.json",
+      "sha256": "1cdf0eb57da225506d23a968062ff000617f4a5988a5bcef58f4439c9f371e3b"
+    }
+  ],
+  "limitations": [
+    "source_revision identifies the original fresh formal processor/API builds at 58faf6d68879e1db92122df493172eab59c02458. The host-only child c9cf9ba0730f236e110a1d48a54d8f47a9faf9af must be bound separately to rebuilt host executables and proven unchanged original kernels/backends; it is not a fresh child backend or RTL build.",
+    "This is processor-only rtlsim, which bypasses the AFU. The tensor TFR and scalar STD floating-point paths are native; inherited integer multiply/divide DPI helpers remain. No universal DPI-free processor claim is made.",
+    "Only ordinary dense/unscaled FP16/BF16-to-FP32 WMMA under RV64 p02-tfr is covered: one cluster/core, four warps of four threads, issue width one, tile 8x4x8, KUNROLL=1, compact row-major A, column-major B and row-major output.",
+    "All 88 processor fixtures use initial FP32 C=+0. K is 8 or 16, with two or four sequential four-product FEDP groups. Tested matrix shapes are 8x4x8, 8x4x16 and 16x8x16. Arbitrary initial C, K>16, long reduction chains, tails, strides, padding, transposition and matrix-load features are outside this processor evidence.",
+    "The four K16 numerical cases detect reversal of complete K8 tiles but do not distinguish independently rounded tile partials followed by summation. FP16 range limits make BF16 the source of signed FP32 overflow and output-FTZ coverage; no impossible FP16 overflow sensitivity is implied.",
+    "The actual API matrix is RV64 syntax-only C++ in an empty-profile eight-thread configuration with WMMA/WGMMA contexts: 17 successful compiles and 30 expected compiler-exit-1 rejections. Enabled other-format/backend controls establish compatibility only; they do not expand this numerical support scope or establish runtime hardware traps.",
+    "The original dirty-tree development selector failure is retained: cancel_large_with_tiny returned 33800000 instead of unchanged expected 00000000 because SimX omitted resolved XCONFIGS/TCU_TYPE_TFR and selected fallback arithmetic. Formal matching SimX and RTL return the original expected bits. Neither expected values nor inherited tests were weakened.",
+    "No P02-A03 WGMMA synchronization/metadata/multi-warp/backpressure acceptance, full P02 completion, full-shell/vendor hw_emu, physical FPGA, silicon, timing, performance, power, model-cycle parity or framework claim follows. P02 stays in_progress, P01-A03 stays blocked and P03 stays not_started.",
+    "Published member text may have literal source/work/tools prefixes normalized. Embedded original hashes continue to identify original bytes; inventory.json must separately bind published member bytes. Tool/library and sampled-resource records are not complete system dependency attestation, hard quotas, cryptographic origin authentication or physical measurements.",
+    "Hosted scaled-format catalog recovery is recorded separately in ci-recovery.json. Three local RV64 tolerance passes do not imply all20 changed case/XLEN executions or bit-exact additional-format qualification."
+  ],
+  "reviewer": "/root/w01_a04: independent original/published packet, command/output, source mapping, API, offline-suite and hosted compatibility recovery review; see recovery-review.json. Historical source reviews remain in the immutable bundle."
+}

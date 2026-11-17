@@ -1,0 +1,914 @@
+﻿2026-11-16T23:58:17.7742149Z Current runner version: '2.338.2'
+2026-11-16T23:58:17.7771176Z ##[group]Runner Image Provisioner
+2026-11-16T23:58:17.7772330Z Hosted Compute Agent
+2026-11-16T23:58:17.7773572Z Version: 20261103.629
+2026-11-16T23:58:17.7774429Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-16T23:58:17.7775600Z Build Date: 2026-11-03T17:26:59Z
+2026-11-16T23:58:17.7776480Z Worker ID: {c57176b3-7e71-48af-b386-b7d273e2721f}
+2026-11-16T23:58:17.7777416Z Region: westus2
+2026-11-16T23:58:17.7778201Z Cloud: Azure
+2026-11-16T23:58:17.7778937Z ##[endgroup]
+2026-11-16T23:58:17.7780930Z ##[group]Operating System
+2026-11-16T23:58:17.7781719Z Ubuntu
+2026-11-16T23:58:17.7782365Z 22.04.5
+2026-11-16T23:58:17.7783056Z LTS
+2026-11-16T23:58:17.7783671Z ##[endgroup]
+2026-11-16T23:58:17.7784337Z ##[group]Runner Image
+2026-11-16T23:58:17.7785383Z Image: ubuntu-22.04
+2026-11-16T23:58:17.7786135Z Version: 20261111.360.2
+2026-11-16T23:58:17.7787846Z Included Software: https://github.com/actions/runner-images/blob/ubuntu22/20261111.360/images/ubuntu/Ubuntu2204-Readme.md
+2026-11-16T23:58:17.7789806Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu22%2F20261111.360
+2026-11-16T23:58:17.7791135Z ##[endgroup]
+2026-11-16T23:58:17.7792599Z ##[group]GITHUB_TOKEN Permissions
+2026-11-16T23:58:17.7795245Z Contents: read
+2026-11-16T23:58:17.7796027Z Metadata: read
+2026-11-16T23:58:17.7796821Z Packages: read
+2026-11-16T23:58:17.7797502Z ##[endgroup]
+2026-11-16T23:58:17.7799917Z Secret source: Actions
+2026-11-16T23:58:17.7801152Z Cache mode: write
+2026-11-16T23:58:17.7802307Z Prepare workflow directory
+2026-11-16T23:58:17.8430668Z Prepare all required actions
+2026-11-16T23:58:17.8489095Z Getting action download info
+2026-11-16T23:58:18.1937356Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-16T23:58:20.1065582Z Download action repository 'actions/download-artifact@v4' (SHA:d3f86a106a0bac45b974a628896c90dbdf5c8093)
+2026-11-16T23:58:20.3582345Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+2026-11-16T23:58:20.9904350Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-16T23:58:21.8063471Z Complete job name: tests (tensor_mx, simx, 64)
+2026-11-16T23:58:21.8660917Z ##[group]Run actions/checkout@v4
+2026-11-16T23:58:21.8661345Z with:
+2026-11-16T23:58:21.8661529Z   repository: baabi-boo/AI-GPU
+2026-11-16T23:58:21.8663709Z   token: ***
+2026-11-16T23:58:21.8663894Z   ssh-strict: true
+2026-11-16T23:58:21.8664066Z   ssh-user: git
+2026-11-16T23:58:21.8664244Z   persist-credentials: true
+2026-11-16T23:58:21.8664439Z   clean: true
+2026-11-16T23:58:21.8664620Z   sparse-checkout-cone-mode: true
+2026-11-16T23:58:21.8664835Z   fetch-depth: 1
+2026-11-16T23:58:21.8665300Z   fetch-tags: false
+2026-11-16T23:58:21.8665481Z   show-progress: true
+2026-11-16T23:58:21.8665658Z   lfs: false
+2026-11-16T23:58:21.8665815Z   submodules: false
+2026-11-16T23:58:21.8665990Z   set-safe-directory: true
+2026-11-16T23:58:21.8666207Z   allow-unsafe-pr-checkout: false
+2026-11-16T23:58:21.8666602Z env:
+2026-11-16T23:58:21.8666819Z   CELL: tensor_mx-simx-64
+2026-11-16T23:58:21.8667111Z ##[endgroup]
+2026-11-16T23:58:23.2669136Z Syncing repository: baabi-boo/AI-GPU
+2026-11-16T23:58:23.2670671Z ##[group]Getting Git version info
+2026-11-16T23:58:23.2671209Z Working directory is '${HOSTED_SOURCE}'
+2026-11-16T23:58:23.2671864Z [command]/usr/bin/git version
+2026-11-16T23:58:23.4011195Z git version 2.56.1
+2026-11-16T23:58:23.4026099Z ##[endgroup]
+2026-11-16T23:58:23.4038098Z Temporarily overriding HOME='/home/runner/work/_temp/007dfdc1-191e-4c76-ba4a-4389b9d6a10d' before making global git config changes
+2026-11-16T23:58:23.4038928Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-16T23:58:23.4042871Z [command]/usr/bin/git config --global --add safe.directory ${HOSTED_SOURCE}
+2026-11-16T23:58:23.4079942Z Deleting the contents of '${HOSTED_SOURCE}'
+2026-11-16T23:58:23.4083690Z ##[group]Initializing the repository
+2026-11-16T23:58:23.4086988Z [command]/usr/bin/git init ${HOSTED_SOURCE}
+2026-11-16T23:58:23.4309722Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-16T23:58:23.4310423Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-16T23:58:23.4311090Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-16T23:58:23.4311488Z hint: call:
+2026-11-16T23:58:23.4311645Z hint:
+2026-11-16T23:58:23.4311867Z hint: 	git config --global init.defaultBranch <name>
+2026-11-16T23:58:23.4312115Z hint:
+2026-11-16T23:58:23.4312355Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-16T23:58:23.4312940Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-16T23:58:23.4313429Z hint:
+2026-11-16T23:58:23.4313679Z hint: 	git branch -m <name>
+2026-11-16T23:58:23.4313963Z hint:
+2026-11-16T23:58:23.4314323Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-16T23:58:23.4314847Z Initialized empty Git repository in ${HOSTED_SOURCE}/.git/
+2026-11-16T23:58:23.4319109Z [command]/usr/bin/git remote add origin https://github.com/baabi-boo/AI-GPU
+2026-11-16T23:58:23.4353967Z ##[endgroup]
+2026-11-16T23:58:23.4354340Z ##[group]Disabling automatic garbage collection
+2026-11-16T23:58:23.4357040Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-16T23:58:23.4387915Z ##[endgroup]
+2026-11-16T23:58:23.4388303Z ##[group]Setting up auth
+2026-11-16T23:58:23.4392803Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-16T23:58:23.4424025Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-16T23:58:23.5260059Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-16T23:58:23.5294444Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-16T23:58:23.5515999Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-16T23:58:23.5550823Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-16T23:58:23.5773716Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-16T23:58:23.5826562Z ##[endgroup]
+2026-11-16T23:58:23.5827138Z ##[group]Fetching the repository
+2026-11-16T23:58:23.5828195Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +c9cf9ba0730f236e110a1d48a54d8f47a9faf9af:refs/remotes/origin/master
+2026-11-16T23:58:26.5687361Z From https://github.com/baabi-boo/AI-GPU
+2026-11-16T23:58:26.5687869Z  * [new ref]         c9cf9ba0730f236e110a1d48a54d8f47a9faf9af -> origin/master
+2026-11-16T23:58:26.5691012Z ##[endgroup]
+2026-11-16T23:58:26.5691309Z ##[group]Determining the checkout info
+2026-11-16T23:58:26.5692875Z ##[endgroup]
+2026-11-16T23:58:26.5697831Z [command]/usr/bin/git sparse-checkout disable
+2026-11-16T23:58:26.5741270Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-16T23:58:26.5772035Z ##[group]Checking out the ref
+2026-11-16T23:58:26.5811218Z [command]/usr/bin/git checkout --progress --force -B master refs/remotes/origin/master
+2026-11-16T23:58:27.4466794Z Reset branch 'master'
+2026-11-16T23:58:27.4476167Z branch 'master' set up to track 'origin/master'.
+2026-11-16T23:58:27.4517642Z ##[endgroup]
+2026-11-16T23:58:27.4565913Z [command]/usr/bin/git log -1 --format=%H
+2026-11-16T23:58:27.4586373Z c9cf9ba0730f236e110a1d48a54d8f47a9faf9af
+2026-11-16T23:58:27.4896935Z Prepare all required actions
+2026-11-16T23:58:27.4897578Z Getting action download info
+2026-11-16T23:58:27.6289611Z ##[group]Run ./.github/actions/setup-vortex
+2026-11-16T23:58:27.6289859Z with:
+2026-11-16T23:58:27.6290030Z   profile: lite
+2026-11-16T23:58:27.6290195Z   prepare: false
+2026-11-16T23:58:27.6290354Z env:
+2026-11-16T23:58:27.6290511Z   CELL: tensor_mx-simx-64
+2026-11-16T23:58:27.6290695Z ##[endgroup]
+2026-11-16T23:58:27.6338817Z ##[start-action display=Read version pins;id=__self.vers]
+2026-11-16T23:58:27.6368686Z ##[group]Run rev=$(bash ci/toolchain_rev.sh)
+2026-11-16T23:58:27.6369002Z [36;1mrev=$(bash ci/toolchain_rev.sh)[0m
+2026-11-16T23:58:27.6369267Z [36;1mecho "toolchain=$rev" >> "$GITHUB_OUTPUT"[0m
+2026-11-16T23:58:27.6435070Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-16T23:58:27.6435358Z env:
+2026-11-16T23:58:27.6435565Z   CELL: tensor_mx-simx-64
+2026-11-16T23:58:27.6435794Z ##[endgroup]
+2026-11-16T23:58:27.8956410Z ##[end-action id=__self.vers;outcome=success;conclusion=success;duration_ms=261]
+2026-11-16T23:58:27.8960144Z ##[start-action display=Cache toolchain;id=__self.cache-toolchain]
+2026-11-16T23:58:27.9004756Z ##[group]Run actions/cache@v4
+2026-11-16T23:58:27.9005280Z with:
+2026-11-16T23:58:27.9005441Z   path: tools
+2026-11-16T23:58:27.9005722Z   key: Linux-toolchain-v3.0.2-e3db4bcdf819a17f618ad9fc2472f8f7dea3192b-lite
+2026-11-16T23:58:27.9006069Z   enableCrossOsArchive: false
+2026-11-16T23:58:27.9006278Z   fail-on-cache-miss: false
+2026-11-16T23:58:27.9006470Z   lookup-only: false
+2026-11-16T23:58:27.9006640Z   save-always: false
+2026-11-16T23:58:27.9006818Z env:
+2026-11-16T23:58:27.9006981Z   CELL: tensor_mx-simx-64
+2026-11-16T23:58:27.9007165Z ##[endgroup]
+2026-11-16T23:58:27.9868682Z (node:1906) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-16T23:58:27.9869457Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-16T23:58:28.2203493Z Cache hit for: Linux-toolchain-v3.0.2-e3db4bcdf819a17f618ad9fc2472f8f7dea3192b-lite
+2026-11-16T23:58:28.2279436Z (node:1906) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-16T23:58:29.4985961Z Received 16777216 of 1329603106 (1.3%), 16.0 MBs/sec
+2026-11-16T23:58:30.4994254Z Received 88080384 of 1329603106 (6.6%), 42.0 MBs/sec
+2026-11-16T23:58:31.5000581Z Received 113246208 of 1329603106 (8.5%), 36.0 MBs/sec
+2026-11-16T23:58:32.5012442Z Received 113246208 of 1329603106 (8.5%), 27.0 MBs/sec
+2026-11-16T23:58:33.5011436Z Received 113246208 of 1329603106 (8.5%), 21.6 MBs/sec
+2026-11-16T23:58:34.5016320Z Received 121634816 of 1329603106 (9.1%), 19.3 MBs/sec
+2026-11-16T23:58:35.5026789Z Received 130023424 of 1329603106 (9.8%), 17.7 MBs/sec
+2026-11-16T23:58:36.5029407Z Received 130023424 of 1329603106 (9.8%), 15.5 MBs/sec
+2026-11-16T23:58:37.5042096Z Received 130023424 of 1329603106 (9.8%), 13.8 MBs/sec
+2026-11-16T23:58:38.5054448Z Received 130023424 of 1329603106 (9.8%), 12.4 MBs/sec
+2026-11-16T23:58:39.5242949Z Received 134217728 of 1329603106 (10.1%), 11.6 MBs/sec
+2026-11-16T23:58:40.5238377Z Received 264241152 of 1329603106 (19.9%), 21.0 MBs/sec
+2026-11-16T23:58:41.5243362Z Received 373293056 of 1329603106 (28.1%), 27.3 MBs/sec
+2026-11-16T23:58:42.5241143Z Received 507510784 of 1329603106 (38.2%), 34.5 MBs/sec
+2026-11-16T23:58:43.5238297Z Received 637534208 of 1329603106 (47.9%), 40.5 MBs/sec
+2026-11-16T23:58:44.5238121Z Received 742391808 of 1329603106 (55.8%), 44.2 MBs/sec
+2026-11-16T23:58:45.5235786Z Received 859832320 of 1329603106 (64.7%), 48.2 MBs/sec
+2026-11-16T23:58:46.5240793Z Received 985661440 of 1329603106 (74.1%), 52.1 MBs/sec
+2026-11-16T23:58:47.5242269Z Received 1103101952 of 1329603106 (83.0%), 55.3 MBs/sec
+2026-11-16T23:58:48.5247120Z Received 1212153856 of 1329603106 (91.2%), 57.7 MBs/sec
+2026-11-16T23:58:49.3803428Z Received 1329603106 of 1329603106 (100.0%), 60.7 MBs/sec
+2026-11-16T23:58:49.3805152Z Cache Size: ~1268 MB (1329603106 B)
+2026-11-16T23:58:49.3892803Z [command]/usr/bin/tar -xf /home/runner/work/_temp/d73a5e4d-38f3-4ad8-a79a-18108737d3cb/cache.tzst -P -C ${HOSTED_SOURCE} --use-compress-program unzstd
+2026-11-16T23:59:05.2739026Z Cache restored successfully
+2026-11-16T23:59:05.5862650Z Cache restored from key: Linux-toolchain-v3.0.2-e3db4bcdf819a17f618ad9fc2472f8f7dea3192b-lite
+2026-11-16T23:59:05.5988718Z ##[end-action id=__self.cache-toolchain;outcome=success;conclusion=success;duration_ms=37702]
+2026-11-16T23:59:05.5991021Z ##[start-action display=Cache third party;id=__self.cache-thirdparty]
+2026-11-16T23:59:05.7452268Z ##[group]Run actions/cache@v4
+2026-11-16T23:59:05.7452474Z with:
+2026-11-16T23:59:05.7452648Z   path: third_party
+2026-11-16T23:59:05.7452996Z   key: Linux-thirdparty-cbe0d7fc3a5ec7c6d1b71c86a227694d83e413fccc1d512acfa661fdbe86c7ac
+2026-11-16T23:59:05.7453409Z   enableCrossOsArchive: false
+2026-11-16T23:59:05.7453607Z   fail-on-cache-miss: false
+2026-11-16T23:59:05.7453817Z   lookup-only: false
+2026-11-16T23:59:05.7453989Z   save-always: false
+2026-11-16T23:59:05.7454157Z env:
+2026-11-16T23:59:05.7454322Z   CELL: tensor_mx-simx-64
+2026-11-16T23:59:05.7454512Z ##[endgroup]
+2026-11-16T23:59:05.8348853Z (node:1946) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-16T23:59:05.8349728Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-16T23:59:06.0830940Z Cache hit for: Linux-thirdparty-cbe0d7fc3a5ec7c6d1b71c86a227694d83e413fccc1d512acfa661fdbe86c7ac
+2026-11-16T23:59:06.0913223Z (node:1946) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-16T23:59:07.3754461Z Received 16777216 of 63174860 (26.6%), 16.0 MBs/sec
+2026-11-16T23:59:07.7693456Z Received 63174860 of 63174860 (100.0%), 43.2 MBs/sec
+2026-11-16T23:59:07.7695485Z Cache Size: ~60 MB (63174860 B)
+2026-11-16T23:59:07.7725137Z [command]/usr/bin/tar -xf /home/runner/work/_temp/c46a7e37-66ae-4e94-a6b1-449d8727ae47/cache.tzst -P -C ${HOSTED_SOURCE} --use-compress-program unzstd
+2026-11-16T23:59:08.0166199Z Cache restored successfully
+2026-11-16T23:59:08.0351486Z Cache restored from key: Linux-thirdparty-cbe0d7fc3a5ec7c6d1b71c86a227694d83e413fccc1d512acfa661fdbe86c7ac
+2026-11-16T23:59:08.0465568Z ##[end-action id=__self.cache-thirdparty;outcome=success;conclusion=success;duration_ms=2447]
+2026-11-16T23:59:08.0467974Z ##[start-action display=Export TOOLDIR;id=__self.__run]
+2026-11-16T23:59:08.0507784Z ##[group]Run echo "TOOLDIR=$GITHUB_WORKSPACE/tools" >> "$GITHUB_ENV"
+2026-11-16T23:59:08.0508176Z [36;1mecho "TOOLDIR=$GITHUB_WORKSPACE/tools" >> "$GITHUB_ENV"[0m
+2026-11-16T23:59:08.0561233Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-16T23:59:08.0561533Z env:
+2026-11-16T23:59:08.0561705Z   CELL: tensor_mx-simx-64
+2026-11-16T23:59:08.0561915Z ##[endgroup]
+2026-11-16T23:59:08.0635798Z ##[end-action id=__self.__run;outcome=success;conclusion=success;duration_ms=16]
+2026-11-16T23:59:08.0637506Z ##[start-action display=Install dependencies;id=__self.__run_2]
+2026-11-16T23:59:08.0653048Z ##[group]Run if [ "lite" = "full" ]; then
+2026-11-16T23:59:08.0653320Z [36;1mif [ "lite" = "full" ]; then[0m
+2026-11-16T23:59:08.0653604Z [36;1m  sudo bash ./ci/install_dependencies.sh --all[0m
+2026-11-16T23:59:08.0653862Z [36;1melse[0m
+2026-11-16T23:59:08.0654089Z [36;1m  sudo bash ./ci/install_dependencies.sh --vulkan[0m
+2026-11-16T23:59:08.0654346Z [36;1mfi[0m
+2026-11-16T23:59:08.0700007Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-16T23:59:08.0700291Z env:
+2026-11-16T23:59:08.0700465Z   CELL: tensor_mx-simx-64
+2026-11-16T23:59:08.0700704Z   TOOLDIR: ${HOSTED_SOURCE}/tools
+2026-11-16T23:59:08.0701115Z ##[endgroup]
+2026-11-16T23:59:08.2578042Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-16T23:59:08.3078421Z Hit:2 http://azure.archive.ubuntu.com/ubuntu jammy InRelease
+2026-11-16T23:59:08.3091037Z Get:6 https://packages.microsoft.com/ubuntu/22.04/prod jammy InRelease [3632 B]
+2026-11-16T23:59:08.3133273Z Get:3 http://azure.archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
+2026-11-16T23:59:08.3145980Z Get:4 http://azure.archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]
+2026-11-16T23:59:08.3167602Z Get:5 http://azure.archive.ubuntu.com/ubuntu jammy-security InRelease [129 kB]
+2026-11-16T23:59:08.4908761Z Get:7 https://packages.microsoft.com/ubuntu/22.04/prod jammy/main amd64 Packages [1076 kB]
+2026-11-16T23:59:08.5199495Z Get:8 https://packages.microsoft.com/ubuntu/22.04/prod jammy/main arm64 Packages [798 kB]
+2026-11-16T23:59:08.5627312Z Get:9 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [3983 kB]
+2026-11-16T23:59:08.5811908Z Get:10 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main Translation-en [585 kB]
+2026-11-16T23:59:08.5843790Z Get:11 http://azure.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1290 kB]
+2026-11-16T23:59:08.5921971Z Get:12 http://azure.archive.ubuntu.com/ubuntu jammy-updates/universe Translation-en [326 kB]
+2026-11-16T23:59:08.7117268Z Get:13 http://azure.archive.ubuntu.com/ubuntu jammy-security/main amd64 Packages [3718 kB]
+2026-11-16T23:59:08.7266389Z Get:14 http://azure.archive.ubuntu.com/ubuntu jammy-security/main Translation-en [519 kB]
+2026-11-16T23:59:08.7295468Z Get:15 http://azure.archive.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [6613 kB]
+2026-11-16T23:59:08.7555338Z Get:16 http://azure.archive.ubuntu.com/ubuntu jammy-security/restricted Translation-en [1272 kB]
+2026-11-16T23:59:08.7609027Z Get:17 http://azure.archive.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1057 kB]
+2026-11-16T23:59:19.1818239Z Fetched 21.6 MB in 2s (10.0 MB/s)
+2026-11-16T23:59:20.5135167Z Reading package lists...
+2026-11-16T23:59:20.5668198Z Reading package lists...
+2026-11-16T23:59:20.8441593Z Building dependency tree...
+2026-11-16T23:59:20.8451445Z Reading state information...
+2026-11-16T23:59:21.0138950Z build-essential is already the newest version (12.9ubuntu3).
+2026-11-16T23:59:21.0139503Z build-essential set to manually installed.
+2026-11-16T23:59:21.0139939Z libffi8 is already the newest version (3.4.2-4).
+2026-11-16T23:59:21.0140349Z libffi8 set to manually installed.
+2026-11-16T23:59:21.0140770Z binutils is already the newest version (2.38-4ubuntu2.12).
+2026-11-16T23:59:21.0141313Z libpng-dev is already the newest version (1.6.37-3ubuntu0.7).
+2026-11-16T23:59:21.0141788Z libpng-dev set to manually installed.
+2026-11-16T23:59:21.0142280Z libstdc++6 is already the newest version (12.3.0-1ubuntu1~22.04.3).
+2026-11-16T23:59:21.0142822Z python3 is already the newest version (3.10.6-1~22.04.1).
+2026-11-16T23:59:21.0143387Z uuid-dev is already the newest version (2.37.2-4ubuntu3.6).
+2026-11-16T23:59:21.0143935Z uuid-dev set to manually installed.
+2026-11-16T23:59:21.0144414Z The following additional packages will be installed:
+2026-11-16T23:59:21.0145173Z   cmake-data dh-elpa-helper gdb libbabeltrace1 libboost-regex1.74.0
+2026-11-16T23:59:21.0145865Z   libboost-serialization1.74-dev libboost-serialization1.74.0 libboost1.74-dev
+2026-11-16T23:59:21.0146654Z   libc-dev-bin libc6 libc6-dbg libc6-dev libc6-i386 libdebuginfod-common
+2026-11-16T23:59:21.0147310Z   libdebuginfod1 libegl-dev libegl-mesa0 libegl1 libgl-dev libgl1-mesa-dev
+2026-11-16T23:59:21.0147893Z   libgles-dev libgles1 libgles2 libglvnd-core-dev libglvnd-dev libglx-dev
+2026-11-16T23:59:21.0148514Z   libhiredis0.14 libipt2 libjsoncpp25 libopengl-dev libopengl0 librhash0
+2026-11-16T23:59:21.0149118Z   libsource-highlight-common libsource-highlight4v5 ocl-icd-libopencl1
+2026-11-16T23:59:21.0149681Z   opencl-c-headers opencl-clhpp-headers
+2026-11-16T23:59:21.0153785Z Suggested packages:
+2026-11-16T23:59:21.0154631Z   distcc | icecc cmake-doc ninja-build cmake-format gdb-doc gdbserver
+2026-11-16T23:59:21.0155355Z   libboost1.74-doc libboost-atomic1.74-dev libboost-chrono1.74-dev
+2026-11-16T23:59:21.0155683Z   libboost-container1.74-dev libboost-context1.74-dev
+2026-11-16T23:59:21.0155983Z   libboost-contract1.74-dev libboost-coroutine1.74-dev
+2026-11-16T23:59:21.0156500Z   libboost-date-time1.74-dev libboost-exception1.74-dev libboost-fiber1.74-dev
+2026-11-16T23:59:21.0156865Z   libboost-filesystem1.74-dev libboost-graph1.74-dev
+2026-11-16T23:59:21.0157188Z   libboost-graph-parallel1.74-dev libboost-iostreams1.74-dev
+2026-11-16T23:59:21.0157538Z   libboost-locale1.74-dev libboost-log1.74-dev libboost-math1.74-dev
+2026-11-16T23:59:21.0157949Z   libboost-mpi1.74-dev libboost-mpi-python1.74-dev libboost-numpy1.74-dev
+2026-11-16T23:59:21.0158385Z   libboost-program-options1.74-dev libboost-python1.74-dev
+2026-11-16T23:59:21.0158752Z   libboost-random1.74-dev libboost-regex1.74-dev libboost-stacktrace1.74-dev
+2026-11-16T23:59:21.0159161Z   libboost-system1.74-dev libboost-test1.74-dev libboost-thread1.74-dev
+2026-11-16T23:59:21.0159885Z   libboost-timer1.74-dev libboost-type-erasure1.74-dev libboost-wave1.74-dev
+2026-11-16T23:59:21.0160326Z   libboost1.74-tools-dev libmpfrc++-dev libntl-dev libboost-nowide1.74-dev
+2026-11-16T23:59:21.0160714Z   glibc-doc manpages-dev opencl-icd opencl-clhpp-headers-doc valgrind-dbg
+2026-11-16T23:59:21.0161034Z   valgrind-mpi kcachegrind alleyoop valkyrie
+2026-11-16T23:59:21.0161273Z Recommended packages:
+2026-11-16T23:59:21.0161498Z   manpages-dev libc-devtools libnss-nis libnss-nisplus
+2026-11-16T23:59:21.1209176Z The following NEW packages will be installed:
+2026-11-16T23:59:21.1209784Z   ccache cmake cmake-data dh-elpa-helper gdb libbabeltrace1
+2026-11-16T23:59:21.1210307Z   libboost-regex1.74.0 libboost-serialization-dev
+2026-11-16T23:59:21.1210914Z   libboost-serialization1.74-dev libboost-serialization1.74.0 libboost1.74-dev
+2026-11-16T23:59:21.1211667Z   libc6-dbg libdebuginfod-common libdebuginfod1 libegl-dev libegl-mesa0
+2026-11-16T23:59:21.1212374Z   libegl1 libgl-dev libgl1-mesa-dev libgles-dev libgles1 libgles2
+2026-11-16T23:59:21.1213056Z   libglvnd-core-dev libglvnd-dev libglx-dev libhiredis0.14 libipt2
+2026-11-16T23:59:21.1213751Z   libjsoncpp25 libopengl-dev libopengl0 librhash0 libsource-highlight-common
+2026-11-16T23:59:21.1214441Z   libsource-highlight4v5 ocl-icd-libopencl1 ocl-icd-opencl-dev
+2026-11-16T23:59:21.1215255Z   opencl-c-headers opencl-clhpp-headers opencl-headers valgrind
+2026-11-16T23:59:21.1218932Z The following packages will be upgraded:
+2026-11-16T23:59:21.1223137Z   libc-dev-bin libc6 libc6-dev libc6-i386
+2026-11-16T23:59:21.1384738Z 4 upgraded, 39 newly installed, 0 to remove and 16 not upgraded.
+2026-11-16T23:59:21.1385337Z Need to get 59.5 MB of archives.
+2026-11-16T23:59:21.1385643Z After this operation, 300 MB of additional disk space will be used.
+2026-11-16T23:59:21.1386029Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-16T23:59:21.2966913Z Get:2 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libdebuginfod-common all 0.186-1ubuntu0.1 [7996 B]
+2026-11-16T23:59:21.3658695Z Get:3 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libc6-dev amd64 2.35-0ubuntu3.18 [2100 kB]
+2026-11-16T23:59:21.9212494Z Get:4 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libc-dev-bin amd64 2.35-0ubuntu3.18 [20.3 kB]
+2026-11-16T23:59:21.9901843Z Get:5 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libc6-i386 amd64 2.35-0ubuntu3.18 [2837 kB]
+2026-11-16T23:59:22.1201950Z Get:6 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libc6 amd64 2.35-0ubuntu3.18 [3236 kB]
+2026-11-16T23:59:22.2598375Z Get:7 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 libhiredis0.14 amd64 0.14.1-2 [32.8 kB]
+2026-11-16T23:59:22.3400000Z Get:8 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 ccache amd64 4.5.1-1 [495 kB]
+2026-11-16T23:59:22.5601037Z Get:9 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libjsoncpp25 amd64 1.9.5-3 [80.0 kB]
+2026-11-16T23:59:22.6301948Z Get:10 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 librhash0 amd64 1.4.2-1ubuntu1 [125 kB]
+2026-11-16T23:59:22.7014415Z Get:11 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 dh-elpa-helper all 2.0.9ubuntu1 [7610 B]
+2026-11-16T23:59:22.7704745Z Get:12 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 cmake-data all 3.22.1-1ubuntu1.22.04.2 [1913 kB]
+2026-11-16T23:59:22.8807176Z Get:13 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 cmake amd64 3.22.1-1ubuntu1.22.04.2 [5010 kB]
+2026-11-16T23:59:23.0595751Z Get:14 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libbabeltrace1 amd64 1.5.8-2build1 [160 kB]
+2026-11-16T23:59:23.1315348Z Get:15 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libdebuginfod1 amd64 0.186-1ubuntu0.1 [12.8 kB]
+2026-11-16T23:59:23.2056564Z Get:16 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libipt2 amd64 2.0.5-1 [46.4 kB]
+2026-11-16T23:59:23.2749305Z Get:17 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libsource-highlight-common all 3.1.9-4.1build2 [64.5 kB]
+2026-11-16T23:59:23.3449162Z Get:18 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libboost-regex1.74.0 amd64 1.74.0-14ubuntu3 [511 kB]
+2026-11-16T23:59:23.4258739Z Get:19 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libsource-highlight4v5 amd64 3.1.9-4.1build2 [207 kB]
+2026-11-16T23:59:23.4975232Z Get:20 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 gdb amd64 12.1-0ubuntu1~22.04.2 [3920 kB]
+2026-11-16T23:59:23.6526910Z Get:21 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libboost1.74-dev amd64 1.74.0-14ubuntu3 [9609 kB]
+2026-11-16T23:59:23.9337974Z Get:22 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libboost-serialization1.74.0 amd64 1.74.0-14ubuntu3 [327 kB]
+2026-11-16T23:59:24.0093608Z Get:23 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libboost-serialization1.74-dev amd64 1.74.0-14ubuntu3 [375 kB]
+2026-11-16T23:59:24.0882954Z Get:24 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 libboost-serialization-dev amd64 1.74.0.3ubuntu7 [3468 B]
+2026-11-16T23:59:24.1584758Z Get:25 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libegl-mesa0 amd64 23.2.1-1ubuntu3.1~22.04.4 [118 kB]
+2026-11-16T23:59:24.2294339Z Get:26 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libegl1 amd64 1.4.0-1 [28.6 kB]
+2026-11-16T23:59:24.2996562Z Get:27 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libglx-dev amd64 1.4.0-1 [14.1 kB]
+2026-11-16T23:59:24.3700686Z Get:28 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libgl-dev amd64 1.4.0-1 [101 kB]
+2026-11-16T23:59:24.4406959Z Get:29 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libegl-dev amd64 1.4.0-1 [18.0 kB]
+2026-11-16T23:59:24.5111337Z Get:30 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libgles1 amd64 1.4.0-1 [11.5 kB]
+2026-11-16T23:59:24.5813235Z Get:31 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libgles2 amd64 1.4.0-1 [18.0 kB]
+2026-11-16T23:59:24.6514690Z Get:32 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libgles-dev amd64 1.4.0-1 [49.4 kB]
+2026-11-16T23:59:24.7218800Z Get:33 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libopengl0 amd64 1.4.0-1 [36.5 kB]
+2026-11-16T23:59:24.7921214Z Get:34 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libopengl-dev amd64 1.4.0-1 [3400 B]
+2026-11-16T23:59:24.8623738Z Get:35 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libc6-dbg amd64 2.35-0ubuntu3.18 [13.8 MB]
+2026-11-16T23:59:25.2310394Z Get:36 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 valgrind amd64 1:3.18.1-1ubuntu2 [14.1 MB]
+2026-11-16T23:59:25.6181532Z Get:37 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libglvnd-core-dev amd64 1.4.0-1 [12.7 kB]
+2026-11-16T23:59:25.6872278Z Get:38 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libglvnd-dev amd64 1.4.0-1 [3162 B]
+2026-11-16T23:59:25.8258226Z Get:39 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libgl1-mesa-dev amd64 23.2.1-1ubuntu3.1~22.04.4 [7012 B]
+2026-11-16T23:59:25.8952248Z Get:40 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 ocl-icd-libopencl1 amd64 2.2.14-3 [39.1 kB]
+2026-11-16T23:59:26.0575148Z Get:41 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 opencl-c-headers all 3.0~2022.01.04-1 [44.5 kB]
+2026-11-16T23:59:26.1689669Z Get:42 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 opencl-clhpp-headers all 3.0~2.0.15-1ubuntu1 [42.6 kB]
+2026-11-16T23:59:26.2726026Z Get:43 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 opencl-headers all 3.0~2022.01.04-1 [1754 B]
+2026-11-16T23:59:26.3422871Z Get:44 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 ocl-icd-opencl-dev amd64 2.2.14-3 [2426 B]
+2026-11-16T23:59:26.6434445Z Preconfiguring packages ...
+2026-11-16T23:59:26.7204100Z Fetched 59.5 MB in 5s (11.4 MB/s)
+2026-11-16T23:59:26.7622832Z Selecting previously unselected package libdebuginfod-common.
+2026-11-16T23:59:26.8735363Z (Reading database ... 
+2026-11-16T23:59:26.8735845Z (Reading database ... 5%
+2026-11-16T23:59:26.8736402Z (Reading database ... 10%
+2026-11-16T23:59:26.8736763Z (Reading database ... 15%
+2026-11-16T23:59:26.8737087Z (Reading database ... 20%
+2026-11-16T23:59:26.8737380Z (Reading database ... 25%
+2026-11-16T23:59:26.8737676Z (Reading database ... 30%
+2026-11-16T23:59:26.8737862Z (Reading database ... 35%
+2026-11-16T23:59:26.8738057Z (Reading database ... 40%
+2026-11-16T23:59:26.8738243Z (Reading database ... 45%
+2026-11-16T23:59:26.8738422Z (Reading database ... 50%
+2026-11-16T23:59:27.1599910Z (Reading database ... 55%
+2026-11-16T23:59:27.4728291Z (Reading database ... 60%
+2026-11-16T23:59:27.8801003Z (Reading database ... 65%
+2026-11-16T23:59:28.3131055Z (Reading database ... 70%
+2026-11-16T23:59:28.8232502Z (Reading database ... 75%
+2026-11-16T23:59:29.7473825Z (Reading database ... 80%
+2026-11-16T23:59:30.6158278Z (Reading database ... 85%
+2026-11-16T23:59:31.7803020Z (Reading database ... 90%
+2026-11-16T23:59:32.7759605Z (Reading database ... 95%
+2026-11-16T23:59:32.7759988Z (Reading database ... 100%
+2026-11-16T23:59:32.7760391Z (Reading database ... 264803 files and directories currently installed.)
+2026-11-16T23:59:32.7825613Z Preparing to unpack .../libdebuginfod-common_0.186-1ubuntu0.1_all.deb ...
+2026-11-16T23:59:32.7930868Z Unpacking libdebuginfod-common (0.186-1ubuntu0.1) ...
+2026-11-16T23:59:32.9143963Z Preparing to unpack .../libc6-dev_2.35-0ubuntu3.18_amd64.deb ...
+2026-11-16T23:59:32.9165437Z Unpacking libc6-dev:amd64 (2.35-0ubuntu3.18) over (2.35-0ubuntu3.15) ...
+2026-11-16T23:59:33.2865282Z Preparing to unpack .../libc-dev-bin_2.35-0ubuntu3.18_amd64.deb ...
+2026-11-16T23:59:33.3001690Z Unpacking libc-dev-bin (2.35-0ubuntu3.18) over (2.35-0ubuntu3.15) ...
+2026-11-16T23:59:33.3556179Z Preparing to unpack .../libc6-i386_2.35-0ubuntu3.18_amd64.deb ...
+2026-11-16T23:59:33.3703497Z Unpacking libc6-i386 (2.35-0ubuntu3.18) over (2.35-0ubuntu3.15) ...
+2026-11-16T23:59:33.6052924Z Preparing to unpack .../libc6_2.35-0ubuntu3.18_amd64.deb ...
+2026-11-16T23:59:33.7226615Z Unpacking libc6:amd64 (2.35-0ubuntu3.18) over (2.35-0ubuntu3.15) ...
+2026-11-16T23:59:33.9382026Z Setting up libc6:amd64 (2.35-0ubuntu3.18) ...
+2026-11-16T23:59:34.3169175Z Selecting previously unselected package libhiredis0.14:amd64.
+2026-11-16T23:59:34.3241489Z (Reading database ... 
+2026-11-16T23:59:34.3241755Z (Reading database ... 5%
+2026-11-16T23:59:34.3242293Z (Reading database ... 10%
+2026-11-16T23:59:34.3242752Z (Reading database ... 15%
+2026-11-16T23:59:34.3243036Z (Reading database ... 20%
+2026-11-16T23:59:34.3243324Z (Reading database ... 25%
+2026-11-16T23:59:34.3243603Z (Reading database ... 30%
+2026-11-16T23:59:34.3243881Z (Reading database ... 35%
+2026-11-16T23:59:34.3244166Z (Reading database ... 40%
+2026-11-16T23:59:34.3244443Z (Reading database ... 45%
+2026-11-16T23:59:34.3244719Z (Reading database ... 50%
+2026-11-16T23:59:34.3270258Z (Reading database ... 55%
+2026-11-16T23:59:34.3290660Z (Reading database ... 60%
+2026-11-16T23:59:34.3315088Z (Reading database ... 65%
+2026-11-16T23:59:34.3422966Z (Reading database ... 70%
+2026-11-16T23:59:34.3551754Z (Reading database ... 75%
+2026-11-16T23:59:34.3605715Z (Reading database ... 80%
+2026-11-16T23:59:34.3805173Z (Reading database ... 85%
+2026-11-16T23:59:34.4017988Z (Reading database ... 90%
+2026-11-16T23:59:34.4112318Z (Reading database ... 95%
+2026-11-16T23:59:34.4112638Z (Reading database ... 100%
+2026-11-16T23:59:34.4113036Z (Reading database ... 264810 files and directories currently installed.)
+2026-11-16T23:59:34.4167801Z Preparing to unpack .../00-libhiredis0.14_0.14.1-2_amd64.deb ...
+2026-11-16T23:59:34.4176712Z Unpacking libhiredis0.14:amd64 (0.14.1-2) ...
+2026-11-16T23:59:34.4380956Z Selecting previously unselected package ccache.
+2026-11-16T23:59:34.4560163Z Preparing to unpack .../01-ccache_4.5.1-1_amd64.deb ...
+2026-11-16T23:59:34.4567801Z Unpacking ccache (4.5.1-1) ...
+2026-11-16T23:59:34.5590223Z Selecting previously unselected package libjsoncpp25:amd64.
+2026-11-16T23:59:34.5779805Z Preparing to unpack .../02-libjsoncpp25_1.9.5-3_amd64.deb ...
+2026-11-16T23:59:34.6747358Z Unpacking libjsoncpp25:amd64 (1.9.5-3) ...
+2026-11-16T23:59:35.4788508Z Selecting previously unselected package librhash0:amd64.
+2026-11-16T23:59:35.4983045Z Preparing to unpack .../03-librhash0_1.4.2-1ubuntu1_amd64.deb ...
+2026-11-16T23:59:35.6812662Z Unpacking librhash0:amd64 (1.4.2-1ubuntu1) ...
+2026-11-16T23:59:36.4788652Z Selecting previously unselected package dh-elpa-helper.
+2026-11-16T23:59:36.4983743Z Preparing to unpack .../04-dh-elpa-helper_2.0.9ubuntu1_all.deb ...
+2026-11-16T23:59:36.6642714Z Unpacking dh-elpa-helper (2.0.9ubuntu1) ...
+2026-11-16T23:59:36.6930106Z Selecting previously unselected package cmake-data.
+2026-11-16T23:59:36.7117284Z Preparing to unpack .../05-cmake-data_3.22.1-1ubuntu1.22.04.2_all.deb ...
+2026-11-16T23:59:36.7232438Z Unpacking cmake-data (3.22.1-1ubuntu1.22.04.2) ...
+2026-11-16T23:59:37.4122107Z Selecting previously unselected package cmake.
+2026-11-16T23:59:37.4325791Z Preparing to unpack .../06-cmake_3.22.1-1ubuntu1.22.04.2_amd64.deb ...
+2026-11-16T23:59:37.4332256Z Unpacking cmake (3.22.1-1ubuntu1.22.04.2) ...
+2026-11-16T23:59:37.5846878Z Selecting previously unselected package libbabeltrace1:amd64.
+2026-11-16T23:59:37.6036087Z Preparing to unpack .../07-libbabeltrace1_1.5.8-2build1_amd64.deb ...
+2026-11-16T23:59:37.6043507Z Unpacking libbabeltrace1:amd64 (1.5.8-2build1) ...
+2026-11-16T23:59:37.6311246Z Selecting previously unselected package libdebuginfod1:amd64.
+2026-11-16T23:59:37.6497321Z Preparing to unpack .../08-libdebuginfod1_0.186-1ubuntu0.1_amd64.deb ...
+2026-11-16T23:59:37.6504158Z Unpacking libdebuginfod1:amd64 (0.186-1ubuntu0.1) ...
+2026-11-16T23:59:37.6754169Z Selecting previously unselected package libipt2.
+2026-11-16T23:59:37.6938596Z Preparing to unpack .../09-libipt2_2.0.5-1_amd64.deb ...
+2026-11-16T23:59:37.6945772Z Unpacking libipt2 (2.0.5-1) ...
+2026-11-16T23:59:37.7141242Z Selecting previously unselected package libsource-highlight-common.
+2026-11-16T23:59:37.7327025Z Preparing to unpack .../10-libsource-highlight-common_3.1.9-4.1build2_all.deb ...
+2026-11-16T23:59:37.7333031Z Unpacking libsource-highlight-common (3.1.9-4.1build2) ...
+2026-11-16T23:59:37.7868940Z Selecting previously unselected package libboost-regex1.74.0:amd64.
+2026-11-16T23:59:37.8060939Z Preparing to unpack .../11-libboost-regex1.74.0_1.74.0-14ubuntu3_amd64.deb ...
+2026-11-16T23:59:37.8069870Z Unpacking libboost-regex1.74.0:amd64 (1.74.0-14ubuntu3) ...
+2026-11-16T23:59:37.8458559Z Selecting previously unselected package libsource-highlight4v5.
+2026-11-16T23:59:37.8646035Z Preparing to unpack .../12-libsource-highlight4v5_3.1.9-4.1build2_amd64.deb ...
+2026-11-16T23:59:37.8652956Z Unpacking libsource-highlight4v5 (3.1.9-4.1build2) ...
+2026-11-16T23:59:37.8875988Z Selecting previously unselected package gdb.
+2026-11-16T23:59:37.9062529Z Preparing to unpack .../13-gdb_12.1-0ubuntu1~22.04.2_amd64.deb ...
+2026-11-16T23:59:37.9069234Z Unpacking gdb (12.1-0ubuntu1~22.04.2) ...
+2026-11-16T23:59:38.0309521Z Selecting previously unselected package libboost1.74-dev:amd64.
+2026-11-16T23:59:38.0499084Z Preparing to unpack .../14-libboost1.74-dev_1.74.0-14ubuntu3_amd64.deb ...
+2026-11-16T23:59:38.0505781Z Unpacking libboost1.74-dev:amd64 (1.74.0-14ubuntu3) ...
+2026-11-16T23:59:40.5037208Z Selecting previously unselected package libboost-serialization1.74.0:amd64.
+2026-11-16T23:59:40.5295988Z Preparing to unpack .../15-libboost-serialization1.74.0_1.74.0-14ubuntu3_amd64.deb ...
+2026-11-16T23:59:40.5303980Z Unpacking libboost-serialization1.74.0:amd64 (1.74.0-14ubuntu3) ...
+2026-11-16T23:59:40.5672511Z Selecting previously unselected package libboost-serialization1.74-dev:amd64.
+2026-11-16T23:59:40.5873191Z Preparing to unpack .../16-libboost-serialization1.74-dev_1.74.0-14ubuntu3_amd64.deb ...
+2026-11-16T23:59:40.5878724Z Unpacking libboost-serialization1.74-dev:amd64 (1.74.0-14ubuntu3) ...
+2026-11-16T23:59:40.6299168Z Selecting previously unselected package libboost-serialization-dev:amd64.
+2026-11-16T23:59:40.6504090Z Preparing to unpack .../17-libboost-serialization-dev_1.74.0.3ubuntu7_amd64.deb ...
+2026-11-16T23:59:40.6591972Z Unpacking libboost-serialization-dev:amd64 (1.74.0.3ubuntu7) ...
+2026-11-16T23:59:40.6791295Z Selecting previously unselected package libegl-mesa0:amd64.
+2026-11-16T23:59:40.6991964Z Preparing to unpack .../18-libegl-mesa0_23.2.1-1ubuntu3.1~22.04.4_amd64.deb ...
+2026-11-16T23:59:40.6997283Z Unpacking libegl-mesa0:amd64 (23.2.1-1ubuntu3.1~22.04.4) ...
+2026-11-16T23:59:40.7338928Z Selecting previously unselected package libegl1:amd64.
+2026-11-16T23:59:40.7538615Z Preparing to unpack .../19-libegl1_1.4.0-1_amd64.deb ...
+2026-11-16T23:59:40.7544522Z Unpacking libegl1:amd64 (1.4.0-1) ...
+2026-11-16T23:59:40.7742933Z Selecting previously unselected package libglx-dev:amd64.
+2026-11-16T23:59:40.7942435Z Preparing to unpack .../20-libglx-dev_1.4.0-1_amd64.deb ...
+2026-11-16T23:59:40.7947879Z Unpacking libglx-dev:amd64 (1.4.0-1) ...
+2026-11-16T23:59:40.8193110Z Selecting previously unselected package libgl-dev:amd64.
+2026-11-16T23:59:40.8389998Z Preparing to unpack .../21-libgl-dev_1.4.0-1_amd64.deb ...
+2026-11-16T23:59:40.8395981Z Unpacking libgl-dev:amd64 (1.4.0-1) ...
+2026-11-16T23:59:40.8653912Z Selecting previously unselected package libegl-dev:amd64.
+2026-11-16T23:59:40.8853169Z Preparing to unpack .../22-libegl-dev_1.4.0-1_amd64.deb ...
+2026-11-16T23:59:40.8859588Z Unpacking libegl-dev:amd64 (1.4.0-1) ...
+2026-11-16T23:59:40.9181058Z Selecting previously unselected package libgles1:amd64.
+2026-11-16T23:59:40.9381055Z Preparing to unpack .../23-libgles1_1.4.0-1_amd64.deb ...
+2026-11-16T23:59:40.9387304Z Unpacking libgles1:amd64 (1.4.0-1) ...
+2026-11-16T23:59:40.9593054Z Selecting previously unselected package libgles2:amd64.
+2026-11-16T23:59:40.9791283Z Preparing to unpack .../24-libgles2_1.4.0-1_amd64.deb ...
+2026-11-16T23:59:40.9798096Z Unpacking libgles2:amd64 (1.4.0-1) ...
+2026-11-16T23:59:40.9997701Z Selecting previously unselected package libgles-dev:amd64.
+2026-11-16T23:59:41.0195740Z Preparing to unpack .../25-libgles-dev_1.4.0-1_amd64.deb ...
+2026-11-16T23:59:41.0201119Z Unpacking libgles-dev:amd64 (1.4.0-1) ...
+2026-11-16T23:59:41.0510153Z Selecting previously unselected package libopengl0:amd64.
+2026-11-16T23:59:41.0707670Z Preparing to unpack .../26-libopengl0_1.4.0-1_amd64.deb ...
+2026-11-16T23:59:41.0714884Z Unpacking libopengl0:amd64 (1.4.0-1) ...
+2026-11-16T23:59:41.0915129Z Selecting previously unselected package libopengl-dev:amd64.
+2026-11-16T23:59:41.1111010Z Preparing to unpack .../27-libopengl-dev_1.4.0-1_amd64.deb ...
+2026-11-16T23:59:41.1115951Z Unpacking libopengl-dev:amd64 (1.4.0-1) ...
+2026-11-16T23:59:41.1334815Z Selecting previously unselected package libc6-dbg:amd64.
+2026-11-16T23:59:41.1531922Z Preparing to unpack .../28-libc6-dbg_2.35-0ubuntu3.18_amd64.deb ...
+2026-11-16T23:59:41.1539704Z Unpacking libc6-dbg:amd64 (2.35-0ubuntu3.18) ...
+2026-11-16T23:59:41.3401086Z Selecting previously unselected package valgrind.
+2026-11-16T23:59:41.3606278Z Preparing to unpack .../29-valgrind_1%3a3.18.1-1ubuntu2_amd64.deb ...
+2026-11-16T23:59:41.3656309Z Unpacking valgrind (1:3.18.1-1ubuntu2) ...
+2026-11-16T23:59:42.4326921Z Selecting previously unselected package libglvnd-core-dev:amd64.
+2026-11-16T23:59:42.4549964Z Preparing to unpack .../30-libglvnd-core-dev_1.4.0-1_amd64.deb ...
+2026-11-16T23:59:42.4907449Z Unpacking libglvnd-core-dev:amd64 (1.4.0-1) ...
+2026-11-16T23:59:42.5686141Z Selecting previously unselected package libglvnd-dev:amd64.
+2026-11-16T23:59:42.5891968Z Preparing to unpack .../31-libglvnd-dev_1.4.0-1_amd64.deb ...
+2026-11-16T23:59:42.7865344Z Unpacking libglvnd-dev:amd64 (1.4.0-1) ...
+2026-11-16T23:59:43.4269860Z Selecting previously unselected package libgl1-mesa-dev:amd64.
+2026-11-16T23:59:43.4481176Z Preparing to unpack .../32-libgl1-mesa-dev_23.2.1-1ubuntu3.1~22.04.4_amd64.deb ...
+2026-11-16T23:59:43.4487010Z Unpacking libgl1-mesa-dev:amd64 (23.2.1-1ubuntu3.1~22.04.4) ...
+2026-11-16T23:59:43.4692427Z Selecting previously unselected package ocl-icd-libopencl1:amd64.
+2026-11-16T23:59:43.4900599Z Preparing to unpack .../33-ocl-icd-libopencl1_2.2.14-3_amd64.deb ...
+2026-11-16T23:59:43.4907067Z Unpacking ocl-icd-libopencl1:amd64 (2.2.14-3) ...
+2026-11-16T23:59:43.5117418Z Selecting previously unselected package opencl-c-headers.
+2026-11-16T23:59:43.5319747Z Preparing to unpack .../34-opencl-c-headers_3.0~2022.01.04-1_all.deb ...
+2026-11-16T23:59:43.5325351Z Unpacking opencl-c-headers (3.0~2022.01.04-1) ...
+2026-11-16T23:59:43.5546366Z Selecting previously unselected package opencl-clhpp-headers.
+2026-11-16T23:59:43.5746728Z Preparing to unpack .../35-opencl-clhpp-headers_3.0~2.0.15-1ubuntu1_all.deb ...
+2026-11-16T23:59:43.5752087Z Unpacking opencl-clhpp-headers (3.0~2.0.15-1ubuntu1) ...
+2026-11-16T23:59:43.5947220Z Selecting previously unselected package opencl-headers.
+2026-11-16T23:59:43.6142903Z Preparing to unpack .../36-opencl-headers_3.0~2022.01.04-1_all.deb ...
+2026-11-16T23:59:43.6148741Z Unpacking opencl-headers (3.0~2022.01.04-1) ...
+2026-11-16T23:59:43.6332215Z Selecting previously unselected package ocl-icd-opencl-dev:amd64.
+2026-11-16T23:59:43.6532014Z Preparing to unpack .../37-ocl-icd-opencl-dev_2.2.14-3_amd64.deb ...
+2026-11-16T23:59:43.6537261Z Unpacking ocl-icd-opencl-dev:amd64 (2.2.14-3) ...
+2026-11-16T23:59:43.7176018Z Setting up libboost1.74-dev:amd64 (1.74.0-14ubuntu3) ...
+2026-11-16T23:59:43.7193478Z Setting up libglvnd-core-dev:amd64 (1.4.0-1) ...
+2026-11-16T23:59:43.7208072Z Setting up libdebuginfod-common (0.186-1ubuntu0.1) ...
+2026-11-16T23:59:43.8567785Z 
+2026-11-16T23:59:43.8568495Z Creating config file /etc/profile.d/debuginfod.sh with new version
+2026-11-16T23:59:43.9672137Z 
+2026-11-16T23:59:43.9672753Z Creating config file /etc/profile.d/debuginfod.csh with new version
+2026-11-16T23:59:44.0375592Z Setting up libdebuginfod1:amd64 (0.186-1ubuntu0.1) ...
+2026-11-16T23:59:44.0391258Z Setting up libsource-highlight-common (3.1.9-4.1build2) ...
+2026-11-16T23:59:44.0407078Z Setting up libopengl0:amd64 (1.4.0-1) ...
+2026-11-16T23:59:44.0421583Z Setting up libc6-dbg:amd64 (2.35-0ubuntu3.18) ...
+2026-11-16T23:59:44.0436653Z Setting up libegl-mesa0:amd64 (23.2.1-1ubuntu3.1~22.04.4) ...
+2026-11-16T23:59:44.0451271Z Setting up libgles2:amd64 (1.4.0-1) ...
+2026-11-16T23:59:44.0465980Z Setting up dh-elpa-helper (2.0.9ubuntu1) ...
+2026-11-16T23:59:44.0480327Z Setting up libgles1:amd64 (1.4.0-1) ...
+2026-11-16T23:59:44.0494509Z Setting up libboost-regex1.74.0:amd64 (1.74.0-14ubuntu3) ...
+2026-11-16T23:59:44.0509129Z Setting up libjsoncpp25:amd64 (1.9.5-3) ...
+2026-11-16T23:59:44.0523097Z Setting up libipt2 (2.0.5-1) ...
+2026-11-16T23:59:44.0537491Z Setting up opencl-c-headers (3.0~2022.01.04-1) ...
+2026-11-16T23:59:44.0551537Z Setting up libbabeltrace1:amd64 (1.5.8-2build1) ...
+2026-11-16T23:59:44.0566264Z Setting up libboost-serialization1.74.0:amd64 (1.74.0-14ubuntu3) ...
+2026-11-16T23:59:44.0580911Z Setting up ocl-icd-libopencl1:amd64 (2.2.14-3) ...
+2026-11-16T23:59:44.0594562Z Setting up librhash0:amd64 (1.4.2-1ubuntu1) ...
+2026-11-16T23:59:44.0608002Z Setting up libegl1:amd64 (1.4.0-1) ...
+2026-11-16T23:59:44.0621826Z Setting up libc6-i386 (2.35-0ubuntu3.18) ...
+2026-11-16T23:59:44.0697043Z Setting up libglx-dev:amd64 (1.4.0-1) ...
+2026-11-16T23:59:44.0796986Z Setting up cmake-data (3.22.1-1ubuntu1.22.04.2) ...
+2026-11-16T23:59:44.1319768Z Setting up libopengl-dev:amd64 (1.4.0-1) ...
+2026-11-16T23:59:44.1333788Z Setting up libc-dev-bin (2.35-0ubuntu3.18) ...
+2026-11-16T23:59:44.1348249Z Setting up valgrind (1:3.18.1-1ubuntu2) ...
+2026-11-16T23:59:44.1392335Z Setting up libgl-dev:amd64 (1.4.0-1) ...
+2026-11-16T23:59:44.1406594Z Setting up libsource-highlight4v5 (3.1.9-4.1build2) ...
+2026-11-16T23:59:44.1422646Z Setting up libhiredis0.14:amd64 (0.14.1-2) ...
+2026-11-16T23:59:44.1452473Z Setting up libegl-dev:amd64 (1.4.0-1) ...
+2026-11-16T23:59:44.1475738Z Setting up ccache (4.5.1-1) ...
+2026-11-16T23:59:44.1494362Z Updating symlinks in /usr/lib/ccache ...
+2026-11-16T23:59:44.1703788Z Setting up gdb (12.1-0ubuntu1~22.04.2) ...
+2026-11-16T23:59:44.1724052Z Setting up opencl-clhpp-headers (3.0~2.0.15-1ubuntu1) ...
+2026-11-16T23:59:44.1745337Z Setting up ocl-icd-opencl-dev:amd64 (2.2.14-3) ...
+2026-11-16T23:59:44.1760301Z Setting up libboost-serialization1.74-dev:amd64 (1.74.0-14ubuntu3) ...
+2026-11-16T23:59:44.1776366Z Setting up cmake (3.22.1-1ubuntu1.22.04.2) ...
+2026-11-16T23:59:44.1791540Z Setting up libc6-dev:amd64 (2.35-0ubuntu3.18) ...
+2026-11-16T23:59:44.1806403Z Setting up libgles-dev:amd64 (1.4.0-1) ...
+2026-11-16T23:59:44.1821275Z Setting up libglvnd-dev:amd64 (1.4.0-1) ...
+2026-11-16T23:59:44.1839403Z Setting up opencl-headers (3.0~2022.01.04-1) ...
+2026-11-16T23:59:44.1854672Z Setting up libboost-serialization-dev:amd64 (1.74.0.3ubuntu7) ...
+2026-11-16T23:59:44.1869630Z Setting up libgl1-mesa-dev:amd64 (23.2.1-1ubuntu3.1~22.04.4) ...
+2026-11-16T23:59:44.1890112Z Processing triggers for man-db (2.10.2-1) ...
+2026-11-16T23:59:44.1952445Z Not building database; man-db/auto-update is not 'true'.
+2026-11-16T23:59:44.1963336Z Processing triggers for libc-bin (2.35-0ubuntu3.15) ...
+2026-11-16T23:59:56.8043620Z 
+2026-11-16T23:59:56.8044257Z Running kernel seems to be up-to-date.
+2026-11-16T23:59:56.8044599Z 
+2026-11-16T23:59:56.8044722Z Services to be restarted:
+2026-11-16T23:59:56.8085588Z  systemctl restart chrony.service
+2026-11-16T23:59:56.8122032Z  systemctl restart containerd.service
+2026-11-16T23:59:56.8158553Z  systemctl restart cron.service
+2026-11-16T23:59:56.8301369Z  systemctl restart haveged.service
+2026-11-16T23:59:56.8375805Z  systemctl restart hv-kvp-daemon.service
+2026-11-16T23:59:56.8412431Z  systemctl restart irqbalance.service
+2026-11-16T23:59:56.8449347Z  systemctl restart mono-xsp4.service
+2026-11-16T23:59:56.8486228Z  systemctl restart multipathd.service
+2026-11-16T23:59:56.8558692Z  systemctl restart packagekit.service
+2026-11-16T23:59:56.8596011Z  systemctl restart php8.1-fpm.service
+2026-11-16T23:59:56.8632225Z  systemctl restart polkit.service
+2026-11-16T23:59:56.8669446Z  systemctl restart rsyslog.service
+2026-11-16T23:59:56.8707363Z  systemctl restart serial-getty@ttyS0.service
+2026-11-16T23:59:56.8744579Z  systemctl restart snapd.service
+2026-11-16T23:59:56.8781964Z  systemctl restart ssh.service
+2026-11-16T23:59:56.8821656Z  systemctl restart systemd-journald.service
+2026-11-16T23:59:56.8900573Z  systemctl restart systemd-networkd.service
+2026-11-16T23:59:56.8939871Z  systemctl restart systemd-resolved.service
+2026-11-16T23:59:56.8978765Z  systemctl restart systemd-udevd.service
+2026-11-16T23:59:56.9052012Z 
+2026-11-16T23:59:56.9053633Z Service restarts being deferred:
+2026-11-16T23:59:56.9054023Z  /etc/needrestart/restart.d/dbus.service
+2026-11-16T23:59:56.9054410Z  systemctl restart docker.service
+2026-11-16T23:59:56.9054766Z  systemctl restart getty@tty1.service
+2026-11-16T23:59:56.9055310Z  systemctl restart hosted-compute-agent.service
+2026-11-16T23:59:56.9055768Z  systemctl restart networkd-dispatcher.service
+2026-11-16T23:59:56.9056190Z  systemctl restart systemd-logind.service
+2026-11-16T23:59:56.9056888Z  systemctl restart user@1001.service
+2026-11-16T23:59:56.9057180Z  systemctl restart walinuxagent.service
+2026-11-16T23:59:56.9057475Z 
+2026-11-16T23:59:56.9057571Z No containers need to be restarted.
+2026-11-16T23:59:56.9057725Z 
+2026-11-16T23:59:56.9057827Z No user sessions are running outdated binaries.
+2026-11-16T23:59:56.9058001Z 
+2026-11-16T23:59:56.9058168Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-11-16T23:59:58.1521533Z GCC version is 11 or greater. No need to install GCC 11.
+2026-11-16T23:59:58.1521874Z Installing Vulkan dependencies...
+2026-11-16T23:59:58.1904110Z Reading package lists...
+2026-11-16T23:59:58.4649306Z Building dependency tree...
+2026-11-16T23:59:58.4659705Z Reading state information...
+2026-11-16T23:59:58.6292480Z The following NEW packages will be installed:
+2026-11-16T23:59:58.6294377Z   libvulkan-dev
+2026-11-16T23:59:58.6443855Z 0 upgraded, 1 newly installed, 0 to remove and 16 not upgraded.
+2026-11-16T23:59:58.6444331Z Need to get 892 kB of archives.
+2026-11-16T23:59:58.6444809Z After this operation, 16.7 MB of additional disk space will be used.
+2026-11-16T23:59:58.6445441Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-16T23:59:58.7416063Z Get:2 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libvulkan-dev amd64 1.3.204.1-2 [892 kB]
+2026-11-16T23:59:59.0246861Z Fetched 892 kB in 0s (7040 kB/s)
+2026-11-16T23:59:59.0435518Z Selecting previously unselected package libvulkan-dev:amd64.
+2026-11-16T23:59:59.0509691Z (Reading database ... 
+2026-11-16T23:59:59.0510050Z (Reading database ... 5%
+2026-11-16T23:59:59.0510394Z (Reading database ... 10%
+2026-11-16T23:59:59.0510695Z (Reading database ... 15%
+2026-11-16T23:59:59.0511002Z (Reading database ... 20%
+2026-11-16T23:59:59.0511289Z (Reading database ... 25%
+2026-11-16T23:59:59.0511575Z (Reading database ... 30%
+2026-11-16T23:59:59.0511865Z (Reading database ... 35%
+2026-11-16T23:59:59.0512159Z (Reading database ... 40%
+2026-11-16T23:59:59.0512448Z (Reading database ... 45%
+2026-11-16T23:59:59.0512775Z (Reading database ... 50%
+2026-11-16T23:59:59.0533385Z (Reading database ... 55%
+2026-11-16T23:59:59.0556011Z (Reading database ... 60%
+2026-11-16T23:59:59.0579784Z (Reading database ... 65%
+2026-11-16T23:59:59.0685973Z (Reading database ... 70%
+2026-11-16T23:59:59.0812809Z (Reading database ... 75%
+2026-11-16T23:59:59.0869333Z (Reading database ... 80%
+2026-11-16T23:59:59.1063893Z (Reading database ... 85%
+2026-11-16T23:59:59.1327222Z (Reading database ... 90%
+2026-11-16T23:59:59.1425584Z (Reading database ... 95%
+2026-11-16T23:59:59.1425890Z (Reading database ... 100%
+2026-11-16T23:59:59.1426290Z (Reading database ... 284806 files and directories currently installed.)
+2026-11-16T23:59:59.1486517Z Preparing to unpack .../libvulkan-dev_1.3.204.1-2_amd64.deb ...
+2026-11-16T23:59:59.1569512Z Unpacking libvulkan-dev:amd64 (1.3.204.1-2) ...
+2026-11-16T23:59:59.2625305Z Setting up libvulkan-dev:amd64 (1.3.204.1-2) ...
+2026-11-16T23:59:59.6547785Z 
+2026-11-16T23:59:59.6548283Z Running kernel seems to be up-to-date.
+2026-11-16T23:59:59.6548515Z 
+2026-11-16T23:59:59.6548621Z Services to be restarted:
+2026-11-16T23:59:59.6588747Z  systemctl restart chrony.service
+2026-11-16T23:59:59.6628050Z  systemctl restart containerd.service
+2026-11-16T23:59:59.6669342Z  systemctl restart cron.service
+2026-11-16T23:59:59.6824751Z  systemctl restart haveged.service
+2026-11-16T23:59:59.6898149Z  systemctl restart hv-kvp-daemon.service
+2026-11-16T23:59:59.6934612Z  systemctl restart irqbalance.service
+2026-11-16T23:59:59.6971453Z  systemctl restart mono-xsp4.service
+2026-11-16T23:59:59.7007858Z  systemctl restart multipathd.service
+2026-11-16T23:59:59.7079664Z  systemctl restart packagekit.service
+2026-11-16T23:59:59.7116056Z  systemctl restart php8.1-fpm.service
+2026-11-16T23:59:59.7153328Z  systemctl restart polkit.service
+2026-11-16T23:59:59.7189906Z  systemctl restart rsyslog.service
+2026-11-16T23:59:59.7226751Z  systemctl restart serial-getty@ttyS0.service
+2026-11-16T23:59:59.7264529Z  systemctl restart snapd.service
+2026-11-16T23:59:59.7302346Z  systemctl restart ssh.service
+2026-11-16T23:59:59.7341745Z  systemctl restart systemd-journald.service
+2026-11-16T23:59:59.7419322Z  systemctl restart systemd-networkd.service
+2026-11-16T23:59:59.7458675Z  systemctl restart systemd-resolved.service
+2026-11-16T23:59:59.7497636Z  systemctl restart systemd-udevd.service
+2026-11-16T23:59:59.7571298Z 
+2026-11-16T23:59:59.7573240Z Service restarts being deferred:
+2026-11-16T23:59:59.7573931Z  /etc/needrestart/restart.d/dbus.service
+2026-11-16T23:59:59.7574506Z  systemctl restart docker.service
+2026-11-16T23:59:59.7575252Z  systemctl restart getty@tty1.service
+2026-11-16T23:59:59.7577174Z  systemctl restart hosted-compute-agent.service
+2026-11-16T23:59:59.7588335Z  systemctl restart networkd-dispatcher.service
+2026-11-16T23:59:59.7588777Z  systemctl restart systemd-logind.service
+2026-11-16T23:59:59.7589068Z  systemctl restart user@1001.service
+2026-11-16T23:59:59.7589304Z  systemctl restart walinuxagent.service
+2026-11-16T23:59:59.7589477Z 
+2026-11-16T23:59:59.7589564Z No containers need to be restarted.
+2026-11-16T23:59:59.7589723Z 
+2026-11-16T23:59:59.7589831Z No user sessions are running outdated binaries.
+2026-11-16T23:59:59.7590004Z 
+2026-11-16T23:59:59.7590164Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-11-17T00:00:01.6977988Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-17T00:00:01.7219164Z Hit:6 https://packages.microsoft.com/ubuntu/22.04/prod jammy InRelease
+2026-11-17T00:00:01.7329006Z Hit:2 http://azure.archive.ubuntu.com/ubuntu jammy InRelease
+2026-11-17T00:00:01.7342059Z Hit:3 http://azure.archive.ubuntu.com/ubuntu jammy-updates InRelease
+2026-11-17T00:00:01.7354317Z Hit:4 http://azure.archive.ubuntu.com/ubuntu jammy-backports InRelease
+2026-11-17T00:00:01.7367021Z Hit:5 http://azure.archive.ubuntu.com/ubuntu jammy-security InRelease
+2026-11-17T00:00:01.8322894Z Get:7 https://packages.lunarg.com/vulkan jammy InRelease
+2026-11-17T00:00:02.1502252Z Get:8 https://packages.lunarg.com/vulkan jammy/main Sources [198 kB]
+2026-11-17T00:00:02.2081470Z Get:9 https://packages.lunarg.com/vulkan jammy/main amd64 Packages [192 kB]
+2026-11-17T00:00:02.3438069Z Fetched 399 kB in 1s (669 kB/s)
+2026-11-17T00:00:03.6729949Z Reading package lists...
+2026-11-17T00:00:03.7265197Z Reading package lists...
+2026-11-17T00:00:04.0103539Z Building dependency tree...
+2026-11-17T00:00:04.0112973Z Reading state information...
+2026-11-17T00:00:04.1805619Z The following NEW packages will be installed:
+2026-11-17T00:00:04.1806071Z   shaderc
+2026-11-17T00:00:04.3509105Z 0 upgraded, 1 newly installed, 0 to remove and 18 not upgraded.
+2026-11-17T00:00:04.3509598Z Need to get 6541 kB of archives.
+2026-11-17T00:00:04.3509902Z After this operation, 34.4 MB of additional disk space will be used.
+2026-11-17T00:00:04.3510408Z Get:1 https://packages.lunarg.com/vulkan jammy/main amd64 shaderc amd64 2025.2~rc1-1lunarg22.04-1 [6541 kB]
+2026-11-17T00:00:04.7257622Z Fetched 6541 kB in 0s (24.3 MB/s)
+2026-11-17T00:00:04.7487286Z Selecting previously unselected package shaderc.
+2026-11-17T00:00:04.7560829Z (Reading database ... 
+2026-11-17T00:00:04.7561158Z (Reading database ... 5%
+2026-11-17T00:00:04.7561384Z (Reading database ... 10%
+2026-11-17T00:00:04.7561578Z (Reading database ... 15%
+2026-11-17T00:00:04.7561777Z (Reading database ... 20%
+2026-11-17T00:00:04.7561954Z (Reading database ... 25%
+2026-11-17T00:00:04.7562142Z (Reading database ... 30%
+2026-11-17T00:00:04.7562802Z (Reading database ... 35%
+2026-11-17T00:00:04.7562985Z (Reading database ... 40%
+2026-11-17T00:00:04.7563168Z (Reading database ... 45%
+2026-11-17T00:00:04.7563352Z (Reading database ... 50%
+2026-11-17T00:00:04.7585672Z (Reading database ... 55%
+2026-11-17T00:00:04.7607372Z (Reading database ... 60%
+2026-11-17T00:00:04.7629938Z (Reading database ... 65%
+2026-11-17T00:00:04.7735272Z (Reading database ... 70%
+2026-11-17T00:00:04.7864588Z (Reading database ... 75%
+2026-11-17T00:00:04.7923632Z (Reading database ... 80%
+2026-11-17T00:00:04.8118767Z (Reading database ... 85%
+2026-11-17T00:00:04.8385470Z (Reading database ... 90%
+2026-11-17T00:00:04.8483673Z (Reading database ... 95%
+2026-11-17T00:00:04.8483986Z (Reading database ... 100%
+2026-11-17T00:00:04.8484407Z (Reading database ... 284861 files and directories currently installed.)
+2026-11-17T00:00:04.8545453Z Preparing to unpack .../shaderc_2025.2~rc1-1lunarg22.04-1_amd64.deb ...
+2026-11-17T00:00:04.8558100Z Unpacking shaderc (2025.2~rc1-1lunarg22.04-1) ...
+2026-11-17T00:00:05.0983387Z Setting up shaderc (2025.2~rc1-1lunarg22.04-1) ...
+2026-11-17T00:00:05.1001046Z Processing triggers for libc-bin (2.35-0ubuntu3.15) ...
+2026-11-17T00:00:05.5073732Z 
+2026-11-17T00:00:05.5074327Z Running kernel seems to be up-to-date.
+2026-11-17T00:00:05.5074655Z 
+2026-11-17T00:00:05.5074779Z Services to be restarted:
+2026-11-17T00:00:05.5112794Z  systemctl restart chrony.service
+2026-11-17T00:00:05.5150019Z  systemctl restart containerd.service
+2026-11-17T00:00:05.5187228Z  systemctl restart cron.service
+2026-11-17T00:00:05.5334237Z  systemctl restart haveged.service
+2026-11-17T00:00:05.5408915Z  systemctl restart hv-kvp-daemon.service
+2026-11-17T00:00:05.5446041Z  systemctl restart irqbalance.service
+2026-11-17T00:00:05.5483574Z  systemctl restart mono-xsp4.service
+2026-11-17T00:00:05.5521361Z  systemctl restart multipathd.service
+2026-11-17T00:00:05.5594275Z  systemctl restart packagekit.service
+2026-11-17T00:00:05.5632540Z  systemctl restart php8.1-fpm.service
+2026-11-17T00:00:05.5670089Z  systemctl restart polkit.service
+2026-11-17T00:00:05.5707157Z  systemctl restart rsyslog.service
+2026-11-17T00:00:05.5745184Z  systemctl restart serial-getty@ttyS0.service
+2026-11-17T00:00:05.5782406Z  systemctl restart snapd.service
+2026-11-17T00:00:05.5820541Z  systemctl restart ssh.service
+2026-11-17T00:00:05.5860783Z  systemctl restart systemd-journald.service
+2026-11-17T00:00:05.5939434Z  systemctl restart systemd-networkd.service
+2026-11-17T00:00:05.5979434Z  systemctl restart systemd-resolved.service
+2026-11-17T00:00:05.6018244Z  systemctl restart systemd-udevd.service
+2026-11-17T00:00:05.6092112Z 
+2026-11-17T00:00:05.6093941Z Service restarts being deferred:
+2026-11-17T00:00:05.6094335Z  /etc/needrestart/restart.d/dbus.service
+2026-11-17T00:00:05.6094700Z  systemctl restart docker.service
+2026-11-17T00:00:05.6095187Z  systemctl restart getty@tty1.service
+2026-11-17T00:00:05.6095589Z  systemctl restart hosted-compute-agent.service
+2026-11-17T00:00:05.6096044Z  systemctl restart networkd-dispatcher.service
+2026-11-17T00:00:05.6096461Z  systemctl restart systemd-logind.service
+2026-11-17T00:00:05.6096839Z  systemctl restart user@1001.service
+2026-11-17T00:00:05.6097203Z  systemctl restart walinuxagent.service
+2026-11-17T00:00:05.6097429Z 
+2026-11-17T00:00:05.6097554Z No containers need to be restarted.
+2026-11-17T00:00:05.6097770Z 
+2026-11-17T00:00:05.6097929Z No user sessions are running outdated binaries.
+2026-11-17T00:00:05.6098181Z 
+2026-11-17T00:00:05.6098435Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-11-17T00:00:06.8983583Z ##[end-action id=__self.__run_2;outcome=success;conclusion=success;duration_ms=58834]
+2026-11-17T00:00:06.8986050Z ##[start-action display=Install test-harness Python deps;id=__self.__run_3]
+2026-11-17T00:00:06.9002271Z ##[group]Run pip install --quiet pytest pyyaml "pyslang>=11,<13"
+2026-11-17T00:00:06.9002651Z [36;1mpip install --quiet pytest pyyaml "pyslang>=11,<13"[0m
+2026-11-17T00:00:06.9055707Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-17T00:00:06.9055983Z env:
+2026-11-17T00:00:06.9056157Z   CELL: tensor_mx-simx-64
+2026-11-17T00:00:06.9056391Z   TOOLDIR: ${HOSTED_SOURCE}/tools
+2026-11-17T00:00:06.9056631Z ##[endgroup]
+2026-11-17T00:00:11.7593072Z ##[end-action id=__self.__run_3;outcome=success;conclusion=success;duration_ms=4860]
+2026-11-17T00:00:11.7595565Z ##[start-action display=Export tool env (SST + gem5 + MPI);id=__self.__run_4]
+2026-11-17T00:00:11.7609422Z ##[end-action id=__self.__run_4;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-17T00:00:11.7611026Z ##[start-action display=Prepare toolchain (on cache miss);id=__self.__run_5]
+2026-11-17T00:00:11.7616911Z ##[end-action id=__self.__run_5;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-17T00:00:11.7618443Z ##[start-action display=Prepare third_party (on cache miss);id=__self.__run_6]
+2026-11-17T00:00:11.7621663Z ##[end-action id=__self.__run_6;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-17T00:00:11.7682183Z ##[group]Run actions/download-artifact@v4
+2026-11-17T00:00:11.7682422Z with:
+2026-11-17T00:00:11.7682587Z   name: build-64
+2026-11-17T00:00:11.7682771Z   path: build64
+2026-11-17T00:00:11.7682949Z   merge-multiple: false
+2026-11-17T00:00:11.7683151Z   repository: baabi-boo/AI-GPU
+2026-11-17T00:00:11.7683353Z   run-id: 43982209402
+2026-11-17T00:00:11.7683523Z env:
+2026-11-17T00:00:11.7683691Z   CELL: tensor_mx-simx-64
+2026-11-17T00:00:11.7683914Z   TOOLDIR: ${HOSTED_SOURCE}/tools
+2026-11-17T00:00:11.7684158Z ##[endgroup]
+2026-11-17T00:00:11.8943957Z Downloading single artifact
+2026-11-17T00:00:11.9062664Z (node:4087) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T00:00:11.9063434Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T00:00:12.1465221Z Preparing to download the following artifacts:
+2026-11-17T00:00:12.1466185Z - build-64 (ID: 14284121663, Size: 95418002, Expected Digest: sha256:af433864782f1fe00dbd23ba75e9d9eb229bccfd39eda5a414048e87d7071098)
+2026-11-17T00:00:12.4070085Z Redirecting to blob download url: https://productionresultssa4.blob.core.windows.net/actions-results/ece56c15-1710-882e-b248-10b00c650b56/workflow-job-run-c3cefc9f-1e50-5d5e-9797-eac8497243dd/artifacts/345a4444a319d964b07128a54bbaed31ae61c1a5614117830aeab75f53bd3936.zip
+2026-11-17T00:00:12.4071597Z Starting download of artifact to: ${HOSTED_SOURCE}/build64
+2026-11-17T00:00:12.7289496Z (node:4087) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-11-17T00:00:17.3609262Z SHA256 digest of downloaded artifact is af433864782f1fe00dbd23ba75e9d9eb229bccfd39eda5a414048e87d7071098
+2026-11-17T00:00:17.3610185Z Artifact download completed successfully.
+2026-11-17T00:00:17.3610640Z Total of 1 artifact(s) downloaded
+2026-11-17T00:00:17.3635520Z Download artifact has finished successfully
+2026-11-17T00:00:17.3900000Z ##[group]Run case "tensor_mx" in
+2026-11-17T00:00:17.3900269Z [36;1mcase "tensor_mx" in[0m
+2026-11-17T00:00:17.3900569Z [36;1m  vulkan) sudo bash ./ci/install_dependencies.sh --vulkan ;;[0m
+2026-11-17T00:00:17.3900877Z [36;1mesac[0m
+2026-11-17T00:00:17.3956189Z shell: /usr/bin/bash -e {0}
+2026-11-17T00:00:17.3956413Z env:
+2026-11-17T00:00:17.3956593Z   CELL: tensor_mx-simx-64
+2026-11-17T00:00:17.3956839Z   TOOLDIR: ${HOSTED_SOURCE}/tools
+2026-11-17T00:00:17.3957112Z ##[endgroup]
+2026-11-17T00:00:17.4068321Z ##[group]Run cd build64
+2026-11-17T00:00:17.4068565Z [36;1mcd build64[0m
+2026-11-17T00:00:17.4068752Z [36;1mchmod -R +x .[0m
+2026-11-17T00:00:17.4069047Z [36;1m# The long model-parity and performance-gate shards compile large[0m
+2026-11-17T00:00:17.4069432Z [36;1m# WGMMA RTL models. Cap Verilator's independent C++ build jobs on[0m
+2026-11-17T00:00:17.4069809Z [36;1m# hosted runners to reduce peak RAM use; this does not alter the[0m
+2026-11-17T00:00:17.4070172Z [36;1m# simulated hardware, test cases, or performance baselines.[0m
+2026-11-17T00:00:17.4070551Z [36;1mif [[ "tensor_mx" == "model_parity" || "tensor_mx" == "perf_gate" ]]; then[0m
+2026-11-17T00:00:17.4070862Z [36;1m  export THREADS=2[0m
+2026-11-17T00:00:17.4071124Z [36;1m  echo "RTL gate Verilator build concurrency: $THREADS"[0m
+2026-11-17T00:00:17.4071395Z [36;1mfi[0m
+2026-11-17T00:00:17.4071646Z [36;1m# The planner owns what a cell selects, so the cell runs exactly the[0m
+2026-11-17T00:00:17.4072024Z [36;1m# cases it was planned (and, if sharded, split) from.[0m
+2026-11-17T00:00:17.4072620Z [36;1mEXPR=$(python3 ci/testcase.py expr --cell="tensor_mx" --driver="simx")[0m
+2026-11-17T00:00:17.4072942Z [36;1mSHARD=()[0m
+2026-11-17T00:00:17.4073138Z [36;1m[ -n "" ] && SHARD=(--shard="/")[0m
+2026-11-17T00:00:17.4073445Z [36;1mVX_XLEN=64 python3 -m pytest ci -m "$EXPR" --strict-markers \[0m
+2026-11-17T00:00:17.4073742Z [36;1m  "${SHARD[@]}" -v \[0m
+2026-11-17T00:00:17.4073994Z [36;1m  --junitxml="$GITHUB_WORKSPACE/junit-$CELL.xml"[0m
+2026-11-17T00:00:17.4120356Z shell: /usr/bin/bash -e {0}
+2026-11-17T00:00:17.4120582Z env:
+2026-11-17T00:00:17.4120751Z   CELL: tensor_mx-simx-64
+2026-11-17T00:00:17.4120989Z   TOOLDIR: ${HOSTED_SOURCE}/tools
+2026-11-17T00:00:17.4121232Z ##[endgroup]
+2026-11-17T00:00:18.3847906Z ============================= test session starts ==============================
+2026-11-17T00:00:18.3848658Z platform linux -- Python 3.10.12, pytest-9.2.0, pluggy-1.7.0 -- /usr/bin/python3
+2026-11-17T00:00:18.3849372Z cachedir: .pytest_cache
+2026-11-17T00:00:18.3850107Z rootdir: ${HOSTED_SOURCE}/build64
+2026-11-17T00:00:18.3863777Z plugins: platformdirs-4.12.4
+2026-11-17T00:00:18.8922225Z collecting ... collected 905 items / 885 deselected / 20 selected
+2026-11-17T00:00:18.8922504Z 
+2026-11-17T00:01:43.6873992Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-mxfp8-nt4:simx] PASSED [  5%]
+2026-11-17T00:02:56.1667296Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-mxfp8-nt8:simx] PASSED [ 10%]
+2026-11-17T00:04:08.8010357Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-mxfp8-nt16:simx] PASSED [ 15%]
+2026-11-17T00:05:21.7354100Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-mxfp8-nt32:simx] PASSED [ 20%]
+2026-11-17T00:05:29.7831687Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-mxbf8-nt4:simx] PASSED [ 25%]
+2026-11-17T00:05:37.7452005Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-mxbf8-nt8:simx] PASSED [ 30%]
+2026-11-17T00:05:45.7192906Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-mxbf8-nt16:simx] PASSED [ 35%]
+2026-11-17T00:05:53.7154433Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-mxbf8-nt32:simx] PASSED [ 40%]
+2026-11-17T00:06:01.9651008Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-mxfp4-nt4:simx] PASSED [ 45%]
+2026-11-17T00:06:10.0318548Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-mxfp4-nt8:simx] PASSED [ 50%]
+2026-11-17T00:06:18.0158130Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-mxfp4-nt16:simx] PASSED [ 55%]
+2026-11-17T00:06:26.3074796Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-mxfp4-nt32:simx] PASSED [ 60%]
+2026-11-17T00:06:34.4264895Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-nvfp4-nt4:simx] PASSED [ 65%]
+2026-11-17T00:06:34.9399313Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-nvfp4-nt4-tls:simx] PASSED [ 70%]
+2026-11-17T00:06:42.9056883Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-nvfp4-nt8:simx] PASSED [ 75%]
+2026-11-17T00:06:50.8986371Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-nvfp4-nt16:simx] PASSED [ 80%]
+2026-11-17T00:06:59.1059063Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-simx-nvfp4-nt32:simx] PASSED [ 85%]
+2026-11-17T00:08:11.9135234Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-lsu-lanes:simx] PASSED [ 90%]
+2026-11-17T00:08:27.5638056Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-ldm-1:simx] PASSED   [ 95%]
+2026-11-17T00:08:40.2154747Z ci/test_runner.py::test_case[tensor_mx:sgemm_tcu_mx-ldm-2:simx] PASSED   [100%]
+2026-11-17T00:08:40.2155342Z 
+2026-11-17T00:08:40.2155558Z - generated xml file: ${HOSTED_SOURCE}/junit-tensor_mx-simx-64.xml -
+2026-11-17T00:08:40.2155983Z ================ 20 passed, 885 deselected in 501.82s (0:08:21) ================
+2026-11-17T00:08:40.2474216Z ##[group]Run actions/upload-artifact@v4
+2026-11-17T00:08:40.2474468Z with:
+2026-11-17T00:08:40.2474658Z   name: junit-tensor_mx-simx-64
+2026-11-17T00:08:40.2474883Z   path: junit-*.xml
+2026-11-17T00:08:40.2475288Z   if-no-files-found: warn
+2026-11-17T00:08:40.2475723Z   compression-level: 6
+2026-11-17T00:08:40.2475917Z   overwrite: false
+2026-11-17T00:08:40.2476122Z   include-hidden-files: false
+2026-11-17T00:08:40.2476331Z env:
+2026-11-17T00:08:40.2476508Z   CELL: tensor_mx-simx-64
+2026-11-17T00:08:40.2476740Z   TOOLDIR: ${HOSTED_SOURCE}/tools
+2026-11-17T00:08:40.2476997Z ##[endgroup]
+2026-11-17T00:08:40.3864619Z (node:10132) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T00:08:40.3865532Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T00:08:40.3956045Z With the provided path, there will be 1 file uploaded
+2026-11-17T00:08:40.3956882Z Artifact name is valid!
+2026-11-17T00:08:40.3957194Z Root directory input is valid!
+2026-11-17T00:08:40.7536805Z Beginning upload of artifact content to blob storage
+2026-11-17T00:08:40.7674768Z (node:10132) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-17T00:08:41.0342767Z Uploaded bytes 557
+2026-11-17T00:08:41.1075115Z Finished uploading artifact content to blob storage!
+2026-11-17T00:08:41.1075913Z SHA256 digest of uploaded artifact zip is 3f8ad7ff9fdd4829b56a92ee177debe684d8c3a2561dd1c506bce1f55e51d0cf
+2026-11-17T00:08:41.1077038Z Finalizing artifact upload
+2026-11-17T00:08:41.4965846Z Artifact junit-tensor_mx-simx-64.zip successfully finalized. Artifact ID 14284183858
+2026-11-17T00:08:41.4967088Z Artifact junit-tensor_mx-simx-64 has been successfully uploaded! Final size is 557 bytes. Artifact ID is 14284183858
+2026-11-17T00:08:41.4971332Z Artifact download URL: https://github.com/baabi-boo/AI-GPU/actions/runs/43982209402/artifacts/14284183858
+2026-11-17T00:08:41.5200736Z Post job cleanup.
+2026-11-17T00:08:41.5204050Z ##[start-action display=Cache third party;id=__1331e0f5-e2ea-44c0-aa91-760779ec7167.cache-thirdparty]
+2026-11-17T00:08:41.5710504Z Post job cleanup.
+2026-11-17T00:08:41.6637755Z Cache hit occurred on the primary key Linux-thirdparty-cbe0d7fc3a5ec7c6d1b71c86a227694d83e413fccc1d512acfa661fdbe86c7ac, not saving cache.
+2026-11-17T00:08:41.6638898Z (node:10157) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T00:08:41.6639449Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T00:08:41.6697143Z ##[end-action id=__1331e0f5-e2ea-44c0-aa91-760779ec7167.cache-thirdparty;outcome=success;conclusion=success;duration_ms=149]
+2026-11-17T00:08:41.6699502Z ##[start-action display=Cache toolchain;id=__1331e0f5-e2ea-44c0-aa91-760779ec7167.cache-toolchain]
+2026-11-17T00:08:41.6748974Z Post job cleanup.
+2026-11-17T00:08:41.7698874Z Cache hit occurred on the primary key Linux-toolchain-v3.0.2-e3db4bcdf819a17f618ad9fc2472f8f7dea3192b-lite, not saving cache.
+2026-11-17T00:08:41.7700079Z (node:10165) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T00:08:41.7700825Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T00:08:41.7759976Z ##[end-action id=__1331e0f5-e2ea-44c0-aa91-760779ec7167.cache-toolchain;outcome=success;conclusion=success;duration_ms=105]
+2026-11-17T00:08:41.7819338Z Post job cleanup.
+2026-11-17T00:08:41.8512896Z [command]/usr/bin/git version
+2026-11-17T00:08:41.8550928Z git version 2.56.1
+2026-11-17T00:08:41.8598718Z Temporarily overriding HOME='/home/runner/work/_temp/264ee856-b962-45af-9a6d-df86693cc207' before making global git config changes
+2026-11-17T00:08:41.8599893Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T00:08:41.8600862Z [command]/usr/bin/git config --global --add safe.directory ${HOSTED_SOURCE}
+2026-11-17T00:08:41.8621196Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T00:08:41.8653292Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T00:08:41.8942452Z fatal: gitfile does not point to a valid repository: third_party/cocogfx/.git
+2026-11-17T00:08:41.8993466Z ##[warning]The process '/usr/bin/git' failed with exit code 128
+2026-11-17T00:08:41.9151946Z Cleaning up orphan processes
+2026-11-17T00:08:41.9470326Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/download-artifact@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+

@@ -1,0 +1,752 @@
+{
+  "schema_version": 1,
+  "record_id": "p02-wmma-evidence-summary-v1-58faf6d-host-c9cf9ba-draft",
+  "status": "finished_execution_evidence",
+  "acceptance_claimed": false,
+  "phase_complete": false,
+  "draft_observed_at_utc": "2026-11-16T23:34:16.814765+00:00",
+  "intended_acceptance": {
+    "id": "P02-A02",
+    "kind": "rtl",
+    "evidence_level": "rtl_verified",
+    "report": "docs/project/evidence/p02-wmma/acceptance.json"
+  },
+  "source_binding": {
+    "primary_formal": {
+      "revision": "58faf6d68879e1db92122df493172eab59c02458",
+      "tree": "cd35869ee89cb42685e9bac367667a7dffbe1b1d",
+      "dirty": false,
+      "source_stable": true,
+      "source_before": {
+        "member": "formal-matrix-packet/snapshots/source-before.json",
+        "original_sha256": "fdcdc580e00174c7012ad9a43b99ac86463cdfc117fe08439fae3f9c65133dd9",
+        "original_size_bytes": 126331
+      },
+      "source_after": {
+        "member": "formal-matrix-packet/snapshots/source-after.json",
+        "original_sha256": "fdcdc580e00174c7012ad9a43b99ac86463cdfc117fe08439fae3f9c65133dd9",
+        "original_size_bytes": 126331
+      },
+      "meaning": "Fresh original four-variant processor builds and actual API compiler matrix; acceptance.source_revision names this source."
+    },
+    "child_host_supplement": {
+      "revision": "c9cf9ba0730f236e110a1d48a54d8f47a9faf9af",
+      "tree": "df62aa14b7dee5e02ad85027ac0e3225d1d8e4a1",
+      "parent": "58faf6d68879e1db92122df493172eab59c02458",
+      "changed_paths": [
+        "tests/regression/sgemm_tcu/main.cpp"
+      ],
+      "change": "Restore live legacy random int iter_errors/%d reporting; keep size_t/%zu fixture reporting and exact fixture behavior.",
+      "main_cpp_sha256": "5e7a584ae8d45d210e8827d36cdd10b6ac760a18cd454ce23bab883942514b27",
+      "exact_diff": {
+        "member": "reviews/w07_a02_legacy_report_fix.diff",
+        "original_sha256": "dee6d5cf649cb8ac87b62d73a790cfdced6a527de4c530d257b0f05210718d99",
+        "original_size_bytes": 1507
+      },
+      "meaning": "A separate supplement must identify newly rebuilt child hosts and proven unchanged original kernels/backends. Do not relabel original compiler records or claim a new child backend/RTL build.",
+      "status": "pass",
+      "report": {
+        "member": "host-revalidation-packet/report.json",
+        "original_sha256": "d8bc112805cded88b707064137d15cedabc4189a38b0846c21d7741b9c965251",
+        "original_size_bytes": 1050927
+      },
+      "source_stable": true,
+      "fresh_backend_build": false,
+      "reused_backend_kernel_revision": "58faf6d68879e1db92122df493172eab59c02458"
+    }
+  },
+  "profile": {
+    "path": "profiles/p02-tfr.json",
+    "sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+    "xlen": 64,
+    "clusters": 1,
+    "cores": 1,
+    "warps": 4,
+    "threads": 4,
+    "issue_width": 1,
+    "tensor_arithmetic": "native TFR",
+    "scalar_floating_point": "native STD",
+    "integer_multiply_divide": "inherited DPI helpers remain (RV64 dpi_lmul/dpi_ldiv)",
+    "formats": [
+      "fp16",
+      "bf16"
+    ],
+    "output_format": "fp32",
+    "element_tile": [
+      8,
+      4,
+      8
+    ],
+    "kunroll": 1,
+    "initial_C_bits": "00000000",
+    "matrix_shapes": [
+      [
+        8,
+        4,
+        8
+      ],
+      [
+        8,
+        4,
+        16
+      ],
+      [
+        16,
+        8,
+        16
+      ]
+    ],
+    "K_values": [
+      8,
+      16
+    ],
+    "products_per_FEDP": 4,
+    "FEDP_groups_per_output": {
+      "K8": 2,
+      "K16": 4
+    },
+    "layouts": {
+      "A": "compact row-major",
+      "B": "compact column-major",
+      "output": "compact row-major"
+    },
+    "TCU_LATENCY": 4,
+    "TCU_USE_DSP": 0,
+    "scope": "ordinary dense/unscaled WMMA; WGMMA and matrix-load extensions disabled"
+  },
+  "formal_processor_matrix": {
+    "outcome": "pass",
+    "started_at": "2026-11-16T22:54:47+00:00",
+    "finished_at": "2026-11-16T23:06:43+00:00",
+    "report": {
+      "member": "formal-matrix-packet/report.json",
+      "original_sha256": "ffbe445a27a1639c0614191b0cc7cf1907674b792d7b103c2c5bc44053811f41",
+      "original_size_bytes": 1114599
+    },
+    "bounded_commands": 209,
+    "fixture_count": 88,
+    "layout_fixture_count": 20,
+    "numerical_fixture_count": 68,
+    "fixture_count_per_format": 44,
+    "case_backend_executions": 176,
+    "iterations_per_case": 2,
+    "launches": 352,
+    "checked_output_words": 14336,
+    "mismatched_output_words": 0,
+    "all_commands_exit_zero": true,
+    "variants": [
+      {
+        "id": "simx-fp16",
+        "backend": "simx",
+        "format": "fp16",
+        "configuration_id": "p02-tfr-rv64-t4-wmma-v1/fp16-fp32-kunroll1",
+        "outcome": "pass",
+        "fixtures": 44,
+        "launches": 88,
+        "checked_output_words": 3584,
+        "source_revision": "58faf6d68879e1db92122df493172eab59c02458",
+        "command_records": "formal-matrix-packet/report.json commands and variants[id=simx-fp16]"
+      },
+      {
+        "id": "simx-bf16",
+        "backend": "simx",
+        "format": "bf16",
+        "configuration_id": "p02-tfr-rv64-t4-wmma-v1/bf16-fp32-kunroll1",
+        "outcome": "pass",
+        "fixtures": 44,
+        "launches": 88,
+        "checked_output_words": 3584,
+        "source_revision": "58faf6d68879e1db92122df493172eab59c02458",
+        "command_records": "formal-matrix-packet/report.json commands and variants[id=simx-bf16]"
+      },
+      {
+        "id": "rtlsim-fp16",
+        "backend": "rtlsim",
+        "format": "fp16",
+        "configuration_id": "p02-tfr-rv64-t4-wmma-v1/fp16-fp32-kunroll1",
+        "outcome": "pass",
+        "fixtures": 44,
+        "launches": 88,
+        "checked_output_words": 3584,
+        "source_revision": "58faf6d68879e1db92122df493172eab59c02458",
+        "command_records": "formal-matrix-packet/report.json commands and variants[id=rtlsim-fp16]"
+      },
+      {
+        "id": "rtlsim-bf16",
+        "backend": "rtlsim",
+        "format": "bf16",
+        "configuration_id": "p02-tfr-rv64-t4-wmma-v1/bf16-fp32-kunroll1",
+        "outcome": "pass",
+        "fixtures": 44,
+        "launches": 88,
+        "checked_output_words": 3584,
+        "source_revision": "58faf6d68879e1db92122df493172eab59c02458",
+        "command_records": "formal-matrix-packet/report.json commands and variants[id=rtlsim-bf16]"
+      }
+    ],
+    "comparison": "Each launch emits all uint32 output words in P02_RESULT records and compares them exactly with frozen independent expected bits; both host and device output buffers are poisoned with expected XOR 1 before every launch. No tolerance pooling or production-model-derived expected bits.",
+    "oracle": "Reviewed independent integer/Fraction FEDP oracle; 68 numerical fixtures plus 20 unchanged layout fixtures, with initial +0 and sequential four-product groups. Independent review reconstructed 3584 fixture words and replayed 9472 FEDP steps.",
+    "corpora": [
+      {
+        "path": "ci/project/fixtures/p02_layout_v1.json",
+        "sha256": "0543f9f4208de3ff4743fe1894d97ccf3b8cca4707e9a26acd1f3dde884725b2",
+        "size_bytes": 83960
+      },
+      {
+        "path": "ci/project/fixtures/p02_wmma_numerical_v1.json",
+        "sha256": "4102d74024e92e9887d7324b9326c0d6ad1fff206b5fad33f45c530d5bd03a73",
+        "size_bytes": 260308
+      }
+    ],
+    "cross_backend_exact_parity": [
+      {
+        "case_pairs": 44,
+        "comparison": "exact uint32 equality; no tolerance or format pooling",
+        "format": "fp16",
+        "launch_pairs": 88,
+        "unequal_words": 0,
+        "word_pairs": 3584
+      },
+      {
+        "case_pairs": 44,
+        "comparison": "exact uint32 equality; no tolerance or format pooling",
+        "format": "bf16",
+        "launch_pairs": 88,
+        "unequal_words": 0,
+        "word_pairs": 3584
+      }
+    ],
+    "complete_command_index": "formal-matrix-packet/report.json commands[0:209], retaining every exact argv/cwd/environment, observed exit, log hash and sampled resource result. acceptance.json includes only representative exact commands."
+  },
+  "actual_API_boundary": {
+    "outcome": "pass",
+    "source_revision": "58faf6d68879e1db92122df493172eab59c02458",
+    "source_tree": "cd35869ee89cb42685e9bac367667a7dffbe1b1d",
+    "source_dirty": false,
+    "started_at": "2026-11-16T23:07:28.556569+00:00",
+    "finished_at": "2026-11-16T23:07:50.865206+00:00",
+    "report": {
+      "member": "formal-api/report.json",
+      "original_sha256": "d1dc826fabd04ae3864f53a2742707869e5efe1717576bda06a3fb4522c9ac5f",
+      "original_size_bytes": 2352631
+    },
+    "wrapper": {
+      "member": "reports/formal-api-matrix.json",
+      "original_sha256": "6f02022dbbcdf06bd4ecae879a02c389d9c826ac44c0b02338474a64cb22f30a",
+      "original_size_bytes": 1502
+    },
+    "test_expectations_met": 47,
+    "successful_syntax_only_compiles": 17,
+    "expected_exit_1_rejections": 30,
+    "contexts_per_case": [
+      "wmma_context",
+      "wgmma_context"
+    ],
+    "context_checks": 94,
+    "successful_contexts": 34,
+    "intended_context_rejections": 60,
+    "command_records": 150,
+    "dependency_probes": 47,
+    "categories": {
+      "TFR_enabled_format_successes": 13,
+      "non_TFR_compatibility_successes": 4,
+      "TFR_disabled_family_rejections": 9,
+      "TFR_missing_prerequisite_rejections": 12,
+      "TFR_unsupported_input_rejections": 4,
+      "invalid_output_type_rejections": 5
+    },
+    "configuration": "Explicit empty-profile RV64, eight threads, WGMMA enabled for class-instantiation coverage; separate from four-thread p02-tfr execution profile.",
+    "diagnostics": {
+      "input": "TCU input format is not enabled in the native TFR configuration",
+      "output": "TCU output type must be fp32 (int32 for integer inputs)"
+    },
+    "limits": [
+      "47 passing test expectations means 17 exit-zero syntax-only translation units plus 30 intended exit-one compiler rejections, not 47 successful compiles.",
+      "Both WMMA and WGMMA class contexts are forced with sizeof in all 47 translation units; no kernel is executed.",
+      "This explicit empty-PROFILE RV64 matrix uses 8 threads and enables WGMMA; ordinary p02-tfr uses 4 threads, FP16/BF16 only, and disables WGMMA. Its execution qualification belongs to the separate processor matrix.",
+      "The 11 other enabled TFR format positives and 4 non-TFR backend positives establish public C++ compatibility only; they do not qualify those formats/backends for the ordinary p02-tfr numerical contract.",
+      "The 30 negative cases establish public C++ static-assertion rejection for the exact disabled, missing-prerequisite, unsupported-input or invalid-output configuration; they do not establish a hardware trap.",
+      "No compiler was launched for this review. Runtime numerical accuracy, WGMMA synchronization/metadata/multi-warp/backpressure, vendor hw_emu and physical-device behavior are outside its scope."
+    ]
+  },
+  "host_boundary": {
+    "source_review": {
+      "member": "reviews/w04_a02_host_closure_review.json",
+      "original_sha256": "0a29c673726fb8fbb518b811d10cbc77e52e7a1e5a802cf130601c1080d21009",
+      "original_size_bytes": 10641
+    },
+    "post_fix_tests": {
+      "member": "reviews/w07_a02_legacy_report_fix_tests.json",
+      "original_sha256": "0e827df753b8df777f511819c84c82ebcadd427e03bc0d327c3c3a0a7b35104f",
+      "original_size_bytes": 1256
+    },
+    "post_fix_report": {
+      "member": "reviews/w07_a02_legacy_report_fix.json",
+      "original_sha256": "87e819fff53a99a7100c52a94697722954b2dd219e33a1432e62cbdde00821a2",
+      "original_size_bytes": 5072
+    },
+    "post_fix_tested_source_state": "base commit plus this exact uncommitted main.cpp patch",
+    "post_fix_main_cpp_sha256": "5e7a584ae8d45d210e8827d36cdd10b6ac760a18cd454ce23bab883942514b27",
+    "focused_source_contract_tests": 1,
+    "adapter_tests": 15,
+    "post_fix_test_outcome": "pass",
+    "explicit_rejection_scenarios_from_reviewed_inventory": {
+      "invalid_cli": 61,
+      "uint32_index_range": 5,
+      "size_t_byte_range": 3,
+      "wrong_format_or_compiled_profile": 16,
+      "device_capabilities": 9,
+      "total": 94
+    },
+    "negative_control_scenarios_from_reviewed_inventory": {
+      "missing_writes_reads": 8,
+      "diagnostic_cap": 1,
+      "all_output_bit_positions": 64,
+      "zero_NaN_bits": 5,
+      "swapped_input_layout": 4,
+      "CPU_conversion_sentinel": 2,
+      "total": 84
+    },
+    "scope": "The focused and 15-method results above were host/runtime-stub checks on the exact uncommitted patch. The separate final clean-child suite also passed all 1448 methods, and the rebuilt child hosts passed the full supplemental processor replay. Host-method/scenario counts are not added to GPU launch totals."
+  },
+  "historical_failures": [
+    {
+      "id": "development-simx-selector-failure",
+      "outcome": "fail",
+      "report": {
+        "member": "dev-matrix-packet/report.json",
+        "original_sha256": "a1cb0e9b59a28e6f49cf984a8d4a25bf59ae795915a070b8fb1b560c5f7a87f0",
+        "original_size_bytes": 148957
+      },
+      "started_at": "2026-11-16T22:32:17+00:00",
+      "finished_at": "2026-11-16T22:36:23+00:00",
+      "base_revision": "e829e6c6ec638c66910871a3be30eb562acf6903",
+      "base_tree": "a93011d52939fec5e2cff20abb68d15aebc45d35",
+      "tested_source_dirty": true,
+      "source_stable": true,
+      "source_before": {
+        "member": "dev-matrix-packet/snapshots/source-before.json",
+        "original_sha256": "6cffa6814c084e04bdf91af81d71be9484fef7173d1eb095089252e51d98e665",
+        "original_size_bytes": 127960
+      },
+      "source_after": {
+        "member": "dev-matrix-packet/snapshots/source-after.json",
+        "original_sha256": "6cffa6814c084e04bdf91af81d71be9484fef7173d1eb095089252e51d98e665",
+        "original_size_bytes": 127960
+      },
+      "provenance_note": "Base commit is HEAD of the dirty development tree, not the complete tested source. The two identical retained source inventories bind changed/untracked file bytes; do not attribute this run to the later clean formal revision.",
+      "bounded_commands": 28,
+      "passed_case_commands_before_failure": 17,
+      "failed_case": "fp16-numerical-cancel_large_with_tiny",
+      "failed_command": {
+        "id": "simx-fp16-fp16-numerical-cancel_large_with_tiny",
+        "argv": [
+          "/usr/bin/make",
+          "--no-print-directory",
+          "-j1",
+          "THREADS=1",
+          "VERILATOR_PATH=${TOOLS}/verilator",
+          "run-simx",
+          "OPTS=-f fp16-numerical-cancel_large_with_tiny -r 2"
+        ],
+        "cwd": "${WORK}/dev-matrix-builds/simx-fp16/tests/regression/sgemm_tcu",
+        "environment": {
+          "CCACHE_DISABLE": "1",
+          "CMAKE_BUILD_PARALLEL_LEVEL": "1",
+          "CONFIGS": "-DITYPE=fp16 -DOTYPE=fp32 -DKUNROLL=1",
+          "HOME": "${WORK}/dev-matrix-builds/home",
+          "LANG": "C",
+          "LC_ALL": "C",
+          "MAKEFLAGS": "-j1",
+          "OBJCACHE": "",
+          "PATH": "${WORK}/host-bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/bin:/bin",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "PYTHONUTF8": "1",
+          "THREADS": "1",
+          "TMPDIR": "${WORK}/dev-matrix-builds/tmp",
+          "TZ": "UTC"
+        },
+        "exit_code": 2,
+        "outcome": "fail"
+      },
+      "log": {
+        "member": "dev-matrix-packet/logs/simx-fp16-fp16-numerical-cancel_large_with_tiny.log",
+        "original_sha256": "31c9ca8aac65988e86644c8592e27e2228ec89c40e3fb0b745ae7923ec90acf0",
+        "original_size_bytes": 7790
+      },
+      "failed_case_launches": 2,
+      "mismatched_words": 64,
+      "actual_word": "33800000",
+      "unchanged_expected_word": "00000000",
+      "cause": "sim/simx/Makefile omitted resolved XCONFIGS from CXXFLAGS. Raw TCU_TYPE=TFR suppressed the generated default while TCU_TYPE_TFR was absent; SimX used scalar fallback arithmetic and preserved 2^-24 that the declared TFR fixed window discards before cancellation.",
+      "diagnostic_reviews": [
+        {
+          "member": "reviews/w03_a03_numeric_review.json",
+          "original_sha256": "448363aed70eb5e581de15328f258955e1cacb911a7a898e3ad6b4d44dc81312",
+          "original_size_bytes": 22003
+        },
+        {
+          "member": "reviews/w04_a01_simx_independent_review.json",
+          "original_sha256": "f9d5c88656993a1ad06793ef6dc9fc261fe2146a6953d3fc2a37f097f8953902",
+          "original_size_bytes": 9996
+        }
+      ],
+      "resolution": "Append resolved selectors in the SimX build and enforce selector/macro/compiler-record consistency. Preserve original expected words and all failed evidence. The corrected development pass and clean formal four-variant pass are separate records.",
+      "corrected_development_report": {
+        "member": "dev-matrix-v2-packet/report.json",
+        "original_sha256": "059ae1689d232350e8683fbf0f2101c9fd693411e93104ff1ecf93f8709428c5",
+        "original_size_bytes": 291423
+      }
+    },
+    {
+      "id": "original-formal-offline-suite",
+      "outcome": "fail",
+      "source_revision": "58faf6d68879e1db92122df493172eab59c02458",
+      "source_tree": "cd35869ee89cb42685e9bac367667a7dffbe1b1d",
+      "source_dirty": false,
+      "source_stable": true,
+      "report": {
+        "member": "reports/formal-offline-suite-results.json",
+        "original_sha256": "9b979eab41c84229ec35686b0893a735c8d23790e6aafdc98f153f545a076258",
+        "original_size_bytes": 39595
+      },
+      "wrapper": {
+        "member": "reports/formal-offline-suite.json",
+        "original_sha256": "908ec8ed8f4f53cd74fd26235261b4f194176dec35deea74119e8930c2fca045",
+        "original_size_bytes": 1264
+      },
+      "runner": {
+        "member": "run_offline_suite.py",
+        "original_sha256": "05e950cb4e49334b5dce1236a8d49a1623ec81f3a28959aa0df1706ae681a582",
+        "original_size_bytes": 1865
+      },
+      "log": {
+        "member": "logs/formal-offline-suite.log",
+        "original_sha256": "551a6f71ce2a413eafea341a017ad9df9e5c67a2dabef32b96d7876b0873422d",
+        "original_size_bytes": 273766
+      },
+      "command": {
+        "argv": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "${WORK}/run_offline_suite.py"
+        ],
+        "cwd": "${SOURCE}",
+        "environment_overrides": {
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "LC_ALL": "C"
+        },
+        "exit_code": 1,
+        "outcome": "fail"
+      },
+      "suite_discovery": "unittest.defaultTestLoader.discover(${SOURCE}/ci/project, pattern=test_*.py), verbosity=2; no suppressed tests.",
+      "tests_run": 1448,
+      "passed": 1447,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "expected_failures": 0,
+      "unexpected_successes": 0,
+      "failed_test": "test_local_qualification_cases.CaseSourceContractTests.test_synthetic_oracles_match_original_source_output_and_reference_checks",
+      "diagnosis": "Inherited source-contract test requires the exact live random-path printf with int iter_errors and %d. The new shared fixture/random %zu reporting did not preserve that source contract; this is an observed tooling/source-contract failure, not a numerical fixture mismatch.",
+      "remediation": "Child c9cf9ba0730f236e110a1d48a54d8f47a9faf9af restores the real random branch int/%d expression and retains fixture size_t/%zu reporting. Original failing test/goldens are unchanged; 1 focused test and 15 adapter tests pass on the exact patch. The complete clean-child suite subsequently passes all 1448 tests, and the rebuilt-host matrix passes all 352 launches and 14336 exact output comparisons; both later records are retained separately.",
+      "patch_review": {
+        "member": "reviews/w07_a04_legacy_independent_review.json",
+        "original_sha256": "815ec59d46b1f9a6598ba4db2695475421db3b07984bc0a6a729faeb4c041eab",
+        "original_size_bytes": 5063
+      }
+    }
+  ],
+  "independent_reviews": [
+    {
+      "member": "reviews/w04_a01_simx_independent_review.json",
+      "original_sha256": "f9d5c88656993a1ad06793ef6dc9fc261fe2146a6953d3fc2a37f097f8953902",
+      "original_size_bytes": 9996,
+      "reviewer": "/root/w04_a01_simx_independent_review",
+      "disposition": "land",
+      "scope": "Independent selector diagnosis and matching configuration correction; historical failed packet retained."
+    },
+    {
+      "member": "reviews/w04_a02_host_closure_review.json",
+      "original_sha256": "0a29c673726fb8fbb518b811d10cbc77e52e7a1e5a802cf130601c1080d21009",
+      "original_size_bytes": 10641,
+      "reviewer": "w04_a02_host_closure_review",
+      "disposition": "pass",
+      "scope": "Host adapter/Makefile closure; raw-byte, bounds and exact-comparison source review."
+    },
+    {
+      "member": "reviews/w04_a03_fixture_closure_review.json",
+      "original_sha256": "04dc35a3d7c9108df10b2c3cf2884be0e3797196f4b96916d7152d158f77640f",
+      "original_size_bytes": 12190,
+      "reviewer": "/root/w04_a03_fixture_closure_review",
+      "disposition": "complete_no_open_findings",
+      "scope": "Independent frozen fixture coverage and K16 sensitivity limits; no processor execution by this review."
+    },
+    {
+      "member": "reviews/w04_a04_runner_independent_review.json",
+      "original_sha256": "84b797c21c4e7b18643e79d7ab6dbf2aab7e2dfff8121b48139b97de50a1e6af",
+      "original_size_bytes": 7099,
+      "reviewer": "/root/w04_a04_runner_independent_review",
+      "disposition": "land_scoped_runner",
+      "scope": "Independent bounded runner/provenance validation review; no acceptance decision."
+    },
+    {
+      "member": "reviews/w05_a01_acceptance_coverage.json",
+      "original_sha256": "66e696047ef5611a68b10e691631046a7c0c856f64ebf3eea276342f786dc338",
+      "original_size_bytes": 33357,
+      "reviewer": "/root/w05_a01_acceptance_coverage",
+      "disposition": "no_additional_A02_fixture_class_missing",
+      "scope": "Criterion mapping, exact independent inventory, unsupported-boundary coverage and explicit limits; written while execution pending."
+    },
+    {
+      "member": "reviews/w05_a05_native_path_audit.json",
+      "original_sha256": "fa642a0e0e2effc5f3566aa6c76ad705dcc30da13ef2ea84b449975c3b6663b5",
+      "original_size_bytes": 27320,
+      "reviewer": "w05_a05_native_path_audit",
+      "disposition": "pass_with_integer_DPI_scope_caveat",
+      "scope": "Native TFR/STD hierarchy and integer DPI scope. Live report hash is a historical sampled-byte observation, not the final completed report binding."
+    },
+    {
+      "member": "reviews/w06_a01_matrix_result_review.json",
+      "original_sha256": "2b1fba5d9da05596607d6c03184234eab2e313319339fac505f27f348bb605b1",
+      "original_size_bytes": 7568,
+      "reviewer": "/root/w06_a01_matrix_result_review",
+      "disposition": "pass",
+      "scope": "Complete exact-result/integrity review: 352 launches, 14336 words, 9472 independent FEDP steps; historical failure preserved."
+    },
+    {
+      "member": "reviews/w06_a02_compiler_record_audit.json",
+      "original_sha256": "6d7151dd5044844ff1f04d70076650914431c19f7eb060048c8bee07fa7fca28",
+      "original_size_bytes": 31656,
+      "reviewer": "w06_a02_compiler_record_audit",
+      "disposition": "pass",
+      "scope": "Separate host/kernel/runtime/backend record and generated-configuration audit; native tensor/STD FP scope."
+    },
+    {
+      "member": "reviews/w06_a03_api_result_review.json",
+      "original_sha256": "13c33f7ac1fa8d4cb356c24f3fe7e1e5909b1954ef1b853f615122e6bfdd9f85",
+      "original_size_bytes": 4417,
+      "reviewer": "w06_a03_api_result_review",
+      "disposition": "pass",
+      "scope": "47 expectations, 94 contexts and 150 command/log records; 30 intended compiler rejections."
+    },
+    {
+      "member": "reviews/w07_a04_legacy_independent_review.json",
+      "original_sha256": "815ec59d46b1f9a6598ba4db2695475421db3b07984bc0a6a729faeb4c041eab",
+      "original_size_bytes": 5063,
+      "reviewer": "w07_a04_legacy_independent_review",
+      "disposition": "pass_no_blocking_findings",
+      "scope": "Independent host-only reporting patch review. Requires child host rebuild/full fixture rerun and complete offline suite; retains inherited random int-counter capacity limitation."
+    }
+  ],
+  "limitations": [
+    {
+      "topic": "initial_C",
+      "limit": "All 88 processor fixtures start FP32 C at +0. Twelve two-FEDP cases synthesize nonzero intermediate C. Arbitrary externally supplied C remains leaf-only; the application contract explicitly excludes nonzero initial matrix C."
+    },
+    {
+      "topic": "K_length",
+      "limit": "K is 8 or 16: two or four sequential four-product FEDPs, maximum two K8 tiles. The application supports other positive complete multiples, but this evidence does not qualify K>16 or unrestricted long-chain behavior."
+    },
+    {
+      "topic": "independent_tile_rounding",
+      "limit": "Four K16 numerical cases distinguish reversal of complete K8 tiles; they explicitly do not distinguish independently rounded tile sums. No broader cross-tile rounding proof is claimed. This is a disclosed test-sensitivity limit, not a new gate or an automatic failure of the enumerated A02 criterion."
+    },
+    {
+      "topic": "FP16_overflow_FTZ",
+      "limit": "Four finite max-FP16 products cannot overflow FP32, and the lifted FP16 tiny products remain finite. BF16 cases supply signed overflow and signed output-FTZ coverage; FP16 claims remain range-applicable."
+    },
+    {
+      "topic": "other_formats",
+      "limit": "Only FP16/BF16 to FP32 arithmetic is qualified. Enabled TF32/FP8/MX/integer API positives, tensor_mx catalog runtime checks and historical P01 TF32 evidence have separate scopes."
+    },
+    {
+      "topic": "unsupported_raw_instructions",
+      "limit": "The supported rejection boundary is C++ template instantiation plus strict host fixture input checks. No runtime hardware trap, raw instruction behavior or fmt_d rejection is promised."
+    },
+    {
+      "topic": "layout_features",
+      "limit": "Compact row-major A / column-major B / row-major output only; shapes 8x4x8, 8x4x16 and 16x8x16. No arbitrary strides, padding, tails, operand transposition or matrix-load feature qualification."
+    },
+    {
+      "topic": "WGMMA_and_integration",
+      "limit": "No WGMMA A03 pass; no full AFU, vendor hw_emu, physical FPGA or silicon qualification."
+    },
+    {
+      "topic": "native_arithmetic",
+      "limit": "Native TFR tensor and STD scalar floating-point datapaths, with inherited integer multiply/divide DPI helpers. SV_DPI remains in RTL configuration; active RV64 helpers include dpi_lmul and dpi_ldiv. No universal DPI-free processor claim."
+    },
+    {
+      "topic": "inherited_random_counter_capacity",
+      "limit": "Independent legacy review records an inherited int mismatch-counter overflow possibility for extremely large random matrices. This is outside the bounded fixture corpus and was neither introduced nor worsened by the reporting restoration; it is not silently claimed fixed."
+    },
+    {
+      "topic": "catalog_and_CI",
+      "limit": "The three completed local RV64 catalog representatives pass their unchanged tolerance checks. These are compatibility supplements, not exact P02-A02 fixture evidence. The source publication and hosted CI observations are separate delivery records; no full20-pair result is inferred from the local subset."
+    },
+    {
+      "topic": "physical_and_performance",
+      "limit": "No full-shell/vendor hw_emu, physical FPGA, silicon, synthesis/timing, throughput, power, WGMMA concurrency or model-cycle-parity qualification."
+    }
+  ],
+  "retention_contract": {
+    "bundle": "evidence-bundle.json.gz",
+    "inventory": "inventory.json",
+    "member_paths_relative_to": "retained evidence workspace root",
+    "digest_semantics": "Every *_original_sha256/original_sha256 here identifies the unnormalized retained file. inventory.json must bind both original and normalized published bytes. Embedded execution hashes remain original and must not be rewritten after literal path-prefix normalization.",
+    "normalization_roles": {
+      "${SOURCE}": "tested checkout; its revision is stated per record",
+      "${WORK}": "retained evidence workspace",
+      "${TOOLS}": "installed tools root"
+    },
+    "command_retention": "All 209 matrix commands and all 150 API command records stay in their exact retained report/log members; summary and acceptance intentionally do not duplicate the full arrays.",
+    "finalizer_rule": "Core execution records and their original hashes are immutable. Acceptance and delivery decisions are separate records; the final ledger is distinct from the51-agent core checkpoint."
+  },
+  "phase_disposition": {
+    "P02": "in_progress",
+    "P02_A02": "See the independent decision in acceptance.json.",
+    "P02_A03": "pending",
+    "P01_A03": "blocked",
+    "P03": "not_started",
+    "P02_T02": "ordinary WMMA arithmetic results do not finish the existing arithmetic-and-concurrency task"
+  },
+  "acceptance_decision": "The separate canonical acceptance.json records the independent decision; this summary records execution evidence and does not automatically close a gate.",
+  "completed_supplements": {
+    "child_host_revalidation": {
+      "outcome": "pass",
+      "source_revision": "c9cf9ba0730f236e110a1d48a54d8f47a9faf9af",
+      "reused_backend_kernel_revision": "58faf6d68879e1db92122df493172eab59c02458",
+      "fresh_backend_build": false,
+      "commands": 184,
+      "case_backend_executions": 176,
+      "launches": 352,
+      "checked_output_words": 14336,
+      "source_stable": true,
+      "reused_artifacts_stable": true,
+      "original_packet_stable": true,
+      "changed_hosts": 4,
+      "unchanged_nonhost_artifacts": 108,
+      "rebuilt_hosts": [
+        {
+          "variant": "simx-fp16",
+          "path": "artifacts/simx-fp16/new-sgemm_tcu",
+          "sha256": "cdb2ac23fbdd7e8c5c672732400b60d26bbe9800b885945896bf6173cbce079a",
+          "size_bytes": 164160
+        },
+        {
+          "variant": "simx-bf16",
+          "path": "artifacts/simx-bf16/new-sgemm_tcu",
+          "sha256": "b2be0321a49e95c2e1200a5e686c6fbfa533acb3a3b3957322308cf84be66325",
+          "size_bytes": 164160
+        },
+        {
+          "variant": "rtlsim-fp16",
+          "path": "artifacts/rtlsim-fp16/new-sgemm_tcu",
+          "sha256": "cdb2ac23fbdd7e8c5c672732400b60d26bbe9800b885945896bf6173cbce079a",
+          "size_bytes": 164160
+        },
+        {
+          "variant": "rtlsim-bf16",
+          "path": "artifacts/rtlsim-bf16/new-sgemm_tcu",
+          "sha256": "b2be0321a49e95c2e1200a5e686c6fbfa533acb3a3b3957322308cf84be66325",
+          "size_bytes": 164160
+        }
+      ],
+      "report": {
+        "member": "host-revalidation-packet/report.json",
+        "original_sha256": "d8bc112805cded88b707064137d15cedabc4189a38b0846c21d7741b9c965251",
+        "original_size_bytes": 1050927
+      },
+      "review": {
+        "member": "reviews/w09_a01_host_result_review.json",
+        "original_sha256": "a9036e6d066722d9fab4f2b4f81d7030a49d03e733bee3803bdfca041f6dd65e",
+        "original_size_bytes": 16263
+      }
+    },
+    "child_full_offline_suite": {
+      "outcome": "pass",
+      "source_revision": "c9cf9ba0730f236e110a1d48a54d8f47a9faf9af",
+      "tests_run": 1448,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 589.248,
+      "source_stable": true,
+      "report": {
+        "member": "reports/final-source-offline-suite-results.json",
+        "original_sha256": "0ee31ad99eae1bf6590087a4a37d70ecf43e78d850ed68074a6b39c8dba0ac86",
+        "original_size_bytes": 6728
+      },
+      "command": {
+        "member": "reports/final-source-offline-suite.json",
+        "original_sha256": "48592f5fe70514cbadf99538e8f515cf9da98a71e0485439c032004bea84c5ef",
+        "original_size_bytes": 1269
+      },
+      "log": {
+        "member": "logs/final-source-offline-suite.log",
+        "original_sha256": "f3699871b926b940e813e2c3b927eec93e64facf9aff549fca44e78e3cab5927",
+        "original_size_bytes": 241947
+      },
+      "review": {
+        "member": "reviews/w08_a05_offline_result_audit.json",
+        "original_sha256": "3f620bac922c3f4288cbfce1b507ce2376a466dea1feec2c3a592a8b23ecb1c1",
+        "original_size_bytes": 13674
+      }
+    },
+    "local_catalog_compatibility": {
+      "outcome": "pass",
+      "source_revision": "c9cf9ba0730f236e110a1d48a54d8f47a9faf9af",
+      "selected_case_XLEN_pairs": 3,
+      "XLEN": 64,
+      "commands": 34,
+      "checked_output_elements": 3072,
+      "local_remaining_pairs_not_run": 17,
+      "exact_A02_evidence": false,
+      "comparison": "max(1e-3, abs(expected)*0.25), finite-value checks",
+      "report": {
+        "member": "catalog-representative-packet/report.json",
+        "original_sha256": "9ed9cfde37f7209983a995710b33f2a21bf462ffa86095c86526719e3686f88e",
+        "original_size_bytes": 992678
+      },
+      "review": {
+        "member": "reviews/w09_a03_catalog_result_review.json",
+        "original_sha256": "cd84efc7c1523a4d1cb406fdacffbdbb5d411e57bcb5f81b4dae294eab9fe184",
+        "original_size_bytes": 19507
+      },
+      "limit": "LDM2 K64 uses one storage-K32 tile and the KUNROLL2 residual path; two-tile unrolling is not established."
+    },
+    "external_headers": {
+      "outcome": "pass",
+      "report": {
+        "member": "reviews/external-headers-final-source.json",
+        "original_sha256": "9614418dde64d40dfc73f49d3d01ddf4979433b3b3985c85f4f901e006ea2d8a",
+        "original_size_bytes": 27976
+      }
+    },
+    "packaging": {
+      "outcome": "pass",
+      "members": 1426,
+      "bundle_sha256": "a4e95bfe1043c3964d9017c1f89d37a04bccfff93d8b6b341adbbeeb2a38e36d",
+      "bundle_size_bytes": 3860472,
+      "maximum_bundle_bytes": 4194304,
+      "verification": "Original-byte and published-only verification both passed for all1426 members.",
+      "aliases": {
+        "member": "w08_a04_host_packet_aliases.json",
+        "original_sha256": "d22db5858ee7d89fcb126746a6fe9a8ed6c4849c16266d9e52803f21144c8c33",
+        "original_size_bytes": 174657
+      },
+      "core_agent_checkpoint": {
+        "member": "agent-ledger-core-checkpoint.json",
+        "original_sha256": "e413fd8891b41379be98a656bc3e6536f5d385b6eb729c89743b50ff364ef595",
+        "original_size_bytes": 15611
+      },
+      "limit": "Eight host executable bodies are omitted. The326-member byte-identical original-packet mirror is reconstructed from canonical formal members using the retained alias manifest."
+    }
+  },
+  "delivery_records": {
+    "source_publication": "source-publication.json",
+    "hosted_CI": "ci-recovery.json",
+    "final_independent_acceptance_review": "recovery-review.json",
+    "final_agent_execution_ledger": "agent-execution.json",
+    "scope": "Recovery closeout records are separate from the immutable core bundle. The agent ledger is the preserved historical 51-assignment checkpoint; the new continuation records its own agents separately. Hosted compatibility results do not broaden A02 arithmetic."
+  }
+}

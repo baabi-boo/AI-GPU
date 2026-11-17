@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "contract_id": "p02-wgmma-processor-matrix-v1",
+  "contract_version": 1,
+  "profile": "",
+  "application": "tests/regression/p02_wgmma",
+  "backends": [
+    "simx",
+    "rtlsim"
+  ],
+  "iterations": 2,
+  "geometry": {
+    "m": 64,
+    "n": 8,
+    "k": 16,
+    "words_per_launch": 512,
+    "threads_per_warp": 8,
+    "warps": 8,
+    "issue_width": 4,
+    "warps_per_cta": 4,
+    "cta_count": 2,
+    "k_tile_elements": 8,
+    "k_tile_count": 2,
+    "grid": [
+      1,
+      2
+    ],
+    "block": [
+      32,
+      1
+    ],
+    "dynamic_lmem_bytes": 640
+  },
+  "expected_counts": {
+    "fixture_payloads": 6,
+    "variants": 6,
+    "cases_per_variant": 2,
+    "backend_variants": 12,
+    "case_executions": 24,
+    "launches": 48,
+    "checked_output_words": 24576
+  },
+  "configs": [
+    "-DVX_CFG_XLEN=64",
+    "-DVX_CFG_NUM_CLUSTERS=1",
+    "-DVX_CFG_NUM_CORES=1",
+    "-DVX_CFG_NUM_THREADS=8",
+    "-DVX_CFG_NUM_WARPS=8",
+    "-DVX_CFG_ISSUE_WIDTH=4",
+    "-DVX_CFG_FETCH_WIDTH=2",
+    "-DVX_CFG_NUM_ALU_BLOCKS=1",
+    "-DVX_CFG_NUM_LSU_BLOCKS=1",
+    "-DVX_CFG_NUM_FPU_BLOCKS=1",
+    "-DVX_CFG_NUM_TCU_BLOCKS=4",
+    "-DVX_CFG_NUM_TCU_LANES=8",
+    "-DVX_CFG_TCU_PE_RATIO=1",
+    "-DVX_CFG_TCU_LATENCY=4",
+    "-DVX_CFG_TCU_USE_DSP=0",
+    "-DVX_CFG_LMEM_LOG_SIZE=14",
+    "-DVX_CFG_LMEM_NUM_BANKS=8",
+    "-DVX_CFG_XLEN_64=1",
+    "-DVX_CFG_TCU_TYPE=TFR",
+    "-DVX_CFG_FPU_TYPE=STD",
+    "-DVX_CFG_EXT_TCU_ENABLE",
+    "-DVX_CFG_LMEM_ENABLE",
+    "-DVX_CFG_TCU_FP16_ENABLE",
+    "-DVX_CFG_TCU_WGMMA_ENABLE",
+    "-DVX_CFG_TCU_TF32_DISABLE",
+    "-DVX_CFG_TCU_FP8_DISABLE",
+    "-DVX_CFG_TCU_FP4_DISABLE",
+    "-DVX_CFG_TCU_INT8_DISABLE",
+    "-DVX_CFG_TCU_INT4_DISABLE",
+    "-DVX_CFG_TCU_MX_DISABLE",
+    "-DVX_CFG_TCU_MXFP4_DISABLE",
+    "-DVX_CFG_TCU_NVFP4_DISABLE",
+    "-DVX_CFG_TCU_DSM_DISABLE",
+    "-DVX_CFG_EXT_LDST_MATRIX_DISABLE",
+    "-DOTYPE=fp32",
+    "-DKUNROLL=1",
+    "-DWGMMA_NRC=8",
+    "-DPERF_ENABLE=1"
+  ],
+  "variants": [
+    {
+      "id": "dense-fp16-ss",
+      "format": "fp16",
+      "sparse": false,
+      "mode": "ss",
+      "a_layout": "block-major",
+      "cases": [
+        "fp16-dense-signatures-a",
+        "fp16-dense-signatures-b"
+      ],
+      "configs": [
+        "-DITYPE=fp16",
+        "-DWGMMA_SS=1",
+        "-DVX_CFG_TCU_SPARSE_DISABLE"
+      ]
+    },
+    {
+      "id": "dense-fp16-rs",
+      "format": "fp16",
+      "sparse": false,
+      "mode": "rs",
+      "a_layout": "block-major",
+      "cases": [
+        "fp16-dense-signatures-a",
+        "fp16-dense-signatures-b"
+      ],
+      "configs": [
+        "-DITYPE=fp16",
+        "-DWGMMA_RS=1",
+        "-DVX_CFG_TCU_SPARSE_DISABLE"
+      ]
+    },
+    {
+      "id": "dense-bf16-ss",
+      "format": "bf16",
+      "sparse": false,
+      "mode": "ss",
+      "a_layout": "block-major",
+      "cases": [
+        "bf16-dense-signatures-a",
+        "bf16-dense-signatures-b"
+      ],
+      "configs": [
+        "-DITYPE=bf16",
+        "-DWGMMA_SS=1",
+        "-DVX_CFG_TCU_SPARSE_DISABLE"
+      ]
+    },
+    {
+      "id": "dense-bf16-rs",
+      "format": "bf16",
+      "sparse": false,
+      "mode": "rs",
+      "a_layout": "block-major",
+      "cases": [
+        "bf16-dense-signatures-a",
+        "bf16-dense-signatures-b"
+      ],
+      "configs": [
+        "-DITYPE=bf16",
+        "-DWGMMA_RS=1",
+        "-DVX_CFG_TCU_SPARSE_DISABLE"
+      ]
+    },
+    {
+      "id": "dense-fp16-ss-row-major-a",
+      "format": "fp16",
+      "sparse": false,
+      "mode": "ss",
+      "a_layout": "row-major",
+      "cases": [
+        "fp16-dense-signatures-a",
+        "fp16-dense-signatures-b"
+      ],
+      "configs": [
+        "-DITYPE=fp16",
+        "-DWGMMA_SS=1",
+        "-DVX_CFG_TCU_SPARSE_DISABLE",
+        "-DWGMMA_RMAJOR_A=1"
+      ]
+    },
+    {
+      "id": "sparse-fp16-ss",
+      "format": "fp16",
+      "sparse": true,
+      "mode": "ss",
+      "a_layout": "row-major-compressed",
+      "cases": [
+        "fp16-sparse-signatures-a",
+        "fp16-sparse-signatures-b"
+      ],
+      "configs": [
+        "-DITYPE=fp16",
+        "-DWGMMA_SS=1",
+        "-DVX_CFG_TCU_SPARSE_ENABLE",
+        "-DP02_WGMMA_SPARSE=1"
+      ]
+    }
+  ],
+  "fixture_inputs": [
+    {
+      "path": "ci/project/p02_wgmma_fixture_oracle.py",
+      "sha256": "8e185325585da8a243546ac150754f50f8357781a6084fc6a63dbeb9cad17194",
+      "size_bytes": 14543
+    },
+    {
+      "path": "ci/project/fixtures/p02_wgmma_v1.json",
+      "sha256": "66ef1fe7d8e9c22a0f9d81bb64e546d9b98481554a6db5d4baebac8275a7481d",
+      "size_bytes": 141666
+    },
+    {
+      "path": "tests/regression/p02_wgmma/fixtures.h",
+      "sha256": "22177196cb3c8d8f55d86700b252a8834f822111c6b88168748078031995a76d",
+      "size_bytes": 85717
+    }
+  ],
+  "resources": {
+    "jobs_max": 2,
+    "min_free_bytes": 16106127360,
+    "max_rss_bytes": 6442450944,
+    "max_log_bytes": 16777216,
+    "timeout_seconds_max": 1800,
+    "execution": "sequential fresh generated build directories",
+    "download": false,
+    "tracing": false
+  },
+  "arithmetic": {
+    "comparison": "exact uint32 equality",
+    "reference": "frozen independent integer fixtures",
+    "output_poisoned_before_each_launch": true,
+    "full_output_retained": true
+  },
+  "performance": {
+    "environment": {
+      "VORTEX_PROFILING": "11"
+    },
+    "samples": "one explicit dump after each launch",
+    "counters": "cumulative within each case process",
+    "per_launch": "subtract prior explicit sample; initial baseline zero",
+    "cleanup_duplicate": "at most one exact duplicate of the final explicit sample",
+    "paired_retired_instructions": "exact equality",
+    "cycle_tolerance_percent": 5,
+    "cycle_relative_denominator": "rtlsim_cycles",
+    "outcome_separate_from_arithmetic": true,
+    "automatic_tolerance_waiver": false
+  },
+  "witness": {
+    "optional": true,
+    "variant": "sparse-fp16-ss",
+    "backend": "rtlsim",
+    "flag": "-DP02_WGMMA_WITNESS=1",
+    "source": "sim/rtlsim/p02_wgmma_scoreboard_monitor.sv",
+    "claim": "observed metadata scoreboard ordering only; no automatic P02-A03 acceptance"
+  },
+  "formal_execution": {
+    "clean_source_required": true,
+    "full_matrix_required": true,
+    "acceptance_automatic": false
+  }
+}

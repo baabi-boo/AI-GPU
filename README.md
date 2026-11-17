@@ -15,9 +15,11 @@ compute, specialized matrix units, fast memory and usable software. It does not
 mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
 **Current development stage: P02 — tensor numerical contract (`in_progress`).**
-P02-T01 is complete: the versioned native FP16/BF16 contract and independent
-fixtures have [source-level P02-A01 evidence](docs/project/evidence/p02-numerics/acceptance.json).
-Whole-processor layout execution and WGMMA concurrency remain P02-A02/A03 work.
+P02-T01 is complete with [source-level P02-A01 evidence](docs/project/evidence/p02-numerics/acceptance.json).
+[P02-A02 is accepted](docs/project/evidence/p02-wmma/acceptance.json) for matching
+full SimX/native processor ordinary WMMA arithmetic and layout checks.
+P02-T02 remains active for P02-A03 WGMMA synchronization, metadata, multiple
+warps and backpressure proof.
 The accepted P01 clean-build (`A01`) and native numerical (`A02`) results now
 unlock software/RTL development without waiting for a vendor FPGA emulator.
 **P01 remains `blocked` on `A03`**, and that proof is required before the
@@ -36,8 +38,10 @@ P00 is complete, P01 is blocked, P02 is in progress, and P03–P11 are not start
 
 - Understand the goal: [project charter](docs/project/charter.md).
 - See the development sequence: [roadmap](ROADMAP.md).
-- Continue the numerical track: [P02 numerical handoff](docs/project/p02-numerics-handoff.md).
-- Review the accepted contract and checks: [P02 evidence](docs/project/evidence/p02-numerics/README.md).
+- Continue the numerical track: [ordinary WMMA handoff](docs/project/p02-wmma-handoff.md).
+- Review the accepted processor checks: [P02 WMMA evidence](docs/project/evidence/p02-wmma/README.md).
+- Read the earlier contract checkpoint: [P02 numerical handoff](docs/project/p02-numerics-handoff.md)
+  and [A01 evidence](docs/project/evidence/p02-numerics/README.md).
 - Pick the next bounded task: [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
 - Reproduce the accepted baseline: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
 - Follow current supplemental work: [P01 tensor-oracle hardening](docs/project/p01-tensor-oracles.md)
@@ -137,7 +141,10 @@ before downloads or execution: approve a disk/RAM/job budget, use pinned tools
 and separate build directories, and start with bounded cases. Do not begin with
 an unrestricted toolchain install or full synthesis sweep.
 
-## P02 numerical contract milestone
+## P02 numerical contract and processor milestones
+
+The contract and A01 results below preserve the original numerical checkpoint;
+the subsequent ordinary WMMA processor result and next action follow it.
 
 The [v1 specification](docs/designs/tensor_numerics_v1.md) defines native TFR
 FP16/BF16-to-FP32 arithmetic for a fixed four-product unit profile. Its
@@ -184,12 +191,24 @@ python3 ci/project/p02_layout_fixture_oracle.py --check
 python3 -m unittest discover -s ci/project -p 'test_p02_*.py'
 ```
 
-See the [numerical handoff](docs/project/p02-numerics-handoff.md) for reviewed
-execution results and evidence boundaries. The next bounded task is P02-T02:
-connect the layout fixtures to the existing matrix regression and execute
-matching configurations on full SimX and native processor RTL, then qualify
-WGMMA synchronization, metadata, multiple warps and backpressure. P02 stays
-`in_progress` until every exit obligation is satisfied.
+The subsequent [P02-A02 record](docs/project/evidence/p02-wmma/acceptance.json)
+binds ordinary WMMA processor validation to clean source
+`58faf6d68879e1db92122df493172eab59c02458`: 88 cases, 176 case/backend
+executions, 352 launches and 14,336 exact output-word checks passed. The scope is
+RV64 FP16/BF16-to-FP32, initial C = +0, K = 8 or 16 and the `8 x 4 x 8` tile,
+using native TFR tensor and STD scalar floating-point paths with integer DPI
+helpers still present. The separate API matrix met 47 expectations in 94
+contexts, including 30 intended compiler rejections.
+
+The first 1,448-test offline run retained one source-contract failure. A
+reporting-only child restores the legacy host report; its full-suite rerun and
+new-host fixture revalidation passed at `c9cf9ba`: 1,448 offline tests and
+352 repeated launches with 14,336 exact word comparisons; see [status](docs/project/status.md).
+The [WMMA handoff](docs/project/p02-wmma-handoff.md) separates those checks from
+the formal processor result. P02-T02 remains active: qualify WGMMA
+synchronization, metadata, multiple warps and
+backpressure with applicable parity evidence. P02 stays `in_progress`, P03 stays
+`not_started`, and P01-A03 remains blocked.
 
 ## P01 supplemental tensor-oracle hardening
 

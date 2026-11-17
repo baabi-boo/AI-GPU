@@ -1,11 +1,13 @@
 # Current project status
 
-**P02-T01 is complete and P02-A01 has reviewed source-level evidence.**
-The [contract acceptance record](evidence/p02-numerics/acceptance.json) and
-[numerical handoff](p02-numerics-handoff.md) cover the implemented contract,
-98 independent arithmetic fixtures, 20 source layout fixtures and bounded
-verification. P02 remains `in_progress`: A02's whole-processor arithmetic/layout
-coverage and A03's WGMMA concurrency obligations remain pending.
+**P02-A01 is accepted at source scope, and P02-A02 is accepted for full-processor
+ordinary WMMA arithmetic and layout checks.** The
+[contract record](evidence/p02-numerics/acceptance.json) retains the reviewed
+numerical contract; the [ordinary WMMA record](evidence/p02-wmma/acceptance.json)
+binds the matching full SimX/native processor results and explicit API rejection
+checks to their tested source. P02-T01 is complete. P02-T02 remains active for
+P02-A03's WGMMA synchronization, metadata, multiple-warp and backpressure proof.
+P02 remains `in_progress`, and P03 remains `not_started`.
 
 P02 entered development through the user-directed staged-entry decision.
 P01-A01 and P01-A02 are accepted, while P01 itself remains blocked on vendor
@@ -26,7 +28,7 @@ the linked reports define the exact accepted scope.
 |---|---|---|
 | P00 — project foundation | `complete` | Its three source-level acceptance gates and verified default-branch delivery remain preserved |
 | P01 — reproducible baseline | `blocked` | A01 clean-build and A02 six-case numerical reports accepted; A03 vendor integration is still required before P07 |
-| P02 — tensor numerical contract | `in_progress` | T01 complete; A01 source contract accepted; A02 full-processor arithmetic/layout and A03 WGMMA concurrency remain pending |
+| P02 — tensor numerical contract | `in_progress` | T01 complete; A01 source contract and A02 ordinary WMMA processor checks accepted; T02 remains active for A03 WGMMA concurrency |
 | P03–P11 | `not_started` | Later software, hardware and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -35,7 +37,71 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — P02 contract and executable fixtures
+## Latest continuation — full-processor ordinary WMMA
+
+Formal processor and API validation used clean source
+`58faf6d68879e1db92122df493172eab59c02458`, tree
+`cd35869ee89cb42685e9bac367667a7dffbe1b1d`. The
+[WMMA evidence packet](evidence/p02-wmma/README.md) and
+[handoff](p02-wmma-handoff.md) retain exact configurations, independent reviews,
+source and compiler provenance, raw results and failed attempts.
+
+| Result | Demonstrated scope |
+|---|---|
+| 88 source cases: 20 unchanged layout cases and 68 numerical cases, 44 per format | Independent FP16/BF16 expected words, normal and exceptional values, cancellation, tile layouts and K traversal |
+| 176 case/backend executions, 352 launches and 14,336 exact output-word checks passed | All selected cases on both full SimX and native processor `rtlsim`, with two separately poisoned launches per case/backend and zero mismatched FP32 words |
+| 47 actual RISC-V API expectations met: 17 successful compilations and 30 intended compiler rejections | Both WMMA/WGMMA class contexts, 94 context checks; explicit public-API rejection, without an unsupported-instruction hardware-trap claim |
+
+The accepted arithmetic scope is ordinary dense WMMA under the unchanged
+RV64 `p02-tfr` profile: FP16/BF16 inputs, FP32 accumulation/output, initial
+C = +0, K = 8 or 16, `KUNROLL=1` and an `8 x 4 x 8` tile. A is row-major,
+B is column-major, and C/D are row-major. The profile has one cluster/core,
+four warps of four threads and issue width one. Native `rtlsim` uses the
+TFR tensor and STD scalar floating-point paths; integer DPI helpers remain
+present. The processor result bypasses the AFU and supplies no vendor `hw_emu`,
+physical FPGA, silicon, WGMMA concurrency or timing-model parity qualification.
+
+The initial development SimX cancellation failure remains retained: it returned
+`33800000` where the frozen expected word was `00000000`. The build omitted the
+resolved TFR selector despite its raw profile flag. Corrected configuration
+propagation selects the existing TFR model, and the formal paired runs match
+the original expected words. Production arithmetic, the profile, the numerical
+specification, inherited goldens and earlier evidence are unchanged.
+
+The first full offline suite at `58faf6d` ran **1,448 tests and failed one
+inherited source-contract check**, with no errors or skips. That failure is
+retained. The reporting-only child
+`c9cf9ba0730f236e110a1d48a54d8f47a9faf9af`, tree
+`df62aa14b7dee5e02ad85027ac0e3225d1d8e4a1`, changes only
+`tests/regression/sgemm_tcu/main.cpp` to restore the legacy random-path iteration
+report while preserving fixture reporting. Its exact patch passed the focused
+source-contract test and all 15 host-adapter tests before the child was created.
+The full suite at clean `c9cf9ba` passed all **1,448 tests**, with zero failures,
+errors or skips in 589.248 seconds. The corrected-host replay passed **184
+commands, 176 case/backend executions, 352 launches and 14,336 exact output
+words**. Four hosts changed; all 108 nonhost artifacts remained identical.
+The earlier failed suite remains retained, and the original fresh processor/API
+results retain their `58faf6d` source identity.
+
+Implementation `c9cf9ba` is published and remotely verified on `master`.
+Project Governance run `43982209440` and the full CI run `43982209402` passed.
+Both hosted scaled-format cells
+passed all 20 cases each, including every one of the 20 changed case/XLEN
+obligations. The [CI recovery record](evidence/p02-wmma/ci-recovery.json) keeps
+those compatibility results separate from exact-bit A02 qualification.
+An [independent recovery review](evidence/p02-wmma/recovery-review.json) verified
+the original and published artifacts before accepting the bounded A02 scope.
+
+P02-T02 stays active. The next bounded acceptance work is to freeze and independently review one
+WGMMA concurrency matrix for metadata dependencies, synchronization, multiple
+warps and backpressure, then run matching SimX/native RTL with applicable
+model-parity evidence or a documented applicability limit. A02 does not close
+P02, start P03 or change the blocked P01-A03 vendor obligation.
+
+## Earlier continuation — P02 contract and executable fixtures
+
+The following A01 checkpoint predates the processor continuation above; its
+reported execution results and outstanding work retain their original scope.
 
 Formal validation used clean source
 `a25321496d802f43830c1658487f1adf79c838c3`, tree
@@ -389,15 +455,14 @@ all existing accepted native evidence and phase states remain unchanged.
 
 ## Next bounded action
 
-**P02-T02: connect the frozen matrix fixtures to the existing WMMA regression
-and execute them on matching full SimX and native processor RTL configurations.**
-Implement explicit fixture selection and exact-bit output checking for both
-formats; exercise compact layouts, tile boundaries and multi-instruction K
-accumulation together with normal, edge and cancellation cases. Preserve the
-reviewed v1 arithmetic rules and all inherited tolerances. Then qualify WGMMA
-descriptor/metadata handling, synchronization, multiple warps and backpressure
-with applicable model-parity evidence. Neither the leaf run nor kernel
-compilation satisfies those remaining gates.
+**Continue P02-T02 with the P02-A03 WGMMA concurrency matrix.** The ordinary
+WMMA adapter and P02-A02 processor arithmetic/layout execution are implemented;
+the [WMMA handoff](p02-wmma-handoff.md) and its acceptance record bind the
+qualified scope and the reporting-child revalidation. Build deterministic
+descriptor/metadata, synchronization, multiple-warp and forced-backpressure
+witnesses, then run matching SimX/native RTL and the applicable model-parity
+cases. Preserve the reviewed numerical rules and all inherited tolerances.
+Earlier leaf stalls and API compilation do not satisfy these remaining gates.
 Follow the [P02 numerical handoff](p02-numerics-handoff.md),
 [P02 phase guide](phases/p02-tensor.md), [backlog](backlog.md), and
 [acceptance policy](acceptance.md).
