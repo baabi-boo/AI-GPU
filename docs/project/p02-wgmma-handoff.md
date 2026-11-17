@@ -1,8 +1,12 @@
 # P02 WGMMA implementation and qualification handoff
 
-The v1 checks below are implemented. Clean-source qualification and independent
-P02-A03 acceptance are pending; P02 remains `in_progress`. The counts in this
-guide are required inventories, not reported execution results. Use the
+The v1 checks below are implemented. The directed native unit has passed at
+clean source `9006939aa123452b198bc0987e34aae8fab45fdd`; its
+[reviewed packet](evidence/p02-wgmma/unit/README.md) retains the nine commands,
+eight groups, 392 accepted/committed transactions and 3,072 exact arithmetic
+checks. Full-processor qualification and independent P02-A03 acceptance remain
+pending; P02 remains `in_progress`. Processor counts below are required
+inventories, not reported execution results. Use the
 [status](status.md), [phase](phases/p02-tensor.md) and [canonical gates](roadmap.json)
 for acceptance state. P01-A03 vendor integration remains a separate blocked gate.
 
@@ -122,6 +126,12 @@ The runners create fresh out-of-tree builds, configure them themselves, and
 execute generated Makefiles. They do not download tools or rebuild dependency
 libraries. Replace the example paths; work and output destinations must not exist
 and must be separate from the source and tool directories.
+
+Reused simulator dependencies also need their matching headers, including
+`third_party/ramulator/ext/spdlog/include` and
+`third_party/ramulator/ext/yaml-cpp/include`. Copying only the three dependency
+libraries leaves the processor build incomplete. Retain the external header
+identities alongside the library hashes when recovering a prepared environment.
 
 ```sh
 python3 ci/project/p02_wgmma_unit.py run \

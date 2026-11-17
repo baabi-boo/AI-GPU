@@ -1,0 +1,122 @@
+{
+  "acceptance_claimed": false,
+  "artifacts": [
+    {
+      "path": "evidence-bundle.json.gz",
+      "sha256": "940193bd8dcf0ab41ba0e7e9d7cc400e7617e21e10f8a0f8465a544d73192d34",
+      "size_bytes": 1243040
+    },
+    {
+      "path": "inventory.json",
+      "sha256": "5d77ee88d047a350768cbabb130fb9c2ae759d833e61684c8cf82d502082f93d",
+      "size_bytes": 210572
+    },
+    {
+      "path": "selection.json",
+      "sha256": "9cc2ea15bfd7aed69a80b1f4bfad2afdf08c8543fddbb13746c7c701713c7d44",
+      "size_bytes": 1198
+    },
+    {
+      "path": "packaging.log",
+      "sha256": "cbe9d0877e0266bd30f0ea4cedc4f476cadc86fb3060831eb6a07a80e3dac26d",
+      "size_bytes": 549
+    }
+  ],
+  "exclusions": [
+    {
+      "path": "unit-initial-evidence/artifacts/build/hw/unittest/tcu_wgmma/tcu_wgmma",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    },
+    {
+      "path": "unit-initial-evidence/artifacts/source/.gitmodules",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    },
+    {
+      "path": "unit-initial-evidence/artifacts/source/hw/rtl/tcu/bhf/HardFloat_consts.vi",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    },
+    {
+      "path": "unit-initial-evidence/artifacts/source/hw/rtl/tcu/bhf/HardFloat_localFuncs.vi",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    }
+  ],
+  "execution_report": {
+    "member": "unit-initial-evidence/report.json",
+    "original_sha256": "d2bd0dc159b90bebb88e09cb867971f4114224d6f8d99ae88a8f621af8c2878d",
+    "published_sha256": "c112932de5491c9dda286cc4cdaeef8c01ef1d315d9869726521619a91be3266"
+  },
+  "exporter": {
+    "independent_review_member": "review-exporter.json",
+    "member": "package_wgmma_evidence.py",
+    "original_sha256": "591a5e769f318a1889a4de2706238c3ab1b82156fe97a5c9e0d803495b0ec8cd"
+  },
+  "inventory": {
+    "build_text_files": 37,
+    "embedded_original_bindings_verified": 513,
+    "file_count": 498,
+    "gzip_bytes": 1243040,
+    "maximum_gzip_bytes": 4194304,
+    "original_total_bytes": 6231453,
+    "published_text_bytes": 6219538,
+    "source_bodies": 433
+  },
+  "limitations": [
+    "This component does not establish full-processor scoreboard ordering, paired processor arithmetic or timing parity.",
+    "The native executable body is omitted; its original hash and build/execution provenance remain retained.",
+    "Three source bodies are omitted by the unchanged exporter allowlist: .gitmodules and two unselected BHF include files. Their original hashes and source revision remain in retained source snapshots.",
+    "Embedded historical hashes identify original bytes. Published contents use separate hashes after literal path-prefix normalization.",
+    "Tool binaries, full build trees and some compiler support files are not embedded. Packaging integrity is not origin authentication or phase acceptance."
+  ],
+  "observed_execution": {
+    "accepted_transactions": 392,
+    "checked_output_words": 3072,
+    "commands": 9,
+    "committed_transactions": 392,
+    "groups": 8
+  },
+  "outcome": "pass",
+  "packaging_commands": [
+    {
+      "command": "python3 package_wgmma_evidence.py build --work ${WORK} --source ${SOURCE} --tools ${TOOLS} --selection unit-selection.json --output unit-published-packet",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "command": "python3 package_wgmma_evidence.py verify --work ${WORK} --source ${SOURCE} --tools ${TOOLS} --output unit-published-packet",
+      "exit_code": 0,
+      "original_members_verified": 498,
+      "published_members_verified": 498,
+      "result": "pass"
+    },
+    {
+      "command": "python3 package_wgmma_evidence.py verify --published-only --output unit-published-packet",
+      "exit_code": 0,
+      "published_members_verified": 498,
+      "result": "pass"
+    }
+  ],
+  "phase_complete": false,
+  "record_id": "p02-wgmma-native-unit-publication-9006939",
+  "reviews": [
+    {
+      "copy_policy": "Byte-identical review copy beside report.json resolves log references relative to the reviewed packet; original review file was not changed.",
+      "member": "unit-initial-evidence/review-unit-arithmetic.json",
+      "original_sha256": "d4e5afcb1a4c7ec2c307de8a6990dd4a96bfa1a3f37705b7f722db69eef28b06",
+      "published_sha256": "d4e5afcb1a4c7ec2c307de8a6990dd4a96bfa1a3f37705b7f722db69eef28b06",
+      "reviewer": "/root/w04e_native_arithmetic_review"
+    },
+    {
+      "copy_policy": "Byte-identical review copy beside report.json resolves log references relative to the reviewed packet; original review file was not changed.",
+      "member": "unit-initial-evidence/review-unit-protocol.json",
+      "original_sha256": "5313346cd6065e4de870d47537ad060197af6cecd8779833871826e41a3fb5bc",
+      "published_sha256": "5313346cd6065e4de870d47537ad060197af6cecd8779833871826e41a3fb5bc",
+      "reviewer": "/root/w04f_native_protocol_review"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Packaging and byte-integrity verification of the completed directed native-unit component only. No P02-A03 or phase acceptance is granted.",
+  "source_identity_policy": "The aggregate exporter source_identity is intentionally null. unit-initial-evidence/report.json and its source-before snapshot bind the actual 9006939 execution. No matrix packet is selected.",
+  "source_revision": "9006939aa123452b198bc0987e34aae8fab45fdd",
+  "source_tree": "c815d75bcd13395618b7fbd9924bcedf6347c6c8",
+  "state": "finished"
+}
