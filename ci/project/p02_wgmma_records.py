@@ -102,6 +102,7 @@ def validate_records(runtime, backend, application, *, driver, variant, source, 
         _syntax(text, role)
         words = _stamp_words(text, role)
         if role == "verilator":
+            require(words.count("--assert") == 1, "Verilator record requires exactly one --assert")
             monitor = str(source / "sim/rtlsim/p02_wgmma_scoreboard_monitor.sv")
             require(words.count(monitor) == int(witness), "unexpected or missing witness source")
             _rtl_arguments([word for word in words if word != monitor], role, source, jobs)

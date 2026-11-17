@@ -236,8 +236,11 @@ def execute_run(args, paths):
         for name in sorted(set(names)):
             destination = output / prefix / name
             destination.parent.mkdir(parents=True, exist_ok=True)
-            with destination.open("xb") as stream:
-                stream.write((root / name).read_bytes())
+            original = root / name
+            require(shutil.disk_usage(output).free - original.stat().st_size >= BUDGET["min_free_bytes"],
+                    "retained artifact would breach the disk reserve")
+            with original.open("rb") as incoming, destination.open("xb") as stream:
+                shutil.copyfileobj(incoming, stream, length=MIB)
             saved.append(destination.relative_to(output).as_posix())
         return hash_artifacts(output, saved)
 

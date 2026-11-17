@@ -17,6 +17,7 @@ import struct
 import subprocess
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest import mock
 
@@ -402,7 +403,8 @@ class CompilerContextTests(unittest.TestCase):
 class WorkflowTests(unittest.TestCase):
     def scenario(self, *, full=False, drift=None, drift_at=2, resource=None, result=None,
                  failed_case=1, bad_output=False, artifact_drift=False, witness=False,
-                 witness_failure=False, parity_failure=False, discard=False, dirty=False):
+                 witness_failure=False, parity_failure=False, discard=False, dirty=False,
+                 copy_disk_usage=None):
         """Mock processes and platform identities; retain real parser/hash gates."""
         temporary = tempfile.TemporaryDirectory(prefix="wgmma-workflow-")
         self.addCleanup(temporary.cleanup)
@@ -506,6 +508,8 @@ class WorkflowTests(unittest.TestCase):
                                       ("run_bounded", execute), ("generated_identity", lambda *_: []),
                                       ("build_artifacts", lambda *_: ("binding.bin",))):
                 stack.enter_context(mock.patch.object(matrix, name, replacement))
+            stack.enter_context(mock.patch.object(matrix.shutil, "disk_usage", side_effect=copy_disk_usage or
+                (lambda _: SimpleNamespace(free=resources["free_disk_bytes"]["output"]))))
             if witness:
                 stack.enter_context(mock.patch("p02_wgmma_witness.verify_witness",
                     side_effect=ValueError("synthetic missing observed wait") if witness_failure else None,

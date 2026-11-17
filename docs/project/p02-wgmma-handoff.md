@@ -141,6 +141,13 @@ sampled process-group RSS against 6 GiB, and cap each log at 16 MiB. Build comma
 are limited to 1,800 seconds; the unit runtime defaults to 120 seconds. Waveform
 capture is disabled. By default, successful build trees remain available for review.
 
+Both runners check the remaining disk reserve before retaining each artifact and
+copy in 1 MiB chunks. This bounds copying memory and avoids consuming the reserve
+with a known-size artifact; it is not an atomic reservation against unrelated
+writers. Processor RTL compiler records must contain exactly one `--assert`,
+including witness builds, so assertion-based ordering checks cannot silently
+disappear from a qualified build.
+
 For investigation, explicitly add `--development`. Matrix subsets additionally
 use `--backend`, `--variant` and `--case`; an unlabelled partial matrix is rejected.
 Development packets cannot establish clean-source acceptance. Retain failed and
