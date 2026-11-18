@@ -148,20 +148,34 @@ vx_result_t capabilities(detail::RuntimeContext* context) noexcept {
     return result;
   };
   vx_result_t result = query32(VX_CAPS_NUM_THREADS, &caps.threads_per_warp);
-  if (result != VX_SUCCESS) return result;
+  if (result != VX_SUCCESS) {
+    return result;
+  }
   result = query32(VX_CAPS_NUM_WARPS, &caps.warps_per_core);
-  if (result != VX_SUCCESS) return result;
+  if (result != VX_SUCCESS) {
+    return result;
+  }
   result = query32(VX_CAPS_NUM_CORES, &caps.cores);
-  if (result != VX_SUCCESS) return result;
+  if (result != VX_SUCCESS) {
+    return result;
+  }
   result = query32(VX_CAPS_NUM_CLUSTERS, &caps.clusters);
-  if (result != VX_SUCCESS) return result;
+  if (result != VX_SUCCESS) {
+    return result;
+  }
   result = query32(VX_CAPS_ISSUE_WIDTH, &caps.issue_width);
-  if (result != VX_SUCCESS) return result;
+  if (result != VX_SUCCESS) {
+    return result;
+  }
   result = vx_device_query(context->device, VX_CAPS_LOCAL_MEM_SIZE, &caps.local_mem_bytes);
-  if (result != VX_SUCCESS) return result;
+  if (result != VX_SUCCESS) {
+    return result;
+  }
   uint64_t isa = 0;
   result = vx_device_query(context->device, VX_CAPS_ISA_FLAGS, &isa);
-  if (result != VX_SUCCESS) return result;
+  if (result != VX_SUCCESS) {
+    return result;
+  }
   caps.address_bits = static_cast<uint32_t>(VX_ISA_ARCH(isa));
   caps.tensor_extension = (isa & VX_ISA_EXT_TCU) != 0;
   caps.local_memory = (isa & VX_ISA_EXT_LMEM) != 0;
@@ -211,30 +225,44 @@ vx_result_t write(detail::OperationState* state, vx_buffer_h buffer,
 
 vx_result_t submit(detail::OperationState* state, uint32_t m, uint32_t n, uint32_t k) noexcept {
   auto result = vx_queue_create(state->context->device, nullptr, &state->queue);
-  if (result != VX_SUCCESS) return result;
+  if (result != VX_SUCCESS) {
+    return result;
+  }
   const std::array<size_t, 3> sizes{state->a.size(), state->b.size(), state->download.size()};
   std::array<uint64_t, 3> addresses{};
   for (size_t i = 0; i != state->buffers.size(); ++i) {
     const uint32_t access = i == 2 ? VX_MEM_WRITE : VX_MEM_READ;
     result = vx_buffer_create(state->context->device, sizes[i], access, &state->buffers[i]);
-    if (result != VX_SUCCESS) return result;
+    if (result != VX_SUCCESS) {
+      return result;
+    }
     result = vx_buffer_address(state->buffers[i], &addresses[i]);
-    if (result != VX_SUCCESS) return result;
+    if (result != VX_SUCCESS) {
+      return result;
+    }
   }
   state->result.validation = plan_matmul(request_for(state, m, n, k, addresses),
                                        state->context->capabilities,
                                        state->context->profile, &state->plan);
-  if (state->result.validation != Status::success) return VX_SUCCESS;
+  if (state->result.validation != Status::success) {
+    return VX_SUCCESS;
+  }
   state->trace.a_address = addresses[0];
   state->trace.b_address = addresses[1];
   state->trace.d_address = addresses[2];
   state->trace.argument_bytes = state->plan.argument_bytes;
   result = write(state, state->buffers[0], state->a);
-  if (result != VX_SUCCESS) return result;
+  if (result != VX_SUCCESS) {
+    return result;
+  }
   result = write(state, state->buffers[1], state->b);
-  if (result != VX_SUCCESS) return result;
+  if (result != VX_SUCCESS) {
+    return result;
+  }
   result = write(state, state->buffers[2], state->download);
-  if (result != VX_SUCCESS) return result;
+  if (result != VX_SUCCESS) {
+    return result;
+  }
   vx_launch_info_t launch{};
   launch.struct_size = sizeof(launch);
   launch.kernel = state->context->kernel;
@@ -247,13 +275,17 @@ vx_result_t submit(detail::OperationState* state, uint32_t m, uint32_t n, uint32
   std::fill(std::begin(launch.cluster_dim), std::end(launch.cluster_dim), 1);
   result = vx_enqueue_launch(state->queue, &launch, 1, &state->events[state->event_count - 1],
                              &state->events[state->event_count]);
-  if (result != VX_SUCCESS) return result;
+  if (result != VX_SUCCESS) {
+    return result;
+  }
   ++state->event_count;
   ++state->trace.launches_enqueued;
   result = vx_enqueue_read(state->queue, state->download.data(), state->buffers[2], 0,
                            state->download.size(), 1, &state->events[state->event_count - 1],
                            &state->events[state->event_count]);
-  if (result != VX_SUCCESS) return result;
+  if (result != VX_SUCCESS) {
+    return result;
+  }
   ++state->event_count;
   ++state->trace.reads_enqueued;
   state->submitted_all = true;
@@ -290,7 +322,9 @@ ExecutionResult ManagedMatmul::create(const ExecutionBinding& binding,
     const auto* first = static_cast<const uint8_t*>(binding.module_bytes);
     context->image.assign(first, first + binding.module_size);
     result.primary = vx_device_open(0, &context->device);
-    if (result.ok()) result.primary = capabilities(context.get());
+    if (result.ok()) {
+      result.primary = capabilities(context.get());
+    }
     if (result.ok() && !supported_capabilities(context->capabilities)) {
       result.validation = Status::unsupported_profile;
     }
@@ -311,7 +345,9 @@ ExecutionResult ManagedMatmul::create(const ExecutionBinding& binding,
   } catch (...) {
     result.primary = VX_ERR_INTERNAL;
   }
-  if (context) context->release(&result.cleanup);
+  if (context) {
+    context->release(&result.cleanup);
+  }
   return result;
 }
 
@@ -322,7 +358,9 @@ ExecutionResult ManagedMatmul::submit(uint32_t m, uint32_t n, uint32_t k,
   if (!context_ || !context_->device || !out || *out || !a || !b) {
     return rejected(Status::invalid_argument);
   }
-  if (!supported_shape(m, n, k)) return rejected(Status::unsupported_shape);
+  if (!supported_shape(m, n, k)) {
+    return rejected(Status::unsupported_shape);
+  }
   if (a_bytes != uint64_t{m} * k * 2 || b_bytes != uint64_t{k} * n * 2) {
     return rejected(Status::insufficient_buffer);
   }
@@ -349,7 +387,9 @@ ExecutionResult ManagedMatmul::submit(uint32_t m, uint32_t n, uint32_t k,
     }
     state.result.primary = vortex::ai::submit(&state, m, n, k);
     result = state.result;
-    if (state.result.complete) result = operation->close(0);
+    if (state.result.complete) {
+      result = operation->close(0);
+    }
     *out = std::move(operation);
     return result;
   } catch (const std::bad_alloc&) {
@@ -365,13 +405,17 @@ ExecutionResult ManagedMatmul::submit(uint32_t m, uint32_t n, uint32_t k,
 }
 
 vx_result_t ManagedMatmul::memory_info(uint64_t* free_bytes, uint64_t* used_bytes) const noexcept {
-  if (!context_ || !context_->device) return VX_ERR_INVALID_HANDLE;
+  if (!context_ || !context_->device) {
+    return VX_ERR_INVALID_HANDLE;
+  }
   return vx_device_memory_info(context_->device, free_bytes, used_bytes);
 }
 
 ExecutionResult ManagedMatmul::close() noexcept {
   ExecutionResult result;
-  if (!context_) return result;
+  if (!context_) {
+    return result;
+  }
   if (context_.use_count() != 1) {
     result.primary = VX_ERR_TIMEOUT;
     result.complete = false;
@@ -396,14 +440,18 @@ MatmulOperation::~MatmulOperation() {
 
 ExecutionResult MatmulOperation::wait(uint64_t timeout_ns) noexcept {
   auto& state = *state_;
-  if (state.closed || state.result.complete) return state.result;
+  if (state.closed || state.result.complete) {
+    return state.result;
+  }
   ++state.trace.wait_calls;
   const auto event = state.events[state.event_count - 1];
   const auto wait_result = vx_event_wait_value(event, 1, timeout_ns);
   if (wait_result == VX_ERR_TIMEOUT) {
     ++state.trace.timed_out_waits;
     auto result = state.result;
-    if (result.primary == VX_SUCCESS) result.primary = VX_ERR_TIMEOUT;
+    if (result.primary == VX_SUCCESS) {
+      result.primary = VX_ERR_TIMEOUT;
+    }
     return result;
   }
   uint64_t value = 0;

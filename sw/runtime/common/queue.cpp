@@ -30,7 +30,11 @@ private:
 
 struct PendingMap {
     explicit PendingMap(Buffer* buffer) : buffer(buffer) {}
-    ~PendingMap() { if (reserved) buffer->map_cancel(); }
+    ~PendingMap() {
+        if (reserved) {
+            buffer->map_cancel();
+        }
+    }
     Retained<Buffer> buffer;
     bool reserved = false;
 };
@@ -110,7 +114,9 @@ void Queue::worker_loop() {
         // the command's work and propagate the failure into completion.
         vx_result_t r = VX_SUCCESS;
         for (const auto& dep : cmd.waits) {
-            if (r == VX_SUCCESS) r = dep->wait(VX_TIMEOUT_INFINITE);
+            if (r == VX_SUCCESS) {
+                r = dep->wait(VX_TIMEOUT_INFINITE);
+            }
         }
         cmd.waits.clear();
 
@@ -158,7 +164,9 @@ vx_result_t Queue::enqueue(Command&& cmd, uint32_t nw, const vx_event_h* w,
     if (nw != 0 && !w) return VX_ERR_INVALID_VALUE;
 
     for (uint32_t i = 0; i < nw; ++i) {
-        if (!w[i]) return VX_ERR_INVALID_HANDLE;
+        if (!w[i]) {
+            return VX_ERR_INVALID_HANDLE;
+        }
     }
 
     // Retain each wait event so the caller can release them immediately
@@ -174,14 +182,18 @@ vx_result_t Queue::enqueue(Command&& cmd, uint32_t nw, const vx_event_h* w,
     // caller one ref and the worker holds one ref.
     Event* completion = nullptr;
     auto r = Event::create(device_, &completion);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     auto caller = Retained<Event>::adopt(completion);
     cmd.completion = caller;
 
     {
         std::lock_guard<std::mutex> g(cmd_mu_);
         commands_.push_back(std::move(cmd));
-        if (out) *out = to_handle(caller.detach());
+        if (out) {
+            *out = to_handle(caller.detach());
+        }
     }
     cmd_cv_.notify_one();
     return VX_SUCCESS;
@@ -205,7 +217,9 @@ vx_result_t Queue::finish(uint64_t timeout_ns) {
     // them in FIFO order).
     vx_event_h ev = nullptr;
     auto r = this->enqueue_barrier(0, nullptr, &ev);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     r = to_event(ev)->wait(timeout_ns);
     to_event(ev)->release();
     if (r == VX_ERR_TIMEOUT) return r;
@@ -227,7 +241,9 @@ vx_result_t Queue::enqueue_write(Buffer* dst, uint64_t off, const void* host,
                                  uint64_t sz, uint32_t nw,
                                  const vx_event_h* w, vx_event_h* out) {
     if (!dst || (!host && sz != 0)) return VX_ERR_INVALID_VALUE;
-    if (off > dst->size() || sz > dst->size() - off)     return VX_ERR_INVALID_VALUE;
+    if (off > dst->size() || sz > dst->size() - off) {
+        return VX_ERR_INVALID_VALUE;
+    }
 
     // Retain dst for the worker's lifetime — caller may release the buffer
     // immediately after enqueue returns (matches OpenCL retain semantics).
@@ -253,7 +269,9 @@ vx_result_t Queue::enqueue_read(void* host, Buffer* src, uint64_t so,
                                 uint64_t sz, uint32_t nw,
                                 const vx_event_h* w, vx_event_h* out) {
     if (!src || (!host && sz != 0)) return VX_ERR_INVALID_VALUE;
-    if (so > src->size() || sz > src->size() - so)      return VX_ERR_INVALID_VALUE;
+    if (so > src->size() || sz > src->size() - so) {
+        return VX_ERR_INVALID_VALUE;
+    }
 
     Command cmd;
     cmd.queued_ns = now_ns();
@@ -277,8 +295,12 @@ vx_result_t Queue::enqueue_copy(Buffer* dst, uint64_t do_, Buffer* src,
                                 uint64_t so, uint64_t sz, uint32_t nw,
                                 const vx_event_h* w, vx_event_h* out) {
     if (!dst || !src)               return VX_ERR_INVALID_VALUE;
-    if (do_ > dst->size() || sz > dst->size() - do_)     return VX_ERR_INVALID_VALUE;
-    if (so > src->size() || sz > src->size() - so)      return VX_ERR_INVALID_VALUE;
+    if (do_ > dst->size() || sz > dst->size() - do_) {
+        return VX_ERR_INVALID_VALUE;
+    }
+    if (so > src->size() || sz > src->size() - so) {
+        return VX_ERR_INVALID_VALUE;
+    }
 
     Command cmd;
     cmd.queued_ns = now_ns();
@@ -301,10 +323,14 @@ vx_result_t Queue::enqueue_copy(Buffer* dst, uint64_t do_, Buffer* src,
 vx_result_t Queue::enqueue_launch(const vx_launch_info_t* info,
                                   uint32_t nw, const vx_event_h* w,
                                   vx_event_h* out) {
-    if (!info) return VX_ERR_INVALID_VALUE;
+    if (!info) {
+        return VX_ERR_INVALID_VALUE;
+    }
     if (info->struct_size < sizeof(vx_launch_info_t))
         return VX_ERR_INVALID_INFO;
-    if (info->ndim > 3) return VX_ERR_INVALID_VALUE;
+    if (info->ndim > 3) {
+        return VX_ERR_INVALID_VALUE;
+    }
     if (info->args_size != 0 && !info->args_host) return VX_ERR_INVALID_VALUE;
 
     // info->kernel is a vx_kernel_h (vx_module_get_kernel). NULL is the legacy
@@ -430,7 +456,9 @@ vx_result_t Queue::enqueue_launch(const vx_launch_info_t* info,
         bool     args_staged = !args_blob.empty();
         bool     args_active = false;
         ScopeExit cleanup([&] {
-            if (args_active) device_->args_slot_release(args_addr, args_pooled);
+            if (args_active) {
+                device_->args_slot_release(args_addr, args_pooled);
+            }
         });
         if (args_staged) {
             auto r = device_->args_slot_acquire(args_blob.size(),
@@ -556,12 +584,18 @@ vx_result_t cmd_build_recs(const vx_command_t* commands, uint32_t count,
             r.dcr_value = c.data.dcr.value;
         } else if (c.type == VX_COMMAND_LAUNCH) {
             const vx_launch_info_t* info = c.data.launch;
-            if (!info) return VX_ERR_INVALID_VALUE;
-            if (info->struct_size < sizeof(vx_launch_info_t))
-                return VX_ERR_INVALID_INFO;
-            if (info->ndim > 3) return VX_ERR_INVALID_VALUE;
-            if (info->args_size != 0 && !info->args_host)
+            if (!info) {
                 return VX_ERR_INVALID_VALUE;
+            }
+            if (info->struct_size < sizeof(vx_launch_info_t)) {
+                return VX_ERR_INVALID_INFO;
+            }
+            if (info->ndim > 3) {
+                return VX_ERR_INVALID_VALUE;
+            }
+            if (info->args_size != 0 && !info->args_host) {
+                return VX_ERR_INVALID_VALUE;
+            }
             r.is_launch = true;
             r.kernel = Retained<Kernel>(info->kernel ? to_kernel(info->kernel) : nullptr);
             if (info->args_host && info->args_size > 0) {
@@ -577,7 +611,9 @@ vx_result_t cmd_build_recs(const vx_command_t* commands, uint32_t count,
             for (uint32_t d = 0; d < info->ndim; ++d) {
                 uint32_t lg = info->cluster_dim[d];
                 if (lg == 0) lg = 1;
-                if (r.grid[d] % lg != 0) return VX_ERR_INVALID_VALUE;
+                if (r.grid[d] % lg != 0) {
+                    return VX_ERR_INVALID_VALUE;
+                }
                 r.cluster[d] = lg;
             }
         } else {
@@ -693,7 +729,9 @@ vx_result_t cmd_submit_launch(Device* device_, const CmdStaged& st) {
     const uint32_t count = qmd.empty() ? 0 : qmd[0];
     for (uint32_t k = 0; k < count; ++k) {
         auto r = device_->cp_submit_dcr_write(qmd[1 + 2 * k], qmd[2 + 2 * k]);
-        if (r != VX_SUCCESS) return r;
+        if (r != VX_SUCCESS) {
+            return r;
+        }
     }
     return device_->cp_submit_launch();
 }
@@ -728,8 +766,12 @@ vx_result_t Queue::enqueue_commands(const vx_command_t* commands,
         std::vector<CmdStaged> staged(recs.size());
         ScopeExit cleanup([&] {
             for (auto& st : staged) {
-                if (st.args_active) device_->args_slot_release(st.args_addr, st.args_pooled);
-                if (st.qmd_active) device_->args_slot_release(st.qmd_addr, st.qmd_pooled);
+                if (st.args_active) {
+                    device_->args_slot_release(st.args_addr, st.args_pooled);
+                }
+                if (st.qmd_active) {
+                    device_->args_slot_release(st.qmd_addr, st.qmd_pooled);
+                }
             }
         });
         const uint32_t tpw = (uint32_t)num_threads; (void)num_warps;
@@ -794,8 +836,12 @@ vx_result_t Queue::enqueue_draw(const vx_command_t* commands,
         std::vector<CmdStaged> staged(recs.size());
         ScopeExit cleanup([&] {
             for (auto& st : staged) {
-                if (st.args_active) device_->args_slot_release(st.args_addr, st.args_pooled);
-                if (st.qmd_active) device_->args_slot_release(st.qmd_addr, st.qmd_pooled);
+                if (st.args_active) {
+                    device_->args_slot_release(st.args_addr, st.args_pooled);
+                }
+                if (st.qmd_active) {
+                    device_->args_slot_release(st.qmd_addr, st.qmd_pooled);
+                }
             }
         });
         const uint32_t tpw = (uint32_t)num_threads; (void)num_warps;
@@ -818,7 +864,9 @@ vx_result_t Queue::enqueue_draw(const vx_command_t* commands,
                               && device_->cp_supports_qmd();
         uint64_t desc_addr = 0; bool desc_pooled = false; bool desc_active = false;
         ScopeExit cleanup_desc([&] {
-            if (desc_active) device_->args_slot_release(desc_addr, desc_pooled);
+            if (desc_active) {
+                device_->args_slot_release(desc_addr, desc_pooled);
+            }
         });
         if (r == VX_SUCCESS && use_op_draw) {
             std::vector<uint8_t> desc(4, 0);   // header placeholder
@@ -998,7 +1046,9 @@ vx_result_t Queue::enqueue_read_rect(void* host_dst, Buffer* src,
     if (info->struct_size < sizeof(vx_rect_info_t))  return VX_ERR_INVALID_INFO;
     ResolvedRect rr;
     auto r = resolve_rect(*info, &rr);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     if (rect_span(rr.region, rr.buffer_origin, rr.buffer_row, rr.buffer_slice)
         > src->size())
         return VX_ERR_INVALID_VALUE;
@@ -1030,7 +1080,9 @@ vx_result_t Queue::enqueue_write_rect(Buffer* dst, const void* host_src,
     if (info->struct_size < sizeof(vx_rect_info_t))  return VX_ERR_INVALID_INFO;
     ResolvedRect rr;
     auto r = resolve_rect(*info, &rr);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     if (rect_span(rr.region, rr.buffer_origin, rr.buffer_row, rr.buffer_slice)
         > dst->size())
         return VX_ERR_INVALID_VALUE;
@@ -1062,7 +1114,9 @@ vx_result_t Queue::enqueue_copy_rect(Buffer* dst, Buffer* src,
     if (info->struct_size < sizeof(vx_rect_info_t))  return VX_ERR_INVALID_INFO;
     ResolvedRect rr;
     auto r = resolve_rect(*info, &rr);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     // buffer_* describes the destination, host_* the source.
     if (rect_span(rr.region, rr.buffer_origin, rr.buffer_row, rr.buffer_slice)
         > dst->size())
@@ -1097,7 +1151,9 @@ vx_result_t Queue::enqueue_fill_buffer(Buffer* dst, uint64_t offset,
     if (!dst || !pattern)             return VX_ERR_INVALID_VALUE;
     if (pattern_size == 0)            return VX_ERR_INVALID_VALUE;
     if (size % pattern_size != 0)     return VX_ERR_INVALID_VALUE;
-    if (offset > dst->size() || size > dst->size() - offset)  return VX_ERR_INVALID_VALUE;
+    if (offset > dst->size() || size > dst->size() - offset) {
+        return VX_ERR_INVALID_VALUE;
+    }
 
     std::vector<uint8_t> pat(static_cast<const uint8_t*>(pattern),
                              static_cast<const uint8_t*>(pattern) + pattern_size);
@@ -1138,7 +1194,9 @@ vx_result_t Queue::enqueue_map(Buffer* buf, uint64_t offset, uint64_t size,
     if (!buf || !out_host_ptr) return VX_ERR_INVALID_VALUE;
     auto pending = std::make_shared<PendingMap>(buf);
     auto r = buf->map_reserve(offset, size, flags, out_host_ptr);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     pending->reserved = true;
 
     try {
@@ -1148,7 +1206,9 @@ vx_result_t Queue::enqueue_map(Buffer* buf, uint64_t offset, uint64_t size,
             *s = now_ns();
             std::lock_guard<std::mutex> g(enqueue_mu_);
             auto rc = pending->buffer->map_commit();
-            if (rc == VX_SUCCESS) pending->reserved = false;
+            if (rc == VX_SUCCESS) {
+                pending->reserved = false;
+            }
             *e = now_ns();
             return rc;
         };
@@ -1157,7 +1217,9 @@ vx_result_t Queue::enqueue_map(Buffer* buf, uint64_t offset, uint64_t size,
         *out_host_ptr = nullptr;
         throw;
     }
-    if (r != VX_SUCCESS) *out_host_ptr = nullptr;
+    if (r != VX_SUCCESS) {
+        *out_host_ptr = nullptr;
+    }
     return r;
 }
 
@@ -1272,7 +1334,9 @@ extern "C" vx_result_t vx_queue_create(vx_device_h dev,
     if (!dev || !out) return VX_ERR_INVALID_VALUE;
     Queue* q = nullptr;
     auto r = Queue::create(to_device(dev), info, &q);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     *out = to_handle(q);
     return VX_SUCCESS;
     VX_C_ENTRY_CATCH

@@ -84,7 +84,9 @@ void drop(vx_event_h event) {
 }
 vx_result_t enqueue(vx_queue_h queue, uint32_t n, const vx_event_h* waits,
                     vx_event_h* out, std::function<void()> work) {
-  if (fail("enqueue")) return VX_ERR_OUT_OF_HOST_MEMORY;
+  if (fail("enqueue")) {
+    return VX_ERR_OUT_OF_HOST_MEMORY;
+  }
   check((queue->events.empty() && n == 0) || (n == 1 && waits[0] == queue->events.back()));
   auto* event = new vx_event;
   event->queue = queue;
@@ -99,8 +101,12 @@ void drain(vx_queue_h queue) {
   for (size_t i = 0; i != queue->events.size(); ++i) {
     auto* event = queue->events[i];
     if (!event->done) {
-      if (state.async_failure == int(i + 1)) error = VX_ERR_DEVICE_LOST;
-      if (error == VX_SUCCESS) event->work();
+      if (state.async_failure == int(i + 1)) {
+        error = VX_ERR_DEVICE_LOST;
+      }
+      if (error == VX_SUCCESS) {
+        event->work();
+      }
       event->result = error;
       event->done = true;
     } else if (event->result != VX_SUCCESS) {
@@ -139,7 +145,9 @@ ExecutionResult launch(ManagedMatmul* runtime, std::unique_ptr<MatmulOperation>*
 extern "C" {
 vx_result_t vx_device_open(uint32_t index, vx_device_h* out) {
   check(index == 0);
-  if (fail("device_open")) return VX_ERR_DEVICE_LOST;
+  if (fail("device_open")) {
+    return VX_ERR_DEVICE_LOST;
+  }
   *out = new int(1);
   ++state.devices;
   return VX_SUCCESS;
@@ -151,7 +159,9 @@ vx_result_t vx_device_release(vx_device_h device) {
   return release_result();
 }
 vx_result_t vx_device_query(vx_device_h, uint32_t id, uint64_t* out) {
-  if (fail("query")) return VX_ERR_DEVICE_LOST;
+  if (fail("query")) {
+    return VX_ERR_DEVICE_LOST;
+  }
   switch (id) {
     case VX_CAPS_NUM_THREADS: *out = state.threads; break;
     case VX_CAPS_NUM_WARPS: *out = 4; break;
@@ -164,12 +174,16 @@ vx_result_t vx_device_query(vx_device_h, uint32_t id, uint64_t* out) {
 }
 vx_result_t vx_device_memory_info(vx_device_h, uint64_t* free_bytes, uint64_t* used_bytes) {
   *used_bytes = 0;
-  for (auto* buffer : state.buffers) *used_bytes += buffer->bytes.size();
+  for (auto* buffer : state.buffers) {
+    *used_bytes += buffer->bytes.size();
+  }
   *free_bytes = 100000 - *used_bytes;
   return VX_SUCCESS;
 }
 vx_result_t vx_module_load_bytes(vx_device_h, const void* bytes, size_t size, vx_module_h* out) {
-  if (fail("module_load")) return VX_ERR_OUT_OF_DEVICE_MEMORY;
+  if (fail("module_load")) {
+    return VX_ERR_OUT_OF_DEVICE_MEMORY;
+  }
   auto* first = static_cast<const uint8_t*>(bytes);
   state.image.assign(first, first + size);
   *out = new vx_module;
@@ -184,7 +198,9 @@ vx_result_t vx_module_release(vx_module_h module) {
 }
 vx_result_t vx_module_get_kernel(vx_module_h, const char* name, vx_kernel_h* out) {
   check(std::string(name) == "main");
-  if (fail("get_kernel")) return VX_ERR_NOT_SUPPORTED;
+  if (fail("get_kernel")) {
+    return VX_ERR_NOT_SUPPORTED;
+  }
   *out = new vx_kernel;
   ++state.kernels;
   return VX_SUCCESS;
@@ -196,14 +212,18 @@ vx_result_t vx_kernel_release(vx_kernel_h kernel) {
   return release_result();
 }
 vx_result_t vx_queue_create(vx_device_h, const vx_queue_info_t*, vx_queue_h* out) {
-  if (fail("queue_create")) return VX_ERR_OUT_OF_HOST_MEMORY;
+  if (fail("queue_create")) {
+    return VX_ERR_OUT_OF_HOST_MEMORY;
+  }
   *out = new vx_queue;
   ++state.queues;
   return VX_SUCCESS;
 }
 vx_result_t vx_queue_release(vx_queue_h queue) {
   for (auto* event : queue->events) {
-    if (!event->done) ++state.premature;
+    if (!event->done) {
+      ++state.premature;
+    }
     drop(event);
   }
   delete queue;
@@ -211,7 +231,9 @@ vx_result_t vx_queue_release(vx_queue_h queue) {
   return release_result();
 }
 vx_result_t vx_buffer_create(vx_device_h, uint64_t size, uint32_t flags, vx_buffer_h* out) {
-  if (fail("buffer_create")) return VX_ERR_OUT_OF_DEVICE_MEMORY;
+  if (fail("buffer_create")) {
+    return VX_ERR_OUT_OF_DEVICE_MEMORY;
+  }
   check(flags == VX_MEM_READ || flags == VX_MEM_WRITE);
   auto* buffer = new Buffer{std::vector<uint8_t>(size), state.next_address};
   state.next_address += 0x1000;
@@ -220,11 +242,19 @@ vx_result_t vx_buffer_create(vx_device_h, uint64_t size, uint32_t flags, vx_buff
   return VX_SUCCESS;
 }
 vx_result_t vx_buffer_address(vx_buffer_h handle, uint64_t* out) {
-  if (fail("buffer_address")) return VX_ERR_DEVICE_LOST;
+  if (fail("buffer_address")) {
+    return VX_ERR_DEVICE_LOST;
+  }
   *out = static_cast<Buffer*>(handle)->address;
-  if (state.bad_address == 1) ++*out;
-  if (state.bad_address == 2) *out = 0x100000;
-  if (state.bad_address == 3) *out = UINT64_MAX - 3;
+  if (state.bad_address == 1) {
+    ++*out;
+  }
+  if (state.bad_address == 2) {
+    *out = 0x100000;
+  }
+  if (state.bad_address == 3) {
+    *out = UINT64_MAX - 3;
+  }
   return VX_SUCCESS;
 }
 vx_result_t vx_buffer_release(vx_buffer_h handle) {
@@ -241,9 +271,11 @@ vx_result_t vx_enqueue_write(vx_queue_h queue, vx_buffer_h handle, uint64_t offs
   const int ordinal = int(queue->events.size());
   return enqueue(queue, n, waits, out, [buffer, source, size, ordinal] {
     auto* first = static_cast<const uint8_t*>(source);
-    if (ordinal < 2) check(std::all_of(first, first + size, [ordinal](uint8_t byte) {
-      return byte == (ordinal == 0 ? 0x12 : 0x34);
-    }));
+    if (ordinal < 2) {
+      check(std::all_of(first, first + size, [ordinal](uint8_t byte) {
+        return byte == (ordinal == 0 ? 0x12 : 0x34);
+      }));
+    }
     std::memcpy(buffer->bytes.data(), source, size);
     ++state.writes_observed;
   });
@@ -256,7 +288,9 @@ vx_result_t vx_enqueue_launch(vx_queue_h queue, const vx_launch_info_t* info,
                             static_cast<const uint8_t*>(info->args_host) + info->args_size);
   return enqueue(queue, n, waits, out, [args] {
     uint64_t address = 0;
-    for (unsigned i = 0; i != 8; ++i) address |= uint64_t{args[48 + i]} << (8 * i);
+    for (unsigned i = 0; i != 8; ++i) {
+      address |= uint64_t{args[48 + i]} << (8 * i);
+    }
     auto found = std::find_if(state.buffers.begin(), state.buffers.end(), [address](Buffer* buffer) {
       return buffer->address == address;
     });
@@ -264,7 +298,9 @@ vx_result_t vx_enqueue_launch(vx_queue_h queue, const vx_launch_info_t* info,
     auto* buffer = *found;
     for (size_t i = 0; i != buffer->bytes.size() / 4; ++i) {
       const uint32_t value = 0x3f800000 + static_cast<uint32_t>(i);
-      for (unsigned j = 0; j != 4; ++j) buffer->bytes[i * 4 + j] = uint8_t(value >> (8 * j));
+      for (unsigned j = 0; j != 4; ++j) {
+        buffer->bytes[i * 4 + j] = uint8_t(value >> (8 * j));
+      }
     }
   });
 }
@@ -329,14 +365,30 @@ void positive_shapes() {
 void invalid_binding() {
   for (int kind = 0; kind != 8; ++kind) {
     auto value = binding();
-    if (kind == 0) value.qualification_id = "";
-    if (kind == 1) value.qualification_id[2] = 'g';
-    if (kind == 2) value.profile.verified_device_profile = false;
-    if (kind == 3) value.profile.verified_kernel_profile = false;
-    if (kind == 4) value.input_dtype = DType::fp32;
-    if (kind == 5) value.module_size = 15;
-    if (kind == 6) value.module_bytes = nullptr;
-    if (kind == 7) state.threads = 8;
+    if (kind == 0) {
+      value.qualification_id = "";
+    }
+    if (kind == 1) {
+      value.qualification_id[2] = 'g';
+    }
+    if (kind == 2) {
+      value.profile.verified_device_profile = false;
+    }
+    if (kind == 3) {
+      value.profile.verified_kernel_profile = false;
+    }
+    if (kind == 4) {
+      value.input_dtype = DType::fp32;
+    }
+    if (kind == 5) {
+      value.module_size = 15;
+    }
+    if (kind == 6) {
+      value.module_bytes = nullptr;
+    }
+    if (kind == 7) {
+      state.threads = 8;
+    }
     std::unique_ptr<ManagedMatmul> runtime;
     check(!ManagedMatmul::create(value, &runtime).ok() && !runtime);
     reset();
@@ -441,18 +493,31 @@ void destructor_drain() {
 }
 
 int main(int argc, char** argv) {
-  if (argc != 2) return 2;
+  if (argc != 2) {
+    return 2;
+  }
   const std::string group = argv[1];
-  if (group == "positive_shapes") positive_shapes();
-  else if (group == "invalid_binding") invalid_binding();
-  else if (group == "invalid_inputs") invalid_inputs();
-  else if (group == "create_failures") create_failures();
-  else if (group == "partial_failures") partial_failures();
-  else if (group == "timeout_ownership") timeout_ownership();
-  else if (group == "asynchronous_errors") asynchronous_errors();
-  else if (group == "allocation_validation") allocation_validation();
-  else if (group == "destructor_drain") destructor_drain();
-  else return 2;
+  if (group == "positive_shapes") {
+    positive_shapes();
+  } else if (group == "invalid_binding") {
+    invalid_binding();
+  } else if (group == "invalid_inputs") {
+    invalid_inputs();
+  } else if (group == "create_failures") {
+    create_failures();
+  } else if (group == "partial_failures") {
+    partial_failures();
+  } else if (group == "timeout_ownership") {
+    timeout_ownership();
+  } else if (group == "asynchronous_errors") {
+    asynchronous_errors();
+  } else if (group == "allocation_validation") {
+    allocation_validation();
+  } else if (group == "destructor_drain") {
+    destructor_drain();
+  } else {
+    return 2;
+  }
   no_resources();
   std::cout << "PASS " << group << " checks=" << checks << '\n';
 }

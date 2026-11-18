@@ -60,7 +60,9 @@ vx_result_t Buffer::reserve(Device* dev, uint64_t address, uint64_t size,
 }
 
 vx_result_t Buffer::access(uint64_t off, uint64_t size, uint32_t /*flags*/) {
-    if (off > size_ || size > size_ - off) return VX_ERR_INVALID_VALUE;
+    if (off > size_ || size > size_ - off) {
+        return VX_ERR_INVALID_VALUE;
+    }
     // Access permissions are not tracked by the transport HAL — the CP is
     // the sole memory engine and the common-core allocator owns the map.
     return VX_SUCCESS;
@@ -69,7 +71,9 @@ vx_result_t Buffer::access(uint64_t off, uint64_t size, uint32_t /*flags*/) {
 vx_result_t Buffer::map_reserve(uint64_t off, uint64_t size, uint32_t flags,
                                 void** out) {
     if (!out)                return VX_ERR_INVALID_VALUE;
-    if (off > size_ || size > size_ - off) return VX_ERR_INVALID_VALUE;
+    if (off > size_ || size > size_ - off) {
+        return VX_ERR_INVALID_VALUE;
+    }
 
     std::lock_guard<std::mutex> g(map_mu_);
     if (mapped_) return VX_ERR_NOT_SUPPORTED;   // single mapping at a time

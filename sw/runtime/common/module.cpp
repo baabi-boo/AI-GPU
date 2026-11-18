@@ -117,15 +117,21 @@ vx_result_t Module::load_bytes(Device* dev, const void* bytes_, size_t size,
     // Reserve the image's VMA range on the device.
     Buffer* raw_image = nullptr;
     auto r = Buffer::reserve(dev, min_vma, rt_sz, 0, &raw_image);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     auto image = Retained<Buffer>::adopt(raw_image);
 
     // .text/.rodata read-only, .bss read-write.
     r = image->access(0, bin_sz, VX_MEM_READ);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     if (rt_sz > bin_sz) {
         r = image->access(bin_sz, rt_sz - bin_sz, VX_MEM_READ_WRITE);
-        if (r != VX_SUCCESS) return r;
+        if (r != VX_SUCCESS) {
+            return r;
+        }
     }
 
     // Synchronously upload the binary payload + zero the BSS region.
@@ -133,11 +139,15 @@ vx_result_t Module::load_bytes(Device* dev, const void* bytes_, size_t size,
     // synchronous, so Module stays a pure synchronous primitive — the
     // caller doesn't need a queue handy to load a module.
     r = dev->dev_write(min_vma, bin, bin_sz);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     if (rt_sz > bin_sz) {
         std::vector<uint8_t> zeros(rt_sz - bin_sz, 0);
         r = dev->dev_write(min_vma + bin_sz, zeros.data(), rt_sz - bin_sz);
-        if (r != VX_SUCCESS) return r;
+        if (r != VX_SUCCESS) {
+            return r;
+        }
     }
 
     // Build the Module. Symbol table comes from the footer if present;
@@ -188,7 +198,9 @@ vx_result_t Module::get_kernel(const char* name, Kernel** out) {
         if (s.name == name) {
             Kernel* k = nullptr;
             auto r = Kernel::create(this, s.pc, &k);
-            if (r != VX_SUCCESS) return r;
+            if (r != VX_SUCCESS) {
+                return r;
+            }
             // Cache holds a non-owning reference — Kernel's destructor
             // removes itself from the cache.
             try {
@@ -247,9 +259,13 @@ vx_result_t Kernel::get_max_block_size(uint32_t* x, uint32_t* y, uint32_t* z) {
     uint64_t nt = 0, nw = 0;
     auto* dev = module_->device();
     auto r = dev->query_caps(VX_CAPS_NUM_THREADS, &nt);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     r = dev->query_caps(VX_CAPS_NUM_WARPS, &nw);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     *x = (uint32_t)nt;
     *y = (uint32_t)nw;
     *z = 1;
@@ -270,7 +286,9 @@ extern "C" vx_result_t vx_module_load_file(vx_device_h dev, const char* path,
     if (!dev || !path || !out) return VX_ERR_INVALID_VALUE;
     Module* m = nullptr;
     auto r = Module::load_file(to_device(dev), path, &m);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     *out = to_handle(m);
     return VX_SUCCESS;
     VX_C_ENTRY_CATCH
@@ -282,7 +300,9 @@ extern "C" vx_result_t vx_module_load_bytes(vx_device_h dev, const void* bytes,
     if (!dev || !bytes || !out) return VX_ERR_INVALID_VALUE;
     Module* m = nullptr;
     auto r = Module::load_bytes(to_device(dev), bytes, size, &m);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     *out = to_handle(m);
     return VX_SUCCESS;
     VX_C_ENTRY_CATCH
@@ -306,7 +326,9 @@ extern "C" vx_result_t vx_module_get_kernel(vx_module_h mod, const char* name,
     if (!mod || !name || !out) return VX_ERR_INVALID_VALUE;
     Kernel* k = nullptr;
     auto r = to_module(mod)->get_kernel(name, &k);
-    if (r != VX_SUCCESS) return r;
+    if (r != VX_SUCCESS) {
+        return r;
+    }
     *out = to_handle(k);
     return VX_SUCCESS;
     VX_C_ENTRY_CATCH

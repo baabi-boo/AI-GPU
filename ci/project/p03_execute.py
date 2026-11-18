@@ -56,9 +56,13 @@ def source_snapshot(source):
     snapshot = base.source_snapshot(source)
     paths = {row["path"] for row in snapshot["files"]} | set(SOURCE_FILES)
     paths.update(path.relative_to(source).as_posix() for path in (source / "tests/runtime").glob("*.cpp"))
+    for directory in base.SOURCE_ROOTS:
+        paths.update(path.relative_to(source).as_posix() for path in (source / directory).rglob("*.inc")
+                     if path.is_file())
     for directory in ("third_party/ramulator/ext/spdlog/include",
                       "third_party/ramulator/ext/yaml-cpp/include",
-                      "third_party/ramulator/src", "third_party/softfloat/source/include"):
+                      "third_party/ramulator/src", "third_party/softfloat/source/include",
+                      "third_party/softfloat/source/RISCV"):
         paths.update(path.relative_to(source).as_posix() for path in (source / directory).rglob("*")
                      if path.is_file() and path.suffix in (".h", ".hpp", ".inc", ".tpp"))
     snapshot["files"] = hash_artifacts(source, sorted(paths))

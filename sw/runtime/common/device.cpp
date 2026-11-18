@@ -261,12 +261,16 @@ vx_result_t Device::open(uint32_t index, Device** out) {
         plat.reset(new CallbacksAdapter(*cb, dev_ctx));
     } catch (...) {
         // The adapter owns the backend only after its allocation succeeds.
-        if (cb->dev_close && dev_ctx) cb->dev_close(dev_ctx);
+        if (cb->dev_close && dev_ctx) {
+            cb->dev_close(dev_ctx);
+        }
         throw;
     }
     auto d = Retained<Device>::adopt(new Device(std::move(plat)));
     auto cr = d->cp_init();
-    if (cr != VX_SUCCESS) return cr;
+    if (cr != VX_SUCCESS) {
+        return cr;
+    }
     *out = d.detach();
     return VX_SUCCESS;
 }

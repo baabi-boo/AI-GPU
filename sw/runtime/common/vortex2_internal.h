@@ -104,10 +104,18 @@ template <class T>
 class Retained {
 public:
     Retained() = default;
-    explicit Retained(T* ptr) : ptr_(ptr) { if (ptr_) ptr_->retain(); }
+    explicit Retained(T* ptr) : ptr_(ptr) {
+        if (ptr_) {
+            ptr_->retain();
+        }
+    }
     Retained(const Retained& other) : Retained(other.ptr_) {}
     Retained(Retained&& other) noexcept : ptr_(other.detach()) {}
-    ~Retained() { if (ptr_) ptr_->release(); }
+    ~Retained() {
+        if (ptr_) {
+            ptr_->release();
+        }
+    }
 
     Retained& operator=(Retained other) noexcept {
         std::swap(ptr_, other.ptr_);
