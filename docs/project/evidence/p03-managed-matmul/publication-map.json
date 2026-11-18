@@ -1,0 +1,486 @@
+{
+  "schema_version": 1,
+  "repository": "baabi-boo/AI-GPU",
+  "publication_method": "GitHub connected-app Git database API with a non-forced compare-and-swap branch update",
+  "reason": "Direct HTTPS Git push had no executor credentials; the connected baabi-boo account provides authorized repository write access.",
+  "scope": "Exact-tree publication mapping. This record identifies uploaded commits and original test/closeout source; it does not relabel tests or claim a new GPU run.",
+  "original_remote_head": "20e026f5e5bffc6ea044f6216b28f66cfaa1b156",
+  "target_branch": "master",
+  "force_push": false,
+  "tested_local_source": "319ad63532cee17ae88fa75757a5ac87ed5c6a77",
+  "published_tested_tree_commit": "1c1852f1a5c425858e6bd31404e41512c7d797ca",
+  "reviewed_local_closeout": "54e1a4c920d8bd848c4524a0a5f87de6b68f23aa",
+  "published_reviewed_closeout": "5b964ebef8d00a56e092639d3077bd35137d1c6f",
+  "mappings": [
+    {
+      "local_sha": "b066586448823ffcc1ef406da5490f897fc4e3f2",
+      "local_tree": "34f835a6f9bded04e5ab943a23ffb9e07904e1dc",
+      "api_sha": "063cac2bb4ac3247c575d2fbbab0f8d6b3f15ac9",
+      "api_tree": "34f835a6f9bded04e5ab943a23ffb9e07904e1dc",
+      "api_parent": "20e026f5e5bffc6ea044f6216b28f66cfaa1b156",
+      "remote_url": "https://github.com/baabi-boo/AI-GPU/commit/063cac2bb4ac3247c575d2fbbab0f8d6b3f15ac9",
+      "remote_readback_verified": true,
+      "raw_local_commit_utf8": "tree 34f835a6f9bded04e5ab943a23ffb9e07904e1dc\nparent 20e026f5e5bffc6ea044f6216b28f66cfaa1b156\nauthor Codex <codex@openai.com> 1794989151 -0700\ncommitter Codex <codex@openai.com> 1794989151 -0700\n\nImplement managed native matmul and runtime lifetime safety\n\nAdd the P03-T02 internal managed operator for the six frozen FP16/BF16\nmatmul signatures, a matching 56-byte device reader and ordinary WMMA\nkernel, strict compiler-record binding, and a bounded SimX/native-RTL\nqualification runner with independent exact-bit fixtures.\n\nKeep queued buffers, kernels, events, module setup and transfer staging\nowned through completion and failure. Retire a synchronous software CP\ncopy after a host exception so released staging cannot be replayed.\nSuccessful CP tick ordering is unchanged. Add host fault-injection and\nactual-runtime bounds, lifetime, allocation and transfer recovery tests.\n\nExpand governance source filters and select the existing runtime smoke\ncase for SimX on RV32/RV64. The runtime catalog change increases selected\ncoverage; no tolerance, golden, installed API, RTL or toolchain pin changes.\nPreserve historical A01 source bodies and acceptance provenance.\n\nReviewed independently by execution_review, runtime_review,\nfailure_path_review and integration_audit with disjoint ownership;\nauthor fixes received a second reviewer. User authorized implementation,\ncommit and push to master. No waiver or human review is fabricated.\n\nValidation before freeze: 45 focused host tests, project governance,\nreal RV64 SimX matmul smoke, 12 actual lifecycle groups and diff checks.\nFormal complete matrix and phase acceptance remain pending this commit.\n",
+      "raw_local_commit_sha256": "7b61b2d99d717b2d2d0008e971b5cb6bb14014dbeabb9207d65504b580cfc21f"
+    },
+    {
+      "local_sha": "319ad63532cee17ae88fa75757a5ac87ed5c6a77",
+      "local_tree": "d7768f5f392cef417e59ccadfc29f20d3f67f707",
+      "api_sha": "1c1852f1a5c425858e6bd31404e41512c7d797ca",
+      "api_tree": "d7768f5f392cef417e59ccadfc29f20d3f67f707",
+      "api_parent": "063cac2bb4ac3247c575d2fbbab0f8d6b3f15ac9",
+      "remote_url": "https://github.com/baabi-boo/AI-GPU/commit/1c1852f1a5c425858e6bd31404e41512c7d797ca",
+      "remote_readback_verified": true,
+      "raw_local_commit_utf8": "tree d7768f5f392cef417e59ccadfc29f20d3f67f707\nparent b066586448823ffcc1ef406da5490f897fc4e3f2\nauthor Codex <codex@openai.com> 1794989820 -0700\ncommitter Codex <codex@openai.com> 1794989820 -0700\n\nComplete P03 input inventory and required control-body braces\n\nInclude source .inc files and SoftFloat RISCV headers in the frozen\nqualification inventory, closing the two gaps found by comparing actual\ncompiler dependencies. Correct stale manifest next-step prose.\n\nAdd required braces to new/touched C++ control bodies and normalize the\nnew lifecycle test indentation. Independent delivery review confirmed\nall nine C++ diffs preserve every nonbrace/nonwhitespace byte and add\n142 balanced brace pairs. No operator arithmetic or runtime behavior\nchanges in this correction.\n\nValidation: 45 focused P03 tests, project governance and diff checks\npass. DP-F01 independently resolved by delivery_audit. Earlier running\nqualification attempts were explicitly interrupted and retained before\nthis correction; fresh full qualification follows this exact commit.\n",
+      "raw_local_commit_sha256": "ab19833c99ce7a29e28d23e935943d4a1d0d7aab1f720da784c8b368f29da854"
+    },
+    {
+      "local_sha": "54e1a4c920d8bd848c4524a0a5f87de6b68f23aa",
+      "local_tree": "6de56163cd0bfcc63ffc0de7bc2c9fff44627c80",
+      "api_sha": "5b964ebef8d00a56e092639d3077bd35137d1c6f",
+      "api_tree": "6de56163cd0bfcc63ffc0de7bc2c9fff44627c80",
+      "api_parent": "1c1852f1a5c425858e6bd31404e41512c7d797ca",
+      "remote_url": "https://github.com/baabi-boo/AI-GPU/commit/5b964ebef8d00a56e092639d3077bd35137d1c6f",
+      "remote_readback_verified": true,
+      "raw_local_commit_utf8": "tree 6de56163cd0bfcc63ffc0de7bc2c9fff44627c80\nparent 319ad63532cee17ae88fa75757a5ac87ed5c6a77\nauthor Codex <codex@openai.com> 1794991274 -0700\ncommitter Codex <codex@openai.com> 1794991274 -0700\n\nAccept P03 managed operators after native execution qualification\n\nClose P03-A02/A03 and P03-T02 for the six declared FP16/BF16 matmul\nsignatures, preserving the historical A01 contract and unsupported\noperator families. Next is P04-T01's model/fixture freeze; P01-A03 vendor\nhw_emu remains blocked and required before P07.\n\nClean implementation 319ad63532cee17ae88fa75757a5ac87ed5c6a77 passed:\n- 210 bounded matrix commands, 176 case executions and 352 actual launches\n- on SimX/native processor RTL, with 14,336 exact output-word comparisons;\n- all 1,669 host tests, including 45 P03 checks, no failures/errors/skips;\n- 12 actual lifecycle groups in each RV64 p02-tfr and default RV32 SimX.\n\nRetain exact logs, compiler roles, wire/dispatch records, source/tool and\nartifact hashes, independent reviews, and earlier failures/interruptions\nin compact archives. Independent qualification reconstructs the raw\ncomparisons without using the new output parser. Final delivery review\nverifies 632 archive members and source identity. Code, tests and CI are\nunchanged from the tested implementation; manifest change is next-action\nprose only.\n\nUpdate canonical phase gates, status, contract, handoff and backlog.\nKeep timeout ownership, trusted build binding, simulated failure scope,\npartial-DMA and physical-hardware limits explicit. No goldens, bounds,\ninstalled interfaces or protected assets change. Original user authorized\nimplementation, commit and direct master publication; no waiver or human\nreview is fabricated.\n",
+      "raw_local_commit_sha256": "8112e623e1b8d79696c0780836fdea43edb653bf4a371195976ea8ef76092e15"
+    }
+  ],
+  "uploaded_blob_count": 72,
+  "uploaded_blob_identities": [
+    {
+      "sha": "e053d5e1e3288c1e62147b05d4f3b6c4082bdee4",
+      "path": "tests/regression/ai_matmul/Makefile",
+      "size_bytes": 651,
+      "remote_sha": "e053d5e1e3288c1e62147b05d4f3b6c4082bdee4"
+    },
+    {
+      "sha": "fc5ae32fb338aac914dfad760ab346e810928f66",
+      "path": "ci/testcases/sw/runtime.yaml",
+      "size_bytes": 891,
+      "remote_sha": "fc5ae32fb338aac914dfad760ab346e810928f66"
+    },
+    {
+      "sha": "2179cb1aa918f96f9717975d9e5cf2999c291dab",
+      "path": "sw/kernel/ai/matmul.cpp",
+      "size_bytes": 1565,
+      "remote_sha": "2179cb1aa918f96f9717975d9e5cf2999c291dab"
+    },
+    {
+      "sha": "6ba1c4022ec5f0b1a754aa3050fc78318c5e7db7",
+      "path": ".github/workflows/project-governance.yml",
+      "size_bytes": 2635,
+      "remote_sha": "6ba1c4022ec5f0b1a754aa3050fc78318c5e7db7"
+    },
+    {
+      "sha": "d4c50bf5e894532ac09468d8f19a668ee474d532",
+      "path": "sw/runtime/ai/runtime.h",
+      "size_bytes": 3086,
+      "remote_sha": "d4c50bf5e894532ac09468d8f19a668ee474d532"
+    },
+    {
+      "sha": "a082ffae8cd434bce4dc7354d3134c93a91a5945",
+      "path": "tests/runtime/Makefile",
+      "size_bytes": 2694,
+      "remote_sha": "a082ffae8cd434bce4dc7354d3134c93a91a5945"
+    },
+    {
+      "sha": "f4216d84653d330c9f3bcfe3f07df4cc95bac082",
+      "path": "sw/common/ai_matmul_profile.h",
+      "size_bytes": 2675,
+      "remote_sha": "f4216d84653d330c9f3bcfe3f07df4cc95bac082"
+    },
+    {
+      "sha": "c77277e247c727bbe21711ebf770372cd7ebcb4c",
+      "path": "sw/runtime/ai/contract.h",
+      "size_bytes": 3285,
+      "remote_sha": "c77277e247c727bbe21711ebf770372cd7ebcb4c"
+    },
+    {
+      "sha": "de895dd0a3e052d737de689bb7c43bfa94c32476",
+      "path": "docs/project/evidence/p03-operators/README.md",
+      "size_bytes": 4089,
+      "remote_sha": "de895dd0a3e052d737de689bb7c43bfa94c32476"
+    },
+    {
+      "sha": "f23b9360c25ec7ce2bd215c9c04e987349878070",
+      "path": "ci/project/test_p03_managed_runtime.py",
+      "size_bytes": 3690,
+      "remote_sha": "f23b9360c25ec7ce2bd215c9c04e987349878070"
+    },
+    {
+      "sha": "17b4786a405513797639cba061ffeb8b932304ab",
+      "path": "docs/project/evidence/p03-managed-matmul/summary.json",
+      "size_bytes": 5193,
+      "remote_sha": "17b4786a405513797639cba061ffeb8b932304ab"
+    },
+    {
+      "sha": "9744c184a45214802b56f94cab940b2092a712cf",
+      "path": "docs/project/evidence/p03-managed-matmul/acceptance-numerics.json",
+      "size_bytes": 5126,
+      "remote_sha": "9744c184a45214802b56f94cab940b2092a712cf"
+    },
+    {
+      "sha": "ca15667b5502a69ad6a360a86d5b8de2c98eae4c",
+      "path": "sw/common/ai_matmul_args.h",
+      "size_bytes": 4342,
+      "remote_sha": "ca15667b5502a69ad6a360a86d5b8de2c98eae4c"
+    },
+    {
+      "sha": "ae4676b4dfbdfcd31af5d63182639cfbdf84c97a",
+      "path": "docs/project/evidence/p03-managed-matmul/source-map.json",
+      "size_bytes": 5250,
+      "remote_sha": "ae4676b4dfbdfcd31af5d63182639cfbdf84c97a"
+    },
+    {
+      "sha": "de1922eb869c09cebb156cf4499a23ff25542f91",
+      "path": "ci/project/fixtures/p03_device_reader_test.cpp",
+      "size_bytes": 5669,
+      "remote_sha": "de1922eb869c09cebb156cf4499a23ff25542f91"
+    },
+    {
+      "sha": "679edb58063729ca11e3366571e6475f31446c29",
+      "path": "docs/project/phases/p03-operators.md",
+      "size_bytes": 5243,
+      "remote_sha": "679edb58063729ca11e3366571e6475f31446c29"
+    },
+    {
+      "sha": "ed3788377e0a1ad62c5701885d6bfb5f14b1bcbd",
+      "path": "docs/project/evidence/p03-managed-matmul/acceptance-lifecycle.json",
+      "size_bytes": 5684,
+      "remote_sha": "ed3788377e0a1ad62c5701885d6bfb5f14b1bcbd"
+    },
+    {
+      "sha": "895684f0aeb9c5436dcaf508a3e800c8df3a533a",
+      "path": "ci/project/test_p03_device_reader.py",
+      "size_bytes": 6177,
+      "remote_sha": "895684f0aeb9c5436dcaf508a3e800c8df3a533a"
+    },
+    {
+      "sha": "fc1288a9b95094e7ecb340920688bde41caacd9b",
+      "path": "docs/project/phases/p03-operators.md",
+      "size_bytes": 5849,
+      "remote_sha": "fc1288a9b95094e7ecb340920688bde41caacd9b"
+    },
+    {
+      "sha": "23703989fc8410eac66371d49fa12f1de96a009c",
+      "path": "tests/regression/ai_matmul/main.cpp",
+      "size_bytes": 6613,
+      "remote_sha": "23703989fc8410eac66371d49fa12f1de96a009c"
+    },
+    {
+      "sha": "fd2d2084a2605eec3143cc527a1d44d59d71b8f8",
+      "path": "sw/runtime/common/buffer.cpp",
+      "size_bytes": 6755,
+      "remote_sha": "fd2d2084a2605eec3143cc527a1d44d59d71b8f8"
+    },
+    {
+      "sha": "7f536f02d33951ab9178651d94d5e84a8690cdcb",
+      "path": "sw/runtime/common/buffer.cpp",
+      "size_bytes": 6787,
+      "remote_sha": "7f536f02d33951ab9178651d94d5e84a8690cdcb"
+    },
+    {
+      "sha": "4162cf6f6fb86cf8822a7afff6d7b82623cebcf3",
+      "path": "tests/regression/ai_matmul/main.cpp",
+      "size_bytes": 6919,
+      "remote_sha": "4162cf6f6fb86cf8822a7afff6d7b82623cebcf3"
+    },
+    {
+      "sha": "1111429294e4ede9ad0efaac57519eca6d831297",
+      "path": "ci/project/p03_execution_records.py",
+      "size_bytes": 6961,
+      "remote_sha": "1111429294e4ede9ad0efaac57519eca6d831297"
+    },
+    {
+      "sha": "9c436afed2df7a4596aa4668b7840f7721d8adb4",
+      "path": "docs/project/evidence/p03-managed-matmul/qualification-review.json",
+      "size_bytes": 7183,
+      "remote_sha": "9c436afed2df7a4596aa4668b7840f7721d8adb4"
+    },
+    {
+      "sha": "cc0bbf532c1bc6ea26cceb7797655daea3a096cb",
+      "path": "sw/runtime/simx/vortex.cpp",
+      "size_bytes": 7842,
+      "remote_sha": "cc0bbf532c1bc6ea26cceb7797655daea3a096cb"
+    },
+    {
+      "sha": "1a81930e20d66a546f5967b228af91cb47737783",
+      "path": "sw/runtime/rtlsim/vortex.cpp",
+      "size_bytes": 7648,
+      "remote_sha": "1a81930e20d66a546f5967b228af91cb47737783"
+    },
+    {
+      "sha": "848fa13ebea45d6f6c11ef04a8a32348b504bdb8",
+      "path": "docs/project/evidence/p03-managed-matmul/README.md",
+      "size_bytes": 7422,
+      "remote_sha": "848fa13ebea45d6f6c11ef04a8a32348b504bdb8"
+    },
+    {
+      "sha": "da88754c81d207d23d41b06f77c5725c2d53c419",
+      "path": "ci/project/p03_operator_manifest.json",
+      "size_bytes": 8000,
+      "remote_sha": "da88754c81d207d23d41b06f77c5725c2d53c419"
+    },
+    {
+      "sha": "c2e93d97b0b6ea99d0d700a597dfde7e7025dc69",
+      "path": "ci/project/p03_operator_manifest.json",
+      "size_bytes": 7936,
+      "remote_sha": "c2e93d97b0b6ea99d0d700a597dfde7e7025dc69"
+    },
+    {
+      "sha": "5800906c7d24d4e19f3b289167a132df8706689c",
+      "path": "ci/project/p03_operator_manifest.json",
+      "size_bytes": 7958,
+      "remote_sha": "5800906c7d24d4e19f3b289167a132df8706689c"
+    },
+    {
+      "sha": "d8a3f72f307583c74c0b1b240c5354453c252f5b",
+      "path": "docs/project/evidence/p03-operators/acceptance.json",
+      "size_bytes": 10024,
+      "remote_sha": "d8a3f72f307583c74c0b1b240c5354453c252f5b"
+    },
+    {
+      "sha": "0b2ab6afa3cd4ffb90d06ea00f43c95fec4ef28c",
+      "path": "ci/project/test_p03_operator_contract.py",
+      "size_bytes": 8769,
+      "remote_sha": "0b2ab6afa3cd4ffb90d06ea00f43c95fec4ef28c"
+    },
+    {
+      "sha": "421ada50359526017d2289443b16bfa1e95e948b",
+      "path": "docs/project/p03-operators-handoff.md",
+      "size_bytes": 9119,
+      "remote_sha": "421ada50359526017d2289443b16bfa1e95e948b"
+    },
+    {
+      "sha": "b3bef6e4cdec1d873ba4a95d6f9c48da77eb96fd",
+      "path": "ROADMAP.md",
+      "size_bytes": 11662,
+      "remote_sha": "b3bef6e4cdec1d873ba4a95d6f9c48da77eb96fd"
+    },
+    {
+      "sha": "52b75afe748d4a63cb70b6338ef2d38e6cf8f38e",
+      "path": "docs/project/evidence/p03-managed-matmul/final-delivery-review.json",
+      "size_bytes": 12051,
+      "remote_sha": "52b75afe748d4a63cb70b6338ef2d38e6cf8f38e"
+    },
+    {
+      "sha": "1fe0073dc0758e0132bcbc737c10785ed409f519",
+      "path": "ROADMAP.md",
+      "size_bytes": 12083,
+      "remote_sha": "1fe0073dc0758e0132bcbc737c10785ed409f519"
+    },
+    {
+      "sha": "9f0d04a66aaad3566f8e5325f451accebfe704af",
+      "path": "docs/project/p03-operators-handoff.md",
+      "size_bytes": 12162,
+      "remote_sha": "9f0d04a66aaad3566f8e5325f451accebfe704af"
+    },
+    {
+      "sha": "07894f129c38d8a3dd2079ade000ac94f57070b6",
+      "path": "sw/runtime/common/module.cpp",
+      "size_bytes": 13216,
+      "remote_sha": "07894f129c38d8a3dd2079ade000ac94f57070b6"
+    },
+    {
+      "sha": "7e98f17a08b0368e15cf841aec270fce9771e2be",
+      "path": "sw/runtime/common/module.cpp",
+      "size_bytes": 13008,
+      "remote_sha": "7e98f17a08b0368e15cf841aec270fce9771e2be"
+    },
+    {
+      "sha": "3868d488124241fe746dd7fcb942efb4bd722acc",
+      "path": "sw/runtime/ai/runtime.cpp",
+      "size_bytes": 16383,
+      "remote_sha": "3868d488124241fe746dd7fcb942efb4bd722acc"
+    },
+    {
+      "sha": "f9229de8f0ad27ba7697b4c3c0cee01a7dba1c04",
+      "path": "ci/project/test_p03_execution_records.py",
+      "size_bytes": 14432,
+      "remote_sha": "f9229de8f0ad27ba7697b4c3c0cee01a7dba1c04"
+    },
+    {
+      "sha": "6c075a94d2bff59103cf72204ac98bb8bbfd4fad",
+      "path": "docs/designs/ai_operator_contract_v1.md",
+      "size_bytes": 16419,
+      "remote_sha": "6c075a94d2bff59103cf72204ac98bb8bbfd4fad"
+    },
+    {
+      "sha": "6f07142aeef0ae2fe6d0fcfbed21decc02af1c38",
+      "path": "ci/project/p03_execute.py",
+      "size_bytes": 16860,
+      "remote_sha": "6f07142aeef0ae2fe6d0fcfbed21decc02af1c38"
+    },
+    {
+      "sha": "b0806c6d99ceb03854da00e53144bfed661a0ebf",
+      "path": "ci/project/p03_execute.py",
+      "size_bytes": 17105,
+      "remote_sha": "b0806c6d99ceb03854da00e53144bfed661a0ebf"
+    },
+    {
+      "sha": "5d5204705cb21d4071d8d4975188ddd3c3d14976",
+      "path": "sw/runtime/ai/runtime.cpp",
+      "size_bytes": 16643,
+      "remote_sha": "5d5204705cb21d4071d8d4975188ddd3c3d14976"
+    },
+    {
+      "sha": "91e3e99e23175798c8869689e45cbbfe48894e4d",
+      "path": "ci/project/fixtures/p03_managed_runtime_test.cpp",
+      "size_bytes": 17604,
+      "remote_sha": "91e3e99e23175798c8869689e45cbbfe48894e4d"
+    },
+    {
+      "sha": "263141e132638cf156694cb59bf65a8a92c8412a",
+      "path": "docs/designs/ai_operator_contract_v1.md",
+      "size_bytes": 18679,
+      "remote_sha": "263141e132638cf156694cb59bf65a8a92c8412a"
+    },
+    {
+      "sha": "793b894169a5ba333fc6ab05363b21201fc713bf",
+      "path": "ci/project/fixtures/p03_managed_runtime_test.cpp",
+      "size_bytes": 17180,
+      "remote_sha": "793b894169a5ba333fc6ab05363b21201fc713bf"
+    },
+    {
+      "sha": "1cfdc6a6f47d5ce7dab3d41b32ca3281b43ff49e",
+      "path": "docs/project/roadmap.json",
+      "size_bytes": 20358,
+      "remote_sha": "1cfdc6a6f47d5ce7dab3d41b32ca3281b43ff49e"
+    },
+    {
+      "sha": "6cffee153717a4e7da2553867f639888001d5ab3",
+      "path": "docs/project/evidence/p03-managed-matmul/implementation-review.json",
+      "size_bytes": 19306,
+      "remote_sha": "6cffee153717a4e7da2553867f639888001d5ab3"
+    },
+    {
+      "sha": "c202d141d69fc4439e5b256077506176599d5783",
+      "path": "docs/project/backlog.md",
+      "size_bytes": 20975,
+      "remote_sha": "c202d141d69fc4439e5b256077506176599d5783"
+    },
+    {
+      "sha": "0fd3bd3472846751052d11ac07cc5f847d47c565",
+      "path": "tests/runtime/test_ai_lifecycle.cpp",
+      "size_bytes": 22892,
+      "remote_sha": "0fd3bd3472846751052d11ac07cc5f847d47c565"
+    },
+    {
+      "sha": "13c972690beb24b1fb8ba0dde7989604fb7e348d",
+      "path": "tests/runtime/test_ai_lifecycle.cpp",
+      "size_bytes": 23976,
+      "remote_sha": "13c972690beb24b1fb8ba0dde7989604fb7e348d"
+    },
+    {
+      "sha": "2caa1260f160c51a33f9abbc370abde1d7adbe4a",
+      "path": "docs/project/backlog.md",
+      "size_bytes": 21649,
+      "remote_sha": "2caa1260f160c51a33f9abbc370abde1d7adbe4a"
+    },
+    {
+      "sha": "dbd1b94060268292ba8416da07467c79c914203c",
+      "path": "README.md",
+      "size_bytes": 27620,
+      "remote_sha": "dbd1b94060268292ba8416da07467c79c914203c"
+    },
+    {
+      "sha": "2e8c510594feb4ef028c4a2b6ff89487991eedbf",
+      "path": "sim/common/cmd_processor.cpp",
+      "size_bytes": 27823,
+      "remote_sha": "2e8c510594feb4ef028c4a2b6ff89487991eedbf"
+    },
+    {
+      "sha": "d120ebc79aef1e4625306c49b60d8bc82970fabd",
+      "path": "README.md",
+      "size_bytes": 26674,
+      "remote_sha": "d120ebc79aef1e4625306c49b60d8bc82970fabd"
+    },
+    {
+      "sha": "891658648b1f4594fc4633f720f6802c14ebab6a",
+      "path": "sw/runtime/common/vortex2_internal.h",
+      "size_bytes": 44458,
+      "remote_sha": "891658648b1f4594fc4633f720f6802c14ebab6a"
+    },
+    {
+      "sha": "3c8b90c55c9ba76399c6882de0d5eb1891431d02",
+      "path": "sw/runtime/common/vortex2_internal.h",
+      "size_bytes": 44386,
+      "remote_sha": "3c8b90c55c9ba76399c6882de0d5eb1891431d02"
+    },
+    {
+      "sha": "1f1282b13cbf69ba29cef2bbd55d7f440dcd91a1",
+      "path": "docs/project/status.md",
+      "size_bytes": 43050,
+      "remote_sha": "1f1282b13cbf69ba29cef2bbd55d7f440dcd91a1"
+    },
+    {
+      "sha": "1f6b3dc24e4d5136c0a35d891b1c248c8348f6a6",
+      "path": "docs/project/status.md",
+      "size_bytes": 45182,
+      "remote_sha": "1f6b3dc24e4d5136c0a35d891b1c248c8348f6a6"
+    },
+    {
+      "sha": "58e589a6862f704d55a663b821d07afa3dab7484",
+      "path": "sw/runtime/common/queue.cpp",
+      "size_bytes": 63369,
+      "remote_sha": "58e589a6862f704d55a663b821d07afa3dab7484"
+    },
+    {
+      "sha": "ec8676a0680697f67e22e10d7d5a17a131a66891",
+      "path": "sw/runtime/common/queue.cpp",
+      "size_bytes": 64122,
+      "remote_sha": "ec8676a0680697f67e22e10d7d5a17a131a66891"
+    },
+    {
+      "sha": "21e81963b4e0e012e7812cf5210c0e552abac4a3",
+      "path": "sw/runtime/common/device.cpp",
+      "size_bytes": 66161,
+      "remote_sha": "21e81963b4e0e012e7812cf5210c0e552abac4a3"
+    },
+    {
+      "sha": "91bef3c7a931b2f31871e59e2d4ad9aaace67d7f",
+      "path": "sw/runtime/common/device.cpp",
+      "size_bytes": 66201,
+      "remote_sha": "91bef3c7a931b2f31871e59e2d4ad9aaace67d7f"
+    },
+    {
+      "sha": "ac9c4ec7500db824578e8e281ec74f817cecc806",
+      "path": "docs/project/evidence/p03-managed-matmul/reviews.tar.gz",
+      "size_bytes": 88047,
+      "remote_sha": "ac9c4ec7500db824578e8e281ec74f817cecc806"
+    },
+    {
+      "sha": "e70c8c58518f46a81418935f76e4b373aa034234",
+      "path": "docs/project/evidence/p03-managed-matmul/archive-index.json",
+      "size_bytes": 134129,
+      "remote_sha": "e70c8c58518f46a81418935f76e4b373aa034234"
+    },
+    {
+      "sha": "d30d0b37e3c3c23e125ca05baeff9d3b9a35a7c3",
+      "path": "docs/project/evidence/p03-managed-matmul/host-tests.tar.gz",
+      "size_bytes": 144982,
+      "remote_sha": "d30d0b37e3c3c23e125ca05baeff9d3b9a35a7c3"
+    },
+    {
+      "sha": "55fcdeb564cf4b100c752ef38144c818bce2398d",
+      "path": "docs/project/evidence/p03-managed-matmul/rv32-lifecycle.tar.gz",
+      "size_bytes": 226550,
+      "remote_sha": "55fcdeb564cf4b100c752ef38144c818bce2398d"
+    },
+    {
+      "sha": "2c03c656bea4dd70696e11ece4538b0eaddf5d4e",
+      "path": "docs/project/evidence/p03-managed-matmul/execution.tar.gz",
+      "size_bytes": 578415,
+      "remote_sha": "2c03c656bea4dd70696e11ece4538b0eaddf5d4e"
+    },
+    {
+      "sha": "ef3ce395fc8f06f45ad4fd18107f9b03c4a40d3a",
+      "path": "docs/project/evidence/p03-managed-matmul/development-history.tar.gz",
+      "size_bytes": 681794,
+      "remote_sha": "ef3ce395fc8f06f45ad4fd18107f9b03c4a40d3a"
+    }
+  ],
+  "preservation": "All original acceptance source_revision values, reports, archives, indexes and review bodies remain unchanged. Original commit objects can be reconstructed from the exact raw bodies using git hash-object -t commit --stdin -w; their complete trees/blobs are reachable through the identical API commit trees.",
+  "final_branch_update": "After independent mapping review, a metadata-only descendant adds this mapping and its review. The coordinator then uses expected_sha equal to the observed previous master head and force=false, and separately verifies the resulting remote head."
+}
