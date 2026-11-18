@@ -65,9 +65,37 @@ class RetentionTests(unittest.TestCase):
             report, _, paths = self.scenario()
         self.assertEqual(report["outcome"], "pass", report["reason"])
         self.assertTrue(copies)
-        self.assertEqual(len(copies), len(report["source_snapshots"]))
+        self.assertEqual(len(copies), len(report["source_snapshots"]) +
+                         sum(len(variant["retained_artifacts"]) for variant in report["variants"]))
         self.assertEqual(matrix.hash_artifacts(paths["output"], [row["path"] for row in report["source_snapshots"]]),
                          report["source_snapshots"])
+
+    def test_copied_source_and_build_bytes_must_match_the_precopy_inventory(self):
+        original_copy = matrix.shutil.copyfileobj
+        for scope in ("source", "build"):
+            for mutation in ("hash", "size"):
+                changed = []
+
+                def copy(source, destination, length):
+                    original_copy(source, destination, length=length)
+                    is_source = "/artifacts/source/" in destination.name
+                    if not changed and is_source == (scope == "source"):
+                        if mutation == "hash":
+                            destination.seek(0)
+                            destination.write(b"X")
+                        else:
+                            destination.write(b"retained byte mutation\n")
+                        changed.append(destination.name)
+
+                with self.subTest(scope=scope, mutation=mutation), mock.patch.object(
+                        matrix.shutil, "copyfileobj", side_effect=copy):
+                    report, calls, _ = self.scenario()
+                self.assertEqual(len(changed), 1)
+                self.assertEqual(report["outcome"], "blocked" if scope == "source" else "fail")
+                self.assertIn("retained " + scope, report["reason"])
+                self.assertTrue(report["source_stable"])
+                self.assertEqual(calls["case"], 0)
+                self.assertFalse(report["acceptance_claimed"])
 
     def test_copy_errors_preserve_a_finished_failure_record(self):
         with mock.patch.object(matrix.shutil, "copyfileobj", side_effect=OSError("retention write failed")):

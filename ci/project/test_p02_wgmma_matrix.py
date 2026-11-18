@@ -92,7 +92,9 @@ def check_compiler(stamps, driver="simx", variant=VARIANT, *, source=SOURCE, bui
 def header_for(variant, witness=False):
     words = compiler_fixture(variant=variant, witness=witness)[0].split()
     return "\n".join("#define " + word[2:].replace("=", " ", 1)
-                     for word in words if word.startswith("-D")) + "\n"
+                     for word in words if word.startswith("-D")) + (
+        "\n#define VX_CFG_LMEM_SIZE __POW(2, VX_CFG_LMEM_LOG_SIZE)\n"
+        "#define __POW(x,y) __vx_cfg_pow((x), (y))\n")
 
 
 class SelectionAndBudgetTests(unittest.TestCase):
@@ -404,7 +406,7 @@ class WorkflowTests(unittest.TestCase):
     def scenario(self, *, full=False, drift=None, drift_at=2, resource=None, result=None,
                  failed_case=1, bad_output=False, artifact_drift=False, witness=False,
                  witness_failure=False, parity_failure=False, discard=False, dirty=False,
-                 copy_disk_usage=None):
+                 copy_disk_usage=None, dependency_header_inventory=None):
         """Mock processes and platform identities; retain real parser/hash gates."""
         temporary = tempfile.TemporaryDirectory(prefix="wgmma-workflow-")
         self.addCleanup(temporary.cleanup)
@@ -419,15 +421,21 @@ class WorkflowTests(unittest.TestCase):
         if discard:
             extra += ["--discard-builds"]
         args = arguments(*extra)
+        saved_sources = set(matrix.TOOLING + matrix.CORPUS + matrix.COPIED + matrix.CONFIG_INPUTS)
+        for directory in (matrix.APP, "tests/regression/sgemm_tcu_wg", "tests/regression/sgemm_tcu_wg_sp"):
+            saved_sources.update(path.relative_to(ROOT).as_posix() for path in (ROOT / directory).iterdir()
+                                 if path.is_file() and (path.suffix in matrix.SOURCE_SUFFIXES or path.name == "Makefile"))
+        if witness:
+            saved_sources.add(MANIFEST["witness"]["source"])
         source_identity = {"checkout": {"dirty": dirty, "blockers": [], "revision": "a" * 40,
-            "changed_paths": [], "untracked_paths": []}, "files": [{"path": "source.cpp", "sha256": "b" * 64}]}
+            "changed_paths": [], "untracked_paths": []}, "files": matrix.hash_artifacts(ROOT, sorted(saved_sources))}
         inventory = {name: {"path": "/fake-tools/" + name, "sha256": "c" * 64} for name in
                      ("g++", "make", "clang", "riscv-gcc", "python3", "verilator", "llvm-objdump")}
         resources = {"available_memory_bytes": 8 * matrix.GIB,
                      "free_disk_bytes": {key: 20 * matrix.GIB for key in ("source", "tools", "work", "output")}}
         if resource:
             resource(resources)
-        calls = {"source": 0, "tools": 0, "dependency": 0, "case": 0, "budgets": []}
+        calls = {"source": 0, "tools": 0, "dependency": 0, "headers": 0, "case": 0, "budgets": []}
         real_hash = matrix.hash_artifacts
 
         def observe_source(_):
@@ -443,6 +451,13 @@ class WorkflowTests(unittest.TestCase):
             if drift == "tools" and calls["tools"] >= drift_at:
                 value["make"]["sha256"] = "e" * 64
             return value
+
+        def observe_headers(root):
+            calls["headers"] += 1
+            if dependency_header_inventory is not None:
+                return dependency_header_inventory(root)
+            return [{"path": "third_party/ramulator/ext/" + name + "/include/test.h",
+                     "sha256": "0" * 64, "size_bytes": 1} for name in ("spdlog", "yaml-cpp")]
 
         def observe_hashes(root, names):
             names = tuple(names)
@@ -504,9 +519,10 @@ class WorkflowTests(unittest.TestCase):
 
         with ExitStack() as stack:
             for name, replacement in (("source_snapshot", observe_source), ("tool_inventory", observe_tools),
+                                      ("dependency_headers", observe_headers),
                                       ("hash_artifacts", observe_hashes), ("_resources", lambda _: resources),
                                       ("run_bounded", execute), ("generated_identity", lambda *_: []),
-                                      ("build_artifacts", lambda *_: ("binding.bin",))):
+                                      ("build_artifacts", lambda *_: ("sw/VX_config.h", "hw/VX_config.vh", "binding.bin"))):
                 stack.enter_context(mock.patch.object(matrix, name, replacement))
             stack.enter_context(mock.patch.object(matrix.shutil, "disk_usage", side_effect=copy_disk_usage or
                 (lambda _: SimpleNamespace(free=resources["free_disk_bytes"]["output"]))))

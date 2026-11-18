@@ -20,6 +20,12 @@ VALUES = {
     "VX_CFG_TCU_PE_RATIO": "1", "VX_CFG_TCU_LATENCY": "4", "VX_CFG_TCU_USE_DSP": "0",
     "VX_CFG_LMEM_LOG_SIZE": "14", "VX_CFG_LMEM_NUM_BANKS": "8",
 }
+LMEM_SIZE = "16384"
+# The unresolved C++ header emits pow(2, $VX_CFG_LMEM_LOG_SIZE) this way.
+# Keep the exact generated expression and its helper binding; do not evaluate
+# arbitrary preprocessor expressions from retained compiler output.
+LMEM_SIZE_EXPRESSION = "__POW(2, VX_CFG_LMEM_LOG_SIZE)"
+POW_MACRO = "(x,y) __vx_cfg_pow((x), (y))"
 ENABLED = ("VX_CFG_EXT_TCU", "VX_CFG_LMEM", "VX_CFG_TCU_FP16", "VX_CFG_TCU_WGMMA")
 DISABLED = tuple("VX_CFG_TCU_" + name for name in
                  ("TF32", "FP8", "FP4", "INT8", "INT4", "MX", "MXFP4", "NVFP4", "DSM")) + (
@@ -36,9 +42,22 @@ def require(condition, message):
         raise ValueError(message)
 
 
-def configuration(defines, variant, label, *, selectors=True):
+def configuration(defines, variant, label, *, selectors=True, effective=False):
     for name, value in VALUES.items():
         require(defines.get(name) == value, label + " has missing/conflicting " + name)
+    lmem_size = defines.get("VX_CFG_LMEM_SIZE")
+    if effective:
+        require(lmem_size in (LMEM_SIZE, LMEM_SIZE_EXPRESSION),
+                label + " has missing/conflicting VX_CFG_LMEM_SIZE")
+        if lmem_size == LMEM_SIZE_EXPRESSION:
+            require(defines.get("__POW") == POW_MACRO and "__vx_cfg_pow" not in defines,
+                    label + " has missing/conflicting VX_CFG_LMEM_SIZE helper")
+    else:
+        # Raw records may omit this derived macro, but each explicit override
+        # must preserve the frozen capacity independently of its address window.
+        require(lmem_size in (None, LMEM_SIZE), label + " has conflicting VX_CFG_LMEM_SIZE")
+        require("__POW" not in defines and "__vx_cfg_pow" not in defines,
+                label + " overrides the VX_CFG_LMEM_SIZE helper")
     require(defines.get("VX_CFG_XLEN_64") == "1", label + " lacks the RV64 selector")
     require(not any(name.startswith("VX_CFG_XLEN_") and name != "VX_CFG_XLEN_64"
                     for name in defines), label + " has another XLEN selector")
@@ -76,12 +95,19 @@ def configuration(defines, variant, label, *, selectors=True):
 
 def validate_header_macros(text, variant):
     defines = {}
+    function_macros = set()
     for line in text.splitlines():
-        match = re.fullmatch(r"#define ([A-Za-z_][A-Za-z0-9_]*)(?:[ \t]+(.*))?", line)
+        match = re.fullmatch(r"#define ([A-Za-z_][A-Za-z0-9_]*)(\([^)]*\))?(?:[ \t]+(.*))?", line)
         if match:
             require(match[1] not in defines, "preprocessor output repeats a macro")
-            defines[match[1]] = match[2] or "1"
-    configuration(defines, variant, "effective compiler configuration")
+            value = match[3] or "1"
+            defines[match[1]] = match[2] + " " + value if match[2] else value
+            if match[2]:
+                function_macros.add(match[1])
+    if defines.get("VX_CFG_LMEM_SIZE") == LMEM_SIZE_EXPRESSION:
+        require("__POW" in function_macros,
+                "effective compiler configuration has conflicting VX_CFG_LMEM_SIZE helper")
+    configuration(defines, variant, "effective compiler configuration", effective=True)
     return {name: value for name, value in defines.items()
             if name.startswith(("VX_CFG_", "WGMMA_", "P02_"))
             or name in ("ITYPE", "OTYPE", "KUNROLL", "PERF_ENABLE")}

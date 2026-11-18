@@ -34,6 +34,7 @@ from baseline_packet_contract import _stamp_defines
 from baseline_process import GIB, MIB, LIMITATIONS as PROCESS_LIMITATIONS, run_bounded
 from p02_matrix import (_now, _write_json, _resources, _source_ok, clean_environment,
                         resolve_paths, tool_inventory, _timeout)
+from p02_wgmma_dependencies import dependency_headers
 import p02_wgmma_fixture_oracle as oracle
 from p02_wgmma_records import (_json, compare_pair, configuration, require,
                                validate_header_macros, validate_records, verify_output)
@@ -79,7 +80,7 @@ LIMITATIONS = [
     "A performance mismatch retains the original five-percent RTL-denominator threshold; no waiver is inferred.",
     "The optional witness observes ordering; it does not force backpressure or prove unobserved state coverage.",
     "Native rtlsim bypasses the AFU; no vendor hw_emu, physical FPGA or silicon result is claimed.",
-    "Dependency libraries are reused identified inputs; this runner never downloads or rebuilds them.",
+    "Dependency libraries and external Ramulator headers are reused identified inputs; this runner never downloads or rebuilds them.",
     "Tool identities do not inventory every system header, support file or dynamic library.",
     "Logs and snapshots contain local paths and require review before publication.",
     *PROCESS_LIMITATIONS,
@@ -221,7 +222,7 @@ def execute_run(args, paths):
                              run_timeout_seconds=args.run_timeout_seconds, configure_timeout_seconds=120),
               "iterations": 2, "witness_requested": args.witness, "commands": [], "variants": [],
               "successful_build_trees_retained": not args.discard_builds, "limitations": LIMITATIONS}
-    active_variant = active_case = initial_source = initial_tools = dependencies = None
+    active_variant = active_case = initial_source = initial_tools = dependencies = initial_headers = None
 
     def checkpoint():
         _write_json(output / "report.json", report)
@@ -266,6 +267,7 @@ def execute_run(args, paths):
         require(observed == initial_source, "source changed during matrix execution")
         require(tool_inventory(paths, env, backends) == initial_tools, "selected tools changed during execution")
         require(hash_artifacts(source, DEPENDENCIES) == dependencies, "dependency libraries changed during execution")
+        require(dependency_headers(source) == initial_headers, "dependency headers changed during execution")
         checkpoint()
 
     try:
@@ -310,6 +312,8 @@ def execute_run(args, paths):
         report["tools_before"] = snapshot_json("tools-before", initial_tools)
         dependencies = hash_artifacts(source, DEPENDENCIES)
         report["dependencies_before"] = dependencies
+        initial_headers = dependency_headers(source)
+        report["dependency_headers_before"] = initial_headers
         saved_sources = list(TOOLING + CORPUS + COPIED + CONFIG_INPUTS)
         for directory in (APP, "tests/regression/sgemm_tcu_wg", "tests/regression/sgemm_tcu_wg_sp"):
             saved_sources += [path.relative_to(source).as_posix() for path in (source / directory).iterdir()
@@ -317,6 +321,11 @@ def execute_run(args, paths):
         if args.witness:
             saved_sources.append(manifest["witness"]["source"])
         report["source_snapshots"] = copy_files(source, saved_sources, "artifacts/source")
+        require([dict(row, path=row["path"].removeprefix("artifacts/source/"))
+                 for row in report["source_snapshots"]] ==
+                sorted((row for row in initial_source["files"] if row["path"] in saved_sources),
+                       key=lambda row: row["path"]),
+                "retained source bytes differ from the initial snapshot")
         checkpoint()
         for name in ("g++", "make", "clang", "riscv-gcc") + (("verilator",) if "rtlsim" in backends else ()):
             command("version-" + name.replace("+", "p"), [initial_tools[name]["path"], "--version"], work, env, 30)
@@ -370,6 +379,11 @@ def execute_run(args, paths):
                         item["path"].endswith((".stamp", ".mk", ".h", ".vh", ".vlt", ".elf", ".vxbin", ".dat", ".d"))
                         or Path(item["path"]).name in ("Makefile", "p02_wgmma")]
             active_variant["retained_artifacts"] = copy_files(build, retained, "artifacts/" + variant_id)
+            require([dict(row, path=row["path"].removeprefix("artifacts/" + variant_id + "/"))
+                     for row in active_variant["retained_artifacts"]] ==
+                    sorted((row for row in baseline_artifacts if row["path"] in retained),
+                           key=lambda row: row["path"]),
+                    "retained build artifacts differ from the built identities")
             stable(variant_id + "-built")
             for name in names:
                 case = cases[name]
@@ -453,6 +467,13 @@ def execute_run(args, paths):
                 report["dependencies_after"] = hash_artifacts(source, DEPENDENCIES)
                 require(final_tools == initial_tools and report["dependencies_after"] == dependencies,
                         "tools or dependencies changed during execution")
+            except (OSError, ValueError, RuntimeError) as error:
+                report.update(outcome="fail", reason=str(error))
+        if initial_headers is not None:
+            try:
+                report["dependency_headers_after"] = dependency_headers(source)
+                require(report["dependency_headers_after"] == initial_headers,
+                        "dependency headers changed during execution")
             except (OSError, ValueError, RuntimeError) as error:
                 report.update(outcome="fail", reason=str(error))
         all_cases = [case for variant in report["variants"] for case in variant["cases"]]
