@@ -33,7 +33,7 @@ the linked reports define the exact accepted scope.
 | P00 — project foundation | `complete` | Its three source-level acceptance gates and verified default-branch delivery remain preserved |
 | P01 — reproducible baseline | `blocked` | A01 clean-build and A02 six-case numerical reports accepted; A03 vendor integration is still required before P07 |
 | P02 — tensor numerical contract | `complete` | A01 source contract, A02 ordinary WMMA and A03 bounded WGMMA evidence accepted after required review; T01/T02 complete |
-| P03 — native AI operator library | `in_progress` | T01 input/argument contract implemented; launch, arithmetic and lifecycle qualification remain open |
+| P03 — native AI operator library | `in_progress` | T01 complete and A01 accepted at source scope; launch, arithmetic and lifecycle qualification remain open |
 | P04–P11 | `not_started` | Later model, framework, hardware and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -43,6 +43,13 @@ Execution and integration owner for this continuation: the primary coding agent
 are not invented human approvals or waivers.
 
 ## Latest continuation — native operator contract
+
+**P03-T01 is complete; P03-A01 is [accepted at source scope](evidence/p03-operators/acceptance.json).**
+Clean source `6367ce34e12915e12271207b207f93bd4d391869` passed 1636 tests with
+zero failures/errors/skips in 397.573 seconds. The exact tree is published as
+`04c3cbf42c68e3b116051343083b86119f67f53d`; the [source mapping and receipts](evidence/p03-operators/README.md)
+retain all identities. Four RV32/RV64 object compilations passed separately.
+Independent review approves only the contract boundary; A02/A03 remain open.
 
 P03-T01 implements the [versioned manifest](../../ci/project/p03_operator_manifest.json),
 [design contract](../designs/ai_operator_contract_v1.md) and internal C++17

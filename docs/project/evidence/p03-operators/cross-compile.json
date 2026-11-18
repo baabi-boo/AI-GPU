@@ -1,0 +1,837 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-11-18T07:05:59.857899+00:00",
+  "scope": "Actual target object compilation of internal host-planning code and static ABI assertions; no link, kernel execution, runtime dispatch or RV32 operator qualification.",
+  "source_revision": "359a8c007f450a8146540f795cb576b29818fa03",
+  "source_dirty": true,
+  "sources_before": [
+    {
+      "path": "${SOURCE}/sw/runtime/ai/contract.h",
+      "resolved_path": "${SOURCE}/sw/runtime/ai/contract.h",
+      "sha256": "c21e8742cf5dcc01e857b5b13f6ff6e159fa6ad8459bf3a475a5eed746c8abb8",
+      "size_bytes": 4535
+    },
+    {
+      "path": "${SOURCE}/sw/runtime/ai/contract.cpp",
+      "resolved_path": "${SOURCE}/sw/runtime/ai/contract.cpp",
+      "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+      "size_bytes": 10833
+    }
+  ],
+  "tools": [
+    {
+      "path": "${TOOLS}/llvm-vortex/bin/clang++",
+      "resolved_path": "${TOOLS}/llvm-vortex/bin/clang-20",
+      "sha256": "92f2fbf93bb013f414871b9dde08174f42832b169389f59cd373451d373cf3cf",
+      "size_bytes": 189776
+    },
+    {
+      "path": "${TOOLS}/llvm-vortex/bin/llvm-readelf",
+      "resolved_path": "${TOOLS}/llvm-vortex/bin/llvm-readobj",
+      "sha256": "658f4b390ba3965cda77915c7f9e322e63b7feac6d24af254a2e9a71339dc3a2",
+      "size_bytes": 2250240
+    }
+  ],
+  "compiler_version": "clang version 20.1.8 (https://github.com/vortexgpgpu/llvm.git f44a6bb2af4c62847585305bbdc760fbe0e3645f)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: ${TOOLS}/llvm-vortex/bin\n",
+  "include_roots": [
+    "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0",
+    "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf",
+    "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/backward",
+    "${TOOLS}/llvm-vortex/lib/clang/20/include",
+    "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include"
+  ],
+  "environment_overrides": {
+    "LC_ALL": "C",
+    "LANG": "C",
+    "TMPDIR": "${CONTINUATION}/p03-cross-build"
+  },
+  "removed_environment_variables": [
+    "CPATH",
+    "CPLUS_INCLUDE_PATH",
+    "C_INCLUDE_PATH",
+    "LIBRARY_PATH",
+    "COMPILER_PATH",
+    "GCC_EXEC_PREFIX"
+  ],
+  "commands": [
+    {
+      "id": "rv32-abi",
+      "argv": [
+        "${TOOLS}/llvm-vortex/bin/clang++",
+        "--target=riscv32-unknown-elf",
+        "-march=rv32im",
+        "-mabi=ilp32",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-O1",
+        "-nostdinc",
+        "-nostdinc++",
+        "-I",
+        "${SOURCE}/sw/runtime/ai",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/backward",
+        "-isystem",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include",
+        "-MD",
+        "-MF",
+        "${CONTINUATION}/p03-cross-build/rv32/abi.d",
+        "-c",
+        "${CONTINUATION}/p03-cross-build/rv32/abi_probe.cpp",
+        "-o",
+        "${CONTINUATION}/p03-cross-build/rv32/abi.o"
+      ],
+      "cwd": "${CONTINUATION}/p03-cross-build/rv32",
+      "exit_code": 0,
+      "duration_seconds": 0.18253426900264458,
+      "stdout": "",
+      "stderr": "",
+      "input": {
+        "path": "${CONTINUATION}/p03-cross-build/rv32/abi_probe.cpp",
+        "resolved_path": "${CONTINUATION}/p03-cross-build/rv32/abi_probe.cpp",
+        "sha256": "ea38c92cec437be18b12f0a61c0e27032771e2115d02d823d84d177d56ba70d0",
+        "size_bytes": 155
+      },
+      "object": {
+        "path": "${CONTINUATION}/p03-cross-build/rv32/abi.o",
+        "resolved_path": "${CONTINUATION}/p03-cross-build/rv32/abi.o",
+        "sha256": "0440dd8ceb945f53adb362587a22864993bfa3b7bbcd0fd228c2ba77b5d430e7",
+        "size_bytes": 684
+      },
+      "object_header": {
+        "argv": [
+          "${TOOLS}/llvm-vortex/bin/llvm-readelf",
+          "-h",
+          "${CONTINUATION}/p03-cross-build/rv32/abi.o"
+        ],
+        "exit_code": 0,
+        "stdout": "ELF Header:\n  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00\n  Class:                             ELF32\n  Data:                              2's complement, little endian\n  Version:                           1 (current)\n  OS/ABI:                            UNIX - System V\n  ABI Version:                       0\n  Type:                              REL (Relocatable file)\n  Machine:                           RISC-V\n  Version:                           0x1\n  Entry point address:               0x0\n  Start of program headers:          0 (bytes into file)\n  Start of section headers:          364 (bytes into file)\n  Flags:                             0x0\n  Size of this header:               52 (bytes)\n  Size of program headers:           0 (bytes)\n  Number of program headers:         0\n  Size of section headers:           40 (bytes)\n  Number of section headers:         8\n  Section header string table index: 1\n",
+        "stderr": "",
+        "target_checks": {
+          "elf_class": true,
+          "riscv_machine": true,
+          "relocatable": true
+        }
+      },
+      "dependency_paths": [
+        "${CONTINUATION}/p03-cross-build/rv32/abi_probe.cpp",
+        "${SOURCE}/sw/runtime/ai/contract.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/array",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/compare",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/initializer_list",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/c++config.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/os_defines.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/cpu_defines.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/pstl/pstl_config.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/type_traits",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/functexcept.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/exception_defines.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_algobase.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/cpp_type_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/ext/type_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/ext/numeric_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_pair.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/move.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/utility.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator_base_types.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator_base_funcs.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/concept_check.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/debug/assertions.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/ptr_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/debug/debug.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/predefined_ops.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/range_access.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/cstddef",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/stddef.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_header_macro.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_ptrdiff_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_size_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_wchar_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_null.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_nullptr_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_max_align_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_offsetof.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/cstdint",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/stdint.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/stdint.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/machine/_default_types.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/features.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/_newlib_version.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/_intsup.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/_stdint.h"
+      ]
+    },
+    {
+      "id": "rv32-contract",
+      "argv": [
+        "${TOOLS}/llvm-vortex/bin/clang++",
+        "--target=riscv32-unknown-elf",
+        "-march=rv32im",
+        "-mabi=ilp32",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-O1",
+        "-nostdinc",
+        "-nostdinc++",
+        "-I",
+        "${SOURCE}/sw/runtime/ai",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/backward",
+        "-isystem",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include",
+        "-MD",
+        "-MF",
+        "${CONTINUATION}/p03-cross-build/rv32/contract.d",
+        "-c",
+        "${SOURCE}/sw/runtime/ai/contract.cpp",
+        "-o",
+        "${CONTINUATION}/p03-cross-build/rv32/contract.o"
+      ],
+      "cwd": "${CONTINUATION}/p03-cross-build/rv32",
+      "exit_code": 0,
+      "duration_seconds": 0.1969933709988254,
+      "stdout": "",
+      "stderr": "",
+      "input": {
+        "path": "${SOURCE}/sw/runtime/ai/contract.cpp",
+        "resolved_path": "${SOURCE}/sw/runtime/ai/contract.cpp",
+        "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+        "size_bytes": 10833
+      },
+      "object": {
+        "path": "${CONTINUATION}/p03-cross-build/rv32/contract.o",
+        "resolved_path": "${CONTINUATION}/p03-cross-build/rv32/contract.o",
+        "sha256": "b9a36f652e43e171d7fdfb767ef5757ebc72c44db9f071f3e1e8eef95d6feb2a",
+        "size_bytes": 10632
+      },
+      "object_header": {
+        "argv": [
+          "${TOOLS}/llvm-vortex/bin/llvm-readelf",
+          "-h",
+          "${CONTINUATION}/p03-cross-build/rv32/contract.o"
+        ],
+        "exit_code": 0,
+        "stdout": "ELF Header:\n  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00\n  Class:                             ELF32\n  Data:                              2's complement, little endian\n  Version:                           1 (current)\n  OS/ABI:                            UNIX - System V\n  ABI Version:                       0\n  Type:                              REL (Relocatable file)\n  Machine:                           RISC-V\n  Version:                           0x1\n  Entry point address:               0x0\n  Start of program headers:          0 (bytes into file)\n  Start of section headers:          10072 (bytes into file)\n  Flags:                             0x0\n  Size of this header:               52 (bytes)\n  Size of program headers:           0 (bytes)\n  Number of program headers:         0\n  Size of section headers:           40 (bytes)\n  Number of section headers:         14\n  Section header string table index: 1\n",
+        "stderr": "",
+        "target_checks": {
+          "elf_class": true,
+          "riscv_machine": true,
+          "relocatable": true
+        }
+      },
+      "dependency_paths": [
+        "${SOURCE}/sw/runtime/ai/contract.cpp",
+        "${SOURCE}/sw/runtime/ai/contract.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/array",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/compare",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/initializer_list",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/c++config.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/os_defines.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/cpu_defines.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/pstl/pstl_config.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/type_traits",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/functexcept.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/exception_defines.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_algobase.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/cpp_type_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/ext/type_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/ext/numeric_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_pair.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/move.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/utility.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator_base_types.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator_base_funcs.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/concept_check.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/debug/assertions.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/ptr_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/debug/debug.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/predefined_ops.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/range_access.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/cstddef",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/stddef.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_header_macro.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_ptrdiff_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_size_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_wchar_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_null.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_nullptr_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_max_align_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_offsetof.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/cstdint",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/stdint.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/stdint.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/machine/_default_types.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/features.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/_newlib_version.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/_intsup.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/_stdint.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/limits"
+      ]
+    },
+    {
+      "id": "rv64-abi",
+      "argv": [
+        "${TOOLS}/llvm-vortex/bin/clang++",
+        "--target=riscv64-unknown-elf",
+        "-march=rv64im",
+        "-mabi=lp64",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-O1",
+        "-nostdinc",
+        "-nostdinc++",
+        "-I",
+        "${SOURCE}/sw/runtime/ai",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/backward",
+        "-isystem",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include",
+        "-MD",
+        "-MF",
+        "${CONTINUATION}/p03-cross-build/rv64/abi.d",
+        "-c",
+        "${CONTINUATION}/p03-cross-build/rv64/abi_probe.cpp",
+        "-o",
+        "${CONTINUATION}/p03-cross-build/rv64/abi.o"
+      ],
+      "cwd": "${CONTINUATION}/p03-cross-build/rv64",
+      "exit_code": 0,
+      "duration_seconds": 0.12625562399989576,
+      "stdout": "",
+      "stderr": "",
+      "input": {
+        "path": "${CONTINUATION}/p03-cross-build/rv64/abi_probe.cpp",
+        "resolved_path": "${CONTINUATION}/p03-cross-build/rv64/abi_probe.cpp",
+        "sha256": "64c0624c27d03660c43aa58cb7afbee977815cf2c437a57ccb978c14213c4de4",
+        "size_bytes": 155
+      },
+      "object": {
+        "path": "${CONTINUATION}/p03-cross-build/rv64/abi.o",
+        "resolved_path": "${CONTINUATION}/p03-cross-build/rv64/abi.o",
+        "sha256": "5af27444dbee8d4a7a0eb492eb11849a25320802d211d66a452e4e43cdbce764",
+        "size_bytes": 928
+      },
+      "object_header": {
+        "argv": [
+          "${TOOLS}/llvm-vortex/bin/llvm-readelf",
+          "-h",
+          "${CONTINUATION}/p03-cross-build/rv64/abi.o"
+        ],
+        "exit_code": 0,
+        "stdout": "ELF Header:\n  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00\n  Class:                             ELF64\n  Data:                              2's complement, little endian\n  Version:                           1 (current)\n  OS/ABI:                            UNIX - System V\n  ABI Version:                       0\n  Type:                              REL (Relocatable file)\n  Machine:                           RISC-V\n  Version:                           0x1\n  Entry point address:               0x0\n  Start of program headers:          0 (bytes into file)\n  Start of section headers:          416 (bytes into file)\n  Flags:                             0x0\n  Size of this header:               64 (bytes)\n  Size of program headers:           0 (bytes)\n  Number of program headers:         0\n  Size of section headers:           64 (bytes)\n  Number of section headers:         8\n  Section header string table index: 1\n",
+        "stderr": "",
+        "target_checks": {
+          "elf_class": true,
+          "riscv_machine": true,
+          "relocatable": true
+        }
+      },
+      "dependency_paths": [
+        "${CONTINUATION}/p03-cross-build/rv64/abi_probe.cpp",
+        "${SOURCE}/sw/runtime/ai/contract.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/array",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/compare",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/initializer_list",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/c++config.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/os_defines.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/cpu_defines.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/pstl/pstl_config.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/type_traits",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/functexcept.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/exception_defines.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_algobase.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/cpp_type_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/ext/type_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/ext/numeric_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_pair.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/move.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/utility.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator_base_types.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator_base_funcs.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/concept_check.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/debug/assertions.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/ptr_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/debug/debug.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/predefined_ops.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/range_access.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/cstddef",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/stddef.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_header_macro.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_ptrdiff_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_size_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_wchar_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_null.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_nullptr_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_max_align_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_offsetof.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/cstdint",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/stdint.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/stdint.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/machine/_default_types.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/features.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/_newlib_version.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/_intsup.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/_stdint.h"
+      ]
+    },
+    {
+      "id": "rv64-contract",
+      "argv": [
+        "${TOOLS}/llvm-vortex/bin/clang++",
+        "--target=riscv64-unknown-elf",
+        "-march=rv64im",
+        "-mabi=lp64",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-O1",
+        "-nostdinc",
+        "-nostdinc++",
+        "-I",
+        "${SOURCE}/sw/runtime/ai",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/backward",
+        "-isystem",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include",
+        "-isystem",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include",
+        "-MD",
+        "-MF",
+        "${CONTINUATION}/p03-cross-build/rv64/contract.d",
+        "-c",
+        "${SOURCE}/sw/runtime/ai/contract.cpp",
+        "-o",
+        "${CONTINUATION}/p03-cross-build/rv64/contract.o"
+      ],
+      "cwd": "${CONTINUATION}/p03-cross-build/rv64",
+      "exit_code": 0,
+      "duration_seconds": 0.16848630699678324,
+      "stdout": "",
+      "stderr": "",
+      "input": {
+        "path": "${SOURCE}/sw/runtime/ai/contract.cpp",
+        "resolved_path": "${SOURCE}/sw/runtime/ai/contract.cpp",
+        "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+        "size_bytes": 10833
+      },
+      "object": {
+        "path": "${CONTINUATION}/p03-cross-build/rv64/contract.o",
+        "resolved_path": "${CONTINUATION}/p03-cross-build/rv64/contract.o",
+        "sha256": "9236b2b5df5c354761e39aa501cdece757054c9e89c73fd778448b6f0c9bc9a0",
+        "size_bytes": 11456
+      },
+      "object_header": {
+        "argv": [
+          "${TOOLS}/llvm-vortex/bin/llvm-readelf",
+          "-h",
+          "${CONTINUATION}/p03-cross-build/rv64/contract.o"
+        ],
+        "exit_code": 0,
+        "stdout": "ELF Header:\n  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00\n  Class:                             ELF64\n  Data:                              2's complement, little endian\n  Version:                           1 (current)\n  OS/ABI:                            UNIX - System V\n  ABI Version:                       0\n  Type:                              REL (Relocatable file)\n  Machine:                           RISC-V\n  Version:                           0x1\n  Entry point address:               0x0\n  Start of program headers:          0 (bytes into file)\n  Start of section headers:          10560 (bytes into file)\n  Flags:                             0x0\n  Size of this header:               64 (bytes)\n  Size of program headers:           0 (bytes)\n  Number of program headers:         0\n  Size of section headers:           64 (bytes)\n  Number of section headers:         14\n  Section header string table index: 1\n",
+        "stderr": "",
+        "target_checks": {
+          "elf_class": true,
+          "riscv_machine": true,
+          "relocatable": true
+        }
+      },
+      "dependency_paths": [
+        "${SOURCE}/sw/runtime/ai/contract.cpp",
+        "${SOURCE}/sw/runtime/ai/contract.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/array",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/compare",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/initializer_list",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/c++config.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/os_defines.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/cpu_defines.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/pstl/pstl_config.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/type_traits",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/functexcept.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/exception_defines.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_algobase.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/cpp_type_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/ext/type_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/ext/numeric_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_pair.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/move.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/utility.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator_base_types.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator_base_funcs.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/concept_check.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/debug/assertions.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/ptr_traits.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/debug/debug.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/predefined_ops.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/range_access.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/cstddef",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/stddef.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_header_macro.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_ptrdiff_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_size_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_wchar_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_null.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_nullptr_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_max_align_t.h",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_offsetof.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/cstdint",
+        "${TOOLS}/llvm-vortex/lib/clang/20/include/stdint.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/stdint.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/machine/_default_types.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/features.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/_newlib_version.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/_intsup.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/_stdint.h",
+        "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/limits"
+      ]
+    }
+  ],
+  "header_and_source_dependencies": [
+    {
+      "path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_header_macro.h",
+      "resolved_path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_header_macro.h",
+      "sha256": "4cf46e8fbb809df048eecbbd63686fa741da27afa8db4245bd1f61c1fb1611dc",
+      "size_bytes": 417
+    },
+    {
+      "path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_max_align_t.h",
+      "resolved_path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_max_align_t.h",
+      "sha256": "3c1e4de47f4f06b35e2c5890d670052e84f716760505ff51b022fc8b21a9400f",
+      "size_bytes": 857
+    },
+    {
+      "path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_null.h",
+      "resolved_path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_null.h",
+      "sha256": "b1d71b08563ab3d2c22a1e4f8ddf4d9a1111c89e9404b859a45c307e8ebc6c69",
+      "size_bytes": 875
+    },
+    {
+      "path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_nullptr_t.h",
+      "resolved_path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_nullptr_t.h",
+      "sha256": "898b4465c5d3040d27e760e82983a751b1b0cae23ba280b18a1b81451841f9eb",
+      "size_bytes": 958
+    },
+    {
+      "path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_offsetof.h",
+      "resolved_path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_offsetof.h",
+      "sha256": "e5f0f4ff8ff5fc6a1cc8b535f5065f1728eadd2bf1e1401f021f803ec7b4222f",
+      "size_bytes": 708
+    },
+    {
+      "path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_ptrdiff_t.h",
+      "resolved_path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_ptrdiff_t.h",
+      "sha256": "b4178a57f3711b7013cba747a72a2f178c29fa9364e77d75b2159754072ced43",
+      "size_bytes": 717
+    },
+    {
+      "path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_size_t.h",
+      "resolved_path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_size_t.h",
+      "sha256": "d86ddc0238da09b385846ebef814ffc50a44e40cf85d4e3793f485952b7e73ad",
+      "size_bytes": 708
+    },
+    {
+      "path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_wchar_t.h",
+      "resolved_path": "${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_wchar_t.h",
+      "sha256": "1900d4998aef3698b06399ed686db0c21e26509b08638a25734fb97ae89b1001",
+      "size_bytes": 853
+    },
+    {
+      "path": "${TOOLS}/llvm-vortex/lib/clang/20/include/stddef.h",
+      "resolved_path": "${TOOLS}/llvm-vortex/lib/clang/20/include/stddef.h",
+      "sha256": "b3e62a046ddf28d09eedebe6eb9461cb7060e47cad2c69964b222c4eea10347e",
+      "size_bytes": 5053
+    },
+    {
+      "path": "${TOOLS}/llvm-vortex/lib/clang/20/include/stdint.h",
+      "resolved_path": "${TOOLS}/llvm-vortex/lib/clang/20/include/stdint.h",
+      "sha256": "655616d8fcb2c92b38c039019685c658c2346b3dd0021aed4ea057b43f621247",
+      "size_bytes": 31054
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/_newlib_version.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/_newlib_version.h",
+      "sha256": "a6f650177bc0235ec5af51bd711083fe3170b5c00bf4f1af370dd7b75e65988f",
+      "size_bytes": 337
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/array",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/array",
+      "sha256": "05205589a4c5619b434b3e197c6677b4cf3553ca002b48bc607a1b0e860921ce",
+      "size_bytes": 14961
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/concept_check.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/concept_check.h",
+      "sha256": "94148b657d0fbeccee2559c2106d920a3228f1ebd6400e8a51c03106ce6b8fb2",
+      "size_bytes": 3423
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/cpp_type_traits.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/cpp_type_traits.h",
+      "sha256": "d89349bf22b06d5efe6dbf0d4f67171034102c805915e4248419a4e5e1fb33c6",
+      "size_bytes": 14045
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/exception_defines.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/exception_defines.h",
+      "sha256": "7f324bb2a5727ec2ffc2927d6ea6ab8ec427d3dff17af6e8baf39b26d1f3afd3",
+      "size_bytes": 1645
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/functexcept.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/functexcept.h",
+      "sha256": "f7f1a5f5b714106716ec4ab60bf7b3d1165b9acc0e7ea0ef37e2e124bf349f64",
+      "size_bytes": 3509
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/move.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/move.h",
+      "sha256": "9fd1c58ee430d13fce64f72baa435553c22a53c1dd4780830feb07226b22217a",
+      "size_bytes": 6788
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/predefined_ops.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/predefined_ops.h",
+      "sha256": "e67ac9691867a88377d1955fa99a6d8879264ba5cd2c9ff1cd51fae92e566733",
+      "size_bytes": 10177
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/ptr_traits.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/ptr_traits.h",
+      "sha256": "8e1f3b92d7e1b1a6de097eaddb1f8c8fd690444a0936048926bee00cb1fd0778",
+      "size_bytes": 9096
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/range_access.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/range_access.h",
+      "sha256": "5f0d6b1834862ab8a4ed3a5643cda40cb195306f810933948be66c73a3e59cfa",
+      "size_bytes": 11234
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_algobase.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_algobase.h",
+      "sha256": "2d487e2e497b2fc7242b3ddfb0ca140a09450efa1e040fc44276fed08a698749",
+      "size_bytes": 76783
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator.h",
+      "sha256": "07b35101c80ce6ec20866cc08a148d96acaf28239d9ac93f9f207c4fbc3c8fe6",
+      "size_bytes": 81564
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator_base_funcs.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator_base_funcs.h",
+      "sha256": "7647f14db02424d129e1b5758fa60916a72d62075e35a24b8444e08c6ad0dc5e",
+      "size_bytes": 8780
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator_base_types.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator_base_types.h",
+      "sha256": "4709223c682a65156badaeee95ea55a33c22b6729bba6a561804cd178c51d750",
+      "size_bytes": 9684
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_pair.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_pair.h",
+      "sha256": "b346d1c22a88694c26c277789182e2f18286efb93be7c6c749f15daa6f43d1ba",
+      "size_bytes": 30112
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/utility.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/utility.h",
+      "sha256": "9d9dae3ac9b35eafea475686eccd43c571a9107ced3d3229e1a3eb01b4ac969a",
+      "size_bytes": 8314
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/compare",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/compare",
+      "sha256": "bee6c349343c91dbcab7f5d47a64ef733e9489138b43486a330142f72c09d2c0",
+      "size_bytes": 37649
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/cstddef",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/cstddef",
+      "sha256": "51409c852efecb6e4de3ef7c31e51e63ddd4ec376ee00e3c68e85e6579fa8648",
+      "size_bytes": 6258
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/cstdint",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/cstdint",
+      "sha256": "cf065429abc16ac2719ed491b40b602df3aea65bbfc71cd90b970e80bc526eb7",
+      "size_bytes": 2335
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/debug/assertions.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/debug/assertions.h",
+      "sha256": "90ef5a83522337a2c9ecdb7b4de1fb84e0b947cc1d9b80a5d05d3d57f7484b6f",
+      "size_bytes": 2368
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/debug/debug.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/debug/debug.h",
+      "sha256": "bb9d67717000b857daeb93db5e293b21a183c128c10143d43b46a49272c36116",
+      "size_bytes": 5881
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/ext/numeric_traits.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/ext/numeric_traits.h",
+      "sha256": "88de8355ea3870b3770481374581b8ce2967826ae4a6f62e93b18296eca97224",
+      "size_bytes": 8227
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/ext/type_traits.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/ext/type_traits.h",
+      "sha256": "035890c3844ae356174ef1a5f93a349b1b25712bedc1d62e751ce62e033f6aeb",
+      "size_bytes": 6627
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/initializer_list",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/initializer_list",
+      "sha256": "b8ecdfdee5998ea0a67e797d0e202795757678c3b867ec6e5cb9bacd3f6ac0d5",
+      "size_bytes": 3038
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/limits",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/limits",
+      "sha256": "f88a2a0ced0804620d8703ebef03766e7a187a8045fb852ec800dc83b176f7ed",
+      "size_bytes": 71724
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/pstl/pstl_config.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/pstl/pstl_config.h",
+      "sha256": "b39dc1b30164702dc8a2e5ad3a0ee4ef1f69cbc12891ed3d033d1b4fb6ce483f",
+      "size_bytes": 7332
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/c++config.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/c++config.h",
+      "sha256": "547bf8fe644772073af9b3413029a1efc54e47186216a0f2cbe97ba916d08172",
+      "size_bytes": 67663
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/cpu_defines.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/cpu_defines.h",
+      "sha256": "af6307f2ea10b83f2ba2461f5b43d15790f7b94f83352a316e68685a7936f79a",
+      "size_bytes": 1333
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/os_defines.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/os_defines.h",
+      "sha256": "0173db399ab250cb9def211e00e1c4e7af78e0e0ed3570a8db13e3ae8ac07506",
+      "size_bytes": 2090
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/type_traits",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/type_traits",
+      "sha256": "1aa3866c504f770f7f3346c66aea26cb17e605399c0e496fc9fa7ddea00f0923",
+      "size_bytes": 110374
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/machine/_default_types.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/machine/_default_types.h",
+      "sha256": "5d8f9f7ead7927e4b8b7ed00172e84f2ae82ea7f5f6ba3240ff813a9236771b3",
+      "size_bytes": 6650
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/stdint.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/stdint.h",
+      "sha256": "99fe201684856075ccd92704f63b702f6fa882b9dab61bd7a9bcce2588275861",
+      "size_bytes": 12432
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/_intsup.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/_intsup.h",
+      "sha256": "1af8abe244b43a3a5b5a85f6c834aa206930b6938e8109fbec430bc140b68df5",
+      "size_bytes": 5741
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/_stdint.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/_stdint.h",
+      "sha256": "49f8328943afa2a83ed4a35fcb808ed08b8c9fcb55373c786fb1b1d3a21952d7",
+      "size_bytes": 1824
+    },
+    {
+      "path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/features.h",
+      "resolved_path": "${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/features.h",
+      "sha256": "92eead7ab3bf7ecb315fd81d0f1eaec250f6d8d7d8574e3cd5d7f80dc779e771",
+      "size_bytes": 15828
+    },
+    {
+      "path": "${SOURCE}/sw/runtime/ai/contract.cpp",
+      "resolved_path": "${SOURCE}/sw/runtime/ai/contract.cpp",
+      "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+      "size_bytes": 10833
+    },
+    {
+      "path": "${SOURCE}/sw/runtime/ai/contract.h",
+      "resolved_path": "${SOURCE}/sw/runtime/ai/contract.h",
+      "sha256": "c21e8742cf5dcc01e857b5b13f6ff6e159fa6ad8459bf3a475a5eed746c8abb8",
+      "size_bytes": 4535
+    },
+    {
+      "path": "${CONTINUATION}/p03-cross-build/rv32/abi_probe.cpp",
+      "resolved_path": "${CONTINUATION}/p03-cross-build/rv32/abi_probe.cpp",
+      "sha256": "ea38c92cec437be18b12f0a61c0e27032771e2115d02d823d84d177d56ba70d0",
+      "size_bytes": 155
+    },
+    {
+      "path": "${CONTINUATION}/p03-cross-build/rv64/abi_probe.cpp",
+      "resolved_path": "${CONTINUATION}/p03-cross-build/rv64/abi_probe.cpp",
+      "sha256": "64c0624c27d03660c43aa58cb7afbee977815cf2c437a57ccb978c14213c4de4",
+      "size_bytes": 155
+    }
+  ],
+  "sources_after": [
+    {
+      "path": "${SOURCE}/sw/runtime/ai/contract.h",
+      "resolved_path": "${SOURCE}/sw/runtime/ai/contract.h",
+      "sha256": "c21e8742cf5dcc01e857b5b13f6ff6e159fa6ad8459bf3a475a5eed746c8abb8",
+      "size_bytes": 4535
+    },
+    {
+      "path": "${SOURCE}/sw/runtime/ai/contract.cpp",
+      "resolved_path": "${SOURCE}/sw/runtime/ai/contract.cpp",
+      "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+      "size_bytes": 10833
+    }
+  ],
+  "source_bytes_stable": true,
+  "finished_at": "2026-11-18T07:06:00.654904+00:00",
+  "outcome": "pass"
+}

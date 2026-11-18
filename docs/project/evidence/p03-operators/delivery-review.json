@@ -1,0 +1,205 @@
+{
+  "canonical_state": {
+    "P01-A03": "blocked; original evidence unchanged",
+    "P02": "complete, all three existing gates accepted without definition changes",
+    "P03": "in_progress",
+    "P03-A01": "accepted source_present only",
+    "P03-A02": "not accepted; actual GPU arithmetic/dispatch required",
+    "P03-A03": "not accepted; runtime bounds/lifetimes/errors/cleanup required",
+    "P03-T01": "complete",
+    "P04-P11": "not_started"
+  },
+  "checks": {
+    "failed": 0,
+    "groups": {
+      "acceptance_artifacts": {
+        "checks": 21,
+        "passed": 21
+      },
+      "acceptance_scope": {
+        "checks": 2,
+        "passed": 2
+      },
+      "canonical_state": {
+        "checks": 18,
+        "passed": 18
+      },
+      "claims": {
+        "checks": 5,
+        "passed": 5
+      },
+      "cross_dependencies": {
+        "checks": 49,
+        "passed": 49
+      },
+      "cross_inputs": {
+        "checks": 18,
+        "passed": 18
+      },
+      "cross_objects": {
+        "checks": 8,
+        "passed": 8
+      },
+      "cross_tools": {
+        "checks": 2,
+        "passed": 2
+      },
+      "current_changes": {
+        "checks": 1,
+        "passed": 1
+      },
+      "frozen_source_snapshot": {
+        "checks": 123,
+        "passed": 123
+      },
+      "full_suite": {
+        "checks": 11,
+        "passed": 11
+      },
+      "input_stability": {
+        "checks": 1,
+        "passed": 1
+      },
+      "publication_digest_preservation": {
+        "checks": 13,
+        "passed": 13
+      },
+      "publication_normalization": {
+        "checks": 14,
+        "passed": 14
+      },
+      "publication_originals": {
+        "checks": 13,
+        "passed": 13
+      },
+      "publication_published": {
+        "checks": 13,
+        "passed": 13
+      },
+      "review_identity": {
+        "checks": 17,
+        "passed": 17
+      },
+      "source_map": {
+        "checks": 12,
+        "passed": 12
+      }
+    },
+    "passed": 341,
+    "total": 341
+  },
+  "current_candidate_changes": {
+    "canonical_documents": [
+      "README.md",
+      "docs/project/backlog.md",
+      "docs/project/p03-operators-handoff.md",
+      "docs/project/phases/p03-operators.md",
+      "docs/project/roadmap.json",
+      "docs/project/status.md"
+    ],
+    "only_documentation_and_evidence_changed_after_clean_validation": true,
+    "packet_files": 17
+  },
+  "decision": "approve_P03_A01_source_contract_evidence_delivery",
+  "evidence_integrity": {
+    "acceptance_artifacts_verified": 21,
+    "acceptance_digest_omitted": "Deliberately not stored to permit acceptance to reference this review without a digest cycle.",
+    "embedded_digest_tokens_unchanged": true,
+    "frozen_source_snapshot_entries_verified": 123,
+    "literal_normalization_reproduced": true,
+    "publication_members_verified": 13,
+    "raw_and_published_hash_size_verified": true
+  },
+  "findings": [],
+  "limitations": [
+    "Matmul remains contract_only; every successful plan has execution_available=false; seven other families remain unavailable.",
+    "No matching 56-byte device reader, actual operator dispatch, arithmetic, transfer/event lifetime or physical hardware result is established by P03 evidence.",
+    "Width-32/64 encoding and target compilation establish representation/layout, not physical addressability, authenticated allocation metadata or actual memory mappings.",
+    "Historical P02 GPU results remain bound to their original source revisions; current offline validation is not a new GPU run.",
+    "Review does not claim remote master publication or post-push CI completion."
+  ],
+  "next_action": "Coordinator may commit the reviewed evidence and documentation and fast-forward the authorized master branch after checking its current head. Continue development with P03-T02 matching reader/adapter, trusted allocation registry/profile binding, managed resource retention, real launches/reference arithmetic and failure/cleanup evidence.",
+  "outcome": "pass",
+  "report_path": "${CONTINUATION}/p03-delivery-review.json",
+  "resolved_observation": {
+    "finding": "The phase guide final handoff sentence could be read as making tiny-model selection the current next action.",
+    "resolution": "Current guide explicitly defers P04 model selection until A02/A03 acceptance and names managed native P03-T02 dispatch, arithmetic and lifetimes as the current action."
+  },
+  "reviewed_at": "2026-11-18T07:21:45.879041+00:00",
+  "reviewed_implementation_files": [
+    {
+      "path": "sw/runtime/ai/contract.h",
+      "sha256": "c21e8742cf5dcc01e857b5b13f6ff6e159fa6ad8459bf3a475a5eed746c8abb8",
+      "size_bytes": 4535
+    },
+    {
+      "path": "sw/runtime/ai/contract.cpp",
+      "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+      "size_bytes": 10833
+    },
+    {
+      "path": "ci/project/p03_operator_manifest.json",
+      "sha256": "df08281fe186e9623d96779b2bc2485df4c9d824c88481e4896d695302759b5a",
+      "size_bytes": 7497
+    },
+    {
+      "path": "docs/designs/ai_operator_contract_v1.md",
+      "sha256": "866dba3101ae3531390341bb935e7bc3371cd812909240b452a4adec80f1464e",
+      "size_bytes": 12309
+    },
+    {
+      "path": "ci/project/test_p03_operator_contract.py",
+      "sha256": "d77f39243d71886e31216cc621654e3540b798dac5db0fd19cd01d2fe91879a1",
+      "size_bytes": 8400
+    },
+    {
+      "path": "ci/project/fixtures/p03_operator_contract_test.cpp",
+      "sha256": "2a6d96d93b267d1bf6ed72c8c107738fc26dc5be978e204595135117d41486c4",
+      "size_bytes": 20845
+    }
+  ],
+  "reviewer": "/root/phase_review",
+  "reviewer_method_notes": [
+    "Static probe checks use the actual equivalent sizeof(void*) * 8 == XLEN expression.",
+    "Post-validation diff checks include the newly staged packet files as well as the six expected canonical documents.",
+    "A02/A03 exclusion is verified in its explicit combined form and separately in the handoff."
+  ],
+  "role": "Independent final publication and acceptance reviewer; authored neither validator nor tests; read-only repository audit.",
+  "schema_version": 1,
+  "scope": "P03 evidence publication, clean source identity bridge, raw/normalized artifact integrity, retained validation and canonical gate/claim consistency. No new test, compiler, GPU or physical execution.",
+  "source_identity": {
+    "identical_tree": "6b4273a75415f0277a67576d31316c96ddf625c9",
+    "local_tested_revision": "6367ce34e12915e12271207b207f93bd4d391869",
+    "parent_revision": "359a8c007f450a8146540f795cb576b29818fa03",
+    "published_implementation_revision": "04c3cbf42c68e3b116051343083b86119f67f53d",
+    "verification": "Rehashed both actual Git commit object byte strings including type/length prefixes; retained local UTF-8 bytes match. Independently rehashed actual tree object; both commits and remote metadata name the same tree and parent. Branch publication is a separate coordinator step."
+  },
+  "validation_review": {
+    "cross_compilation": {
+      "commands": 4,
+      "dependencies_rehashed": 49,
+      "scope": "Four original input/object hashes and actual ELF class/machine/relocatable bytes verified, with empty diagnostic/zero-exit receipts; source matches clean tested commit. Pre-freeze dirty-source state retained. No linking, target execution or RV32 operator qualification.",
+      "targets": [
+        "RV32IM/ILP32",
+        "RV64IM/LP64"
+      ],
+      "tools_rehashed": 2
+    },
+    "focused_tests": {
+      "scope": "Eight compiled host/UBSan groups and four manifest/profile/ABI checks; included in full-suite raw log; original dirty development receipt preserved.",
+      "tests": 12
+    },
+    "full_suite": {
+      "errors": 0,
+      "failures": 0,
+      "log_sha256": "a390d0b5b42c563555792a684fabfaf8bc154e1e3d62f58cdfc971b3959e3bf9",
+      "receipt_process_seconds": 398.365494,
+      "scope": "Read and rehashed actual raw log and bounded process receipt; not rerun by this reviewer.",
+      "skips": 0,
+      "source_clean_and_stable_per_retained_receipt": true,
+      "tests": 1636,
+      "unittest_seconds": 397.573
+    },
+    "prior_independent_contract_review_checks": 84
+  }
+}

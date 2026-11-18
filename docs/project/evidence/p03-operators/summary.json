@@ -1,0 +1,63 @@
+{
+  "cross_compilation": {
+    "commands": 4,
+    "inputs": [
+      "ABI static-assert probe",
+      "contract.cpp"
+    ],
+    "source_scope": "Executed before source freeze with dirty checkout explicitly recorded; both implementation file hashes match frozen source. No link or device execution.",
+    "targets": [
+      "RV32IM/ILP32",
+      "RV64IM/LP64"
+    ]
+  },
+  "evidence_level": "source_present",
+  "focused_suite": {
+    "host_groups": 8,
+    "manifest_checks": 4,
+    "scope": "Included in the full suite; separate development receipt retained.",
+    "tests": 12
+  },
+  "full_suite": {
+    "budget": {
+      "max_log_bytes": 16777216,
+      "max_rss_bytes": 6442450944,
+      "min_free_bytes": 16106127360,
+      "timeout_seconds": 900
+    },
+    "errors": 0,
+    "failures": 0,
+    "log": "full-suite.log",
+    "peak_sampled_process_group_rss_bytes": 108498944,
+    "seconds": 397.573,
+    "skips": 0,
+    "source_clean_and_stable": true,
+    "tests": 1636
+  },
+  "limitations": [
+    "Matmul is contract_only; execution_available is false and all other operator families are unavailable.",
+    "The 56-byte internal argument ABI has no device reader and is incompatible with the inherited regression kernel_arg_t.",
+    "Address width checks validate representation, not physical aperture, mapping or authentication of allocation metadata.",
+    "No P03 dispatch, GPU arithmetic, queue/event lifetime, transfer/error recovery or physical device result is established.",
+    "Original P02 GPU evidence remains bound to its historical sources; this continuation independently revalidated and published it without a new GPU run."
+  ],
+  "outcome": "pass",
+  "phase_state": {
+    "P01-A03": "blocked",
+    "P02": "complete",
+    "P03": "in_progress",
+    "P03-A01": "accepted_source_present",
+    "P03-A02": "not_run",
+    "P03-A03": "not_run",
+    "P03-T01": "complete"
+  },
+  "published_implementation_revision": "04c3cbf42c68e3b116051343083b86119f67f53d",
+  "review": {
+    "consistency_checks": 84,
+    "outcome": "approve_P03_T01_and_P03_A01_source_contract_scope",
+    "reviewer": "/root/phase_review"
+  },
+  "schema_version": 1,
+  "source_revision": "6367ce34e12915e12271207b207f93bd4d391869",
+  "source_tree": "6b4273a75415f0277a67576d31316c96ddf625c9"
+}

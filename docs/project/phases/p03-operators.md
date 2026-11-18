@@ -2,7 +2,8 @@
 
 **Goal:** provide reusable native AI operators over the existing tensor API and
 runtime, without requiring a replacement HIP compiler. **P03 is in progress.**
-P03-T01 has an implemented [input/argument contract](../../designs/ai_operator_contract_v1.md),
+P03-T01 is complete with [source-level A01 acceptance](../evidence/p03-operators/acceptance.json)
+and an implemented [input/argument contract](../../designs/ai_operator_contract_v1.md),
 [manifest](../../../ci/project/p03_operator_manifest.json) and checked host planner.
 Device launches and lifecycle qualification remain P03-T02 work. The
 [handoff](../p03-operators-handoff.md) records source-level evidence. Live state and canonical gates
@@ -70,5 +71,7 @@ broaden the support matrix before its tests pass.
 
 Hand P04 the versioned operator/support manifest, native caller, build recipe,
 error/lifetime contract and evidence references. Update [status](../status.md)
-and [backlog](../backlog.md). The next bounded action is to select a fixed,
-redistributable tiny model that can be composed from those accepted operators.
+and [backlog](../backlog.md). After P03-A02/A03 are accepted, the P04 handoff
+selects a fixed, redistributable tiny model composed from the accepted operators.
+The current next action remains P03-T02: implement and qualify managed native
+dispatch, arithmetic and resource lifetimes.

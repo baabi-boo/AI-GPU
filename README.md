@@ -241,6 +241,11 @@ completing P02-T02 and P02. P01-A03 remains blocked and required before P07.
 
 ## P03 native operator contract
 
+**P03-T01 is complete and P03-A01 is [accepted at source scope](docs/project/evidence/p03-operators/acceptance.json).**
+The frozen implementation passed all 1,636 offline tests; four actual RV32/RV64
+object compilations passed separately. [Evidence and source mapping](docs/project/evidence/p03-operators/README.md)
+keep these checks distinct from the remaining device execution and lifetime gates.
+
 The [internal C++17 planner](sw/runtime/ai/contract.h) validates FP16/BF16-to-FP32
 matmul for exactly `(M,N,K) = (8,4,8), (8,4,16), (16,8,16)`. It checks tensor
 shape, layout, strides, allocation extents and permissions, device/profile

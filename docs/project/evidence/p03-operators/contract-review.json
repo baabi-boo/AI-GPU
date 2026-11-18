@@ -1,0 +1,476 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/phase_review",
+  "role": "Independent source/specification/ABI and test-semantics reviewer; authored neither validator nor test files",
+  "reviewed_at": "2026-11-18T07:07:53.733602+00:00",
+  "reviewed_base_commit": "6367ce34e12915e12271207b207f93bd4d391869",
+  "reviewed_source_state": "New source identified by exact hashes; current uncommitted working tree, not a claim of clean committed execution.",
+  "outcome": "pass",
+  "decision": "approve_P03_T01_and_P03_A01_source_contract_scope",
+  "acceptance_scope": "Versioned manifest for all eight required operator families, with one bounded contract-only matmul signature, checked pure planning, complete internal argument layout, explicit rejection behavior and independently tested byte encoding. No device execution or runtime-resource acceptance.",
+  "source_files": [
+    {
+      "path": "sw/runtime/ai/contract.h",
+      "sha256": "c21e8742cf5dcc01e857b5b13f6ff6e159fa6ad8459bf3a475a5eed746c8abb8",
+      "size_bytes": 4535
+    },
+    {
+      "path": "sw/runtime/ai/contract.cpp",
+      "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+      "size_bytes": 10833
+    },
+    {
+      "path": "ci/project/p03_operator_manifest.json",
+      "sha256": "df08281fe186e9623d96779b2bc2485df4c9d824c88481e4896d695302759b5a",
+      "size_bytes": 7497
+    },
+    {
+      "path": "docs/designs/ai_operator_contract_v1.md",
+      "sha256": "866dba3101ae3531390341bb935e7bc3371cd812909240b452a4adec80f1464e",
+      "size_bytes": 12309
+    },
+    {
+      "path": "ci/project/test_p03_operator_contract.py",
+      "sha256": "d77f39243d71886e31216cc621654e3540b798dac5db0fd19cd01d2fe91879a1",
+      "size_bytes": 8400
+    },
+    {
+      "path": "ci/project/fixtures/p03_operator_contract_test.cpp",
+      "sha256": "2a6d96d93b267d1bf6ed72c8c107738fc26dc5be978e204595135117d41486c4",
+      "size_bytes": 20845
+    }
+  ],
+  "focused_test_review": {
+    "reviewer": "/root/wgmma_audit",
+    "receipt_sha256": "fef12ca3040daa18841f67c259b7b706239bfe00781a345fdcef6689a12d63ee",
+    "test": {
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/project",
+        "-p",
+        "test_p03_operator_contract.py",
+        "-v"
+      ],
+      "cwd": "${SOURCE}",
+      "started_at": "2026-11-18T07:05:41.445750+00:00",
+      "elapsed_seconds": 1.5315034039995226,
+      "exit_code": 0,
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "compiler_execution": "Real C++17 host compilation with -Wall -Wextra -Werror and UBSan; eight native host groups plus four manifest checks",
+      "log": {
+        "path": "p03-independent-host-tests.log",
+        "sha256": "cf4c14a07a6c602dba9979c4fadae04d340e793573c450d8070d0fa0c1df536a",
+        "size_bytes": 2299
+      }
+    },
+    "source_files_stable": true,
+    "observed_result": "12 tests pass, zero failures/errors/skips; eight compiled host groups with UBSan plus four manifest/profile/ABI checks. I inspected the test code and actual receipt/log; I did not rerun the suite."
+  },
+  "cross_compilation_review": {
+    "receipt_sha256": "3ebc5b9eeb932463d7f67a96d1f6df7d6f803b49f4a87998c418cf8df8e6388f",
+    "source_bytes_stable": true,
+    "command_ids": [
+      "rv32-abi",
+      "rv32-contract",
+      "rv64-abi",
+      "rv64-contract"
+    ],
+    "target_flags": [
+      "RV32IM/ILP32",
+      "RV64IM/LP64"
+    ],
+    "compiler": "Pinned LLVM 20.1.8",
+    "dependency_entries_checked": 49,
+    "tool_entries_checked": 2,
+    "observed_result": "Four zero-exit compilations with empty diagnostics; object headers independently checked as little-endian ELF32/ELF64 RISC-V (e_machine 243). Static probe source requires actual XLEN and pointer width. No linking or target execution."
+  },
+  "consistency_checks": [
+    {
+      "check": "tested_source:sw/runtime/ai/contract.h",
+      "pass": true
+    },
+    {
+      "check": "tested_source:sw/runtime/ai/contract.cpp",
+      "pass": true
+    },
+    {
+      "check": "tested_source:ci/project/p03_operator_manifest.json",
+      "pass": true
+    },
+    {
+      "check": "tested_source:docs/designs/ai_operator_contract_v1.md",
+      "pass": true
+    },
+    {
+      "check": "tested_source:ci/project/test_p03_operator_contract.py",
+      "pass": true
+    },
+    {
+      "check": "tested_source:ci/project/fixtures/p03_operator_contract_test.cpp",
+      "pass": true
+    },
+    {
+      "check": "host_test_sources_stable",
+      "pass": true
+    },
+    {
+      "check": "host_test_log_identity",
+      "pass": true
+    },
+    {
+      "check": "host_test_result",
+      "pass": true
+    },
+    {
+      "check": "cross_sources_stable",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_header_macro.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_max_align_t.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_null.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_nullptr_t.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_offsetof.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_ptrdiff_t.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_size_t.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/llvm-vortex/lib/clang/20/include/__stddef_wchar_t.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/llvm-vortex/lib/clang/20/include/stddef.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/llvm-vortex/lib/clang/20/include/stdint.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/_newlib_version.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/array",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/concept_check.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/cpp_type_traits.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/exception_defines.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/functexcept.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/move.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/predefined_ops.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/ptr_traits.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/range_access.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_algobase.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator_base_funcs.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_iterator_base_types.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/stl_pair.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/bits/utility.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/compare",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/cstddef",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/cstdint",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/debug/assertions.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/debug/debug.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/ext/numeric_traits.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/ext/type_traits.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/initializer_list",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/limits",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/pstl/pstl_config.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/c++config.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/cpu_defines.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf/bits/os_defines.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/type_traits",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/machine/_default_types.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/stdint.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/_intsup.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/_stdint.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/sys/features.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${SOURCE}/sw/runtime/ai/contract.cpp",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${SOURCE}/sw/runtime/ai/contract.h",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${WORK}/p03-cross-build/rv32/abi_probe.cpp",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${WORK}/p03-cross-build/rv64/abi_probe.cpp",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/llvm-vortex/bin/clang++",
+      "pass": true
+    },
+    {
+      "check": "cross_dependency:${TOOLS}/llvm-vortex/bin/llvm-readelf",
+      "pass": true
+    },
+    {
+      "check": "cross_command:rv32-abi",
+      "pass": true
+    },
+    {
+      "check": "cross_input:rv32-abi",
+      "pass": true
+    },
+    {
+      "check": "cross_object:rv32-abi",
+      "pass": true
+    },
+    {
+      "check": "actual_riscv_object:rv32-abi",
+      "pass": true
+    },
+    {
+      "check": "actual_width_probe:rv32-abi",
+      "pass": true
+    },
+    {
+      "check": "cross_command:rv32-contract",
+      "pass": true
+    },
+    {
+      "check": "cross_input:rv32-contract",
+      "pass": true
+    },
+    {
+      "check": "cross_object:rv32-contract",
+      "pass": true
+    },
+    {
+      "check": "actual_riscv_object:rv32-contract",
+      "pass": true
+    },
+    {
+      "check": "cross_command:rv64-abi",
+      "pass": true
+    },
+    {
+      "check": "cross_input:rv64-abi",
+      "pass": true
+    },
+    {
+      "check": "cross_object:rv64-abi",
+      "pass": true
+    },
+    {
+      "check": "actual_riscv_object:rv64-abi",
+      "pass": true
+    },
+    {
+      "check": "actual_width_probe:rv64-abi",
+      "pass": true
+    },
+    {
+      "check": "cross_command:rv64-contract",
+      "pass": true
+    },
+    {
+      "check": "cross_input:rv64-contract",
+      "pass": true
+    },
+    {
+      "check": "cross_object:rv64-contract",
+      "pass": true
+    },
+    {
+      "check": "actual_riscv_object:rv64-contract",
+      "pass": true
+    },
+    {
+      "check": "cross_expected_four_commands",
+      "pass": true
+    },
+    {
+      "check": "no_execution_or_fallback",
+      "pass": true
+    },
+    {
+      "check": "qualified_shape_union",
+      "pass": true
+    },
+    {
+      "check": "width_vs_aperture_explicit",
+      "pass": true
+    },
+    {
+      "check": "planner_wire_integration_oracle",
+      "pass": true
+    }
+  ],
+  "consistency_check_count": 84,
+  "findings": [],
+  "resolved_findings": [
+    {
+      "id": "P03-R01",
+      "severity": "F1",
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "finding": "The first wording could conflate 64-bit ISA address representation with the narrower actual device memory aperture.",
+      "resolution": "Header, manifest and specification now name representation width explicitly, cite the inherited 48-bit RV64 memory width, and require trusted allocation/profile mapping validation before any future dispatch. Boundary encoding tests do not assert physical validity."
+    },
+    {
+      "id": "P03-R02",
+      "severity": "F1",
+      "confidence": "high",
+      "evidence_type": "missing-test",
+      "finding": "Separate planner-field and encoder-byte tests could miss a planner that discarded successful encoded argument bytes.",
+      "resolution": "The successful suballocation test now compares the entire returned 56-byte plan block with an independent literal containing nonzero offsets and actual checked addresses."
+    }
+  ],
+  "static_findings_checked": [
+    "Dimension and byte multiplication reject overflow before use; supported tuple checks prevent overflow in fixed encoder span calculations.",
+    "Offset and span checks use subtraction after ordered bounds checks; base-plus-offset rejects addition overflow. Full allocation and selected range both fit the declared representation.",
+    "Aliasing uses inclusive endpoints only after proven nonzero representable ranges, so endpoint additions cannot wrap. All three accesses are pairwise disjoint; adjacent slices are allowed.",
+    "Repeated allocation IDs require consistent metadata. Device identity and access are checked independently of allocation-ID equality. Registry metadata and profile flags are explicitly trusted caller attestations, not authentication.",
+    "Both output objects are initialized locally and published only after every validation/encoding stage succeeds. All failure paths preserve caller output.",
+    "All eleven argument fields have explicit widths/offsets; 56-byte size and eight-byte alignment are statically asserted. Encoder emits each byte explicitly and does not serialize host pointers, native padding or size_t.",
+    "Exact compact layouts, strides, six format/shape tuples, positive-zero initial accumulation, no transpose/batching and exact bounded profile agree across source, manifest and design.",
+    "All successful plans retain execution_available=false. Unsupported families are explicitly unavailable. No runtime symbols, installed headers, install rule, production kernel or RTL/model source is changed.",
+    "Ownership/async completion semantics are future-wrapper obligations; the pure planner neither owns nor releases resources and cannot certify actual queue, transfer or lifetime safety."
+  ],
+  "not_run_by_this_reviewer": [
+    "Focused compiler/test execution (independent tester receipt inspected instead)",
+    "Cross compiler invocation (author receipt, tool/dependency/input/object hashes inspected instead)",
+    "Full offline repository suite on frozen final implementation",
+    "GPU or RTL arithmetic/runtime dispatch",
+    "Physical FPGA, vendor integration or silicon"
+  ],
+  "required_before_publication": [
+    "Freeze the exact implementation source and preserve a source-identity mapping for the working-tree receipts.",
+    "Run the planned full offline suite and governance checks on that frozen source; record their actual outcome separately.",
+    "Update P03 status to in_progress with source-only scope; P03-A02/A03 remain pending and P03 remains incomplete."
+  ],
+  "next_development": "P03-T02 must add the reviewed matching kernel reader/adapter, trusted allocation registry, actual capability/profile binding, retained asynchronous lifetimes, dispatch/reference checks and cleanup/error tests before execution availability."
+}

@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/wgmma_audit",
+  "role": "independent validator/API reviewer and test author; did not implement validator",
+  "reviewed_revision": "359a8c007f450a8146540f795cb576b29818fa03",
+  "reviewed_worktree_dirty": true,
+  "scope": "New experimental internal operator contract, checked host planner, explicit byte encoder, manifest and specification; no GPU or runtime execution",
+  "impact_class": "R3 (conservative new operator/argument contract classification)",
+  "outcome": "pass",
+  "findings": [],
+  "resolved_findings": [
+    {
+      "description": "ISA/representation width must be distinguished from narrower physical addressability and actual mapped allocation extents",
+      "resolution": "Header, manifest and specification now explicitly separate the limits and require trusted caller registry/addressability checks before future dispatch."
+    },
+    {
+      "description": "Standalone wire tests alone do not verify encoded bytes are retained in a successful MatmulPlan",
+      "resolution": "Independent literal 56-byte expected block added to the successful subview plan test with nonzero offsets."
+    }
+  ],
+  "source_files_before": [
+    {
+      "path": "sw/runtime/ai/contract.h",
+      "sha256": "c21e8742cf5dcc01e857b5b13f6ff6e159fa6ad8459bf3a475a5eed746c8abb8",
+      "size_bytes": 4535
+    },
+    {
+      "path": "sw/runtime/ai/contract.cpp",
+      "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+      "size_bytes": 10833
+    },
+    {
+      "path": "ci/project/p03_operator_manifest.json",
+      "sha256": "df08281fe186e9623d96779b2bc2485df4c9d824c88481e4896d695302759b5a",
+      "size_bytes": 7497
+    },
+    {
+      "path": "docs/designs/ai_operator_contract_v1.md",
+      "sha256": "866dba3101ae3531390341bb935e7bc3371cd812909240b452a4adec80f1464e",
+      "size_bytes": 12309
+    },
+    {
+      "path": "ci/project/test_p03_operator_contract.py",
+      "sha256": "d77f39243d71886e31216cc621654e3540b798dac5db0fd19cd01d2fe91879a1",
+      "size_bytes": 8400
+    },
+    {
+      "path": "ci/project/fixtures/p03_operator_contract_test.cpp",
+      "sha256": "2a6d96d93b267d1bf6ed72c8c107738fc26dc5be978e204595135117d41486c4",
+      "size_bytes": 20845
+    }
+  ],
+  "source_files_after": [
+    {
+      "path": "sw/runtime/ai/contract.h",
+      "sha256": "c21e8742cf5dcc01e857b5b13f6ff6e159fa6ad8459bf3a475a5eed746c8abb8",
+      "size_bytes": 4535
+    },
+    {
+      "path": "sw/runtime/ai/contract.cpp",
+      "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+      "size_bytes": 10833
+    },
+    {
+      "path": "ci/project/p03_operator_manifest.json",
+      "sha256": "df08281fe186e9623d96779b2bc2485df4c9d824c88481e4896d695302759b5a",
+      "size_bytes": 7497
+    },
+    {
+      "path": "docs/designs/ai_operator_contract_v1.md",
+      "sha256": "866dba3101ae3531390341bb935e7bc3371cd812909240b452a4adec80f1464e",
+      "size_bytes": 12309
+    },
+    {
+      "path": "ci/project/test_p03_operator_contract.py",
+      "sha256": "d77f39243d71886e31216cc621654e3540b798dac5db0fd19cd01d2fe91879a1",
+      "size_bytes": 8400
+    },
+    {
+      "path": "ci/project/fixtures/p03_operator_contract_test.cpp",
+      "sha256": "2a6d96d93b267d1bf6ed72c8c107738fc26dc5be978e204595135117d41486c4",
+      "size_bytes": 20845
+    }
+  ],
+  "source_files_stable": true,
+  "test": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "ci/project",
+      "-p",
+      "test_p03_operator_contract.py",
+      "-v"
+    ],
+    "cwd": "${SOURCE}",
+    "started_at": "2026-11-18T07:05:41.445750+00:00",
+    "elapsed_seconds": 1.5315034039995226,
+    "exit_code": 0,
+    "tests": 12,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "compiler_execution": "Real C++17 host compilation with -Wall -Wextra -Werror and UBSan; eight native host groups plus four manifest checks",
+    "log": {
+      "path": "p03-independent-host-tests.log",
+      "sha256": "cf4c14a07a6c602dba9979c4fadae04d340e793573c450d8070d0fa0c1df536a",
+      "size_bytes": 2299
+    }
+  },
+  "proofs": [
+    "Six dtype/shape pairs match the independently read P02 ordinary WMMA fixture union; unsupported dimension cross products reject.",
+    "Both entry points construct output locally and publish only after success; rejection tests check unchanged output storage.",
+    "Dimension/byte multiplication and device base+offset addition reject overflow; full allocation and accessed ranges are checked without overflowing exclusive endpoints.",
+    "Access, device/allocation identity, compact layout/strides, pairwise address alias, alignment, exact profile and unknown values reject explicitly.",
+    "Literal independent RV32/RV64 byte arrays check wire offsets and endianness; valid last-address range and crossing rejection are exercised.",
+    "Plans retain execution_available=false; other operator families are explicitly unavailable; no installed ABI, device launches or fallback are introduced."
+  ],
+  "not_run": [
+    "GPU arithmetic or runtime queue/transfer execution",
+    "Physical hardware",
+    "Actual RV32/RV64 cross compilation by this reviewer (assigned separately)"
+  ],
+  "verdict": "Land for source-level P03 contract scope after separate final integration review; no P03-A02/A03 or hardware claim."
+}

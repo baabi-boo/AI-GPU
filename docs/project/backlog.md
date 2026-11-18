@@ -20,7 +20,7 @@ transactions with observed waits. The corrected original-packet verifier checked
 1,103 files against the independently supplied report digest. Independent
 engineering and publication-integrity reviews support the bounded acceptance.
 
-**P03-T01 is implemented; next bounded task: P03-T02 — native execution.**
+**P03-T01 is complete with [source-level A01 acceptance](evidence/p03-operators/acceptance.json); next bounded task: P03-T02 — native execution.**
 The [manifest](../../ci/project/p03_operator_manifest.json),
 [checked host planner](../../sw/runtime/ai/contract.h) and
 [argument contract](../designs/ai_operator_contract_v1.md) cover six proven
@@ -224,7 +224,7 @@ remains an unqualified candidate until its selected configuration earns evidence
 P02-T01 is complete with reviewed source-level P02-A01 evidence. P02-A02 has
 accepted full-processor ordinary WMMA arithmetic/layout and API rejection
 evidence. P02-T02 is complete with independently reviewed A03 acceptance for the
-bounded WGMMA execution and protocol evidence. P03-T01 is implemented and
+bounded WGMMA execution and protocol evidence. P03-T01 is complete with source-level A01 acceptance and
 P03 is `in_progress`; A02/A03 still require actual operator execution and lifecycle
 evidence. Detailed work packages remain in the phase guides.
 
@@ -232,7 +232,7 @@ evidence. Detailed work packages remain in the phase guides.
 |---|---|---|---|
 | **P02-T01 — Arithmetic contract — complete** | Reviewed v1 FP16/BF16-to-FP32 semantics, runnable T4 application profile, 98 independent arithmetic fixtures and 20 layout fixtures; frozen comparisons and inherited tolerances preserved. | P00 plus accepted P01-A01/A02; compute architecture lead | [P02-A01 source evidence](evidence/p02-numerics/acceptance.json) |
 | **P02-T02 — Arithmetic and concurrency proof — complete** | Ordinary WMMA and bounded WGMMA native-unit/full-processor arithmetic, metadata witness, directed pressure and declared parity evidence are independently reviewed and accepted. | T01; verification lead | [P02-A02 accepted](evidence/p02-wmma/acceptance.json); [P02-A03 accepted](evidence/p02-wgmma/processor/acceptance.json) |
-| **P03-T01 — Operator contract — implemented** | Versioned manifest, exact six format/shape signatures, checked descriptor planner, 56-byte argument encoding, explicit unavailable categories and required ownership/completion rules; source-level validation only. | P02; kernel and runtime lead | P03-A01 |
+| **P03-T01 — Operator contract — complete** | Versioned manifest, exact six format/shape signatures, checked descriptor planner, 56-byte argument encoding, explicit unavailable categories and required ownership/completion rules; source-level validation only. | P02; kernel and runtime lead | P03-A01 |
 | **P03-T02 — Operator implementations and lifetime tests** | Reuse inherited kernels; independently verify each advertised operator, dispatch, bounds, queue/event lifetime and failure cleanup. | T01; kernel and runtime lead | P03-A02, P03-A03 |
 | **P04-T01 — Fixed tiny model** | Freeze a redistributable model or deterministic generator, hashes, inputs, licenses and layer/reference outputs; map every operation to the accepted library. | P03; model runtime lead | P04-A01 |
 | **P04-T02 — Native model execution** | Compose the fixed model, compare intermediates/final output, and retain device-dispatch and transfer traces with allowed host work explicit. | T01; model runtime lead | P04-A02, P04-A03 |

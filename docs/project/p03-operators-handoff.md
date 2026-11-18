@@ -1,6 +1,7 @@
 # P03 native operator contract handoff
 
-P03 is `in_progress`. P03-T01 implements an internal operator manifest, checked
+P03 is `in_progress`. **P03-T01 is complete and P03-A01 is accepted at source scope**
+through the [reviewed evidence](evidence/p03-operators/acceptance.json). It implements an internal operator manifest, checked
 C++17 planner and explicit device-argument encoder. P02 is complete with its
 independently reviewed numerical and concurrency evidence; P01-A03 vendor
 integration remains blocked and required before P07.
@@ -49,8 +50,12 @@ The test module compiles the real planner under C++17 with strict warnings and
 UBSan, executes positive and negative groups, compares literal independent ABI
 bytes, and cross-checks the manifest against the accepted P02 shape/profile
 inventory. It needs a native compiler, not a GPU build. Target compilation and
-host execution are distinct observations; formal source-bound results are
-recorded after the implementation is frozen and independently reviewed.
+host execution are distinct observations; the [evidence packet](evidence/p03-operators/README.md) records exact scope.
+Clean source `6367ce34e12915e12271207b207f93bd4d391869` passed all **1636 tests**,
+with zero failures/errors/skips in 397.573 seconds. The identical tree is
+published as `04c3cbf42c68e3b116051343083b86119f67f53d`. Four actual RV32/RV64
+object compilations and independent review are retained with their original
+pre-freeze source/file identities; no GPU execution is inferred.
 
 Only P03-A01 source-level contract acceptance can follow from these checks.
 P03-A02 needs actual operator launches and independent arithmetic comparisons;
