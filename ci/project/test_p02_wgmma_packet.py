@@ -11,6 +11,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
+from baseline_inventory import SOURCE_INPUTS
 import p02_wgmma_packet as packet
 import p02_wgmma_matrix as matrix
 import p02_wgmma_records as records
@@ -55,7 +56,8 @@ class PacketFixture:
         if witness:
             r["witness_parser"] = originals[packet.WITNESS_PARSER]
         self.source = {"checkout": {"revision": r["source_revision"], "tree": "2" * 40, "dirty": False,
-            "changed_paths": [], "untracked_paths": [], "blockers": [], "inputs": [originals["configure"]]},
+            "changed_paths": [], "untracked_paths": [], "blockers": [],
+            "inputs": [row(name, (packet.ROOT / name).read_bytes()) for name in SOURCE_INPUTS]},
             "files": [originals[name] for name in sorted(originals)]}
         for name in ("before", "after"):
             r["source_" + name] = self.snapshot("source-" + name, self.source)
@@ -217,6 +219,9 @@ class PacketFixture:
                                             if item["path"] not in retained]
         for name in retained:
             (self.root / name).unlink()
+        self.refresh_source_snapshots()
+
+    def refresh_source_snapshots(self):
         contents = (json.dumps(self.source, indent=2) + "\n").encode()
         for key, value in self.report.items():
             if key.startswith("source_") and type(value) is dict:
@@ -246,6 +251,69 @@ class PacketTests(unittest.TestCase):
         self.assertTrue(all(result["unavailable_binary_bodies"].values()))
         for key in ("acceptance_claimed", "qualifies_P02_A03", "phase_complete"):
             self.assertIs(result[key], False)
+
+    def test_real_checkout_inventory_keeps_unused_blackbox_identity_explicit(self):
+        fixture = self.fixture()
+        inputs = {item["path"]: item for item in fixture.source["checkout"]["inputs"]}
+        files = {item["path"] for item in fixture.source["files"]}
+        self.assertEqual(set(inputs), {"VERSION", ".gitmodules", "configure", "config.mk.in",
+            "VX_config.toml", "VX_types.toml", "ci/gen_config.py", "ci/blackbox.sh"})
+        self.assertEqual(set(inputs) - files, {"ci/blackbox.sh"})
+        self.assertEqual(len(set(inputs) & files), 7)
+        self.assertFalse((fixture.root / "artifacts/source/ci/blackbox.sh").exists())
+        result = packet.verify_packet(fixture.root)
+        self.assertEqual(result["checkout_inputs_outside_execution_inventory"], [inputs["ci/blackbox.sh"]])
+        self.assertTrue(any("ci/blackbox.sh" in text and "body" in text for text in result["limitations"]))
+
+    def test_checkout_inventory_rejects_missing_extra_replaced_and_duplicate_inputs(self):
+        fixture = self.fixture()
+        inputs = fixture.source["checkout"]["inputs"]
+        unexpected = row("ci/unexpected-input.sh", b"unexpected checkout input")
+        cases = [("missing " + item["path"], [other for other in inputs if other["path"] != item["path"]],
+                  "checkout input inventory") for item in inputs]
+        cases += [("extra", inputs + [unexpected], "checkout input inventory"),
+                  ("replaced", inputs[:-1] + [unexpected], "checkout input inventory"),
+                  ("duplicate", inputs + [inputs[0]], "checkout inputs repeats a path")]
+        for name, changed, message in cases:
+            with self.subTest(change=name):
+                fixture.source["checkout"]["inputs"] = changed
+                fixture.refresh_source_snapshots()
+                self.rejects(fixture, message)
+
+    def test_nonallowlisted_checkout_inputs_require_execution_identities(self):
+        fixture = self.fixture()
+        files = fixture.source["files"]
+        for name in SOURCE_INPUTS:
+            if name == "ci/blackbox.sh":
+                continue
+            with self.subTest(source=name):
+                fixture.source["files"] = [item for item in files if item["path"] != name]
+                fixture.refresh_source_snapshots()
+                self.rejects(fixture, "checkout input lacks execution source identity: " + name)
+
+    def test_all_checkout_overlaps_reject_digest_and_size_drift(self):
+        fixture = self.fixture()
+        original = copy.deepcopy(fixture.source)
+        for name in SOURCE_INPUTS:
+            for field in ("sha256", "size_bytes"):
+                with self.subTest(source=name, field=field):
+                    fixture.source = copy.deepcopy(original)
+                    item = next(item for item in fixture.source["checkout"]["inputs"] if item["path"] == name)
+                    if name == "ci/blackbox.sh":
+                        fixture.source["files"].append(copy.deepcopy(item))
+                    item[field] = "0" * 64 if field == "sha256" else item[field] + 1
+                    fixture.refresh_source_snapshots()
+                    self.rejects(fixture, "checkout/source input " + name)
+
+    def test_matching_blackbox_execution_identity_does_not_require_unused_body(self):
+        fixture = self.fixture()
+        blackbox = next(item for item in fixture.source["checkout"]["inputs"] if item["path"] == "ci/blackbox.sh")
+        fixture.source["files"].append(copy.deepcopy(blackbox))
+        fixture.refresh_source_snapshots()
+        fixture.save()
+        result = packet.verify_packet(fixture.root)
+        self.assertEqual(result["checkout_inputs_outside_execution_inventory"], [])
+        self.assertFalse((fixture.root / "artifacts/source/ci/blackbox.sh").exists())
 
     def test_complete_parity_failure_is_valid_evidence_without_qualification(self):
         fixture = self.fixture(full=True, witness=True, parity_failure=True)
@@ -383,6 +451,7 @@ class PacketTests(unittest.TestCase):
 
     def test_required_consumer_and_helper_source_chains_cannot_be_omitted(self):
         required = ("tests/regression/p02_wgmma/main.cpp", "tests/regression/p02_wgmma/Makefile",
+                    "tests/regression/p02_wgmma/fixtures.h",
                     "tests/regression/sgemm_tcu_wg/main.cpp", "tests/regression/sgemm_tcu_wg/common.h",
                     "tests/regression/sgemm_tcu_wg/kernel.cpp", "tests/regression/sgemm_tcu_wg/Makefile",
                     "tests/regression/sgemm_tcu_wg_sp/main.cpp", "tests/regression/sgemm_tcu_wg_sp/common.h",

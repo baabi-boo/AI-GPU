@@ -21,7 +21,7 @@ from pathlib import Path
 import re
 import sys
 
-from baseline_inventory import _digest, hash_artifacts
+from baseline_inventory import SOURCE_INPUTS, _digest, hash_artifacts
 from baseline_packet_io import (PacketReader, _json_float, _json_integer,
                                 _reject_constant, _relative_path, _unique_keys)
 import p02_wgmma_matrix as matrix
@@ -40,6 +40,8 @@ HELPERS = tuple("ci/project/" + name + ".py" for name in (
     "p02_wgmma_dependencies", "p02_wgmma_fixture_oracle", "p02_wgmma_matrix",
     "p02_wgmma_records", "preflight"))
 WITNESS_PARSER = "ci/project/p02_wgmma_witness.py"
+# The shared checkout inventory includes blackbox.sh, which this runner does not invoke.
+CHECKOUT_ONLY_INPUTS = ("ci/blackbox.sh",)
 # The v1 runner retains these direct consumer inputs unconditionally. Declare
 # the minimum here: matching packet snapshots cannot make a required file
 # optional by omitting its entire identity and retained-body chain.
@@ -161,6 +163,20 @@ def bind_copies(reader, values, original, prefix, expected):
     return {name: copied[prefix + name] for name in expected}
 
 
+def bind_checkout_inputs(values, files):
+    inputs = inventory(values, "checkout inputs")
+    same(sorted(inputs), sorted(SOURCE_INPUTS), "checkout input inventory")
+    outside = []
+    for path, row in inputs.items():
+        if path in files:
+            same(row, files[path], "checkout/source input " + path)
+        else:
+            require(path in CHECKOUT_ONLY_INPUTS,
+                    "checkout input lacks execution source identity: " + path)
+            outside.append(row)
+    return sorted(outside, key=lambda row: row["path"])
+
+
 def verify_source(reader, report, variants):
     before = reader.json(report["source_before"])
     require(type(before) is dict and set(before) == {"checkout", "files"}, "invalid source snapshot")
@@ -189,8 +205,7 @@ def verify_source(reader, report, variants):
         same(report[key]["path"], "snapshots/" + name + ".json", "source snapshot path")
         same(reader.json(report[key]), before, "source stability " + key)
     files = inventory(before["files"], "source files")
-    for row in inventory(checkout["inputs"], "checkout inputs").values():
-        same(row, files.get(row["path"]), "checkout/source input")
+    checkout_only = bind_checkout_inputs(checkout["inputs"], files)
     helpers = inventory(report["loaded_helpers"], "loaded helpers")
     same(sorted(helpers), sorted(HELPERS), "loaded helper closure")
     saved = set(HELPERS + (matrix.MANIFEST, WITNESS_PARSER) + matrix.CORPUS + matrix.COPIED
@@ -204,7 +219,8 @@ def verify_source(reader, report, variants):
         same(report["witness_parser"], files.get(WITNESS_PARSER), "witness parser identity")
     for path, row in helpers.items():
         same(row, files.get(path), "loaded helper source " + path)
-    return files, bind_copies(reader, report["source_snapshots"], files, "artifacts/source/", saved)
+    retained = bind_copies(reader, report["source_snapshots"], files, "artifacts/source/", saved)
+    return files, retained, checkout_only
 
 
 def verify_tools(reader, report, backends):
@@ -374,7 +390,7 @@ def verify_packet(packet, *, report_sha256=None, require_witness=False):
             names = [case["id"] for case in item["cases"]]
             require(names and len(names) == len(set(names)) and set(names) <= set(spec["cases"]), "invalid case inventory")
             same(names, [name for name in spec["cases"] if name in names], "case order")
-        source_files, sources = verify_source(reader, report, variants)
+        source_files, sources, checkout_only = verify_source(reader, report, variants)
         same(report["manifest"], source_files[matrix.MANIFEST], "manifest identity")
         same(report["manifest"]["sha256"], matrix.MANIFEST_SHA256, "frozen manifest")
         same(reader.json(sources[matrix.MANIFEST]), manifest, "retained manifest")
@@ -497,12 +513,14 @@ def verify_packet(packet, *, report_sha256=None, require_witness=False):
                            "checked_output_words": 1024 * count, "commands": len(commands), "performance_pairs": len(paired["pairs"]),
                            "witness_case_executions": witnessed},
                 "unavailable_binary_bodies": unavailable, "verified_file_count": len(reader.inventory()),
+                "checkout_inputs_outside_execution_inventory": checkout_only,
                 "verifier_sources": hash_artifacts(ROOT, sorted(set(HELPERS + (WITNESS_PARSER,)))) + [
                     {"path": "ci/project/p02_wgmma_packet.py", "sha256": _digest(Path(__file__))[0],
                      "size_bytes": Path(__file__).stat().st_size}],
                 "acceptance_claimed": False, "qualifies_P02_A03": False, "phase_complete": False,
                 "limitations": ["Hashes establish consistency, not independent authenticity without an external trust anchor.",
                     "Only retained bodies are checked; original tools, dependencies, omitted binaries and source bodies are identity-only evidence.",
+                    "Only the unused ci/blackbox.sh may lack an execution-source identity; its checkout identity is recorded without requiring or verifying its body.",
                     "Generated native metadata presence is checked; native hierarchy semantics and disassembly require independent review.",
                     "No GPU execution, binary replay, publication normalization, or automatic acceptance is performed."]}
 
