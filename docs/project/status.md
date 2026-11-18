@@ -1,13 +1,17 @@
 # Current project status
 
-**P02-A01 is accepted at source scope, and P02-A02 is accepted for full-processor
-ordinary WMMA arithmetic and layout checks.** The
+**P02 is complete with independently reviewed A01–A03 evidence.** The
 [contract record](evidence/p02-numerics/acceptance.json) retains the reviewed
 numerical contract; the [ordinary WMMA record](evidence/p02-wmma/acceptance.json)
 binds the matching full SimX/native processor results and explicit API rejection
-checks to their tested source. P02-T01 is complete. P02-T02 remains active for
-P02-A03's WGMMA synchronization, metadata, multiple-warp and backpressure proof.
-P02 remains `in_progress`, and P03 remains `not_started`.
+checks to their tested source. The
+[WGMMA acceptance](evidence/p02-wgmma/processor/acceptance.json) adds the
+completed bounded native-unit and full-processor arithmetic, metadata,
+concurrency/backpressure and declared parity proof after independent engineering
+and publication-integrity review. P02-T01 and P02-T02 are complete. **P03 is
+`in_progress`** with an implemented native operator contract, checked host
+planner and explicit argument encoder. Device execution and lifetime gates
+remain open; see the [P03 handoff](p03-operators-handoff.md).
 
 P02 entered development through the user-directed staged-entry decision.
 P01-A01 and P01-A02 are accepted, while P01 itself remains blocked on vendor
@@ -17,8 +21,8 @@ At the accepted historical revision, all six frozen numerical executions pass
 from a clean GPU source checkout. The fresh generated FP16 SimX build and
 supplemental full-AFU integer `xrtsim` smoke also pass. Independent reviews accept
 the clean-build and native numerical packets. Qualified vendor tools/platform
-are still missing for P01-A03. P00 remains complete, P02 is in progress,
-and P03–P11 remain `not_started`.
+are still missing for P01-A03. P00 and P02 are complete, P03 is in progress,
+and P04–P11 remain `not_started`.
 [roadmap.json](roadmap.json) remains authoritative for phase state and evidence;
 the linked reports define the exact accepted scope.
 
@@ -28,8 +32,9 @@ the linked reports define the exact accepted scope.
 |---|---|---|
 | P00 — project foundation | `complete` | Its three source-level acceptance gates and verified default-branch delivery remain preserved |
 | P01 — reproducible baseline | `blocked` | A01 clean-build and A02 six-case numerical reports accepted; A03 vendor integration is still required before P07 |
-| P02 — tensor numerical contract | `in_progress` | T01 complete; A01 source contract and A02 ordinary WMMA processor checks accepted; T02 remains active for A03 WGMMA concurrency |
-| P03–P11 | `not_started` | Later software, hardware and silicon gates have not been earned |
+| P02 — tensor numerical contract | `complete` | A01 source contract, A02 ordinary WMMA and A03 bounded WGMMA evidence accepted after required review; T01/T02 complete |
+| P03 — native AI operator library | `in_progress` | T01 input/argument contract implemented; launch, arithmetic and lifecycle qualification remain open |
+| P04–P11 | `not_started` | Later model, framework, hardware and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
 
@@ -37,7 +42,114 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — full-processor ordinary WMMA
+## Latest continuation — native operator contract
+
+P03-T01 implements the [versioned manifest](../../ci/project/p03_operator_manifest.json),
+[design contract](../designs/ai_operator_contract_v1.md) and internal C++17
+[planner/encoder](../../sw/runtime/ai/contract.h). The only contract signatures
+are ordinary dense FP16/BF16-to-FP32 matmul at `(8,4,8)`, `(8,4,16)` and
+`(16,8,16)`, with row-major A, column-major B, row-major D and initial C=+0.
+The implementation validates checked sizes, exact strides, tracked allocation
+bounds/access, device/profile identity, representation width and nonaliasing.
+Failures preserve caller output. All plans explicitly report execution unavailable.
+
+The new 56-byte argument schema is internal and is not compatible with the
+existing regression kernel argument block. P03-T02 must supply its actual
+reader/adapter, managed runtime wrapper and retained resource lifetimes before
+launching it. No installed runtime ABI, P02 numerical contract, protected asset,
+GPU datapath or simulator has changed. [The handoff](p03-operators-handoff.md)
+records validation scope and the next bounded work.
+
+The previous unfinished WGMMA publication is also reconciled. Its four immutable
+archives are unchanged; a final W10F review replaces the stale active mapping,
+while old captures, original failed audits and unfinished historical agent
+approvals remain explicit. The new independent
+[closure review](evidence/p02-wgmma/processor/reviews/closure-review.md) accepts
+P02-A03 using the retained actual execution, not a fresh GPU-run claim.
+
+## Completed WGMMA processor qualification
+
+The [processor packet](evidence/p02-wgmma/processor/README.md) and
+[WGMMA handoff](p02-wgmma-handoff.md) retain a finished, passing formal run at
+clean source `4af2307e57202c1269e20f893267a5583ad3cba0`, tree
+`42e5d6f2c9c0c2035c4d3ec8c86125e8cca45192`. The original report SHA-256 is
+`b5b136bb3144613d7c32c47a888f744e864d9dab737c19e954f9da7dabcadb78`.
+The source stayed clean and stable throughout execution. The final results are:
+
+| Result | Demonstrated scope |
+|---|---|
+| 113 successful commands; 12 backend/configuration builds | Six frozen configurations on full SimX and native processor RTL; matching effective configuration and retained compiler/input provenance |
+| 24 case executions, 48 launches and 24,576 exact output-word comparisons passed | Two signature cases per configuration/backend, each with two poisoned launches; dense FP16/BF16 SS/RS, FP16 SS row-major A and bounded sparse FP16 SS |
+| Both sparse RTL witness cases passed | 64 completed metadata transactions across four launches, all 64 with observed waits; each launch covers eight physical warps, four issue instances and two CTAs |
+| All 12 performance pairs passed | Exact retired-instruction equality and the unchanged 5% launch-delta cycle rule; maximum observed difference 1.356484% |
+| Corrected original-packet CLI passed; 1,103 files verified | Independent report-digest anchor, retained-body/input/command consistency and reparsed arithmetic, witness and parity results; no binary replay |
+
+Each sparse case records 723 and 651 slot-wait cycles on its two launches.
+These are sums across scoreboard slots, not elapsed launch time. Per-slot
+reservation, real XREG0 wait, matching release and eventual issue establish
+ordering. The reviewed sparse binary places the load and dependent WGMMA at
+adjacent PCs; the scoreboard records supply the dependency proof. Auxiliary
+cache/stall counters retain their observed differences: the frozen parity
+predicates are exact instructions and the cycle bound, not equality or causal
+attribution of every auxiliary counter.
+
+The [historical native unit](evidence/p02-wgmma/unit/README.md) retains its
+original clean execution at `9006939aa123452b198bc0987e34aae8fab45fdd`: nine
+commands, eight groups, 392 accepted/committed transactions and 3,072 checked
+arithmetic words. Independent bridge review confirms all 417 named RTL/harness
+paths remain unchanged at the processor source. Dense NRC16 RS supplies the
+causal blocked-result/execute/dispatch pressure observation; its following eight
+stable cycles do not each prove that full conjunction. Forced sparse-compute
+pressure remains unclaimed. Unit totals are separate from processor totals.
+
+The corrected verifier is published as
+`359a8c007f450a8146540f795cb576b29818fa03`, equivalent to tested local
+`5e3b74fd569169ad921315223c121a037ae656b7`, tree
+`97116818da872f43f952a351eb6616fc327be438`. It requires exactly eight generic
+checkout inputs and strict equality for every execution-inventory overlap. Only
+unused `ci/blackbox.sh` may remain checkout-only, with its identity explicitly
+reported and its body unverified. Mandatory consumer source copies and helper
+closure remain required. The earlier verifier's checkout/source mismatch is
+retained as a failure; the original execution packet was unchanged.
+
+Tooling results retain separate source identities: 1,602 tests passed at local
+implementation `7360bba` (the same tree later published as `4af2307`), and the
+earlier verifier tree published as `ad94b69` passed 1,619 tests before the known
+checkout-input correction. The corrected verifier's 22 focused tests passed.
+Its actual hosted full suite at published `359a8c0` passed **1,624 tests in
+312.155 seconds**, with zero failures, errors or skips. The
+[independent hosted review](evidence/p02-wgmma/processor/reviews/w10d.md)
+verified the decoded job log and source identity for
+[Governance run 44241512544](https://github.com/baabi-boo/AI-GPU/actions/runs/44241512544).
+This is a fresh observed full-suite result, not a sum of earlier test counts.
+None of those tooling checks is GPU execution or an automatic acceptance decision.
+
+Execution source `4af2307` also completed
+[general CI run 44235141936](https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936)
+with all 42 jobs passing. Corrected-source
+[general CI run 44241512594](https://github.com/baabi-boo/AI-GPU/actions/runs/44241512594)
+was still in progress at the last retained observation; no complete pass is
+claimed for that workflow or transferred to a later documentation revision.
+
+The first formal attempt at local `7360bba` failed compilation under GCC 14.2.0
+with `-Werror=dangling-reference`, before any case, launch or word comparison.
+A separate Clang 20.1.8 compatibility probe also failed under the unchanged
+warning policy. The GCC 12 preparation and successful retry retain both earlier
+failures; see [host compiler compatibility](developer-guide.md#host-compiler-compatibility-for-wgmma).
+
+Independent engineering and publication-integrity reviews support the
+[P02-A03 acceptance](evidence/p02-wgmma/processor/acceptance.json), record
+`p02-a03-wgmma-4af2307-359a8c0`, completing P02-T02 and P02. The original verifier
+result remains `independent_review_required` with its acceptance and
+phase-completion flags false; the separate reviewed acceptance record supplies
+the decision. Native TFR/STD processor arithmetic retains integer
+DPI helpers and bypasses the AFU. No full-AFU, vendor `hw_emu`, physical FPGA,
+synthesis/PPA or silicon result follows. P01-A03 remains blocked. P03 was
+`not_started` at that acceptance checkpoint; the newer contract work is above.
+
+<a id="latest-continuation--full-processor-ordinary-wmma"></a>
+
+## Earlier continuation — full-processor ordinary WMMA
 
 Formal processor and API validation used clean source
 `58faf6d68879e1db92122df493172eab59c02458`, tree
@@ -92,11 +204,9 @@ those compatibility results separate from exact-bit A02 qualification.
 An [independent recovery review](evidence/p02-wmma/recovery-review.json) verified
 the original and published artifacts before accepting the bounded A02 scope.
 
-P02-T02 stays active. The next bounded acceptance work is to freeze and independently review one
-WGMMA concurrency matrix for metadata dependencies, synchronization, multiple
-warps and backpressure, then run matching SimX/native RTL with applicable
-model-parity evidence or a documented applicability limit. A02 does not close
-P02, start P03 or change the blocked P01-A03 vendor obligation.
+At that checkpoint, P02-T02 stayed active for the subsequent WGMMA concurrency
+matrix. The completed execution is recorded above. The ordinary A02 result
+alone did not close P02, start P03 or change the blocked P01-A03 obligation.
 
 ## Earlier continuation — P02 contract and executable fixtures
 
@@ -231,8 +341,9 @@ The local shim uses modeled host/device memory and retains DPI-assisted integer
 multiply/divide. STD floating-point and TFR tensor claims are limited to each
 retained configuration; local AFU/unit evidence does not qualify vendor
 loading/platform semantics, physical cache coherence or physical hardware.
-P00 remains `complete`, P01-A01/A02 retain their accepted historical reports,
-P01-A03 remains blocked on vendor `hw_emu`, and P02–P11 remain `not_started`.
+At that earlier checkpoint, P00 was `complete`, P01-A01/A02 retained their
+accepted reports, P01-A03 was blocked on vendor `hw_emu`, and P02–P11 were
+`not_started`. The later staged entry and P02 completion are recorded above.
 
 <a id="latest-tooling-continuation--compiler-records"></a>
 
@@ -268,9 +379,10 @@ the original local commit bytes and exact remote tree/parent verification.
 
 Use the [compiler-record handoff](p01-compiler-records-handoff.md) for review dispositions,
 delivery state and the continuation's actual assignment record. This work
-preserves the accepted numerical packets and establishes no new GPU, vendor
-`hw_emu` or physical-device result. P01-A03 remains blocked and P02 remains
-`not_started`; the next bounded action remains vendor/platform qualification.
+preserved the accepted numerical packets and established no new GPU, vendor
+`hw_emu` or physical-device result. At that earlier checkpoint, P01-A03 remained
+blocked, P02 was `not_started`, and the next bounded action was vendor/platform
+qualification. The later native-development sequence is recorded above.
 
 The [completed execution ledger](p01-compiler-records-agent-execution.json)
 records 60 distinct assignments in ten logical waves. Hosted
@@ -407,9 +519,9 @@ A successful plan establishes input consistency only. It retains
 `acceptance_outcome: blocked`. The planner launches no workload and does not
 enforce the candidate's execution budget. Actual vendor compatibility, artifact
 production provenance and separately supervised execution still require review.
-This continuation establishes no new GPU execution, vendor-emulation result or
-physical measurement. P01-A01/A02 retain their accepted historical evidence;
-P01-A03 remains blocked and P02 remains `not_started`.
+That preparation continuation established no new GPU execution, vendor-emulation
+result or physical measurement. At that checkpoint, P01-A01/A02 retained their
+accepted evidence, P01-A03 remained blocked and P02 was `not_started`.
 
 ## Vendor integration tooling continuation
 
@@ -448,29 +560,28 @@ read-only planner's F1 compiler-glob follow-up and strengthens both inspectors.
 That correction does not grant a preparation candidate launch readiness or
 replace the execution runner's independent input review.
 
-The current environment still lacks the vendor executables, vendor roots and
-qualified platform/artifact packet. No vendor `hw_emu` job ran in this
-continuation. Passing tooling tests or a read-only plan does not accept P01-A03;
-all existing accepted native evidence and phase states remain unchanged.
+That vendor-tooling continuation found no vendor executables, vendor roots or
+qualified platform/artifact packet. No vendor `hw_emu` job ran, and it left the
+then-existing accepted native evidence and phase states unchanged. P01-A03
+remains blocked; tooling tests or a read-only plan cannot supply its missing run.
 
 ## Next bounded action
 
-**Continue P02-T02 with the P02-A03 WGMMA concurrency matrix.** The ordinary
-WMMA adapter and P02-A02 processor arithmetic/layout execution are implemented;
-the [WMMA handoff](p02-wmma-handoff.md) and its acceptance record bind the
-qualified scope and the reporting-child revalidation. Build deterministic
-descriptor/metadata, synchronization, multiple-warp and forced-backpressure
-witnesses, then run matching SimX/native RTL and the applicable model-parity
-cases. Preserve the reviewed numerical rules and all inherited tolerances.
-Earlier leaf stalls and API compilation do not satisfy these remaining gates.
-Follow the [P02 numerical handoff](p02-numerics-handoff.md),
-[P02 phase guide](phases/p02-tensor.md), [backlog](backlog.md), and
-[acceptance policy](acceptance.md).
+**P03-T02 — managed matmul execution and lifecycle qualification.**
+Implement a matching reader or explicit adapter for the frozen 56-byte argument
+schema, extract the ordinary WMMA kernel without changing its numerical contract,
+and add a wrapper over the existing runtime. It must query actual capabilities,
+track owned allocation metadata, bind the accepted module/profile and retain
+buffers, kernels, queues and events until completion. Then run every declared
+signature through actual SimX/native RTL launches with independent references,
+and test transfers, timeouts, failed events and cleanup. Keep unsupported operator
+families explicit. See the [P03 handoff](p03-operators-handoff.md),
+[phase guide](phases/p03-operators.md) and [backlog](backlog.md).
 
 **Parallel blocked hardware task:** P01-T05 still needs a qualified vendor
 release/platform, matching prepared `hw_emu` artifact packet and actual reviewed
 DMA/launch/completion smoke through the [vendor integration guide](p01-xrt-integration.md).
-Do not spend money, install oversized vendor tooling, claim an A03 pass or close
+Do not spend money, install oversized vendor tooling, claim a P01-A03 pass or close
 P01 without the missing evidence. This work must be completed before P07.
 
 ## Preserved P00 history

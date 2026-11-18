@@ -117,6 +117,37 @@ or `--all` unless the broad dependency set is intentionally budgeted. Catalog
 runs also require their pytest/PyYAML dependencies; install them in a dedicated
 environment using the reviewed [CI setup](../designs/continuous_integration.md).
 
+### Host compiler compatibility for WGMMA
+
+Pin the host compiler separately from the RISC-V toolchain, including its resolved
+executable, support files, runtime dependencies and final `--host-bin` aliases.
+Before a formal retry, retain a C++17 compile/link/run smoke and the failing
+`dram_sim.cpp` compile through both the direct compiler and its final alias.
+Preserve warnings, includes, defines, optimization and dependency flags; only
+compiler/output paths change in these compatibility probes.
+
+The first formal WGMMA attempt at local `7360bba` failed under GCC 14.2.0 in
+bundled fmt `core.h:1735` on `-Werror=dangling-reference`. It verified zero
+cases, launches or words; arithmetic, witness and parity were `not_run`. The
+separate Clang 20.1.8 probe failed at `format.h:4168` on
+`-Wdeprecated-literal-operator` under `-Werror`, producing no object. Preserve
+both failures with their original identities.
+
+Debian GCC `12.2.0-14+deb12u1` passed the retained C++17 smoke and direct/alias
+compile probes with the original warning policy and no warning suppression.
+The InRelease → Packages.xz → six-package SHA-256 chain and extracted compiler
+identities were checked; **InRelease signature validation was not performed**.
+This hash chain is not signature authentication, and reused runtime libraries
+remain host-dependent.
+
+The subsequent full witnessed matrix finished successfully at published source
+`4af2307e57202c1269e20f893267a5583ad3cba0`. The
+[WGMMA handoff](p02-wgmma-handoff.md) records its frozen inputs, actual results,
+resource limits, corrected original-packet verification CLI and independently
+reviewed [P02-A03 acceptance](evidence/p02-wgmma/processor/acceptance.json). Keep failed
+attempts, compiler compatibility and processor qualification separately
+attributed; a passing probe or verifier does not close an acceptance gate.
+
 ## 5. Freeze the AI baseline and run generated scripts
 
 Use separate build directories for RV32/RV64, incompatible profiles, FPGA and

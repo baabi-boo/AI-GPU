@@ -1,0 +1,142 @@
+{
+  "artifacts": [
+    {
+      "path": "evidence-bundle.json.gz",
+      "sha256": "ffc1862caf5d311e358228bb380da3da5d7b73f74b48781caac9846ea0dca344",
+      "size_bytes": 374643
+    },
+    {
+      "path": "inventory.json",
+      "sha256": "05c9b0c752efb6a575f4bbeda3c4fe25bb333185409078a27cf6221cd80536d6",
+      "size_bytes": 20987
+    },
+    {
+      "path": "selection.json",
+      "sha256": "d99b5c62a7fc89b77034c8d999aa55a1aa67cfab6a49f1529724142229083550",
+      "size_bytes": 8257
+    },
+    {
+      "path": "verification-receipts.json",
+      "sha256": "2af79a6e9d635594400e581d3fb371bfce6f1c496eff94667c09a08e73db224f",
+      "size_bytes": 4097
+    }
+  ],
+  "audit_limits": [
+    "Original-byte checking covers every selected member, not excluded binaries, tools, build trees, third-party header bodies, or all dependencies named by records.",
+    "Excluded directory entries are pruning roots; their descendants are not inventoried.",
+    "Embedded binding checks cover recognized path/hash pairs that resolve to selected members; external and deliberately excluded references are counted separately. Explicit live_file_snapshot_only observations retain their historical digest and are listed separately instead of being asserted to identify the finished file.",
+    "Private-key and signed-URL scans are bounded pattern checks, not a complete secret or redistribution-rights audit.",
+    "A completed-report marker does not certify result correctness or acceptance.",
+    "Digest consistency checks integrity against this inventory; no signature or origin authentication is established by the exporter.",
+    "Planning is a point-in-time observation. Re-run after all execution and review writers stop; build re-reads every selected input before publication.",
+    "Deterministic bytes require identical inputs, selection, helper and Python/zlib compression implementation; gzip timestamps and filenames are fixed."
+  ],
+  "binding_audit": {
+    "historical_live_file_observations": [],
+    "recognized_external_or_excluded_bindings_not_verified": 2710,
+    "recognized_original_bindings_verified": 10
+  },
+  "bundle": {
+    "expanded_sha256": "e4e6ba215bbabe8b1355e62b152d7a3c4ce284b670c2f7142bc9018057582823",
+    "expanded_size_bytes": 2910916,
+    "file_count": 22,
+    "original_total_bytes": 2699781,
+    "published_text_bytes": 2677302,
+    "sha256": "ffc1862caf5d311e358228bb380da3da5d7b73f74b48781caac9846ea0dca344",
+    "size_bytes": 374643
+  },
+  "claims": {
+    "acceptance_claimed": false,
+    "phase_complete": false,
+    "qualifies_P02_A03": false
+  },
+  "component": "processor-historical-verifier",
+  "created_at": "2026-11-18T05:18:28.278842+00:00",
+  "deferred_inputs": [],
+  "digest_policy": "original_sha256 and original_size_bytes identify the exact retained input bytes. published_sha256 and published_size_bytes identify content.encode('utf-8') after literal path-prefix substitution only. Every pre-existing digest or size inside embedded records still describes ORIGINAL bytes and is never recomputed or rewritten. Verify published members with their published fields; verifying original fields requires the retained originals. An unchanged member has equal original and published bytes, sizes, and hashes.",
+  "explicit_wgmma_source_identities": {
+    "corrected_verifier": {
+      "local_revision": "5e3b74fd569169ad921315223c121a037ae656b7",
+      "published_revision": "359a8c007f450a8146540f795cb576b29818fa03",
+      "tree": "97116818da872f43f952a351eb6616fc327be438"
+    },
+    "historical_unit": {
+      "processor_scope": false,
+      "recorded_checked_words": 3072,
+      "recorded_transactions": 392,
+      "revision": "9006939aa123452b198bc0987e34aae8fab45fdd",
+      "tree": "c815d75bcd13395618b7fbd9924bcedf6347c6c8"
+    },
+    "historical_verifier": {
+      "local_revision": "ba12d66e14771be32dbed7a67a988b839cd41e23",
+      "published_revision": "ad94b696409d4d05c1063541ac014478f90c3e71",
+      "tree": "14777b89cabaf7656accceeb846f128fb9bca542"
+    },
+    "implementation_validation": {
+      "local_revision": "7360bbadf4f9dcbd80a3f326c91a1c9cd72ffa7b",
+      "published_revision": "4af2307e57202c1269e20f893267a5583ad3cba0",
+      "same_tree": "42e5d6f2c9c0c2035c4d3ec8c86125e8cca45192"
+    },
+    "processor_execution": {
+      "revision": "4af2307e57202c1269e20f893267a5583ad3cba0",
+      "source_dirty": false,
+      "source_stable": true,
+      "tree": "42e5d6f2c9c0c2035c4d3ec8c86125e8cca45192"
+    }
+  },
+  "exporter": {
+    "changed": false,
+    "retained_original_path": "package_wgmma_evidence.py",
+    "sha256": "591a5e769f318a1889a4de2706238c3ab1b82156fe97a5c9e0d803495b0ec8cd",
+    "size_bytes": 31718
+  },
+  "formal_completed_report_original_sha256": "b5b136bb3144613d7c32c47a888f744e864d9dab737c19e954f9da7dabcadb78",
+  "limits": {
+    "compressed_bundle_bytes": 4194304,
+    "expanded_bundle_bytes": 100663296,
+    "member_bytes": 16777216,
+    "members": 4096,
+    "total_original_bytes": 67108864,
+    "total_published_bytes": 67108864
+  },
+  "missing_required_inputs": [],
+  "outcome": "pass",
+  "schema_version": 1,
+  "scope": "Immutable original partial-verifier failure, captured running report, reproducer and pre-fix regression with exact historical code snapshots. No completed execution claim attaches to the captured running report.",
+  "selection": {
+    "copy_byte_identical": true,
+    "original_sha256": "d99b5c62a7fc89b77034c8d999aa55a1aa67cfab6a49f1529724142229083550",
+    "published_copy": "selection.json",
+    "retained_original_path": "publication-drafts/processor-historical-verifier-selection.json"
+  },
+  "separate_components_required_for_union_coverage": true,
+  "source_identity": null,
+  "state": "finished",
+  "verification": {
+    "all_four_commands_exit_zero": true,
+    "embedded_original_digests_unchanged": true,
+    "original_and_published": {
+      "acceptance_claimed": false,
+      "bundle_sha256": "ffc1862caf5d311e358228bb380da3da5d7b73f74b48781caac9846ea0dca344",
+      "original_members_verified": 22,
+      "published_members_verified": 22
+    },
+    "plan_hash_equals_built_hash": true,
+    "published_only": {
+      "acceptance_claimed": false,
+      "bundle_sha256": "ffc1862caf5d311e358228bb380da3da5d7b73f74b48781caac9846ea0dca344",
+      "original_members_verified": 0,
+      "published_members_verified": 22
+    },
+    "receipt_file": "verification-receipts.json",
+    "receipt_original_sha256": "895f7858166e1bdb08a2c39deaf6252defbcbaf345a220444de54a08d192f606",
+    "receipt_original_size_bytes": 4919,
+    "receipt_published_sha256": "2af79a6e9d635594400e581d3fb371bfce6f1c496eff94667c09a08e73db224f",
+    "receipt_published_size_bytes": 4097,
+    "receipt_substitutions": {
+      "${SOURCE}": 3,
+      "${TOOLS}": 3,
+      "${WORK}": 17
+    }
+  }
+}

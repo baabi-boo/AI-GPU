@@ -1,0 +1,376 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/w09e_acceptance_review",
+  "review_kind": "Independent P02-A03 acceptance review",
+  "state": "interim",
+  "decision": "pending_final_evidence",
+  "final_review_complete": false,
+  "acceptance_claimed": false,
+  "qualifies_P02_A03": false,
+  "phase_complete": false,
+  "reviewed_at": "2026-11-18T05:03:39.410637+00:00",
+  "source_revision": "4af2307e57202c1269e20f893267a5583ad3cba0",
+  "source_tree": "42e5d6f2c9c0c2035c4d3ec8c86125e8cca45192",
+  "source_dirty": false,
+  "canonical_criterion": "WGMMA synchronization, metadata, multi-warp and backpressure cases preserve correctness with no unexplained model divergence.",
+  "canonical_verification": "Concurrency tests and model-parity evidence or documented applicability limits",
+  "required_evidence_level": "rtl_verified",
+  "prerequisites": [
+    {
+      "record": "${SOURCE}/docs/project/evidence/p01-build.json",
+      "record_sha256": "7c31c2c58fce7e3f9fe2229f9dcc4d1ede8aa2c1ee7afb4b9714a67ef9ae38a0",
+      "acceptance_ids": [
+        "P01-A01"
+      ],
+      "outcome": "pass",
+      "reviewer": "/root/w09f_clean_build_acceptance_review; /root integration; /root/w10c_acceptance_record_review (record integrity)",
+      "evidence_level": "simulated",
+      "source_revision": "03181532b81fe95b1cfeac2ffb25d8597af689b2",
+      "artifact_count": 63,
+      "artifact_mismatches": []
+    },
+    {
+      "record": "${SOURCE}/docs/project/evidence/p01-native.json",
+      "record_sha256": "7cf5ae93704e22fa9172ac2eb8dd93275ab312a1dc39e689d907f8e08b38b026",
+      "acceptance_ids": [
+        "P01-A02"
+      ],
+      "outcome": "pass",
+      "reviewer": "/root/w09e_native_acceptance_review; /root integration; /root/w10c_acceptance_record_review (record integrity)",
+      "evidence_level": "rtl_verified",
+      "source_revision": "03181532b81fe95b1cfeac2ffb25d8597af689b2",
+      "artifact_count": 48,
+      "artifact_mismatches": []
+    },
+    {
+      "record": "${SOURCE}/docs/project/evidence/p01-xrt-blocked.json",
+      "record_sha256": "c480d1eb390a237b5e33c55b2115f3a43e997207a9122c319264671284e82551",
+      "acceptance_ids": [
+        "P01-A03"
+      ],
+      "outcome": "blocked",
+      "reviewer": "/root/w08a_vendor_blocker_record \u2014 actual prerequisite observation and blocked-scope review; no human approval or waiver represented; /root/w10b_xrtsim_evidence_review (supplemental packet); /root integration; /root/w10c_acceptance_record_review (record integrity)",
+      "evidence_level": "rtl_verified",
+      "source_revision": "03181532b81fe95b1cfeac2ffb25d8597af689b2",
+      "artifact_count": 45,
+      "artifact_mismatches": []
+    },
+    {
+      "record": "${SOURCE}/docs/project/evidence/p02-numerics/acceptance.json",
+      "record_sha256": "5cfa9e078bd42b5aa8100b8996675ed1bf34d9133320baaed7437545dd3b72fb",
+      "acceptance_ids": [
+        "P02-A01"
+      ],
+      "outcome": "pass",
+      "reviewer": "Independent source reviews: /root/w05a25_math_fixture_closure, /root/w05a26_layout_profile_review, /root/w05a27_native_build_closure, /root/w05a28_compiler_provenance_review, /root/w05a29_a01_contract_review, /root/w05a30_r3_integration_review, /root/w06a34_profile_build_review. Independent exported-packet review: /root/w07a40_packet_integrity_review. Independent acceptance-scope review: /root/w07a41_acceptance_scope_review.",
+      "evidence_level": "source_present",
+      "source_revision": "a25321496d802f43830c1658487f1adf79c838c3",
+      "artifact_count": 20,
+      "artifact_mismatches": []
+    },
+    {
+      "record": "${SOURCE}/docs/project/evidence/p02-wmma/acceptance.json",
+      "record_sha256": "364f49da0eb495ffcd2ea9ff5a402396eab531db3422819a972ccb2f7be9396a",
+      "acceptance_ids": [
+        "P02-A02"
+      ],
+      "outcome": "pass",
+      "reviewer": "/root/w01_a04: independent original/published packet, command/output, source mapping, API, offline-suite and hosted compatibility recovery review; see recovery-review.json. Historical source reviews remain in the immutable bundle.",
+      "evidence_level": "rtl_verified",
+      "source_revision": "58faf6d68879e1db92122df493172eab59c02458",
+      "artifact_count": 28,
+      "artifact_mismatches": []
+    }
+  ],
+  "historical_unit": {
+    "source_revision": "9006939aa123452b198bc0987e34aae8fab45fdd",
+    "source_tree": "c815d75bcd13395618b7fbd9924bcedf6347c6c8",
+    "command_outcomes": {
+      "pass": 9
+    },
+    "observations": {
+      "accepted_transactions": 392,
+      "checked_output_words": 3072,
+      "committed_transactions": 392,
+      "coverage": {
+        "accepted": 392,
+        "commit_holds": 81,
+        "commits": 392,
+        "cta_conflicts": 54,
+        "cta_entries": 1,
+        "cycles": 1306,
+        "delayed_lmem": 88,
+        "delayed_metadata": 8,
+        "descriptor_a_poisoned": 238,
+        "descriptor_b_poisoned": 357,
+        "dispatch_stalls": 2283,
+        "lmem_holds": 32,
+        "lmem_requests": 192,
+        "lmem_responses": 192,
+        "metadata_lanes": 64,
+        "metadata_requests": 8,
+        "metadata_writes": 16,
+        "overlapping": 486,
+        "pressure_holds": 10,
+        "pressure_limit": 256,
+        "pressure_qualified": 2,
+        "pressure_tail": 8,
+        "watchdog": 100000,
+        "words": 3072
+      },
+      "cycle_watchdog_per_group": 100000,
+      "group_count": 8,
+      "groups": [
+        {
+          "accepted": 64,
+          "commits": 64,
+          "cycles": 182,
+          "name": "dense_ss_initial",
+          "words": 512
+        },
+        {
+          "accepted": 64,
+          "commits": 64,
+          "cycles": 67,
+          "name": "dense_ss_descriptor_reuse",
+          "words": 512
+        },
+        {
+          "accepted": 64,
+          "commits": 64,
+          "cycles": 123,
+          "name": "dense_ss_row_major",
+          "words": 512
+        },
+        {
+          "accepted": 64,
+          "commits": 64,
+          "cycles": 107,
+          "name": "dense_rs_bf16",
+          "words": 512
+        },
+        {
+          "accepted": 32,
+          "commits": 32,
+          "cycles": 179,
+          "name": "cta_exclusion",
+          "words": 256
+        },
+        {
+          "accepted": 36,
+          "commits": 36,
+          "cycles": 453,
+          "name": "sparse_metadata_initial",
+          "words": 256
+        },
+        {
+          "accepted": 36,
+          "commits": 36,
+          "cycles": 105,
+          "name": "sparse_metadata_reload",
+          "words": 256
+        },
+        {
+          "accepted": 32,
+          "commits": 32,
+          "cycles": 90,
+          "name": "dense_rs_commit_pressure",
+          "words": 256
+        }
+      ]
+    },
+    "bridge_paths": 417,
+    "bridge_mismatches": [],
+    "all_original_source_files": 436,
+    "all_original_source_current_mismatches": [],
+    "publication_artifact_count": 4,
+    "publication_artifact_mismatches": [],
+    "published_member_count": 498,
+    "published_member_mismatches": [],
+    "historical_git_object_locally_available": false,
+    "provenance_boundary": "Original execution identity is retained by reviewed original snapshots and published records; this review independently rehashes the bytes and current source, and does not claim a fresh unit run or reconstruct an unavailable historical Git object."
+  },
+  "current_source_inventory": {
+    "files": 740,
+    "mismatches": [],
+    "source_before": {
+      "path": "snapshots/source-before.json",
+      "sha256": "96fabbd00a1fa59a8234530add191ff951c3bd5741509d97df2f8dbb8d9f41f5",
+      "size_bytes": 127037
+    }
+  },
+  "interim_observation": {
+    "observed_at": "2026-11-18T05:03:39.410637+00:00",
+    "report_checkpoint": {
+      "sha256": "b5b136bb3144613d7c32c47a888f744e864d9dab737c19e954f9da7dabcadb78",
+      "size_bytes": 2952368,
+      "live_report_may_advance": true
+    },
+    "report_states": {
+      "state": "finished",
+      "outcome": "pass",
+      "arithmetic_outcome": "pass",
+      "parity_outcome": "pass",
+      "witness_outcome": "pass",
+      "source_revision": "4af2307e57202c1269e20f893267a5583ad3cba0",
+      "source_dirty": false,
+      "source_frozen_before_execution": true,
+      "acceptance_claimed": false,
+      "qualifies_P02_A03": false,
+      "phase_complete": false
+    },
+    "completed_variants": [
+      "simx-dense-fp16-ss",
+      "simx-dense-fp16-rs",
+      "simx-dense-bf16-ss",
+      "simx-dense-bf16-rs",
+      "simx-dense-fp16-ss-row-major-a",
+      "simx-sparse-fp16-ss",
+      "rtlsim-dense-fp16-ss",
+      "rtlsim-dense-fp16-rs",
+      "rtlsim-dense-bf16-ss",
+      "rtlsim-dense-bf16-rs",
+      "rtlsim-dense-fp16-ss-row-major-a",
+      "rtlsim-sparse-fp16-ss"
+    ],
+    "observed_counts": {
+      "completed_variants": 12,
+      "case_executions": 24,
+      "launches": 48,
+      "checked_output_words": 24576
+    },
+    "commands_by_outcome": {
+      "pass": 113
+    },
+    "pending_variants": [],
+    "final_independent_proof_pending": true
+  },
+  "obligations": [
+    {
+      "id": "A03-01",
+      "obligation": "Entry and P02 prerequisites",
+      "status": "satisfied",
+      "assessment": "P00 complete; reviewed P01-A01/A02 and P02-A01/A02 remain passing with all referenced artifact hashes matching. P01-A03 stays separately blocked.",
+      "evidence": "Canonical roadmap and prerequisite acceptance records"
+    },
+    {
+      "id": "A03-02",
+      "obligation": "Frozen arithmetic, geometry and parity contract",
+      "status": "satisfied",
+      "assessment": "Six variants, two fixtures each, two iterations on each of SimX/native rtlsim; exact uint32 outputs; exact retired instructions; unchanged 5% cycles with RTL denominator. No post-failure threshold change.",
+      "evidence": "ci/project/p02_wgmma_matrix.json; WGMMA handoff"
+    },
+    {
+      "id": "A03-03",
+      "obligation": "Historical unit applicability to frozen source",
+      "status": "satisfied",
+      "assessment": "All 417 bridge files match original unit snapshot digests and current source. All 436 original unit source inputs and eight generic checkout inputs are unchanged. Common effective geometry/backend matches; unit sparse enabled and dense processor rows sparse disabled are intentional scope distinctions.",
+      "evidence": "Historical comparison; unit source-before; current frozen source"
+    },
+    {
+      "id": "A03-04",
+      "obligation": "Descriptor and layout correctness",
+      "status": "unit_satisfied_processor_final_pending",
+      "assessment": "Unit descriptor reuse/replacement, row-major A, 238 poisoned A and 357 poisoned B descriptors; completed dense processor layout reviews pass. Full final artifact binding remains pending.",
+      "evidence": "Unit native-run; W07A-W07E"
+    },
+    {
+      "id": "A03-05",
+      "obligation": "Synchronization and multiple warps",
+      "status": "unit_satisfied_processor_final_pending",
+      "assessment": "Unit staggered overlap, 486 overlapping cycles, 54 CTA conflicts and one eventual entry; exactly-once commits and drained ownership. Processor geometry is two CTAs with four warps each and barriers around K tiles. Final sparse ownership witness remains pending.",
+      "evidence": "Unit protocol review; frozen kernels; W07F final pending"
+    },
+    {
+      "id": "A03-06",
+      "obligation": "Directed backpressure and bounded progress",
+      "status": "satisfied_bounded_unit",
+      "assessment": "Dense NRC16 RS pressure has two causal observations of same-slot blocked compute result/execute/dispatch with ready operands, admission blockage and no CTA conflict; ten holds and eight additional stable cycles. LMEM holds/delays and bounded drain are separately exercised. Forced sparse compute pressure is unclaimed.",
+      "evidence": "Unit main.cpp, wrapper, native-run and protocol review"
+    },
+    {
+      "id": "A03-07",
+      "obligation": "Metadata transaction behavior",
+      "status": "satisfied_bounded_unit",
+      "assessment": "Eight requests, sixteen split-mask writes, sixty-four lanes, delayed metadata/reload and exact sparse arithmetic pass. Direct dispatch waits for completion and does not prove processor scoreboard order.",
+      "evidence": "Unit native-run and protocol review"
+    },
+    {
+      "id": "A03-08",
+      "obligation": "Matched complete processor arithmetic",
+      "status": "pending_final_proof",
+      "assessment": "Require complete final 12-variant/24-case/48-launch/24,576-word record and independent raw-log confirmation, including both native sparse cases. Current progress is retained separately without upgrading aggregate proof.",
+      "evidence": "Formal report; W07A-W07F; corrected official verifier"
+    },
+    {
+      "id": "A03-09",
+      "obligation": "Actual processor metadata scoreboard dependency",
+      "status": "pending",
+      "assessment": "Require W07F final review of the same sparse arithmetic logs: reserve, real XREG0 wait, matching release and eventual issue, 16 loads/eight physical warps per launch, two loads per warp, both local warps in four issue instances, two stable CTA groups, >=1 real wait each launch.",
+      "evidence": "W07F final and monitor-bound native build/disassembly"
+    },
+    {
+      "id": "A03-10",
+      "obligation": "Model parity within frozen scope",
+      "status": "pending_complete_pairing",
+      "assessment": "Completed dense paired reviews pass exact instructions and 5% cycle rule. Require all 24 launch pairs and final sparse outcome. Auxiliary TCU counter differences are retained and do not establish event-level equivalence; no undefined metric is upgraded into a new gate.",
+      "evidence": "Frozen performance manifest; W07A-W07F; final parity report"
+    },
+    {
+      "id": "A03-11",
+      "obligation": "Native arithmetic, compiler roles and assertions",
+      "status": "pending_final_proof",
+      "assessment": "Completed native records show TFR tensor/STD scalar hierarchy and exactly one --assert. Processor integer/utility DPI remains; the unit is separately DPI-free. Require full final compiler/native hierarchy and sparse monitor binding.",
+      "evidence": "W07A-W07F; complete official verifier; final resource/source review"
+    },
+    {
+      "id": "A03-12",
+      "obligation": "Provenance, stability and retained failures",
+      "status": "pending_final_proof",
+      "assessment": "740 current processor source inputs match initial frozen snapshot; unit publication artifacts/members validate. Require final source/tools/libraries/137-header stability, command cleanup/resources and preserved historical attempts. Old verifier defect is preserved, not reclassified as GPU failure.",
+      "evidence": "W08E final; W09A failure; W09B/W09C correction review; final report"
+    },
+    {
+      "id": "A03-13",
+      "obligation": "Corrected packet verifier and independent acceptance",
+      "status": "pending",
+      "assessment": "New verifier source hash 11497b57db50c4c1e690d38c406d0de94f86b2017cec036f7ed79008151e72a4 requires completed independent W09C review and official complete-packet invocation with --require-witness and independently recorded final report digest. Focused tests cannot substitute.",
+      "evidence": "W09B/W09C and root-supplied final receipts"
+    },
+    {
+      "id": "A03-14",
+      "obligation": "Immutable publication and state reconciliation",
+      "status": "pending_delivery",
+      "assessment": "Review final immutable packet/index and acceptance linkage; close P02 only after every obligation and required decision. P03 remains not_started until accepted handoff; next bounded work is operator contract/manifest definition. P01-A03 remains blocked.",
+      "evidence": "Final publication, roadmap, phase/status/backlog changes"
+    }
+  ],
+  "scope_judgment": "The declared combination is adequate in principle for the bounded A03 gate: native unit directed concurrency/pressure plus native processor arithmetic/scoreboard witness and paired frozen instruction/cycle checks. Approval remains contingent on completed actual proof. Sparse forced compute pressure, every-warp waiting and event-by-event auxiliary-counter equivalence are unclaimed; these are declared coverage limits, not waived failed requirements.",
+  "parity_boundary": {
+    "instructions": "exact per-launch equality",
+    "cycles": "abs(SimX_cycles - RTL_cycles) * 100 <= RTL_cycles * 5",
+    "auxiliary_counters": "Raw TCU counts may differ (RS cache hits 119 RTL versus 118 SimX; other observed stalls/reads also differ). They were not frozen equality predicates, and their attribution is not claimed. Preserve observations; no event-level identity statement, new gate, widened threshold or waiver."
+  },
+  "pending_before_final_decision": [
+    "Root GO after finished original report identity is independently fixed",
+    "Complete official corrected-verifier result and W09C independent review",
+    "W07F final same-log sparse arithmetic/witness review and native monitor binding",
+    "Final W08E source/tool/dependency/resource stability review",
+    "Immutable publication/evidence linkage and exact state reconciliation"
+  ],
+  "limits": [
+    "No source edits, compiler, GPU run, test suite or subagent was used by this reviewer.",
+    "Source bridging supports bounded historical applicability and is not new execution.",
+    "The unit retains arithmetic totals rather than all successful raw words; original reviewers checked the executed harness and omitted binary.",
+    "Processor arithmetic is native TFR/STD with inherited integer/utility DPI; processor-only rtlsim bypasses AFU.",
+    "No full-AFU, vendor hw_emu, physical FPGA, synthesis/PPA, silicon, arbitrary format/geometry or event-level timing-equivalence claim.",
+    "No human or maintainer approval is represented by this agent review."
+  ],
+  "root_supplied_completion_anchor": {
+    "record": "rootformal-completion-anchor.json",
+    "expected_report_sha256": "b5b136bb3144613d7c32c47a888f744e864d9dab737c19e954f9da7dabcadb78",
+    "expected_report_size_bytes": 2952368,
+    "matches_review_observation": true,
+    "received_after_interim": "Root instructed reviewer to release the slot pending final verifier and sparse witness reviews; final disposition remains pending."
+  }
+}

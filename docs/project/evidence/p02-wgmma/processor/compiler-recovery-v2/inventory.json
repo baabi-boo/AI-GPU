@@ -1,0 +1,1515 @@
+{
+  "acceptance_claimed": false,
+  "audit_limits": [
+    "Original-byte checking covers every selected member, not excluded binaries, tools, build trees, third-party header bodies, or all dependencies named by records.",
+    "Excluded directory entries are pruning roots; their descendants are not inventoried.",
+    "Embedded binding checks cover recognized path/hash pairs that resolve to selected members; external and deliberately excluded references are counted separately. Explicit live_file_snapshot_only observations retain their historical digest and are listed separately instead of being asserted to identify the finished file.",
+    "Private-key and signed-URL scans are bounded pattern checks, not a complete secret or redistribution-rights audit.",
+    "A completed-report marker does not certify result correctness or acceptance.",
+    "Digest consistency checks integrity against this inventory; no signature or origin authentication is established by the exporter.",
+    "Planning is a point-in-time observation. Re-run after all execution and review writers stop; build re-reads every selected input before publication.",
+    "Deterministic bytes require identical inputs, selection, helper and Python/zlib compression implementation; gzip timestamps and filenames are fixed."
+  ],
+  "binding_audit": {
+    "historical_live_file_observations": [],
+    "recognized_external_or_excluded_bindings_not_verified": 2486,
+    "recognized_original_bindings_verified": 126
+  },
+  "bundle_path": "evidence-bundle.json.gz",
+  "bundle_sha256": "d293fe7f7ccb0479d9090338fddfa5daae664381d8f5ae19e5bf1756b48983b4",
+  "bundle_size_bytes": 425678,
+  "deferred_inputs": [],
+  "digest_policy": "original_sha256 and original_size_bytes identify the exact retained input bytes. published_sha256 and published_size_bytes identify content.encode('utf-8') after literal path-prefix substitution only. Every pre-existing digest or size inside embedded records still describes ORIGINAL bytes and is never recomputed or rewritten. Verify published members with their published fields; verifying original fields requires the retained originals. An unchanged member has equal original and published bytes, sizes, and hashes.",
+  "excluded_inputs": [
+    {
+      "path": "host-gcc12/metadata/InRelease",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    },
+    {
+      "path": "host-gcc12/metadata/Packages.xz",
+      "reason": "explicit selection exclusion"
+    },
+    {
+      "path": "host-gcc12/metadata/cpp-12.control",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    },
+    {
+      "path": "host-gcc12/metadata/g++-12.control",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    },
+    {
+      "path": "host-gcc12/metadata/gcc-12-base.control",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    },
+    {
+      "path": "host-gcc12/metadata/gcc-12.control",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    },
+    {
+      "path": "host-gcc12/metadata/libgcc-12-dev.control",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    },
+    {
+      "path": "host-gcc12/metadata/libstdc++-12-dev.control",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    },
+    {
+      "path": "host-gcc12/probes/dram-alias.o",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    },
+    {
+      "path": "host-gcc12/probes/dram-direct.o",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    },
+    {
+      "path": "host-gcc12/probes/smoke",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    },
+    {
+      "path": "wgmma-formal-evidence/artifacts/source/.gitmodules",
+      "reason": "non-allowlisted text type; binaries/archives/waveforms omitted"
+    }
+  ],
+  "file_count": 133,
+  "files": [
+    {
+      "encoding": "utf-8",
+      "original_sha256": "b1d7ccb800331fd000d5a233e854d5cb4a0720304a677b591b4c640fd8cae754",
+      "original_size_bytes": 13548,
+      "path": "failure-index.json",
+      "published_sha256": "39ac223fd782c58ea365a193ff0bbc95c317d9032bdf2cfd5ce26c70230974cc",
+      "published_size_bytes": 12917,
+      "substitutions": {
+        "${SOURCE}": 3,
+        "${TOOLS}": 8,
+        "${WORK}": 6
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "496452fdce4b2bcfc590eee6e33a6cb01bb03c021c2cb0b1537c58409d9d7dc1",
+      "original_size_bytes": 227,
+      "path": "host-compat/clang-inventory.json",
+      "published_sha256": "496452fdce4b2bcfc590eee6e33a6cb01bb03c021c2cb0b1537c58409d9d7dc1",
+      "published_size_bytes": 227,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "a5de205979412264ab6a1d6f958e61fc5d8d770ffb91c9b7baf0326bd33583fd",
+      "original_size_bytes": 237,
+      "path": "host-compat/clang-version.log",
+      "published_sha256": "85e0a25f4542df1eccc74251f1560e1e12a160800a237077d0d44f1eb9360338",
+      "published_size_bytes": 196,
+      "substitutions": {
+        "${TOOLS}": 1
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "8df0c2afc588f908eba69d3fcfe5a9450bba429208cb3da4acc840e84903dce1",
+      "original_size_bytes": 3020,
+      "path": "host-compat/dram_sim.clang-argv.json",
+      "published_sha256": "5a761ec158d8a773a51b59db67e123dbfde3d6fc78f3b77fb07c4be312de767a",
+      "published_size_bytes": 2313,
+      "substitutions": {
+        "${SOURCE}": 18,
+        "${TOOLS}": 1,
+        "${WORK}": 4
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "c103c3180a494d4a12a55bf58d8eab3928dfdc5227f4ba0dccaa0d07a7e7a112",
+      "original_size_bytes": 2612,
+      "path": "host-compat/dram_sim.clang-command.txt",
+      "published_sha256": "47974696144307f3dc75f420121e4bae13821b7c4537d515509899daa1bf19ae",
+      "published_size_bytes": 1905,
+      "substitutions": {
+        "${SOURCE}": 18,
+        "${TOOLS}": 1,
+        "${WORK}": 4
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "540749078db5af869b77b253b63a6586525ba01b8c6e7d2ab2efd352541b30f5",
+      "original_size_bytes": 1121,
+      "path": "host-compat/dram_sim.clang-output.log",
+      "published_sha256": "66a2be47277ce28029212631020fec99a933ef7d3b10f141e83f590776e518cf",
+      "published_size_bytes": 918,
+      "substitutions": {
+        "${SOURCE}": 7
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "cfaa909dcb69af2376247ff5b2c64e97128385db81a2a274d5db632fd738ea74",
+      "original_size_bytes": 1325,
+      "path": "host-compat/dram_sim.clang-result.json",
+      "published_sha256": "2fd35d1f6c4c9256206dae5dfc4fa6156a7b711eac691573aa5003d1acd8f739",
+      "published_size_bytes": 1058,
+      "substitutions": {
+        "${TOOLS}": 3,
+        "${WORK}": 4
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "feec1aec3ea507cb0353c811d090338f78973a9a7e6b283f64e10ce58124cf2e",
+      "original_size_bytes": 2587,
+      "path": "host-compat/dram_sim.original-command.txt",
+      "published_sha256": "62b02fc419effe4763a21b7364835cab1b72e95e574b22bb5bb14033d60edb9f",
+      "published_size_bytes": 1921,
+      "substitutions": {
+        "${SOURCE}": 18,
+        "${WORK}": 4
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "608b787135f5117e71bac72f328098d070194b2df3d578799e1654542fe1e11a",
+      "original_size_bytes": 2203,
+      "path": "host-compat/gcc-inventory.json",
+      "published_sha256": "608b787135f5117e71bac72f328098d070194b2df3d578799e1654542fe1e11a",
+      "published_size_bytes": 2203,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "d6e54be713c137e5184fa241b3f08813b590dc0eb6564f35924addcf2fd969c2",
+      "original_size_bytes": 5425,
+      "path": "host-gcc12/acquire.py",
+      "published_sha256": "d6e54be713c137e5184fa241b3f08813b590dc0eb6564f35924addcf2fd969c2",
+      "published_size_bytes": 5425,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "a732464b020c2704918c02e1c2116fddf858caeadda8932b12d15519fe5fa735",
+      "original_size_bytes": 389,
+      "path": "host-gcc12/acquisition-receipt.json",
+      "published_sha256": "a732464b020c2704918c02e1c2116fddf858caeadda8932b12d15519fe5fa735",
+      "published_size_bytes": 389,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "80a92efee69feceaa629e287a5be0f4481a5db8a8e893f312ce94366bcd0edbf",
+      "original_size_bytes": 806,
+      "path": "host-gcc12/logs/Packages.xz.download.json",
+      "published_sha256": "76fdb20649af226898c50c48ed791277a46676f8a729684d565190ee8ca8edca",
+      "published_size_bytes": 770,
+      "substitutions": {
+        "${WORK}": 1
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "6379c17d798191f995d43b0950ea7787779fe29c9af7354b25de37a514ff207d",
+      "original_size_bytes": 54,
+      "path": "host-gcc12/logs/cpp-12.extract.json",
+      "published_sha256": "6379c17d798191f995d43b0950ea7787779fe29c9af7354b25de37a514ff207d",
+      "published_size_bytes": 54,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "19dbe6c3ca2d9ad2277511826ec54d7eea72e7692ca60fe2a247ea49044b6f9b",
+      "original_size_bytes": 847,
+      "path": "host-gcc12/logs/cpp-12_12.2.0-14+deb12u1_amd64.deb.download.json",
+      "published_sha256": "a1b1381b9da2f184bd3b44968c46462fe631ab59a78a950525bae5c97e4ff4d2",
+      "published_size_bytes": 811,
+      "substitutions": {
+        "${WORK}": 1
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "6379c17d798191f995d43b0950ea7787779fe29c9af7354b25de37a514ff207d",
+      "original_size_bytes": 54,
+      "path": "host-gcc12/logs/g++-12.extract.json",
+      "published_sha256": "6379c17d798191f995d43b0950ea7787779fe29c9af7354b25de37a514ff207d",
+      "published_size_bytes": 54,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "41284f90fc9194eb370bd0bedc6d4e7074251f572dcc5909e2b6be476bc74fec",
+      "original_size_bytes": 849,
+      "path": "host-gcc12/logs/g++-12_12.2.0-14+deb12u1_amd64.deb.download.json",
+      "published_sha256": "81dbd89703097f0158688e7b25fd9e46c1da027695ef59a6c124dab654c667b0",
+      "published_size_bytes": 813,
+      "substitutions": {
+        "${WORK}": 1
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "44c362af33f02d0f97e55219a8e35ba8374b0bf61352141287b86ac131355d36",
+      "original_size_bytes": 260,
+      "path": "host-gcc12/logs/g++-version.log",
+      "published_sha256": "44c362af33f02d0f97e55219a8e35ba8374b0bf61352141287b86ac131355d36",
+      "published_size_bytes": 260,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "6379c17d798191f995d43b0950ea7787779fe29c9af7354b25de37a514ff207d",
+      "original_size_bytes": 54,
+      "path": "host-gcc12/logs/gcc-12-base.extract.json",
+      "published_sha256": "6379c17d798191f995d43b0950ea7787779fe29c9af7354b25de37a514ff207d",
+      "published_size_bytes": 54,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "adf46d9a46c581a0b1489755f1293fb6611ae6a9d66c3eed3b5f79f3563a6da2",
+      "original_size_bytes": 858,
+      "path": "host-gcc12/logs/gcc-12-base_12.2.0-14+deb12u1_amd64.deb.download.json",
+      "published_sha256": "bcf55caf2aec0c900ae38185487afd4cfb5ef6b562820fb5867a864d29251412",
+      "published_size_bytes": 822,
+      "substitutions": {
+        "${WORK}": 1
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "6379c17d798191f995d43b0950ea7787779fe29c9af7354b25de37a514ff207d",
+      "original_size_bytes": 54,
+      "path": "host-gcc12/logs/gcc-12.extract.json",
+      "published_sha256": "6379c17d798191f995d43b0950ea7787779fe29c9af7354b25de37a514ff207d",
+      "published_size_bytes": 54,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "69ed6f8eac18b611e8236933ff643d5767cd63355c591eca60c332e04d8ad7e9",
+      "original_size_bytes": 849,
+      "path": "host-gcc12/logs/gcc-12_12.2.0-14+deb12u1_amd64.deb.download.json",
+      "published_sha256": "acc2135f2542553091cc2710355c2eabbb2bb37c08fe7e91efd7d16e5fa080c7",
+      "published_size_bytes": 813,
+      "substitutions": {
+        "${WORK}": 1
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "ba4aa3688542d944b584afa84a6332469bed71c19d3c72e5bbdb069972d6db1d",
+      "original_size_bytes": 260,
+      "path": "host-gcc12/logs/gcc-version.log",
+      "published_sha256": "ba4aa3688542d944b584afa84a6332469bed71c19d3c72e5bbdb069972d6db1d",
+      "published_size_bytes": 260,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "6379c17d798191f995d43b0950ea7787779fe29c9af7354b25de37a514ff207d",
+      "original_size_bytes": 54,
+      "path": "host-gcc12/logs/libgcc-12-dev.extract.json",
+      "published_sha256": "6379c17d798191f995d43b0950ea7787779fe29c9af7354b25de37a514ff207d",
+      "published_size_bytes": 54,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "861f8c1a8e2769aa1f981a613f016dd592763e9f0adc0844372d01e9d53107ad",
+      "original_size_bytes": 868,
+      "path": "host-gcc12/logs/libgcc-12-dev_12.2.0-14+deb12u1_amd64.deb.download.json",
+      "published_sha256": "ae62a2328f5d9ca916e92558802a70e1b8d72333c097903906ae682f4f3a9c91",
+      "published_size_bytes": 832,
+      "substitutions": {
+        "${WORK}": 1
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "6379c17d798191f995d43b0950ea7787779fe29c9af7354b25de37a514ff207d",
+      "original_size_bytes": 54,
+      "path": "host-gcc12/logs/libstdc++-12-dev.extract.json",
+      "published_sha256": "6379c17d798191f995d43b0950ea7787779fe29c9af7354b25de37a514ff207d",
+      "published_size_bytes": 54,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "b0560fc6aab9735fd061ce3fd6ac9642e360c0f3aad2b6c095ac80560d93f405",
+      "original_size_bytes": 877,
+      "path": "host-gcc12/logs/libstdc++-12-dev_12.2.0-14+deb12u1_amd64.deb.download.json",
+      "published_sha256": "d6b8f88088932019a8fffa2db3554ecbdadc375b8cb82544449d5bb7975411cc",
+      "published_size_bytes": 841,
+      "substitutions": {
+        "${WORK}": 1
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "2c0346a8ef6b8098e05ca8a2a575b3ec957e017c6868d2dbd76a3bdabad27d39",
+      "original_size_bytes": 816,
+      "path": "host-gcc12/logs/official-debian-retry.json",
+      "published_sha256": "faddca659236dd005d7a83c61391634eba25d3eb35963e9998153826f32b8b2e",
+      "published_size_bytes": 780,
+      "substitutions": {
+        "${WORK}": 1
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "c09c39b1dd88de8b6d112e2048c93201e7e419ca9aec936b3d24157dfb19632f",
+      "original_size_bytes": 2753,
+      "path": "host-gcc12/metadata/compiler-runtime-linkage.json",
+      "published_sha256": "1ee622399a8695bb60ad60391b56722fde4ae21e8e8875392d7e1f32412eec0f",
+      "published_size_bytes": 2609,
+      "substitutions": {
+        "${WORK}": 4
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "b4302f93e4dda8f443a3b22161e28989a2c5e6b51849932ed56c78a3856abccc",
+      "original_size_bytes": 2504,
+      "path": "host-gcc12/metadata/extracted-broken-symlinks.json",
+      "published_sha256": "80fada0230ea5ab24ff69a689bb4be7d86dc31eace093d3766c91be39b239676",
+      "published_size_bytes": 2144,
+      "substitutions": {
+        "${WORK}": 10
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "156238c0fc5c4db34e7f75a12c19e6c573d81f7e9162fd327345367e7a10f225",
+      "original_size_bytes": 2123,
+      "path": "host-gcc12/metadata/host-aliases.json",
+      "published_sha256": "80c57d624803102c9dd30962110295bcf7e03e3a4c1c47184d55012c8aab6b05",
+      "published_size_bytes": 1763,
+      "substitutions": {
+        "${WORK}": 10
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "33ccb6842991d7337253e262883bd69107c565cb511cdf39186338a1b3d725a9",
+      "original_size_bytes": 4855,
+      "path": "host-gcc12/metadata/host-runtime-bridges.json",
+      "published_sha256": "fd5b99b53bf2e67b68944ead8e3aa73e85db36b8d6b37b316390167169476e81",
+      "published_size_bytes": 4495,
+      "substitutions": {
+        "${WORK}": 10
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "b8fdf810d6346ea70eb31c38374554eb87c984eba4c95d6bcb086c202bb5e265",
+      "original_size_bytes": 8041,
+      "path": "host-gcc12/metadata/host-runtime-inventory.json",
+      "published_sha256": "b8fdf810d6346ea70eb31c38374554eb87c984eba4c95d6bcb086c202bb5e265",
+      "published_size_bytes": 8041,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "5a27acf813d40d581687b979a24ecb92c0afdd1ae3bb29202abff6e74e7bf0da",
+      "original_size_bytes": 409,
+      "path": "host-gcc12/metadata/index-expected.json",
+      "published_sha256": "5a27acf813d40d581687b979a24ecb92c0afdd1ae3bb29202abff6e74e7bf0da",
+      "published_size_bytes": 409,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "eeb2fecd8b120380204e5df3234884728f7beb9b2b8b64b118e29ffb54cd1f16",
+      "original_size_bytes": 6271,
+      "path": "host-gcc12/metadata/package-index-stanzas.json",
+      "published_sha256": "eeb2fecd8b120380204e5df3234884728f7beb9b2b8b64b118e29ffb54cd1f16",
+      "published_size_bytes": 6271,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "211ee0a9dc1a2e21d1102cae03f1743875df1212cd5195efaab03c23101dba17",
+      "original_size_bytes": 10906,
+      "path": "host-gcc12/metadata/package-plan.json",
+      "published_sha256": "7f69889a34f8a4eaa2da1c134ce597def77e7cc1cb97deb63353f1d7d62afa9c",
+      "published_size_bytes": 10690,
+      "substitutions": {
+        "${WORK}": 6
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "9f2a29fe177fa5312a469bc32cb8d132000311ba86cb0497a54fbe275bbeb4f3",
+      "original_size_bytes": 368,
+      "path": "host-gcc12/metadata/source-binding.json",
+      "published_sha256": "9f2a29fe177fa5312a469bc32cb8d132000311ba86cb0497a54fbe275bbeb4f3",
+      "published_size_bytes": 368,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "904045e6d31296f29290b41f17624d27237cfac236a4858d7d086199ed5c7c7a",
+      "original_size_bytes": 4895,
+      "path": "host-gcc12/probe.py",
+      "published_sha256": "904045e6d31296f29290b41f17624d27237cfac236a4858d7d086199ed5c7c7a",
+      "published_size_bytes": 4895,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "c31115c91b392ff054aa7ae701096207081d30443e63e2deb899756f8e826666",
+      "original_size_bytes": 3003,
+      "path": "host-gcc12/probes/dram-alias.argv.json",
+      "published_sha256": "c57502d9231763cf4c606e4ac425a77a28756cadc9d397803c214766b85c4049",
+      "published_size_bytes": 2301,
+      "substitutions": {
+        "${SOURCE}": 18,
+        "${WORK}": 5
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "55296fd7cd049cbdc0b4a80a2c27001c3a153bcae6db3139e48c0221b2eb6942",
+      "original_size_bytes": 2595,
+      "path": "host-gcc12/probes/dram-alias.command.txt",
+      "published_sha256": "67f41d744f996a0536ee657782ddc3a6d838a84c0f7860406f92b90fd223a163",
+      "published_size_bytes": 1893,
+      "substitutions": {
+        "${SOURCE}": 18,
+        "${WORK}": 5
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "ae29b13d0275688f75cf013ce6158818a302a5a94b103812af8c541211a546dd",
+      "original_size_bytes": 1041,
+      "path": "host-gcc12/probes/dram-alias.elf.txt",
+      "published_sha256": "ae29b13d0275688f75cf013ce6158818a302a5a94b103812af8c541211a546dd",
+      "published_size_bytes": 1041,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_size_bytes": 0,
+      "path": "host-gcc12/probes/dram-alias.output.log",
+      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published_size_bytes": 0,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "f698e2ec6dbcc1d8c8c53032a39171c2cee3cbda2d9912b9c052e044be5ea7fe",
+      "original_size_bytes": 4509,
+      "path": "host-gcc12/probes/dram-alias.result.json",
+      "published_sha256": "39117392fc7e7fbdf7d9da037daf8323d540b67bfaf579ad36683f54480a75a4",
+      "published_size_bytes": 3627,
+      "substitutions": {
+        "${SOURCE}": 18,
+        "${WORK}": 10
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "40763bb69c3d8b14ed3550f37aa3ff69885b33b0bd8f326ba06cbbd11813ae3d",
+      "original_size_bytes": 3041,
+      "path": "host-gcc12/probes/dram-direct.argv.json",
+      "published_sha256": "c739b909f1b22bb1571eacb789bf1e098e10795a60e4cf1d68f6c5ab7ee23210",
+      "published_size_bytes": 2339,
+      "substitutions": {
+        "${SOURCE}": 18,
+        "${WORK}": 5
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "779618ff066a4e37e5e49ea91d6826b05e4877286f4bf07ac6149ba9cd742459",
+      "original_size_bytes": 2633,
+      "path": "host-gcc12/probes/dram-direct.command.txt",
+      "published_sha256": "5ccd6167c4641ee5c27fb8f212875c6e3f656fe3115015867c54cfa51b9b0661",
+      "published_size_bytes": 1931,
+      "substitutions": {
+        "${SOURCE}": 18,
+        "${WORK}": 5
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "ae29b13d0275688f75cf013ce6158818a302a5a94b103812af8c541211a546dd",
+      "original_size_bytes": 1041,
+      "path": "host-gcc12/probes/dram-direct.elf.txt",
+      "published_sha256": "ae29b13d0275688f75cf013ce6158818a302a5a94b103812af8c541211a546dd",
+      "published_size_bytes": 1041,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_size_bytes": 0,
+      "path": "host-gcc12/probes/dram-direct.output.log",
+      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published_size_bytes": 0,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "f7c5fa6d9ef0a7c9e1521f6d2c31db500e09bc581fb0b9727036df1f9746db67",
+      "original_size_bytes": 4550,
+      "path": "host-gcc12/probes/dram-direct.result.json",
+      "published_sha256": "8656ee8a4bb6ce717b9867fe45835a41e6b8c22fbcbbef809085d1ce4c4a0a5a",
+      "published_size_bytes": 3668,
+      "substitutions": {
+        "${SOURCE}": 18,
+        "${WORK}": 10
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "4045a635df5d8fe5c738e18df990feb6c6585e776c8307d87e366ad351fd8cae",
+      "original_size_bytes": 2995,
+      "path": "host-gcc12/probes/dram_sim.original-argv.json",
+      "published_sha256": "b767ca82eb9dd25ba8c2d49ff89f64670337536c08ceceeab9367d915b983453",
+      "published_size_bytes": 2329,
+      "substitutions": {
+        "${SOURCE}": 18,
+        "${WORK}": 4
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "feec1aec3ea507cb0353c811d090338f78973a9a7e6b283f64e10ce58124cf2e",
+      "original_size_bytes": 2587,
+      "path": "host-gcc12/probes/dram_sim.original-command.txt",
+      "published_sha256": "62b02fc419effe4763a21b7364835cab1b72e95e574b22bb5bb14033d60edb9f",
+      "published_size_bytes": 1921,
+      "substitutions": {
+        "${SOURCE}": 18,
+        "${WORK}": 4
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "bd430e2c4b5bd6a5ca141757b9b91b6e98c4437789e2350473e987a04dc01cd6",
+      "original_size_bytes": 330,
+      "path": "host-gcc12/probes/smoke.argv.json",
+      "published_sha256": "b38b7ced9a2d115b68c6f35d2482d4db0865f93e374d8ab1267f4ad6d7222081",
+      "published_size_bytes": 222,
+      "substitutions": {
+        "${WORK}": 3
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "cabcd6f2b7e7446a53c47c5dd08c996107f875cd5d0070d2a8747a7397b5f301",
+      "original_size_bytes": 277,
+      "path": "host-gcc12/probes/smoke.command.txt",
+      "published_sha256": "d6c24432ca913c65c7acba6a17bd2d61b1073bfce9c8f9162b384632500396df",
+      "published_size_bytes": 169,
+      "substitutions": {
+        "${WORK}": 3
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "8c883aad72c70d00bd8413cc3ed735006ba9c62bbb6afd00052b0cceb32b1d87",
+      "original_size_bytes": 388,
+      "path": "host-gcc12/probes/smoke.cpp",
+      "published_sha256": "8c883aad72c70d00bd8413cc3ed735006ba9c62bbb6afd00052b0cceb32b1d87",
+      "published_size_bytes": 388,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "84d1cbeab247707bfae3309c87c8e92b4f7183492aaf52db05325797c59b3124",
+      "original_size_bytes": 9385,
+      "path": "host-gcc12/probes/smoke.output.log",
+      "published_sha256": "a144e818274508b83530bca0450493db286010beda43aec87128b5bd14087ae5",
+      "published_size_bytes": 7621,
+      "substitutions": {
+        "${WORK}": 49
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "4632f2da259d52d2806e8ecbd1cc9768dcb0b3e280ecc9aff0e79b4309f04a2e",
+      "original_size_bytes": 1896,
+      "path": "host-gcc12/probes/smoke.result.json",
+      "published_sha256": "6a0bbbe3ad1efdf05d3ca7dd2372f863aa58e081e21eb714507088da8e38e052",
+      "published_size_bytes": 1644,
+      "substitutions": {
+        "${WORK}": 7
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "651ea1b191588bc6dd327b8aa8b71d0998d7a1169c645a40725ca5d3d8b384ba",
+      "original_size_bytes": 440,
+      "path": "host-gcc12/probes/source-command.json",
+      "published_sha256": "9327f0c33fe027c986d6f0adb941719d4699a1fb3dd55dc3ff1d59dab3528b17",
+      "published_size_bytes": 368,
+      "substitutions": {
+        "${WORK}": 2
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "f998339aaa62ad40804f8ba6d2f106fdd769ed947a78a5bd9e1da0d6c21547eb",
+      "original_size_bytes": 45894,
+      "path": "host-gcc12/receipt.json",
+      "published_sha256": "713968afdf65fc09093ee9bc2b793323e35b90a939e6515993c46f153cee2bae",
+      "published_size_bytes": 42654,
+      "substitutions": {
+        "${SOURCE}": 36,
+        "${WORK}": 61
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "f6b1c0a7946ed0cce8cb30deddb21b37610e2f13baceb16ec0eb0e6b80c469f6",
+      "original_size_bytes": 1988,
+      "path": "implementation-publication.json",
+      "published_sha256": "f6b1c0a7946ed0cce8cb30deddb21b37610e2f13baceb16ec0eb0e6b80c469f6",
+      "published_size_bytes": 1988,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "591a5e769f318a1889a4de2706238c3ab1b82156fe97a5c9e0d803495b0ec8cd",
+      "original_size_bytes": 31718,
+      "path": "package_wgmma_evidence.py",
+      "published_sha256": "591a5e769f318a1889a4de2706238c3ab1b82156fe97a5c9e0d803495b0ec8cd",
+      "published_size_bytes": 31718,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "77737fa4b34f2693e982cc9ee35736816c35a7778fc2d326cc1bbf5b301fe1aa",
+      "original_size_bytes": 151075,
+      "path": "publication-drafts/compiler-recovery-inputs/InRelease.txt",
+      "published_sha256": "77737fa4b34f2693e982cc9ee35736816c35a7778fc2d326cc1bbf5b301fe1aa",
+      "published_size_bytes": 151075,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "3960ec39e12a2bd2b844535e5249fe9b4e129fc8bac2a8819dee0382db7d0a3d",
+      "original_size_bytes": 4833,
+      "path": "publication-drafts/compiler-recovery-inputs/component-context.json",
+      "published_sha256": "3960ec39e12a2bd2b844535e5249fe9b4e129fc8bac2a8819dee0382db7d0a3d",
+      "published_size_bytes": 4833,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "e597dbc3d53428b10ba20cb017c7d917e5c74911bc307e9cb975d96b61c4d8a3",
+      "original_size_bytes": 824,
+      "path": "publication-drafts/compiler-recovery-inputs/cpp-12.control.txt",
+      "published_sha256": "e597dbc3d53428b10ba20cb017c7d917e5c74911bc307e9cb975d96b61c4d8a3",
+      "published_size_bytes": 824,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "50ca7d3f414869c27d18999f059e134c0417a08f42d89feb7c80a50eea966df1",
+      "original_size_bytes": 681,
+      "path": "publication-drafts/compiler-recovery-inputs/g++-12.control.txt",
+      "published_sha256": "50ca7d3f414869c27d18999f059e134c0417a08f42d89feb7c80a50eea966df1",
+      "published_size_bytes": 681,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "98d554fc1ecc48c11784fab0cda89ce555fca098e44dc6e3f466f926155473c7",
+      "original_size_bytes": 445,
+      "path": "publication-drafts/compiler-recovery-inputs/gcc-12-base.control.txt",
+      "published_sha256": "98d554fc1ecc48c11784fab0cda89ce555fca098e44dc6e3f466f926155473c7",
+      "published_size_bytes": 445,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "5ab0aee499c61b8634b80c18458b705833c4f37a91a962ecc41c8731bc44e7b1",
+      "original_size_bytes": 823,
+      "path": "publication-drafts/compiler-recovery-inputs/gcc-12.control.txt",
+      "published_sha256": "5ab0aee499c61b8634b80c18458b705833c4f37a91a962ecc41c8731bc44e7b1",
+      "published_size_bytes": 823,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "269efdb245ae59a9dae23b9ee5dd86a70c5688a353340eaeed33b4a5b73c4566",
+      "original_size_bytes": 920,
+      "path": "publication-drafts/compiler-recovery-inputs/libgcc-12-dev.control.txt",
+      "published_sha256": "269efdb245ae59a9dae23b9ee5dd86a70c5688a353340eaeed33b4a5b73c4566",
+      "published_size_bytes": 920,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "c07c2cc472ab73024e3888b7df516021683e7aa3c70147fc7ef806e1e0aa3964",
+      "original_size_bytes": 791,
+      "path": "publication-drafts/compiler-recovery-inputs/libstdc++-12-dev.control.txt",
+      "published_sha256": "c07c2cc472ab73024e3888b7df516021683e7aa3c70147fc7ef806e1e0aa3964",
+      "published_size_bytes": 791,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "632677b727feb911c5d2fa9d2991d9f87434fc83d99fc4ae15ee8e4556ecbabb",
+      "original_size_bytes": 575,
+      "path": "publication-drafts/compiler-recovery-source-inputs/gitmodules.txt",
+      "published_sha256": "632677b727feb911c5d2fa9d2991d9f87434fc83d99fc4ae15ee8e4556ecbabb",
+      "published_size_bytes": 575,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "fd9461814ce4cb3277485749facd2569aee20e572e4b2c2a1944abf60f439844",
+      "original_size_bytes": 428,
+      "path": "publication-drafts/compiler-recovery-source-inputs/source-copy.json",
+      "published_sha256": "fd9461814ce4cb3277485749facd2569aee20e572e4b2c2a1944abf60f439844",
+      "published_size_bytes": 428,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "db7ef83b8160a7369fdff991bf05b0fb4a132fda42f0355c9db66f132d1223c7",
+      "original_size_bytes": 2440,
+      "path": "publication-drafts/compiler-recovery-v2-selection.json",
+      "published_sha256": "db7ef83b8160a7369fdff991bf05b0fb4a132fda42f0355c9db66f132d1223c7",
+      "published_size_bytes": 2440,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "2b8cad0cfb4b7fd0d7bfa0afc8f4b2bd8c4d4b51a06966fea381591998d47b93",
+      "original_size_bytes": 4756,
+      "path": "reviews/w04d.md",
+      "published_sha256": "f5ca23a3528e0f8cee195b5940484b00d188eeef7d4a064c6c4590411989379a",
+      "published_size_bytes": 4013,
+      "substitutions": {
+        "${SOURCE}": 18,
+        "${TOOLS}": 1,
+        "${WORK}": 5
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "a1613bf92c7eaa4489f57bdc70c0d2abe71c48c1c27a2e55887401ca79e1187d",
+      "original_size_bytes": 5629,
+      "path": "reviews/w04f.md",
+      "published_sha256": "0dc1b5f5d659951b0dddf331f808a84a272ce616f5d741203406024528ff8291",
+      "published_size_bytes": 5413,
+      "substitutions": {
+        "${WORK}": 6
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "97ab114a0a2d0232c05674555212f80e4241da4bde6dc1675b7222dfda3e8ad1",
+      "original_size_bytes": 1479,
+      "path": "reviews/w05b.md",
+      "published_sha256": "97ab114a0a2d0232c05674555212f80e4241da4bde6dc1675b7222dfda3e8ad1",
+      "published_size_bytes": 1479,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "3f6c6d7bb70fa9054d451c4e9894eecfe65d90dd4e38137011abcdb320687a25",
+      "original_size_bytes": 2163,
+      "path": "reviews/w05c.md",
+      "published_sha256": "3f6c6d7bb70fa9054d451c4e9894eecfe65d90dd4e38137011abcdb320687a25",
+      "published_size_bytes": 2163,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+      "original_size_bytes": 112,
+      "path": "wgmma-formal-evidence/artifacts/source/VERSION",
+      "published_sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+      "published_size_bytes": 112,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+      "original_size_bytes": 30127,
+      "path": "wgmma-formal-evidence/artifacts/source/VX_config.toml",
+      "published_sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+      "published_size_bytes": 30127,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+      "original_size_bytes": 36543,
+      "path": "wgmma-formal-evidence/artifacts/source/VX_types.toml",
+      "published_sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+      "published_size_bytes": 36543,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+      "original_size_bytes": 60839,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/gen_config.py",
+      "published_sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+      "published_size_bytes": 60839,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+      "original_size_bytes": 20466,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/baseline_inventory.py",
+      "published_sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+      "published_size_bytes": 20466,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "original_size_bytes": 8890,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/baseline_matrix.py",
+      "published_sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "published_size_bytes": 8890,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+      "original_size_bytes": 53680,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/baseline_packet_contract.py",
+      "published_sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+      "published_size_bytes": 53680,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "53ac39e541628a68b3d405201734195e8ed606b26eab5ee72746e96b3148515d",
+      "original_size_bytes": 14315,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/baseline_packet_io.py",
+      "published_sha256": "53ac39e541628a68b3d405201734195e8ed606b26eab5ee72746e96b3148515d",
+      "published_size_bytes": 14315,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+      "original_size_bytes": 12627,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/baseline_process.py",
+      "published_sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+      "published_size_bytes": 12627,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+      "original_size_bytes": 7143,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/compiler_records.py",
+      "published_sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+      "published_size_bytes": 7143,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "66ef1fe7d8e9c22a0f9d81bb64e546d9b98481554a6db5d4baebac8275a7481d",
+      "original_size_bytes": 141666,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/fixtures/p02_wgmma_v1.json",
+      "published_sha256": "66ef1fe7d8e9c22a0f9d81bb64e546d9b98481554a6db5d4baebac8275a7481d",
+      "published_size_bytes": 141666,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17",
+      "original_size_bytes": 30055,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/p02_matrix.py",
+      "published_sha256": "e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17",
+      "published_size_bytes": 30055,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+      "original_size_bytes": 12332,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/p02_matrix_records.py",
+      "published_sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+      "published_size_bytes": 12332,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "f08efb4010dfbf6d90042e5a6d366e98d0935a13b1b4209dada5ea6bcd0efd13",
+      "original_size_bytes": 5693,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/p02_wgmma_dependencies.py",
+      "published_sha256": "f08efb4010dfbf6d90042e5a6d366e98d0935a13b1b4209dada5ea6bcd0efd13",
+      "published_size_bytes": 5693,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "8e185325585da8a243546ac150754f50f8357781a6084fc6a63dbeb9cad17194",
+      "original_size_bytes": 14543,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/p02_wgmma_fixture_oracle.py",
+      "published_sha256": "8e185325585da8a243546ac150754f50f8357781a6084fc6a63dbeb9cad17194",
+      "published_size_bytes": 14543,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "fdc3ea03364babc00892f7de31fb2f2053074bf1ea76cb605dfbe5c5ac31b002",
+      "original_size_bytes": 6206,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/p02_wgmma_matrix.json",
+      "published_sha256": "fdc3ea03364babc00892f7de31fb2f2053074bf1ea76cb605dfbe5c5ac31b002",
+      "published_size_bytes": 6206,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "a98cf74c438e4433293181ea7fa0f7360d659a54edc7af699b0b10911ff76c74",
+      "original_size_bytes": 34735,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/p02_wgmma_matrix.py",
+      "published_sha256": "a98cf74c438e4433293181ea7fa0f7360d659a54edc7af699b0b10911ff76c74",
+      "published_size_bytes": 34735,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "3a78219453dba18518c71c249735286b93f68c8b3dadf74c80dd0351b5cffed2",
+      "original_size_bytes": 16615,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/p02_wgmma_records.py",
+      "published_sha256": "3a78219453dba18518c71c249735286b93f68c8b3dadf74c80dd0351b5cffed2",
+      "published_size_bytes": 16615,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "5209a06b3428edba6bbf1c5ef0f8c065f1cba69acc72929fe1030e2f0bd3cdc1",
+      "original_size_bytes": 14246,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/p02_wgmma_witness.py",
+      "published_sha256": "5209a06b3428edba6bbf1c5ef0f8c065f1cba69acc72929fe1030e2f0bd3cdc1",
+      "published_size_bytes": 14246,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+      "original_size_bytes": 15124,
+      "path": "wgmma-formal-evidence/artifacts/source/ci/project/preflight.py",
+      "published_sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+      "published_size_bytes": 15124,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+      "original_size_bytes": 3264,
+      "path": "wgmma-formal-evidence/artifacts/source/config.mk.in",
+      "published_sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+      "published_size_bytes": 3264,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "39a7a1fe4caeb4db06fcdac544e99d700857795b94a7bbd4e5396a9028edbefa",
+      "original_size_bytes": 11382,
+      "path": "wgmma-formal-evidence/artifacts/source/configure",
+      "published_sha256": "39a7a1fe4caeb4db06fcdac544e99d700857795b94a7bbd4e5396a9028edbefa",
+      "published_size_bytes": 11382,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+      "original_size_bytes": 170,
+      "path": "wgmma-formal-evidence/artifacts/source/sim/common.mk",
+      "published_sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+      "published_size_bytes": 170,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "3913bba5168fe388c316b8936a3eb4b5f42c95497115a356efd3910648ca2fdf",
+      "original_size_bytes": 11150,
+      "path": "wgmma-formal-evidence/artifacts/source/sim/rtlsim/Makefile",
+      "published_sha256": "3913bba5168fe388c316b8936a3eb4b5f42c95497115a356efd3910648ca2fdf",
+      "published_size_bytes": 11150,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "3e5c968c5a5db2eff92e57da559866a30150346d8ad0c6f71cf9f20e23da73d0",
+      "original_size_bytes": 10065,
+      "path": "wgmma-formal-evidence/artifacts/source/sim/rtlsim/p02_wgmma_scoreboard_monitor.sv",
+      "published_sha256": "3e5c968c5a5db2eff92e57da559866a30150346d8ad0c6f71cf9f20e23da73d0",
+      "published_size_bytes": 10065,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "fc877bfb369afbe82da6d6e6eeee6389d55a74d262da32bd1522d3c508a397a2",
+      "original_size_bytes": 404,
+      "path": "wgmma-formal-evidence/artifacts/source/sim/rtlsim/verilator.vlt.in",
+      "published_sha256": "fc877bfb369afbe82da6d6e6eeee6389d55a74d262da32bd1522d3c508a397a2",
+      "published_size_bytes": 404,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "c719966647f32fef5421dd798a89d3eeddccd692e7c61046e5744b7a8e722403",
+      "original_size_bytes": 10608,
+      "path": "wgmma-formal-evidence/artifacts/source/sim/simx/Makefile",
+      "published_sha256": "c719966647f32fef5421dd798a89d3eeddccd692e7c61046e5744b7a8e722403",
+      "published_size_bytes": 10608,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "b1c359421ca2b1b8c31b9dc98893fac772daa239e236e9d1c9225a1eb431238c",
+      "original_size_bytes": 2432,
+      "path": "wgmma-formal-evidence/artifacts/source/sw/kernel/Makefile",
+      "published_sha256": "b1c359421ca2b1b8c31b9dc98893fac772daa239e236e9d1c9225a1eb431238c",
+      "published_size_bytes": 2432,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "2af4343c0738db4a665c96e24f90f78912302b20597dda74d9592afb6676736e",
+      "original_size_bytes": 618,
+      "path": "wgmma-formal-evidence/artifacts/source/sw/runtime/common.mk",
+      "published_sha256": "2af4343c0738db4a665c96e24f90f78912302b20597dda74d9592afb6676736e",
+      "published_size_bytes": 618,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "4c9a1b7c64d40a9726d1aafda30b416ebb08fde10d3f4dbde584c76aa45e03d3",
+      "original_size_bytes": 1795,
+      "path": "wgmma-formal-evidence/artifacts/source/sw/runtime/rtlsim/Makefile",
+      "published_sha256": "4c9a1b7c64d40a9726d1aafda30b416ebb08fde10d3f4dbde584c76aa45e03d3",
+      "published_size_bytes": 1795,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "c59dfb1850b0e19c77edc8cbc1fc1c96df11f5779724efefde437b83003bb97c",
+      "original_size_bytes": 1712,
+      "path": "wgmma-formal-evidence/artifacts/source/sw/runtime/simx/Makefile",
+      "published_sha256": "c59dfb1850b0e19c77edc8cbc1fc1c96df11f5779724efefde437b83003bb97c",
+      "published_size_bytes": 1712,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "e6aae339e07e2a3086cc0334c9353001521f774afdc9e921acf1e126b115b941",
+      "original_size_bytes": 2931,
+      "path": "wgmma-formal-evidence/artifacts/source/sw/runtime/stub/Makefile",
+      "published_sha256": "e6aae339e07e2a3086cc0334c9353001521f774afdc9e921acf1e126b115b941",
+      "published_size_bytes": 2931,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "4164a783137b2f6e594ff3795f5911233227c3e4bfcb0319095cd6e78acf9b56",
+      "original_size_bytes": 14342,
+      "path": "wgmma-formal-evidence/artifacts/source/tests/regression/common.mk",
+      "published_sha256": "4164a783137b2f6e594ff3795f5911233227c3e4bfcb0319095cd6e78acf9b56",
+      "published_size_bytes": 14342,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "c6adc040f205f2fa09c7aa5f0bab6c63ac7d9161fe240be0b0ea83f4fafe99f9",
+      "original_size_bytes": 860,
+      "path": "wgmma-formal-evidence/artifacts/source/tests/regression/p02_wgmma/Makefile",
+      "published_sha256": "c6adc040f205f2fa09c7aa5f0bab6c63ac7d9161fe240be0b0ea83f4fafe99f9",
+      "published_size_bytes": 860,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "22177196cb3c8d8f55d86700b252a8834f822111c6b88168748078031995a76d",
+      "original_size_bytes": 85717,
+      "path": "wgmma-formal-evidence/artifacts/source/tests/regression/p02_wgmma/fixtures.h",
+      "published_sha256": "22177196cb3c8d8f55d86700b252a8834f822111c6b88168748078031995a76d",
+      "published_size_bytes": 85717,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "1a7a22b7834463e976e685be43f8f38243800e0856684b98a1aa21144b4a542d",
+      "original_size_bytes": 16365,
+      "path": "wgmma-formal-evidence/artifacts/source/tests/regression/p02_wgmma/main.cpp",
+      "published_sha256": "1a7a22b7834463e976e685be43f8f38243800e0856684b98a1aa21144b4a542d",
+      "published_size_bytes": 16365,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "514dcb27da4afd82f87374716ed8fac9cb2cf22dab38d6e943c90d92c6b1e239",
+      "original_size_bytes": 979,
+      "path": "wgmma-formal-evidence/artifacts/source/tests/regression/sgemm_tcu_wg/Makefile",
+      "published_sha256": "514dcb27da4afd82f87374716ed8fac9cb2cf22dab38d6e943c90d92c6b1e239",
+      "published_size_bytes": 979,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "83a8c85beceb133eab3d588b3b325d575e0f7a9f4ef09c77b8aa679bbdfd1892",
+      "original_size_bytes": 389,
+      "path": "wgmma-formal-evidence/artifacts/source/tests/regression/sgemm_tcu_wg/common.h",
+      "published_sha256": "83a8c85beceb133eab3d588b3b325d575e0f7a9f4ef09c77b8aa679bbdfd1892",
+      "published_size_bytes": 389,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "67a4626685b97b0e890407422fa2113d260c143df793d804db3e3c0bf044e87c",
+      "original_size_bytes": 3876,
+      "path": "wgmma-formal-evidence/artifacts/source/tests/regression/sgemm_tcu_wg/kernel.cpp",
+      "published_sha256": "67a4626685b97b0e890407422fa2113d260c143df793d804db3e3c0bf044e87c",
+      "published_size_bytes": 3876,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "43cf8425de36f96ace7203c4e180a8fb5425eabc8c326067b42823d3d648c18c",
+      "original_size_bytes": 24520,
+      "path": "wgmma-formal-evidence/artifacts/source/tests/regression/sgemm_tcu_wg/main.cpp",
+      "published_sha256": "43cf8425de36f96ace7203c4e180a8fb5425eabc8c326067b42823d3d648c18c",
+      "published_size_bytes": 24520,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "73cfc6c4dc750cdedd95e1ecca88cb2ae289c02bdfe0205d9ff7ea7141a4940f",
+      "original_size_bytes": 1019,
+      "path": "wgmma-formal-evidence/artifacts/source/tests/regression/sgemm_tcu_wg_sp/Makefile",
+      "published_sha256": "73cfc6c4dc750cdedd95e1ecca88cb2ae289c02bdfe0205d9ff7ea7141a4940f",
+      "published_size_bytes": 1019,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "a8319769aaf95e8f8e34a07ae64322382319e9be8f6c5b1e293efedb407cfcbb",
+      "original_size_bytes": 671,
+      "path": "wgmma-formal-evidence/artifacts/source/tests/regression/sgemm_tcu_wg_sp/common.h",
+      "published_sha256": "a8319769aaf95e8f8e34a07ae64322382319e9be8f6c5b1e293efedb407cfcbb",
+      "published_size_bytes": 671,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "82184e802bb3f7fa4d03590cba9874edc43986af9c71f8913c8d6676c3b9ac43",
+      "original_size_bytes": 4788,
+      "path": "wgmma-formal-evidence/artifacts/source/tests/regression/sgemm_tcu_wg_sp/kernel.cpp",
+      "published_sha256": "82184e802bb3f7fa4d03590cba9874edc43986af9c71f8913c8d6676c3b9ac43",
+      "published_size_bytes": 4788,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "54ee30d4452601330620b97ba852172ee460b47616661eb57bd66ea681728f44",
+      "original_size_bytes": 18803,
+      "path": "wgmma-formal-evidence/artifacts/source/tests/regression/sgemm_tcu_wg_sp/main.cpp",
+      "published_sha256": "54ee30d4452601330620b97ba852172ee460b47616661eb57bd66ea681728f44",
+      "published_size_bytes": 18803,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_size_bytes": 0,
+      "path": "wgmma-formal-evidence/logs/simx-dense-fp16-ss-configure.log",
+      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published_size_bytes": 0,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_size_bytes": 0,
+      "path": "wgmma-formal-evidence/logs/simx-dense-fp16-ss-cpp-header-reproduce.log",
+      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published_size_bytes": 0,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "63a5819945e7a5a47a297e391885d40ddf7c7a81a3833ce9efd0201a0ff6c429",
+      "original_size_bytes": 32493,
+      "path": "wgmma-formal-evidence/logs/simx-dense-fp16-ss-runtime.log",
+      "published_sha256": "95d36fde39f22f089babbbc6dcf83e7c78a5a00a71cba37f3ae67aefff4d2b71",
+      "published_size_bytes": 27043,
+      "substitutions": {
+        "${SOURCE}": 142,
+        "${WORK}": 37
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_size_bytes": 0,
+      "path": "wgmma-formal-evidence/logs/simx-dense-fp16-ss-verilog-header-reproduce.log",
+      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "published_size_bytes": 0,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "a5de205979412264ab6a1d6f958e61fc5d8d770ffb91c9b7baf0326bd33583fd",
+      "original_size_bytes": 237,
+      "path": "wgmma-formal-evidence/logs/version-clang.log",
+      "published_sha256": "85e0a25f4542df1eccc74251f1560e1e12a160800a237077d0d44f1eb9360338",
+      "published_size_bytes": 196,
+      "substitutions": {
+        "${TOOLS}": 1
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "5f6798e87440f1e8b88bf6822c33bebe434f83374640a7f8ba967902ee1ea098",
+      "original_size_bytes": 232,
+      "path": "wgmma-formal-evidence/logs/version-gpp.log",
+      "published_sha256": "5f6798e87440f1e8b88bf6822c33bebe434f83374640a7f8ba967902ee1ea098",
+      "published_size_bytes": 232,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "cb84250d994234272d0a465014ce2931be76e9e0cb114b9bffa078c3c211e8eb",
+      "original_size_bytes": 300,
+      "path": "wgmma-formal-evidence/logs/version-make.log",
+      "published_sha256": "cb84250d994234272d0a465014ce2931be76e9e0cb114b9bffa078c3c211e8eb",
+      "published_size_bytes": 300,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "1465dfea136403db376c980056ae4cbc568db1682230d28c19568814a0547451",
+      "original_size_bytes": 254,
+      "path": "wgmma-formal-evidence/logs/version-riscv-gcc.log",
+      "published_sha256": "1465dfea136403db376c980056ae4cbc568db1682230d28c19568814a0547451",
+      "published_size_bytes": 254,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "46aedd5b30efdd94426c9eebbcf4a6ae7a9680526cc90ce8fec95977c2d6b12d",
+      "original_size_bytes": 38,
+      "path": "wgmma-formal-evidence/logs/version-verilator.log",
+      "published_sha256": "46aedd5b30efdd94426c9eebbcf4a6ae7a9680526cc90ce8fec95977c2d6b12d",
+      "published_size_bytes": 38,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "d6f5b40257c3f330957691bb023fde8a4ab775ab9e2abf88683d8e3686d2ac76",
+      "original_size_bytes": 99319,
+      "path": "wgmma-formal-evidence/report.json",
+      "published_sha256": "5b0f2ffebc26b13c22098dcbd17347f85f73a97bfa114dff4b0284c9318cd5af",
+      "published_size_bytes": 97706,
+      "substitutions": {
+        "${SOURCE}": 6,
+        "${TOOLS}": 7,
+        "${WORK}": 32
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "690173f589504b19bf777e626e54124a02ebfb4a7141c2b644cb0ee21e8070b9",
+      "original_size_bytes": 125079,
+      "path": "wgmma-formal-evidence/snapshots/selected-fixtures.json",
+      "published_sha256": "690173f589504b19bf777e626e54124a02ebfb4a7141c2b644cb0ee21e8070b9",
+      "published_size_bytes": 125079,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "63b3f489783213baa2db97550daad5621df06409bac69c0b53cf8637a805cbe0",
+      "original_size_bytes": 127037,
+      "path": "wgmma-formal-evidence/snapshots/source-after.json",
+      "published_sha256": "63b3f489783213baa2db97550daad5621df06409bac69c0b53cf8637a805cbe0",
+      "published_size_bytes": 127037,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "63b3f489783213baa2db97550daad5621df06409bac69c0b53cf8637a805cbe0",
+      "original_size_bytes": 127037,
+      "path": "wgmma-formal-evidence/snapshots/source-before.json",
+      "published_sha256": "63b3f489783213baa2db97550daad5621df06409bac69c0b53cf8637a805cbe0",
+      "published_size_bytes": 127037,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "63b3f489783213baa2db97550daad5621df06409bac69c0b53cf8637a805cbe0",
+      "original_size_bytes": 127037,
+      "path": "wgmma-formal-evidence/snapshots/source-simx-dense-fp16-ss-before.json",
+      "published_sha256": "63b3f489783213baa2db97550daad5621df06409bac69c0b53cf8637a805cbe0",
+      "published_size_bytes": 127037,
+      "substitutions": {}
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "88c78cec1e1a121e6931820b415d76026a0c347dee163976604dafcd63e01620",
+      "original_size_bytes": 6404,
+      "path": "wgmma-formal-evidence/snapshots/tools-after.json",
+      "published_sha256": "5b3bbae2a518564c54fa731e2732f605464032709658a328e4ab2098f8defa57",
+      "published_size_bytes": 5338,
+      "substitutions": {
+        "${TOOLS}": 26
+      }
+    },
+    {
+      "encoding": "utf-8",
+      "original_sha256": "88c78cec1e1a121e6931820b415d76026a0c347dee163976604dafcd63e01620",
+      "original_size_bytes": 6404,
+      "path": "wgmma-formal-evidence/snapshots/tools-before.json",
+      "published_sha256": "5b3bbae2a518564c54fa731e2732f605464032709658a328e4ab2098f8defa57",
+      "published_size_bytes": 5338,
+      "substitutions": {
+        "${TOOLS}": 26
+      }
+    }
+  ],
+  "format": "normalized-text-evidence-v2",
+  "limits": {
+    "compressed_bundle_bytes": 4194304,
+    "expanded_bundle_bytes": 100663296,
+    "member_bytes": 16777216,
+    "members": 4096,
+    "total_original_bytes": 67108864,
+    "total_published_bytes": 67108864
+  },
+  "missing_required_inputs": [],
+  "normalization_roles": {
+    "${SOURCE}": "tested source checkout",
+    "${TOOLS}": "installed tools root",
+    "${WORK}": "retained evidence workspace",
+    "${WORK}/..": "workspace parent, when source and work are siblings"
+  },
+  "original_total_bytes": 1798294,
+  "published_text_bytes": 1771701,
+  "retained_project_include_snapshots": [],
+  "schema_version": 1,
+  "scope": "Text evidence packaging only. Completed execution packets, historical failures, logs and reviews retain their individual scope. This export grants no acceptance and makes no execution, numerical, hardware, or phase-completion decision.",
+  "selection": {
+    "exclude": [
+      "host-gcc12/metadata/Packages.xz",
+      "host-gcc12/packages",
+      "host-gcc12/prefix"
+    ],
+    "guards": {},
+    "inputs": [
+      {
+        "completed_report": "wgmma-formal-evidence/report.json",
+        "path": "wgmma-formal-evidence",
+        "required": true
+      },
+      {
+        "path": "failure-index.json",
+        "required": true
+      },
+      {
+        "path": "implementation-publication.json",
+        "required": true
+      },
+      {
+        "path": "host-compat",
+        "required": true
+      },
+      {
+        "path": "host-gcc12/acquire.py",
+        "required": true
+      },
+      {
+        "path": "host-gcc12/probe.py",
+        "required": true
+      },
+      {
+        "path": "host-gcc12/receipt.json",
+        "required": true
+      },
+      {
+        "path": "host-gcc12/acquisition-receipt.json",
+        "required": true
+      },
+      {
+        "path": "host-gcc12/logs",
+        "required": true
+      },
+      {
+        "path": "host-gcc12/metadata",
+        "required": true
+      },
+      {
+        "path": "host-gcc12/probes",
+        "required": true
+      },
+      {
+        "path": "reviews/w04d.md",
+        "required": true
+      },
+      {
+        "path": "reviews/w04f.md",
+        "required": true
+      },
+      {
+        "path": "reviews/w05b.md",
+        "required": true
+      },
+      {
+        "path": "reviews/w05c.md",
+        "required": true
+      },
+      {
+        "path": "package_wgmma_evidence.py",
+        "required": true
+      },
+      {
+        "path": "publication-drafts/compiler-recovery-inputs",
+        "required": true
+      },
+      {
+        "path": "publication-drafts/compiler-recovery-v2-selection.json",
+        "required": true
+      },
+      {
+        "path": "publication-drafts/compiler-recovery-source-inputs",
+        "required": true
+      }
+    ],
+    "required_groups": {
+      "clang_probe": [
+        "host-compat/dram_sim.clang-result.json"
+      ],
+      "context": [
+        "publication-drafts/compiler-recovery-inputs/component-context.json"
+      ],
+      "formal_failure_log": [
+        "wgmma-formal-evidence/logs/simx-dense-fp16-ss-runtime.log"
+      ],
+      "formal_failure_report": [
+        "wgmma-formal-evidence/report.json"
+      ],
+      "gcc12_receipt": [
+        "host-gcc12/receipt.json"
+      ],
+      "gitmodules_copy": [
+        "publication-drafts/compiler-recovery-source-inputs/gitmodules.txt"
+      ],
+      "metadata_copies": [
+        "publication-drafts/compiler-recovery-inputs/InRelease.txt"
+      ],
+      "source_mapping": [
+        "implementation-publication.json"
+      ]
+    },
+    "schema_version": 1
+  },
+  "source_identity": null,
+  "uncompressed_bundle_sha256": "0b6ee6bc1d73bb5a6eb9b861268fa8a984e1d5a550c4fb5967d5b25fa9e990ee",
+  "uncompressed_bundle_size_bytes": 1963280
+}

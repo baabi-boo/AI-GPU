@@ -1,0 +1,225 @@
+{
+  "review_id": "w09c",
+  "decision": "approve",
+  "scope": "narrow checkout/execution source-input binding fix only",
+  "finalized_at": "2026-11-18T05:00:39.702383+00:00",
+  "findings": [],
+  "severity_counts": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "candidate": {
+    "review_id": "w09c",
+    "candidate_base_revision": "ba12d66e14771be32dbed7a67a988b839cd41e23",
+    "changed_paths": [
+      "ci/project/p02_wgmma_packet.py",
+      "ci/project/test_p02_wgmma_packet.py"
+    ],
+    "status": [
+      " M ci/project/p02_wgmma_packet.py",
+      " M ci/project/test_p02_wgmma_packet.py"
+    ],
+    "baseline_files": [
+      {
+        "path": "ci/project/p02_wgmma_packet.py",
+        "sha256": "ce33df0111d33cbb22a4f6c2360b0b1da7fb7c8063db66b98e081d310069c0a4",
+        "size_bytes": 33359
+      },
+      {
+        "path": "ci/project/test_p02_wgmma_packet.py",
+        "sha256": "291b35c4ddd491de63c776a515a9096bdb7e4986660bc093cba72c6187a8694f",
+        "size_bytes": 27684
+      }
+    ],
+    "reviewed_files": [
+      {
+        "path": "ci/project/p02_wgmma_packet.py",
+        "sha256": "11497b57db50c4c1e690d38c406d0de94f86b2017cec036f7ed79008151e72a4",
+        "size_bytes": 34281
+      },
+      {
+        "path": "ci/project/test_p02_wgmma_packet.py",
+        "sha256": "b22daed1c623ae72389da7bf9ab12c242e92ef300d7a7762e3946ec1d38271bf",
+        "size_bytes": 31735
+      }
+    ],
+    "reviewed_patch": {
+      "path": "w09c-reviewed.patch",
+      "sha256": "e74aeb8ae412bee634bb19c02617a03959942f5c18a2d4ea97defda323798fd5",
+      "size_bytes": 12233
+    },
+    "mandatory_consumer_count": 11,
+    "unchanged_ast_guards": {
+      "CONSUMER_INPUTS": true,
+      "bind_copies": true,
+      "Reader": true,
+      "inventory": true,
+      "identity": true,
+      "all_other_verify_source_guards": true
+    },
+    "git_diff_check": {
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "focused_tests": {
+    "test_methods": 10,
+    "named_subtests": 46,
+    "failures": 0,
+    "errors": 0,
+    "outcome": "pass",
+    "data": "w09c-focused-data.json"
+  },
+  "real_snapshot_boundary": {
+    "checks": 41,
+    "adversarial_helper_rejections": 37,
+    "failures": 0,
+    "outcome": "pass",
+    "data": "w09c-real-boundary-data.json",
+    "source_before": {
+      "path": "snapshots/source-before.json",
+      "sha256": "96fabbd00a1fa59a8234530add191ff951c3bd5741509d97df2f8dbb8d9f41f5",
+      "size_bytes": 127037
+    },
+    "captured_report": {
+      "path": "${WORK}/reviews/w09a-report-partial.json",
+      "sha256": "dd60b9a2037d34b72b407612e89cbf7f4ced3e5dca208c0828e24e1ec23b6ad2",
+      "size_bytes": 2313955
+    },
+    "actual_inventory": {
+      "source_file_count": 740,
+      "checkout_input_count": 8,
+      "checkout_paths": [
+        "VERSION",
+        ".gitmodules",
+        "configure",
+        "config.mk.in",
+        "VX_config.toml",
+        "VX_types.toml",
+        "ci/gen_config.py",
+        "ci/blackbox.sh"
+      ],
+      "overlap_paths": [
+        ".gitmodules",
+        "VERSION",
+        "VX_config.toml",
+        "VX_types.toml",
+        "ci/gen_config.py",
+        "config.mk.in",
+        "configure"
+      ],
+      "checkout_only_identity": {
+        "path": "ci/blackbox.sh",
+        "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+        "size_bytes": 9153
+      },
+      "captured_source_revision": "4af2307e57202c1269e20f893267a5583ad3cba0",
+      "captured_source_tree": "42e5d6f2c9c0c2035c4d3ec8c86125e8cca45192"
+    }
+  },
+  "commands": {
+    "review_id": "w09c",
+    "cwd": "${WORK}/verifier-candidate",
+    "runs": [
+      {
+        "status": "fulfilled",
+        "value": {
+          "label": "focused",
+          "cmd": "python3 -I -B ${WORK}/reviews/w09c-focused.py > ${WORK}/reviews/w09c-focused.stdout 2> ${WORK}/reviews/w09c-focused.stderr",
+          "result": {
+            "chunk_id": "10a84c",
+            "wall_time_seconds": 6.153547047,
+            "exit_code": 0,
+            "original_token_count": 0,
+            "output": ""
+          }
+        }
+      },
+      {
+        "status": "fulfilled",
+        "value": {
+          "label": "real_boundary",
+          "cmd": "python3 -I -B ${WORK}/reviews/w09c-real-boundary.py > ${WORK}/reviews/w09c-real-boundary.stdout 2> ${WORK}/reviews/w09c-real-boundary.stderr",
+          "result": {
+            "chunk_id": "44c7ff",
+            "wall_time_seconds": 0.352219487,
+            "exit_code": 0,
+            "original_token_count": 0,
+            "output": ""
+          }
+        }
+      }
+    ]
+  },
+  "candidate_stable_during_checks": true,
+  "original_partial_report_preserved": true,
+  "final_source_after_synthesized": false,
+  "actual_complete_packet_verifier_invoked": false,
+  "full_test_suite_invoked": false,
+  "external_process_launch_attempts_in_test_and_boundary_scripts": 0,
+  "compiler_gpu_or_native_execution_performed": false,
+  "candidate_files_edited_by_reviewer": false,
+  "acceptance_claimed": false,
+  "qualifies_P02_A03": false,
+  "phase_complete": false,
+  "artifacts": [
+    {
+      "path": "w09c-command-receipts.json",
+      "sha256": "909073c22b7da7c26e8abf531a6a2dc8af238f9ef8d8139bfbd6fed7a9772e08",
+      "size_bytes": 1213
+    },
+    {
+      "path": "w09c-focused-data.json",
+      "sha256": "f829787884c7b273eabdd1c770d4852ae44c2587d94bbe78fe9fe1d8831b09ba",
+      "size_bytes": 14452
+    },
+    {
+      "path": "w09c-focused.py",
+      "sha256": "930514a0bf10a651233edd59128c03b78518f6f3284e6782bf5b99cd1c30ac21",
+      "size_bytes": 3754
+    },
+    {
+      "path": "w09c-focused.stderr",
+      "sha256": "0bf9449024ea4dbc4192558aadb84f2885061581568c8691ade3316e158be54f",
+      "size_bytes": 1849
+    },
+    {
+      "path": "w09c-focused.stdout",
+      "sha256": "6ae7a7ee499e724accbe60107122f62b50dcce2f0288cf95331aaa458c91caed",
+      "size_bytes": 77
+    },
+    {
+      "path": "w09c-real-boundary-data.json",
+      "sha256": "742fbc2724bc31a35a7a9569fdd46c2b8b3d6503c6d232b73dd5ec7360756d4a",
+      "size_bytes": 16977
+    },
+    {
+      "path": "w09c-real-boundary.py",
+      "sha256": "173a2afc630d3b46912518dab04d01679b5aa6875ca6ee2811b87e690f3b4055",
+      "size_bytes": 10496
+    },
+    {
+      "path": "w09c-real-boundary.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w09c-real-boundary.stdout",
+      "sha256": "30759c41db356eaa50d9f789d88bfaa3fcec1ff76b17607fd2ca17172f7703d8",
+      "size_bytes": 2209
+    },
+    {
+      "path": "w09c-reviewed.patch",
+      "sha256": "e74aeb8ae412bee634bb19c02617a03959942f5c18a2d4ea97defda323798fd5",
+      "size_bytes": 12233
+    },
+    {
+      "path": "w09c-static-data.json",
+      "sha256": "1af0ad688a63f293c2f0bc4447313d07ab4f0563c801dc4672dca73902532c36",
+      "size_bytes": 1535
+    }
+  ]
+}

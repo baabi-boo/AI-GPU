@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "component_id": "p02-wgmma-compiler-failure-and-recovery",
+  "scope": "Preserved GCC14 formal build failure, separate Clang20 probe failure, and GCC12 host compatibility recovery; no formal processor acceptance result.",
+  "source_revision": "7360bbadf4f9dcbd80a3f326c91a1c9cd72ffa7b",
+  "source_tree": "42e5d6f2c9c0c2035c4d3ec8c86125e8cca45192",
+  "same_tree_published_commit": "4af2307e57202c1269e20f893267a5583ad3cba0",
+  "source_identity_member": "publication-drafts/compiler-recovery-inputs/component-context.json",
+  "artifacts": [
+    {
+      "path": "publication-staging/compiler-recovery-v2/evidence-bundle.json.gz",
+      "sha256": "d293fe7f7ccb0479d9090338fddfa5daae664381d8f5ae19e5bf1756b48983b4",
+      "size_bytes": 425678
+    },
+    {
+      "path": "publication-staging/compiler-recovery-v2/inventory.json",
+      "sha256": "fc0b6330b2e9016aa8ac8b6455c483d58a080bd827fb566f569b3a6dfb666341",
+      "size_bytes": 61805
+    },
+    {
+      "path": "package_wgmma_evidence.py",
+      "sha256": "591a5e769f318a1889a4de2706238c3ab1b82156fe97a5c9e0d803495b0ec8cd",
+      "size_bytes": 31718
+    },
+    {
+      "path": "publication-drafts/compiler-recovery-v2-selection.json",
+      "sha256": "db7ef83b8160a7369fdff991bf05b0fb4a132fda42f0355c9db66f132d1223c7",
+      "size_bytes": 2440
+    }
+  ],
+  "file_count": 133,
+  "original_total_bytes": 1798294,
+  "published_text_bytes": 1771701,
+  "compressed_bytes": 425678,
+  "expanded_bundle_bytes": 1963280,
+  "limits": {
+    "compressed_bundle_bytes": 4194304,
+    "expanded_bundle_bytes": 100663296,
+    "member_bytes": 16777216,
+    "members": 4096,
+    "total_original_bytes": 67108864,
+    "total_published_bytes": 67108864
+  },
+  "binding_audit": {
+    "historical_live_file_observations": [],
+    "recognized_external_or_excluded_bindings_not_verified": 2486,
+    "recognized_original_bindings_verified": 126
+  },
+  "missing_required_inputs": [],
+  "deferred_inputs": [],
+  "verification": {
+    "commands": [
+      {
+        "argv": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/5b5ef3281659/ai-gpu-work/package_wgmma_evidence.py",
+          "verify",
+          "--work",
+          "/workspace/scratch/5b5ef3281659/ai-gpu-work",
+          "--source",
+          "/workspace/scratch/5b5ef3281659/AI-GPU",
+          "--tools",
+          "/workspace/scratch/5b5ef3281659/ai-gpu-work/tools",
+          "--output",
+          "/workspace/scratch/5b5ef3281659/ai-gpu-work/publication-staging/compiler-recovery-v2"
+        ],
+        "cwd": "/workspace/scratch/5b5ef3281659/ai-gpu-work",
+        "started_at": "2026-11-18T04:27:05.559117+00:00",
+        "duration_seconds": 0.24334,
+        "exit_code": 0,
+        "stdout": "{\"acceptance_claimed\": false, \"bundle_sha256\": \"d293fe7f7ccb0479d9090338fddfa5daae664381d8f5ae19e5bf1756b48983b4\", \"original_members_verified\": 133, \"published_members_verified\": 133}\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "/workspace/scratch/5b5ef3281659/ai-gpu-work/package_wgmma_evidence.py",
+          "verify",
+          "--published-only",
+          "--output",
+          "/workspace/scratch/5b5ef3281659/ai-gpu-work/publication-staging/compiler-recovery-v2"
+        ],
+        "cwd": "/workspace/scratch/5b5ef3281659/ai-gpu-work",
+        "started_at": "2026-11-18T04:27:05.802493+00:00",
+        "duration_seconds": 0.160319,
+        "exit_code": 0,
+        "stdout": "{\"acceptance_claimed\": false, \"bundle_sha256\": \"d293fe7f7ccb0479d9090338fddfa5daae664381d8f5ae19e5bf1756b48983b4\", \"original_members_verified\": 0, \"published_members_verified\": 133}\n",
+        "stderr": ""
+      }
+    ],
+    "verbatim_metadata_copies": 7,
+    "verbatim_source_copies": 1,
+    "formal_failed_packet_members_at_original_names": 60,
+    "formal_failed_packet_members_via_verbatim_copy": 1,
+    "all_clang_probe_files_retained": 8,
+    "source_checkout_clean": true,
+    "source_head_at_export": "4af2307e57202c1269e20f893267a5583ad3cba0"
+  },
+  "limitations": [
+    "The failed formal attempt remains bound to its original clean7360bbadf4f9dcbd80a3f326c91a1c9cd72ffa7b revision; 4af2307 is a distinct published commit with the same tree.",
+    "Clang20 and GCC12 probes change only compiler and object output arguments; original -MF paths remain. Clang20 lacks an independent source snapshot and is bound through the original compile log.",
+    "GCC12 InRelease signature validation was not performed; the independent review checked SHA256 metadata and archive chains, not signed authenticity.",
+    "Packages.xz, six package archives, extracted compiler prefix, runtime library bodies, generated object files and tool binaries are omitted; retained receipts preserve their recorded identities.",
+    "Literal workspace prefix normalization changes published text bytes; embedded original hashes are preserved. inventory.json independently binds original and published member bytes.",
+    "Exporter source_identity is null because its historical hardcoded path is WMMA-specific; this explicit component context and failed WGMMA report/snapshots provide the actual source identity.",
+    "The 1602-test summary in implementation-publication.json is historical publication metadata; its full suite execution evidence belongs to the separate implementation component.",
+    "Original .gitmodules body is retained as publication-drafts/compiler-recovery-source-inputs/gitmodules.txt with an explicit byte identity map; unchanged exporter excludes the original suffixless name.",
+    "Earlier compiler-recovery component remains unchanged; compiler-recovery-v2 adds this omitted body and its explicit map."
+  ],
+  "acceptance_claimed": false,
+  "qualifies_P02_A03": false,
+  "phase_complete": false,
+  "artifact_paths_relative_to": "retained evidence workspace"
+}

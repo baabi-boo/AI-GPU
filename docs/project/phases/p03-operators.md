@@ -1,8 +1,11 @@
 # P03 — AI operator library
 
 **Goal:** provide reusable native AI operators over the existing tensor API and
-runtime, without requiring a replacement HIP compiler. This is an implementation
-plan, not a claim that the library already exists. Live state and canonical gates
+runtime, without requiring a replacement HIP compiler. **P03 is in progress.**
+P03-T01 has an implemented [input/argument contract](../../designs/ai_operator_contract_v1.md),
+[manifest](../../../ci/project/p03_operator_manifest.json) and checked host planner.
+Device launches and lifecycle qualification remain P03-T02 work. The
+[handoff](../p03-operators-handoff.md) records source-level evidence. Live state and canonical gates
 are in [roadmap.json](../roadmap.json); the accountable role is Kernel and runtime lead.
 
 ## Entry and boundaries

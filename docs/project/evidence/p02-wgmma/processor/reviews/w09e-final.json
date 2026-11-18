@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/w09e_acceptance_review",
+  "review_kind": "Final independent P02-A03 engineering acceptance review",
+  "reviewed_at": "2026-11-18T05:16:20.456792+00:00",
+  "state": "finished",
+  "decision": "approve",
+  "decision_scope": "Approve the completed bounded P02-A03 engineering evidence; canonical closure remains conditional on intact final export and state reconciliation.",
+  "engineering_evidence_satisfies_P02_A03": true,
+  "engineering_review_complete": true,
+  "canonical_gate_closed": false,
+  "phase_complete": false,
+  "publication_complete_claimed": false,
+  "human_or_maintainer_approval_claimed": false,
+  "waiver_granted": false,
+  "findings": [],
+  "blocking_engineering_findings": 0,
+  "canonical_criterion": "WGMMA synchronization, metadata, multi-warp and backpressure cases preserve correctness with no unexplained model divergence.",
+  "canonical_verification": "Concurrency tests and model-parity evidence or documented applicability limits",
+  "evidence_level": "rtl_verified",
+  "execution_source_revision": "4af2307e57202c1269e20f893267a5583ad3cba0",
+  "execution_source_tree": "42e5d6f2c9c0c2035c4d3ec8c86125e8cca45192",
+  "report_sha256": "b5b136bb3144613d7c32c47a888f744e864d9dab737c19e954f9da7dabcadb78",
+  "report_size_bytes": 2952368,
+  "preserved_interim_files": [
+    {
+      "path": "${WORK}/reviews/w09e.md",
+      "sha256": "7bf7848132cbe27bf649d6bf774078f4e06a37c5601b236b6e30b039bb075e08",
+      "size_bytes": 12033
+    },
+    {
+      "path": "${WORK}/reviews/w09e.json",
+      "sha256": "130570e2cb1504cf51c0953f67860ccac33be82f17ded90a1eb07235b7e74a2a",
+      "size_bytes": 18351
+    }
+  ],
+  "completion_anchor_filename_note": "The actual hash-checked file is formal-completion-anchor.json. The earlier interim root_supplied_completion_anchor.record used rootformal-completion-anchor.json as task-message shorthand; no file with that name was relied on. The interim bytes are preserved.",
+  "approved_scope": {
+    "processor": "RV64; one cluster/core; eight threads per warp; eight warps; issue width four; four TCU blocks; native TFR tensor and STD scalar floating-point arithmetic; 16 KiB/eight-bank LMEM; latency four; DSP off.",
+    "geometry": "M64 N8 K16, NRC8 KUNROLL1, initial C=+0, two CTAs/four warps each, two K8 tiles, two fixture patterns and two launches per pattern.",
+    "variants": [
+      "dense-fp16-ss",
+      "dense-fp16-rs",
+      "dense-bf16-ss",
+      "dense-bf16-rs",
+      "dense-fp16-ss-row-major-a",
+      "sparse-fp16-ss"
+    ],
+    "reference": "Frozen independent bounded integer fixtures with exact uint32 FP32 output equality; no extension of general rounding/exceptional-value qualification.",
+    "directed_unit": "Historical no-DPI native four-slot TCU/shared unit at 9006939aa123452b198bc0987e34aae8fab45fdd, source-bridged to the execution source; dense NRC16 RS pressure is separate from NRC8 processor geometry."
+  },
+  "completed_evidence": {
+    "processor_commands": 113,
+    "backend_variants": 12,
+    "case_executions": 24,
+    "processor_launches": 48,
+    "processor_exact_words": 24576,
+    "case_performance_pairs": 12,
+    "paired_launch_comparisons": 24,
+    "maximum_cycle_gap_percent": 1.3564839934888768,
+    "metadata_events": 256,
+    "metadata_transactions": 64,
+    "metadata_transactions_with_real_wait": 64,
+    "native_sparse_launches": 4,
+    "summed_warp_wait_cycles": 2748,
+    "summed_warp_wait_cycles_are_elapsed_stall_time": false,
+    "unit_commands": 9,
+    "unit_groups": 8,
+    "unit_accepted_and_committed_transactions_each": 392,
+    "unit_exact_words_including_intermediate_feedback": 3072,
+    "official_verified_packet_files": 1103,
+    "reviewer_consumed_and_rechecked_files": 1908
+  },
+  "parity_scope": {
+    "instructions": "Exact per-launch retired-instruction equality.",
+    "cycles": "abs(SimX_cycles - RTL_cycles) * 100 <= RTL_cycles * 5",
+    "auxiliary_events": "TCU counters remain observed, unequal where reported, and unattributed. They are not frozen equality predicates. This review claims no event-by-event model identity and grants no tolerance or applicability waiver."
+  },
+  "verifier": {
+    "local_revision": "5e3b74fd569169ad921315223c121a037ae656b7",
+    "published_revision": "359a8c007f450a8146540f795cb576b29818fa03",
+    "identical_tree": "97116818da872f43f952a351eb6616fc327be438",
+    "source_sha256": "11497b57db50c4c1e690d38c406d0de94f86b2017cec036f7ed79008151e72a4",
+    "independent_fix_review": "approve",
+    "focused_clean_test_count": 22,
+    "official_cli_exit_code": 0,
+    "official_trust_anchor": "external_report_sha256",
+    "official_packet_valid": true,
+    "official_qualification_status": "independent_review_required",
+    "original_failure_preserved": true,
+    "execution_source_rewritten": false,
+    "full_corrected_repository_suite_claimed": false
+  },
+  "obligations": [
+    {
+      "id": "A03-01",
+      "obligation": "Entry and P02 prerequisites",
+      "status": "satisfied",
+      "assessment": "P00 complete; P01-A01/A02 staged entry and P02-A01/A02 accepted. All 159 referenced prerequisite artifact hashes match; separate P01-A03 blocked record remains intact."
+    },
+    {
+      "id": "A03-02",
+      "obligation": "Frozen arithmetic, geometry and parity contract",
+      "status": "satisfied",
+      "assessment": "Frozen six-variant RV64 matrix, independent fixture hashes, exact output comparison, exact per-launch instructions and unchanged 5% RTL-denominator cycle rule are preserved."
+    },
+    {
+      "id": "A03-03",
+      "obligation": "Historical unit applicability to frozen source",
+      "status": "satisfied",
+      "assessment": "417 named bridge entries and all 436 original unit source-snapshot entries match current source; all eight checkout inputs match. Reviewed original unit identity is preserved; current bridging is not a rerun."
+    },
+    {
+      "id": "A03-04",
+      "obligation": "Descriptor and layout correctness",
+      "status": "satisfied_bounded_scope",
+      "assessment": "Unit descriptor reuse/replacement and poison checks pass; all dense SS/RS FP16/BF16 rows and FP16 row-major-A processor rows pass exact arithmetic with matched configuration and binaries."
+    },
+    {
+      "id": "A03-05",
+      "obligation": "Synchronization and multiple warps",
+      "status": "satisfied_bounded_scope",
+      "assessment": "Directed unit observes staggered overlap, CTA conflict exclusion followed by entry, stable commits and drain. Processor runs cover two four-warp CTAs; sparse raw witness confirms stable ownership in every per-warp load pair."
+    },
+    {
+      "id": "A03-06",
+      "obligation": "Directed backpressure and bounded progress",
+      "status": "satisfied_bounded_scope",
+      "assessment": "Native dense NRC16 RS isolated pressure observes two causal conjunctions, ten held cycles, and eight further stable cycles. Separate LMEM stalls/delays and bounded drain pass. Forced sparse compute pressure is not claimed."
+    },
+    {
+      "id": "A03-07",
+      "obligation": "Metadata transaction behavior",
+      "status": "satisfied_bounded_scope",
+      "assessment": "Native unit metadata tests pass eight requests, sixteen split writes and sixty-four lanes with delays, reload, exact output and proper drain. Processor dependency order is separately established below."
+    },
+    {
+      "id": "A03-08",
+      "obligation": "Matched complete processor arithmetic",
+      "status": "satisfied",
+      "assessment": "113 commands and all 12 variants pass; 24 case executions, 48 launches and 24,576 exact words. This reviewer rehashed every command log and reparsed every actual/expected output against the frozen corpus."
+    },
+    {
+      "id": "A03-09",
+      "obligation": "Actual processor metadata scoreboard dependency",
+      "status": "satisfied",
+      "assessment": "All four native sparse launches have sixteen complete reserve/wait/release/issue transactions across eight physical warps and two stable CTA groups. All 64 transactions actually wait; assertions and passive monitors are bound into the exact executed native library."
+    },
+    {
+      "id": "A03-10",
+      "obligation": "Model parity within frozen scope",
+      "status": "satisfied_frozen_parity_scope",
+      "assessment": "All 24 launch pairs have exact retired-instruction equality and pass the unchanged 5% cycle rule. Maximum observed gap is 50/3686*100 = 1.3564839934888768%. Auxiliary TCU event counts retain their observed differences; no event-level equivalence is claimed."
+    },
+    {
+      "id": "A03-11",
+      "obligation": "Native arithmetic, compiler roles and assertions",
+      "status": "satisfied_bounded_native_scope",
+      "assessment": "All native variants select TFR tensor and STD scalar arithmetic with exactly one --assert. Sparse hierarchy has 32 native FEDP instances, four bound monitors/eight local-warp pairs, and compiled assertion diagnostics. Inherited integer/utility DPI remains; unit no-DPI evidence is separate."
+    },
+    {
+      "id": "A03-12",
+      "obligation": "Provenance, stability and retained failures",
+      "status": "satisfied",
+      "assessment": "38 source snapshots, 740 source identities, 22 selected tools, three reused libraries and 137 dependency headers remain stable. All 113 commands succeed with complete cleanup and no recorded resource stop. Historical unit, environment attempts and verifier failure remain separate preserved evidence."
+    },
+    {
+      "id": "A03-13",
+      "obligation": "Corrected packet verifier and independent acceptance",
+      "status": "satisfied",
+      "assessment": "W09C approves the exact strict checkout-input fix; clean 22 focused tests pass. The official corrected CLI with --require-witness and external report SHA-256 exits 0, checks 1,103 packet files, and reports packet_valid=true. Its independent_review_required state is addressed by this engineering assessment."
+    },
+    {
+      "id": "A03-14",
+      "obligation": "Immutable publication and state reconciliation",
+      "status": "pending_canonical_delivery",
+      "assessment": "Engineering evidence is approved. Canonical closure still requires finalized immutable export/index, independent publication-integrity review, accurate acceptance artifact hashes, and reconciled roadmap/phase/status/backlog. This review does not claim that export or closure has occurred."
+    }
+  ],
+  "canonical_closure_conditions": [
+    "Finish the exact immutable evidence export with unchanged size/selection limits, original and separately normalized published identities, explicit omissions and no overwritten failure history.",
+    "Independently review the final publication components/index and both original-plus-published and published-only verification results; attach actual artifact hashes and this review to the acceptance record.",
+    "Reconcile P02-A03 evidence and P02 phase status only after all passing prerequisite records and the finalized publication remain valid. Keep the original execution/source identities distinct from later verifier/documentation/publication revisions.",
+    "Keep P01 and P01-A03 blocked on their original vendor-integration requirement. Do not infer AFU/vendor/physical/synthesis qualification.",
+    "Keep P03 not_started in this acceptance change unless separately beginning its bounded native operator contract/manifest/ABI task; an accepted P02 handoff is not completed P03 operator execution."
+  ],
+  "limitations": [
+    "No fresh unit rerun: historical native unit applicability rests on matching source/configuration identities plus the retained completed reviews. The original unit Git object is not locally reconstructed.",
+    "Unit logs retain success totals rather than every successful word; original reviewers inspected the executed harness and original binary.",
+    "Forced causal compute pressure is dense NRC16 RS only. The eight tail cycles do not each prove the full upstream conjunction.",
+    "The processor sparse witness proves the actual observed transactions. No same-cycle release/issue occurred, and none is claimed as runtime coverage.",
+    "Native tensor/scalar floating-point paths retain inherited integer/utility DPI in processor rtlsim; whole-processor no-DPI is unclaimed.",
+    "Omitted library/tool/dependency/source bodies retain identity-only publication scope where specified. Export integrity is not binary replay or origin authentication.",
+    "RSS/disk enforcement is polled, source stability is observed at checkpoints, dependencies are reused identified inputs, and resource figures are host observations.",
+    "No arbitrary geometry, sparse BF16/RS, scaled formats, FEDP2K, LDST_MATRIX, universal IEEE behavior, event-level timing identity, full-AFU, vendor hw_emu, physical FPGA, synthesis/PPA or silicon claim.",
+    "No compiler, GPU execution, test suite or subagent was invoked by this acceptance reviewer; only read-only evidence analysis and review-file writes were performed."
+  ],
+  "review_method_note": "The reviewer independently reparsed all final arithmetic/counter logs and rejoined all sparse metadata event chains, rehashed final artifacts and receipt bindings, then rechecked all 1,908 consumed identities. One initial reader assertion compared two equivalent verifier-source inventories in incidental list order; inspection proved exact path-to-identity equality and the reader was corrected to compare inventories by path. This was a reviewer helper ordering assumption, not a packet/verifier/GPU failure or a gate change.",
+  "artifacts": [
+    {
+      "path": "${WORK}/formal-completion-anchor.json",
+      "sha256": "116d815fc5e52e0b3df79260c20200775e49471f9f7ffe4404f2a708f911aaa2",
+      "size_bytes": 18132
+    },
+    {
+      "path": "${WORK}/wgmma-gcc12-formal-evidence/report.json",
+      "sha256": "b5b136bb3144613d7c32c47a888f744e864d9dab737c19e954f9da7dabcadb78",
+      "size_bytes": 2952368
+    },
+    {
+      "path": "${WORK}/reviews/w09e.md",
+      "sha256": "7bf7848132cbe27bf649d6bf774078f4e06a37c5601b236b6e30b039bb075e08",
+      "size_bytes": 12033
+    },
+    {
+      "path": "${WORK}/reviews/w09e.json",
+      "sha256": "130570e2cb1504cf51c0953f67860ccac33be82f17ded90a1eb07235b7e74a2a",
+      "size_bytes": 18351
+    },
+    {
+      "path": "${WORK}/reviews/w09e-final-audit.py",
+      "sha256": "a21cd66d76dfdb51bf6ba901fb8be8bd0859c12b041560b18459806910c9dd33",
+      "size_bytes": 17291
+    },
+    {
+      "path": "${WORK}/reviews/w09e-final-proof-data.json",
+      "sha256": "6d466b3aa47b04ae62eb08ee920df2898d516497e4e597f92094e6328a32a00c",
+      "size_bytes": 514249
+    },
+    {
+      "path": "${WORK}/reviews/w07f-final.md",
+      "sha256": "3a883f5b8c6911cdbabf8f0f920b88aafb231fba4634f6e3968946280e3db5cb",
+      "size_bytes": 10223
+    },
+    {
+      "path": "${WORK}/reviews/w07f-final-data.json",
+      "sha256": "c258447c20c3c367c43892e0036b3c90f2bb6c68c0ae767e45afc51b3b58cbb4",
+      "size_bytes": 77706
+    },
+    {
+      "path": "${WORK}/reviews/w07f-data.json",
+      "sha256": "8e23d42c45a0dd64ea9ca7f1138c1e066af3a6626a97a1efc7eadabc48e03b15",
+      "size_bytes": 79368
+    },
+    {
+      "path": "${WORK}/reviews/w07f-native-binding.json",
+      "sha256": "651b995117a4fc726efe456419bec2ec66d3347f17fbb1bfb6c131ccb24c79a0",
+      "size_bytes": 8451
+    },
+    {
+      "path": "${WORK}/reviews/w08e.md",
+      "sha256": "c5d804cfead856e8fe956abb0b3211ff441bf9f58bd7beb0ee3db4247b6b109c",
+      "size_bytes": 14128
+    },
+    {
+      "path": "${WORK}/reviews/w08e-data.json",
+      "sha256": "22d3060f131aecfbd3c2fe52748d30d3d23ff50d6fc01f19518a733ee8eeab0b",
+      "size_bytes": 59565
+    },
+    {
+      "path": "${WORK}/reviews/w09a-final.md",
+      "sha256": "93f0e55e91c18d6653c375df61242327aef0f07a1be525b54929de511b017a50",
+      "size_bytes": 6930
+    },
+    {
+      "path": "${WORK}/reviews/w09a-final-command.json",
+      "sha256": "3e7d2dea1e3a383945990a30e02729e635ee46ea7b8e10da64b10dd1ac382475",
+      "size_bytes": 10845
+    },
+    {
+      "path": "${WORK}/reviews/w09a-final-output.json",
+      "sha256": "e63e8641b7a4fd9908dcd744eb31dd873055ddff8989ce5190b649d6567536e8",
+      "size_bytes": 5386
+    },
+    {
+      "path": "${WORK}/reviews/w09a-final-data.json",
+      "sha256": "c3353a2157cef13a3fc742c51f14693f105989b2d5dc42adac53081c154accfa",
+      "size_bytes": 7907
+    },
+    {
+      "path": "${WORK}/reviews/w09c.md",
+      "sha256": "18b1c9c97affe0501a2af390b184f4d77ccdcfbccdfce1410045dd02b1099c8a",
+      "size_bytes": 10443
+    },
+    {
+      "path": "${WORK}/reviews/w09c-data.json",
+      "sha256": "58dffca6ff9dfcb3f99db5365b49cbbbc1bdf15999c9d691cf813eed83214aa2",
+      "size_bytes": 7156
+    },
+    {
+      "path": "${WORK}/verifier-input-fix-clean-tests.json",
+      "sha256": "8fe3b3e42d138f1d35e7e771dde705f8edc290cbfe3579171833cd3a43df0e14",
+      "size_bytes": 1041
+    },
+    {
+      "path": "${WORK}/verifier-fix-publication.json",
+      "sha256": "6a0c8ab00b7a3da508718669f4ef605e29ab2a51c6942ebde2751ceb57968608",
+      "size_bytes": 4055
+    }
+  ]
+}

@@ -1,0 +1,625 @@
+{
+  "exclude": [
+    "reviews/logs/rtlsim-dense-bf16-rs-application-build.log",
+    "reviews/logs/rtlsim-dense-bf16-rs-bf16-dense-signatures-a.log",
+    "reviews/logs/rtlsim-dense-bf16-rs-bf16-dense-signatures-b.log",
+    "reviews/logs/rtlsim-dense-bf16-rs-configure.log",
+    "reviews/logs/rtlsim-dense-bf16-rs-cpp-header-reproduce.log",
+    "reviews/logs/rtlsim-dense-bf16-rs-effective-header.log",
+    "reviews/logs/rtlsim-dense-bf16-rs-kernel-disassembly.log",
+    "reviews/logs/rtlsim-dense-bf16-rs-runtime.log",
+    "reviews/logs/rtlsim-dense-bf16-rs-verilog-header-reproduce.log",
+    "reviews/logs/rtlsim-dense-fp16-rs-application-build.log",
+    "reviews/logs/rtlsim-dense-fp16-rs-configure.log",
+    "reviews/logs/rtlsim-dense-fp16-rs-cpp-header-reproduce.log",
+    "reviews/logs/rtlsim-dense-fp16-rs-effective-header.log",
+    "reviews/logs/rtlsim-dense-fp16-rs-fp16-dense-signatures-a.log",
+    "reviews/logs/rtlsim-dense-fp16-rs-fp16-dense-signatures-b.log",
+    "reviews/logs/rtlsim-dense-fp16-rs-kernel-disassembly.log",
+    "reviews/logs/rtlsim-dense-fp16-rs-runtime.log",
+    "reviews/logs/rtlsim-dense-fp16-rs-verilog-header-reproduce.log",
+    "reviews/logs/rtlsim-sparse-fp16-ss-fp16-sparse-signatures-a.log",
+    "reviews/logs/rtlsim-sparse-fp16-ss-fp16-sparse-signatures-b.log",
+    "reviews/logs/simx-dense-bf16-rs-application-build.log",
+    "reviews/logs/simx-dense-bf16-rs-bf16-dense-signatures-a.log",
+    "reviews/logs/simx-dense-bf16-rs-bf16-dense-signatures-b.log",
+    "reviews/logs/simx-dense-bf16-rs-configure.log",
+    "reviews/logs/simx-dense-bf16-rs-cpp-header-reproduce.log",
+    "reviews/logs/simx-dense-bf16-rs-effective-header.log",
+    "reviews/logs/simx-dense-bf16-rs-kernel-disassembly.log",
+    "reviews/logs/simx-dense-bf16-rs-runtime.log",
+    "reviews/logs/simx-dense-bf16-rs-verilog-header-reproduce.log",
+    "reviews/logs/simx-dense-fp16-rs-application-build.log",
+    "reviews/logs/simx-dense-fp16-rs-configure.log",
+    "reviews/logs/simx-dense-fp16-rs-cpp-header-reproduce.log",
+    "reviews/logs/simx-dense-fp16-rs-effective-header.log",
+    "reviews/logs/simx-dense-fp16-rs-fp16-dense-signatures-a.log",
+    "reviews/logs/simx-dense-fp16-rs-fp16-dense-signatures-b.log",
+    "reviews/logs/simx-dense-fp16-rs-kernel-disassembly.log",
+    "reviews/logs/simx-dense-fp16-rs-runtime.log",
+    "reviews/logs/simx-dense-fp16-rs-verilog-header-reproduce.log",
+    "reviews/logs/simx-sparse-fp16-ss-fp16-sparse-signatures-a.log",
+    "reviews/logs/simx-sparse-fp16-ss-fp16-sparse-signatures-b.log",
+    "reviews/w09*",
+    "reviews/w10*"
+  ],
+  "guards": {
+    "logs/ramulator-build.log": "ramulator-build-result.json",
+    "logs/remaining-dependencies-build.log": "remaining-dependencies-build-result.json",
+    "logs/runner-offline-suite.log": "runner-offline-suite.json",
+    "logs/verifier-candidate-tests.log": "verifier-candidate-tests.json",
+    "logs/verifier-input-fix-clean-tests.log": "verifier-input-fix-clean-tests.json",
+    "logs/wgmma-formal-invocation.log": "wgmma-formal-evidence/report.json",
+    "logs/wgmma-gcc12-formal-invocation.log": "wgmma-gcc12-formal-evidence/report.json"
+  },
+  "inputs": [
+    {
+      "completed_report": "wgmma-gcc12-formal-evidence/report.json",
+      "path": "wgmma-gcc12-formal-evidence/report.json",
+      "required": true
+    },
+    {
+      "completed_report": "wgmma-gcc12-formal-evidence/report.json",
+      "path": "wgmma-gcc12-formal-evidence/snapshots",
+      "required": true
+    },
+    {
+      "completed_report": "wgmma-gcc12-formal-evidence/report.json",
+      "path": "wgmma-gcc12-formal-evidence/artifacts/source",
+      "required": true
+    },
+    {
+      "completed_report": "wgmma-gcc12-formal-evidence/report.json",
+      "path": "wgmma-gcc12-formal-evidence/logs",
+      "required": true
+    },
+    {
+      "path": "publication-drafts/processor-inputs",
+      "required": true
+    },
+    {
+      "path": "implementation-publication.json",
+      "required": true
+    },
+    {
+      "path": "verifier-publication.json",
+      "required": true
+    },
+    {
+      "completed_report": "verifier-candidate-tests.json",
+      "path": "verifier-candidate-tests.json",
+      "required": true
+    },
+    {
+      "completed_report": "runner-offline-suite.json",
+      "path": "runner-offline-suite.json",
+      "required": true
+    },
+    {
+      "path": "external-dependency-revisions.json",
+      "required": true
+    },
+    {
+      "path": "historical-unit-source-comparison.json",
+      "required": true
+    },
+    {
+      "path": "simulation-preflight-preimplementation.json",
+      "required": true
+    },
+    {
+      "path": "ramulator-build-result.json",
+      "required": true
+    },
+    {
+      "path": "remaining-dependencies-build-result.json",
+      "required": true
+    },
+    {
+      "path": "package_wgmma_evidence.py",
+      "required": true
+    },
+    {
+      "path": "package_wmma_evidence.py",
+      "required": true
+    },
+    {
+      "path": "test_package_wgmma_evidence.py",
+      "required": true
+    },
+    {
+      "path": "publication-drafts/processor-full-selection.json",
+      "required": true
+    },
+    {
+      "path": "logs/bootstrap.log",
+      "required": true
+    },
+    {
+      "path": "logs/cmake-install.log",
+      "required": true
+    },
+    {
+      "path": "logs/lmem-review-correction.log",
+      "required": true
+    },
+    {
+      "path": "logs/ramulator-build.log",
+      "required": true
+    },
+    {
+      "path": "logs/ramulator-configure.log",
+      "required": true
+    },
+    {
+      "path": "logs/remaining-dependencies-build.log",
+      "required": true
+    },
+    {
+      "path": "logs/runner-offline-suite.log",
+      "required": true
+    },
+    {
+      "path": "logs/submodules.log",
+      "required": true
+    },
+    {
+      "path": "logs/verifier-candidate-tests.log",
+      "required": true
+    },
+    {
+      "path": "logs/wgmma-formal-invocation.log",
+      "required": true
+    },
+    {
+      "path": "logs/wgmma-gcc12-formal-invocation.log",
+      "required": true
+    },
+    {
+      "path": "reviews/w01a.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w01b.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w01c.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w01d.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w01e.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w01f.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w02a.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w02b.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w02c.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w02d.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w02e.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w02f.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w03a.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w03b.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w03c.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w03d.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w03e.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w03f.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w04a.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w04b.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w04c.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w04d.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w04e.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w04f.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w05a.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w05b.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w05c.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w05d.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w05e.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w05f-ci-snapshot.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w05f.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w06a.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w06b.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w06c-evidence.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w06c.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w06d-data.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w06d.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w06e-observation.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w06e.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w06f.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w07a-audit.py",
+      "required": true
+    },
+    {
+      "path": "reviews/w07a-data.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w07a-hierarchy-binding.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w07a-interim.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w07a.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w07b-data.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w07b-interim.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w07b.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w07c-audit.py",
+      "required": true
+    },
+    {
+      "path": "reviews/w07c-data.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w07c.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w07d-audit.py",
+      "required": true
+    },
+    {
+      "path": "reviews/w07d-data.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w07d-interim-data.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w07d-interim.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w07d.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w07e-audit.py",
+      "required": true
+    },
+    {
+      "path": "reviews/w07e-data.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w07e.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w07f-audit.py",
+      "required": true
+    },
+    {
+      "path": "reviews/w07f-data.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w07f-final-data.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w07f-final.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w07f-interim-data.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w07f-interim.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w07f-native-binding.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w07f-native-binding.py",
+      "required": true
+    },
+    {
+      "path": "reviews/w07f-precompletion-data.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w07f.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w08a.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w08a.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w08b.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w08c-data.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w08c.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w08d.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w08e-audit.py",
+      "required": true
+    },
+    {
+      "path": "reviews/w08e-data.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w08e-interim-audit.py",
+      "required": true
+    },
+    {
+      "path": "reviews/w08e-interim-data.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w08e-interim.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w08e.md",
+      "required": true
+    },
+    {
+      "path": "reviews/w08f-ci-attempt1-jobs.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w08f-ci-run.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w08f-governance-attempt1-jobs.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w08f-governance-job.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w08f-governance-run.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w08f-governance.log",
+      "required": true
+    },
+    {
+      "path": "reviews/w08f-provenance.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w08f-sha256.txt",
+      "required": true
+    },
+    {
+      "path": "reviews/w08f.json",
+      "required": true
+    },
+    {
+      "path": "reviews/w08f.md",
+      "required": true
+    },
+    {
+      "completed_report": "formal-completion-anchor.json",
+      "path": "formal-completion-anchor.json",
+      "required": true
+    },
+    {
+      "path": "logs/verifier-input-fix-clean-tests.log",
+      "required": true
+    },
+    {
+      "path": "publication-drafts/processor-core-selection.json",
+      "required": true
+    }
+  ],
+  "required_groups": {
+    "completed_formal_report": [
+      "wgmma-gcc12-formal-evidence/report.json"
+    ],
+    "corrected_verifier_final_packet_verification": [
+      "publication-drafts/processor-inputs/final-packet-verification.json"
+    ],
+    "corrected_verifier_final_validation": [
+      "publication-drafts/processor-inputs/final-verifier-validation.json"
+    ],
+    "corrected_verifier_publication": [
+      "publication-drafts/processor-inputs/verifier-publication-final.json"
+    ],
+    "corrected_verifier_source": [
+      "publication-drafts/processor-inputs/verifier/p02_wgmma_packet.py"
+    ],
+    "corrected_verifier_tests_source": [
+      "publication-drafts/processor-inputs/verifier/test_p02_wgmma_packet.py"
+    ],
+    "formal_command_logs": [
+      "wgmma-gcc12-formal-evidence/logs/*.log"
+    ],
+    "formal_retained_source": [
+      "wgmma-gcc12-formal-evidence/artifacts/source/*"
+    ],
+    "formal_source_snapshots": [
+      "wgmma-gcc12-formal-evidence/snapshots/source-before.json"
+    ],
+    "processor_component_context": [
+      "publication-drafts/processor-inputs/component-context.json"
+    ],
+    "source_copy_map": [
+      "publication-drafts/processor-inputs/source-copy-map.json"
+    ],
+    "unit_bridge": [
+      "historical-unit-source-comparison.json"
+    ],
+    "unit_inventory": [
+      "publication-drafts/processor-inputs/unit/inventory.json"
+    ],
+    "unit_publication": [
+      "publication-drafts/processor-inputs/unit/publication.json"
+    ],
+    "wave_01_review": [
+      "reviews/w01*.md"
+    ],
+    "wave_02_review": [
+      "reviews/w02*.md"
+    ],
+    "wave_03_review": [
+      "reviews/w03*.md"
+    ],
+    "wave_04_review": [
+      "reviews/w04*.md"
+    ],
+    "wave_05_review": [
+      "reviews/w05*.md"
+    ],
+    "wave_06_review": [
+      "reviews/w06*.md"
+    ],
+    "wave_07_review": [
+      "reviews/w07*.md"
+    ],
+    "wave_08_review": [
+      "reviews/w08*.md"
+    ]
+  },
+  "schema_version": 1
+}

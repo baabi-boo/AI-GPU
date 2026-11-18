@@ -7,12 +7,29 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Start here: ordinary WMMA accepted; WGMMA concurrency remains active
+## Start here: P02 complete; native operator execution next
 
-**Next bounded acceptance work: P02-T02 — freeze and review one WGMMA matrix
-covering synchronization, metadata, multiple warps and backpressure.** Run the
-reviewed selection on matching SimX/native RTL and retain applicable model-parity
-evidence or a documented applicability limit. P02-T02 remains active for A03.
+**P02-A03 is accepted, completing P02-T02 and P02.** The
+[acceptance record](evidence/p02-wgmma/processor/acceptance.json),
+[WGMMA handoff](p02-wgmma-handoff.md) and
+[processor packet](evidence/p02-wgmma/processor/README.md) record a finished,
+passing formal matrix at clean source `4af2307`: 113 commands, 12 builds, 24 case
+executions, 48 launches and 24,576 exact output-word comparisons. All 12 declared
+performance pairs pass, and the two sparse RTL cases complete 64 metadata
+transactions with observed waits. The corrected original-packet verifier checked
+1,103 files against the independently supplied report digest. Independent
+engineering and publication-integrity reviews support the bounded acceptance.
+
+**P03-T01 is implemented; next bounded task: P03-T02 — native execution.**
+The [manifest](../../ci/project/p03_operator_manifest.json),
+[checked host planner](../../sw/runtime/ai/contract.h) and
+[argument contract](../designs/ai_operator_contract_v1.md) cover six proven
+ordinary WMMA format/shape signatures. They validate inputs and encode arguments
+without dispatch. Implement the matching device reader and managed runtime
+wrapper, then independently qualify launches, arithmetic, transfers, completion
+and failure cleanup. [The handoff](p03-operators-handoff.md) keeps source-level
+validation separate from execution gates. Other operator categories remain
+explicitly unavailable.
 
 The [ordinary WMMA handoff](p02-wmma-handoff.md) and
 [P02-A02 record](evidence/p02-wmma/acceptance.json) bind full-processor checks to
@@ -36,7 +53,7 @@ The earlier [numerical handoff](p02-numerics-handoff.md) and
 [A01 record](evidence/p02-numerics/acceptance.json) retain the completed T01
 contract and original leaf/model/compiler evidence.
 
-P02 remains `in_progress`; A02 is accepted, A03 is pending and P03 is `not_started`.
+P02 is `complete` with accepted A01–A03 evidence; P03 is `not_started`.
 The vendor P01-T05/P01-A03 obligation still blocks **P01 completion and P07**.
 The preserved [entry decision](p02-entry-handoff.md) permits native development
 without turning the missing vendor result into a pass.
@@ -62,7 +79,7 @@ P01-T05 `probe`/`plan`/`run` route. Its strict receipt and artifact checks prepa
 the missing vendor run; they do not replace it or grant acceptance.
 It requires its own manifest/receipt, CLI budgets and fresh build directory;
 there is no automatic adapter from the read-only `hwemu.py` candidate.
-P00 remains complete, P01 remains blocked on A03, P02 is `in_progress`, and
+P00 and P02 are complete, P01 remains blocked on A03, and
 P03–P11 remain `not_started`. Check the actual
 execution state and accepted reports before extending the baseline:
 
@@ -206,15 +223,16 @@ remains an unqualified candidate until its selected configuration earns evidence
 
 P02-T01 is complete with reviewed source-level P02-A01 evidence. P02-A02 has
 accepted full-processor ordinary WMMA arithmetic/layout and API rejection
-evidence. P02-T02 remains active for P02-A03 WGMMA concurrency, metadata and
-backpressure proof. P03 onward remain gated on their parent phases. Detailed
-work packages remain in the phase guides.
+evidence. P02-T02 is complete with independently reviewed A03 acceptance for the
+bounded WGMMA execution and protocol evidence. P03-T01 is implemented and
+P03 is `in_progress`; A02/A03 still require actual operator execution and lifecycle
+evidence. Detailed work packages remain in the phase guides.
 
 | Work item | First bounded deliverable | Entry / accountable role | Gates |
 |---|---|---|---|
 | **P02-T01 — Arithmetic contract — complete** | Reviewed v1 FP16/BF16-to-FP32 semantics, runnable T4 application profile, 98 independent arithmetic fixtures and 20 layout fixtures; frozen comparisons and inherited tolerances preserved. | P00 plus accepted P01-A01/A02; compute architecture lead | [P02-A01 source evidence](evidence/p02-numerics/acceptance.json) |
-| **P02-T02 — Arithmetic and concurrency proof — active** | Ordinary WMMA adapter and matched full SimX/native processor arithmetic/layout checks are accepted. Complete WGMMA metadata, synchronization, multiple warps and backpressure proof with applicable parity evidence. | T01; verification lead | [P02-A02 accepted](evidence/p02-wmma/acceptance.json); P02-A03 pending |
-| **P03-T01 — Operator contract** | Define the smallest model-relevant operator/signature matrix and explicit rejection/error/ownership rules over the existing native runtime. | P02; kernel and runtime lead | P03-A01 |
+| **P02-T02 — Arithmetic and concurrency proof — complete** | Ordinary WMMA and bounded WGMMA native-unit/full-processor arithmetic, metadata witness, directed pressure and declared parity evidence are independently reviewed and accepted. | T01; verification lead | [P02-A02 accepted](evidence/p02-wmma/acceptance.json); [P02-A03 accepted](evidence/p02-wgmma/processor/acceptance.json) |
+| **P03-T01 — Operator contract — implemented** | Versioned manifest, exact six format/shape signatures, checked descriptor planner, 56-byte argument encoding, explicit unavailable categories and required ownership/completion rules; source-level validation only. | P02; kernel and runtime lead | P03-A01 |
 | **P03-T02 — Operator implementations and lifetime tests** | Reuse inherited kernels; independently verify each advertised operator, dispatch, bounds, queue/event lifetime and failure cleanup. | T01; kernel and runtime lead | P03-A02, P03-A03 |
 | **P04-T01 — Fixed tiny model** | Freeze a redistributable model or deterministic generator, hashes, inputs, licenses and layer/reference outputs; map every operation to the accepted library. | P03; model runtime lead | P04-A01 |
 | **P04-T02 — Native model execution** | Compose the fixed model, compare intermediates/final output, and retain device-dispatch and transfer traces with allowed host work explicit. | T01; model runtime lead | P04-A02, P04-A03 |

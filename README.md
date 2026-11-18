@@ -14,12 +14,22 @@ simulator configuration. “NVIDIA-style” describes the ambition of programmab
 compute, specialized matrix units, fast memory and usable software. It does not
 mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
-**Current development stage: P02 — tensor numerical contract (`in_progress`).**
+**Current development: P03 — native AI operator library (`in_progress`).**
+The [v1 operator contract](docs/designs/ai_operator_contract_v1.md) now implements
+checked matmul planning and argument encoding; [the handoff](docs/project/p03-operators-handoff.md)
+separates this source-level boundary from the remaining device launch and lifetime work.
+
+**Completed milestone: P02 — tensor numerical contract (`complete`).**
 P02-T01 is complete with [source-level P02-A01 evidence](docs/project/evidence/p02-numerics/acceptance.json).
 [P02-A02 is accepted](docs/project/evidence/p02-wmma/acceptance.json) for matching
 full SimX/native processor ordinary WMMA arithmetic and layout checks.
-P02-T02 remains active for P02-A03 WGMMA synchronization, metadata, multiple
-warps and backpressure proof.
+The full witnessed WGMMA matrix has finished with passing arithmetic, metadata
+ordering and paired performance checks: 12 builds, 24 case executions, 48 launches
+and 24,576 exact output-word comparisons.
+[P02-A03 is accepted](docs/project/evidence/p02-wgmma/processor/acceptance.json)
+after independent engineering and publication-integrity review, completing
+P02-T02 and P02; see the
+[WGMMA handoff](docs/project/p02-wgmma-handoff.md).
 The accepted P01 clean-build (`A01`) and native numerical (`A02`) results now
 unlock software/RTL development without waiting for a vendor FPGA emulator.
 **P01 remains `blocked` on `A03`**, and that proof is required before the
@@ -32,14 +42,19 @@ review. [P01-A03](docs/project/evidence/p01-xrt-blocked.json) remains blocked by
 missing qualified vendor XRT `hw_emu` tools/platform.
 The authoritative [status](docs/project/status.md) and
 [phase gates](docs/project/roadmap.json) separate implementation from acceptance;
-P00 is complete, P01 is blocked, P02 is in progress, and P03–P11 are not started.
+P00 and P02 are complete, P01 is blocked, P03 is in progress, and P04–P11 are not started.
 
 ## Start here
 
 - Understand the goal: [project charter](docs/project/charter.md).
 - See the development sequence: [roadmap](ROADMAP.md).
-- Continue the numerical track: [ordinary WMMA handoff](docs/project/p02-wmma-handoff.md).
-- Review the accepted processor checks: [P02 WMMA evidence](docs/project/evidence/p02-wmma/README.md).
+- Continue the native operator library: [P03 handoff](docs/project/p03-operators-handoff.md)
+  and [operator manifest](ci/project/p03_operator_manifest.json).
+- Review the accepted WGMMA results:
+  [WGMMA handoff](docs/project/p02-wgmma-handoff.md) and
+  [P02-A03 evidence](docs/project/evidence/p02-wgmma/processor/README.md).
+- Review the accepted ordinary processor checks: [WMMA handoff](docs/project/p02-wmma-handoff.md)
+  and [P02 WMMA evidence](docs/project/evidence/p02-wmma/README.md).
 - Read the earlier contract checkpoint: [P02 numerical handoff](docs/project/p02-numerics-handoff.md)
   and [A01 evidence](docs/project/evidence/p02-numerics/README.md).
 - Pick the next bounded task: [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
@@ -144,7 +159,7 @@ an unrestricted toolchain install or full synthesis sweep.
 ## P02 numerical contract and processor milestones
 
 The contract and A01 results below preserve the original numerical checkpoint;
-the subsequent ordinary WMMA processor result and next action follow it.
+the subsequent ordinary WMMA and WGMMA processor results follow it.
 
 The [v1 specification](docs/designs/tensor_numerics_v1.md) defines native TFR
 FP16/BF16-to-FP32 arithmetic for a fixed four-product unit profile. Its
@@ -205,10 +220,45 @@ reporting-only child restores the legacy host report; its full-suite rerun and
 new-host fixture revalidation passed at `c9cf9ba`: 1,448 offline tests and
 352 repeated launches with 14,336 exact word comparisons; see [status](docs/project/status.md).
 The [WMMA handoff](docs/project/p02-wmma-handoff.md) separates those checks from
-the formal processor result. P02-T02 remains active: qualify WGMMA
-synchronization, metadata, multiple warps and
-backpressure with applicable parity evidence. P02 stays `in_progress`, P03 stays
-`not_started`, and P01-A03 remains blocked.
+the formal processor result.
+
+The completed [WGMMA processor packet](docs/project/evidence/p02-wgmma/processor/README.md)
+uses clean source `4af2307e57202c1269e20f893267a5583ad3cba0`: all 113 commands,
+12 backend/configuration builds, 24 case executions, 48 launches and 24,576 exact
+output-word comparisons passed. All 12 performance pairs have exact instruction
+counts and cycle differences within the unchanged 5% bound; the largest observed
+difference is 1.356484%. The two sparse RTL cases record 64 completed metadata
+transactions, all with observed waits. The separately reviewed
+[native unit](docs/project/evidence/p02-wgmma/unit/README.md) retains its original
+`9006939` execution: 392 accepted/committed transactions and 3,072 checked words.
+Its forced compute-pressure case is dense NRC16 RS; sparse forced compute
+pressure is unclaimed.
+
+The corrected offline verifier validates 1,103 retained packet files against the
+independently supplied report digest. Independent engineering and publication
+reviews support the [P02-A03 acceptance](docs/project/evidence/p02-wgmma/processor/acceptance.json),
+completing P02-T02 and P02. P01-A03 remains blocked and required before P07.
+
+## P03 native operator contract
+
+The [internal C++17 planner](sw/runtime/ai/contract.h) validates FP16/BF16-to-FP32
+matmul for exactly `(M,N,K) = (8,4,8), (8,4,16), (16,8,16)`. It checks tensor
+shape, layout, strides, allocation extents and permissions, device/profile
+identity, alignment, overflow and overlapping accessed ranges. Rejections leave
+the caller’s output unchanged. A separate encoder produces a versioned 56-byte
+little-endian argument block with checked 32/64-bit address representation.
+
+This is a source contract and host planner. Every plan reports
+`execution_available=false`; the new argument schema has no device reader yet.
+GEMV, reductions, softmax, normalization, activations, conversions and attention
+are explicitly unavailable in the [manifest](ci/project/p03_operator_manifest.json).
+P03-T02 must implement the matching kernel reader, runtime launch wrapper,
+resource lifetimes and independent SimX/native RTL checks before any operator
+execution claim. See the [handoff](docs/project/p03-operators-handoff.md).
+
+```sh
+python3 -m unittest discover -s ci/project -p 'test_p03_operator_contract.py'
+```
 
 ## P01 supplemental tensor-oracle hardening
 

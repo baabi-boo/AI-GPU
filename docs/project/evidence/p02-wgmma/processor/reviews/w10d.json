@@ -1,0 +1,1026 @@
+{
+  "schema": "w10d_corrected_hosted_ci_review_v1",
+  "reviewer": "/root/w10d_corrected_ci",
+  "verdict": "PASS_CORRECTED_SOURCE_FULL_OFFLINE_GOVERNANCE",
+  "observation_capture": {
+    "schema": "w10d_capture_provenance_v1",
+    "repository": "baabi-boo/AI-GPU",
+    "current_response_capture_completed_at": "2026-11-18T05:18:54.206Z",
+    "older_response_capture_completed_at": "2026-11-18T05:19:55.843Z",
+    "current_observation_scope": "API and decoded log responses captured before the stated completion timestamp; no claim of an atomic multi-endpoint snapshot",
+    "source_urls": {
+      "w10d-governance.log": "GitHub decoded job logs: baabi-boo/AI-GPU job 134590278005",
+      "w10d-governance-run.json": "https://api.github.com/repos/baabi-boo/AI-GPU/actions/runs/44241512544",
+      "w10d-governance-jobs.json": "https://api.github.com/repos/baabi-boo/AI-GPU/actions/runs/44241512544/jobs?per_page=100",
+      "w10d-ci-run.json": "https://api.github.com/repos/baabi-boo/AI-GPU/actions/runs/44241512594",
+      "w10d-ci-jobs.json": "https://api.github.com/repos/baabi-boo/AI-GPU/actions/runs/44241512594/jobs?per_page=100",
+      "w10d-commit.json": "https://api.github.com/repos/baabi-boo/AI-GPU/git/commits/359a8c007f450a8146540f795cb576b29818fa03",
+      "w10d-base-ci-run.json": "https://api.github.com/repos/baabi-boo/AI-GPU/actions/runs/44235141936",
+      "w10d-base-ci-jobs.json": "https://api.github.com/repos/baabi-boo/AI-GPU/actions/runs/44235141936/jobs?per_page=100",
+      "w10d-pre-fix-ci-run.json": "https://api.github.com/repos/baabi-boo/AI-GPU/actions/runs/44238045255",
+      "w10d-pre-fix-ci-jobs.json": "https://api.github.com/repos/baabi-boo/AI-GPU/actions/runs/44238045255/jobs?per_page=100"
+    },
+    "formats": {
+      "log": "Exact decoded UTF-8 tool content, BOM and ANSI retained; byte-content round-trip verified.",
+      "json": "Original UTF-8 API response content with a single terminal newline where absent."
+    },
+    "tools": [
+      "github_fetch",
+      "github_fetch_workflow_job_logs"
+    ],
+    "read_only": true,
+    "workflow_mutations": false,
+    "local_test_build_reruns": false
+  },
+  "repository": "baabi-boo/AI-GPU",
+  "source_identity": {
+    "published_commit": "359a8c007f450a8146540f795cb576b29818fa03",
+    "published_parent": "ad94b696409d4d05c1063541ac014478f90c3e71",
+    "published_tree": "97116818da872f43f952a351eb6616fc327be438",
+    "equivalent_local_commit": "5e3b74fd569169ad921315223c121a037ae656b7",
+    "local_tree": "97116818da872f43f952a351eb6616fc327be438",
+    "corrected_files": [
+      {
+        "path": "ci/project/p02_wgmma_packet.py",
+        "bytes": 34281,
+        "sha256": "11497b57db50c4c1e690d38c406d0de94f86b2017cec036f7ed79008151e72a4",
+        "source": "committed local tree 5e3b74fd569169ad921315223c121a037ae656b7",
+        "working_copy_equal": true
+      },
+      {
+        "path": "ci/project/test_p02_wgmma_packet.py",
+        "bytes": 31735,
+        "sha256": "b22daed1c623ae72389da7bf9ab12c242e92ef300d7a7762e3946ec1d38271bf",
+        "source": "committed local tree 5e3b74fd569169ad921315223c121a037ae656b7",
+        "working_copy_equal": true
+      }
+    ]
+  },
+  "governance": {
+    "run_id": 44241512544,
+    "run_attempt": 1,
+    "head_sha": "359a8c007f450a8146540f795cb576b29818fa03",
+    "status": "completed",
+    "conclusion": "success",
+    "run_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44241512544",
+    "job": {
+      "id": 134590278005,
+      "name": "governance",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "head_sha": "359a8c007f450a8146540f795cb576b29818fa03",
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44241512544/job/134590278005"
+    },
+    "test_step": {
+      "name": "Test governance tooling",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 7,
+      "started_at": "2026-11-18T05:04:34Z",
+      "completed_at": "2026-11-18T05:09:47Z"
+    },
+    "tests": {
+      "command_line": 179,
+      "command": "python3 -m unittest discover -s ci/project -p 'test_*.py'",
+      "summary_line": 190,
+      "summary": "Ran 1624 tests in 312.155s",
+      "result_line": 192,
+      "result": "OK",
+      "tests_run": 1624,
+      "duration_seconds": 312.155,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "progress_line": 188,
+      "progress_counts": {
+        ".": 1624
+      }
+    }
+  },
+  "corrected_source_general_ci": {
+    "run_id": 44241512594,
+    "run_attempt": 1,
+    "head_sha": "359a8c007f450a8146540f795cb576b29818fa03",
+    "status": "in_progress",
+    "conclusion": null,
+    "run_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44241512594",
+    "total_jobs": 5,
+    "job_status_counts": {
+      "completed:success": 3,
+      "in_progress:None": 2
+    },
+    "adverse_jobs": [],
+    "jobs": [
+      {
+        "id": 134590277727,
+        "name": "change-impact",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "359a8c007f450a8146540f795cb576b29818fa03",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44241512594/job/134590277727"
+      },
+      {
+        "id": 134590278014,
+        "name": "plan",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "359a8c007f450a8146540f795cb576b29818fa03",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44241512594/job/134590278014"
+      },
+      {
+        "id": 134595378385,
+        "name": "setup",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "359a8c007f450a8146540f795cb576b29818fa03",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44241512594/job/134595378385"
+      },
+      {
+        "id": 134596062248,
+        "name": "build (64)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "359a8c007f450a8146540f795cb576b29818fa03",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44241512594/job/134596062248"
+      },
+      {
+        "id": 134596062254,
+        "name": "build (32)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "359a8c007f450a8146540f795cb576b29818fa03",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44241512594/job/134596062254"
+      }
+    ],
+    "pass_claimed": false
+  },
+  "execution_source_general_ci": {
+    "run_id": 44235141936,
+    "run_attempt": 1,
+    "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+    "status": "completed",
+    "conclusion": "success",
+    "run_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936",
+    "total_jobs": 42,
+    "job_status_counts": {
+      "completed:success": 42
+    },
+    "adverse_jobs": [],
+    "jobs": [
+      {
+        "id": 134569345120,
+        "name": "change-impact",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134569345120"
+      },
+      {
+        "id": 134569345401,
+        "name": "plan",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134569345401"
+      },
+      {
+        "id": 134569535253,
+        "name": "setup",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134569535253"
+      },
+      {
+        "id": 134570324303,
+        "name": "build (32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134570324303"
+      },
+      {
+        "id": 134570324322,
+        "name": "build (64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134570324322"
+      },
+      {
+        "id": 134574464259,
+        "name": "tests (config2, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464259"
+      },
+      {
+        "id": 134574464265,
+        "name": "tests (dxa, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464265"
+      },
+      {
+        "id": 134574464292,
+        "name": "tests (config2, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464292"
+      },
+      {
+        "id": 134574464293,
+        "name": "tests (graphics, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464293"
+      },
+      {
+        "id": 134574464307,
+        "name": "tests (debug, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464307"
+      },
+      {
+        "id": 134574464313,
+        "name": "tests (cache, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464313"
+      },
+      {
+        "id": 134574464315,
+        "name": "tests (debug, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464315"
+      },
+      {
+        "id": 134574464326,
+        "name": "tests (config1, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464326"
+      },
+      {
+        "id": 134574464342,
+        "name": "tests (graphics, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464342"
+      },
+      {
+        "id": 134574464393,
+        "name": "tests (graphics_parity, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464393"
+      },
+      {
+        "id": 134574464403,
+        "name": "tests (config1, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464403"
+      },
+      {
+        "id": 134574464471,
+        "name": "tests (tensor_mx, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464471"
+      },
+      {
+        "id": 134574464477,
+        "name": "tests (dxa, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464477"
+      },
+      {
+        "id": 134574464511,
+        "name": "tests (isa, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464511"
+      },
+      {
+        "id": 134574464512,
+        "name": "tests (sw, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464512"
+      },
+      {
+        "id": 134574464521,
+        "name": "tests (vm, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464521"
+      },
+      {
+        "id": 134574464528,
+        "name": "tests (vulkan, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464528"
+      },
+      {
+        "id": 134574464540,
+        "name": "tests (cache, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464540"
+      },
+      {
+        "id": 134574464546,
+        "name": "tests (tensor_wg, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464546"
+      },
+      {
+        "id": 134574464548,
+        "name": "tests (perf, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464548"
+      },
+      {
+        "id": 134574464563,
+        "name": "tests (tensor_sp, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464563"
+      },
+      {
+        "id": 134574464564,
+        "name": "tests (p02_wgmma, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464564"
+      },
+      {
+        "id": 134574464583,
+        "name": "tests (raytracing, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464583"
+      },
+      {
+        "id": 134574464600,
+        "name": "tests (tensor_mx, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464600"
+      },
+      {
+        "id": 134574464605,
+        "name": "tests (tensor_sp, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464605"
+      },
+      {
+        "id": 134574464612,
+        "name": "tests (regression, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464612"
+      },
+      {
+        "id": 134574464623,
+        "name": "tests (isa, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464623"
+      },
+      {
+        "id": 134574464626,
+        "name": "tests (raytracing, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464626"
+      },
+      {
+        "id": 134574464644,
+        "name": "tests (regression, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464644"
+      },
+      {
+        "id": 134574464659,
+        "name": "tests (tensor, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464659"
+      },
+      {
+        "id": 134574464664,
+        "name": "tests (sw, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464664"
+      },
+      {
+        "id": 134574464668,
+        "name": "tests (vm, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464668"
+      },
+      {
+        "id": 134574464681,
+        "name": "tests (tensor, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464681"
+      },
+      {
+        "id": 134574464683,
+        "name": "tests (graphics_parity, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464683"
+      },
+      {
+        "id": 134574464704,
+        "name": "tests (vulkan, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464704"
+      },
+      {
+        "id": 134574464904,
+        "name": "tests (tensor_wg, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134574464904"
+      },
+      {
+        "id": 134596643806,
+        "name": "complete",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "4af2307e57202c1269e20f893267a5583ad3cba0",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44235141936/job/134596643806"
+      }
+    ],
+    "pass_claimed": true
+  },
+  "historical_pre_fix_general_ci": {
+    "run_id": 44238045255,
+    "run_attempt": 1,
+    "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+    "status": "in_progress",
+    "conclusion": null,
+    "run_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255",
+    "total_jobs": 41,
+    "job_status_counts": {
+      "completed:success": 28,
+      "in_progress:None": 13
+    },
+    "adverse_jobs": [],
+    "jobs": [
+      {
+        "id": 134578847743,
+        "name": "plan",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134578847743"
+      },
+      {
+        "id": 134578848046,
+        "name": "change-impact",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134578848046"
+      },
+      {
+        "id": 134582352275,
+        "name": "setup",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134582352275"
+      },
+      {
+        "id": 134582905636,
+        "name": "build (64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134582905636"
+      },
+      {
+        "id": 134582905781,
+        "name": "build (32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134582905781"
+      },
+      {
+        "id": 134587011170,
+        "name": "tests (config1, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011170"
+      },
+      {
+        "id": 134587011193,
+        "name": "tests (config2, simx, 64)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011193"
+      },
+      {
+        "id": 134587011209,
+        "name": "tests (cache, simx, 32)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011209"
+      },
+      {
+        "id": 134587011212,
+        "name": "tests (config1, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011212"
+      },
+      {
+        "id": 134587011229,
+        "name": "tests (isa, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011229"
+      },
+      {
+        "id": 134587011233,
+        "name": "tests (dxa, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011233"
+      },
+      {
+        "id": 134587011244,
+        "name": "tests (config2, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011244"
+      },
+      {
+        "id": 134587011250,
+        "name": "tests (p02_wgmma, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011250"
+      },
+      {
+        "id": 134587011263,
+        "name": "tests (tensor, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011263"
+      },
+      {
+        "id": 134587011264,
+        "name": "tests (graphics, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011264"
+      },
+      {
+        "id": 134587011267,
+        "name": "tests (tensor, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011267"
+      },
+      {
+        "id": 134587011274,
+        "name": "tests (graphics_parity, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011274"
+      },
+      {
+        "id": 134587011278,
+        "name": "tests (isa, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011278"
+      },
+      {
+        "id": 134587011279,
+        "name": "tests (dxa, simx, 32)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011279"
+      },
+      {
+        "id": 134587011290,
+        "name": "tests (tensor_sp, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011290"
+      },
+      {
+        "id": 134587011292,
+        "name": "tests (tensor_mx, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011292"
+      },
+      {
+        "id": 134587011302,
+        "name": "tests (graphics_parity, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011302"
+      },
+      {
+        "id": 134587011304,
+        "name": "tests (raytracing, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011304"
+      },
+      {
+        "id": 134587011310,
+        "name": "tests (sw, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011310"
+      },
+      {
+        "id": 134587011312,
+        "name": "tests (regression, simx, 64)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011312"
+      },
+      {
+        "id": 134587011317,
+        "name": "tests (debug, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011317"
+      },
+      {
+        "id": 134587011327,
+        "name": "tests (regression, simx, 32)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011327"
+      },
+      {
+        "id": 134587011343,
+        "name": "tests (raytracing, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011343"
+      },
+      {
+        "id": 134587011350,
+        "name": "tests (tensor_mx, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011350"
+      },
+      {
+        "id": 134587011357,
+        "name": "tests (graphics, simx, 64)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011357"
+      },
+      {
+        "id": 134587011361,
+        "name": "tests (tensor_sp, simx, 32)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011361"
+      },
+      {
+        "id": 134587011366,
+        "name": "tests (cache, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011366"
+      },
+      {
+        "id": 134587011370,
+        "name": "tests (debug, simx, 64)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011370"
+      },
+      {
+        "id": 134587011404,
+        "name": "tests (sw, simx, 64)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011404"
+      },
+      {
+        "id": 134587011486,
+        "name": "tests (tensor_wg, simx, 64)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011486"
+      },
+      {
+        "id": 134587011499,
+        "name": "tests (perf, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011499"
+      },
+      {
+        "id": 134587011536,
+        "name": "tests (vulkan, simx, 32)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011536"
+      },
+      {
+        "id": 134587011543,
+        "name": "tests (vm, simx, 32)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011543"
+      },
+      {
+        "id": 134587011544,
+        "name": "tests (tensor_wg, simx, 32)",
+        "status": "completed",
+        "conclusion": "success",
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011544"
+      },
+      {
+        "id": 134587011585,
+        "name": "tests (vulkan, simx, 64)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011585"
+      },
+      {
+        "id": 134587011608,
+        "name": "tests (vm, simx, 64)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_attempt": 1,
+        "head_sha": "ad94b696409d4d05c1063541ac014478f90c3e71",
+        "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44238045255/job/134587011608"
+      }
+    ],
+    "pass_claimed": false
+  },
+  "historical_full_suite": {
+    "published_commit": "ad94b696409d4d05c1063541ac014478f90c3e71",
+    "tests_run": 1619,
+    "log_identity": {
+      "file": "w08f-governance.log",
+      "bytes": 18955,
+      "sha256": "db44988b1669f7ab6f2786fc7ab95cfff237aefd13db4fe7ea48c5d8850d3e90"
+    },
+    "distinct_from_corrected_suite": true,
+    "historical_files_unchanged": true
+  },
+  "limits": [
+    "Hosted governance checks offline tooling, project metadata and baseline packets; it does not run or certify GPU arithmetic.",
+    "The completed corrected-source suite is one actual full discovery invocation of 1624 tests, not the sum of earlier 1602, 17, or 22 focused invocations.",
+    "The earlier full 1619-test run binds the pre-correction ad94 commit and remains historical evidence.",
+    "General CI for corrected 359a8c and historical ad94 was in progress at capture; neither is claimed as complete.",
+    "Execution-source 4af general CI completed successfully with all 42 observed jobs successful; that status does not transfer to later commits.",
+    "API snapshots are sequential observations, not an atomic snapshot. Non-verbose unittest output provides an aggregate result and progress, not individual test names.",
+    "The raw log preserves a nonblocking Node.js action deprecation warning and an explicitly governance-permitted uninitialized-submodule warning."
+  ],
+  "artifacts": [
+    {
+      "file": "w10d-governance.log",
+      "bytes": 18960,
+      "sha256": "49f6c220807adc2b7ebfd6b2be88d5ecaaa97876d5ec820f8a6e3bcc37d69d0c"
+    },
+    {
+      "file": "w10d-governance-run.json",
+      "bytes": 12544,
+      "sha256": "c232503ff0654521bdc05a58288a148c53646029a65e34f2e29dc89064697dad"
+    },
+    {
+      "file": "w10d-governance-jobs.json",
+      "bytes": 2416,
+      "sha256": "f318348b33df6bfc12f240615390c95241cfa19305cab86603afca93e734e55c"
+    },
+    {
+      "file": "w10d-ci-run.json",
+      "bytes": 12509,
+      "sha256": "7a87d8a7fb06b6490a4ddb21b79741fe7b01f5c24c1889aa0eecffda830753b3"
+    },
+    {
+      "file": "w10d-ci-jobs.json",
+      "bytes": 9397,
+      "sha256": "01f77321896de2a524027bb48341c37f894d889c689a191ac17501d2e94d3d05"
+    },
+    {
+      "file": "w10d-commit.json",
+      "bytes": 1820,
+      "sha256": "fc519acaff8938092981e6a225b55f88edd35b30a601915cd524ec7043a2a47c"
+    },
+    {
+      "file": "w10d-base-ci-run.json",
+      "bytes": 12708,
+      "sha256": "5efa9aa22fd9f8b359ac09e3cc4382261d6bff9f001083d34e3ad83a105cc7a4"
+    },
+    {
+      "file": "w10d-base-ci-jobs.json",
+      "bytes": 117857,
+      "sha256": "0c5d8d140b083567e5c1c368837be3080fff0c66086b1cb0b1dd15e86f3e45be"
+    },
+    {
+      "file": "w10d-pre-fix-ci-run.json",
+      "bytes": 12417,
+      "sha256": "b04f35953aafbc4f8f674b7c356a44812add72b3ec2391357efa399b209e5220"
+    },
+    {
+      "file": "w10d-pre-fix-ci-jobs.json",
+      "bytes": 112318,
+      "sha256": "231868e7524edc2a57a904d250db4f39d00272a67f0e7594505a10827decf53c"
+    },
+    {
+      "file": "w10d-provenance.json",
+      "bytes": 1903,
+      "sha256": "3f457596c5706b3c8c13041e066362a48211538bfecaa7433e3c85c34a45d6dd"
+    },
+    {
+      "file": "w10d-audit.py",
+      "bytes": 12304,
+      "sha256": "10f96ccd504633cdca3e53b269e2a20358b3b699c6f5e97d023e458c8bf234b5"
+    }
+  ],
+  "method": "Read-only GitHub connector retrieval; local parsing and committed-tree identities only. No workflow mutation, retry, cancellation, source edit, build or test rerun."
+}

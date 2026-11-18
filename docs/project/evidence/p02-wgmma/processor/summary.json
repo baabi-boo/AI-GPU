@@ -1,0 +1,1004 @@
+{
+  "configuration": {
+    "clusters": 1,
+    "cores": 1,
+    "ctas_per_launch": 2,
+    "dynamic_local_memory_bytes_per_cta": 640,
+    "initial_c": "+0",
+    "integer_dpi_helpers_remain": true,
+    "issue_width": 4,
+    "k": 16,
+    "kunroll": 1,
+    "local_memory_banks": 8,
+    "local_memory_bytes": 16384,
+    "m": 64,
+    "n": 8,
+    "nrc": 8,
+    "profile": "",
+    "scalar_floating_arithmetic": "native STD",
+    "tcu_blocks": 4,
+    "tensor_arithmetic": "native TFR",
+    "tensor_latency": 4,
+    "threads_per_warp": 8,
+    "warps": 8,
+    "warps_per_cta": 4,
+    "xlen": 64
+  },
+  "contract": {
+    "path": "ci/project/p02_wgmma_matrix.json",
+    "sha256": "fdc3ea03364babc00892f7de31fb2f2053074bf1ea76cb605dfbe5c5ac31b002",
+    "size_bytes": 6206
+  },
+  "corrected_verifier": {
+    "automatic_acceptance": false,
+    "external_report_digest_used": true,
+    "focused_tests": 22,
+    "original_packet_valid": true,
+    "published_revision": "359a8c007f450a8146540f795cb576b29818fa03",
+    "require_witness": true,
+    "source_sha256": "11497b57db50c4c1e690d38c406d0de94f86b2017cec036f7ed79008151e72a4",
+    "tested_local_revision": "5e3b74fd569169ad921315223c121a037ae656b7",
+    "tree": "97116818da872f43f952a351eb6616fc327be438",
+    "verified_file_count": 1103
+  },
+  "counts": {
+    "backend_variants": 12,
+    "case_executions": 24,
+    "checked_output_words": 24576,
+    "commands": 113,
+    "launches": 48,
+    "metadata_events": 256,
+    "metadata_transactions": 64,
+    "paired_case_comparisons": 12,
+    "paired_launch_comparisons": 24,
+    "waited_metadata_transactions": 64,
+    "witness_case_executions": 2,
+    "witness_launches": 4
+  },
+  "finished_at": "2026-11-18T05:01:23+00:00",
+  "historical_native_unit": {
+    "accepted_and_committed_transactions": 392,
+    "all_unit_snapshot_files_unchanged": 436,
+    "bridge_relevant_files_unchanged": 417,
+    "commands": 9,
+    "exact_arithmetic_word_checks": 3072,
+    "groups": 8,
+    "publication": "docs/project/evidence/p02-wgmma/unit/publication.json",
+    "scope": "Native TFR direct unit without DPI; forced dense NRC16 RS common compute pressure, CTA exclusion, metadata reload and split masks, LMEM stalls, descriptor poisoning and stable pending-commit tail. No forced sparse-compute pressure claim.",
+    "source_revision": "9006939aa123452b198bc0987e34aae8fab45fdd",
+    "source_tree": "c815d75bcd13395618b7fbd9924bcedf6347c6c8"
+  },
+  "hosted_validation": {
+    "corrected_verifier": {
+      "duration_seconds": 312.155,
+      "errors": 0,
+      "failures": 0,
+      "governance_run": 44241512544,
+      "independent_review": "reviews/w10d.json",
+      "job": 134590278005,
+      "original_log": {
+        "member": "reviews/w10d-governance.log",
+        "sha256": "49f6c220807adc2b7ebfd6b2be88d5ecaaa97876d5ec820f8a6e3bcc37d69d0c",
+        "size_bytes": 18960
+      },
+      "outcome": "pass",
+      "skips": 0,
+      "source_revision": "359a8c007f450a8146540f795cb576b29818fa03",
+      "source_tree": "97116818da872f43f952a351eb6616fc327be438",
+      "tests": 1624
+    },
+    "execution_source_general_ci": {
+      "outcome": "success",
+      "run": 44235141936,
+      "source_revision": "4af2307e57202c1269e20f893267a5583ad3cba0",
+      "state": "completed",
+      "successful_jobs": 42
+    },
+    "historical_verifier_suite": {
+      "scope": "Before the known checkout-input correction; original receipt remains unchanged.",
+      "source_revision": "ad94b696409d4d05c1063541ac014478f90c3e71",
+      "tests": 1619
+    },
+    "later_general_ci_observation": {
+      "observation_member": "reviews/w10d-ci-run.json",
+      "pass_claimed": false,
+      "run": 44241512594,
+      "running_jobs": 2,
+      "scope": "Historical snapshot captured by W10D; not a claim about a later workflow state.",
+      "source_revision": "359a8c007f450a8146540f795cb576b29818fa03",
+      "state": "in_progress",
+      "successful_jobs": 3
+    }
+  },
+  "largest_cycle_gap_percent": 1.3564839934888768,
+  "limitations": [
+    "Only the frozen six variants, bounded integer fixtures, fixed geometry and two launches per case are qualified here. General sparse/scaled/arbitrary-format numerical support is not inferred.",
+    "The fixed parity gate requires equal retired instructions and cycle difference at most five percent of RTL cycles. Auxiliary TCU event counters are retained but exact event-by-event equality is not claimed.",
+    "Summed warp wait cycles overlap and are not elapsed processor stall time. Same-cycle metadata release/issue was permitted but not observed in this packet.",
+    "Processor rtlsim bypasses the AFU; inherited integer multiply/divide and utility DPI remain. No vendor hw_emu, board, FPGA, silicon, synthesis/PPA, or physical throughput evidence is claimed.",
+    "Published text may have literal workspace prefixes normalized; embedded original hashes remain original identities and inventories bind the published bytes separately.",
+    "Reused tools/dependencies and external headers are identified inputs; local GCC12 package identities were checked, but InRelease GPG signature verification was not performed.",
+    "The original GCC14/Clang20 compile failures and original verifier input-schema rejection are preserved with their original source identities."
+  ],
+  "metadata_witness": [
+    {
+      "case_id": "fp16-sparse-signatures-a",
+      "event_count": 128,
+      "launches": [
+        {
+          "cta_groups": [
+            {
+              "cta": 0,
+              "warps": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "cta": 1,
+              "warps": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "issue_instances": [
+            "cluster0-socket0-core0-issue0-scoreboard",
+            "cluster0-socket0-core0-issue1-scoreboard",
+            "cluster0-socket0-core0-issue2-scoreboard",
+            "cluster0-socket0-core0-issue3-scoreboard"
+          ],
+          "iteration": 0,
+          "physical_warps": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "summed_warp_wait_cycles": 723,
+          "transaction_count": 16,
+          "waited_transaction_count": 16
+        },
+        {
+          "cta_groups": [
+            {
+              "cta": 2,
+              "warps": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "cta": 3,
+              "warps": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "issue_instances": [
+            "cluster0-socket0-core0-issue0-scoreboard",
+            "cluster0-socket0-core0-issue1-scoreboard",
+            "cluster0-socket0-core0-issue2-scoreboard",
+            "cluster0-socket0-core0-issue3-scoreboard"
+          ],
+          "iteration": 1,
+          "physical_warps": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "summed_warp_wait_cycles": 651,
+          "transaction_count": 16,
+          "waited_transaction_count": 16
+        }
+      ],
+      "summed_warp_wait_cycles": 1374,
+      "transaction_count": 32,
+      "waited_transaction_count": 32
+    },
+    {
+      "case_id": "fp16-sparse-signatures-b",
+      "event_count": 128,
+      "launches": [
+        {
+          "cta_groups": [
+            {
+              "cta": 0,
+              "warps": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "cta": 1,
+              "warps": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "issue_instances": [
+            "cluster0-socket0-core0-issue0-scoreboard",
+            "cluster0-socket0-core0-issue1-scoreboard",
+            "cluster0-socket0-core0-issue2-scoreboard",
+            "cluster0-socket0-core0-issue3-scoreboard"
+          ],
+          "iteration": 0,
+          "physical_warps": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "summed_warp_wait_cycles": 723,
+          "transaction_count": 16,
+          "waited_transaction_count": 16
+        },
+        {
+          "cta_groups": [
+            {
+              "cta": 2,
+              "warps": [
+                0,
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "cta": 3,
+              "warps": [
+                4,
+                5,
+                6,
+                7
+              ]
+            }
+          ],
+          "issue_instances": [
+            "cluster0-socket0-core0-issue0-scoreboard",
+            "cluster0-socket0-core0-issue1-scoreboard",
+            "cluster0-socket0-core0-issue2-scoreboard",
+            "cluster0-socket0-core0-issue3-scoreboard"
+          ],
+          "iteration": 1,
+          "physical_warps": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "summed_warp_wait_cycles": 651,
+          "transaction_count": 16,
+          "waited_transaction_count": 16
+        }
+      ],
+      "summed_warp_wait_cycles": 1374,
+      "transaction_count": 32,
+      "waited_transaction_count": 32
+    }
+  ],
+  "original_report": {
+    "member": "wgmma-gcc12-formal-evidence/report.json",
+    "sha256": "b5b136bb3144613d7c32c47a888f744e864d9dab737c19e954f9da7dabcadb78",
+    "size_bytes": 2952368
+  },
+  "outcomes": {
+    "arithmetic_outcome": "pass",
+    "outcome": "pass",
+    "parity_outcome": "pass",
+    "witness_outcome": "pass"
+  },
+  "paired_performance": {
+    "automatic_waiver": false,
+    "cycle_tolerance_percent": 5,
+    "metric": "per-launch deltas of cumulative retired-instruction and cycle counters",
+    "outcome": "pass",
+    "pairs": [
+      {
+        "case_id": "bf16-dense-signatures-a",
+        "launches": [
+          {
+            "cycle_delta": 0,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 0,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 7028,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            },
+            "simx": {
+              "cycles": 7028,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            }
+          },
+          {
+            "cycle_delta": 68,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 1,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 6949,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            },
+            "simx": {
+              "cycles": 7017,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            }
+          }
+        ],
+        "outcome": "pass",
+        "variant": "dense-bf16-rs"
+      },
+      {
+        "case_id": "bf16-dense-signatures-b",
+        "launches": [
+          {
+            "cycle_delta": 0,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 0,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 7028,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            },
+            "simx": {
+              "cycles": 7028,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            }
+          },
+          {
+            "cycle_delta": 68,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 1,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 6949,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            },
+            "simx": {
+              "cycles": 7017,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            }
+          }
+        ],
+        "outcome": "pass",
+        "variant": "dense-bf16-rs"
+      },
+      {
+        "case_id": "bf16-dense-signatures-a",
+        "launches": [
+          {
+            "cycle_delta": 4,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 0,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 6836,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            },
+            "simx": {
+              "cycles": 6840,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            }
+          },
+          {
+            "cycle_delta": 35,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 1,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 6798,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            },
+            "simx": {
+              "cycles": 6833,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            }
+          }
+        ],
+        "outcome": "pass",
+        "variant": "dense-bf16-ss"
+      },
+      {
+        "case_id": "bf16-dense-signatures-b",
+        "launches": [
+          {
+            "cycle_delta": 4,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 0,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 6836,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            },
+            "simx": {
+              "cycles": 6840,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            }
+          },
+          {
+            "cycle_delta": 35,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 1,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 6798,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            },
+            "simx": {
+              "cycles": 6833,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            }
+          }
+        ],
+        "outcome": "pass",
+        "variant": "dense-bf16-ss"
+      },
+      {
+        "case_id": "fp16-dense-signatures-a",
+        "launches": [
+          {
+            "cycle_delta": 0,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 0,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 7028,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            },
+            "simx": {
+              "cycles": 7028,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            }
+          },
+          {
+            "cycle_delta": 68,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 1,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 6949,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            },
+            "simx": {
+              "cycles": 7017,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            }
+          }
+        ],
+        "outcome": "pass",
+        "variant": "dense-fp16-rs"
+      },
+      {
+        "case_id": "fp16-dense-signatures-b",
+        "launches": [
+          {
+            "cycle_delta": 0,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 0,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 7028,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            },
+            "simx": {
+              "cycles": 7028,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            }
+          },
+          {
+            "cycle_delta": 68,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 1,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 6949,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            },
+            "simx": {
+              "cycles": 7017,
+              "derivation": "cumulative_delta",
+              "instructions": 5688
+            }
+          }
+        ],
+        "outcome": "pass",
+        "variant": "dense-fp16-rs"
+      },
+      {
+        "case_id": "fp16-dense-signatures-a",
+        "launches": [
+          {
+            "cycle_delta": 4,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 0,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 6836,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            },
+            "simx": {
+              "cycles": 6840,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            }
+          },
+          {
+            "cycle_delta": 35,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 1,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 6798,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            },
+            "simx": {
+              "cycles": 6833,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            }
+          }
+        ],
+        "outcome": "pass",
+        "variant": "dense-fp16-ss"
+      },
+      {
+        "case_id": "fp16-dense-signatures-b",
+        "launches": [
+          {
+            "cycle_delta": 4,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 0,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 6836,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            },
+            "simx": {
+              "cycles": 6840,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            }
+          },
+          {
+            "cycle_delta": 35,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 1,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 6798,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            },
+            "simx": {
+              "cycles": 6833,
+              "derivation": "cumulative_delta",
+              "instructions": 5584
+            }
+          }
+        ],
+        "outcome": "pass",
+        "variant": "dense-fp16-ss"
+      },
+      {
+        "case_id": "fp16-dense-signatures-a",
+        "launches": [
+          {
+            "cycle_delta": 39,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 0,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 5455,
+              "derivation": "cumulative_delta",
+              "instructions": 4072
+            },
+            "simx": {
+              "cycles": 5494,
+              "derivation": "cumulative_delta",
+              "instructions": 4072
+            }
+          },
+          {
+            "cycle_delta": 53,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 1,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 5424,
+              "derivation": "cumulative_delta",
+              "instructions": 4072
+            },
+            "simx": {
+              "cycles": 5477,
+              "derivation": "cumulative_delta",
+              "instructions": 4072
+            }
+          }
+        ],
+        "outcome": "pass",
+        "variant": "dense-fp16-ss-row-major-a"
+      },
+      {
+        "case_id": "fp16-dense-signatures-b",
+        "launches": [
+          {
+            "cycle_delta": 39,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 0,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 5455,
+              "derivation": "cumulative_delta",
+              "instructions": 4072
+            },
+            "simx": {
+              "cycles": 5494,
+              "derivation": "cumulative_delta",
+              "instructions": 4072
+            }
+          },
+          {
+            "cycle_delta": 53,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 1,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 5424,
+              "derivation": "cumulative_delta",
+              "instructions": 4072
+            },
+            "simx": {
+              "cycles": 5477,
+              "derivation": "cumulative_delta",
+              "instructions": 4072
+            }
+          }
+        ],
+        "outcome": "pass",
+        "variant": "dense-fp16-ss-row-major-a"
+      },
+      {
+        "case_id": "fp16-sparse-signatures-a",
+        "launches": [
+          {
+            "cycle_delta": 24,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 0,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 3720,
+              "derivation": "cumulative_delta",
+              "instructions": 2544
+            },
+            "simx": {
+              "cycles": 3744,
+              "derivation": "cumulative_delta",
+              "instructions": 2544
+            }
+          },
+          {
+            "cycle_delta": 50,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 1,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 3686,
+              "derivation": "cumulative_delta",
+              "instructions": 2544
+            },
+            "simx": {
+              "cycles": 3736,
+              "derivation": "cumulative_delta",
+              "instructions": 2544
+            }
+          }
+        ],
+        "outcome": "pass",
+        "variant": "sparse-fp16-ss"
+      },
+      {
+        "case_id": "fp16-sparse-signatures-b",
+        "launches": [
+          {
+            "cycle_delta": 24,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 0,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 3720,
+              "derivation": "cumulative_delta",
+              "instructions": 2544
+            },
+            "simx": {
+              "cycles": 3744,
+              "derivation": "cumulative_delta",
+              "instructions": 2544
+            }
+          },
+          {
+            "cycle_delta": 50,
+            "cycle_relative_denominator": "rtlsim_cycles",
+            "cycle_tolerance_percent": 5,
+            "cycle_within_tolerance": true,
+            "instructions_equal": true,
+            "iteration": 1,
+            "outcome": "pass",
+            "rtlsim": {
+              "cycles": 3686,
+              "derivation": "cumulative_delta",
+              "instructions": 2544
+            },
+            "simx": {
+              "cycles": 3736,
+              "derivation": "cumulative_delta",
+              "instructions": 2544
+            }
+          }
+        ],
+        "outcome": "pass",
+        "variant": "sparse-fp16-ss"
+      }
+    ],
+    "unpaired": []
+  },
+  "record_id": "p02-wgmma-processor-execution-4af2307",
+  "resource_observations": {
+    "all_process_cleanup_complete": true,
+    "compiler_workers": 2,
+    "disk_reserve_bytes": 16106127360,
+    "largest_log_bytes": 179825,
+    "limits": "RSS is sampled; memory/disk minima are retained boundary observations. Polled budgets are not hard quotas or atomic disk reservations.",
+    "log_bytes": 4702197,
+    "lowest_recorded_boundary_available_memory_bytes": 9212465152,
+    "lowest_recorded_boundary_free_disk_bytes": 55442927616,
+    "peak_sampled_process_group_rss_bytes": 3140571136,
+    "rss_budget_bytes": 6442450944,
+    "successful_build_trees_retained": true,
+    "wall_interval_seconds": 2810,
+    "waveforms": false
+  },
+  "schema_version": 1,
+  "scope": "Completed bounded full-processor SimX/native RTL WGMMA execution and reviewed historical native-unit bridge. Acceptance is recorded separately in acceptance.json.",
+  "source_dirty": false,
+  "source_revision": "4af2307e57202c1269e20f893267a5583ad3cba0",
+  "source_stable": true,
+  "source_tree": "42e5d6f2c9c0c2035c4d3ec8c86125e8cca45192",
+  "started_at": "2026-11-18T04:14:33+00:00",
+  "variants": [
+    {
+      "backend": "simx",
+      "case_ids": [
+        "fp16-dense-signatures-a",
+        "fp16-dense-signatures-b"
+      ],
+      "id": "dense-fp16-ss",
+      "outcome": "pass"
+    },
+    {
+      "backend": "simx",
+      "case_ids": [
+        "fp16-dense-signatures-a",
+        "fp16-dense-signatures-b"
+      ],
+      "id": "dense-fp16-rs",
+      "outcome": "pass"
+    },
+    {
+      "backend": "simx",
+      "case_ids": [
+        "bf16-dense-signatures-a",
+        "bf16-dense-signatures-b"
+      ],
+      "id": "dense-bf16-ss",
+      "outcome": "pass"
+    },
+    {
+      "backend": "simx",
+      "case_ids": [
+        "bf16-dense-signatures-a",
+        "bf16-dense-signatures-b"
+      ],
+      "id": "dense-bf16-rs",
+      "outcome": "pass"
+    },
+    {
+      "backend": "simx",
+      "case_ids": [
+        "fp16-dense-signatures-a",
+        "fp16-dense-signatures-b"
+      ],
+      "id": "dense-fp16-ss-row-major-a",
+      "outcome": "pass"
+    },
+    {
+      "backend": "simx",
+      "case_ids": [
+        "fp16-sparse-signatures-a",
+        "fp16-sparse-signatures-b"
+      ],
+      "id": "sparse-fp16-ss",
+      "outcome": "pass"
+    },
+    {
+      "backend": "rtlsim",
+      "case_ids": [
+        "fp16-dense-signatures-a",
+        "fp16-dense-signatures-b"
+      ],
+      "id": "dense-fp16-ss",
+      "outcome": "pass"
+    },
+    {
+      "backend": "rtlsim",
+      "case_ids": [
+        "fp16-dense-signatures-a",
+        "fp16-dense-signatures-b"
+      ],
+      "id": "dense-fp16-rs",
+      "outcome": "pass"
+    },
+    {
+      "backend": "rtlsim",
+      "case_ids": [
+        "bf16-dense-signatures-a",
+        "bf16-dense-signatures-b"
+      ],
+      "id": "dense-bf16-ss",
+      "outcome": "pass"
+    },
+    {
+      "backend": "rtlsim",
+      "case_ids": [
+        "bf16-dense-signatures-a",
+        "bf16-dense-signatures-b"
+      ],
+      "id": "dense-bf16-rs",
+      "outcome": "pass"
+    },
+    {
+      "backend": "rtlsim",
+      "case_ids": [
+        "fp16-dense-signatures-a",
+        "fp16-dense-signatures-b"
+      ],
+      "id": "dense-fp16-ss-row-major-a",
+      "outcome": "pass"
+    },
+    {
+      "backend": "rtlsim",
+      "case_ids": [
+        "fp16-sparse-signatures-a",
+        "fp16-sparse-signatures-b"
+      ],
+      "id": "sparse-fp16-ss",
+      "outcome": "pass"
+    }
+  ]
+}

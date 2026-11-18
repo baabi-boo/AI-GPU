@@ -1,0 +1,563 @@
+{
+  "review_id": "w09c",
+  "scope": "original captured source_before checkout/execution inventory boundary only",
+  "started_at": "2026-11-18T04:58:07.245415+00:00",
+  "full_verifier_invoked": false,
+  "final_source_after_synthesized": false,
+  "packet_files_modified": false,
+  "acceptance_claimed": false,
+  "qualifies_P02_A03": false,
+  "phase_complete": false,
+  "candidate_sources_before": [
+    {
+      "path": "ci/project/baseline_inventory.py",
+      "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+      "size_bytes": 20466
+    },
+    {
+      "path": "ci/project/baseline_matrix.py",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "size_bytes": 8890
+    },
+    {
+      "path": "ci/project/baseline_packet_contract.py",
+      "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+      "size_bytes": 53680
+    },
+    {
+      "path": "ci/project/baseline_packet_io.py",
+      "sha256": "53ac39e541628a68b3d405201734195e8ed606b26eab5ee72746e96b3148515d",
+      "size_bytes": 14315
+    },
+    {
+      "path": "ci/project/baseline_process.py",
+      "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+      "size_bytes": 12627
+    },
+    {
+      "path": "ci/project/compiler_records.py",
+      "sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+      "size_bytes": 7143
+    },
+    {
+      "path": "ci/project/p02_matrix.py",
+      "sha256": "e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17",
+      "size_bytes": 30055
+    },
+    {
+      "path": "ci/project/p02_matrix_records.py",
+      "sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+      "size_bytes": 12332
+    },
+    {
+      "path": "ci/project/p02_wgmma_dependencies.py",
+      "sha256": "f08efb4010dfbf6d90042e5a6d366e98d0935a13b1b4209dada5ea6bcd0efd13",
+      "size_bytes": 5693
+    },
+    {
+      "path": "ci/project/p02_wgmma_fixture_oracle.py",
+      "sha256": "8e185325585da8a243546ac150754f50f8357781a6084fc6a63dbeb9cad17194",
+      "size_bytes": 14543
+    },
+    {
+      "path": "ci/project/p02_wgmma_matrix.py",
+      "sha256": "a98cf74c438e4433293181ea7fa0f7360d659a54edc7af699b0b10911ff76c74",
+      "size_bytes": 34735
+    },
+    {
+      "path": "ci/project/p02_wgmma_packet.py",
+      "sha256": "11497b57db50c4c1e690d38c406d0de94f86b2017cec036f7ed79008151e72a4",
+      "size_bytes": 34281
+    },
+    {
+      "path": "ci/project/p02_wgmma_records.py",
+      "sha256": "3a78219453dba18518c71c249735286b93f68c8b3dadf74c80dd0351b5cffed2",
+      "size_bytes": 16615
+    },
+    {
+      "path": "ci/project/p02_wgmma_witness.py",
+      "sha256": "5209a06b3428edba6bbf1c5ef0f8c065f1cba69acc72929fe1030e2f0bd3cdc1",
+      "size_bytes": 14246
+    },
+    {
+      "path": "ci/project/preflight.py",
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+      "size_bytes": 15124
+    },
+    {
+      "path": "ci/project/test_p02_wgmma_packet.py",
+      "sha256": "b22daed1c623ae72389da7bf9ab12c242e92ef300d7a7762e3946ec1d38271bf",
+      "size_bytes": 31735
+    }
+  ],
+  "script": {
+    "path": "${WORK}/reviews/w09c-real-boundary.py",
+    "sha256": "173a2afc630d3b46912518dab04d01679b5aa6875ca6ee2811b87e690f3b4055",
+    "size_bytes": 10496
+  },
+  "checks": [
+    {
+      "name": "original rule still reproduces retained W09A rejection",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input differs"
+      }
+    },
+    {
+      "name": "unchanged actual snapshot accepted by new boundary with exact identity-only row",
+      "outcome": "pass",
+      "result": [
+        {
+          "path": "ci/blackbox.sh",
+          "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+          "size_bytes": 9153
+        }
+      ]
+    },
+    {
+      "name": "reject checkout omission: VERSION",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input inventory differs"
+      }
+    },
+    {
+      "name": "reject checkout omission: .gitmodules",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input inventory differs"
+      }
+    },
+    {
+      "name": "reject checkout omission: configure",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input inventory differs"
+      }
+    },
+    {
+      "name": "reject checkout omission: config.mk.in",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input inventory differs"
+      }
+    },
+    {
+      "name": "reject checkout omission: VX_config.toml",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input inventory differs"
+      }
+    },
+    {
+      "name": "reject checkout omission: VX_types.toml",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input inventory differs"
+      }
+    },
+    {
+      "name": "reject checkout omission: ci/gen_config.py",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input inventory differs"
+      }
+    },
+    {
+      "name": "reject checkout omission: ci/blackbox.sh",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input inventory differs"
+      }
+    },
+    {
+      "name": "reject extra checkout path",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input inventory differs"
+      }
+    },
+    {
+      "name": "reject eight-row checkout path substitution",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input inventory differs"
+      }
+    },
+    {
+      "name": "reject duplicate checkout identity",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout inputs repeats a path"
+      }
+    },
+    {
+      "name": "reject missing required execution identity: .gitmodules",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input lacks execution source identity: .gitmodules"
+      }
+    },
+    {
+      "name": "reject overlap sha256 drift: .gitmodules",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input .gitmodules differs"
+      }
+    },
+    {
+      "name": "reject overlap size_bytes drift: .gitmodules",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input .gitmodules differs"
+      }
+    },
+    {
+      "name": "reject missing required execution identity: VERSION",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input lacks execution source identity: VERSION"
+      }
+    },
+    {
+      "name": "reject overlap sha256 drift: VERSION",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input VERSION differs"
+      }
+    },
+    {
+      "name": "reject overlap size_bytes drift: VERSION",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input VERSION differs"
+      }
+    },
+    {
+      "name": "reject missing required execution identity: VX_config.toml",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input lacks execution source identity: VX_config.toml"
+      }
+    },
+    {
+      "name": "reject overlap sha256 drift: VX_config.toml",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input VX_config.toml differs"
+      }
+    },
+    {
+      "name": "reject overlap size_bytes drift: VX_config.toml",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input VX_config.toml differs"
+      }
+    },
+    {
+      "name": "reject missing required execution identity: VX_types.toml",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input lacks execution source identity: VX_types.toml"
+      }
+    },
+    {
+      "name": "reject overlap sha256 drift: VX_types.toml",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input VX_types.toml differs"
+      }
+    },
+    {
+      "name": "reject overlap size_bytes drift: VX_types.toml",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input VX_types.toml differs"
+      }
+    },
+    {
+      "name": "reject missing required execution identity: ci/gen_config.py",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input lacks execution source identity: ci/gen_config.py"
+      }
+    },
+    {
+      "name": "reject overlap sha256 drift: ci/gen_config.py",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input ci/gen_config.py differs"
+      }
+    },
+    {
+      "name": "reject overlap size_bytes drift: ci/gen_config.py",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input ci/gen_config.py differs"
+      }
+    },
+    {
+      "name": "reject missing required execution identity: config.mk.in",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input lacks execution source identity: config.mk.in"
+      }
+    },
+    {
+      "name": "reject overlap sha256 drift: config.mk.in",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input config.mk.in differs"
+      }
+    },
+    {
+      "name": "reject overlap size_bytes drift: config.mk.in",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input config.mk.in differs"
+      }
+    },
+    {
+      "name": "reject missing required execution identity: configure",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout input lacks execution source identity: configure"
+      }
+    },
+    {
+      "name": "reject overlap sha256 drift: configure",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input configure differs"
+      }
+    },
+    {
+      "name": "reject overlap size_bytes drift: configure",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input configure differs"
+      }
+    },
+    {
+      "name": "matching blackbox overlap is checked and no longer reported outside execution inventory",
+      "outcome": "pass",
+      "result": []
+    },
+    {
+      "name": "reject blackbox overlap sha256 drift",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input ci/blackbox.sh differs"
+      }
+    },
+    {
+      "name": "reject blackbox overlap size_bytes drift",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "checkout/source input ci/blackbox.sh differs"
+      }
+    },
+    {
+      "name": "reject invalid checkout-only digest",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "invalid SHA-256 identity"
+      }
+    },
+    {
+      "name": "reject boolean checkout-only size",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "invalid file size"
+      }
+    },
+    {
+      "name": "reject extra checkout-only identity field",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "invalid file identity fields"
+      }
+    },
+    {
+      "name": "incomplete actual report still rejected by complete source-stability gate",
+      "outcome": "pass",
+      "result": {
+        "error_type": "ValueError",
+        "reason": "source stability snapshot inventory differs"
+      }
+    }
+  ],
+  "failures": [],
+  "captured_report": {
+    "path": "${WORK}/reviews/w09a-report-partial.json",
+    "sha256": "dd60b9a2037d34b72b407612e89cbf7f4ced3e5dca208c0828e24e1ec23b6ad2",
+    "size_bytes": 2313955
+  },
+  "source_before": {
+    "path": "snapshots/source-before.json",
+    "sha256": "96fabbd00a1fa59a8234530add191ff951c3bd5741509d97df2f8dbb8d9f41f5",
+    "size_bytes": 127037
+  },
+  "actual_inventory": {
+    "source_file_count": 740,
+    "checkout_input_count": 8,
+    "checkout_paths": [
+      "VERSION",
+      ".gitmodules",
+      "configure",
+      "config.mk.in",
+      "VX_config.toml",
+      "VX_types.toml",
+      "ci/gen_config.py",
+      "ci/blackbox.sh"
+    ],
+    "overlap_paths": [
+      ".gitmodules",
+      "VERSION",
+      "VX_config.toml",
+      "VX_types.toml",
+      "ci/gen_config.py",
+      "config.mk.in",
+      "configure"
+    ],
+    "checkout_only_identity": {
+      "path": "ci/blackbox.sh",
+      "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+      "size_bytes": 9153
+    },
+    "captured_source_revision": "4af2307e57202c1269e20f893267a5583ad3cba0",
+    "captured_source_tree": "42e5d6f2c9c0c2035c4d3ec8c86125e8cca45192"
+  },
+  "checked_packet_members": [
+    {
+      "path": "snapshots/source-before.json",
+      "sha256": "96fabbd00a1fa59a8234530add191ff951c3bd5741509d97df2f8dbb8d9f41f5",
+      "size_bytes": 127037
+    }
+  ],
+  "packet_reader_recheck": "pass",
+  "candidate_sources_after": [
+    {
+      "path": "ci/project/baseline_inventory.py",
+      "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+      "size_bytes": 20466
+    },
+    {
+      "path": "ci/project/baseline_matrix.py",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "size_bytes": 8890
+    },
+    {
+      "path": "ci/project/baseline_packet_contract.py",
+      "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+      "size_bytes": 53680
+    },
+    {
+      "path": "ci/project/baseline_packet_io.py",
+      "sha256": "53ac39e541628a68b3d405201734195e8ed606b26eab5ee72746e96b3148515d",
+      "size_bytes": 14315
+    },
+    {
+      "path": "ci/project/baseline_process.py",
+      "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+      "size_bytes": 12627
+    },
+    {
+      "path": "ci/project/compiler_records.py",
+      "sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+      "size_bytes": 7143
+    },
+    {
+      "path": "ci/project/p02_matrix.py",
+      "sha256": "e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17",
+      "size_bytes": 30055
+    },
+    {
+      "path": "ci/project/p02_matrix_records.py",
+      "sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+      "size_bytes": 12332
+    },
+    {
+      "path": "ci/project/p02_wgmma_dependencies.py",
+      "sha256": "f08efb4010dfbf6d90042e5a6d366e98d0935a13b1b4209dada5ea6bcd0efd13",
+      "size_bytes": 5693
+    },
+    {
+      "path": "ci/project/p02_wgmma_fixture_oracle.py",
+      "sha256": "8e185325585da8a243546ac150754f50f8357781a6084fc6a63dbeb9cad17194",
+      "size_bytes": 14543
+    },
+    {
+      "path": "ci/project/p02_wgmma_matrix.py",
+      "sha256": "a98cf74c438e4433293181ea7fa0f7360d659a54edc7af699b0b10911ff76c74",
+      "size_bytes": 34735
+    },
+    {
+      "path": "ci/project/p02_wgmma_packet.py",
+      "sha256": "11497b57db50c4c1e690d38c406d0de94f86b2017cec036f7ed79008151e72a4",
+      "size_bytes": 34281
+    },
+    {
+      "path": "ci/project/p02_wgmma_records.py",
+      "sha256": "3a78219453dba18518c71c249735286b93f68c8b3dadf74c80dd0351b5cffed2",
+      "size_bytes": 16615
+    },
+    {
+      "path": "ci/project/p02_wgmma_witness.py",
+      "sha256": "5209a06b3428edba6bbf1c5ef0f8c065f1cba69acc72929fe1030e2f0bd3cdc1",
+      "size_bytes": 14246
+    },
+    {
+      "path": "ci/project/preflight.py",
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+      "size_bytes": 15124
+    },
+    {
+      "path": "ci/project/test_p02_wgmma_packet.py",
+      "sha256": "b22daed1c623ae72389da7bf9ab12c242e92ef300d7a7762e3946ec1d38271bf",
+      "size_bytes": 31735
+    }
+  ],
+  "blocked_process_attempts": [],
+  "finished_at": "2026-11-18T04:58:07.547127+00:00",
+  "outcome": "pass",
+  "check_count": 41
+}

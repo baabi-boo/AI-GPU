@@ -1,0 +1,3551 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/phase_review",
+  "reviewed_at": "2026-11-18T07:02:30.447833+00:00",
+  "outcome": "pass",
+  "decision": "approve_P02_A03_bounded_acceptance_and_P02_closure_checkpoint",
+  "scope": "Actual current-session independent final review; no impersonation of historical W10C, human approval or waiver.",
+  "processor_source_revision": "4af2307e57202c1269e20f893267a5583ad3cba0",
+  "corrected_verifier_revision": "359a8c007f450a8146540f795cb576b29818fa03",
+  "historical_unit_revision": "9006939aa123452b198bc0987e34aae8fab45fdd",
+  "original_report_sha256": "b5b136bb3144613d7c32c47a888f744e864d9dab737c19e954f9da7dabcadb78",
+  "earlier_current_session_audit": {
+    "reviewer": "/root/phase_review",
+    "reviewed_at": "2026-11-18T06:56:24.747179+00:00",
+    "checks_passed": 1251,
+    "checks_failed": 0,
+    "official_verifier_exit_code": 0,
+    "official_verifier_files_checked": 1103,
+    "counts": {
+      "launches": 48,
+      "exact_words": 24576,
+      "case_executions": 24,
+      "metadata_events": 256,
+      "metadata_transactions": 64,
+      "launch_parity_pairs": 24
+    },
+    "largest_cycle_gap_percent": 1.3564839934888768,
+    "metadata_summaries": [
+      {
+        "case_id": "fp16-sparse-signatures-a",
+        "iteration": 0,
+        "events": 64,
+        "transactions": 16,
+        "waited_transactions": 16,
+        "summed_warp_wait_cycles": 723,
+        "release_to_issue_min": 1,
+        "release_to_issue_max": 15
+      },
+      {
+        "case_id": "fp16-sparse-signatures-a",
+        "iteration": 1,
+        "events": 64,
+        "transactions": 16,
+        "waited_transactions": 16,
+        "summed_warp_wait_cycles": 651,
+        "release_to_issue_min": 1,
+        "release_to_issue_max": 21
+      },
+      {
+        "case_id": "fp16-sparse-signatures-b",
+        "iteration": 0,
+        "events": 64,
+        "transactions": 16,
+        "waited_transactions": 16,
+        "summed_warp_wait_cycles": 723,
+        "release_to_issue_min": 1,
+        "release_to_issue_max": 15
+      },
+      {
+        "case_id": "fp16-sparse-signatures-b",
+        "iteration": 1,
+        "events": 64,
+        "transactions": 16,
+        "waited_transactions": 16,
+        "summed_warp_wait_cycles": 651,
+        "release_to_issue_min": 1,
+        "release_to_issue_max": 21
+      }
+    ],
+    "unit_source_entries_checked": 436,
+    "unit_checkout_inputs_checked": 8,
+    "method": "Current offline verifier with external digest and mandatory witness; separate standard-library rehash of every raw command log, direct exact-word comparisons, raw metadata-event correlation, cumulative-counter deltas and historical-unit source identity comparison."
+  },
+  "final_checks_passed": 850,
+  "final_checks_failed": 0,
+  "active_review_map_rows": 172,
+  "active_published_locations": 176,
+  "historical_review_map_rows": 1,
+  "acceptance_artifacts_checked": 55,
+  "historical_agent_status_counts": {
+    "completed": 57,
+    "completed_engineering_approval": 1,
+    "interim_ledger_retained_completed_by_continuation": 1,
+    "audit_retained_final_approval_not_recorded": 1
+  },
+  "documents": [
+    {
+      "path": "README.md",
+      "sha256": "e14ee837c4308ec917e99729d600f33e748e7c7351b60e4f4ac764e407da863c",
+      "size_bytes": 24621
+    },
+    {
+      "path": "ROADMAP.md",
+      "sha256": "9845c1ec7b2ca2b67602298b63610e02deb643879121223762542b61f994148c",
+      "size_bytes": 11477
+    },
+    {
+      "path": "docs/project/status.md",
+      "sha256": "afe9e2822d425842f8cbc7a6a74bf4d428a2c93741cbc24fd9e048b52d451ea7",
+      "size_bytes": 39570
+    },
+    {
+      "path": "docs/project/backlog.md",
+      "sha256": "3710908f81556e24d355eb3a5da28ae9f02388bc1bcf7d701acbc0eb9cf91afe",
+      "size_bytes": 20480
+    },
+    {
+      "path": "docs/project/phases/p02-tensor.md",
+      "sha256": "5f29ecc1dc7a5d53e7a8bafe1fff5017fc1bc088ac8d8a3faefb7bb6fb8a06a1",
+      "size_bytes": 9973
+    },
+    {
+      "path": "docs/project/p02-wgmma-handoff.md",
+      "sha256": "1a619517d27035322ed855cc0bbc050a6718d05e24bdac30cb0fef19ac40cdbd",
+      "size_bytes": 17592
+    }
+  ],
+  "findings": [],
+  "resolved_findings": [
+    {
+      "id": "CLOSURE-01",
+      "resolution": "Publish this actual current-session approval; retain original unfinished W10C audit and avoid invented historical approval."
+    },
+    {
+      "id": "CLOSURE-02",
+      "resolution": "Current W10F final data and Markdown are separately published and actively mapped; stale standalone and original interim map remain historical."
+    },
+    {
+      "id": "CLOSURE-03",
+      "resolution": "Historical assignment states and current-session agents remain separate; missing original final approval and later coordinator reconciliation are explicit."
+    },
+    {
+      "id": "CLOSURE-O01",
+      "resolution": "Shared-parent normalization was valid in immutable archives; full independent map check now includes that declared role. A further standalone W10B omission was normalized, with its original standalone preserved."
+    }
+  ],
+  "checks": [
+    {
+      "check": "immutable_archive:processor-core",
+      "pass": true
+    },
+    {
+      "check": "immutable_archive:processor-artifacts",
+      "pass": true
+    },
+    {
+      "check": "immutable_archive:processor-historical-verifier",
+      "pass": true
+    },
+    {
+      "check": "immutable_archive:compiler-recovery-v2",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w01a.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w01a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w01a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w01a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w01b.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w01b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w01b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w01b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w01c.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w01c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w01c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w01c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w01d.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w01d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w01d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w01d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w01e.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w01e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w01e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w01e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w01f.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w01f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w01f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w01f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w02a.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w02a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w02a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w02a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w02b.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w02b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w02b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w02b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w02c.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w02c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w02c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w02c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w02d.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w02d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w02d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w02d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w02e.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w02e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w02e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w02e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w02f.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w02f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w02f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w02f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w03a.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w03a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w03a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w03a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w03b.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w03b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w03b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w03b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w03c.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w03c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w03c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w03c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w03d.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w03d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w03d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w03d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w03e.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w03e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w03e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w03e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w03f.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w03f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w03f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w03f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w04a.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w04a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w04a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w04a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w04b.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w04b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w04b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w04b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w04c.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w04c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w04c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w04c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w04d.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w04d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w04d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w04d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w04d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w04d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w04d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w04e.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w04e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w04e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w04e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w04f.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w04f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w04f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w04f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w04f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w04f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w04f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w05a.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w05a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w05a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w05a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w05b.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w05b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w05b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w05b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w05b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w05b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w05b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w05c.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w05c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w05c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w05c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w05c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w05c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w05c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w05d.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w05d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w05d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w05d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w05e.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w05e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w05e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w05e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w05f-ci-snapshot.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w05f-ci-snapshot.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w05f-ci-snapshot.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w05f-ci-snapshot.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w05f.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w05f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w05f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w05f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w06a.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w06a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w06a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w06a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w06b.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w06b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w06b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w06b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w06c-evidence.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w06c-evidence.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w06c-evidence.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w06c-evidence.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w06c.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w06c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w06c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w06c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w06d-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w06d-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w06d-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w06d-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w06d.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w06d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w06d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w06d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w06e-observation.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w06e-observation.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w06e-observation.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w06e-observation.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w06e.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w06e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w06e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w06e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w06f.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w06f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w06f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w06f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07a-audit.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07a-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07a-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07a-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07a-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07a-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07a-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07a-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07a-hierarchy-binding.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07a-hierarchy-binding.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07a-hierarchy-binding.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07a-hierarchy-binding.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07a-interim.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07a-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07a-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07a-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07a.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07b-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07b-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07b-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07b-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07b-interim.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07b-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07b-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07b-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07b.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07c-audit.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07c-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07c-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07c-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07c-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07c-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07c-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07c-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07c.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07d-audit.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07d-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07d-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07d-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07d-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07d-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07d-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07d-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07d-interim-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07d-interim-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07d-interim-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07d-interim-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07d-interim.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07d-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07d-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07d-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07d.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07e-audit.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07e-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07e-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07e-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07e-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07e-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07e-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07e-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07e.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07f-audit.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07f-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07f-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07f-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07f-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07f-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07f-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07f-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07f-final-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07f-final-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07f-final-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07f-final-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07f-final.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07f-final.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07f-final.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07f-final.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07f-interim-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07f-interim-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07f-interim-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07f-interim-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07f-interim.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07f-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07f-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07f-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07f-native-binding.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07f-native-binding.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07f-native-binding.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07f-native-binding.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07f-native-binding.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07f-native-binding.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07f-native-binding.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07f-native-binding.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07f-precompletion-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07f-precompletion-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07f-precompletion-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07f-precompletion-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w07f.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w07f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w07f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w07f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08a.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08a.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08a.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08a.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08a.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08b.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08b.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08c-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08c-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08c-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08c-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08c.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08c.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08d.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08d.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08e-audit.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08e-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08e-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08e-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08e-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08e-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08e-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08e-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08e-interim-audit.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08e-interim-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08e-interim-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08e-interim-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08e-interim-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08e-interim-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08e-interim-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08e-interim-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08e-interim.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08e-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08e-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08e-interim.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08e.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08e.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08f-ci-attempt1-jobs.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08f-ci-attempt1-jobs.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08f-ci-attempt1-jobs.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08f-ci-attempt1-jobs.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08f-ci-run.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08f-ci-run.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08f-ci-run.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08f-ci-run.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08f-governance-attempt1-jobs.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08f-governance-attempt1-jobs.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08f-governance-attempt1-jobs.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08f-governance-attempt1-jobs.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08f-governance-job.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08f-governance-job.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08f-governance-job.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08f-governance-job.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08f-governance-run.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08f-governance-run.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08f-governance-run.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08f-governance-run.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08f-governance.log",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08f-governance.log:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08f-governance.log:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08f-governance.log:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08f-provenance.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08f-provenance.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08f-provenance.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08f-provenance.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08f-sha256.txt",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08f-sha256.txt:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08f-sha256.txt:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08f-sha256.txt:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08f.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08f.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08f.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08f.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w08f.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w08f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w08f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w08f.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09a-audit.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09a-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09a-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09a-audit.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09a-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09a-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09a-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09a-data.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09a-final-command.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09a-final-command.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09a-final-command.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09a-final-command.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09a-final-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09a-final-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09a-final-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09a-final-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09a-final-output.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09a-final-output.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09a-final-output.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09a-final-output.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09a-final.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09a-final.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09a-final.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09a-final.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09a-final.stderr",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09a-final.stderr:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09a-final.stderr:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09a-final.stderr:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09a-initial-failure.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09a-initial-failure.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09a-initial-failure.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09a-initial-failure.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09a-minimal-repro.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09a-minimal-repro.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09a-minimal-repro.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09a-minimal-repro.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09a-minimal-repro.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09a-minimal-repro.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09a-minimal-repro.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09a-minimal-repro.py:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09a-minimal-repro.stderr",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09a-minimal-repro.stderr:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09a-minimal-repro.stderr:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09a-minimal-repro.stderr:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09a-minimal-repro.stdout",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09a-minimal-repro.stdout:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09a-minimal-repro.stdout:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09a-minimal-repro.stdout:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09a-report-partial.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09a-report-partial.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09a-report-partial.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09a-report-partial.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09a.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09a.md:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09b-actual-input-replay.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09b-actual-input-replay.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09b-actual-input-replay.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09b-actual-input-replay.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09b-after-tests.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09b-after-tests.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09b-after-tests.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09b-after-tests.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09b-before-regression.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09b-before-regression.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09b-before-regression.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09b-before-regression.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09b-sources-before.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09b-sources-before.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09b-sources-before.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09b-sources-before.json:archive_member",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09b.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09b.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09b.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09b.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09c-command-receipts.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09c-command-receipts.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09c-command-receipts.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09c-command-receipts.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09c-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09c-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09c-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09c-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09c-focused-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09c-focused-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09c-focused-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09c-focused-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09c-focused.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09c-focused.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09c-focused.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09c-focused.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09c-focused.stderr",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09c-focused.stderr:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09c-focused.stderr:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09c-focused.stderr:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09c-focused.stdout",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09c-focused.stdout:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09c-focused.stdout:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09c-focused.stdout:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09c-real-boundary-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09c-real-boundary-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09c-real-boundary-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09c-real-boundary-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09c-real-boundary.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09c-real-boundary.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09c-real-boundary.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09c-real-boundary.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09c-real-boundary.stderr",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09c-real-boundary.stderr:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09c-real-boundary.stderr:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09c-real-boundary.stderr:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09c-real-boundary.stdout",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09c-real-boundary.stdout:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09c-real-boundary.stdout:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09c-real-boundary.stdout:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09c-reviewed.patch",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09c-reviewed.patch:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09c-reviewed.patch:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09c-reviewed.patch:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09c-static-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09c-static-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09c-static-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09c-static-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09c.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09c.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09c.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09c.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09d-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09d-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09d-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09d-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09d-interim.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09d-interim.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09d-interim.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09d-interim.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09d.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09d.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09d.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09d.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09e-final-audit.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09e-final-audit.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09e-final-audit.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09e-final-audit.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09e-final-proof-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09e-final-proof-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09e-final-proof-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09e-final-proof-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09e-final.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09e-final.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09e-final.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09e-final.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09e-final.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09e-final.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09e-final.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09e-final.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09e.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09e.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09e.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09e.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09e.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09e.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09e.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09e.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w09f.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w09f.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w09f.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w09f.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10a.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10a.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10a.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10a.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10b-audit.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10b-audit.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10b-audit.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10b-audit.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10b-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10b-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10b-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10b-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10b.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10b.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10b.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10b.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10c-final-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10c-final-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10c-final-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10c-final-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10c-interim-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10c-interim-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10c-interim-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10c-interim-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10c.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10c.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10c.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10c.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10c.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10c.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10c.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10c.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10d-audit.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10d-audit.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10d-audit.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10d-audit.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10d-base-ci-jobs.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10d-base-ci-jobs.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10d-base-ci-jobs.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10d-base-ci-jobs.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10d-base-ci-run.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10d-base-ci-run.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10d-base-ci-run.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10d-base-ci-run.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10d-ci-jobs.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10d-ci-jobs.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10d-ci-jobs.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10d-ci-jobs.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10d-ci-run.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10d-ci-run.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10d-ci-run.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10d-ci-run.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10d-commit.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10d-commit.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10d-commit.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10d-commit.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10d-governance-jobs.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10d-governance-jobs.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10d-governance-jobs.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10d-governance-jobs.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10d-governance-run.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10d-governance-run.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10d-governance-run.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10d-governance-run.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10d-governance.log",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10d-governance.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10d-governance.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10d-governance.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10d-pre-fix-ci-jobs.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10d-pre-fix-ci-jobs.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10d-pre-fix-ci-jobs.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10d-pre-fix-ci-jobs.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10d-pre-fix-ci-run.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10d-pre-fix-ci-run.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10d-pre-fix-ci-run.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10d-pre-fix-ci-run.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10d-provenance.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10d-provenance.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10d-provenance.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10d-provenance.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10d.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10d.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10d.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10d.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10d.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10d.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10d.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10d.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10e-audit.py",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10e-audit.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10e-audit.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10e-audit.py:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10e-remote-commit.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10e-remote-commit.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10e-remote-commit.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10e-remote-commit.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10e.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10e.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10e.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10e.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10e.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10e.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10e.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10e.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10f-compiler-recovery-v2.stderr.log",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10f-compiler-recovery-v2.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10f-compiler-recovery-v2.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10f-compiler-recovery-v2.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10f-compiler-recovery-v2.stdout.log",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10f-compiler-recovery-v2.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10f-compiler-recovery-v2.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10f-compiler-recovery-v2.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10f-data.json",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10f-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10f-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10f-data.json:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10f-processor-artifacts.stderr.log",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10f-processor-artifacts.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10f-processor-artifacts.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10f-processor-artifacts.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10f-processor-artifacts.stdout.log",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10f-processor-artifacts.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10f-processor-artifacts.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10f-processor-artifacts.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10f-processor-core.stderr.log",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10f-processor-core.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10f-processor-core.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10f-processor-core.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10f-processor-core.stdout.log",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10f-processor-core.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10f-processor-core.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10f-processor-core.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10f-processor-core.strace.log",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10f-processor-core.strace.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10f-processor-core.strace.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10f-processor-core.strace.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10f-processor-historical-verifier.stderr.log",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10f-processor-historical-verifier.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10f-processor-historical-verifier.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10f-processor-historical-verifier.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10f-processor-historical-verifier.stdout.log",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10f-processor-historical-verifier.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10f-processor-historical-verifier.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10f-processor-historical-verifier.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10f-strace-attempt.stderr.log",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10f-strace-attempt.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10f-strace-attempt.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10f-strace-attempt.stderr.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10f-strace-attempt.stdout.log",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10f-strace-attempt.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10f-strace-attempt.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10f-strace-attempt.stdout.log:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_original:reviews/w10f.md",
+      "pass": true
+    },
+    {
+      "check": "map_published:reviews/w10f.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_normalization:reviews/w10f.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "map_digest_tokens:reviews/w10f.md:standalone_file",
+      "pass": true
+    },
+    {
+      "check": "historical_original_reconstruction",
+      "pass": true
+    },
+    {
+      "check": "historical_published",
+      "pass": true
+    },
+    {
+      "check": "w10b_interim_preserved",
+      "pass": true
+    },
+    {
+      "check": "interim_map_preserved",
+      "pass": true
+    },
+    {
+      "check": "recovery_archive_identity:compiler-recovery-v2/evidence-bundle.json.gz",
+      "pass": true
+    },
+    {
+      "check": "recovery_archive_identity:processor-artifacts/evidence-bundle.json.gz",
+      "pass": true
+    },
+    {
+      "check": "recovery_archive_identity:processor-core/evidence-bundle.json.gz",
+      "pass": true
+    },
+    {
+      "check": "recovery_archive_identity:processor-historical-verifier/evidence-bundle.json.gz",
+      "pass": true
+    },
+    {
+      "check": "historical_failed_audit_preserved",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:ci/project/fixtures/p02_wgmma_v1.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:ci/project/p02_wgmma_dependencies.py",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:ci/project/p02_wgmma_fixture_oracle.py",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:ci/project/p02_wgmma_matrix.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:ci/project/p02_wgmma_matrix.py",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:ci/project/p02_wgmma_packet.py",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:ci/project/p02_wgmma_records.py",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:ci/project/p02_wgmma_witness.py",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:ci/project/test_p02_wgmma_dependencies.py",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:ci/project/test_p02_wgmma_lmem.py",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:ci/project/test_p02_wgmma_matrix.py",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:ci/project/test_p02_wgmma_packet.py",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:ci/project/test_p02_wgmma_retention.py",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/compiler-recovery-v2/component-index.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/compiler-recovery-v2/evidence-bundle.json.gz",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/compiler-recovery-v2/inventory.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-artifacts/component-index.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-artifacts/evidence-bundle.json.gz",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-artifacts/inventory.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-artifacts/selection.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-artifacts/verification-receipts.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-component-index.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-core/component-index.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-core/evidence-bundle.json.gz",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-core/inventory.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-core/selection.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-core/verification-receipts.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-historical-verifier/component-index.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-historical-verifier/evidence-bundle.json.gz",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-historical-verifier/inventory.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-historical-verifier/selection.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-historical-verifier/verification-receipts.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/processor-union-coverage.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/publication.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/reviews/w09a-final-command.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/reviews/w09a-final-data.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/reviews/w09a-final-output.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/reviews/w09c-data.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/reviews/w09c.md",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/reviews/w09e-final-proof-data.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/reviews/w09e-final.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/reviews/w09e-final.md",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/reviews/w10b-data.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/reviews/w10b.md",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/reviews/w10d-governance.log",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/reviews/w10d.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/reviews/w10d.md",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/summary.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/tools/package_wgmma_evidence.py",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/processor/tools/package_wmma_evidence.py",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/unit/evidence-bundle.json.gz",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/unit/inventory.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/unit/packaging.log",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/unit/publication.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_artifact:docs/project/evidence/p02-wgmma/unit/selection.json",
+      "pass": true
+    },
+    {
+      "check": "acceptance_scope",
+      "pass": true
+    },
+    {
+      "check": "reviewer_attribution",
+      "pass": true
+    },
+    {
+      "check": "P02_complete",
+      "pass": true
+    },
+    {
+      "check": "P02_gate_reference",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P00:acceptance",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P00:depends_on",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P00:entry_acceptances",
+      "pass": true
+    },
+    {
+      "check": "other_phase_unchanged:P00",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P01:acceptance",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P01:depends_on",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P01:entry_acceptances",
+      "pass": true
+    },
+    {
+      "check": "other_phase_unchanged:P01",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P02:acceptance",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P02:depends_on",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P02:entry_acceptances",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P03:acceptance",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P03:depends_on",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P03:entry_acceptances",
+      "pass": true
+    },
+    {
+      "check": "other_phase_unchanged:P03",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P04:acceptance",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P04:depends_on",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P04:entry_acceptances",
+      "pass": true
+    },
+    {
+      "check": "other_phase_unchanged:P04",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P05:acceptance",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P05:depends_on",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P05:entry_acceptances",
+      "pass": true
+    },
+    {
+      "check": "other_phase_unchanged:P05",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P06:acceptance",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P06:depends_on",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P06:entry_acceptances",
+      "pass": true
+    },
+    {
+      "check": "other_phase_unchanged:P06",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P07:acceptance",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P07:depends_on",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P07:entry_acceptances",
+      "pass": true
+    },
+    {
+      "check": "other_phase_unchanged:P07",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P08:acceptance",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P08:depends_on",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P08:entry_acceptances",
+      "pass": true
+    },
+    {
+      "check": "other_phase_unchanged:P08",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P09:acceptance",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P09:depends_on",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P09:entry_acceptances",
+      "pass": true
+    },
+    {
+      "check": "other_phase_unchanged:P09",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P10:acceptance",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P10:depends_on",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P10:entry_acceptances",
+      "pass": true
+    },
+    {
+      "check": "other_phase_unchanged:P10",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P11:acceptance",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P11:depends_on",
+      "pass": true
+    },
+    {
+      "check": "unchanged_contract:P11:entry_acceptances",
+      "pass": true
+    },
+    {
+      "check": "other_phase_unchanged:P11",
+      "pass": true
+    },
+    {
+      "check": "P01_blocked",
+      "pass": true
+    },
+    {
+      "check": "P03_not_started_at_closure_checkpoint",
+      "pass": true
+    },
+    {
+      "check": "protected_unchanged:docs/project/evidence/p01-xrt-blocked.json",
+      "pass": true
+    },
+    {
+      "check": "protected_unchanged:docs/assets/img/vortex_framework_stack.svg",
+      "pass": true
+    },
+    {
+      "check": "protected_unchanged:ci/project/p02_wgmma_matrix.json",
+      "pass": true
+    },
+    {
+      "check": "protected_unchanged:ci/project/fixtures/p02_wgmma_v1.json",
+      "pass": true
+    },
+    {
+      "check": "ledger_historical_roster",
+      "pass": true
+    },
+    {
+      "check": "ledger_truthful",
+      "pass": true
+    },
+    {
+      "check": "ledger_interim_preserved",
+      "pass": true
+    },
+    {
+      "check": "closure_link",
+      "pass": true
+    },
+    {
+      "check": "final_W10F_links",
+      "pass": true
+    },
+    {
+      "check": "doc_P02_complete:README.md",
+      "pass": true
+    },
+    {
+      "check": "doc_P03_next_action:README.md",
+      "pass": true
+    },
+    {
+      "check": "doc_A03_link:README.md",
+      "pass": true
+    },
+    {
+      "check": "doc_P02_complete:ROADMAP.md",
+      "pass": true
+    },
+    {
+      "check": "doc_P03_next_action:ROADMAP.md",
+      "pass": true
+    },
+    {
+      "check": "doc_A03_link:ROADMAP.md",
+      "pass": true
+    },
+    {
+      "check": "doc_P02_complete:docs/project/status.md",
+      "pass": true
+    },
+    {
+      "check": "doc_P03_next_action:docs/project/status.md",
+      "pass": true
+    },
+    {
+      "check": "doc_A03_link:docs/project/status.md",
+      "pass": true
+    },
+    {
+      "check": "doc_P02_complete:docs/project/backlog.md",
+      "pass": true
+    },
+    {
+      "check": "doc_P03_next_action:docs/project/backlog.md",
+      "pass": true
+    },
+    {
+      "check": "doc_A03_link:docs/project/backlog.md",
+      "pass": true
+    },
+    {
+      "check": "doc_P02_complete:docs/project/phases/p02-tensor.md",
+      "pass": true
+    },
+    {
+      "check": "doc_P03_next_action:docs/project/phases/p02-tensor.md",
+      "pass": true
+    },
+    {
+      "check": "doc_A03_link:docs/project/phases/p02-tensor.md",
+      "pass": true
+    },
+    {
+      "check": "doc_P02_complete:docs/project/p02-wgmma-handoff.md",
+      "pass": true
+    },
+    {
+      "check": "doc_P03_next_action:docs/project/p02-wgmma-handoff.md",
+      "pass": true
+    },
+    {
+      "check": "doc_A03_link:docs/project/p02-wgmma-handoff.md",
+      "pass": true
+    },
+    {
+      "check": "prior_independent_audit_pass",
+      "pass": true
+    },
+    {
+      "check": "original_report_unchanged",
+      "pass": true
+    }
+  ],
+  "record_dependency_policy": "This review does not hash acceptance.json or itself. The coordinator may bind its review files from acceptance without a digest cycle. Document hashes identify this P02 closure checkpoint; later P03 changes require separate evidence.",
+  "limits": [
+    "No compiler, GPU simulation, RTL workload, broad test suite or physical hardware was executed by this reviewer.",
+    "The official packet verifier was run from the current checkout with an independently supplied report digest. Additional direct JSON/log readers used Python standard library only and imported no production arithmetic/witness parser.",
+    "All 436 historical unit source entries and eight checkout input entries match current and candidate source bytes. This bridges historical evidence; it is not a unit rerun.",
+    "Native hierarchy/disassembly and fixture arithmetic independence rely in part on retained independent engineering reviews; this review directly recomputes raw output equality, metadata event ordering/coverage and frozen parity predicates.",
+    "Exact output coverage is six bounded configurations and small integer fixtures; directed forced compute pressure is native dense NRC16 RS, distinct from NRC8 processor matrix.",
+    "No test threshold, golden value, fixture value, source implementation or historical evidence was changed.",
+    "Publication origin authenticity, omitted binary replay, vendor hw_emu, physical FPGA, silicon and future CI outcomes are not claimed.",
+    "This approves the P02 closure checkpoint at review time, with P03 not_started. Later P03 implementation and phase status changes are separate.",
+    "Applicable governance runs, actual commit publication and hosted CI remain the execution owner responsibility; no future success is claimed."
+  ]
+}

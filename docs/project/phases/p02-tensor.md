@@ -1,10 +1,12 @@
 # P02 — Tensor numerical contract
 
 **Goal:** define and prove the arithmetic behavior of the first supported AI
-configuration. This phase remains `in_progress`. P02-T01 is complete with
+configuration. This phase is `complete`. P02-T01 is complete with
 [P02-A01 source-level evidence](../evidence/p02-numerics/acceptance.json).
 [P02-A02 ordinary WMMA evidence](../evidence/p02-wmma/acceptance.json) is
-accepted; P02-T02 remains active for P02-A03 WGMMA concurrency proof.
+accepted. The independently reviewed
+[P02-A03 WGMMA evidence](../evidence/p02-wgmma/processor/acceptance.json)
+completes P02-T02 and the phase's three acceptance gates.
 The live status, dependencies and authoritative gate text are in
 [roadmap.json](../roadmap.json); the accountable role is Compute architecture lead.
 
@@ -37,7 +39,8 @@ model-function cases, 47 compiler cases and 1,343 offline tests at the original
 A01 checkpoint. The later [ordinary WMMA packet](../evidence/p02-wmma/README.md)
 adds the application adapter and matched processor execution for the 20 unchanged
 layout cases plus 68 independent numerical cases, satisfying A02's ordinary WMMA
-scope. Item 5 remains active; WGMMA compiler checks do not satisfy it.
+scope. Item 5 now has accepted native-unit and processor evidence, described
+below, with completed engineering and publication-integrity review.
 
 1. Freeze one baseline configuration: XLEN, native arithmetic backend, enabled
    formats, tensor/WGMMA switches, warp geometry, local memory and tile layouts.
@@ -87,6 +90,33 @@ rerun passed all 1,448 tests, and the rebuilt hosts repeated all 352 launches
 and 14,336 exact comparisons successfully; see [status](../status.md).
 Those child checks preserve the formal processor result's original source identity.
 
+## Accepted bounded WGMMA scope
+
+The [WGMMA handoff](../p02-wgmma-handoff.md) and
+[processor packet](../evidence/p02-wgmma/processor/README.md) retain the finished
+formal run at clean source `4af2307e57202c1269e20f893267a5583ad3cba0`: 113
+commands, 12 backend/configuration builds, 24 case executions, 48 launches and
+24,576 exact output-word comparisons passed. Six configurations cover dense
+FP16/BF16 SS/RS, FP16 SS row-major A and bounded sparse FP16 SS. The two sparse
+RTL cases contain 64 completed metadata transactions, all with observed waits.
+All 12 performance pairs preserve exact retired-instruction equality and the
+unchanged 5% cycle bound; the largest difference is 1.356484%.
+
+The [historical native unit](../evidence/p02-wgmma/unit/README.md) remains a
+separate execution at `9006939aa123452b198bc0987e34aae8fab45fdd`: eight groups,
+392 accepted/committed transactions and 3,072 exact arithmetic words. Its 417-file
+RTL/harness bridge is unchanged at the processor source. Directed dense NRC16
+RS pressure supplies the blocked compute-path observation; forced sparse-compute
+pressure is unclaimed. Processor metadata ordering and unit pressure are
+complementary evidence. Integer DPI helpers remain in the processor; full-AFU,
+vendor `hw_emu`, physical FPGA, PPA and silicon qualification remain separate.
+
+The corrected original-packet verifier checked 1,103 files with the independently
+supplied report digest. Independent engineering and publication-integrity reviews
+support [P02-A03 acceptance](../evidence/p02-wgmma/processor/acceptance.json),
+record `p02-a03-wgmma-4af2307-359a8c0`. The original verifier's automatic
+acceptance flags remain false; the reviewed acceptance record closes the gate.
+
 ## Deliverables and acceptance
 
 | Gate | Required deliverable and proof | Evidence level |
@@ -109,14 +139,15 @@ native test, stale configuration or unreviewed tolerance change. In particular,
 resolve NVFP4 subnormal-scale semantics before advertising that mode; exclusion
 must be explicit, not a hidden fallback. Do not convert a missing run to a pass.
 
-P02-T02 remains active for A03. After closing the reporting-child validation
-and delivery recorded in status, freeze and independently review a bounded
-WGMMA selection for metadata dependencies, synchronization, multiple warps and
-backpressure. Execute matching SimX/native RTL and retain applicable model-parity
-evidence or a documented applicability limit. The ordinary WMMA result, direct
-leaf stalls and host model-function calls do not replace that concurrency proof.
+P02-T02 is complete. The accepted record reconciles the finished processor packet,
+historical native-unit source bridge, sparse witness, declared instruction/cycle
+checks and independent engineering/publication reviews. Preserve failed attempts
+and the original execution identities when using this evidence downstream.
 
-After every P02 exit gate is accepted, hand P03 the supported configuration,
+All P02 exit gates are accepted. P03 receives the supported configuration,
 immutable numerical contracts, fixture manifest and evidence references for
-the native operator interface. Until then P03 remains `not_started`. Record
+the native operator interface. P03-T01 now implements that separate source-level
+contract, planner and argument encoder. Continue with matching device dispatch
+and lifecycle qualification in the [P03 handoff](../p03-operators-handoff.md).
+P03 is `in_progress`; its full execution and lifetime gates remain open. Record
 unresolved combinations in [status](../status.md) and [backlog](../backlog.md).

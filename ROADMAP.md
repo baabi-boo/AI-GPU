@@ -119,15 +119,28 @@ document or governance check cannot stand in for unexecuted GPU tests.
 Read [status](docs/project/status.md), then the
 [ordered backlog](docs/project/backlog.md). **P02-T01 is complete, P02-A01 is
 accepted at source scope, and P02-A02 is accepted for full-processor ordinary
-WMMA arithmetic and layout checks.** P02-T02 remains active for **P02-A03:
-WGMMA synchronization, metadata, multiple warps and backpressure**, with matching
-SimX/native RTL and applicable model-parity evidence or a documented
-applicability limit. Close the reporting-child validation and delivery recorded
-in status before the next GPU acceptance run. Use the
-[ordinary WMMA handoff](docs/project/p02-wmma-handoff.md) and
-[reviewed processor evidence](docs/project/evidence/p02-wmma/acceptance.json);
-the [earlier contract evidence](docs/project/evidence/p02-numerics/acceptance.json)
-retains its original scope. P02 remains `in_progress` and P03 `not_started`.
+WMMA arithmetic and layout checks.** The bounded WGMMA processor matrix has
+finished with passing arithmetic, sparse metadata witness and all 24 declared
+per-launch instruction/cycle comparisons. Its 113 commands cover 12 builds, 24 case
+executions, 48 launches and 24,576 exact output-word comparisons. Use the
+[WGMMA handoff](docs/project/p02-wgmma-handoff.md) and
+[processor packet](docs/project/evidence/p02-wgmma/processor/README.md) for the
+completed execution and corrected offline verification. Independent engineering
+and publication-integrity reviews support the
+[P02-A03 acceptance](docs/project/evidence/p02-wgmma/processor/acceptance.json).
+**P02-T02 and P02 are complete; P03 is `in_progress`.** The accepted
+[ordinary WMMA record](docs/project/evidence/p02-wmma/acceptance.json)
+and [earlier contract record](docs/project/evidence/p02-numerics/acceptance.json)
+retain their original scopes and source identities.
+
+P03-T01 now has a [versioned operator contract](docs/designs/ai_operator_contract_v1.md),
+[manifest](ci/project/p03_operator_manifest.json), checked native host planner
+and argument encoder. Its six format/shape signatures remain `contract_only`;
+other categories are explicitly unavailable. The next bounded task is **P03-T02**:
+implement the matching kernel reader and runtime wrapper, retain asynchronous
+resources through completion, then verify actual dispatch and arithmetic on
+SimX/native RTL. [The P03 handoff](docs/project/p03-operators-handoff.md) records
+source-level validation separately from the remaining A02/A03 execution gates.
 The missing vendor platform remains a separate P01-T05/P07 dependency; resolve
 tools, access and a disk/RAM/job/time budget before any substantial build.
 

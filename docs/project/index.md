@@ -37,7 +37,10 @@ unexecuted template as a completion record.
 - [P02 entry handoff](p02-entry-handoff.md): accepted baseline inputs, nonblocking native work and deferred vendor-emulation scope.
 - [P02 numerical handoff](p02-numerics-handoff.md): versioned TFR semantics,
   completed P02-T01, independent bit-exact fixtures, actual checks and the next
-  whole-processor/WGMMA proof. P02 remains `in_progress`.
+  whole-processor/WGMMA proof at that historical checkpoint. P02 is now complete.
+- [WGMMA handoff](p02-wgmma-handoff.md): accepted P02-A03 processor/unit evidence.
+- [Native operator handoff](p03-operators-handoff.md): P03 input validation, argument
+  encoding and remaining runtime execution/lifetime work.
 - [Backlog](backlog.md): ordered work items with deliverables and gate mappings.
 - [P01 hw_emu preparation](p01-hwemu-runbook.md): read-only inventory and candidate
   planning, the corrected XRT hook and lean opt-in tracing; P01-A03 remains blocked.

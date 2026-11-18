@@ -1,0 +1,197 @@
+diff --git a/ci/project/p02_wgmma_packet.py b/ci/project/p02_wgmma_packet.py
+index c4483e3..9614fe5 100644
+--- a/ci/project/p02_wgmma_packet.py
++++ b/ci/project/p02_wgmma_packet.py
+@@ -21,7 +21,7 @@ from pathlib import Path
+ import re
+ import sys
+ 
+-from baseline_inventory import _digest, hash_artifacts
++from baseline_inventory import SOURCE_INPUTS, _digest, hash_artifacts
+ from baseline_packet_io import (PacketReader, _json_float, _json_integer,
+                                 _reject_constant, _relative_path, _unique_keys)
+ import p02_wgmma_matrix as matrix
+@@ -40,6 +40,8 @@ HELPERS = tuple("ci/project/" + name + ".py" for name in (
+     "p02_wgmma_dependencies", "p02_wgmma_fixture_oracle", "p02_wgmma_matrix",
+     "p02_wgmma_records", "preflight"))
+ WITNESS_PARSER = "ci/project/p02_wgmma_witness.py"
++# The shared checkout inventory includes blackbox.sh, which this runner does not invoke.
++CHECKOUT_ONLY_INPUTS = ("ci/blackbox.sh",)
+ # The v1 runner retains these direct consumer inputs unconditionally. Declare
+ # the minimum here: matching packet snapshots cannot make a required file
+ # optional by omitting its entire identity and retained-body chain.
+@@ -161,6 +163,20 @@ def bind_copies(reader, values, original, prefix, expected):
+     return {name: copied[prefix + name] for name in expected}
+ 
+ 
++def bind_checkout_inputs(values, files):
++    inputs = inventory(values, "checkout inputs")
++    same(sorted(inputs), sorted(SOURCE_INPUTS), "checkout input inventory")
++    outside = []
++    for path, row in inputs.items():
++        if path in files:
++            same(row, files[path], "checkout/source input " + path)
++        else:
++            require(path in CHECKOUT_ONLY_INPUTS,
++                    "checkout input lacks execution source identity: " + path)
++            outside.append(row)
++    return sorted(outside, key=lambda row: row["path"])
++
++
+ def verify_source(reader, report, variants):
+     before = reader.json(report["source_before"])
+     require(type(before) is dict and set(before) == {"checkout", "files"}, "invalid source snapshot")
+@@ -189,8 +205,7 @@ def verify_source(reader, report, variants):
+         same(report[key]["path"], "snapshots/" + name + ".json", "source snapshot path")
+         same(reader.json(report[key]), before, "source stability " + key)
+     files = inventory(before["files"], "source files")
+-    for row in inventory(checkout["inputs"], "checkout inputs").values():
+-        same(row, files.get(row["path"]), "checkout/source input")
++    checkout_only = bind_checkout_inputs(checkout["inputs"], files)
+     helpers = inventory(report["loaded_helpers"], "loaded helpers")
+     same(sorted(helpers), sorted(HELPERS), "loaded helper closure")
+     saved = set(HELPERS + (matrix.MANIFEST, WITNESS_PARSER) + matrix.CORPUS + matrix.COPIED
+@@ -204,7 +219,8 @@ def verify_source(reader, report, variants):
+         same(report["witness_parser"], files.get(WITNESS_PARSER), "witness parser identity")
+     for path, row in helpers.items():
+         same(row, files.get(path), "loaded helper source " + path)
+-    return files, bind_copies(reader, report["source_snapshots"], files, "artifacts/source/", saved)
++    retained = bind_copies(reader, report["source_snapshots"], files, "artifacts/source/", saved)
++    return files, retained, checkout_only
+ 
+ 
+ def verify_tools(reader, report, backends):
+@@ -374,7 +390,7 @@ def verify_packet(packet, *, report_sha256=None, require_witness=False):
+             names = [case["id"] for case in item["cases"]]
+             require(names and len(names) == len(set(names)) and set(names) <= set(spec["cases"]), "invalid case inventory")
+             same(names, [name for name in spec["cases"] if name in names], "case order")
+-        source_files, sources = verify_source(reader, report, variants)
++        source_files, sources, checkout_only = verify_source(reader, report, variants)
+         same(report["manifest"], source_files[matrix.MANIFEST], "manifest identity")
+         same(report["manifest"]["sha256"], matrix.MANIFEST_SHA256, "frozen manifest")
+         same(reader.json(sources[matrix.MANIFEST]), manifest, "retained manifest")
+@@ -497,12 +513,14 @@ def verify_packet(packet, *, report_sha256=None, require_witness=False):
+                            "checked_output_words": 1024 * count, "commands": len(commands), "performance_pairs": len(paired["pairs"]),
+                            "witness_case_executions": witnessed},
+                 "unavailable_binary_bodies": unavailable, "verified_file_count": len(reader.inventory()),
++                "checkout_inputs_outside_execution_inventory": checkout_only,
+                 "verifier_sources": hash_artifacts(ROOT, sorted(set(HELPERS + (WITNESS_PARSER,)))) + [
+                     {"path": "ci/project/p02_wgmma_packet.py", "sha256": _digest(Path(__file__))[0],
+                      "size_bytes": Path(__file__).stat().st_size}],
+                 "acceptance_claimed": False, "qualifies_P02_A03": False, "phase_complete": False,
+                 "limitations": ["Hashes establish consistency, not independent authenticity without an external trust anchor.",
+                     "Only retained bodies are checked; original tools, dependencies, omitted binaries and source bodies are identity-only evidence.",
++                    "Only the unused ci/blackbox.sh may lack an execution-source identity; its checkout identity is recorded without requiring or verifying its body.",
+                     "Generated native metadata presence is checked; native hierarchy semantics and disassembly require independent review.",
+                     "No GPU execution, binary replay, publication normalization, or automatic acceptance is performed."]}
+ 
+diff --git a/ci/project/test_p02_wgmma_packet.py b/ci/project/test_p02_wgmma_packet.py
+index fb03b37..fe141b5 100644
+--- a/ci/project/test_p02_wgmma_packet.py
++++ b/ci/project/test_p02_wgmma_packet.py
+@@ -11,6 +11,7 @@ from pathlib import Path
+ import tempfile
+ import unittest
+ 
++from baseline_inventory import SOURCE_INPUTS
+ import p02_wgmma_packet as packet
+ import p02_wgmma_matrix as matrix
+ import p02_wgmma_records as records
+@@ -55,7 +56,8 @@ class PacketFixture:
+         if witness:
+             r["witness_parser"] = originals[packet.WITNESS_PARSER]
+         self.source = {"checkout": {"revision": r["source_revision"], "tree": "2" * 40, "dirty": False,
+-            "changed_paths": [], "untracked_paths": [], "blockers": [], "inputs": [originals["configure"]]},
++            "changed_paths": [], "untracked_paths": [], "blockers": [],
++            "inputs": [row(name, (packet.ROOT / name).read_bytes()) for name in SOURCE_INPUTS]},
+             "files": [originals[name] for name in sorted(originals)]}
+         for name in ("before", "after"):
+             r["source_" + name] = self.snapshot("source-" + name, self.source)
+@@ -217,6 +219,9 @@ class PacketFixture:
+                                             if item["path"] not in retained]
+         for name in retained:
+             (self.root / name).unlink()
++        self.refresh_source_snapshots()
++
++    def refresh_source_snapshots(self):
+         contents = (json.dumps(self.source, indent=2) + "\n").encode()
+         for key, value in self.report.items():
+             if key.startswith("source_") and type(value) is dict:
+@@ -247,6 +252,69 @@ class PacketTests(unittest.TestCase):
+         for key in ("acceptance_claimed", "qualifies_P02_A03", "phase_complete"):
+             self.assertIs(result[key], False)
+ 
++    def test_real_checkout_inventory_keeps_unused_blackbox_identity_explicit(self):
++        fixture = self.fixture()
++        inputs = {item["path"]: item for item in fixture.source["checkout"]["inputs"]}
++        files = {item["path"] for item in fixture.source["files"]}
++        self.assertEqual(set(inputs), {"VERSION", ".gitmodules", "configure", "config.mk.in",
++            "VX_config.toml", "VX_types.toml", "ci/gen_config.py", "ci/blackbox.sh"})
++        self.assertEqual(set(inputs) - files, {"ci/blackbox.sh"})
++        self.assertEqual(len(set(inputs) & files), 7)
++        self.assertFalse((fixture.root / "artifacts/source/ci/blackbox.sh").exists())
++        result = packet.verify_packet(fixture.root)
++        self.assertEqual(result["checkout_inputs_outside_execution_inventory"], [inputs["ci/blackbox.sh"]])
++        self.assertTrue(any("ci/blackbox.sh" in text and "body" in text for text in result["limitations"]))
++
++    def test_checkout_inventory_rejects_missing_extra_replaced_and_duplicate_inputs(self):
++        fixture = self.fixture()
++        inputs = fixture.source["checkout"]["inputs"]
++        unexpected = row("ci/unexpected-input.sh", b"unexpected checkout input")
++        cases = [("missing " + item["path"], [other for other in inputs if other["path"] != item["path"]],
++                  "checkout input inventory") for item in inputs]
++        cases += [("extra", inputs + [unexpected], "checkout input inventory"),
++                  ("replaced", inputs[:-1] + [unexpected], "checkout input inventory"),
++                  ("duplicate", inputs + [inputs[0]], "checkout inputs repeats a path")]
++        for name, changed, message in cases:
++            with self.subTest(change=name):
++                fixture.source["checkout"]["inputs"] = changed
++                fixture.refresh_source_snapshots()
++                self.rejects(fixture, message)
++
++    def test_nonallowlisted_checkout_inputs_require_execution_identities(self):
++        fixture = self.fixture()
++        files = fixture.source["files"]
++        for name in SOURCE_INPUTS:
++            if name == "ci/blackbox.sh":
++                continue
++            with self.subTest(source=name):
++                fixture.source["files"] = [item for item in files if item["path"] != name]
++                fixture.refresh_source_snapshots()
++                self.rejects(fixture, "checkout input lacks execution source identity: " + name)
++
++    def test_all_checkout_overlaps_reject_digest_and_size_drift(self):
++        fixture = self.fixture()
++        original = copy.deepcopy(fixture.source)
++        for name in SOURCE_INPUTS:
++            for field in ("sha256", "size_bytes"):
++                with self.subTest(source=name, field=field):
++                    fixture.source = copy.deepcopy(original)
++                    item = next(item for item in fixture.source["checkout"]["inputs"] if item["path"] == name)
++                    if name == "ci/blackbox.sh":
++                        fixture.source["files"].append(copy.deepcopy(item))
++                    item[field] = "0" * 64 if field == "sha256" else item[field] + 1
++                    fixture.refresh_source_snapshots()
++                    self.rejects(fixture, "checkout/source input " + name)
++
++    def test_matching_blackbox_execution_identity_does_not_require_unused_body(self):
++        fixture = self.fixture()
++        blackbox = next(item for item in fixture.source["checkout"]["inputs"] if item["path"] == "ci/blackbox.sh")
++        fixture.source["files"].append(copy.deepcopy(blackbox))
++        fixture.refresh_source_snapshots()
++        fixture.save()
++        result = packet.verify_packet(fixture.root)
++        self.assertEqual(result["checkout_inputs_outside_execution_inventory"], [])
++        self.assertFalse((fixture.root / "artifacts/source/ci/blackbox.sh").exists())
++
+     def test_complete_parity_failure_is_valid_evidence_without_qualification(self):
+         fixture = self.fixture(full=True, witness=True, parity_failure=True)
+         result = packet.verify_packet(fixture.root)
+@@ -383,6 +451,7 @@ class PacketTests(unittest.TestCase):
+ 
+     def test_required_consumer_and_helper_source_chains_cannot_be_omitted(self):
+         required = ("tests/regression/p02_wgmma/main.cpp", "tests/regression/p02_wgmma/Makefile",
++                    "tests/regression/p02_wgmma/fixtures.h",
+                     "tests/regression/sgemm_tcu_wg/main.cpp", "tests/regression/sgemm_tcu_wg/common.h",
+                     "tests/regression/sgemm_tcu_wg/kernel.cpp", "tests/regression/sgemm_tcu_wg/Makefile",
+                     "tests/regression/sgemm_tcu_wg_sp/main.cpp", "tests/regression/sgemm_tcu_wg_sp/common.h",
