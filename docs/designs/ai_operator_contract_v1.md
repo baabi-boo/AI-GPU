@@ -66,8 +66,8 @@ handling, signed output flush-to-zero, infinities and canonical NaNs. The
 defines the existing execution evidence. This planner introduces no arithmetic
 implementation, reference values, new tolerances or broader IEEE guarantee.
 The new kernel reuses the same ordinary WMMA K traversal, fragment loads,
-positive-zero initialization and output stores. P03 operator execution still
-requires its own independently reviewed evidence.
+positive-zero initialization and output stores. The independently reviewed [P03 execution evidence](../project/evidence/p03-managed-matmul/acceptance-numerics.json)
+qualifies this managed path at the exact source and scope recorded below.
 
 The plan records grid `[N / 4, M / 8, 1]`, block `[4, 1, 1]` and zero dynamic
 local-memory bytes, matching the ordinary `8 x 4 x 8` tile origin. These are
@@ -267,3 +267,36 @@ map submissions cancel their staging, and scratch recycling handles host
 allocation failure without abandoning a device allocation. Actual runtime
 tests, fault-injection tests and arithmetic executions remain distinct evidence
 scopes; see the [handoff](../project/p03-operators-handoff.md).
+
+## Qualified execution scope
+
+At clean source `319ad63532cee17ae88fa75757a5ac87ed5c6a77`, the managed operator matrix
+executed all 88 unchanged independent P02 layout/numerical fixtures on both
+SimX and native processor RTL: **176 case/backend executions, 352 launches and
+14,336 exact FP32 output-word comparisons passed**. Each launch used separately
+poisoned output storage and retained actual argument, transfer, dispatch,
+completion and memory-accounting records. The independent CPU-produced fixture
+words remain the oracle; the production simulator does not generate expected
+answers, and no tolerance or golden value was relaxed.
+
+The [numerical acceptance](../project/evidence/p03-managed-matmul/acceptance-numerics.json) covers only the
+six declared FP16/BF16-to-FP32 signatures and accepted RV64 profile. Separate
+[lifecycle acceptance](../project/evidence/p03-managed-matmul/acceptance-lifecycle.json) records the actual
+RV64 `p02-tfr` SimX and default RV32 SimX executions, each passing 12 groups, together with
+explicitly scoped host fault-injection tests. RV32 common-runtime lifecycle
+coverage does not extend the matmul execution profile to RV32. The RV32
+receipt's `cache_enabled=false` records disabled compiler caching; the actual
+processor configuration had instruction and data caches enabled.
+
+Transfer-failure tests inject host allocation failures at identified simulated
+DMA staging and software command-processor stages. They check propagation,
+resource release, preserved seeded output and subsequent recovery at those
+points. They do not establish atomic rollback for arbitrary partially completed
+DMA, real device removal, physical reset/recovery or hardware transport failures.
+A failed or partially submitted operation can have performed earlier work;
+this API does not provide transactional cancellation.
+
+Native processor RTL bypasses the AFU and retains integer DPI helpers while
+using native TFR tensor and STD scalar arithmetic. No physical FPGA throughput,
+power, synthesis/PPA, vendor `hw_emu` or fabricated-silicon result follows.
+P01-A03 remains a separate blocked vendor-integration obligation before P07.

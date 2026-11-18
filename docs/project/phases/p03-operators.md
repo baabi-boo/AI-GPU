@@ -1,15 +1,18 @@
 # P03 — AI operator library
 
 **Goal:** provide reusable native AI operators over the existing tensor API and
-runtime, without requiring a replacement HIP compiler. **P03 is in progress.**
+runtime, without requiring a replacement HIP compiler. **P03 is complete for
+the declared six-signature native matmul scope.**
 P03-T01 is complete with [source-level A01 acceptance](../evidence/p03-operators/acceptance.json)
 and an implemented [input/argument contract](../../designs/ai_operator_contract_v1.md),
 [manifest](../../../ci/project/p03_operator_manifest.json) and checked host planner.
-P03-T02 now implements the matching device reader, managed wrapper, qualified
-execution runner and common-runtime lifecycle fixes. A02/A03 execution and
-independent acceptance remain pending at this checkpoint. The
-[handoff](../p03-operators-handoff.md) separates implemented behavior, host/target
-compilation checks and the remaining formal run. Live state and canonical gates
+P03-T02 implements the matching device reader, managed wrapper, qualified
+execution runner and common-runtime lifecycle fixes. Independently reviewed
+[A02 numerical evidence](../evidence/p03-managed-matmul/acceptance-numerics.json) and
+[A03 lifecycle evidence](../evidence/p03-managed-matmul/acceptance-lifecycle.json) qualify actual
+execution and resource ownership at their exact recorded sources. The
+[handoff](../p03-operators-handoff.md) separates full operator results, runtime
+lifecycle integration, host fault-injection checks and target compilation. Live state and canonical gates
 are in [roadmap.json](../roadmap.json); the accountable role is Kernel and runtime lead.
 
 ## Entry and boundaries
@@ -76,7 +79,12 @@ Hand P04 the versioned operator/support manifest, native caller, build recipe,
 error/lifetime contract and evidence references. Update [status](../status.md)
 and [backlog](../backlog.md). After P03-A02/A03 are accepted, the P04 handoff
 selects a fixed, redistributable tiny model composed from the accepted operators.
-The current next action is P03-T02 qualification: freeze the reviewed source,
-run the full managed SimX/native-RTL matrix and actual lifecycle tests, retain
-their results, and independently review A02/A03 acceptance. Source presence and
-host stub tests do not close those gates.
+The next bounded action is P04-T01: freeze the small redistributable model or
+deterministic generator, independent reference, permitted host work and complete
+operator mapping. P04 remains `not_started`. The six accepted matmul signatures
+do not imply activations, casts, bias, normalization or arbitrary-shape support.
+
+Acceptance remains bounded to simulation/native processor RTL. Selected DMA
+allocation-failure tests do not prove rollback of arbitrary partially completed
+transfers or physical device recovery. P01-A03 vendor `hw_emu` remains blocked
+and required before P07; no FPGA or silicon measurement is inferred.

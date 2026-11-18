@@ -1,0 +1,173 @@
+{
+  "artifacts": [
+    {
+      "path": "p03-review/qualification-audit/audit_numerics.py",
+      "sha256": "3bb1558438edfc11590e5fc60b616593a4d5dc2fd3f50d688452ed5a23ecfa96",
+      "size_bytes": 20598
+    },
+    {
+      "path": "p03-review/qualification-audit/numerical-audit.json",
+      "sha256": "9080695a21353c7eb35e5ad89a99335e3d927fbfbdeac106c10d25e88c325cd7",
+      "size_bytes": 4060
+    },
+    {
+      "path": "p03-review/qualification-audit/lifecycle-review.json",
+      "sha256": "b01cb267bb46f0e1e233e2d8bb12663bd6630294dcdd195e536c1004030795a1",
+      "size_bytes": 8420
+    },
+    {
+      "path": "p03-formal-results/report.json",
+      "sha256": "464d7cd42412035f68cf199fdd308fea10b6ccac494cf2692a722f1e0c295fa8",
+      "size_bytes": 1812180
+    },
+    {
+      "path": "p03-formal-host/verification.json",
+      "sha256": "68cf9d032fc4b6458653991c4b1580a725b330d67ad30d5c70aa6d58871279ef",
+      "size_bytes": 361109
+    },
+    {
+      "path": "p03-rv32/final-evidence/report.json",
+      "sha256": "2b300f86861e7604fc81b4412a172ab86699201529a20469d407588973147ea0",
+      "size_bytes": 36706
+    }
+  ],
+  "blocking_findings": [],
+  "host_observations": {
+    "bounded_process_seconds": 428.757821,
+    "errors": 0,
+    "failed": 0,
+    "focused_total": 45,
+    "full_suite_tests": 1669,
+    "note": "The 45 P03 tests are included in the 1669 total; they are not an additional set of 45 unique tests beyond that total.",
+    "p03_tests_in_full_suite": {
+      "test_p03_device_reader": 7,
+      "test_p03_execution_records": 17,
+      "test_p03_managed_runtime": 9,
+      "test_p03_operator_contract": 12
+    },
+    "skipped": 0,
+    "test_framework_seconds": 427.714
+  },
+  "independence": "This reviewer authored no implementation, test harness, qualification runner or enforcement code. It authored only the separate read-only audit. Its delegated lifecycle reviewer independently checked that scope without edits, builds or test reruns.",
+  "lifecycle_observations": {
+    "actual_simx_configurations": [
+      "RV64 p02-tfr",
+      "default RV32"
+    ],
+    "details": "See independent lifecycle-review.json for exact refs, device-memory accounting, skipped commands, timeout ownership, module setup failures and the three DMA allocation stages including after descriptor publication.",
+    "groups_per_configuration": 12,
+    "host_mock_cases": 9
+  },
+  "limitations": [
+    "Only six ordinary FP16/BF16-to-FP32 matmul signatures, declared compact layouts, C=+0 and the frozen profile are qualified. Other operator families remain unavailable.",
+    "Native processor RTL bypasses the AFU; integer DPI helpers remain. No vendor hw_emu, FPGA, physical bandwidth/latency/power, synthesis/PPA or silicon evidence is established.",
+    "Actual SimX lifecycle tests and host mock tests are distinct. Mocked device-loss, cleanup errors and sentinel arithmetic do not constitute actual GPU error injection or numerical proof.",
+    "SimX DMA allocation failures cover backend/common staging registration and software-CP scratch creation. They do not establish arbitrary simulator exceptions, physical bus/device-loss recovery, transactional rollback of partial DMA, or exhaustive backend-construction failure safety.",
+    "Device allocator bytes and intrusive reference counts are checked; these are not whole-process host-heap leak measurements.",
+    "The trusted compiler/module/backend binding is source-bound qualification evidence, not authentication against malicious concurrent filesystem writers or arbitrary hardware.",
+    "The local hashed binaries/tools were independently verified while available. Portable publication retains source/configuration/raw results and hashes, not a binary-replay archive.",
+    "Earlier preflight-blocked and controlled-interruption packets are historical failures/partial work, never accepted evidence.",
+    "No new performance/model_parity execution is claimed. Phase closure still requires retention of existing A01/P02 prerequisites and accurate published acceptance/documents; this receipt does not fabricate human approval or self-issue a waiver."
+  ],
+  "nonblocking_clarifications": [
+    {
+      "detail": "RV32 raw configuration.cache_enabled=false denotes disabled compiler caching (CCACHE_DISABLE=1); exact compiler flags have hardware instruction/data caches enabled. Preserve raw receipt and clarify this meaning in publication.",
+      "id": "QA-F01",
+      "severity": "F1"
+    }
+  ],
+  "numerical_observations": {
+    "backends": [
+      "simx",
+      "rtlsim"
+    ],
+    "case_executions": 176,
+    "checked_words": 14336,
+    "commands": 210,
+    "formats": [
+      "fp16",
+      "bf16"
+    ],
+    "launches": 352,
+    "operator_signatures": 6,
+    "source_cases": 88,
+    "variant_summaries": [
+      {
+        "cases": 44,
+        "checked_words": 3584,
+        "compiler_roles": [
+          "runtime",
+          "backend_cpp",
+          "kernel",
+          "host"
+        ],
+        "id": "simx-fp16",
+        "launches": 88,
+        "qualification_id": "5ed1a55ef9a2ca97195039e6774cab754c88fe096cdeff4bb8110ba59c0f2d5a"
+      },
+      {
+        "cases": 44,
+        "checked_words": 3584,
+        "compiler_roles": [
+          "runtime",
+          "backend_cpp",
+          "kernel",
+          "host"
+        ],
+        "id": "simx-bf16",
+        "launches": 88,
+        "qualification_id": "4d0003af35fe35fb68c7a50e2183d6a9ec918642fd5f0453d3cfdfe5ecaa055a"
+      },
+      {
+        "cases": 44,
+        "checked_words": 3584,
+        "compiler_roles": [
+          "runtime",
+          "verilator",
+          "backend_cpp",
+          "kernel",
+          "host"
+        ],
+        "id": "rtlsim-fp16",
+        "launches": 88,
+        "qualification_id": "813a3fe34383979ebb80662c89bb6412eae429afdf03f3e42aa9c20dd73746d2"
+      },
+      {
+        "cases": 44,
+        "checked_words": 3584,
+        "compiler_roles": [
+          "runtime",
+          "verilator",
+          "backend_cpp",
+          "kernel",
+          "host"
+        ],
+        "id": "rtlsim-bf16",
+        "launches": 88,
+        "qualification_id": "4eb39691a57f3c5b4aead543bec9ead8be6a6e4c54430094f7c791818ee4a237"
+      }
+    ]
+  },
+  "outcome": "pass",
+  "recommendations": {
+    "P03-A02": "accept at rtl_verified scope for the six declared signatures on SimX and native processor RTL",
+    "P03-A03": "accept at simulated scope for actual RV32 and RV64 SimX lifecycle integration with separately identified host mocks"
+  },
+  "reviewed_at": "2026-11-18T08:26:33.470334+00:00",
+  "reviewer": "/root/qualification_audit",
+  "schema_version": 1,
+  "source_and_binding_observations": {
+    "all_four_artifact_before_after_equal": true,
+    "all_raw_command_log_hashes_verified": true,
+    "distinct_tool_identities": 21,
+    "exact_wire_bytes_verified": true,
+    "loaded_helpers": 15,
+    "retained_source_bodies": 40,
+    "separate_runtime_backend_kernel_host_records_verified": true,
+    "source_inventory_files": 950,
+    "source_stable": true,
+    "unchanged_independent_fixtures_reproduced": true
+  },
+  "source_revision": "319ad63532cee17ae88fa75757a5ac87ed5c6a77",
+  "source_tree": "d7768f5f392cef417e59ccadfc29f20d3f67f707"
+}

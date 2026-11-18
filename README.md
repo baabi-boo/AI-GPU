@@ -14,11 +14,16 @@ simulator configuration. “NVIDIA-style” describes the ambition of programmab
 compute, specialized matrix units, fast memory and usable software. It does not
 mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
-**Current development: P03 — native AI operator library (`in_progress`).**
+**Latest completed milestone: P03 — native AI operator library (`complete`).**
 The [v1 operator contract](docs/designs/ai_operator_contract_v1.md) now has a matching
-device reader and managed matmul wrapper over the native runtime. The
-[handoff](docs/project/p03-operators-handoff.md) records the six implemented
-signatures, ownership/error behavior and pending formal execution qualification.
+device reader and managed matmul wrapper over the native runtime. Its six bounded
+FP16/BF16 signatures passed **176 case executions, 352 launches and 14,336 exact
+output-word comparisons** on SimX and native processor RTL. Actual RV32/RV64
+lifecycle checks and all **1,669 host tests** passed; independent review accepts
+[P03-A02/A03](docs/project/evidence/p03-managed-matmul/README.md).
+The [handoff](docs/project/p03-operators-handoff.md) records the accepted scope and
+ownership/error behavior. **Next: P04-T01**, freeze the tiny-model fixture and
+reference contract; P04 remains `not_started`.
 
 **Completed milestone: P02 — tensor numerical contract (`complete`).**
 P02-T01 is complete with [source-level P02-A01 evidence](docs/project/evidence/p02-numerics/acceptance.json).
@@ -43,14 +48,15 @@ review. [P01-A03](docs/project/evidence/p01-xrt-blocked.json) remains blocked by
 missing qualified vendor XRT `hw_emu` tools/platform.
 The authoritative [status](docs/project/status.md) and
 [phase gates](docs/project/roadmap.json) separate implementation from acceptance;
-P00 and P02 are complete, P01 is blocked, P03 is in progress, and P04–P11 are not started.
+P00, P02 and P03 are complete, P01 is blocked, and P04–P11 are not started.
 
 ## Start here
 
 - Understand the goal: [project charter](docs/project/charter.md).
 - See the development sequence: [roadmap](ROADMAP.md).
-- Continue the native operator library: [P03 handoff](docs/project/p03-operators-handoff.md)
-  and [operator manifest](ci/project/p03_operator_manifest.json).
+- Build on the accepted native operators: [P03 handoff](docs/project/p03-operators-handoff.md)
+  and [operator manifest](ci/project/p03_operator_manifest.json); next is the
+  [P04 tiny-model fixture](docs/project/phases/p04-inference.md).
 - Review the accepted WGMMA results:
   [WGMMA handoff](docs/project/p02-wgmma-handoff.md) and
   [P02-A03 evidence](docs/project/evidence/p02-wgmma/processor/README.md).
@@ -240,12 +246,13 @@ independently supplied report digest. Independent engineering and publication
 reviews support the [P02-A03 acceptance](docs/project/evidence/p02-wgmma/processor/acceptance.json),
 completing P02-T02 and P02. P01-A03 remains blocked and required before P07.
 
-## P03 native operator contract
+## P03 accepted native operators
 
 **P03-T01 is complete and P03-A01 is [accepted at source scope](docs/project/evidence/p03-operators/acceptance.json).**
 The frozen implementation passed all 1,636 offline tests; four actual RV32/RV64
 object compilations passed separately. [Evidence and source mapping](docs/project/evidence/p03-operators/README.md)
-keep these checks distinct from the remaining device execution and lifetime gates.
+keep those historical source checks distinct from the later accepted device
+execution and lifetime results.
 
 The [internal C++17 planner](sw/runtime/ai/contract.h) validates FP16/BF16-to-FP32
 matmul for exactly `(M,N,K) = (8,4,8), (8,4,16), (16,8,16)`. It checks tensor
@@ -261,8 +268,14 @@ consumes the shared argument bytes. The trusted runner binds the actual compiled
 profile and module to each launch; a timeout retains in-flight resources.
 GEMV, reductions, softmax, normalization, activations, conversions and attention
 are explicitly unavailable in the [manifest](ci/project/p03_operator_manifest.json).
-P03-T02's full SimX/native-RTL and lifetime acceptance remains pending the formal
-qualification packet. See the [handoff](docs/project/p03-operators-handoff.md).
+**P03-T02 and P03 are complete** after the clean-source matrix and independent
+review. [P03-A02](docs/project/evidence/p03-managed-matmul/acceptance-numerics.json)
+accepts the four SimX/native-RTL format builds and exact arithmetic checks;
+[P03-A03](docs/project/evidence/p03-managed-matmul/acceptance-lifecycle.json)
+accepts twelve actual lifecycle groups in each of RV32/RV64 SimX, with host mocks
+separately scoped. The [packet](docs/project/evidence/p03-managed-matmul/README.md)
+retains raw results, compiler records, source identities and earlier failed or
+interrupted attempts. See the [handoff](docs/project/p03-operators-handoff.md).
 
 ```sh
 python3 -m unittest discover -s ci/project -p 'test_p03*.py'

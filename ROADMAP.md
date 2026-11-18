@@ -128,19 +128,24 @@ executions, 48 launches and 24,576 exact output-word comparisons. Use the
 completed execution and corrected offline verification. Independent engineering
 and publication-integrity reviews support the
 [P02-A03 acceptance](docs/project/evidence/p02-wgmma/processor/acceptance.json).
-**P02-T02 and P02 are complete; P03 is `in_progress`.** The accepted
+**P02-T02 and P02 are complete; P03 is also `complete`.** The accepted
 [ordinary WMMA record](docs/project/evidence/p02-wmma/acceptance.json)
 and [earlier contract record](docs/project/evidence/p02-numerics/acceptance.json)
 retain their original scopes and source identities.
 
-P03-T01 now has a [versioned operator contract](docs/designs/ai_operator_contract_v1.md),
+P03-T01 supplies the [versioned operator contract](docs/designs/ai_operator_contract_v1.md),
 [manifest](ci/project/p03_operator_manifest.json), checked native host planner
-and argument encoder. P03-T02 now adds the matching kernel reader, managed runtime
-wrapper and cleanup/bounds fixes. Its six format/shape signatures are implemented;
-other categories remain explicitly unavailable. The next bounded task is to
-qualify actual dispatch, arithmetic and lifetimes on the full fresh-build
-SimX/native-RTL matrix. [The P03 handoff](docs/project/p03-operators-handoff.md)
-keeps development checks separate from pending A02/A03 acceptance.
+and argument encoder. P03-T02 adds the matching kernel reader, managed runtime
+wrapper and cleanup/bounds fixes. Its six format/shape signatures are accepted:
+176 case executions, 352 launches and 14,336 exact output-word comparisons passed
+on SimX/native processor RTL; twelve lifecycle groups passed in each actual
+RV32/RV64 SimX configuration, and all 1,669 host tests passed.
+[The accepted packet](docs/project/evidence/p03-managed-matmul/README.md) retains
+source-bound execution and independent review; other operator categories remain
+explicitly unavailable. **The next bounded task is P04-T01:** freeze a small,
+redistributable model/weight fixture, seeds, layouts, layer/final reference and
+host/device work boundary. P04 remains `not_started`. [The P03 handoff](docs/project/p03-operators-handoff.md)
+records the accepted operator inputs and limits for that next phase.
 The missing vendor platform remains a separate P01-T05/P07 dependency; resolve
 tools, access and a disk/RAM/job/time budget before any substantial build.
 

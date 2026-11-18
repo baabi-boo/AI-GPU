@@ -1,11 +1,14 @@
 # P03 managed native operator handoff
 
-P03 is `in_progress`. **P03-T01 is complete and P03-A01 is accepted at source
-scope** through the [historical reviewed evidence](evidence/p03-operators/acceptance.json).
-P03-T02 now implements a matching device reader, managed matmul wrapper,
-qualification runner and runtime lifecycle fixes. **P03-A02/A03 remain pending
-execution and independent acceptance at this checkpoint.** P02 is complete;
-P01-A03 vendor integration remains blocked and required before P07.
+**P03 is complete for the declared six-signature native matmul scope.**
+P03-T01/A01 retain their [historical source-level acceptance](evidence/p03-operators/acceptance.json).
+The independently reviewed [A02 numerical acceptance](evidence/p03-managed-matmul/acceptance-numerics.json)
+and [A03 lifecycle acceptance](evidence/p03-managed-matmul/acceptance-lifecycle.json) complete
+P03-T02 using actual managed execution and resource-lifetime results. The
+matching device reader, wrapper, qualification runner and runtime fixes are
+implemented and tested. P02 remains complete; P01-A03 vendor integration remains
+blocked and required before P07. **P04 remains `not_started`** until its bounded
+model contract and fixtures are deliberately selected.
 
 ## Implemented boundary
 
@@ -77,20 +80,47 @@ also cover overflow-safe linear spans, failed-map rollback, exception cleanup
 and scratch-slot recycling under host allocation failure. Their actual runtime
 qualification is separate from the wrapper's stub-based decision tests.
 
-## Validation observed before formal execution
+## Accepted validation and exact source
+
+Formal execution used clean source `319ad63532cee17ae88fa75757a5ac87ed5c6a77`, tree
+`d7768f5f392cef417e59ccadfc29f20d3f67f707`. Source, tool, configuration and identified dependency
+artifacts remained stable across the retained runs. The linked acceptance
+records and their [published packet index](evidence/p03-managed-matmul/README.md)
+define the exact scope; raw command receipts retain the underlying observations.
 
 | Check | Observed result | Scope |
 |---|---|---|
-| Existing operator contract module | 12 tests passed | Host planner/ABI and updated availability manifest |
-| Device reader/profile module | 7 tests passed | Literal bytes, decoder rejections and positive/negative compiler-profile probes |
-| Managed wrapper module | 9 tests passed | Real wrapper with injected runtime stubs, including ownership, timeout and failures; fake output is not an arithmetic oracle |
-| Execution-record module | 17 tests passed | Separate compiler-record validation and corrupted trace/result rejection |
-| Actual Vortex Clang target objects | FP16 and BF16 RV64 objects compiled | Device-source compilation only; no launch implied |
-| Formal managed SimX/native-RTL matrix and actual lifecycle integration | Pending at this checkpoint | Required execution evidence for A02/A03 |
+| Managed operator matrix | 176 case/backend executions, 352 separately poisoned launches and 14,336 exact FP32 output words passed | All 88 independent fixtures on each of SimX and native processor RTL, 44 per format; six declared signatures only |
+| Actual runtime lifecycle integration | RV64 `p02-tfr` SimX and default RV32 SimX: 12 groups passed in each recorded execution | Bounds, wait-list/timeout ownership, failed commands, allocation/module/DMA failures, recovery and repeated resource accounting |
+| Focused P03 host checks | 45 tests passed | 12 contract, 7 reader/profile, 9 managed-wrapper and 17 execution-record checks; wrapper stubs do not establish GPU arithmetic |
+| Complete offline project suite | 1,669 tests passed, zero failures/errors/skips, 427.714 seconds | Full suite at source `319ad63532cee17ae88fa75757a5ac87ed5c6a77`; tooling/source checks remain distinct from GPU execution |
+| Actual Vortex Clang target objects | FP16 and BF16 RV64 objects compiled | Original development compile observations retain their source identities separately from formal launches |
 
-These are development observations, not a combined full-suite result or a claim
-that the final frozen source has already executed. Run focused host checks from
-the source root:
+All 210 retained matrix commands passed. The 45 focused P03 checks are included
+in the 1,669-test total. The full-suite test framework reported 427.714 seconds;
+its complete bounded command took 428.757821 seconds. The matrix
+peak process-group RSS was 1,484,550,144 bytes. At qualification closeout,
+54,525,153,280 bytes (50.8 GiB) of disk space remained free. These resource
+observations are distinct from accelerator performance measurements.
+
+Every arithmetic result was compared against the unchanged independently
+produced P02 fixture words; no expected output came from the production
+simulator and no numerical tolerance was widened. Repeated launches retain
+different output poison values, byte-exact argument records and device-memory
+counters returning to the pre-operation baseline. The actual lifecycle groups
+include selected simulated DMA allocation failures and explicit no-replay
+recovery checks; synthetic skipped-kernel handles prove ownership only.
+
+Host runtime stubs separately exercise device-loss and cleanup-error decisions.
+They do not prove physical device recovery. DMA failure evidence is bounded to
+the injected host-allocation stages; arbitrary partially completed transfers
+may already have modified memory, and transactional rollback/cancellation is
+not provided. RV32 runtime lifecycle coverage does not qualify RV32 matmul.
+The RV32 receipt's raw `cache_enabled=false` field refers to disabled compiler
+caching (`CCACHE_DISABLE=1`); the tested processor had instruction and data
+caches enabled.
+
+Run the focused checks from the source root:
 
 ```sh
 python3 -m unittest discover -s ci/project -p 'test_p03_*.py' -v
@@ -101,9 +131,10 @@ The [historical A01 packet](evidence/p03-operators/README.md) separately retains
 clean source `6367ce34e12915e12271207b207f93bd4d391869`, its 1636-test full-suite
 pass and equivalent published tree at
 `04c3cbf42c68e3b116051343083b86119f67f53d`. Its original six source bodies are
-preserved byte-for-byte; the active acceptance changes their artifact paths
-only. Its four RV32/RV64 compilations and review remain historical source-level
-evidence and do not establish the new execution or lifetime gates.
+preserved byte-for-byte; the active historical acceptance changes their
+artifact paths only. Its four RV32/RV64 compilations and review keep their
+original source-level scope. The separate new A02/A03 records establish
+managed execution and lifecycle acceptance.
 
 ## Reproduce the bounded execution matrix
 
@@ -132,7 +163,9 @@ argument bytes, transfer/launch/wait traces and device-memory restoration.
 The SimX FP16 build also runs
 [`test_ai_lifecycle`](../../tests/runtime/test_ai_lifecycle.cpp) against the
 actual common runtime; it has no silent kernel-dependent skips. Synthetic
-module handles in skipped-command tests establish ownership only.
+module handles in skipped-command tests establish ownership only. The
+default runner covers RV64 `p02-tfr` lifecycle execution; the accepted
+default-RV32 lifecycle run has its own retained receipt.
 
 The runner reserves 15 GiB free disk, budgets 6 GiB process-group RSS and 16 MiB
 per-command logs, and defaults to two build jobs. These are polled budgets,
@@ -146,11 +179,18 @@ Native processor RTL bypasses the AFU and retains integer DPI helpers while
 using the native TFR tensor/STD scalar paths. It does not supply vendor
 `hw_emu`, physical FPGA, PPA or silicon evidence.
 
-## Next bounded action: qualify P03-T02
+## Next bounded action: P04-T01 model freeze
 
-Freeze the reviewed source, execute the full runner matrix and actual lifecycle
-tests, retain failures as well as successful retries, and run the full offline
-suite on the final stable implementation. Obtain independent source/evidence
-review before attaching A02/A03 acceptance records. Until those gates are
-accepted, P03 remains `in_progress`; the P04 handoff then selects a fixed,
-redistributable tiny model composed from the accepted operators.
+P04 remains `not_started`. Freeze one small redistributable model or deterministic
+model generator, its weights/inputs/license hashes and an independent layerwise
+reference before implementing the executor. Map every accelerated operation to
+the accepted dtype, shape and layout manifest. The current library exposes
+matmul only: activations, bias, normalization, casts and arbitrary shapes are
+not implicitly available. Any additional operator must earn its own contract
+and qualification; any deliberately permitted host work must be explicit.
+
+Use the [P04 phase guide](phases/p04-inference.md) to choose a bounded network
+that fits the available operations and predeclare model-level comparison rules.
+Operator acceptance does not establish complete model inference, a framework
+backend, training, physical performance or P01-A03 vendor integration. Preserve
+the current accepted source/evidence while extending the next work package.

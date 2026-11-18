@@ -1,0 +1,90 @@
+{
+  "acceptance_ids": [
+    "P03-A03"
+  ],
+  "artifacts": [
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/archive-index.json",
+      "sha256": "e9cf6de768764b92501db8748f21e5bfc29dfa4f5147134ab61d41ecc98892d9"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/development-history.tar.gz",
+      "sha256": "341071f5917c853efc06b0e1dc51d8423fbc3a328a32f437243b7524bf401fe2"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/execution.tar.gz",
+      "sha256": "a8ef6bf94d53af4a9f03109a1edc569da8cbc00d817991a674bdf2b01ecf9981"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/host-tests.tar.gz",
+      "sha256": "e99ac8d2ef90b19f5180b3c473fccbf4b7ba80588055ffbe48b255aa1a4f7c79"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/implementation-review.json",
+      "sha256": "bbfccc9c19304af7f4feb19c2ab49a1366f37f3f227f98ba72f10e28fd82f57b"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/qualification-review.json",
+      "sha256": "6f156676384229901106874220ae836fd589645469e33a7ef5f84c7a6707712b"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/reviews.tar.gz",
+      "sha256": "98e1d68ce45fd3b812048adcdb50f51d071f6e3404c7035807a86a5263ca2ec6"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/rv32-lifecycle.tar.gz",
+      "sha256": "02ea732e1b538b683df137877f59dda9ba9b7e5653c5aadf10e37d6f66f01ee7"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/source-map.json",
+      "sha256": "bc45ac9a0f9caedc750284a63c1dbdbaf86266fe5ed7da1cf572aec4328b7441"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/summary.json",
+      "sha256": "3df076bd86b32b7c46c3bbb6f073b91e14bef2b94ff146e59cff178b138aafcd"
+    }
+  ],
+  "commands": [
+    {
+      "command": "Generated RV64 p02-tfr build: make -j2 test_ai_lifecycle; VORTEX_DRIVER=simx LD_LIBRARY_PATH=${BUILD}/sw/runtime ${BUILD}/tests/runtime/test_ai_lifecycle; lifecycle-build/run receipts in execution.tar.gz/report.json",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "command": "Default RV32 reconfigure/build and actual lifecycle execution through retained qualify.py; exact command/config/environment receipts in rv32-lifecycle.tar.gz/report.json",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "command": "cwd=${SOURCE}; python3 -m unittest discover -s ci/project -p 'test_*.py' -v; 1,669 tests in 427.714 seconds, no errors/failures/skips; exact bounded receipt in host-tests.tar.gz/verification.json",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "command": "cwd=${SOURCE}; python3 ci/project/check_project.py; bash ci/check_sw_sim_boundary.sh; separate passing receipts retained in host-tests.tar.gz/verification.json",
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "configuration": "Same clean source/tree as the numerical record. RV64 p02-tfr actual SimX lifecycle log is in execution.tar.gz; default RV32 actual SimX configuration, 201 canonical compiler dependency inputs, source/tool/artifact stability and all raw receipts are in rv32-lifecycle.tar.gz. The raw RV32 cache_enabled=false flag means compiler caching disabled, while hardware I/D caches are enabled. host-tests.tar.gz records governance, software-boundary validation and all 1,669 host tests.",
+  "evidence_level": "simulated",
+  "kind": "simulation",
+  "limitations": [
+    "Only the six declared signatures and exact frozen configurations are accepted.",
+    "Native processor RTL bypasses the AFU; integer DPI helpers remain, while tensor/scalar arithmetic uses the named native TFR/STD datapaths.",
+    "Trusted compiler-record and byte binding identifies build inputs; it does not authenticate arbitrary hardware or a malicious concurrent filesystem writer.",
+    "Mocked device-loss and cleanup-error tests are host-only; actual SimX faults are the specifically injected allocation failures.",
+    "Timeouts retain ownership; destruction drains indefinitely if a backend never completes.",
+    "No transactional rollback of partially completed DMA or broad physical-device recovery is established.",
+    "Device allocator accounting and ownership checks are not an exhaustive process-heap leak measurement.",
+    "Tool identities do not inventory every system header, compiler support file or dynamic library.",
+    "Evidence stores binary hashes and reproducible source/configuration bodies, not binary replay archives.",
+    "P01-A03 vendor integration remains blocked and is required before P07 can close."
+  ],
+  "outcome": "pass",
+  "record_id": "p03-a03-managed-lifecycle-319ad635",
+  "reviewer": "/root/qualification_audit independently accepts the bounded numerical and lifecycle evidence, with /root/qualification_audit/lifecycle_evidence separately checking actual runtime scope; /root/delivery_audit reviewed source, CI, ABI obligations and final corrections. Raw source-bound receipts are retained. The originating user authorized implementation, commit and direct master push; no human review or waiver is fabricated.",
+  "schema_version": 1,
+  "scope": "Accept bounded buffer bounds, queue/event/handle lifetimes, timeout ownership, injected transfer-allocation error propagation/recovery and repeated resource cleanup. Twelve actual SimX lifecycle groups pass in both default RV32 and RV64 p02-tfr. The complete host suite passes 1,669 tests, including 45 P03 tests; mocked device-loss and cleanup failures remain explicitly host-only. This is not physical-device recovery or exhaustive heap-leak certification.",
+  "source_revision": "319ad63532cee17ae88fa75757a5ac87ed5c6a77"
+}

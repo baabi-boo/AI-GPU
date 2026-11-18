@@ -1,17 +1,19 @@
 # Current project status
 
-**P02 is complete with independently reviewed A01–A03 evidence.** The
-[contract record](evidence/p02-numerics/acceptance.json) retains the reviewed
-numerical contract; the [ordinary WMMA record](evidence/p02-wmma/acceptance.json)
-binds the matching full SimX/native processor results and explicit API rejection
-checks to their tested source. The
-[WGMMA acceptance](evidence/p02-wgmma/processor/acceptance.json) adds the
-completed bounded native-unit and full-processor arithmetic, metadata,
-concurrency/backpressure and declared parity proof after independent engineering
-and publication-integrity review. P02-T01 and P02-T02 are complete. **P03 is
-`in_progress`** with an implemented native operator contract, matching device
-reader and managed execution wrapper. Formal arithmetic and lifetime acceptance
-remain open; see the [P03 handoff](p03-operators-handoff.md).
+**P03 is complete with independently reviewed A01–A03 evidence.** The
+[historical operator contract](evidence/p03-operators/acceptance.json) remains
+accepted at source scope. The new [numerical acceptance](evidence/p03-managed-matmul/acceptance-numerics.json)
+and [lifecycle acceptance](evidence/p03-managed-matmul/acceptance-lifecycle.json)
+complete P03-T02 for six ordinary FP16/BF16-to-FP32 matmul signatures. They bind
+actual SimX/native processor RTL dispatch and actual RV32/RV64 SimX lifecycle
+results to clean source `319ad63532cee17ae88fa75757a5ac87ed5c6a77`.
+The [P03 handoff](p03-operators-handoff.md) supplies the accepted inputs for
+P04-T01, the next bounded model/fixture freeze. P04 remains `not_started`.
+
+**P02 remains complete.** Its reviewed [contract](evidence/p02-numerics/acceptance.json),
+[ordinary WMMA](evidence/p02-wmma/acceptance.json) and
+[WGMMA](evidence/p02-wgmma/processor/acceptance.json) evidence retain their
+original numerical, metadata/backpressure and declared parity scopes.
 
 P02 entered development through the user-directed staged-entry decision.
 P01-A01 and P01-A02 are accepted, while P01 itself remains blocked on vendor
@@ -21,7 +23,7 @@ At the accepted historical revision, all six frozen numerical executions pass
 from a clean GPU source checkout. The fresh generated FP16 SimX build and
 supplemental full-AFU integer `xrtsim` smoke also pass. Independent reviews accept
 the clean-build and native numerical packets. Qualified vendor tools/platform
-are still missing for P01-A03. P00 and P02 are complete, P03 is in progress,
+are still missing for P01-A03. P00, P02 and P03 are complete,
 and P04–P11 remain `not_started`.
 [roadmap.json](roadmap.json) remains authoritative for phase state and evidence;
 the linked reports define the exact accepted scope.
@@ -33,7 +35,7 @@ the linked reports define the exact accepted scope.
 | P00 — project foundation | `complete` | Its three source-level acceptance gates and verified default-branch delivery remain preserved |
 | P01 — reproducible baseline | `blocked` | A01 clean-build and A02 six-case numerical reports accepted; A03 vendor integration is still required before P07 |
 | P02 — tensor numerical contract | `complete` | A01 source contract, A02 ordinary WMMA and A03 bounded WGMMA evidence accepted after required review; T01/T02 complete |
-| P03 — native AI operator library | `in_progress` | T01 complete and A01 accepted at source scope; launch, arithmetic and lifecycle qualification remain open |
+| P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
 | P04–P11 | `not_started` | Later model, framework, hardware and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -42,29 +44,50 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — managed native matmul implementation
+## Latest continuation — qualified managed native matmul
 
-P03-T02 now implements the six declared matmul signatures through an internal
+P03-T02 implements the six declared matmul signatures through an internal
 managed `vortex2.h` wrapper and the matching ordinary WMMA kernel. The wrapper
 owns copied host inputs, actual allocations, module/kernel handles, per-operation
-queues and completion events. A timeout leaves the operation owned and retryable;
-primary execution errors and cleanup errors remain distinct. The trusted runner
-validates each runtime/backend/kernel/host compiler record separately and binds
-the actual artifacts to the dispatch trace. Capability bits alone do not establish
-the numerical profile.
+queues and completion events. Timeouts retain ownership; primary execution and
+cleanup errors remain distinct. The trusted runner validates runtime, backend,
+kernel and host compiler records separately and binds exact artifacts to each
+trace. Capability bits alone do not identify the numerical profile.
 
-Shared runtime fixes address retained resources in skipped commands, rejected
-wait lists, overflowing buffer spans, failed maps and allocation-exception
-cleanup. New lifecycle tests exercise the actual common runtime; fault-injected
-wrapper tests have a separate, explicitly host-only scope. New source-only tests
-cover the shared byte reader, profile exclusions and malformed evidence records.
+The [accepted packet](evidence/p03-managed-matmul/README.md) records clean source
+`319ad63532cee17ae88fa75757a5ac87ed5c6a77`, tree
+`d7768f5f392cef417e59ccadfc29f20d3f67f707`, with unchanged source, tools,
+dependencies and artifacts throughout execution and independent review.
 
-The first development SimX smoke completed two poisoned launches with 64 exact
-word comparisons and restored device-memory accounting. Eight initial actual
-runtime lifecycle groups passed. These observations are development checks,
-not the final clean-source matrix or automatic A02/A03 acceptance. The handoff
-records the bounded formal run required next. Earlier dependency-header and
-public-kernel-name failures are retained with their corrected attempts.
+| Observed result | Scope |
+|---|---|
+| 176 case executions, 352 actual launches, 14,336 exact output words | 88 unchanged independent P02 fixtures on each of SimX and native processor RTL; FP16/BF16, three shapes each, two distinct output poisons |
+| 210 bounded commands passed | Fresh configuration/builds, separate compiler records, numerical launches and RV64 lifecycle execution |
+| Twelve lifecycle groups passed in each RV64/RV32 SimX configuration | Bounds, wait/event ownership, timeout retention, skipped work, module/setup allocation failures, three transfer allocation-failure stages, scratch cleanup and 32 release/recovery cycles |
+| All 1,669 host tests passed in 427.714 seconds | No errors, failures or skips; includes 45 P03 tests: 12 contract, seven reader/profile, nine managed mocks and 17 record-parser checks |
+| Peak sampled matrix RSS 1,484,550,144 bytes; 54,525,153,280 bytes disk free afterward | Two build jobs, 6 GiB polled RSS budget, 15 GiB disk reserve and 16 MiB per-command log limit; no downloads |
+
+Shared runtime fixes retain resources through skipped commands and exceptions,
+reject overflowing spans, roll back failed map reservations and reclaim partial
+setup allocations. The software command processor retires a failed synchronous
+transfer before freed staging can be replayed. Its successful tick ordering is
+unchanged. The regression reads a seeded destination after the injected failure
+and before recovery can conceal a stale write. No new timing/performance claim
+or additional `model_parity` execution is made.
+
+The independent qualification reviewer reconstructed the wire arguments and raw
+output comparisons without using the new output parser. A separate reviewer
+checked lifecycle scope; source/policy review verified CI coverage expansion,
+unchanged installed interfaces, protected assets and historical A01 provenance.
+The RV32 receipt's `cache_enabled=false` means compiler caching is disabled;
+actual processor instruction/data caches are enabled.
+
+Earlier dependency-header/public-kernel-name failures, the nested-submodule
+preflight block and controlled interruptions for braces/inventory corrections
+are retained as development history. They do not count toward acceptance.
+Native processor RTL bypasses the AFU. Physical device recovery, arbitrary
+simulator exceptions, partial-DMA rollback, exhaustive host-heap leak freedom,
+vendor `hw_emu`, FPGA performance, PPA and silicon remain outside this evidence.
 
 ## Previous continuation — native operator contract
 
@@ -73,7 +96,8 @@ Clean source `6367ce34e12915e12271207b207f93bd4d391869` passed 1636 tests with
 zero failures/errors/skips in 397.573 seconds. The exact tree is published as
 `04c3cbf42c68e3b116051343083b86119f67f53d`; the [source mapping and receipts](evidence/p03-operators/README.md)
 retain all identities. Four RV32/RV64 object compilations passed separately.
-Independent review approves only the contract boundary; A02/A03 remain open.
+At that earlier checkpoint, independent review approved only the contract
+boundary; A02/A03 were still open.
 
 P03-T01 implements the [versioned manifest](../../ci/project/p03_operator_manifest.json),
 [design contract](../designs/ai_operator_contract_v1.md) and internal C++17
@@ -85,7 +109,7 @@ bounds/access, device/profile identity, representation width and nonaliasing.
 Failures preserve caller output. All plans explicitly report execution unavailable.
 
 The new 56-byte argument schema is internal and is not compatible with the
-existing regression kernel argument block. P03-T02 must supply its actual
+existing regression kernel argument block. That checkpoint required P03-T02 to supply its actual
 reader/adapter, managed runtime wrapper and retained resource lifetimes before
 launching it. No installed runtime ABI, P02 numerical contract, protected asset,
 GPU datapath or simulator has changed. [The handoff](p03-operators-handoff.md)
@@ -598,13 +622,14 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**P03-T02 — managed matmul execution and lifecycle qualification.**
-Freeze the reviewed implementation, run the complete 88-fixture matrix on fresh
-SimX/native-RTL builds with two poisoned launches per case, and verify the actual
-runtime lifecycle groups. Retain exact source/configuration, separate compiler
-records, dispatch/transfers, raw bits and memory accounting. Review the final
-packet before accepting A02/A03 or completing P03. See the [P03 handoff](p03-operators-handoff.md),
-[phase guide](phases/p03-operators.md) and [backlog](backlog.md).
+**P04-T01 — freeze the tiny-model and reference fixture.**
+Select a small redistributable model or weight generator, pin provenance/license,
+seeds, dimensions/layouts, and independent layer/final reference results before
+implementing its executor. Compose the declared accelerated work from accepted
+P03 signatures and identify any additional qualification required. Declare host
+work and transfer accounting explicitly. P04 remains `not_started`; no model
+execution or framework result is implied by P03 completion. See the [P03 handoff](p03-operators-handoff.md),
+[P04 phase guide](phases/p04-inference.md) and [backlog](backlog.md).
 
 **Parallel blocked hardware task:** P01-T05 still needs a qualified vendor
 release/platform, matching prepared `hw_emu` artifact packet and actual reviewed

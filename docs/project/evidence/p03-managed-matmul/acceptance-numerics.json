@@ -1,0 +1,80 @@
+{
+  "acceptance_ids": [
+    "P03-A02"
+  ],
+  "artifacts": [
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/archive-index.json",
+      "sha256": "e9cf6de768764b92501db8748f21e5bfc29dfa4f5147134ab61d41ecc98892d9"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/development-history.tar.gz",
+      "sha256": "341071f5917c853efc06b0e1dc51d8423fbc3a328a32f437243b7524bf401fe2"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/execution.tar.gz",
+      "sha256": "a8ef6bf94d53af4a9f03109a1edc569da8cbc00d817991a674bdf2b01ecf9981"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/host-tests.tar.gz",
+      "sha256": "e99ac8d2ef90b19f5180b3c473fccbf4b7ba80588055ffbe48b255aa1a4f7c79"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/implementation-review.json",
+      "sha256": "bbfccc9c19304af7f4feb19c2ab49a1366f37f3f227f98ba72f10e28fd82f57b"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/qualification-review.json",
+      "sha256": "6f156676384229901106874220ae836fd589645469e33a7ef5f84c7a6707712b"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/reviews.tar.gz",
+      "sha256": "98e1d68ce45fd3b812048adcdb50f51d071f6e3404c7035807a86a5263ca2ec6"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/rv32-lifecycle.tar.gz",
+      "sha256": "02ea732e1b538b683df137877f59dda9ba9b7e5653c5aadf10e37d6f66f01ee7"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/source-map.json",
+      "sha256": "bc45ac9a0f9caedc750284a63c1dbdbaf86266fe5ed7da1cf572aec4328b7441"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/summary.json",
+      "sha256": "3df076bd86b32b7c46c3bbb6f073b91e14bef2b94ff146e59cff178b138aafcd"
+    }
+  ],
+  "commands": [
+    {
+      "command": "cwd=${SOURCE}; python3 ci/project/p03_execute.py run --source-dir ${SOURCE} --tools-dir ${TOOLS} --host-bin ${HOST_BIN} --work-dir ${FRESH_WORK} --output ${FRESH_OUTPUT} --jobs 2; all 210 exact command/environment/process receipts retained in execution.tar.gz/report.json",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "command": "Independent audit_numerics.py over the finished raw packet; exact script and receipt retained in reviews.tar.gz/qualification-audit/",
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "configuration": "Clean source 319ad63532cee17ae88fa75757a5ac87ed5c6a77, tree d7768f5f392cef417e59ccadfc29f20d3f67f707. RV64 profiles/p02-tfr.json; 1 cluster/core, 4 warps/threads, issue1; ordinary TFR WMMA and STD FPU; FP16/BF16 inputs to FP32; tile8x4x8, KUNROLL1, C=+0; other format banks, WGMMA and sparse disabled. Exact role-specific compiler records, tools, binary/source hashes, raw logs and before/after inventories are in execution.tar.gz and archive-index.json.",
+  "evidence_level": "rtl_verified",
+  "kind": "rtl",
+  "limitations": [
+    "Only the six declared signatures and exact frozen configurations are accepted.",
+    "Native processor RTL bypasses the AFU; integer DPI helpers remain, while tensor/scalar arithmetic uses the named native TFR/STD datapaths.",
+    "Trusted compiler-record and byte binding identifies build inputs; it does not authenticate arbitrary hardware or a malicious concurrent filesystem writer.",
+    "Mocked device-loss and cleanup-error tests are host-only; actual SimX faults are the specifically injected allocation failures.",
+    "Timeouts retain ownership; destruction drains indefinitely if a backend never completes.",
+    "No transactional rollback of partially completed DMA or broad physical-device recovery is established.",
+    "Device allocator accounting and ownership checks are not an exhaustive process-heap leak measurement.",
+    "Tool identities do not inventory every system header, compiler support file or dynamic library.",
+    "Evidence stores binary hashes and reproducible source/configuration bodies, not binary replay archives.",
+    "P01-A03 vendor integration remains blocked and is required before P07 can close."
+  ],
+  "outcome": "pass",
+  "record_id": "p03-a02-managed-matmul-319ad635",
+  "reviewer": "/root/qualification_audit independently accepts the bounded numerical and lifecycle evidence, with /root/qualification_audit/lifecycle_evidence separately checking actual runtime scope; /root/delivery_audit reviewed source, CI, ABI obligations and final corrections. Raw source-bound receipts are retained. The originating user authorized implementation, commit and direct master push; no human review or waiver is fabricated.",
+  "schema_version": 1,
+  "scope": "Accept the six declared native matmul signatures after 88 independent fixtures on each of SimX and native processor RTL: 176 case executions, 352 actual launches, 14,336 exact FP32 output-word comparisons and 210 passing bounded commands. The independent reviewer reconstructed wires and raw-bit comparisons without using the new output parser. This accepts P03-T02 numerical dispatch only within the frozen support matrix.",
+  "source_revision": "319ad63532cee17ae88fa75757a5ac87ed5c6a77"
+}

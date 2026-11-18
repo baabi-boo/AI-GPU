@@ -1,0 +1,152 @@
+{
+  "accepted_ids": [
+    "P03-A02",
+    "P03-A03"
+  ],
+  "configuration": {
+    "backends": [
+      "simx",
+      "native processor rtlsim"
+    ],
+    "clusters": 1,
+    "cores": 1,
+    "issue_width": 1,
+    "kunroll": 1,
+    "operator_xlen": 64,
+    "profile": "profiles/p02-tfr.json",
+    "scalar_fpu": "STD",
+    "tensor": "ordinary native TFR WMMA",
+    "threads": 4,
+    "tile_mnk": [
+      8,
+      4,
+      8
+    ],
+    "warps": 4,
+    "wgmma_sparse_and_other_format_banks": "disabled"
+  },
+  "host_tests": {
+    "bounded_process_seconds": 428.757821,
+    "errors": 0,
+    "failures": 0,
+    "p03_subset": {
+      "contract": 12,
+      "execution_records": 17,
+      "managed_mock": 9,
+      "reader_and_profile": 7,
+      "total": 45
+    },
+    "skips": 0,
+    "tests": 1669,
+    "unittest_seconds": 427.714
+  },
+  "lifecycle": {
+    "actual_backend": "simx",
+    "actual_transfer_faults": [
+      "backend host-region registration allocation",
+      "common runtime host-region registration allocation",
+      "software-CP copy scratch allocation after descriptor publication"
+    ],
+    "allocation_release_cycles_per_run": 32,
+    "configurations": [
+      "RV64 p02-tfr",
+      "default RV32"
+    ],
+    "failed_dependency_or_sticky_command_variants": 14,
+    "groups_per_configuration": 12,
+    "no_replay_proof": "Seeded device destination is read after the injected error and before any replacement write.",
+    "rv32_cache_field_clarification": "The raw RV32 report configuration.cache_enabled=false denotes disabled compiler caching (CCACHE_DISABLE=1); resolved flags show processor instruction and data caches enabled.",
+    "uncached_scratch_slots_freed_per_run": 96
+  },
+  "limitations": [
+    "Only the six declared signatures and exact frozen configurations are accepted.",
+    "Native processor RTL bypasses the AFU; integer DPI helpers remain, while tensor/scalar arithmetic uses the named native TFR/STD datapaths.",
+    "Trusted compiler-record and byte binding identifies build inputs; it does not authenticate arbitrary hardware or a malicious concurrent filesystem writer.",
+    "Mocked device-loss and cleanup-error tests are host-only; actual SimX faults are the specifically injected allocation failures.",
+    "Timeouts retain ownership; destruction drains indefinitely if a backend never completes.",
+    "No transactional rollback of partially completed DMA or broad physical-device recovery is established.",
+    "Device allocator accounting and ownership checks are not an exhaustive process-heap leak measurement.",
+    "Tool identities do not inventory every system header, compiler support file or dynamic library.",
+    "Evidence stores binary hashes and reproducible source/configuration bodies, not binary replay archives.",
+    "P01-A03 vendor integration remains blocked and is required before P07 can close."
+  ],
+  "not_run": [
+    "vendor XRT hw_emu",
+    "physical FPGA or silicon execution",
+    "new performance or PPA measurement",
+    "additional model_parity (no successful CP tick or timing behavior changed)",
+    "exhaustive host heap leak or physical fault recovery qualification"
+  ],
+  "numerical_results": {
+    "all_commands_pass": true,
+    "case_executions": 176,
+    "command_receipts": 210,
+    "exact_output_words": 14336,
+    "fixtures_per_format": 44,
+    "independent_source_fixtures": 88,
+    "iterations_per_case": 2,
+    "launches": 352,
+    "output_poisons": [
+      "0x7fc0dead",
+      "0xdeadbeef"
+    ],
+    "silent_cpu_fallback": false,
+    "variant_count": 4
+  },
+  "outcome": "pass",
+  "phase": "P03",
+  "resources": {
+    "build_jobs": 2,
+    "downloads_performed": false,
+    "free_disk_bytes_after_matrix": 54525153280,
+    "matrix_peak_sampled_rss_bytes": 1484550144,
+    "max_log_bytes_per_command": 16777216,
+    "min_free_bytes": 16106127360,
+    "polled_rss_budget_bytes": 6442450944
+  },
+  "retained_history": [
+    "development dependency-header build failure and public-kernel-name smoke failure",
+    "formal preflight blocked by uninitialized pinned nested dependencies, restored from local copies",
+    "explicitly interrupted host/matrix attempts before mandatory braces and dependency-inventory correction"
+  ],
+  "review": {
+    "lifecycle": "/root/qualification_audit/lifecycle_evidence",
+    "qualification": "/root/qualification_audit",
+    "scope": "Independent agent engineering review; no human code review or waiver is asserted.",
+    "source_and_policy": "/root/delivery_audit"
+  },
+  "schema_version": 1,
+  "source_clean_during_execution_and_review": true,
+  "source_revision": "319ad63532cee17ae88fa75757a5ac87ed5c6a77",
+  "source_tree": "d7768f5f392cef417e59ccadfc29f20d3f67f707",
+  "support": {
+    "a_layout": "compact row-major",
+    "accumulator_and_output": "fp32",
+    "all_other_operator_families": "unavailable",
+    "b_layout": "compact column-major",
+    "d_layout": "compact row-major",
+    "initial_c": "exact +0",
+    "inputs": [
+      "fp16",
+      "bf16"
+    ],
+    "operator": "matmul",
+    "shapes_mnk": [
+      [
+        8,
+        4,
+        8
+      ],
+      [
+        8,
+        4,
+        16
+      ],
+      [
+        16,
+        8,
+        16
+      ]
+    ]
+  }
+}

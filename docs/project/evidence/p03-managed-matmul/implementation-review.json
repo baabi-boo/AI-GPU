@@ -1,0 +1,411 @@
+{
+  "artifacts": [
+    {
+      "path": "base-classifier/change-impact.yaml",
+      "sha256": "489d1018c790bb6c383b774b119223889bb508be6c63db654d5c6c80520d0333",
+      "size_bytes": 11511
+    },
+    {
+      "path": "base-classifier/change_impact.py",
+      "sha256": "bd2ef579de90b14b7ab4cd5ef2f6b7c911753e154c4201aaf0f0d0b25a460779",
+      "size_bytes": 80757
+    },
+    {
+      "path": "base-classifier/classify-319ad635.log",
+      "sha256": "fe87655d1f28ff72ff71e8d7c3fbdaa04c20cf89130c9c83356d3d8428bf77b0",
+      "size_bytes": 345
+    },
+    {
+      "path": "base-classifier/classify.log",
+      "sha256": "90801ca7c9cb7a638398c8e9d049d46fa92c51b17373ef71677e889f7dfdc961",
+      "size_bytes": 345
+    },
+    {
+      "path": "base-classifier/explain-319ad635.log",
+      "sha256": "c834bbb760e954b45c66dfbdfb19f3ed2a90ddfa5d2475f6080133e9a93fa93b",
+      "size_bytes": 3065
+    },
+    {
+      "path": "base-classifier/explain.log",
+      "sha256": "c83cce252409adc79f4a7cd6c6fe87ec11d59d49f7ab74673f84ad530cb2ba95",
+      "size_bytes": 3065
+    },
+    {
+      "path": "base-classifier/receipt-319ad635.json",
+      "sha256": "52e40187550a5c78dafd94d1a144cbecf273d85f519d9b18e282d943d25216b3",
+      "size_bytes": 1509
+    },
+    {
+      "path": "base-classifier/receipt.json",
+      "sha256": "1d6d5e0f4f0326e21ab6048b91b7f1fac93ff340ef39d00595988b557b3e3252",
+      "size_bytes": 2095
+    },
+    {
+      "path": "delivery-policy-checks/base-runtime.yaml",
+      "sha256": "4a897c9c6b74c0f8a602e2fc30a56aeadf6c362e53c39ca2e12e0d5849b91731",
+      "size_bytes": 803
+    },
+    {
+      "path": "delivery-policy-checks/catalog-lint-receipt.json",
+      "sha256": "2c07a941316697306e4ef1951531d64c74f5b6fa4a0cbe86d34143ace7d154c2",
+      "size_bytes": 203
+    },
+    {
+      "path": "delivery-policy-checks/catalog-lint.log",
+      "sha256": "b93f679422a695c3af041373cd2663bc16c4f17e4c1dfed2ca8b6496099cdbe0",
+      "size_bytes": 40
+    },
+    {
+      "path": "delivery-policy-checks/correction-review.json",
+      "sha256": "fe6c6103b3ec06696b892d3b7fa20d6f5e42cea49a06d781a11c7a4eb3db468d",
+      "size_bytes": 4624
+    },
+    {
+      "path": "delivery-policy-checks/historical-a01.json",
+      "sha256": "6907b66cd6b87e03bcfcb80e303c268cf401cb42a981dcd419e43430b0019307",
+      "size_bytes": 1809
+    },
+    {
+      "path": "delivery-policy-checks/static-checks.json",
+      "sha256": "56c10aaa7a75f5c4193603aa30d4aebb0cfbc5f89a4050f167d4cd48fb7c17d3",
+      "size_bytes": 2215
+    },
+    {
+      "path": "delivery-policy-review.initial.json",
+      "sha256": "63dda50951c7ef11eb32a3cf0d5bb6ce6ec9676d3fbf5ba19d14c96217c60659",
+      "size_bytes": 17010
+    }
+  ],
+  "authorization": {
+    "interpretation": "Direct publication is authorized by the task; do not add a second permission stop solely for local policy PR wording.",
+    "limits": "No fabricated human code review, waiver, physical-device approval, procurement or unrelated repository authorization. No push performed by this reviewer.",
+    "source": "Originating user request explicitly instructs implementation, commit and push to master of baabi-boo/AI-GPU."
+  },
+  "base_revision": "20e026f5e5bffc6ea044f6216b28f66cfaa1b156",
+  "classification": {
+    "class": "R3",
+    "contract_findings": [
+      {
+        "detail": "runtime-1 drivers (none) -> [simx]",
+        "detector": "test-coverage",
+        "path": "ci/testcases/sw/runtime.yaml"
+      }
+    ],
+    "evidence": [
+      "configure-copied: tests/regression/ai_matmul/Makefile and tests/runtime/Makefile must be regenerated before execution."
+    ],
+    "source": "Unmodified base revision classifier and policy executed with Python isolated mode against full45-file diff."
+  },
+  "execution_seen": {
+    "base_classifier_classify": "exit0",
+    "base_classifier_explain": "exit0",
+    "catalog_lint": "pass:950 cases across29 categories",
+    "full_host_suite": "pending at review",
+    "full_operator_matrix": "pending at review",
+    "rv32_lifecycle": "pending at review",
+    "static_assertion_script": "exit0"
+  },
+  "findings": [
+    {
+      "confidence": "high",
+      "evidence": [
+        "runtime.cpp151,153,325: one-line if-return bodies",
+        "ai_matmul/main.cpp42-46: if/else option parsing without braced bodies",
+        "test_ai_lifecycle.cpp42-43,413,421: if and for bodies without braces",
+        "vortex2_internal.h107,110: Retained constructor/destructor contain brace-less if bodies",
+        "queue.cpp newly added ScopeExit lambdas contain brace-less conditional releases"
+      ],
+      "evidence_type": "static-proof",
+      "id": "DP-F01",
+      "paths": [
+        "sw/runtime/ai/runtime.cpp",
+        "tests/regression/ai_matmul/main.cpp",
+        "tests/runtime/test_ai_lifecycle.cpp",
+        "ci/project/fixtures/p03_managed_runtime_test.cpp",
+        "sw/runtime/common/vortex2_internal.h",
+        "sw/runtime/common/queue.cpp"
+      ],
+      "required_resolution": "Add explicit compound bodies to new or modified if/else/for/while bodies, preserving behavior; independently verify the final diff and bind required execution evidence to the resulting source revision.",
+      "resolution": {
+        "receipt": "delivery-policy-checks/correction-review.json",
+        "revision": "319ad63532cee17ae88fa75757a5ac87ed5c6a77",
+        "summary": "Added142 balanced brace pairs across9C++ files. All nonbrace/nonwhitespace bytes preserved. Independent inspection finds original single-statement scopes unchanged; new complete files need zero additional InsertBraces changes. Standalone lifecycle test indentation normalized to2spaces."
+      },
+      "rule": "docs/coding_guidelines_cpp.md section2; code-review skill requires explicit repository rules rather than personal style preferences.",
+      "scenario": "The new source violates an R2 review obligation; appending a second cleanup/action statement to one of these bodies would silently move it outside the conditional/loop scope. No currently observed numerical error is alleged.",
+      "severity": "F2",
+      "state": "resolved",
+      "what": "New control-statement bodies omit braces despite the repository mandatory-braces rule."
+    }
+  ],
+  "independence": "Reviewer authored no source, tests, CI or evidence changes in this implementation; only this external audit receipt and read-only check outputs.",
+  "initial_reviewed_revision": "b066586448823ffcc1ef406da5490f897fc4e3f2",
+  "limitations": [
+    "This receipt is source and policy review, not native arithmetic execution, physical FPGA, vendor hw_emu or silicon evidence.",
+    "Formal operator matrix, host suite and RV32 lifecycle are being rerun on correction319ad635. This policy review does not predict or substitute for their outcomes.",
+    "No PoCL/Mesa/chipStar rebuild or clean install was run; installed API and install surface are unchanged."
+  ],
+  "model_parity_applicability": {
+    "ran": false,
+    "reason": "The software CP synchronous MEM exception path changes recovery only. On successful execution old and new finish the same Bid tick in Retire, then publish sequence on the same next tick. No hardware pipeline, RTL, SimChannel timing, arbitration or normal timing behavior changed. This is rule applicability analysis, not a waiver or performance result.",
+    "required_for_this_hunk": false
+  },
+  "phase_acceptance_claimed": false,
+  "recorded_at": "2026-11-18T08:17:43.536102+00:00",
+  "reviewed_revision": "319ad63532cee17ae88fa75757a5ac87ed5c6a77",
+  "reviewer": "/root/delivery_audit",
+  "rules_read": [
+    "AGENTS.md",
+    "docs/review/code-review-policy.md",
+    "docs/coding_guidelines_cpp.md",
+    "docs/coding_guidelines_verilog.md",
+    "docs/bug_fixes.md",
+    ".agents/skills/code-review/SKILL.md",
+    ".agents/skills/simx-review/SKILL.md",
+    "docs/designs/simobject.md",
+    "docs/designs/simx_simulator_architecture.md"
+  ],
+  "schema_version": 1,
+  "scope": "Independent policy, CI coverage, protected surface and bounded internal ABI audit. Functional runtime error-path review remains separately covered by runtime_review and failure_path_review; numerical execution review is pending.",
+  "source_hashes": [
+    {
+      "path": ".github/workflows/project-governance.yml",
+      "sha256": "3353e2cce78d073eda1ad06d5e543c121fac1b325b8afafa1df33260f4479d5a",
+      "size_bytes": 2635
+    },
+    {
+      "path": "README.md",
+      "sha256": "16d6bfe490fa059f14e9997c39aef7de36834429e70b5ceaf2eab3c475b76615",
+      "size_bytes": 26674
+    },
+    {
+      "path": "ROADMAP.md",
+      "sha256": "e0e562d134de4c19ad9729f76efc3d4792d4aa3a638d75abd97d95f06e3b6d4d",
+      "size_bytes": 11662
+    },
+    {
+      "path": "ci/project/fixtures/p03_device_reader_test.cpp",
+      "sha256": "a3d85898d163e72dc2624a5cdc6897cb271e836b27577edab470ab22d3e74aaf",
+      "size_bytes": 5669
+    },
+    {
+      "path": "ci/project/fixtures/p03_managed_runtime_test.cpp",
+      "sha256": "9200ce1cf221be6baad4ee5faca2ccae88bb1570aefe01c834e5d329768e986e",
+      "size_bytes": 17604
+    },
+    {
+      "path": "ci/project/p03_execute.py",
+      "sha256": "bee5c380eb0d328e72586e2c51e4162b8ca5314ef68d2987a7d744fc1c05aa82",
+      "size_bytes": 17105
+    },
+    {
+      "path": "ci/project/p03_execution_records.py",
+      "sha256": "b26449105f17f9487cc4fbaab36884ceea42be9f502a26aa58331ed4cf1140de",
+      "size_bytes": 6961
+    },
+    {
+      "path": "ci/project/p03_operator_manifest.json",
+      "sha256": "33d68c1b541984b8258279b23ebdf08c407e0594cb7d862e34637b947e7594e4",
+      "size_bytes": 7958
+    },
+    {
+      "path": "ci/project/test_p03_device_reader.py",
+      "sha256": "912407e22feee07c09786314508fc5248a46fa034c47f326ea8cbba7ea1b6eb6",
+      "size_bytes": 6177
+    },
+    {
+      "path": "ci/project/test_p03_execution_records.py",
+      "sha256": "bff962d2f54b6a9ecdfbc32a3b5c0d8652adb34e85668d4b056f3fe1c5d32c10",
+      "size_bytes": 14432
+    },
+    {
+      "path": "ci/project/test_p03_managed_runtime.py",
+      "sha256": "7db617aba88d38f81483653e842b43f9b3d7c116b7d72c30d920a6b935e9a9cd",
+      "size_bytes": 3690
+    },
+    {
+      "path": "ci/project/test_p03_operator_contract.py",
+      "sha256": "4a7d8af07a7b0ed7f840b780b143f6344a06a7177bd22721929414d93820835a",
+      "size_bytes": 8769
+    },
+    {
+      "path": "ci/testcases/sw/runtime.yaml",
+      "sha256": "926cb515e94f68b4f8b2a8567e633d109f41b95c3bc5883d13cb7a45077d7731",
+      "size_bytes": 891
+    },
+    {
+      "path": "docs/designs/ai_operator_contract_v1.md",
+      "sha256": "24d6d450499478e2fa4b886c2f6e4bab95ff77a0d0e89e61689715aef1b29882",
+      "size_bytes": 16419
+    },
+    {
+      "path": "docs/project/backlog.md",
+      "sha256": "a8d5eb295adc56484ba37b3f6e0f6399db5570054b1a1c2a3b98c16c5c4a04ee",
+      "size_bytes": 20975
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/README.md",
+      "sha256": "4d23536f282c7e5356d89f19f0c2592b0209dcbe98f71188d9868ccaa8adbc23",
+      "size_bytes": 4089
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/acceptance.json",
+      "sha256": "6cac806e58f0de5cded827fc9f272c7d3cb189584013722d917a75352b812dcc",
+      "size_bytes": 10024
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/acceptance.original.json",
+      "sha256": "281ec293e83344ca67a4876a78e492048032ae6345fca220c383b449046aca40",
+      "size_bytes": 9696
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/source-at-04c3cbf/ci/project/fixtures/p03_operator_contract_test.cpp",
+      "sha256": "2a6d96d93b267d1bf6ed72c8c107738fc26dc5be978e204595135117d41486c4",
+      "size_bytes": 20845
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/source-at-04c3cbf/ci/project/p03_operator_manifest.json",
+      "sha256": "df08281fe186e9623d96779b2bc2485df4c9d824c88481e4896d695302759b5a",
+      "size_bytes": 7497
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/source-at-04c3cbf/ci/project/test_p03_operator_contract.py",
+      "sha256": "d77f39243d71886e31216cc621654e3540b798dac5db0fd19cd01d2fe91879a1",
+      "size_bytes": 8400
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/source-at-04c3cbf/docs/designs/ai_operator_contract_v1.md.txt",
+      "sha256": "866dba3101ae3531390341bb935e7bc3371cd812909240b452a4adec80f1464e",
+      "size_bytes": 12309
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/source-at-04c3cbf/sw/runtime/ai/contract.cpp",
+      "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+      "size_bytes": 10833
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/source-at-04c3cbf/sw/runtime/ai/contract.h",
+      "sha256": "c21e8742cf5dcc01e857b5b13f6ff6e159fa6ad8459bf3a475a5eed746c8abb8",
+      "size_bytes": 4535
+    },
+    {
+      "path": "docs/project/p03-operators-handoff.md",
+      "sha256": "25c21d93f654df4fcc618ba8e2b42eade01285f118d5b96ba14449892d88d19c",
+      "size_bytes": 9119
+    },
+    {
+      "path": "docs/project/phases/p03-operators.md",
+      "sha256": "0bbe3d7fd1bf006f8980a84bc8d5fd31aab1332585bc177658b1f9ae7ed2d34e",
+      "size_bytes": 5243
+    },
+    {
+      "path": "docs/project/status.md",
+      "sha256": "aca5890b8ae9f3dbc07fa8bee3cab0bc698485fb4f31bd8ced522cf3fe8067a5",
+      "size_bytes": 43050
+    },
+    {
+      "path": "sim/common/cmd_processor.cpp",
+      "sha256": "c7090583f8dd1774d71755dc96f11845ff4d96340e51451643ec1ab16b14dd42",
+      "size_bytes": 27823
+    },
+    {
+      "path": "sw/common/ai_matmul_args.h",
+      "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+      "size_bytes": 4342
+    },
+    {
+      "path": "sw/common/ai_matmul_profile.h",
+      "sha256": "8b2eb9a819506227808537612672c08a574230736f13f840a9d83bbd35675680",
+      "size_bytes": 2675
+    },
+    {
+      "path": "sw/kernel/ai/matmul.cpp",
+      "sha256": "ad3b6107f0eef91ec676412bc795ab70cd1c9f31647b2cea854de6234fe71d3e",
+      "size_bytes": 1565
+    },
+    {
+      "path": "sw/runtime/ai/contract.h",
+      "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+      "size_bytes": 3285
+    },
+    {
+      "path": "sw/runtime/ai/runtime.cpp",
+      "sha256": "40046e3ac8b32a442c8bf636561cac3808de9a55586423741fd8e4fc511402b6",
+      "size_bytes": 16643
+    },
+    {
+      "path": "sw/runtime/ai/runtime.h",
+      "sha256": "03781d4de8f853bc9e2f9c4af85bc5b063359446cfc51a3b3e13a0d60e3c3b9d",
+      "size_bytes": 3086
+    },
+    {
+      "path": "sw/runtime/common/buffer.cpp",
+      "sha256": "e0f4c550a7591f723d6cf18e43302fd1955a56e2c2ecc53e0f5eb037482c1366",
+      "size_bytes": 6787
+    },
+    {
+      "path": "sw/runtime/common/device.cpp",
+      "sha256": "9b32e38a9bbc0460a7f2af522fd5efdc96e1c06e359e28c5151285557f89d90a",
+      "size_bytes": 66201
+    },
+    {
+      "path": "sw/runtime/common/module.cpp",
+      "sha256": "5d2efe2ba92801d3dbb1e836b077e7d966bc9a6b2beb8d29c50f89ce4ee67f06",
+      "size_bytes": 13216
+    },
+    {
+      "path": "sw/runtime/common/queue.cpp",
+      "sha256": "1d785262d128de3ffbf1feb32cc2b32f6457a6644df6ef9a04d4e8b4d45c962e",
+      "size_bytes": 64122
+    },
+    {
+      "path": "sw/runtime/common/vortex2_internal.h",
+      "sha256": "3997d6ecca442eb04cf1df3129d0b90a9c0ec66015c798fc4d4510b93dd1f9ce",
+      "size_bytes": 44458
+    },
+    {
+      "path": "sw/runtime/rtlsim/vortex.cpp",
+      "sha256": "c984089e2f47bff1077387fd9321826ddf6e0e02d3831a21f8e1efcb51f7ed30",
+      "size_bytes": 7648
+    },
+    {
+      "path": "sw/runtime/simx/vortex.cpp",
+      "sha256": "5558f262394cb278db3b5d170e976162c2c1ccf84b6479204bad83f5afab91a3",
+      "size_bytes": 7842
+    },
+    {
+      "path": "tests/regression/ai_matmul/Makefile",
+      "sha256": "868f0203c5d3128bc1e503c44b7d0719fa28e4062ec6941b4f667ef69a74adb5",
+      "size_bytes": 651
+    },
+    {
+      "path": "tests/regression/ai_matmul/main.cpp",
+      "sha256": "31428ef514ba3f3f8ba687fd3cecf4f032126a8e0055fd37ca6f7eab99f54317",
+      "size_bytes": 6919
+    },
+    {
+      "path": "tests/runtime/Makefile",
+      "sha256": "fc54185402e93e32f3e43c31ea62fa12b6cf3e235fc10363ae61aeb0e5d7d0bb",
+      "size_bytes": 2694
+    },
+    {
+      "path": "tests/runtime/test_ai_lifecycle.cpp",
+      "sha256": "0e6efb5275c6e25f3991d7da789fa1a02b4eb204da7da37d7b4b3bb4491df7ae",
+      "size_bytes": 22892
+    }
+  ],
+  "static_conclusions": [
+    "Runtime catalog change adds a SimX marker only. The authored script, smoke tier, RV32/RV64 list and every other parsed field are unchanged. Before change the ordinary SimX smoke filter omitted runtime-1; after change it selects sw:runtime-1:simx for both word sizes with needs_sim false.",
+    "Both workflow events add exactly the same seven source path patterns. Runners, permissions, checkout settings, commands, limits and every other parsed workflow field are unchanged. No new fork trust or secrets exposure is introduced.",
+    "No installed header, RTL source, golden baseline, VERSION/toolchain pin, VX_config.toml, VX_types.toml, compiler-record enforcement or frozen P02 numerical contract changes are present.",
+    "The protected README SVG is byte-identical to base and remains embedded in README.",
+    "The internal MatmulArguments layout, version1,56-byte length, align8 and all offsets were moved byte-for-byte from contract.h to sw/common/ai_matmul_args.h. The existing explicit little-endian host writer now shares the type with the new allocation-free device reader; the kernel and managed host compile against the same header.",
+    "The device reader restricts the exact six signatures, checks version/byte count/dtype/flags/reserved fields, four-byte alignment, nonoverflowing ranges and pairwise nonoverlap before publishing the decoded result. The kernel checks accepted grid/block geometry before output access. Literal byte and rejection tests cover these boundaries independently of the writer.",
+    "The new common headers are not in SW_COMMON_PUBLIC; installed headers and install rules are unchanged. PoCL, Mesa and chipStar do not acquire the new internal argument contract through their installed include surface. Their builds are not claimed by this audit.",
+    "The profile-constrained ai_matmul target is excluded from generic regression TESTS, avoiding an unsupported default-profile/RV32 build. The actual shared-runtime RV32 lifecycle execution is separate pending evidence.",
+    "The software CP MEM state change keeps successful copy and next-tick retirement ordering unchanged; only a synchronous copy exception prevents replay of released staging. No arithmetic, pipeline or performance-bound change is introduced by that hunk.",
+    "Historical A01 acceptance is preserved byte-identical as acceptance.original.json. The active record changes only six artifact paths; all22 hashes verify, and redirected bodies are byte-identical to published04c3cbf. No source-only A01 claim was upgraded to execution evidence.",
+    "Post-review correction319ad635 contains only C++ braces/whitespace changes, a source-inventory expansion to .inc and SoftFloatRISCV headers, and manifest prose correcting an obsolete next_implementation description. Independent snapshot includes runtime callbacks.inc and SoftFloat specialize.h; no enforcement bound or fixture changed."
+  ],
+  "verdict": "source_and_policy_pass; final_required_formal_qualification_and_packet_review_pending"
+}
