@@ -91,8 +91,13 @@ public:
     void* ptr = aligned_alloc(CACHE_BLOCK_SIZE, asize);
     if (ptr == nullptr)
       return -1;
-    std::lock_guard<std::mutex> g(host_mu_);
-    host_regions_[reinterpret_cast<uint64_t>(ptr)] = asize;
+    try {
+      std::lock_guard<std::mutex> g(host_mu_);
+      host_regions_[reinterpret_cast<uint64_t>(ptr)] = asize;
+    } catch (...) {
+      free(ptr);
+      throw;
+    }
     *host_ptr = ptr;
     *cp_addr  = reinterpret_cast<uint64_t>(ptr);
     return 0;

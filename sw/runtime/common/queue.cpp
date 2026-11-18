@@ -15,6 +15,28 @@
 
 namespace vx {
 
+namespace {
+
+template <class F>
+class ScopeExit {
+public:
+    explicit ScopeExit(F cleanup) : cleanup_(std::move(cleanup)) {}
+    ~ScopeExit() { cleanup_(); }
+    ScopeExit(const ScopeExit&) = delete;
+    ScopeExit& operator=(const ScopeExit&) = delete;
+private:
+    F cleanup_;
+};
+
+struct PendingMap {
+    explicit PendingMap(Buffer* buffer) : buffer(buffer) {}
+    ~PendingMap() { if (reserved) buffer->map_cancel(); }
+    Retained<Buffer> buffer;
+    bool reserved = false;
+};
+
+} // namespace
+
 // ============================================================================
 // Construction / destruction
 // ============================================================================
@@ -24,8 +46,14 @@ Queue::Queue(Device* dev, const vx_queue_info_t& info)
       priority_(static_cast<uint32_t>(info.priority)),
       flags_(info.flags) {
     device_->retain();
-    device_->register_queue(this);
-    worker_ = std::thread([this]{ this->worker_loop(); });
+    try {
+        device_->register_queue(this);
+        worker_ = std::thread([this]{ this->worker_loop(); });
+    } catch (...) {
+        device_->unregister_queue(this);
+        device_->release();
+        throw;
+    }
 }
 
 Queue::~Queue() {
@@ -81,10 +109,10 @@ void Queue::worker_loop() {
         // not the caller; if a wait fails (event errored), short-circuit
         // the command's work and propagate the failure into completion.
         vx_result_t r = VX_SUCCESS;
-        for (Event* dep : cmd.waits) {
+        for (const auto& dep : cmd.waits) {
             if (r == VX_SUCCESS) r = dep->wait(VX_TIMEOUT_INFINITE);
-            dep->release();
         }
+        cmd.waits.clear();
 
         uint64_t submit_ns = now_ns();
         uint64_t start_ns  = submit_ns;
@@ -95,8 +123,16 @@ void Queue::worker_loop() {
             if (r == VX_SUCCESS && async_error_ != VX_SUCCESS) r = async_error_;
         }
         if (r == VX_SUCCESS && cmd.work) {
-            r = cmd.work(&start_ns, &end_ns);
+            try {
+                r = cmd.work(&start_ns, &end_ns);
+            } catch (const std::bad_alloc&) {
+                r = VX_ERR_OUT_OF_HOST_MEMORY;
+            } catch (...) {
+                r = VX_ERR_INTERNAL;
+            }
         }
+        // Completion also bounds ownership when a dependency skips the work.
+        cmd.work = {};
         if (r != VX_SUCCESS) {
             std::lock_guard<std::mutex> g(cmd_mu_);
             if (async_error_ == VX_SUCCESS) async_error_ = r;
@@ -108,7 +144,6 @@ void Queue::worker_loop() {
                                             start_ns, end_ns);
             }
             cmd.completion->complete(r);
-            cmd.completion->release();
         }
     }
 }
@@ -122,15 +157,16 @@ vx_result_t Queue::enqueue(Command&& cmd, uint32_t nw, const vx_event_h* w,
                            vx_event_h* out) {
     if (nw != 0 && !w) return VX_ERR_INVALID_VALUE;
 
+    for (uint32_t i = 0; i < nw; ++i) {
+        if (!w[i]) return VX_ERR_INVALID_HANDLE;
+    }
+
     // Retain each wait event so the caller can release them immediately
     // after enqueue returns. The worker releases them in turn after each
     // wait completes.
     cmd.waits.reserve(nw);
     for (uint32_t i = 0; i < nw; ++i) {
-        if (!w[i]) return VX_ERR_INVALID_HANDLE;
-        Event* e = to_event(w[i]);
-        e->retain();
-        cmd.waits.push_back(e);
+        cmd.waits.emplace_back(to_event(w[i]));
     }
 
     // Completion event — created in QUEUED state. The worker will mark it
@@ -138,19 +174,14 @@ vx_result_t Queue::enqueue(Command&& cmd, uint32_t nw, const vx_event_h* w,
     // caller one ref and the worker holds one ref.
     Event* completion = nullptr;
     auto r = Event::create(device_, &completion);
-    if (r != VX_SUCCESS) {
-        for (Event* e : cmd.waits) e->release();
-        return r;
-    }
-    completion->retain();           // for the worker
-    cmd.completion = completion;
-
-    if (out) *out = to_handle(completion);
-    else     completion->release(); // caller doesn't want it — drop caller's ref
+    if (r != VX_SUCCESS) return r;
+    auto caller = Retained<Event>::adopt(completion);
+    cmd.completion = caller;
 
     {
         std::lock_guard<std::mutex> g(cmd_mu_);
         commands_.push_back(std::move(cmd));
+        if (out) *out = to_handle(caller.detach());
     }
     cmd_cv_.notify_one();
     return VX_SUCCESS;
@@ -196,14 +227,13 @@ vx_result_t Queue::enqueue_write(Buffer* dst, uint64_t off, const void* host,
                                  uint64_t sz, uint32_t nw,
                                  const vx_event_h* w, vx_event_h* out) {
     if (!dst || (!host && sz != 0)) return VX_ERR_INVALID_VALUE;
-    if (off + sz > dst->size())     return VX_ERR_INVALID_VALUE;
+    if (off > dst->size() || sz > dst->size() - off)     return VX_ERR_INVALID_VALUE;
 
     // Retain dst for the worker's lifetime — caller may release the buffer
     // immediately after enqueue returns (matches OpenCL retain semantics).
-    dst->retain();
     Command cmd;
     cmd.queued_ns = now_ns();
-    cmd.work = [this, dst, off, host, sz](uint64_t* s, uint64_t* e) {
+    cmd.work = [this, dst = Retained<Buffer>(dst), off, host, sz](uint64_t* s, uint64_t* e) {
         vx_result_t r;
         {
             *s = now_ns();
@@ -213,11 +243,9 @@ vx_result_t Queue::enqueue_write(Buffer* dst, uint64_t off, const void* host,
                                              host, sz);
             *e = now_ns();
         }
-        dst->release();
         return r;
     };
     auto r = this->enqueue(std::move(cmd), nw, w, out);
-    if (r != VX_SUCCESS) dst->release();
     return r;
 }
 
@@ -225,12 +253,11 @@ vx_result_t Queue::enqueue_read(void* host, Buffer* src, uint64_t so,
                                 uint64_t sz, uint32_t nw,
                                 const vx_event_h* w, vx_event_h* out) {
     if (!src || (!host && sz != 0)) return VX_ERR_INVALID_VALUE;
-    if (so + sz > src->size())      return VX_ERR_INVALID_VALUE;
+    if (so > src->size() || sz > src->size() - so)      return VX_ERR_INVALID_VALUE;
 
-    src->retain();
     Command cmd;
     cmd.queued_ns = now_ns();
-    cmd.work = [this, host, src, so, sz](uint64_t* s, uint64_t* e) {
+    cmd.work = [this, host, src = Retained<Buffer>(src), so, sz](uint64_t* s, uint64_t* e) {
         vx_result_t r;
         {
             *s = now_ns();
@@ -240,11 +267,9 @@ vx_result_t Queue::enqueue_read(void* host, Buffer* src, uint64_t so,
                                             src->dev_address() + so, sz);
             *e = now_ns();
         }
-        src->release();
         return r;
     };
     auto r = this->enqueue(std::move(cmd), nw, w, out);
-    if (r != VX_SUCCESS) src->release();
     return r;
 }
 
@@ -252,14 +277,12 @@ vx_result_t Queue::enqueue_copy(Buffer* dst, uint64_t do_, Buffer* src,
                                 uint64_t so, uint64_t sz, uint32_t nw,
                                 const vx_event_h* w, vx_event_h* out) {
     if (!dst || !src)               return VX_ERR_INVALID_VALUE;
-    if (do_ + sz > dst->size())     return VX_ERR_INVALID_VALUE;
-    if (so + sz > src->size())      return VX_ERR_INVALID_VALUE;
+    if (do_ > dst->size() || sz > dst->size() - do_)     return VX_ERR_INVALID_VALUE;
+    if (so > src->size() || sz > src->size() - so)      return VX_ERR_INVALID_VALUE;
 
-    dst->retain();
-    src->retain();
     Command cmd;
     cmd.queued_ns = now_ns();
-    cmd.work = [this, dst, do_, src, so, sz](uint64_t* s, uint64_t* e) {
+    cmd.work = [this, dst = Retained<Buffer>(dst), do_, src = Retained<Buffer>(src), so, sz](uint64_t* s, uint64_t* e) {
         vx_result_t r;
         {
             *s = now_ns();
@@ -269,12 +292,9 @@ vx_result_t Queue::enqueue_copy(Buffer* dst, uint64_t do_, Buffer* src,
                                             src->dev_address() + so, sz);
             *e = now_ns();
         }
-        src->release();
-        dst->release();
         return r;
     };
     auto r = this->enqueue(std::move(cmd), nw, w, out);
-    if (r != VX_SUCCESS) { src->release(); dst->release(); }
     return r;
 }
 
@@ -294,8 +314,7 @@ vx_result_t Queue::enqueue_launch(const vx_launch_info_t* info,
     // even if the caller releases the kernel immediately. The launch PCs are
     // derived from this handle inside the work lambda, so it is the only
     // kernel-state we capture.
-    Kernel* kernel = (info->kernel != nullptr) ? to_kernel(info->kernel) : nullptr;
-    if (kernel) kernel->retain();
+    Retained<Kernel> kernel(info->kernel ? to_kernel(info->kernel) : nullptr);
 
     // Copy the args block now so the caller can free/reuse `info` (and the
     // memory it points at) the instant enqueue returns. An empty blob is the
@@ -327,7 +346,6 @@ vx_result_t Queue::enqueue_launch(const vx_launch_info_t* info,
         uint32_t lg = info->cluster_dim[i];
         if (lg == 0) lg = 1;
         if (grid_in[i] % lg != 0) {
-            if (kernel) kernel->release();
             return VX_ERR_INVALID_VALUE;
         }
         lg_in[i] = lg;
@@ -350,7 +368,6 @@ vx_result_t Queue::enqueue_launch(const vx_launch_info_t* info,
             r = device_->query_caps(VX_CAPS_LOCAL_MEM_SIZE, &lmem_cap);
         }
         if (r != VX_SUCCESS) {
-            if (kernel) kernel->release();
             return r;
         }
         uint32_t block_size = 1;
@@ -358,11 +375,9 @@ vx_result_t Queue::enqueue_launch(const vx_launch_info_t* info,
             block_size *= block_in[i];
         }
         if (block_size > (uint32_t)(nt * nw)) {
-            if (kernel) kernel->release();
             return VX_ERR_INVALID_VALUE;
         }
         if (lmem_size > lmem_cap) {
-            if (kernel) kernel->release();
             return VX_ERR_INVALID_VALUE;
         }
     }
@@ -379,7 +394,7 @@ vx_result_t Queue::enqueue_launch(const vx_launch_info_t* info,
         //              begins executing (__vx_cta_entry is linked there).
         // Both are XLEN-wide (64-bit on build64) and split across the
         // paired *_ADDR0/1 / *_ENTRY0/1 DCRs below.
-        const bool     has_kernel = (kernel != nullptr);
+        const bool     has_kernel = bool(kernel);
         const uint64_t kernel_pc  = has_kernel ? kernel->pc() : 0;
         const uint64_t program_pc = has_kernel ? kernel->module()->base_address() : 0;
         // ---- Compute the full KMU descriptor (block_size, warp_step).
@@ -387,12 +402,10 @@ vx_result_t Queue::enqueue_launch(const vx_launch_info_t* info,
         if (ndim > 0) {
             auto r = device_->query_caps(VX_CAPS_NUM_THREADS, &num_threads);
             if (r != VX_SUCCESS) {
-                if (kernel) kernel->release();
                 *s = *e = now_ns(); return r;
             }
             r = device_->query_caps(VX_CAPS_NUM_WARPS, &num_warps);
             if (r != VX_SUCCESS) {
-                if (kernel) kernel->release();
                 *s = *e = now_ns(); return r;
             }
         }
@@ -415,18 +428,20 @@ vx_result_t Queue::enqueue_launch(const vx_launch_info_t* info,
         bool     args_pooled = false;
         bool     args_clean  = false;
         bool     args_staged = !args_blob.empty();
+        bool     args_active = false;
+        ScopeExit cleanup([&] {
+            if (args_active) device_->args_slot_release(args_addr, args_pooled);
+        });
         if (args_staged) {
             auto r = device_->args_slot_acquire(args_blob.size(),
                                                 &args_addr, &args_pooled, &args_clean);
             if (r != VX_SUCCESS) {
-                if (kernel) kernel->release();
                 *s = *e = now_ns(); return r;
             }
+            args_active = true;
             r = device_->dev_write(args_addr, args_blob.data(),
                                    args_blob.size(), args_clean);
             if (r != VX_SUCCESS) {
-                device_->args_slot_release(args_addr, args_pooled);
-                if (kernel) kernel->release();
                 *s = *e = now_ns();
                 return r;
             }
@@ -442,9 +457,6 @@ vx_result_t Queue::enqueue_launch(const vx_launch_info_t* info,
             #define WR(addr, val) do {                                        \
                 auto _r = device_->cp_submit_dcr_write((addr), (uint32_t)(val)); \
                 if (_r != VX_SUCCESS) {                                       \
-                    if (args_staged)                                          \
-                        device_->args_slot_release(args_addr, args_pooled);   \
-                    if (kernel) kernel->release();                            \
                     *s = *e = now_ns();                                       \
                     return _r;                                                \
                 }                                                             \
@@ -487,15 +499,9 @@ vx_result_t Queue::enqueue_launch(const vx_launch_info_t* info,
             *e = now_ns();
         }
 
-        // Launch retired — the kernel has consumed its args. Return the
-        // scratch slot to the pool for the next launch.
-        if (args_staged)
-            device_->args_slot_release(args_addr, args_pooled);
-        if (kernel) kernel->release();
         return r;
     };
     auto r = this->enqueue(std::move(cmd), nw, w, out);
-    if (r != VX_SUCCESS && kernel) kernel->release();
     return r;
 }
 
@@ -520,7 +526,7 @@ struct CmdRec {
     bool                   is_launch = false;
     uint32_t               dcr_addr  = 0;
     uint32_t               dcr_value = 0;
-    Kernel*                kernel    = nullptr;   // retained when is_launch
+    Retained<Kernel>       kernel;
     std::vector<uint8_t>   args;
     uint32_t               ndim      = 0;
     uint32_t               lmem_size = 0;
@@ -538,18 +544,10 @@ struct CmdStaged {
     std::vector<uint32_t> qmd_words;
 };
 
-// Validate `commands`, copy into `recs`, retaining launched kernels (recorded
-// in `retained`). On any validation error the retained kernels are released and
-// the error is returned; on success the caller owns `retained`.
+// Capture kernels with their records so skipped commands retain no resources.
 vx_result_t cmd_build_recs(const vx_command_t* commands, uint32_t count,
-                           std::vector<CmdRec>& recs,
-                           std::vector<Kernel*>& retained) {
+                           std::vector<CmdRec>& recs) {
     recs.reserve(count);
-    auto fail = [&](vx_result_t e) -> vx_result_t {
-        for (Kernel* k : retained) k->release();
-        retained.clear();
-        return e;
-    };
     for (uint32_t i = 0; i < count; ++i) {
         const vx_command_t& c = commands[i];
         CmdRec r;
@@ -558,15 +556,14 @@ vx_result_t cmd_build_recs(const vx_command_t* commands, uint32_t count,
             r.dcr_value = c.data.dcr.value;
         } else if (c.type == VX_COMMAND_LAUNCH) {
             const vx_launch_info_t* info = c.data.launch;
-            if (!info) return fail(VX_ERR_INVALID_VALUE);
+            if (!info) return VX_ERR_INVALID_VALUE;
             if (info->struct_size < sizeof(vx_launch_info_t))
-                return fail(VX_ERR_INVALID_INFO);
-            if (info->ndim > 3) return fail(VX_ERR_INVALID_VALUE);
+                return VX_ERR_INVALID_INFO;
+            if (info->ndim > 3) return VX_ERR_INVALID_VALUE;
             if (info->args_size != 0 && !info->args_host)
-                return fail(VX_ERR_INVALID_VALUE);
+                return VX_ERR_INVALID_VALUE;
             r.is_launch = true;
-            r.kernel = (info->kernel != nullptr) ? to_kernel(info->kernel) : nullptr;
-            if (r.kernel) { r.kernel->retain(); retained.push_back(r.kernel); }
+            r.kernel = Retained<Kernel>(info->kernel ? to_kernel(info->kernel) : nullptr);
             if (info->args_host && info->args_size > 0) {
                 const uint8_t* p = static_cast<const uint8_t*>(info->args_host);
                 r.args.assign(p, p + info->args_size);
@@ -580,11 +577,11 @@ vx_result_t cmd_build_recs(const vx_command_t* commands, uint32_t count,
             for (uint32_t d = 0; d < info->ndim; ++d) {
                 uint32_t lg = info->cluster_dim[d];
                 if (lg == 0) lg = 1;
-                if (r.grid[d] % lg != 0) return fail(VX_ERR_INVALID_VALUE);
+                if (r.grid[d] % lg != 0) return VX_ERR_INVALID_VALUE;
                 r.cluster[d] = lg;
             }
         } else {
-            return fail(VX_ERR_INVALID_VALUE);
+            return VX_ERR_INVALID_VALUE;
         }
         recs.push_back(std::move(r));
     }
@@ -618,7 +615,7 @@ vx_result_t cmd_stage_qmds(Device* device_, const std::vector<CmdRec>& recs,
         }
 
         // 2) KMU descriptor values (same derivation as vx_enqueue_launch).
-        const bool     has_kernel = (rec.kernel != nullptr);
+        const bool     has_kernel = bool(rec.kernel);
         const uint64_t kernel_pc  = has_kernel ? rec.kernel->pc() : 0;
         const uint64_t program_pc = has_kernel
                                   ? rec.kernel->module()->base_address() : 0;
@@ -709,8 +706,7 @@ vx_result_t Queue::enqueue_commands(const vx_command_t* commands,
     if (!commands || count == 0) return VX_ERR_INVALID_VALUE;
 
     std::vector<CmdRec>  recs;
-    std::vector<Kernel*> retained;   // released if enqueue() fails (work won't run)
-    auto rb = cmd_build_recs(commands, count, recs, retained);
+    auto rb = cmd_build_recs(commands, count, recs);
     if (rb != VX_SUCCESS) return rb;
 
     Command cmd;
@@ -724,13 +720,18 @@ vx_result_t Queue::enqueue_commands(const vx_command_t* commands,
         if (rq == VX_SUCCESS)
             rq = device_->query_caps(VX_CAPS_NUM_WARPS, &num_warps);
         if (rq != VX_SUCCESS) {
-            for (const CmdRec& rec : recs) if (rec.kernel) rec.kernel->release();
             *s = *e = now_ns();
             return rq;
         }
 
         // Step 1 — stage each launch's args + QMD into device scratch.
         std::vector<CmdStaged> staged(recs.size());
+        ScopeExit cleanup([&] {
+            for (auto& st : staged) {
+                if (st.args_active) device_->args_slot_release(st.args_addr, st.args_pooled);
+                if (st.qmd_active) device_->args_slot_release(st.qmd_addr, st.qmd_pooled);
+            }
+        });
         const uint32_t tpw = (uint32_t)num_threads; (void)num_warps;
         vx_result_t r = cmd_stage_qmds(device_, recs, staged, tpw);
 
@@ -757,20 +758,10 @@ vx_result_t Queue::enqueue_commands(const vx_command_t* commands,
             *s = *e = now_ns();
         }
 
-        // Batch drained → release the args + QMD scratch slots and the kernels.
-        for (auto& st : staged) {
-            if (st.args_active) device_->args_slot_release(st.args_addr, st.args_pooled);
-            if (st.qmd_active)  device_->args_slot_release(st.qmd_addr,  st.qmd_pooled);
-        }
-        for (const CmdRec& rec : recs) if (rec.kernel) rec.kernel->release();
         return r;
     };
 
     auto r = this->enqueue(std::move(cmd), nw, w, out);
-    if (r != VX_SUCCESS) {                 // work lambda won't run → release kernels
-        for (Kernel* k : retained) k->release();
-        return r;
-    }
     return r;
 }
 
@@ -780,8 +771,7 @@ vx_result_t Queue::enqueue_draw(const vx_command_t* commands,
     if (!commands || count == 0) return VX_ERR_INVALID_VALUE;
 
     std::vector<CmdRec>  recs;
-    std::vector<Kernel*> retained;
-    auto rb = cmd_build_recs(commands, count, recs, retained);
+    auto rb = cmd_build_recs(commands, count, recs);
     if (rb != VX_SUCCESS) return rb;
 
     Command cmd;
@@ -796,13 +786,18 @@ vx_result_t Queue::enqueue_draw(const vx_command_t* commands,
         if (rq == VX_SUCCESS)
             rq = device_->query_caps(VX_CAPS_NUM_CORES, &num_cores);
         if (rq != VX_SUCCESS) {
-            for (const CmdRec& rec : recs) if (rec.kernel) rec.kernel->release();
             *s = *e = now_ns();
             return rq;
         }
 
         // Step 1 — stage each launch's args + QMD into device scratch.
         std::vector<CmdStaged> staged(recs.size());
+        ScopeExit cleanup([&] {
+            for (auto& st : staged) {
+                if (st.args_active) device_->args_slot_release(st.args_addr, st.args_pooled);
+                if (st.qmd_active) device_->args_slot_release(st.qmd_addr, st.qmd_pooled);
+            }
+        });
         const uint32_t tpw = (uint32_t)num_threads; (void)num_warps;
         vx_result_t r = cmd_stage_qmds(device_, recs, staged, tpw);
 
@@ -822,6 +817,9 @@ vx_result_t Queue::enqueue_draw(const vx_command_t* commands,
         const bool use_op_draw = device_->cp_supports_draw()
                               && device_->cp_supports_qmd();
         uint64_t desc_addr = 0; bool desc_pooled = false; bool desc_active = false;
+        ScopeExit cleanup_desc([&] {
+            if (desc_active) device_->args_slot_release(desc_addr, desc_pooled);
+        });
         if (r == VX_SUCCESS && use_op_draw) {
             std::vector<uint8_t> desc(4, 0);   // header placeholder
             uint32_t num_steps = 0;
@@ -877,20 +875,10 @@ vx_result_t Queue::enqueue_draw(const vx_command_t* commands,
             *s = *e = now_ns();
         }
 
-        if (desc_active) device_->args_slot_release(desc_addr, desc_pooled);
-        for (auto& st : staged) {
-            if (st.args_active) device_->args_slot_release(st.args_addr, st.args_pooled);
-            if (st.qmd_active)  device_->args_slot_release(st.qmd_addr,  st.qmd_pooled);
-        }
-        for (const CmdRec& rec : recs) if (rec.kernel) rec.kernel->release();
         return r;
     };
 
     auto r = this->enqueue(std::move(cmd), nw, w, out);
-    if (r != VX_SUCCESS) {
-        for (Kernel* k : retained) k->release();
-        return r;
-    }
     return r;
 }
 
@@ -1015,10 +1003,9 @@ vx_result_t Queue::enqueue_read_rect(void* host_dst, Buffer* src,
         > src->size())
         return VX_ERR_INVALID_VALUE;
 
-    src->retain();
     Command cmd;
     cmd.queued_ns = now_ns();
-    cmd.work = [this, host_dst, src, rr](uint64_t* s, uint64_t* e) {
+    cmd.work = [this, host_dst, src = Retained<Buffer>(src), rr](uint64_t* s, uint64_t* e) {
         vx_result_t rc;
         {
             *s = now_ns();
@@ -1029,11 +1016,9 @@ vx_result_t Queue::enqueue_read_rect(void* host_dst, Buffer* src,
             });
             *e = now_ns();
         }
-        src->release();
         return rc;
     };
     auto rr_enq = this->enqueue(std::move(cmd), nw, w, out);
-    if (rr_enq != VX_SUCCESS) src->release();
     return rr_enq;
 }
 
@@ -1050,10 +1035,9 @@ vx_result_t Queue::enqueue_write_rect(Buffer* dst, const void* host_src,
         > dst->size())
         return VX_ERR_INVALID_VALUE;
 
-    dst->retain();
     Command cmd;
     cmd.queued_ns = now_ns();
-    cmd.work = [this, dst, host_src, rr](uint64_t* s, uint64_t* e) {
+    cmd.work = [this, dst = Retained<Buffer>(dst), host_src, rr](uint64_t* s, uint64_t* e) {
         vx_result_t rc;
         {
             *s = now_ns();
@@ -1064,11 +1048,9 @@ vx_result_t Queue::enqueue_write_rect(Buffer* dst, const void* host_src,
             });
             *e = now_ns();
         }
-        dst->release();
         return rc;
     };
     auto rr_enq = this->enqueue(std::move(cmd), nw, w, out);
-    if (rr_enq != VX_SUCCESS) dst->release();
     return rr_enq;
 }
 
@@ -1089,11 +1071,9 @@ vx_result_t Queue::enqueue_copy_rect(Buffer* dst, Buffer* src,
         > src->size())
         return VX_ERR_INVALID_VALUE;
 
-    dst->retain();
-    src->retain();
     Command cmd;
     cmd.queued_ns = now_ns();
-    cmd.work = [this, dst, src, rr](uint64_t* s, uint64_t* e) {
+    cmd.work = [this, dst = Retained<Buffer>(dst), src = Retained<Buffer>(src), rr](uint64_t* s, uint64_t* e) {
         vx_result_t rc;
         {
             *s = now_ns();
@@ -1104,12 +1084,9 @@ vx_result_t Queue::enqueue_copy_rect(Buffer* dst, Buffer* src,
             });
             *e = now_ns();
         }
-        src->release();
-        dst->release();
         return rc;
     };
     auto rr_enq = this->enqueue(std::move(cmd), nw, w, out);
-    if (rr_enq != VX_SUCCESS) { src->release(); dst->release(); }
     return rr_enq;
 }
 
@@ -1120,14 +1097,13 @@ vx_result_t Queue::enqueue_fill_buffer(Buffer* dst, uint64_t offset,
     if (!dst || !pattern)             return VX_ERR_INVALID_VALUE;
     if (pattern_size == 0)            return VX_ERR_INVALID_VALUE;
     if (size % pattern_size != 0)     return VX_ERR_INVALID_VALUE;
-    if (offset + size > dst->size())  return VX_ERR_INVALID_VALUE;
+    if (offset > dst->size() || size > dst->size() - offset)  return VX_ERR_INVALID_VALUE;
 
     std::vector<uint8_t> pat(static_cast<const uint8_t*>(pattern),
                              static_cast<const uint8_t*>(pattern) + pattern_size);
-    dst->retain();
     Command cmd;
     cmd.queued_ns = now_ns();
-    cmd.work = [this, dst, offset, size, pat = std::move(pat)]
+    cmd.work = [this, dst = Retained<Buffer>(dst), offset, size, pat = std::move(pat)]
                (uint64_t* s, uint64_t* e) {
         vx_result_t r = VX_SUCCESS;
         {
@@ -1149,11 +1125,9 @@ vx_result_t Queue::enqueue_fill_buffer(Buffer* dst, uint64_t offset,
             }
             *e = now_ns();
         }
-        dst->release();
         return r;
     };
     auto rc = this->enqueue(std::move(cmd), nw, w, out);
-    if (rc != VX_SUCCESS) dst->release();
     return rc;
 }
 
@@ -1162,41 +1136,37 @@ vx_result_t Queue::enqueue_map(Buffer* buf, uint64_t offset, uint64_t size,
                                const vx_event_h* w, vx_event_h* out,
                                void** out_host_ptr) {
     if (!buf || !out_host_ptr) return VX_ERR_INVALID_VALUE;
-    // Reserve the host mirror now so the caller gets a valid pointer
-    // synchronously; the READ population runs on the worker in queue order.
+    auto pending = std::make_shared<PendingMap>(buf);
     auto r = buf->map_reserve(offset, size, flags, out_host_ptr);
     if (r != VX_SUCCESS) return r;
+    pending->reserved = true;
 
-    buf->retain();
-    Command cmd;
-    cmd.queued_ns = now_ns();
-    cmd.work = [this, buf](uint64_t* s, uint64_t* e) {
-        vx_result_t rc;
-        {
+    try {
+        Command cmd;
+        cmd.queued_ns = now_ns();
+        cmd.work = [this, pending = std::move(pending)](uint64_t* s, uint64_t* e) {
             *s = now_ns();
             std::lock_guard<std::mutex> g(enqueue_mu_);
-            rc = buf->map_commit();
+            auto rc = pending->buffer->map_commit();
+            if (rc == VX_SUCCESS) pending->reserved = false;
             *e = now_ns();
-        }
-        buf->release();
-        return rc;
-    };
-    r = this->enqueue(std::move(cmd), nw, w, out);
-    if (r != VX_SUCCESS) {
-        buf->release();
-        buf->map_cancel();
+            return rc;
+        };
+        r = this->enqueue(std::move(cmd), nw, w, out);
+    } catch (...) {
         *out_host_ptr = nullptr;
+        throw;
     }
+    if (r != VX_SUCCESS) *out_host_ptr = nullptr;
     return r;
 }
 
 vx_result_t Queue::enqueue_unmap(Buffer* buf, void* host_ptr, uint32_t nw,
                                  const vx_event_h* w, vx_event_h* out) {
     if (!buf) return VX_ERR_INVALID_HANDLE;
-    buf->retain();
     Command cmd;
     cmd.queued_ns = now_ns();
-    cmd.work = [this, buf, host_ptr](uint64_t* s, uint64_t* e) {
+    cmd.work = [this, buf = Retained<Buffer>(buf), host_ptr](uint64_t* s, uint64_t* e) {
         vx_result_t r;
         {
             *s = now_ns();
@@ -1204,11 +1174,9 @@ vx_result_t Queue::enqueue_unmap(Buffer* buf, void* host_ptr, uint32_t nw,
             r = buf->unmap(host_ptr);
             *e = now_ns();
         }
-        buf->release();
         return r;
     };
     auto rc = this->enqueue(std::move(cmd), nw, w, out);
-    if (rc != VX_SUCCESS) buf->release();
     return rc;
 }
 
@@ -1248,12 +1216,10 @@ vx_result_t Queue::enqueue_signal(Event* ev, uint64_t value,
                                   uint32_t nw, const vx_event_h* w,
                                   vx_event_h* out) {
     if (!ev) return VX_ERR_INVALID_HANDLE;
-    // Retain the target event for the duration the work item lives in the
-    // queue; release in the work lambda after signaling.
-    ev->retain();
+    // The target remains owned even if a dependency skips this command.
     Command cmd;
     cmd.queued_ns = now_ns();
-    cmd.work = [ev, value](uint64_t* s, uint64_t* e) {
+    cmd.work = [ev = Retained<Event>(ev), value](uint64_t* s, uint64_t* e) {
         *s = now_ns();
         // Host-side timeline signal. The event counter is the authoritative
         // cross-queue rendezvous point (see enqueue_wait_value): advancing it
@@ -1261,7 +1227,6 @@ vx_result_t Queue::enqueue_signal(Event* ev, uint64_t value,
         // event. No CP ring op — a device-side signal would only matter to a
         // device-side wait, which the single in-order ring cannot support.
         ev->signal(value);
-        ev->release();
         *e = now_ns();
         return VX_SUCCESS;
     };
@@ -1272,10 +1237,9 @@ vx_result_t Queue::enqueue_wait_value(Event* ev, uint64_t value,
                                       uint32_t nw, const vx_event_h* w,
                                       vx_event_h* out) {
     if (!ev) return VX_ERR_INVALID_HANDLE;
-    ev->retain();
     Command cmd;
     cmd.queued_ns = now_ns();
-    cmd.work = [ev, value](uint64_t* s, uint64_t* e) {
+    cmd.work = [ev = Retained<Event>(ev), value](uint64_t* s, uint64_t* e) {
         *s = now_ns();
         // Host-side timeline wait on the event counter. We deliberately do
         // NOT post a device-side CMD_EVENT_WAIT: the CP ring is a single
@@ -1287,7 +1251,6 @@ vx_result_t Queue::enqueue_wait_value(Event* ev, uint64_t value,
         // Event::complete), so blocking the worker here preserves this queue's
         // in-order semantics without touching the CP ring.
         vx_result_t r = ev->wait_value(value, VX_TIMEOUT_INFINITE);
-        ev->release();
         *e = now_ns();
         return r;
     };

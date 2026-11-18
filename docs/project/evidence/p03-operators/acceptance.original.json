@@ -1,0 +1,143 @@
+{
+  "acceptance_ids": [
+    "P03-A01"
+  ],
+  "artifacts": [
+    {
+      "path": "sw/runtime/ai/contract.h",
+      "sha256": "c21e8742cf5dcc01e857b5b13f6ff6e159fa6ad8459bf3a475a5eed746c8abb8"
+    },
+    {
+      "path": "sw/runtime/ai/contract.cpp",
+      "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff"
+    },
+    {
+      "path": "ci/project/p03_operator_manifest.json",
+      "sha256": "df08281fe186e9623d96779b2bc2485df4c9d824c88481e4896d695302759b5a"
+    },
+    {
+      "path": "ci/project/test_p03_operator_contract.py",
+      "sha256": "d77f39243d71886e31216cc621654e3540b798dac5db0fd19cd01d2fe91879a1"
+    },
+    {
+      "path": "ci/project/fixtures/p03_operator_contract_test.cpp",
+      "sha256": "2a6d96d93b267d1bf6ed72c8c107738fc26dc5be978e204595135117d41486c4"
+    },
+    {
+      "path": "docs/designs/ai_operator_contract_v1.md",
+      "sha256": "866dba3101ae3531390341bb935e7bc3371cd812909240b452a4adec80f1464e"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/change-impact.log",
+      "sha256": "fb1784c44fbd76d4b97233787c21afad44ef5a258ea8f3562b4908caffa73d32"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/contract-review.json",
+      "sha256": "9783b1c1d23ae39d838aa91821b45c7aec08d6fffff0594c32cafba2c16c5189"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/contract-review.md",
+      "sha256": "1729772223ddb2ab95bd81834685e6d827433397aaf2f987d8e5512ed52b9894"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/cross-compile.json",
+      "sha256": "179aea08b0eb66ae6537163482abc628a09e7a720789d21a30501a76d8d0177c"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/focused-host-tests.log",
+      "sha256": "cf4c14a07a6c602dba9979c4fadae04d340e793573c450d8070d0fa0c1df536a"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/full-suite.log",
+      "sha256": "a390d0b5b42c563555792a684fabfaf8bc154e1e3d62f58cdfc971b3959e3bf9"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/governance.log",
+      "sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/implementation-review.json",
+      "sha256": "a0367cf6de38435604ae4a2a105c0b70395590c401244daac888b3dfbc268276"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/probes/rv32-abi-probe.cpp",
+      "sha256": "ea38c92cec437be18b12f0a61c0e27032771e2115d02d823d84d177d56ba70d0"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/probes/rv64-abi-probe.cpp",
+      "sha256": "64c0624c27d03660c43aa58cb7afbee977815cf2c437a57ccb978c14213c4de4"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/publication.json",
+      "sha256": "f4ec53acfd351686adeddd328368c14bf955719226751c560e7f430374ac2fd8"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/run_formal_tests.py",
+      "sha256": "3c7857a3bd7695c0f9e7847327c8f67965493cb750528539088800d62fa6d171"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/source-map.json",
+      "sha256": "1d3e64121342e3631dc53db4c19efb6b13db6b79d7450f8be913a972557a11f4"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/summary.json",
+      "sha256": "3b11e67de370c67875f7bc77369b283ba511e69a05c95b9a72a80f93ed8eb1f5"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/verification.json",
+      "sha256": "5408b6f279a5c83ab3b096ff81b69fcd7169f00d7ede78f59de5e9fbd78154ba"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/delivery-review.json",
+      "sha256": "c57b86c4bfaf5e2ee565bfc27df98d913b1f33b85980b7e3767183be81330a31"
+    }
+  ],
+  "commands": [
+    {
+      "command": "cwd=${SOURCE}; python3 ci/project/check_project.py; full retained process receipt in verification.json",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "command": "cwd=${SOURCE}; python3 -m unittest discover -s ci/project -p 'test_*.py' -v; full retained process receipt in verification.json",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "command": "cwd=${CONTINUATION}/p03-cross-build/rv32; ${TOOLS}/llvm-vortex/bin/clang++ --target=riscv32-unknown-elf -march=rv32im -mabi=ilp32 -std=c++17 -Wall -Wextra -Werror -pedantic -O1 -nostdinc -nostdinc++ -I ${SOURCE}/sw/runtime/ai -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0 -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/backward -isystem ${TOOLS}/llvm-vortex/lib/clang/20/include -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include -MD -MF ${CONTINUATION}/p03-cross-build/rv32/abi.d -c ${CONTINUATION}/p03-cross-build/rv32/abi_probe.cpp -o ${CONTINUATION}/p03-cross-build/rv32/abi.o",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "command": "cwd=${CONTINUATION}/p03-cross-build/rv32; ${TOOLS}/llvm-vortex/bin/clang++ --target=riscv32-unknown-elf -march=rv32im -mabi=ilp32 -std=c++17 -Wall -Wextra -Werror -pedantic -O1 -nostdinc -nostdinc++ -I ${SOURCE}/sw/runtime/ai -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0 -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/backward -isystem ${TOOLS}/llvm-vortex/lib/clang/20/include -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include -MD -MF ${CONTINUATION}/p03-cross-build/rv32/contract.d -c ${SOURCE}/sw/runtime/ai/contract.cpp -o ${CONTINUATION}/p03-cross-build/rv32/contract.o",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "command": "cwd=${CONTINUATION}/p03-cross-build/rv64; ${TOOLS}/llvm-vortex/bin/clang++ --target=riscv64-unknown-elf -march=rv64im -mabi=lp64 -std=c++17 -Wall -Wextra -Werror -pedantic -O1 -nostdinc -nostdinc++ -I ${SOURCE}/sw/runtime/ai -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0 -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/backward -isystem ${TOOLS}/llvm-vortex/lib/clang/20/include -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include -MD -MF ${CONTINUATION}/p03-cross-build/rv64/abi.d -c ${CONTINUATION}/p03-cross-build/rv64/abi_probe.cpp -o ${CONTINUATION}/p03-cross-build/rv64/abi.o",
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "command": "cwd=${CONTINUATION}/p03-cross-build/rv64; ${TOOLS}/llvm-vortex/bin/clang++ --target=riscv64-unknown-elf -march=rv64im -mabi=lp64 -std=c++17 -Wall -Wextra -Werror -pedantic -O1 -nostdinc -nostdinc++ -I ${SOURCE}/sw/runtime/ai -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0 -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/riscv64-unknown-elf -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include/c++/12.2.0/backward -isystem ${TOOLS}/llvm-vortex/lib/clang/20/include -isystem ${TOOLS}/riscv64-gnu-toolchain/riscv64-unknown-elf/include -MD -MF ${CONTINUATION}/p03-cross-build/rv64/contract.d -c ${SOURCE}/sw/runtime/ai/contract.cpp -o ${CONTINUATION}/p03-cross-build/rv64/contract.o",
+      "exit_code": 0,
+      "result": "pass"
+    }
+  ],
+  "configuration": "Tree 6b4273a75415f0277a67576d31316c96ddf625c9; identical published implementation 04c3cbf42c68e3b116051343083b86119f67f53d (source-map.json). C++17 host planner for six FP16/BF16-to-FP32 shape tuples under the accepted ordinary RV64 p02-tfr WMMA profile. Explicit 56-byte little-endian argument schema; four actual RV32IM/RV64IM object compilations are retained separately from host test execution.",
+  "evidence_level": "source_present",
+  "kind": "design_review",
+  "limitations": [
+    "Matmul is contract_only; execution_available is false and all other operator families are unavailable.",
+    "The 56-byte internal argument ABI has no device reader and is incompatible with the inherited regression kernel_arg_t.",
+    "Address width checks validate representation, not physical aperture, mapping or authentication of allocation metadata.",
+    "No P03 dispatch, GPU arithmetic, queue/event lifetime, transfer/error recovery or physical device result is established.",
+    "Original P02 GPU evidence remains bound to its historical sources; this continuation independently revalidated and published it without a new GPU run."
+  ],
+  "outcome": "pass",
+  "record_id": "p03-a01-native-operator-contract-v1-6367ce3",
+  "reviewer": "/root/phase_review independently approves source-contract scope after 84 consistency checks and review of implementation, tests, ABI, target compilations and source identities; /root/wgmma_audit independently reviewed implementation and authored rejection/literal-byte tests. The coordinator subsequently froze unchanged source and ran all 1636 offline tests. No human approval or waiver is fabricated. A subsequent independent 341-check delivery review verifies the assembled evidence, source mapping and A01-only phase state; its receipt is retained separately.",
+  "schema_version": 1,
+  "scope": "Accept P03-A01 and complete P03-T01 for the versioned eight-family operator availability manifest, bounded contract-only matmul descriptors, checked planning, explicit internal argument encoding and rejection behavior. Matmul execution remains unavailable; every other family is explicitly unsupported. This does not accept P03-A02/A03 or complete P03.",
+  "source_revision": "6367ce34e12915e12271207b207f93bd4d391869"
+}

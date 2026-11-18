@@ -115,16 +115,17 @@ vx_result_t Module::load_bytes(Device* dev, const void* bytes_, size_t size,
     const uint8_t* bin = bytes + 16;
 
     // Reserve the image's VMA range on the device.
-    Buffer* image = nullptr;
-    auto r = Buffer::reserve(dev, min_vma, rt_sz, 0, &image);
+    Buffer* raw_image = nullptr;
+    auto r = Buffer::reserve(dev, min_vma, rt_sz, 0, &raw_image);
     if (r != VX_SUCCESS) return r;
+    auto image = Retained<Buffer>::adopt(raw_image);
 
     // .text/.rodata read-only, .bss read-write.
     r = image->access(0, bin_sz, VX_MEM_READ);
-    if (r != VX_SUCCESS) { image->release(); return r; }
+    if (r != VX_SUCCESS) return r;
     if (rt_sz > bin_sz) {
         r = image->access(bin_sz, rt_sz - bin_sz, VX_MEM_READ_WRITE);
-        if (r != VX_SUCCESS) { image->release(); return r; }
+        if (r != VX_SUCCESS) return r;
     }
 
     // Synchronously upload the binary payload + zero the BSS region.
@@ -132,16 +133,17 @@ vx_result_t Module::load_bytes(Device* dev, const void* bytes_, size_t size,
     // synchronous, so Module stays a pure synchronous primitive — the
     // caller doesn't need a queue handy to load a module.
     r = dev->dev_write(min_vma, bin, bin_sz);
-    if (r != VX_SUCCESS) { image->release(); return r; }
+    if (r != VX_SUCCESS) return r;
     if (rt_sz > bin_sz) {
         std::vector<uint8_t> zeros(rt_sz - bin_sz, 0);
         r = dev->dev_write(min_vma + bin_sz, zeros.data(), rt_sz - bin_sz);
-        if (r != VX_SUCCESS) { image->release(); return r; }
+        if (r != VX_SUCCESS) return r;
     }
 
     // Build the Module. Symbol table comes from the footer if present;
     // otherwise we fall back to a single "main" entry at min_vma.
-    Module* m = new Module(dev, image, min_vma);
+    auto m = Retained<Module>::adopt(new Module(dev, image.get(), min_vma));
+    image.detach();
     if (has_footer) {
         const uint8_t* entries_start = bytes + size - 12 - size_t(n_syms) * 16;
         const uint8_t* strings_start = bytes + 16 + bin_sz;
@@ -169,13 +171,13 @@ vx_result_t Module::load_bytes(Device* dev, const void* bytes_, size_t size,
         m->symbols_.push_back({"main", min_vma});
     }
 
-    *out = m;
+    *out = m.detach();
     return VX_SUCCESS;
 }
 
 vx_result_t Module::get_kernel(const char* name, Kernel** out) {
     if (!name || !out) return VX_ERR_INVALID_VALUE;
-    std::lock_guard<std::mutex> g(kcache_mu_);
+    std::unique_lock<std::mutex> g(kcache_mu_);
     auto it = kernel_cache_.find(name);
     if (it != kernel_cache_.end()) {
         it->second->retain();
@@ -189,7 +191,14 @@ vx_result_t Module::get_kernel(const char* name, Kernel** out) {
             if (r != VX_SUCCESS) return r;
             // Cache holds a non-owning reference — Kernel's destructor
             // removes itself from the cache.
-            kernel_cache_[name] = k;
+            try {
+                kernel_cache_[name] = k;
+            } catch (...) {
+                // Kernel destruction acquires this mutex to unlink its cache entry.
+                g.unlock();
+                k->release();
+                throw;
+            }
             // The kernel was created with refcount=1; return that ref to
             // the caller. The cache's "reference" is a raw pointer only.
             *out = k;

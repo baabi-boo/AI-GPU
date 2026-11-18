@@ -9,8 +9,8 @@ checks to their tested source. The
 completed bounded native-unit and full-processor arithmetic, metadata,
 concurrency/backpressure and declared parity proof after independent engineering
 and publication-integrity review. P02-T01 and P02-T02 are complete. **P03 is
-`in_progress`** with an implemented native operator contract, checked host
-planner and explicit argument encoder. Device execution and lifetime gates
+`in_progress`** with an implemented native operator contract, matching device
+reader and managed execution wrapper. Formal arithmetic and lifetime acceptance
 remain open; see the [P03 handoff](p03-operators-handoff.md).
 
 P02 entered development through the user-directed staged-entry decision.
@@ -42,7 +42,31 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — native operator contract
+## Latest continuation — managed native matmul implementation
+
+P03-T02 now implements the six declared matmul signatures through an internal
+managed `vortex2.h` wrapper and the matching ordinary WMMA kernel. The wrapper
+owns copied host inputs, actual allocations, module/kernel handles, per-operation
+queues and completion events. A timeout leaves the operation owned and retryable;
+primary execution errors and cleanup errors remain distinct. The trusted runner
+validates each runtime/backend/kernel/host compiler record separately and binds
+the actual artifacts to the dispatch trace. Capability bits alone do not establish
+the numerical profile.
+
+Shared runtime fixes address retained resources in skipped commands, rejected
+wait lists, overflowing buffer spans, failed maps and allocation-exception
+cleanup. New lifecycle tests exercise the actual common runtime; fault-injected
+wrapper tests have a separate, explicitly host-only scope. New source-only tests
+cover the shared byte reader, profile exclusions and malformed evidence records.
+
+The first development SimX smoke completed two poisoned launches with 64 exact
+word comparisons and restored device-memory accounting. Eight initial actual
+runtime lifecycle groups passed. These observations are development checks,
+not the final clean-source matrix or automatic A02/A03 acceptance. The handoff
+records the bounded formal run required next. Earlier dependency-header and
+public-kernel-name failures are retained with their corrected attempts.
+
+## Previous continuation — native operator contract
 
 **P03-T01 is complete; P03-A01 is [accepted at source scope](evidence/p03-operators/acceptance.json).**
 Clean source `6367ce34e12915e12271207b207f93bd4d391869` passed 1636 tests with
@@ -575,14 +599,11 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 ## Next bounded action
 
 **P03-T02 — managed matmul execution and lifecycle qualification.**
-Implement a matching reader or explicit adapter for the frozen 56-byte argument
-schema, extract the ordinary WMMA kernel without changing its numerical contract,
-and add a wrapper over the existing runtime. It must query actual capabilities,
-track owned allocation metadata, bind the accepted module/profile and retain
-buffers, kernels, queues and events until completion. Then run every declared
-signature through actual SimX/native RTL launches with independent references,
-and test transfers, timeouts, failed events and cleanup. Keep unsupported operator
-families explicit. See the [P03 handoff](p03-operators-handoff.md),
+Freeze the reviewed implementation, run the complete 88-fixture matrix on fresh
+SimX/native-RTL builds with two poisoned launches per case, and verify the actual
+runtime lifecycle groups. Retain exact source/configuration, separate compiler
+records, dispatch/transfers, raw bits and memory accounting. Review the final
+packet before accepting A02/A03 or completing P03. See the [P03 handoff](p03-operators-handoff.md),
 [phase guide](phases/p03-operators.md) and [backlog](backlog.md).
 
 **Parallel blocked hardware task:** P01-T05 still needs a qualified vendor

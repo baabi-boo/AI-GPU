@@ -2,14 +2,17 @@
   "schema_version": 1,
   "contract_id": "p03-native-operators-v1",
   "contract_version": 1,
-  "work_package": "P03-T01",
+  "work_package": "P03-T02",
   "specification": "docs/designs/ai_operator_contract_v1.md",
   "header": "sw/runtime/ai/contract.h",
   "implementation": "sw/runtime/ai/contract.cpp",
-  "execution_available": false,
+  "execution_available": true,
+  "runtime_wrapper": "sw/runtime/ai/runtime.h",
+  "device_kernel": "sw/kernel/ai/matmul.cpp",
+  "execution_runner": "ci/project/p03_execute.py",
   "cpu_fallback": false,
   "installed_api": false,
-  "claim_scope": "Internal C++17 input validation, checked planning and device-argument encoding only. A successful plan does not allocate, copy, enqueue, execute or qualify an operator.",
+  "claim_scope": "Internal managed matmul implementation for the six declared signatures through a trusted, source-bound SimX/native-RTL runner. Actual acceptance requires retained execution and lifecycle evidence; the pure planner still performs no dispatch.",
   "profile": {
     "id": "p02_tfr_wmma_v1",
     "source": "profiles/p02-tfr.json",
@@ -31,13 +34,13 @@
     "local_memory": true,
     "requires_verified_kernel_profile": true,
     "requires_verified_device_profile": true,
-    "profile_attestation_scope": "Caller must bind actual module and device configuration to the accepted numerical profile; runtime ISA/capability queries alone cannot establish this."
+    "profile_attestation_scope": "The trusted execution runner separately validates runtime/backend/kernel/host compiler records, hashes exact build artifacts, selects the corresponding runtime path, and binds those identities to each launch. The wrapper loads the supplied module bytes and verifies queried device geometry. This is not authentication of arbitrary hardware."
   },
   "operators": [
     {
       "id": "matmul",
       "enum_value": 1,
-      "state": "contract_only",
+      "state": "implemented",
       "signature": {
         "input_dtypes": ["fp16", "bf16"],
         "matching_input_dtypes_required": true,
@@ -69,7 +72,8 @@
         "numerics": "The accepted P02 TFR ordered four-product reductions, RNE, exceptional values and signed output FTZ contract; no new arithmetic or tolerance is introduced."
       },
       "planned_kernel_origin": "tests/regression/sgemm_tcu/kernel.cpp",
-      "dispatch": "unavailable_pending_P03_T02"
+      "kernel": "sw/kernel/ai/matmul.cpp",
+      "dispatch": "managed_vortex2_qualified_runner"
     },
     {"id": "gemv", "enum_value": 2, "state": "unavailable", "reason": "No vector signature or dispatch has been qualified."},
     {"id": "reduction", "enum_value": 3, "state": "unavailable", "reason": "Axes, reduction order and numerical behavior remain to be frozen."},
@@ -86,7 +90,8 @@
     "byte_order": "little_endian",
     "address_bits": [32, 64],
     "execution_address_bits": [64],
-    "consumer_available": false,
+    "consumer_available": true,
+    "shared_header": "sw/common/ai_matmul_args.h",
     "legacy_kernel_arg_compatible": false,
     "host_pointers_allowed": false,
     "fields": [

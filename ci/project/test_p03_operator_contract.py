@@ -33,7 +33,8 @@ class OperatorContractHostTests(unittest.TestCase):
             "PATH": os.environ.get("PATH", os.defpath), "LC_ALL": "C",
             "TMPDIR": str(cls.build), "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1",
         }
-        cls.inputs = [HARNESS, CONTRACT / "contract.h", CONTRACT / "contract.cpp"]
+        cls.inputs = [HARNESS, CONTRACT / "contract.h", CONTRACT / "contract.cpp",
+                      ROOT / "sw/common/ai_matmul_args.h"]
         cls.identities = {path: hashlib.sha256(path.read_bytes()).hexdigest() for path in cls.inputs}
         run_host_command([
             cls.compiler, "-std=c++17", "-O1", "-g0", "-Wall", "-Wextra", "-Werror",
@@ -81,15 +82,18 @@ class OperatorManifestTests(unittest.TestCase):
         self.manifest = json.loads(MANIFEST.read_text())
         self.operators = {entry["id"]: entry for entry in self.manifest["operators"]}
 
-    def test_all_required_families_are_explicit_and_execution_is_unavailable(self):
+    def test_only_matmul_is_implemented_in_the_internal_qualified_runner(self):
         self.assertEqual(self.manifest["schema_version"], 1)
         self.assertEqual(self.manifest["contract_id"], "p03-native-operators-v1")
         self.assertEqual(len(self.manifest["operators"]), 8)
         self.assertEqual(set(self.operators), {
             "matmul", "gemv", "reduction", "softmax", "normalization", "activation", "layout_cast", "attention",
         })
-        self.assertIs(self.manifest["execution_available"], False)
-        self.assertEqual(self.operators["matmul"]["state"], "contract_only")
+        self.assertIs(self.manifest["execution_available"], True)
+        self.assertEqual(self.manifest["execution_runner"], "ci/project/p03_execute.py")
+        self.assertTrue((ROOT / self.manifest["runtime_wrapper"]).is_file())
+        self.assertTrue((ROOT / self.manifest["device_kernel"]).is_file())
+        self.assertEqual(self.operators["matmul"]["state"], "implemented")
         for name, entry in self.operators.items():
             if name != "matmul":
                 self.assertEqual(entry["state"], "unavailable", name)
@@ -147,7 +151,8 @@ class OperatorManifestTests(unittest.TestCase):
         self.assertEqual(abi["address_bits"], [32, 64])
         self.assertEqual(abi["execution_address_bits"], [64])
         self.assertEqual(abi["byte_order"], "little_endian")
-        self.assertIs(abi["consumer_available"], False)
+        self.assertIs(abi["consumer_available"], True)
+        self.assertEqual(abi["shared_header"], "sw/common/ai_matmul_args.h")
         self.assertIs(abi["legacy_kernel_arg_compatible"], False)
         self.assertIs(abi["host_pointers_allowed"], False)
         self.assertEqual([(field["name"], field["offset"], field["type"]) for field in abi["fields"]], [

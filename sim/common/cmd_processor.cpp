@@ -534,6 +534,10 @@ void CommandProcessor::tick_engine() {
             } else if (cur_cmd_.opcode == OP_MEM_WRITE ||
                        cur_cmd_.opcode == OP_MEM_READ  ||
                        cur_cmd_.opcode == OP_MEM_COPY) {
+                // These copy hooks run synchronously. If allocation or a hook
+                // throws, retire this descriptor on the next tick instead of
+                // replaying a transfer whose host staging has been released.
+                eng_state_ = EngState::Retire;
                 // CMD_MEM_*: copy arg2 bytes from src (arg1) to dst (arg0).
                 // The CP DMA is an MMU-aware copy engine: the device-side
                 // operand is a virtual address, translated here by a
@@ -574,7 +578,6 @@ void CommandProcessor::tick_engine() {
                         done += n;
                     }
                 }
-                eng_state_ = EngState::Retire;
             } else {
                 // Unknown opcode — retire as NOP.
                 eng_state_ = EngState::Retire;

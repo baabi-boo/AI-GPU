@@ -135,12 +135,12 @@ retain their original scopes and source identities.
 
 P03-T01 now has a [versioned operator contract](docs/designs/ai_operator_contract_v1.md),
 [manifest](ci/project/p03_operator_manifest.json), checked native host planner
-and argument encoder. Its six format/shape signatures remain `contract_only`;
-other categories are explicitly unavailable. The next bounded task is **P03-T02**:
-implement the matching kernel reader and runtime wrapper, retain asynchronous
-resources through completion, then verify actual dispatch and arithmetic on
-SimX/native RTL. [The P03 handoff](docs/project/p03-operators-handoff.md) records
-source-level validation separately from the remaining A02/A03 execution gates.
+and argument encoder. P03-T02 now adds the matching kernel reader, managed runtime
+wrapper and cleanup/bounds fixes. Its six format/shape signatures are implemented;
+other categories remain explicitly unavailable. The next bounded task is to
+qualify actual dispatch, arithmetic and lifetimes on the full fresh-build
+SimX/native-RTL matrix. [The P03 handoff](docs/project/p03-operators-handoff.md)
+keeps development checks separate from pending A02/A03 acceptance.
 The missing vendor platform remains a separate P01-T05/P07 dependency; resolve
 tools, access and a disk/RAM/job/time budget before any substantial build.
 

@@ -60,3 +60,13 @@ prove actual memory mappings, and caller-supplied metadata must come from a
 trusted registry before future dispatch. No CPU fallback, device launch,
 arithmetic, queue/event lifetime, transfer recovery or physical hardware result
 is claimed. P03-T02 must implement and qualify those boundaries separately.
+
+## Historical source preservation during P03-T02
+
+The active acceptance record now points to byte-for-byte copies of its six
+original source artifacts under `source-at-04c3cbf/`, so later implementation
+changes cannot silently replace the accepted source. All artifact hashes,
+original commands, source identities, review, outcome and limitations are
+unchanged. `acceptance.original.json` preserves the complete preceding record.
+This path-only preservation does not transfer its source-only acceptance to
+new device execution or lifetime claims.

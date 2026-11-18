@@ -5,8 +5,11 @@ runtime, without requiring a replacement HIP compiler. **P03 is in progress.**
 P03-T01 is complete with [source-level A01 acceptance](../evidence/p03-operators/acceptance.json)
 and an implemented [input/argument contract](../../designs/ai_operator_contract_v1.md),
 [manifest](../../../ci/project/p03_operator_manifest.json) and checked host planner.
-Device launches and lifecycle qualification remain P03-T02 work. The
-[handoff](../p03-operators-handoff.md) records source-level evidence. Live state and canonical gates
+P03-T02 now implements the matching device reader, managed wrapper, qualified
+execution runner and common-runtime lifecycle fixes. A02/A03 execution and
+independent acceptance remain pending at this checkpoint. The
+[handoff](../p03-operators-handoff.md) separates implemented behavior, host/target
+compilation checks and the remaining formal run. Live state and canonical gates
 are in [roadmap.json](../roadmap.json); the accountable role is Kernel and runtime lead.
 
 ## Entry and boundaries
@@ -73,5 +76,7 @@ Hand P04 the versioned operator/support manifest, native caller, build recipe,
 error/lifetime contract and evidence references. Update [status](../status.md)
 and [backlog](../backlog.md). After P03-A02/A03 are accepted, the P04 handoff
 selects a fixed, redistributable tiny model composed from the accepted operators.
-The current next action remains P03-T02: implement and qualify managed native
-dispatch, arithmetic and resource lifetimes.
+The current next action is P03-T02 qualification: freeze the reviewed source,
+run the full managed SimX/native-RTL matrix and actual lifecycle tests, retain
+their results, and independently review A02/A03 acceptance. Source presence and
+host stub tests do not close those gates.

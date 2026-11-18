@@ -22,7 +22,7 @@ CXXFLAGS += $(XCONFIGS)
 
 LDFLAGS += -Wl,-rpath,$(RT_DIR) -L$(RT_DIR) -lvortex -pthread
 
-TESTS := test_basic test_async test_timeline_events test_module_kernel test_rect_fill
+TESTS := test_basic test_async test_timeline_events test_module_kernel test_rect_fill test_ai_lifecycle
 
 .PHONY: all run run-simx run-xrt clean
 
@@ -42,6 +42,9 @@ test_module_kernel: $(VORTEX_HOME)/tests/runtime/test_module_kernel.cpp
 
 test_rect_fill: $(VORTEX_HOME)/tests/runtime/test_rect_fill.cpp
 	$(CXX) $(CXXFLAGS) $< $(LDFLAGS) -o $@
+
+test_ai_lifecycle: $(VORTEX_HOME)/tests/runtime/test_ai_lifecycle.cpp $(VORTEX_HOME)/sw/runtime/common/vortex2_internal.h
+	$(CXX) $(CXXFLAGS) -I$(VORTEX_HOME)/sw/runtime/common -I$(SW_COMMON_DIR) $< $(LDFLAGS) -o $@
 
 # Bare run — honours whatever VORTEX_DRIVER is in the environment.
 run: $(TESTS)

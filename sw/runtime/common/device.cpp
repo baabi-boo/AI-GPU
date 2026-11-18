@@ -55,6 +55,18 @@ static uint64_t resolve_pinned_size() {
 }
 
 namespace {
+
+template <class F>
+class ScopeExit {
+public:
+    explicit ScopeExit(F cleanup) : cleanup_(std::move(cleanup)) {}
+    ~ScopeExit() { cleanup_(); }
+    ScopeExit(const ScopeExit&) = delete;
+    ScopeExit& operator=(const ScopeExit&) = delete;
+private:
+    F cleanup_;
+};
+
 // CP regfile offsets (CP-internal; backends translate to physical addrs).
 // Matches VX_cp_axil_regfile.
 constexpr uint32_t CP_REG_CTRL          = 0x000;
@@ -220,8 +232,16 @@ void Device::args_slot_release(uint64_t addr, bool pooled) {
         this->mem_free(addr);
         return;
     }
-    std::lock_guard<std::mutex> g(args_pool_mu_);
-    args_pool_free_.push_back({addr, llc_epoch_.load() + 1});
+    {
+        std::lock_guard<std::mutex> g(args_pool_mu_);
+        try {
+            args_pool_free_.push_back({addr, llc_epoch_.load() + 1});
+            return;
+        } catch (const std::bad_alloc&) {
+            // Recycling is optional; cleanup must survive host exhaustion.
+        }
+    }
+    this->mem_free(addr);
 }
 
 vx_result_t Device::open(uint32_t index, Device** out) {
@@ -236,14 +256,18 @@ vx_result_t Device::open(uint32_t index, Device** out) {
     if (cb->dev_open(&dev_ctx) != 0)
         return VX_ERR_DEVICE_LOST;
 
-    std::unique_ptr<Platform> plat(new CallbacksAdapter(*cb, dev_ctx));
-    Device* d = new Device(std::move(plat));
-    auto cr = d->cp_init();
-    if (cr != VX_SUCCESS) {
-        d->release();
-        return cr;
+    std::unique_ptr<Platform> plat;
+    try {
+        plat.reset(new CallbacksAdapter(*cb, dev_ctx));
+    } catch (...) {
+        // The adapter owns the backend only after its allocation succeeds.
+        if (cb->dev_close && dev_ctx) cb->dev_close(dev_ctx);
+        throw;
     }
-    *out = d;
+    auto d = Retained<Device>::adopt(new Device(std::move(plat)));
+    auto cr = d->cp_init();
+    if (cr != VX_SUCCESS) return cr;
+    *out = d.detach();
     return VX_SUCCESS;
 }
 
@@ -489,6 +513,8 @@ vx_result_t Device::cp_init() {
     // No kernel has run yet, so the last-level cache holds none of these.
     {
         std::lock_guard<std::mutex> g(args_pool_mu_);
+        // Allocate bookkeeping first, before any slot needs to be reclaimed.
+        args_pool_free_.reserve(ARGS_POOL_CLEAN);
         for (uint32_t i = 0; i < ARGS_POOL_CLEAN; ++i) {
             uint64_t addr = 0;
             auto r = this->mem_alloc(ARGS_SLOT_SIZE, /*VX_MEM_READ*/ 0x1, &addr);
@@ -1042,6 +1068,7 @@ vx_result_t Device::cp_submit_mem_write(uint64_t dev_dst, const void* host_src,
     HostMem staging;
     auto r = host_alloc(std::min(size, CP_STAGING_CHUNK), &staging);
     if (r != VX_SUCCESS) return r;
+    ScopeExit staging_guard([&] { host_free(staging.cp_addr); });
     auto src = static_cast<const uint8_t*>(host_src);
     for (uint64_t off = 0; off < size && r == VX_SUCCESS; off += CP_STAGING_CHUNK) {
         const uint64_t n = std::min(size - off, CP_STAGING_CHUNK);
@@ -1056,7 +1083,6 @@ vx_result_t Device::cp_submit_mem_write(uint64_t dev_dst, const void* host_src,
             r = cp_submit_mem_(CP_OPCODE_MEM_WRITE, dev_dst + off,
                                staging.cp_addr, n, physical, llc_clean);
     }
-    host_free(staging.cp_addr);
     return r;
 }
 
@@ -1069,6 +1095,7 @@ vx_result_t Device::cp_submit_mem_read(void* host_dst, uint64_t dev_src,
     HostMem staging;
     auto r = host_alloc(std::min(size, CP_STAGING_CHUNK), &staging);
     if (r != VX_SUCCESS) return r;
+    ScopeExit staging_guard([&] { host_free(staging.cp_addr); });
     auto dst = static_cast<uint8_t*>(host_dst);
     for (uint64_t off = 0; off < size && r == VX_SUCCESS; off += CP_STAGING_CHUNK) {
         const uint64_t n = std::min(size - off, CP_STAGING_CHUNK);
@@ -1083,7 +1110,6 @@ vx_result_t Device::cp_submit_mem_read(void* host_dst, uint64_t dev_src,
         if (r == VX_SUCCESS)
             std::memcpy(dst + off, staging.host_ptr, n);
     }
-    host_free(staging.cp_addr);
     return r;
 }
 
@@ -1097,9 +1123,13 @@ vx_result_t Device::host_alloc(uint64_t size, HostMem* out) {
     auto r = platform_->host_mem_alloc(size, &hp, &ca);
     if (r != VX_SUCCESS) return r;
     HostMem hm{hp, ca, size};
-    {
+    try {
         std::lock_guard<std::mutex> g(mu_);
         host_mems_[ca] = hm;
+    } catch (...) {
+        // No caller can free this allocation until it has been published.
+        platform_->host_mem_free(ca);
+        throw;
     }
     *out = hm;
     return VX_SUCCESS;

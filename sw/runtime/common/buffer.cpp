@@ -13,8 +13,8 @@ namespace vx {
 
 Buffer::Buffer(Device* dev, uint64_t dev_addr, uint64_t size, uint32_t flags)
     : device_(dev), dev_addr_(dev_addr), size_(size), flags_(flags) {
-    device_->retain();
     device_->register_buffer(this);
+    device_->retain();
 }
 
 Buffer::~Buffer() {
@@ -36,7 +36,12 @@ vx_result_t Buffer::create(Device* dev, uint64_t size, uint32_t flags,
     uint64_t dev_addr = 0;
     auto r = dev->mem_alloc(size, flags, &dev_addr);
     if (r != VX_SUCCESS) return r;
-    *out = new Buffer(dev, dev_addr, size, flags);
+    try {
+        *out = new Buffer(dev, dev_addr, size, flags);
+    } catch (...) {
+        dev->mem_free(dev_addr);
+        throw;
+    }
     return VX_SUCCESS;
 }
 
@@ -45,12 +50,17 @@ vx_result_t Buffer::reserve(Device* dev, uint64_t address, uint64_t size,
     if (!dev || !out || size == 0) return VX_ERR_INVALID_VALUE;
     auto r = dev->mem_reserve(address, size, flags);
     if (r != VX_SUCCESS) return r;
-    *out = new Buffer(dev, address, size, flags);
+    try {
+        *out = new Buffer(dev, address, size, flags);
+    } catch (...) {
+        dev->mem_free(address);
+        throw;
+    }
     return VX_SUCCESS;
 }
 
 vx_result_t Buffer::access(uint64_t off, uint64_t size, uint32_t /*flags*/) {
-    if (off + size > size_) return VX_ERR_INVALID_VALUE;
+    if (off > size_ || size > size_ - off) return VX_ERR_INVALID_VALUE;
     // Access permissions are not tracked by the transport HAL — the CP is
     // the sole memory engine and the common-core allocator owns the map.
     return VX_SUCCESS;
@@ -59,7 +69,7 @@ vx_result_t Buffer::access(uint64_t off, uint64_t size, uint32_t /*flags*/) {
 vx_result_t Buffer::map_reserve(uint64_t off, uint64_t size, uint32_t flags,
                                 void** out) {
     if (!out)                return VX_ERR_INVALID_VALUE;
-    if (off + size > size_)  return VX_ERR_INVALID_VALUE;
+    if (off > size_ || size > size_ - off) return VX_ERR_INVALID_VALUE;
 
     std::lock_guard<std::mutex> g(map_mu_);
     if (mapped_) return VX_ERR_NOT_SUPPORTED;   // single mapping at a time

@@ -15,9 +15,10 @@ compute, specialized matrix units, fast memory and usable software. It does not
 mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
 **Current development: P03 — native AI operator library (`in_progress`).**
-The [v1 operator contract](docs/designs/ai_operator_contract_v1.md) now implements
-checked matmul planning and argument encoding; [the handoff](docs/project/p03-operators-handoff.md)
-separates this source-level boundary from the remaining device launch and lifetime work.
+The [v1 operator contract](docs/designs/ai_operator_contract_v1.md) now has a matching
+device reader and managed matmul wrapper over the native runtime. The
+[handoff](docs/project/p03-operators-handoff.md) records the six implemented
+signatures, ownership/error behavior and pending formal execution qualification.
 
 **Completed milestone: P02 — tensor numerical contract (`complete`).**
 P02-T01 is complete with [source-level P02-A01 evidence](docs/project/evidence/p02-numerics/acceptance.json).
@@ -253,16 +254,18 @@ identity, alignment, overflow and overlapping accessed ranges. Rejections leave
 the caller’s output unchanged. A separate encoder produces a versioned 56-byte
 little-endian argument block with checked 32/64-bit address representation.
 
-This is a source contract and host planner. Every plan reports
-`execution_available=false`; the new argument schema has no device reader yet.
+The pure planner still reports `execution_available=false`. The separate
+[managed wrapper](sw/runtime/ai/runtime.h) now supplies owned allocations,
+transfers, dispatch and completion, and the [device reader](sw/kernel/ai/matmul.cpp)
+consumes the shared argument bytes. The trusted runner binds the actual compiled
+profile and module to each launch; a timeout retains in-flight resources.
 GEMV, reductions, softmax, normalization, activations, conversions and attention
 are explicitly unavailable in the [manifest](ci/project/p03_operator_manifest.json).
-P03-T02 must implement the matching kernel reader, runtime launch wrapper,
-resource lifetimes and independent SimX/native RTL checks before any operator
-execution claim. See the [handoff](docs/project/p03-operators-handoff.md).
+P03-T02's full SimX/native-RTL and lifetime acceptance remains pending the formal
+qualification packet. See the [handoff](docs/project/p03-operators-handoff.md).
 
 ```sh
-python3 -m unittest discover -s ci/project -p 'test_p03_operator_contract.py'
+python3 -m unittest discover -s ci/project -p 'test_p03*.py'
 ```
 
 ## P01 supplemental tensor-oracle hardening

@@ -37,6 +37,7 @@
 #include <system_error>   // std::system_error (std::thread ctor)
 #include <thread>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 
 // ============================================================================
@@ -97,6 +98,37 @@ protected:
 
 private:
     std::atomic<uint32_t> refs_{1};   // created with one reference
+};
+
+template <class T>
+class Retained {
+public:
+    Retained() = default;
+    explicit Retained(T* ptr) : ptr_(ptr) { if (ptr_) ptr_->retain(); }
+    Retained(const Retained& other) : Retained(other.ptr_) {}
+    Retained(Retained&& other) noexcept : ptr_(other.detach()) {}
+    ~Retained() { if (ptr_) ptr_->release(); }
+
+    Retained& operator=(Retained other) noexcept {
+        std::swap(ptr_, other.ptr_);
+        return *this;
+    }
+    static Retained adopt(T* ptr) {
+        Retained result;
+        result.ptr_ = ptr;
+        return result;
+    }
+    T* get() const { return ptr_; }
+    T* operator->() const { return ptr_; }
+    explicit operator bool() const { return ptr_ != nullptr; }
+    T* detach() noexcept {
+        T* result = ptr_;
+        ptr_ = nullptr;
+        return result;
+    }
+
+private:
+    T* ptr_ = nullptr;
 };
 
 // ============================================================================
@@ -763,8 +795,8 @@ private:
     // OpenCL in-order queue semantics POCL relies on.
     // ------------------------------------------------------------------
     struct Command {
-        std::vector<Event*>                                       waits;
-        Event*                                                    completion = nullptr;
+        std::vector<Retained<Event>>                               waits;
+        Retained<Event>                                            completion;
         uint64_t                                                  queued_ns  = 0;
         // work returns the platform result and fills start/end timestamps
         // when profiling is requested (caller writes 0s when it doesn't

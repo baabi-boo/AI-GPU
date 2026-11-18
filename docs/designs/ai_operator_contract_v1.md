@@ -5,14 +5,18 @@
 The internal C++17 [planner](../../sw/runtime/ai/contract.h) validates a bounded
 ordinary WMMA matmul request and produces checked device-argument bytes. The
 [manifest](../../ci/project/p03_operator_manifest.json) is the machine-readable
-contract. These files implement P03-T01's input and argument boundary; acceptance
-and phase state remain in the [canonical roadmap](../project/roadmap.json).
+contract. P03-T02 adds a [managed runtime wrapper](../../sw/runtime/ai/runtime.h),
+[matching device kernel](../../sw/kernel/ai/matmul.cpp) and
+[qualification runner](../../ci/project/p03_execute.py). Acceptance and phase
+state remain in the [canonical roadmap](../project/roadmap.json).
 
 **Planning success does not mean execution availability.** Every returned
-`MatmulPlan` has `execution_available == false`. There is no runtime dispatch,
-allocation, transfer, CPU computation, CPU fallback, device argument reader or
-installed API in this module. `sw/runtime/ai/` is experimental internal source;
-it changes no existing runtime header, runtime symbol or install rule.
+`MatmulPlan` has `execution_available == false`; the pure planner performs no
+allocation, transfer or dispatch. The separate managed wrapper executes the
+declared matmul signatures through `vortex2.h` when supplied a qualified runner
+binding. Source availability does not establish execution acceptance.
+`sw/runtime/ai/` remains experimental internal source, with no installed API,
+CPU fallback, implicit arithmetic conversion or new arithmetic implementation.
 
 The first model-facing operation is a small dense linear projection. Its inputs
 and outputs can become building blocks for a later fixed model, but composition,
@@ -22,7 +26,7 @@ activations, casts, bias, model selection and inference remain separate work.
 
 | Family | Current state | Boundary |
 |---|---|---|
-| Matmul | `contract_only` | Validated descriptors and argument encoding for the signatures below; no launches |
+| Matmul | `implemented` | Checked planning, managed transfers/launch/completion and matching device reader for the six signatures below; execution qualification is separate |
 | GEMV | `unavailable` | No vector signature or implicit vector padding |
 | Reductions | `unavailable` | No axis, reduction-order or numerical contract |
 | Softmax | `unavailable` | No reusable reduction/exp signature |
@@ -37,7 +41,7 @@ example source being present.
 
 ## Frozen matmul signature
 
-The supported **contract** tuples `(M, N, K)` are exactly `(8, 4, 8)`,
+The supported tuples `(M, N, K)` are exactly `(8, 4, 8)`,
 `(8, 4, 16)` and `(16, 8, 16)`, for each of FP16 and BF16 inputs. They are the
 union of the accepted P02 [layout fixtures](../../ci/project/fixtures/p02_layout_v1.json)
 and [numerical fixtures](../../ci/project/fixtures/p02_wmma_numerical_v1.json).
@@ -61,8 +65,9 @@ handling, signed output flush-to-zero, infinities and canonical NaNs. The
 [ordinary WMMA acceptance record](../project/evidence/p02-wmma/acceptance.json)
 defines the existing execution evidence. This planner introduces no arithmetic
 implementation, reference values, new tolerances or broader IEEE guarantee.
-P03 operator execution must still be independently demonstrated after launch
-wrappers are implemented.
+The new kernel reuses the same ordinary WMMA K traversal, fragment loads,
+positive-zero initialization and output stores. P03 operator execution still
+requires its own independently reviewed evidence.
 
 The plan records grid `[N / 4, M / 8, 1]`, block `[4, 1, 1]` and zero dynamic
 local-memory bytes, matching the ordinary `8 x 4 x 8` tile origin. These are
@@ -83,13 +88,29 @@ be set only after the actual kernel/module configuration and actual device
 configuration have been bound to the accepted
 [`p02-tfr` profile](../../profiles/p02-tfr.json). In particular, the selected
 native tensor/scalar arithmetic, tensor-format bank and excluded features must
-match. A future wrapper must retain that provenance alongside its module.
+match. The managed wrapper retains the supplied module bytes and execution
+binding alongside its runtime context.
 
 The existing [`vortex2.h`](../../sw/runtime/include/vortex2.h) queries expose
 geometry, memory size, architecture and feature flags. They do not expose the
 full numerical backend/format configuration. The TCU feature bit alone cannot
 verify this profile. This contract does not invent a query or change the runtime
 ABI to conceal that limitation.
+
+The internal `ExecutionBinding` is supplied by the trusted qualification runner,
+not inferred from the tensor-feature bit. Before launching the native caller,
+the runner independently validates runtime, arithmetic backend, kernel and host
+compiler records; reproduces generated configuration headers; hashes the actual
+host, module and runtime/backend artifacts; and selects the corresponding
+`VORTEX_DRIVER` and exact runtime library directory. A SHA-256 identifier over
+that binding accompanies each recorded operation. The wrapper accepts the
+qualified input dtype and module bytes, loads those bytes, and separately
+checks the queried device geometry and required features.
+
+This is an internal trusted-build boundary. A 64-character binding identifier
+is not proof by itself, and directly constructing `ExecutionBinding` does not
+perform the runner's provenance checks. It does not authenticate arbitrary
+hardware or protect against a malicious concurrent filesystem writer.
 
 `address_bits` denotes the ISA/address representation width, **not** the device's
 physical aperture or the validity of a virtual mapping. RV64 can have a narrower
@@ -130,19 +151,20 @@ different allocation IDs are supplied.
 
 The runtime currently has no general buffer-extent or buffer-owner query.
 Consequently this module cannot authenticate arbitrary caller-supplied metadata
-or prove that the referenced memory exists. The later managed wrapper must
-record metadata when it creates/reserves buffers and prevent unverified views
-from entering dispatch. The pure planner takes no ownership and retains no
-buffer handles.
+or prove that the referenced memory exists. `ManagedMatmul` therefore accepts
+compact host input spans and creates its own three buffers. It records each
+returned device address, exact allocated extent, access permission and context
+identity before calling the planner. Arbitrary handles, allocation metadata and
+caller-created subviews cannot enter this dispatch API. The pure planner keeps
+its broader checked-view contract and takes no ownership of buffer handles.
 
 ## Internal argument ABI
 
-`MatmulArguments` is a **new internal 56-byte schema** for a later reader. It is
-not compatible with the existing regression `kernel_arg_t`, and its bytes must
-not be submitted to that kernel. P03-T02 must implement and review the matching
-kernel reader or explicit adapter before any launch. If the definition becomes
-shared with a kernel, move the shared definition into `sw/common/` through the
-normal contract review; do not introduce a cross-layer include.
+`MatmulArguments` is an internal 56-byte schema now shared through
+[`sw/common/ai_matmul_args.h`](../../sw/common/ai_matmul_args.h). Its layout is
+unchanged from the accepted P03-T01 contract. The new device reader matches the
+explicit host encoder. These bytes remain incompatible with the inherited
+regression `kernel_arg_t` and must not be submitted to that kernel.
 
 | Offset | Field | Width | Required value |
 |---:|---|---|---|
@@ -162,6 +184,12 @@ The structure has explicit eight-byte alignment and static assertions for size
 and every offset. `encode_matmul_arguments` writes each scalar explicitly in
 little-endian order; it does not copy native struct representation, implicit
 padding, `size_t`, pointer values or host endianness into the output.
+`decode_matmul_arguments` reconstructs each field from little-endian bytes and
+validates version, byte count, reserved fields, compiled input dtype, exact shape
+tuple, alignment, representation and pairwise range separation. Failure leaves
+the decoder output unchanged. The kernel also checks launch geometry. A rejected
+raw invocation returns without touching D; this schema has no device error-result
+field. Managed calls reject unsupported requests before launch.
 
 The encoder accepts an address representation width of 32 or 64 and verifies complete
 operand ranges, alignment, shape, dtype and pairwise disjointness before writing.
@@ -173,7 +201,7 @@ aperture or memory mapping. The width-32 encoding is an ABI representation check
 
 ## Errors and atomic output
 
-Both entry points are `noexcept`, allocate no resources and leave their output
+The planner and encoder are `noexcept`, allocate no resources and leave their output
 object unchanged on every failure. A null output pointer returns
 `invalid_argument`. Successful output is constructed locally and assigned only
 after every check passes. Callers must obey ordinary C++ object-lifetime rules;
@@ -192,25 +220,50 @@ tensor description/size/strides, shape compatibility, allocation-identity
 consistency, per-view memory checks, then address aliasing and encoding. Exact
 error precedence is not an execution or allocation ordering guarantee.
 
-## Required ownership and completion implementation
+## Managed execution and completion
 
-P03-T02 must place an actual wrapper over `vx_device_h`, `vx_buffer_h`,
-`vx_queue_h`, `vx_module_h`, `vx_kernel_h` and `vx_event_h`. It must query
-capabilities, obtain device addresses through the runtime, maintain trusted
-allocation metadata and bind the accepted module/profile. No such wrapper is
-implemented by this contract checkpoint.
+`ManagedMatmul::create` copies the supplied module image, opens device index zero,
+queries capabilities, loads the image and resolves the public `.vxbin` entry
+`main` (the image packer maps the device symbol `kernel_main` to that name). Its context
+owns the device, module and kernel. Each `submit` creates a separate queue and
+three buffers, copies both input byte spans into owned host storage, and prepares
+explicit little-endian output poison. The operation enqueues three writes, one
+kernel launch and one read, with dependency events between commands. The launch
+uses the runtime's host-blob argument staging; host pointers are never encoded
+as device addresses.
 
-Before asynchronous submission, the wrapper must retain every buffer, module,
-kernel, queue and dependency event needed by the operation. Kernel argument
-staging must use the runtime's host-blob contract and the reviewed device reader;
-host pointers are never device addresses. Copies, waits, launches and completion
-must remain explicit and appear in dispatch records. A successful enqueue is
-not successful completion.
+The objects support one caller at a time. An operation shares the context and
+may outlive its `ManagedMatmul` owner. It owns input/output staging, queue,
+buffers and events until terminal completion is established. `MatmulTrace`
+records the execution binding, actual addresses and sizes, exact argument bytes,
+poison, enqueued command counts, wait counts and observed event results.
 
-Release resources only after completion or an established terminal failure.
-A timeout means work may still be outstanding: returning a timeout must not
-free in-flight resources. Partial-submit cleanup must preserve the original
-runtime failure and separately report cleanup failures. The wrapper must also
-test allocation exhaustion, transfer errors, failed dependency events, device
-loss, repeated allocation/free and completion ownership. Those results belong
-to P03-A02/A03 and cannot follow from host-only planning tests.
+| API/result | Required caller behavior |
+|---|---|
+| `create(binding, &owner)` | Supply a pointer to an empty `unique_ptr` and a binding already validated by the trusted runner; inspect validation, primary and cleanup statuses |
+| `submit(..., &operation)` | Supply a pointer to an empty `unique_ptr`; retain a returned operation even when submission reports a primary runtime error, because earlier commands may already be queued |
+| `wait(timeout_ns)` | Inspect both status and `complete`; a successful enqueue is not completion, and a timeout leaves ownership intact for a later wait |
+| `output_words()` | Read output only after successful completion; unavailable output is an empty vector |
+| `operation.close(timeout_ns)` | Release only after established completion; if `complete` is false, keep the operation alive and retry |
+| `owner.close()` | Close after operations release their contexts; outstanding operation ownership returns timeout/incomplete without destroying the context |
+
+`ExecutionResult.validation` describes request rejection, `primary` preserves the
+first runtime failure, and `cleanup` separately records release failures.
+`complete` describes whether submitted work is terminal. Timeout is not a
+terminal failure and never authorizes early release. Completion checks use both
+the event wait result and completion value, then collect individual event
+results before exposing output.
+
+The operation destructor drains indefinitely to avoid freeing resources still
+in use. Applications requiring bounded latency must use explicit timed waits and
+retain ownership when `close(timeout_ns)` is incomplete; destroying that object
+does not cancel device work. Explicit close is also how callers observe cleanup
+errors instead of discarding them during destruction.
+
+The common queue owns retained resources even when dependency failure or a
+sticky queue error skips command execution. It destroys those captures before
+signaling completion. Linear buffer bounds reject unsigned wraparound, failed
+map submissions cancel their staging, and scratch recycling handles host
+allocation failure without abandoning a device allocation. Actual runtime
+tests, fault-injection tests and arithmetic executions remain distinct evidence
+scopes; see the [handoff](../project/p03-operators-handoff.md).
