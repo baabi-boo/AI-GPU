@@ -1,0 +1,220 @@
+{
+  "acceptance_claimed": false,
+  "auditor_sha256": "542f2e3e56b6eb0b0ed88df4e7de1c7c80a55b00634c6f30cd6e3d733c610f13",
+  "compiler_mutations_rejected": [
+    {
+      "appended_flag": "-DVX_CFG_TCU_TYPE_DPI",
+      "reason": "alternative/DPI arithmetic selector",
+      "role": "runtime"
+    },
+    {
+      "appended_flag": "-DITYPE=bf16",
+      "reason": "conflicting macro values",
+      "role": "runtime"
+    },
+    {
+      "appended_flag": "-ffast-math",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "runtime"
+    },
+    {
+      "appended_flag": "-UVX_CFG_TCU_TYPE_TFR",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "runtime"
+    },
+    {
+      "appended_flag": "@override.flags",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "runtime"
+    },
+    {
+      "appended_flag": "-DVX_CFG_NUM_THREADS=8",
+      "reason": "conflicting macro values",
+      "role": "runtime"
+    },
+    {
+      "appended_flag": "-Wp,-DVX_CFG_TCU_TYPE_DPI",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "runtime"
+    },
+    {
+      "appended_flag": "-Xclang -target-feature",
+      "reason": "unrecognized canonical compiler argument: -Xclang",
+      "role": "runtime"
+    },
+    {
+      "appended_flag": "-DVX_CFG_TCU_TYPE_DPI",
+      "reason": "alternative/DPI arithmetic selector",
+      "role": "backend_cpp"
+    },
+    {
+      "appended_flag": "-DITYPE=bf16",
+      "reason": "conflicting macro values",
+      "role": "backend_cpp"
+    },
+    {
+      "appended_flag": "-ffast-math",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "backend_cpp"
+    },
+    {
+      "appended_flag": "-UVX_CFG_TCU_TYPE_TFR",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "backend_cpp"
+    },
+    {
+      "appended_flag": "@override.flags",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "backend_cpp"
+    },
+    {
+      "appended_flag": "-DVX_CFG_NUM_THREADS=8",
+      "reason": "conflicting macro values",
+      "role": "backend_cpp"
+    },
+    {
+      "appended_flag": "-Wp,-DVX_CFG_TCU_TYPE_DPI",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "backend_cpp"
+    },
+    {
+      "appended_flag": "-Xclang -target-feature",
+      "reason": "unrecognized canonical compiler argument: -Xclang",
+      "role": "backend_cpp"
+    },
+    {
+      "appended_flag": "-DVX_CFG_TCU_TYPE_DPI",
+      "reason": "alternative/DPI arithmetic selector",
+      "role": "kernel"
+    },
+    {
+      "appended_flag": "-DITYPE=bf16",
+      "reason": "conflicting macro values",
+      "role": "kernel"
+    },
+    {
+      "appended_flag": "-ffast-math",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "kernel"
+    },
+    {
+      "appended_flag": "-UVX_CFG_TCU_TYPE_TFR",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "kernel"
+    },
+    {
+      "appended_flag": "@override.flags",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "kernel"
+    },
+    {
+      "appended_flag": "-DVX_CFG_NUM_THREADS=8",
+      "reason": "conflicting macro values",
+      "role": "kernel"
+    },
+    {
+      "appended_flag": "-Wp,-DVX_CFG_TCU_TYPE_DPI",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "kernel"
+    },
+    {
+      "appended_flag": "-Xclang -target-feature",
+      "reason": "unrecognized canonical compiler argument: -Xclang",
+      "role": "kernel"
+    },
+    {
+      "appended_flag": "-DVX_CFG_TCU_TYPE_DPI",
+      "reason": "alternative/DPI arithmetic selector",
+      "role": "host"
+    },
+    {
+      "appended_flag": "-DITYPE=bf16",
+      "reason": "conflicting macro values",
+      "role": "host"
+    },
+    {
+      "appended_flag": "-ffast-math",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "host"
+    },
+    {
+      "appended_flag": "-UVX_CFG_TCU_TYPE_TFR",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "host"
+    },
+    {
+      "appended_flag": "@override.flags",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "host"
+    },
+    {
+      "appended_flag": "-DVX_CFG_NUM_THREADS=8",
+      "reason": "conflicting macro values",
+      "role": "host"
+    },
+    {
+      "appended_flag": "-Wp,-DVX_CFG_TCU_TYPE_DPI",
+      "reason": "opaque or noncanonical arithmetic flag transport",
+      "role": "host"
+    },
+    {
+      "appended_flag": "-Xclang -target-feature",
+      "reason": "unrecognized canonical compiler argument: -Xclang",
+      "role": "host"
+    }
+  ],
+  "compiler_roles_checked": [
+    "runtime",
+    "backend_cpp",
+    "kernel",
+    "host"
+  ],
+  "existing_retained_files_rehashed": 88,
+  "expected_retained_files": 89,
+  "include_root_review_followup": {
+    "acceptance_claimed": false,
+    "actual_compiler_roles_checked": 18,
+    "finding": "W08B demonstrated unbound include roots were accepted by the original auditor when record hashes were recomputed.",
+    "finding_scope": "Independent-auditor coverage gap; no foreign include path was observed in actual native records.",
+    "independent_review_scope": "The exact repaired script accepts all 18 actual roles and rejects both original foreign/traversal reproducers plus reordered RTL include roots.",
+    "independent_reviewer": "W08B",
+    "original_auditor_archive": "history/audit_provenance-542f2e3e.py.gz",
+    "original_auditor_archive_sha256": "fe1da3d6d2acbd6673ac8c293d01e12e832caf707683832d5211f179c5b5e185",
+    "original_auditor_uncompressed_sha256": "542f2e3e56b6eb0b0ed88df4e7de1c7c80a55b00634c6f30cd6e3d733c610f13",
+    "probe_result": "provenance-includes-f4c6a3-probes.json",
+    "probe_result_sha256": "65fd99e808967dca9ca3c16faeb09c46f2af57127dde6368d84ec19d2dfae400",
+    "probe_script": "probe_provenance_includes.py",
+    "probe_script_sha256": "1fa8e9e021dd0f8b6d8241de7447aa1cfd6123ec54a4a20b11249743be1838cf",
+    "recomputed_record_mutations_rejected": 468,
+    "repaired_auditor_sha256": "32f18937591df8e91dd86d6693550748a4d3ed8f1cfd766733d20f0617fa4ab9",
+    "whole_packet_result_unchanged": "fail: required .config.stamp body was not uploaded"
+  },
+  "limitations": [
+    "The recorded execution passed; its uploaded archive is incomplete.",
+    "Mutations recomputed their record hashes and summaries; rejection did not depend on a stale reported hash.",
+    "Compiler roles were tested separately because the whole-packet audit stops at the missing file.",
+    "Executable, dependency, tool and quarantined cache product bytes are identified by the runner; those unarchived binaries were not rehashed offline.",
+    "No missing file was reconstructed. Fresh qualification after artifact-upload repair is required."
+  ],
+  "missing_retained_files": [
+    {
+      "path": "artifacts/simx-fp16/.config.stamp",
+      "sha256": "98b5672d069e7cd0f560f54b534412273a831e13dd157986ad14aaa4996a16ad",
+      "size_bytes": 372
+    }
+  ],
+  "native_execution_performed_by_reviewer": false,
+  "observed_source_revision": "f4c6a323ab1696ac487fd86489ad7ed7836a558d",
+  "observed_source_tree": "580af9bfe167c88b2d065005f0d16798a29bd6bd",
+  "offline_result_sha256": "5597f852fed462c9da312d2da6d1ef7486c116feb20fe48d97e1e2f211c806d3",
+  "outcome": "incomplete",
+  "packet": "/workspace/scratch/6ae68c392555/p04-native-f4c6a3/simx-fp16/model",
+  "preparation_sha256": "0a4baea4210ea528695ac2ac679e2e0751ed2ebf2a89bc28636c6f9a4412f236",
+  "quarantine_recorded_bytes_unchanged": true,
+  "quarantined_cache_products": 10,
+  "report_sha256": "2e3cfaede320522fb332d0396a0fa9457ee7d8d8f4bda79a7c9a0604b4a0edfe",
+  "retained_source_bodies": 57,
+  "review": "W07D actual SimX FP16 provenance receipt",
+  "schema_version": 1,
+  "source_inventory_entries": 966
+}

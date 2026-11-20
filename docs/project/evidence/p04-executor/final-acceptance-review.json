@@ -1,0 +1,121 @@
+{
+  "outcome": "pass",
+  "reviewer": "/root/w10a_acceptance_review",
+  "worker": 55,
+  "source_revision": "c9d139cc9f84839b6a56b6228dd304460cbfe45c",
+  "artifact_references_per_record": 32,
+  "recursive_unique_artifact_bodies_rehashed": 32,
+  "artifact_reference_graph_acyclic": true,
+  "formal_records": {
+    "acceptance-numerics.json": "890b6eaa5ce8d44f3a9d975d747e1ac09caff0a66782ac8cc7c3b174678f375a",
+    "acceptance-dispatch.json": "96b377c36de40d463fb4c2e04609388011aaef3e340d816836f5a3f5dadd1018"
+  },
+  "original_records": {
+    "acceptance-numerics.json": "a9c6b2e027cb831be88b923c8b8ebadc99a6bac7038c934d055a665e379fa154",
+    "acceptance-dispatch.json": "7273b521d0f33e17fffa28d8c70429e352f4371a3af89a3d46bdd585d25235ad"
+  },
+  "only_configuration_wording_changed": true,
+  "roadmap_delta": "P04 complete and A02/A03 links only",
+  "counts": {
+    "case_executions": 20,
+    "model_runs": 40,
+    "host_assembly_bytes": 10240,
+    "events": 600,
+    "launches": 120,
+    "tensor_h2d_bytes": 76800,
+    "tensor_d2h_bytes": 30720
+  },
+  "comparison_counts": {
+    "bridge_words": 2560,
+    "assembled_output_words": 2560,
+    "hidden_words": 5120,
+    "output_block_words": 2560
+  },
+  "commands_verified": 62,
+  "compiler_role_count": 18,
+  "host_tests": 1816,
+  "host_test_seconds": 366.568,
+  "protected_change_count": 0,
+  "native_execution_performed_by_reviewer": false,
+  "variants": [
+    {
+      "variant": "simx-fp16",
+      "report_sha256": "95681d92fd2959d796ae1a7a3823586ef41dca7c7e02b44ecddee532ce006180",
+      "commands": 15,
+      "models": 10,
+      "launches": 30
+    },
+    {
+      "variant": "simx-bf16",
+      "report_sha256": "1d29d56b805fdc127f6027265c1534984347ee791246900a2dea3a4891e12a07",
+      "commands": 15,
+      "models": 10,
+      "launches": 30
+    },
+    {
+      "variant": "rtlsim-fp16",
+      "report_sha256": "68c83d0248919570fa82723efdb39ab5c717500d404ef5807fc3899d06be63db",
+      "commands": 16,
+      "models": 10,
+      "launches": 30
+    },
+    {
+      "variant": "rtlsim-bf16",
+      "report_sha256": "24f443e93f8a8fd2cc4e2883b6c015e9a2ee9006e4f5cb349650951fad8d1c43",
+      "commands": 16,
+      "models": 10,
+      "launches": 30
+    }
+  ],
+  "schema_version": 1,
+  "record_type": "independent_final_acceptance_review",
+  "wave": 10,
+  "review_outcome": "accept_final_formal_records_with_bounded_scope",
+  "formal_acceptance_records_authored_by_reviewer": false,
+  "unresolved_required_findings": [],
+  "findings": [
+    {
+      "id": "W10A-F1-01",
+      "severity": "F1",
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "finding": "The original configuration wording said matching binaries/tools/dependencies were retained although the archives retain their identities, not complete binary bodies. The explicit limitations already stated the correct boundary.",
+      "correction": "Integrator replaced only that phrase with matching binary/tool/dependency identities in both formal records.",
+      "verification": "Replacing the corrected phrase back reproduces both original authored SHA-256 hashes exactly. Both corrected records and all referenced evidence independently validate.",
+      "status": "closed"
+    }
+  ],
+  "verification_program_sha256": "2c68dcb98c1e617cdb73672bd7fc7d5d62b5e805f7557e9539d8c81db7526226",
+  "commands": [
+    {
+      "command": "python3 /workspace/scratch/6ae68c392555/w10a_verify_acceptance.py > /workspace/scratch/6ae68c392555/w10a_verify_acceptance.json",
+      "exit_code": 0,
+      "scope": "Independent standard-library checks of retained evidence and formal metadata; no production or auditor helpers imported."
+    },
+    {
+      "command": "python3 ci/project/check_project.py",
+      "exit_code": 0,
+      "scope": "Structure and metadata only; does not certify GPU truth."
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "scope": "Whitespace validation at this review checkpoint."
+    }
+  ],
+  "reviewed_input_hashes": {
+    "acceptance-numerics.json": "890b6eaa5ce8d44f3a9d975d747e1ac09caff0a66782ac8cc7c3b174678f375a",
+    "acceptance-dispatch.json": "96b377c36de40d463fb4c2e04609388011aaef3e340d816836f5a3f5dadd1018",
+    "summary.json": "f910bb8becefc6a61ec9ed91992e4de7ae4f6d67c40eef9cbcc77fae39785a45",
+    "qualification-review.json": "c68b38ccf24c819d1279f7f03beedd0bcc2d166718afc3640820f552e49fe43c",
+    "archive-index.json": "a76792a1979049bfd8f03a7083c42003807146027dca11851ae2c5a08d9ee650"
+  },
+  "limitations": [
+    "Review confirms the exact c9d139c frozen-model matrix and formal evidence references; it performs no new native execution and adds no qualification runs.",
+    "Processor RTL bypasses AFU; vendor hw_emu, physical FPGA, silicon and physical performance remain outside scope.",
+    "Host timings contain overlapping categories and independent-job clocks; explicit tensor bytes exclude control/module/setup traffic.",
+    "P01-A03 and the inherited DSP area-gate failure remain unresolved. P05 through P11 remain not_started.",
+    "Current-state Markdown was being edited by another worker and is outside this frozen-record review. Final publication integrity and overall general-CI status remain separate obligations.",
+    "This review does not assert that all external tool, dependency and native binary bodies are archived or independently rehydrated."
+  ]
+}

@@ -14,29 +14,33 @@ simulator configuration. “NVIDIA-style” describes the ambition of programmab
 compute, specialized matrix units, fast memory and usable software. It does not
 mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
-**Current work: P04 — tiny-model inference (`in_progress`).**
-**P04-T01 is complete; [P04-A01 is accepted at `source_present` scope](docs/project/evidence/p04-fixture/acceptance.json).**
-The [tiny-MLP fixture contract](docs/designs/tiny_mlp_fixture_v1.md) and
-[hashed manifest](ci/project/p04_model_manifest.json) fix a synthetic, bias-free
-batch-16 network with dimensions 16 → 8 → 4, deterministic weights, ten FP16/BF16
-cases and exact intermediate/final reference bits. The
-[qualification packet](docs/project/evidence/p04-fixture/README.md) records all
-**1,733 source/host tests passing** at frozen source
-[`10ace66`](https://github.com/baabi-boo/AI-GPU/commit/10ace66193686e3862c3c218760b66c044f1d4ae),
-with independent source and results review at that earlier fixture checkpoint.
-**P04-T02 now has an implemented managed executor, native application, strict
-execution records and CI/catalog integration.** It composes three native matmul
-calls with explicitly declared host ReLU, exact format conversion and row-block
-assembly; native activation remains unavailable. The
-[executor packet](docs/project/evidence/p04-executor/README.md) records source and
-host development evidence; clean native model qualification is the next bounded
-step in the [executor plan](docs/project/p04-executor-plan.md).
-The planned four-variant matrix covers 20 case/backend pairs, 40 model runs and
-120 launches. These counts are requirements, not executed results; P04-A02/A03
-remain unearned. The [executor audit](docs/project/p04-executor-audit.md) records
-the selected work and the unresolved inherited CI area-gate failure.
+**Latest completed phase: P04 — tiny-model inference (`complete`).**
+The frozen synthetic, bias-free batch-16 **16 → 8 → 4 MLP** now runs through
+three native matmuls per model on SimX and native processor RTL, in FP16 and BF16.
+The fresh matrix at
+[`c9d139c`](https://github.com/baabi-boo/AI-GPU/commit/c9d139cc9f84839b6a56b6228dd304460cbfe45c)
+passed **20 case/backend pairs, 40 model runs and 120 launches**, with exact
+hidden, bridge and final-output comparisons and 600 event/profile pairs.
+The complete host suite also passed **1,816 tests** at that revision.
+[P04-A02](docs/project/evidence/p04-executor/acceptance-numerics.json) and
+[P04-A03](docs/project/evidence/p04-executor/acceptance-dispatch.json) accept this
+bounded native processor RTL scope after independent review.
 
-**Latest completed phase: P03 — native AI operator library (`complete`).**
+ReLU, exact format conversion and output-row assembly remain explicit host work;
+there is no CPU matmul fallback or native activation claim. The
+[executor packet](docs/project/evidence/p04-executor/README.md) retains original
+archives, build provenance, independent audits and replay instructions. The
+earlier [P04-A01 fixture acceptance](docs/project/evidence/p04-fixture/acceptance.json)
+and [hashed manifest](ci/project/p04_model_manifest.json) remain unchanged.
+
+**Next bounded action: P05-T01 — the Python/custom-op bridge.** Start with the
+[binding handoff](docs/project/p05-entry-handoff.md); P05 remains `not_started`.
+Processor RTL qualification does not establish full-AFU integration, physical
+FPGA performance or a full framework backend. The
+[executor audit](docs/project/p04-executor-audit.md) also preserves the unresolved
+inherited tensor DSP area-gate failure.
+
+**Earlier completed phase: P03 — native AI operator library (`complete`).**
 The [v1 operator contract](docs/designs/ai_operator_contract_v1.md) now has a matching
 device reader and managed matmul wrapper over the native runtime. Its six bounded
 FP16/BF16 signatures passed **176 case executions, 352 launches and 14,336 exact
@@ -69,7 +73,7 @@ review. [P01-A03](docs/project/evidence/p01-xrt-blocked.json) remains blocked by
 missing qualified vendor XRT `hw_emu` tools/platform.
 The authoritative [status](docs/project/status.md) and
 [phase gates](docs/project/roadmap.json) separate implementation from acceptance;
-P00, P02 and P03 are complete, P01 is blocked, P04 is in progress, and P05–P11
+P00, P02, P03 and P04 are complete, P01 is blocked, and P05–P11
 are not started.
 
 ## Start here
@@ -90,7 +94,8 @@ are not started.
   and [P02 WMMA evidence](docs/project/evidence/p02-wmma/README.md).
 - Read the earlier contract checkpoint: [P02 numerical handoff](docs/project/p02-numerics-handoff.md)
   and [A01 evidence](docs/project/evidence/p02-numerics/README.md).
-- Pick the next bounded task: [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
+- Start the next bounded task: [P05 binding handoff](docs/project/p05-entry-handoff.md),
+  [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
 - Reproduce the accepted baseline: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
 - Follow current supplemental work: [P01 tensor-oracle hardening](docs/project/p01-tensor-oracles.md)
   and its [evidence index](docs/project/evidence/p01-tensor-oracles/README.md).
@@ -117,7 +122,7 @@ the exact starting revision and evidence boundaries.
 |---|---|---|
 | Compute | RISC-V parallel cores; WMMA/WGMMA tensor units and structured sparsity | Reproduce a supported native configuration and prove its numerical behavior |
 | Memory and platform | Caches, shared memory, asynchronous tile copies and FPGA integration | Measure useful data movement, usable external memory and real-board behavior |
-| Software | Accepted bounded matmul library, implemented tiny-model executor, native tensor kernels and existing OpenCL/basic HIP routes | Qualify composed model execution, then add Python/custom-op integration |
+| Software | Accepted bounded matmul library and fixed tiny-model execution, native tensor kernels and existing OpenCL/basic HIP routes | Add the qualified Python/custom-op bridge and preserve explicit placement/lifetimes |
 | Verification | Simulators, RTL tests and regression catalogs | Attach reproducible results to every claimed capability and preserve inherited gates |
 
 Source presence is not a fresh passing test. Tensor acceleration is not enabled
@@ -130,13 +135,14 @@ first model uses the existing **native kernel and runtime path**. A new HIP
 compiler is not its prerequisite. A PyTorch custom-op bridge is a later bounded
 integration—not a complete framework device backend.
 
-## The first useful milestone
+## The first model milestone
 
 Run one small, fixed, redistributable AI model through native operators. Compare
 its intermediate layers and final output against a frozen CPU reference, and
 retain traces proving where each accelerated operation executed. Unsupported
 operations must be explicit; silent CPU fallback cannot satisfy an accelerator
-claim. This is the P04 target, after the baseline and numerical gates.
+claim. P04 now satisfies this milestone for the fixed MLP and the accepted
+SimX/native processor RTL configuration.
 
 Then reproduce the workload on a selected physical FPGA: a reconfigurable chip
 that lets the design be tested before manufacturing a custom chip. Real memory,

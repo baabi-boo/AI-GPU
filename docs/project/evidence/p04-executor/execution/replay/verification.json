@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "scope": "Independent integrity and relocated replay of all four retained fresh native packets through the published README commands",
+  "outcome": "pass",
+  "native_execution_performed": false,
+  "phase_acceptance_claimed": false,
+  "source_revision": "c9d139cc9f84839b6a56b6228dd304460cbfe45c",
+  "replay_directory": "/tmp/p04-evidence-j71kymrp",
+  "archive_index": {
+    "path": "docs/project/evidence/p04-executor/archive-index.json",
+    "sha256": "a76792a1979049bfd8f03a7083c42003807146027dca11851ae2c5a08d9ee650",
+    "size_bytes": 227458
+  },
+  "replay_guide": {
+    "path": "docs/project/evidence/p04-executor/execution/README.md",
+    "sha256": "6ea4a32d00c56d92bdb98d2c15baa88d6c98a88bef4607b923360e20ae0e2d7f",
+    "size_bytes": 6616
+  },
+  "executed_command": {
+    "path": "docs/project/evidence/p04-executor/execution/replay/command.sh",
+    "sha256": "ab631caeabe60d3e055a29d2809e391acec0942ff604d82a41e0d0862a193cca",
+    "size_bytes": 3227
+  },
+  "command_exit_code": 0,
+  "command_log": {
+    "path": "docs/project/evidence/p04-executor/execution/replay/command.log.gz",
+    "sha256": "4f7988c85ffb88c4a5bb0e7147cbfffa717a908fc9186a26e0d48aca13a05c98",
+    "size_bytes": 4453
+  },
+  "decoded_command_log_sha256": "437b90db82e1bc3ba63251b5972d94f4ef8e44810be5b539413503be2698ed48",
+  "decoded_command_log_bytes": 27575,
+  "auditors": [
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/audit_numerics.py",
+      "sha256": "d7130898b8d3d0690c7cf03459d50e2301ab9fcbcd928562c599bdaea32d918e",
+      "size_bytes": 22886
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/audit_dispatch.py",
+      "sha256": "8f83c5bf7986ef99f6580a1bea3dc645ee7736549f3af454be56fc96f9351781",
+      "size_bytes": 27342
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/audit_provenance.py",
+      "sha256": "32f18937591df8e91dd86d6693550748a4d3ed8f1cfd766733d20f0617fa4ab9",
+      "size_bytes": 29030
+    }
+  ],
+  "results": [
+    {
+      "audit": "numerics",
+      "outcome": "pass",
+      "full_matrix": true,
+      "output": {
+        "path": "docs/project/evidence/p04-executor/execution/replay/numerics.json",
+        "sha256": "abb17ead1925f7a80456ab18074592cf91afa4b765d4d6d9a213b3b51651eba6",
+        "size_bytes": 2610
+      },
+      "matches_integrator_result_after_extraction_path_normalization": true,
+      "command_exit_code": 0
+    },
+    {
+      "audit": "dispatch",
+      "outcome": "pass",
+      "full_matrix": true,
+      "output": {
+        "path": "docs/project/evidence/p04-executor/execution/replay/dispatch.json",
+        "sha256": "10228ce5438f409c12438448649107add4cba86874f69264505c0a36f13f1443",
+        "size_bytes": 16256
+      },
+      "matches_integrator_result_after_extraction_path_normalization": true,
+      "command_exit_code": 0
+    },
+    {
+      "audit": "provenance",
+      "outcome": "pass",
+      "full_matrix": true,
+      "output": {
+        "path": "docs/project/evidence/p04-executor/execution/replay/provenance.json",
+        "sha256": "bf21586a6b3247a553b3585fd84bd439b6afb300fdacd0177e798c9f022a5f95",
+        "size_bytes": 8682
+      },
+      "matches_integrator_result_after_extraction_path_normalization": true,
+      "command_exit_code": 0
+    }
+  ],
+  "limitations": [
+    "The script executes the two documented shell blocks under set -euo pipefail, then records the chosen extraction directory; the trailing capture does not modify packet bodies.",
+    "Path-normalized equality compares retained auditor observations, not freshly executed native workloads.",
+    "The qualification source Git objects are present locally; external tool, binary and dependency bodies remain outside this retained-data replay."
+  ]
+}

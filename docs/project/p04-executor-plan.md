@@ -1,11 +1,14 @@
 # P04-T02 — Native tiny-model executor plan
 
 The managed executor, native application, strict execution records, trusted
-runner and CI/catalog integration are implemented. This plan now guides their
-clean native qualification; no native model result or P04-A02/A03 acceptance
-is claimed at this checkpoint. See the
-[executor packet](evidence/p04-executor/README.md) and
-[audit](p04-executor-audit.md) for development evidence and remaining obligations.
+runner and CI/catalog integration are implemented and qualified. This plan
+preserves their frozen reproduction obligations. Fresh four-variant execution
+at `c9d139cc9f84839b6a56b6228dd304460cbfe45c` earned
+[P04-A02](evidence/p04-executor/acceptance-numerics.json) and
+[P04-A03](evidence/p04-executor/acceptance-dispatch.json) after independent review.
+See the [executor packet](evidence/p04-executor/README.md) for retained execution,
+provenance and replay, and the [initial audit](p04-executor-audit.md) for the
+development-entry findings.
 The [fixture contract](../designs/tiny_mlp_fixture_v1.md) defines the source
 workload; [roadmap.json](roadmap.json) and accepted evidence determine phase state.
 The primary coding agent owns integration and execution under the model runtime
@@ -13,10 +16,11 @@ lead role.
 
 The frozen qualification inventory is SimX/native processor RTL × FP16/BF16,
 five cases per format and two distinct output poisons per case: **four variants,
-20 case/backend pairs, 40 model runs and 120 native launches**. These are required
-counts, not executed results. Each variant uses at most two build jobs, a 4 GiB
+20 case/backend pairs, 40 model runs and 120 native launches**. The fresh accepted
+matrix completed these counts and 600 event/profile pairs. Each variant uses at
+most two build jobs, a 4 GiB
 process-group RSS cap, 15 GiB free-disk reserve, 16 MiB per-command logs, 1,800-second
-build deadlines and 180-second case deadlines. Native qualification remains
+build deadlines and 180-second case deadlines. This native qualification remains
 separate from the already accepted fixture source contract.
 
 ## 1. Freeze inputs and execution identity
@@ -98,7 +102,7 @@ bridge, reference comparisons, transfers and native work separately, stating the
 clock/method and any overlap. Simulator cycles or wall time are not physical GPU
 latency. Never synthesize dispatch evidence from the reference or static graph.
 
-Per case, the current three submissions plan nine tensor-buffer writes, three
+Per model run, the three submissions issue nine tensor-buffer writes, three
 launches and three reads: **1,920 H2D bytes including output poison, and 768 D2H
 bytes**. Report these as explicit tensor-buffer traffic. Exclude and separately
 identify per-launch argument/control, module and setup traffic; the tensor
@@ -107,7 +111,7 @@ totals are not physical DMA transaction counts or bandwidth measurements.
 ## 5. Qualify and hand off
 
 The executor is registered in the native test catalog, and the dedicated hosted
-workflow is configured to build the four variants from clean source. Execute the
+workflow qualified the four variants from clean source. For reproduction, execute the
 declared native inventory and retain raw intermediates/final outputs, actual
 dispatch and host records, source/tool/configuration identities, bounded command
 receipts and artifact hashes. Have independent review reconcile graph coverage,
@@ -116,6 +120,8 @@ all comparisons, trace lineage, resource ownership and failed attempts.
 P04-A02 requires actual composed execution matching the frozen references;
 P04-A03 requires actual native placement and separate host/transfer accounting.
 Only their compatible passing evidence can close those gates under the
-[acceptance policy](acceptance.md). This plan grants neither acceptance nor a
-P04 completion claim, and leaves P01-A03 and later physical-hardware obligations
-unchanged.
+[acceptance policy](acceptance.md). The linked acceptance records now supply that
+proof for the fixed matrix; this plan itself is not execution evidence. The next
+bounded action is [P05-T01's Python binding](p05-entry-handoff.md). P01-A03,
+the inherited DSP area-gate failure and later physical-hardware obligations
+remain unresolved by this processor-level qualification.

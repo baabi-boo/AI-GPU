@@ -51,10 +51,17 @@ The existing P03 runner and its 6 GiB budget remain unchanged.
 
 ## Ten-wave work plan
 
-The requested 60 distinct agents are scheduled as six agents in each of ten
-waves. The workspace supports three concurrent workers, so each wave has two
-groups of three. Receipts record completed work only; this schedule is not
-evidence that a task or test has finished.
+The requested 60 distinct worker assignments are organized as six in each of
+ten waves. The workspace allows at most three concurrent workers plus the
+integrator. Assignments run in batches, and independent work in adjacent waves
+can overlap. Follow-up turns remain the same worker; failed spawn requests do
+not create another assignment.
+
+The [execution ledger](evidence/p04-executor/agent-ledger.json) distinguishes
+completed and active assignments from any still-planned work, and links their
+individual receipts. Its counts describe actual delegation and retained work;
+neither this schedule nor the ledger certifies native execution, test results,
+phase acceptance or publication.
 
 | Wave | Focus |
 |---|---|

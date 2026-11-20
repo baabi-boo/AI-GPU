@@ -1,0 +1,179 @@
+{
+  "audit": "p04-independent-dispatch-v1",
+  "counts": {
+    "case_executions": 5,
+    "events": 150,
+    "host_assembly_bytes": 2560,
+    "launches": 30,
+    "model_runs": 10,
+    "tensor_d2h_bytes": 7680,
+    "tensor_h2d_bytes": 19200
+  },
+  "fixture_sha256": "d22a899827afb3e8c22a528fc6a27fd12ff114ef39caf9ffa0cccd77e849cd03",
+  "full_matrix_checked": false,
+  "limitations": [
+    "This audit reads retained observations; it does not execute or authenticate the originating runner.",
+    "Independent numerical recomputation and native compiler-role/source review are separate obligations.",
+    "Memory snapshots bracket tensor operations while the owner/module exists; owner cleanup is checked separately.",
+    "Host durations overlap event profiles and advance contains nested work; reported categories must not be summed as disjoint cost.",
+    "Per-variant timestamp durations may be summarized; absolute host steady clocks from separate jobs are not aligned.",
+    "Queue service includes runtime synchronization/staging; it is not physical device latency, throughput or speedup.",
+    "Tensor bytes include destination poison and exclude argument/control/module/setup traffic; physical transactions are not measured."
+  ],
+  "outcome": "pass",
+  "phase_acceptance": false,
+  "profile_sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+  "reports": [
+    {
+      "counts": {
+        "case_executions": 5,
+        "events": 150,
+        "host_assembly_bytes": 2560,
+        "launches": 30,
+        "model_runs": 10,
+        "tensor_d2h_bytes": 7680,
+        "tensor_h2d_bytes": 19200
+      },
+      "packet": "/workspace/scratch/6ae68c392555/p04-native-f4c6a3/simx-fp16/model",
+      "report_sha256": "2e3cfaede320522fb332d0396a0fa9457ee7d8d8f4bda79a7c9a0604b4a0edfe"
+    }
+  ],
+  "schema_version": 1,
+  "source_revision": "f4c6a323ab1696ac487fd86489ad7ed7836a558d",
+  "source_tree": "580af9bfe167c88b2d065005f0d16798a29bd6bd",
+  "variants": [
+    {
+      "cases": [
+        "fp16-seeded_dense",
+        "fp16-negated_dense",
+        "fp16-zero",
+        "fp16-signed_basis",
+        "fp16-split_boundary"
+      ],
+      "id": "simx-fp16",
+      "qualification_id": "b7a0af04d5a7d8d9affe68ad15a3cb6ebab4109296ef55024370c5533f4c958a",
+      "timings_ns": {
+        "event.d2h.preparation": {
+          "max_ns": 90,
+          "min_ns": 60,
+          "samples": 30,
+          "sum_ns": 2141
+        },
+        "event.d2h.queue": {
+          "max_ns": 24515178,
+          "min_ns": 9950455,
+          "samples": 30,
+          "sum_ns": 408800106
+        },
+        "event.d2h.service": {
+          "max_ns": 322211,
+          "min_ns": 69941,
+          "samples": 30,
+          "sum_ns": 4104560
+        },
+        "event.h2d.preparation": {
+          "max_ns": 280,
+          "min_ns": 29,
+          "samples": 90,
+          "sum_ns": 5796
+        },
+        "event.h2d.queue": {
+          "max_ns": 62198,
+          "min_ns": 4106,
+          "samples": 90,
+          "sum_ns": 1450377
+        },
+        "event.h2d.service": {
+          "max_ns": 46807,
+          "min_ns": 1032,
+          "samples": 90,
+          "sum_ns": 485576
+        },
+        "event.launch.preparation": {
+          "max_ns": 44473,
+          "min_ns": 10259,
+          "samples": 30,
+          "sum_ns": 494921
+        },
+        "event.launch.queue": {
+          "max_ns": 63822,
+          "min_ns": 9791,
+          "samples": 30,
+          "sum_ns": 688861
+        },
+        "event.launch.service": {
+          "max_ns": 24438004,
+          "min_ns": 9923317,
+          "samples": 30,
+          "sum_ns": 407604730
+        },
+        "host.advance": {
+          "max_ns": 45703912,
+          "min_ns": 39755374,
+          "samples": 10,
+          "sum_ns": 415687917
+        },
+        "host.assembly": {
+          "max_ns": 51,
+          "min_ns": 30,
+          "samples": 10,
+          "sum_ns": 381
+        },
+        "host.bridge": {
+          "max_ns": 1293,
+          "min_ns": 251,
+          "samples": 10,
+          "sum_ns": 9881
+        },
+        "host.bridge_compare": {
+          "max_ns": 431,
+          "min_ns": 240,
+          "samples": 10,
+          "sum_ns": 2924
+        },
+        "host.close": {
+          "max_ns": 894256,
+          "min_ns": 555846,
+          "samples": 10,
+          "sum_ns": 6961212
+        },
+        "host.create": {
+          "max_ns": 5518446,
+          "min_ns": 1264086,
+          "samples": 10,
+          "sum_ns": 31661488
+        },
+        "host.output_compare": {
+          "max_ns": 150,
+          "min_ns": 130,
+          "samples": 10,
+          "sum_ns": 1361
+        },
+        "host.submit": {
+          "max_ns": 71423,
+          "min_ns": 23073,
+          "samples": 30,
+          "sum_ns": 977256
+        },
+        "stage.close": {
+          "max_ns": 106509,
+          "min_ns": 32541,
+          "samples": 30,
+          "sum_ns": 1171137
+        },
+        "stage.compare": {
+          "max_ns": 440,
+          "min_ns": 90,
+          "samples": 30,
+          "sum_ns": 4368
+        },
+        "stage.wait": {
+          "max_ns": 24782544,
+          "min_ns": 10038321,
+          "samples": 30,
+          "sum_ns": 413457419
+        }
+      }
+    }
+  ]
+}

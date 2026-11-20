@@ -1,0 +1,617 @@
+{
+  "audit": "p04-independent-dispatch-v1",
+  "counts": {
+    "case_executions": 20,
+    "events": 600,
+    "host_assembly_bytes": 10240,
+    "launches": 120,
+    "model_runs": 40,
+    "tensor_d2h_bytes": 30720,
+    "tensor_h2d_bytes": 76800
+  },
+  "fixture_sha256": "d22a899827afb3e8c22a528fc6a27fd12ff114ef39caf9ffa0cccd77e849cd03",
+  "full_matrix_checked": true,
+  "limitations": [
+    "This audit reads retained observations; it does not execute or authenticate the originating runner.",
+    "Independent numerical recomputation and native compiler-role/source review are separate obligations.",
+    "Memory snapshots bracket tensor operations while the owner/module exists; owner cleanup is checked separately.",
+    "Host durations overlap event profiles and advance contains nested work; reported categories must not be summed as disjoint cost.",
+    "Per-variant timestamp durations may be summarized; absolute host steady clocks from separate jobs are not aligned.",
+    "Queue service includes runtime synchronization/staging; it is not physical device latency, throughput or speedup.",
+    "Tensor bytes include destination poison and exclude argument/control/module/setup traffic; physical transactions are not measured."
+  ],
+  "outcome": "pass",
+  "phase_acceptance": false,
+  "profile_sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+  "reports": [
+    {
+      "counts": {
+        "case_executions": 5,
+        "events": 150,
+        "host_assembly_bytes": 2560,
+        "launches": 30,
+        "model_runs": 10,
+        "tensor_d2h_bytes": 7680,
+        "tensor_h2d_bytes": 19200
+      },
+      "packet": "/tmp/p04-evidence-j71kymrp/simx-fp16/model",
+      "report_sha256": "95681d92fd2959d796ae1a7a3823586ef41dca7c7e02b44ecddee532ce006180"
+    },
+    {
+      "counts": {
+        "case_executions": 5,
+        "events": 150,
+        "host_assembly_bytes": 2560,
+        "launches": 30,
+        "model_runs": 10,
+        "tensor_d2h_bytes": 7680,
+        "tensor_h2d_bytes": 19200
+      },
+      "packet": "/tmp/p04-evidence-j71kymrp/simx-bf16/model",
+      "report_sha256": "1d29d56b805fdc127f6027265c1534984347ee791246900a2dea3a4891e12a07"
+    },
+    {
+      "counts": {
+        "case_executions": 5,
+        "events": 150,
+        "host_assembly_bytes": 2560,
+        "launches": 30,
+        "model_runs": 10,
+        "tensor_d2h_bytes": 7680,
+        "tensor_h2d_bytes": 19200
+      },
+      "packet": "/tmp/p04-evidence-j71kymrp/rtlsim-fp16/model",
+      "report_sha256": "68c83d0248919570fa82723efdb39ab5c717500d404ef5807fc3899d06be63db"
+    },
+    {
+      "counts": {
+        "case_executions": 5,
+        "events": 150,
+        "host_assembly_bytes": 2560,
+        "launches": 30,
+        "model_runs": 10,
+        "tensor_d2h_bytes": 7680,
+        "tensor_h2d_bytes": 19200
+      },
+      "packet": "/tmp/p04-evidence-j71kymrp/rtlsim-bf16/model",
+      "report_sha256": "24f443e93f8a8fd2cc4e2883b6c015e9a2ee9006e4f5cb349650951fad8d1c43"
+    }
+  ],
+  "schema_version": 1,
+  "source_revision": "c9d139cc9f84839b6a56b6228dd304460cbfe45c",
+  "source_tree": "6ef022a7f940b2e084da6117f307d4b6d0a443f1",
+  "variants": [
+    {
+      "cases": [
+        "bf16-seeded_dense",
+        "bf16-negated_dense",
+        "bf16-zero",
+        "bf16-signed_basis",
+        "bf16-split_boundary"
+      ],
+      "id": "rtlsim-bf16",
+      "qualification_id": "1c001925c365140f1d99bf93cc73acb8b80abb0d9614bc068681e6ecf3b7e0a4",
+      "timings_ns": {
+        "event.d2h.preparation": {
+          "max_ns": 441,
+          "min_ns": 150,
+          "samples": 30,
+          "sum_ns": 5751
+        },
+        "event.d2h.queue": {
+          "max_ns": 373113757,
+          "min_ns": 291416210,
+          "samples": 30,
+          "sum_ns": 9730059626
+        },
+        "event.d2h.service": {
+          "max_ns": 15023574,
+          "min_ns": 9346412,
+          "samples": 30,
+          "sum_ns": 321893383
+        },
+        "event.h2d.preparation": {
+          "max_ns": 261,
+          "min_ns": 30,
+          "samples": 90,
+          "sum_ns": 5770
+        },
+        "event.h2d.queue": {
+          "max_ns": 66134,
+          "min_ns": 3544,
+          "samples": 90,
+          "sum_ns": 1319238
+        },
+        "event.h2d.service": {
+          "max_ns": 49953,
+          "min_ns": 1212,
+          "samples": 90,
+          "sum_ns": 449728
+        },
+        "event.launch.preparation": {
+          "max_ns": 2629644,
+          "min_ns": 1675819,
+          "samples": 30,
+          "sum_ns": 64770721
+        },
+        "event.launch.queue": {
+          "max_ns": 67747,
+          "min_ns": 8620,
+          "samples": 30,
+          "sum_ns": 593893
+        },
+        "event.launch.service": {
+          "max_ns": 370705352,
+          "min_ns": 289702935,
+          "samples": 30,
+          "sum_ns": 9664623516
+        },
+        "host.advance": {
+          "max_ns": 1054282184,
+          "min_ns": 991728452,
+          "samples": 10,
+          "sum_ns": 10056319683
+        },
+        "host.assembly": {
+          "max_ns": 210,
+          "min_ns": 120,
+          "samples": 10,
+          "sum_ns": 1481
+        },
+        "host.bridge": {
+          "max_ns": 1613,
+          "min_ns": 411,
+          "samples": 10,
+          "sum_ns": 11984
+        },
+        "host.bridge_compare": {
+          "max_ns": 321,
+          "min_ns": 241,
+          "samples": 10,
+          "sum_ns": 2997
+        },
+        "host.close": {
+          "max_ns": 1318662,
+          "min_ns": 772303,
+          "samples": 10,
+          "sum_ns": 10682907
+        },
+        "host.create": {
+          "max_ns": 15028183,
+          "min_ns": 3145242,
+          "samples": 10,
+          "sum_ns": 61155411
+        },
+        "host.output_compare": {
+          "max_ns": 311,
+          "min_ns": 210,
+          "samples": 10,
+          "sum_ns": 2433
+        },
+        "host.submit": {
+          "max_ns": 86532,
+          "min_ns": 42650,
+          "samples": 30,
+          "sum_ns": 1778977
+        },
+        "stage.close": {
+          "max_ns": 76854,
+          "min_ns": 45485,
+          "samples": 30,
+          "sum_ns": 1589789
+        },
+        "stage.compare": {
+          "max_ns": 501,
+          "min_ns": 180,
+          "samples": 30,
+          "sum_ns": 8611
+        },
+        "stage.wait": {
+          "max_ns": 383179767,
+          "min_ns": 302108314,
+          "samples": 30,
+          "sum_ns": 10052828122
+        }
+      }
+    },
+    {
+      "cases": [
+        "fp16-seeded_dense",
+        "fp16-negated_dense",
+        "fp16-zero",
+        "fp16-signed_basis",
+        "fp16-split_boundary"
+      ],
+      "id": "rtlsim-fp16",
+      "qualification_id": "fba9dd257f4c76334f193f810c82b67056e61965db8ecce61bdbde643d79af93",
+      "timings_ns": {
+        "event.d2h.preparation": {
+          "max_ns": 441,
+          "min_ns": 180,
+          "samples": 30,
+          "sum_ns": 6998
+        },
+        "event.d2h.queue": {
+          "max_ns": 223069891,
+          "min_ns": 172001622,
+          "samples": 30,
+          "sum_ns": 6009675489
+        },
+        "event.d2h.service": {
+          "max_ns": 9080634,
+          "min_ns": 5778866,
+          "samples": 30,
+          "sum_ns": 188634836
+        },
+        "event.h2d.preparation": {
+          "max_ns": 832,
+          "min_ns": 20,
+          "samples": 90,
+          "sum_ns": 5508
+        },
+        "event.h2d.queue": {
+          "max_ns": 40401,
+          "min_ns": 1392,
+          "samples": 90,
+          "sum_ns": 974615
+        },
+        "event.h2d.service": {
+          "max_ns": 34032,
+          "min_ns": 841,
+          "samples": 90,
+          "sum_ns": 350783
+        },
+        "event.launch.preparation": {
+          "max_ns": 2099560,
+          "min_ns": 1032424,
+          "samples": 30,
+          "sum_ns": 41422318
+        },
+        "event.launch.queue": {
+          "max_ns": 40932,
+          "min_ns": 5799,
+          "samples": 30,
+          "sum_ns": 433259
+        },
+        "event.launch.service": {
+          "max_ns": 221485856,
+          "min_ns": 170906513,
+          "samples": 30,
+          "sum_ns": 5967739580
+        },
+        "host.advance": {
+          "max_ns": 647151397,
+          "min_ns": 600248589,
+          "samples": 10,
+          "sum_ns": 6202519600
+        },
+        "host.assembly": {
+          "max_ns": 391,
+          "min_ns": 150,
+          "samples": 10,
+          "sum_ns": 2154
+        },
+        "host.bridge": {
+          "max_ns": 1242,
+          "min_ns": 340,
+          "samples": 10,
+          "sum_ns": 9292
+        },
+        "host.bridge_compare": {
+          "max_ns": 631,
+          "min_ns": 191,
+          "samples": 10,
+          "sum_ns": 2917
+        },
+        "host.close": {
+          "max_ns": 1350031,
+          "min_ns": 728035,
+          "samples": 10,
+          "sum_ns": 10321850
+        },
+        "host.create": {
+          "max_ns": 7435718,
+          "min_ns": 2746824,
+          "samples": 10,
+          "sum_ns": 49503629
+        },
+        "host.output_compare": {
+          "max_ns": 340,
+          "min_ns": 200,
+          "samples": 10,
+          "sum_ns": 2372
+        },
+        "host.submit": {
+          "max_ns": 184988,
+          "min_ns": 40481,
+          "samples": 30,
+          "sum_ns": 1881967
+        },
+        "stage.close": {
+          "max_ns": 145459,
+          "min_ns": 39739,
+          "samples": 30,
+          "sum_ns": 1462207
+        },
+        "stage.compare": {
+          "max_ns": 541,
+          "min_ns": 210,
+          "samples": 30,
+          "sum_ns": 9094
+        },
+        "stage.wait": {
+          "max_ns": 228979262,
+          "min_ns": 178844758,
+          "samples": 30,
+          "sum_ns": 6199053811
+        }
+      }
+    },
+    {
+      "cases": [
+        "bf16-seeded_dense",
+        "bf16-negated_dense",
+        "bf16-zero",
+        "bf16-signed_basis",
+        "bf16-split_boundary"
+      ],
+      "id": "simx-bf16",
+      "qualification_id": "97144a4b53dd00d908690e4cc6488383adc0dbe2914a5010f8704d0b9a353aa8",
+      "timings_ns": {
+        "event.d2h.preparation": {
+          "max_ns": 211,
+          "min_ns": 60,
+          "samples": 30,
+          "sum_ns": 2558
+        },
+        "event.d2h.queue": {
+          "max_ns": 24287760,
+          "min_ns": 9875779,
+          "samples": 30,
+          "sum_ns": 414720454
+        },
+        "event.d2h.service": {
+          "max_ns": 331515,
+          "min_ns": 73887,
+          "samples": 30,
+          "sum_ns": 4535417
+        },
+        "event.h2d.preparation": {
+          "max_ns": 240,
+          "min_ns": 29,
+          "samples": 90,
+          "sum_ns": 5657
+        },
+        "event.h2d.queue": {
+          "max_ns": 65402,
+          "min_ns": 2823,
+          "samples": 90,
+          "sum_ns": 1457000
+        },
+        "event.h2d.service": {
+          "max_ns": 48750,
+          "min_ns": 1093,
+          "samples": 90,
+          "sum_ns": 511800
+        },
+        "event.launch.preparation": {
+          "max_ns": 24425,
+          "min_ns": 11632,
+          "samples": 30,
+          "sum_ns": 508472
+        },
+        "event.launch.queue": {
+          "max_ns": 66964,
+          "min_ns": 9085,
+          "samples": 30,
+          "sum_ns": 692701
+        },
+        "event.launch.service": {
+          "max_ns": 24248513,
+          "min_ns": 9847078,
+          "samples": 30,
+          "sum_ns": 413505937
+        },
+        "host.advance": {
+          "max_ns": 45128765,
+          "min_ns": 40357630,
+          "samples": 10,
+          "sum_ns": 422111983
+        },
+        "host.assembly": {
+          "max_ns": 180,
+          "min_ns": 30,
+          "samples": 10,
+          "sum_ns": 712
+        },
+        "host.bridge": {
+          "max_ns": 1283,
+          "min_ns": 251,
+          "samples": 10,
+          "sum_ns": 9771
+        },
+        "host.bridge_compare": {
+          "max_ns": 411,
+          "min_ns": 230,
+          "samples": 10,
+          "sum_ns": 2763
+        },
+        "host.close": {
+          "max_ns": 876124,
+          "min_ns": 574746,
+          "samples": 10,
+          "sum_ns": 7321245
+        },
+        "host.create": {
+          "max_ns": 5645608,
+          "min_ns": 1286144,
+          "samples": 10,
+          "sum_ns": 32863013
+        },
+        "host.output_compare": {
+          "max_ns": 370,
+          "min_ns": 130,
+          "samples": 10,
+          "sum_ns": 1654
+        },
+        "host.submit": {
+          "max_ns": 86551,
+          "min_ns": 23534,
+          "samples": 30,
+          "sum_ns": 1139653
+        },
+        "stage.close": {
+          "max_ns": 45314,
+          "min_ns": 32921,
+          "samples": 30,
+          "sum_ns": 1092003
+        },
+        "stage.compare": {
+          "max_ns": 261,
+          "min_ns": 80,
+          "samples": 30,
+          "sum_ns": 3896
+        },
+        "stage.wait": {
+          "max_ns": 24531685,
+          "min_ns": 9970146,
+          "samples": 30,
+          "sum_ns": 419813360
+        }
+      }
+    },
+    {
+      "cases": [
+        "fp16-seeded_dense",
+        "fp16-negated_dense",
+        "fp16-zero",
+        "fp16-signed_basis",
+        "fp16-split_boundary"
+      ],
+      "id": "simx-fp16",
+      "qualification_id": "1854c8bb1ac4d2d321173fe7eb199ee3dd7478638d3dc1e6d7138d7b887ed40e",
+      "timings_ns": {
+        "event.d2h.preparation": {
+          "max_ns": 401,
+          "min_ns": 60,
+          "samples": 30,
+          "sum_ns": 3939
+        },
+        "event.d2h.queue": {
+          "max_ns": 22218388,
+          "min_ns": 9937376,
+          "samples": 30,
+          "sum_ns": 416187111
+        },
+        "event.d2h.service": {
+          "max_ns": 338201,
+          "min_ns": 71768,
+          "samples": 30,
+          "sum_ns": 4456129
+        },
+        "event.h2d.preparation": {
+          "max_ns": 571,
+          "min_ns": 29,
+          "samples": 90,
+          "sum_ns": 5897
+        },
+        "event.h2d.queue": {
+          "max_ns": 70184,
+          "min_ns": 3450,
+          "samples": 90,
+          "sum_ns": 1500547
+        },
+        "event.h2d.service": {
+          "max_ns": 49402,
+          "min_ns": 1032,
+          "samples": 90,
+          "sum_ns": 507243
+        },
+        "event.launch.preparation": {
+          "max_ns": 36217,
+          "min_ns": 10639,
+          "samples": 30,
+          "sum_ns": 525334
+        },
+        "event.launch.queue": {
+          "max_ns": 71336,
+          "min_ns": 8470,
+          "samples": 30,
+          "sum_ns": 689876
+        },
+        "event.launch.service": {
+          "max_ns": 22132948,
+          "min_ns": 9907193,
+          "samples": 30,
+          "sum_ns": 414955946
+        },
+        "host.advance": {
+          "max_ns": 45695274,
+          "min_ns": 40183395,
+          "samples": 10,
+          "sum_ns": 424165988
+        },
+        "host.assembly": {
+          "max_ns": 171,
+          "min_ns": 130,
+          "samples": 10,
+          "sum_ns": 1406
+        },
+        "host.bridge": {
+          "max_ns": 1393,
+          "min_ns": 310,
+          "samples": 10,
+          "sum_ns": 10238
+        },
+        "host.bridge_compare": {
+          "max_ns": 261,
+          "min_ns": 231,
+          "samples": 10,
+          "sum_ns": 2464
+        },
+        "host.close": {
+          "max_ns": 946257,
+          "min_ns": 644553,
+          "samples": 10,
+          "sum_ns": 8086639
+        },
+        "host.create": {
+          "max_ns": 5858180,
+          "min_ns": 1372038,
+          "samples": 10,
+          "sum_ns": 34105519
+        },
+        "host.output_compare": {
+          "max_ns": 310,
+          "min_ns": 141,
+          "samples": 10,
+          "sum_ns": 2153
+        },
+        "host.submit": {
+          "max_ns": 78957,
+          "min_ns": 27371,
+          "samples": 30,
+          "sum_ns": 1442683
+        },
+        "stage.close": {
+          "max_ns": 78477,
+          "min_ns": 33713,
+          "samples": 30,
+          "sum_ns": 1323789
+        },
+        "stage.compare": {
+          "max_ns": 651,
+          "min_ns": 90,
+          "samples": 30,
+          "sum_ns": 8096
+        },
+        "stage.wait": {
+          "max_ns": 22579091,
+          "min_ns": 10028239,
+          "samples": 30,
+          "sum_ns": 421301820
+        }
+      }
+    }
+  ]
+}

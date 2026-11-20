@@ -4,11 +4,12 @@
 owns this executor implementation and qualification continuation. The
 [executor packet](../evidence/p04-executor/README.md) records the native-run budget.
 Live status, dependencies and exit criteria are in [roadmap.json](../roadmap.json).
-This is a development plan, not evidence that model inference already works.
+The linked acceptance records define the demonstrated model and configuration;
+the ordered work packages below remain the reproduction contract.
 
-## Current work: executor implemented, native qualification pending
+## Accepted scope: fixed model on SimX and native processor RTL
 
-P04 is `in_progress`. **P04-T01 is complete and P04-A01 is
+P04 is `complete`. **P04-T01 is complete and P04-A01 is
 [accepted at `source_present` scope](../evidence/p04-fixture/acceptance.json).**
 The [fixed tiny MLP contract](../../designs/tiny_mlp_fixture_v1.md),
 [model manifest](../../../ci/project/p04_model_manifest.json), independent
@@ -23,10 +24,13 @@ or skips. The source remained unchanged throughout qualification.
 Those historical results cover the fixture, independent reference and compiled
 host helper. The subsequent P04-T02 implementation supplies the managed executor,
 native application, strict records, trusted runner and CI/catalog integration.
-Its [development packet](../evidence/p04-executor/README.md) and
-[audit](../p04-executor-audit.md) retain source and host evidence. Actual native
-model qualification and independent results review remain outstanding;
-P04-A02 and P04-A03 remain unearned.
+Its [execution packet](../evidence/p04-executor/README.md) retains fresh
+qualification at `c9d139cc9f84839b6a56b6228dd304460cbfe45c`, original artifacts,
+source/build identities and independent numerical, dispatch and provenance
+reviews. [P04-A02](../evidence/p04-executor/acceptance-numerics.json) and
+[P04-A03](../evidence/p04-executor/acceptance-dispatch.json) are accepted at
+`rtl_verified` evidence level, explicitly limited to the native processor
+datapath. The complete host suite passed 1,816 tests in 366.568 seconds.
 
 The selected model is a synthetic, bias-free 16→8→4 ReLU MLP with a fixed batch
 of 16, 160 original deterministic weights and ten cases covering five input
@@ -39,13 +43,18 @@ layer and two `(8,4,8)` calls for the output row blocks. ReLU, exact conversion
 of actual FP32 hidden outputs to the selected input format, and output row
 copies are explicit host work. This placement uses the existing P03 signatures;
 it neither introduces native activation/cast support nor allows a CPU matmul
-fallback. Full qualification plans four variants: SimX/native processor RTL ×
+fallback. Full qualification passed four variants: SimX/native processor RTL ×
 FP16/BF16, with two distinct output poisons per case. The resulting 20 case/backend
-pairs, 40 model runs and 120 native launches are requirements, not executed results.
+pairs, 40 model runs and 120 native launches are actual fresh results, with
+600 event/profile pairs. Exact comparisons cover 5,120 hidden, 2,560 packed
+bridge, 2,560 output-block and 2,560 assembled-output words. Explicit tensor
+traffic is 76,800 H2D and 30,720 D2H bytes; host row assembly copies 10,240 bytes.
+Argument/control, module and setup traffic remain outside those totals.
 
-**P04-T02 — qualify the implemented native model executor** is the next bounded
-step. The [executor plan](../p04-executor-plan.md) defines actual-output lineage,
-completion/ownership rules, resource limits and trace obligations.
+**P04-T02 is complete. P05-T01 is the next bounded action**, using the
+[Python binding handoff](../p05-entry-handoff.md). The
+[executor plan](../p04-executor-plan.md) retains actual-output lineage,
+completion/ownership rules, resource limits and trace obligations for reproduction.
 
 ## Goal and boundaries
 
@@ -89,10 +98,12 @@ CUDA compatibility and physical throughput claims. See [software](../software.md
 The model/fixture manifest, independent reference, checked host bridge and
 source/negative tests complete P04-T01 under the accepted P04-A01 source contract.
 P04-T02 supplies the native executor, host integration tests, record validation,
-catalog registration and hosted qualification path. It must still deliver
-compatible clean-source native execution/trace evidence and independent review.
+catalog registration and hosted qualification path. Its compatible clean-source
+native execution/trace evidence and independent review are retained in the
+accepted executor packet; earlier failed preparation and incomplete uploads are
+preserved separately and are not included in the accepted run totals.
 
-| Gate | Required proof | Evidence level |
+| Gate | Required proof | Minimum evidence level |
 |---|---|---|
 | `P04-A01` | Fixed model, optional tokenizer, weights/generator, seeds, shapes, hashes and redistribution provenance | `source_present` |
 | `P04-A02` | End-to-end native execution matches frozen layer and final-output references under predeclared tolerances | `simulated` |
@@ -109,9 +120,12 @@ Block acceptance for unresolved fixture licensing, unsupported model signatures,
 unexplained reference differences, hidden CPU execution, missing traces or resource
 overruns. A test not run stays not run; do not relax tolerances to close the phase.
 
-After P04-A02/A03 pass and P04 closes, hand the exact fixture, operator contract
-and native results to [P05](p05-framework.md) for Python integration and
-[P06](p06-performance.md) for
-performance work. Neither a simulator model nor this document closes the later
+The exact fixture, operator contract and accepted native results now supply
+the [P05 handoff](../p05-entry-handoff.md) for Python integration and
+[P06](p06-performance.md) for a separately frozen performance workload/counter
+policy. P05 and P06 remain `not_started`. Neither the simulator model nor this
+document closes the later
 physical FPGA gate. Vendor XRT `hw_emu` remains the blocked P01-A03 obligation;
-full P01 completion is still required before P07 can close.
+full P01 completion is still required before P07 can close. The inherited
+267 → 283 DSP area-gate failure also remains unresolved. Host steady-clock
+profiles establish runtime observations, not physical GPU latency or throughput.

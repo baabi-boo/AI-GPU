@@ -1,0 +1,75 @@
+{
+  "acceptance_claimed": false,
+  "audit": "independent-p04-source-provenance-v1",
+  "full_matrix": false,
+  "limitations": [
+    "This is retained provenance consistency, not an independent native rerun or phase acceptance.",
+    "Main-repository source bodies are compared with Git blobs; external submodule body hashes are recorded, not rehydrated by this offline audit.",
+    "Tool/native executable bytes and dependency binaries are not archived here and cannot be independently rehashed offline.",
+    "Source pins, compiler flags and byte bindings identify trusted execution inputs; they do not authenticate arbitrary hardware.",
+    "Native processor RTL TFR/STD arithmetic retains integer DPI plumbing; full AFU, vendor emulation and physical hardware are outside scope."
+  ],
+  "outcome": "pass",
+  "packets": [
+    {
+      "commands_verified": 15,
+      "dependencies": [
+        {
+          "path": "third_party/softfloat/build/Linux-x86_64-GCC/softfloat.a",
+          "sha256": "23da7e10a92a73dfdae924be9d4e4490837a5a7639a6e71a03c9fe07cb1276ae",
+          "size_bytes": 530042
+        },
+        {
+          "path": "third_party/ramulator/libramulator.so",
+          "sha256": "10bcf59a01fecb757c6e54f1f490ee9d12f97ff127685907b3d11a8902bf9286",
+          "size_bytes": 5560480
+        },
+        {
+          "path": "third_party/ramulator_ext/libramulator-vortex.so",
+          "sha256": "bffe1f935b7de7cf926b6a997137e8e4eef43a3ecd72fa33f6bf95feffa19d0f",
+          "size_bytes": 691624
+        }
+      ],
+      "external_submodule_file_identities_recorded": 193,
+      "fixture_sha256": "d22a899827afb3e8c22a528fc6a27fd12ff114ef39caf9ffa0cccd77e849cd03",
+      "git_source_bodies_verified": 773,
+      "packet": "/workspace/scratch/6ae68c392555/p04-native-c9d139c/simx-fp16/model",
+      "preparation_checked": true,
+      "profile_sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+      "report_sha256": "95681d92fd2959d796ae1a7a3823586ef41dca7c7e02b44ecddee532ce006180",
+      "retained_source_bodies_verified": 57,
+      "revision": "c9d139cc9f84839b6a56b6228dd304460cbfe45c",
+      "source_inventory_entries": 966,
+      "tool_names": [
+        "ar",
+        "as",
+        "bash",
+        "clang",
+        "clang++",
+        "g++",
+        "gcc",
+        "ld",
+        "libc64/lib/libc.a",
+        "libc64/lib/libm.a",
+        "libcrt64/lib/baremetal/libclang_rt.builtins-riscv64.a",
+        "llvm-objcopy",
+        "llvm-objdump",
+        "make",
+        "perl",
+        "python3",
+        "riscv-gcc",
+        "riscv-gcc-ar",
+        "riscv-objcopy",
+        "riscv-objdump"
+      ],
+      "tree": "6ef022a7f940b2e084da6117f307d4b6d0a443f1",
+      "variants": [
+        [
+          "simx",
+          "fp16"
+        ]
+      ]
+    }
+  ],
+  "schema_version": 1
+}

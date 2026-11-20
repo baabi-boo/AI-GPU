@@ -145,23 +145,33 @@ source-bound execution and independent review; other operator categories remain
 explicitly unavailable. [The P03 handoff](docs/project/p03-operators-handoff.md)
 records the accepted operator inputs and limits for P04.
 
-**P04-T01 is complete, with [P04-A01 accepted at source scope](docs/project/evidence/p04-fixture/acceptance.json); P04 remains `in_progress`.**
+**P04-T01 and P04-T02 are complete.**
+[P04-A01](docs/project/evidence/p04-fixture/acceptance.json) retains its source
+scope; [P04-A02](docs/project/evidence/p04-executor/acceptance-numerics.json) and
+[P04-A03](docs/project/evidence/p04-executor/acceptance-dispatch.json) now accept
+the composed model at bounded native processor RTL scope.
 The [tiny-MLP contract](docs/designs/tiny_mlp_fixture_v1.md) and
 [hashed manifest](ci/project/p04_model_manifest.json) fix a synthetic, bias-free
 batch-16 network with dimensions 16 → 8 → 4, deterministic weights and ten
-FP16/BF16 cases. Exact layer/final reference bits and the planned native-matmul
+FP16/BF16 cases. Exact layer/final reference bits and the native-matmul
 boundary are fixed; host ReLU, exact format conversion and row-block assembly
 are explicitly declared because native activation remains unavailable.
 The [qualification packet](docs/project/evidence/p04-fixture/README.md) retains
 all 1,733 passing source/host tests and independent review at frozen source
 `10ace66193686e3862c3c218760b66c044f1d4ae`; those results qualify the earlier fixture
-checkpoint. P04-T02 now supplies the managed executor, native app, strict records,
+checkpoint. P04-T02 supplies the managed executor, native app, strict records,
 trusted runner and CI/catalog integration described in the
 [executor packet](docs/project/evidence/p04-executor/README.md).
-Clean native qualification and independent results review are the next bounded
-work in the [executor plan](docs/project/p04-executor-plan.md). The planned four
-variants cover 20 case/backend pairs, 40 model runs and 120 launches; these are
-requirements, not executed results. P04-A02/A03 remain unearned.
+Fresh clean-source qualification at `c9d139cc9f84839b6a56b6228dd304460cbfe45c`
+passed all four SimX/native processor RTL × FP16/BF16 variants: 20 case/backend
+pairs, 40 model runs, 120 launches and 600 event/profile pairs. Exact intermediate
+and output comparisons, source/build provenance and separate host/transfer
+accounting passed independent review; 1,816 host tests passed in 366.568 seconds.
+Original packets and replayable audits are retained in the executor packet.
+The [executor plan](docs/project/p04-executor-plan.md) remains the reproduction
+contract. **P05-T01 is the next bounded action**, using the
+[Python binding handoff](docs/project/p05-entry-handoff.md); P05–P11 remain
+`not_started`.
 The [executor audit](docs/project/p04-executor-audit.md) records why this step
 follows P03 and preserves the unresolved inherited CI area-gate failure.
 

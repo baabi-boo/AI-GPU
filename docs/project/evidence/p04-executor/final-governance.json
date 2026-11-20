@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/w10d_final_governance",
+  "worker_number": 58,
+  "wave": 10,
+  "outcome": "pass",
+  "scope": "Focused final source/document/metadata governance; no new native execution or full host-suite rerun",
+  "qualified_source_revision": "c9d139cc9f84839b6a56b6228dd304460cbfe45c",
+  "native_execution_performed": false,
+  "full_host_suite_rerun": false,
+  "python_version": "3.12.14",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "ci/project/check_project.py"
+      ],
+      "exit_code": 0,
+      "result": "pass",
+      "started_at_utc": "2026-11-20T15:49:46.854517+00:00",
+      "duration_seconds": 1.13761,
+      "log": "docs/project/evidence/p04-executor/final-governance/01-project-check.log",
+      "log_bytes": 96,
+      "log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/project",
+        "-p",
+        "test_check_project.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "result": "pass",
+      "started_at_utc": "2026-11-20T15:49:46.866379+00:00",
+      "duration_seconds": 0.387971,
+      "log": "docs/project/evidence/p04-executor/final-governance/02-governance-tests.log",
+      "log_bytes": 7316,
+      "log_sha256": "6e9cd0cf2af26eb65507d14359a1ac1285e214885c95d16466b4b4c9e52d78d6"
+    },
+    {
+      "command": [
+        "bash",
+        "ci/check_sw_sim_boundary.sh"
+      ],
+      "exit_code": 0,
+      "result": "pass",
+      "started_at_utc": "2026-11-20T15:49:47.510228+00:00",
+      "duration_seconds": 1.001342,
+      "log": "docs/project/evidence/p04-executor/final-governance/03-software-boundary.log",
+      "log_bytes": 35,
+      "log_sha256": "75b0e4b77df9d128a635ce1e3cb6d893508285b6583b0bf137af7b5e04d89c6f"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "result": "pass",
+      "started_at_utc": "2026-11-20T15:49:46.809391+00:00",
+      "duration_seconds": 0.023755,
+      "log": "docs/project/evidence/p04-executor/final-governance/04-whitespace.log",
+      "log_bytes": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "focused_suite": {
+    "tests": 55,
+    "test_seconds": 0.202,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "expected_failures": 0,
+    "unexpected_successes": 0,
+    "result": "OK"
+  },
+  "supplemental_check": {
+    "command": "python3 /workspace/scratch/6ae68c392555/w10d_verify_metadata.py",
+    "script_sha256": "d3224fd9400f918ac9d034ecb24e982701e986cec6b2b020c06e788ae8993eee",
+    "exit_code": 0,
+    "result": "pass",
+    "duration_seconds": 0.227386,
+    "formal_artifact_references": 64,
+    "unique_formal_artifacts": 32,
+    "local_link_targets": 428,
+    "current_documents": 8,
+    "selected_source_git_blob_checks": 10,
+    "phase_states": {
+      "P00": "complete",
+      "P01": "blocked",
+      "P02": "complete",
+      "P03": "complete",
+      "P04": "complete",
+      "P05": "not_started",
+      "P06": "not_started",
+      "P07": "not_started",
+      "P08": "not_started",
+      "P09": "not_started",
+      "P10": "not_started",
+      "P11": "not_started"
+    },
+    "result_path": "docs/project/evidence/p04-executor/final-governance/05-metadata.json",
+    "result_sha256": "22d5c2e3c17bbc6f838aae660d42c055e9863a419299928480692b8b80d5300d"
+  },
+  "formal_record_hashes": {
+    "acceptance-numerics.json": "890b6eaa5ce8d44f3a9d975d747e1ac09caff0a66782ac8cc7c3b174678f375a",
+    "acceptance-dispatch.json": "96b377c36de40d463fb4c2e04609388011aaef3e340d816836f5a3f5dadd1018"
+  },
+  "findings": [],
+  "limitations": [
+    "The 55 focused tests exercise temporary governance fixtures, and check_project.py validates repository structure, metadata, local references and hashes; neither certifies native scientific correctness.",
+    "The existing 1816-test hosted result and native qualification remain at source c9d139c; their tests were not repeated here.",
+    "The source implementation paths remain unchanged from the qualified revision; this review observes the current documentation/evidence worktree before final commit/publication.",
+    "The interim worker ledger is intentionally excluded from a final 60-worker completion claim; the integrator must update actual completion state and receipt hashes after remaining workers finish.",
+    "P01-A03, the inherited DSP area-gate failure, full-AFU/vendor/physical-hardware proof and broad general-CI completion remain separate obligations.",
+    "Final publication identity and remote branch readback are not established by this review."
+  ],
+  "artifacts": [
+    {
+      "path": "docs/project/evidence/p04-executor/final-governance/01-project-check.json",
+      "sha256": "e86ddc00ac88471cf48b4012766f43b5e61a90d0176df755792b39e1da105330"
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/final-governance/01-project-check.log",
+      "sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993"
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/final-governance/02-governance-tests.json",
+      "sha256": "fefa23a8a4c8b81423d5e1d24f4279bb43648e91cbf8487910e5a3cd66c7f3bf"
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/final-governance/02-governance-tests.log",
+      "sha256": "6e9cd0cf2af26eb65507d14359a1ac1285e214885c95d16466b4b4c9e52d78d6"
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/final-governance/03-software-boundary.json",
+      "sha256": "38591b83005e236755ee6349e3c314dd23fe424f2d3966aa78770e37fd096f7d"
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/final-governance/03-software-boundary.log",
+      "sha256": "75b0e4b77df9d128a635ce1e3cb6d893508285b6583b0bf137af7b5e04d89c6f"
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/final-governance/04-whitespace.json",
+      "sha256": "9c651cf2070c7cda8ce4e8aa5bff44b66bfa1565e14bfe1a7b5e25c16f99d03b"
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/final-governance/04-whitespace.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/final-governance/05-metadata.json",
+      "sha256": "22d5c2e3c17bbc6f838aae660d42c055e9863a419299928480692b8b80d5300d"
+    }
+  ]
+}

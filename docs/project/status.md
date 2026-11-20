@@ -1,21 +1,25 @@
 # Current project status
 
-**P04-T01 is complete; P04-A01 is [accepted at `source_present` scope](evidence/p04-fixture/acceptance.json).
-P04 remains `in_progress`.** The [tiny-model fixture contract](../designs/tiny_mlp_fixture_v1.md)
-fixes a synthetic, bias-free `16 → 8 → 4` ReLU MLP for a batch of 16 samples,
-with ten deterministic FP16/BF16 cases, independent integer reference results,
-explicit host placement and a [hash-pinned manifest](../../ci/project/p04_model_manifest.json).
-The fixture producer, strict contract checker and host ReLU/exact-conversion
-helper are qualified at source/host scope, with exact-source validation and
-independent review retained in the [acceptance packet](evidence/p04-fixture/README.md).
-**P04-T02 now has an implemented managed executor, native application, strict
-records, trusted runner and CI/catalog integration.** The
-[executor packet](evidence/p04-executor/README.md) records source and host
-development evidence. Clean native model qualification and independent review
-are next; P04-A02/A03 remain unearned. The
-[executor plan](p04-executor-plan.md) freezes four required variants covering
-20 case/backend pairs, 40 model runs and 120 launches. These are planned
-qualification counts, not execution results.
+**P04 is complete for the fixed tiny-model contract.**
+[P04-A01](evidence/p04-fixture/acceptance.json) retains its accepted source scope;
+[P04-A02](evidence/p04-executor/acceptance-numerics.json) and
+[P04-A03](evidence/p04-executor/acceptance-dispatch.json) accept native execution
+and placement at bounded processor RTL scope. The synthetic, bias-free batch-16
+`16 → 8 → 4` ReLU MLP uses ten frozen FP16/BF16 cases, independent integer
+references and the unchanged [manifest](../../ci/project/p04_model_manifest.json).
+
+Fresh qualification at `c9d139cc9f84839b6a56b6228dd304460cbfe45c` passed all four
+SimX/native processor RTL × FP16/BF16 variants: **20 case/backend pairs,
+40 model runs, 120 native launches and 600 event/profile pairs**. Independent
+numerical, dispatch and provenance reviews reconcile actual intermediate/output
+bits, live bridge inputs, source/build identities, cleanup and transfer accounting.
+The complete host suite passed **1,816 tests in 366.568 seconds** at the same
+revision. The [executor packet](evidence/p04-executor/README.md) retains the
+original archives, failed attempts, exact auditors and successful relocated replay.
+
+**Next bounded action: P05-T01**, following the
+[Python binding handoff](p05-entry-handoff.md). P05 remains `not_started`;
+P04 does not establish a Python/framework backend or physical GPU performance.
 
 **P03 is complete with independently reviewed A01–A03 evidence.** The
 [historical operator contract](evidence/p03-operators/acceptance.json) remains
@@ -40,8 +44,8 @@ At the accepted historical revision, all six frozen numerical executions pass
 from a clean GPU source checkout. The fresh generated FP16 SimX build and
 supplemental full-AFU integer `xrtsim` smoke also pass. Independent reviews accept
 the clean-build and native numerical packets. Qualified vendor tools/platform
-are still missing for P01-A03. P00, P02 and P03 are complete,
-P04 is `in_progress`, and P05–P11 remain `not_started`.
+are still missing for P01-A03. P00, P02, P03 and P04 are complete,
+and P05–P11 remain `not_started`.
 [roadmap.json](roadmap.json) remains authoritative for phase state and evidence;
 the linked reports define the exact accepted scope.
 
@@ -53,7 +57,7 @@ the linked reports define the exact accepted scope.
 | P01 — reproducible baseline | `blocked` | A01 clean-build and A02 six-case numerical reports accepted; A03 vendor integration is still required before P07 |
 | P02 — tensor numerical contract | `complete` | A01 source contract, A02 ordinary WMMA and A03 bounded WGMMA evidence accepted after required review; T01/T02 complete |
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
-| P04 — tiny-model inference | `in_progress` | T01/A01 complete at source scope; T02 executor, records and CI are implemented, with clean native qualification and A02/A03 still pending |
+| P04 — tiny-model inference | `complete` | A01 fixed fixture preserved; A02/A03 accept the full four-variant composed-model matrix at native processor RTL scope |
 | P05–P11 | `not_started` | Later framework, performance, hardware and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -62,7 +66,7 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — managed executor implementation
+## Latest continuation — qualified managed model execution
 
 The [executor audit](p04-executor-audit.md) selected P04-T02 after the accepted
 fixture and managed operator work. The implemented model owns incomplete native
@@ -73,16 +77,31 @@ outcomes, actual launch arguments, comparisons, transfer bytes and resource
 counters. The [record contract](../designs/mlp_execution_records_v1.md) and strict
 consumer check these observations against the frozen inputs and build binding.
 
-Host fault-injection and serialization checks support the implementation, but
-they do not establish native model execution. The dedicated `P04 Native Model`
-workflow and native catalog are prepared to build clean SimX/native-RTL variants
-for FP16/BF16, with two distinct output poisons per case. Their bounded runner
-uses two build jobs, a 4 GiB process-group RSS cap, 15 GiB disk reserve and
-16 MiB per-command log cap. Its selected source/configuration bodies and binary
-hashes support reproduction without claiming a complete build archive.
-See the [executor packet](evidence/p04-executor/README.md) for the planned matrix,
-commands, individual development receipts and remaining acceptance boundary.
-Host steady-clock profiles are runtime observations, not physical GPU latency.
+The fresh [native workflow](https://github.com/baabi-boo/AI-GPU/actions/runs/44762622060)
+passed 62 bounded commands across four clean variants, with two distinct output
+poisons per case. Exact checks cover 5,120 hidden words, 2,560 packed bridge words,
+2,560 output-block words and 2,560 assembled-output words. Explicit tensor traffic
+is 76,800 H2D bytes including destination poison and 30,720 D2H bytes; actual host
+row assembly copies 10,240 bytes. Argument/control, module and setup traffic are
+outside these totals. ReLU, exact conversion and assembly remain declared host
+work; native matmuls never select a CPU fallback.
+
+Initial preparation rejected cached `cocogfx` build products. A strict quarantine
+restored the unchanged clean-source requirement. The next four native runs
+succeeded, but their uploads omitted `.config.stamp`; those incomplete packets
+remain failed qualification evidence. Corrected narrow artifact uploads retained
+the stamps in the fresh accepted matrix. Earlier runs are not added to its totals.
+Independent review also corrected and rechecked the evidence auditors' include
+path and timing-consistency checks before acceptance.
+
+The runner uses two build jobs, a polled 4 GiB process-group RSS cap, 15 GiB disk
+reserve, 16 MiB command logs and bounded build/case deadlines. Selected source and
+generated bodies plus binary hashes support reproduction; complete tool/native
+binaries are not archived. Host steady-clock profiles and overlapping host wait
+durations do not measure physical GPU latency. Processor RTL bypasses the AFU.
+The [executor packet](evidence/p04-executor/README.md) records exact scope and
+replay instructions. The inherited **267 → 283 DSP** area-gate failure remains
+unresolved; no RTL, simulator behavior, baseline or tolerance changed here.
 
 ## Previous continuation — fixed tiny-model source contract
 
@@ -691,17 +710,17 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**Qualify the implemented P04-T02 managed tiny-model executor.** Freeze a clean
-source checkpoint and run the four declared SimX/native-RTL × FP16/BF16 variants.
-The required 20 case/backend pairs, 40 model runs and 120 launches must produce
-matching actual intermediate/final words, verified live-input lineage and
-separate host/transfer records. Retain failed attempts and reconcile source,
-tools, generated builds and raw records through independent review.
-The [executor plan](p04-executor-plan.md) and
-[executor packet](evidence/p04-executor/README.md) define the reproduction and
-evidence boundaries. P04 remains `in_progress`, and P04-A02/A03 remain unearned
-until compatible actual runs and records pass review. See the
-[P04 phase guide](phases/p04-inference.md) and [backlog](backlog.md).
+**P05-T01 — specify and implement the first copying Python binding.** Follow the
+[entry handoff](p05-entry-handoff.md): preserve the accepted C++ session/operation
+owners, exact tensor representations, timeout/error behavior and native placement.
+Begin with one supported matmul and a trusted fixed-case MLP entry, then qualify
+all declared signatures, packaging and framework integration under the
+[P05 phase guide](phases/p05-framework.md). P05 remains `not_started` until that
+implementation begins; its acceptance gates have not been earned by P04.
+The [accepted executor packet](evidence/p04-executor/README.md) supplies the
+unchanged native comparison path. See the [backlog](backlog.md) for the bounded
+work item. P06 still needs a frozen benchmark/counter policy before performance
+optimization claims.
 
 **Parallel blocked hardware task:** P01-T05 still needs a qualified vendor
 release/platform, matching prepared `hw_emu` artifact packet and actual reviewed

@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/w10c_replay_review",
+  "worker": 57,
+  "outcome": "pass",
+  "scope": "Independent final archive/member and retained replay/history verification; no native workload or full auditor rerun performed.",
+  "native_execution_performed": false,
+  "phase_acceptance_claimed": false,
+  "source_revision": "c9d139cc9f84839b6a56b6228dd304460cbfe45c",
+  "archive_index_sha256": "a76792a1979049bfd8f03a7083c42003807146027dca11851ae2c5a08d9ee650",
+  "archives_checked": 8,
+  "file_members_checked": 736,
+  "fresh_matrix_counts": {
+    "case_executions": 20,
+    "model_runs": 40,
+    "launches": 120
+  },
+  "fresh_raw_command_logs_rehashed": 62,
+  "archives": [
+    {
+      "variant": "simx-fp16",
+      "source_revision": "f4c6a323ab1696ac487fd86489ad7ed7836a558d",
+      "disposition": "incomplete_original_retained",
+      "archive_sha256": "ca47f1579a5d342a92901884ab3ed58d65c9d2400eb92114f08e0aed5b1f730a",
+      "members": 91,
+      "stamp_retained": false
+    },
+    {
+      "variant": "simx-bf16",
+      "source_revision": "f4c6a323ab1696ac487fd86489ad7ed7836a558d",
+      "disposition": "incomplete_original_retained",
+      "archive_sha256": "60d60a766e2f54e36c9718c9308822ef3bcaf002d0fa0121a8b6e930ca0b5106",
+      "members": 91,
+      "stamp_retained": false
+    },
+    {
+      "variant": "rtlsim-fp16",
+      "source_revision": "f4c6a323ab1696ac487fd86489ad7ed7836a558d",
+      "disposition": "incomplete_original_retained",
+      "archive_sha256": "64d58219b8e373c62bd0ba646d1ed70d6f137c6cb88b599cf2bcba1cc294baf4",
+      "members": 92,
+      "stamp_retained": false
+    },
+    {
+      "variant": "rtlsim-bf16",
+      "source_revision": "f4c6a323ab1696ac487fd86489ad7ed7836a558d",
+      "disposition": "incomplete_original_retained",
+      "archive_sha256": "36c43ba579826c4d4d3f8c2687796bbb1ef7609ecba0be322bd271eac64b0d21",
+      "members": 92,
+      "stamp_retained": false
+    },
+    {
+      "variant": "simx-fp16",
+      "source_revision": "c9d139cc9f84839b6a56b6228dd304460cbfe45c",
+      "disposition": "fresh_complete_variant_retained",
+      "archive_sha256": "880aff18e6ceedbf3c9f85c40215931bbfd901700b70be7d11a0d4b7604f4212",
+      "members": 92,
+      "stamp_retained": true
+    },
+    {
+      "variant": "simx-bf16",
+      "source_revision": "c9d139cc9f84839b6a56b6228dd304460cbfe45c",
+      "disposition": "fresh_complete_variant_retained",
+      "archive_sha256": "88bb102374a48fda5c10bff97d1cf785795a78d3993cc7deb1b7a07e5cdc00eb",
+      "members": 92,
+      "stamp_retained": true
+    },
+    {
+      "variant": "rtlsim-fp16",
+      "source_revision": "c9d139cc9f84839b6a56b6228dd304460cbfe45c",
+      "disposition": "fresh_complete_variant_retained",
+      "archive_sha256": "5678137bd17043e71f9752661d7a73504d2da45a1bda0a783e61a30d90c8203a",
+      "members": 93,
+      "stamp_retained": true
+    },
+    {
+      "variant": "rtlsim-bf16",
+      "source_revision": "c9d139cc9f84839b6a56b6228dd304460cbfe45c",
+      "disposition": "fresh_complete_variant_retained",
+      "archive_sha256": "6732dcbedaa9cd58a16c4f2b40d13cf86eecb96e6c01c8eae807f06be5397b74",
+      "members": 93,
+      "stamp_retained": true
+    }
+  ],
+  "replay_receipt_sha256": "fdfe6a8b94de91e3ee24af821bcb17c832a3a4a270a3aea14b6f822db7caecc1",
+  "replay_outputs_matched_after_only_path_normalization": [
+    "numerics",
+    "dispatch",
+    "provenance"
+  ],
+  "history": [
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/history/audit_dispatch-86e7bd87.py.gz",
+      "archive_sha256": "4c68109bda73652e942fd97cb88d0c5ba1ba3e93ff8806db3c9d5088f77a742d",
+      "source_sha256": "86e7bd877abe1ec328f26ccdc0b24aec2eac64bf45d064d753eec3c943f4eb2a",
+      "source_bytes": 26719
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/history/audit_provenance-542f2e3e.py.gz",
+      "archive_sha256": "fe1da3d6d2acbd6673ac8c293d01e12e832caf707683832d5211f179c5b5e185",
+      "source_sha256": "542f2e3e56b6eb0b0ed88df4e7de1c7c80a55b00634c6f30cd6e3d733c610f13",
+      "source_bytes": 25998
+    }
+  ],
+  "findings": [],
+  "observations": [
+    "All four older f4c6a3 native runner reports pass, but each original archive still lacks its required stamp and remains explicitly incomplete; none contributes to fresh totals.",
+    "Initial native_execution=not_run identity/preparation receipts are preserved unchanged; final successful hosted jobs and bound finished reports supply final outcomes.",
+    "The published fresh replay uses Python3 and Git, canonical absolute paths, exact qualification Git objects and a fresh extraction directory; binaries and full external tool/dependency bodies are not archived.",
+    "The exact historical W08C counterexample script deliberately retains its original absolute paths and original expectations. Historical reproduction requires rebinding paths and importing the preserved original auditor in isolation; the portable current probes take packet arguments. This is not advertised as a turnkey historical replay command."
+  ],
+  "limitations": [
+    "This review verifies preserved bytes and existing replay outcomes; it does not independently re-execute the native model or authenticate external hardware.",
+    "The published extraction uses a trusted hash-bound index and fresh private temporary directory; it is not a generic installer for attacker-selected archives.",
+    "P01-A03, AFU/vendor integration, physical FPGA/silicon and the inherited DSP area gate remain outside this review."
+  ],
+  "original_preparation_failures_checked": [
+    {
+      "variant": "simx-fp16",
+      "preparation_sha256": "b62bf460ec69c824e900e28353c3bfc5b931276b51c9268c81646a62a601395f",
+      "native_execution": "not_run",
+      "retention": "original extracted preparation/job receipts and artifact identity metadata; ZIP envelope not archived"
+    },
+    {
+      "variant": "simx-bf16",
+      "preparation_sha256": "5b187d2f9126feaa9b8b99078241e696c97387c178ce550e4bb0c0cdebee4d9d",
+      "native_execution": "not_run",
+      "retention": "original extracted preparation/job receipts and artifact identity metadata; ZIP envelope not archived"
+    },
+    {
+      "variant": "rtlsim-fp16",
+      "preparation_sha256": "a333cd9b99633e7f81f4224cbd14627bed5781b6a7de219fe5e7fb9c58b4ce48",
+      "native_execution": "not_run",
+      "retention": "original extracted preparation/job receipts and artifact identity metadata; ZIP envelope not archived"
+    },
+    {
+      "variant": "rtlsim-bf16",
+      "preparation_sha256": "5c65c855292b3bd0f13b3be55e0f047693f997945aeac7f76a965f7826e8df3d",
+      "native_execution": "not_run",
+      "retention": "original extracted preparation/job receipts and artifact identity metadata; ZIP envelope not archived"
+    }
+  ],
+  "catalog_preparation_failure_checked": {
+    "archive_sha256": "c6c5eb2f41e1448d53528f896dea0fe646818dd555b87046d5637c0b7a89d865",
+    "zip_members": 2,
+    "decoded_job_log_sha256": "00da6a8a9658b343711106caee00a8283b5e56981a6924a933402e1a0b38ec2a",
+    "native_execution": "not_run"
+  }
+}

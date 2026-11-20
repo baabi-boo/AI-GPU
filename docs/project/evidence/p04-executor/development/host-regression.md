@@ -40,3 +40,30 @@ later edits or native execution.
 All of these observations are source/host checks. They do not demonstrate a
 native model launch, timing performance, hardware behavior or acceptance of
 P04-A02/A03. Do not add overlapping suite/subset counts together.
+
+## Published preparation and retention corrections
+
+The later preparation correction and the following retention correction each
+passed their own exact-source hosted governance run:
+
+| Published source | Tests | Test duration | Job duration / budget |
+|---|---:|---:|---|
+| `f4c6a323ab1696ac487fd86489ad7ed7836a558d` | 1,816 | 340.461 s | 359 / 600 s |
+| `c9d139cc9f84839b6a56b6228dd304460cbfe45c` | 1,816 | 366.568 s | 378 / 600 s |
+
+Both ran `python3 -m unittest discover -s ci/project -p 'test_*.py'` and ended
+with plain `OK`, with no failures, errors or skips. The seven additional test
+methods cover strict cached-product quarantine boundaries. The checkout,
+preflight and final job metadata agree on each exact source, and preflight
+reports no tracked changes. The workflow does not retain a complete post-suite
+source inventory, so these results do not assert one.
+
+The exact logs and source/job metadata are retained in
+`../host-tests/f4c6a3-governance.*` and
+`../host-tests/c9d139c-governance.*`. Independent rehashing, source-change review,
+timeout assessment and precise limitations are recorded in [W08F](w08f.md).
+Neither host result is native-model qualification or a claim that general CI is
+entirely green. W08F also preserves the first implementation's failed general-CI
+model preparation: it stopped at dirty `third_party/cocogfx` provenance before
+running the catalog cell; it does not describe the corrected revision's model
+execution outcome.
