@@ -6,14 +6,21 @@ actual execution owner and resource budget before the native model run.
 Live status, dependencies and exit criteria are in [roadmap.json](../roadmap.json).
 This is a development plan, not evidence that model inference already works.
 
-## Current work: fixture implemented, acceptance pending
+## Current work: fixture accepted, executor required
 
-P04 is `in_progress`. P04-T01's [fixed tiny MLP contract](../../designs/tiny_mlp_fixture_v1.md),
+P04 is `in_progress`. **P04-T01 is complete and P04-A01 is
+[accepted at `source_present` scope](../evidence/p04-fixture/acceptance.json).**
+The [fixed tiny MLP contract](../../designs/tiny_mlp_fixture_v1.md),
 [model manifest](../../../ci/project/p04_model_manifest.json), independent
 [fixture producer](../../../ci/project/p04_reference.py), checked host bridge
-and source regression tests are implemented and under qualification. P04-A01
-remains pending until exact-source validation and independent review are retained
-and attached to the roadmap. This work targets `source_present` evidence only.
+and source regression tests are retained in the
+[qualification packet](../evidence/p04-fixture/README.md). All five formal
+commands passed at clean source `10ace66193686e3862c3c218760b66c044f1d4ae`,
+tree `775aa7d5f96cfc5f7346e591ca151f36c485d2cf`; the complete source suite passed
+1,733 tests in 752.879 seconds, including 64 P04 tests, without failures, errors
+or skips. The source remained unchanged throughout qualification.
+
+These are source, independent-reference and compiled host-helper results.
 P04-A02 and P04-A03 remain unearned: no composed model executor, native model
 launch or model-level dispatch/latency result is supplied by this continuation.
 
@@ -31,9 +38,8 @@ it neither introduces native activation/cast support nor allows a CPU matmul
 fallback. The 30 native launches across the ten cases are planned workload
 counts, not executed results.
 
-The immediate task is to qualify and review this source contract. After
-P04-A01 acceptance, **P04-T02 — compose and qualify the native model executor**
-is the next implementation step; the [executor plan](../p04-executor-plan.md)
+**P04-T02 — compose and qualify the native model executor** is the next
+implementation step. The [executor plan](../p04-executor-plan.md)
 defines actual-output lineage, completion/ownership rules and trace obligations.
 
 ## Goal and boundaries
@@ -76,7 +82,7 @@ CUDA compatibility and physical throughput claims. See [software](../software.md
 ## Deliverables and acceptance
 
 The model/fixture manifest, independent reference, checked host bridge and
-source/negative tests are implemented for P04-T01, with acceptance pending.
+source/negative tests complete P04-T01 under the accepted P04-A01 source contract.
 P04-T02 must still deliver the native executor, model integration tests, catalog
 registration and source-bound execution/trace evidence.
 
@@ -97,8 +103,9 @@ Block acceptance for unresolved fixture licensing, unsupported model signatures,
 unexplained reference differences, hidden CPU execution, missing traces or resource
 overruns. A test not run stays not run; do not relax tolerances to close the phase.
 
-On acceptance, hand the exact fixture, operator contract and native results to
-[P05](p05-framework.md) for Python integration and [P06](p06-performance.md) for
+After P04-A02/A03 pass and P04 closes, hand the exact fixture, operator contract
+and native results to [P05](p05-framework.md) for Python integration and
+[P06](p06-performance.md) for
 performance work. Neither a simulator model nor this document closes the later
 physical FPGA gate. Vendor XRT `hw_emu` remains the blocked P01-A03 obligation;
 full P01 completion is still required before P07 can close.

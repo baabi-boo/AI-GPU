@@ -9,7 +9,7 @@ matching device reader, wrapper, qualification runner and runtime fixes are
 implemented and tested. P02 remains complete; P01-A03 vendor integration remains
 blocked and required before P07. **P04 is `in_progress`:** its
 [selected tiny-model contract](../designs/tiny_mlp_fixture_v1.md) and deterministic
-fixtures are implemented under qualification. P04-A01 is pending;
+fixtures complete P04-T01, with [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json).
 P04-A02/A03 remain unearned, with no composed model execution claimed.
 
 ## Implemented boundary
@@ -183,12 +183,13 @@ using the native TFR tensor/STD scalar paths. It does not supply vendor
 
 ## Next bounded implementation: P04-T02 managed model execution
 
-P04-T01 has selected a synthetic, bias-free `16 → 8 → 4` ReLU MLP for a batch
+Completed P04-T01 fixes a synthetic, bias-free `16 → 8 → 4` ReLU MLP for a batch
 of 16 samples. Its [fixture contract](../designs/tiny_mlp_fixture_v1.md) and
 [manifest](../../ci/project/p04_model_manifest.json) fix ten FP16/BF16 cases,
 generated weights/inputs, provenance, layouts and exact layer/final references.
-Complete exact-source qualification and independent P04-A01 review before
-accepting that source contract. P04 remains `in_progress`.
+The [source qualification packet](evidence/p04-fixture/README.md) retains the
+exact-source host checks and independent review supporting [P04-A01](evidence/p04-fixture/acceptance.json).
+P04 remains `in_progress`; the composed execution and trace gates are unearned.
 
 The [P04-T02 plan](p04-executor-plan.md) composes one `(16,8,16)` hidden matmul
 and two `(8,4,8)` output matmuls per case through the accepted managed wrapper.

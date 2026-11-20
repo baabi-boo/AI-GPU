@@ -1,0 +1,173 @@
+{
+  "script_sha256": "f5c2f7322edf6fdb7ccda237f9444e95bcae517b152a43377f75b65ee881955c",
+  "no_assert_guards": true,
+  "cases": [
+    {
+      "case": "valid_default",
+      "optimization": 0,
+      "expected": "accepted",
+      "observed": "accepted",
+      "reason": null,
+      "wrote_only_isolated_output": true,
+      "pass": true
+    },
+    {
+      "case": "valid_optimized",
+      "optimization": 2,
+      "expected": "accepted",
+      "observed": "accepted",
+      "reason": null,
+      "wrote_only_isolated_output": true,
+      "pass": true
+    },
+    {
+      "case": "incomplete_optimized",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "Exactly 60 actual agent entries are required",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    },
+    {
+      "case": "duplicate_agent",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "Agent names must be unique",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    },
+    {
+      "case": "duplicate_assignment",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "Agent name must match its wave and assignment",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    },
+    {
+      "case": "missing_expected_slot",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "Every wave must contain exactly assignments 1 through 6",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    },
+    {
+      "case": "reused_receipt",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "Receipt paths must be unique",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    },
+    {
+      "case": "mismatched_agent",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "Agent names must be unique",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    },
+    {
+      "case": "mismatched_receipt",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "Receipt path must match its wave and assignment",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    },
+    {
+      "case": "empty_receipt",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "Empty receipt: w01_a02.md",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    },
+    {
+      "case": "missing_receipt",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "Each assignment needs a regular completed receipt",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    },
+    {
+      "case": "symlink_receipt",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "Each assignment needs a regular completed receipt",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    },
+    {
+      "case": "empty_task",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "Each assignment needs a substantive task label",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    },
+    {
+      "case": "wrong_count_type",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "The requested agent count must be 60",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    },
+    {
+      "case": "wrong_wave_type",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "The requested wave count must be 10",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    },
+    {
+      "case": "boolean_assignment",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "Slot numbers must be integers",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    },
+    {
+      "case": "unique_mismatched_agent_prefix",
+      "optimization": 2,
+      "expected": "rejected",
+      "observed": "rejected",
+      "reason": "Agent name must match its wave and assignment",
+      "wrote_only_isolated_output": false,
+      "pass": true
+    }
+  ],
+  "actual_registry_count": 52,
+  "actual_nonempty_receipts": 49,
+  "actual_optimized_invocation": {
+    "argv": [
+      "python3",
+      "-O",
+      "${WORKSPACE}/build_agent_ledger.py"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "Exactly 60 actual agent entries are required\n",
+    "output_existence_unchanged": true
+  },
+  "scope": "Synthetic probes execute the unmodified script AST with only workspace redirected into temporary directories. They do not establish actual 60-agent completion or alter repository artifacts."
+}

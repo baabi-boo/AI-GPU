@@ -1,0 +1,137 @@
+{
+  "reviewer": "/root/w07_a02_qualification_review",
+  "observed_at_utc": "2026-11-20T08:35:29.385348+00:00",
+  "source_revision": "10ace66193686e3862c3c218760b66c044f1d4ae",
+  "source_tree": "775aa7d5f96cfc5f7346e591ca151f36c485d2cf",
+  "source_clean_at_observation": true,
+  "identities": {
+    "${CONTINUATION}/qualify_p04.py": "7b742bdf282ed42f93807d90cfffd50c0a02c086248fbb3759e75b9e3d56b645",
+    "ci/project/baseline_process.py": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+    "ci/project/p04_model_contract.py": "c184d980d57aec54567d79025845c5fb34887741697ac78a66692a65da02e4b3",
+    "ci/project/p04_reference.py": "115a7db51948d69fc6267d5fe658d1a8e68c22e9f200d5ddc3f0a5181d7140a9"
+  },
+  "completed_commands_at_observation": [
+    {
+      "name": "fixture",
+      "argv": [
+        "python3",
+        "ci/project/p04_reference.py",
+        "--check"
+      ],
+      "receipt": {
+        "outcome": "pass",
+        "exit_code": 0,
+        "reason": null,
+        "process_started": true,
+        "duration_seconds": 0.20561,
+        "log_sha256": "e8e28ac7c133b15fc71ce1e45e7706de87b41feaa7386cf42707c876b56242ce",
+        "log_size_bytes": 72,
+        "peak_rss_bytes": 10092544,
+        "cleanup_complete": true,
+        "limitations": [
+          "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+          "Process-group RSS can count shared pages more than once and excludes page cache.",
+          "Reported peak RSS is the highest sample and may miss peaks between polls.",
+          "No container/cgroup memory limit is inferred by this process monitor.",
+          "Descendants that deliberately leave the process group are outside its containment."
+        ]
+      },
+      "log": "fixture.log",
+      "verified_log_sha256": "e8e28ac7c133b15fc71ce1e45e7706de87b41feaa7386cf42707c876b56242ce",
+      "machine_path_or_secret_markers": false
+    },
+    {
+      "name": "contract",
+      "argv": [
+        "python3",
+        "ci/project/p04_model_contract.py",
+        "--check"
+      ],
+      "receipt": {
+        "outcome": "pass",
+        "exit_code": 0,
+        "reason": null,
+        "process_started": true,
+        "duration_seconds": 0.24636,
+        "log_sha256": "783b20be81b2ffe4115e33911257d7909ea038e6a20d9f05ec779ef5eb1350a1",
+        "log_size_bytes": 77,
+        "peak_rss_bytes": 12058624,
+        "cleanup_complete": true,
+        "limitations": [
+          "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+          "Process-group RSS can count shared pages more than once and excludes page cache.",
+          "Reported peak RSS is the highest sample and may miss peaks between polls.",
+          "No container/cgroup memory limit is inferred by this process monitor.",
+          "Descendants that deliberately leave the process group are outside its containment."
+        ]
+      },
+      "log": "contract.log",
+      "verified_log_sha256": "783b20be81b2ffe4115e33911257d7909ea038e6a20d9f05ec779ef5eb1350a1",
+      "machine_path_or_secret_markers": false
+    },
+    {
+      "name": "governance",
+      "argv": [
+        "python3",
+        "ci/project/check_project.py"
+      ],
+      "receipt": {
+        "outcome": "pass",
+        "exit_code": 0,
+        "reason": null,
+        "process_started": true,
+        "duration_seconds": 0.967462,
+        "log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+        "log_size_bytes": 96,
+        "peak_rss_bytes": 14700544,
+        "cleanup_complete": true,
+        "limitations": [
+          "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+          "Process-group RSS can count shared pages more than once and excludes page cache.",
+          "Reported peak RSS is the highest sample and may miss peaks between polls.",
+          "No container/cgroup memory limit is inferred by this process monitor.",
+          "Descendants that deliberately leave the process group are outside its containment."
+        ]
+      },
+      "log": "governance.log",
+      "verified_log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+      "machine_path_or_secret_markers": false
+    },
+    {
+      "name": "baseline-packets",
+      "argv": [
+        "python3",
+        "ci/project/check_baseline_packets.py"
+      ],
+      "receipt": {
+        "outcome": "pass",
+        "exit_code": 0,
+        "reason": null,
+        "process_started": true,
+        "duration_seconds": 0.264915,
+        "log_sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be",
+        "log_size_bytes": 657,
+        "peak_rss_bytes": 15859712,
+        "cleanup_complete": true,
+        "limitations": [
+          "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+          "Process-group RSS can count shared pages more than once and excludes page cache.",
+          "Reported peak RSS is the highest sample and may miss peaks between polls.",
+          "No container/cgroup memory limit is inferred by this process monitor.",
+          "Descendants that deliberately leave the process group are outside its containment."
+        ]
+      },
+      "log": "baseline-packets.log",
+      "verified_log_sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be",
+      "machine_path_or_secret_markers": false
+    }
+  ],
+  "review_scope": "Qualification process and currently completed command receipts only; no full-suite result acceptance.",
+  "preflight_probe_sha256": "1ac724e1e2629f6ff6a427a96a91ca30c173e9313a44e5ab324db5fd379fa8d6",
+  "finding": {
+    "severity": "F1",
+    "confidence": "high",
+    "evidence_type": "static-proof plus isolated no-process preflight probe",
+    "summary": "An early blocked run_bounded receipt without an opened log causes the outer harness to raise before preserving that command entry. It fails closed and does not affect these completed commands."
+  }
+}

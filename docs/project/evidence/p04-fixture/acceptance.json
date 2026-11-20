@@ -1,0 +1,304 @@
+{
+  "schema_version": 1,
+  "record_id": "p04-a01-tiny-mlp-fixture-v1-10ace66",
+  "kind": "design_review",
+  "outcome": "pass",
+  "evidence_level": "source_present",
+  "scope": "P04-A01 source contract for the fixed synthetic batch-16 16-to-8-to-4 ReLU MLP, original deterministic weights and inputs, independent exact references, manifest-declared placement, checked host bridge and source regression coverage. No model executor or GPU execution is established; P04-A02/A03 are unearned and P04 remains in_progress.",
+  "source_revision": "10ace66193686e3862c3c218760b66c044f1d4ae",
+  "configuration": "Clean Git tree 775aa7d5f96cfc5f7346e591ca151f36c485d2cf; ordinary RV64 p02-tfr profile identity and 17 manifest dependencies frozen; five input families in FP16 and BF16 (10 cases); 160 deterministic weights; zero-bit tolerances; Python 3.12.14 and GCC 14.2.0 with C++17/UBSan host tests. See source-inventory.json, verification.json and the frozen model manifest.",
+  "acceptance_ids": [
+    "P04-A01"
+  ],
+  "commands": [
+    {
+      "command": "cwd=${SOURCE}; python3 ci/project/p04_reference.py --check; actual bounded-process receipt retained in verification.json",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${SOURCE}; python3 ci/project/p04_model_contract.py --check; actual bounded-process receipt retained in verification.json",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${SOURCE}; python3 ci/project/check_project.py; actual bounded-process receipt retained in verification.json",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${SOURCE}; python3 ci/project/check_baseline_packets.py; actual bounded-process receipt retained in verification.json",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "cwd=${SOURCE}; python3 -m unittest discover -s ci/project -p 'test_*.py'; actual bounded-process receipt retained in verification.json",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "Base-revision classifier explain/classify for 4a5df5afef1826b70a2addee5029aae9dada2da1..10ace66193686e3862c3c218760b66c044f1d4ae; exact invocations retained in reviews/w07_a01_policy_review.json",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/project/evidence/p04-fixture/README.md",
+      "sha256": "2884335a7f1ea20426fdf7375a40566588ee11c9ca4802d5b40ba7cc365b12e9"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/agent-ledger.json",
+      "sha256": "406c6c63ffa5fa53cd75b36fcb85c228bfbecfcd089f496322858fc88b57b875"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/agent-ledger.md",
+      "sha256": "40e6c0f8e1dd48f73011ddd1740a56215c43f457be7c4e38fabe50e564f5b4c0"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/artifact-provenance.json",
+      "sha256": "1c6e38b17674f32b6ff18cd492f23f006b18c37cdefb4fe766039f9751a83719"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/baseline-packets.log",
+      "sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/change-impact.json",
+      "sha256": "f46e3f4bfe8f861b762db8bd2c969d8468c3f8c3faa5e7f6e98af939ce94bf94"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/change-impact.log",
+      "sha256": "73918557cbdd2c71e1ae91f724ce7ac95b6ef6145d0169a5e649c1a604d25198"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/contract.log",
+      "sha256": "783b20be81b2ffe4115e33911257d7909ea038e6a20d9f05ec779ef5eb1350a1"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/findings.json",
+      "sha256": "a1452709b3eb0984817f1f4a365fb53500ff6289e99eadcd740a84d1d71a0dda"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/findings.md",
+      "sha256": "757c10f555010cc828ffb62e990d9f53847d52f482ba8325c9ae0f33fd47f4d6"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/fixture.log",
+      "sha256": "e8e28ac7c133b15fc71ce1e45e7706de87b41feaa7386cf42707c876b56242ce"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/focused-development.log",
+      "sha256": "d8d6a605c345bd5cd79e6055b4a823f4026a58c93fa8e8c240deaeac9624dec5"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/full-suite.log",
+      "sha256": "6eae5030946d0ce91db11d01f8e394af727ccc6ae9dd8441934a22927ae7a16d"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/governance.log",
+      "sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/metadata-checks/historical-packet-validator.log",
+      "sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/metadata-checks/metadata-unit-tests.log",
+      "sha256": "fbf4789adf51709bf33885c81e9c80f6073180c2900662f3476fab94092c2a48"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/metadata-checks/project-validator.log",
+      "sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/metadata-checks/verification.json",
+      "sha256": "97804c017264fffc553cda38682857a8a974782cfcfaafa9b0b893c12448d3bc"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w06_a06.md",
+      "sha256": "9317202e5adc6ddf3e2cc492893a4740eef5beec2e1ac190e08c4fd6ac949d4f"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w06_a06_review.json",
+      "sha256": "028ea1f4ab6059d12781b28568d75a5c9e3e2011bc94c3f13ca9faa64204f273"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w07_a01.md",
+      "sha256": "cf4b707d48e37562d34ae64c619134de1fd835320d2c7a83c6bbc522a45ed35f"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w07_a01_policy_review.json",
+      "sha256": "f704d7666b79d7c28329b611731b063fe35e6389b92cb084928bc46a04a1f896"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w07_a02.md",
+      "sha256": "4447fa192fa76dc9b9622334cadbb1f2f33bfb592907aded749864131c99cb0a"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w07_a02_preflight_probe.json",
+      "sha256": "1ac724e1e2629f6ff6a427a96a91ca30c173e9313a44e5ab324db5fd379fa8d6"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w07_a02_review.json",
+      "sha256": "4d843667f4d33cc5a6fa7db5e3dbb1cd61d7992d6d99d824dca6eba86e1e282b"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w07_a03.md",
+      "sha256": "22e04eb1350e2fdb240e0b74f284c82d439100794e8948e4dfa108f1d0a6ce97"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w07_a03_provenance_probe.py",
+      "sha256": "2cd924478a4bc01d9fb2e2489ec110ffbac0f23e8a520e2685fc1f5bb54ac3e1"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w07_a03_provenance_results.json",
+      "sha256": "9e526b403ec329792cfcea73439aa862c6e618a740ff87f154ec2fd4c9757741"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w07_a04_review.json",
+      "sha256": "b74809543fb2475c912f0fa2456c2278f49c761053a23a41313e26f0a21edd03"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w07_a05_execution_boundary_results.json",
+      "sha256": "62ff839469018da30c08dc0f569703f35ed02717daf7293021abc6f871d1e5a5"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w07_a06_test_inventory.json",
+      "sha256": "7ff0a7085e458c8cee1d9d152595f6fd787637de42ede1ead668e1967b920a4c"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w08_a02.md",
+      "sha256": "63dffb7f4518da6b712304756cc5d8a88af56608abe2a881e8fa8ed9ab28a763"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w08_a02_review.json",
+      "sha256": "cb0f254b871f035dc29feacf8c1d5d4d43d48978ead764b2d3d61024ea7fc082"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w08_a06.md",
+      "sha256": "4835f3e3186acfe8b7a4961ab127706aa47053efbfcb2f573af25938b4f3fae4"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w08_a06_review.json",
+      "sha256": "b57e66be4c5fe465253a0e72d95f549c7f88a4e716285a3a0b4927b797c83bb0"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a01.md",
+      "sha256": "20029dd70646741d11d3ff30e33e9e5b5d026cc0c85060dcd666fc123adfc069"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a01_review.json",
+      "sha256": "71ceaae56b9164a3d8311b0d350316f4f643a25e163f59bc9b47fa0ed7736c16"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a02.md",
+      "sha256": "5b4f311a88c36d67f3528105a30eb86d67f8f365ba4aa5018db1671d59801369"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a02_fixed_guard_probes.json",
+      "sha256": "6452414834a856eb162a84a46384e37d6ee5de4895e5b87bad0cb1928eb633ba"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a02_review.json",
+      "sha256": "151e370bd59c2c57a054927bfba3b2dfb85804c34d4a5350a78dbeeca5ebeda4"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a03.md",
+      "sha256": "0a2084516f062aa461dc45a55875a6fb69adba31e8614e35cd87c9feb33bcb4c"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a03_results.json",
+      "sha256": "c4c7d101cdc03e3bf4160a9d3bf66b4f70cb03353222cb056dffe2d5bb0c72e2"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a04.json",
+      "sha256": "6a6e69b05e89c8a23de39f81cdc1f8f88bc59b6038d88d8b81276e75cb22f803"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a04.md",
+      "sha256": "46ef6818e2db2e04f5991880043a4180ccdc80bfbdf721189520bada47e044ed"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a05.md",
+      "sha256": "8603873ddb888bfe1266627b5fa321844a91e6712175253f3e7e871c6e72d515"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a05_review.json",
+      "sha256": "5d6186fd4db20cef2c8add97ebf7a89f844ff3d23fe78e1af71433c659808a89"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a06.md",
+      "sha256": "64371e49aa96084a755be4ed737772c5fe5a859a33b81101eb1f19c6fb18b6a3"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a06_identity_checks.json",
+      "sha256": "c444e02110daf004222f2d93fec7860167f95f5281af6aa2a160ed9d37eb35e4"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a06_local_probe.json",
+      "sha256": "84149180797cf8c1c5df5a46bf4418a553c10ca55b96827c223e1f3b06e49be6"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w09_a06_review.json",
+      "sha256": "b398a81e65b407526dc6aef7995078a2a62ccbeaa934584dc12c7a334f24e14b"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w10_a01.md",
+      "sha256": "5c83843ec897acbc2472490164d7d17e147e0d2ddbe8e233a5ce51cb8fec6dac"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w10_a01_review.json",
+      "sha256": "d0f32c923cbb1ecdb2291e0fd61fcd7154d44e47f88f8ed7d4c0aad4d7775c54"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w10_a02.md",
+      "sha256": "9f257956af34b978301a43700a3259478ae9215adb3b7a9933c3a63e6370214f"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w10_a02_review.json",
+      "sha256": "c3d29c75663c90d266b3201187bf9abab5fb33bfe3a7fe31ca9be1a577168fe9"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w10_a03.json",
+      "sha256": "df8c403dee514803a45b4f608ae635ead7527b4935c8f090f4e2a4a2c92a839b"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w10_a03.md",
+      "sha256": "c687598b1f22f4dbcb74e47e6fb49b04e05d7b68c823ab52b5a5eeafbe75dfa4"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w10_a04_postledger.json",
+      "sha256": "622806a092b73c99588ed2d30afcb592472a9f1a4e11d7e490b74c19f46d9e6a"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/reviews/w10_a04_postledger.md",
+      "sha256": "5bc02f0b93456523fe390b055a2d95b660b53c1dd75eb2dc5f5a588b2143cebb"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/run_formal_tests.py",
+      "sha256": "7b742bdf282ed42f93807d90cfffd50c0a02c086248fbb3759e75b9e3d56b645"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/source-inventory.json",
+      "sha256": "557303059f98d9d662b265dd94bf35d9570d5d4ca6c7f1091373048a58d12d29"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/source-publication.json",
+      "sha256": "01fc46db9a68fb054c5a601284aef0fb17bede45ce6d8ddb88ad7c95c3225a3e"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/verification.json",
+      "sha256": "55b4f1f271b46399632c15ce2e62969840e2abcb67e3c0afeb40dd7603716c22"
+    }
+  ],
+  "limitations": [
+    "No model executor, composed native model run, GPU output, dispatch/transfer timing, performance, physical FPGA or silicon result is established.",
+    "Thirty native launches and per-case tensor-buffer traffic are planned graph counts only, not executed measurements; host ReLU, exact conversion and row assembly are explicit permitted work.",
+    "The synthetic fixture establishes a deterministic correctness target, not trained-model or language-model quality.",
+    "Profile/source identity is not generated-build or runtime/kernel agreement; that proof belongs to P04-T02.",
+    "The exact qualification harness fails nonzero without saving the blocked receipt if an early process preflight prevents log creation; all retained actual commands produced matching complete logs.",
+    "The pre-existing DSP area-gate failure and P01-A03 vendor-emulation blocker remain unresolved; P07 still requires full P01 completion."
+  ],
+  "reviewer": "/root/w06_a06_changed_hunk_review independently approved every implementation/test/specification/workflow hunk and frozen source identities; /root/w07_a01_base_classifier verified the baseline policy and R2 obligations; /root/w07_a03_fixture_provenance reconstructed the fixture independently; /root/w08_a02_formal_results_review independently approved all five completed commands, actual 1733-test result, clean exact source, tools, log/artifact integrity and source-only claim scope. These are actual engineering reviews, not invented human approval or a waiver. /root/w08_a06_packet_review independently approved the assembled initial 31-artifact packet and its A01-only attachment; /root/w09_a01_final_docs_review approved the nine accepted-state document changes. Later additions retain their own explicit review scopes. /root/w10_a02_final_evidence_integrity approved the corrected retained evidence snapshot; /root/w10_a05_payload_portability approved the final pre-ledger payload; /root/w10_a04_final_agent_ledger independently verified all sixty completed receipt identities and the compiled ledger in a separate follow-up, preserving its original receipt."
+}

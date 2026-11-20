@@ -1,0 +1,532 @@
+{
+  "schema_version": 1,
+  "record_type": "development_finding_dispositions",
+  "created_by": "/root/w08_a03_findings_retention",
+  "audited_base_revision": "4a5df5afef1826b70a2addee5029aae9dada2da1",
+  "implementation_revision": "10ace66193686e3862c3c218760b66c044f1d4ae",
+  "implementation_tree": "775aa7d5f96cfc5f7346e591ca151f36c485d2cf",
+  "scope": "Preserve actual development findings, observed failures, corrections and remaining limits. This record grants no phase acceptance and is not a new execution report. Qualification and acceptance are recorded separately in this packet.",
+  "severity_policy": "Only severities explicitly assigned by the originating report are retained. Null means the source report did not assign an F level; it does not mean F0.",
+  "summary": {
+    "corrected_development_items": 7,
+    "remaining_items": 3,
+    "repaired_reported_F2": 3,
+    "repaired_reported_F1": 1,
+    "remaining_reported_F1": 1,
+    "new_gpu_execution_claimed": false
+  },
+  "findings": [
+    {
+      "id": "P04-F01",
+      "title": "Provisional split input repeated its eight-row blocks",
+      "reported_severity": null,
+      "origin_agents": [
+        "/root/w02_a01_reference_impl"
+      ],
+      "origin_records": [
+        "w02_a01.md",
+        "w02_a03.md"
+      ],
+      "status": "corrected_before_initial_fixture_generation",
+      "problem": "The provisional split formula repeated both eight-row input blocks because 8*3+1 is divisible by five, weakening repeated/swapped output-block detection.",
+      "correction": "Use ((3*r + 2*k + 3*(r//8)) % 5) - 2 before generating the first fixture. No accepted fixture or tolerance was changed.",
+      "validation": [
+        "Producer asserts row-block distinction before generation.",
+        "Independent serialized-input tests check that output halves cannot repeat or swap.",
+        "Frozen provenance review reconstructed every input family, including the revised row-block term."
+      ],
+      "fix_agents": [
+        "/root/w02_a01_reference_impl",
+        "/root/w02_a03_design_spec"
+      ],
+      "review_agents": [
+        "/root/w02_a05_reference_tests",
+        "/root/w07_a03_fixture_provenance"
+      ],
+      "supporting_records": [
+        "w02_a05.md",
+        "w07_a03.md"
+      ],
+      "fixed_source_revision": "10ace66193686e3862c3c218760b66c044f1d4ae"
+    },
+    {
+      "id": "P04-F02",
+      "title": "Alternate-root check could pin a different producer than it used",
+      "reported_severity": "F2",
+      "reported_confidence": "high",
+      "reported_evidence": "static proof and executed reproduction",
+      "origin_agents": [
+        "/root/w03_a04_source_review"
+      ],
+      "origin_records": [
+        "w03_a04.md",
+        "w03_a04_root_probe.json"
+      ],
+      "status": "fixed_and_independently_reviewed",
+      "problem": "After changing a copied producer W1 seed from 0x50403401 to 0x50403403, the outer checker wrote and accepted a manifest for the old fixture while pinning the changed target producer.",
+      "before_fix_observation": {
+        "outer_write_exit": 0,
+        "outer_check_exit": 0,
+        "target_reference_check_exit": 1,
+        "target_contract_check_exit": 1
+      },
+      "correction": "Compare the target checker, reference producer and encoding-helper bytes against the actual invoking modules before generating expectations. Intentional source changes use the reviewed target own checker; no target code is imported for this identity check.",
+      "validation": [
+        "Independent review executed nine subprocess probes; copied producer/checker/helper mismatches fail even after their manifest digests are refreshed.",
+        "All six mismatch rejection paths preserved temporary-file bytes and modification times; identical copies and reviewed target-own changes remain supported."
+      ],
+      "fix_agents": [
+        "/root/w04_a01_checker_fix",
+        "/root/w04_a03_root_regression_tests"
+      ],
+      "review_agents": [
+        "/root/w04_a05_fix_review",
+        "/root/w06_a06_changed_hunk_review"
+      ],
+      "supporting_records": [
+        "w04_a01.md",
+        "w04_a01_probe.json",
+        "w04_a03.md",
+        "w04_a05.md",
+        "w04_a05_probe.json",
+        "w06_a06.md"
+      ],
+      "fixed_source_revision": "10ace66193686e3862c3c218760b66c044f1d4ae",
+      "limits": [
+        "Source consistency is not authentication, a concurrent-mutation guarantee or an import sandbox."
+      ]
+    },
+    {
+      "id": "P04-F03",
+      "title": "Normative specifications were not pinned and one sentence overstated source evidence",
+      "reported_severity": "F1",
+      "origin_agents": [
+        "/root/w03_a04_source_review"
+      ],
+      "origin_records": [
+        "w03_a04.md"
+      ],
+      "status": "fixed_and_independently_reviewed",
+      "problem": "The named tiny-MLP and tensor-numerics specifications could drift outside the manifest inventory; one sentence described fixture data as establishing execution correctness.",
+      "correction": "Pin both normative specifications and describe the data as correctness targets for later execution. Clarify tensor-transfer exclusions and future actual-output/completion obligations.",
+      "validation": [
+        "Frozen review verified all 17 final artifact pins, including both specifications.",
+        "Reviewed specification and executor plan distinguish source targets, host work, tensor-buffer byte estimates and later measured execution."
+      ],
+      "fix_agents": [
+        "/root/w04_a01_checker_fix",
+        "/root/w04_a04_spec_corrections"
+      ],
+      "review_agents": [
+        "/root/w06_a06_changed_hunk_review",
+        "/root/w07_a05_execution_boundary_review"
+      ],
+      "supporting_records": [
+        "w04_a01.md",
+        "w04_a04.md",
+        "w06_a06.md",
+        "w07_a05.md"
+      ],
+      "fixed_source_revision": "10ace66193686e3862c3c218760b66c044f1d4ae"
+    },
+    {
+      "id": "P04-F04",
+      "title": "Host output-copy token disagreed between fixture and graph",
+      "reported_severity": null,
+      "origin_agents": [
+        "/root/w03_a06_runtime_mapping"
+      ],
+      "origin_records": [
+        "w03_a06.md"
+      ],
+      "status": "fixed_and_independently_reviewed",
+      "problem": "Fixture host_work used output_row_assembly while the manifest graph and allowlist used copy_row_blocks. No current executor existed, but a future consumer could disagree between the contracts.",
+      "correction": "Use copy_row_blocks in the producer, regenerate the fixture explicitly and add cross-document token equality coverage.",
+      "validation": [
+        "All 44 raw tensor hashes over 4,000 uint32 words remained identical after the metadata-only correction.",
+        "The 19 focused reference tests passed; an independent reviewer recomputed tensor identities."
+      ],
+      "fixture_sha256_before": "de845064bf2ca9de3ead396d479374c941761f1df565c238ced9a09a55f219c6",
+      "fixture_sha256_after": "d22a899827afb3e8c22a528fc6a27fd12ff114ef39caf9ffa0cccd77e849cd03",
+      "fix_agents": [
+        "/root/w04_a02_host_token_fix"
+      ],
+      "review_agents": [
+        "/root/w04_a05_fix_review",
+        "/root/w06_a06_changed_hunk_review"
+      ],
+      "supporting_records": [
+        "w04_a02.md",
+        "w04_a02_verification.json",
+        "w04_a05.md",
+        "w06_a06.md"
+      ],
+      "fixed_source_revision": "10ace66193686e3862c3c218760b66c044f1d4ae"
+    },
+    {
+      "id": "P04-F05",
+      "title": "Spec-only edits would not trigger the governance workflow",
+      "reported_severity": null,
+      "origin_agents": [
+        "/root/w04_a06_integration_review"
+      ],
+      "origin_records": [
+        "w04_a06.md"
+      ],
+      "status": "fixed_and_independently_reviewed",
+      "problem": "Both governance event filters omitted the two newly pinned design specifications; the combined implementation change triggered CI but later spec-only edits would not.",
+      "correction": "Add both exact paths to push and pull_request filters, four positive lines total, and dynamically test coverage of all pinned artifacts.",
+      "before_fix_observation": {
+        "focused_tests": 2,
+        "failing_subtests": 4,
+        "missing_paths_per_event": 2
+      },
+      "validation": [
+        "After the fix, both focused tests passed.",
+        "Independent review proved removing only the four additions reproduces the baseline workflow byte for byte.",
+        "All 17 final manifest pins, the workflow and its test are covered by both event filters.",
+        "The extracted baseline classifier classified the frozen change R2, with no R3 contracts or workflow trust exposures."
+      ],
+      "fix_agents": [
+        "/root/w05_a01_ci_coverage_fix"
+      ],
+      "review_agents": [
+        "/root/w05_a06_workflow_review",
+        "/root/w06_a06_changed_hunk_review",
+        "/root/w07_a01_base_classifier"
+      ],
+      "supporting_records": [
+        "w05_a01.md",
+        "w05_a06.md",
+        "w06_a06.md",
+        "w07_a01.md"
+      ],
+      "fixed_source_revision": "10ace66193686e3862c3c218760b66c044f1d4ae"
+    },
+    {
+      "id": "P04-F06",
+      "title": "Manifest regeneration accepted native-incompatible profile settings",
+      "reported_severity": "F2",
+      "origin_agents": [
+        "/root/w05_a02_contract_adversarial"
+      ],
+      "origin_records": [
+        "w05_a02.md",
+        "w05_a02_profile_probes.json"
+      ],
+      "status": "fixed_and_independently_reviewed",
+      "problem": "The old subset check accepted disabled FP16/local memory, PE ratio 2, and an extra local-memory-size override of 8192 after explicit manifest regeneration, while the actual native profile guard rejected each generated configuration.",
+      "before_fix_observation": {
+        "independent_profile_mutations": 4,
+        "each_manifest_write_exit": 0,
+        "each_manifest_check_exit": 0,
+        "each_actual_config_generation_exit": 0,
+        "each_actual_native_guard_compile_exit": 1,
+        "gpu_execution": false
+      },
+      "correction": "Validate exact typed mappings for all 26 core and two chip settings; reject extra configuration keys, platform overrides, inheritance and unknown top-level fields. Pin the native guard, configuration defaults, type definitions and parser; leave descriptive metadata separately permitted.",
+      "validation": [
+        "Seven new tests cover 15 independent semantic mutations after updating each copied profile digest.",
+        "All 30 check/write rejection invocations preserved copied bytes and mtimes.",
+        "The complete contract module passed 32 tests in the isolated copied bundle.",
+        "Independent profile review verified actual parser merge/inheritance behavior, final 17 source pins, and unchanged native configuration/guard files."
+      ],
+      "fix_agents": [
+        "/root/w05_a04_profile_fix",
+        "/root/w05_a05_profile_tests"
+      ],
+      "review_agents": [
+        "/root/w06_a02_profile_review",
+        "/root/w06_a06_changed_hunk_review"
+      ],
+      "supporting_records": [
+        "w05_a04.md",
+        "w05_a04_profile_fix_probes.json",
+        "w05_a05.md",
+        "w05_a05_contract_results.json",
+        "w06_a02.md",
+        "w06_a06.md"
+      ],
+      "fixed_source_revision": "10ace66193686e3862c3c218760b66c044f1d4ae",
+      "limits": [
+        "Pins and mapping checks establish source consistency, not generated-build, runtime-override or backend/kernel agreement. Future executor qualification must establish those separately."
+      ]
+    },
+    {
+      "id": "P04-F07",
+      "title": "CI regression guard missed legal quoted or padded control keys",
+      "reported_severity": "F2",
+      "origin_agents": [
+        "/root/w05_a06_workflow_review"
+      ],
+      "origin_records": [
+        "w05_a06.md"
+      ],
+      "status": "fixed_and_independently_reviewed",
+      "problem": "The new test accepted job-level if : false, single-quoted if: false, and continue-on-error : true, even though these legal YAML forms can skip or suppress the governance job. The current workflow itself was unconditional.",
+      "correction": "Require plain job-level mapping keys at the existing indentation; reject duplicates, if, continue-on-error, and unsupported quoted/padded/merge/explicit-key forms.",
+      "validation": [
+        "Twelve in-memory mutation probes were rejected; baseline and a harmless plain name field were accepted.",
+        "Both focused tests passed after repair.",
+        "An independent changed-hunk reviewer separately replayed all three original bypasses; each was rejected.",
+        "The workflow bytes were unchanged by the guard repair."
+      ],
+      "fix_agents": [
+        "/root/w06_a01_ci_guard_fix"
+      ],
+      "review_agents": [
+        "/root/w06_a06_changed_hunk_review"
+      ],
+      "supporting_records": [
+        "w06_a01.md",
+        "w06_a01_ci_guard_results.json",
+        "w06_a06.md"
+      ],
+      "fixed_source_revision": "10ace66193686e3862c3c218760b66c044f1d4ae",
+      "limits": [
+        "This is a conservative guard for the current workflow subset, not a general YAML parser or a security guarantee for an arbitrary rewritten workflow."
+      ]
+    },
+    {
+      "id": "P04-F08",
+      "title": "Inherited tensor DSP area gate remains failed",
+      "reported_severity": null,
+      "origin_agents": [
+        "/root/w01_a03_ci_regression",
+        "/root"
+      ],
+      "origin_records": [
+        "w01_a03.md",
+        "w02_a06.md"
+      ],
+      "status": "unresolved_existing_ci_failure",
+      "problem": "Three existing full CI runs report tensor DSP usage 267 to 283, shown as +6.0%, beyond the unchanged 5% limit. The latest audited run had 125 passing jobs plus failed logic_gate and aggregate jobs.",
+      "observed_runs": [
+        {
+          "run_id": 43831931973,
+          "job_id": 133185321661,
+          "url": "https://github.com/baabi-boo/AI-GPU/actions/runs/43831931973/job/133185321661"
+        },
+        {
+          "run_id": 44006819632,
+          "job_id": 133788898496,
+          "url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44006819632/job/133788898496"
+        },
+        {
+          "run_id": 44271136872,
+          "job_id": 134700081401,
+          "url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44271136872/job/134700081401"
+        }
+      ],
+      "disposition": "No RTL, golden baseline or gate threshold is changed by the fixture work. The green predecessor run 44258576211 had 42 jobs and no logic_gate cell; reduced green coverage does not resolve this failure.",
+      "static_candidate": {
+        "revision": "1a898f7fb292e2b554ddd5c2065710a6cb5faba5",
+        "description": "Widened MX scale indexing also widens a dynamic multiplication. Additional DSP inference is plausible.",
+        "causal_bisect_measured": false
+      },
+      "follow_up": "Establish parent/candidate Beacon measurements and per-unit attribution; preserve the widened index, prove any addressing rewrite equivalent, and run MX WGMMA NRC=16 RTL coverage with applicable SimX/RTL parity.",
+      "repository_record": "docs/project/p04-audit.md",
+      "closure_claimed": false
+    },
+    {
+      "id": "P04-F09",
+      "title": "P01-A03 vendor hardware-emulation prerequisite remains blocked",
+      "reported_severity": null,
+      "origin_agents": [
+        "/root/w01_a04_evidence_audit",
+        "/root/w02_a06_ci_audit_record"
+      ],
+      "origin_records": [
+        "w01_a04.md",
+        "w02_a06.md"
+      ],
+      "status": "blocked_vendor_prerequisite",
+      "problem": "Qualified vendor XRT hw_emu tools/platform and matching integration artifacts are unavailable or unverified in the retained P01-A03 record.",
+      "disposition": "P01-A01/A02 remain accepted; the blocked A03 record is preserved. Source-only P04 work does not replace vendor integration, and P07 still requires full P01 completion.",
+      "follow_up": "Establish the identified vendor release/platform, matching xclbin and emconfig, tool identities and resource budget, then execute and independently review the bounded XRT hw_emu integration smoke.",
+      "repository_record": "docs/project/evidence/p01-xrt-blocked.json",
+      "closure_claimed": false
+    },
+    {
+      "id": "P04-F10",
+      "title": "Qualification harness can omit an early blocked receipt",
+      "reported_severity": "F1",
+      "reported_confidence": "high",
+      "reported_evidence": "static proof and isolated no-process preflight probe",
+      "origin_agents": [
+        "/root/w07_a02_qualification_review"
+      ],
+      "origin_records": [
+        "w07_a02.md",
+        "w07_a02_preflight_probe.json"
+      ],
+      "status": "open_fail_closed_diagnostic_limit",
+      "problem": "When run_bounded blocks before creating a log, the outer harness calls log.read_bytes before appending the blocked receipt. FileNotFoundError prevents that latest record from being saved.",
+      "observed_probe": {
+        "outcome": "blocked",
+        "reason": "disk_reserve",
+        "process_started": false,
+        "log_sha256": null,
+        "log_size_bytes": 0,
+        "outer_hash_step": "FileNotFoundError",
+        "qualification_run_affected": false
+      },
+      "disposition": "The harness fails nonzero and cannot grant a false pass. None of the completed qualification commands inspected by the reporter took this path. Preserve the exact executed harness and disclose the limitation; the finding does not alter the P04 implementation.",
+      "executed_harness_sha256": "7b742bdf282ed42f93807d90cfffd50c0a02c086248fbb3759e75b9e3d56b645",
+      "follow_up_owner_role": "P04 executor and qualification owner",
+      "follow_up": "Before adapting the harness for the next qualification, persist a returned blocked receipt even when no log exists, use an explicit absent-log identity, and exercise early disk/resource/log-open failures in isolated no-process probes. Keep the historical executed harness unchanged.",
+      "closure_claimed": false
+    }
+  ],
+  "provenance": [
+    {
+      "original_name": "w01_a03.md",
+      "original_sha256": "e676d193f9463a4453376e47011dbd07a4fbe850e06f0eb1cba252a09d2f4a3b"
+    },
+    {
+      "original_name": "w01_a04.md",
+      "original_sha256": "5efec568137fca73ee68da9172545b74c8c4625bf692a9fff69d8056f09de0dc"
+    },
+    {
+      "original_name": "w02_a01.md",
+      "original_sha256": "bf5b2e1a4ced8dfb578c3853c692a2aedf752acbb74aa06a76fb7b72985ad307"
+    },
+    {
+      "original_name": "w02_a03.md",
+      "original_sha256": "e33510e0a0d513165818a9a8e910536a8cc6ba930c1976ab9f164874de508f2e"
+    },
+    {
+      "original_name": "w02_a05.md",
+      "original_sha256": "183772c7c1361ea0aec5717bada058119204d8ad19b5a84fc9cd8cb367a6cad8"
+    },
+    {
+      "original_name": "w02_a06.md",
+      "original_sha256": "5e2a58e5b0a0056bdc0a47927ec9bc545af2e07338f9fb28f754858c5d5302e2"
+    },
+    {
+      "original_name": "w03_a04.md",
+      "original_sha256": "3d8b6b87ba264bb8c4cf26b2ff10550afd0e051a2a9acca8b5b4fc3c57e6c6ab"
+    },
+    {
+      "original_name": "w03_a04_root_probe.json",
+      "original_sha256": "be546d625bcf08b8d00f9ab9e731163d6fd81876334804366d45047dc28b8c5c"
+    },
+    {
+      "original_name": "w03_a06.md",
+      "original_sha256": "5af28f7511332f6a030db7442876067b2117b9fc37570300e625597560bb2ccb"
+    },
+    {
+      "original_name": "w04_a01.md",
+      "original_sha256": "5ba33d0fae59bbe5890d7ff37fd6f01c96868bac662a7f07fe7efb797e4bb176"
+    },
+    {
+      "original_name": "w04_a01_probe.json",
+      "original_sha256": "8f9c3a2d91e1806f205187548ff75888ec40a9024525c8fbcfaf241f52b1e210"
+    },
+    {
+      "original_name": "w04_a02.md",
+      "original_sha256": "96c274cd4e20574ef7f6a0d5476f70e69fe196e0abf375e8fa39d98f6d672d9e"
+    },
+    {
+      "original_name": "w04_a02_verification.json",
+      "original_sha256": "e33acac7cd6e0f95a88b3652d7782d0adb1416891ea9c9980ea84da6db514a3d"
+    },
+    {
+      "original_name": "w04_a03.md",
+      "original_sha256": "5489ca307b958a7d877fc0494bdd3d7435f31db684cb89130249e9dc644c6a72"
+    },
+    {
+      "original_name": "w04_a04.md",
+      "original_sha256": "e3dea30693203a03ddce646d3d417559de1c6a369824bb133022727cf2feb250"
+    },
+    {
+      "original_name": "w04_a05.md",
+      "original_sha256": "e762df860bb0cb76c38cdbd09b19af1d144a652ba53573b0be3da96b5007a881"
+    },
+    {
+      "original_name": "w04_a05_probe.json",
+      "original_sha256": "6c15e53e2ba4aa90594f269bc346de0ed058543d5f961c701da9e26b2b5936c8"
+    },
+    {
+      "original_name": "w04_a06.md",
+      "original_sha256": "9ac84942a2b34fae0039491242ae46cf498d2bf314a0c5087ae1c37a300ab10c"
+    },
+    {
+      "original_name": "w05_a01.md",
+      "original_sha256": "f2487eca9e25c1370be6261635031ffca95b95f71ea37f82af9ee18110f7a5f6"
+    },
+    {
+      "original_name": "w05_a02.md",
+      "original_sha256": "7e19f8fb2d594ca12f722551671c62c09e710637b91ebe08457a7a7e7fc88fad"
+    },
+    {
+      "original_name": "w05_a02_profile_probes.json",
+      "original_sha256": "d1411ff950025bd408585366fe3498dac16b1fa5f6539edfc1a7d0beb53f36f4"
+    },
+    {
+      "original_name": "w05_a04.md",
+      "original_sha256": "09d7d7654af659c6bfa8e0869ee69182271f3d10c71f97461b1a7ed3bfa9e112"
+    },
+    {
+      "original_name": "w05_a04_profile_fix_probes.json",
+      "original_sha256": "dd700c920d17b45ebee05b3395979258a0771840df5e53e2d9d628e1eaa004c8"
+    },
+    {
+      "original_name": "w05_a05.md",
+      "original_sha256": "7070c06b00e0e33722ca5befe2fe8b806110849c50c804c658b718fd04d924ce"
+    },
+    {
+      "original_name": "w05_a05_contract_results.json",
+      "original_sha256": "527b6f177138bbd951f84bab62089a7f21104085759719b3d1e92b2e5cb22a09"
+    },
+    {
+      "original_name": "w05_a06.md",
+      "original_sha256": "c331bfefdfe47e5b4bcb70cdd6ddda6a31ebf7611f393620bc0e1f93f72a721e"
+    },
+    {
+      "original_name": "w06_a01.md",
+      "original_sha256": "4e4eb4c3e974fb0cc6224187c954295197c6f6fb5a8844e5163458a15909e9da"
+    },
+    {
+      "original_name": "w06_a01_ci_guard_results.json",
+      "original_sha256": "c4bfc2fd5288e648ff30d7a8d0926d9979258ca6c6271689c97afdf9abdf853e"
+    },
+    {
+      "original_name": "w06_a02.md",
+      "original_sha256": "174dcb0b742fb857a129ce27e2befb2d619c5d37ee80f3474e496ab57f872786"
+    },
+    {
+      "original_name": "w06_a06.md",
+      "original_sha256": "9317202e5adc6ddf3e2cc492893a4740eef5beec2e1ac190e08c4fd6ac949d4f"
+    },
+    {
+      "original_name": "w07_a01.md",
+      "original_sha256": "cf4b707d48e37562d34ae64c619134de1fd835320d2c7a83c6bbc522a45ed35f"
+    },
+    {
+      "original_name": "w07_a02.md",
+      "original_sha256": "a18e0d3d0bb127d10cf0a749cff297790086cc78a5fdec6795624034e26499fa"
+    },
+    {
+      "original_name": "w07_a02_preflight_probe.json",
+      "original_sha256": "1ac724e1e2629f6ff6a427a96a91ca30c173e9313a44e5ab324db5fd379fa8d6"
+    },
+    {
+      "original_name": "w07_a03.md",
+      "original_sha256": "adefbdf7218b6c9c712cc660ac2a7f5c4447a45be0e527067d716a3cc3999608"
+    },
+    {
+      "original_name": "w07_a05.md",
+      "original_sha256": "3e160827f9d0bb1fe212330c8a1acf7e982131e7797926e2dbd658502f18fbca"
+    },
+    {
+      "repository_path": "docs/project/p04-audit.md",
+      "sha256": "0d94c7cecd885e8b56c31be93f7bd7f28aae7cceb950f4240e5554ef17abea61"
+    },
+    {
+      "repository_path": "docs/project/evidence/p01-xrt-blocked.json",
+      "sha256": "c480d1eb390a237b5e33c55b2115f3a43e997207a9122c319264671284e82551"
+    }
+  ],
+  "provenance_retention": "Original names and SHA-256 values identify inspected development receipts/probes. Compact observations are embedded in this record. These names do not assert separately delivered raw files; completed agent reports are retained by the packet agent ledger."
+}

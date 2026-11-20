@@ -131,9 +131,14 @@ P01 completion and its own physical FPGA measurements. Follow the
 
 ## ADR-005 — Fixed nonlinear MLP on the accepted matmul signatures
 
-**Status:** selected and implemented for P04-T01, 2026-11-20; formal
-`source_present` acceptance remains pending. This resolves ODR-002's model and
-placement selection without closing P04-A01, P04-A02 or P04-A03.
+**Status:** P04-T01 complete, with [P04-A01 accepted at `source_present`
+scope](evidence/p04-fixture/acceptance.json), 2026-11-20. This resolves ODR-002's
+model and placement selection. P04 remains `in_progress`; P04-A02/A03 are unearned.
+The [qualification packet](evidence/p04-fixture/README.md) binds the reviewed
+contract and all five passing formal commands to source
+`10ace66193686e3862c3c218760b66c044f1d4ae`, tree
+`775aa7d5f96cfc5f7346e591ca151f36c485d2cf`. Its source suite passed 1,733 tests
+in 752.879 seconds with no failures, errors or skips and unchanged source.
 
 **Decision owner:** the primary coding agent (`/root`), carrying out the user's
 instruction to audit and implement the next bounded development step. Model

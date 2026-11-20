@@ -1,0 +1,158 @@
+{
+  "source_revision": "10ace66193686e3862c3c218760b66c044f1d4ae",
+  "source_tree": "775aa7d5f96cfc5f7346e591ca151f36c485d2cf",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "scope": "Host tooling and source contract qualification; no GPU execution.",
+  "commands": [
+    {
+      "name": "fixture",
+      "argv": [
+        "python3",
+        "ci/project/p04_reference.py",
+        "--check"
+      ],
+      "cwd": "${SOURCE}",
+      "receipt": {
+        "outcome": "pass",
+        "exit_code": 0,
+        "reason": null,
+        "process_started": true,
+        "duration_seconds": 0.20561,
+        "log_sha256": "e8e28ac7c133b15fc71ce1e45e7706de87b41feaa7386cf42707c876b56242ce",
+        "log_size_bytes": 72,
+        "peak_rss_bytes": 10092544,
+        "cleanup_complete": true,
+        "limitations": [
+          "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+          "Process-group RSS can count shared pages more than once and excludes page cache.",
+          "Reported peak RSS is the highest sample and may miss peaks between polls.",
+          "No container/cgroup memory limit is inferred by this process monitor.",
+          "Descendants that deliberately leave the process group are outside its containment."
+        ]
+      },
+      "log": "fixture.log",
+      "log_sha256": "e8e28ac7c133b15fc71ce1e45e7706de87b41feaa7386cf42707c876b56242ce"
+    },
+    {
+      "name": "contract",
+      "argv": [
+        "python3",
+        "ci/project/p04_model_contract.py",
+        "--check"
+      ],
+      "cwd": "${SOURCE}",
+      "receipt": {
+        "outcome": "pass",
+        "exit_code": 0,
+        "reason": null,
+        "process_started": true,
+        "duration_seconds": 0.24636,
+        "log_sha256": "783b20be81b2ffe4115e33911257d7909ea038e6a20d9f05ec779ef5eb1350a1",
+        "log_size_bytes": 77,
+        "peak_rss_bytes": 12058624,
+        "cleanup_complete": true,
+        "limitations": [
+          "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+          "Process-group RSS can count shared pages more than once and excludes page cache.",
+          "Reported peak RSS is the highest sample and may miss peaks between polls.",
+          "No container/cgroup memory limit is inferred by this process monitor.",
+          "Descendants that deliberately leave the process group are outside its containment."
+        ]
+      },
+      "log": "contract.log",
+      "log_sha256": "783b20be81b2ffe4115e33911257d7909ea038e6a20d9f05ec779ef5eb1350a1"
+    },
+    {
+      "name": "governance",
+      "argv": [
+        "python3",
+        "ci/project/check_project.py"
+      ],
+      "cwd": "${SOURCE}",
+      "receipt": {
+        "outcome": "pass",
+        "exit_code": 0,
+        "reason": null,
+        "process_started": true,
+        "duration_seconds": 0.967462,
+        "log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+        "log_size_bytes": 96,
+        "peak_rss_bytes": 14700544,
+        "cleanup_complete": true,
+        "limitations": [
+          "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+          "Process-group RSS can count shared pages more than once and excludes page cache.",
+          "Reported peak RSS is the highest sample and may miss peaks between polls.",
+          "No container/cgroup memory limit is inferred by this process monitor.",
+          "Descendants that deliberately leave the process group are outside its containment."
+        ]
+      },
+      "log": "governance.log",
+      "log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993"
+    },
+    {
+      "name": "baseline-packets",
+      "argv": [
+        "python3",
+        "ci/project/check_baseline_packets.py"
+      ],
+      "cwd": "${SOURCE}",
+      "receipt": {
+        "outcome": "pass",
+        "exit_code": 0,
+        "reason": null,
+        "process_started": true,
+        "duration_seconds": 0.264915,
+        "log_sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be",
+        "log_size_bytes": 657,
+        "peak_rss_bytes": 15859712,
+        "cleanup_complete": true,
+        "limitations": [
+          "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+          "Process-group RSS can count shared pages more than once and excludes page cache.",
+          "Reported peak RSS is the highest sample and may miss peaks between polls.",
+          "No container/cgroup memory limit is inferred by this process monitor.",
+          "Descendants that deliberately leave the process group are outside its containment."
+        ]
+      },
+      "log": "baseline-packets.log",
+      "log_sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be"
+    },
+    {
+      "name": "full-suite",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/project",
+        "-p",
+        "test_*.py"
+      ],
+      "cwd": "${SOURCE}",
+      "receipt": {
+        "outcome": "pass",
+        "exit_code": 0,
+        "reason": null,
+        "process_started": true,
+        "duration_seconds": 754.226047,
+        "log_sha256": "6eae5030946d0ce91db11d01f8e394af727ccc6ae9dd8441934a22927ae7a16d",
+        "log_size_bytes": 1913,
+        "peak_rss_bytes": 108716032,
+        "cleanup_complete": true,
+        "limitations": [
+          "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+          "Process-group RSS can count shared pages more than once and excludes page cache.",
+          "Reported peak RSS is the highest sample and may miss peaks between polls.",
+          "No container/cgroup memory limit is inferred by this process monitor.",
+          "Descendants that deliberately leave the process group are outside its containment."
+        ]
+      },
+      "log": "full-suite.log",
+      "log_sha256": "6eae5030946d0ce91db11d01f8e394af727ccc6ae9dd8441934a22927ae7a16d"
+    }
+  ],
+  "source_unchanged": true
+}

@@ -1,0 +1,149 @@
+{
+  "reviewer": "/root/w07_a05_execution_boundary_review",
+  "source_revision": "10ace66193686e3862c3c218760b66c044f1d4ae",
+  "source_tree": "775aa7d5f96cfc5f7346e591ca151f36c485d2cf",
+  "scope": "Read-only static graph, transfer arithmetic and P03 runtime API review; no model execution",
+  "outcome": "approve",
+  "blocking_findings": [],
+  "source_clean": true,
+  "source_artifacts": [
+    {
+      "path": "ci/project/p04_model_manifest.json",
+      "sha256": "8eb6acc6c8d19990eca2fc328395a1dcc3f41c7a3d6deee904a3e923163e9ec2"
+    },
+    {
+      "path": "docs/designs/tiny_mlp_fixture_v1.md",
+      "sha256": "8375616d9a498c08640c2d436d9764d6d10196001e7401730b121cdb64263b12"
+    },
+    {
+      "path": "docs/project/p04-executor-plan.md",
+      "sha256": "118e265278b71e221477f7887d6f8d321014969527737987def4486fe86002bb"
+    },
+    {
+      "path": "sw/runtime/ai/runtime.h",
+      "sha256": "03781d4de8f853bc9e2f9c4af85bc5b063359446cfc51a3b3e13a0d60e3c3b9d"
+    },
+    {
+      "path": "sw/runtime/ai/runtime.cpp",
+      "sha256": "40046e3ac8b32a442c8bf636561cac3808de9a55586423741fd8e4fc511402b6"
+    },
+    {
+      "path": "sw/runtime/ai/contract.h",
+      "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b"
+    },
+    {
+      "path": "sw/runtime/ai/contract.cpp",
+      "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff"
+    },
+    {
+      "path": "sw/runtime/ai/mlp_host.h",
+      "sha256": "309e437aa9ca80c3a9c7c8ca7544478cdce4861203d32280709e2e940425cd0b"
+    },
+    {
+      "path": "sw/runtime/ai/mlp_host.cpp",
+      "sha256": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256"
+    },
+    {
+      "path": "sw/kernel/ai/matmul.cpp",
+      "sha256": "ad3b6107f0eef91ec676412bc795ab70cd1c9f31647b2cea854de6234fe71d3e"
+    },
+    {
+      "path": "sw/common/ai_matmul_args.h",
+      "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147"
+    },
+    {
+      "path": "sw/common/ai_matmul_profile.h",
+      "sha256": "8b2eb9a819506227808537612672c08a574230736f13f840a9d83bbd35675680"
+    },
+    {
+      "path": "docs/project/p03-operators-handoff.md",
+      "sha256": "a5303b4f09823de863177df2fb9d03b32081aaf0f0e668b464a83978a5f6d3e4"
+    }
+  ],
+  "planned_submissions": [
+    {
+      "operation": "hidden_matmul",
+      "mnk": [
+        16,
+        8,
+        16
+      ],
+      "grid": [
+        2,
+        2,
+        1
+      ],
+      "block": [
+        4,
+        1,
+        1
+      ],
+      "a_write_bytes": 512,
+      "b_write_bytes": 256,
+      "d_poison_write_bytes": 512,
+      "d_read_bytes": 512,
+      "h2d_bytes": 1280
+    },
+    {
+      "operation": "output_rows_0_7",
+      "mnk": [
+        8,
+        4,
+        8
+      ],
+      "grid": [
+        1,
+        1,
+        1
+      ],
+      "block": [
+        4,
+        1,
+        1
+      ],
+      "a_write_bytes": 128,
+      "b_write_bytes": 64,
+      "d_poison_write_bytes": 128,
+      "d_read_bytes": 128,
+      "h2d_bytes": 320
+    },
+    {
+      "operation": "output_rows_8_15",
+      "mnk": [
+        8,
+        4,
+        8
+      ],
+      "grid": [
+        1,
+        1,
+        1
+      ],
+      "block": [
+        4,
+        1,
+        1
+      ],
+      "a_write_bytes": 128,
+      "b_write_bytes": 64,
+      "d_poison_write_bytes": 128,
+      "d_read_bytes": 128,
+      "h2d_bytes": 320
+    }
+  ],
+  "planned_totals_per_case": {
+    "tensor_h2d_bytes": 1920,
+    "tensor_d2h_bytes": 768,
+    "writes": 9,
+    "reads": 3,
+    "native_launches": 3,
+    "argument_payload_bytes": 168
+  },
+  "accounting_limitations": [
+    "The 168 argument payload bytes are three 56-byte API payloads, not measured transport traffic.",
+    "Tensor totals exclude argument/control/module/setup traffic and are not physical DMA transaction counts.",
+    "Ten cases imply 30 planned launches per inventory traversal; future backend/repetition counts require separate declaration."
+  ],
+  "actual_gpu_runs": 0,
+  "source_unchanged": true
+}

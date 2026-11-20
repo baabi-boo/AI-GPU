@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/w09_a02_agent_accounting",
+  "disposition": "approve observed partial accounting and corrected finalizer; final 60-agent completion remains pending",
+  "scope": "Read-only accounting and scratch-finalizer review; no repository edit, broad test, compilation, GPU execution, commit, push or agent spawn.",
+  "initial_snapshot": {
+    "observed_at_utc": "2026-11-20T08:53:18.483366+00:00",
+    "registry_sha256": "08109e25b52a187b59a9f01945377e64146554cb14ec8b510241315fd0ee6709",
+    "registered_agents": 50,
+    "unique_agents": 50,
+    "unique_slots": 50,
+    "unique_receipts": 50,
+    "completed_nonempty_receipts": 47,
+    "wave_counts": {
+      "1": 6,
+      "2": 6,
+      "3": 6,
+      "4": 6,
+      "5": 6,
+      "6": 6,
+      "7": 6,
+      "8": 6,
+      "9": 2
+    },
+    "title_slot_matches": 47,
+    "distinct_raw_receipt_hashes": 47,
+    "receipt_bytes": 201172,
+    "portable_marker_hits": 0
+  },
+  "later_snapshot": {
+    "registered_agents": 52,
+    "completed_nonempty_receipts": 49,
+    "actual_optimized_exit_code": 1,
+    "no_output_created_or_changed": true
+  },
+  "finding": {
+    "severity": "F1",
+    "confidence": "high",
+    "evidence_type": "static-proof",
+    "summary": "Original assert guards disappeared under optimization and did not require unique slots/receipt paths.",
+    "initial_script_sha256": "d1fe3be493bce56838d02a2d04de283d1e5fcde46a06b6f13d07275419490898",
+    "status": "fixed",
+    "fix_owner": "/root",
+    "corrected_script_sha256": "f5c2f7322edf6fdb7ccda237f9444e95bcae517b152a43377f75b65ee881955c",
+    "independent_probe_cases": 17,
+    "valid_cases_passed": 2,
+    "invalid_cases_rejected_before_output": 15
+  },
+  "remaining": [
+    "All sixty real agents and receipts must complete",
+    "Final actual-count and generated-ledger review",
+    "Final artifact hashes and publication readback"
+  ],
+  "artifacts": [
+    {
+      "path": "w09_a02.md",
+      "sha256": "5b4f311a88c36d67f3528105a30eb86d67f8f365ba4aa5018db1671d59801369"
+    },
+    {
+      "path": "w09_a02_observation.json",
+      "sha256": "8f3ce0762761ee1729cca93197e76d614b23b073f02254633e46e587a05cc283"
+    },
+    {
+      "path": "w09_a02_fixed_guard_probes.json",
+      "sha256": "6452414834a856eb162a84a46384e37d6ee5de4895e5b87bad0cb1928eb633ba"
+    }
+  ]
+}

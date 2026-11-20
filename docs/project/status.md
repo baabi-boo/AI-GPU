@@ -1,14 +1,15 @@
 # Current project status
 
-**P04 is `in_progress`. P04-T01 is implemented and under qualification;
-P04-A01 remains pending.** The [tiny-model fixture contract](../designs/tiny_mlp_fixture_v1.md)
+**P04-T01 is complete; P04-A01 is [accepted at `source_present` scope](evidence/p04-fixture/acceptance.json).
+P04 remains `in_progress`.** The [tiny-model fixture contract](../designs/tiny_mlp_fixture_v1.md)
 fixes a synthetic, bias-free `16 → 8 → 4` ReLU MLP for a batch of 16 samples,
 with ten deterministic FP16/BF16 cases, independent integer reference results,
 explicit host placement and a [hash-pinned manifest](../../ci/project/p04_model_manifest.json).
 The fixture producer, strict contract checker and host ReLU/exact-conversion
-helper are present. Formal qualification and independent evidence review must
-finish before source-level acceptance. No composed model or GPU execution has
-been demonstrated by this work; P04-A02/A03 remain unearned. The next code work
+helper are qualified at source/host scope, with exact-source validation and
+independent review retained in the [acceptance packet](evidence/p04-fixture/README.md).
+No composed model or GPU execution has been demonstrated by this work;
+P04-A02/A03 remain unearned. The next code work
 is [P04-T02, the managed model executor](p04-executor-plan.md).
 
 **P03 is complete with independently reviewed A01–A03 evidence.** The
@@ -47,7 +48,7 @@ the linked reports define the exact accepted scope.
 | P01 — reproducible baseline | `blocked` | A01 clean-build and A02 six-case numerical reports accepted; A03 vendor integration is still required before P07 |
 | P02 — tensor numerical contract | `complete` | A01 source contract, A02 ordinary WMMA and A03 bounded WGMMA evidence accepted after required review; T01/T02 complete |
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
-| P04 — tiny-model inference | `in_progress` | T01 fixture/reference/placement contract is implemented under qualification; A01 is pending and A02/A03 are unearned |
+| P04 — tiny-model inference | `in_progress` | T01 is complete and A01 is accepted at source scope; model execution and dispatch evidence for A02/A03 remain unearned |
 | P05–P11 | `not_started` | Later framework, performance, hardware and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -69,8 +70,15 @@ placement does not add native activation/cast support or CPU matmul fallback.
 The original generated weights, input families, seeds, layouts and exact
 preactivation/bridge/final targets are fixed before executor development. The
 manifest pins the fixture, independent producer, accepted profile and relevant
-source dependencies. These source artifacts support the pending P04-A01 review;
-they do not establish P04-A02/A03, dispatch, transfer timing or model performance.
+source dependencies. The [P04-A01 acceptance](evidence/p04-fixture/acceptance.json)
+binds this contract to clean source `10ace66193686e3862c3c218760b66c044f1d4ae`,
+tree `775aa7d5f96cfc5f7346e591ca151f36c485d2cf`. All five formal commands passed:
+fixture reproduction, contract validation, project governance, historical packet
+consistency and the complete source suite. The suite passed **1,733 tests in
+752.879 seconds**, including all **64 P04 tests**, with no errors, failures or
+skips. The tested source remained unchanged. Python 3.12.14 and GCC 14.2.0
+provided Python/reference and C++17/UBSan host checks; these results establish
+no P04-A02/A03 execution, device dispatch, transfer timing or model performance.
 
 The audit also preserves a separate unresolved CI area failure: tensor DSP usage
 is **267 → 283**, beyond the unchanged 5% gate threshold. The linked audit names
@@ -656,10 +664,9 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**Finish P04-T01 qualification, then implement P04-T02 — the managed tiny-model
-executor.** The fixture/reference/placement contract is implemented; freeze and
-test its exact source and complete independent review before attaching P04-A01
-acceptance. The [executor plan](p04-executor-plan.md) then composes the three
+**Implement P04-T02 — the managed tiny-model executor.** P04-T01 is complete
+with [source-level P04-A01 acceptance](evidence/p04-fixture/acceptance.json).
+The [executor plan](p04-executor-plan.md) composes the three
 declared matmul calls per case, feeds actual outputs through the explicit host
 bridge, preserves managed ownership through errors/timeouts, and records exact
 intermediate/final comparisons plus separate native, host and transfer evidence.

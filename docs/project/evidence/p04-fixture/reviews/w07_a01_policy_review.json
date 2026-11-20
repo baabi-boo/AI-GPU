@@ -1,0 +1,141 @@
+{
+  "base": "4a5df5afef1826b70a2addee5029aae9dada2da1",
+  "head": "10ace66193686e3862c3c218760b66c044f1d4ae",
+  "tree": "775aa7d5f96cfc5f7346e591ca151f36c485d2cf",
+  "inputs": [
+    {
+      "source_path": "ci/change_impact.py",
+      "base_revision": "4a5df5afef1826b70a2addee5029aae9dada2da1",
+      "snapshot": "change_impact.py",
+      "sha256": "bd2ef579de90b14b7ab4cd5ef2f6b7c911753e154c4201aaf0f0d0b25a460779",
+      "unchanged_at_candidate": true
+    },
+    {
+      "source_path": "docs/review/change-impact.yaml",
+      "base_revision": "4a5df5afef1826b70a2addee5029aae9dada2da1",
+      "snapshot": "change-impact.yaml",
+      "sha256": "489d1018c790bb6c383b774b119223889bb508be6c63db654d5c6c80520d0333",
+      "unchanged_at_candidate": true
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "-I",
+        "${BASE_POLICY_SNAPSHOT}/change_impact.py",
+        "--repo",
+        "${SOURCE}",
+        "--policy",
+        "${BASE_POLICY_SNAPSHOT}/change-impact.yaml",
+        "explain",
+        "--base",
+        "4a5df5afef1826b70a2addee5029aae9dada2da1",
+        "--head",
+        "10ace66193686e3862c3c218760b66c044f1d4ae",
+        "--event",
+        "push"
+      ],
+      "exit_code": 0,
+      "stdout": "explain.stdout",
+      "stdout_sha256": "73918557cbdd2c71e1ae91f724ce7ac95b6ef6145d0169a5e649c1a604d25198",
+      "stderr": "explain.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "python3",
+        "-I",
+        "${BASE_POLICY_SNAPSHOT}/change_impact.py",
+        "--repo",
+        "${SOURCE}",
+        "--policy",
+        "${BASE_POLICY_SNAPSHOT}/change-impact.yaml",
+        "classify",
+        "--base",
+        "4a5df5afef1826b70a2addee5029aae9dada2da1",
+        "--head",
+        "10ace66193686e3862c3c218760b66c044f1d4ae",
+        "--event",
+        "push",
+        "--format",
+        "json"
+      ],
+      "exit_code": 0,
+      "stdout": "classify.stdout",
+      "stdout_sha256": "f46e3f4bfe8f861b762db8bd2c969d8468c3f8c3faa5e7f6e98af939ce94bf94",
+      "stderr": "classify.stderr",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "unchanged_paths": {
+    "hw": true,
+    "sim": true,
+    "ci/baselines": true,
+    "ci/testcases": true,
+    "VERSION": true,
+    "VX_config.toml": true,
+    "VX_types.toml": true,
+    "configure": true,
+    "ci/gen_config.py": true,
+    "sw/runtime/include": true,
+    "sw/kernel/include": true,
+    "sw/common": true,
+    "Makefile.in": true,
+    "ci/perf_baseline.py": true,
+    "ci/logic_gate.py": true,
+    "ci/fpga_gate.py": true,
+    "ci/asic_gate.py": true,
+    "ci/testcase.py": true,
+    "docs/assets/img/vortex_framework_stack.svg": true
+  },
+  "workflow_only_four_positive_path_lines": true,
+  "working_tree_clean_at_start_and_end": true,
+  "class_counts": {
+    "R2": 3,
+    "R0": 11,
+    "R1": 11
+  },
+  "classification": "R2",
+  "contracts": [],
+  "evidence_findings": [],
+  "workflow_risks": {
+    "base": [],
+    "candidate": []
+  },
+  "source_only_scope": true,
+  "remaining_before_acceptance": [
+    "Exact-source full-suite qualification and independent results review",
+    "Acceptance/evidence-only child review and remote lease verification by root"
+  ],
+  "raw_files": [
+    {
+      "path": "change-impact.yaml",
+      "sha256": "489d1018c790bb6c383b774b119223889bb508be6c63db654d5c6c80520d0333"
+    },
+    {
+      "path": "change_impact.py",
+      "sha256": "bd2ef579de90b14b7ab4cd5ef2f6b7c911753e154c4201aaf0f0d0b25a460779"
+    },
+    {
+      "path": "classify.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "classify.stdout",
+      "sha256": "f46e3f4bfe8f861b762db8bd2c969d8468c3f8c3faa5e7f6e98af939ce94bf94"
+    },
+    {
+      "path": "explain.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "explain.stdout",
+      "sha256": "73918557cbdd2c71e1ae91f724ce7ac95b6ef6145d0169a5e649c1a604d25198"
+    },
+    {
+      "path": "workflow-risks.json",
+      "sha256": "d6290e51abc71be2b014149a18bef28315208b7b0611b7f180df94c45cb8789d"
+    }
+  ]
+}

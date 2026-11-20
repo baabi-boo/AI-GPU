@@ -145,16 +145,18 @@ source-bound execution and independent review; other operator categories remain
 explicitly unavailable. [The P03 handoff](docs/project/p03-operators-handoff.md)
 records the accepted operator inputs and limits for P04.
 
-**P04 is `in_progress`: its implemented T01 fixture is under qualification.**
+**P04-T01 is complete, with [P04-A01 accepted at source scope](docs/project/evidence/p04-fixture/acceptance.json); P04 remains `in_progress`.**
 The [tiny-MLP contract](docs/designs/tiny_mlp_fixture_v1.md) and
 [hashed manifest](ci/project/p04_model_manifest.json) fix a synthetic, bias-free
 batch-16 network with dimensions 16 → 8 → 4, deterministic weights and ten
 FP16/BF16 cases. Exact layer/final reference bits and the planned native-matmul
 boundary are fixed; host ReLU, exact format conversion and row-block assembly
 are explicitly declared because native activation remains unavailable.
-P04-A01 is pending formal source qualification; P04-A02/A03 remain unearned,
-and this work claims no model or GPU execution. After qualification, the next
-bounded implementation is [P04-T02 — the managed model executor](docs/project/p04-executor-plan.md).
+The [qualification packet](docs/project/evidence/p04-fixture/README.md) retains
+all 1,733 passing source/host tests and independent review at frozen source
+`10ace66193686e3862c3c218760b66c044f1d4ae`. P04-A02/A03 remain unearned,
+and this work claims no composed model or GPU execution. The next bounded
+implementation is [P04-T02 — the managed model executor](docs/project/p04-executor-plan.md).
 The [development audit](docs/project/p04-audit.md) records why this step follows
 P03 and preserves the unresolved inherited CI area-gate failure.
 

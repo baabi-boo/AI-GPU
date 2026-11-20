@@ -1,0 +1,249 @@
+{
+  "reviewer": "/root/w08_a02_formal_results_review",
+  "observed_at_utc": "2026-11-20T08:47:07.409880+00:00",
+  "disposition": "approve",
+  "scope": "Independent final review of actual host/source qualification for P04-A01 only; no GPU/model execution or delivery acceptance.",
+  "source_revision": "10ace66193686e3862c3c218760b66c044f1d4ae",
+  "source_tree": "775aa7d5f96cfc5f7346e591ca151f36c485d2cf",
+  "clean_source_verified_after_execution": true,
+  "qualification_record_sha256": "55b4f1f271b46399632c15ce2e62969840e2abcb67e3c0afeb40dd7603716c22",
+  "qualification_runner_sha256": "7b742bdf282ed42f93807d90cfffd50c0a02c086248fbb3759e75b9e3d56b645",
+  "commands_verified": [
+    {
+      "name": "fixture",
+      "argv": [
+        "python3",
+        "ci/project/p04_reference.py",
+        "--check"
+      ],
+      "cwd": "${SOURCE}",
+      "outcome": "pass",
+      "exit_code": 0,
+      "duration_seconds": 0.20561,
+      "verified_log": "fixture.log",
+      "verified_sha256": "e8e28ac7c133b15fc71ce1e45e7706de87b41feaa7386cf42707c876b56242ce",
+      "verified_size_bytes": 72,
+      "peak_sampled_rss_bytes": 10092544,
+      "cleanup_complete": true,
+      "path_or_credential_markers_detected": false
+    },
+    {
+      "name": "contract",
+      "argv": [
+        "python3",
+        "ci/project/p04_model_contract.py",
+        "--check"
+      ],
+      "cwd": "${SOURCE}",
+      "outcome": "pass",
+      "exit_code": 0,
+      "duration_seconds": 0.24636,
+      "verified_log": "contract.log",
+      "verified_sha256": "783b20be81b2ffe4115e33911257d7909ea038e6a20d9f05ec779ef5eb1350a1",
+      "verified_size_bytes": 77,
+      "peak_sampled_rss_bytes": 12058624,
+      "cleanup_complete": true,
+      "path_or_credential_markers_detected": false
+    },
+    {
+      "name": "governance",
+      "argv": [
+        "python3",
+        "ci/project/check_project.py"
+      ],
+      "cwd": "${SOURCE}",
+      "outcome": "pass",
+      "exit_code": 0,
+      "duration_seconds": 0.967462,
+      "verified_log": "governance.log",
+      "verified_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+      "verified_size_bytes": 96,
+      "peak_sampled_rss_bytes": 14700544,
+      "cleanup_complete": true,
+      "path_or_credential_markers_detected": false
+    },
+    {
+      "name": "baseline-packets",
+      "argv": [
+        "python3",
+        "ci/project/check_baseline_packets.py"
+      ],
+      "cwd": "${SOURCE}",
+      "outcome": "pass",
+      "exit_code": 0,
+      "duration_seconds": 0.264915,
+      "verified_log": "baseline-packets.log",
+      "verified_sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be",
+      "verified_size_bytes": 657,
+      "peak_sampled_rss_bytes": 15859712,
+      "cleanup_complete": true,
+      "path_or_credential_markers_detected": false
+    },
+    {
+      "name": "full-suite",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/project",
+        "-p",
+        "test_*.py"
+      ],
+      "cwd": "${SOURCE}",
+      "outcome": "pass",
+      "exit_code": 0,
+      "duration_seconds": 754.226047,
+      "verified_log": "full-suite.log",
+      "verified_sha256": "6eae5030946d0ce91db11d01f8e394af727ccc6ae9dd8441934a22927ae7a16d",
+      "verified_size_bytes": 1913,
+      "peak_sampled_rss_bytes": 108716032,
+      "cleanup_complete": true,
+      "path_or_credential_markers_detected": false
+    }
+  ],
+  "full_suite_tests_run": 1733,
+  "full_suite_reported_seconds": 752.879,
+  "full_suite_status": "OK",
+  "skips_failures_or_expected_failures_reported": false,
+  "new_p04_test_method_counts": {
+    "test_p04_ci_contract.py": 2,
+    "test_p04_host_bridge.py": 6,
+    "test_p04_model_contract.py": 32,
+    "test_p04_numerics.py": 5,
+    "test_p04_reference.py": 19
+  },
+  "new_p04_test_total": 64,
+  "manifest_sha256": "8eb6acc6c8d19990eca2fc328395a1dcc3f41c7a3d6deee904a3e923163e9ec2",
+  "manifest_pins_verified": [
+    {
+      "path": "ci/project/fixtures/p04_tiny_mlp_v1.json",
+      "sha256": "d22a899827afb3e8c22a528fc6a27fd12ff114ef39caf9ffa0cccd77e849cd03",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "ci/project/p04_reference.py",
+      "sha256": "115a7db51948d69fc6267d5fe658d1a8e68c22e9f200d5ddc3f0a5181d7140a9",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "ci/project/p04_model_contract.py",
+      "sha256": "c184d980d57aec54567d79025845c5fb34887741697ac78a66692a65da02e4b3",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "ci/project/p02_layout_fixture_oracle.py",
+      "sha256": "34e78c0313e2b032930615f02a790729d1c49293349728b55f7d04a29a2568a7",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "ci/project/p03_operator_manifest.json",
+      "sha256": "09f7071a40cec46f3fd7290a4aaadefc730a2bf006dc401a220050246d229f6b",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "profiles/p02-tfr.json",
+      "sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "VX_config.toml",
+      "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "VX_types.toml",
+      "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "ci/gen_config.py",
+      "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "sw/runtime/ai/mlp_host.h",
+      "sha256": "309e437aa9ca80c3a9c7c8ca7544478cdce4861203d32280709e2e940425cd0b",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "sw/runtime/ai/mlp_host.cpp",
+      "sha256": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "sw/runtime/ai/contract.h",
+      "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "sw/common/ai_matmul_args.h",
+      "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "sw/common/ai_matmul_profile.h",
+      "sha256": "8b2eb9a819506227808537612672c08a574230736f13f840a9d83bbd35675680",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "docs/designs/tiny_mlp_fixture_v1.md",
+      "sha256": "8375616d9a498c08640c2d436d9764d6d10196001e7401730b121cdb64263b12",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "docs/designs/tensor_numerics_v1.md",
+      "sha256": "2d7d3f18728fe77dd96a7de0c05c9550f2c2446ef7bee4fb0740fe8d367a06a2",
+      "working_bytes_equal_frozen_git_blob": true
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "working_bytes_equal_frozen_git_blob": true
+    }
+  ],
+  "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "compiler": {
+    "version": "g++ (Debian 14.2.0-19) 14.2.0",
+    "preferred_cpp_and_gpp_resolve_to_same_binary": true,
+    "resolved_binary_name": "x86_64-linux-gnu-g++-14",
+    "observed_binary_sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+    "identity_observed_after_execution": true
+  },
+  "resource_policy": {
+    "timeout_seconds_per_command": 1800,
+    "min_free_bytes": 16106127360,
+    "max_log_bytes": 5242880,
+    "max_sampled_process_group_rss_bytes": 3221225472,
+    "polled_not_hard_quotas": true
+  },
+  "raw_log_note": "The SST hello/fibonacci lines are emitted by test_sst_setup.py using a temporary fake sst executable and fake make function; they are not an SST/GPU execution result.",
+  "new_blocking_findings": [],
+  "known_nonblocking_finding": {
+    "severity": "F1",
+    "summary": "The exact retained outer harness raises before recording an early blocked command if no log was created. It fails closed; all five observed commands started, produced logs, exited zero and cleaned up, so this path did not affect qualification.",
+    "prior_review": "w07_a02_review.json"
+  },
+  "limitations": [
+    "These commands qualify source contracts, host reference/tooling and the checked C++ host helper; no P04 model or GPU/backend execution occurred.",
+    "P04-A02/A03 remain unearned, P04 remains in progress, and the 30 native launches remain planned.",
+    "Sampled resource limits are polled budgets; shared pages can be counted more than once, between-poll peaks can be missed, page cache is excluded, and escaped process groups are outside containment.",
+    "Historical baseline packet checks establish retained packet consistency, not a new GPU or physical-hardware run.",
+    "This review does not resolve the existing DSP area-gate failure or P01-A03 vendor integration blocker.",
+    "Final assembled evidence/acceptance documents and remote publication still need the parent's separate review and readback."
+  ],
+  "review_actions": [
+    "Read final verification.json and all five raw logs",
+    "Recomputed inner/outer log hashes and sizes",
+    "Checked actual unittest completion summary and no skip/failure suffix",
+    "Checked all 17 source pins against working bytes and frozen Git blobs",
+    "Verified HEAD/tree/clean working state after execution",
+    "Inspected the exact qualification runner and actual C++ bridge test compile flags",
+    "Independently counted 64 new test methods by AST",
+    "Checked host Python/compiler identity and scanned logs for machine-path/credential markers"
+  ],
+  "test_suite_rerun_by_reviewer": false,
+  "source_modified_by_reviewer": false,
+  "gpu_execution_claimed": false
+}

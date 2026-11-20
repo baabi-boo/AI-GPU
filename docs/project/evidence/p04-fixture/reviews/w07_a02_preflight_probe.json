@@ -1,0 +1,23 @@
+{
+  "scenario": "Bounded runner resource preflight blocks before a log is opened",
+  "runner_receipt": {
+    "outcome": "blocked",
+    "exit_code": null,
+    "reason": "disk_reserve",
+    "process_started": false,
+    "duration_seconds": 0.0,
+    "log_sha256": null,
+    "log_size_bytes": 0,
+    "peak_rss_bytes": 0,
+    "cleanup_complete": true,
+    "limitations": [
+      "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+      "Process-group RSS can count shared pages more than once and excludes page cache.",
+      "Reported peak RSS is the highest sample and may miss peaks between polls.",
+      "No container/cgroup memory limit is inferred by this process monitor.",
+      "Descendants that deliberately leave the process group are outside its containment."
+    ]
+  },
+  "harness_log_hash_step": "FileNotFoundError before harness writes blocked command entry",
+  "qualification_run_affected": false
+}

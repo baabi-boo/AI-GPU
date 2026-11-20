@@ -15,19 +15,23 @@ compute, specialized matrix units, fast memory and usable software. It does not
 mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
 **Current work: P04 — tiny-model inference (`in_progress`).**
-P04-T01 implements the [tiny-MLP fixture contract](docs/designs/tiny_mlp_fixture_v1.md)
-and [hashed manifest](ci/project/p04_model_manifest.json): a synthetic, bias-free
+**P04-T01 is complete; [P04-A01 is accepted at `source_present` scope](docs/project/evidence/p04-fixture/acceptance.json).**
+The [tiny-MLP fixture contract](docs/designs/tiny_mlp_fixture_v1.md) and
+[hashed manifest](ci/project/p04_model_manifest.json) fix a synthetic, bias-free
 batch-16 network with dimensions 16 → 8 → 4, deterministic weights, ten FP16/BF16
-cases and exact intermediate/final reference bits. This source contract is
-**under qualification; P04-A01 is pending**. Its planned placement uses native
-matmul with explicitly declared host ReLU, exact format conversion and row-block
-assembly; native activation remains unavailable. No model or GPU execution is
-claimed, and P04-A02/A03 remain unearned. After qualification, the next bounded
+cases and exact intermediate/final reference bits. The
+[qualification packet](docs/project/evidence/p04-fixture/README.md) records all
+**1,733 source/host tests passing** at frozen source
+[`10ace66`](https://github.com/baabi-boo/AI-GPU/commit/10ace66193686e3862c3c218760b66c044f1d4ae),
+with independent source and results review. Planned placement uses native matmul
+with explicitly declared host ReLU, exact format conversion and row-block
+assembly; native activation remains unavailable. No composed model or GPU
+execution is claimed, and P04-A02/A03 remain unearned. The next bounded
 implementation is [P04-T02 — the managed model executor](docs/project/p04-executor-plan.md).
 The [development audit](docs/project/p04-audit.md) records the scope and existing
 CI limitation.
 
-**Latest completed milestone: P03 — native AI operator library (`complete`).**
+**Latest completed phase: P03 — native AI operator library (`complete`).**
 The [v1 operator contract](docs/designs/ai_operator_contract_v1.md) now has a matching
 device reader and managed matmul wrapper over the native runtime. Its six bounded
 FP16/BF16 signatures passed **176 case executions, 352 launches and 14,336 exact
@@ -69,8 +73,9 @@ are not started.
 - See the development sequence: [roadmap](ROADMAP.md).
 - Build on the accepted native operators: [P03 handoff](docs/project/p03-operators-handoff.md)
   and [operator manifest](ci/project/p03_operator_manifest.json).
-- Inspect the current [P04 tiny-model contract](docs/designs/tiny_mlp_fixture_v1.md)
-  and [manifest](ci/project/p04_model_manifest.json), then follow the
+- Inspect the accepted [P04 tiny-model contract](docs/designs/tiny_mlp_fixture_v1.md),
+  [manifest](ci/project/p04_model_manifest.json) and
+  [source qualification](docs/project/evidence/p04-fixture/README.md), then follow the
   [executor plan](docs/project/p04-executor-plan.md) and [phase guide](docs/project/phases/p04-inference.md).
 - Review the accepted WGMMA results:
   [WGMMA handoff](docs/project/p02-wgmma-handoff.md) and
