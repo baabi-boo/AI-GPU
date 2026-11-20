@@ -26,6 +26,17 @@ tests together with the historical fixture tests. It was run in the implementati
 worktree before its first commit; the independent receipts identify tested
 production hashes. A complete clean-source hosted regression remains required.
 
+The first published implementation, `7167ce17d335ec1f50e26da9b4832c1c27013ada`,
+then passed the complete hosted governance suite: **1,809 tests in 491.547
+seconds**, with plain `OK` and no failures, errors or skips. The job took
+505 seconds and completed successfully under its existing 600-second limit.
+The exact decoded GitHub job log is preserved as
+`../host-tests/7167ce1-governance.log.gz`, with its raw/archive hashes, step
+outcomes and source/run identity in `../host-tests/7167ce1-governance.json`.
+Independent review is in `w07a.md`. Subsequent preparation corrections still
+require their own exact-source governance run; this result does not qualify
+later edits or native execution.
+
 All of these observations are source/host checks. They do not demonstrate a
 native model launch, timing performance, hardware behavior or acceptance of
 P04-A02/A03. Do not add overlapping suite/subset counts together.

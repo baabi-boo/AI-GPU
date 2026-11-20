@@ -38,6 +38,15 @@ and independently reviewed. A successful selected-variant report does not claim
 the full matrix. Argument/control staging, module loading and setup traffic are
 outside the explicit tensor-byte totals.
 
+The first published implementation is
+[`7167ce1`](https://github.com/baabi-boo/AI-GPU/commit/7167ce17d335ec1f50e26da9b4832c1c27013ada).
+The [source map](source-map.json) records its exact tree equality with the locally
+reviewed checkpoint. Initial hosted preparation stopped before native execution
+because the restored `cocogfx` checkout was dirty. Investigation reproduced the
+condition with its unignored build products. The
+[failed preparation record](failed-attempts/7167ce1-simx-fp16/preparation.json)
+preserves that blocker; it is not a numerical failure or passing model result.
+
 ## Reproduction
 
 The dedicated `P04 Native Model` workflow runs four isolated variants, with two
@@ -59,7 +68,10 @@ python3 ci/project/p04_execute.py run \
 
 The two destination paths must not exist or overlap the checkout/tools. The runner
 requires at least 4 GiB available memory and a 15 GiB free-disk reserve; commands
-have a 4 GiB process-group RSS cap and 16 MiB log cap. It does not install or rebuild
+have a polled 4 GiB process-group RSS budget and a 16 MiB log cap. These are command
+budgets, not cgroup or whole-job quotas. The hosted invocation fixes the case
+deadline at 180 seconds; the reusable CLI permits bounded customization through
+1,800 seconds, which is outside this frozen qualification invocation. It does not install or rebuild
 dependencies. `--backend` and `--format` select a smaller declared variant without
 enabling development mode. Dirty-source development output cannot earn acceptance.
 

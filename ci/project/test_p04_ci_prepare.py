@@ -123,6 +123,34 @@ class TinyMlpCiPreparationTests(unittest.TestCase):
         self.assertIs(report["acceptance_claimed"], False)
         return report, probe
 
+    def cocogfx_fixture(self):
+        fixture = self.fixture()
+        module = fixture.source / "third_party/cocogfx"
+        (module / "src/nested").mkdir(parents=True)
+        for name in ("src/first.cpp", "src/second.cpp", "src/nested/unbuilt.cpp"):
+            (module / name).write_bytes(b"// tracked host-test source\n")
+        (module / "Makefile").write_text("SRCS := $(wildcard src/*.cpp)\n")
+        self.git(module, "init", "--quiet")
+        self.git(module, "add", ".")
+        self.git(module, "commit", "--quiet", "-m", "Disposable cocogfx source")
+        fixture.module = module
+        fixture.module_revision = self.git(module, "rev-parse", "HEAD").strip()
+        (fixture.source / ".gitmodules").write_text(
+            '[submodule "third_party/cocogfx"]\n\tpath = third_party/cocogfx\n\turl = ../unused-cocogfx\n')
+        self.git(fixture.source, "add", ".gitmodules")
+        self.git(fixture.source, "update-index", "--add", "--cacheinfo",
+                 "160000," + fixture.module_revision + ",third_party/cocogfx")
+        self.git(fixture.source, "commit", "--quiet", "-m", "Record disposable cocogfx gitlink")
+        self.git(fixture.source, "config", "submodule.third_party/cocogfx.url", "../unused-cocogfx")
+        self.git(fixture.source, "config", "submodule.third_party/cocogfx.active", "true")
+        fixture.args.expected_revision = self.git(fixture.source, "rev-parse", "HEAD").strip()
+        fixture.products = {}
+        for name in (".depend", "libcocogfx.a", "src/first.o", "src/second.o"):
+            data = b"synthetic cached product: " + name.encode() + b"\n"
+            (module / name).write_bytes(data)
+            fixture.products[name] = data
+        return fixture
+
     def blocked(self, fixture, reason, *, moved=False, **options):
         report, probe = self.prepare(fixture, **options)
         self.assertEqual(report["outcome"], "blocked")
@@ -345,6 +373,146 @@ class TinyMlpCiPreparationTests(unittest.TestCase):
         self.assertIn("preparation receipt already exists", json.loads(second.getvalue())["reason"])
         self.assertEqual((receipt.read_bytes(), receipt.stat().st_mtime_ns), before)
         self.assertEqual((fixture.source / "tools/marker").read_bytes(), MARKER)
+        probe.assert_not_called()
+
+    def test_known_unused_cache_products_move_without_deletion_or_dependency_changes(self):
+        fixture = self.cocogfx_fixture()
+        before = baseline_inventory.collect_source(fixture.source)
+        self.assertIn("third_party/cocogfx", before["changed_paths"])
+        dependencies = baseline_inventory.hash_artifacts(fixture.source, preparation.base.DEPENDENCIES)
+        inodes = {name: (fixture.module / name).stat().st_ino for name in fixture.products}
+        report, _ = self.prepare(fixture)
+        self.assertEqual(report["outcome"], "pass", report["reason"])
+        self.assertFalse(report["source"]["dirty"])
+        quarantine = report["cache_quarantine"]
+        self.assertEqual(quarantine["state"], "relocated")
+        self.assertEqual(quarantine["expected_revision"], fixture.module_revision)
+        self.assertEqual(quarantine["revision_before"], fixture.module_revision)
+        self.assertEqual(quarantine["revision_after"], fixture.module_revision)
+        self.assertEqual(set(quarantine["status_before"]), {"?? " + name for name in fixture.products})
+        self.assertEqual(quarantine["status_after"], [])
+        for item in quarantine["files"]:
+            name = str(Path(item["path"]).relative_to("third_party/cocogfx"))
+            target = Path(item["destination"])
+            self.assertTrue(target.is_relative_to(fixture.workspace / "cache-quarantine/cocogfx"))
+            self.assertFalse((fixture.module / name).exists())
+            self.assertEqual(target.read_bytes(), fixture.products[name])
+            self.assertEqual(target.stat().st_ino, inodes[name])
+            self.assertTrue(item["moved"])
+            self.assertEqual(item["sha256"], hashlib.sha256(fixture.products[name]).hexdigest())
+            self.assertEqual(item["after_sha256"], item["sha256"])
+            self.assertEqual(item["after_size_bytes"], item["size_bytes"])
+        self.assertEqual(report["dependency_identities"], dependencies)
+        receipt = fixture.workspace / "evidence/preparation.json"
+        retained = receipt.read_bytes()
+        stack, _ = self.controlled_environment(fixture)
+        with stack, self.assertRaisesRegex(ValueError, "preparation receipt already exists"):
+            preparation.prepare(fixture.args)
+        self.assertEqual(receipt.read_bytes(), retained)
+
+    def test_unknown_cache_inputs_block_all_product_moves(self):
+        for name in ("unrecognized.a", "src/not-tracked.o", "src/nested/unbuilt.o"):
+            with self.subTest(name=name):
+                fixture = self.cocogfx_fixture()
+                (fixture.module / name).write_bytes(b"unknown cache input\n")
+                report, probe = self.blocked(fixture, "unrecognized untracked cache inputs", moved=True)
+                self.assertFalse((fixture.workspace / "cache-quarantine").exists())
+                self.assertEqual(report["cache_quarantine"]["state"], "checking")
+                for product, data in fixture.products.items():
+                    self.assertEqual((fixture.module / product).read_bytes(), data)
+                probe.assert_not_called()
+
+    def test_tracked_and_index_changes_cannot_be_cleaned_by_quarantine(self):
+        for mode in ("worktree", "index", "index_with_original_worktree"):
+            with self.subTest(mode=mode):
+                fixture = self.cocogfx_fixture()
+                tracked = fixture.module / "src/first.cpp"
+                original = tracked.read_bytes()
+                tracked.write_bytes(b"// changed source\n")
+                if mode != "worktree":
+                    self.git(fixture.module, "add", "src/first.cpp")
+                if mode == "index_with_original_worktree":
+                    tracked.write_bytes(original)
+                _, probe = self.blocked(fixture, "tracked or index changes", moved=True)
+                self.assertFalse((fixture.workspace / "cache-quarantine").exists())
+                for product, data in fixture.products.items():
+                    self.assertEqual((fixture.module / product).read_bytes(), data)
+                probe.assert_not_called()
+
+    def test_cocogfx_head_and_parent_index_must_match_committed_gitlink(self):
+        for mode in ("head", "parent_index"):
+            with self.subTest(mode=mode):
+                fixture = self.cocogfx_fixture()
+                if mode == "head":
+                    (fixture.module / "src/first.cpp").write_bytes(b"// another committed source\n")
+                    self.git(fixture.module, "add", "src/first.cpp")
+                    self.git(fixture.module, "commit", "--quiet", "-m", "Different submodule head")
+                    reason = "HEAD differs from its committed gitlink"
+                else:
+                    self.git(fixture.source, "update-index", "--cacheinfo",
+                             "160000," + fixture.args.expected_revision + ",third_party/cocogfx")
+                    reason = "index differs from its committed gitlink"
+                _, probe = self.blocked(fixture, reason, moved=True)
+                self.assertFalse((fixture.workspace / "cache-quarantine").exists())
+                for product, data in fixture.products.items():
+                    self.assertEqual((fixture.module / product).read_bytes(), data)
+                probe.assert_not_called()
+
+    def test_cache_product_symlinks_and_nonregular_files_are_not_moved(self):
+        for mode in ("symlink", "fifo"):
+            with self.subTest(mode=mode):
+                fixture = self.cocogfx_fixture()
+                product = fixture.module / ".depend"
+                product.unlink()
+                if mode == "symlink":
+                    product.symlink_to(fixture.module / "src/first.cpp")
+                    reason = "symlink traversal"
+                else:
+                    os.mkfifo(product)
+                    reason = "regular file"
+                _, probe = self.blocked(fixture, reason, moved=True)
+                self.assertTrue(os.path.lexists(product))
+                self.assertFalse((fixture.workspace / "cache-quarantine").exists())
+                self.assertEqual((fixture.module / "libcocogfx.a").read_bytes(), fixture.products["libcocogfx.a"])
+                probe.assert_not_called()
+
+    def test_quarantine_destination_must_be_fresh_without_overwriting_anything(self):
+        for mode in ("directory", "dangling_symlink"):
+            with self.subTest(mode=mode):
+                fixture = self.cocogfx_fixture()
+                destination = fixture.workspace / "cache-quarantine"
+                if mode == "directory":
+                    destination.mkdir()
+                    (destination / "preserved").write_bytes(b"preserve me\n")
+                else:
+                    destination.symlink_to(fixture.workspace / "missing")
+                _, probe = self.blocked(fixture, "quarantine destination must be fresh", moved=True)
+                for product, data in fixture.products.items():
+                    self.assertEqual((fixture.module / product).read_bytes(), data)
+                if mode == "directory":
+                    self.assertEqual((destination / "preserved").read_bytes(), b"preserve me\n")
+                else:
+                    self.assertTrue(destination.is_symlink())
+                probe.assert_not_called()
+
+    def test_interrupted_quarantine_retains_each_moved_and_unmoved_product(self):
+        fixture = self.cocogfx_fixture()
+        rename = Path.rename
+
+        def fail_second_product(path, target):
+            if path == fixture.module / "libcocogfx.a":
+                raise OSError("synthetic interrupted quarantine")
+            return rename(path, target)
+
+        with mock.patch.object(Path, "rename", fail_second_product):
+            report, probe = self.blocked(fixture, "interrupted quarantine", moved=True)
+        quarantine = report["cache_quarantine"]
+        self.assertEqual(quarantine["state"], "relocating")
+        self.assertEqual([item["path"] for item in quarantine["files"] if item["moved"]],
+                         ["third_party/cocogfx/.depend"])
+        for name, data in fixture.products.items():
+            location = fixture.workspace / "cache-quarantine/cocogfx" if name == ".depend" else fixture.module
+            self.assertEqual((location / name).read_bytes(), data)
         probe.assert_not_called()
 
 

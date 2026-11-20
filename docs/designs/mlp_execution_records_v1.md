@@ -80,8 +80,9 @@ For every successful repetition it independently checks:
    timestamps and zero-duration intervals are allowed; absent observations are
    not synthesized from default zeros.
 5. Submission, completion, operation cleanup, model completion and owner cleanup
-   are distinct observations. An incomplete result, cleanup error or unrestored
-   resource baseline cannot pass.
+   are distinct observations. A successful asynchronous submission may still be
+   incomplete; completion and cleanup must be complete. A cleanup error or
+   unrestored resource baseline cannot pass.
 
 ## Timing and transfer accounting
 
@@ -93,8 +94,12 @@ includes mutex wait. These are host runtime observations, not physical DMA,
 device cycles, accelerator-only latency, throughput or speedup.
 
 Host create, submission, waiting, comparisons, ReLU/conversion, assembly and
-cleanup are separately recorded. Host wait intervals overlap event profiles and
-must not be added to those profiles. The three submissions carry 1,920 explicit
+cleanup are separately recorded. `advance_ns` accumulates across calls and
+contains nested submission, wait, bridge, comparison and operation-close work;
+it is not exclusive orchestration overhead. Host wait intervals overlap event
+profiles. Nested and overlapping intervals must not be added as disjoint costs,
+and absolute steady-clock timestamps from separate machines do not share a
+timeline. The three submissions carry 1,920 explicit
 tensor-buffer H2D bytes (including poisons) and 768 D2H bytes per model run.
 Argument/control, module/setup traffic and physical transaction counts are
 excluded. The two output-block copies perform 256 bytes of explicit host assembly.

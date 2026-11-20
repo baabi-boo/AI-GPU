@@ -13,7 +13,7 @@ import shutil
 import subprocess
 import sys
 
-from baseline_inventory import collect_source, hash_artifacts
+from baseline_inventory import _git, collect_source, hash_artifacts
 import p02_matrix as base
 from p02_matrix_records import require
 from preflight import available_memory_bytes, read_pins
@@ -28,6 +28,80 @@ CACHE_REMEDY = (
     "inputs, then rerun this workflow. This qualification job does not install "
     "a whole toolchain, rebuild cached dependencies or write shared caches."
 )
+
+
+def quarantine_cocogfx_products(source, workspace, report):
+    """Preserve unused cache products without hiding source modifications."""
+    name = "third_party/cocogfx"
+    details = {"submodule": name, "state": "not_present", "files": []}
+    report["cache_quarantine"] = details
+    entry = _git(source, "ls-tree", "-z", "HEAD", "--", name)
+    if not entry:
+        require(not os.path.lexists(source / name), "untracked cocogfx directory cannot be quarantined")
+        return
+    match = re.fullmatch(rb"160000 commit ([0-9a-f]{40})\tthird_party/cocogfx\x00", entry)
+    require(match is not None, "cocogfx must be a committed submodule")
+    expected = match.group(1).decode("ascii")
+    details.update(state="checking", expected_revision=expected)
+    require(_git(source, "ls-files", "--stage", "-z", "--", name)
+            == ("160000 " + expected + " 0\t" + name + "\0").encode(),
+            "cocogfx index differs from its committed gitlink")
+    module = base._path(source / name, existing=True)
+    require(module.is_dir() and Path(_git(module, "rev-parse", "--show-toplevel").decode().strip()) == module,
+            "cocogfx must be its initialized submodule checkout")
+    revision = _git(module, "rev-parse", "--verify", "HEAD").decode("ascii").strip()
+    details["revision_before"] = revision
+    require(revision == expected, "cocogfx HEAD differs from its committed gitlink")
+    status_args = ("status", "--porcelain=v1", "-z", "--untracked-files=all", "--ignore-submodules=none")
+    status = _git(module, *status_args)
+    entries = [item.decode("utf-8") for item in status.split(b"\0") if item]
+    details["status_before"] = entries
+    require(all(item.startswith("?? ") for item in entries), "cocogfx has tracked or index changes")
+    tracked = _git(module, "ls-files", "-z").decode("utf-8").split("\0")
+    allowed = {".depend", "libcocogfx.a"} | {
+        str(Path(path).with_suffix(".o")) for path in tracked
+        if Path(path).parent == Path("src") and Path(path).suffix == ".cpp"
+    }
+    products = sorted(item[3:] for item in entries)
+    require(len(products) == len(set(products)) and set(products) <= allowed,
+            "cocogfx contains unrecognized untracked cache inputs")
+    require(not any(path.startswith(name + "/") for path in base.DEPENDENCIES),
+            "cocogfx products are required model dependencies")
+    for product in allowed - set(tracked):
+        if os.path.lexists(module / product):
+            path = base._path(module / product, existing=True)
+            require(path.is_file(), "cocogfx cache product must be a regular file")
+    for product in products:
+        path = base._path(module / product, existing=True)
+        require(path.stat().st_dev == workspace.stat().st_dev,
+                "cocogfx quarantine requires atomic same-filesystem relocation")
+    details["files"] = [dict(item, moved=False) for item in hash_artifacts(
+        source, [name + "/" + product for product in products])]
+    if not products:
+        details.update(state="not_needed", status_after=[], revision_after=revision)
+        return
+    quarantine = workspace / "cache-quarantine"
+    require(not os.path.lexists(quarantine), "cache quarantine destination must be fresh")
+    destination = quarantine / "cocogfx"
+    details.update(state="relocating", destination=str(destination))
+    quarantine.mkdir(mode=0o700)
+    destination.mkdir(mode=0o700)
+    for product, item in zip(products, details["files"]):
+        target = destination / product
+        target.parent.mkdir(mode=0o700, exist_ok=True)
+        require(not os.path.lexists(target), "cache quarantine file already exists")
+        item["destination"] = str(target)
+        (module / product).rename(target)
+        item["moved"] = True
+        after = hash_artifacts(destination, [product])[0]
+        item["after_sha256"], item["after_size_bytes"] = after["sha256"], after["size_bytes"]
+        require((item["sha256"], item["size_bytes"]) == (after["sha256"], after["size_bytes"]),
+                "cocogfx cache product changed during quarantine")
+    details["status_after"] = [item.decode("utf-8") for item in _git(module, *status_args).split(b"\0") if item]
+    details["revision_after"] = _git(module, "rev-parse", "--verify", "HEAD").decode("ascii").strip()
+    require(not details["status_after"] and details["revision_after"] == expected,
+            "cocogfx source changed during quarantine")
+    details["state"] = "relocated"
 
 
 def prepare(args):
@@ -102,6 +176,7 @@ def prepare(args):
         cache_tools.rename(destination)
         report["tools_relocated"] = True
         report["tools_dir"] = str(destination)
+        quarantine_cocogfx_products(source, workspace, report)
         checkout = collect_source(source)
         report["source"] = checkout
         require(checkout["revision"] == args.expected_revision, "checkout differs from the workflow SHA")
