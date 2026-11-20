@@ -47,6 +47,14 @@ condition with its unignored build products. The
 [failed preparation record](failed-attempts/7167ce1-simx-fp16/preparation.json)
 preserves that blocker; it is not a numerical failure or passing model result.
 
+After the cache correction, the first SimX/FP16 variant at `f4c6a323` completed
+five cases, ten model repetitions and thirty launches. Independent numerical and
+dispatch checks passed within that selected scope. Independent provenance review
+found that the artifact upload omitted the required `.config.stamp` body. The
+[original incomplete packet and finding](failed-attempts/f4c6a3-simx-fp16/retention-failure.json)
+are retained. This successful execution does not supply a complete qualification
+packet; fresh execution and upload are required after correcting retention.
+
 ## Reproduction
 
 The dedicated `P04 Native Model` workflow runs four isolated variants, with two
