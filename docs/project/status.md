@@ -1,14 +1,25 @@
 # Current project status
 
+**P04 is `in_progress`. P04-T01 is implemented and under qualification;
+P04-A01 remains pending.** The [tiny-model fixture contract](../designs/tiny_mlp_fixture_v1.md)
+fixes a synthetic, bias-free `16 → 8 → 4` ReLU MLP for a batch of 16 samples,
+with ten deterministic FP16/BF16 cases, independent integer reference results,
+explicit host placement and a [hash-pinned manifest](../../ci/project/p04_model_manifest.json).
+The fixture producer, strict contract checker and host ReLU/exact-conversion
+helper are present. Formal qualification and independent evidence review must
+finish before source-level acceptance. No composed model or GPU execution has
+been demonstrated by this work; P04-A02/A03 remain unearned. The next code work
+is [P04-T02, the managed model executor](p04-executor-plan.md).
+
 **P03 is complete with independently reviewed A01–A03 evidence.** The
 [historical operator contract](evidence/p03-operators/acceptance.json) remains
-accepted at source scope. The new [numerical acceptance](evidence/p03-managed-matmul/acceptance-numerics.json)
+accepted at source scope. The [numerical acceptance](evidence/p03-managed-matmul/acceptance-numerics.json)
 and [lifecycle acceptance](evidence/p03-managed-matmul/acceptance-lifecycle.json)
 complete P03-T02 for six ordinary FP16/BF16-to-FP32 matmul signatures. They bind
 actual SimX/native processor RTL dispatch and actual RV32/RV64 SimX lifecycle
 results to clean source `319ad63532cee17ae88fa75757a5ac87ed5c6a77`.
-The [P03 handoff](p03-operators-handoff.md) supplies the accepted inputs for
-P04-T01, the next bounded model/fixture freeze. P04 remains `not_started`.
+The [P03 handoff](p03-operators-handoff.md) supplies the accepted operator inputs
+and ownership rules for the selected P04 network.
 
 **P02 remains complete.** Its reviewed [contract](evidence/p02-numerics/acceptance.json),
 [ordinary WMMA](evidence/p02-wmma/acceptance.json) and
@@ -24,7 +35,7 @@ from a clean GPU source checkout. The fresh generated FP16 SimX build and
 supplemental full-AFU integer `xrtsim` smoke also pass. Independent reviews accept
 the clean-build and native numerical packets. Qualified vendor tools/platform
 are still missing for P01-A03. P00, P02 and P03 are complete,
-and P04–P11 remain `not_started`.
+P04 is `in_progress`, and P05–P11 remain `not_started`.
 [roadmap.json](roadmap.json) remains authoritative for phase state and evidence;
 the linked reports define the exact accepted scope.
 
@@ -36,7 +47,8 @@ the linked reports define the exact accepted scope.
 | P01 — reproducible baseline | `blocked` | A01 clean-build and A02 six-case numerical reports accepted; A03 vendor integration is still required before P07 |
 | P02 — tensor numerical contract | `complete` | A01 source contract, A02 ordinary WMMA and A03 bounded WGMMA evidence accepted after required review; T01/T02 complete |
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
-| P04–P11 | `not_started` | Later model, framework, hardware and silicon gates have not been earned |
+| P04 — tiny-model inference | `in_progress` | T01 fixture/reference/placement contract is implemented under qualification; A01 is pending and A02/A03 are unearned |
+| P05–P11 | `not_started` | Later framework, performance, hardware and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
 
@@ -44,7 +56,29 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — qualified managed native matmul
+## Latest continuation — fixed tiny-model source contract
+
+The [development-entry audit](p04-audit.md) maps the selected network onto three
+native matmul calls per case using accepted shapes: one `(16,8,16)` hidden projection
+and two `(8,4,8)` output row blocks. The planned host work is limited to ReLU,
+exact FP32-to-FP16/BF16 conversion and copying the actual output row blocks.
+The host bridge must consume actual first-layer results, after their exact
+comparison; reference arrays may not supply subsequent native inputs. This
+placement does not add native activation/cast support or CPU matmul fallback.
+
+The original generated weights, input families, seeds, layouts and exact
+preactivation/bridge/final targets are fixed before executor development. The
+manifest pins the fixture, independent producer, accepted profile and relevant
+source dependencies. These source artifacts support the pending P04-A01 review;
+they do not establish P04-A02/A03, dispatch, transfer timing or model performance.
+
+The audit also preserves a separate unresolved CI area failure: tensor DSP usage
+is **267 → 283**, beyond the unchanged 5% gate threshold. The linked audit names
+the existing runs and a static candidate requiring measured attribution. This
+continuation changes no RTL, native profile, golden baseline or gate tolerance;
+its source checks cannot resolve that failure.
+
+## Previous continuation — qualified managed native matmul
 
 P03-T02 implements the six declared matmul signatures through an internal
 managed `vortex2.h` wrapper and the matching ordinary WMMA kernel. The wrapper
@@ -318,7 +352,7 @@ vendor integration result and later actual physical measurements. The
 records the decision. Historical evidence, failed attempts, vendor runbooks
 and source-level numerical tolerances were not changed by this decision.
 
-## Latest continuation — supplemental tensor-oracle hardening
+## Preserved continuation — supplemental tensor-oracle hardening
 
 The [tensor-oracle guide](p01-tensor-oracles.md) and
 [evidence index](evidence/p01-tensor-oracles/README.md) describe this supplemental
@@ -622,13 +656,15 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**P04-T01 — freeze the tiny-model and reference fixture.**
-Select a small redistributable model or weight generator, pin provenance/license,
-seeds, dimensions/layouts, and independent layer/final reference results before
-implementing its executor. Compose the declared accelerated work from accepted
-P03 signatures and identify any additional qualification required. Declare host
-work and transfer accounting explicitly. P04 remains `not_started`; no model
-execution or framework result is implied by P03 completion. See the [P03 handoff](p03-operators-handoff.md),
+**Finish P04-T01 qualification, then implement P04-T02 — the managed tiny-model
+executor.** The fixture/reference/placement contract is implemented; freeze and
+test its exact source and complete independent review before attaching P04-A01
+acceptance. The [executor plan](p04-executor-plan.md) then composes the three
+declared matmul calls per case, feeds actual outputs through the explicit host
+bridge, preserves managed ownership through errors/timeouts, and records exact
+intermediate/final comparisons plus separate native, host and transfer evidence.
+P04 remains `in_progress`, and P04-A02/A03 remain unearned until those actual
+runs and records pass review. See the [P03 handoff](p03-operators-handoff.md),
 [P04 phase guide](phases/p04-inference.md) and [backlog](backlog.md).
 
 **Parallel blocked hardware task:** P01-T05 still needs a qualified vendor

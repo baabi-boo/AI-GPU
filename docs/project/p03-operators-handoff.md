@@ -7,8 +7,10 @@ and [A03 lifecycle acceptance](evidence/p03-managed-matmul/acceptance-lifecycle.
 P03-T02 using actual managed execution and resource-lifetime results. The
 matching device reader, wrapper, qualification runner and runtime fixes are
 implemented and tested. P02 remains complete; P01-A03 vendor integration remains
-blocked and required before P07. **P04 remains `not_started`** until its bounded
-model contract and fixtures are deliberately selected.
+blocked and required before P07. **P04 is `in_progress`:** its
+[selected tiny-model contract](../designs/tiny_mlp_fixture_v1.md) and deterministic
+fixtures are implemented under qualification. P04-A01 is pending;
+P04-A02/A03 remain unearned, with no composed model execution claimed.
 
 ## Implemented boundary
 
@@ -179,18 +181,27 @@ Native processor RTL bypasses the AFU and retains integer DPI helpers while
 using the native TFR tensor/STD scalar paths. It does not supply vendor
 `hw_emu`, physical FPGA, PPA or silicon evidence.
 
-## Next bounded action: P04-T01 model freeze
+## Next bounded implementation: P04-T02 managed model execution
 
-P04 remains `not_started`. Freeze one small redistributable model or deterministic
-model generator, its weights/inputs/license hashes and an independent layerwise
-reference before implementing the executor. Map every accelerated operation to
-the accepted dtype, shape and layout manifest. The current library exposes
-matmul only: activations, bias, normalization, casts and arbitrary shapes are
-not implicitly available. Any additional operator must earn its own contract
-and qualification; any deliberately permitted host work must be explicit.
+P04-T01 has selected a synthetic, bias-free `16 → 8 → 4` ReLU MLP for a batch
+of 16 samples. Its [fixture contract](../designs/tiny_mlp_fixture_v1.md) and
+[manifest](../../ci/project/p04_model_manifest.json) fix ten FP16/BF16 cases,
+generated weights/inputs, provenance, layouts and exact layer/final references.
+Complete exact-source qualification and independent P04-A01 review before
+accepting that source contract. P04 remains `in_progress`.
 
-Use the [P04 phase guide](phases/p04-inference.md) to choose a bounded network
-that fits the available operations and predeclare model-level comparison rules.
-Operator acceptance does not establish complete model inference, a framework
-backend, training, physical performance or P01-A03 vendor integration. Preserve
-the current accepted source/evidence while extending the next work package.
+The [P04-T02 plan](p04-executor-plan.md) composes one `(16,8,16)` hidden matmul
+and two `(8,4,8)` output matmuls per case through the accepted managed wrapper.
+The declared host work is ReLU/exact conversion of actual hidden results and
+copying actual output row blocks. Native activation/cast remains unavailable;
+this plan neither implies those operators exist nor permits CPU matmul fallback.
+Reference values are comparison data and must never feed subsequent native work.
+
+Carry the ownership, completion and error rules above into the executor, retain
+actual intermediate/final comparisons and dispatch lineage, and account for host
+work and transfers separately. P04-A02/A03 require that new execution evidence.
+The [P04 phase guide](phases/p04-inference.md) and [entry audit](p04-audit.md)
+retain the scope and unresolved inherited CI area failure. Operator acceptance
+does not establish complete model inference, a framework backend, training,
+physical performance or P01-A03 vendor integration. Preserve the accepted P03
+source/evidence while extending the next work package.

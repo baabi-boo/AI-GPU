@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "model_id": "p04-tiny-mlp-v1",
+  "fixture_id": "p04-tiny-mlp-fixture-v1",
+  "contract_version": 1,
+  "work_package": "P04-T01",
+  "scope": "Frozen hybrid tiny-model source fixture; no model or device execution evidence.",
+  "evidence_level": "source_present",
+  "execution_available": false,
+  "gpu_execution_claimed": false,
+  "cpu_matmul_fallback": false,
+  "execution_acceptances": {
+    "P04-A02": "not_run",
+    "P04-A03": "not_run"
+  },
+  "specification": "docs/designs/tiny_mlp_fixture_v1.md",
+  "fixture": "ci/project/fixtures/p04_tiny_mlp_v1.json",
+  "artifacts": [
+    {
+      "path": "ci/project/fixtures/p04_tiny_mlp_v1.json",
+      "sha256": "d22a899827afb3e8c22a528fc6a27fd12ff114ef39caf9ffa0cccd77e849cd03"
+    },
+    {
+      "path": "ci/project/p04_reference.py",
+      "sha256": "115a7db51948d69fc6267d5fe658d1a8e68c22e9f200d5ddc3f0a5181d7140a9"
+    },
+    {
+      "path": "ci/project/p04_model_contract.py",
+      "sha256": "c184d980d57aec54567d79025845c5fb34887741697ac78a66692a65da02e4b3"
+    },
+    {
+      "path": "ci/project/p02_layout_fixture_oracle.py",
+      "sha256": "34e78c0313e2b032930615f02a790729d1c49293349728b55f7d04a29a2568a7"
+    },
+    {
+      "path": "ci/project/p03_operator_manifest.json",
+      "sha256": "09f7071a40cec46f3fd7290a4aaadefc730a2bf006dc401a220050246d229f6b"
+    },
+    {
+      "path": "profiles/p02-tfr.json",
+      "sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102"
+    },
+    {
+      "path": "VX_config.toml",
+      "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf"
+    },
+    {
+      "path": "VX_types.toml",
+      "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23"
+    },
+    {
+      "path": "ci/gen_config.py",
+      "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165"
+    },
+    {
+      "path": "sw/runtime/ai/mlp_host.h",
+      "sha256": "309e437aa9ca80c3a9c7c8ca7544478cdce4861203d32280709e2e940425cd0b"
+    },
+    {
+      "path": "sw/runtime/ai/mlp_host.cpp",
+      "sha256": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256"
+    },
+    {
+      "path": "sw/runtime/ai/contract.h",
+      "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b"
+    },
+    {
+      "path": "sw/common/ai_matmul_args.h",
+      "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147"
+    },
+    {
+      "path": "sw/common/ai_matmul_profile.h",
+      "sha256": "8b2eb9a819506227808537612672c08a574230736f13f840a9d83bbd35675680"
+    },
+    {
+      "path": "docs/designs/tiny_mlp_fixture_v1.md",
+      "sha256": "8375616d9a498c08640c2d436d9764d6d10196001e7401730b121cdb64263b12"
+    },
+    {
+      "path": "docs/designs/tensor_numerics_v1.md",
+      "sha256": "2d7d3f18728fe77dd96a7de0c05c9550f2c2446ef7bee4fb0740fe8d367a06a2"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    }
+  ],
+  "operator_contract_id": "p03-native-operators-v1",
+  "profile": "p02-tfr-rv64-t4-wmma-v1",
+  "formats": [
+    "fp16",
+    "bf16"
+  ],
+  "case_ids": [
+    "fp16-seeded_dense",
+    "fp16-negated_dense",
+    "fp16-zero",
+    "fp16-signed_basis",
+    "fp16-split_boundary",
+    "bf16-seeded_dense",
+    "bf16-negated_dense",
+    "bf16-zero",
+    "bf16-signed_basis",
+    "bf16-split_boundary"
+  ],
+  "case_count": 10,
+  "planned_native_launches_per_case": 3,
+  "planned_native_launches_total": 30,
+  "graph": [
+    {
+      "id": "hidden_matmul",
+      "placement": "native",
+      "operator": "matmul",
+      "mnk": [
+        16,
+        8,
+        16
+      ],
+      "a": "input",
+      "b": "w1",
+      "output": "actual_hidden",
+      "a_bytes": 512,
+      "b_bytes": 256,
+      "output_bytes": 512
+    },
+    {
+      "id": "hidden_relu_cast",
+      "placement": "host",
+      "operator": "relu_and_exact_cast",
+      "input": "actual_hidden",
+      "output": "actual_bridge",
+      "elements": 128,
+      "input_bytes": 512,
+      "output_bytes": 256,
+      "helper": "vortex::ai::prepare_mlp_hidden",
+      "compare_preactivation_first": true
+    },
+    {
+      "id": "output_rows_0_7",
+      "placement": "native",
+      "operator": "matmul",
+      "mnk": [
+        8,
+        4,
+        8
+      ],
+      "a": "actual_bridge",
+      "rows": [
+        0,
+        8
+      ],
+      "a_offset_bytes": 0,
+      "b": "w2",
+      "output": "actual_output_rows_0_7",
+      "a_bytes": 128,
+      "b_bytes": 64,
+      "output_bytes": 128
+    },
+    {
+      "id": "output_rows_8_15",
+      "placement": "native",
+      "operator": "matmul",
+      "mnk": [
+        8,
+        4,
+        8
+      ],
+      "a": "actual_bridge",
+      "rows": [
+        8,
+        16
+      ],
+      "a_offset_bytes": 128,
+      "b": "w2",
+      "output": "actual_output_rows_8_15",
+      "a_bytes": 128,
+      "b_bytes": 64,
+      "output_bytes": 128
+    },
+    {
+      "id": "assemble_logits",
+      "placement": "host",
+      "operator": "copy_row_blocks",
+      "inputs": [
+        "actual_output_rows_0_7",
+        "actual_output_rows_8_15"
+      ],
+      "output": "actual_logits",
+      "destination_offsets_bytes": [
+        0,
+        128
+      ],
+      "copy_bytes": [
+        128,
+        128
+      ]
+    }
+  ],
+  "host_work_allowlist": [
+    "relu_and_exact_cast",
+    "row_partition",
+    "copy_row_blocks"
+  ],
+  "reference_use": "Comparison only; every dependent operation consumes actual prior output.",
+  "numerics": {
+    "input_and_weight_integer_range": [
+      -2,
+      2
+    ],
+    "hidden_prefix_abs_max": 64,
+    "bridge_integer_range": [
+      0,
+      64
+    ],
+    "output_prefix_abs_max": 1024,
+    "initial_accumulator_bits": "00000000",
+    "comparisons": [
+      "hidden_words",
+      "bridge_words",
+      "output_words"
+    ],
+    "comparison": "uint32_bit_equality",
+    "absolute_tolerance": 0,
+    "relative_tolerance": 0,
+    "ulp_tolerance": 0,
+    "bridge_rejects": [
+      "nonfinite",
+      "nonintegral",
+      "outside_minus64_plus64"
+    ],
+    "bridge_signed_zero": "normalize_to_positive_zero"
+  },
+  "representation": {
+    "input_layout": "row_major",
+    "weight_layout": "column_major",
+    "intermediate_and_output_layout": "row_major",
+    "byte_order": "little_endian",
+    "word_encoding": "eight_lowercase_hex_digits",
+    "earlier_element": "low_16_bits"
+  },
+  "future_execution_requirements": {
+    "launches": "Three unique native operation IDs with actual runtime bindings and row ranges.",
+    "host_records": "Host bridge and row copies are explicit, ordered, separately timed work.",
+    "transfer_records": "Record A/B writes, output-poison writes and output reads separately.",
+    "failure": "No CPU matmul fallback; preserve errors and drain retained operation resources.",
+    "performance": "Report host, transfer and native work separately; no physical-speed inference."
+  },
+  "resource_limits": {
+    "fixture_bytes": 262144,
+    "manifest_bytes": 262144,
+    "artifact_bytes_each": 1048576
+  },
+  "provenance": {
+    "license": "Apache-2.0",
+    "original_synthetic_data": true,
+    "external_downloads": false,
+    "trained_accuracy_claimed": false,
+    "tokenizer": null
+  }
+}

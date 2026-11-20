@@ -142,10 +142,22 @@ on SimX/native processor RTL; twelve lifecycle groups passed in each actual
 RV32/RV64 SimX configuration, and all 1,669 host tests passed.
 [The accepted packet](docs/project/evidence/p03-managed-matmul/README.md) retains
 source-bound execution and independent review; other operator categories remain
-explicitly unavailable. **The next bounded task is P04-T01:** freeze a small,
-redistributable model/weight fixture, seeds, layouts, layer/final reference and
-host/device work boundary. P04 remains `not_started`. [The P03 handoff](docs/project/p03-operators-handoff.md)
-records the accepted operator inputs and limits for that next phase.
+explicitly unavailable. [The P03 handoff](docs/project/p03-operators-handoff.md)
+records the accepted operator inputs and limits for P04.
+
+**P04 is `in_progress`: its implemented T01 fixture is under qualification.**
+The [tiny-MLP contract](docs/designs/tiny_mlp_fixture_v1.md) and
+[hashed manifest](ci/project/p04_model_manifest.json) fix a synthetic, bias-free
+batch-16 network with dimensions 16 → 8 → 4, deterministic weights and ten
+FP16/BF16 cases. Exact layer/final reference bits and the planned native-matmul
+boundary are fixed; host ReLU, exact format conversion and row-block assembly
+are explicitly declared because native activation remains unavailable.
+P04-A01 is pending formal source qualification; P04-A02/A03 remain unearned,
+and this work claims no model or GPU execution. After qualification, the next
+bounded implementation is [P04-T02 — the managed model executor](docs/project/p04-executor-plan.md).
+The [development audit](docs/project/p04-audit.md) records why this step follows
+P03 and preserves the unresolved inherited CI area-gate failure.
+
 The missing vendor platform remains a separate P01-T05/P07 dependency; resolve
 tools, access and a disk/RAM/job/time budget before any substantial build.
 

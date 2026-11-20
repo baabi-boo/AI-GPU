@@ -14,6 +14,19 @@ simulator configuration. “NVIDIA-style” describes the ambition of programmab
 compute, specialized matrix units, fast memory and usable software. It does not
 mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
+**Current work: P04 — tiny-model inference (`in_progress`).**
+P04-T01 implements the [tiny-MLP fixture contract](docs/designs/tiny_mlp_fixture_v1.md)
+and [hashed manifest](ci/project/p04_model_manifest.json): a synthetic, bias-free
+batch-16 network with dimensions 16 → 8 → 4, deterministic weights, ten FP16/BF16
+cases and exact intermediate/final reference bits. This source contract is
+**under qualification; P04-A01 is pending**. Its planned placement uses native
+matmul with explicitly declared host ReLU, exact format conversion and row-block
+assembly; native activation remains unavailable. No model or GPU execution is
+claimed, and P04-A02/A03 remain unearned. After qualification, the next bounded
+implementation is [P04-T02 — the managed model executor](docs/project/p04-executor-plan.md).
+The [development audit](docs/project/p04-audit.md) records the scope and existing
+CI limitation.
+
 **Latest completed milestone: P03 — native AI operator library (`complete`).**
 The [v1 operator contract](docs/designs/ai_operator_contract_v1.md) now has a matching
 device reader and managed matmul wrapper over the native runtime. Its six bounded
@@ -22,8 +35,7 @@ output-word comparisons** on SimX and native processor RTL. Actual RV32/RV64
 lifecycle checks and all **1,669 host tests** passed; independent review accepts
 [P03-A02/A03](docs/project/evidence/p03-managed-matmul/README.md).
 The [handoff](docs/project/p03-operators-handoff.md) records the accepted scope and
-ownership/error behavior. **Next: P04-T01**, freeze the tiny-model fixture and
-reference contract; P04 remains `not_started`.
+ownership/error behavior used by the P04 contract.
 
 **Completed milestone: P02 — tensor numerical contract (`complete`).**
 P02-T01 is complete with [source-level P02-A01 evidence](docs/project/evidence/p02-numerics/acceptance.json).
@@ -48,15 +60,18 @@ review. [P01-A03](docs/project/evidence/p01-xrt-blocked.json) remains blocked by
 missing qualified vendor XRT `hw_emu` tools/platform.
 The authoritative [status](docs/project/status.md) and
 [phase gates](docs/project/roadmap.json) separate implementation from acceptance;
-P00, P02 and P03 are complete, P01 is blocked, and P04–P11 are not started.
+P00, P02 and P03 are complete, P01 is blocked, P04 is in progress, and P05–P11
+are not started.
 
 ## Start here
 
 - Understand the goal: [project charter](docs/project/charter.md).
 - See the development sequence: [roadmap](ROADMAP.md).
 - Build on the accepted native operators: [P03 handoff](docs/project/p03-operators-handoff.md)
-  and [operator manifest](ci/project/p03_operator_manifest.json); next is the
-  [P04 tiny-model fixture](docs/project/phases/p04-inference.md).
+  and [operator manifest](ci/project/p03_operator_manifest.json).
+- Inspect the current [P04 tiny-model contract](docs/designs/tiny_mlp_fixture_v1.md)
+  and [manifest](ci/project/p04_model_manifest.json), then follow the
+  [executor plan](docs/project/p04-executor-plan.md) and [phase guide](docs/project/phases/p04-inference.md).
 - Review the accepted WGMMA results:
   [WGMMA handoff](docs/project/p02-wgmma-handoff.md) and
   [P02-A03 evidence](docs/project/evidence/p02-wgmma/processor/README.md).

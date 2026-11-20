@@ -7,7 +7,7 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Start here: P03 complete; freeze the bounded native model
+## Start here: qualify P04's fixed model contract
 
 **P02-A03 is accepted, completing P02-T02 and P02.** The
 [acceptance record](evidence/p02-wgmma/processor/acceptance.json),
@@ -29,15 +29,29 @@ executions, 352 launches and 14,336 exact output-word checks from the 88
 independent fixtures on SimX/native processor RTL. Actual runtime lifecycle
 results cover RV64 `p02-tfr` SimX and default RV32 SimX, with 12 groups per recorded execution.
 
-**Next bounded task: P04-T01 — freeze the model contract and fixtures.**
-P04 remains `not_started`. Choose a small redistributable model or deterministic
-generator, freeze weights/inputs/license hashes and layerwise reference rules,
-and map every accelerated operation to the accepted
-[manifest](../../ci/project/p03_operator_manifest.json). The current library
-provides the exact FP16/BF16-to-FP32 matmul tuples only; other operator families
-remain explicitly unavailable. [The handoff](p03-operators-handoff.md) records
-execution/lifetime proof and limitations, including the trusted runner boundary
-and the absence of general partial-DMA rollback or physical recovery proof.
+**Current bounded task: qualify P04-T01's implemented fixture contract.**
+P04 is `in_progress`; P04-A01 remains pending exact-source validation and
+independent review. The [fixed tiny MLP](../designs/tiny_mlp_fixture_v1.md)
+defines a synthetic, bias-free batch-16 16→8→4 ReLU network, 160 original
+deterministic weights and ten cases across FP16/BF16. The
+[fixture producer](../../ci/project/p04_reference.py),
+[model manifest](../../ci/project/p04_model_manifest.json), checked host bridge
+and source regression tests are implemented. Their acceptance scope is
+`source_present`; no composed native model execution is claimed.
+
+Each case plans one `(16,8,16)` hidden matmul and two `(8,4,8)` output calls,
+using the accepted [P03 signatures](../../ci/project/p03_operator_manifest.json).
+ReLU, exact format conversion and row assembly are declared host work, with
+actual outputs feeding each dependent operation and no CPU matmul fallback.
+Other native operator families remain unavailable. The
+[P03 handoff](p03-operators-handoff.md) retains the trusted runner boundary and
+the absence of general partial-DMA rollback or physical recovery proof.
+
+**Next implementation after P04-A01 acceptance: P04-T02 — compose and qualify
+the native model executor.** Follow the [executor plan](p04-executor-plan.md)
+to compare actual intermediates and final outputs, preserve operation ownership,
+and retain actual dispatch and separate host/transfer records. P04-A02 and
+P04-A03 remain unearned; 30 planned launches are not executed evidence.
 
 The [ordinary WMMA handoff](p02-wmma-handoff.md) and
 [P02-A02 record](evidence/p02-wmma/acceptance.json) bind full-processor checks to
@@ -61,7 +75,8 @@ The earlier [numerical handoff](p02-numerics-handoff.md) and
 [A01 record](evidence/p02-numerics/acceptance.json) retain the completed T01
 contract and original leaf/model/compiler evidence.
 
-P02 and P03 are `complete` within their accepted scopes; P04 remains `not_started`.
+P02 and P03 are `complete` within their accepted scopes; P04 is `in_progress`
+with its fixture implementation under qualification.
 The vendor P01-T05/P01-A03 obligation still blocks **P01 completion and P07**.
 The preserved [entry decision](p02-entry-handoff.md) permits native development
 without turning the missing vendor result into a pass.
@@ -87,8 +102,8 @@ P01-T05 `probe`/`plan`/`run` route. Its strict receipt and artifact checks prepa
 the missing vendor run; they do not replace it or grant acceptance.
 It requires its own manifest/receipt, CLI budgets and fresh build directory;
 there is no automatic adapter from the read-only `hwemu.py` candidate.
-P00, P02 and P03 are complete, P01 remains blocked on A03, and
-P04–P11 remain `not_started`. Check the actual
+P00, P02 and P03 are complete, P01 remains blocked on A03, P04 is `in_progress`,
+and P05–P11 remain `not_started`. Check the actual
 execution state and accepted reports before extending the baseline:
 
 ```sh
@@ -234,9 +249,10 @@ accepted full-processor ordinary WMMA arithmetic/layout and API rejection
 evidence. P02-T02 is complete with independently reviewed A03 acceptance for the
 bounded WGMMA execution and protocol evidence. P03-T01 retains source-level A01
 acceptance; P03-T02 now has accepted A02 numerical and A03 lifecycle evidence,
-completing P03 for the declared six signatures. P04-T01 is the next bounded
-action, with P04 still `not_started`. Detailed work packages remain in the phase
-guides.
+completing P03 for the declared six signatures. P04-T01's source implementation
+is under qualification, with P04 `in_progress` and P04-A01 pending. P04-T02 is
+the next implementation after that acceptance. Detailed work packages remain in
+the phase guides.
 
 | Work item | First bounded deliverable | Entry / accountable role | Gates |
 |---|---|---|---|
@@ -244,8 +260,8 @@ guides.
 | **P02-T02 — Arithmetic and concurrency proof — complete** | Ordinary WMMA and bounded WGMMA native-unit/full-processor arithmetic, metadata witness, directed pressure and declared parity evidence are independently reviewed and accepted. | T01; verification lead | [P02-A02 accepted](evidence/p02-wmma/acceptance.json); [P02-A03 accepted](evidence/p02-wgmma/processor/acceptance.json) |
 | **P03-T01 — Operator contract — complete** | Versioned manifest, exact six format/shape signatures, checked descriptor planner, 56-byte argument encoding, explicit unavailable categories and required ownership/completion rules; source-level validation only. | P02; kernel and runtime lead | P03-A01 |
 | **P03-T02 — Operator implementations and lifetime tests — complete** | Managed six-signature matmul has independent SimX/native-RTL arithmetic and actual common-runtime lifecycle acceptance; exact scope and partial-transfer limits remain recorded. | T01; kernel and runtime lead | [P03-A02](evidence/p03-managed-matmul/acceptance-numerics.json), [P03-A03](evidence/p03-managed-matmul/acceptance-lifecycle.json) |
-| **P04-T01 — Fixed tiny model** | Freeze a redistributable model or deterministic generator, hashes, inputs, licenses and layer/reference outputs; map every operation to the accepted library. | P03; model runtime lead | P04-A01 |
-| **P04-T02 — Native model execution** | Compose the fixed model, compare intermediates/final output, and retain device-dispatch and transfer traces with allowed host work explicit. | T01; model runtime lead | P04-A02, P04-A03 |
+| **P04-T01 — Fixed tiny model — under qualification** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge are implemented; retain exact-source validation and independent review before acceptance. | P03; model runtime lead | P04-A01 pending |
+| **P04-T02 — Native model execution — next after T01 acceptance** | Compose the three native matmuls per case, compare actual intermediates/final output, and retain device-dispatch and transfer records with host ReLU/bridge/row copies explicit. | T01; model runtime lead | P04-A02, P04-A03 unearned |
 | **P05-T01 — Python/custom-op bridge** | Bind the accepted native path, test representations/lifetimes/errors and clean installation, reproduce the model, then publish tested versions and limitations. | P04; framework integration lead | P05-A01, P05-A02, P05-A03 |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),

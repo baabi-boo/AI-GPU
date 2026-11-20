@@ -1,8 +1,8 @@
 # Architecture and program decisions
 
-This log separates **accepted project-setup decisions** from **unresolved
-engineering and funding choices**. An accepted design direction does not prove
-implementation, test success or permission to spend money. Phase progress and
+This log separates **accepted project-setup and scoped development decisions**
+from **unresolved engineering and funding choices**. An accepted design direction
+does not prove implementation, test success or permission to spend money. Phase progress and
 acceptance remain in [roadmap.json](roadmap.json).
 
 ## Decision process
@@ -119,14 +119,64 @@ running it; (3) silently replace vendor `hw_emu` with `xrtsim`. The latter two
 would misrepresent evidence, and the first would block otherwise independent
 native software progress without improving P02's numerical contract.
 
-**Scope and consequences:** 12 phases and all 36 acceptance IDs remain. P01 is
-`blocked`, P02 has begun and its three gates remain unaccepted, P03–P11 are
-`not_started`. Vendor XRT P01-T05 remains an independently funded/qualified
-workstream. No new tool, platform, board, dataset or numerical tolerance was
+**Scope and consequences at this decision's checkpoint:** 12 phases and all 36
+acceptance IDs remained. P01 was `blocked`, P02 had begun and its three gates
+remained unaccepted, and P03–P11 were `not_started`. Vendor XRT P01-T05 remains
+an independently funded/qualified workstream. No new tool, platform, board,
+dataset or numerical tolerance was
 approved or modified. If accepted A01/A02 evidence is invalidated, the offline
 validator will reject P02's in-progress/complete state. P07 acceptance requires
 P01 completion and its own physical FPGA measurements. Follow the
 [handoff](p02-entry-handoff.md) and [acceptance policy](acceptance.md).
+
+## ADR-005 — Fixed nonlinear MLP on the accepted matmul signatures
+
+**Status:** selected and implemented for P04-T01, 2026-11-20; formal
+`source_present` acceptance remains pending. This resolves ODR-002's model and
+placement selection without closing P04-A01, P04-A02 or P04-A03.
+
+**Decision owner:** the primary coding agent (`/root`), carrying out the user's
+instruction to audit and implement the next bounded development step. Model
+runtime lead remains the accountable role for model execution. This records the
+actual engineering decision; it does not claim a separate human design approval
+or waive the required independent review.
+
+**Problem:** P03 qualifies six ordinary FP16/BF16-to-FP32 matmul signatures.
+Native activation, conversion, reduction, normalization and attention operators
+are explicitly unavailable. A transformer would require a wider operator
+program before its execution could satisfy the current contract. One isolated
+matmul would not exercise a nonlinear multilayer model or actual intermediate
+dependencies.
+
+**Decision:** select the [fixed tiny MLP v1](../designs/tiny_mlp_fixture_v1.md):
+a bias-free 16→8→4 ReLU network evaluated on a fixed batch of 16. Generate its
+160 original synthetic weights and deterministic inputs without external model
+downloads. Freeze five families in each of FP16 and BF16, with independent
+integer layer/final references, exact encodings, provenance and hashes in the
+[fixture](../../ci/project/fixtures/p04_tiny_mlp_v1.json) and
+[manifest](../../ci/project/p04_model_manifest.json).
+
+Map the hidden layer to `(16,8,16)` and the two output row blocks to
+`(8,4,8)`. Declare ReLU, exact FP32-to-input-format conversion and output row
+assembly as host work before execution. Actual hidden outputs must feed the
+bridge, and actual bridge bytes must feed the second layer. Frozen reference
+arrays are comparator data only. A native failure fails the case; it cannot
+select a CPU matmul path.
+
+**Alternatives:** expanding native activation/cast/attention first remains a
+future development option, but exceeds this fixture-freeze task. A linear-only
+network would miss the nonlinear dependency this fixture is designed to check.
+A pretrained model would introduce larger redistribution and numerical-scope
+requirements without providing evidence for the current fixed operators.
+
+**Consequences and evidence boundary:** the bounded integer domain permits
+exact comparisons under P02; no tolerance changes or P03 signature expansion
+are needed. Synthetic weights establish correctness targets, not learned-model
+quality. Source/reference/host-helper checks cannot prove device placement or
+model execution. The [P04-T02 executor plan](p04-executor-plan.md) retains the
+separate actual execution, intermediate comparison, resource lifetime and
+host/transfer accounting obligations for P04-A02/A03. P01-A03 vendor `hw_emu`
+remains blocked and required before P07 completion.
 
 ## Open decisions
 
@@ -136,7 +186,6 @@ not named appointments or approvals.
 | ID | Decision required | Required evidence before acceptance | Accountable role | Latest gate |
 |---|---|---|---|---|
 | ODR-001 | First AI configuration: XLEN, cores, tensor backend, formats and local memory | Reproducible baseline and native arithmetic coverage; explicit unsupported cases | Compute architecture lead | P02 |
-| ODR-002 | Tiny model and supported operator/shape contract | Redistributable fixtures, deterministic reference, declared host/device work | Model runtime lead | P04 |
 | ODR-003 | Initial Python/framework versions and bridge boundary | Packaging prototype, supported-op matrix and resource-lifetime tests | Framework integration lead | P05 |
 | ODR-004 | Physical FPGA board, host and tool/platform versions | Availability, license/access approval, supported shell, memory-map and resource assessment | FPGA platform lead | P07 |
 | ODR-005 | Performance, memory capacity and power targets | Frozen workload, baseline measurements, feasible resource/timing budgets and measurement plan | Performance and memory lead | P06/P07 |
