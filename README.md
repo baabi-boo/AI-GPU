@@ -23,13 +23,18 @@ cases and exact intermediate/final reference bits. The
 [qualification packet](docs/project/evidence/p04-fixture/README.md) records all
 **1,733 source/host tests passing** at frozen source
 [`10ace66`](https://github.com/baabi-boo/AI-GPU/commit/10ace66193686e3862c3c218760b66c044f1d4ae),
-with independent source and results review. Planned placement uses native matmul
-with explicitly declared host ReLU, exact format conversion and row-block
-assembly; native activation remains unavailable. No composed model or GPU
-execution is claimed, and P04-A02/A03 remain unearned. The next bounded
-implementation is [P04-T02 — the managed model executor](docs/project/p04-executor-plan.md).
-The [development audit](docs/project/p04-audit.md) records the scope and existing
-CI limitation.
+with independent source and results review at that earlier fixture checkpoint.
+**P04-T02 now has an implemented managed executor, native application, strict
+execution records and CI/catalog integration.** It composes three native matmul
+calls with explicitly declared host ReLU, exact format conversion and row-block
+assembly; native activation remains unavailable. The
+[executor packet](docs/project/evidence/p04-executor/README.md) records source and
+host development evidence; clean native model qualification is the next bounded
+step in the [executor plan](docs/project/p04-executor-plan.md).
+The planned four-variant matrix covers 20 case/backend pairs, 40 model runs and
+120 launches. These counts are requirements, not executed results; P04-A02/A03
+remain unearned. The [executor audit](docs/project/p04-executor-audit.md) records
+the selected work and the unresolved inherited CI area-gate failure.
 
 **Latest completed phase: P03 — native AI operator library (`complete`).**
 The [v1 operator contract](docs/designs/ai_operator_contract_v1.md) now has a matching
@@ -76,6 +81,7 @@ are not started.
 - Inspect the accepted [P04 tiny-model contract](docs/designs/tiny_mlp_fixture_v1.md),
   [manifest](ci/project/p04_model_manifest.json) and
   [source qualification](docs/project/evidence/p04-fixture/README.md), then follow the
+  [executor packet](docs/project/evidence/p04-executor/README.md),
   [executor plan](docs/project/p04-executor-plan.md) and [phase guide](docs/project/phases/p04-inference.md).
 - Review the accepted WGMMA results:
   [WGMMA handoff](docs/project/p02-wgmma-handoff.md) and
@@ -107,11 +113,11 @@ The inherited [Vortex](https://github.com/vortexgpgpu/vortex) source provides a
 substantial foundation. The [baseline audit](docs/project/baseline.md) identifies
 the exact starting revision and evidence boundaries.
 
-| Area | Inherited building blocks | AI-GPU development work |
+| Area | Current building blocks | AI-GPU development work |
 |---|---|---|
 | Compute | RISC-V parallel cores; WMMA/WGMMA tensor units and structured sparsity | Reproduce a supported native configuration and prove its numerical behavior |
 | Memory and platform | Caches, shared memory, asynchronous tile copies and FPGA integration | Measure useful data movement, usable external memory and real-board behavior |
-| Software | Native tensor kernels, GEMM/attention examples, host runtime and existing OpenCL/basic HIP routes | Build a reusable operator library, a tiny-model executor, then Python/custom-op integration |
+| Software | Accepted bounded matmul library, implemented tiny-model executor, native tensor kernels and existing OpenCL/basic HIP routes | Qualify composed model execution, then add Python/custom-op integration |
 | Verification | Simulators, RTL tests and regression catalogs | Attach reproducible results to every claimed capability and preserve inherited gates |
 
 Source presence is not a fresh passing test. Tensor acceleration is not enabled

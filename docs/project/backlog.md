@@ -7,7 +7,7 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Start here: implement P04's managed model executor
+## Start here: qualify P04's implemented managed model executor
 
 **P02-A03 is accepted, completing P02-T02 and P02.** The
 [acceptance record](evidence/p02-wgmma/processor/acceptance.json),
@@ -50,11 +50,16 @@ Other native operator families remain unavailable. The
 [P03 handoff](p03-operators-handoff.md) retains the trusted runner boundary and
 the absence of general partial-DMA rollback or physical recovery proof.
 
-**Current bounded task: P04-T02 — compose and qualify the native model
-executor.** Follow the [executor plan](p04-executor-plan.md)
-to compare actual intermediates and final outputs, preserve operation ownership,
-and retain actual dispatch and separate host/transfer records. P04-A02 and
-P04-A03 remain unearned; 30 planned launches are not executed evidence.
+**Current bounded task: P04-T02 — qualify the implemented native model
+executor.** The managed graph, native application, strict record verifier, trusted
+runner and CI/catalog integration are implemented; the
+[executor packet](evidence/p04-executor/README.md) records their source and host
+development evidence. Follow the [executor plan](p04-executor-plan.md) for clean
+native qualification and independent results review. Its four planned variants
+require 20 case/backend pairs, 40 model runs and 120 launches. These are required
+counts, not execution results; P04-A02 and P04-A03 remain unearned. The
+[executor audit](p04-executor-audit.md) retains the existing CI area-gate failure
+and local resource limits.
 
 The [ordinary WMMA handoff](p02-wmma-handoff.md) and
 [P02-A02 record](evidence/p02-wmma/acceptance.json) bind full-processor checks to
@@ -253,8 +258,9 @@ evidence. P02-T02 is complete with independently reviewed A03 acceptance for the
 bounded WGMMA execution and protocol evidence. P03-T01 retains source-level A01
 acceptance; P03-T02 now has accepted A02 numerical and A03 lifecycle evidence,
 completing P03 for the declared six signatures. P04-T01 is complete with
-source-level P04-A01 acceptance; P04 remains `in_progress`, and P04-T02 is the
-next bounded implementation. Detailed work packages remain in the phase guides.
+source-level P04-A01 acceptance; P04 remains `in_progress`. P04-T02's executor
+and qualification tooling are implemented, with clean native qualification and
+independent review next. Detailed work packages remain in the phase guides.
 
 | Work item | First bounded deliverable | Entry / accountable role | Gates |
 |---|---|---|---|
@@ -263,7 +269,7 @@ next bounded implementation. Detailed work packages remain in the phase guides.
 | **P03-T01 — Operator contract — complete** | Versioned manifest, exact six format/shape signatures, checked descriptor planner, 56-byte argument encoding, explicit unavailable categories and required ownership/completion rules; source-level validation only. | P02; kernel and runtime lead | P03-A01 |
 | **P03-T02 — Operator implementations and lifetime tests — complete** | Managed six-signature matmul has independent SimX/native-RTL arithmetic and actual common-runtime lifecycle acceptance; exact scope and partial-transfer limits remain recorded. | T01; kernel and runtime lead | [P03-A02](evidence/p03-managed-matmul/acceptance-numerics.json), [P03-A03](evidence/p03-managed-matmul/acceptance-lifecycle.json) |
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
-| **P04-T02 — Native model execution — next** | Compose the three native matmuls per case, compare actual intermediates/final output, and retain device-dispatch and transfer records with host ReLU/bridge/row copies explicit. | T01; model runtime lead | P04-A02, P04-A03 unearned |
+| **P04-T02 — Native model execution — in progress** | Executor, native app, strict records and CI/catalog integration are implemented; qualify clean native runs with exact intermediates/final output, live-input lineage and separate host/transfer accounting. | T01; model runtime lead | P04-A02, P04-A03 unearned |
 | **P05-T01 — Python/custom-op bridge** | Bind the accepted native path, test representations/lifetimes/errors and clean installation, reproduce the model, then publish tested versions and limitations. | P04; framework integration lead | P05-A01, P05-A02, P05-A03 |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),

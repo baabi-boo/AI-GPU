@@ -79,3 +79,6 @@ class ManagedRuntimeHostTests(unittest.TestCase):
 
     def test_destructor_drains_and_repeated_operations_release_resources(self):
         self.group("destructor_drain")
+
+    def test_opt_in_profiles_distinguish_observed_events_and_query_failures(self):
+        self.group("profiling")

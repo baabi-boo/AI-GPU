@@ -154,11 +154,16 @@ boundary are fixed; host ReLU, exact format conversion and row-block assembly
 are explicitly declared because native activation remains unavailable.
 The [qualification packet](docs/project/evidence/p04-fixture/README.md) retains
 all 1,733 passing source/host tests and independent review at frozen source
-`10ace66193686e3862c3c218760b66c044f1d4ae`. P04-A02/A03 remain unearned,
-and this work claims no composed model or GPU execution. The next bounded
-implementation is [P04-T02 — the managed model executor](docs/project/p04-executor-plan.md).
-The [development audit](docs/project/p04-audit.md) records why this step follows
-P03 and preserves the unresolved inherited CI area-gate failure.
+`10ace66193686e3862c3c218760b66c044f1d4ae`; those results qualify the earlier fixture
+checkpoint. P04-T02 now supplies the managed executor, native app, strict records,
+trusted runner and CI/catalog integration described in the
+[executor packet](docs/project/evidence/p04-executor/README.md).
+Clean native qualification and independent results review are the next bounded
+work in the [executor plan](docs/project/p04-executor-plan.md). The planned four
+variants cover 20 case/backend pairs, 40 model runs and 120 launches; these are
+requirements, not executed results. P04-A02/A03 remain unearned.
+The [executor audit](docs/project/p04-executor-audit.md) records why this step
+follows P03 and preserves the unresolved inherited CI area-gate failure.
 
 The missing vendor platform remains a separate P01-T05/P07 dependency; resolve
 tools, access and a disk/RAM/job/time budget before any substantial build.

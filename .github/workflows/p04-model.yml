@@ -1,0 +1,157 @@
+name: P04 Native Model
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/p04-model.yml'
+      - 'ci/project/**'
+      - 'ci/toolchain_rev.sh'
+      - 'ci/install_dependencies.sh'
+      - 'ci/gen_config.py'
+      - 'configure'
+      - 'config.mk.in'
+      - 'sw/**'
+      - 'sim/**'
+      - 'hw/rtl/**'
+      - 'hw/dpi/**'
+      - 'tests/regression/ai_mlp/**'
+      - 'tests/regression/common.mk'
+      - 'third_party/**'
+      - 'profiles/p02-tfr.json'
+      - 'docs/designs/tiny_mlp_fixture_v1.md'
+      - 'docs/designs/mlp_execution_records_v1.md'
+      - 'docs/designs/tensor_numerics_v1.md'
+      - 'VERSION'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - '.gitmodules'
+  pull_request:
+    paths:
+      - '.github/workflows/p04-model.yml'
+      - 'ci/project/**'
+      - 'ci/toolchain_rev.sh'
+      - 'ci/install_dependencies.sh'
+      - 'ci/gen_config.py'
+      - 'configure'
+      - 'config.mk.in'
+      - 'sw/**'
+      - 'sim/**'
+      - 'hw/rtl/**'
+      - 'hw/dpi/**'
+      - 'tests/regression/ai_mlp/**'
+      - 'tests/regression/common.mk'
+      - 'third_party/**'
+      - 'profiles/p02-tfr.json'
+      - 'docs/designs/tiny_mlp_fixture_v1.md'
+      - 'docs/designs/mlp_execution_records_v1.md'
+      - 'docs/designs/tensor_numerics_v1.md'
+      - 'VERSION'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - '.gitmodules'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p04-model-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  qualification:
+    name: Native model (${{ matrix.backend }}, ${{ matrix.format }})
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        backend: [simx, rtlsim]
+        format: [fp16, bf16]
+    env:
+      P04_BACKEND: ${{ matrix.backend }}
+      P04_FORMAT: ${{ matrix.format }}
+      PYTHONDONTWRITEBYTECODE: '1'
+      MAKEFLAGS: '-j2'
+      THREADS: '2'
+      CMAKE_BUILD_PARALLEL_LEVEL: '2'
+      CCACHE_DISABLE: '1'
+      OBJCACHE: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          submodules: recursive
+          persist-credentials: false
+      - name: Initialize retained job identity
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'p04-model'
+          root.mkdir(mode=0o700)
+          (root / 'evidence').mkdir(mode=0o700)
+          with open(os.environ['GITHUB_ENV'], 'a') as environment:
+              environment.write('P04_ROOT=' + str(root) + '\n')
+          data = {key: os.environ[key] for key in (
+              'GITHUB_SHA', 'GITHUB_EVENT_NAME', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT',
+              'P04_BACKEND', 'P04_FORMAT')}
+          data.update(native_execution='not_run', acceptance_claimed=False)
+          (root / 'evidence' / 'job.json').write_text(json.dumps(data, indent=2) + '\n')
+          PY
+      - name: Resolve pinned toolchain cache identity
+        id: pins
+        run: |
+          set -euo pipefail
+          P04_TOOLCHAIN_ID=$(bash ci/toolchain_rev.sh)
+          [[ "$P04_TOOLCHAIN_ID" =~ ^[A-Za-z0-9._-]+-[0-9a-f]{40}$ ]]
+          echo "toolchain=$P04_TOOLCHAIN_ID" >> "$GITHUB_OUTPUT"
+      - name: Restore pinned toolchain without writing cache
+        id: toolchain
+        uses: actions/cache/restore@v4
+        with:
+          path: tools
+          key: ${{ runner.os }}-toolchain-${{ steps.pins.outputs.toolchain }}-lite
+          restore-keys: ${{ runner.os }}-toolchain-${{ steps.pins.outputs.toolchain }}-
+      - name: Restore dependency inputs without writing cache
+        id: dependencies
+        uses: actions/cache/restore@v4
+        with:
+          path: third_party
+          key: ${{ runner.os }}-thirdparty-${{ hashFiles('third_party/Makefile', '.gitmodules') }}
+      - name: Install baseline host dependencies
+        if: steps.toolchain.outputs.cache-matched-key != '' && steps.dependencies.outputs.cache-matched-key != ''
+        timeout-minutes: 15
+        run: sudo bash ci/install_dependencies.sh
+      - name: Verify clean source and relocate restored tools
+        env:
+          P04_TOOLCHAIN_ID: ${{ steps.pins.outputs.toolchain }}
+          P04_TOOLCHAIN_CACHE: ${{ steps.toolchain.outputs.cache-matched-key }}
+          P04_DEPENDENCY_CACHE: ${{ steps.dependencies.outputs.cache-matched-key }}
+          P04_DEPENDENCY_KEY: ${{ runner.os }}-thirdparty-${{ hashFiles('third_party/Makefile', '.gitmodules') }}
+        run: |
+          python3 ci/project/p04_ci_prepare.py \
+            --source-dir "$PWD" --workspace-dir "$P04_ROOT" \
+            --expected-revision "$GITHUB_SHA" --toolchain-id "$P04_TOOLCHAIN_ID" \
+            --toolchain-cache-key "$P04_TOOLCHAIN_CACHE" \
+            --third-party-cache-key "$P04_DEPENDENCY_CACHE" \
+            --expected-third-party-key "$P04_DEPENDENCY_KEY" \
+            --backend "$P04_BACKEND" --format "$P04_FORMAT"
+      - name: Execute frozen native model variant
+        run: |
+          python3 ci/project/p04_execute.py run \
+            --source-dir "$PWD" --tools-dir "$P04_ROOT/tools" \
+            --work-dir "$P04_ROOT/work" --output "$P04_ROOT/evidence/model" \
+            --backend "$P04_BACKEND" --format "$P04_FORMAT" \
+            --iterations 2 --jobs 2 --timeout-seconds 1800 --run-timeout-seconds 180
+      - name: Retain preparation and native execution packet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p04-${{ matrix.backend }}-${{ matrix.format }}-${{ github.sha }}-attempt${{ github.run_attempt }}
+          path: ${{ runner.temp }}/p04-model/evidence
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 6

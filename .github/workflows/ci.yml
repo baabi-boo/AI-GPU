@@ -258,10 +258,67 @@ jobs:
       CELL: ${{ matrix.category }}-${{ matrix.driver }}-${{ matrix.xlen }}${{ matrix.shards && format('-{0}of{1}', matrix.shard, matrix.shards) || '' }}
     steps:
       - uses: actions/checkout@v4
+      - name: Initialize model qualification workspace
+        if: matrix.category == 'p04_mlp'
+        run: |
+          python3 - <<'PY_MODEL'
+          import json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'p04-catalog'
+          root.mkdir(mode=0o700)
+          (root / 'evidence').mkdir(mode=0o700)
+          data = {key: os.environ[key] for key in (
+              'GITHUB_SHA', 'GITHUB_EVENT_NAME', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT', 'CELL')}
+          data.update(native_execution='not_run', acceptance_claimed=False)
+          (root / 'evidence' / 'job.json').write_text(json.dumps(data, indent=2) + '\n')
+          with Path(os.environ['GITHUB_ENV']).open('a') as stream:
+              stream.write('P04_CATALOG_ROOT=' + str(root) + '\n')
+              stream.write('P04_CATALOG_TOOLS=' + str(root / 'tools') + '\n')
+              stream.write('PYTHONDONTWRITEBYTECODE=1\n')
+          PY_MODEL
+      - name: Initialize model submodule metadata
+        if: matrix.category == 'p04_mlp'
+        run: git submodule update --init --recursive
+      - name: Resolve model toolchain identity
+        id: p04_pins
+        if: matrix.category == 'p04_mlp'
+        run: |
+          set -euo pipefail
+          P04_TOOLCHAIN_ID=$(bash ci/toolchain_rev.sh)
+          [[ "$P04_TOOLCHAIN_ID" =~ ^[A-Za-z0-9._-]+-[0-9a-f]{40}$ ]]
+          echo "toolchain=$P04_TOOLCHAIN_ID" >> "$GITHUB_OUTPUT"
       - name: Setup Vortex
+        id: vortex_inputs
         uses: ./.github/actions/setup-vortex
         with:
           profile: ${{ needs.plan.outputs.profile }}
+      - name: Verify and isolate model qualification inputs
+        if: matrix.category == 'p04_mlp'
+        env:
+          P04_TOOLCHAIN_ID: ${{ steps.p04_pins.outputs.toolchain }}
+          P04_TOOLCHAIN_HIT: ${{ steps.vortex_inputs.outputs.toolchain-hit }}
+          P04_DEPENDENCY_HIT: ${{ steps.vortex_inputs.outputs.thirdparty-hit }}
+          P04_PROFILE: ${{ needs.plan.outputs.profile }}
+          P04_BACKEND: ${{ matrix.driver }}
+          P04_DEPENDENCY_KEY: ${{ runner.os }}-thirdparty-${{ hashFiles('third_party/Makefile', '.gitmodules') }}
+        run: |
+          set -euo pipefail
+          [[ "$(bash ci/toolchain_rev.sh)" == "$P04_TOOLCHAIN_ID" ]]
+          P04_TOOLCHAIN_CACHE=''
+          P04_DEPENDENCY_CACHE=''
+          if [[ "$P04_TOOLCHAIN_HIT" == 'true' ]]; then
+            P04_TOOLCHAIN_CACHE="Linux-toolchain-$P04_TOOLCHAIN_ID-$P04_PROFILE"
+          fi
+          if [[ "$P04_DEPENDENCY_HIT" == 'true' ]]; then
+            P04_DEPENDENCY_CACHE="$P04_DEPENDENCY_KEY"
+          fi
+          python3 ci/project/p04_ci_prepare.py \
+            --source-dir "$PWD" --workspace-dir "$P04_CATALOG_ROOT" \
+            --expected-revision "$GITHUB_SHA" --toolchain-id "$P04_TOOLCHAIN_ID" \
+            --toolchain-cache-key "$P04_TOOLCHAIN_CACHE" \
+            --third-party-cache-key "$P04_DEPENDENCY_CACHE" \
+            --expected-third-party-key "$P04_DEPENDENCY_KEY" \
+            --backend "$P04_BACKEND" --format both
       - uses: actions/download-artifact@v4
         with:
           name: build-${{ matrix.xlen }}
@@ -317,6 +374,15 @@ jobs:
         with:
           name: junit-${{ env.CELL }}
           path: junit-*.xml
+      - name: Retain native model catalog packet
+        if: always() && matrix.category == 'p04_mlp'
+        uses: actions/upload-artifact@v4
+        with:
+          name: p04-catalog-${{ matrix.driver }}-${{ github.sha }}-attempt${{ github.run_attempt }}
+          path: ${{ runner.temp }}/p04-catalog/evidence
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 6
 
   complete:
     runs-on: ubuntu-22.04

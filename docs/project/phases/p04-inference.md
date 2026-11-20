@@ -1,12 +1,12 @@
 # P04 — Tiny-model inference
 
 **Accountable role:** Model runtime lead. The primary coding agent (`/root`)
-owns this fixture implementation and qualification continuation. Assign the
-actual execution owner and resource budget before the native model run.
+owns this executor implementation and qualification continuation. The
+[executor packet](../evidence/p04-executor/README.md) records the native-run budget.
 Live status, dependencies and exit criteria are in [roadmap.json](../roadmap.json).
 This is a development plan, not evidence that model inference already works.
 
-## Current work: fixture accepted, executor required
+## Current work: executor implemented, native qualification pending
 
 P04 is `in_progress`. **P04-T01 is complete and P04-A01 is
 [accepted at `source_present` scope](../evidence/p04-fixture/acceptance.json).**
@@ -20,9 +20,13 @@ tree `775aa7d5f96cfc5f7346e591ca151f36c485d2cf`; the complete source suite passe
 1,733 tests in 752.879 seconds, including 64 P04 tests, without failures, errors
 or skips. The source remained unchanged throughout qualification.
 
-These are source, independent-reference and compiled host-helper results.
-P04-A02 and P04-A03 remain unearned: no composed model executor, native model
-launch or model-level dispatch/latency result is supplied by this continuation.
+Those historical results cover the fixture, independent reference and compiled
+host helper. The subsequent P04-T02 implementation supplies the managed executor,
+native application, strict records, trusted runner and CI/catalog integration.
+Its [development packet](../evidence/p04-executor/README.md) and
+[audit](../p04-executor-audit.md) retain source and host evidence. Actual native
+model qualification and independent results review remain outstanding;
+P04-A02 and P04-A03 remain unearned.
 
 The selected model is a synthetic, bias-free 16→8→4 ReLU MLP with a fixed batch
 of 16, 160 original deterministic weights and ten cases covering five input
@@ -35,12 +39,13 @@ layer and two `(8,4,8)` calls for the output row blocks. ReLU, exact conversion
 of actual FP32 hidden outputs to the selected input format, and output row
 copies are explicit host work. This placement uses the existing P03 signatures;
 it neither introduces native activation/cast support nor allows a CPU matmul
-fallback. The 30 native launches across the ten cases are planned workload
-counts, not executed results.
+fallback. Full qualification plans four variants: SimX/native processor RTL ×
+FP16/BF16, with two distinct output poisons per case. The resulting 20 case/backend
+pairs, 40 model runs and 120 native launches are requirements, not executed results.
 
-**P04-T02 — compose and qualify the native model executor** is the next
-implementation step. The [executor plan](../p04-executor-plan.md)
-defines actual-output lineage, completion/ownership rules and trace obligations.
+**P04-T02 — qualify the implemented native model executor** is the next bounded
+step. The [executor plan](../p04-executor-plan.md) defines actual-output lineage,
+completion/ownership rules, resource limits and trace obligations.
 
 ## Goal and boundaries
 
@@ -83,8 +88,9 @@ CUDA compatibility and physical throughput claims. See [software](../software.md
 
 The model/fixture manifest, independent reference, checked host bridge and
 source/negative tests complete P04-T01 under the accepted P04-A01 source contract.
-P04-T02 must still deliver the native executor, model integration tests, catalog
-registration and source-bound execution/trace evidence.
+P04-T02 supplies the native executor, host integration tests, record validation,
+catalog registration and hosted qualification path. It must still deliver
+compatible clean-source native execution/trace evidence and independent review.
 
 | Gate | Required proof | Evidence level |
 |---|---|---|

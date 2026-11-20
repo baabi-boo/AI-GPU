@@ -60,6 +60,7 @@ struct RuntimeContext {
   ProfileBinding profile{};
   DType dtype = DType::fp16;
   std::string qualification_id;
+  bool enable_profiling = false;
   std::vector<uint8_t> image;
 
   void release(vx_result_t* cleanup) noexcept {
@@ -224,7 +225,12 @@ vx_result_t write(detail::OperationState* state, vx_buffer_h buffer,
 }
 
 vx_result_t submit(detail::OperationState* state, uint32_t m, uint32_t n, uint32_t k) noexcept {
-  auto result = vx_queue_create(state->context->device, nullptr, &state->queue);
+  vx_queue_info_t queue_info{};
+  queue_info.struct_size = sizeof(queue_info);
+  queue_info.priority = VX_QUEUE_PRIORITY_NORMAL;
+  queue_info.flags = VX_QUEUE_PROFILING_ENABLE;
+  const auto* info = state->context->enable_profiling ? &queue_info : nullptr;
+  auto result = vx_queue_create(state->context->device, info, &state->queue);
   if (result != VX_SUCCESS) {
     return result;
   }
@@ -319,6 +325,7 @@ ExecutionResult ManagedMatmul::create(const ExecutionBinding& binding,
     context->profile = binding.profile;
     context->dtype = binding.input_dtype;
     context->qualification_id = binding.qualification_id;
+    context->enable_profiling = binding.enable_profiling;
     const auto* first = static_cast<const uint8_t*>(binding.module_bytes);
     context->image.assign(first, first + binding.module_size);
     result.primary = vx_device_open(0, &context->device);
@@ -371,6 +378,7 @@ ExecutionResult ManagedMatmul::submit(uint32_t m, uint32_t n, uint32_t k,
     auto& state = *operation->state_;
     state.trace.qualification_id = context_->qualification_id;
     state.trace.input_dtype = context_->dtype;
+    state.trace.profiling_enabled = context_->enable_profiling;
     state.trace.m = m;
     state.trace.n = n;
     state.trace.k = k;
@@ -468,6 +476,15 @@ ExecutionResult MatmulOperation::wait(uint64_t timeout_ns) noexcept {
   for (size_t i = 0; i != state.event_count; ++i) {
     state.trace.event_results[i] = vx_event_wait_value(state.events[i], 1, 0);
     remember(state.trace.event_results[i], &state.result.primary);
+    if (state.trace.profiling_enabled) {
+      vx_profile_info_t profile{};
+      state.trace.event_profile_queried[i] = true;
+      const auto profile_result = vx_event_get_profiling(state.events[i], &profile);
+      state.trace.event_profile_results[i] = profile_result;
+      if (profile_result == VX_SUCCESS) {
+        state.trace.event_profiles[i] = profile;
+      }
+    }
   }
   if (state.submitted_all && state.result.ok()) {
     for (size_t i = 0; i != state.output.size(); ++i) {

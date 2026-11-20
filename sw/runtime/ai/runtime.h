@@ -18,6 +18,7 @@ struct ExecutionBinding {
   const void* module_bytes = nullptr;
   size_t module_size = 0;
   std::string qualification_id;
+  bool enable_profiling = false;
 };
 
 struct ExecutionResult {
@@ -51,6 +52,12 @@ struct MatmulTrace {
   uint64_t wait_calls = 0;
   uint64_t timed_out_waits = 0;
   std::array<vx_result_t, 5> event_results{};
+  bool profiling_enabled = false;
+  std::array<vx_profile_info_t, 5> event_profiles{};
+  std::array<vx_result_t, 5> event_profile_results{
+      VX_ERR_NOT_SUPPORTED, VX_ERR_NOT_SUPPORTED, VX_ERR_NOT_SUPPORTED,
+      VX_ERR_NOT_SUPPORTED, VX_ERR_NOT_SUPPORTED};
+  std::array<bool, 5> event_profile_queried{};
 };
 
 namespace detail {

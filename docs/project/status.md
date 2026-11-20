@@ -8,9 +8,14 @@ explicit host placement and a [hash-pinned manifest](../../ci/project/p04_model_
 The fixture producer, strict contract checker and host ReLU/exact-conversion
 helper are qualified at source/host scope, with exact-source validation and
 independent review retained in the [acceptance packet](evidence/p04-fixture/README.md).
-No composed model or GPU execution has been demonstrated by this work;
-P04-A02/A03 remain unearned. The next code work
-is [P04-T02, the managed model executor](p04-executor-plan.md).
+**P04-T02 now has an implemented managed executor, native application, strict
+records, trusted runner and CI/catalog integration.** The
+[executor packet](evidence/p04-executor/README.md) records source and host
+development evidence. Clean native model qualification and independent review
+are next; P04-A02/A03 remain unearned. The
+[executor plan](p04-executor-plan.md) freezes four required variants covering
+20 case/backend pairs, 40 model runs and 120 launches. These are planned
+qualification counts, not execution results.
 
 **P03 is complete with independently reviewed A01–A03 evidence.** The
 [historical operator contract](evidence/p03-operators/acceptance.json) remains
@@ -48,7 +53,7 @@ the linked reports define the exact accepted scope.
 | P01 — reproducible baseline | `blocked` | A01 clean-build and A02 six-case numerical reports accepted; A03 vendor integration is still required before P07 |
 | P02 — tensor numerical contract | `complete` | A01 source contract, A02 ordinary WMMA and A03 bounded WGMMA evidence accepted after required review; T01/T02 complete |
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
-| P04 — tiny-model inference | `in_progress` | T01 is complete and A01 is accepted at source scope; model execution and dispatch evidence for A02/A03 remain unearned |
+| P04 — tiny-model inference | `in_progress` | T01/A01 complete at source scope; T02 executor, records and CI are implemented, with clean native qualification and A02/A03 still pending |
 | P05–P11 | `not_started` | Later framework, performance, hardware and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -57,7 +62,29 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — fixed tiny-model source contract
+## Latest continuation — managed executor implementation
+
+The [executor audit](p04-executor-audit.md) selected P04-T02 after the accepted
+fixture and managed operator work. The implemented model owns incomplete native
+operations through timeout and cleanup, compares actual hidden results before
+the host bridge, feeds its actual bytes into both output calls, and assembles
+the returned row blocks. Profiling is opt-in; records preserve event-query
+outcomes, actual launch arguments, comparisons, transfer bytes and resource
+counters. The [record contract](../designs/mlp_execution_records_v1.md) and strict
+consumer check these observations against the frozen inputs and build binding.
+
+Host fault-injection and serialization checks support the implementation, but
+they do not establish native model execution. The dedicated `P04 Native Model`
+workflow and native catalog are prepared to build clean SimX/native-RTL variants
+for FP16/BF16, with two distinct output poisons per case. Their bounded runner
+uses two build jobs, a 4 GiB process-group RSS cap, 15 GiB disk reserve and
+16 MiB per-command log cap. Its selected source/configuration bodies and binary
+hashes support reproduction without claiming a complete build archive.
+See the [executor packet](evidence/p04-executor/README.md) for the planned matrix,
+commands, individual development receipts and remaining acceptance boundary.
+Host steady-clock profiles are runtime observations, not physical GPU latency.
+
+## Previous continuation — fixed tiny-model source contract
 
 The [development-entry audit](p04-audit.md) maps the selected network onto three
 native matmul calls per case using accepted shapes: one `(16,8,16)` hidden projection
@@ -664,14 +691,16 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**Implement P04-T02 — the managed tiny-model executor.** P04-T01 is complete
-with [source-level P04-A01 acceptance](evidence/p04-fixture/acceptance.json).
-The [executor plan](p04-executor-plan.md) composes the three
-declared matmul calls per case, feeds actual outputs through the explicit host
-bridge, preserves managed ownership through errors/timeouts, and records exact
-intermediate/final comparisons plus separate native, host and transfer evidence.
-P04 remains `in_progress`, and P04-A02/A03 remain unearned until those actual
-runs and records pass review. See the [P03 handoff](p03-operators-handoff.md),
+**Qualify the implemented P04-T02 managed tiny-model executor.** Freeze a clean
+source checkpoint and run the four declared SimX/native-RTL × FP16/BF16 variants.
+The required 20 case/backend pairs, 40 model runs and 120 launches must produce
+matching actual intermediate/final words, verified live-input lineage and
+separate host/transfer records. Retain failed attempts and reconcile source,
+tools, generated builds and raw records through independent review.
+The [executor plan](p04-executor-plan.md) and
+[executor packet](evidence/p04-executor/README.md) define the reproduction and
+evidence boundaries. P04 remains `in_progress`, and P04-A02/A03 remain unearned
+until compatible actual runs and records pass review. See the
 [P04 phase guide](phases/p04-inference.md) and [backlog](backlog.md).
 
 **Parallel blocked hardware task:** P01-T05 still needs a qualified vendor

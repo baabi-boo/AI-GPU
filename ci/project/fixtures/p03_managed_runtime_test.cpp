@@ -30,6 +30,9 @@ struct State {
   int events = 0;
   int premature = 0;
   int writes_observed = 0;
+  int profiled_queues = 0;
+  int default_queues = 0;
+  uint64_t profile_clock = 100;
   uint32_t threads = 4;
   int timeout_budget = 0;
   int async_failure = 0;
@@ -69,9 +72,13 @@ struct vx_event {
   bool done = false;
   vx_result_t result = VX_SUCCESS;
   vx_queue_h queue = nullptr;
+  vx_profile_info_t profile{};
   std::function<void()> work;
 };
-struct vx_queue { std::vector<vx_event_h> events; };
+struct vx_queue {
+  std::vector<vx_event_h> events;
+  bool profiling_enabled = false;
+};
 struct vx_module {};
 struct vx_kernel {};
 
@@ -90,6 +97,7 @@ vx_result_t enqueue(vx_queue_h queue, uint32_t n, const vx_event_h* waits,
   check((queue->events.empty() && n == 0) || (n == 1 && waits[0] == queue->events.back()));
   auto* event = new vx_event;
   event->queue = queue;
+  event->profile.queued_ns = ++state.profile_clock;
   event->work = std::move(work);
   queue->events.push_back(event);
   ++state.events;
@@ -109,6 +117,10 @@ void drain(vx_queue_h queue) {
       }
       event->result = error;
       event->done = true;
+      state.profile_clock += 10;
+      event->profile.submit_ns = state.profile_clock;
+      event->profile.start_ns = state.profile_clock + (error == VX_SUCCESS ? 2 : 0);
+      event->profile.end_ns = state.profile_clock + (error == VX_SUCCESS ? 8 : 0);
     } else if (event->result != VX_SUCCESS) {
       error = event->result;
     }
@@ -124,9 +136,11 @@ ExecutionBinding binding(DType dtype = DType::fp16) {
   result.qualification_id = std::string(64, 'a');
   return result;
 }
-std::unique_ptr<ManagedMatmul> create(DType dtype = DType::fp16) {
+std::unique_ptr<ManagedMatmul> create(DType dtype = DType::fp16, bool enable_profiling = false) {
   std::unique_ptr<ManagedMatmul> runtime;
-  check(ManagedMatmul::create(binding(dtype), &runtime).ok());
+  auto value = binding(dtype);
+  value.enable_profiling = enable_profiling;
+  check(ManagedMatmul::create(value, &runtime).ok());
   check(runtime != nullptr && state.image == std::vector<uint8_t>(64, 0x5a));
   return runtime;
 }
@@ -211,11 +225,20 @@ vx_result_t vx_kernel_release(vx_kernel_h kernel) {
   --state.kernels;
   return release_result();
 }
-vx_result_t vx_queue_create(vx_device_h, const vx_queue_info_t*, vx_queue_h* out) {
+vx_result_t vx_queue_create(vx_device_h, const vx_queue_info_t* info, vx_queue_h* out) {
   if (fail("queue_create")) {
     return VX_ERR_OUT_OF_HOST_MEMORY;
   }
   *out = new vx_queue;
+  if (info) {
+    check(info->struct_size == sizeof(*info) && info->next == nullptr
+          && info->priority == VX_QUEUE_PRIORITY_NORMAL
+          && info->flags == VX_QUEUE_PROFILING_ENABLE);
+    (*out)->profiling_enabled = true;
+    ++state.profiled_queues;
+  } else {
+    ++state.default_queues;
+  }
   ++state.queues;
   return VX_SUCCESS;
 }
@@ -324,6 +347,15 @@ vx_result_t vx_event_wait_value(vx_event_h event, uint64_t value, uint64_t) {
 }
 vx_result_t vx_event_get_value(vx_event_h event, uint64_t* out) {
   *out = event->done ? 1 : 0;
+  return VX_SUCCESS;
+}
+vx_result_t vx_event_get_profiling(vx_event_h event, vx_profile_info_t* out) {
+  check(event && out && event->done && event->queue->profiling_enabled);
+  if (fail("profiling")) {
+    *out = {99, 98, 97, 96};
+    return VX_ERR_NOT_SUPPORTED;
+  }
+  *out = event->profile;
   return VX_SUCCESS;
 }
 vx_result_t vx_event_release(vx_event_h event) {
@@ -490,6 +522,140 @@ void destructor_drain() {
   check(runtime->close().ok());
   no_resources();
 }
+
+void check_no_profile(const MatmulTrace& trace, size_t i) {
+  check(!trace.event_profile_queried[i]
+        && trace.event_profile_results[i] == VX_ERR_NOT_SUPPORTED);
+  const auto& profile = trace.event_profiles[i];
+  check(profile.queued_ns == 0 && profile.submit_ns == 0
+        && profile.start_ns == 0 && profile.end_ns == 0);
+}
+
+void check_profile(const MatmulTrace& trace, size_t i) {
+  check(trace.event_profile_queried[i]
+        && trace.event_profile_results[i] == VX_SUCCESS);
+  const auto& profile = trace.event_profiles[i];
+  check(profile.queued_ns <= profile.submit_ns && profile.submit_ns <= profile.start_ns
+        && profile.start_ns <= profile.end_ns);
+}
+
+void profiling() {
+  {
+    auto runtime = create();
+    std::unique_ptr<MatmulOperation> operation;
+    check(launch(runtime.get(), &operation).ok());
+    check(operation->close(VX_TIMEOUT_INFINITE).ok());
+    const auto& trace = operation->trace();
+    check(!trace.profiling_enabled && state.default_queues == 1 && state.profiled_queues == 0);
+    check(state.calls["profiling"] == 0);
+    for (size_t i = 0; i != trace.event_profiles.size(); ++i) {
+      check_no_profile(trace, i);
+    }
+    check(runtime->close().ok());
+    reset();
+  }
+  for (const auto dtype : {DType::fp16, DType::bf16}) {
+    auto runtime = create(dtype, true);
+    std::unique_ptr<MatmulOperation> operation;
+    check(launch(runtime.get(), &operation).ok());
+    check(operation->trace().profiling_enabled && state.profiled_queues == 1
+          && state.default_queues == 0);
+    state.timeout_budget = 1;
+    const auto timed_out = operation->wait(0);
+    check(timed_out.primary == VX_ERR_TIMEOUT && !timed_out.complete);
+    check(state.calls["profiling"] == 0);
+    for (size_t i = 0; i != operation->trace().event_profiles.size(); ++i) {
+      check_no_profile(operation->trace(), i);
+    }
+    auto result = operation->wait(VX_TIMEOUT_INFINITE);
+    check(result.ok() && result.complete && !operation->output_words().empty());
+    check(state.calls["profiling"] == 5);
+    const auto recorded = operation->trace().event_profiles;
+    for (size_t i = 0; i != recorded.size(); ++i) {
+      check_profile(operation->trace(), i);
+      check(operation->trace().event_results[i] == VX_SUCCESS);
+    }
+    check(operation->wait(0).ok());
+    check(operation->close(0).ok() && operation->close(0).ok());
+    check(state.calls["profiling"] == 5);
+    for (size_t i = 0; i != recorded.size(); ++i) {
+      const auto& saved = operation->trace().event_profiles[i];
+      check(saved.queued_ns == recorded[i].queued_ns && saved.submit_ns == recorded[i].submit_ns
+            && saved.start_ns == recorded[i].start_ns && saved.end_ns == recorded[i].end_ns);
+    }
+    check(runtime->close().ok());
+    reset();
+  }
+  for (int at = 1; at <= 5; ++at) {
+    auto runtime = create(DType::fp16, true);
+    state.fail_call = "profiling";
+    state.fail_at = at;
+    std::unique_ptr<MatmulOperation> operation;
+    check(launch(runtime.get(), &operation).ok());
+    const auto result = operation->close(VX_TIMEOUT_INFINITE);
+    check(result.ok() && result.complete && operation->output_words().size() == 32);
+    check(state.calls["profiling"] == 5);
+    const auto& trace = operation->trace();
+    for (size_t i = 0; i != trace.event_profiles.size(); ++i) {
+      check(trace.event_profile_queried[i]);
+      if (i + 1 == size_t(at)) {
+        check(trace.event_profile_results[i] == VX_ERR_NOT_SUPPORTED);
+        const auto& profile = trace.event_profiles[i];
+        check(profile.queued_ns == 0 && profile.submit_ns == 0
+              && profile.start_ns == 0 && profile.end_ns == 0);
+      } else {
+        check_profile(trace, i);
+      }
+    }
+    check(operation->wait(0).ok() && state.calls["profiling"] == 5);
+    check(runtime->close().ok());
+    reset();
+  }
+  for (int at = 1; at <= 5; ++at) {
+    auto runtime = create(DType::fp16, true);
+    state.fail_call = "enqueue";
+    state.fail_at = at;
+    std::unique_ptr<MatmulOperation> operation;
+    const auto submitted = launch(runtime.get(), &operation);
+    check(submitted.primary == VX_ERR_OUT_OF_HOST_MEMORY && operation);
+    const auto result = operation->close(VX_TIMEOUT_INFINITE);
+    check(result.primary == submitted.primary && result.cleanup == VX_SUCCESS && result.complete);
+    check(operation->output_words().empty() && state.calls["profiling"] == at - 1);
+    const auto& trace = operation->trace();
+    check(trace.profiling_enabled);
+    for (size_t i = 0; i != trace.event_profiles.size(); ++i) {
+      if (i < size_t(at - 1)) {
+        check_profile(trace, i);
+      } else {
+        check_no_profile(trace, i);
+      }
+    }
+    check(runtime->close().ok());
+    reset();
+  }
+  for (int at = 1; at <= 5; ++at) {
+    auto runtime = create(DType::fp16, true);
+    state.async_failure = at;
+    std::unique_ptr<MatmulOperation> operation;
+    check(launch(runtime.get(), &operation).ok());
+    const auto result = operation->close(VX_TIMEOUT_INFINITE);
+    check(result.primary == VX_ERR_DEVICE_LOST && result.cleanup == VX_SUCCESS && result.complete);
+    check(operation->output_words().empty() && state.calls["profiling"] == 5);
+    const auto& trace = operation->trace();
+    for (size_t i = 0; i != trace.event_profiles.size(); ++i) {
+      check_profile(trace, i);
+      if (i + 1 >= size_t(at)) {
+        check(trace.event_results[i] == VX_ERR_DEVICE_LOST);
+        check(trace.event_profiles[i].submit_ns == trace.event_profiles[i].start_ns
+              && trace.event_profiles[i].start_ns == trace.event_profiles[i].end_ns);
+      } else {
+        check(trace.event_results[i] == VX_SUCCESS);
+      }
+    }
+    check(runtime->close().ok());
+    reset();
+  }
+}
 }
 
 int main(int argc, char** argv) {
@@ -515,6 +681,8 @@ int main(int argc, char** argv) {
     allocation_validation();
   } else if (group == "destructor_drain") {
     destructor_drain();
+  } else if (group == "profiling") {
+    profiling();
   } else {
     return 2;
   }

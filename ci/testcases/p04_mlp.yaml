@@ -1,0 +1,67 @@
+# SPDX-License-Identifier: Apache-2.0
+# The source-bound runner builds fresh matched variants and retains actual traces.
+category: p04_mlp
+defaults:
+  xlen: [64]
+  tier: smoke
+  via: script
+  touches:
+  - ci/testcases/p04_mlp.yaml
+  - ci/project/
+  - tests/regression/ai_mlp/
+  - tests/regression/common.mk
+  - sw/runtime/
+  - sw/kernel/
+  - sw/common/
+  - sim/simx/
+  - sim/rtlsim/
+  - sim/common/
+  - sim/common.mk
+  - hw/rtl/
+  - hw/dpi/
+  - third_party/
+  - profiles/p02-tfr.json
+  - configure
+  - config.mk.in
+  - ci/gen_config.py
+  - docs/designs/mlp_execution_records_v1.md
+  - docs/designs/tiny_mlp_fixture_v1.md
+  - docs/designs/tensor_numerics_v1.md
+  - .gitmodules
+  - VERSION
+  - VX_config.toml
+  - VX_types.toml
+tests:
+- id: fixed-model-simx
+  driver: simx
+  env:
+    P04_CATALOG_BACKEND: simx
+  # configure copies the harness and this catalog, but keeps ci/project in
+  # source. Read its literal source identity without evaluating make syntax.
+  run: &model_run |
+    python3 - <<'PY_MODEL'
+    import os, re, sys
+    from pathlib import Path
+    config = Path('config.mk')
+    if config.is_symlink():
+        raise SystemExit('model catalog config.mk must not be a symlink')
+    with config.open('rb') as stream:
+        data = stream.read(1024 * 1024 + 1)
+    if len(data) > 1024 * 1024:
+        raise SystemExit('model catalog config.mk exceeds its byte bound')
+    values = re.findall(r'^VORTEX_HOME[ \t]*\?=[ \t]*(.*?)[ \t]*$',
+                        data.decode('utf-8'), re.MULTILINE)
+    if len(values) != 1 or not re.fullmatch(r'/[A-Za-z0-9_./+-]+', values[0]):
+        raise SystemExit('model catalog requires one literal VORTEX_HOME')
+    source = Path(values[0])
+    if source.resolve(strict=True) != source:
+        raise SystemExit('model catalog source must not traverse a symlink')
+    runner = source / 'ci/project/p04_catalog.py'
+    os.execv(sys.executable, [sys.executable, str(runner), '--backend',
+                             os.environ['P04_CATALOG_BACKEND']])
+    PY_MODEL
+- id: fixed-model-rtlsim
+  driver: rtlsim
+  env:
+    P04_CATALOG_BACKEND: rtlsim
+  run: *model_run

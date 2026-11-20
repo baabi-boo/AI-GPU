@@ -1,11 +1,23 @@
 # P04-T02 — Native tiny-model executor plan
 
-This is future implementation and qualification work. No model executor or
-device execution result is supplied by this plan. The
-[fixture contract](../designs/tiny_mlp_fixture_v1.md) defines the source workload;
-[roadmap.json](roadmap.json) and accepted evidence determine phase state.
-The accountable role is model runtime lead; assign the actual execution owner
-and resource budget before beginning the run.
+The managed executor, native application, strict execution records, trusted
+runner and CI/catalog integration are implemented. This plan now guides their
+clean native qualification; no native model result or P04-A02/A03 acceptance
+is claimed at this checkpoint. See the
+[executor packet](evidence/p04-executor/README.md) and
+[audit](p04-executor-audit.md) for development evidence and remaining obligations.
+The [fixture contract](../designs/tiny_mlp_fixture_v1.md) defines the source
+workload; [roadmap.json](roadmap.json) and accepted evidence determine phase state.
+The primary coding agent owns integration and execution under the model runtime
+lead role.
+
+The frozen qualification inventory is SimX/native processor RTL × FP16/BF16,
+five cases per format and two distinct output poisons per case: **four variants,
+20 case/backend pairs, 40 model runs and 120 native launches**. These are required
+counts, not executed results. Each variant uses at most two build jobs, a 4 GiB
+process-group RSS cap, 15 GiB free-disk reserve, 16 MiB per-command logs, 1,800-second
+build deadlines and 180-second case deadlines. Native qualification remains
+separate from the already accepted fixture source contract.
 
 ## 1. Freeze inputs and execution identity
 
@@ -23,9 +35,9 @@ supplying `ExecutionBinding`. Match the ordinary `p02-tfr` RV64 profile,
 selected input dtype, FP32 output and K-unroll setting on both application and
 backend. A plausible qualification ID or capability bit is not provenance proof.
 
-Use separate generated build trees for incompatible variants. Start with one
-bounded SimX case, then execute the frozen inventory and declared native
-processor-RTL coverage; retain each backend's result separately. Do not promote
+Use separate generated build trees for incompatible variants. Execute the
+bounded frozen inventory and declared native processor-RTL coverage; retain
+each backend's result separately. Do not promote
 processor RTL to full-AFU, vendor-emulation or physical-board evidence.
 
 ## 2. Compose three managed matmuls per case
@@ -53,7 +65,7 @@ and compare its actual bytes with the bridge reference. Expected H and bridge
 arrays are comparison inputs only; they must never feed subsequent native work.
 
 Sequential output calls are sufficient. Compare each actual output block with
-its own row range, then use `copy_row_blocks` to assemble logits at byte offsets
+its own row range, then copy the actual blocks into logits at byte offsets
 0 and 128. Compare all 64 assembled FP32 words exactly. Native failure never
 selects a CPU matmul implementation. The host bridge and copies have fixed,
 manifest-declared placement; they are not native activation/cast support.
@@ -71,12 +83,13 @@ Exercise partial submission, failed dependency, timeout retention and late-stage
 failure paths. A failed case keeps its raw outcomes; retrying must not overwrite
 the failed evidence or reuse stale outputs as a successful result.
 
-## 4. Add model-level execution records
+## 4. Verify model-level execution records
 
-Existing `MatmulTrace` covers a single call; it does not supply model operation
-IDs, graph dependencies or elapsed timings. Add executor-level records binding
-case, format, backend, fixture/source identity, operation ID, row slice,
-dependency order and actual bridge lineage to each native trace. Preserve the
+`MatmulTrace` covers a single call, with opt-in event profiles. The implemented
+executor records bind case, format, backend, fixture/source identity, operation
+ID, row slice, dependency order and actual bridge lineage to each native trace.
+Validate their exact schema under the
+[record contract](../designs/mlp_execution_records_v1.md). Preserve the
 qualification binding, shape, dtype, poison, A/B/D addresses and extents,
 56-byte arguments, enqueue counts, waits/timeouts, event results and statuses.
 
@@ -93,8 +106,9 @@ totals are not physical DMA transaction counts or bandwidth measurements.
 
 ## 5. Qualify and hand off
 
-Register the executor in the native test catalog with deterministic numerical,
-placement and failure checks. Retain raw intermediates/final outputs, actual
+The executor is registered in the native test catalog, and the dedicated hosted
+workflow is configured to build the four variants from clean source. Execute the
+declared native inventory and retain raw intermediates/final outputs, actual
 dispatch and host records, source/tool/configuration identities, bounded command
 receipts and artifact hashes. Have independent review reconcile graph coverage,
 all comparisons, trace lineage, resource ownership and failed attempts.
