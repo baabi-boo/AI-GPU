@@ -24,7 +24,8 @@ from baseline_process import LIMITATIONS as PROCESS_LIMITATIONS
 from p02_matrix_records import DISABLED, PROFILE_SHA256
 from p03_execution_records import qualification_id
 from p06_compiler_records import validate_header_macros, validate_records
-from p06_contract import CONTRACT_ID, FORMATS, MANIFEST_PATH, decode_contract, load_contract, select_workloads
+from p06_contract import (CONTRACT_ID, FORMATS, MANIFEST_PATH, decode_contract,
+                          load_analysis_contract, select_workloads)
 from p06_records import summarize, verify_sample
 
 
@@ -174,7 +175,10 @@ class _Replay:
     def __init__(self, view, api, revision, fmt):
         self.view, self.api, self.revision, self.fmt = view, api, revision, fmt
         self.report = view.json("report.json")
-        self.contract = load_contract(ROOT)
+        # The current checkout supplies trusted readers and oracle inputs.
+        # Historical execution-source pins are checked against retained bytes
+        # in provenance(), independently of the current runtime implementation.
+        self.contract = load_analysis_contract(ROOT)
         self.workloads = select_workloads(self.contract, [fmt])
         self.variant_id = "simx-" + fmt
         self.command_index = 0

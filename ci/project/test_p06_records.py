@@ -17,7 +17,7 @@ from p06_test_samples import (BINDING, REVISION, raw_records, render_log,
 class SampleRecordTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.contract = p06_contract.load_contract()
+        cls.contract = p06_contract.load_analysis_contract()
         cls.workloads = p06_contract.select_workloads(cls.contract)
         cls.operator = cls.workloads[0]
         cls.model = cls.workloads[3]
@@ -335,7 +335,7 @@ class SampleRecordTests(unittest.TestCase):
 class SampleSummaryTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.contract = p06_contract.load_contract()
+        cls.contract = p06_contract.load_analysis_contract()
         cls.workloads = p06_contract.select_workloads(cls.contract)
         cls.all_samples = samples(cls.contract)
 

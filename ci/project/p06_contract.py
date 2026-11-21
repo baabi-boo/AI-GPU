@@ -74,6 +74,48 @@ _SOURCE_HASHES = {'VX_config.toml': 'a1c49de52a0373b5f74706528d46bea1181c54f7769
  'tests/regression/ai_mlp/p04_fixtures.h': '61a1368572b0cee5e67e0cc803b32e57b19557f53eb6b8e32e079a55b237e773',
  'tests/regression/ai_mlp/records.h': '13a4d51ab7058a799b9598c0ba410b64b6bd28d77c305f88de702ef0db8daf29',
  'tests/regression/sgemm_tcu/p02_fixtures.h': '1e692ad5d14e895286e57e45bf9d1730cf2380a33ccbaa486c601db838daa64e'}
+
+# Historical analysis uses current, reviewed readers and independent producers.
+# These are the frozen inputs needed to interpret the manifest, CSR table and
+# workload fixtures; they are deliberately enumerated rather than derived by
+# excluding whichever execution sources happen to have changed. The P04 model
+# validator also verifies its transitive documentation/license inputs against
+# the pinned model manifest, and the P02 validator reproduces its leaf fixture.
+# All execution-source pins remain mandatory in validate_contract() and must
+# separately be checked against retained source bytes by an archive replayer.
+ANALYSIS_SOURCE_PATHS = (
+    "VX_config.toml",
+    "VX_types.toml",
+    "ci/gen_config.py",
+    "ci/project/fixtures/p02_layout_v1.json",
+    "ci/project/fixtures/p02_wmma_numerical_v1.json",
+    "ci/project/fixtures/p04_tiny_mlp_v1.json",
+    "ci/project/p02_fixture_oracle.py",
+    "ci/project/p02_layout_fixture_oracle.py",
+    "ci/project/p02_wmma_fixtures.py",
+    "ci/project/p02_wmma_numerical_fixture_oracle.py",
+    "ci/project/p03_operator_manifest.json",
+    "ci/project/p04_fixture_adapter.py",
+    "ci/project/p04_model_contract.py",
+    "ci/project/p04_model_manifest.json",
+    "ci/project/p04_reference.py",
+    "profiles/p02-tfr.json",
+    "sw/common/ai_matmul_args.h",
+    "sw/common/ai_matmul_profile.h",
+    "sw/runtime/ai/contract.h",
+    "sw/runtime/ai/mlp_host.cpp",
+    "sw/runtime/ai/mlp_host.h",
+)
+_ANALYSIS_HELPERS = (
+    ("ci/project/p02_fixture_oracle.py", operator_fixtures.leaf),
+    ("ci/project/p02_layout_fixture_oracle.py", operator_fixtures.layout),
+    ("ci/project/p02_wmma_fixtures.py", operator_fixtures),
+    ("ci/project/p02_wmma_numerical_fixture_oracle.py", operator_fixtures.numerical),
+    ("ci/project/p04_fixture_adapter.py", model_fixtures),
+    ("ci/project/p04_model_contract.py", model_fixtures.contract),
+    ("ci/project/p04_reference.py", model_fixtures.reference),
+)
+
 _CAPABILITIES = (('num_cores', 3),
  ('num_clusters', 10),
  ('socket_size', 11),
@@ -393,17 +435,20 @@ def _validate_workload_sources(contract, source):
                      == workload["accounting"]["tensor_d2h_bytes"], "model output byte count differs")
 
 
-def validate_contract(contract, source=ROOT):
-    """Check the exact manifest, pinned inputs and independent workload inventory."""
+def _validated_inputs(contract, source, paths):
     _same(contract, expected_contract(), "P06 contract")
     source = Path(source).absolute()
     _require(source.is_dir(), "source root must be an existing directory")
     contents = {}
-    for item in contract["source_inputs"]:
-        data = _read_file(source / item["path"], MAX_SOURCE_BYTES)
-        _require(hashlib.sha256(data).hexdigest() == item["sha256"],
-                 "frozen source input differs: " + item["path"])
-        contents[item["path"]] = data
+    for path in paths:
+        data = _read_file(source / path, MAX_SOURCE_BYTES)
+        _require(hashlib.sha256(data).hexdigest() == _SOURCE_HASHES[path],
+                 "frozen source input differs: " + path)
+        contents[path] = data
+    return source, contents
+
+
+def _validate_counter_sources(contract, contents):
     types = tomllib.loads(contents["VX_types.toml"].decode("utf-8"))
     sections = ("dcr_mpm_class", "csr_mpm_base", "csr_mpm_core", "csr_mpm_icache",
                 "csr_mpm_dcache", "csr_mpm_l2cache", "csr_mpm_l3cache", "csr_mpm_mem",
@@ -415,13 +460,46 @@ def validate_contract(contract, source=ROOT):
         _require(symbols.get(counter["class_macro"]) == counter["mpm_class"]
                  and symbols.get(counter["csr_macro"]) == counter["csr"],
                  "counter class/address differs from the frozen CSR definition: " + counter["name"])
+
+
+def validate_contract(contract, source=ROOT):
+    """Check all frozen execution sources and the independent workload inventory."""
+    source, contents = _validated_inputs(contract, source, sorted(_SOURCE_HASHES))
+    _validate_counter_sources(contract, contents)
     _validate_workload_sources(contract, source)
     return contract
 
 
 def load_contract(source=ROOT):
+    """Load the original native execution contract; changed runtime sources fail."""
     source = Path(source).absolute()
     return validate_contract(decode_contract(_read_file(source / MANIFEST_PATH, MAX_MANIFEST_BYTES)), source)
+
+
+def validate_analysis_contract(contract, source=ROOT):
+    """Check the frozen definition and trusted inputs for historical analysis.
+
+    This does not qualify source for native execution or validate an archive.
+    A replayer must independently verify every source_inputs pin against the
+    archive's retained bytes. Archived Python is never imported here.
+    """
+    source, contents = _validated_inputs(contract, source, ANALYSIS_SOURCE_PATHS)
+    for path, module in _ANALYSIS_HELPERS:
+        invoking = Path(module.__file__).absolute()
+        _require(invoking == ROOT / path,
+                 "analysis helper did not load from the trusted repository: " + path)
+        _require(hashlib.sha256(_read_file(invoking, MAX_SOURCE_BYTES)).hexdigest()
+                 == _SOURCE_HASHES[path], "trusted analysis helper differs: " + path)
+    _validate_counter_sources(contract, contents)
+    _validate_workload_sources(contract, source)
+    return contract
+
+
+def load_analysis_contract(source=ROOT):
+    """Load the frozen definition for historical analysis with current readers."""
+    source = Path(source).absolute()
+    return validate_analysis_contract(
+        decode_contract(_read_file(source / MANIFEST_PATH, MAX_MANIFEST_BYTES)), source)
 
 
 def select_workloads(contract, formats=None):

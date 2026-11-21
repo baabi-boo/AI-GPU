@@ -339,6 +339,20 @@ class ReplayTests(unittest.TestCase):
             with self.subTest(check=pattern):
                 self.reject(members, pattern)
 
+    def test_changed_runtime_bytes_cannot_replace_frozen_archive_sources(self):
+        # Reader evolution permits analysis from the current checkout; it must
+        # never authorize replacing historical execution inputs with current
+        # runtime bytes, even when every source descriptor is rehashed.
+        for fmt in ("fp16", "bf16"):
+            for source in ("sw/runtime/ai/runtime.cpp", "sw/runtime/ai/runtime.h",
+                           "sw/runtime/ai/mlp_runtime.cpp"):
+                with self.subTest(format=fmt, source=source):
+                    members = dict(self.packets[fmt])
+                    body = (replay.ROOT / source).read_bytes() + b"\n// retained runtime substitution\n"
+                    self.assertNotEqual(body, members["baseline/artifacts/source/" + source])
+                    replace_source_body(members, source, body)
+                    self.reject(members, "frozen source pin differs: " + source, fmt=fmt)
+
     def test_build_stages_and_final_binary_identity_must_be_conserved(self):
         self.reject(self.changed_report(lambda report: report["variants"][0]["retained_builds"].pop(1)),
                     "build stage")

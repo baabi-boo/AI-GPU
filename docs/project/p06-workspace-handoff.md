@@ -10,11 +10,14 @@ was established against `3235cd59d724663dda1bece20645d5ccf30462e1` before the
 runtime implementation. Its [evidence packet](evidence/p06-serial-workspace/README.md)
 records exact source hashes, completed reviews and test scope.
 
-Targeted host checks are passing. Complete integration testing on the new frozen
-checkpoint and fresh SimX/processor-RTL execution are pending at this
-documentation checkpoint. The earlier full host-suite baseline ran before the
-runtime changes and did not select the newly added workspace tests. Neither it
-nor historical P03/P04/P05 native passes qualifies the changed runtime.
+Targeted host checks are passing. The [first clean implementation integration run](evidence/p06-serial-workspace/host/checkpoint-5da357f-failed/retention.json)
+at `5da357f0f4a3cd3581919b35941db7a07d0d9fbe` ran 2,484 tests and failed with
+two failures and twelve errors, all caused by the original cold-baseline source
+pins rejecting the changed runtime. The separation described below is implemented;
+a complete rerun on its corrected frozen checkpoint, independent enforcement
+review and fresh SimX/processor-RTL execution remain pending here. The earlier
+2,449-test baseline predates the runtime changes and did not select the added
+workspace tests. Historical native passes do not qualify the changed runtime.
 
 P06-A01 retains its original cold SimX acceptance at
 `84b6ca0ca75fba248ba330642bbf8764db3d459c`. P06 and P06-T01 remain `in_progress`;
@@ -69,6 +72,47 @@ the complete integration gate. New host fixtures use the existing bounded
 host-command helper, C++17/UBSan and source-identity checks. Their deferred fake
 C API and synthetic output establish control, transport and fault behavior;
 they are separate from native numerical execution.
+
+## Historical cold baseline and current execution
+
+The [original P06 manifest](../../ci/project/p06_benchmark_contract.json), all
+46 execution-source pins, accepted archives and measurements remain unchanged.
+`load_contract` and `validate_contract` still check every frozen execution input
+against the checkout being qualified. The [native cold-baseline runner](../../ci/project/p06_execute.py)
+continues using that strict path and rejects this changed runtime before launch.
+
+Historical readers use the explicit `load_analysis_contract` entry point. It
+checks the exact original manifest, 21 interpretation inputs and the actual paths
+and frozen hashes of seven executing fixture helpers. The current
+[replayer](../../ci/project/p06_replay.py) separately verifies every retained
+source descriptor and all 46 original execution pins inside each digest-verified
+archive. Archived Python and binaries remain data. The
+[fresh retained analysis](evidence/p06-serial-workspace/host/historical-replay/analysis.json)
+reproduces the original eight workloads, 48 processes and 72 launches; it records
+`native_execution=not_run` and makes no new acceptance claim.
+
+The current [baseline workflow](../../.github/workflows/p06-baseline.yml) now
+runs that historical analysis using current trusted readers and absolute archive
+paths. Its candidate checkout identity is distinct from the recorded original
+native source. It supplies no current-runtime cold performance result. Current
+native correctness belongs to the workspace matrix below and the existing
+[P04 model](../../.github/workflows/p04-model.yml),
+[P05 Python](../../.github/workflows/p05-python.yml) and
+[P05 PyTorch](../../.github/workflows/p05-torch.yml) routes, each with its own
+execution scope and artifact review.
+
+To reproduce original cold native execution, use a separate clean checkout of
+`84b6ca0ca75fba248ba330642bbf8764db3d459c`, that checkout's original native runner,
+identified tools/dependencies and the unchanged native budgets. Follow its frozen
+execution instructions. Do not replace the current runtime with retained files,
+refresh original source hashes, or treat an analysis pass as permission to run
+changed sources under the original experiment identity.
+
+The [P06-A01 retention-only successor](evidence/p06-serial-workspace/p06-a01-retained-baseline.json)
+changes only two artifact paths to exact historical reader bytes; its
+[retention metadata](evidence/p06-serial-workspace/p06-a01-source-retention.json)
+records the mapping. The original acceptance, commands, digests, measurements,
+source revision and phase state are preserved.
 
 ## Native correctness execution
 

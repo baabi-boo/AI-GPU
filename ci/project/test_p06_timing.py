@@ -12,7 +12,7 @@ from p06_test_samples import BINDING, REVISION, raw_records, render_log, samples
 class ModelTimingTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.contract = p06_contract.load_contract()
+        cls.contract = p06_contract.load_analysis_contract()
         cls.workloads = {
             fmt: p06_contract.select_workloads(cls.contract, [fmt])
             for fmt in ("fp16", "bf16")

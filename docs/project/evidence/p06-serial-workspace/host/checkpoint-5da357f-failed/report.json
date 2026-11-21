@@ -1,0 +1,70 @@
+{
+  "scope": "full-source-host-integration",
+  "source_dir": "/tmp/ai-gpu-workspace-verify-20261121",
+  "revision": "5da357f0f4a3cd3581919b35941db7a07d0d9fbe",
+  "tree": "27bfa6a08e25eff4d8dc3822ca79d24ef7c2b4d4",
+  "source_before": "",
+  "observed_start_utc": "2026-11-21 15:49:35 UTC",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "state": "finished",
+  "commands": [
+    {
+      "name": "governance",
+      "argv": [
+        "python3",
+        "ci/project/check_project.py"
+      ],
+      "cwd": "/tmp/ai-gpu-workspace-verify-20261121",
+      "log": "/tmp/p06-workspace-full-host-5da357f-governance.log",
+      "state": "completed",
+      "exit_code": 0,
+      "seconds": 1.175,
+      "log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+      "log_bytes": 96
+    },
+    {
+      "name": "boundary",
+      "argv": [
+        "bash",
+        "ci/check_sw_sim_boundary.sh"
+      ],
+      "cwd": "/tmp/ai-gpu-workspace-verify-20261121",
+      "log": "/tmp/p06-workspace-full-host-5da357f-boundary.log",
+      "state": "completed",
+      "exit_code": 0,
+      "seconds": 0.467,
+      "log_sha256": "75b0e4b77df9d128a635ce1e3cb6d893508285b6583b0bf137af7b5e04d89c6f",
+      "log_bytes": 35
+    },
+    {
+      "name": "unittest",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/project",
+        "-p",
+        "test_*.py"
+      ],
+      "cwd": "/tmp/ai-gpu-workspace-verify-20261121",
+      "log": "/tmp/p06-workspace-full-host-5da357f-unittest.log",
+      "state": "completed",
+      "exit_code": 1,
+      "seconds": 882.692,
+      "log_sha256": "3097af437c584ffa9c30362be839b9ccc4dbb3241f9ac50bb080ff9940386340",
+      "log_bytes": 21232
+    }
+  ],
+  "native_execution": false,
+  "source_after": "",
+  "revision_after": "5da357f0f4a3cd3581919b35941db7a07d0d9fbe",
+  "tree_after": "27bfa6a08e25eff4d8dc3822ca79d24ef7c2b4d4",
+  "source_stable": true,
+  "passed": false,
+  "tests": 2484,
+  "test_seconds": 880.736
+}

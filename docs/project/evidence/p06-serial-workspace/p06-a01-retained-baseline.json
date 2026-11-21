@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "record_id": "p06-a01-cold-simx-baseline-84b6ca0",
+  "kind": "simulation",
+  "outcome": "pass",
+  "evidence_level": "simulated",
+  "scope": "P06-A01 only: the complete original frozen eight-workload FP16/BF16 cold-context SimX baseline at source 84b6ca0ca75fba248ba330642bbf8764db3d459c, hosted run 44901052221 attempt 1. Ordinary TFR tensor arithmetic is simulated through the native managed runtime with STD scalar arithmetic; the model declares host ReLU, exact format conversion and row assembly. Independent source, raw numerical/dispatch/counter, compiler/configuration and full-matrix analysis review establishes 48 processes / 72 launches, including 40 measured processes / 60 measured launches. Review does not execute archived code, provide new native execution, establish RTL/physical performance, prove an optimization or close P06.",
+  "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+  "configuration": "ci/project/p06_benchmark_contract.json (p06-native-baseline-v1), SHA-256 0c851e9d517b4142da3f9522ad1940069c2cc46faa424e682f0299c3fb914fba; RV64 p02-tfr SimX timing model, PERF=1 backend, one cluster/core, four warps of four threads, issue width one; FP16/BF16 to FP32; three fixed matmul shapes (8,4,8), (8,4,16), (16,8,16) and fixed batch-16 16-to-8-to-4 model per format; one retained warm-up plus five measured fresh-process/device-context invocations each; jobs=2, polled 4 GiB RSS, 15 GiB free-disk reserve, 16 MiB log bound, 1800-second build and 180-second run deadlines. Original exact argv/cwd/environment, compiler records and generated headers are retained in each ZIP baseline/report.json and build snapshots.",
+  "acceptance_ids": [
+    "P06-A01"
+  ],
+  "commands": [
+    {
+      "command": "python3 ci/project/p06_analyze.py --fp16-archive /workspace/scratch/00f618e398e9/AI-GPU/docs/project/evidence/p06-baseline/archives/simx-fp16.zip --fp16-sha256 aaf54ff60b8f4f889264fb3efa4249cbdb02a7fad2b20124b4ad0ba9ae2f41dc --bf16-archive /workspace/scratch/00f618e398e9/AI-GPU/docs/project/evidence/p06-baseline/archives/simx-bf16.zip --bf16-sha256 f19f174879e2c1fb120a3328ec919d42b4d67f59ba056ceb6e0b6f5607f4996b --source-revision 84b6ca0ca75fba248ba330642bbf8764db3d459c --output /workspace/scratch/00f618e398e9/p06-audit/agents/w04_a1-analysis.json",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 docs/project/evidence/p06-baseline/reviews/audit_sources.py --repo /workspace/scratch/00f618e398e9/AI-GPU --vendor-root /workspace/scratch/00f618e398e9/p06-audit/vendor-source --output /workspace/scratch/00f618e398e9/p06-audit/agents/w04_a1-source-provenance.json",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 docs/project/evidence/p06-baseline/reviews/audit_measurements.py --repo /workspace/scratch/00f618e398e9/AI-GPU --output /workspace/scratch/00f618e398e9/p06-audit/agents/w04_a1-measurement-review.json",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/project/evidence/p06-baseline/reviews/acceptance-review.json",
+      "sha256": "cdc01ad08629b8044ebb4ca3254cb55a139bc7ff5fa19110ff40afab285a1f6b"
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/archives/simx-fp16.zip",
+      "sha256": "aaf54ff60b8f4f889264fb3efa4249cbdb02a7fad2b20124b4ad0ba9ae2f41dc"
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/archives/simx-bf16.zip",
+      "sha256": "f19f174879e2c1fb120a3328ec919d42b4d67f59ba056ceb6e0b6f5607f4996b"
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/archive-index.json",
+      "sha256": "2d28b4e04bec36b0f77f1a8cf239e943aa67a807e18fc0bcd919ea6422d06692"
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/reviews/analysis.json",
+      "sha256": "39a5d0d5ff01605d26947ca0a055185d56c47c636c31ee72757a7c39bc4541a7"
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/reviews/source-provenance.json",
+      "sha256": "4ecee49090e1580e7f96454fa80e767fd3863dad649285b6e4411c9debafea29"
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/reviews/measurement-review.json",
+      "sha256": "e03131b63de2d19b92c67a8ff8b58821db3d8abffc00987ae455c3ccea627fdd"
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/reviews/audit_sources.py",
+      "sha256": "5b6816aa06f76366488f2a87839bf9164cc3704a35fcd48fe08dff23b0969ec4"
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/reviews/audit_measurements.py",
+      "sha256": "a30be7adcb05c7e623fd3393d7e93c87b4aa9df2986377a4ed6fd84d64a05030"
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/hosted/observation.json",
+      "sha256": "0474cab843ae126da718f66fc521d802591f6b23f38d40250a6e6a965745cbe6"
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/hosted/governance.log",
+      "sha256": "5ccb975236e0633cab82bbf55890e66bdb4c1803f33d9b485ff1b804365e3a21"
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/hosted/prior-attempt.json",
+      "sha256": "a42d5f7ac84ee940662c44b95221ffa878e4239e6f883a0a97f6308d60694ee2"
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/hosted/prior-failed-governance.log",
+      "sha256": "a88f0b5d888167766a34cf8950e10b07be72745ac80d9cb483ad4294c91a2575"
+    },
+    {
+      "path": "ci/project/p06_benchmark_contract.json",
+      "sha256": "0c851e9d517b4142da3f9522ad1940069c2cc46faa424e682f0299c3fb914fba"
+    },
+    {
+      "path": "docs/designs/native_benchmark_v1.md",
+      "sha256": "9eae97f809a280d9518c7940c9611a34d7e129aa4c5708338cd17058983fe1ca"
+    },
+    {
+      "path": "docs/designs/native_baseline_analysis_v1.md",
+      "sha256": "9ebec7ff6818ab2ebeae950a5c11bdc06023c64c150e81894c2a1e5d544e561a"
+    },
+    {
+      "path": "ci/project/p06_records.py",
+      "sha256": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7"
+    },
+    {
+      "path": "docs/project/evidence/p06-serial-workspace/history/p06-a01/ci/project/p06_replay.py.txt",
+      "sha256": "c965b08ec243a7af7faa88bb29652773cdd9562c88e7414585897e3289b46231"
+    },
+    {
+      "path": "docs/project/evidence/p06-serial-workspace/history/p06-a01/ci/project/p06_analyze.py.txt",
+      "sha256": "fb4bee2291748c2d12701f7b25c4830db2c8380d28738bca8bb763f07279c783"
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/reviews/supervisor-observation.json",
+      "sha256": "3d7880fcaae4162ef4020ba716191fef2121cfc043dfd24c45eda8abd9d8b1e9"
+    }
+  ],
+  "limitations": [
+    "Acceptance is only P06-A01 at simulated evidence level for original source 84b6ca0ca75fba248ba330642bbf8764db3d459c. Review replay is not a new native execution; the candidate validator/analyzer changes do not inherit a new-source native or full-host-suite result.",
+    "The configuration is RV64 p02-tfr SimX timing-model execution, one cluster/core, four warps of four threads, issue width one, FP16/BF16 inputs and FP32 output. No processor RTL, AFU emulation, physical FPGA or silicon result is established here.",
+    "Every invocation uses a fresh process and device context. The retained warm-up does not establish warm device caches, resident weights, reused allocations, multiple live operations, concurrent queues, or steady-state throughput.",
+    "Whole-context active cycles include all model launches and are not synchronized model latency or per-kernel timing. Macroinstructions are not FLOPs; overlapping stall counters cannot be summed as an elapsed interval.",
+    "Logical tensor payload, destination poison, argument payload and modeled 64-byte memory requests have distinct boundaries. They do not establish physical bandwidth, a tensor roofline, measured DMA traffic, or physical memory capacity.",
+    "Twelve disabled L2/L3 counters are unavailable, not zero. Included local-memory counters are measured zero in this suite. Per-launch-reset cache-port bank counters are deliberately excluded from whole-context totals.",
+    "Host process duration includes supervisor exit-observation/cleanup, startup, instrumentation, numerical checks and allowed host work. A reachable approximately 100 ms monitor delay is documented; exact historical exit timestamps are absent and no delay is subtracted retrospectively.",
+    "Five measured repetitions support the retained descriptive statistics only; no outlier is removed and no production tail-latency, confidence-interval, causal bottleneck or optimization claim is made.",
+    "The model includes declared host ReLU, exact format conversion and row assembly. Only its three matrix operations are dispatched through the native runtime; this is not proof of an entirely device-resident model.",
+    "Source audit checks all 979 retained bodies and all five top-level gitlinks per format. Three unrelated nested CVFPU gitlinks were not fetched, no retained body falls under them, and FetchContent historical tag immutability is not established. Exhaustive system/build-input retention and toolchain origin are not independently proved by source-byte matching.",
+    "P06-A02 and P06-A03 remain unaccepted; P06 remains in progress. The inherited 267 to 283 DSP area finding and P01-A03 vendor XRT hw_emu blocker remain unresolved and unwaived. No synthesis, resource closure, power, energy or physical speed claim follows.",
+    "The original 2401-test hosted result and six successful workflows belong to 84b6ca0ca75fba248ba330642bbf8764db3d459c only. Other workflow successes do not grant P05 or unrelated acceptance. Publication and the full candidate-source host suite are integration-owner work."
+  ],
+  "reviewer": "/root/w04_a1 independently reviewed every P06-A01 obligation, reran original-archive full-matrix analysis and source/measurement auditors, and verified byte-identical retained reports. See reviews/acceptance-review.json for the explicit approval and exact reviewed hashes. This records actual engineering review only; no human approval or policy waiver is invented."
+}

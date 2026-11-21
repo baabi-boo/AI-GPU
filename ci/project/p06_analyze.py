@@ -19,7 +19,7 @@ import statistics
 import sys
 
 import p06_replay as replay
-from p06_contract import load_contract, select_workloads
+from p06_contract import load_analysis_contract, select_workloads
 from p06_records import summarize
 
 
@@ -226,7 +226,7 @@ def _compatible(packets):
 def analyze_archives(fp16_archive, fp16_sha256, bf16_archive, bf16_sha256, *, expected_revision):
     """Replay both originals, require one complete experiment, then derive data."""
     _same(_source_identity(), ANALYZER_SOURCE, "executing analyzer source stability")
-    contract = load_contract(ROOT)
+    contract = load_analysis_contract(ROOT)
     packets = []
     try:
         for fmt, path, sha256 in (("fp16", fp16_archive, fp16_sha256), ("bf16", bf16_archive, bf16_sha256)):

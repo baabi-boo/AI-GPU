@@ -1,0 +1,257 @@
+.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................E..E...E...................................FE...F..EE...............EEEEEE........................................................................................................................................................................................................begin sst tests...
+=== sst: hello ===
+=== sst: fibonacci ===
+sst tests done!
+..................................................................................................................................................................................................................................................................................................................................................
+======================================================================
+ERROR: test_p06_analyze (unittest.loader._FailedTest.test_p06_analyze)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_p06_analyze
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_analyze.py", line 13, in <module>
+    from p06_test_packets import REVISION, synthetic_packet, write_archive
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_test_packets.py", line 22, in <module>
+    import test_p06_runner as harness_module
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_runner.py", line 26, in <module>
+    CONTRACT = runner.load_contract()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 424, in load_contract
+    return validate_contract(decode_contract(_read_file(source / MANIFEST_PATH, MAX_MANIFEST_BYTES)), source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 404, in validate_contract
+    _require(hashlib.sha256(data).hexdigest() == item["sha256"],
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 164, in _require
+    raise ContractError(message)
+p06_contract.ContractError: frozen source input differs: sw/runtime/ai/mlp_runtime.cpp
+
+
+======================================================================
+ERROR: test_all_bound_sources_and_build_inputs_trigger_both_events (test_p06_ci_contract.NativeBaselineWorkflowTests.test_all_bound_sources_and_build_inputs_trigger_both_events)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_ci_contract.py", line 85, in test_all_bound_sources_and_build_inputs_trigger_both_events
+    for path in sorted(required_sources()):
+                       ^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_ci_contract.py", line 41, in required_sources
+    names.update(row["path"] for row in load_contract()["source_inputs"])
+                                        ^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 424, in load_contract
+    return validate_contract(decode_contract(_read_file(source / MANIFEST_PATH, MAX_MANIFEST_BYTES)), source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 404, in validate_contract
+    _require(hashlib.sha256(data).hexdigest() == item["sha256"],
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 164, in _require
+    raise ContractError(message)
+p06_contract.ContractError: frozen source input differs: sw/runtime/ai/mlp_runtime.cpp
+
+======================================================================
+ERROR: test_hosted_simx_matrix_and_resource_limits_match_the_frozen_budget (test_p06_ci_contract.NativeBaselineWorkflowTests.test_hosted_simx_matrix_and_resource_limits_match_the_frozen_budget)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_ci_contract.py", line 122, in test_hosted_simx_matrix_and_resource_limits_match_the_frozen_budget
+    self.assertEqual(load_contract()["budget"], dict(expected, jobs_max=2,
+                     ^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 424, in load_contract
+    return validate_contract(decode_contract(_read_file(source / MANIFEST_PATH, MAX_MANIFEST_BYTES)), source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 404, in validate_contract
+    _require(hashlib.sha256(data).hexdigest() == item["sha256"],
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 164, in _require
+    raise ContractError(message)
+p06_contract.ContractError: frozen source input differs: sw/runtime/ai/mlp_runtime.cpp
+
+======================================================================
+ERROR: test_copied_source_load_is_read_only_and_selection_is_detached (test_p06_contract.BenchmarkSourceIntegrityTests.test_copied_source_load_is_read_only_and_selection_is_detached)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_contract.py", line 351, in test_copied_source_load_is_read_only_and_selection_is_detached
+    document = contract.load_contract(self.source)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 424, in load_contract
+    return validate_contract(decode_contract(_read_file(source / MANIFEST_PATH, MAX_MANIFEST_BYTES)), source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 404, in validate_contract
+    _require(hashlib.sha256(data).hexdigest() == item["sha256"],
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 164, in _require
+    raise ContractError(message)
+p06_contract.ContractError: frozen source input differs: sw/runtime/ai/mlp_runtime.cpp
+
+======================================================================
+ERROR: test_transitive_leaf_fixture_still_requires_its_independent_producer (test_p06_contract.BenchmarkSourceIntegrityTests.test_transitive_leaf_fixture_still_requires_its_independent_producer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_contract.py", line 399, in test_transitive_leaf_fixture_still_requires_its_independent_producer
+    contract.load_contract(self.source)
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 424, in load_contract
+    return validate_contract(decode_contract(_read_file(source / MANIFEST_PATH, MAX_MANIFEST_BYTES)), source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 404, in validate_contract
+    _require(hashlib.sha256(data).hexdigest() == item["sha256"],
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 164, in _require
+    raise ContractError(message)
+p06_contract.ContractError: frozen source input differs: sw/runtime/ai/mlp_runtime.cpp
+
+======================================================================
+ERROR: setUpClass (test_p06_contract.FrozenBenchmarkInventoryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_contract.py", line 33, in setUpClass
+    cls.document = contract.load_contract(ROOT)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 424, in load_contract
+    return validate_contract(decode_contract(_read_file(source / MANIFEST_PATH, MAX_MANIFEST_BYTES)), source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 404, in validate_contract
+    _require(hashlib.sha256(data).hexdigest() == item["sha256"],
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 164, in _require
+    raise ContractError(message)
+p06_contract.ContractError: frozen source input differs: sw/runtime/ai/mlp_runtime.cpp
+
+======================================================================
+ERROR: setUpClass (test_p06_published_baseline.PublishedBaselineTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_published_baseline.py", line 32, in setUpClass
+    cls.result = analyze.analyze_archives(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_analyze.py", line 229, in analyze_archives
+    contract = load_contract(ROOT)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 424, in load_contract
+    return validate_contract(decode_contract(_read_file(source / MANIFEST_PATH, MAX_MANIFEST_BYTES)), source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 404, in validate_contract
+    _require(hashlib.sha256(data).hexdigest() == item["sha256"],
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 164, in _require
+    raise ContractError(message)
+p06_contract.ContractError: frozen source input differs: sw/runtime/ai/mlp_runtime.cpp
+
+======================================================================
+ERROR: setUpClass (test_p06_records.SampleRecordTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_records.py", line 20, in setUpClass
+    cls.contract = p06_contract.load_contract()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 424, in load_contract
+    return validate_contract(decode_contract(_read_file(source / MANIFEST_PATH, MAX_MANIFEST_BYTES)), source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 404, in validate_contract
+    _require(hashlib.sha256(data).hexdigest() == item["sha256"],
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 164, in _require
+    raise ContractError(message)
+p06_contract.ContractError: frozen source input differs: sw/runtime/ai/mlp_runtime.cpp
+
+======================================================================
+ERROR: setUpClass (test_p06_records.SampleSummaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_records.py", line 338, in setUpClass
+    cls.contract = p06_contract.load_contract()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 424, in load_contract
+    return validate_contract(decode_contract(_read_file(source / MANIFEST_PATH, MAX_MANIFEST_BYTES)), source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 404, in validate_contract
+    _require(hashlib.sha256(data).hexdigest() == item["sha256"],
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 164, in _require
+    raise ContractError(message)
+p06_contract.ContractError: frozen source input differs: sw/runtime/ai/mlp_runtime.cpp
+
+======================================================================
+ERROR: test_p06_replay (unittest.loader._FailedTest.test_p06_replay)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_p06_replay
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_replay.py", line 24, in <module>
+    from p06_test_packets import REVISION, descriptor, encoded, synthetic_packet, write_archive
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_test_packets.py", line 22, in <module>
+    import test_p06_runner as harness_module
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_runner.py", line 26, in <module>
+    CONTRACT = runner.load_contract()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 424, in load_contract
+    return validate_contract(decode_contract(_read_file(source / MANIFEST_PATH, MAX_MANIFEST_BYTES)), source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 404, in validate_contract
+    _require(hashlib.sha256(data).hexdigest() == item["sha256"],
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 164, in _require
+    raise ContractError(message)
+p06_contract.ContractError: frozen source input differs: sw/runtime/ai/mlp_runtime.cpp
+
+
+======================================================================
+ERROR: test_p06_runner (unittest.loader._FailedTest.test_p06_runner)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_p06_runner
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_runner.py", line 26, in <module>
+    CONTRACT = runner.load_contract()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 424, in load_contract
+    return validate_contract(decode_contract(_read_file(source / MANIFEST_PATH, MAX_MANIFEST_BYTES)), source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 404, in validate_contract
+    _require(hashlib.sha256(data).hexdigest() == item["sha256"],
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 164, in _require
+    raise ContractError(message)
+p06_contract.ContractError: frozen source input differs: sw/runtime/ai/mlp_runtime.cpp
+
+
+======================================================================
+ERROR: setUpClass (test_p06_timing.ModelTimingTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_timing.py", line 15, in setUpClass
+    cls.contract = p06_contract.load_contract()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 424, in load_contract
+    return validate_contract(decode_contract(_read_file(source / MANIFEST_PATH, MAX_MANIFEST_BYTES)), source)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 404, in validate_contract
+    _require(hashlib.sha256(data).hexdigest() == item["sha256"],
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/p06_contract.py", line 164, in _require
+    raise ContractError(message)
+p06_contract.ContractError: frozen source input differs: sw/runtime/ai/mlp_runtime.cpp
+
+======================================================================
+FAIL: test_cli_reports_source_only_success_and_retains_corrupt_input (test_p06_contract.BenchmarkSourceIntegrityTests.test_cli_reports_source_only_success_and_retains_corrupt_input)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_contract.py", line 488, in test_cli_reports_source_only_success_and_retains_corrupt_input
+    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+AssertionError: 1 != 0 : {"outcome": "fail", "reason": "frozen source input differs: sw/runtime/ai/mlp_runtime.cpp", "native_execution": "not_run"}
+
+
+======================================================================
+FAIL: test_original_fixture_inventory_or_geometry_cannot_be_substituted (test_p06_contract.BenchmarkSourceIntegrityTests.test_original_fixture_inventory_or_geometry_cannot_be_substituted)
+----------------------------------------------------------------------
+p06_contract.ContractError: frozen source input differs: sw/runtime/ai/mlp_runtime.cpp
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-workspace-verify-20261121/ci/project/test_p06_contract.py", line 478, in test_original_fixture_inventory_or_geometry_cannot_be_substituted
+    self.assertRaisesRegex(contract.ContractError, "model fixture dimensions"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "model fixture dimensions" does not match "frozen source input differs: sw/runtime/ai/mlp_runtime.cpp"
+
+----------------------------------------------------------------------
+Ran 2484 tests in 880.736s
+
+FAILED (failures=2, errors=12)

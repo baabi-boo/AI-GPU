@@ -20,6 +20,7 @@ import baseline_inventory
 from baseline_process import LIMITATIONS as PROCESS_LIMITATIONS
 import p04_model_contract
 import test_p06_runner as harness_module
+from p06_test_frozen_sources import frozen_source_paths, stage_frozen_sources
 from p06_test_samples import REVISION
 
 
@@ -71,8 +72,19 @@ class PacketHarness(harness_module.RunnerHarness):
             target = source / name
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes((ROOT / name).read_bytes())
+        # Keep the real execution validator strict. The synthetic source corpus
+        # uses authentic frozen execution inputs as data alongside the current
+        # trusted runner helpers; none of the staged Python is imported.
+        frozen = {row["path"] for row in harness_module.CONTRACT["source_inputs"]}
+        frozen.update((runner.MANIFEST_PATH, ".github/workflows/p06-baseline.yml"))
+        # Some additional P04 closure inputs (for example LICENSE) were not
+        # retained by the native packet. Their current bytes remain subject to
+        # the unchanged, independently pinned P04 source validation.
+        archived = set(frozen_source_paths())
+        frozen.update(name for name in (*p04_model_contract.ARTIFACT_PATHS,
+                                       *runner.base.CORPUS) if name in archived)
+        stage_frozen_sources(source, frozen)
         self.paths["source"] = source
-        self.stack.enter_context(mock.patch.object(harness_module, "ROOT", source))
         loaded = harness_module.ORIGINAL_HASH(source, NATIVE_HELPERS)
         self.stack.enter_context(mock.patch.object(runner, "LOADED_HELPERS", loaded))
         pins = dict(line.split("=", 1) for line in (source / "VERSION").read_text().splitlines()

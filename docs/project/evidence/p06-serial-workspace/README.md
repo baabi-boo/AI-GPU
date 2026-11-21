@@ -9,8 +9,10 @@ and [handoff](../../p06-workspace-handoff.md). The
 scope; it contains no performance or phase acceptance.
 
 **Current scope: implemented sources and passing targeted host checks.** The
-complete integration suite on the new checkpoint, fresh native correctness execution
-and final publication identity are pending at this documentation checkpoint.
+first clean implementation checkpoint failed its complete integration attempt on
+the frozen-baseline source coupling described below. A complete rerun of the
+corrected checkpoint, independent enforcement review, fresh native correctness
+execution and final publication identity remain pending here.
 The original P06-A01 cold SimX acceptance remains at
 `84b6ca0ca75fba248ba330642bbf8764db3d459c`; P06-A02/A03 remain open.
 
@@ -19,6 +21,8 @@ The original P06-A01 cold SimX acceptance remains at
 | Evidence | Recorded result and boundary |
 |---|---|
 | [Initial full-suite baseline](host/baseline-full-suite.json) and [console](host/baseline-full-suite.log) | 2,449 tests passed before runtime implementation. Workspace files added after discovery were not selected; this is not the new implementation's integration result. |
+| [Failed clean checkpoint](host/checkpoint-5da357f-failed/retention.json), [report](host/checkpoint-5da357f-failed/report.json) and [console](host/checkpoint-5da357f-failed/unittest.log) | At `5da357f`, 2,484 tests ran with two failures and twelve errors, all from original cold-baseline source pins rejecting the changed runtime. Import/setup errors reduced the executed count; the attempt is not a pass. |
+| [Current-reader historical analysis](host/historical-replay/analysis.json) and [retention metadata](host/historical-replay/retention.json) | Both unchanged original archives replay successfully with the current readers. Original summaries/diagnostics remain unchanged; 48 historical processes / 72 historical launches are not new native execution. The initial relative-path CLI failure and corrected absolute-path success are both retained. |
 | [Consumer expectations and compiled binding](agents/w03_a01.md), [retained binding result](host/p05-boundary/results.json) and [retention metadata](host/p05-boundary/retention.json) | P03/new-runtime targeted suites and all 107 compiled P05 host scenarios passed. Fake native libraries exercise ownership and injected errors; actual SimX execution remains separate. |
 | [Strict records and compiler regressions](agents/w03_a02.md) | 55 methods and 2,704 expected rejections passed. Synthetic output transports and retained stamps are parser evidence. |
 | [Compiler hardening](agents/w03_a03.md) | Complete role-aware macro contracts reject extra ISA/derived configuration. Fresh configured stamp targets reproduced the positive records without native compilation. |
@@ -36,7 +40,7 @@ native processes or checked accelerator words.
 
 | Obligation | Current record |
 |---|---|
-| Full host suite on frozen new implementation checkpoint | Pending; record exact revision/tree, command, console and outcome when completed. |
+| Full host suite on corrected frozen implementation checkpoint | Pending rerun; the failed `5da357f` attempt is retained above. Record the new exact revision/tree, command, console and outcome. |
 | New SimX FP16 native workspace variant | Pending checkpoint publication and execution. |
 | New SimX BF16 native workspace variant | Pending checkpoint publication and execution. |
 | New processor-RTL FP16 native workspace variant | Pending checkpoint publication and execution. |
@@ -76,6 +80,29 @@ The accepted source remains `e1420fd550f716df33a2556057b7086a03032cbe`.
 Original commands, artifact digests, scope and acceptance state are preserved;
 only the canonical P05-A01 evidence location changes. This relocation establishes
 no new Python/framework or workspace execution result.
+
+## Historical P06 acceptance and replay separation
+
+The [P06-A01 retention-only successor](p06-a01-retained-baseline.json) preserves
+all original acceptance fields and artifact digests. Only the two changed reader
+paths now point to [original replay source](history/p06-a01/ci/project/p06_replay.py.txt)
+and [original analysis source](history/p06-a01/ci/project/p06_analyze.py.txt).
+[Retention metadata](p06-a01-source-retention.json) binds these exact bytes to the
+original record and unchanged accepted source `84b6ca0ca75fba248ba330642bbf8764db3d459c`.
+The canonical roadmap points to the successor; no phase status or acceptance
+criterion changes.
+
+The strict native loader still requires all 46 original execution-source hashes.
+The explicit analysis loader verifies the frozen definition, 21 interpretation
+inputs and seven invoking fixture helpers; replay separately checks all 46
+historical pins against retained archive bytes. The
+[current baseline workflow](../../../../.github/workflows/p06-baseline.yml)
+checks those archives as data using current trusted readers. It does not build
+or qualify the current runtime as the old cold experiment. Original native
+reproduction requires a separate clean original checkout with its original
+runner, tools and native budgets. See the
+[handoff](../../p06-workspace-handoff.md#historical-cold-baseline-and-current-execution)
+for the separate current-native routes and remaining qualification obligations.
 
 ## Work accounting and open gates
 

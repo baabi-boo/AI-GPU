@@ -28,7 +28,7 @@ def _cases():
 
 def raw_records(workload, sample_id, *, contract=None, binding_id=BINDING,
                 source_revision=REVISION, delta=1000):
-    contract = p06_contract.load_contract() if contract is None else contract
+    contract = p06_contract.load_analysis_contract() if contract is None else contract
     before = {
         "schema_version": 1, "sample_id": sample_id, "context_id": 1,
         "device_index": 0, "compiled_memory_block_bytes": 64,
@@ -89,7 +89,7 @@ def synthetic_log(workload, sample_id, *, contract=None, binding_id=BINDING,
 
 def sample(workload, phase, repetition, *, contract=None, binding_id=BINDING,
            source_revision=REVISION, duration=1.0, delta=1000):
-    contract = p06_contract.load_contract() if contract is None else contract
+    contract = p06_contract.load_analysis_contract() if contract is None else contract
     sample_id = workload["id"] + "-" + phase + "-" + str(repetition)
     text = synthetic_log(workload, sample_id, contract=contract, binding_id=binding_id,
                          source_revision=source_revision, delta=delta)
@@ -104,7 +104,7 @@ def sample(workload, phase, repetition, *, contract=None, binding_id=BINDING,
 
 
 def samples(contract=None, formats=None):
-    contract = p06_contract.load_contract() if contract is None else contract
+    contract = p06_contract.load_analysis_contract() if contract is None else contract
     rows = []
     for workload in p06_contract.select_workloads(contract, formats):
         rows.append(sample(workload, "warmup", 0, contract=contract, duration=90.0, delta=999999))

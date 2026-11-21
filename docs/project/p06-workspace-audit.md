@@ -31,6 +31,7 @@ allocation is the bottleneck or predict a speedup.
 | Every operation allocates and releases A/B/D | Add opt-in resident A/B/D for `(8,4,8)`, with unchanged default behavior, kernel, fixture arithmetic, transfers and per-operation queue/events. |
 | Existing P04 lifecycle mocks replace the managed runtime | Add combined tests of the real model and real managed wrapper, distinguishing host fault injection from native accelerator execution. |
 | Common release APIs do not expose every underlying deallocation failure | Describe observed release failures accurately; handle-release counts alone do not prove physical memory reclamation. |
+| Historical replay and metadata tests call the strict original execution-source validator | The three changed runtime files correctly fail its original hashes. Separate historical interpretation from native execution qualification while preserving every original source pin and accepted measurement. |
 
 ## Implementation and verification boundaries
 
@@ -52,9 +53,40 @@ storage with the existing 1 GiB reserve. Hosted native workflows retain their
 two-job, memory, disk and deadline limits. No limit is relaxed to fit this host.
 
 This implementation is not a performance acceptance. The original cold
-baseline remains unchanged. Warm-context before/after measurements require the
+manifest, source pins and accepted measurements remain unchanged. Warm-context
+before/after measurements require the
 separate frozen sampling, timing, source-pair and rejection protocol before a
 speedup or P06-A02 decision; P06-A03 still needs its resource/timing reports.
+
+## Frozen-baseline integration finding
+
+The [consumer audit](evidence/p06-serial-workspace/agents/w05_a03.md) reproduced
+an F3 integration blocker at `5da357f0f4a3cd3581919b35941db7a07d0d9fbe`:
+the old contract loader rejected the three intentionally changed runtime files.
+The [complete integration attempt](evidence/p06-serial-workspace/host/checkpoint-5da357f-failed/retention.json)
+ran 2,484 tests with two failures and twelve errors from that same coupling.
+Failed imports and setup reduced the method count. The original native validator
+was correct to reject those bytes; updating its pins would misidentify a new
+experiment as the accepted cold baseline.
+
+The implemented correction leaves the strict native loader and runner unchanged
+in scope. A distinct historical-analysis API validates the exact manifest,
+21 interpretation inputs and seven invoking helper identities. Replay still
+checks every retained source descriptor and all 46 frozen execution pins inside
+each digest-verified original archive, with no execution of archived code.
+The current baseline workflow performs that historical replay, while workspace,
+P04 and P05 workflows retain their separate current-native execution scopes.
+The [fresh analysis](evidence/p06-serial-workspace/host/historical-replay/analysis.json)
+and its [retained failed/corrected CLI attempts](evidence/p06-serial-workspace/host/historical-replay/retention.json)
+are recorded separately from the unchanged accepted measurements.
+
+The [P06-A01 successor](evidence/p06-serial-workspace/p06-a01-retained-baseline.json)
+only relocates the two original reader artifacts to exact retained source bytes.
+Original commands, hashes, source revision and acceptance state remain intact.
+Independent enforcement review and the complete corrected-checkpoint rerun remain
+required before the integration finding can close; these documentation changes
+make no closure claim. The [handoff](p06-workspace-handoff.md#historical-cold-baseline-and-current-execution)
+explains historical native reproduction and current candidate qualification.
 
 ## Work accounting
 

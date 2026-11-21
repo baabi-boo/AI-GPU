@@ -7,7 +7,6 @@ import json
 import os
 from pathlib import Path
 import re
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -20,17 +19,33 @@ import p02_wmma_fixtures
 import p04_fixture_adapter
 import p04_model_contract
 import p06_contract as contract
+from p06_test_frozen_sources import (frozen_source_bytes, frozen_source_paths,
+                                     stage_frozen_sources)
 
 
 ROOT = Path(__file__).resolve().parents[2]
 RAW_MANIFEST = (ROOT / contract.MANIFEST_PATH).read_bytes()
 MANIFEST = json.loads(RAW_MANIFEST)
+FROZEN_TEST_PATHS = {row["path"] for row in MANIFEST["source_inputs"]}
+FROZEN_TEST_PATHS.update(p04_model_contract.ARTIFACT_PATHS)
+FROZEN_TEST_PATHS.update((p02_fixture_oracle.JSON_PATH.as_posix(), contract.MANIFEST_PATH))
+
+
+def stage_contract_sources(destination):
+    # The baseline packet retained all 46 native pins. Its P04 closure also
+    # needs current documentation/LICENSE, whose original identities are
+    # independently required by the unmodified frozen P04 model validator.
+    for name in sorted(FROZEN_TEST_PATHS):
+        target = destination / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((ROOT / name).read_bytes())
+    stage_frozen_sources(destination, FROZEN_TEST_PATHS & set(frozen_source_paths()))
 
 
 class FrozenBenchmarkInventoryTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.document = contract.load_contract(ROOT)
+        cls.document = contract.load_analysis_contract(ROOT)
         cls.operators = {row["id"]: row for row in p02_wmma_fixtures.load_cases(ROOT)}
         cls.models = {row["id"]: row for row in p04_fixture_adapter.load_cases(ROOT)}
         cls.graph = json.loads((ROOT / p04_model_contract.MANIFEST_PATH).read_bytes())["graph"]
@@ -125,7 +140,7 @@ class FrozenBenchmarkInventoryTests(unittest.TestCase):
         digests = {}
         for row in sources:
             with self.subTest(path=row["path"]):
-                digests[row["path"]] = hashlib.sha256((ROOT / row["path"]).read_bytes()).hexdigest()
+                digests[row["path"]] = hashlib.sha256(frozen_source_bytes(row["path"])).hexdigest()
                 self.assertEqual(row["sha256"], digests[row["path"]])
         self.assertEqual(self.document["profile"]["sha256"], digests["profiles/p02-tfr.json"])
         for workload in self.document["workloads"]:
@@ -191,7 +206,7 @@ class FrozenBenchmarkInventoryTests(unittest.TestCase):
         with mock.patch.object(p02_wmma_fixtures, "load_cases", wraps=p02_wmma_fixtures.load_cases) as operators, \
                 mock.patch.object(p04_fixture_adapter, "load_cases", wraps=p04_fixture_adapter.load_cases) as models:
             document = deepcopy(self.document)
-            self.assertIs(contract.validate_contract(document, ROOT), document)
+            self.assertIs(contract.validate_analysis_contract(document, ROOT), document)
         operators.assert_called_once_with(ROOT)
         models.assert_called_once_with(ROOT)
         self.assertEqual(document, self.document)
@@ -333,14 +348,7 @@ class BenchmarkSourceIntegrityTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         self.temporary = Path(temporary.name)
         self.source = self.temporary / "source"
-        paths = {row["path"] for row in MANIFEST["source_inputs"]}
-        paths.update(p04_model_contract.ARTIFACT_PATHS)
-        paths.add(p02_fixture_oracle.JSON_PATH.as_posix())
-        paths.add(contract.MANIFEST_PATH)
-        for name in sorted(paths):
-            target = self.source / name
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(ROOT / name, target)
+        stage_contract_sources(self.source)
 
     def snapshot(self):
         return {path.relative_to(self.source).as_posix(): (path.read_bytes(), path.stat().st_mtime_ns)
@@ -499,6 +507,135 @@ class BenchmarkSourceIntegrityTests(unittest.TestCase):
         self.assertEqual(json.loads(result.stdout)["native_execution"], "not_run")
         self.assertEqual(json.loads(result.stdout)["outcome"], "fail")
         self.assertEqual(self.snapshot(), before)
+
+
+class HistoricalAnalysisSeparationTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory(prefix="p06-analysis-contract-")
+        self.addCleanup(temporary.cleanup)
+        self.parent = Path(temporary.name)
+        self.source = self.parent / "source"
+        stage_contract_sources(self.source)
+
+    def test_original_execution_and_current_analysis_have_distinct_entry_points(self):
+        self.assertEqual(contract.load_contract(self.source), MANIFEST)
+        self.assertEqual(contract.load_analysis_contract(self.source), MANIFEST)
+        self.assertEqual(contract.load_analysis_contract(ROOT), MANIFEST)
+        with self.assertRaisesRegex(contract.ContractError, "frozen source input differs"):
+            contract.load_contract(ROOT)
+        self.assertIsNot(contract.load_contract, contract.load_analysis_contract)
+
+    def test_changed_runtime_data_never_authorizes_original_execution(self):
+        for name in ("sw/runtime/ai/runtime.cpp", "sw/runtime/ai/runtime.h",
+                     "sw/runtime/ai/mlp_runtime.cpp"):
+            path = self.source / name
+            original = path.read_bytes()
+            with self.subTest(path=name):
+                try:
+                    path.write_bytes(original + b"\n// deliberately changed test data\n")
+                    self.assertEqual(contract.load_analysis_contract(self.source), MANIFEST)
+                    with self.assertRaisesRegex(contract.ContractError,
+                                                "frozen source input differs: " + re.escape(name)):
+                        contract.load_contract(self.source)
+                finally:
+                    path.write_bytes(original)
+
+    def test_every_analysis_input_still_requires_its_original_bytes(self):
+        self.assertTrue(set(contract.ANALYSIS_SOURCE_PATHS)
+                        < {row["path"] for row in MANIFEST["source_inputs"]})
+        for name in contract.ANALYSIS_SOURCE_PATHS:
+            path = self.source / name
+            original = path.read_bytes()
+            with self.subTest(path=name):
+                try:
+                    path.write_bytes(original + b"\n")
+                    with self.assertRaisesRegex(contract.ContractError,
+                                                "frozen source input differs: " + re.escape(name)):
+                        contract.load_analysis_contract(self.source)
+                finally:
+                    path.write_bytes(original)
+
+    def test_manifest_hash_inventory_and_workload_data_are_not_rebased(self):
+        mutations = (
+            lambda document: document["source_inputs"][0].update(sha256="0" * 64),
+            lambda document: document["workloads"][0]["accounting"].update(flops=1),
+            lambda document: document["counters"][0].update(csr=2818),
+            lambda document: document.update(acceptance_claimed=True),
+        )
+        for mutate in mutations:
+            document = deepcopy(MANIFEST)
+            mutate(document)
+            original = deepcopy(document)
+            with self.subTest(mutation=mutate), self.assertRaisesRegex(
+                    contract.ContractError, "frozen contract"):
+                contract.validate_analysis_contract(document, self.source)
+            self.assertEqual(document, original)
+
+    def test_analysis_rejects_untrusted_invoking_helper_paths_and_bytes(self):
+        original_read = contract._read_file
+        for relative, module in contract._ANALYSIS_HELPERS:
+            with self.subTest(helper=relative, kind="path"), \
+                    mock.patch.object(module, "__file__", str(self.source / relative)), \
+                    self.assertRaisesRegex(contract.ContractError, "trusted repository"):
+                contract.load_analysis_contract(self.source)
+
+            def changed_helper(path, limit, relative=relative):
+                body = original_read(path, limit)
+                return body + b"\n" if Path(path) == ROOT / relative else body
+
+            with self.subTest(helper=relative, kind="bytes"), \
+                    mock.patch.object(contract, "_read_file", side_effect=changed_helper), \
+                    self.assertRaisesRegex(contract.ContractError, "trusted analysis helper differs"):
+                contract.load_analysis_contract(self.source)
+
+    def test_local_analysis_never_imports_code_from_the_retained_source(self):
+        archived_reader = self.source / "ci/project/p06_contract.py"
+        archived_reader.write_text("raise RuntimeError('archived code must not execute')\n")
+        before = archived_reader.read_bytes()
+        self.assertEqual(contract.load_analysis_contract(self.source), MANIFEST)
+        self.assertEqual(archived_reader.read_bytes(), before)
+        self.assertEqual(Path(contract.__file__).absolute(), ROOT / "ci/project/p06_contract.py")
+        for relative, module in contract._ANALYSIS_HELPERS:
+            self.assertEqual(Path(module.__file__).absolute(), ROOT / relative)
+
+    def test_analysis_reproduces_transitive_fixture_and_rejects_changed_leaf(self):
+        path = self.source / p02_fixture_oracle.JSON_PATH
+        path.write_bytes(path.read_bytes() + b"\n")
+        with self.assertRaisesRegex(p02_wmma_fixtures.FixtureError, "frozen leaf fixture"):
+            contract.load_analysis_contract(self.source)
+
+    def test_analysis_file_checks_remain_bounded_and_reject_symlinks(self):
+        path = self.source / "VX_types.toml"
+        original = path.read_bytes()
+        for kind in ("missing", "directory", "fifo", "oversized", "symlink"):
+            with self.subTest(kind=kind):
+                path.unlink()
+                if kind == "directory":
+                    path.mkdir()
+                elif kind == "fifo":
+                    os.mkfifo(path)
+                elif kind == "oversized":
+                    with path.open("wb") as stream:
+                        stream.truncate(contract.MAX_SOURCE_BYTES + 1)
+                elif kind == "symlink":
+                    path.symlink_to(ROOT / "VX_types.toml")
+                command = [sys.executable, "-c", (
+                    "import sys; sys.path.insert(0, sys.argv[1]); "
+                    "from p06_contract import load_analysis_contract; "
+                    "load_analysis_contract(sys.argv[2])"), str(ROOT / "ci/project"), str(self.source)]
+                result = subprocess.run(command, cwd=ROOT, text=True, capture_output=True,
+                                        env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"), timeout=15)
+                self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+                self.assertIn("ContractError", result.stderr)
+                if path.is_dir():
+                    path.rmdir()
+                elif path.exists() or path.is_symlink():
+                    path.unlink()
+                path.write_bytes(original)
+        alias = self.parent / "linked"
+        alias.symlink_to(self.source, target_is_directory=True)
+        with self.assertRaisesRegex(contract.ContractError, "symlink"):
+            contract.load_analysis_contract(alias)
 
 
 if __name__ == "__main__":

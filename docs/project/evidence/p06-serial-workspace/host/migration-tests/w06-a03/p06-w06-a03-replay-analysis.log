@@ -1,0 +1,71 @@
+setUpClass (test_p06_replay.ReplayTests) ... ERROR
+setUpClass (test_p06_analyze.AnalyzerIntegrationTests) ... ERROR
+test_dependency_identity_and_counter_contract_must_match (test_p06_analysis_compatibility.MatrixCompatibilityTests.test_dependency_identity_and_counter_contract_must_match) ... ok
+test_distinct_format_bindings_and_binaries_remain_separate (test_p06_analysis_compatibility.MatrixCompatibilityTests.test_distinct_format_bindings_and_binaries_remain_separate) ... ok
+test_exact_manifest_bytes_are_distinct_from_parsed_contract_identity (test_p06_analysis_compatibility.MatrixCompatibilityTests.test_exact_manifest_bytes_are_distinct_from_parsed_contract_identity) ... ok
+test_experiment_boundaries_sampling_budget_and_helpers_must_match (test_p06_analysis_compatibility.MatrixCompatibilityTests.test_experiment_boundaries_sampling_budget_and_helpers_must_match) ... ok
+test_hardware_macro_maps_are_not_format_specific_exemptions (test_p06_analysis_compatibility.MatrixCompatibilityTests.test_hardware_macro_maps_are_not_format_specific_exemptions) ... ok
+test_hosted_provenance_cannot_be_dropped_from_only_one_format (test_p06_analysis_compatibility.MatrixCompatibilityTests.test_hosted_provenance_cannot_be_dropped_from_only_one_format) ... ok
+test_hosted_run_attempt_source_and_workflow_identity_must_agree (test_p06_analysis_compatibility.MatrixCompatibilityTests.test_hosted_run_attempt_source_and_workflow_identity_must_agree) ... ok
+test_relocated_identical_tools_keep_the_same_compatibility_identity (test_p06_analysis_compatibility.MatrixCompatibilityTests.test_relocated_identical_tools_keep_the_same_compatibility_identity) ... ok
+test_revision_tree_pins_submodules_and_source_bodies_must_agree (test_p06_analysis_compatibility.MatrixCompatibilityTests.test_revision_tree_pins_submodules_and_source_bodies_must_agree) ... ok
+test_tool_names_hashes_and_sizes_cannot_be_normalized_away (test_p06_analysis_compatibility.MatrixCompatibilityTests.test_tool_names_hashes_and_sizes_cannot_be_normalized_away) ... ok
+test_host_intervals_and_input_records_are_preserved_without_subtraction (test_p06_analysis_metrics.AnalysisMetricTests.test_host_intervals_and_input_records_are_preserved_without_subtraction) ... ok
+test_invalid_numeric_values_are_not_coerced_into_valid_metrics (test_p06_analysis_metrics.AnalysisMetricTests.test_invalid_numeric_values_are_not_coerced_into_valid_metrics) ... ok
+test_large_counter_operands_and_request_bytes_remain_exact_integers (test_p06_analysis_metrics.AnalysisMetricTests.test_large_counter_operands_and_request_bytes_remain_exact_integers) ... ok
+test_large_request_statistics_keep_integer_extrema_and_exact_small_spread (test_p06_analysis_metrics.AnalysisMetricTests.test_large_request_statistics_keep_integer_extrema_and_exact_small_spread) ... ok
+test_missing_one_measurement_does_not_produce_partial_subset_statistics (test_p06_analysis_metrics.AnalysisMetricTests.test_missing_one_measurement_does_not_produce_partial_subset_statistics) ... ok
+test_ratios_are_computed_per_sample_before_population_statistics (test_p06_analysis_metrics.AnalysisMetricTests.test_ratios_are_computed_per_sample_before_population_statistics) ... ok
+test_six_metric_definitions_use_the_declared_work_and_byte_boundaries (test_p06_analysis_metrics.AnalysisMetricTests.test_six_metric_definitions_use_the_declared_work_and_byte_boundaries) ... ok
+test_unavailable_counters_are_distinct_from_measured_zero (test_p06_analysis_metrics.AnalysisMetricTests.test_unavailable_counters_are_distinct_from_measured_zero) ... ok
+test_warmup_is_retained_but_excluded_from_every_metric_statistic (test_p06_analysis_metrics.AnalysisMetricTests.test_warmup_is_retained_but_excluded_from_every_metric_statistic) ... ok
+test_zero_or_missing_ratio_operands_preserve_their_distinct_reasons (test_p06_analysis_metrics.AnalysisMetricTests.test_zero_or_missing_ratio_operands_preserve_their_distinct_reasons) ... ok
+
+======================================================================
+ERROR: setUpClass (test_p06_replay.ReplayTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-serial-20261121/ci/project/test_p06_replay.py", line 133, in setUpClass
+    cls.packets = {fmt: synthetic_packet(fmt) for fmt in ("fp16", "bf16")}
+                        ^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-serial-20261121/ci/project/p06_test_packets.py", line 118, in synthetic_packet
+    with PacketHarness(cleanup, fmt) as harness:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-serial-20261121/ci/project/p06_test_packets.py", line 63, in __init__
+    super().__init__(test, "--format", fmt)
+  File "/tmp/ai-gpu-serial-20261121/ci/project/test_p06_runner.py", line 67, in __init__
+    stage_frozen_sources(self.paths["source"], frozen)
+  File "/tmp/ai-gpu-serial-20261121/ci/project/p06_test_frozen_sources.py", line 85, in stage_frozen_sources
+    target.write_bytes(frozen_source_bytes(path))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-serial-20261121/ci/project/p06_test_frozen_sources.py", line 75, in frozen_source_bytes
+    return _sources()[_relative(path)]
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'LICENSE'
+
+======================================================================
+ERROR: setUpClass (test_p06_analyze.AnalyzerIntegrationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-serial-20261121/ci/project/test_p06_analyze.py", line 23, in setUpClass
+    cls.members = {fmt: synthetic_packet(fmt) for fmt in ("fp16", "bf16")}
+                        ^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-serial-20261121/ci/project/p06_test_packets.py", line 118, in synthetic_packet
+    with PacketHarness(cleanup, fmt) as harness:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-serial-20261121/ci/project/p06_test_packets.py", line 63, in __init__
+    super().__init__(test, "--format", fmt)
+  File "/tmp/ai-gpu-serial-20261121/ci/project/test_p06_runner.py", line 67, in __init__
+    stage_frozen_sources(self.paths["source"], frozen)
+  File "/tmp/ai-gpu-serial-20261121/ci/project/p06_test_frozen_sources.py", line 85, in stage_frozen_sources
+    target.write_bytes(frozen_source_bytes(path))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ai-gpu-serial-20261121/ci/project/p06_test_frozen_sources.py", line 75, in frozen_source_bytes
+    return _sources()[_relative(path)]
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'LICENSE'
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.109s
+
+FAILED (errors=2)

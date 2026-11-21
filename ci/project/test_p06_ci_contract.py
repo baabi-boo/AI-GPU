@@ -1,14 +1,14 @@
 # SPDX-License-Identifier: Apache-2.0
-"""Host-only checks for bounded native benchmark CI and evidence retention."""
+"""Check the original native workflow as data and unchanged native build entry.
 
-import hashlib
-import json
-import os
+The current workflow performs historical replay and is covered separately by
+``test_p06_replay_ci``. No archived Python or native command is executed here.
+"""
+
 from pathlib import Path
 import re
 import shlex
 import subprocess
-import sys
 import tempfile
 import unittest
 
@@ -16,13 +16,14 @@ from baseline_inventory import SOURCE_INPUTS
 import p03_execute
 import p04_ci_prepare
 import p06_execute as runner
-from p06_contract import load_contract
+from p06_contract import load_analysis_contract
+from p06_test_frozen_sources import frozen_source_bytes
 from test_p05_ci_workflow import (children, command, path_filters, scalars,
                                   script, steps, workflow)
 
 
 ROOT = Path(__file__).resolve().parents[2]
-WORKFLOW = ROOT / ".github/workflows/p06-baseline.yml"
+WORKFLOW_PATH = ".github/workflows/p06-baseline.yml"
 GOVERNANCE = ROOT / ".github/workflows/project-governance.yml"
 
 
@@ -38,7 +39,7 @@ def required_sources():
     names = set(SOURCE_INPUTS + runner.SOURCE_FILES + runner.base.COPIED
                 + runner.base.TOOLING + runner.base.CORPUS
                 + runner.model_run.SOURCE_FILES + p03_execute.SOURCE_FILES)
-    names.update(row["path"] for row in load_contract()["source_inputs"])
+    names.update(row["path"] for row in load_analysis_contract()["source_inputs"])
     names.update(row["path"] for row in runner.LOADED_HELPERS)
     for directory in runner.base.SOURCE_ROOTS:
         names.update(path.relative_to(ROOT).as_posix()
@@ -52,10 +53,14 @@ def required_sources():
     return names
 
 
-class NativeBaselineWorkflowTests(unittest.TestCase):
+class HistoricalNativeBaselineWorkflowTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.workflow = workflow(WORKFLOW)
+        temporary = tempfile.TemporaryDirectory(prefix="p06-historical-workflow-")
+        cls.addClassCleanup(temporary.cleanup)
+        cls.workflow_path = Path(temporary.name) / "p06-baseline.yml"
+        cls.workflow_path.write_bytes(frozen_source_bytes(WORKFLOW_PATH))
+        cls.workflow = workflow(cls.workflow_path)
         cls.events = children(cls.workflow, "on", 2)
         cls.jobs = children(cls.workflow, "jobs", 2)
         cls.job = children(cls.jobs, "baseline", 4)
@@ -119,7 +124,7 @@ class NativeBaselineWorkflowTests(unittest.TestCase):
         self.assertEqual(runner.BUDGET, expected)
         self.assertEqual((p04_ci_prepare.MIN_FREE_BYTES, p04_ci_prepare.MAX_RSS_BYTES),
                          (expected["min_free_bytes"], expected["max_rss_bytes"]))
-        self.assertEqual(load_contract()["budget"], dict(expected, jobs_max=2,
+        self.assertEqual(load_analysis_contract()["budget"], dict(expected, jobs_max=2,
                          build_timeout_seconds=1800, run_timeout_seconds=180))
 
     def test_token_checkout_actions_and_step_controls_keep_the_trust_boundary(self):
@@ -143,7 +148,7 @@ class NativeBaselineWorkflowTests(unittest.TestCase):
             if "if" in step:
                 self.assertIn(step, [self.one("name", "Install baseline host dependencies"),
                                      self.one("uses", "actions/upload-artifact@v4")])
-        self.assertNotRegex(WORKFLOW.read_text(), r"secrets\s*\.|pull_request_target|self-hosted|write-all|id-token:")
+        self.assertNotRegex(self.workflow_path.read_text(), r"secrets\s*\.|pull_request_target|self-hosted|write-all|id-token:")
 
     def test_pinned_python_and_its_identity_probe_precede_preparation(self):
         setup = self.one("uses", "actions/setup-python@v5")
@@ -225,32 +230,25 @@ class NativeBaselineWorkflowTests(unittest.TestCase):
         })
         self.assertEqual(self.steps[-1], upload)
 
-    def test_real_identity_block_retains_workflow_without_claiming_execution(self):
-        lines = script(self.one("name", "Initialize retained job identity")).splitlines()
+    def test_historical_identity_block_declares_retention_without_execution(self):
+        # Inspect pinned historical source as data. The replacement current
+        # replay identity block gets an actual host execution in its own suite.
+        body = script(self.one("name", "Initialize retained job identity"))
+        lines = body.splitlines()
         self.assertEqual(lines[0], "python3 - <<'PY'")
         self.assertEqual(lines[-1], "PY")
-        with tempfile.TemporaryDirectory(prefix="p06-ci-identity-") as temporary:
-            root = Path(temporary)
-            env = {"PATH": str(Path(sys.executable).parent) + os.pathsep + os.defpath,
-                   "RUNNER_TEMP": str(root), "GITHUB_ENV": str(root / "github-env"),
-                   "GITHUB_SHA": "1" * 40, "GITHUB_EVENT_NAME": "push", "GITHUB_RUN_ID": "123",
-                   "GITHUB_RUN_ATTEMPT": "2", "GITHUB_JOB": "baseline",
-                   "GITHUB_REPOSITORY": "host-only/synthetic", "GITHUB_REF": "refs/heads/master",
-                   "P06_BACKEND": "simx", "P06_FORMAT": "fp16"}
-            result = subprocess.run([sys.executable, "-I", "-"], input="\n".join(lines[1:-1]),
-                                    cwd=ROOT, env=env, text=True, capture_output=True, timeout=10)
-            self.assertEqual(result.returncode, 0, result.stderr)
-            evidence = root / "p06-baseline/evidence"
-            data = json.loads((evidence / "job.json").read_text())
-            self.assertEqual(data, {**{key: value for key, value in env.items()
-                                      if key.startswith("GITHUB_") and key != "GITHUB_ENV"},
-                                   "P06_BACKEND": "simx", "P06_FORMAT": "fp16",
-                                   "scope": "simx-native-baseline", "native_execution": "not_run",
-                                   "acceptance_claimed": False,
-                                   "workflow_sha256": hashlib.sha256(WORKFLOW.read_bytes()).hexdigest()})
-            self.assertEqual((evidence / "workflow.yml").read_bytes(), WORKFLOW.read_bytes())
-            self.assertEqual((root / "github-env").read_text(),
-                             "P06_ROOT=" + str(root / "p06-baseline") + "\n")
+        for token in ("Path('.github/workflows/p06-baseline.yml').read_bytes()",
+                      "(root / 'evidence' / 'workflow.yml').write_bytes(workflow)",
+                      "'GITHUB_SHA'", "'GITHUB_EVENT_NAME'", "'GITHUB_RUN_ID'",
+                      "'GITHUB_RUN_ATTEMPT'", "'GITHUB_JOB'", "'GITHUB_REPOSITORY'",
+                      "'GITHUB_REF'", "'P06_BACKEND'", "'P06_FORMAT'",
+                      "scope='simx-native-baseline'", "native_execution='not_run'",
+                      "acceptance_claimed=False",
+                      "workflow_sha256=hashlib.sha256(workflow).hexdigest()",
+                      "(root / 'evidence' / 'job.json').write_text(",
+                      "environment.write('P06_ROOT=' + str(root)"):
+            self.assertIn(token, body)
+        self.assertEqual(self.workflow_path.read_bytes(), frozen_source_bytes(WORKFLOW_PATH))
 
     def test_every_shell_block_is_syntactically_valid_without_execution(self):
         for step in self.steps:

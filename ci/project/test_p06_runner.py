@@ -18,12 +18,15 @@ import unittest
 from unittest import mock
 
 import p06_execute as runner
+import p04_model_contract
+from p06_contract import load_analysis_contract
+from p06_test_frozen_sources import frozen_source_paths, stage_frozen_sources
 from p06_test_samples import REVISION, synthetic_log
 from test_p02_matrix import STAMP_SAMPLES, sample as compiler_sample
 
 
 ROOT = runner.ROOT
-CONTRACT = runner.load_contract()
+CONTRACT = load_analysis_contract()
 FIRST_SAMPLE = "simx-fp16-single-dense_boundaries-warmup-0"
 ORIGINAL_HASH = runner.hash_artifacts
 ORIGINAL_SUMMARIZE = runner.summarize
@@ -47,8 +50,21 @@ class RunnerHarness:
         temporary = tempfile.TemporaryDirectory(prefix="p06-runner-host-")
         test.addCleanup(temporary.cleanup)
         root = Path(temporary.name)
-        self.paths = {"source": ROOT, "work": root / "work", "output": root / "output",
+        self.paths = {"source": root / "source", "work": root / "work", "output": root / "output",
                       "tools": root / "tools", "host_bin": None, "verilator": root / "tools/verilator"}
+        # Keep the real native loader strict. Original execution inputs are
+        # archived data; currently imported helpers remain current source.
+        frozen = {row["path"] for row in CONTRACT["source_inputs"]}
+        frozen.update(p04_model_contract.ARTIFACT_PATHS)
+        frozen.update((runner.MANIFEST_PATH, "ci/project/fixtures/p02_tfr_v1.json"))
+        names = frozen | set(runner.SOURCE_FILES + runner.base.COPIED)
+        names.update(row["path"] for row in runner.LOADED_HELPERS)
+        names.update(("configure", "sim/rtlsim/verilator.vlt.in"))
+        for name in sorted(names):
+            target = self.paths["source"] / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes((ROOT / name).read_bytes())
+        stage_frozen_sources(self.paths["source"], frozen & set(frozen_source_paths()))
         self.paths["tools"].mkdir()
         self.resources = {"available_memory_bytes": runner.BUDGET["max_rss_bytes"],
                           "free_disk_bytes": {key: runner.BUDGET["min_free_bytes"]
@@ -56,7 +72,7 @@ class RunnerHarness:
         self.snapshot = {"checkout": {"revision": REVISION, "tree": "f" * 40,
                                      "dirty": False, "changed_paths": [], "untracked_paths": [],
                                      "blockers": []},
-                         "files": ORIGINAL_HASH(ROOT, sorted(set(runner.SOURCE_FILES)))}
+                         "files": ORIGINAL_HASH(self.paths["source"], sorted(set(runner.SOURCE_FILES)))}
         self.calls = []
         self.snapshot_calls = 0
         self.fail_id = None
@@ -109,7 +125,7 @@ class RunnerHarness:
 
     def hash_artifacts(self, root, paths):
         paths = tuple(paths)
-        if Path(root) == ROOT and paths == runner.base.DEPENDENCIES:
+        if Path(root) == self.paths["source"] and paths == runner.base.DEPENDENCIES:
             changed = self.finished_summary and self.final_drift == "dependencies"
             return [{"path": name, "sha256": ("b" if changed else "a") * 64, "size_bytes": 1}
                     for name in paths]
@@ -121,6 +137,7 @@ class RunnerHarness:
         return value
 
     def configure_files(self, build, fmt):
+        source = self.paths["source"]
         for relative in runner.artifacts():
             if relative == runner.HEADER_PROBE:
                 continue
@@ -128,26 +145,26 @@ class RunnerHarness:
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.write_text("synthetic host-test build: " + fmt + ":" + destination.name + "\n")
         for relative in runner.base.COPIED:
-            (build / relative).write_bytes((ROOT / relative).read_bytes())
+            (build / relative).write_bytes((source / relative).read_bytes())
         (build / "sim/rtlsim/verilator.vlt").write_text(
-            (ROOT / "sim/rtlsim/verilator.vlt.in").read_text().replace("@VORTEX_HOME@", str(ROOT)))
+            (source / "sim/rtlsim/verilator.vlt.in").read_text().replace("@VORTEX_HOME@", str(source)))
         for app in runner.APPS.values():
-            (build / app / "Makefile").write_bytes((ROOT / app / "Makefile").read_bytes())
-        settings = {"XLEN": "64", "PROFILE": "p02-tfr", "VORTEX_HOME": str(ROOT),
+            (build / app / "Makefile").write_bytes((source / app / "Makefile").read_bytes())
+        settings = {"XLEN": "64", "PROFILE": "p02-tfr", "VORTEX_HOME": str(source),
                     "TOOLDIR": str(self.paths["tools"]), "OSVERSION": "ubuntu/focal"}
         (build / "config.mk").write_text("".join(key + " ?= " + value + "\n"
                                                  for key, value in settings.items()))
         (build / ".config.stamp").write_text(
-            "XLEN=64 PROFILE=p02-tfr SOURCE_DIR=" + str(ROOT) + " BUILDDIR=" + str(build)
+            "XLEN=64 PROFILE=p02-tfr SOURCE_DIR=" + str(source) + " BUILDDIR=" + str(build)
             + " TOOLDIR=" + str(self.paths["tools"]) + "\n")
-        options = dict(source=ROOT, build=build, tools=self.paths["tools"], fmt=fmt)
+        options = dict(source=source, build=build, tools=self.paths["tools"], fmt=fmt)
         (build / "sw/runtime/simx_rt_config.stamp").write_text(compiler_sample("simx_rt", **options))
         (build / "sw/runtime/simx_config.stamp").write_text(
             compiler_sample("simx_backend", **options).rstrip() + " -DPERF_ENABLE\n")
         app_lines = compiler_sample("application", **options).splitlines()
         app_lines[1] = app_lines[1].replace(
-            "-I" + str(ROOT / "third_party/softfloat/source/include"),
-            "-I" + str(ROOT / "sw/runtime/ai"))
+            "-I" + str(source / "third_party/softfloat/source/include"),
+            "-I" + str(source / "sw/runtime/ai"))
         app_lines[2] = "-Wl,--wrap=vx_device_open -Wl,--wrap=vx_device_release -L" + str(
             build / "sw/runtime") + " -lvortex"
         for app in runner.APPS.values():
@@ -269,6 +286,20 @@ class PlanAndBoundaryTests(unittest.TestCase):
 
 
 class ExecutionAndRetentionTests(unittest.TestCase):
+    def test_changed_runtime_source_is_blocked_before_any_process(self):
+        for name in ("sw/runtime/ai/runtime.cpp", "sw/runtime/ai/runtime.h",
+                     "sw/runtime/ai/mlp_runtime.cpp"):
+            with self.subTest(path=name), RunnerHarness(self) as harness:
+                path = harness.paths["source"] / name
+                path.write_bytes(path.read_bytes() + b"\n// changed execution input\n")
+                report = harness.execute()
+                self.assertEqual(report["outcome"], "blocked")
+                self.assertIn("frozen source input differs: " + name, report["reason"])
+                self.assertEqual(report["commands"], [])
+                self.assertEqual(report["samples"], [])
+                self.assertEqual(harness.calls, [])
+                harness.verify.assert_not_called()
+
     def test_selected_packet_retains_actual_logs_bindings_and_fixed_boundaries(self):
         with RunnerHarness(self) as harness:
             report = harness.execute()
@@ -347,7 +378,8 @@ class ExecutionAndRetentionTests(unittest.TestCase):
             for name, argv, cwd, env, budgets in harness.calls:
                 with self.subTest(command=name):
                     self.assertEqual({key: budgets[key] for key in runner.BUDGET}, runner.BUDGET)
-                    self.assertEqual(budgets["resource_paths"], (ROOT, harness.paths["work"], harness.paths["output"]))
+                    self.assertEqual(budgets["resource_paths"], (
+                        harness.paths["source"], harness.paths["work"], harness.paths["output"]))
                     self.assertNotIn("HOME", env)
                     self.assertNotIn("VORTEX_PROFILING", env)
                     self.assertLessEqual(budgets["timeout_seconds"], 1800)
