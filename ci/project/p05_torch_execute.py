@@ -277,6 +277,14 @@ def _snapshot(inputs, root, report, key, relative=None):
     return bundle_producer._snapshot(inputs, root, report[key], relative or "snapshots/" + key.replace("_", "-") + ".json")
 
 
+def _verify_retained_installation(root, installed):
+    # _tree_records orders Path components; _installed_inventory orders complete
+    # relative strings. Package names and their dist-info siblings differ under
+    # those orderings. Compare every exact receipt in the installation's order.
+    retained = sorted(python_run._tree_records(root), key=lambda row: row["path"])
+    _same(retained, installed, "retained installed binding differs")
+
+
 def _python_sources(inputs, source, output, report, current):
     before = _snapshot(inputs, output, report, "source_before")
     after = _snapshot(inputs, output, report, "source_after")
@@ -457,7 +465,7 @@ def _verify_python_packet(*, inputs, source, python_work, python_output, work, o
     original_site, installed = python_run._installed_inventory(original_venv, wheel_rows)
     _same(_snapshot(inputs, python_output, packet, "installed_before"), installed, "original P05 installed bytes changed")
     _same(_snapshot(inputs, python_output, packet, "installed_after"), installed, "original P05 final installed bytes differ")
-    _same(python_run._tree_records(python_output / "artifacts/installed"), installed, "retained installed binding differs")
+    _verify_retained_installation(python_output / "artifacts/installed", installed)
     for row in installed:
         _same(inputs.observe(original_site, row["path"]), row, "original installed binding changed")
     _same(base._file_identity(original_venv / "bin/python"), packet["venv_interpreter"], "original P05 interpreter changed")
