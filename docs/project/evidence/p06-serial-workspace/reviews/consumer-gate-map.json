@@ -1,0 +1,486 @@
+{
+  "scope": "consumer-gates-read-only-source-and-host-boundary-review",
+  "checkpoint": "94267b34d1d2183c744a0c0f2cd1089966c00c21",
+  "tree": "0f22995d04c459ae3b0c8af9f987efea978f3336",
+  "native_execution": false,
+  "framework_execution": false,
+  "source_contract_probe": {
+    "model_cases": 10,
+    "matmul_fixture_cases": 88,
+    "p04_variants": [
+      [
+        "simx",
+        "fp16"
+      ],
+      [
+        "simx",
+        "bf16"
+      ],
+      [
+        "rtlsim",
+        "fp16"
+      ],
+      [
+        "rtlsim",
+        "bf16"
+      ]
+    ],
+    "p04_full_selection": true,
+    "p05_selection": {
+      "fp16": {
+        "matmul_cases": [
+          "fp16-single-dense_boundaries",
+          "fp16-numerical-cross_tile_rounding_positive",
+          "fp16-multi-dense_boundaries"
+        ],
+        "shapes": [
+          [
+            8,
+            4,
+            8
+          ],
+          [
+            8,
+            4,
+            16
+          ],
+          [
+            16,
+            8,
+            16
+          ]
+        ],
+        "model_cases": [
+          "fp16-seeded_dense",
+          "fp16-negated_dense",
+          "fp16-zero",
+          "fp16-signed_basis",
+          "fp16-split_boundary"
+        ]
+      },
+      "bf16": {
+        "matmul_cases": [
+          "bf16-single-dense_boundaries",
+          "bf16-numerical-cross_tile_rounding_positive",
+          "bf16-multi-dense_boundaries"
+        ],
+        "shapes": [
+          [
+            8,
+            4,
+            8
+          ],
+          [
+            8,
+            4,
+            16
+          ],
+          [
+            16,
+            8,
+            16
+          ]
+        ],
+        "model_cases": [
+          "bf16-seeded_dense",
+          "bf16-negated_dense",
+          "bf16-zero",
+          "bf16-signed_basis",
+          "bf16-split_boundary"
+        ]
+      }
+    },
+    "binding_source_count": 23,
+    "p06_modules_imported": [],
+    "native_or_framework_processes_started": 0
+  },
+  "prospective_counts": {
+    "p04": {
+      "variants": 4,
+      "case_backend_pairs": 20,
+      "model_runs": 40,
+      "launches": 120,
+      "native_shapes": [
+        [
+          16,
+          8,
+          16
+        ],
+        [
+          8,
+          4,
+          8
+        ],
+        [
+          8,
+          4,
+          8
+        ]
+      ]
+    },
+    "p05_python_per_format": {
+      "native_model_runs": 10,
+      "native_matmul_runs": 6,
+      "native_model_launches": 30,
+      "native_matmul_launches": 6,
+      "python_model_runs": 10,
+      "python_matmul_runs": 6,
+      "python_launches": 36,
+      "distinct_launches": 72
+    },
+    "p05_python_both_formats": 144,
+    "p05_torch_per_format": {
+      "native_comparison_launches": 36,
+      "plain_python_launches": 36,
+      "framework_launches": 36,
+      "framework_operator_calls": 16,
+      "copied_packet_additional_launches": 0,
+      "distinct_launches": 108
+    },
+    "p05_torch_both_formats": 216,
+    "scope": "required successful scopes, no newly observed execution"
+  },
+  "retained_native_binding_test_recheck": {
+    "artifacts_verified": 3,
+    "completed": 107,
+    "passed": 107,
+    "source_counts": {
+      "bf16": 63,
+      "fp16": 63
+    },
+    "driver_sources": 1,
+    "rerun": false,
+    "native_execution": false
+  },
+  "historical_auditor_boundary": {
+    "old_source_count": 22,
+    "current_source_count": 23,
+    "additional_current_sources": [
+      "python/vortex_ai/torch_ops.py"
+    ],
+    "historical_extractor_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+    "preexisting_at_base": true,
+    "claim": "Historical 22-source provenance auditor and original-archive extractor are not a direct current-packet audit route."
+  },
+  "torch_cleanup_failure_reproduction": {
+    "scope": "real compiled managed runtime and Python boundary over previously built host-only fault DSOs; no PyTorch imported",
+    "child_source": "import json,os\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session,Tensor,BindingError\nfmt=os.environ['P05_TEST_DTYPE'];controls=FaultControls.activate(os.environ['P05_TEST_BUNDLE'])\nsession=Session.open(os.environ['P05_TEST_BUNDLE'])\ncontrols.fail('event_release',occurrence=1)\na=Tensor(bytearray([0x12]*128),dtype=fmt,shape=(8,8),layout='row_major')\nb=Tensor(bytearray([0x34]*64),dtype=fmt,shape=(8,4),layout='column_major')\noperation=session.submit(a,b)\nassert operation.wait(1000000000).ok\nclosed=operation.close(0)\nassert closed.complete and closed.primary==0 and closed.cleanup==10\nassert operation.close(0)==closed\ntry:session.submit(a,b)\nexcept BindingError as error:\n    if error.operation is not None:assert error.operation.close(0).complete\nelse:raise AssertionError('poison bypass')\nowner=session.close();repeated=session.close()\nassert owner==repeated\ncontrols.assert_no_resources()\nprint(json.dumps({'format':fmt,'operation_close':{'complete':closed.complete,'primary':closed.primary,'cleanup':closed.cleanup,'ok':closed.ok},'session_close':{'complete':owner.complete,'primary':owner.primary,'cleanup':owner.cleanup,'ok':owner.ok},'repeat_equal':owner==repeated,'old_torch_host_assertion_would_fail':not owner.ok}),flush=True)\nassert session.close().ok, 'Reproduced outdated p05_torch_native_host_tests.py final-close assertion'\n",
+    "child_source_sha256": "f07b9a4eb26bec9b1a8ce9ec4b8e54c9339575a0033584b23fa529fea43d7f19",
+    "timeout_seconds": 20,
+    "results": [
+      {
+        "format": "fp16",
+        "exit_code": 1,
+        "seconds": 0.178,
+        "stdout": "{\"format\": \"fp16\", \"operation_close\": {\"complete\": true, \"primary\": 0, \"cleanup\": 10, \"ok\": false}, \"session_close\": {\"complete\": true, \"primary\": 0, \"cleanup\": 10, \"ok\": false}, \"repeat_equal\": true, \"old_torch_host_assertion_would_fail\": true}\n",
+        "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 22, in <module>\nAssertionError: Reproduced outdated p05_torch_native_host_tests.py final-close assertion\n",
+        "observations": {
+          "format": "fp16",
+          "operation_close": {
+            "complete": true,
+            "primary": 0,
+            "cleanup": 10,
+            "ok": false
+          },
+          "session_close": {
+            "complete": true,
+            "primary": 0,
+            "cleanup": 10,
+            "ok": false
+          },
+          "repeat_equal": true,
+          "old_torch_host_assertion_would_fail": true
+        },
+        "extension_sha256": "79f491107e5c177f19a2169aab5a04ec805b3a637b3f42381a83da76f831f75d"
+      },
+      {
+        "format": "bf16",
+        "exit_code": 1,
+        "seconds": 0.167,
+        "stdout": "{\"format\": \"bf16\", \"operation_close\": {\"complete\": true, \"primary\": 0, \"cleanup\": 10, \"ok\": false}, \"session_close\": {\"complete\": true, \"primary\": 0, \"cleanup\": 10, \"ok\": false}, \"repeat_equal\": true, \"old_torch_host_assertion_would_fail\": true}\n",
+        "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 22, in <module>\nAssertionError: Reproduced outdated p05_torch_native_host_tests.py final-close assertion\n",
+        "observations": {
+          "format": "bf16",
+          "operation_close": {
+            "complete": true,
+            "primary": 0,
+            "cleanup": 10,
+            "ok": false
+          },
+          "session_close": {
+            "complete": true,
+            "primary": 0,
+            "cleanup": 10,
+            "ok": false
+          },
+          "repeat_equal": true,
+          "old_torch_host_assertion_would_fail": true
+        },
+        "extension_sha256": "82750a34ddd9e7a91ff9526ad1a1300c7a1110916dfbd5887c88c2903f27f045"
+      }
+    ],
+    "finding": {
+      "severity": "F3",
+      "confidence": "high",
+      "evidence_type": "static-proof plus bounded compiled host reproduction",
+      "path": "ci/project/p05_torch_native_host_tests.py",
+      "problem": "Unconditional final session.close().ok contradicts sticky cleanup=10 in cleanup_failure; both format jobs reach a failing host test after native execution.",
+      "resolution_required": "Condition only cleanup_failure to require complete primary0 cleanup10, require repeated close equality, preserve healthy scenarios requiring ok; no production change."
+    }
+  },
+  "source_identities": [
+    {
+      "path": ".github/workflows/p04-model.yml",
+      "sha256": "6454942f5a9ce84b51edffe8bd95acd1618990b89082a31cf6465b9a8f5b2c23",
+      "size_bytes": 5847,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p05-python.yml",
+      "sha256": "dc22f840b235d3abee1bac9b205392331ea684de1c1d03ab1ca3e6c91990f195",
+      "size_bytes": 8890,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p05-torch.yml",
+      "sha256": "67db9d8ca9223b51ffe1165f08f3999eb1d93a849ca1c64a207a1c4b47ad9a26",
+      "size_bytes": 11274,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p04_execute.py",
+      "sha256": "02f4254bab32b40212f7276453c4e5d449ebdae07a8e26f4933e81feb1f9f793",
+      "size_bytes": 19620,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p05_execute.py",
+      "sha256": "18f63ebd5bb04fbe9bcdf094d6d2464dbd8196ba3602d064f9b27ee87f9f7ef4",
+      "size_bytes": 41467,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p05_torch_execute.py",
+      "sha256": "92e61f2b659995f694c99ab05f401816507286dec7ff262cd4a94084473ab62d",
+      "size_bytes": 59599,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p04_ci_prepare.py",
+      "sha256": "b0eeaf430387b685be039276891d3c49f93ef4513142e8aad262c23e5037c3ab",
+      "size_bytes": 12431,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p04_model_contract.py",
+      "sha256": "c184d980d57aec54567d79025845c5fb34887741697ac78a66692a65da02e4b3",
+      "size_bytes": 15901,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p04_model_manifest.json",
+      "sha256": "8eb6acc6c8d19990eca2fc328395a1dcc3f41c7a3d6deee904a3e923163e9ec2",
+      "size_bytes": 7211,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p04_fixture_adapter.py",
+      "sha256": "37a50f6f0f80fd79b926b7ed5d13a233de6bf518590da7fa7d40800dcc91094a",
+      "size_bytes": 5364,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p05_bundle.py",
+      "sha256": "209610324c3bb1d9f4ae9b833759bec3c7823d7590d5d3bc8e3bfd414373000c",
+      "size_bytes": 28204,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p04_execution_records.py",
+      "sha256": "abddfb06fb48bbd064c09d61879b278bca22778f5a8289f4c1ac93fb882b33e0",
+      "size_bytes": 16283,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p05_execution_records.py",
+      "sha256": "34ca711b60137515a03316ab3406069acc6743611726dd45d5265badae55fdb2",
+      "size_bytes": 16533,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p05_torch_records.py",
+      "sha256": "4a4abb8ac132502c4f954449b1ac9c220d585209bec9642e81fa817f37229a6d",
+      "size_bytes": 11638,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p05_torch_contract.json",
+      "sha256": "295d4cffec7391c25ad1c97f7f808945e9a9df88f10410600d2b17a054623a11",
+      "size_bytes": 4703,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p05_torch_requirements.lock",
+      "sha256": "a4186e5b4f85ae6e9519e42d1bf063ac3cad11fedbe1dbf5a03ab746e4002d5b",
+      "size_bytes": 1277,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p05_torch_native_host_tests.py",
+      "sha256": "17ebfe4481ba434a4aad885792eecd4cf889a932b50746f0cb05b92c533183a3",
+      "size_bytes": 14544,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/test_p05_torch_native_host_orchestration.py",
+      "sha256": "7ef860514924dd131a4e8bb814a376e443f85d9971ef544129c7321dfe449781",
+      "size_bytes": 6207,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/test_p05_torch_ci.py",
+      "sha256": "5bfccbe5fce1e2ddb8dee963a2fb6e42b544b14dedc7c4a1cf35433b5874c4c1",
+      "size_bytes": 16012,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p05_test_runtime.py",
+      "sha256": "89aed60290c2d6eef76cca1e4205f89bcb83a0056ef748b6050a3c40aa526356",
+      "size_bytes": 17447,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/test_p05_native_binding.py",
+      "sha256": "56d7bbcd854a8d9c1d1ed805f8eb64880f058799f7b586fc84a0723c4322bca5",
+      "size_bytes": 34563,
+      "matches_checkpoint": true,
+      "unchanged_from_base": false
+    },
+    {
+      "path": "python/native/module.cpp",
+      "sha256": "3e0688fef091dcc58bfaeb13e1ab18d2bcc147a601ceaa3a48cc91a34464170e",
+      "size_bytes": 37547,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "python/vortex_ai/_api.py",
+      "sha256": "f66748c6657ddd55e8753343f49b43cce87003df770e8bbb20c70ee57e3d0db2",
+      "size_bytes": 32061,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "python/vortex_ai/_bundle.py",
+      "sha256": "cf438f291359314844b6489545ad1b263639a36706ae3b86f94d9832c6ee4679",
+      "size_bytes": 12288,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "python/vortex_ai/torch_ops.py",
+      "sha256": "b38aec7920a4640aa7af8e01143bf5851ccb9c5132644e60d96f901b71b80d70",
+      "size_bytes": 14380,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "sw/runtime/ai/runtime.h",
+      "sha256": "aa76760f2e25c1969b86e08dacf7823c9b441dc82ef2c65f803bdc80ee9f657e",
+      "size_bytes": 3719,
+      "matches_checkpoint": true,
+      "unchanged_from_base": false
+    },
+    {
+      "path": "sw/runtime/ai/runtime.cpp",
+      "sha256": "f55365110aed41cfaa290b69da8d91d9fa0ae04063dda591b94ae6ca626cf675",
+      "size_bytes": 22983,
+      "matches_checkpoint": true,
+      "unchanged_from_base": false
+    },
+    {
+      "path": "sw/runtime/ai/mlp_runtime.cpp",
+      "sha256": "08fe64256e71822db327c31d97904826274af446a67ae11417d98a5a31cd45fd",
+      "size_bytes": 13925,
+      "matches_checkpoint": true,
+      "unchanged_from_base": false
+    },
+    {
+      "path": "tests/regression/ai_matmul/main.cpp",
+      "sha256": "31428ef514ba3f3f8ba687fd3cecf4f032126a8e0055fd37ca6f7eab99f54317",
+      "size_bytes": 6919,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "tests/regression/ai_mlp/main.cpp",
+      "sha256": "1abf4706aaa5265a4ddd959587d2095e2a01f32ad6b1ca94d30fffd8e562eb9b",
+      "size_bytes": 8070,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/audit_provenance.py",
+      "sha256": "4684a4e928ff672d371bdb78ab5f646b61ae59d1147c3c690e722a22a89186ac",
+      "size_bytes": 72768,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/extract_retained.py",
+      "sha256": "3abfe1aac9bbeef648389bcfc45c569b58a52db849b0575f23bac6c80f6507be",
+      "size_bytes": 5707,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/audit_provenance.py",
+      "sha256": "32f18937591df8e91dd86d6693550748a4d3ed8f1cfd766733d20f0617fa4ab9",
+      "size_bytes": 29030,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/audit_numerics.py",
+      "sha256": "d7130898b8d3d0690c7cf03459d50e2301ab9fcbcd928562c599bdaea32d918e",
+      "size_bytes": 22886,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/audit_dispatch.py",
+      "sha256": "8f83c5bf7986ef99f6580a1bea3dc645ee7736549f3af454be56fc96f9351781",
+      "size_bytes": 27342,
+      "matches_checkpoint": true,
+      "unchanged_from_base": true
+    }
+  ],
+  "source_stable": true,
+  "limits": [
+    "No complete host suite, GPU/RTL build, native accelerator execution, framework import or network access was used.",
+    "Current-source fixture loading and source hashing are not successful native execution; actual tool/dependency prerequisites remain hosted obligations.",
+    "The compiled reproduction exercises existing host-only fault DSOs bound to checkpoint source; it is not a real PyTorch run.",
+    "Current processor-RTL matrix does not exercise default (8,4,16); current SimX P05 comparison selections do.",
+    "Historical P05 artifact auditors require a separately reviewed current-source adaptation; no historical reader or acceptance was changed."
+  ]
+}

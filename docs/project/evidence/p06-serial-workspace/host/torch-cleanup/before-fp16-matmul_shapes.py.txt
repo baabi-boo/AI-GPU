@@ -1,0 +1,33 @@
+import json,os
+from p05_test_runtime import FaultControls
+from vortex_ai import BindingError,Session,Tensor
+name='matmul_shapes'
+fmt='fp16'
+bundle=os.environ['P05_TEST_BUNDLE']
+controls=FaultControls.activate(bundle)
+session=Session.open(bundle)
+if name=='cleanup_failure':controls.fail('event_release',occurrence=1)
+operation=session.submit(Tensor(bytes(128),dtype=fmt,shape=(8,8),layout='row_major'),Tensor(bytes(64),dtype=fmt,shape=(8,4),layout='column_major'))
+result=operation.close(0)
+expected_cleanup=10 if name=='cleanup_failure' else 0
+assert result.complete and result.primary==0 and result.cleanup==expected_cleanup
+assert operation.close(0)==result
+print(json.dumps({'scope':'compiled-native-final-close-tail-no-pytorch','phase':'before-tail','scenario_label':name,'format':fmt,'operation_close':{'complete':result.complete,'primary':result.primary,'cleanup':result.cleanup}}),flush=True)
+assert session.close().ok
+if name == 'cleanup_failure':
+    before = controls.counter('calls:device_open')
+    try:
+        Session.open(bundle)
+    except BindingError as error:
+        assert error.kind == 'state' and 'cleanup failed' in str(error)
+    else:
+        raise AssertionError('process cleanup poison was bypassed')
+    assert controls.counter('calls:device_open') == before
+closed=session.close()
+assert closed.complete and closed.primary==0 and closed.cleanup==expected_cleanup
+counts=dict(controls.counters)
+assert session.close()==closed
+assert controls.counters==counts
+controls.assert_no_resources()
+assert controls.counter('max_live_devices')<=1
+print(json.dumps({'scope':'compiled-native-final-close-tail-no-pytorch','phase':'after-tail','scenario_label':name,'format':fmt,'session_close':{'complete':closed.complete,'primary':closed.primary,'cleanup':closed.cleanup},'repeat_no_native_calls':True,'counters':controls.counters},sort_keys=True))

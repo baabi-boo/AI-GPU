@@ -171,6 +171,7 @@ def child(name):
         assert error.operation is operation
         result = operation.close(0)
         assert result.complete and result.primary == 0 and result.cleanup == 10
+        assert operation.close(0) == result
         no_output(operation)
         before = controls.counter("calls:enqueue")
         blocked = rejected(raw_matmul)
@@ -196,8 +197,10 @@ def child(name):
         raise ValueError(name)
 
     adapter.close()
-    assert session.close().ok
+    closed = session.close()
     if name == "cleanup_failure":
+        assert closed.complete and closed.primary == 0 and closed.cleanup == 10
+        assert session.close() == closed
         before = controls.counter("calls:device_open")
         try:
             Session.open(bundle)
@@ -206,6 +209,8 @@ def child(name):
         else:
             raise AssertionError("process cleanup poison was bypassed")
         assert controls.counter("calls:device_open") == before
+    else:
+        assert closed.ok
     for value, expected in saved:
         assert struct.pack(f"<{value.numel()}i", *value.view(torch.int32).flatten().tolist()) == expected
     controls.assert_no_resources()

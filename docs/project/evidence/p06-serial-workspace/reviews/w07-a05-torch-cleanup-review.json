@@ -1,0 +1,881 @@
+{
+  "scope": "independent-compiled-owner-close-tail-review",
+  "baseline": "94267b34d1d2183c744a0c0f2cd1089966c00c21",
+  "test_before_sha256": "17ebfe4481ba434a4aad885792eecd4cf889a932b50746f0cb05b92c533183a3",
+  "test_after_sha256": "8134c5f7eb2c1e2d89eed887a5b0c8b6286910f285a0688eab0b06b43fc6193b",
+  "ast_scope_exact": true,
+  "unchanged_scenarios": [
+    "matmul_shapes",
+    "fixed_models",
+    "transient_timeout",
+    "matmul_deadline",
+    "model_deadline",
+    "partial_submit",
+    "async_failure",
+    "cleanup_failure",
+    "model_mismatch"
+  ],
+  "unchanged_model_names": [
+    "seeded_dense",
+    "negated_dense",
+    "zero",
+    "signed_basis",
+    "split_boundary"
+  ],
+  "torch_available": false,
+  "torch_execution": false,
+  "native_accelerator_execution": false,
+  "tail_sources": {
+    "old": "assert session.close().ok\nif name == 'cleanup_failure':\n    before = controls.counter('calls:device_open')\n    try:\n        Session.open(bundle)\n    except BindingError as error:\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\n    else:\n        raise AssertionError('process cleanup poison was bypassed')\n    assert controls.counter('calls:device_open') == before",
+    "new": "closed = session.close()\nif name == 'cleanup_failure':\n    assert closed.complete and closed.primary == 0 and (closed.cleanup == 10)\n    assert session.close() == closed\n    before = controls.counter('calls:device_open')\n    try:\n        Session.open(bundle)\n    except BindingError as error:\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\n    else:\n        raise AssertionError('process cleanup poison was bypassed')\n    assert controls.counter('calls:device_open') == before\nelse:\n    assert closed.ok"
+  },
+  "bundles": [
+    {
+      "format": "fp16",
+      "source_count": 63,
+      "artifact_count": 6,
+      "package_files": [
+        "__init__.py",
+        "_api.py",
+        "_bundle.py",
+        "launch.py",
+        "torch_ops.py"
+      ],
+      "extension_sha256": "79f491107e5c177f19a2169aab5a04ec805b3a637b3f42381a83da76f831f75d",
+      "manifest_sha256": "6e5997bd13603cee8a5a6a762b73993be662a67e66a51d880c2016c2844763e2"
+    },
+    {
+      "format": "bf16",
+      "source_count": 63,
+      "artifact_count": 6,
+      "package_files": [
+        "__init__.py",
+        "_api.py",
+        "_bundle.py",
+        "launch.py",
+        "torch_ops.py"
+      ],
+      "extension_sha256": "82750a34ddd9e7a91ff9526ad1a1300c7a1110916dfbd5887c88c2903f27f045",
+      "manifest_sha256": "3f27427bc8f3de3e03f3c74788fad2ece83f99cd7c6ff5ec4aa72235f8474977"
+    }
+  ],
+  "children": [
+    {
+      "label": "fp16-old-healthy-matmul_shapes",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/w07-a05-review-4v5rc3ix/fp16-old-healthy-matmul_shapes.py"
+      ],
+      "cwd": "/tmp/p06-w03-a01-native-binding/fp16",
+      "timeout_seconds": 20,
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "seconds": 0.158,
+      "stdout": "{\"format\": \"fp16\", \"fault\": \"healthy\", \"case_label\": \"matmul_shapes\", \"test_assertion_rejected\": false, \"operation_status\": [true, 0, 0], \"owner_status\": [true, 0, 0], \"repeated_close_native_calls_unchanged\": true, \"torch_imported\": false, \"resources\": {\"devices\": 0, \"modules\": 0, \"kernels\": 0, \"queues\": 0, \"buffers\": 0, \"events\": 0, \"bytes\": 0}}\n",
+      "stderr": "",
+      "source": "import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = 'healthy'\nname = 'matmul_shapes'\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nassert operation.close(0) == result\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(\"assert session.close().ok\\nif name == 'cleanup_failure':\\n    before = controls.counter('calls:device_open')\\n    try:\\n        Session.open(bundle)\\n    except BindingError as error:\\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\\n    else:\\n        raise AssertionError('process cleanup poison was bypassed')\\n    assert controls.counter('calls:device_open') == before\")\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n",
+      "source_sha256": "b9cb3a5df016b917979b463e60342a835ced79bb4dc7dc4b031b764a0a271ce2",
+      "observation": {
+        "format": "fp16",
+        "fault": "healthy",
+        "case_label": "matmul_shapes",
+        "test_assertion_rejected": false,
+        "operation_status": [
+          true,
+          0,
+          0
+        ],
+        "owner_status": [
+          true,
+          0,
+          0
+        ],
+        "repeated_close_native_calls_unchanged": true,
+        "torch_imported": false,
+        "resources": {
+          "devices": 0,
+          "modules": 0,
+          "kernels": 0,
+          "queues": 0,
+          "buffers": 0,
+          "events": 0,
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "label": "fp16-old-cleanup-cleanup_failure",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/w07-a05-review-4v5rc3ix/fp16-old-cleanup-cleanup_failure.py"
+      ],
+      "cwd": "/tmp/p06-w03-a01-native-binding/fp16",
+      "timeout_seconds": 20,
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "seconds": 0.16,
+      "stdout": "{\"format\": \"fp16\", \"fault\": \"cleanup\", \"case_label\": \"cleanup_failure\", \"test_assertion_rejected\": true, \"operation_status\": [true, 0, 10], \"owner_status\": [true, 0, 10], \"repeated_close_native_calls_unchanged\": true, \"torch_imported\": false, \"resources\": {\"devices\": 0, \"modules\": 0, \"kernels\": 0, \"queues\": 0, \"buffers\": 0, \"events\": 0, \"bytes\": 0}}\n",
+      "stderr": "",
+      "source": "import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = 'cleanup'\nname = 'cleanup_failure'\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nassert operation.close(0) == result\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(\"assert session.close().ok\\nif name == 'cleanup_failure':\\n    before = controls.counter('calls:device_open')\\n    try:\\n        Session.open(bundle)\\n    except BindingError as error:\\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\\n    else:\\n        raise AssertionError('process cleanup poison was bypassed')\\n    assert controls.counter('calls:device_open') == before\")\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n",
+      "source_sha256": "b9a0d87c777e8b8bd95ea4d6bc27366242ea21a7e38696c0d6a9208c7e6c0976",
+      "observation": {
+        "format": "fp16",
+        "fault": "cleanup",
+        "case_label": "cleanup_failure",
+        "test_assertion_rejected": true,
+        "operation_status": [
+          true,
+          0,
+          10
+        ],
+        "owner_status": [
+          true,
+          0,
+          10
+        ],
+        "repeated_close_native_calls_unchanged": true,
+        "torch_imported": false,
+        "resources": {
+          "devices": 0,
+          "modules": 0,
+          "kernels": 0,
+          "queues": 0,
+          "buffers": 0,
+          "events": 0,
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "label": "fp16-new-healthy-matmul_shapes",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/w07-a05-review-4v5rc3ix/fp16-new-healthy-matmul_shapes.py"
+      ],
+      "cwd": "/tmp/p06-w03-a01-native-binding/fp16",
+      "timeout_seconds": 20,
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "seconds": 0.108,
+      "stdout": "{\"format\": \"fp16\", \"fault\": \"healthy\", \"case_label\": \"matmul_shapes\", \"test_assertion_rejected\": false, \"operation_status\": [true, 0, 0], \"owner_status\": [true, 0, 0], \"repeated_close_native_calls_unchanged\": true, \"torch_imported\": false, \"resources\": {\"devices\": 0, \"modules\": 0, \"kernels\": 0, \"queues\": 0, \"buffers\": 0, \"events\": 0, \"bytes\": 0}}\n",
+      "stderr": "",
+      "source": "import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = 'healthy'\nname = 'matmul_shapes'\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nassert operation.close(0) == result\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(\"closed = session.close()\\nif name == 'cleanup_failure':\\n    assert closed.complete and closed.primary == 0 and (closed.cleanup == 10)\\n    assert session.close() == closed\\n    before = controls.counter('calls:device_open')\\n    try:\\n        Session.open(bundle)\\n    except BindingError as error:\\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\\n    else:\\n        raise AssertionError('process cleanup poison was bypassed')\\n    assert controls.counter('calls:device_open') == before\\nelse:\\n    assert closed.ok\")\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n",
+      "source_sha256": "6d7b608fbab9c0cdf7dfafca284162a9ba6855e5fd4d2f8834029345954efc88",
+      "observation": {
+        "format": "fp16",
+        "fault": "healthy",
+        "case_label": "matmul_shapes",
+        "test_assertion_rejected": false,
+        "operation_status": [
+          true,
+          0,
+          0
+        ],
+        "owner_status": [
+          true,
+          0,
+          0
+        ],
+        "repeated_close_native_calls_unchanged": true,
+        "torch_imported": false,
+        "resources": {
+          "devices": 0,
+          "modules": 0,
+          "kernels": 0,
+          "queues": 0,
+          "buffers": 0,
+          "events": 0,
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "label": "fp16-new-cleanup-cleanup_failure",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/w07-a05-review-4v5rc3ix/fp16-new-cleanup-cleanup_failure.py"
+      ],
+      "cwd": "/tmp/p06-w03-a01-native-binding/fp16",
+      "timeout_seconds": 20,
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "seconds": 0.167,
+      "stdout": "{\"format\": \"fp16\", \"fault\": \"cleanup\", \"case_label\": \"cleanup_failure\", \"test_assertion_rejected\": false, \"operation_status\": [true, 0, 10], \"owner_status\": [true, 0, 10], \"repeated_close_native_calls_unchanged\": true, \"torch_imported\": false, \"resources\": {\"devices\": 0, \"modules\": 0, \"kernels\": 0, \"queues\": 0, \"buffers\": 0, \"events\": 0, \"bytes\": 0}}\n",
+      "stderr": "",
+      "source": "import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = 'cleanup'\nname = 'cleanup_failure'\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nassert operation.close(0) == result\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(\"closed = session.close()\\nif name == 'cleanup_failure':\\n    assert closed.complete and closed.primary == 0 and (closed.cleanup == 10)\\n    assert session.close() == closed\\n    before = controls.counter('calls:device_open')\\n    try:\\n        Session.open(bundle)\\n    except BindingError as error:\\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\\n    else:\\n        raise AssertionError('process cleanup poison was bypassed')\\n    assert controls.counter('calls:device_open') == before\\nelse:\\n    assert closed.ok\")\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n",
+      "source_sha256": "db7cf7efa6431ac87d6a0e08038106c7598b56b29fa2da2ec2b421e00b2377e4",
+      "observation": {
+        "format": "fp16",
+        "fault": "cleanup",
+        "case_label": "cleanup_failure",
+        "test_assertion_rejected": false,
+        "operation_status": [
+          true,
+          0,
+          10
+        ],
+        "owner_status": [
+          true,
+          0,
+          10
+        ],
+        "repeated_close_native_calls_unchanged": true,
+        "torch_imported": false,
+        "resources": {
+          "devices": 0,
+          "modules": 0,
+          "kernels": 0,
+          "queues": 0,
+          "buffers": 0,
+          "events": 0,
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "label": "fp16-new-async-async_failure",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/w07-a05-review-4v5rc3ix/fp16-new-async-async_failure.py"
+      ],
+      "cwd": "/tmp/p06-w03-a01-native-binding/fp16",
+      "timeout_seconds": 20,
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "seconds": 0.111,
+      "stdout": "{\"format\": \"fp16\", \"fault\": \"async\", \"case_label\": \"async_failure\", \"test_assertion_rejected\": false, \"operation_status\": [true, 6, 0], \"owner_status\": [true, 0, 0], \"repeated_close_native_calls_unchanged\": true, \"torch_imported\": false, \"resources\": {\"devices\": 0, \"modules\": 0, \"kernels\": 0, \"queues\": 0, \"buffers\": 0, \"events\": 0, \"bytes\": 0}}\n",
+      "stderr": "",
+      "source": "import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = 'async'\nname = 'async_failure'\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nassert operation.close(0) == result\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(\"closed = session.close()\\nif name == 'cleanup_failure':\\n    assert closed.complete and closed.primary == 0 and (closed.cleanup == 10)\\n    assert session.close() == closed\\n    before = controls.counter('calls:device_open')\\n    try:\\n        Session.open(bundle)\\n    except BindingError as error:\\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\\n    else:\\n        raise AssertionError('process cleanup poison was bypassed')\\n    assert controls.counter('calls:device_open') == before\\nelse:\\n    assert closed.ok\")\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n",
+      "source_sha256": "dc1bf318611c744ca6e2ceb07264b48e505e80acd69f73756a73cbb9a050271b",
+      "observation": {
+        "format": "fp16",
+        "fault": "async",
+        "case_label": "async_failure",
+        "test_assertion_rejected": false,
+        "operation_status": [
+          true,
+          6,
+          0
+        ],
+        "owner_status": [
+          true,
+          0,
+          0
+        ],
+        "repeated_close_native_calls_unchanged": true,
+        "torch_imported": false,
+        "resources": {
+          "devices": 0,
+          "modules": 0,
+          "kernels": 0,
+          "queues": 0,
+          "buffers": 0,
+          "events": 0,
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "label": "fp16-new-healthy-cleanup_failure",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/w07-a05-review-4v5rc3ix/fp16-new-healthy-cleanup_failure.py"
+      ],
+      "cwd": "/tmp/p06-w03-a01-native-binding/fp16",
+      "timeout_seconds": 20,
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "seconds": 0.147,
+      "stdout": "{\"format\": \"fp16\", \"fault\": \"healthy\", \"case_label\": \"cleanup_failure\", \"test_assertion_rejected\": true, \"operation_status\": [true, 0, 0], \"owner_status\": [true, 0, 0], \"repeated_close_native_calls_unchanged\": true, \"torch_imported\": false, \"resources\": {\"devices\": 0, \"modules\": 0, \"kernels\": 0, \"queues\": 0, \"buffers\": 0, \"events\": 0, \"bytes\": 0}}\n",
+      "stderr": "",
+      "source": "import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = 'healthy'\nname = 'cleanup_failure'\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nassert operation.close(0) == result\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(\"closed = session.close()\\nif name == 'cleanup_failure':\\n    assert closed.complete and closed.primary == 0 and (closed.cleanup == 10)\\n    assert session.close() == closed\\n    before = controls.counter('calls:device_open')\\n    try:\\n        Session.open(bundle)\\n    except BindingError as error:\\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\\n    else:\\n        raise AssertionError('process cleanup poison was bypassed')\\n    assert controls.counter('calls:device_open') == before\\nelse:\\n    assert closed.ok\")\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n",
+      "source_sha256": "678b04066cef519dedeaa27f07ad320a246bbd50295d183d9b4ad9b83e79267b",
+      "observation": {
+        "format": "fp16",
+        "fault": "healthy",
+        "case_label": "cleanup_failure",
+        "test_assertion_rejected": true,
+        "operation_status": [
+          true,
+          0,
+          0
+        ],
+        "owner_status": [
+          true,
+          0,
+          0
+        ],
+        "repeated_close_native_calls_unchanged": true,
+        "torch_imported": false,
+        "resources": {
+          "devices": 0,
+          "modules": 0,
+          "kernels": 0,
+          "queues": 0,
+          "buffers": 0,
+          "events": 0,
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "label": "fp16-new-cleanup-matmul_shapes",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/w07-a05-review-4v5rc3ix/fp16-new-cleanup-matmul_shapes.py"
+      ],
+      "cwd": "/tmp/p06-w03-a01-native-binding/fp16",
+      "timeout_seconds": 20,
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "seconds": 0.194,
+      "stdout": "{\"format\": \"fp16\", \"fault\": \"cleanup\", \"case_label\": \"matmul_shapes\", \"test_assertion_rejected\": true, \"operation_status\": [true, 0, 10], \"owner_status\": [true, 0, 10], \"repeated_close_native_calls_unchanged\": true, \"torch_imported\": false, \"resources\": {\"devices\": 0, \"modules\": 0, \"kernels\": 0, \"queues\": 0, \"buffers\": 0, \"events\": 0, \"bytes\": 0}}\n",
+      "stderr": "",
+      "source": "import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = 'cleanup'\nname = 'matmul_shapes'\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nassert operation.close(0) == result\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(\"closed = session.close()\\nif name == 'cleanup_failure':\\n    assert closed.complete and closed.primary == 0 and (closed.cleanup == 10)\\n    assert session.close() == closed\\n    before = controls.counter('calls:device_open')\\n    try:\\n        Session.open(bundle)\\n    except BindingError as error:\\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\\n    else:\\n        raise AssertionError('process cleanup poison was bypassed')\\n    assert controls.counter('calls:device_open') == before\\nelse:\\n    assert closed.ok\")\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n",
+      "source_sha256": "f93beff73f6c06599915fbd6ca804783dd2457d1d6d9ac90d1660f316dee9fef",
+      "observation": {
+        "format": "fp16",
+        "fault": "cleanup",
+        "case_label": "matmul_shapes",
+        "test_assertion_rejected": true,
+        "operation_status": [
+          true,
+          0,
+          10
+        ],
+        "owner_status": [
+          true,
+          0,
+          10
+        ],
+        "repeated_close_native_calls_unchanged": true,
+        "torch_imported": false,
+        "resources": {
+          "devices": 0,
+          "modules": 0,
+          "kernels": 0,
+          "queues": 0,
+          "buffers": 0,
+          "events": 0,
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "label": "bf16-old-healthy-matmul_shapes",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/w07-a05-review-4v5rc3ix/bf16-old-healthy-matmul_shapes.py"
+      ],
+      "cwd": "/tmp/p06-w03-a01-native-binding/bf16",
+      "timeout_seconds": 20,
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "seconds": 0.113,
+      "stdout": "{\"format\": \"bf16\", \"fault\": \"healthy\", \"case_label\": \"matmul_shapes\", \"test_assertion_rejected\": false, \"operation_status\": [true, 0, 0], \"owner_status\": [true, 0, 0], \"repeated_close_native_calls_unchanged\": true, \"torch_imported\": false, \"resources\": {\"devices\": 0, \"modules\": 0, \"kernels\": 0, \"queues\": 0, \"buffers\": 0, \"events\": 0, \"bytes\": 0}}\n",
+      "stderr": "",
+      "source": "import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = 'healthy'\nname = 'matmul_shapes'\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nassert operation.close(0) == result\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(\"assert session.close().ok\\nif name == 'cleanup_failure':\\n    before = controls.counter('calls:device_open')\\n    try:\\n        Session.open(bundle)\\n    except BindingError as error:\\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\\n    else:\\n        raise AssertionError('process cleanup poison was bypassed')\\n    assert controls.counter('calls:device_open') == before\")\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n",
+      "source_sha256": "b9cb3a5df016b917979b463e60342a835ced79bb4dc7dc4b031b764a0a271ce2",
+      "observation": {
+        "format": "bf16",
+        "fault": "healthy",
+        "case_label": "matmul_shapes",
+        "test_assertion_rejected": false,
+        "operation_status": [
+          true,
+          0,
+          0
+        ],
+        "owner_status": [
+          true,
+          0,
+          0
+        ],
+        "repeated_close_native_calls_unchanged": true,
+        "torch_imported": false,
+        "resources": {
+          "devices": 0,
+          "modules": 0,
+          "kernels": 0,
+          "queues": 0,
+          "buffers": 0,
+          "events": 0,
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "label": "bf16-old-cleanup-cleanup_failure",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/w07-a05-review-4v5rc3ix/bf16-old-cleanup-cleanup_failure.py"
+      ],
+      "cwd": "/tmp/p06-w03-a01-native-binding/bf16",
+      "timeout_seconds": 20,
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "seconds": 0.156,
+      "stdout": "{\"format\": \"bf16\", \"fault\": \"cleanup\", \"case_label\": \"cleanup_failure\", \"test_assertion_rejected\": true, \"operation_status\": [true, 0, 10], \"owner_status\": [true, 0, 10], \"repeated_close_native_calls_unchanged\": true, \"torch_imported\": false, \"resources\": {\"devices\": 0, \"modules\": 0, \"kernels\": 0, \"queues\": 0, \"buffers\": 0, \"events\": 0, \"bytes\": 0}}\n",
+      "stderr": "",
+      "source": "import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = 'cleanup'\nname = 'cleanup_failure'\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nassert operation.close(0) == result\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(\"assert session.close().ok\\nif name == 'cleanup_failure':\\n    before = controls.counter('calls:device_open')\\n    try:\\n        Session.open(bundle)\\n    except BindingError as error:\\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\\n    else:\\n        raise AssertionError('process cleanup poison was bypassed')\\n    assert controls.counter('calls:device_open') == before\")\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n",
+      "source_sha256": "b9a0d87c777e8b8bd95ea4d6bc27366242ea21a7e38696c0d6a9208c7e6c0976",
+      "observation": {
+        "format": "bf16",
+        "fault": "cleanup",
+        "case_label": "cleanup_failure",
+        "test_assertion_rejected": true,
+        "operation_status": [
+          true,
+          0,
+          10
+        ],
+        "owner_status": [
+          true,
+          0,
+          10
+        ],
+        "repeated_close_native_calls_unchanged": true,
+        "torch_imported": false,
+        "resources": {
+          "devices": 0,
+          "modules": 0,
+          "kernels": 0,
+          "queues": 0,
+          "buffers": 0,
+          "events": 0,
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "label": "bf16-new-healthy-matmul_shapes",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/w07-a05-review-4v5rc3ix/bf16-new-healthy-matmul_shapes.py"
+      ],
+      "cwd": "/tmp/p06-w03-a01-native-binding/bf16",
+      "timeout_seconds": 20,
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "seconds": 0.112,
+      "stdout": "{\"format\": \"bf16\", \"fault\": \"healthy\", \"case_label\": \"matmul_shapes\", \"test_assertion_rejected\": false, \"operation_status\": [true, 0, 0], \"owner_status\": [true, 0, 0], \"repeated_close_native_calls_unchanged\": true, \"torch_imported\": false, \"resources\": {\"devices\": 0, \"modules\": 0, \"kernels\": 0, \"queues\": 0, \"buffers\": 0, \"events\": 0, \"bytes\": 0}}\n",
+      "stderr": "",
+      "source": "import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = 'healthy'\nname = 'matmul_shapes'\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nassert operation.close(0) == result\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(\"closed = session.close()\\nif name == 'cleanup_failure':\\n    assert closed.complete and closed.primary == 0 and (closed.cleanup == 10)\\n    assert session.close() == closed\\n    before = controls.counter('calls:device_open')\\n    try:\\n        Session.open(bundle)\\n    except BindingError as error:\\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\\n    else:\\n        raise AssertionError('process cleanup poison was bypassed')\\n    assert controls.counter('calls:device_open') == before\\nelse:\\n    assert closed.ok\")\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n",
+      "source_sha256": "6d7b608fbab9c0cdf7dfafca284162a9ba6855e5fd4d2f8834029345954efc88",
+      "observation": {
+        "format": "bf16",
+        "fault": "healthy",
+        "case_label": "matmul_shapes",
+        "test_assertion_rejected": false,
+        "operation_status": [
+          true,
+          0,
+          0
+        ],
+        "owner_status": [
+          true,
+          0,
+          0
+        ],
+        "repeated_close_native_calls_unchanged": true,
+        "torch_imported": false,
+        "resources": {
+          "devices": 0,
+          "modules": 0,
+          "kernels": 0,
+          "queues": 0,
+          "buffers": 0,
+          "events": 0,
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "label": "bf16-new-cleanup-cleanup_failure",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/w07-a05-review-4v5rc3ix/bf16-new-cleanup-cleanup_failure.py"
+      ],
+      "cwd": "/tmp/p06-w03-a01-native-binding/bf16",
+      "timeout_seconds": 20,
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "seconds": 0.159,
+      "stdout": "{\"format\": \"bf16\", \"fault\": \"cleanup\", \"case_label\": \"cleanup_failure\", \"test_assertion_rejected\": false, \"operation_status\": [true, 0, 10], \"owner_status\": [true, 0, 10], \"repeated_close_native_calls_unchanged\": true, \"torch_imported\": false, \"resources\": {\"devices\": 0, \"modules\": 0, \"kernels\": 0, \"queues\": 0, \"buffers\": 0, \"events\": 0, \"bytes\": 0}}\n",
+      "stderr": "",
+      "source": "import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = 'cleanup'\nname = 'cleanup_failure'\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nassert operation.close(0) == result\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(\"closed = session.close()\\nif name == 'cleanup_failure':\\n    assert closed.complete and closed.primary == 0 and (closed.cleanup == 10)\\n    assert session.close() == closed\\n    before = controls.counter('calls:device_open')\\n    try:\\n        Session.open(bundle)\\n    except BindingError as error:\\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\\n    else:\\n        raise AssertionError('process cleanup poison was bypassed')\\n    assert controls.counter('calls:device_open') == before\\nelse:\\n    assert closed.ok\")\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n",
+      "source_sha256": "db7cf7efa6431ac87d6a0e08038106c7598b56b29fa2da2ec2b421e00b2377e4",
+      "observation": {
+        "format": "bf16",
+        "fault": "cleanup",
+        "case_label": "cleanup_failure",
+        "test_assertion_rejected": false,
+        "operation_status": [
+          true,
+          0,
+          10
+        ],
+        "owner_status": [
+          true,
+          0,
+          10
+        ],
+        "repeated_close_native_calls_unchanged": true,
+        "torch_imported": false,
+        "resources": {
+          "devices": 0,
+          "modules": 0,
+          "kernels": 0,
+          "queues": 0,
+          "buffers": 0,
+          "events": 0,
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "label": "bf16-new-async-async_failure",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/w07-a05-review-4v5rc3ix/bf16-new-async-async_failure.py"
+      ],
+      "cwd": "/tmp/p06-w03-a01-native-binding/bf16",
+      "timeout_seconds": 20,
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "seconds": 0.129,
+      "stdout": "{\"format\": \"bf16\", \"fault\": \"async\", \"case_label\": \"async_failure\", \"test_assertion_rejected\": false, \"operation_status\": [true, 6, 0], \"owner_status\": [true, 0, 0], \"repeated_close_native_calls_unchanged\": true, \"torch_imported\": false, \"resources\": {\"devices\": 0, \"modules\": 0, \"kernels\": 0, \"queues\": 0, \"buffers\": 0, \"events\": 0, \"bytes\": 0}}\n",
+      "stderr": "",
+      "source": "import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = 'async'\nname = 'async_failure'\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nassert operation.close(0) == result\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(\"closed = session.close()\\nif name == 'cleanup_failure':\\n    assert closed.complete and closed.primary == 0 and (closed.cleanup == 10)\\n    assert session.close() == closed\\n    before = controls.counter('calls:device_open')\\n    try:\\n        Session.open(bundle)\\n    except BindingError as error:\\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\\n    else:\\n        raise AssertionError('process cleanup poison was bypassed')\\n    assert controls.counter('calls:device_open') == before\\nelse:\\n    assert closed.ok\")\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n",
+      "source_sha256": "dc1bf318611c744ca6e2ceb07264b48e505e80acd69f73756a73cbb9a050271b",
+      "observation": {
+        "format": "bf16",
+        "fault": "async",
+        "case_label": "async_failure",
+        "test_assertion_rejected": false,
+        "operation_status": [
+          true,
+          6,
+          0
+        ],
+        "owner_status": [
+          true,
+          0,
+          0
+        ],
+        "repeated_close_native_calls_unchanged": true,
+        "torch_imported": false,
+        "resources": {
+          "devices": 0,
+          "modules": 0,
+          "kernels": 0,
+          "queues": 0,
+          "buffers": 0,
+          "events": 0,
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "label": "bf16-new-healthy-cleanup_failure",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/w07-a05-review-4v5rc3ix/bf16-new-healthy-cleanup_failure.py"
+      ],
+      "cwd": "/tmp/p06-w03-a01-native-binding/bf16",
+      "timeout_seconds": 20,
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "seconds": 0.151,
+      "stdout": "{\"format\": \"bf16\", \"fault\": \"healthy\", \"case_label\": \"cleanup_failure\", \"test_assertion_rejected\": true, \"operation_status\": [true, 0, 0], \"owner_status\": [true, 0, 0], \"repeated_close_native_calls_unchanged\": true, \"torch_imported\": false, \"resources\": {\"devices\": 0, \"modules\": 0, \"kernels\": 0, \"queues\": 0, \"buffers\": 0, \"events\": 0, \"bytes\": 0}}\n",
+      "stderr": "",
+      "source": "import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = 'healthy'\nname = 'cleanup_failure'\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nassert operation.close(0) == result\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(\"closed = session.close()\\nif name == 'cleanup_failure':\\n    assert closed.complete and closed.primary == 0 and (closed.cleanup == 10)\\n    assert session.close() == closed\\n    before = controls.counter('calls:device_open')\\n    try:\\n        Session.open(bundle)\\n    except BindingError as error:\\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\\n    else:\\n        raise AssertionError('process cleanup poison was bypassed')\\n    assert controls.counter('calls:device_open') == before\\nelse:\\n    assert closed.ok\")\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n",
+      "source_sha256": "678b04066cef519dedeaa27f07ad320a246bbd50295d183d9b4ad9b83e79267b",
+      "observation": {
+        "format": "bf16",
+        "fault": "healthy",
+        "case_label": "cleanup_failure",
+        "test_assertion_rejected": true,
+        "operation_status": [
+          true,
+          0,
+          0
+        ],
+        "owner_status": [
+          true,
+          0,
+          0
+        ],
+        "repeated_close_native_calls_unchanged": true,
+        "torch_imported": false,
+        "resources": {
+          "devices": 0,
+          "modules": 0,
+          "kernels": 0,
+          "queues": 0,
+          "buffers": 0,
+          "events": 0,
+          "bytes": 0
+        }
+      }
+    },
+    {
+      "label": "bf16-new-cleanup-matmul_shapes",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/tmp/w07-a05-review-4v5rc3ix/bf16-new-cleanup-matmul_shapes.py"
+      ],
+      "cwd": "/tmp/p06-w03-a01-native-binding/bf16",
+      "timeout_seconds": 20,
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "seconds": 0.107,
+      "stdout": "{\"format\": \"bf16\", \"fault\": \"cleanup\", \"case_label\": \"matmul_shapes\", \"test_assertion_rejected\": true, \"operation_status\": [true, 0, 10], \"owner_status\": [true, 0, 10], \"repeated_close_native_calls_unchanged\": true, \"torch_imported\": false, \"resources\": {\"devices\": 0, \"modules\": 0, \"kernels\": 0, \"queues\": 0, \"buffers\": 0, \"events\": 0, \"bytes\": 0}}\n",
+      "stderr": "",
+      "source": "import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = 'cleanup'\nname = 'matmul_shapes'\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nassert operation.close(0) == result\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(\"closed = session.close()\\nif name == 'cleanup_failure':\\n    assert closed.complete and closed.primary == 0 and (closed.cleanup == 10)\\n    assert session.close() == closed\\n    before = controls.counter('calls:device_open')\\n    try:\\n        Session.open(bundle)\\n    except BindingError as error:\\n        assert error.kind == 'state' and 'cleanup failed' in str(error)\\n    else:\\n        raise AssertionError('process cleanup poison was bypassed')\\n    assert controls.counter('calls:device_open') == before\\nelse:\\n    assert closed.ok\")\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n",
+      "source_sha256": "f93beff73f6c06599915fbd6ca804783dd2457d1d6d9ac90d1660f316dee9fef",
+      "observation": {
+        "format": "bf16",
+        "fault": "cleanup",
+        "case_label": "matmul_shapes",
+        "test_assertion_rejected": true,
+        "operation_status": [
+          true,
+          0,
+          10
+        ],
+        "owner_status": [
+          true,
+          0,
+          10
+        ],
+        "repeated_close_native_calls_unchanged": true,
+        "torch_imported": false,
+        "resources": {
+          "devices": 0,
+          "modules": 0,
+          "kernels": 0,
+          "queues": 0,
+          "buffers": 0,
+          "events": 0,
+          "bytes": 0
+        }
+      }
+    }
+  ],
+  "seconds": 2.0,
+  "source_stable": true,
+  "outcome": "pass",
+  "source_identities": [
+    {
+      "path": "ci/project/p05_torch_native_host_tests.py",
+      "sha256": "8134c5f7eb2c1e2d89eed887a5b0c8b6286910f285a0688eab0b06b43fc6193b",
+      "size_bytes": 14743,
+      "matches_baseline": false
+    },
+    {
+      "path": "ci/project/p05_test_runtime.py",
+      "sha256": "89aed60290c2d6eef76cca1e4205f89bcb83a0056ef748b6050a3c40aa526356",
+      "size_bytes": 17447,
+      "matches_baseline": true
+    },
+    {
+      "path": "ci/project/fixtures/p05_python_runtime.cpp",
+      "sha256": "a080adf4f4ada0aa0be58c32e739544cfffa8b3199d365303541e10c56813df4",
+      "size_bytes": 35697,
+      "matches_baseline": true
+    },
+    {
+      "path": "ci/project/test_p05_torch_native_host_orchestration.py",
+      "sha256": "7ef860514924dd131a4e8bb814a376e443f85d9971ef544129c7321dfe449781",
+      "size_bytes": 6207,
+      "matches_baseline": true
+    },
+    {
+      "path": "ci/project/test_p05_torch_ci.py",
+      "sha256": "5bfccbe5fce1e2ddb8dee963a2fb6e42b544b14dedc7c4a1cf35433b5874c4c1",
+      "size_bytes": 16012,
+      "matches_baseline": true
+    },
+    {
+      "path": "ci/project/test_p05_native_binding.py",
+      "sha256": "56d7bbcd854a8d9c1d1ed805f8eb64880f058799f7b586fc84a0723c4322bca5",
+      "size_bytes": 34563,
+      "matches_baseline": true
+    },
+    {
+      "path": "python/native/module.cpp",
+      "sha256": "3e0688fef091dcc58bfaeb13e1ab18d2bcc147a601ceaa3a48cc91a34464170e",
+      "size_bytes": 37547,
+      "matches_baseline": true
+    },
+    {
+      "path": "python/native/runtime_loader.cpp",
+      "sha256": "8b75dfb415deadaa48b756b7db2f8a540329f838f804f2532e4bdcca5f001a60",
+      "size_bytes": 36859,
+      "matches_baseline": true
+    },
+    {
+      "path": "python/vortex_ai/_api.py",
+      "sha256": "f66748c6657ddd55e8753343f49b43cce87003df770e8bbb20c70ee57e3d0db2",
+      "size_bytes": 32061,
+      "matches_baseline": true
+    },
+    {
+      "path": "python/vortex_ai/_bundle.py",
+      "sha256": "cf438f291359314844b6489545ad1b263639a36706ae3b86f94d9832c6ee4679",
+      "size_bytes": 12288,
+      "matches_baseline": true
+    },
+    {
+      "path": "python/vortex_ai/torch_ops.py",
+      "sha256": "b38aec7920a4640aa7af8e01143bf5851ccb9c5132644e60d96f901b71b80d70",
+      "size_bytes": 14380,
+      "matches_baseline": true
+    },
+    {
+      "path": "sw/runtime/ai/runtime.h",
+      "sha256": "aa76760f2e25c1969b86e08dacf7823c9b441dc82ef2c65f803bdc80ee9f657e",
+      "size_bytes": 3719,
+      "matches_baseline": true
+    },
+    {
+      "path": "sw/runtime/ai/runtime.cpp",
+      "sha256": "f55365110aed41cfaa290b69da8d91d9fa0ae04063dda591b94ae6ca626cf675",
+      "size_bytes": 22983,
+      "matches_baseline": true
+    },
+    {
+      "path": "sw/runtime/ai/mlp_runtime.cpp",
+      "sha256": "08fe64256e71822db327c31d97904826274af446a67ae11417d98a5a31cd45fd",
+      "size_bytes": 13925,
+      "matches_baseline": true
+    },
+    {
+      "path": ".github/workflows/p05-torch.yml",
+      "sha256": "67db9d8ca9223b51ffe1165f08f3999eb1d93a849ca1c64a207a1c4b47ad9a26",
+      "size_bytes": 11274,
+      "matches_baseline": true
+    },
+    {
+      "path": "docs/designs/serial_matmul_workspace_v1.md",
+      "sha256": "133f3a53b883910e01998ef8bfc96d8e98b728c5902e7e95a8a8c270f6da2004",
+      "size_bytes": 17846,
+      "matches_baseline": true
+    }
+  ],
+  "reviewed_source_stable": true,
+  "canonical_acceptance_records_checked": [
+    {
+      "path": "docs/project/evidence/p01-build.json",
+      "sha256": "7c31c2c58fce7e3f9fe2229f9dcc4d1ede8aa2c1ee7afb4b9714a67ef9ae38a0"
+    },
+    {
+      "path": "docs/project/evidence/p01-native.json",
+      "sha256": "7cf5ae93704e22fa9172ac2eb8dd93275ab312a1dc39e689d907f8e08b38b026"
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-blocked.json",
+      "sha256": "c480d1eb390a237b5e33c55b2115f3a43e997207a9122c319264671284e82551"
+    },
+    {
+      "path": "docs/project/evidence/p02-numerics/acceptance.json",
+      "sha256": "5cfa9e078bd42b5aa8100b8996675ed1bf34d9133320baaed7437545dd3b72fb"
+    },
+    {
+      "path": "docs/project/evidence/p02-wgmma/processor/acceptance.json",
+      "sha256": "5aa45a3e6bd1920167874e97bbb75a91738c2a32933f39c1d638786ee381f92f"
+    },
+    {
+      "path": "docs/project/evidence/p02-wmma/acceptance.json",
+      "sha256": "364f49da0eb495ffcd2ea9ff5a402396eab531db3422819a972ccb2f7be9396a"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/acceptance-lifecycle.json",
+      "sha256": "5bcedb8c6db3c81a9ca87fc654548ae7e01e860733ae1c1813c246442022abf9"
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/acceptance-numerics.json",
+      "sha256": "400da6d933c4cd6d21506f0000626c4aa1324e305026890c435cc2ced2575ef4"
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/acceptance.json",
+      "sha256": "6cac806e58f0de5cded827fc9f272c7d3cb189584013722d917a75352b812dcc"
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/acceptance-dispatch.json",
+      "sha256": "96b377c36de40d463fb4c2e04609388011aaef3e340d816836f5a3f5dadd1018"
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/acceptance-numerics.json",
+      "sha256": "890b6eaa5ce8d44f3a9d975d747e1ac09caff0a66782ac8cc7c3b174678f375a"
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/acceptance.json",
+      "sha256": "c1b0055aef8ceef1a8fe900cb8630d900686bdff8fec14e37a66b583bcad6838"
+    },
+    {
+      "path": "docs/project/evidence/p06-serial-workspace/a01-retained-binding.json",
+      "sha256": "9de532f05b99fa36a1b42822170aa720795fb8a9ca2f823b0daf06556928a85f"
+    },
+    {
+      "path": "docs/project/evidence/p06-serial-workspace/p06-a01-retained-baseline.json",
+      "sha256": "9d2991f2346886a7ba0a15f51d3a980d7c1da2225920ebc1b3e45329d91efc02"
+    },
+    {
+      "path": "docs/project/evidence/setup-accepted.json",
+      "sha256": "1879f316e4f9aa0dd68ab98ecaf354859d9935260e832c61c820fcf8ee87ba69"
+    },
+    {
+      "path": "docs/project/evidence/setup-validation.json",
+      "sha256": "a5d4f47850b49434e164162ee3f5bb7a7fb625e0d59f738c9b25376cab3f40fa"
+    }
+  ],
+  "no_canonical_live_artifact_reference": true,
+  "scope_findings": [],
+  "resolved_finding": {
+    "severity": "F3",
+    "confidence": "high",
+    "evidence_type": "static-proof and independent compiled-host reproduction",
+    "problem": "The old common owner-close assertion rejected the intended sticky cleanup status.",
+    "resolution": "The cleanup scenario now requires complete/primary0/cleanup10 and stable repeated operation/owner close; every other scenario retains its OK requirement.",
+    "source_sha256": "8134c5f7eb2c1e2d89eed887a5b0c8b6286910f285a0688eab0b06b43fc6193b"
+  },
+  "workflow_tests": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "-v",
+      "test_p05_torch_native_host_orchestration",
+      "test_p05_torch_ci"
+    ],
+    "cwd": "/tmp/ai-gpu-serial-20261121",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "ci/project"
+    },
+    "exit_code": 0,
+    "tests": 15,
+    "seconds": 0.079,
+    "evidence": "Direct tool-returned complete console reviewed; not separately written as a raw log."
+  },
+  "diff_check": {
+    "argv": [
+      "git",
+      "diff",
+      "--check",
+      "--",
+      "ci/project/p05_torch_native_host_tests.py"
+    ],
+    "exit_code": 0
+  },
+  "independent_probe_source": "import ast\nimport copy\nimport hashlib\nimport importlib.util\nimport json\nimport os\nfrom pathlib import Path\nimport subprocess\nimport sys\nimport tempfile\nimport time\n\nROOT = Path('/tmp/ai-gpu-serial-20261121')\nBASE = '94267b34d1d2183c744a0c0f2cd1089966c00c21'\nPATH = 'ci/project/p05_torch_native_host_tests.py'\nTEMP = Path(tempfile.mkdtemp(prefix='w07-a05-review-'))\nsys.path.insert(0, str(ROOT / 'ci/project'))\nfrom p05_test_runtime import TestRuntime\n\ndef sha(body):\n    return hashlib.sha256(body).hexdigest()\n\ndef dump(node):\n    return ast.dump(node, include_attributes=False)\n\ndef expr(text):\n    return ast.parse(text).body[0]\n\ndef child(module):\n    return next(node for node in module.body if isinstance(node, ast.FunctionDef) and node.name == 'child')\n\ndef final_tail(module):\n    body = child(module).body\n    start = next(i for i, node in enumerate(body)\n                 if dump(node) == dump(expr('adapter.close()')))\n    stop = next(i for i in range(start + 1, len(body)) if isinstance(body[i], ast.For))\n    return ast.Module(body=copy.deepcopy(body[start + 1:stop]), type_ignores=[])\n\nold_bytes = subprocess.check_output(['git', 'show', BASE + ':' + PATH], cwd=ROOT)\nnew_bytes = (ROOT / PATH).read_bytes()\nold, new = ast.parse(old_bytes), ast.parse(new_bytes)\nnormalized = copy.deepcopy(new)\nnormalized_child = child(normalized)\nrepeat = dump(expr('assert operation.close(0) == result'))\nparents = [node for node in ast.walk(normalized_child)\n           if isinstance(node, ast.If) and any(dump(item) == repeat for item in node.body)]\nassert len(parents) == 1\nparents[0].body = [node for node in parents[0].body if dump(node) != repeat]\nowner = next(i for i, node in enumerate(normalized_child.body)\n             if dump(node) == dump(expr('closed = session.close()')))\nnormalized_child.body[owner] = expr('assert session.close().ok')\nbranch = normalized_child.body[owner + 1]\nassert isinstance(branch, ast.If)\nassert dump(branch.body[0]) == dump(expr('assert closed.complete and closed.primary == 0 and closed.cleanup == 10'))\nassert dump(branch.body[1]) == dump(expr('assert session.close() == closed'))\nassert len(branch.orelse) == 1 and dump(branch.orelse[0]) == dump(expr('assert closed.ok'))\nbranch.body = branch.body[2:]\nbranch.orelse = []\nassert dump(normalized) == dump(old), 'unexpected change outside the two reviewed blocks'\nassignments = {node.targets[0].id: ast.literal_eval(node.value)\n               for node in new.body if isinstance(node, ast.Assign)\n               and isinstance(node.targets[0], ast.Name)\n               and node.targets[0].id in ('SCENARIOS', 'MODEL_NAMES', 'SCOPE')}\nassert len(assignments['SCENARIOS']) == 9\ntails = {name: ast.unparse(final_tail(module)) for name, module in [('old', old), ('new', new)]}\nfor name, text in tails.items():\n    (TEMP / (name + '-tail.py.txt')).write_text(text + '\\n')\n\nretained = json.loads((ROOT / 'docs/project/evidence/p06-serial-workspace/host/p05-boundary/results.json').read_text())\nbundle_root = Path('/tmp/p06-w03-a01-native-binding')\nreport = {'scope': 'independent-compiled-owner-close-tail-review', 'baseline': BASE,\n          'test_before_sha256': sha(old_bytes), 'test_after_sha256': sha(new_bytes),\n          'ast_scope_exact': True, 'unchanged_scenarios': list(assignments['SCENARIOS']),\n          'unchanged_model_names': list(assignments['MODEL_NAMES']),\n          'torch_available': importlib.util.find_spec('torch') is not None,\n          'torch_execution': False, 'native_accelerator_execution': False,\n          'tail_sources': tails, 'bundles': [], 'children': []}\n\ncases = [('old', 'healthy', 'matmul_shapes', 0), ('old', 'cleanup', 'cleanup_failure', 1),\n         ('new', 'healthy', 'matmul_shapes', 0), ('new', 'cleanup', 'cleanup_failure', 0),\n         ('new', 'async', 'async_failure', 0),\n         ('new', 'healthy', 'cleanup_failure', 1), ('new', 'cleanup', 'matmul_shapes', 1)]\nbegan = time.monotonic()\nfor fmt in ('fp16', 'bf16'):\n    root = bundle_root / fmt\n    manifest_path = root / 'bundle/manifest.json'\n    manifest = json.loads(manifest_path.read_text())\n    expected = retained['builds'][fmt]\n    assert manifest['binding_sources'] == expected['binding_sources']\n    assert len(manifest['binding_sources']) == 63\n    for row in manifest['binding_sources']:\n        body = (ROOT / row['path']).read_bytes()\n        assert len(body) == row['size'] and sha(body) == row['sha256'], row['path']\n    for row in manifest['artifacts']:\n        body = (root / 'bundle' / row['path']).read_bytes()\n        assert len(body) == row['size'] and sha(body) == row['sha256'], row['path']\n    extension, = (root / 'python/vortex_ai').glob('_native.*.so')\n    assert sha(extension.read_bytes()) == expected['extension_sha256']\n    assert sha(manifest_path.read_bytes()) == expected['manifest_sha256']\n    packages = []\n    for path in sorted((root / 'python/vortex_ai').glob('*.py')):\n        assert path.read_bytes() == (ROOT / 'python/vortex_ai' / path.name).read_bytes()\n        packages.append(path.name)\n    report['bundles'].append({'format': fmt, 'source_count': 63,\n                              'artifact_count': len(manifest['artifacts']),\n                              'package_files': packages, 'extension_sha256': expected['extension_sha256'],\n                              'manifest_sha256': expected['manifest_sha256']})\n    runtime = TestRuntime(root, root / 'bundle', root / 'python', extension,\n                          root / 'generated/p05_build_config.h', fmt, ())\n    for version, fault, name, expected_exit in cases:\n        code = '''import json, os, sys\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import Session, Tensor, BindingError\nbundle = os.environ['P05_TEST_BUNDLE']\nfmt = os.environ['P05_TEST_DTYPE']\ncontrols = FaultControls.activate(bundle)\nsession = Session.open(bundle)\nfault = FAULT\nname = NAME\nif fault == 'cleanup':\n    controls.fail('event_release', occurrence=1)\nelif fault == 'async':\n    controls.async_failure(4, code=6)\na = Tensor(bytearray([0x12] * 128), dtype=fmt, shape=(8, 8), layout='row_major')\nb = Tensor(bytearray([0x34] * 64), dtype=fmt, shape=(8, 4), layout='column_major')\noperation = session.submit(a, b)\nwaited = operation.wait(1000000000)\nresult = operation.close(0)\nassert result.complete and result.primary == (6 if fault == 'async' else 0)\nassert result.cleanup == (10 if fault == 'cleanup' else 0)\nbefore_repeat = controls.counters\nOP_REPEAT\nassert controls.counters == before_repeat\nif fault == 'cleanup':\n    before = controls.counter('calls:enqueue')\n    try:\n        session.submit(a, b)\n    except BindingError as error:\n        if error.operation is not None:\n            assert error.operation.close(0).complete\n    else:\n        raise AssertionError('poisoned owner accepted new work')\n    assert controls.counter('calls:enqueue') == before\nfailed = False\ntry:\n    exec(TAIL)\nexcept AssertionError:\n    failed = True\nclosed = session.close()\ncounts = controls.counters\nassert session.close() == closed\nassert controls.counters == counts\ncontrols.assert_no_resources()\nassert 'torch' not in sys.modules\nprint(json.dumps({'format': fmt, 'fault': fault, 'case_label': name,\n                  'test_assertion_rejected': failed,\n                  'operation_status': [result.complete, result.primary, result.cleanup],\n                  'owner_status': [closed.complete, closed.primary, closed.cleanup],\n                  'repeated_close_native_calls_unchanged': True,\n                  'torch_imported': False, 'resources': controls.counters['resources']}))\nraise SystemExit(1 if failed else 0)\n'''.replace('FAULT', repr(fault)).replace('NAME', repr(name)).replace('TAIL', repr(tails[version]))\n        code = code.replace('OP_REPEAT', ast.unparse(expr('assert operation.close(0) == result')))\n        label = '-'.join((fmt, version, fault, name))\n        path = TEMP / (label + '.py')\n        path.write_text(code)\n        start = time.monotonic()\n        result = subprocess.run([sys.executable, str(path)], cwd=runtime.root,\n                                env=runtime.environment(), capture_output=True, text=True, timeout=20)\n        observation = json.loads(result.stdout) if result.stdout else None\n        row = {'label': label, 'argv': [sys.executable, str(path)], 'cwd': str(runtime.root),\n               'timeout_seconds': 20, 'expected_exit': expected_exit, 'actual_exit': result.returncode,\n               'seconds': round(time.monotonic() - start, 3), 'stdout': result.stdout,\n               'stderr': result.stderr, 'source': code, 'source_sha256': sha(code.encode()),\n               'observation': observation}\n        report['children'].append(row)\n        assert result.returncode == expected_exit and not result.stderr, row\n        assert observation['test_assertion_rejected'] == bool(expected_exit)\nreport['seconds'] = round(time.monotonic() - began, 3)\nreport['source_stable'] = (ROOT / PATH).read_bytes() == new_bytes\nassert report['source_stable']\nreport['outcome'] = 'pass'\n(TEMP / 'review.json').write_text(json.dumps(report, indent=2) + '\\n')\nprint(json.dumps({'result': str(TEMP / 'review.json'), 'children': len(report['children']),\n                  'seconds': report['seconds'], 'outcome': report['outcome']}))\n",
+  "limitations": [
+    "This exercises exact old/current close-tail statements over real compiled host-only fault runtimes; it does not run TorchSession or the full nine PyTorch scenario bodies.",
+    "The optional host runner requires the pinned PyTorch environment and 10 GiB reserve; it was not invoked and no prerequisite was relaxed.",
+    "The compiled test bundles name their earlier build source revision; all 63 bound source bodies, artifacts, extension and Python package identities were rechecked against the current runtime.",
+    "No full repository suite, accelerator arithmetic, native simulator, hardware execution, build, installation, commit or push was performed by this review.",
+    "The real hosted PyTorch gate and root integration/publication obligations remain separate."
+  ]
+}

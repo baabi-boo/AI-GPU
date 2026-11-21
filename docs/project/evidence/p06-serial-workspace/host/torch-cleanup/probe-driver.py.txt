@@ -1,0 +1,50 @@
+from pathlib import Path
+import ast,hashlib,json,sys,time
+ROOT=Path('/tmp/ai-gpu-serial-20261121')
+WORK=Path('/tmp/w07-a04-workdir.txt').read_text().strip()
+WORK=Path(WORK)
+sys.path.insert(0,str(ROOT/'ci/project'))
+from p05_test_runtime import TestRuntime
+source=ROOT/'ci/project/p05_torch_native_host_tests.py'
+(WORK/'after.py').write_bytes(source.read_bytes())
+
+def digest(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def close_tail(p):
+    tree=ast.parse(p.read_text())
+    function=next(node for node in tree.body if isinstance(node,ast.FunctionDef) and node.name=='child')
+    at=next(i for i,node in enumerate(function.body) if isinstance(node,ast.Expr) and isinstance(node.value,ast.Call) and isinstance(node.value.func,ast.Attribute) and isinstance(node.value.func.value,ast.Name) and node.value.func.value.id=='adapter' and node.value.func.attr=='close')
+    stop=next(i for i in range(at+1,len(function.body)) if isinstance(function.body[i],ast.For))
+    return ast.unparse(ast.Module(body=function.body[at+1:stop],type_ignores=[]))
+results=[]
+identities=[]
+for fmt in ('fp16','bf16'):
+    base=Path('/tmp/p06-w03-a01-native-binding')/fmt
+    manifest=json.loads((base/'bundle/manifest.json').read_text())
+    for row in manifest['binding_sources']:
+        body=(ROOT/row['path']).read_bytes()
+        if len(body)!=row['size'] or hashlib.sha256(body).hexdigest()!=row['sha256']:
+            raise AssertionError('source mismatch '+row['path'])
+    for row in manifest['artifacts']:
+        p=base/'bundle'/row['path']
+        if p.stat().st_size!=row['size'] or digest(p)!=row['sha256']:
+            raise AssertionError('bundle artifact mismatch '+str(p))
+    runtime=TestRuntime(root=base,bundle=base/'bundle',package_root=base/'python',extension=next((base/'python/vortex_ai').glob('_native.*.so')),build_config=base/'generated/p05_build_config.h',dtype=fmt,commands=())
+    identities.append({'format':fmt,'bound_source_count':len(manifest['binding_sources']),'bound_sources_match_current':True,'artifacts_match_manifest':True,'manifest_sha256':digest(base/'bundle/manifest.json'),'extension_sha256':digest(runtime.extension),'manifest_source_revision':manifest['source_revision'],'scope':manifest['scope']})
+    for version in ('before','after'):
+        snapshot=WORK/(version+'.py')
+        tail=close_tail(snapshot)
+        scenarios=('cleanup_failure','matmul_shapes') if version=='before' else ('matmul_shapes','fixed_models','transient_timeout','matmul_deadline','model_deadline','partial_submit','async_failure','cleanup_failure','model_mismatch')
+        for name in scenarios:
+            child=f'''import json,os\nfrom p05_test_runtime import FaultControls\nfrom vortex_ai import BindingError,Session,Tensor\nname={name!r}\nfmt={fmt!r}\nbundle=os.environ['P05_TEST_BUNDLE']\ncontrols=FaultControls.activate(bundle)\nsession=Session.open(bundle)\nif name=='cleanup_failure':controls.fail('event_release',occurrence=1)\noperation=session.submit(Tensor(bytes(128),dtype=fmt,shape=(8,8),layout='row_major'),Tensor(bytes(64),dtype=fmt,shape=(8,4),layout='column_major'))\nresult=operation.close(0)\nexpected_cleanup=10 if name=='cleanup_failure' else 0\nassert result.complete and result.primary==0 and result.cleanup==expected_cleanup\nassert operation.close(0)==result\nprint(json.dumps({{'scope':'compiled-native-final-close-tail-no-pytorch','phase':'before-tail','scenario_label':name,'format':fmt,'operation_close':{{'complete':result.complete,'primary':result.primary,'cleanup':result.cleanup}}}}),flush=True)\n'''+tail+'''\nclosed=session.close()\nassert closed.complete and closed.primary==0 and closed.cleanup==expected_cleanup\ncounts=dict(controls.counters)\nassert session.close()==closed\nassert controls.counters==counts\ncontrols.assert_no_resources()\nassert controls.counter('max_live_devices')<=1\nprint(json.dumps({'scope':'compiled-native-final-close-tail-no-pytorch','phase':'after-tail','scenario_label':name,'format':fmt,'session_close':{'complete':closed.complete,'primary':closed.primary,'cleanup':closed.cleanup},'repeat_no_native_calls':True,'counters':controls.counters},sort_keys=True))\n'''
+            stem=version+'-'+fmt+'-'+name
+            (WORK/(stem+'.py')).write_text(child)
+            start=time.monotonic();run=runtime.run_python(child,timeout=20,check=False);duration=time.monotonic()-start
+            (WORK/(stem+'.stdout.log')).write_text(run.stdout);(WORK/(stem+'.stderr.log')).write_text(run.stderr)
+            expected=1 if version=='before' and name=='cleanup_failure' else 0
+            if run.returncode!=expected or (expected==0 and run.stderr):raise AssertionError((stem,run.returncode,run.stdout,run.stderr))
+            if expected==1 and 'AssertionError' not in run.stderr:raise AssertionError('wrong failure')
+            results.append({'case':stem,'source_sha256':digest(snapshot),'exit_code':run.returncode,'expected_exit_code':expected,'seconds':round(duration,6),'stdout_sha256':digest(WORK/(stem+'.stdout.log')),'stderr_sha256':digest(WORK/(stem+'.stderr.log'))})
+            print(stem,run.returncode,flush=True)
+report={'scope':'compiled-native-final-close-tail-no-pytorch','source_revision':'94267b34d1d2183c744a0c0f2cd1089966c00c21','before_test_sha256':digest(WORK/'before.py'),'after_test_sha256':digest(WORK/'after.py'),'bundle_identities':identities,'results':results,'outcome':'pass','limitations':['The exact final-close statements were extracted from each child() AST and executed over real compiled Session/Operation owners.','The scenario labels select final-close expectations only; the full Torch scenario bodies and TorchSession dispatch were not executed.','PyTorch is not installed locally; no native simulator or accelerator ran.','The reused test bundle manifest names the earlier base revision, but all 63 bound source bodies per format match the current implementation exactly.']}
+(WORK/'probe.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps({'outcome':'pass','cases':len(results),'report':str(WORK/'probe.json')}))

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "scope": "base-policy-change-classification",
+  "base": "3235cd59d724663dda1bece20645d5ccf30462e1",
+  "head": "94267b34d1d2183c744a0c0f2cd1089966c00c21",
+  "changed_files": 145,
+  "classification": "R2",
+  "reasons": [
+    "path:ci-enforcement",
+    "path:sw-stack",
+    "path:build-config"
+  ],
+  "base_inputs": [
+    {
+      "path": "ci/change_impact.py",
+      "sha256": "bd2ef579de90b14b7ab4cd5ef2f6b7c911753e154c4201aaf0f0d0b25a460779"
+    },
+    {
+      "path": "docs/review/change-impact.yaml",
+      "sha256": "489d1018c790bb6c383b774b119223889bb508be6c63db654d5c6c80520d0333"
+    }
+  ],
+  "output": {
+    "path": "docs/project/evidence/p06-serial-workspace/reviews/migration-change-impact.txt",
+    "sha256": "ff8ea7c0d0415c5581feeb951322b91d5e6e071de284f5d3a8e2933e739bfb03"
+  },
+  "exit_code": 0,
+  "limitations": [
+    "Classification is not a passing native or integration test.",
+    "Independent source-bound reviews cover runtime and CI enforcement changes; no gate waiver is recorded."
+  ]
+}
