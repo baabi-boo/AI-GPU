@@ -1,12 +1,16 @@
 # Current project status
 
-**P06-T01 is in progress: qualify the implemented frozen native performance
-baseline.** The [audit](p06-benchmark-audit.md) selected repeatable measurement
-of the accepted P03/P04 workloads. The [contract](../designs/native_benchmark_v1.md),
-[manifest](../../ci/project/p06_benchmark_contract.json) and
-[runner](../../ci/project/p06_execute.py) are implemented. P06-A01 awaits hosted
-native execution and independent original-artifact review; P06-A02/A03 remain
-open and P06's acceptance evidence list remains empty.
+**P06-A01 is [accepted at simulated scope](evidence/p06-baseline/acceptance.json);
+P06 and P06-T01 remain `in_progress`.** Independent original-artifact review
+qualifies the eight-workload baseline at `84b6ca0ca75fba248ba330642bbf8764db3d459c`,
+[run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221):
+48 processes and 72 launches, including 40 measured processes and 60 measured
+launches. The [qualification audit](p06-qualification-audit.md),
+[packet](evidence/p06-baseline/README.md) and
+[analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
+scope and new validation. P06-A02/A03 remain open. Next, freeze one small-workload
+amortization experiment; resolve native multiple-live-operation ownership before
+any reuse or concurrency claim.
 
 **P04 is complete for the fixed tiny-model contract.**
 [P04-A01](evidence/p04-fixture/acceptance.json) retains its accepted source scope;
@@ -75,7 +79,7 @@ the linked reports define the exact accepted scope.
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
 | P04 — tiny-model inference | `complete` | A01 fixed fixture preserved; A02/A03 accept the full four-variant composed-model matrix at native processor RTL scope |
 | P05 — Python/framework bridge | `in_progress` | A01 accepts the bounded copying Python binding on SimX; the custom-op implementation and prior CI still need independent artifact review for A02/A03 |
-| P06 — Memory and performance scaling | `in_progress` | Frozen native benchmark tooling is implemented; A01 awaits hosted execution and independent review, and A02/A03 remain open |
+| P06 — Memory and performance scaling | `in_progress` | A01 accepts the original eight-workload cold SimX baseline after independent review; A02/A03 remain open |
 | P07–P11 | `not_started` | Later hardware, reliability, research and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -84,42 +88,49 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — frozen native performance baseline
+## Latest continuation — accepted native performance baseline
 
 P04 is complete and supplies P06's accepted native-model prerequisite. P05 is an
-independent track. The [development audit](p06-benchmark-audit.md) explains why
-the next step is a repeated baseline before selecting a performance change.
+independent track. The [qualification audit](p06-qualification-audit.md) completes
+review of the baseline implemented in the [preceding audit](p06-benchmark-audit.md).
+[P06-A01](evidence/p06-baseline/acceptance.json) accepts the original execution at
+`84b6ca0ca75fba248ba330642bbf8764db3d459c`, run `44901052221`, attempt 1; the
+[independent acceptance review](evidence/p06-baseline/reviews/acceptance-review.json)
+records the exact obligations and limitations.
 
 The [implemented contract](../designs/native_benchmark_v1.md) freezes three
 accepted matmul shapes and the fixed model in each of FP16/BF16: **eight workloads**
 on the RV64 `p02-tfr` SimX timing model. Each uses one retained warm-up followed
-by five measured fresh processes. The suite requires **48 processes and 72
+by five measured fresh processes. The complete suite passed **48 processes and 72
 launches**, including **40 measured processes and 60 measured launches**.
 Every process starts a fresh device context; the warm-up does not establish
 warm-cache measurements. The counter table contains **45 rows: 33 available
 and 12 explicitly unavailable**. Counts span the whole context, including all
 three model launches, and do not provide per-stage or physical-device timing.
 
-The [manifest](../../ci/project/p06_benchmark_contract.json),
-[execution runner](../../ci/project/p06_execute.py),
-[strict records](../../ci/project/p06_records.py),
-[packet replay](../../ci/project/p06_replay.py) and
-[hosted workflow](../../.github/workflows/p06-baseline.yml) are implemented around
-the unchanged native applications. Source and host validation do not qualify
-the P06 native matrix. No P06 acceptance record or native result has been
-established at this checkpoint.
+The [packet](evidence/p06-baseline/README.md) preserves both original archives and
+failed prior attempts. Independent review reconciles 4,608 exact native output
+words, 768 bridge words and 768 assembled output words, plus source, compiler,
+dispatch, cleanup and raw-counter records. The new
+[analyzer](../../ci/project/p06_analyze.py) replays the full matrix and derives
+per-sample diagnostics under its [contract](../designs/native_baseline_analysis_v1.md).
+Stricter serial timing containment rejects impossible lifecycle/advance totals
+while preserving the original measurements and the 1,000 ns process allowance.
 
-Local native execution is blocked by missing toolchain inputs and the inherited
-resource prerequisites, including the 15 GiB disk reserve. The reviewed hosted
-route retains the two-job, 4 GiB memory and 15 GiB disk requirements. The next
-action is hosted clean-source qualification, preservation of every failed
-attempt, and independent replay of the original artifacts. Only then select a
-bounded optimization hypothesis from the measured limiting resource.
+A separate host-only reproduction found an approximately 100 ms supervisor
+exit-observation delay. Original host durations remain unchanged; exact exit
+timestamps are unavailable, so no guessed correction or fine-grained host speedup
+is inferred. This continuation reviews original data and adds host validation,
+without new native execution. The cold SimX counts motivate a small-workload
+amortization experiment; they do not establish a causal bottleneck or successful optimization. Native
+multiple-live-operation ownership needs separate resolution before reuse or
+concurrency claims.
 
-P06-A01 remains unearned pending that run and review; P06-A02/A03 remain open.
-There is no optimization, native-RTL performance, synthesis or physical speed
-claim. P01-A03 still lacks qualified vendor `hw_emu` evidence before P07, and the
-inherited [267 → 283 DSP area-gate failure](p04-executor-audit.md) remains unresolved.
+P06-A02/A03 remain open. This continuation establishes no native-RTL performance,
+synthesis or physical speed result. P01-A03 still lacks qualified vendor `hw_emu`
+evidence before P07, and the inherited [267 → 283 DSP area-gate failure](p04-executor-audit.md)
+remains unresolved. The two-job, 4 GiB memory and 15 GiB disk prerequisites are
+unchanged.
 
 ## Previous continuation — copying Python binding
 
@@ -807,15 +818,17 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**P06-T01 — qualify the frozen native baseline.** Run the reviewed
-[hosted workflow](../../.github/workflows/p06-baseline.yml) from a clean exact
-revision, retain all 48 processes / 72 launches and failed attempts, and have an
-independent reviewer replay the original artifacts against their supplied
-digests. Apply the [contract](../designs/native_benchmark_v1.md) before any
-P06-A01 decision. After an accepted baseline, choose one measured optimization
-hypothesis with a matched before/after correctness and performance plan.
-P06-A02/A03 remain open. See the [phase guide](phases/p06-performance.md) and
-[backlog](backlog.md).
+**P06-T01 — freeze one small-workload amortization experiment.** Use the
+[accepted cold baseline](evidence/p06-baseline/README.md) and
+[qualification audit](p06-qualification-audit.md) to specify the workload/layout,
+ownership rule, reference/candidate revisions, identical numerical inputs,
+repetitions and rejection conditions before changing native code. Preserve the
+cold baseline and define any warm-context boundary separately. Resolve native
+multiple-live-operation ownership before reuse or concurrency claims; the
+accepted model serializes and explicitly closes each operation. P06-A02 still
+requires matched correctness, native RTL and applicable parity/performance
+evidence; A03 requires a reviewed target budget and synthesis reports. See the
+[phase guide](phases/p06-performance.md) and [backlog](backlog.md).
 
 **Parallel framework task:** preserve the
 [accepted copying binding](evidence/p05-python/acceptance-binding.json) and

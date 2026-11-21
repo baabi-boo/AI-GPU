@@ -1,0 +1,99 @@
+{
+  "agent": "/root/w02_a1",
+  "wave": 2,
+  "assignment": 1,
+  "task": "Implement two P06 host-time containment repairs in ci/project/p06_records.py only.",
+  "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+  "source_state": "Uncommitted validator-only change atop the stated revision; native archived execution remains at the original revision.",
+  "source_before_sha256": "328de498ceddb91d04f269e86ac71957a7d1d5e4841a092ffc834f7256fec720",
+  "source_after_sha256": "141f149f9774d06bec61dc4b905b7a87017d1193976088a92269b1b21c0d19be",
+  "diff_sha256": "6581966bdf8873c8c27809426ce9f41a110b0eae226a214f1a8f6550451c3ce9",
+  "findings": [
+    {
+      "id": "P06-TIME-01",
+      "disposition": "fixed",
+      "change": "Require disjoint model_create + model_advance + model_close durations to fit within the bounded process duration plus the existing 1000 ns receipt-rounding allowance."
+    },
+    {
+      "id": "P06-TIME-02",
+      "disposition": "fixed",
+      "change": "Require serial native submit/wait/compare/close scopes and bridge/bridge_compare/assembly/output_compare scopes to fit within accumulated model advance time. Overlapping event profiles and observer intervals are not added."
+    }
+  ],
+  "commands": [
+    {
+      "command": "Read AGENTS.md, ci/project/p06_records.py, successful runtime model timing scopes, and w01_a3 findings/reproducer.",
+      "result": "complete"
+    },
+    {
+      "command": "python3 -m unittest discover -s ci/project -p test_p06_records.py",
+      "result": "pass",
+      "exit_code": 0,
+      "tests_run": 23,
+      "duration_seconds": 40.739
+    },
+    {
+      "command": "python3 ci/project/p06_replay.py --archive /workspace/scratch/00f618e398e9/p06-audit/p06-fp16-84b6ca0.zip --sha256 aaf54ff60b8f4f889264fb3efa4249cbdb02a7fad2b20124b4ad0ba9ae2f41dc --source-revision 84b6ca0ca75fba248ba330642bbf8764db3d459c --format fp16 --output /workspace/scratch/00f618e398e9/p06-audit/agents/w02_a1-fp16-replay.json",
+      "result": "pass",
+      "exit_code": 0,
+      "commands_checked": 45,
+      "retained_source_files_checked": 979
+    },
+    {
+      "command": "python3 ci/project/p06_replay.py --archive /workspace/scratch/00f618e398e9/p06-audit/p06-bf16-84b6ca0.zip --sha256 f19f174879e2c1fb120a3328ec919d42b4d67f59ba056ceb6e0b6f5607f4996b --source-revision 84b6ca0ca75fba248ba330642bbf8764db3d459c --format bf16 --output /workspace/scratch/00f618e398e9/p06-audit/agents/w02_a1-bf16-replay.json",
+      "result": "pass",
+      "exit_code": 0,
+      "commands_checked": 45,
+      "retained_source_files_checked": 979
+    },
+    {
+      "command": "Compare original and repaired replay summaries; assert the only changed trusted replay source is ci/project/p06_records.py.",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check -- ci/project/p06_records.py",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "changed_files": [
+    "ci/project/p06_records.py"
+  ],
+  "artifacts": [
+    {
+      "path": "p06-audit/agents/w02_a1.patch",
+      "sha256": "6581966bdf8873c8c27809426ce9f41a110b0eae226a214f1a8f6550451c3ce9"
+    },
+    {
+      "path": "p06-audit/agents/w02_a1-record-tests.log",
+      "sha256": "cded07f83c89c01baf8f381cd1ffd5bebe0d3e69f890a255854cc0bde9985ab6"
+    },
+    {
+      "path": "p06-audit/agents/w02_a1-fp16-replay.log",
+      "sha256": "fd19ad2833726f1d5ef62fc66504c44b9ace00cf981d5a738ed77eb9cbcb6089"
+    },
+    {
+      "path": "p06-audit/agents/w02_a1-bf16-replay.log",
+      "sha256": "5004e5cf11644aa9a766b0a088cb57b915871d542b0012d5349611e14e4ffba6"
+    },
+    {
+      "path": "p06-audit/agents/w02_a1-fp16-replay.json",
+      "sha256": "f1330912de3ccda1f38dddf06ee7bf6a6c977addf63649f6d094ad8e29e13c1c"
+    },
+    {
+      "path": "p06-audit/agents/w02_a1-bf16-replay.json",
+      "sha256": "d1491dfd7645c01ba5d877134a259c73484c5e4becc7f241c33268f9f8fd268f"
+    },
+    {
+      "path": "p06-audit/agents/w02_a1-summary-conservation.json",
+      "sha256": "9865ce6fbbd9f38b875b7a88a190fa6c4fc13542cc16cc9539b09c85270eb4b9"
+    }
+  ],
+  "result": "Implemented both guards; 23 existing record tests pass; both original packets replay successfully with unchanged summaries. No report schema, native source, measurement, test, documentation or gate tolerance change.",
+  "limitations": [
+    "No native GPU, RTL, vendor or physical execution.",
+    "Independent regression tests and review belong to separate agents.",
+    "No commit or publication performed."
+  ]
+}

@@ -1,0 +1,2034 @@
+{
+  "assignments_per_wave": 6,
+  "completed_agents": 23,
+  "entries": [
+    {
+      "assignment": 1,
+      "completed_receipt_sha256": "263ce8cb9ed30bfe58911cf168eafcfd43952c3445ff37cd2f6a354faa967e41",
+      "receipt": {
+        "agent": "/root/w01_a1",
+        "assignment": 1,
+        "changed_files": [],
+        "commands": [
+          "Read AGENTS.md, canonical roadmap, status, backlog, acceptance policy and P06 source/design documents."
+        ],
+        "findings": [
+          "P06-A01 original FP16/BF16 artifact qualification is the next required step; P04 supplies its dependency.",
+          "Current project status/backlog/roadmap prose predates successful run 44901052221.",
+          "P06-A02/A03, P01-A03 vendor integration and inherited DSP finding remain open."
+        ],
+        "limitations": [
+          "No tests or GPU execution claimed."
+        ],
+        "receipt_author": "/root, transcribed from completed w01_a1 report",
+        "result": "Completed read-only audit; select full original-artifact qualification and bounded measured diagnostics before optimization.",
+        "task": "Roadmap and acceptance audit",
+        "wave": 1
+      },
+      "task_name": "/root/w01_a1",
+      "wave": 1
+    },
+    {
+      "assignment": 2,
+      "completed_receipt_sha256": "2ba4ffe3c3e46e8dfeb328add3ed5e02f0ee4f752f593043b7218bbf721aaa8b",
+      "receipt": {
+        "agent": "/root/w01_a2",
+        "assignment": 2,
+        "changed_files": [],
+        "commands": [
+          "cat AGENTS.md; cat docs/designs/native_benchmark_v1.md; rg --files runtime tests/regression (runtime directory absent; actual sources under sw/runtime)",
+          "rg --files sw/runtime; sed -n 1,160p docs/project/acceptance.md; Python JSON inspection of docs/project/roadmap.json",
+          "sed -n 1,260p sw/runtime/ai/runtime.cpp; sed -n 1,280p sw/runtime/ai/mlp_runtime.cpp",
+          "sed -n 255,630p sw/runtime/ai/runtime.cpp; sed -n 280,620p sw/runtime/ai/mlp_runtime.cpp; cat sw/runtime/ai/runtime.h",
+          "rg native kernel locations; cat tests/regression/ai_matmul/Makefile (first guessed vx_ai_matmul.h path absent)",
+          "cat sw/kernel/ai/matmul.cpp; sed -n 1,270p sw/runtime/common/queue.cpp; rg native concurrency and timeout contracts/tests",
+          "rg --files docs/project/evidence for P06; sed -n 210,315p docs/designs/ai_operator_contract_v1.md; sed -n 410,550p sw/runtime/common/queue.cpp; rg current P06 status/backlog",
+          "rg concurrency and active ownership across native runtime, Python, and host tests; inspect sw/runtime/common/device.cpp and vortex2_internal.h cp locks; sed -n 1,100p ci/project/test_p03_managed_runtime.py",
+          "sed -n 715,760p sw/runtime/common/device.cpp; sed -n 824,838p sw/runtime/common/vortex2_internal.h; rg active context Python guard; sed -n 1,135p docs/project/status.md; sed -n 1,50p docs/project/backlog.md"
+        ],
+        "findings": [
+          {
+            "finding": "Qualify original P06 native artifacts first, then add strict measured diagnostics before selecting an optimization. Current records already separate device-context counters, process duration, model creation, stage submit/wait/close and host bridge. Rank candidate costs without adding overlapping spans or treating simulation wall time as hardware latency.",
+            "paths": [
+              "docs/designs/native_benchmark_v1.md",
+              "docs/project/status.md",
+              "docs/project/backlog.md",
+              "sw/runtime/ai/mlp_runtime.cpp"
+            ],
+            "severity": "recommendation"
+          },
+          {
+            "finding": "Each three-launch model allocates three independent queues, nine device buffers and fifteen events; it also transfers the same 64-byte output weights twice. A scoped reusable model workspace could reduce lifecycle overhead, but only after baseline shows meaningful host cost. Queue reuse needs explicit sticky-error recovery and model memory-accounting changes; it is not a safe incidental refactor.",
+            "paths": [
+              "sw/runtime/ai/runtime.cpp",
+              "sw/runtime/ai/mlp_runtime.cpp",
+              "sw/runtime/common/queue.cpp"
+            ],
+            "severity": "candidate"
+          },
+          {
+            "confidence": "high",
+            "evidence_type": "static-proof",
+            "finding": "Native ManagedMatmul permits a second live operation from sequential submit calls; each creates its own Queue. Queue enqueue_mu_ is an instance member, while Device cp_mu_ protects individual command submissions only. Therefore DCR setup sequences can interleave before launch. Native docs say one caller at a time but do not forbid multiple live operations; Python separately enforces single active ownership. This is an existing native concurrency contract gap and should be retained as a bounded follow-up, not silently enabled by queue/workspace optimization.",
+            "paths": [
+              "sw/runtime/ai/runtime.cpp",
+              "sw/runtime/ai/runtime.h",
+              "sw/runtime/common/queue.cpp",
+              "sw/runtime/common/device.cpp",
+              "sw/runtime/common/vortex2_internal.h",
+              "docs/designs/ai_operator_contract_v1.md",
+              "python/native/module.cpp"
+            ],
+            "severity": "F2"
+          },
+          {
+            "finding": "Do not remove destination poison, collapse model output blocks, or reuse residency within the frozen baseline: those change its measured workload and trace/memory obligations. Keep exact source numerical references, stage ordering, timeout ownership, failure propagation and actual cleanup checks.",
+            "paths": [
+              "docs/designs/native_benchmark_v1.md",
+              "sw/runtime/ai/runtime.cpp",
+              "sw/runtime/ai/mlp_runtime.cpp"
+            ],
+            "severity": "constraint"
+          }
+        ],
+        "limitations": [
+          "Original P06 native archives were not supplied to this assignment; no measured bottleneck ranking is asserted.",
+          "Concurrent native queue race is demonstrated by reachable code and lock scope, not fresh simulated execution.",
+          "Local native builds were intentionally not attempted under the recorded disk prerequisite shortfall."
+        ],
+        "result": "Completed static audit. No repository changes and no GPU/host tests performed. Recommended artifact qualification plus source-bound measured diagnostics; no achieved speedup claimed.",
+        "task": "Read-only native managed-runtime and tiny-model audit; identify next measurable optimization and ownership risks.",
+        "wave": 1
+      },
+      "task_name": "/root/w01_a2",
+      "wave": 1
+    },
+    {
+      "assignment": 3,
+      "completed_receipt_sha256": "8933c68eecda5564c65fd892927a51a4373f1e88009540c935050f0da588bfb4",
+      "receipt": {
+        "agent": "/root/w01_a3",
+        "assignment": 3,
+        "changed_files": [],
+        "commands": [
+          "Read AGENTS.md, all ci/project/p06*.py modules, test_p06_replay.py, test_p06_records.py, .github/workflows/p06-baseline.yml and model execution scopes with cat/sed/rg.",
+          "PYTHONPATH=ci/project python3 inline synthetic lifecycle-time probe: accepted 7.1 s serial work in a 4.0 s process.",
+          "PYTHONPATH=ci/project python3 inline synthetic child-time probe: accepted 9000 ns serial waits in a 3500 ns advance.",
+          "python3 /workspace/scratch/00f618e398e9/p06-audit/agents/w01_a3_probe.py: reproduced both acceptance defects.",
+          "Read original FP16/BF16 archives with zipfile as data; checked proposed aggregate bounds on all twelve retained model samples.",
+          "python3 -m unittest discover -s ci/project -p test_p06_records.py: 23 tests passed in 40.869 seconds, exit 0."
+        ],
+        "findings": [
+          {
+            "confidence": "high",
+            "evidence_type": "static-proof plus executable synthetic reproduction",
+            "id": "P06-TIME-01",
+            "proof": "The app calls create to completion, then one or more nonoverlapping advance calls, then one or more nonoverlapping close calls. advance_ns and close_ns accumulate each scope duration. Existing max(context span, each duration) containment does not constrain their serial sum.",
+            "repair": "Retain the context and individual interval checks; additionally bound create duration + accumulated advance_ns + accumulated close_ns by the process receipt duration plus its existing 1000 ns rounding allowance. Do not sum nested event or stage durations into this top-level sum.",
+            "reproduction": {
+              "accepted": true,
+              "context_interval_ns": 3905000000,
+              "create_advance_close_total_ns": 7100000000,
+              "process_duration_ns": 4000000000
+            },
+            "severity": "F2",
+            "source": [
+              "ci/project/p06_records.py:_host_timings",
+              "ci/project/p06_records.py:summarize",
+              "tests/regression/ai_mlp/main.cpp:run",
+              "sw/runtime/ai/mlp_runtime.cpp:ManagedMlp::create",
+              "sw/runtime/ai/mlp_runtime.cpp:ManagedMlp::advance",
+              "sw/runtime/ai/mlp_runtime.cpp:ManagedMlp::close"
+            ],
+            "summary": "Disjoint create, advance and close durations can together exceed the complete process duration while summarize accepts them."
+          },
+          {
+            "confidence": "high",
+            "evidence_type": "static-proof plus executable synthetic reproduction",
+            "id": "P06-TIME-02",
+            "proof": "On a successful trace, advance completes submit/wait/compare/release for each stage serially; each operation is closed before the next stage. Bridge and its comparison, assembly and its comparison use separate scopes. Repeated polling adds disjoint waits to per-stage wait_ns and disjoint enclosing calls to advance_ns. Native event profiles may overlap those waits and must never be added.",
+            "repair": "Bound the sum of all three stages submit durations, accumulated waits, comparisons and closes plus bridge, bridge comparison, assembly and output comparison by accumulated advance_ns; preserve existing individual checks.",
+            "reproduction": {
+              "accepted": true,
+              "advance_ns": 3500,
+              "three_serial_waits_ns": 9000
+            },
+            "severity": "F2",
+            "source": [
+              "ci/project/p06_records.py:_host_timings",
+              "sw/runtime/ai/mlp_runtime.cpp:ManagedMlp::advance",
+              "sw/runtime/ai/mlp_runtime.cpp:submit_stage",
+              "sw/runtime/ai/mlp_runtime.cpp:compare_stage",
+              "sw/runtime/ai/mlp_runtime.cpp:release_operation",
+              "sw/runtime/ai/mlp_runtime.cpp:bridge",
+              "sw/runtime/ai/mlp_runtime.cpp:assemble"
+            ],
+            "summary": "Individually bounded serial child timings can sum to more than their enclosing advance duration."
+          },
+          {
+            "confidence": "high",
+            "evidence_type": "static-proof",
+            "id": "P06-PROVENANCE-OBS",
+            "requirement": "Independently record artifact metadata and digests from GitHub; compare every retained source body to its Git blob at the externally supplied revision, including submodule blobs through their pinned commits.",
+            "severity": "F0",
+            "summary": "Retained replay deliberately checks internal packet consistency, not authentic repository content or GitHub origin."
+          }
+        ],
+        "limitations": [
+          "No GPU, RTL, vendor or physical hardware execution performed.",
+          "No original archive contents modified or extracted."
+        ],
+        "original_artifact_probe": {
+          "bf16": {
+            "failures": [],
+            "minimum_advance_children_margin_ns": 4546,
+            "minimum_top_level_margin_ns": 15586342,
+            "model_samples_checked": 6
+          },
+          "fp16": {
+            "failures": [],
+            "minimum_advance_children_margin_ns": 3918,
+            "minimum_top_level_margin_ns": 115350693,
+            "model_samples_checked": 6
+          },
+          "scope": "Data consistency probe on original archives; no independent native reexecution and no acceptance decision."
+        },
+        "qualification_steps": [
+          "Record run 44901052221 attempt 1 job identities and successful conclusions against externally known source 84b6ca0ca75fba248ba330642bbf8764db3d459c.",
+          "Keep both original ZIP files and externally supplied archive digests unchanged; do not rewrite or normalize source records.",
+          "Replay each archive with canonical absolute path using p06_replay.py --archive FILE --sha256 DIGEST --source-revision 84b6ca0ca75fba248ba330642bbf8764db3d459c --format FORMAT --output NEW_PATH.",
+          "Require each report to check 45 commands, 24 processes and 36 launches; combine both formats only after checking one source/configuration contract and distinct format identities.",
+          "Compare all retained source bodies and snapshot inventories to actual Git blobs; validate source tree and all pinned submodule revisions independently.",
+          "Retain replay outputs, source conservation results, actual raw samples, performance analysis, review and host workflow evidence with exact hashes before making P06-A01 acceptance. P06-A02/A03 remain unearned."
+        ],
+        "result": "Two reproducible host-time validation defects; both stricter bounds pass on all twelve original model samples. No repository edits.",
+        "scratch_artifacts": [
+          "p06-audit/agents/w01_a3.json",
+          "p06-audit/agents/w01_a3_probe.py"
+        ],
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Read-only P06 runner, replay and provenance audit; identify concrete validation gaps and original-artifact qualification steps.",
+        "tests": {
+          "command": "python3 -m unittest discover -s ci/project -p test_p06_records.py",
+          "duration_seconds": 40.869,
+          "exit_code": 0,
+          "outcome": "pass",
+          "tests_run": 23
+        },
+        "wave": 1
+      },
+      "task_name": "/root/w01_a3",
+      "wave": 1
+    },
+    {
+      "assignment": 4,
+      "completed_receipt_sha256": "7ea90a9f58969dee2a59a851665cfb359cd638ec4872cec511f0f7fd59d94452",
+      "receipt": {
+        "agent": "/root/w01_a4",
+        "artifacts": [
+          {
+            "path": "w01_a4.py",
+            "sha256": "95d7713f8d470c592bee93f9c9ff35ce3c3b405e39fb8f75ae6a824aaf7430d3"
+          },
+          {
+            "path": "w01_a4-source-audit.json",
+            "sha256": "ebce9856d2fa37529ab513c37744ce3d763c6bd631fd4d769b43bbf7cb1f87f3"
+          },
+          {
+            "path": "w01_a4-source-audit.log",
+            "sha256": "292f1350a077fd4c119004ec3c7fc396a52676aa12cd2ad42d7ccb623b569ede"
+          },
+          {
+            "path": "w01_a4-initial.py",
+            "sha256": "69e28834ba0037c53a0714df3e50ac26934e8017a11e6246921a75ecc7f04cd9"
+          },
+          {
+            "path": "w01_a4-source-audit-initial.log",
+            "sha256": "364735f29f70c11e67bbbc31686f45b9c089cb0531b2dbb24df1ad21fa757379"
+          }
+        ],
+        "assignment": 4,
+        "changed_files": [],
+        "commands": [
+          {
+            "command": "Read AGENTS.md, inspect git status/submodule status and source_snapshot producer definitions at current checkout",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "git fetch --depth 1 https://github.com/CMU-SAFARI/ramulator2.git e62c84a6f0e06566ba6e182d308434b4532068a5 in isolated scratch repo",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "git fetch --depth 1 https://github.com/ucb-bar/berkeley-softfloat-3.git b51ef8f3201669b2288104c28546fc72532a1ea4 in isolated scratch repo",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "python3 p06-audit/agents/w01_a4.py --repo AI-GPU --packets p06-audit --vendors p06-audit/vendor-source --output p06-audit/agents/w01_a4-source-audit.json (initial source-classification version)",
+            "exit_code": 1,
+            "result": "fail"
+          },
+          {
+            "command": "git fetch --depth 1 https://github.com/gabime/spdlog.git refs/tags/v1.11.0 in isolated scratch repo",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "git fetch --depth 1 https://github.com/jbeder/yaml-cpp.git refs/tags/yaml-cpp-0.7.0 in isolated scratch repo",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "python3 p06-audit/agents/w01_a4.py --repo AI-GPU --packets p06-audit --vendors p06-audit/vendor-source --output p06-audit/agents/w01_a4-source-audit.json (corrected source categories; actual invocation used absolute paths)",
+            "exit_code": 0,
+            "result": "pass"
+          }
+        ],
+        "findings": [
+          "Both original ZIP digests exactly match the externally supplied GitHub artifact identities.",
+          "Each format retains 979 source files. All 786 main-repository bodies match Git blobs at 84b6ca0; both full inventories and body sets are identical.",
+          "All five top-level submodule identities match main-repository gitlinks.",
+          "Per packet, 50 Ramulator and 7 SoftFloat bodies match their pinned Git commits; 99 spdlog and 37 yaml-cpp bodies match separately resolved FetchContent commits.",
+          "Initial reviewer script incorrectly treated FetchContent headers as Ramulator Git blobs and failed on spdlog/async.h. The failed script/log are retained, the category distinction was corrected, and the complete corrected audit passed."
+        ],
+        "limitations": [
+          "This is source/provenance review, not native GPU execution or acceptance.",
+          "Git commit identities and two archive digests were supplied externally by the integration owner.",
+          "Three nested CVFPU gitlinks were not fetched or independently checked; no retained source body falls under them.",
+          "FetchContent tags were resolved at audit time; every retained header matches the resolved immutable commit, but historical tag immutability is not established.",
+          "Dependency binary construction, toolchain origin, and system support files are outside this source-byte comparison.",
+          "The check covers every retained source body and its exact inventory; it does not prove the producer retained every possible build input."
+        ],
+        "resource_observation": "Only shallow source Git objects were downloaded; four isolated repositories occupy 3.0 MiB. No toolchain, build, native execution, or upstream mutation.",
+        "result": "pass",
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Independently compare original P06 source inventories and every retained body to pinned Git objects.",
+        "wave": 1
+      },
+      "task_name": "/root/w01_a4",
+      "wave": 1
+    },
+    {
+      "assignment": 5,
+      "completed_receipt_sha256": "79e05889ff6e2fea02bdb1a39a59bb3fbaeadb7f17b548fa45c23bfc81f5a5f6",
+      "receipt": {
+        "agent": "/root/w01_a5",
+        "artifacts": [
+          {
+            "path": "w01_a5.py",
+            "sha256": "b5ce3ea27bcad4b606fe6f638e6164c2148b7c94b688c38ca3aa9656b7c89751"
+          },
+          {
+            "path": "w01_a5-results.json",
+            "sha256": "5bf33ffa9c0abe284b599eed7d205e1682a96cfc81a862fb01da0b6496c66dbb"
+          },
+          {
+            "path": "w01_a5-monitor.py",
+            "sha256": "85efd9bcded8646482fc27262278c9768cafbad7b4130229693cfca5108acbdb"
+          },
+          {
+            "path": "w01_a5-monitor-results.json",
+            "sha256": "3d7880fcaae4162ef4020ba716191fef2121cfc043dfd24c45eda8abd9d8b1e9"
+          }
+        ],
+        "assignment": 5,
+        "changed_files": [],
+        "commands": [
+          {
+            "command": "Read AGENTS.md,baseline_process.py,p06_records.py,p03_execution_records.py,p04_fixture_adapter.py,p02_wmma_fixtures.py,and matching native runtime wait paths",
+            "result": "pass"
+          },
+          {
+            "command": "Exploratory raw archive inspection",
+            "result": "one exploratory KeyError for absent observation.kind,then corrected to use workload identity; no source mutation"
+          },
+          {
+            "command": "python3 /workspace/scratch/00f618e398e9/p06-audit/agents/w01_a5.py",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "python3 /workspace/scratch/00f618e398e9/p06-audit/agents/w01_a5-monitor.py",
+            "exit_code": 0,
+            "result": "pass"
+          }
+        ],
+        "findings": [
+          {
+            "confidence": "high",
+            "evidence_type": "executed-data-audit",
+            "finding": "Both digest-pinned original archives reconcile: 48 processes, 72 native launches; 40 measured processes, 60 measured launches; 4608 exact native output words, 768 host-bridge words, 768 final assembled-output words.",
+            "severity": "F0"
+          },
+          {
+            "confidence": "high",
+            "evidence_type": "executed-data-audit",
+            "finding": "All 45 counters are identical across all six samples of each workload, including warm-up;33 are available and 12 remain explicitly null.",
+            "severity": "F0"
+          },
+          {
+            "confidence": "high",
+            "evidence_type": "synthetic-host-reproduction-and-static-proof",
+            "finding": "run_bounded polls process before drain; EOF unregisters the only fd, then select(0.1) can sleep 100 ms before noticing child exit.Reported process duration includes this monitor latency. Three synthetic default samples took114\u2013116ms versus 21 ms with 2 ms polling and20\u201326ms direct execution.",
+            "severity": "F2"
+          },
+          {
+            "confidence": "high",
+            "evidence_type": "executed-data-audit",
+            "finding": "Historical host durations cannot support fine-grained speed comparisons or be corrected retrospectively: no precise process-exit timestamp was retained.FP16 multi samples differ by ~103 ms despite ~16 ms context spans and identical counters.",
+            "severity": "F1"
+          }
+        ],
+        "limitations": [
+          "No production files changed, no native GPU execution, no publication.",
+          "Existing frozen fixtures supplied expected words; arithmetic producer was not regenerated by this assignment.",
+          "Root retrieved original digests; full Git/source authenticity reconciliation belongs to another reviewer.",
+          "Synthetic monitor reproduction demonstrates a reachable timing artifact but cannot identify exact exit times of individual historical samples.",
+          "SimX counters are model observations, not physical throughput, power, energy or synthesis evidence."
+        ],
+        "result": "pass_with_measurement_limitation",
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Independently reconcile original P06 numerical/counter/timing logs and investigate host duration bimodality.",
+        "wave": 1
+      },
+      "task_name": "/root/w01_a5",
+      "wave": 1
+    },
+    {
+      "assignment": 6,
+      "completed_receipt_sha256": "858239982a3ab7b0d9213e4582d23f3d2f605881bf6f14f2026aae6b48660a9f",
+      "receipt": {
+        "agent": "/root/w01_a6",
+        "assignment": 6,
+        "changed_files": [],
+        "commands": [
+          "Read AGENTS.md and docs/designs/native_benchmark_v1.md; inspected original replay report and archive schema with Python json/zipfile.",
+          "Compared source_before, tools_before, dependencies_before, contract_snapshot and report invariants across both original archives using Python.",
+          "Independently calculated cycle/FLOP, instruction/MAC, logical payload and modeled external-request-byte quantities from original summaries."
+        ],
+        "findings": [
+          "Explicit format-specific original archive and digest inputs should rerun trusted replay; saved summary JSON is not an authoritative input.",
+          "Both original formats have equal source, tool, dependency and contract snapshots; budget, boundaries, sampling and loaded helpers also match.",
+          "Derived per-sample metrics must preserve counter scope, null unavailable data and exact integer accounting; statistics are taken after per-sample derivation.",
+          "Original cycle medians match across formats: 5952, 6339, 6405, 18189; interpretation is bounded SimX whole-context active cycles.",
+          "Small-workload amortization is a plausible subsequent experiment, not an established optimization or physical performance result."
+        ],
+        "limitations": [
+          "No new GPU, RTL or physical execution.",
+          "No acceptance decision.",
+          "No new tests executed; inspection and independent data arithmetic only."
+        ],
+        "result": "Design complete; no production changes. Cross-format data invariants pass for both original archives.",
+        "scratch_artifacts": [
+          "p06-audit/agents/w01_a6.json",
+          "p06-audit/agents/w01_a6-design.md"
+        ],
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Independent design of full-matrix P06 qualification and analysis API/CLI",
+        "wave": 1
+      },
+      "task_name": "/root/w01_a6",
+      "wave": 1
+    },
+    {
+      "assignment": 1,
+      "completed_receipt_sha256": "21660110bb409c47729016682dccd731201c1904903041ed898b0f1ebb0ea4d5",
+      "receipt": {
+        "agent": "/root/w02_a1",
+        "artifacts": [
+          {
+            "path": "p06-audit/agents/w02_a1.patch",
+            "sha256": "6581966bdf8873c8c27809426ce9f41a110b0eae226a214f1a8f6550451c3ce9"
+          },
+          {
+            "path": "p06-audit/agents/w02_a1-record-tests.log",
+            "sha256": "cded07f83c89c01baf8f381cd1ffd5bebe0d3e69f890a255854cc0bde9985ab6"
+          },
+          {
+            "path": "p06-audit/agents/w02_a1-fp16-replay.log",
+            "sha256": "fd19ad2833726f1d5ef62fc66504c44b9ace00cf981d5a738ed77eb9cbcb6089"
+          },
+          {
+            "path": "p06-audit/agents/w02_a1-bf16-replay.log",
+            "sha256": "5004e5cf11644aa9a766b0a088cb57b915871d542b0012d5349611e14e4ffba6"
+          },
+          {
+            "path": "p06-audit/agents/w02_a1-fp16-replay.json",
+            "sha256": "f1330912de3ccda1f38dddf06ee7bf6a6c977addf63649f6d094ad8e29e13c1c"
+          },
+          {
+            "path": "p06-audit/agents/w02_a1-bf16-replay.json",
+            "sha256": "d1491dfd7645c01ba5d877134a259c73484c5e4becc7f241c33268f9f8fd268f"
+          },
+          {
+            "path": "p06-audit/agents/w02_a1-summary-conservation.json",
+            "sha256": "9865ce6fbbd9f38b875b7a88a190fa6c4fc13542cc16cc9539b09c85270eb4b9"
+          }
+        ],
+        "assignment": 1,
+        "changed_files": [
+          "ci/project/p06_records.py"
+        ],
+        "commands": [
+          {
+            "command": "Read AGENTS.md, ci/project/p06_records.py, successful runtime model timing scopes, and w01_a3 findings/reproducer.",
+            "result": "complete"
+          },
+          {
+            "command": "python3 -m unittest discover -s ci/project -p test_p06_records.py",
+            "duration_seconds": 40.739,
+            "exit_code": 0,
+            "result": "pass",
+            "tests_run": 23
+          },
+          {
+            "command": "python3 ci/project/p06_replay.py --archive /workspace/scratch/00f618e398e9/p06-audit/p06-fp16-84b6ca0.zip --sha256 aaf54ff60b8f4f889264fb3efa4249cbdb02a7fad2b20124b4ad0ba9ae2f41dc --source-revision 84b6ca0ca75fba248ba330642bbf8764db3d459c --format fp16 --output /workspace/scratch/00f618e398e9/p06-audit/agents/w02_a1-fp16-replay.json",
+            "commands_checked": 45,
+            "exit_code": 0,
+            "result": "pass",
+            "retained_source_files_checked": 979
+          },
+          {
+            "command": "python3 ci/project/p06_replay.py --archive /workspace/scratch/00f618e398e9/p06-audit/p06-bf16-84b6ca0.zip --sha256 f19f174879e2c1fb120a3328ec919d42b4d67f59ba056ceb6e0b6f5607f4996b --source-revision 84b6ca0ca75fba248ba330642bbf8764db3d459c --format bf16 --output /workspace/scratch/00f618e398e9/p06-audit/agents/w02_a1-bf16-replay.json",
+            "commands_checked": 45,
+            "exit_code": 0,
+            "result": "pass",
+            "retained_source_files_checked": 979
+          },
+          {
+            "command": "Compare original and repaired replay summaries; assert the only changed trusted replay source is ci/project/p06_records.py.",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "git diff --check -- ci/project/p06_records.py",
+            "exit_code": 0,
+            "result": "pass"
+          }
+        ],
+        "diff_sha256": "6581966bdf8873c8c27809426ce9f41a110b0eae226a214f1a8f6550451c3ce9",
+        "findings": [
+          {
+            "change": "Require disjoint model_create + model_advance + model_close durations to fit within the bounded process duration plus the existing 1000 ns receipt-rounding allowance.",
+            "disposition": "fixed",
+            "id": "P06-TIME-01"
+          },
+          {
+            "change": "Require serial native submit/wait/compare/close scopes and bridge/bridge_compare/assembly/output_compare scopes to fit within accumulated model advance time. Overlapping event profiles and observer intervals are not added.",
+            "disposition": "fixed",
+            "id": "P06-TIME-02"
+          }
+        ],
+        "limitations": [
+          "No native GPU, RTL, vendor or physical execution.",
+          "Independent regression tests and review belong to separate agents.",
+          "No commit or publication performed."
+        ],
+        "result": "Implemented both guards; 23 existing record tests pass; both original packets replay successfully with unchanged summaries. No report schema, native source, measurement, test, documentation or gate tolerance change.",
+        "source_after_sha256": "141f149f9774d06bec61dc4b905b7a87017d1193976088a92269b1b21c0d19be",
+        "source_before_sha256": "328de498ceddb91d04f269e86ac71957a7d1d5e4841a092ffc834f7256fec720",
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "source_state": "Uncommitted validator-only change atop the stated revision; native archived execution remains at the original revision.",
+        "task": "Implement two P06 host-time containment repairs in ci/project/p06_records.py only.",
+        "wave": 2
+      },
+      "task_name": "/root/w02_a1",
+      "wave": 2
+    },
+    {
+      "assignment": 2,
+      "completed_receipt_sha256": "c1447f69077229759c72c86d6543728b7ea6c75119017e9903bd3fe6485f0924",
+      "receipt": {
+        "agent": "/root/w02_a2",
+        "assignment": 2,
+        "changed_files": [
+          "ci/project/test_p06_timing.py"
+        ],
+        "commands": [
+          "Read AGENTS.md, w01_a3 receipt/probe, P06 test helpers and native model call/timer scopes.",
+          "python3 -m unittest discover -s ci/project -p test_p06_timing.py -v",
+          "In-memory differential harness: git show 84b6ca0ca75fba248ba330642bbf8764db3d459c:ci/project/p06_records.py; load original module and run the same new tests; require six failing methods and no errors.",
+          "git diff --check -- ci/project/test_p06_timing.py"
+        ],
+        "findings": [
+          "Forty corruption subcases across six test methods fail against the original 84b6ca0 validator, with no test errors.",
+          "All eight test methods pass against the strengthened validator, including both formats and warmup records.",
+          "Valid positive boundaries retain nested event/query observations, zero timers and accumulated timeout-resume waits without double counting."
+        ],
+        "limitations": [
+          "Synthetic host records only; no GPU or RTL execution.",
+          "No production file changed by this assignment.",
+          "Initial differential driver incorrectly counted subtests as methods and exited 1; final driver classifies six failing methods and preserves the expected 40 failures."
+        ],
+        "logs": {
+          "w02_a2-final-tests.log": "5a4e8fbfb739a291cc5202f215d24130298bf612a2ddf861be3fefead0af10e5",
+          "w02_a2-original-final-tests.log": "b61695396c94b065c1dd394dae594c4d2fc4c34373fd068221c2d75831675704"
+        },
+        "result": "Implemented eight independent host regression tests. Final corrected-validator suite and original-validator differential expectation both passed.",
+        "task": "Write independent regressions for serial lifecycle and child timing containment; own only test_p06_timing.py.",
+        "tested_source_hashes": {
+          "ci/project/p06_records.py": "141f149f9774d06bec61dc4b905b7a87017d1193976088a92269b1b21c0d19be",
+          "ci/project/test_p06_timing.py": "d4bd5d8fc64aef4007686a15620164f75ae9cff17a562ee4afa48cd7e85d1034"
+        },
+        "tests": {
+          "corrected_validator": {
+            "duration_seconds": 26.545,
+            "exit_code": 0,
+            "outcome": "pass",
+            "tests_run": 8
+          },
+          "original_validator": {
+            "duration_seconds": 17.354,
+            "errors": 0,
+            "failing_methods": 6,
+            "failing_subcases": 40,
+            "harness_exit_code": 0,
+            "outcome": "expected_failures",
+            "tests_run": 8
+          }
+        },
+        "wave": 2
+      },
+      "task_name": "/root/w02_a2",
+      "wave": 2
+    },
+    {
+      "assignment": 3,
+      "completed_receipt_sha256": "fc5f7ea27f0d9129ed59762595c03c79d651c138e8108cba747ee3b03002c930",
+      "receipt": {
+        "agent": "/root/w02_a3",
+        "assignment": 3,
+        "changed_files": [
+          "ci/project/p06_analyze.py"
+        ],
+        "commands": [
+          {
+            "command": "python3 ci/project/p06_analyze.py --fp16-archive <original canonical FP16 archive> --fp16-sha256 aaf54ff60b8f4f889264fb3efa4249cbdb02a7fad2b20124b4ad0ba9ae2f41dc --bf16-archive <original canonical BF16 archive> --bf16-sha256 f19f174879e2c1fb120a3328ec919d42b4d67f59ba056ceb6e0b6f5607f4996b --source-revision 84b6ca0ca75fba248ba330642bbf8764db3d459c --output <scratch analysis-draft.json>",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "Independent inline Python Fraction/raw-ZIP reconciliation of all 48 samples, 288 metric values, 2160 counter values and 8 original workload summaries",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "Repeat original analyzer invocation at final source into scratch analysis-draft-v2.json after two report-label refinements",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "Compare pre/post-label analysis summaries and diagnostics, compatibility digests and final analyzer source hash",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "Run original analyzer once after integration owner changed process bound to exact Fraction arithmetic; write analysis-draft-v3.json, compare all summaries/diagnostics and trusted helper digests",
+            "exit_code": 0,
+            "result": "pass"
+          }
+        ],
+        "final_analyzed_helper_identities": [
+          {
+            "path": "ci/project/baseline_matrix.py",
+            "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+            "size_bytes": 8890
+          },
+          {
+            "path": "ci/project/baseline_packet_contract.py",
+            "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+            "size_bytes": 53680
+          },
+          {
+            "path": "ci/project/baseline_packet_io.py",
+            "sha256": "53ac39e541628a68b3d405201734195e8ed606b26eab5ee72746e96b3148515d",
+            "size_bytes": 14315
+          },
+          {
+            "path": "ci/project/baseline_process.py",
+            "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+            "size_bytes": 12627
+          },
+          {
+            "path": "ci/project/compiler_records.py",
+            "sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+            "size_bytes": 7143
+          },
+          {
+            "path": "ci/project/p02_fixture_oracle.py",
+            "sha256": "12e546864a4fef5b05e10c7a04b1006bcd59376e5921ea1221c4d42668490145",
+            "size_bytes": 23351
+          },
+          {
+            "path": "ci/project/p02_layout_fixture_oracle.py",
+            "sha256": "34e78c0313e2b032930615f02a790729d1c49293349728b55f7d04a29a2568a7",
+            "size_bytes": 10910
+          },
+          {
+            "path": "ci/project/p02_matrix_records.py",
+            "sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+            "size_bytes": 12332
+          },
+          {
+            "path": "ci/project/p02_wmma_fixtures.py",
+            "sha256": "4a672a5d3357f220120f43e5f5d7e880f7d0ba36df380d69cd1873ea4879835e",
+            "size_bytes": 16440
+          },
+          {
+            "path": "ci/project/p02_wmma_numerical_fixture_oracle.py",
+            "sha256": "083450dc11712e5fc6dce7d19fb854bd9ef25b738347efd56bd07e81b079570b",
+            "size_bytes": 15556
+          },
+          {
+            "path": "ci/project/p03_execution_records.py",
+            "sha256": "b26449105f17f9487cc4fbaab36884ceea42be9f502a26aa58331ed4cf1140de",
+            "size_bytes": 6961
+          },
+          {
+            "path": "ci/project/p04_execution_records.py",
+            "sha256": "abddfb06fb48bbd064c09d61879b278bca22778f5a8289f4c1ac93fb882b33e0",
+            "size_bytes": 16283
+          },
+          {
+            "path": "ci/project/p04_fixture_adapter.py",
+            "sha256": "37a50f6f0f80fd79b926b7ed5d13a233de6bf518590da7fa7d40800dcc91094a",
+            "size_bytes": 5364
+          },
+          {
+            "path": "ci/project/p04_model_contract.py",
+            "sha256": "c184d980d57aec54567d79025845c5fb34887741697ac78a66692a65da02e4b3",
+            "size_bytes": 15901
+          },
+          {
+            "path": "ci/project/p04_reference.py",
+            "sha256": "115a7db51948d69fc6267d5fe658d1a8e68c22e9f200d5ddc3f0a5181d7140a9",
+            "size_bytes": 11855
+          },
+          {
+            "path": "ci/project/p06_compiler_records.py",
+            "sha256": "f441c12f4c9e4b9ef10eca13f8b5291fc41ffb86f1f42e42dfd320056dedd6da",
+            "size_bytes": 13614
+          },
+          {
+            "path": "ci/project/p06_contract.py",
+            "sha256": "1e26e4c63004ee30846a785c03e27d091ac354c18dedf3e621583dcf9d864ace",
+            "size_bytes": 27982
+          },
+          {
+            "path": "ci/project/p06_records.py",
+            "sha256": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7",
+            "size_bytes": 28046
+          },
+          {
+            "path": "ci/project/p06_replay.py",
+            "sha256": "c965b08ec243a7af7faa88bb29652773cdd9562c88e7414585897e3289b46231",
+            "size_bytes": 44347
+          }
+        ],
+        "findings": [
+          "Implemented complete 48-process/72-launch data analysis with exact cross-format source, tool, dependency, hardware, contract, budget and workflow/run identity checks.",
+          "Original samples are replayed before aggregation; six metric definitions retain exact integer operands and compute descriptive statistics from per-sample ratios.",
+          "All warm-ups, null counters and original host intervals are preserved; no physical performance, optimization or automatic acceptance is claimed.",
+          "Tools compare names, hashes and sizes without treating path prefixes as binary identity."
+        ],
+        "independent_tests": {
+          "agent": "/root/w02_a4",
+          "duration_seconds": 78.453,
+          "receipt": "p06-audit/agents/w02_a4.json",
+          "result": "pass",
+          "scope": "Before two report-label-only changes; parent final integrated suite will validate final source.",
+          "tests": 10
+        },
+        "limitations": [
+          "No GPU or RTL execution performed; this is original retained-data replay and analysis.",
+          "Archive-origin authentication and source-to-Git review remain independent requirements.",
+          "No acceptance, phase completion, optimization, or physical measurement is claimed."
+        ],
+        "result": "Implemented and validated against both original archives; final analysis-draft-v3.json uses current exact-Fraction timing validation and preserves all baseline observations.",
+        "scratch_artifacts": [
+          "p06-audit/analysis-draft.json",
+          "p06-audit/analysis-draft-v2.json",
+          "p06-audit/agents/w02_a3-original-analysis.log",
+          "p06-audit/agents/w02_a3-final-original-analysis.log",
+          "p06-audit/agents/w02_a3-original-check.json",
+          "p06-audit/analysis-draft-v3.json",
+          "p06-audit/agents/w02_a3-current-original-analysis.log"
+        ],
+        "source_files": [
+          {
+            "path": "ci/project/p06_analyze.py",
+            "sha256": "fb4bee2291748c2d12701f7b25c4830db2c8380d28738bca8bb763f07279c783",
+            "size_bytes": 16219
+          }
+        ],
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Implement digest-pinned full-matrix P06 analysis around trusted original replay.",
+        "wave": 2
+      },
+      "task_name": "/root/w02_a3",
+      "wave": 2
+    },
+    {
+      "assignment": 4,
+      "completed_receipt_sha256": "341860e4b50c20c761b4506a74b7debe2d37e52e83e2c31780b47a51244dc88e",
+      "receipt": {
+        "agent": "/root/w02_a4",
+        "assignment": 4,
+        "changed_files": [
+          "ci/project/test_p06_analyze.py"
+        ],
+        "commands": [
+          "python3 -m unittest discover -s ci/project -p test_p06_analyze.py",
+          "git diff --check -- ci/project/test_p06_analyze.py"
+        ],
+        "findings": [
+          "Valid synthetic original FP16/BF16 archives produce exactly eight workloads, 48 processes, and 72 launches while claiming no new native execution, acceptance, completion, or optimization.",
+          "Missing format archives, wrong external SHA-256/source revisions, swapped formats and duplicate format packets are rejected.",
+          "Rehashed agreeing summary copies cannot override the checked sample inventory.",
+          "Corrupt raw warm-up numerical output in either format overrides the retained pass and summary; missing measured samples also fail.",
+          "CLI requires both format identities, returns failure for corrupt input, creates no report on failed analysis, and preserves existing output bytes."
+        ],
+        "limitations": [
+          "Synthetic host-only packets; no GPU, native, RTL or hardware execution.",
+          "Metric arithmetic and cross-format incompatibility coverage are assigned to separate reviewers.",
+          "Tests ran against the recorded uncommitted analyzer/source hashes; later descriptive-label edits require final integrated verification."
+        ],
+        "python_version": "3.12.14",
+        "result": "All 10 independent end-to-end/CLI tests passed. Production code unchanged by this assignment.",
+        "source_hashes": {
+          "ci/project/p06_analyze.py": "428cf38afaec980050a4980d0d606b45241270787aa3dc88bab7a02dfbf007a1",
+          "ci/project/p06_records.py": "141f149f9774d06bec61dc4b905b7a87017d1193976088a92269b1b21c0d19be",
+          "ci/project/test_p06_analyze.py": "06bca4641e595ecbd7c42211ddbd434b69ae5d546743d79c3a1c9a10568bf026"
+        },
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Independent end-to-end and CLI tests of complete P06 retained-data analyzer",
+        "tests": {
+          "command": "python3 -m unittest discover -s ci/project -p test_p06_analyze.py",
+          "duration_seconds": 78.453,
+          "exit_code": 0,
+          "log": "p06-audit/agents/w02_a4-tests.log",
+          "log_sha256": "f2e7b6430c70cecd25d219473eaa20fe8dfce99dea15778698a30e61f4d452c6",
+          "outcome": "pass",
+          "tests_run": 10
+        },
+        "wave": 2
+      },
+      "task_name": "/root/w02_a4",
+      "wave": 2
+    },
+    {
+      "assignment": 5,
+      "completed_receipt_sha256": "8b9f1a3c74f3c0f5cc79e0db92e7de94a45d642768073f881abf88b733088bca",
+      "receipt": {
+        "agent": "/root/w02_a5",
+        "assignment": 5,
+        "changed_files": [],
+        "commands": [
+          "Read AGENTS.md, git diff -- ci/project/p06_records.py, new timing tests and relevant C++/P04 validator scopes with cat/sed/rg.",
+          "PYTHONPATH=ci/project python3 inline targeted synthetic boundary probe: selected first six-decimal duration with a downward float-conversion artifact, built an otherwise-valid FP16 sample and called verify_sample plus summarize. Probe exited 0 and observed expected rejection at the documented exact bound."
+        ],
+        "findings": [
+          {
+            "change_relationship": "Inherited process-bound arithmetic is reused by the new lifecycle aggregate; the new tests exercise only a representable 5 us boundary.",
+            "confidence": "high",
+            "details": {
+              "accepted": false,
+              "computed_float_bound_ns": 129999.99999999999,
+              "decimal_bound_ns": 130000,
+              "probe": "six-decimal exact rounding boundary",
+              "reason": "serial model lifecycle exceeds the whole process duration",
+              "rounded_process_seconds": 0.000129,
+              "scope": "synthetic host record only; no native execution",
+              "serial_lifecycle_ns": 130000
+            },
+            "evidence_type": "executable synthetic reproduction",
+            "id": "P06-TIME-ROUNDING-01",
+            "introduced_by_change": false,
+            "original_artifacts_affected": "No observed effect on the original hosted packets; their retained margins exceed this fractional-nanosecond edge.",
+            "recommendation": "Compute the bound exactly from the retained decimal duration for both guards, preserving the same 1000 ns allowance, and cover a six-decimal duration such as 0.000129. Do not widen the allowance.",
+            "severity": "F1",
+            "summary": "Binary float multiplication can reject the exact documented process-rounding allowance."
+          }
+        ],
+        "limitations": [
+          "No production code, tests, docs, refs or remote state changed.",
+          "No full suite repeated and no GPU/native/RTL execution performed.",
+          "One targeted synthetic boundary probe only."
+        ],
+        "result": "Serial-scope implementation is correct; one narrow inherited numeric-boundary defect identified for correction or explicit follow-up.",
+        "review": {
+          "integer_extremes": "Record parsing requires uint64 integer values, chronology rejects reversed intervals, Python sums do not wrap, and the existing bounded process duration excludes impossible multi-century saturated totals.",
+          "overlap": "Native event profiles and observer query intervals are intentionally omitted from child/lifecycle sums; they overlap other included scopes.",
+          "preservation": "Every preexisting timing/chronology guard remains; process rounding allowance is unchanged at 1000 ns. Output schemas and native source are unchanged.",
+          "serial_advance_children": "Sound for successful traces: each submit/wait/compare/release completes before the next stage; bridge and assembly comparisons use separate scopes. Retry waits and release scopes accumulate once within successive advance calls. A successful terminal result has no pending operation for model close to release.",
+          "serial_lifecycle": "Sound: app finishes create, performs successive advance calls, then successive close calls. Their accumulated host durations are disjoint; the destructor close occurs after the retained result and does not inflate the recorded total.",
+          "tests": "New eight-test module covers both formats, warmups, aggregate corruption, all disjoint child categories, exact bounds, timeout-resume accumulation and zero timers. Independent differential evidence from author is not represented as execution by this reviewer."
+        },
+        "reviewed_files": {
+          "ci/project/p04_execution_records.py": "abddfb06fb48bbd064c09d61879b278bca22778f5a8289f4c1ac93fb882b33e0",
+          "ci/project/p06_records.py": "141f149f9774d06bec61dc4b905b7a87017d1193976088a92269b1b21c0d19be",
+          "ci/project/test_p06_timing.py": "d4bd5d8fc64aef4007686a15620164f75ae9cff17a562ee4afa48cd7e85d1034",
+          "sw/runtime/ai/mlp_runtime.cpp": "0dab325434c513b85b66b108ca3b896304ab797252b9fd01919435fc8655ddd1",
+          "tests/regression/ai_mlp/main.cpp": "1abf4706aaa5265a4ddd959587d2095e2a01f32ad6b1ca94d30fffd8e562eb9b"
+        },
+        "scratch_artifacts": [
+          "p06-audit/agents/w02_a5-boundary-probe.json",
+          "p06-audit/agents/w02_a5.json"
+        ],
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Independent review of timing containment implementation and tests; read-only production.",
+        "wave": 2
+      },
+      "task_name": "/root/w02_a5",
+      "wave": 2
+    },
+    {
+      "assignment": 6,
+      "completed_receipt_sha256": "f975990d57a27f886c47a725d0910f8a087e47f671968b13b09f1fdf3e9a1998",
+      "receipt": {
+        "agent": "/root/w02_a6",
+        "assignment": 6,
+        "changed_files": [
+          "docs/designs/native_baseline_analysis_v1.md"
+        ],
+        "commands": [
+          "Read AGENTS.md, ci/project/p06_analyze.py, timing checks in p06_records.py, prior analyzer design note, qualification audit and archive-index.json.",
+          "Checked all 8 relative Markdown references resolve to files.",
+          "Validated the documented shell example with bash -n without executing it.",
+          "Matched both documented archive paths/digests and source revision to archive-index.json.",
+          "Confirmed exact decimal Fraction conversion and unchanged 1000 ns allowance in current validator source.",
+          "Checked document for trailing whitespace."
+        ],
+        "file_sha256": "9ebec7ff6818ab2ebeae950a5c11bdc06023c64c150e81894c2a1e5d544e561a",
+        "findings": [
+          "Documented exact two-format replay and compatibility behavior, six implemented per-sample metric formulas, measured-only statistics, unavailable/zero handling and exclusive output creation.",
+          "Kept archived data review distinct from new execution, provenance authentication, gate acceptance, optimization and physical measurements.",
+          "Documented disjoint timing aggregates and exact decimal process bound, plus the reproduced process-supervisor delay limitation."
+        ],
+        "limitations": [
+          "No test suite or analyzer execution was repeated for this documentation-only assignment.",
+          "No production, test, manifest, status or acceptance file changed; no commit or publication attempted."
+        ],
+        "result": "Documentation complete; all stated documentation checks passed.",
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Document the implemented complete native baseline analysis contract and original-archive reproduction command.",
+        "wave": 2
+      },
+      "task_name": "/root/w02_a6",
+      "wave": 2
+    },
+    {
+      "assignment": 1,
+      "completed_receipt_sha256": "7c2b2a84ecda48a7286eb239f1da87ab2abcc3dc5a719151f750ed4e00c9f546",
+      "receipt": {
+        "agent": "/root/w03_a1",
+        "assignment": 1,
+        "changed_files": [
+          "ci/project/test_p06_timing.py"
+        ],
+        "commands": [
+          "Read AGENTS.md, prior independent timing receipt/probe, p06_records.py duration validation and existing timing tests.",
+          "python3 -m unittest discover -s ci/project -p test_p06_timing.py",
+          "git diff --check"
+        ],
+        "findings": [],
+        "implementation": [
+          "Added lifecycle boundary acceptance at 130000 ns and rejection at 130001 ns for recorded duration 0.000129 seconds, in both formats.",
+          "Added the same exact boundary checks for the observed context span, independently of the lifecycle aggregate.",
+          "Added explicit rejection cases for boolean, NaN, positive/negative infinity and string process durations before decimal conversion.",
+          "Retained all eight earlier timing regression methods."
+        ],
+        "limitations": [
+          "Synthetic host data only; no GPU, RTL or physical execution.",
+          "No production code, other repository file, commit or remote reference changed."
+        ],
+        "logs": {
+          "w03_a1-timing-tests.log": "a2cf5895ea3f3972c0f56dfc71514be5a7e74693106553587429c3309e47edff"
+        },
+        "overall_assignment": 13,
+        "result": "All 11 timing tests pass. Exact decimal lifecycle and context bounds accept the unchanged allowance and reject one nanosecond beyond it.",
+        "review": {
+          "disposition": "pass",
+          "exact_decimal_boundary": "Fraction(str(duration)) interprets the retained decimal value exactly; scaling by integer 1000000000 and adding integer 1000 leaves the documented rounding allowance unchanged.",
+          "scope": "Reviewed root-authored p06_records.py change; this assignment modified only the timing test module.",
+          "type_safety": "The existing exact int/float type, finite-value and bounded-duration guards execute before Fraction conversion; invalid types and nonfinite inputs are rejected without coercion."
+        },
+        "task": "Append exact decimal process-boundary regressions and independently review the Fraction conversion.",
+        "tested_source_hashes": {
+          "ci/project/p06_records.py": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7",
+          "ci/project/test_p06_timing.py": "97e00af2b899e903cb86a8f6dd491ba49cf9bb90b28e7c69f50cd925ce6583e1"
+        },
+        "tests": {
+          "command": "python3 -m unittest discover -s ci/project -p test_p06_timing.py",
+          "duration_seconds": 28.297,
+          "exit_code": 0,
+          "outcome": "pass",
+          "tests_run": 11
+        },
+        "wave": 3
+      },
+      "task_name": "/root/w03_a1",
+      "wave": 3
+    },
+    {
+      "assignment": 2,
+      "completed_receipt_sha256": "f0a80a51d9b2be145fa9822de3d9b7701af9086abb54583b804a18f857a21c51",
+      "receipt": {
+        "agent": "/root/w03_a2",
+        "assignment": 2,
+        "changed_files": [
+          "ci/project/test_p06_analysis_metrics.py"
+        ],
+        "commands": [
+          "Read AGENTS.md, canonical current status/backlog/acceptance/P06 phase state, p06_analyze.py and existing analyzer/sample tests.",
+          "python3 -m unittest discover -s ci/project -p test_p06_analysis_metrics.py -v",
+          "git diff --check"
+        ],
+        "coverage": [
+          "All six metric values and units checked against hand-derived and Fraction references.",
+          "Ratios reduced from individual samples; distinct test values detect ratio-of-medians and ratio-of-totals substitutions.",
+          "Population deviation independently derived with exact rational intermediates.",
+          "Warmup retained but excluded from every measured statistic.",
+          "Unsigned-64-sized raw operands and larger derived request-byte integers remain exact, including extrema and small spread.",
+          "Unavailable counters differ from zero; unavailable and zero-denominator ratio reasons remain distinct.",
+          "One unavailable measured metric suppresses its statistics instead of silently using the other four samples.",
+          "Raw host durations and overlapping host intervals remain unchanged; returned nested timing/accounting objects are independent copies.",
+          "Boolean, fractional, negative, nonfinite and textual metric operands are not silently coerced."
+        ],
+        "findings": [],
+        "limitations": [
+          "Synthetic unit inputs isolate post-replay arithmetic and are not qualified native packets.",
+          "No archives regenerated or replayed, native/RTL execution performed, production files edited, or commits created."
+        ],
+        "log": {
+          "path": "p06-audit/agents/w03_a2-tests.log",
+          "sha256": "236c0db8532cc170ce8723d08303ca33260ac3e468e037e416e1fc61d249d4aa"
+        },
+        "result": "Ten lightweight tests passed; no production arithmetic defect found in this bounded review.",
+        "task": "Independent lightweight metric arithmetic and reduction regression tests for full-matrix P06 analysis.",
+        "tested_source_hashes": {
+          "ci/project/p06_analyze.py": "fb4bee2291748c2d12701f7b25c4830db2c8380d28738bca8bb763f07279c783",
+          "ci/project/p06_records.py": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7",
+          "ci/project/test_p06_analysis_metrics.py": "a2198451cf4a5366c09f1e9682e1580aec9440152b9a34e648e22bcde0fe70c2"
+        },
+        "tests": {
+          "command": "python3 -m unittest discover -s ci/project -p test_p06_analysis_metrics.py -v",
+          "duration_seconds": 0.003,
+          "exit_code": 0,
+          "outcome": "pass",
+          "tests_run": 10
+        },
+        "wave": 3
+      },
+      "task_name": "/root/w03_a2",
+      "wave": 3
+    },
+    {
+      "assignment": 3,
+      "completed_receipt_sha256": "8dc977de16589adcfedb43836cfb59c27047317d3244a74016a9b08bcd42bf3f",
+      "receipt": {
+        "agent": "/root/w03_a3",
+        "assignment": 3,
+        "changed_files": [
+          "ci/project/test_p06_analysis_compatibility.py"
+        ],
+        "commands": [
+          "Read AGENTS.md, current project status/backlog/acceptance and native baseline analysis contract, and p06_analyze._compatible.",
+          "python3 -m unittest discover -s ci/project -p test_p06_analysis_compatibility.py",
+          "git diff --check -- ci/project/test_p06_analysis_compatibility.py"
+        ],
+        "findings": [
+          "No production defect found in the reviewed compatibility boundary.",
+          "Tool path relocation is accepted while names, hashes and sizes remain checked; format-specific bindings and binaries are preserved separately.",
+          "Source revision/tree/pins/submodule/source-file identity, dependency identities, exact manifest bytes, experiment policies, hardware maps and hosted-run identities cannot be mixed."
+        ],
+        "limitations": [
+          "All inputs are small synthetic packet-shaped data at the post-replay boundary; archive integrity and individual record validation remain covered by separate end-to-end tests.",
+          "No GPU, RTL, physical hardware, new native execution or acceptance decision.",
+          "No production, document or pre-existing test file was modified."
+        ],
+        "log_sha256": "8c4b1532288f3c2237a75b4778a19116380135ed2658033225c3d1a1a8446867",
+        "result": "Added ten focused compatibility tests; all passed.",
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Independent lightweight post-replay cross-format compatibility tests.",
+        "tested_source_hashes": {
+          "ci/project/p06_analyze.py": "fb4bee2291748c2d12701f7b25c4830db2c8380d28738bca8bb763f07279c783",
+          "ci/project/test_p06_analysis_compatibility.py": "6b22842d3633141594e02d06b306c3e45236842047f87785875bb67f3e585a46"
+        },
+        "tests": {
+          "duration_seconds": 0.005,
+          "exit_code": 0,
+          "log": "w03_a3-tests.log",
+          "outcome": "pass",
+          "tests_run": 10
+        },
+        "wave": 3
+      },
+      "task_name": "/root/w03_a3",
+      "wave": 3
+    },
+    {
+      "assignment": 4,
+      "completed_receipt_sha256": "a871260383c3bbbd9beb23c159999238595c88b62f37ed62e7852cf4b66a7384",
+      "receipt": {
+        "agent": "/root/w03_a4",
+        "assignment": 4,
+        "changed_files": [
+          "docs/project/evidence/p06-baseline/reviews/audit_sources.py",
+          "docs/project/evidence/p06-baseline/reviews/source-provenance.json"
+        ],
+        "commands": [
+          {
+            "command": "python3 docs/project/evidence/p06-baseline/reviews/audit_sources.py --repo REPO --vendor-root SCRATCH/p06-audit/vendor-source --output REPO/docs/project/evidence/p06-baseline/reviews/source-provenance.json",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "python3 -O docs/project/evidence/p06-baseline/reviews/audit_sources.py --repo REPO --vendor-root SCRATCH/p06-audit/vendor-source --output SCRATCH/p06-audit/agents/w03_a4-optimized.json",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "Compare normal/optimized report JSON and all per-file checks against previous independent audit; inspect AST for removable assertions; git diff --check",
+            "exit_code": 0,
+            "result": "pass"
+          }
+        ],
+        "findings": [
+          "Both original archive identities match the reviewed index and fixed external digests.",
+          "All 979 source bodies per format match independently fetched immutable Git content with exact category counts.",
+          "All five top-level gitlinks match; three unrelated nested CVFPU gitlinks remain explicitly unverified.",
+          "Source checks remain active under Python optimization and produce identical results.",
+          "Packaged report omits absolute machine paths and shares its identical per-file proof inventory across both format results."
+        ],
+        "limitations": [
+          "This is retained source-to-Git comparison, not native execution or phase acceptance.",
+          "The reviewed archive digests and source revision are explicit inputs pinned in this auditor; GitHub origin is a separate review.",
+          "Three nested CVFPU gitlinks are recorded but not independently checked; no retained source body falls under them.",
+          "FetchContent tags were resolved during the original review; retained headers match those immutable commits, but historical tag immutability is not established.",
+          "Dependency binary construction, toolchain origin and system support files are outside this source-byte comparison.",
+          "Every retained body and its inventory is checked; this does not prove the producer retained every possible build input."
+        ],
+        "preserved_prior_failure": [
+          "p06-audit/agents/w01_a4-initial.py",
+          "p06-audit/agents/w01_a4-source-audit-initial.log"
+        ],
+        "result": "pass",
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Package and execute reproducible original-baseline source-to-Git audit",
+        "tested_hashes": {
+          "docs/project/evidence/p06-baseline/reviews/audit_sources.py": "5b6816aa06f76366488f2a87839bf9164cc3704a35fcd48fe08dff23b0969ec4",
+          "docs/project/evidence/p06-baseline/reviews/source-provenance.json": "4ecee49090e1580e7f96454fa80e767fd3863dad649285b6e4411c9debafea29"
+        },
+        "wave": 3
+      },
+      "task_name": "/root/w03_a4",
+      "wave": 3
+    },
+    {
+      "assignment": 5,
+      "completed_receipt_sha256": "97407c52b17246794875309fa009152c47bb3075a8ded51123edbba1dfa01d51",
+      "receipt": {
+        "agent": "/root/w03_a5",
+        "artifacts": [
+          {
+            "path": "docs/project/evidence/p06-baseline/reviews/audit_measurements.py",
+            "sha256": "a30be7adcb05c7e623fd3393d7e93c87b4aa9df2986377a4ed6fd84d64a05030",
+            "size_bytes": 31357
+          },
+          {
+            "path": "docs/project/evidence/p06-baseline/reviews/measurement-review.json",
+            "sha256": "e03131b63de2d19b92c67a8ff8b58821db3d8abffc00987ae455c3ccea627fdd",
+            "size_bytes": 135472
+          }
+        ],
+        "assignment": 5,
+        "assignment_number": 17,
+        "changed_files": [
+          "docs/project/evidence/p06-baseline/reviews/audit_measurements.py",
+          "docs/project/evidence/p06-baseline/reviews/measurement-review.json"
+        ],
+        "commands": [
+          {
+            "command": "Read AGENTS.md, project status/roadmap/backlog/acceptance policy, original archive index, frozen contract/fixtures, prior w01_a5.py and receipt, and relevant report/summary schemas as data.",
+            "result": "pass"
+          },
+          {
+            "command": "python3 docs/project/evidence/p06-baseline/reviews/audit_measurements.py --repo . --output docs/project/evidence/p06-baseline/reviews/measurement-review.json",
+            "cwd": "/workspace/scratch/00f618e398e9/AI-GPU",
+            "exit_code": 0,
+            "result": "pass",
+            "totals": {
+              "assembled_output_words": 768,
+              "host_bridge_words": 768,
+              "launches": 72,
+              "measurement_assembled_output_words": 640,
+              "measurement_host_bridge_words": 640,
+              "measurement_launches": 60,
+              "measurement_native_output_words": 3840,
+              "measurement_processes": 40,
+              "native_output_words": 4608,
+              "processes": 48,
+              "warmup_assembled_output_words": 128,
+              "warmup_host_bridge_words": 128,
+              "warmup_launches": 12,
+              "warmup_native_output_words": 768,
+              "warmup_processes": 8
+            }
+          },
+          {
+            "command": "AST parse audit_measurements.py and require zero ast.Assert nodes.",
+            "result": "pass"
+          },
+          {
+            "command": "python3 -O <repo>/docs/project/evidence/p06-baseline/reviews/audit_measurements.py --repo <repo> --output <temporary>/optimized.json; compare bytes with retained measurement-review.json.",
+            "exit_code": 0,
+            "result": "pass; byte-identical report"
+          },
+          {
+            "command": "python3 -O <repo>/docs/project/evidence/p06-baseline/reviews/audit_measurements.py --repo <repo> --output <repo>/docs/project/evidence/p06-baseline/reviews/measurement-review.json",
+            "exit_code": 1,
+            "result": "expected rejection: output already exists; retained report bytes unchanged"
+          },
+          {
+            "command": "Copy only the archive index, two original archives, contract and three frozen fixtures to a temporary relocated repository; run audit_measurements.py from a separate working directory with --repo <temporary-repo> --output <temporary>/relocated.json; compare retained output bytes.",
+            "exit_code": 0,
+            "result": "pass; byte-identical report"
+          },
+          {
+            "command": "Flip one byte in the temporary fp16 archive only; run python3 -O audit_measurements.py --repo <temporary-repo> --output <temporary>/invalid.json.",
+            "exit_code": 1,
+            "result": "expected rejection: external archive digest differs; no output created"
+          }
+        ],
+        "completed_task": true,
+        "findings": [
+          {
+            "confidence": "high",
+            "evidence_type": "executed-data-audit",
+            "finding": "Both original archives match the supplied archive index and reconcile 48 processes, 72 launches, 4608 native output words, 768 packed host bridge words, and 768 assembled output words; measurement-only totals are 40 processes and 60 launches.",
+            "severity": "F0"
+          },
+          {
+            "confidence": "high",
+            "evidence_type": "executed-data-audit",
+            "finding": "The two archived measured-only summaries and retained summary snapshots exactly match independent reconstruction of all counter, process, host timing, dispatch, sampling, accounting, boundary and limitation fields. Every workload has one warmup followed by five measurements; all 45 counters are identical across its six samples, with 33 available and 12 explicitly null.",
+            "severity": "F0"
+          },
+          {
+            "confidence": "high",
+            "evidence_type": "executed-data-audit",
+            "finding": "Frozen matmul outputs, MLP hidden/output bits, packed bridge words, live native stage inputs and weight bytes, cleanup/resource restoration, command success, source identity fields, and sample log hashes all match.",
+            "severity": "F0"
+          },
+          {
+            "confidence": "high",
+            "evidence_type": "retained-evidence-limitation",
+            "finding": "Historical process durations include supervisor monitoring and cleanup latency. There is no retained exact process-exit timestamp, so no retrospective subtraction or fine-grained speed attribution is claimed.",
+            "severity": "F1"
+          },
+          {
+            "confidence": "high",
+            "evidence_type": "executed-cli-validation",
+            "finding": "The CLI works on a relocated minimal repository, uses explicit failures with no assert statements, produces byte-identical output with python -O, rejects a damaged original archive under python -O without output, and refuses to overwrite existing output.",
+            "severity": "F0"
+          }
+        ],
+        "limitations": [
+          "Compares original raw words with existing independent frozen fixtures; does not regenerate their arithmetic.",
+          "Reads original ZIP members as data without extraction, importing archive helpers, or executing archive code or binaries.",
+          "Archive identity is checked against the supplied archive index; this audit does not independently authenticate GitHub origin or rebuild source.",
+          "Native execution belongs to the archived source revision; this data audit is not a new native execution or an acceptance decision.",
+          "Whole-context SimX counters cannot identify individual model-stage costs or physical speed, bandwidth, power or energy.",
+          "Retained process duration includes supervisor monitoring and cleanup latency; no exact process-exit timestamp was retained, so that delay cannot be removed retrospectively.",
+          "No observer, nested host interval or estimated supervisor delay is subtracted from retained process duration.",
+          "Warmup is a separate fresh process and does not warm later device contexts; summaries use all five measurement samples without outlier removal.",
+          "P06-A02/A03, vendor integration, native RTL performance, synthesis and physical hardware measurements remain separate obligations.",
+          "No production, acceptance or README files were changed by this assignment.",
+          "No commit, push, source rebuild, new native GPU execution, or independent GitHub origin authentication was performed.",
+          "The optimized and relocated CLI checks used disposable temporary copies; originals and the retained review were unchanged."
+        ],
+        "result": "pass_with_documented_measurement_limitations",
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Package and run a portable independent raw measurement auditor for the original P06-A01 archives.",
+        "wave": 3
+      },
+      "task_name": "/root/w03_a5",
+      "wave": 3
+    },
+    {
+      "assignment": 6,
+      "completed_receipt_sha256": "8a37adc939dc4e0bea79aec55e5c7995d581d3ed340fd2d24f34cb88b72b482a",
+      "receipt": {
+        "agent": "/root/w03_a6",
+        "assignment": 6,
+        "assignment_sequence": "18/60",
+        "base_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "changed_files": [],
+        "checks_executed": [
+          {
+            "description": "Line-by-line analyzer/design review and security/failure-path inspection of its trusted dependencies.",
+            "kind": "static-review",
+            "outcome": "pass"
+          },
+          {
+            "description": "Read AGENTS.md, review policy, project handoff/backlog and acceptance procedure; inspected HEAD and local changes.",
+            "kind": "worktree-inspection",
+            "outcome": "pass"
+          }
+        ],
+        "completed_at": "2026-11-21T13:51:23.094915+00:00",
+        "coverage": [
+          "Reviewed all 297 lines of ci/project/p06_analyze.py, the full analysis design, and relevant replay/record/contract implementation and archive-reader checks.",
+          "Both inputs require externally supplied original ZIP SHA-256 and the full expected revision. Trusted replay validates raw logs, sample records, compiler/configuration data, retained source descriptors, and summaries before aggregation.",
+          "The analyzer rereads each archive using a fresh digest-verifying ArchiveReader, compares the exact report descriptor to the replay receipt, verifies referenced snapshots, and only returns from the context after the close-time ZIP identity check.",
+          "Between-read replacement with different content fails the unchanged external digest. Replacement with identical bytes retains the same data identity. Open-file or path mutation during either read is checked by file stamps and final hashing.",
+          "Archived code is neither extracted nor executed. Archive paths are canonical and symlink-free; recorded runner paths are validated syntactically. The local archive reader is source-pinned before loading.",
+          "Compatibility checks compare complete source/dependency/contract/manifest data, tool names and binary identities, policies/helpers/hardware macro maps, and hosted identity presence and common workflow/run identity.",
+          "The freshly recomputed combined summary enforces canonical format order, all eight workloads, one warmup and five measurements each, unique command/log identities, one source revision, and the complete 48-process/72-launch matrix.",
+          "Metrics preserve exact integer operands and unavailable-versus-zero meaning. Descriptive reductions include all five measurements and preserve every warmup/outlier record.",
+          "Analyzer source is checked at import and entry/exit; replay validates its local transitive source identities at entry/exit for each archive and the analyzer compares the recorded identities across formats.",
+          "Invalid input and write failures return nonzero through the CLI. Output creation is exclusive and occurs only after analysis and JSON serialization; existing files are preserved.",
+          "Output explicitly declines native execution, acceptance, phase completion and optimization claims, and states provenance, timing, whole-context counter and physical-performance limits."
+        ],
+        "findings": [],
+        "limitations": [
+          "Approval covers the new analyzer and its interaction with existing validators, not independent GitHub-origin/source-to-Git authentication or a P06 acceptance decision.",
+          "No source edits, archive regeneration, new native/RTL execution, commit, or publication performed."
+        ],
+        "receipt_path": "/workspace/scratch/00f618e398e9/p06-audit/agents/w03_a6.json",
+        "reviewed_file_identities": {
+          "ci/project/p06_analyze.py": {
+            "sha256": "fb4bee2291748c2d12701f7b25c4830db2c8380d28738bca8bb763f07279c783",
+            "size_bytes": 16219
+          },
+          "ci/project/p06_contract.py": {
+            "sha256": "1e26e4c63004ee30846a785c03e27d091ac354c18dedf3e621583dcf9d864ace",
+            "size_bytes": 27982
+          },
+          "ci/project/p06_records.py": {
+            "sha256": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7",
+            "size_bytes": 28046
+          },
+          "ci/project/p06_replay.py": {
+            "sha256": "c965b08ec243a7af7faa88bb29652773cdd9562c88e7414585897e3289b46231",
+            "size_bytes": 44347
+          },
+          "ci/project/test_p06_analyze.py": {
+            "sha256": "06bca4641e595ecbd7c42211ddbd434b69ae5d546743d79c3a1c9a10568bf026",
+            "size_bytes": 8440
+          },
+          "docs/designs/native_baseline_analysis_v1.md": {
+            "sha256": "9ebec7ff6818ab2ebeae950a5c11bdc06023c64c150e81894c2a1e5d544e561a",
+            "size_bytes": 8943
+          },
+          "docs/project/evidence/p05-torch/reviews/archive_reader.py": {
+            "sha256": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3",
+            "size_bytes": 16065
+          }
+        },
+        "reviewed_state": "Uncommitted worktree; exact reviewed file identities retained below.",
+        "task": "Independent review of every line of the new production P06 analyzer against its design and trusted replay/archive boundary.",
+        "tests": {
+          "reason": "Parent reports metric/compatibility and ten replay/CLI tests already passed. This review found no concrete additional defect requiring a targeted reproducer, so those tests were not repeated.",
+          "status": "not_run"
+        },
+        "verdict": "scoped_approve",
+        "wave": 3
+      },
+      "task_name": "/root/w03_a6",
+      "wave": 3
+    },
+    {
+      "assignment": 1,
+      "completed_receipt_sha256": "81b11da8f51255337855d47a1e472175e1d637e3cf5a156eed4f3340683f954d",
+      "receipt": {
+        "agent": "/root/w04_a1",
+        "artifacts": [
+          {
+            "path": "docs/project/evidence/p06-baseline/reviews/acceptance-review.json",
+            "sha256": "cdc01ad08629b8044ebb4ca3254cb55a139bc7ff5fa19110ff40afab285a1f6b"
+          },
+          {
+            "path": "docs/project/evidence/p06-baseline/acceptance.json",
+            "sha256": "aced72e481acfea91677c50e8cc4c7245011e7d9208c52b18b83bc0bb4fa7293"
+          }
+        ],
+        "assignment": 1,
+        "blocking_findings": [],
+        "changed_files": [
+          "docs/project/evidence/p06-baseline/reviews/acceptance-review.json",
+          "docs/project/evidence/p06-baseline/acceptance.json"
+        ],
+        "commands": [
+          {
+            "command": "python3 ci/project/p06_analyze.py --fp16-archive /workspace/scratch/00f618e398e9/AI-GPU/docs/project/evidence/p06-baseline/archives/simx-fp16.zip --fp16-sha256 aaf54ff60b8f4f889264fb3efa4249cbdb02a7fad2b20124b4ad0ba9ae2f41dc --bf16-archive /workspace/scratch/00f618e398e9/AI-GPU/docs/project/evidence/p06-baseline/archives/simx-bf16.zip --bf16-sha256 f19f174879e2c1fb120a3328ec919d42b4d67f59ba056ceb6e0b6f5607f4996b --source-revision 84b6ca0ca75fba248ba330642bbf8764db3d459c --output /workspace/scratch/00f618e398e9/p06-audit/agents/w04_a1-analysis.json",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "python3 docs/project/evidence/p06-baseline/reviews/audit_sources.py --repo /workspace/scratch/00f618e398e9/AI-GPU --vendor-root /workspace/scratch/00f618e398e9/p06-audit/vendor-source --output /workspace/scratch/00f618e398e9/p06-audit/agents/w04_a1-source-provenance.json",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "python3 docs/project/evidence/p06-baseline/reviews/audit_measurements.py --repo /workspace/scratch/00f618e398e9/AI-GPU --output /workspace/scratch/00f618e398e9/p06-audit/agents/w04_a1-measurement-review.json",
+            "exit_code": 0,
+            "result": "pass"
+          },
+          {
+            "command": "python3 ci/project/check_project.py",
+            "disposition": "Transient assembly failure retained; these two files are created only after this independent A01 review passes. Final validation is recorded separately.",
+            "errors": [
+              "README.md linked the not-yet-created acceptance.json",
+              "README.md linked the not-yet-created reviews/acceptance-review.json"
+            ],
+            "exit_code": 1,
+            "result": "fail"
+          },
+          {
+            "command": "python3 ci/project/check_project.py",
+            "disposition": "The two transient assembly links now resolve. This check does not replace the separately pending full candidate-source host suite.",
+            "exit_code": 0,
+            "output": "Project governance validation passed (structure and metadata only; no GPU execution certified).",
+            "result": "pass"
+          },
+          {
+            "artifacts_checked": 20,
+            "command": "Python invocation of ci/project/check_project.py:_validate_report with the canonical acceptance ID set",
+            "errors": [],
+            "exit_code": 0,
+            "result": "pass",
+            "scope": "Generic evidence schema and real artifact digests only; roadmap attachment remains separate integration work."
+          }
+        ],
+        "decision": "approve",
+        "findings": [
+          {
+            "assessment": "Retain uncorrected host durations and the reproduced supervisor delay; use modeled counts for this baseline and do not infer fine host speedups.",
+            "disposition": "scope-limited",
+            "id": "P06-HOST-SUPERVISOR"
+          },
+          {
+            "assessment": "All retained bodies are checked. Historical FetchContent tag immutability, exhaustive system-input capture and three unrelated nested CVFPU gitlinks are not independently established.",
+            "disposition": "disclosed",
+            "id": "P06-SOURCE-BOUNDARIES"
+          },
+          {
+            "assessment": "Frozen execution serializes and closes operations. Future resident-context or concurrent-queue experiments require separate ownership/launch-serialization qualification.",
+            "disposition": "out-of-scope-follow-up",
+            "id": "P06-CONCURRENCY"
+          }
+        ],
+        "limits": [
+          "No native GPU, RTL, vendor, synthesis or physical execution during this review.",
+          "No new-source full-host-suite result is claimed.",
+          "No roadmap/status edits, commit, push, human approval or waiver.",
+          "All current hashes are frozen; subsequent changes to a reviewed artifact require explicit review and digest refresh."
+        ],
+        "overall_assignment": 19,
+        "reproduced_reports": [
+          {
+            "byte_identical": true,
+            "path": "/workspace/scratch/00f618e398e9/p06-audit/agents/w04_a1-analysis.json",
+            "retained_equivalent": "docs/project/evidence/p06-baseline/reviews/analysis.json",
+            "sha256": "39a5d0d5ff01605d26947ca0a055185d56c47c636c31ee72757a7c39bc4541a7"
+          },
+          {
+            "byte_identical": true,
+            "path": "/workspace/scratch/00f618e398e9/p06-audit/agents/w04_a1-source-provenance.json",
+            "retained_equivalent": "docs/project/evidence/p06-baseline/reviews/source-provenance.json",
+            "sha256": "4ecee49090e1580e7f96454fa80e767fd3863dad649285b6e4411c9debafea29"
+          },
+          {
+            "byte_identical": true,
+            "path": "/workspace/scratch/00f618e398e9/p06-audit/agents/w04_a1-measurement-review.json",
+            "retained_equivalent": "docs/project/evidence/p06-baseline/reviews/measurement-review.json",
+            "sha256": "e03131b63de2d19b92c67a8ff8b58821db3d8abffc00987ae455c3ccea627fdd"
+          }
+        ],
+        "result": "Every P06-A01 obligation passes independent source, raw measurement and full-matrix analysis review. Generic simulation/simulated acceptance created for the original source only. P06-A02/A03 and phase completion remain open.",
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Independent P06-A01 acceptance review of the complete original cold SimX baseline; no production edits or publication.",
+        "wave": 4
+      },
+      "task_name": "/root/w04_a1",
+      "wave": 4
+    },
+    {
+      "assignment": 2,
+      "completed_receipt_sha256": "edf4cc4a538e818de581299cce9ef2758f59a3204c13b1662bf78ac544c31bff",
+      "receipt": {
+        "agent": "/root/w04_a2",
+        "assignment": 2,
+        "changed_files": [
+          "ci/project/test_p06_published_baseline.py"
+        ],
+        "commands": [
+          "Read AGENTS.md, current status/roadmap/backlog/acceptance, p06_analyze.py, p06_replay.py, retained archive index and saved analysis.",
+          "python3 /workspace/scratch/00f618e398e9/AI-GPU/ci/project/test_p06_published_baseline.py -v",
+          "git diff --check -- ci/project/test_p06_published_baseline.py"
+        ],
+        "coverage": [
+          "Original FP16/BF16 ZIP SHA-256, sizes and relative paths agree with the independent archive index.",
+          "Expected source 84b6ca0ca75fba248ba330642bbf8764db3d459c and retained checkout tree agree with the index; workflow bytes, digest, repository, run ID and attempt agree.",
+          "Full eight-workload matrix retains eight warmup plus forty measured processes and twelve warmup plus sixty measured launches, with unique sample IDs and the five measured repetitions.",
+          "Saved summary, diagnostics, metric definitions, counter-null policy and cross-format compatibility identities are unchanged.",
+          "Saved input identities match after excluding only the local archive pathname; historical reviewer-source hashes are not compared to the current analyzer.",
+          "Forty-five counters retain thirty-three available and twelve unavailable descriptors, with unavailable statistics and samples remaining null.",
+          "Analyzer and hosted identity records make no new execution or acceptance claims; analyzer phase-completion and optimization claims remain false."
+        ],
+        "findings": [],
+        "limitations": [
+          "This reanalyzes prior retained data; it performs no native or RTL execution and grants no acceptance.",
+          "The test resolves its checkout from __file__, needs no Git history, network or vendor tools, and was run from /tmp. A separate shallow clone was not created for this bounded check.",
+          "No production or documentation files were modified, no archive was generated or changed, no phase metadata was asserted, and no commit was created."
+        ],
+        "result": "Seven retained-original regression tests passed. The sole analysis call is cached in setUpClass and uses externally indexed digests and a fixed original revision.",
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Durable host CI coverage of the retained original two-format P06 baseline packet.",
+        "tested_source_hashes": {
+          "ci/project/p06_analyze.py": "fb4bee2291748c2d12701f7b25c4830db2c8380d28738bca8bb763f07279c783",
+          "ci/project/p06_records.py": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7",
+          "ci/project/p06_replay.py": "c965b08ec243a7af7faa88bb29652773cdd9562c88e7414585897e3289b46231",
+          "ci/project/test_p06_published_baseline.py": "92190bbf6303a5f770398e71b0bac359423dc55bd219d67866e91cdc10a7452a",
+          "docs/project/evidence/p06-baseline/archive-index.json": "2d28b4e04bec36b0f77f1a8cf239e943aa67a807e18fc0bcd919ea6422d06692",
+          "docs/project/evidence/p06-baseline/reviews/analysis.json": "39a5d0d5ff01605d26947ca0a055185d56c47c636c31ee72757a7c39bc4541a7"
+        },
+        "tests": {
+          "command": "python3 /workspace/scratch/00f618e398e9/AI-GPU/ci/project/test_p06_published_baseline.py -v",
+          "cwd": "/tmp",
+          "duration_seconds": 12.391,
+          "exit_code": 0,
+          "outcome": "pass",
+          "real_analysis_calls_per_class": 1,
+          "synthetic_archives_generated": 0,
+          "tests_run": 7
+        },
+        "wave": 4
+      },
+      "task_name": "/root/w04_a2",
+      "wave": 4
+    },
+    {
+      "assignment": 3,
+      "completed_receipt_sha256": "39e43c6a2384b2ed2fb1bbeff5617446b357b9679a3da6de2ccf43896aaddbfb",
+      "receipt": {
+        "acceptance_claimed": false,
+        "agent": "/root/w04_a3",
+        "assignment": 3,
+        "assignment_index": 21,
+        "changed_files": [
+          "docs/project/evidence/p06-baseline/README.md"
+        ],
+        "findings": [
+          {
+            "changed_file": "docs/project/evidence/p06-baseline/README.md",
+            "disposition": "Clarified the README to one cluster with one core; root approved this narrow edit.",
+            "evidence": "Both digest-verified original packet macro maps and frozen capability values record NUM_CLUSTERS=1 and NUM_CORES=1.",
+            "id": "P06-DOC-01",
+            "severity": "minor",
+            "summary": "The evidence README phrase one core/cluster left the total cluster count implicit."
+          }
+        ],
+        "integration_followups": [
+          {
+            "disposition": "The two acceptance artifacts were missing during the initial link check, as expected under concurrent ownership. Both existed at the final receipt check; all 26 local Markdown links now resolve. Their substantive acceptance review remains outside this assignment.",
+            "paths": [
+              "docs/project/evidence/p06-baseline/acceptance.json",
+              "docs/project/evidence/p06-baseline/reviews/acceptance-review.json"
+            ]
+          }
+        ],
+        "limitations": [
+          "No independent source-to-Git fetch was repeated; source-body claims were reconciled to the retained source-provenance proof and its auditor.",
+          "No fresh GitHub API observation, GPU, RTL, vendor, synthesis or physical execution performed.",
+          "Acceptance decision and review content were intentionally outside this assignment; only their existence was verified at the final link check."
+        ],
+        "local_links": [
+          {
+            "document": "docs/designs/native_baseline_analysis_v1.md",
+            "exists": true,
+            "target": "../../ci/project/p06_analyze.py"
+          },
+          {
+            "document": "docs/designs/native_baseline_analysis_v1.md",
+            "exists": true,
+            "target": "native_benchmark_v1.md"
+          },
+          {
+            "document": "docs/designs/native_baseline_analysis_v1.md",
+            "exists": true,
+            "target": "../../ci/project/p06_benchmark_contract.json"
+          },
+          {
+            "document": "docs/designs/native_baseline_analysis_v1.md",
+            "exists": true,
+            "target": "../project/evidence/p06-baseline/archive-index.json"
+          },
+          {
+            "document": "docs/designs/native_baseline_analysis_v1.md",
+            "exists": true,
+            "target": "../../ci/project/p06_replay.py"
+          },
+          {
+            "document": "docs/designs/native_baseline_analysis_v1.md",
+            "exists": true,
+            "target": "../project/acceptance.md"
+          },
+          {
+            "document": "docs/designs/native_baseline_analysis_v1.md",
+            "exists": true,
+            "target": "../../ci/project/p06_records.py"
+          },
+          {
+            "document": "docs/designs/native_baseline_analysis_v1.md",
+            "exists": true,
+            "target": "../project/p06-qualification-audit.md"
+          },
+          {
+            "document": "docs/project/p06-qualification-audit.md",
+            "exists": true,
+            "target": "evidence/p06-baseline/README.md"
+          },
+          {
+            "document": "docs/project/p06-qualification-audit.md",
+            "exists": true,
+            "target": "p06-benchmark-audit.md"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "acceptance.json"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "reviews/acceptance-review.json"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "reviews/analysis.json"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "archive-index.json"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "archives/simx-fp16.zip"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "archives/simx-bf16.zip"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "hosted/observation.json"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "hosted/governance.log"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "hosted/prior-attempt.json"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "hosted/prior-failed-governance.log"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "reviews/source-provenance.json"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "reviews/measurement-review.json"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "reviews/timing-summary-conservation.json"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "reviews/supervisor-observation.json"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "../../p06-qualification-audit.md"
+          },
+          {
+            "document": "docs/project/evidence/p06-baseline/README.md",
+            "exists": true,
+            "target": "../../../designs/native_baseline_analysis_v1.md"
+          }
+        ],
+        "native_execution": "not_run",
+        "outcome": "pass_with_minor_clarification",
+        "remaining_documentation_defects": [],
+        "requested_assignment_total": 60,
+        "review_execution_notes": [
+          "An initial read-only metric-check script used output_words for standalone matmul records, causing KeyError; corrected the reviewer script to actual_bits and completed all 48 samples successfully. This was not an implementation or evidence defect."
+        ],
+        "reviewed_files": [
+          {
+            "path": "docs/designs/native_baseline_analysis_v1.md",
+            "sha256": "9ebec7ff6818ab2ebeae950a5c11bdc06023c64c150e81894c2a1e5d544e561a",
+            "size_bytes": 8943
+          },
+          {
+            "path": "docs/project/p06-qualification-audit.md",
+            "sha256": "d51474a1b85a3e9cef5b05b88254e1817daf049c62aa079ba4bd63ed0b5f36cc",
+            "size_bytes": 6994
+          },
+          {
+            "path": "docs/project/evidence/p06-baseline/README.md",
+            "sha256": "a6447a4814b81ac12be240a71198b36fdbb6cfa60c4488a75e18ae84a44f7707",
+            "size_bytes": 7177
+          },
+          {
+            "path": "ci/project/p06_analyze.py",
+            "sha256": "fb4bee2291748c2d12701f7b25c4830db2c8380d28738bca8bb763f07279c783",
+            "size_bytes": 16219
+          },
+          {
+            "path": "ci/project/p06_records.py",
+            "sha256": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7",
+            "size_bytes": 28046
+          },
+          {
+            "path": "docs/project/evidence/p06-baseline/reviews/analysis.json",
+            "sha256": "39a5d0d5ff01605d26947ca0a055185d56c47c636c31ee72757a7c39bc4541a7",
+            "size_bytes": 444488
+          },
+          {
+            "path": "docs/project/evidence/p06-baseline/reviews/measurement-review.json",
+            "sha256": "e03131b63de2d19b92c67a8ff8b58821db3d8abffc00987ae455c3ccea627fdd",
+            "size_bytes": 135472
+          },
+          {
+            "path": "docs/project/evidence/p06-baseline/reviews/source-provenance.json",
+            "sha256": "4ecee49090e1580e7f96454fa80e767fd3863dad649285b6e4411c9debafea29",
+            "size_bytes": 274035
+          },
+          {
+            "path": "docs/project/evidence/p06-baseline/reviews/supervisor-observation.json",
+            "sha256": "3d7880fcaae4162ef4020ba716191fef2121cfc043dfd24c45eda8abd9d8b1e9",
+            "size_bytes": 1360
+          },
+          {
+            "path": "docs/project/evidence/p06-baseline/reviews/timing-summary-conservation.json",
+            "sha256": "9865ce6fbbd9f38b875b7a88a190fa6c4fc13542cc16cc9539b09c85270eb4b9",
+            "size_bytes": 1245
+          },
+          {
+            "path": "docs/project/evidence/p06-baseline/archive-index.json",
+            "sha256": "2d28b4e04bec36b0f77f1a8cf239e943aa67a807e18fc0bcd919ea6422d06692",
+            "size_bytes": 1509
+          }
+        ],
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Independent documentation and numerical-scope review of the three new P06 documents against implementation and retained original evidence.",
+        "verification_scope": [
+          "Read AGENTS.md and relevant canonical project governance before review.",
+          "Read three owned docs and relevant analyzer, validator, native owner/model and supervisor implementation.",
+          "Read retained reports, hosted observations/logs, independent source audit and measurement audit CLIs.",
+          "Used read-only inline Python to validate original archive hashes/sizes, topology, sample metrics/statistics, comparison totals, source-category counts and local links.",
+          "Re-read the narrow README edit; no broad test suite or native execution was run."
+        ],
+        "verified": {
+          "aggregation": "Five measurements per workload; every warm-up retained and validated; count/minimum/maximum/median/population_stddev independently agree. No outlier exclusion, ratio-of-medians, or favorable available-subset reduction.",
+          "cli": "Python API signature, six CLI flags, canonical absolute ZIP paths, exact archive digests, expected revision, optional stdout mode, exclusive output creation, and independent audit CLIs match the implementation.",
+          "counters": "45 counter values per sample, 33 available and 12 null. All six invocations agree within each workload; both formats share all 45 values for corresponding workloads.",
+          "evidence_level": "All three documents keep modeled whole-context counts, host durations, retained-data analysis, independent acceptance, A02 native RTL/parity obligations, A03 synthesis/resource obligations, and physical measurements separate. No optimization, causal bottleneck, hardware throughput, power, energy, FPGA or silicon result is asserted.",
+          "formulas": "All six documented metric formulas match p06_analyze.py. Independently recomputed 288 per-sample metric values across all 48 original samples, exact ratio operands, request-byte multiplication by compiled memory-block bytes, and 48 measured metric statistic records.",
+          "hosted": "Retained hosted observation names six successful workflows at source 84b6ca0ca75fba248ba330642bbf8764db3d459c, including run 44901052221 attempt 1. Governance log confirms 2401 tests in 847.900 s. Failed prior fd7129a governance attempt remains distinct.",
+          "inventory": {
+            "assembled_output_word_comparisons": 768,
+            "bridge_word_comparisons": 768,
+            "measured_launches": 60,
+            "measured_processes": 40,
+            "native_output_word_comparisons": 4608,
+            "total_launches": 72,
+            "total_processes": 48,
+            "warmup_launches": 12,
+            "warmup_processes": 8,
+            "workloads": 8
+          },
+          "largest_vs_smallest": "4096/512 = 8; (6405-5952)/5952 * 100 = 7.610887096774194 percent, correctly rounded to about 7.6 percent.",
+          "numeric_rows": [
+            {
+              "cycles": 5952,
+              "flops": 512,
+              "logical_tensor_bytes": 448,
+              "macroinstructions": 509,
+              "shape": [
+                8,
+                4,
+                8
+              ]
+            },
+            {
+              "cycles": 6339,
+              "flops": 1024,
+              "logical_tensor_bytes": 640,
+              "macroinstructions": 559,
+              "shape": [
+                8,
+                4,
+                16
+              ]
+            },
+            {
+              "cycles": 6405,
+              "flops": 4096,
+              "logical_tensor_bytes": 1792,
+              "macroinstructions": 2208,
+              "shape": [
+                16,
+                8,
+                16
+              ]
+            },
+            {
+              "cycles": 18189,
+              "flops": 5120,
+              "logical_tensor_bytes": 2688,
+              "macroinstructions": 3226,
+              "shape": "batch16 model, [16,8,16] + two [8,4,8] launches"
+            }
+          ],
+          "ownership": "Source confirms ManagedMatmul creates a queue per operation; the frozen model closes each operation before advancing stages. Documentation correctly requires separate ownership/concurrency qualification before relying on reuse or concurrent queues.",
+          "remaining_gates": "P06 remains in_progress; A02/A03, inherited 267 to 283 DSP finding and P01-A03 vendor hw_emu blocker remain outstanding.",
+          "source_counts": {
+            "main_repository": 786,
+            "nested_cvfpu_gitlinks_not_fetched": 3,
+            "ramulator": 50,
+            "softfloat": 7,
+            "spdlog": 99,
+            "top_level_gitlinks": 5,
+            "total_per_format": 979,
+            "yaml_cpp": 37
+          },
+          "source_scope": "Documentation preserves separately resolved FetchContent commits, absent historical tag immutability proof, unchecked unrelated nested CVFPU gitlinks, and distinction between source bytes and binary build provenance.",
+          "supervisor": "Retained synthetic monitor values 114.457-115.577 ms with 100 ms polling, 20.787-21.453 ms with 2 ms polling, and 20.043-25.801 ms direct support the documented approximately 114-116 ms versus 20-26 ms ranges. Original exit timestamps remain unavailable; no retrospective subtraction is claimed.",
+          "timing": "Documented lifecycle sum and stage/bridge/assembly sum match p06_records.py. Exact decimal Fraction conversion retains the single 1000 ns process allowance; waits are accumulated rather than multiplied; nested observers and overlapping event profiles are excluded.",
+          "timing_examples": "The retained independent w01_a3 review supports the two old-reader probes: 7.1 s serial lifecycle in a 4 s process and 9000 ns serial waits in a 3500 ns advance. Conservation evidence retains unchanged summaries for all twelve original model samples.",
+          "topology": "RV64 p02-tfr, SimX timing mode, TFR arithmetic, one cluster, one core, four warps, four threads, issue width one; checked original expanded macros and frozen manifest."
+        },
+        "wave": 4
+      },
+      "task_name": "/root/w04_a3",
+      "wave": 4
+    },
+    {
+      "assignment": 4,
+      "completed_receipt_sha256": "aaecdb761174d7c68c378896130893cba8e810a96d556326d06cd37cf52f488e",
+      "receipt": {
+        "agent": "/root/w04_a4",
+        "assignment": 4,
+        "changed_files": [
+          "README.md",
+          "ROADMAP.md",
+          "docs/project/status.md",
+          "docs/project/backlog.md",
+          "docs/project/phases/p06-performance.md",
+          "docs/project/benchmarks.md",
+          "docs/project/roadmap.json"
+        ],
+        "checks": {
+          "diff_whitespace": "pass",
+          "local_links_and_governance": "pass",
+          "preserved_scope": "P05 current sections and status historical continuations compare byte-for-byte with HEAD.",
+          "protected_svg": "Byte-identical to HEAD and still embedded in README.",
+          "roadmap_delta": "Only P06-A01 evidence reference added; P06 status remains in_progress and all other phase metadata is unchanged.",
+          "stale_current_p06_pending_claims": "Removed awaiting-execution/review, empty-evidence and unmeasured-baseline claims from owned current sections."
+        },
+        "commands": [
+          {
+            "command": "python3 ci/project/check_project.py",
+            "cwd": "/workspace/scratch/00f618e398e9/AI-GPU",
+            "exit_code": 0,
+            "log": "/workspace/scratch/00f618e398e9/p06-audit/agents/w04_a4-governance.log",
+            "result": "pass"
+          },
+          {
+            "command": "git diff --check -- README.md ROADMAP.md docs/project/status.md docs/project/backlog.md docs/project/phases/p06-performance.md docs/project/benchmarks.md docs/project/roadmap.json",
+            "cwd": "/workspace/scratch/00f618e398e9/AI-GPU",
+            "exit_code": 0,
+            "log": "/workspace/scratch/00f618e398e9/p06-audit/agents/w04_a4-diff-check.log",
+            "result": "pass"
+          }
+        ],
+        "file_sha256": {
+          "README.md": "99cef9a18119e886f3c30557dc0df378401e2f68489323e6e97aeb7bde4895b3",
+          "ROADMAP.md": "8e1eb3abafe41082d64d4c82eda6cc03054ab734fcff672c370f5d0c2c1850da",
+          "docs/project/backlog.md": "fa8999997eece93fc1cb4e35a3eb8c30de2dc5a2c2a99d5025388b94cfd0aa5f",
+          "docs/project/benchmarks.md": "a87a71b118b72620861700f927588e63af6f532716ba83c35c2930f464955ad0",
+          "docs/project/phases/p06-performance.md": "fc848f348c48f220c118fc10b9ff1c7429c268d4208975fcb48aa6fbbfcf3d1e",
+          "docs/project/roadmap.json": "693ccfc20e3717ad85156a2ecee9421b7497b8363d5bfb339bef5d9b78de1921",
+          "docs/project/status.md": "05e5930f3adc4b93637098de600467e2e6c5370377feaf051be127533f604ef4"
+        },
+        "findings": [],
+        "limitations": [
+          "Documentation and metadata verification only; no new native/RTL execution or full host suite was performed by this assignment.",
+          "P06 and P06-T01 remain in_progress; P06-A02/A03 remain open. P05 acceptance is unchanged.",
+          "P01-A03 vendor hw_emu, inherited 267-to-283 DSP finding and physical FPGA/silicon obligations remain unresolved.",
+          "Original evidence, protected SVG, implementation, tests and gates were not changed by this assignment.",
+          "No commit or publication performed; root owns integration and authorized publication."
+        ],
+        "overall_assignment": 22,
+        "protected_svg_sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+        "result": "Seven documentation/state files now record independently approved P06-A01 at the original 84b6ca0 / run44901052221 identity, the eight-workload 48-process/72-launch scope, analyzer/timing changes and supervisor timing limitation. Next action is a frozen small-workload amortization experiment with native ownership qualification required before reuse/concurrency claims.",
+        "review_inputs": {
+          "docs/project/evidence/p06-baseline/acceptance.json": "aced72e481acfea91677c50e8cc4c7245011e7d9208c52b18b83bc0bb4fa7293",
+          "docs/project/evidence/p06-baseline/reviews/acceptance-review.json": "cdc01ad08629b8044ebb4ca3254cb55a139bc7ff5fa19110ff40afab285a1f6b"
+        },
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Update current canonical P06 state and documentation after independent acceptance of the original baseline.",
+        "wave": 4
+      },
+      "task_name": "/root/w04_a4",
+      "wave": 4
+    },
+    {
+      "assignment": 5,
+      "completed_receipt_sha256": "c5094f30b2bf44b868516fdece2627c4a9314eb877f312e84b5733ade9865adf",
+      "receipt": {
+        "agent": "/root/w04_a5",
+        "assignment": 5,
+        "blocking_findings": [],
+        "changed_files": [],
+        "checks": {
+          "archive_contents": {
+            "inspection": "Read ZIP member names and text in memory only; no extraction or archived-code execution.",
+            "nontext_or_nul_member_count": 0
+          },
+          "archive_identity": [
+            {
+              "bytes": 3855324,
+              "matches_index_sha256": true,
+              "matches_index_size": true,
+              "members": 1159,
+              "path": "docs/project/evidence/p06-baseline/archives/simx-bf16.zip",
+              "sha256": "f19f174879e2c1fb120a3328ec919d42b4d67f59ba056ceb6e0b6f5607f4996b",
+              "uncompressed_bytes": 16841307
+            },
+            {
+              "bytes": 3854925,
+              "matches_index_sha256": true,
+              "matches_index_size": true,
+              "members": 1159,
+              "path": "docs/project/evidence/p06-baseline/archives/simx-fp16.zip",
+              "sha256": "aaf54ff60b8f4f889264fb3efa4249cbdb02a7fad2b20124b4ad0ba9ae2f41dc",
+              "uncompressed_bytes": 16841198
+            }
+          ],
+          "credentials_and_sensitive_urls": {
+            "candidate_count": 0,
+            "masked_github_authorization_headers": 2,
+            "non_sensitive_runner_path_occurrences": 4049,
+            "observed_url_query_keys": [
+              "id",
+              "v"
+            ],
+            "suspicious_credential_member_names": []
+          },
+          "license_and_provenance": {
+            "changed_attribution_files": [],
+            "removed_readme_attribution_lines": [],
+            "review": "All-rights-reserved candidates were intact existing Intel/SoftFloat BSD notices and fmt MIT-reference notices; generic spdlog hostname documentation was not machine inventory. No proprietary/confidential marker or credential license file was found. Original public-source snapshots remain unchanged.",
+            "tracked_attribution_files_checked": 9
+          },
+          "protected_svg": {
+            "readme_embedding_present": true,
+            "sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+            "unchanged_from_HEAD": true
+          },
+          "publication_binary_inventory": {
+            "changed_or_untracked_binary_files": [
+              "docs/project/evidence/p06-baseline/archives/simx-bf16.zip",
+              "docs/project/evidence/p06-baseline/archives/simx-fp16.zip"
+            ],
+            "only_intended_original_evidence_archives": true,
+            "staged_files_at_review": []
+          }
+        },
+        "commands": [
+          "Read AGENTS.md and current project policy/state.",
+          "Python stdlib in-memory inspection of all scoped text and ZIP member names/text: credential patterns, signed URLs, URL query keys/domains, personal paths, suspicious names, binary magic/text, license markers; manually resolve generic hostname and existing license-header candidates.",
+          "Compare both original ZIP SHA-256 values and byte lengths with archive-index.json.",
+          "Compare tracked LICENSE/NOTICE/COPYING/AUTHORS files and protected SVG with HEAD; check README attribution retention and image embedding.",
+          "Inspect changed/untracked file text/binary identities and staged filenames."
+        ],
+        "completed_at": "2026-11-21T13:58:56.881409+00:00",
+        "limitations": [
+          "Review applies to the exact scoped file hashes above; later additions to the evolving journal require the normal final publication check.",
+          "Credential-pattern and content inspection found no concrete publication blocker; this is not a legal opinion or proof that arbitrary secrets cannot exist.",
+          "No production/acceptance edits, test suite repeats, new GPU/native execution, artifact rewriting, staging, commit or publication."
+        ],
+        "overall_assignment": "23/60",
+        "result": "scoped_pass",
+        "scope": {
+          "outer_files": 24,
+          "reviewed_file_sha256": {
+            "docs/project/evidence/p06-baseline/README.md": "a6447a4814b81ac12be240a71198b36fdbb6cfa60c4488a75e18ae84a44f7707",
+            "docs/project/evidence/p06-baseline/acceptance.json": "aced72e481acfea91677c50e8cc4c7245011e7d9208c52b18b83bc0bb4fa7293",
+            "docs/project/evidence/p06-baseline/archive-index.json": "2d28b4e04bec36b0f77f1a8cf239e943aa67a807e18fc0bcd919ea6422d06692",
+            "docs/project/evidence/p06-baseline/archives/simx-bf16.zip": "f19f174879e2c1fb120a3328ec919d42b4d67f59ba056ceb6e0b6f5607f4996b",
+            "docs/project/evidence/p06-baseline/archives/simx-fp16.zip": "aaf54ff60b8f4f889264fb3efa4249cbdb02a7fad2b20124b4ad0ba9ae2f41dc",
+            "docs/project/evidence/p06-baseline/hosted/governance.log": "5ccb975236e0633cab82bbf55890e66bdb4c1803f33d9b485ff1b804365e3a21",
+            "docs/project/evidence/p06-baseline/hosted/observation.json": "0474cab843ae126da718f66fc521d802591f6b23f38d40250a6e6a965745cbe6",
+            "docs/project/evidence/p06-baseline/hosted/prior-attempt.json": "a42d5f7ac84ee940662c44b95221ffa878e4239e6f883a0a97f6308d60694ee2",
+            "docs/project/evidence/p06-baseline/hosted/prior-failed-governance.log": "a88f0b5d888167766a34cf8950e10b07be72745ac80d9cb483ad4294c91a2575",
+            "docs/project/evidence/p06-baseline/reviews/acceptance-review.json": "cdc01ad08629b8044ebb4ca3254cb55a139bc7ff5fa19110ff40afab285a1f6b",
+            "docs/project/evidence/p06-baseline/reviews/analysis.json": "39a5d0d5ff01605d26947ca0a055185d56c47c636c31ee72757a7c39bc4541a7",
+            "docs/project/evidence/p06-baseline/reviews/audit_measurements.py": "a30be7adcb05c7e623fd3393d7e93c87b4aa9df2986377a4ed6fd84d64a05030",
+            "docs/project/evidence/p06-baseline/reviews/audit_sources.py": "5b6816aa06f76366488f2a87839bf9164cc3704a35fcd48fe08dff23b0969ec4",
+            "docs/project/evidence/p06-baseline/reviews/measurement-review.json": "e03131b63de2d19b92c67a8ff8b58821db3d8abffc00987ae455c3ccea627fdd",
+            "docs/project/evidence/p06-baseline/reviews/source-provenance.json": "4ecee49090e1580e7f96454fa80e767fd3863dad649285b6e4411c9debafea29",
+            "docs/project/evidence/p06-baseline/reviews/supervisor-observation.json": "3d7880fcaae4162ef4020ba716191fef2121cfc043dfd24c45eda8abd9d8b1e9",
+            "docs/project/evidence/p06-baseline/reviews/timing-summary-conservation.json": "9865ce6fbbd9f38b875b7a88a190fa6c4fc13542cc16cc9539b09c85270eb4b9",
+            "docs/project/evidence/p06-baseline/reviews/w01_a3.json": "8933c68eecda5564c65fd892927a51a4373f1e88009540c935050f0da588bfb4",
+            "docs/project/evidence/p06-baseline/reviews/w02_a1.json": "21660110bb409c47729016682dccd731201c1904903041ed898b0f1ebb0ea4d5",
+            "docs/project/evidence/p06-baseline/reviews/w02_a2.json": "c1447f69077229759c72c86d6543728b7ea6c75119017e9903bd3fe6485f0924",
+            "docs/project/evidence/p06-baseline/reviews/w02_a5.json": "8b9f1a3c74f3c0f5cc79e0db92e7de94a45d642768073f881abf88b733088bca",
+            "docs/project/evidence/p06-baseline/reviews/w03_a1.json": "7c2b2a84ecda48a7286eb239f1da87ab2abcc3dc5a719151f750ed4e00c9f546",
+            "docs/project/p06-qualification-agent-execution.json": "8551e26a409b9dc46d7ed0df5cdaff7a2b1e2c1c8f072d52acb0d95f54d649d9",
+            "docs/project/p06-qualification-audit.md": "d51474a1b85a3e9cef5b05b88254e1817daf049c62aa079ba4bd63ed0b5f36cc"
+          },
+          "text_items_including_zip_members": 2340,
+          "zip_members": 2318
+        },
+        "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+        "task": "Publication integrity review of the new original P06 baseline packet and qualification audit/journal.",
+        "wave": 4
+      },
+      "task_name": "/root/w04_a5",
+      "wave": 4
+    }
+  ],
+  "maximum_concurrent_subagents": 3,
+  "requested_agents": 60,
+  "requested_waves": 10,
+  "schema_version": 1,
+  "scope": "Actual completed agent assignments for P06 original baseline qualification and analysis; requested counts are not completion claims.",
+  "starting_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+  "status": "in_progress"
+}

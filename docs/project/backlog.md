@@ -7,24 +7,27 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Start here: P06-T01 native baseline qualification
+## Start here: P06-T01 small-workload amortization experiment
 
-**Current bounded task: P06-T01 — qualify the implemented frozen native baseline.**
-The [audit](p06-benchmark-audit.md),
-[contract](../designs/native_benchmark_v1.md),
-[manifest](../../ci/project/p06_benchmark_contract.json) and
-[runner](../../ci/project/p06_execute.py) fix eight FP16/BF16 matmul/model
-workloads. Each has one warm-up and five measured fresh processes, for
-48 processes / 72 launches (40 measured processes / 60 measured launches).
-The counter table has 45 rows: 33 available and 12 explicitly unavailable.
+**Current bounded task: P06-T01 — freeze one small-workload amortization experiment.**
+[P06-A01 is accepted](evidence/p06-baseline/acceptance.json) for the original
+[run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
+at `84b6ca0ca75fba248ba330642bbf8764db3d459c`. The
+[packet](evidence/p06-baseline/README.md) retains eight FP16/BF16 workloads,
+48 processes / 72 launches (40 measured processes / 60 measured launches),
+and 45 counter rows: 33 available and 12 explicitly unavailable. The
+[qualification audit](p06-qualification-audit.md) and
+[analysis contract](../designs/native_baseline_analysis_v1.md) document independent
+review, the reusable analyzer, stricter timing checks and host timing limitations.
 
-P04 supplies P06's prerequisite; P05 is independent. Run the
-[hosted qualification](../../.github/workflows/p06-baseline.yml), retain failed
-attempts and original artifacts, and obtain independent packet replay before an
-A01 decision. P06 is `in_progress`, its acceptance evidence list is empty, and
-A02/A03 remain open. After an accepted baseline, choose one bounded optimization
-hypothesis from its measurements. Keep the two-job, 4 GiB memory and 15 GiB disk
-prerequisites; a blocked local environment does not waive them.
+Freeze the candidate workload/layout, ownership rule, matched source revisions,
+identical numerical inputs, repetitions and rejection criteria before changing
+native code. Preserve the cold baseline and define any warm-context boundary
+separately. Resolve native multiple-live-operation ownership before reuse or
+concurrency claims; the accepted model serializes and explicitly closes each
+operation. P04 supplies the prerequisite; P05 is independent. P06 and P06-T01
+remain `in_progress`, with A02/A03 open. Keep the two-job, 4 GiB memory and 15 GiB
+disk prerequisites unchanged.
 
 **P02-A03 is accepted, completing P02-T02 and P02.** The
 [acceptance record](evidence/p02-wgmma/processor/acceptance.json),
@@ -297,8 +300,9 @@ completing P03 for the declared six signatures. P04-T01 is complete with
 source-level P04-A01 acceptance. P04-T02 now has accepted A02/A03 execution and
 trace evidence for the fixed model, completing P04 at bounded processor RTL
 scope. P05-A01 now accepts the bounded copying Python binding; P05-T01 remains
-in progress for the scoped framework route. P06-T01 is also in progress for
-hosted qualification of the [frozen native baseline](p06-benchmark-audit.md).
+in progress for the scoped framework route. P06-T01 is also in progress, with
+[P06-A01 accepted](evidence/p06-baseline/acceptance.json) and a small-workload
+amortization experiment next under the [qualification audit](p06-qualification-audit.md).
 Detailed work packages remain in the
 phase guides, the [development audit](p05-binding-audit.md) and the
 [Python binding handoff](p05-entry-handoff.md).
@@ -312,7 +316,7 @@ phase guides, the [development audit](p05-binding-audit.md) and the
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
 | **P04-T02 — Native model execution — complete** | Four clean SimX/native processor RTL × FP16/BF16 variants pass exact intermediate/final comparisons, live-input lineage, native placement and separate host/transfer accounting after independent review. | T01; model runtime lead | [P04-A02](evidence/p04-executor/acceptance-numerics.json), [P04-A03](evidence/p04-executor/acceptance-dispatch.json) |
 | **P05-T01 — Python/custom-op bridge — in progress** | Preserve the accepted copying binding; independently review the existing custom-op implementation's installed dispatch, compatibility and explicit failure evidence before an acceptance decision. | P04; framework integration lead; [handoff](p05-entry-handoff.md) | [P05-A01 accepted](evidence/p05-python/acceptance-binding.json); P05-A02/P05-A03 unearned |
-| **P06-T01 — Measured optimization — in progress** | Qualify the implemented frozen SimX baseline with hosted native execution and independent original-packet replay; then select a measured optimization hypothesis and matched before/after plan. | P04; performance and memory lead; [audit](p06-benchmark-audit.md) | [P06 gates](phases/p06-performance.md): A01 awaits execution/review; A02/A03 open |
+| **P06-T01 — Measured optimization — in progress** | Freeze one small-workload amortization experiment from the accepted cold SimX baseline, with matched before/after criteria; resolve native multiple-live-operation ownership before reuse/concurrency claims. | P04; performance and memory lead; [audit](p06-qualification-audit.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),
 [P04](phases/p04-inference.md), [P05](phases/p05-framework.md) and

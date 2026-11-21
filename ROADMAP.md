@@ -183,8 +183,11 @@ The [handoff](docs/project/p05-entry-handoff.md) preserves the
 [implemented binding contract](docs/designs/python_binding_v1.md).
 P05-A02/A03 remain unearned; no framework version has accepted qualification.
 
-**P06-T01 is now `in_progress`: qualify the implemented frozen native baseline.**
-The [development audit](docs/project/p06-benchmark-audit.md),
+**P06-T01 remains `in_progress`, with
+[P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json) at simulated scope.**
+The original [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
+at `84b6ca0ca75fba248ba330642bbf8764db3d459c` passed independent source,
+numerical, counter and full-matrix analysis review. The
 [benchmark contract](docs/designs/native_benchmark_v1.md),
 [manifest](ci/project/p06_benchmark_contract.json) and
 [runner](ci/project/p06_execute.py) fix eight FP16/BF16 matmul/model workloads.
@@ -193,10 +196,14 @@ Each uses one warm-up and five measured fresh processes, for 48 processes and
 has 45 rows: 33 available and 12 explicitly unavailable. P04 supplies the entry
 dependency; P05 is independent.
 
-P06-A01 awaits the [hosted native matrix](.github/workflows/p06-baseline.yml) and
-independent review of its original artifacts. Its evidence list remains empty;
-P06-A02/A03 remain open, with no optimization or synthesis result claimed.
-After baseline qualification, choose one measured optimization hypothesis.
+The [qualification packet](docs/project/evidence/p06-baseline/README.md),
+[audit](docs/project/p06-qualification-audit.md) and
+[analysis contract](docs/designs/native_baseline_analysis_v1.md) retain the original
+measurements, stricter serial timing validation and supervisor timing limitation.
+P06-A02/A03 remain open. Next, freeze one small-workload amortization experiment
+with matched before/after criteria. Native multiple-live-operation ownership
+must be resolved before any reuse or concurrency claim. No optimization,
+synthesis or physical performance result is established by this SimX baseline.
 P07–P11 remain `not_started`. The
 [executor audit](docs/project/p04-executor-audit.md) preserves the unresolved
 inherited 267 → 283 DSP area-gate failure.

@@ -1,9 +1,45 @@
 # Benchmark protocol
 
-**Status: planned, not measured.** This setup establishes no achieved throughput,
-latency, bandwidth, power, model quality or NVIDIA comparison. A correct answer
-and a fast answer are separate obligations; every speed claim needs both.
+**Status: P06-A01 accepts a frozen cold-context SimX baseline.**
+The [acceptance](evidence/p06-baseline/acceptance.json) is limited to modeled
+cycles/counters, checked logical accounting and retained host observations.
+Physical throughput, latency, bandwidth, power and NVIDIA comparisons remain
+unmeasured. A correct answer and a fast answer are separate obligations;
+every speed claim needs both.
 Apply the [acceptance policy](acceptance.md) and [P06 gates](phases/p06-performance.md).
+
+## Accepted baseline scope
+
+The original [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
+at source `84b6ca0ca75fba248ba330642bbf8764db3d459c` ran three fixed matmul
+shapes and the batch-16 `16 → 8 → 4` model in each of FP16/BF16. The
+[contract](../designs/native_benchmark_v1.md) and
+[manifest](../../ci/project/p06_benchmark_contract.json) freeze eight workloads,
+each with one warm-up and five measured fresh processes: 48 processes and
+72 launches, including 40 measured processes and 60 measured launches.
+Each invocation starts a new device context; this does not establish warm-cache
+or resident-workspace performance. The 45 counter rows retain 33 available
+values and 12 explicit unavailable values.
+
+The [qualification packet](evidence/p06-baseline/README.md) preserves original
+archives, independent numerical/source/counter review and measured-only descriptive
+statistics. The new [analyzer](../../ci/project/p06_analyze.py) follows the
+[analysis contract](../designs/native_baseline_analysis_v1.md), replaying both
+originals before deriving full-matrix diagnostics. Serial lifecycle and advance
+timing totals must fit their enclosing intervals; the original measurements and
+1,000 ns process allowance remain unchanged. Native event profiles overlap host
+waits and are excluded from the serial sums.
+
+The [qualification audit](p06-qualification-audit.md) records a reproduced
+approximately 100 ms supervisor exit-observation delay. Original host durations
+remain intact; an estimated delay must not be subtracted to infer host speedup.
+Whole-context modeled counts include every model launch and cannot establish
+per-kernel latency, a causal bottleneck or physical bandwidth.
+
+Next, freeze one small-workload amortization experiment with matched before/after
+criteria. Resolve native multiple-live-operation ownership before reuse or
+concurrency claims, and define any warm-context boundary separately from the
+accepted cold baseline. P06 and P06-T01 remain `in_progress`; A02/A03 remain open.
 
 ## Small workloads first
 
@@ -14,7 +50,8 @@ Apply the [acceptance policy](acceptance.md) and [P06 gates](phases/p06-performa
 | B3 | Softmax and attention: reductions, synchronization, transfers | `tests/regression/softmax`, `flash_attn`; declare masks, sequence length and precision |
 | B4 | Tiny-model inference: useful end-to-end work | P04's fixed redistributable model; layer checks, dispatch traces and final-output quality |
 
-These are benchmark candidates, not statements that these tests passed here.
+These are broader benchmark candidates; P06 timing acceptance covers only the
+exact suite above.
 Use bounded deterministic cases before scaling; keep nominal, edge and unsupported
 cases in the numerical suite even when the timing subset uses representative inputs.
 No large model downloads or expensive sweeps are authorized by this document.

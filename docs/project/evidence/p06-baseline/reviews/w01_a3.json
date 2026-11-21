@@ -1,0 +1,111 @@
+{
+  "agent": "/root/w01_a3",
+  "wave": 1,
+  "assignment": 3,
+  "task": "Read-only P06 runner, replay and provenance audit; identify concrete validation gaps and original-artifact qualification steps.",
+  "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+  "findings": [
+    {
+      "id": "P06-TIME-01",
+      "severity": "F2",
+      "confidence": "high",
+      "evidence_type": "static-proof plus executable synthetic reproduction",
+      "summary": "Disjoint create, advance and close durations can together exceed the complete process duration while summarize accepts them.",
+      "source": [
+        "ci/project/p06_records.py:_host_timings",
+        "ci/project/p06_records.py:summarize",
+        "tests/regression/ai_mlp/main.cpp:run",
+        "sw/runtime/ai/mlp_runtime.cpp:ManagedMlp::create",
+        "sw/runtime/ai/mlp_runtime.cpp:ManagedMlp::advance",
+        "sw/runtime/ai/mlp_runtime.cpp:ManagedMlp::close"
+      ],
+      "proof": "The app calls create to completion, then one or more nonoverlapping advance calls, then one or more nonoverlapping close calls. advance_ns and close_ns accumulate each scope duration. Existing max(context span, each duration) containment does not constrain their serial sum.",
+      "reproduction": {
+        "accepted": true,
+        "process_duration_ns": 4000000000,
+        "create_advance_close_total_ns": 7100000000,
+        "context_interval_ns": 3905000000
+      },
+      "repair": "Retain the context and individual interval checks; additionally bound create duration + accumulated advance_ns + accumulated close_ns by the process receipt duration plus its existing 1000 ns rounding allowance. Do not sum nested event or stage durations into this top-level sum."
+    },
+    {
+      "id": "P06-TIME-02",
+      "severity": "F2",
+      "confidence": "high",
+      "evidence_type": "static-proof plus executable synthetic reproduction",
+      "summary": "Individually bounded serial child timings can sum to more than their enclosing advance duration.",
+      "source": [
+        "ci/project/p06_records.py:_host_timings",
+        "sw/runtime/ai/mlp_runtime.cpp:ManagedMlp::advance",
+        "sw/runtime/ai/mlp_runtime.cpp:submit_stage",
+        "sw/runtime/ai/mlp_runtime.cpp:compare_stage",
+        "sw/runtime/ai/mlp_runtime.cpp:release_operation",
+        "sw/runtime/ai/mlp_runtime.cpp:bridge",
+        "sw/runtime/ai/mlp_runtime.cpp:assemble"
+      ],
+      "proof": "On a successful trace, advance completes submit/wait/compare/release for each stage serially; each operation is closed before the next stage. Bridge and its comparison, assembly and its comparison use separate scopes. Repeated polling adds disjoint waits to per-stage wait_ns and disjoint enclosing calls to advance_ns. Native event profiles may overlap those waits and must never be added.",
+      "reproduction": {
+        "accepted": true,
+        "advance_ns": 3500,
+        "three_serial_waits_ns": 9000
+      },
+      "repair": "Bound the sum of all three stages submit durations, accumulated waits, comparisons and closes plus bridge, bridge comparison, assembly and output comparison by accumulated advance_ns; preserve existing individual checks."
+    },
+    {
+      "id": "P06-PROVENANCE-OBS",
+      "severity": "F0",
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "summary": "Retained replay deliberately checks internal packet consistency, not authentic repository content or GitHub origin.",
+      "requirement": "Independently record artifact metadata and digests from GitHub; compare every retained source body to its Git blob at the externally supplied revision, including submodule blobs through their pinned commits."
+    }
+  ],
+  "commands": [
+    "Read AGENTS.md, all ci/project/p06*.py modules, test_p06_replay.py, test_p06_records.py, .github/workflows/p06-baseline.yml and model execution scopes with cat/sed/rg.",
+    "PYTHONPATH=ci/project python3 inline synthetic lifecycle-time probe: accepted 7.1 s serial work in a 4.0 s process.",
+    "PYTHONPATH=ci/project python3 inline synthetic child-time probe: accepted 9000 ns serial waits in a 3500 ns advance.",
+    "python3 /workspace/scratch/00f618e398e9/p06-audit/agents/w01_a3_probe.py: reproduced both acceptance defects.",
+    "Read original FP16/BF16 archives with zipfile as data; checked proposed aggregate bounds on all twelve retained model samples.",
+    "python3 -m unittest discover -s ci/project -p test_p06_records.py: 23 tests passed in 40.869 seconds, exit 0."
+  ],
+  "original_artifact_probe": {
+    "fp16": {
+      "model_samples_checked": 6,
+      "failures": [],
+      "minimum_top_level_margin_ns": 115350693,
+      "minimum_advance_children_margin_ns": 3918
+    },
+    "bf16": {
+      "model_samples_checked": 6,
+      "failures": [],
+      "minimum_top_level_margin_ns": 15586342,
+      "minimum_advance_children_margin_ns": 4546
+    },
+    "scope": "Data consistency probe on original archives; no independent native reexecution and no acceptance decision."
+  },
+  "qualification_steps": [
+    "Record run 44901052221 attempt 1 job identities and successful conclusions against externally known source 84b6ca0ca75fba248ba330642bbf8764db3d459c.",
+    "Keep both original ZIP files and externally supplied archive digests unchanged; do not rewrite or normalize source records.",
+    "Replay each archive with canonical absolute path using p06_replay.py --archive FILE --sha256 DIGEST --source-revision 84b6ca0ca75fba248ba330642bbf8764db3d459c --format FORMAT --output NEW_PATH.",
+    "Require each report to check 45 commands, 24 processes and 36 launches; combine both formats only after checking one source/configuration contract and distinct format identities.",
+    "Compare all retained source bodies and snapshot inventories to actual Git blobs; validate source tree and all pinned submodule revisions independently.",
+    "Retain replay outputs, source conservation results, actual raw samples, performance analysis, review and host workflow evidence with exact hashes before making P06-A01 acceptance. P06-A02/A03 remain unearned."
+  ],
+  "changed_files": [],
+  "scratch_artifacts": [
+    "p06-audit/agents/w01_a3.json",
+    "p06-audit/agents/w01_a3_probe.py"
+  ],
+  "result": "Two reproducible host-time validation defects; both stricter bounds pass on all twelve original model samples. No repository edits.",
+  "limitations": [
+    "No GPU, RTL, vendor or physical hardware execution performed.",
+    "No original archive contents modified or extracted."
+  ],
+  "tests": {
+    "command": "python3 -m unittest discover -s ci/project -p test_p06_records.py",
+    "tests_run": 23,
+    "duration_seconds": 40.869,
+    "outcome": "pass",
+    "exit_code": 0
+  }
+}

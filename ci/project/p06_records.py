@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from fractions import Fraction
 import hashlib
 import json
 import math
@@ -327,9 +328,11 @@ def _host_timings(numerical, snapshots, workload):
         advance = trace["advance_ns"]
         _require(advance <= after["query_begin_ns"] - trace["create_end_ns"],
                  "model advance duration exceeds its enclosing lifetime")
+        serial_advance = 0
         for name in ("bridge", "bridge_compare", "assembly", "output_compare"):
             _require(trace[name + "_ns"] <= advance,
                      "model " + name + " duration exceeds its enclosing advance duration")
+            serial_advance += trace[name + "_ns"]
         values["model_create"] = trace["create_end_ns"] - trace["create_begin_ns"]
         for name in ("advance", "bridge", "bridge_compare", "assembly", "output_compare", "close"):
             values["model_" + name] = trace[name + "_ns"]
@@ -338,10 +341,15 @@ def _host_timings(numerical, snapshots, workload):
             values[prefix + "submit"] = stage["submit_end_ns"] - stage["submit_begin_ns"]
             _require(values[prefix + "submit"] <= advance,
                      "native submit duration exceeds its enclosing model advance duration")
+            serial_advance += values[prefix + "submit"]
             for name in ("wait", "compare", "close"):
                 _require(stage[name + "_ns"] <= advance,
                          "native " + name + " duration exceeds its enclosing model advance duration")
                 values[prefix + name] = stage[name + "_ns"]
+                serial_advance += stage[name + "_ns"]
+        # Successful advance serializes these host scopes; event profiles overlap them.
+        _require(serial_advance <= advance,
+                 "serial model work exceeds its enclosing advance duration")
     return values
 
 
@@ -462,9 +470,18 @@ def summarize(samples, contract, workloads):
         context_interval = snapshots["end"]["query_end_ns"] - first_observation
         # The bounded runner rounds wall duration to six fractional digits.
         # This tolerance accounts for that rounding, not for removing overhead.
+        # Interpret the retained decimal exactly: binary float multiplication
+        # can place an exact allowance boundary just below its integer value.
+        process_bound_ns = Fraction(str(duration)) * 1_000_000_000 + 1000
         _require(max(context_interval, *observation["host_timings_ns"].values())
-                 <= duration * 1_000_000_000 + 1000,
+                 <= process_bound_ns,
                  "retained host interval exceeds the whole process duration")
+        if workload["kind"] == "mlp":
+            # Creation, accumulated advances and accumulated closes are disjoint.
+            lifecycle = sum(observation["host_timings_ns"]["model_" + name]
+                            for name in ("create", "advance", "close"))
+            _require(lifecycle <= process_bound_ns,
+                     "serial model lifecycle exceeds the whole process duration")
         revisions.add(observation["source_revision"])
         if phase == "measurement":
             per_workload[workload["id"]].append(sample)

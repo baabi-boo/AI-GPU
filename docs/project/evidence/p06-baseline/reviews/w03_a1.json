@@ -1,0 +1,47 @@
+{
+  "agent": "/root/w03_a1",
+  "wave": 3,
+  "assignment": 1,
+  "overall_assignment": 13,
+  "task": "Append exact decimal process-boundary regressions and independently review the Fraction conversion.",
+  "findings": [],
+  "changed_files": [
+    "ci/project/test_p06_timing.py"
+  ],
+  "implementation": [
+    "Added lifecycle boundary acceptance at 130000 ns and rejection at 130001 ns for recorded duration 0.000129 seconds, in both formats.",
+    "Added the same exact boundary checks for the observed context span, independently of the lifecycle aggregate.",
+    "Added explicit rejection cases for boolean, NaN, positive/negative infinity and string process durations before decimal conversion.",
+    "Retained all eight earlier timing regression methods."
+  ],
+  "review": {
+    "disposition": "pass",
+    "exact_decimal_boundary": "Fraction(str(duration)) interprets the retained decimal value exactly; scaling by integer 1000000000 and adding integer 1000 leaves the documented rounding allowance unchanged.",
+    "type_safety": "The existing exact int/float type, finite-value and bounded-duration guards execute before Fraction conversion; invalid types and nonfinite inputs are rejected without coercion.",
+    "scope": "Reviewed root-authored p06_records.py change; this assignment modified only the timing test module."
+  },
+  "commands": [
+    "Read AGENTS.md, prior independent timing receipt/probe, p06_records.py duration validation and existing timing tests.",
+    "python3 -m unittest discover -s ci/project -p test_p06_timing.py",
+    "git diff --check"
+  ],
+  "tests": {
+    "command": "python3 -m unittest discover -s ci/project -p test_p06_timing.py",
+    "outcome": "pass",
+    "exit_code": 0,
+    "tests_run": 11,
+    "duration_seconds": 28.297
+  },
+  "tested_source_hashes": {
+    "ci/project/test_p06_timing.py": "97e00af2b899e903cb86a8f6dd491ba49cf9bb90b28e7c69f50cd925ce6583e1",
+    "ci/project/p06_records.py": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7"
+  },
+  "logs": {
+    "w03_a1-timing-tests.log": "a2cf5895ea3f3972c0f56dfc71514be5a7e74693106553587429c3309e47edff"
+  },
+  "result": "All 11 timing tests pass. Exact decimal lifecycle and context bounds accept the unchanged allowance and reject one nanosecond beyond it.",
+  "limitations": [
+    "Synthetic host data only; no GPU, RTL or physical execution.",
+    "No production code, other repository file, commit or remote reference changed."
+  ]
+}

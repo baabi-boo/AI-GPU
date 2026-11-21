@@ -1,0 +1,60 @@
+{
+  "agent": "/root/w02_a5",
+  "wave": 2,
+  "assignment": 5,
+  "task": "Independent review of timing containment implementation and tests; read-only production.",
+  "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+  "reviewed_files": {
+    "ci/project/p06_records.py": "141f149f9774d06bec61dc4b905b7a87017d1193976088a92269b1b21c0d19be",
+    "ci/project/test_p06_timing.py": "d4bd5d8fc64aef4007686a15620164f75ae9cff17a562ee4afa48cd7e85d1034",
+    "sw/runtime/ai/mlp_runtime.cpp": "0dab325434c513b85b66b108ca3b896304ab797252b9fd01919435fc8655ddd1",
+    "tests/regression/ai_mlp/main.cpp": "1abf4706aaa5265a4ddd959587d2095e2a01f32ad6b1ca94d30fffd8e562eb9b",
+    "ci/project/p04_execution_records.py": "abddfb06fb48bbd064c09d61879b278bca22778f5a8289f4c1ac93fb882b33e0"
+  },
+  "review": {
+    "serial_lifecycle": "Sound: app finishes create, performs successive advance calls, then successive close calls. Their accumulated host durations are disjoint; the destructor close occurs after the retained result and does not inflate the recorded total.",
+    "serial_advance_children": "Sound for successful traces: each submit/wait/compare/release completes before the next stage; bridge and assembly comparisons use separate scopes. Retry waits and release scopes accumulate once within successive advance calls. A successful terminal result has no pending operation for model close to release.",
+    "overlap": "Native event profiles and observer query intervals are intentionally omitted from child/lifecycle sums; they overlap other included scopes.",
+    "integer_extremes": "Record parsing requires uint64 integer values, chronology rejects reversed intervals, Python sums do not wrap, and the existing bounded process duration excludes impossible multi-century saturated totals.",
+    "preservation": "Every preexisting timing/chronology guard remains; process rounding allowance is unchanged at 1000 ns. Output schemas and native source are unchanged.",
+    "tests": "New eight-test module covers both formats, warmups, aggregate corruption, all disjoint child categories, exact bounds, timeout-resume accumulation and zero timers. Independent differential evidence from author is not represented as execution by this reviewer."
+  },
+  "findings": [
+    {
+      "id": "P06-TIME-ROUNDING-01",
+      "severity": "F1",
+      "confidence": "high",
+      "evidence_type": "executable synthetic reproduction",
+      "summary": "Binary float multiplication can reject the exact documented process-rounding allowance.",
+      "details": {
+        "probe": "six-decimal exact rounding boundary",
+        "rounded_process_seconds": 0.000129,
+        "decimal_bound_ns": 130000,
+        "computed_float_bound_ns": 129999.99999999999,
+        "serial_lifecycle_ns": 130000,
+        "accepted": false,
+        "reason": "serial model lifecycle exceeds the whole process duration",
+        "scope": "synthetic host record only; no native execution"
+      },
+      "introduced_by_change": false,
+      "change_relationship": "Inherited process-bound arithmetic is reused by the new lifecycle aggregate; the new tests exercise only a representable 5 us boundary.",
+      "recommendation": "Compute the bound exactly from the retained decimal duration for both guards, preserving the same 1000 ns allowance, and cover a six-decimal duration such as 0.000129. Do not widen the allowance.",
+      "original_artifacts_affected": "No observed effect on the original hosted packets; their retained margins exceed this fractional-nanosecond edge."
+    }
+  ],
+  "commands": [
+    "Read AGENTS.md, git diff -- ci/project/p06_records.py, new timing tests and relevant C++/P04 validator scopes with cat/sed/rg.",
+    "PYTHONPATH=ci/project python3 inline targeted synthetic boundary probe: selected first six-decimal duration with a downward float-conversion artifact, built an otherwise-valid FP16 sample and called verify_sample plus summarize. Probe exited 0 and observed expected rejection at the documented exact bound."
+  ],
+  "changed_files": [],
+  "scratch_artifacts": [
+    "p06-audit/agents/w02_a5-boundary-probe.json",
+    "p06-audit/agents/w02_a5.json"
+  ],
+  "result": "Serial-scope implementation is correct; one narrow inherited numeric-boundary defect identified for correction or explicit follow-up.",
+  "limitations": [
+    "No production code, tests, docs, refs or remote state changed.",
+    "No full suite repeated and no GPU/native/RTL execution performed.",
+    "One targeted synthetic boundary probe only."
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "scope": "synthetic host subprocess only; stdout closed before a 5ms tail",
+  "native_execution": "not_run",
+  "monitored": [
+    {
+      "poll_seconds": 0.1,
+      "duration_seconds": 0.114457,
+      "outcome": "pass",
+      "cleanup_complete": true
+    },
+    {
+      "poll_seconds": 0.1,
+      "duration_seconds": 0.114657,
+      "outcome": "pass",
+      "cleanup_complete": true
+    },
+    {
+      "poll_seconds": 0.1,
+      "duration_seconds": 0.115577,
+      "outcome": "pass",
+      "cleanup_complete": true
+    },
+    {
+      "poll_seconds": 0.002,
+      "duration_seconds": 0.020787,
+      "outcome": "pass",
+      "cleanup_complete": true
+    },
+    {
+      "poll_seconds": 0.002,
+      "duration_seconds": 0.021453,
+      "outcome": "pass",
+      "cleanup_complete": true
+    },
+    {
+      "poll_seconds": 0.002,
+      "duration_seconds": 0.021133,
+      "outcome": "pass",
+      "cleanup_complete": true
+    }
+  ],
+  "direct_elapsed_seconds": [
+    0.02580055999715114,
+    0.021486209996510297,
+    0.020042755000758916
+  ],
+  "source": "ci/project/baseline_process.py",
+  "inference": "The default empty-selector wait can add about one 100ms polling interval after EOF before process termination is noticed.",
+  "limitation": "This establishes a reachable monitor delay; it does not recover exact exit times of historical native samples."
+}

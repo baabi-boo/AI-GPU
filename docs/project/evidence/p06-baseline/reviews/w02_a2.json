@@ -1,0 +1,51 @@
+{
+  "agent": "/root/w02_a2",
+  "wave": 2,
+  "assignment": 2,
+  "task": "Write independent regressions for serial lifecycle and child timing containment; own only test_p06_timing.py.",
+  "findings": [
+    "Forty corruption subcases across six test methods fail against the original 84b6ca0 validator, with no test errors.",
+    "All eight test methods pass against the strengthened validator, including both formats and warmup records.",
+    "Valid positive boundaries retain nested event/query observations, zero timers and accumulated timeout-resume waits without double counting."
+  ],
+  "commands": [
+    "Read AGENTS.md, w01_a3 receipt/probe, P06 test helpers and native model call/timer scopes.",
+    "python3 -m unittest discover -s ci/project -p test_p06_timing.py -v",
+    "In-memory differential harness: git show 84b6ca0ca75fba248ba330642bbf8764db3d459c:ci/project/p06_records.py; load original module and run the same new tests; require six failing methods and no errors.",
+    "git diff --check -- ci/project/test_p06_timing.py"
+  ],
+  "changed_files": [
+    "ci/project/test_p06_timing.py"
+  ],
+  "result": "Implemented eight independent host regression tests. Final corrected-validator suite and original-validator differential expectation both passed.",
+  "tests": {
+    "corrected_validator": {
+      "outcome": "pass",
+      "exit_code": 0,
+      "tests_run": 8,
+      "duration_seconds": 26.545
+    },
+    "original_validator": {
+      "outcome": "expected_failures",
+      "harness_exit_code": 0,
+      "tests_run": 8,
+      "failing_methods": 6,
+      "failing_subcases": 40,
+      "errors": 0,
+      "duration_seconds": 17.354
+    }
+  },
+  "tested_source_hashes": {
+    "ci/project/test_p06_timing.py": "d4bd5d8fc64aef4007686a15620164f75ae9cff17a562ee4afa48cd7e85d1034",
+    "ci/project/p06_records.py": "141f149f9774d06bec61dc4b905b7a87017d1193976088a92269b1b21c0d19be"
+  },
+  "logs": {
+    "w02_a2-final-tests.log": "5a4e8fbfb739a291cc5202f215d24130298bf612a2ddf861be3fefead0af10e5",
+    "w02_a2-original-final-tests.log": "b61695396c94b065c1dd394dae594c4d2fc4c34373fd068221c2d75831675704"
+  },
+  "limitations": [
+    "Synthetic host records only; no GPU or RTL execution.",
+    "No production file changed by this assignment.",
+    "Initial differential driver incorrectly counted subtests as methods and exited 1; final driver classifies six failing methods and preserves the expected 40 failures."
+  ]
+}

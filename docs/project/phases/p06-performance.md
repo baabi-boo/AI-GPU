@@ -1,9 +1,9 @@
 # P06 — Memory and performance scaling
 
 **Goal:** measure and improve useful work per second, byte and joule without
-confusing simulated behavior with physical speed. **P06 is `in_progress`** with
-frozen baseline tooling implemented and native qualification outstanding.
-No performance result or P06 acceptance is established yet. Live state and canonical gates are in
+confusing simulated behavior with physical speed. **P06 is `in_progress`**, with
+[P06-A01 accepted](../evidence/p06-baseline/acceptance.json) for the frozen cold
+SimX baseline and P06-A02/A03 open. Live state and canonical gates are in
 [roadmap.json](../roadmap.json); the accountable role is Performance and memory lead.
 
 ## Entry and boundaries
@@ -19,9 +19,12 @@ No performance result or P06 acceptance is established yet. Live state and canon
 - Do not promise a core count, memory capacity, frequency, TOPS or commercial-GPU
   comparison. Freeze feasible configuration-specific targets before acceptance.
 
-## Current bounded implementation
+## Accepted baseline and next experiment
 
-The [development audit](../p06-benchmark-audit.md) selected a repeated native
+The [qualification audit](../p06-qualification-audit.md) independently qualifies
+the original [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
+at `84b6ca0ca75fba248ba330642bbf8764db3d459c`. The preceding
+[development audit](../p06-benchmark-audit.md) selected this repeated native
 baseline before an optimization. The implemented
 [contract](../../designs/native_benchmark_v1.md),
 [manifest](../../../ci/project/p06_benchmark_contract.json),
@@ -40,18 +43,25 @@ is not established. The counter inventory has **45 rows: 33 available and
 model launches, with host intervals and logical transfer/operation counts
 retained separately.
 
-**Next action:** execute the reviewed
-[hosted qualification](../../../.github/workflows/p06-baseline.yml), preserve
-original artifacts and every failed attempt, and obtain independent replay
-against their supplied digests. Retain the two-job, 4 GiB memory and 15 GiB disk
-prerequisites. Local source/host checks cannot replace native execution or
-justify relaxing a blocked prerequisite. Only after an accepted baseline
-select a bounded optimization hypothesis from its measurements.
+The [packet](../evidence/p06-baseline/README.md) retains original archives,
+source/numerical/counter review and [independent acceptance](../evidence/p06-baseline/reviews/acceptance-review.json).
+The new [analyzer](../../../ci/project/p06_analyze.py) and
+[analysis contract](../../designs/native_baseline_analysis_v1.md) provide
+full-matrix replay and per-sample diagnostics. Stricter serial timing containment
+preserves every original measurement and the existing 1,000 ns process allowance.
+Host durations include supervision with a documented exit-observation limitation;
+no fine-grained host speedup or physical performance is inferred.
 
-P06-A01 awaits that execution and review; its acceptance evidence list remains
-empty. P06-A02/A03 remain open. P04 supplies the entry dependency and P05 is
-independent. The missing P01 vendor `hw_emu` evidence and inherited
-[267 → 283 DSP area-gate failure](../p04-executor-audit.md) remain unresolved.
+**Next action:** freeze one small-workload amortization experiment with matched
+workloads, source revisions, numerical inputs, repetitions and rejection criteria.
+Retain this cold baseline and define any warm-context boundary separately.
+Resolve native multiple-live-operation ownership before reuse or concurrency
+claims; the accepted model serializes and explicitly closes each operation.
+Keep the two-job, 4 GiB memory and 15 GiB disk prerequisites unchanged.
+
+P06 and P06-T01 remain `in_progress`; P06-A02/A03 remain open. P04 supplies the
+entry dependency and P05 is independent. The missing P01 vendor `hw_emu` evidence
+and inherited [267 → 283 DSP area-gate failure](../p04-executor-audit.md) remain unresolved.
 
 ## Ordered work packages
 
@@ -103,5 +113,5 @@ After the P06 gates are accepted, hand P07 the selected configuration,
 constraints, bounded workloads, memory-map assumptions and reproducible reports.
 P07 also requires P01's vendor integration gate. Update [status](../status.md)
 and [backlog](../backlog.md) as each gate earns evidence. The current next action
-remains hosted baseline qualification and independent review; a documented
-board-readiness decision and physical implementation plan follow later.
+is the frozen small-workload amortization experiment described above; a
+documented board-readiness decision and physical implementation plan follow later.
