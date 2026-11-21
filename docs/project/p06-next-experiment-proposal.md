@@ -1,8 +1,15 @@
 # P06 next experiment proposal: serial workspace amortization
 
-**Draft for review; not a frozen acceptance contract or an optimization result.**
-This milestone implements no runtime, runner or benchmark change. P06-A01 retains
-its accepted simulated scope at `84b6ca0ca75fba248ba330642bbf8764db3d459c`; P06-A02/A03 remain open.
+**Warm performance draft for review; not a frozen sampling contract or an
+optimization result.** The ownership prerequisite and a separate correctness
+smoke are now implemented under the
+[frozen serial workspace contract](../designs/serial_matmul_workspace_v1.md).
+The [workspace handoff](p06-workspace-handoff.md) and
+[evidence packet](evidence/p06-serial-workspace/README.md) record their current
+verification scope; full checkpoint integration and fresh native correctness
+execution remain pending. The proposed timing, repetitions and decision criteria
+below are still unfrozen and have not been evaluated. P06-A01 retains its accepted
+simulated scope at `84b6ca0ca75fba248ba330642bbf8764db3d459c`; P06-A02/A03 remain open.
 
 ## Evidence and one hypothesis
 
@@ -29,8 +36,9 @@ Argument/control and module traffic remain separately identified, outside those 
 The new reference must be a reviewed clean descendant of `9036b379e3dbdf2b68d1590ca37a47cbf099b7b4`
 with the common ownership prerequisite and measurement harness, retaining current
 per-operation A/B/D allocation. Its candidate adds only the resident buffer policy.
-Exact commits do not yet exist: pin both, their reviewed diff, source inventories and
-artifact hashes before evaluation. Match tools, dependencies,
+The exact performance reference/candidate commits are not yet pinned: identify
+both, their reviewed diff, source inventories and artifact hashes before
+evaluation. Match tools, dependencies,
 independent compiler records, generated headers, native kernel, RV64 `p02-tfr`
 SimX timing profile, topology, observer and host conditions. Record actual buffer
 addresses/extents independently; allocation policy need not preserve address values.
@@ -42,19 +50,23 @@ baseline or directly comparable to the original process-duration measurements.
 
 ## Ownership prerequisite before reuse
 
-Review an explicit native exclusive-lease contract before implementing reuse.
-The [managed contract](../designs/ai_operator_contract_v1.md#managed-execution-and-completion)
-creates a queue and three buffers per submission; one caller does not prevent
-multiple live operations. Launch setup across queues is not qualified for overlap.
-Require one live context per process and one live operation per context, including
-after successful `wait()`. Reject resubmission until completed explicit operation
-close has drained work and released events/queue; only then return the workspace lease.
-The context owns resident buffers; a live operation retains that context. Owner close
-must remain incomplete while a lease is outstanding. Timeout or partial submission
-retains all necessary ownership; failed cleanup prevents reuse and new submissions.
-These rules are prerequisites to demonstrate, not claims about today's native API;
-the [Python restrictions](../designs/python_binding_v1.md#process-and-concurrency-restrictions)
-do not themselves qualify a new native lease implementation. No concurrency is proposed.
+The [serial workspace contract](../designs/serial_matmul_workspace_v1.md) now
+implements the prerequisite identified by this proposal: one managed context
+reservation per linked runtime instance and one operation lease per context,
+including after successful `wait()`. Completed explicit close drains accepted
+work and releases operation resources before permitting another submission.
+A live operation retains its context and any resident buffers; owner close
+remains incomplete while that operation is live. Timeout and partial submission
+retain required ownership; observed cleanup failure prevents new managed work.
+Non-timeout execution errors survive later successful drain.
+
+Targeted host tests cover direct and real-model composition, allocation failure,
+simultaneous creates and cleanup poisoning. Complete checkpoint integration and
+the separate native correctness matrix remain pending in the
+[workspace packet](evidence/p06-serial-workspace/README.md). The native guard
+does not police raw runtime clients, separately linked copies or concurrent
+methods on one owner; the [Python restrictions](../designs/python_binding_v1.md#process-and-concurrency-restrictions)
+remain separately scoped. No overlap or general native concurrency is proposed.
 
 ## Proposed samples and measurement boundary
 
@@ -101,8 +113,11 @@ batch active cycles. Reject any correctness, ownership, cleanup, provenance, res
 or inherited-gate failure; absent improvement rejects this treatment. Five batches
 support descriptive results only. Preserve failures rather than adjust the protocol.
 
-Next deliverable: independently reviewed manifest, ownership state/failure matrix and
-measurement schema; implementation and native execution follow in a separate milestone.
+Next performance deliverable: an independently reviewed sampling manifest and
+measurement schema, with exact matched source identities and rejection criteria,
+after the workspace correctness checkpoint has been qualified. The implemented
+[correctness manifest](../../ci/project/p06_workspace_contract.json) specifies
+no timing or speedup acceptance and does not freeze this performance proposal.
 P06-A02 needs matched correctness, native RTL and applicable parity/performance evidence;
 A03 needs reviewed target budgets and resource/timing reports.
 Keep two jobs, 4 GiB polled RSS, 15 GiB disk reserve, bounded logs/deadlines, the inherited

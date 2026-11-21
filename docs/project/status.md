@@ -8,11 +8,19 @@ qualifies the eight-workload baseline at `84b6ca0ca75fba248ba330642bbf8764db3d45
 launches. The [qualification audit](p06-qualification-audit.md),
 [packet](evidence/p06-baseline/README.md) and
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
-scope and new validation. P06-A02/A03 remain open. Next, freeze one small-workload
-amortization experiment; resolve native multiple-live-operation ownership before
-any reuse or concurrency claim.
-Resume with the [qualification handoff](p06-qualification-handoff.md) and
-[DRAFT next experiment proposal](p06-next-experiment-proposal.md).
+scope and new validation. P06-A02/A03 remain open.
+
+The [serial workspace prerequisite](../designs/serial_matmul_workspace_v1.md) is
+now implemented: one managed context per linked runtime instance, one operation
+until completed explicit close, sticky execution/cleanup errors, and an opt-in
+320-byte requested A/B/D workspace for `(8,4,8)` in FP16/BF16. Targeted host
+checks pass; the complete integration suite on a frozen new checkpoint and its
+fresh native correctness matrix remain pending in the
+[workspace packet](evidence/p06-serial-workspace/README.md). The next action is
+checkpoint qualification, followed by a separate freeze of warm-context sampling.
+Resume with the [workspace handoff](p06-workspace-handoff.md) and
+[DRAFT performance proposal](p06-next-experiment-proposal.md). No speedup or new
+P06 gate is accepted by the implementation.
 
 **P04 is complete for the fixed tiny-model contract.**
 [P04-A01](evidence/p04-fixture/acceptance.json) retains its accepted source scope;
@@ -81,7 +89,7 @@ the linked reports define the exact accepted scope.
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
 | P04 — tiny-model inference | `complete` | A01 fixed fixture preserved; A02/A03 accept the full four-variant composed-model matrix at native processor RTL scope |
 | P05 — Python/framework bridge | `in_progress` | A01 accepts the bounded copying Python binding on SimX; the custom-op implementation and prior CI still need independent artifact review for A02/A03 |
-| P06 — Memory and performance scaling | `in_progress` | A01 accepts the original eight-workload cold SimX baseline after independent review; A02/A03 remain open |
+| P06 — Memory and performance scaling | `in_progress` | A01 retains the accepted cold SimX baseline; serial ownership/workspace implementation has targeted host checks, with checkpoint/native qualification pending; A02/A03 remain open |
 | P07–P11 | `not_started` | Later hardware, reliability, research and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -90,7 +98,40 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — accepted native performance baseline
+## Latest continuation — serial ownership and fixed workspace
+
+The [development audit](p06-workspace-audit.md) at
+`3235cd59d724663dda1bece20645d5ccf30462e1` found unguarded native context/operation
+coexistence and errors that could be lost after later successful observations.
+The [frozen contract](../designs/serial_matmul_workspace_v1.md) specifies the
+implemented reservation, explicit-close lease and sticky-error behavior.
+Observed cleanup failure poisons new managed work; timeout remains retryable and
+retains all required resources. Raw runtime clients, separate linked copies and
+concurrent methods on one owner remain outside the guard's qualification scope.
+
+`WorkspacePolicy::reusable_single_tile` owns A128/B64/D128 requested bytes for
+`(8,4,8)`; all input and poison writes, the kernel and output read remain per
+operation. Default `per_operation` keeps all six supported format/shape
+signatures. Real MLP, Python, PyTorch and cold-benchmark callers keep their
+default allocation policy; the MLP rejects non-default policy before native open.
+
+The [packet](evidence/p06-serial-workspace/README.md) links source-bound host
+fault/control checks, real model/managed-wrapper composition, simultaneous
+create and allocation-failure tests, strict parser/runner tests and independent
+reviews. Synthetic output and mocked native observations are identified as host
+evidence. The initial full-suite baseline precedes runtime implementation; it
+does not validate the new sources. Complete checkpoint integration and the new
+SimX/processor-RTL correctness executions remain pending.
+
+The separate [correctness runner](../../ci/project/p06_workspace_execute.py) and
+[hosted workflow](../../.github/workflows/p06-workspace.yml) freeze four calls
+with changed inputs per policy/format/backend process. Review actual artifacts against
+the [manifest](../../ci/project/p06_workspace_contract.json) before claiming any
+completed native matrix. The [handoff](p06-workspace-handoff.md) states commands,
+expected counts and observation limits. Warm performance sampling remains a
+[draft](p06-next-experiment-proposal.md); P06-A02/A03 are open.
+
+## Previous continuation — accepted native performance baseline
 
 P04 is complete and supplies P06's accepted native-model prerequisite. P05 is an
 independent track. The [qualification audit](p06-qualification-audit.md) completes
@@ -126,9 +167,10 @@ is inferred. Original-artifact qualification reviews the historical run; fresh
 checkpoint regression execution at `9036b37` is recorded in the
 [implementation validation packet](evidence/p06-analysis-validation/README.md),
 with acceptance kept at its original source. The cold SimX counts motivate a small-workload
-amortization experiment; they do not establish a causal bottleneck or successful optimization. Native
-multiple-live-operation ownership needs separate resolution before reuse or
-concurrency claims.
+amortization experiment; they do not establish a causal bottleneck or successful
+optimization. That continuation identified native multiple-live-operation
+ownership as the prerequisite. Its subsequent implementation and current
+verification scope are recorded in the workspace continuation above.
 
 P06-A02/A03 remain open. This continuation establishes no native-RTL performance,
 synthesis or physical speed result. P01-A03 still lacks qualified vendor `hw_emu`
@@ -822,19 +864,21 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**P06-T01 — freeze one small-workload amortization experiment.** Use the
-[accepted cold baseline](evidence/p06-baseline/README.md) and
-[qualification audit](p06-qualification-audit.md) to specify the workload/layout,
-ownership rule, reference/candidate revisions, identical numerical inputs,
-repetitions and rejection conditions before changing native code. Preserve the
-cold baseline and define any warm-context boundary separately. Resolve native
-multiple-live-operation ownership before reuse or concurrency claims; the
-accepted model serializes and explicitly closes each operation. P06-A02 still
+**P06-T01 — qualify the serial workspace correctness checkpoint.** Follow the
+[workspace handoff](p06-workspace-handoff.md) to finish independent review, run
+the complete host integration suite and execute the frozen native matrix on a
+clean checkpoint. Retain exact source/tool/configuration identities, failed
+attempts, all output words and live-device allocation/release observations. A
+selected variant is not the full matrix, and this smoke is not performance
+evidence. See the current [packet](evidence/p06-serial-workspace/README.md).
+
+Then review and freeze the [warm performance proposal](p06-next-experiment-proposal.md):
+matched reference/candidate revisions, identical numerical inputs, workload/layout,
+repetitions, measurement boundaries and rejection criteria. Preserve the
+[accepted cold baseline](evidence/p06-baseline/README.md) separately. P06-A02 still
 requires matched correctness, native RTL and applicable parity/performance
-evidence; A03 requires a reviewed target budget and synthesis reports. See the
-[phase guide](phases/p06-performance.md) and [backlog](backlog.md).
-Resume with the [qualification handoff](p06-qualification-handoff.md) and
-[DRAFT next experiment proposal](p06-next-experiment-proposal.md).
+evidence; A03 requires a reviewed target budget and synthesis/resource/timing
+reports. See the [phase guide](phases/p06-performance.md) and [backlog](backlog.md).
 
 **Parallel framework task:** preserve the
 [accepted copying binding](evidence/p05-python/acceptance-binding.json) and

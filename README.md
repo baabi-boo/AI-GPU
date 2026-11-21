@@ -33,8 +33,8 @@ archives, build provenance, independent audits and replay instructions. The
 earlier [P04-A01 fixture acceptance](docs/project/evidence/p04-fixture/acceptance.json)
 and [hashed manifest](ci/project/p04_model_manifest.json) remain unchanged.
 
-**Current work: P06-T01 — measured optimization (`in_progress`), with
-[P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
+**Current work: P06-T01 — serial workspace correctness before measured optimization
+(`in_progress`), with [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
 Independent review qualifies the original
 [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
 at source `84b6ca0ca75fba248ba330642bbf8764db3d459c`. The frozen
@@ -54,14 +54,24 @@ their measurements. Host durations include supervision with a documented
 exit-observation limitation; these results establish modeled counters, not
 physical speed.
 
+The [workspace development audit](docs/project/p06-workspace-audit.md) selected
+the ownership prerequisite for that experiment. The internal managed runtime now
+reserves one context per linked runtime instance and one operation until completed
+explicit close, retains execution/cleanup errors, and blocks new work after an
+observed cleanup failure. Its opt-in `(8,4,8)` workspace keeps **320 requested
+A/B/D bytes**; the default six FP16/BF16 signatures and model allocation policy
+remain available. Targeted host checks pass in the
+[workspace evidence packet](docs/project/evidence/p06-serial-workspace/README.md);
+complete checkpoint integration and fresh native execution are still pending.
+
 **P06 and P06-T01 remain `in_progress`; P06-A02/A03 remain open.** P04 supplies
-the prerequisite and P05 is independent. Next, freeze one small-workload
-amortization experiment with matched before/after criteria, as described in the
-[qualification audit](docs/project/p06-qualification-audit.md). Resolve native
-multiple-live-operation ownership before any reuse or concurrency claim; the
-accepted baseline serializes and explicitly closes each operation.
-Resume with the [qualification handoff](docs/project/p06-qualification-handoff.md)
-and [DRAFT next experiment proposal](docs/project/p06-next-experiment-proposal.md).
+the prerequisite and P05 is independent. Next, qualify the frozen correctness
+matrix on a clean checkpoint, then review and freeze the separate warm-context
+measurement protocol. Resume with the
+[workspace handoff](docs/project/p06-workspace-handoff.md),
+[runtime/correctness contract](docs/designs/serial_matmul_workspace_v1.md) and
+[DRAFT performance proposal](docs/project/p06-next-experiment-proposal.md).
+The workspace implementation establishes no speedup or new phase acceptance.
 
 **Parallel work: P05-T01 — the Python/custom-op bridge (`in_progress`).**
 [P05-A01 now accepts the copying Python binding](docs/project/evidence/p05-python/acceptance-binding.json)
@@ -139,9 +149,11 @@ and P07–P11 are not started.
   and [P02 WMMA evidence](docs/project/evidence/p02-wmma/README.md).
 - Read the earlier contract checkpoint: [P02 numerical handoff](docs/project/p02-numerics-handoff.md)
   and [A01 evidence](docs/project/evidence/p02-numerics/README.md).
-- Start the next bounded task: [P06 qualification audit](docs/project/p06-qualification-audit.md),
-  [qualification handoff](docs/project/p06-qualification-handoff.md),
-  [DRAFT next experiment proposal](docs/project/p06-next-experiment-proposal.md),
+- Start the next bounded task: [workspace development audit](docs/project/p06-workspace-audit.md),
+  [workspace handoff](docs/project/p06-workspace-handoff.md),
+  [runtime/correctness contract](docs/designs/serial_matmul_workspace_v1.md),
+  [workspace evidence](docs/project/evidence/p06-serial-workspace/README.md),
+  [DRAFT performance proposal](docs/project/p06-next-experiment-proposal.md),
   [accepted baseline packet](docs/project/evidence/p06-baseline/README.md),
   [benchmark contract](docs/designs/native_benchmark_v1.md),
   [status](docs/project/status.md) and [backlog](docs/project/backlog.md).

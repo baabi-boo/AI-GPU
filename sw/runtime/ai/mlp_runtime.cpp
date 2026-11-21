@@ -103,7 +103,8 @@ ExecutionResult ManagedMlp::create(const ExecutionBinding& binding, const MlpCas
                                   std::unique_ptr<ManagedMlp>* out) noexcept {
   const uint64_t begin = now_ns();
   ExecutionResult result;
-  if (!out || *out || !valid_case_id(input.case_id)) {
+  if (!out || *out || !valid_case_id(input.case_id)
+      || binding.workspace_policy != WorkspacePolicy::per_operation) {
     result.validation = Status::invalid_argument;
     return result;
   }

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "contract_id": "p06-serial-workspace-correctness-v1",
+  "scope": "native-correctness-and-managed-ownership",
+  "profile": "p02-tfr",
+  "xlen": 64,
+  "backends": ["simx", "rtlsim"],
+  "formats": ["fp16", "bf16"],
+  "policies": ["per_operation", "reusable_single_tile"],
+  "shape": [8, 4, 8],
+  "operand_bytes": [128, 64, 128],
+  "sequence": [
+    {"fixture_suffix": "single-dense_boundaries", "poison": 3735928559},
+    {"fixture_suffix": "numerical-zero", "poison": 2143346349},
+    {"fixture_suffix": "single-k03", "poison": 3735928559},
+    {"fixture_suffix": "single-dense_boundaries", "poison": 2143346349}
+  ],
+  "per_process": {
+    "launches": 4,
+    "checked_words": 128,
+    "peak_requested_payload_bytes": 320,
+    "per_operation_buffer_creates": 12,
+    "per_operation_buffer_releases": 12,
+    "resident_buffer_creates": 3,
+    "resident_buffer_releases": 3
+  },
+  "complete_matrix": {
+    "processes": 8,
+    "launches": 32,
+    "checked_words": 1024
+  },
+  "performance_acceptance": false,
+  "phase_acceptance": false
+}

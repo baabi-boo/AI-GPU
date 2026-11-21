@@ -72,7 +72,10 @@ class ManagedRuntimeHostTests(unittest.TestCase):
         self.group("timeout_ownership")
 
     def test_failed_events_preserve_primary_and_cleanup_errors_separately(self):
-        self.group("asynchronous_errors")
+        # Observed cleanup failure poisons the linked runtime for the process lifetime.
+        for ordinal in range(1, 6):
+            with self.subTest(ordinal=ordinal):
+                self.group(f"asynchronous_errors_{ordinal}")
 
     def test_actual_allocated_addresses_are_validated_before_dispatch(self):
         self.group("allocation_validation")

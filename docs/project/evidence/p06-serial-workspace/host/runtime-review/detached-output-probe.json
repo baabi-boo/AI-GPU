@@ -1,0 +1,43 @@
+{
+  "scope": "host-fake-backend-output-lifetime-probe",
+  "command": [
+    "c++",
+    "-std=c++17",
+    "-O1",
+    "-g0",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-fsanitize=undefined",
+    "-fno-sanitize-recover=undefined",
+    "-pthread",
+    "-I",
+    "/tmp/ai-gpu-serial-20261121/ci/project/fixtures",
+    "-I",
+    "/tmp/ai-gpu-serial-20261121/sw/runtime/ai",
+    "-I",
+    "/tmp/ai-gpu-serial-20261121/sw/runtime/include",
+    "-I",
+    "/tmp/ai-gpu-serial-20261121/sw/common",
+    "/tmp/w04-a03-runtime-review-hjsilf7k/detached-output.cpp",
+    "/tmp/ai-gpu-serial-20261121/sw/runtime/ai/runtime.cpp",
+    "/tmp/ai-gpu-serial-20261121/sw/runtime/ai/contract.cpp",
+    "-o",
+    "/tmp/w04-a03-runtime-review-hjsilf7k/detached-output"
+  ],
+  "output": "PASS detached_output words=32 owner_cleanup=3 operation_cleanup=0\n",
+  "exit_code": 0,
+  "sources": {
+    "ci/project/fixtures/p06_workspace_runtime_test.cpp": "fb230045340253c9422d69db7ab711da377b7d689b22e9f5d99a1e1c11ab927b",
+    "ci/project/fixtures/p03_managed_runtime_test.cpp": "fbd9bc31b893f173969152f7f8e1ed198d9364cad7425c43c11ddfd545d78bb0",
+    "sw/runtime/ai/runtime.cpp": "f55365110aed41cfaa290b69da8d91d9fa0ae04063dda591b94ae6ca626cf675",
+    "sw/runtime/ai/runtime.h": "aa76760f2e25c1969b86e08dacf7823c9b441dc82ef2c65f803bdc80ee9f657e",
+    "sw/runtime/ai/contract.cpp": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+    "sw/runtime/ai/contract.h": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+    "sw/runtime/include/vortex2.h": "9738cdf35a7344d6a974b4d78f7b02d3c1e7ce87cfe68ef668b03c8eb1832614",
+    "sw/common/ai_matmul_args.h": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147"
+  },
+  "harness_sha256": "6fa9922020dddf0d9e95899b90247df37294670a2e7f5aecff4b3d66b903e59a",
+  "source_stable": true,
+  "native_execution": false
+}

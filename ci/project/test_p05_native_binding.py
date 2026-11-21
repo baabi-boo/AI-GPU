@@ -423,7 +423,10 @@ def asynchronous_failure(h, ordinal):
     assert operation.close(0) == result
     h.no_output(operation)
     h.blocked_work(lambda: h.submit(session))
-    assert session.close().ok
+    closed = session.close()
+    assert closed.complete and closed.primary == 0 and closed.cleanup == 10
+    assert session.close() == closed
+    h.no_output(operation)
     h.blocked_open(poison=True)
 
 
@@ -431,11 +434,18 @@ def transient_event_failure(h, name):
     session = h.open()
     operation = h.submit(session)
     h.controls.fail(name)
-    assert not operation.close(0).complete
+    result = operation.close(0)
+    assert not result.complete and result.primary == 6 and result.cleanup == 0
     assert h.controls.counter("buffers") == 3
     assert session.pending_operations() == (operation,)
-    assert operation.close(0).ok
+    h.no_output(operation)
+    result = operation.close(0)
+    assert result.complete and result.primary == 6 and result.cleanup == 0
+    assert operation.close(0) == result
+    assert session.pending_operations() == ()
+    h.no_output(operation)
     assert session.close().ok
+    h.no_output(operation)
 
 
 def profile_failure(h, occurrence):
@@ -459,7 +469,10 @@ def explicit_operation_cleanup(h, name, occurrence):
     assert operation.close(0) == result
     h.no_output(operation)
     h.blocked_work(lambda: h.submit(session))
-    assert session.close().ok
+    closed = session.close()
+    assert closed.complete and closed.primary == 0 and closed.cleanup == 10
+    assert session.close() == closed
+    h.no_output(operation)
     h.blocked_open(poison=True)
 
 

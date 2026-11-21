@@ -481,21 +481,22 @@ void timeout_ownership() {
   check(operation->trace().timed_out_waits == 1 && !operation->output_words().empty());
   no_resources();
 }
-void asynchronous_errors() {
-  for (int at = 1; at <= 5; ++at) {
-    auto runtime = create();
-    std::unique_ptr<MatmulOperation> operation;
-    state.async_failure = at;
-    check(launch(runtime.get(), &operation).ok());
-    state.cleanup_failure = true;
-    auto result = operation->close(VX_TIMEOUT_INFINITE);
-    check(result.primary == VX_ERR_DEVICE_LOST && result.cleanup == VX_ERR_INTERNAL && result.complete);
-    check(operation->output_words().empty() && state.queues == 0 && state.buffers.empty());
-    result = operation->close(0);
-    check(result.primary == VX_ERR_DEVICE_LOST && result.cleanup == VX_ERR_INTERNAL);
-    check(runtime->close().ok());
-    reset();
-  }
+void asynchronous_errors(int at) {
+  auto runtime = create();
+  std::unique_ptr<MatmulOperation> operation;
+  state.async_failure = at;
+  check(launch(runtime.get(), &operation).ok());
+  state.cleanup_failure = true;
+  auto result = operation->close(VX_TIMEOUT_INFINITE);
+  check(result.primary == VX_ERR_DEVICE_LOST && result.cleanup == VX_ERR_INTERNAL && result.complete);
+  check(operation->output_words().empty() && state.queues == 0 && state.buffers.empty());
+  result = operation->close(0);
+  check(result.primary == VX_ERR_DEVICE_LOST && result.cleanup == VX_ERR_INTERNAL && result.complete);
+  result = runtime->close();
+  check(result.primary == VX_SUCCESS && result.cleanup == VX_ERR_INTERNAL && result.complete);
+  result = runtime->close();
+  check(result.primary == VX_SUCCESS && result.cleanup == VX_ERR_INTERNAL && result.complete);
+  check(operation->output_words().empty());
 }
 void allocation_validation() {
   for (int mode = 1; mode <= 3; ++mode) {
@@ -663,6 +664,7 @@ int main(int argc, char** argv) {
     return 2;
   }
   const std::string group = argv[1];
+  const std::string asynchronous_prefix = "asynchronous_errors_";
   if (group == "positive_shapes") {
     positive_shapes();
   } else if (group == "invalid_binding") {
@@ -675,8 +677,10 @@ int main(int argc, char** argv) {
     partial_failures();
   } else if (group == "timeout_ownership") {
     timeout_ownership();
-  } else if (group == "asynchronous_errors") {
-    asynchronous_errors();
+  } else if (group.size() == asynchronous_prefix.size() + 1
+             && group.compare(0, asynchronous_prefix.size(), asynchronous_prefix) == 0
+             && group.back() >= '1' && group.back() <= '5') {
+    asynchronous_errors(group.back() - '0');
   } else if (group == "allocation_validation") {
     allocation_validation();
   } else if (group == "destructor_drain") {
@@ -688,4 +692,5 @@ int main(int argc, char** argv) {
   }
   no_resources();
   std::cout << "PASS " << group << " checks=" << checks << '\n';
+  return 0;
 }

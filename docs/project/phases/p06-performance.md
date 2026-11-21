@@ -52,12 +52,24 @@ preserves every original measurement and the existing 1,000 ns process allowance
 Host durations include supervision with a documented exit-observation limitation;
 no fine-grained host speedup or physical performance is inferred.
 
-**Next action:** freeze one small-workload amortization experiment with matched
-workloads, source revisions, numerical inputs, repetitions and rejection criteria.
-Retain this cold baseline and define any warm-context boundary separately.
-Resolve native multiple-live-operation ownership before reuse or concurrency
-claims; the accepted model serializes and explicitly closes each operation.
-Keep the two-job, 4 GiB memory and 15 GiB disk prerequisites unchanged.
+The [serial workspace audit](../p06-workspace-audit.md) selected the ownership
+prerequisite. Its [runtime/correctness contract](../../designs/serial_matmul_workspace_v1.md)
+is now implemented: one context per linked managed-runtime instance, one live
+operation through completed explicit close, sticky execution/cleanup errors, and
+an opt-in `(8,4,8)` workspace retaining 320 requested A/B/D bytes. Default
+allocation preserves all six signatures; the MLP rejects non-default policy.
+The [workspace packet](../evidence/p06-serial-workspace/README.md) records
+targeted host checks and their synthetic/fault-injection limits.
+
+**Next action:** finish checkpoint integration and run/review the frozen native
+correctness matrix through the [workspace handoff](../p06-workspace-handoff.md).
+The new native matrix is pending; existing historical passes do not qualify
+changed sources. Then independently freeze matched workloads, source revisions,
+numerical inputs, repetitions, measurement boundaries and rejection criteria
+for the [draft warm performance experiment](../p06-next-experiment-proposal.md).
+Retain the cold baseline separately. Keep the two-job, 4 GiB memory and 15 GiB
+disk prerequisites unchanged. Neither host tests nor the correctness smoke
+establish a speedup or P06-A02/A03 acceptance.
 
 P06 and P06-T01 remain `in_progress`; P06-A02/A03 remain open. P04 supplies the
 entry dependency and P05 is independent. The missing P01 vendor `hw_emu` evidence
@@ -113,5 +125,6 @@ After the P06 gates are accepted, hand P07 the selected configuration,
 constraints, bounded workloads, memory-map assumptions and reproducible reports.
 P07 also requires P01's vendor integration gate. Update [status](../status.md)
 and [backlog](../backlog.md) as each gate earns evidence. The current next action
-is the frozen small-workload amortization experiment described above; a
+is qualification of a clean workspace checkpoint and its native executions,
+followed by the separate warm performance protocol freeze described above. A
 documented board-readiness decision and physical implementation plan follow later.

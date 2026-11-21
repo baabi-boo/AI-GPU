@@ -12,6 +12,12 @@
 namespace vortex::ai {
 namespace {
 
+// Zero is available, -1 is reserved, and a positive release error is permanent.
+// Keeping these states in one atomic prevents release from racing past poison.
+constexpr int kContextReserved = -1;
+std::atomic<int> managed_context_state{VX_SUCCESS};
+constexpr std::array<uint64_t, 3> kResidentBytes{128, 64, 128};
+
 void remember(vx_result_t result, vx_result_t* first) noexcept {
   if (*first == VX_SUCCESS && result != VX_SUCCESS) {
     *first = result;
@@ -22,6 +28,45 @@ ExecutionResult rejected(Status status) noexcept {
   ExecutionResult result;
   result.validation = status;
   return result;
+}
+
+ExecutionResult context_status(int state) noexcept {
+  ExecutionResult result;
+  if (state == kContextReserved) {
+    result.primary = VX_ERR_TIMEOUT;
+  } else if (state != VX_SUCCESS) {
+    result.primary = VX_ERR_INTERNAL;
+    result.cleanup = static_cast<vx_result_t>(state);
+  }
+  return result;
+}
+
+ExecutionResult reserve_context() noexcept {
+  int expected = VX_SUCCESS;
+  if (managed_context_state.compare_exchange_strong(
+          expected, kContextReserved, std::memory_order_acquire, std::memory_order_acquire)) {
+    return {};
+  }
+  return context_status(expected);
+}
+
+ExecutionResult new_work_status() noexcept {
+  const int state = managed_context_state.load(std::memory_order_acquire);
+  return state == kContextReserved ? ExecutionResult{} : context_status(state);
+}
+
+void poison_context(vx_result_t error) noexcept {
+  if (error != VX_SUCCESS) {
+    int expected = kContextReserved;
+    managed_context_state.compare_exchange_strong(
+        expected, static_cast<int>(error), std::memory_order_release, std::memory_order_relaxed);
+  }
+}
+
+void return_context_reservation() noexcept {
+  int expected = kContextReserved;
+  managed_context_state.compare_exchange_strong(
+      expected, VX_SUCCESS, std::memory_order_release, std::memory_order_relaxed);
 }
 
 bool qualified_id(const std::string& value) noexcept {
@@ -59,28 +104,48 @@ struct RuntimeContext {
   DeviceCapabilities capabilities{};
   ProfileBinding profile{};
   DType dtype = DType::fp16;
+  WorkspacePolicy workspace_policy = WorkspacePolicy::per_operation;
+  std::array<vx_buffer_h, 3> resident_buffers{};
   std::string qualification_id;
   bool enable_profiling = false;
+  bool context_reserved = false;
+  bool operation_leased = false;
+  vx_result_t cleanup = VX_SUCCESS;
   std::vector<uint8_t> image;
 
-  void release(vx_result_t* cleanup) noexcept {
+  void observe_cleanup(vx_result_t error) noexcept {
+    remember(error, &cleanup);
+    poison_context(error);
+  }
+
+  vx_result_t release() noexcept {
+    for (auto& buffer : resident_buffers) {
+      if (buffer) {
+        observe_cleanup(vx_buffer_release(buffer));
+        buffer = nullptr;
+      }
+    }
     if (kernel) {
-      remember(vx_kernel_release(kernel), cleanup);
+      observe_cleanup(vx_kernel_release(kernel));
       kernel = nullptr;
     }
     if (module) {
-      remember(vx_module_release(module), cleanup);
+      observe_cleanup(vx_module_release(module));
       module = nullptr;
     }
     if (device) {
-      remember(vx_device_release(device), cleanup);
+      observe_cleanup(vx_device_release(device));
       device = nullptr;
     }
+    if (context_reserved) {
+      context_reserved = false;
+      return_context_reservation();
+    }
+    return cleanup;
   }
 
   ~RuntimeContext() {
-    vx_result_t ignored = VX_SUCCESS;
-    release(&ignored);
+    release();
   }
 };
 
@@ -100,26 +165,48 @@ struct OperationState {
   bool submitted_all = false;
   bool output_valid = false;
   bool closed = false;
+  bool owns_buffers = true;
+  bool owns_lease = false;
+
+  void observe_cleanup(vx_result_t error) noexcept {
+    remember(error, &result.cleanup);
+    if (context) {
+      context->observe_cleanup(error);
+    }
+    if (error != VX_SUCCESS) {
+      output_valid = false;
+    }
+  }
 
   void release() noexcept {
     for (auto& event : events) {
       if (event) {
-        remember(vx_event_release(event), &result.cleanup);
+        observe_cleanup(vx_event_release(event));
         event = nullptr;
       }
     }
     if (queue) {
-      remember(vx_queue_release(queue), &result.cleanup);
+      observe_cleanup(vx_queue_release(queue));
       queue = nullptr;
     }
     for (auto& buffer : buffers) {
-      if (buffer) {
-        remember(vx_buffer_release(buffer), &result.cleanup);
-        buffer = nullptr;
+      if (buffer && owns_buffers) {
+        observe_cleanup(vx_buffer_release(buffer));
+      }
+      buffer = nullptr;
+    }
+    if (context) {
+      remember(context->cleanup, &result.cleanup);
+      if (owns_lease && result.cleanup == VX_SUCCESS) {
+        context->operation_leased = false;
+      }
+      owns_lease = false;
+      if (context.use_count() == 1) {
+        remember(context->release(), &result.cleanup);
       }
     }
-    if (context && context.use_count() == 1) {
-      context->release(&result.cleanup);
+    if (result.cleanup != VX_SUCCESS) {
+      output_valid = false;
     }
     context.reset();
     closed = true;
@@ -190,24 +277,59 @@ bool supported_capabilities(const DeviceCapabilities& caps) noexcept {
       && caps.tensor_extension && caps.local_memory;
 }
 
-MatmulRequest request_for(detail::OperationState* state, uint32_t m, uint32_t n, uint32_t k,
-                         const std::array<uint64_t, 3>& addresses) noexcept {
+MatmulRequest request_for(const detail::RuntimeContext& context,
+                         uint32_t m, uint32_t n, uint32_t k,
+                         const std::array<uint64_t, 3>& addresses,
+                         const std::array<uint64_t, 3>& sizes) noexcept {
   MatmulRequest request;
-  request.a.dtype = state->context->dtype;
+  request.a.dtype = context.dtype;
   request.a.dimensions = {m, k};
   request.a.strides_bytes = {uint64_t{k} * 2, 2};
-  request.b.dtype = state->context->dtype;
+  request.b.dtype = context.dtype;
   request.b.layout = Layout::column_major;
   request.b.dimensions = {k, n};
   request.b.strides_bytes = {2, uint64_t{k} * 2};
   request.d.dtype = DType::fp32;
   request.d.dimensions = {m, n};
   request.d.strides_bytes = {uint64_t{n} * 4, 4};
-  const uint64_t device_id = state->context->capabilities.device_id;
-  request.a.allocation = {device_id, 1, addresses[0], state->a.size(), true, false};
-  request.b.allocation = {device_id, 2, addresses[1], state->b.size(), true, false};
-  request.d.allocation = {device_id, 3, addresses[2], state->download.size(), false, true};
+  const uint64_t device_id = context.capabilities.device_id;
+  request.a.allocation = {device_id, 1, addresses[0], sizes[0], true, false};
+  request.b.allocation = {device_id, 2, addresses[1], sizes[1], true, false};
+  request.d.allocation = {device_id, 3, addresses[2], sizes[2], false, true};
   return request;
+}
+
+vx_result_t allocate_buffers(detail::RuntimeContext* context,
+                             const std::array<uint64_t, 3>& sizes,
+                             std::array<vx_buffer_h, 3>* buffers,
+                             std::array<uint64_t, 3>* addresses) noexcept {
+  for (size_t i = 0; i != buffers->size(); ++i) {
+    const uint32_t access = i == 2 ? VX_MEM_WRITE : VX_MEM_READ;
+    auto result = vx_buffer_create(context->device, sizes[i], access, &(*buffers)[i]);
+    if (result != VX_SUCCESS) {
+      return result;
+    }
+    result = vx_buffer_address((*buffers)[i], &(*addresses)[i]);
+    if (result != VX_SUCCESS) {
+      return result;
+    }
+  }
+  return VX_SUCCESS;
+}
+
+ExecutionResult create_workspace(detail::RuntimeContext* context) noexcept {
+  ExecutionResult result;
+  if (context->workspace_policy == WorkspacePolicy::reusable_single_tile) {
+    std::array<uint64_t, 3> addresses{};
+    result.primary = allocate_buffers(context, kResidentBytes, &context->resident_buffers,
+                                      &addresses);
+    if (result.ok()) {
+      MatmulPlan plan;
+      result.validation = plan_matmul(request_for(*context, 8, 4, 8, addresses, kResidentBytes),
+                                       context->capabilities, context->profile, &plan);
+    }
+  }
+  return result;
 }
 
 vx_result_t write(detail::OperationState* state, vx_buffer_h buffer,
@@ -234,20 +356,25 @@ vx_result_t submit(detail::OperationState* state, uint32_t m, uint32_t n, uint32
   if (result != VX_SUCCESS) {
     return result;
   }
-  const std::array<size_t, 3> sizes{state->a.size(), state->b.size(), state->download.size()};
+  std::array<uint64_t, 3> sizes{state->a.size(), state->b.size(), state->download.size()};
   std::array<uint64_t, 3> addresses{};
-  for (size_t i = 0; i != state->buffers.size(); ++i) {
-    const uint32_t access = i == 2 ? VX_MEM_WRITE : VX_MEM_READ;
-    result = vx_buffer_create(state->context->device, sizes[i], access, &state->buffers[i]);
-    if (result != VX_SUCCESS) {
-      return result;
+  if (state->context->workspace_policy == WorkspacePolicy::reusable_single_tile) {
+    state->owns_buffers = false;
+    state->buffers = state->context->resident_buffers;
+    sizes = kResidentBytes;
+    for (size_t i = 0; i != state->buffers.size(); ++i) {
+      result = vx_buffer_address(state->buffers[i], &addresses[i]);
+      if (result != VX_SUCCESS) {
+        return result;
+      }
     }
-    result = vx_buffer_address(state->buffers[i], &addresses[i]);
+  } else {
+    result = allocate_buffers(state->context.get(), sizes, &state->buffers, &addresses);
     if (result != VX_SUCCESS) {
       return result;
     }
   }
-  state->result.validation = plan_matmul(request_for(state, m, n, k, addresses),
+  state->result.validation = plan_matmul(request_for(*state->context, m, n, k, addresses, sizes),
                                        state->context->capabilities,
                                        state->context->profile, &state->plan);
   if (state->result.validation != Status::success) {
@@ -308,7 +435,9 @@ ManagedMatmul::~ManagedMatmul() = default;
 ExecutionResult ManagedMatmul::create(const ExecutionBinding& binding,
                                      std::unique_ptr<ManagedMatmul>* out) noexcept {
   if (!out || *out || !binding.module_bytes || binding.module_size < 16
-      || !qualified_id(binding.qualification_id)) {
+      || !qualified_id(binding.qualification_id)
+      || (binding.workspace_policy != WorkspacePolicy::per_operation
+          && binding.workspace_policy != WorkspacePolicy::reusable_single_tile)) {
     return rejected(Status::invalid_argument);
   }
   if (binding.profile.profile != Profile::p02_tfr_wmma_v1
@@ -318,12 +447,17 @@ ExecutionResult ManagedMatmul::create(const ExecutionBinding& binding,
   if (binding.input_dtype != DType::fp16 && binding.input_dtype != DType::bf16) {
     return rejected(Status::unsupported_dtype);
   }
-  ExecutionResult result;
+  ExecutionResult result = reserve_context();
+  if (!result.ok()) {
+    return result;
+  }
   std::shared_ptr<detail::RuntimeContext> context;
   try {
     context = std::make_shared<detail::RuntimeContext>();
+    context->context_reserved = true;
     context->profile = binding.profile;
     context->dtype = binding.input_dtype;
+    context->workspace_policy = binding.workspace_policy;
     context->qualification_id = binding.qualification_id;
     context->enable_profiling = binding.enable_profiling;
     const auto* first = static_cast<const uint8_t*>(binding.module_bytes);
@@ -343,6 +477,9 @@ ExecutionResult ManagedMatmul::create(const ExecutionBinding& binding,
       result.primary = vx_module_get_kernel(context->module, "main", &context->kernel);
     }
     if (result.ok()) {
+      result = create_workspace(context.get());
+    }
+    if (result.ok()) {
       std::unique_ptr<ManagedMatmul> owner(new ManagedMatmul(context));
       *out = std::move(owner);
       return result;
@@ -353,7 +490,9 @@ ExecutionResult ManagedMatmul::create(const ExecutionBinding& binding,
     result.primary = VX_ERR_INTERNAL;
   }
   if (context) {
-    context->release(&result.cleanup);
+    remember(context->release(), &result.cleanup);
+  } else {
+    return_context_reservation();
   }
   return result;
 }
@@ -365,13 +504,23 @@ ExecutionResult ManagedMatmul::submit(uint32_t m, uint32_t n, uint32_t k,
   if (!context_ || !context_->device || !out || *out || !a || !b) {
     return rejected(Status::invalid_argument);
   }
-  if (!supported_shape(m, n, k)) {
+  if (!supported_shape(m, n, k)
+      || (context_->workspace_policy == WorkspacePolicy::reusable_single_tile
+          && (m != 8 || n != 4 || k != 8))) {
     return rejected(Status::unsupported_shape);
   }
   if (a_bytes != uint64_t{m} * k * 2 || b_bytes != uint64_t{k} * n * 2) {
     return rejected(Status::insufficient_buffer);
   }
-  ExecutionResult result;
+  ExecutionResult result = new_work_status();
+  if (!result.ok()) {
+    return result;
+  }
+  if (context_->operation_leased) {
+    result.primary = VX_ERR_TIMEOUT;
+    return result;
+  }
+  context_->operation_leased = true;
   std::unique_ptr<MatmulOperation> operation;
   try {
     operation.reset(new MatmulOperation(context_));
@@ -406,8 +555,16 @@ ExecutionResult ManagedMatmul::submit(uint32_t m, uint32_t n, uint32_t k,
     result.primary = VX_ERR_INTERNAL;
   }
   if (operation) {
-    operation->state_->result = result;
-    result = operation->close(0);
+    auto& state = *operation->state_;
+    remember(result.primary, &state.result.primary);
+    if (state.result.complete) {
+      result = operation->close(0);
+    } else {
+      result = state.result;
+      *out = std::move(operation);
+    }
+  } else {
+    context_->operation_leased = false;
   }
   return result;
 }
@@ -420,23 +577,26 @@ vx_result_t ManagedMatmul::memory_info(uint64_t* free_bytes, uint64_t* used_byte
 }
 
 ExecutionResult ManagedMatmul::close() noexcept {
-  ExecutionResult result;
   if (!context_) {
-    return result;
+    return close_result_;
   }
+  ExecutionResult result;
+  result.cleanup = context_->cleanup;
   if (context_.use_count() != 1) {
     result.primary = VX_ERR_TIMEOUT;
     result.complete = false;
     return result;
   }
-  context_->release(&result.cleanup);
+  remember(context_->release(), &result.cleanup);
   context_.reset();
-  return result;
+  close_result_ = result;
+  return close_result_;
 }
 
 MatmulOperation::MatmulOperation(std::shared_ptr<detail::RuntimeContext> context)
     : state_(new detail::OperationState) {
   state_->context = std::move(context);
+  state_->owns_lease = true;
 }
 
 MatmulOperation::~MatmulOperation() {
@@ -452,29 +612,38 @@ ExecutionResult MatmulOperation::wait(uint64_t timeout_ns) noexcept {
     return state.result;
   }
   ++state.trace.wait_calls;
-  const auto event = state.events[state.event_count - 1];
-  const auto wait_result = vx_event_wait_value(event, 1, timeout_ns);
-  if (wait_result == VX_ERR_TIMEOUT) {
+  const auto timed_out = [&state]() noexcept {
     ++state.trace.timed_out_waits;
     auto result = state.result;
     if (result.primary == VX_SUCCESS) {
       result.primary = VX_ERR_TIMEOUT;
     }
     return result;
-  }
-  uint64_t value = 0;
-  const auto value_result = vx_event_get_value(event, &value);
-  if (value_result != VX_SUCCESS || value < 1) {
-    auto result = state.result;
-    if (result.primary == VX_SUCCESS) {
-      result.primary = value_result != VX_SUCCESS ? value_result : VX_ERR_INTERNAL;
-    }
-    return result;
+  };
+  const auto event = state.events[state.event_count - 1];
+  const auto wait_result = vx_event_wait_value(event, 1, timeout_ns);
+  if (wait_result == VX_ERR_TIMEOUT) {
+    return timed_out();
   }
   remember(wait_result, &state.result.primary);
-  state.result.complete = true;
+  uint64_t value = 0;
+  const auto value_result = vx_event_get_value(event, &value);
+  if (value_result == VX_ERR_TIMEOUT) {
+    return timed_out();
+  }
+  if (value_result != VX_SUCCESS) {
+    remember(value_result, &state.result.primary);
+    return state.result;
+  }
+  if (value < 1) {
+    remember(VX_ERR_INTERNAL, &state.result.primary);
+    return state.result;
+  }
   for (size_t i = 0; i != state.event_count; ++i) {
     state.trace.event_results[i] = vx_event_wait_value(state.events[i], 1, 0);
+    if (state.trace.event_results[i] == VX_ERR_TIMEOUT) {
+      return timed_out();
+    }
     remember(state.trace.event_results[i], &state.result.primary);
     if (state.trace.profiling_enabled) {
       vx_profile_info_t profile{};
@@ -486,6 +655,7 @@ ExecutionResult MatmulOperation::wait(uint64_t timeout_ns) noexcept {
       }
     }
   }
+  state.result.complete = true;
   if (state.submitted_all && state.result.ok()) {
     for (size_t i = 0; i != state.output.size(); ++i) {
       state.output[i] = get_word(state.download.data() + i * 4);
@@ -507,7 +677,7 @@ ExecutionResult MatmulOperation::close(uint64_t timeout_ns) noexcept {
 
 const std::vector<uint32_t>& MatmulOperation::output_words() const noexcept {
   static const std::vector<uint32_t> empty;
-  return state_->output_valid ? state_->output : empty;
+  return state_->output_valid && state_->result.ok() ? state_->output : empty;
 }
 
 const MatmulTrace& MatmulOperation::trace() const noexcept {

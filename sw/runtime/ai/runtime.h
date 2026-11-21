@@ -11,6 +11,11 @@
 
 namespace vortex::ai {
 
+enum class WorkspacePolicy : uint32_t {
+  per_operation = 0,
+  reusable_single_tile = 1,
+};
+
 // A trusted runner verifies image/backend/compiler records before supplying this binding.
 struct ExecutionBinding {
   ProfileBinding profile{};
@@ -19,6 +24,7 @@ struct ExecutionBinding {
   size_t module_size = 0;
   std::string qualification_id;
   bool enable_profiling = false;
+  WorkspacePolicy workspace_policy = WorkspacePolicy::per_operation;
 };
 
 struct ExecutionResult {
@@ -83,7 +89,8 @@ class MatmulOperation {
   std::unique_ptr<detail::OperationState> state_;
 };
 
-// Single-caller objects; operations may outlive their ManagedMatmul owner.
+// One live context per linked managed-runtime instance; each owner is single-caller.
+// Operations may outlive their owner and retain their lease until completed close.
 class ManagedMatmul {
  public:
   ~ManagedMatmul();
@@ -104,6 +111,7 @@ class ManagedMatmul {
  private:
   explicit ManagedMatmul(std::shared_ptr<detail::RuntimeContext> context);
   std::shared_ptr<detail::RuntimeContext> context_;
+  ExecutionResult close_result_{};
 };
 
 } // namespace vortex::ai

@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "scope": "historical-source-retention-only",
+  "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+  "publication_base": "3235cd59d724663dda1bece20645d5ccf30462e1",
+  "original_record": {
+    "path": "docs/project/evidence/p05-python/acceptance-binding.json",
+    "sha256": "1896bae3b59273f51448b554b965dc7d98d6beafcd446527c41c878a32c740c5"
+  },
+  "predecessor_record": {
+    "path": "docs/project/evidence/p05-torch/a01-retained-binding.json",
+    "sha256": "afe748b3bd33dea30ee78777a5e34314cd28f151875327a80dbd33f3b7ecc367"
+  },
+  "previous_source_retention": {
+    "path": "docs/project/evidence/p05-torch/a01-source-retention.json",
+    "sha256": "95facaaee3cc569ec0b403d903fd305a9a6dfb1364b14ae378c820105929e5ff"
+  },
+  "successor_record": {
+    "path": "docs/project/evidence/p06-serial-workspace/a01-retained-binding.json",
+    "sha256": "9de532f05b99fa36a1b42822170aa720795fb8a9ca2f823b0daf06556928a85f"
+  },
+  "mappings": [
+    {
+      "original_path": "python/vortex_ai/_bundle.py",
+      "retained_path": "docs/project/evidence/p05-torch/history/p05-a01/python/vortex_ai/_bundle.py.txt",
+      "sha256": "e25ccf8a7fbe93b60b38507f3261f8936dcfad64c1d8012b307065ab6d94751d",
+      "bytes": 12251
+    },
+    {
+      "original_path": "MANIFEST.in",
+      "retained_path": "docs/project/evidence/p05-torch/history/p05-a01/MANIFEST.in.txt",
+      "sha256": "4261573e864bd1a0e602aaa4d020808a84a61cc7f90d9b1a5e11dc846d1c25e7",
+      "bytes": 868
+    },
+    {
+      "original_path": "ci/project/test_p05_packaging.py",
+      "retained_path": "docs/project/evidence/p05-torch/history/p05-a01/ci/project/test_p05_packaging.py.txt",
+      "sha256": "7f4333b13ba1b350f0595e2c30807518d3c4982ae14264ef36b060aeac378b3c",
+      "bytes": 25110
+    },
+    {
+      "original_path": "ci/project/test_p05_bundle.py",
+      "retained_path": "docs/project/evidence/p05-torch/history/p05-a01/ci/project/test_p05_bundle.py.txt",
+      "sha256": "c22fd03fafc7f86c7e24f77e1bd9e59142d9af465d20fca64c6c8a136b185970",
+      "bytes": 34293
+    },
+    {
+      "original_path": "ci/project/test_p05_native_binding.py",
+      "retained_path": "docs/project/evidence/p06-serial-workspace/history/p05-a01/ci/project/test_p05_native_binding.py.txt",
+      "sha256": "02ce8df097277120e7028785fbb7bc3d12d372f2e2f29b7bf88c5edbdb2e51b6",
+      "bytes": 33976
+    }
+  ],
+  "new_mapping_count": 1,
+  "execution_claimed": false,
+  "acceptance_scope_changed": false,
+  "new_acceptance_claimed": false,
+  "reviewer": "/root/w04_a01_history_retention",
+  "reason": "The current native-binding tests now require non-timeout completion errors and cleanup failures to remain sticky under the frozen serial-workspace runtime contract. Preserve the historical acceptance against its original test bytes rather than changing their recorded digest or attributing new expectations to the old native execution."
+}

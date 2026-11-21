@@ -51,6 +51,12 @@ matmul close before resubmission until separately qualified native concurrency
 work changes that contract; a completed wait alone does not release an
 operation's ownership.
 
+For the native serial ownership and opt-in resident workspace, follow the
+[workspace handoff](docs/project/p06-workspace-handoff.md) and
+[frozen runtime/correctness contract](docs/designs/serial_matmul_workspace_v1.md).
+The [workspace evidence packet](docs/project/evidence/p06-serial-workspace/README.md)
+separates host fault checks from native execution and future performance acceptance.
+
 ---
 
 ## 1. Documentation Map

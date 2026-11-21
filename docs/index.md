@@ -13,6 +13,10 @@ qualified result; consult the current status and evidence before making a claim.
 - [Current status](project/status.md) and [backlog](project/backlog.md): observed progress, blockers and the next bounded work item
 - [Developer guide](project/developer-guide.md): source-only checks, execution prerequisites and resource safeguards
 - [Acceptance and evidence](project/acceptance.md): what phase completion actually requires
+- [P06 serial workspace handoff](project/p06-workspace-handoff.md),
+  [runtime/correctness contract](designs/serial_matmul_workspace_v1.md) and
+  [evidence packet](project/evidence/p06-serial-workspace/README.md): implemented
+  managed ownership, opt-in fixed workspace and separately scoped verification
 - [P01 local qualification](project/p01-local-qualification.md) and [handoff](project/p01-local-qualification-handoff.md):
   supplemental vendor-free full-AFU `xrtsim` and focused unit checks, separate
   from the vendor `hw_emu` gate (`P01-A03`)

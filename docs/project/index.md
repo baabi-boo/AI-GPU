@@ -54,11 +54,16 @@ unexecuted template as a completion record.
   separate host/transfer accounting.
 - [P04 development audit](p04-audit.md): historical task selection, inherited
   capability limits and the unresolved CI area-gate failure.
-- [P06 qualification handoff](p06-qualification-handoff.md): the current measured
-  optimization track, accepted original P06-A01 baseline and open A02/A03 gates.
-- [Draft workspace experiment](p06-next-experiment-proposal.md) and
-  [ownership review matrix](p06-ownership-review-matrix.md): the next protocol to
-  review and freeze; neither is an implemented optimization or acceptance result.
+- [P06 workspace handoff](p06-workspace-handoff.md),
+  [runtime/correctness contract](../designs/serial_matmul_workspace_v1.md) and
+  [evidence packet](evidence/p06-serial-workspace/README.md): the implemented
+  serial ownership and optional resident workspace, with current verification
+  boundaries and open P06-A02/A03 gates.
+- [P06 qualification handoff](p06-qualification-handoff.md): the historical
+  qualification of the original accepted P06-A01 cold baseline.
+- [Draft warm performance experiment](p06-next-experiment-proposal.md) and
+  [earlier ownership review matrix](p06-ownership-review-matrix.md): the separate
+  measurement protocol still needs review and freezing before performance work.
 - [Python binding handoff](p05-entry-handoff.md): the parallel P05 framework track.
 - [Backlog](backlog.md): ordered work items with deliverables and gate mappings.
 - [P01 hw_emu preparation](p01-hwemu-runbook.md): read-only inventory and candidate
