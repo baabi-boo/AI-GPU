@@ -6,6 +6,7 @@ on:
       - '.github/workflows/project-governance.yml'
       - '.github/workflows/p05-python.yml'
       - '.github/workflows/p05-torch.yml'
+      - '.github/workflows/p06-baseline.yml'
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/pull_request_template.md'
       - 'ci/project/**'
@@ -21,6 +22,9 @@ on:
       - 'sw/kernel/ai/**'
       - 'tests/regression/ai_matmul/**'
       - 'tests/regression/ai_mlp/**'
+      - 'tests/regression/ai_bench_common/**'
+      - 'tests/regression/ai_bench_matmul/**'
+      - 'tests/regression/ai_bench_mlp/**'
       - 'tests/runtime/**'
       - 'docs/project/**'
       - 'docs/designs/tiny_mlp_fixture_v1.md'
@@ -28,6 +32,7 @@ on:
       - 'docs/designs/tensor_numerics_v1.md'
       - 'docs/designs/python_binding_v1.md'
       - 'docs/designs/torch_custom_ops_v1.md'
+      - 'docs/designs/native_benchmark_v1.md'
       - 'docs/index.md'
       - 'docs/assets/img/vortex_framework_stack.svg'
       - 'profiles/**'
@@ -47,6 +52,7 @@ on:
       - '.github/workflows/project-governance.yml'
       - '.github/workflows/p05-python.yml'
       - '.github/workflows/p05-torch.yml'
+      - '.github/workflows/p06-baseline.yml'
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/pull_request_template.md'
       - 'ci/project/**'
@@ -62,6 +68,9 @@ on:
       - 'sw/kernel/ai/**'
       - 'tests/regression/ai_matmul/**'
       - 'tests/regression/ai_mlp/**'
+      - 'tests/regression/ai_bench_common/**'
+      - 'tests/regression/ai_bench_matmul/**'
+      - 'tests/regression/ai_bench_mlp/**'
       - 'tests/runtime/**'
       - 'docs/project/**'
       - 'docs/designs/tiny_mlp_fixture_v1.md'
@@ -69,6 +78,7 @@ on:
       - 'docs/designs/tensor_numerics_v1.md'
       - 'docs/designs/python_binding_v1.md'
       - 'docs/designs/torch_custom_ops_v1.md'
+      - 'docs/designs/native_benchmark_v1.md'
       - 'docs/index.md'
       - 'docs/assets/img/vortex_framework_stack.svg'
       - 'profiles/**'
@@ -95,7 +105,7 @@ concurrency:
 jobs:
   governance:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     env:
       PYTHONDONTWRITEBYTECODE: '1'
     steps:

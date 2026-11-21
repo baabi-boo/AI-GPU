@@ -1,8 +1,9 @@
 # P06 — Memory and performance scaling
 
 **Goal:** measure and improve useful work per second, byte and joule without
-confusing simulated behavior with physical speed. This is a development plan,
-not a performance result. Live state and canonical gates are in
+confusing simulated behavior with physical speed. **P06 is `in_progress`** with
+frozen baseline tooling implemented and native qualification outstanding.
+No performance result or P06 acceptance is established yet. Live state and canonical gates are in
 [roadmap.json](../roadmap.json); the accountable role is Performance and memory lead.
 
 ## Entry and boundaries
@@ -17,6 +18,40 @@ not a performance result. Live state and canonical gates are in
   are not measured FPGA throughput or energy efficiency.
 - Do not promise a core count, memory capacity, frequency, TOPS or commercial-GPU
   comparison. Freeze feasible configuration-specific targets before acceptance.
+
+## Current bounded implementation
+
+The [development audit](../p06-benchmark-audit.md) selected a repeated native
+baseline before an optimization. The implemented
+[contract](../../designs/native_benchmark_v1.md),
+[manifest](../../../ci/project/p06_benchmark_contract.json),
+[runner](../../../ci/project/p06_execute.py) and
+[original-packet replay](../../../ci/project/p06_replay.py) reuse the unchanged
+accepted applications with a test-only observer.
+
+The fixed suite has eight workloads: the three accepted matmul shapes and the
+batch-16 `16 → 8 → 4` model in each of FP16/BF16. It uses the RV64 `p02-tfr`
+SimX timing model, one core/cluster, four warps of four threads and issue width
+one. Each workload has one retained warm-up and five measured fresh processes:
+**48 processes / 72 launches**, of which **40 processes / 60 launches** are
+measured. Every invocation starts a fresh device context; warm-cache behavior
+is not established. The counter inventory has **45 rows: 33 available and
+12 explicitly unavailable**. Counts span the whole context and all three
+model launches, with host intervals and logical transfer/operation counts
+retained separately.
+
+**Next action:** execute the reviewed
+[hosted qualification](../../../.github/workflows/p06-baseline.yml), preserve
+original artifacts and every failed attempt, and obtain independent replay
+against their supplied digests. Retain the two-job, 4 GiB memory and 15 GiB disk
+prerequisites. Local source/host checks cannot replace native execution or
+justify relaxing a blocked prerequisite. Only after an accepted baseline
+select a bounded optimization hypothesis from its measurements.
+
+P06-A01 awaits that execution and review; its acceptance evidence list remains
+empty. P06-A02/A03 remain open. P04 supplies the entry dependency and P05 is
+independent. The missing P01 vendor `hw_emu` evidence and inherited
+[267 → 283 DSP area-gate failure](../p04-executor-audit.md) remain unresolved.
 
 ## Ordered work packages
 
@@ -64,7 +99,9 @@ Block acceptance for numerical failures, unexplained parity/gate regressions,
 uncontrolled benchmark changes, missing resource budgets or exhausted resources.
 Do not hide a regression with a compensating improvement elsewhere.
 
-Hand P07 the selected configuration, constraints, bounded workloads, memory-map
-assumptions and reproducible reports. Update [status](../status.md) and
-[backlog](../backlog.md); the next bounded action is a documented board-readiness
-decision and physical implementation plan, not an unsupported performance claim.
+After the P06 gates are accepted, hand P07 the selected configuration,
+constraints, bounded workloads, memory-map assumptions and reproducible reports.
+P07 also requires P01's vendor integration gate. Update [status](../status.md)
+and [backlog](../backlog.md) as each gate earns evidence. The current next action
+remains hosted baseline qualification and independent review; a documented
+board-readiness decision and physical implementation plan follow later.

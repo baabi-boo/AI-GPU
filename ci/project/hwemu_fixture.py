@@ -16,7 +16,7 @@ from hwemu_contract import CONFIGS, GENERATED_PATHS, GIB, MIB, validate_manifest
 SOURCE = Path(__file__).resolve().parents[2]
 SOURCE_FILES = (
     "configure", "VERSION", "config.mk.in", "VX_config.toml", "VX_types.toml",
-    "ci/gen_config.py", "ci/blackbox.sh", "sw/kernel/Makefile",
+    "vortex_opae.toml", "ci/gen_config.py", "ci/blackbox.sh", "sw/kernel/Makefile",
     "sw/runtime/stub/Makefile", "sw/runtime/common.mk", "sw/runtime/xrt/Makefile",
     "sw/runtime/xrt/xrt.ini.in", "sw/runtime/xrt/xsim.tcl",
     "tests/regression/demo/Makefile", "tests/regression/common.mk",

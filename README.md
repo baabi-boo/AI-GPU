@@ -33,7 +33,25 @@ archives, build provenance, independent audits and replay instructions. The
 earlier [P04-A01 fixture acceptance](docs/project/evidence/p04-fixture/acceptance.json)
 and [hashed manifest](ci/project/p04_model_manifest.json) remain unchanged.
 
-**Current work: P05-T01 — the Python/custom-op bridge (`in_progress`).**
+**Current work: P06-T01 — qualify the frozen native performance baseline
+(`in_progress`).** The [development audit](docs/project/p06-benchmark-audit.md)
+selects repeatable measurement before an optimization. The implemented
+[benchmark contract](docs/designs/native_benchmark_v1.md),
+[manifest](ci/project/p06_benchmark_contract.json) and
+[runner](ci/project/p06_execute.py) reuse the accepted native matmuls and fixed
+model on the RV64 `p02-tfr` SimX timing model. Eight workloads each use one warm-up
+and five measured fresh processes: **48 processes and 72 launches**, including
+40 measured processes and 60 measured launches. The counter inventory has
+**45 rows: 33 available and 12 explicitly unavailable**.
+
+**P06-A01 awaits hosted native execution and independent original-artifact
+review; P06-A02/A03 remain open.** No P06 acceptance evidence or performance
+result is established yet. P04 supplies P06's prerequisite; P05 is an independent
+track. Next, run the [hosted qualification](.github/workflows/p06-baseline.yml),
+replay its original packet, and use the accepted measurements to select one
+bounded optimization hypothesis.
+
+**Parallel work: P05-T01 — the Python/custom-op bridge (`in_progress`).**
 [P05-A01 now accepts the copying Python binding](docs/project/evidence/p05-python/acceptance-binding.json)
 on SimX at
 [`e1420fd`](https://github.com/baabi-boo/AI-GPU/commit/e1420fd550f716df33a2556057b7086a03032cbe).
@@ -43,14 +61,17 @@ pairs**, plus **2,174 clean hosted source tests**. The
 [Python evidence packet](docs/project/evidence/p05-python/README.md) retains exact
 source/build/package identities, independent reviews and earlier failures.
 
-The next bounded step is to freeze, implement and qualify the scoped PyTorch
-custom-op route. **P05-A02/A03 remain unearned; no PyTorch version is qualified.**
+The scoped PyTorch custom-op implementation and successful prior installed CI
+jobs now exist, as recorded in the [current audit](docs/project/p06-benchmark-audit.md).
+Independent artifact review remains outstanding; this continuation makes no new
+P05 acceptance decision. **P05-A02/A03 remain unearned; no PyTorch version has
+accepted qualification.**
 Start with the [handoff](docs/project/p05-entry-handoff.md),
 [API contract](docs/designs/python_binding_v1.md) and [package guide](python/README.md).
 This simulated binding result establishes no Python RTL/XRT qualification,
 physical FPGA performance or full framework backend. The
 [executor audit](docs/project/p04-executor-audit.md) preserves the unresolved
-inherited tensor DSP area-gate failure.
+inherited tensor **267 → 283 DSP** area-gate failure.
 
 **Earlier completed phase: P03 — native AI operator library (`complete`).**
 The [v1 operator contract](docs/designs/ai_operator_contract_v1.md) now has a matching
@@ -85,8 +106,8 @@ review. [P01-A03](docs/project/evidence/p01-xrt-blocked.json) remains blocked by
 missing qualified vendor XRT `hw_emu` tools/platform.
 The authoritative [status](docs/project/status.md) and
 [phase gates](docs/project/roadmap.json) separate implementation from acceptance;
-P00, P02, P03 and P04 are complete, P01 is blocked, P05 is in progress,
-and P06–P11 are not started.
+P00, P02, P03 and P04 are complete, P01 is blocked, P05 and P06 are in progress,
+and P07–P11 are not started.
 
 ## Start here
 
@@ -106,8 +127,10 @@ and P06–P11 are not started.
   and [P02 WMMA evidence](docs/project/evidence/p02-wmma/README.md).
 - Read the earlier contract checkpoint: [P02 numerical handoff](docs/project/p02-numerics-handoff.md)
   and [A01 evidence](docs/project/evidence/p02-numerics/README.md).
-- Start the next bounded task: [P05 binding handoff](docs/project/p05-entry-handoff.md),
+- Start the next bounded task: [P06 baseline audit](docs/project/p06-benchmark-audit.md),
+  [benchmark contract](docs/designs/native_benchmark_v1.md),
   [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
+- Follow parallel framework work: [P05 binding handoff](docs/project/p05-entry-handoff.md).
 - Reproduce the accepted baseline: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
 - Follow current supplemental work: [P01 tensor-oracle hardening](docs/project/p01-tensor-oracles.md)
   and its [evidence index](docs/project/evidence/p01-tensor-oracles/README.md).

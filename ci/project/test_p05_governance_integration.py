@@ -85,7 +85,7 @@ class PythonGovernanceIntegrationTests(unittest.TestCase):
             "cancel-in-progress": "true",
         })
         self.assertEqual(self.job["runs-on"], ("ubuntu-24.04", []))
-        self.assertEqual(self.job["timeout-minutes"], ("10", []))
+        self.assertEqual(self.job["timeout-minutes"], ("20", []))
         self.assertEqual(scalars(children(self.job, "env", 6)), {
             "PYTHONDONTWRITEBYTECODE": "'1'",
         })

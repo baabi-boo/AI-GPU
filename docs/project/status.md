@@ -1,5 +1,13 @@
 # Current project status
 
+**P06-T01 is in progress: qualify the implemented frozen native performance
+baseline.** The [audit](p06-benchmark-audit.md) selected repeatable measurement
+of the accepted P03/P04 workloads. The [contract](../designs/native_benchmark_v1.md),
+[manifest](../../ci/project/p06_benchmark_contract.json) and
+[runner](../../ci/project/p06_execute.py) are implemented. P06-A01 awaits hosted
+native execution and independent original-artifact review; P06-A02/A03 remain
+open and P06's acceptance evidence list remains empty.
+
 **P04 is complete for the fixed tiny-model contract.**
 [P04-A01](evidence/p04-fixture/acceptance.json) retains its accepted source scope;
 [P04-A02](evidence/p04-executor/acceptance-numerics.json) and
@@ -21,8 +29,11 @@ original archives, failed attempts, exact auditors and successful relocated repl
 [P05-A01 acceptance](evidence/p05-python/acceptance-binding.json).** The
 [installed SimX packet](evidence/p05-python/README.md) binds the supported
 representations, ownership/error checks and clean installation to
-`e1420fd550f716df33a2556057b7086a03032cbe`. The next bounded action is the scoped
-PyTorch custom-op route in the [binding handoff](p05-entry-handoff.md).
+`e1420fd550f716df33a2556057b7086a03032cbe`. The scoped PyTorch custom-op route now
+has an implementation and successful prior installed CI jobs; its independent
+artifact review remains outstanding, as recorded in the
+[current audit](p06-benchmark-audit.md). The [binding handoff](p05-entry-handoff.md)
+retains the earlier contract. This continuation makes no new P05 acceptance decision.
 P05-A02 and P05-A03 remain unearned; this result establishes no framework backend
 or physical GPU performance.
 
@@ -50,7 +61,7 @@ from a clean GPU source checkout. The fresh generated FP16 SimX build and
 supplemental full-AFU integer `xrtsim` smoke also pass. Independent reviews accept
 the clean-build and native numerical packets. Qualified vendor tools/platform
 are still missing for P01-A03. P00, P02, P03 and P04 are complete,
-P05 is `in_progress`, and P06–P11 remain `not_started`.
+P05 and P06 are `in_progress`, and P07–P11 remain `not_started`.
 [roadmap.json](roadmap.json) remains authoritative for phase state and evidence;
 the linked reports define the exact accepted scope.
 
@@ -63,8 +74,9 @@ the linked reports define the exact accepted scope.
 | P02 — tensor numerical contract | `complete` | A01 source contract, A02 ordinary WMMA and A03 bounded WGMMA evidence accepted after required review; T01/T02 complete |
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
 | P04 — tiny-model inference | `complete` | A01 fixed fixture preserved; A02/A03 accept the full four-variant composed-model matrix at native processor RTL scope |
-| P05 — Python/framework bridge | `in_progress` | A01 accepts the bounded copying Python binding on SimX; custom-op execution and tested framework compatibility (A02/A03) remain unearned |
-| P06–P11 | `not_started` | Later performance, hardware and silicon gates have not been earned |
+| P05 — Python/framework bridge | `in_progress` | A01 accepts the bounded copying Python binding on SimX; the custom-op implementation and prior CI still need independent artifact review for A02/A03 |
+| P06 — Memory and performance scaling | `in_progress` | Frozen native benchmark tooling is implemented; A01 awaits hosted execution and independent review, and A02/A03 remain open |
+| P07–P11 | `not_started` | Later hardware, reliability, research and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
 
@@ -72,7 +84,44 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — copying Python binding
+## Latest continuation — frozen native performance baseline
+
+P04 is complete and supplies P06's accepted native-model prerequisite. P05 is an
+independent track. The [development audit](p06-benchmark-audit.md) explains why
+the next step is a repeated baseline before selecting a performance change.
+
+The [implemented contract](../designs/native_benchmark_v1.md) freezes three
+accepted matmul shapes and the fixed model in each of FP16/BF16: **eight workloads**
+on the RV64 `p02-tfr` SimX timing model. Each uses one retained warm-up followed
+by five measured fresh processes. The suite requires **48 processes and 72
+launches**, including **40 measured processes and 60 measured launches**.
+Every process starts a fresh device context; the warm-up does not establish
+warm-cache measurements. The counter table contains **45 rows: 33 available
+and 12 explicitly unavailable**. Counts span the whole context, including all
+three model launches, and do not provide per-stage or physical-device timing.
+
+The [manifest](../../ci/project/p06_benchmark_contract.json),
+[execution runner](../../ci/project/p06_execute.py),
+[strict records](../../ci/project/p06_records.py),
+[packet replay](../../ci/project/p06_replay.py) and
+[hosted workflow](../../.github/workflows/p06-baseline.yml) are implemented around
+the unchanged native applications. Source and host validation do not qualify
+the P06 native matrix. No P06 acceptance record or native result has been
+established at this checkpoint.
+
+Local native execution is blocked by missing toolchain inputs and the inherited
+resource prerequisites, including the 15 GiB disk reserve. The reviewed hosted
+route retains the two-job, 4 GiB memory and 15 GiB disk requirements. The next
+action is hosted clean-source qualification, preservation of every failed
+attempt, and independent replay of the original artifacts. Only then select a
+bounded optimization hypothesis from the measured limiting resource.
+
+P06-A01 remains unearned pending that run and review; P06-A02/A03 remain open.
+There is no optimization, native-RTL performance, synthesis or physical speed
+claim. P01-A03 still lacks qualified vendor `hw_emu` evidence before P07, and the
+inherited [267 → 283 DSP area-gate failure](p04-executor-audit.md) remains unresolved.
+
+## Previous continuation — copying Python binding
 
 The [development audit](p05-binding-audit.md) selected the first P05-T01 slice:
 a Linux CPython 3.12 extension around the unchanged managed native owners.
@@ -758,18 +807,23 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**P05-T01 — implement and qualify the scoped PyTorch custom-op route.**
-Start from the [accepted copying binding](evidence/p05-python/acceptance-binding.json)
-and [handoff](p05-entry-handoff.md). First freeze one tested framework version,
-operator schemas, tensor devices/layouts, copying rules and explicit rejection of
-unsupported gradients. Then route the declared operators through the existing
-owners and reproduce the fixed model against the unchanged native executable,
-retaining exact outputs, native dispatch, host bridge work and clean installation.
-No PyTorch version is qualified yet. P05 remains `in_progress`; A02 needs actual
-framework execution and A03 needs its versioned compatibility/failure matrix.
-See the [phase guide](phases/p05-framework.md) and [backlog](backlog.md).
-P06 still needs a frozen benchmark/counter policy before performance optimization
-claims; the accepted Python binding does not supply those measurements.
+**P06-T01 — qualify the frozen native baseline.** Run the reviewed
+[hosted workflow](../../.github/workflows/p06-baseline.yml) from a clean exact
+revision, retain all 48 processes / 72 launches and failed attempts, and have an
+independent reviewer replay the original artifacts against their supplied
+digests. Apply the [contract](../designs/native_benchmark_v1.md) before any
+P06-A01 decision. After an accepted baseline, choose one measured optimization
+hypothesis with a matched before/after correctness and performance plan.
+P06-A02/A03 remain open. See the [phase guide](phases/p06-performance.md) and
+[backlog](backlog.md).
+
+**Parallel framework task:** preserve the
+[accepted copying binding](evidence/p05-python/acceptance-binding.json) and
+[handoff](p05-entry-handoff.md), then independently review the existing PyTorch
+custom-op implementation's installed execution and compatibility artifacts.
+Prior successful CI does not itself close A02/A03; no new P05 acceptance decision
+is made here. P05 remains `in_progress`; its
+[phase guide](phases/p05-framework.md) retains the outstanding gates.
 
 **Parallel blocked hardware task:** P01-T05 still needs a qualified vendor
 release/platform, matching prepared `hw_emu` artifact packet and actual reviewed

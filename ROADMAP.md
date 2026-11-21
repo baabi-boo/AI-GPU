@@ -176,14 +176,30 @@ the copying Python binding.** Its installed two-format SimX matrix at
 launches and 660 event/profile pairs; 2,174 clean hosted source tests passed.
 The [Python packet](docs/project/evidence/p05-python/README.md) retains source-bound
 installation, lifecycle/error tests, exact outputs and independent review.
-The next bounded task is the scoped PyTorch custom-op route: freeze its supported
-version and operator contract, implement it through the existing owners, then
-reproduce the fixed model with actual dispatch and clean-install evidence.
+The scoped PyTorch custom-op implementation has successful prior installed CI
+jobs, but independent artifact review remains outstanding. This continuation
+makes no new P05 acceptance decision.
 The [handoff](docs/project/p05-entry-handoff.md) preserves the
 [implemented binding contract](docs/designs/python_binding_v1.md).
-P05-A02/A03 remain unearned; no framework version is qualified, and P06–P11
-remain `not_started`. The [executor audit](docs/project/p04-executor-audit.md)
-preserves the unresolved inherited CI area-gate failure.
+P05-A02/A03 remain unearned; no framework version has accepted qualification.
+
+**P06-T01 is now `in_progress`: qualify the implemented frozen native baseline.**
+The [development audit](docs/project/p06-benchmark-audit.md),
+[benchmark contract](docs/designs/native_benchmark_v1.md),
+[manifest](ci/project/p06_benchmark_contract.json) and
+[runner](ci/project/p06_execute.py) fix eight FP16/BF16 matmul/model workloads.
+Each uses one warm-up and five measured fresh processes, for 48 processes and
+72 launches (40 measured processes and 60 measured launches). The counter table
+has 45 rows: 33 available and 12 explicitly unavailable. P04 supplies the entry
+dependency; P05 is independent.
+
+P06-A01 awaits the [hosted native matrix](.github/workflows/p06-baseline.yml) and
+independent review of its original artifacts. Its evidence list remains empty;
+P06-A02/A03 remain open, with no optimization or synthesis result claimed.
+After baseline qualification, choose one measured optimization hypothesis.
+P07–P11 remain `not_started`. The
+[executor audit](docs/project/p04-executor-audit.md) preserves the unresolved
+inherited 267 → 283 DSP area-gate failure.
 
 The missing vendor platform remains a separate P01-T05/P07 dependency; resolve
 tools, access and a disk/RAM/job/time budget before any substantial build.

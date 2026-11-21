@@ -244,9 +244,7 @@ if [ "$(realpath "$SOURCE_DIR")" != "$(realpath "$CURRENT_DIR")" ]; then
     done
 fi
 
-# generate header files from toml configs:
-#   *.toml --> <build>/hw/*.vh    (Verilog)
-#   *.toml --> <build>/sw/*.h     (C++)
+# Packaging metadata is TOML too; only these inputs define hardware headers.
 mkdir -p "$CURRENT_DIR/hw" "$CURRENT_DIR/sw"
 gen_header() {
     local toml="$1"
@@ -260,14 +258,17 @@ gen_header() {
 # gen_config.py reads XLEN from the environment to resolve the XLEN-dependent
 # exprs relocated into VX_types.toml ([memmap]/[vm]).
 export XLEN
-for toml in "$SOURCE_DIR"/*.toml; do
-    [ -f "$toml" ] || continue
-    name=$(basename -- "$toml" .toml)
+for name in VX_config VX_types vortex_opae; do
+    toml="$SOURCE_DIR/$name.toml"
+    if [ ! -f "$toml" ]; then
+        echo "Missing hardware configuration: $toml" >&2
+        exit 1
+    fi
     extra=""
     case "$name" in
         VX_types) extra="--resolved" ;;
         VX_config) [ -n "$PROFILE" ] && extra="--profile=$PROFILE" ;;
     esac
-    gen_header "$toml" "$CURRENT_DIR/hw/$name.vh" verilog "$extra"
-    gen_header "$toml" "$CURRENT_DIR/sw/$name.h"  cpp     "$extra"
+    gen_header "$toml" "$CURRENT_DIR/hw/$name.vh" verilog "$extra" || exit $?
+    gen_header "$toml" "$CURRENT_DIR/sw/$name.h"  cpp     "$extra" || exit $?
 done

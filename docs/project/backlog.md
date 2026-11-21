@@ -7,7 +7,24 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Start here: P05-T01 scoped PyTorch custom operators
+## Start here: P06-T01 native baseline qualification
+
+**Current bounded task: P06-T01 — qualify the implemented frozen native baseline.**
+The [audit](p06-benchmark-audit.md),
+[contract](../designs/native_benchmark_v1.md),
+[manifest](../../ci/project/p06_benchmark_contract.json) and
+[runner](../../ci/project/p06_execute.py) fix eight FP16/BF16 matmul/model
+workloads. Each has one warm-up and five measured fresh processes, for
+48 processes / 72 launches (40 measured processes / 60 measured launches).
+The counter table has 45 rows: 33 available and 12 explicitly unavailable.
+
+P04 supplies P06's prerequisite; P05 is independent. Run the
+[hosted qualification](../../.github/workflows/p06-baseline.yml), retain failed
+attempts and original artifacts, and obtain independent packet replay before an
+A01 decision. P06 is `in_progress`, its acceptance evidence list is empty, and
+A02/A03 remain open. After an accepted baseline, choose one bounded optimization
+hypothesis from its measurements. Keep the two-job, 4 GiB memory and 15 GiB disk
+prerequisites; a blocked local environment does not waive them.
 
 **P02-A03 is accepted, completing P02-T02 and P02.** The
 [acceptance record](evidence/p02-wgmma/processor/acceptance.json),
@@ -69,15 +86,15 @@ SimX matrix, clean packaging, ownership/error tests and independent audits.
 The matrix has 144 combined Python/native launches and 660 event/profile pairs;
 the clean hosted suite passed 2,174 tests at that source revision.
 
-**Current bounded task: P05-T01 — implement and qualify the scoped PyTorch
-custom-op route.** Use the [handoff](p05-entry-handoff.md),
+**Parallel task: P05-T01 — independently review the scoped PyTorch custom-op
+qualification.** Use the [handoff](p05-entry-handoff.md),
 [binding contract](../designs/python_binding_v1.md) and
-[compatibility matrix](p05-python-compatibility.md). Freeze one framework version
-and explicit dtype/shape/stride/device/copy/error rules before implementing its
-operators through the existing owners. Reject unsupported gradients and layouts,
-then reproduce the fixed model against the native comparison path in a fresh
-installation with actual dispatch and separately recorded host work.
-P05 remains `in_progress`; A02/A03 are unearned and no PyTorch version is qualified.
+[compatibility matrix](p05-python-compatibility.md). The implementation and
+successful prior installed CI jobs exist; independent original-artifact review
+and acceptance remain outstanding, as recorded in the
+[current audit](p06-benchmark-audit.md). This continuation makes no new P05
+acceptance decision. P05 remains `in_progress`; A02/A03 are unearned and no
+PyTorch version has accepted qualification.
 The [executor audit](p04-executor-audit.md) retains the unresolved inherited
 267 → 283 DSP area-gate failure; Python qualification does not resolve it.
 
@@ -130,7 +147,7 @@ the missing vendor run; they do not replace it or grant acceptance.
 It requires its own manifest/receipt, CLI budgets and fresh build directory;
 there is no automatic adapter from the read-only `hwemu.py` candidate.
 P00, P02, P03 and P04 are complete, P01 remains blocked on A03,
-P05 is `in_progress`, and P06–P11 remain `not_started`. Check the actual
+P05 and P06 are `in_progress`, and P07–P11 remain `not_started`. Check the actual
 execution state and accepted reports before extending the baseline:
 
 ```sh
@@ -280,7 +297,9 @@ completing P03 for the declared six signatures. P04-T01 is complete with
 source-level P04-A01 acceptance. P04-T02 now has accepted A02/A03 execution and
 trace evidence for the fixed model, completing P04 at bounded processor RTL
 scope. P05-A01 now accepts the bounded copying Python binding; P05-T01 remains
-in progress for the scoped framework route. Detailed work packages remain in the
+in progress for the scoped framework route. P06-T01 is also in progress for
+hosted qualification of the [frozen native baseline](p06-benchmark-audit.md).
+Detailed work packages remain in the
 phase guides, the [development audit](p05-binding-audit.md) and the
 [Python binding handoff](p05-entry-handoff.md).
 
@@ -292,17 +311,18 @@ phase guides, the [development audit](p05-binding-audit.md) and the
 | **P03-T02 — Operator implementations and lifetime tests — complete** | Managed six-signature matmul has independent SimX/native-RTL arithmetic and actual common-runtime lifecycle acceptance; exact scope and partial-transfer limits remain recorded. | T01; kernel and runtime lead | [P03-A02](evidence/p03-managed-matmul/acceptance-numerics.json), [P03-A03](evidence/p03-managed-matmul/acceptance-lifecycle.json) |
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
 | **P04-T02 — Native model execution — complete** | Four clean SimX/native processor RTL × FP16/BF16 variants pass exact intermediate/final comparisons, live-input lineage, native placement and separate host/transfer accounting after independent review. | T01; model runtime lead | [P04-A02](evidence/p04-executor/acceptance-numerics.json), [P04-A03](evidence/p04-executor/acceptance-dispatch.json) |
-| **P05-T01 — Python/custom-op bridge — in progress** | Preserve the accepted copying binding; freeze the framework version/operator contract, implement scoped custom operators and qualify fixed-model dispatch plus explicit failure behavior. | P04; framework integration lead; [handoff](p05-entry-handoff.md) | [P05-A01 accepted](evidence/p05-python/acceptance-binding.json); P05-A02/P05-A03 unearned |
+| **P05-T01 — Python/custom-op bridge — in progress** | Preserve the accepted copying binding; independently review the existing custom-op implementation's installed dispatch, compatibility and explicit failure evidence before an acceptance decision. | P04; framework integration lead; [handoff](p05-entry-handoff.md) | [P05-A01 accepted](evidence/p05-python/acceptance-binding.json); P05-A02/P05-A03 unearned |
+| **P06-T01 — Measured optimization — in progress** | Qualify the implemented frozen SimX baseline with hosted native execution and independent original-packet replay; then select a measured optimization hypothesis and matched before/after plan. | P04; performance and memory lead; [audit](p06-benchmark-audit.md) | [P06 gates](phases/p06-performance.md): A01 awaits execution/review; A02/A03 open |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),
-[P04](phases/p04-inference.md) and [P05](phases/p05-framework.md). A custom-op
+[P04](phases/p04-inference.md), [P05](phases/p05-framework.md) and
+[P06](phases/p06-performance.md). A custom-op
 bridge is not a full device backend, CUDA compatibility, autograd or training.
 
 ## Later work — gated, not forgotten
 
 | Queue | First decision or deliverable | Entry / accountable role |
 |---|---|---|
-| **P06-T01 — Measured optimization** | Freeze benchmarks and resource targets; optimize a demonstrated bottleneck with before/after correctness and performance evidence. | P04; performance and memory lead; [P06 gates](phases/p06-performance.md) |
 | **P07-T01 — One physical FPGA** | Obtain an authorized board/platform decision; prove usable memory, DMA and the model on `hw`, followed by the specified initial soak. | P01/P04/P06; FPGA platform lead; [P07 gates](phases/p07-fpga.md) |
 | **P08-T01 — Experimental release qualification** | Freeze a threat/failure model, test recovery/isolation, complete the specified physical soak and reproduce the release packet. | P05/P07; reliability and release lead; [P08 gates](phases/p08-reliability.md) |
 | **P09-T01 — Optional research branch** | Select a bounded training/gradient workload and two-device transport experiment; obtain physical correctness evidence before scaling claims. | P08; research lead; [P09 gates](phases/p09-research.md) |
