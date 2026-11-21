@@ -169,13 +169,21 @@ and output comparisons, source/build provenance and separate host/transfer
 accounting passed independent review; 1,816 host tests passed in 366.568 seconds.
 Original packets and replayable audits are retained in the executor packet.
 The [executor plan](docs/project/p04-executor-plan.md) remains the reproduction
-contract. **P05-T01 is in progress**, with the first copying Python binding and
-its independent qualification described in the
-[binding handoff](docs/project/p05-entry-handoff.md) and
-[implemented contract](docs/designs/python_binding_v1.md). P05 acceptance remains
-unearned; P06–P11 remain `not_started`.
-The [executor audit](docs/project/p04-executor-audit.md) records why this step
-follows P03 and preserves the unresolved inherited CI area-gate failure.
+contract. **P05-T01 remains in progress, with
+[P05-A01 accepted](docs/project/evidence/p05-python/acceptance-binding.json) for
+the copying Python binding.** Its installed two-format SimX matrix at
+`e1420fd550f716df33a2556057b7086a03032cbe` passed 144 combined Python/native
+launches and 660 event/profile pairs; 2,174 clean hosted source tests passed.
+The [Python packet](docs/project/evidence/p05-python/README.md) retains source-bound
+installation, lifecycle/error tests, exact outputs and independent review.
+The next bounded task is the scoped PyTorch custom-op route: freeze its supported
+version and operator contract, implement it through the existing owners, then
+reproduce the fixed model with actual dispatch and clean-install evidence.
+The [handoff](docs/project/p05-entry-handoff.md) preserves the
+[implemented binding contract](docs/designs/python_binding_v1.md).
+P05-A02/A03 remain unearned; no framework version is qualified, and P06–P11
+remain `not_started`. The [executor audit](docs/project/p04-executor-audit.md)
+preserves the unresolved inherited CI area-gate failure.
 
 The missing vendor platform remains a separate P01-T05/P07 dependency; resolve
 tools, access and a disk/RAM/job/time budget before any substantial build.

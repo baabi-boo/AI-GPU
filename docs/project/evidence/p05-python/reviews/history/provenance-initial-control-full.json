@@ -1,0 +1,27 @@
+{
+  "acceptance_claimed": false,
+  "audit": "independent-p05-retained-provenance-v1",
+  "auditor_sha256": "cc0e18b5e241ad6301f949f393cfa3f0918829106cc8a3af1b8ff83a81bb7e62",
+  "full_matrix": false,
+  "limitations": [
+    "Retained provenance and clean-install consistency only; no native rerun, numerical/dispatch acceptance, phase completion, framework support or hardware claim.",
+    "Trusted-builder/nonhostile-filesystem scope: hashes bind recorded observations; this is not a hostile-process sandbox or authenticated execution attestation.",
+    "Original absolute build/source/venv paths are compared as recorded names and are never required to exist after relocation.",
+    "Main-repository bytes use actual Git commit objects; submodule file hashes/pins are recorded without fetching or reconstructing missing bodies.",
+    "Native configure templates, stamps, compiler roles, effective-header observations and retained header identities are checked; configuration generators are not executed by this auditor.",
+    "System Python, compiler-support files, package-build prerequisites and system ELF dependencies are identified rather than replay-archived. Tool semantic versions beyond retained g++/Clang/Make banners and VERSION/package/Python metadata are unavailable.",
+    "P04 kernel ELF, libvortex2.a and softfloat.a are identity-only where absent from the retained packet; retained bundle libraries, host binaries, matmul kernel ELF and installed extension are parsed without execution.",
+    "The existing independent P04 provenance auditor is reused only after its full body matches the explicitly reported SHA-256 pin; no P05 runner/record/package module is imported."
+  ],
+  "outcome": "fail",
+  "p04_helper": {
+    "path": "docs/project/evidence/p04-executor/reviews/audit_provenance.py",
+    "sha256": "32f18937591df8e91dd86d6693550748a4d3ed8f1cfd766733d20f0617fa4ab9",
+    "source": "recorded Git commit object"
+  },
+  "packets": [],
+  "phase_complete": false,
+  "reason": "unrecognized VERSION syntax",
+  "schema_version": 1,
+  "selected_scope_requested": false
+}

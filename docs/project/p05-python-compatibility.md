@@ -1,33 +1,41 @@
 # P05 Python compatibility and reproduction v1
 
 This matrix describes `vortex-ai==0.1.0`, binding API 1, and the
-[implemented contract](../designs/python_binding_v1.md). It separates the
-implemented surface from qualified execution. The recorded local host is
-CPython **3.12.14**, GCC/G++ **14.2.0**, Linux x86_64, and glibc **2.41**.
-An actual clean unbound sdist → wheel → fresh-venv import passed at binding
-source SHA-256 `7a724e5b309ff714cf0b89df32518d1d6b09ac42692fc8fc96e6c90deefef6a3`.
-That retained W04 result predates the current compiler staging, loader path,
-and native state hardening. This run and the injected-runtime checks provide
-host development evidence;
-**final bound native installed qualification and hosted CI remain pending**.
-An implemented workflow or a passing host-only check does not establish those
-results. Live phase state and accepted records remain in [status](status.md)
-and [roadmap.json](roadmap.json).
+[implemented contract](../designs/python_binding_v1.md). **P05-A01 is accepted**
+for the declared copying Python interface and clean installed SimX execution at
+[`e1420fd550f716df33a2556057b7086a03032cbe`](https://github.com/baabi-boo/AI-GPU/commit/e1420fd550f716df33a2556057b7086a03032cbe).
+Both FP16 and BF16 installations passed independent numerical, dispatch and
+provenance review. Their shared 22-input binding-source SHA-256 is
+`c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a`.
+The [acceptance record](evidence/p05-python/acceptance-binding.json) and
+[execution packet](evidence/p05-python/README.md) define that exact tested scope.
+
+Hosted qualification used Linux x86_64, GIL CPython **3.12.14**, G++ **11.4.0**,
+Clang **20.1.8** and GNU Make **4.3**. The separate local unbound packaging check
+used CPython **3.12.14**, GCC/G++ **14.2.0** and glibc **2.41**. Its eight real
+packaging commands and the injected-runtime checks are
+[host development evidence](evidence/p05-python/development/host-validation.md);
+they do not substitute for the actual installed SimX executions.
+The clean hosted governance suite passed 2,174 tests at the recorded commit.
+
+**P05 remains `in_progress`; P05-A02 and P05-A03 remain unearned.** No PyTorch
+operator or framework version has been qualified. Live phase state and accepted
+records remain in [status](status.md) and [roadmap.json](roadmap.json).
 
 ## Compatibility matrix
 
-| Surface | Implemented boundary | Evidence/limit |
+| Surface | Supported boundary | Qualified evidence or limit |
 |---|---|---|
-| Interpreter | Linux CPython 3.12 with the GIL, main interpreter | Local 3.12.14 observed; no other Python/platform qualification |
-| Host compiler/build | C++17 CPython C API; GCC/G++ 14.2.0 observed | Platform-specific `cp312` wheel; no ABI3 or manylinux claim |
+| Interpreter | Linux x86_64 CPython 3.12 with the GIL, main interpreter | Installed 3.12.14 qualified; no other Python/platform, free-threaded or subinterpreter qualification |
+| Host compiler/build | C++17 CPython C API | Hosted bound builds use G++ 11.4.0; local unbound packaging uses GCC/G++ 14.2.0; platform-specific `cp312` wheels, no ABI3 or manylinux claim |
 | Build tools | setuptools 84.2.1, wheel 0.48.0, packaging 26.3 | Exact [`pyproject.toml`](../../pyproject.toml) pins; preprovision for offline builds |
 | Python dependencies | None at runtime | Core API has no NumPy or PyTorch adapter |
 | Package modes | Unbound import/API checks; bound native execution | Empty bundle pin cannot open a session; bound execution needs the exact external bundle |
-| Backend/profile | SimX, `p02_tfr_wmma_v1`, one FP16 or BF16 variant per wheel/process | Both fresh variant packets still required; Python RTL/XRT/hardware routes unqualified |
-| Matmul | Three rank-two shapes in each format; copied A row-major/B column-major; FP32 output | Six implemented signatures; final installed/native comparison pending |
-| Model | Ten frozen P04 cases, five per format | Fixed qualification executor; no arbitrary model/weight API |
-| Ownership | Explicit copies/close, one live context, recoverable pending work | No zero-copy, concurrent queues, bounded destructor cancellation, or post-fork use |
-| Framework | No implemented PyTorch custom operator | No tested PyTorch version; P05-A02 is the next unearned framework gate |
+| Backend/profile | RV64 SimX, `p02_tfr_wmma_v1`, one FP16 or BF16 variant per wheel/process | Both fresh installed variants qualified; Python processor-RTL/XRT/hardware routes unqualified |
+| Matmul | `(M,N,K)` = `(8,4,8)`, `(8,4,16)`, `(16,8,16)` in each format; copied A row-major/B column-major; FP32 output | All six signatures compared with the independent native executable, twice with distinct poisons; strides are packed **byte** strides |
+| Model | Ten frozen P04 cases, five per format; batch 16, `16 → 8 → 4` MLP | All ten cases qualified; fixed executor, no arbitrary model/weight API |
+| Ownership | Explicit copies/close, one live context, one outstanding matmul, recoverable pending work | Completed wait alone does not release ownership; no zero-copy, concurrent queues, bounded destructor cancellation, or post-fork use |
+| Framework | No implemented PyTorch custom operator | No tested PyTorch version; scoped custom-op execution and framework compatibility remain the A02/A03 obligations |
 | Broader execution | No autograd/training, ONNX execution, general device backend, multi-device or CUDA binary compatibility | Separate contracts and qualification required |
 
 The [package guide](../../python/README.md) provides clean source staging,
@@ -36,6 +44,31 @@ An sdist retains its source inventory and generated compiled-pin header; a bound
 sdist additionally retains the exact manifest. Its offline rebuild needs host
 Python/build tools/compiler, but neither the original bundle nor a GPU toolchain.
 The external bundle is required again when executing the installed package.
+
+## Installation and portability limits
+
+The hosted bound sdist → offline wheel → fresh copied-interpreter venv path
+passed for both formats. Each installed package resolves outside the source
+checkout and loads the five identified project libraries. The actual hosted
+offline-wheel command compiles two fresh groups of six translation units and
+links twice. The local W06 unbound wheel command compiled one group and linked
+once; those distinct command paths must not be reported as one observation.
+
+The hosted extension retains
+`RUNPATH=/opt/hostedtoolcache/Python/3.12.14/x64/lib`, while `libsimx.so` retains
+its original Ramulator search paths. Compatible host Python and system ELF
+libraries remain prerequisites. This qualification does not establish an
+arbitrary-host or manylinux wheel, a complete archived operating-system runtime,
+or reproducible compilation of every transitive dependency. Keep the
+[dependency notices](evidence/p05-python/THIRD_PARTY_NOTICES.md) with the retained
+archives when redistributing the evidence packet.
+
+The original archives also passed a
+[relocated data replay](evidence/p05-python/relocated-replay.json) through all
+three independent auditors. Follow the
+[replay instructions](evidence/p05-python/reviews/README.md#relocated-data-replay)
+to inspect them without executing downloaded binaries. A fresh native/package
+execution uses the separate two-stage procedure below.
 
 ## Two top-level qualification stages
 
@@ -105,32 +138,42 @@ override. The launcher starts a child with only the verified canonical bundle
 library directory on `LD_LIBRARY_PATH`. Native code independently checks its
 compiled receipt/artifact pins before creating a context.
 
-## Required observations and remaining gates
+## Qualified observations and remaining gates
 
 For each format, both comparison routes run three frozen standalone matmul
 cases twice and five frozen model cases twice, using the two prescribed poisons.
-The installed route must observe six matmul launches plus 30 model launches;
-the native reference side supplies the same 36-launch total. Both formats and
-both routes together require 144 observed launches. These are required counts,
-not a claim that this pending qualification has run.
+The installed route observed six matmul launches plus 30 model launches;
+the native comparison side supplies the same 36-launch total. Both formats and
+both routes together passed **144 observed launches**: 72 through Python and
+72 through the native executables. The copied original native packet identifies
+the same native executions and is not added to those totals.
 
 The consumer checks exact raw output bits against immutable fixtures and the
-independent native executables, actual native dispatch/argument bytes, all five
-event/profile pairs per launch, completed cleanup, memory accounting, source and
-bundle identities, and installed package/extension paths. It preserves raw
+independent native executables, actual native dispatch/argument bytes, five
+event/profile pairs per installed launch and per native model launch, completed
+cleanup, memory accounting, source and bundle identities, and installed
+package/extension paths. It preserves raw
 `P05_MATMUL` and `P05_MODEL` lines; model records use the existing P04 serializer.
 No missing output, trace, or resource observation may be manufactured by a host
 reference. Host ReLU/cast/assembly remain separately identified; no CPU matmul
 fallback is available.
 
+The twelve standalone native comparison launches are unprofiled. The other
+132 launches account for **660 queried event/profile pairs**: 360 Python and
+300 native. Host steady-clock service, wait and advance intervals overlap;
+they are not additive physical device latency or a speedup measurement.
+
 Retain `python-output/report.json`, `logs/`, the copied `native/` packet,
 `packages/sdist/`, `packages/wheel/`, `artifacts/bundle/`, installed-file hashes,
 and `artifacts/installed-observations.json`, including failed attempts. A
 successful selected-format packet still has `acceptance_claimed: false`.
-Independent external-contract review and a recorded acceptance decision remain
-necessary under the [acceptance policy](acceptance.md).
+The runner does not grant acceptance itself. The independent full-matrix and
+lifecycle reviews support the separate
+[P05-A01 decision](evidence/p05-python/acceptance-binding.json) under the
+[acceptance policy](acceptance.md). Earlier failed development runs remain in
+the linked host-validation history.
 
-P05-A01 still needs the complete bound installation/lifecycle evidence;
+P05-A01 accepts this bounded binding/installation scope.
 P05-A02 still needs the scoped PyTorch custom-op model and native-dispatch proof;
 P05-A03 needs the tested framework compatibility matrix. This plain-Python slice
 does not complete [P05](phases/p05-framework.md). SimX is simulation evidence,

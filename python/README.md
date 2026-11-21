@@ -2,19 +2,31 @@
 
 `vortex-ai==0.1.0` exposes binding API **1** as `vortex_ai`, with a C++17 CPython
 extension wrapping the existing managed matmul and frozen P04 model owners.
-The implemented target is Linux CPython 3.12 with the GIL. The recorded local
-host is CPython **3.12.14**, GCC/G++ **14.2.0**, Linux x86_64, glibc **2.41**.
-Build dependencies are pinned to setuptools **84.2.1**, wheel **0.48.0**, and
-packaging **26.3**; there are no Python runtime dependencies. Wheels are
+The qualified target is Linux x86_64 CPython **3.12.14** with the GIL and main
+interpreter, using separate installed SimX FP16 and BF16 bundles. Hosted bound
+qualification used G++ **11.4.0**, Clang **20.1.8** and GNU Make **4.3**.
+The separate local unbound packaging check used GCC/G++ **14.2.0** and glibc
+**2.41**. Build dependencies are pinned to setuptools **84.2.1**, wheel **0.48.0**,
+and packaging **26.3**; there are no Python runtime dependencies. Wheels are
 platform-specific `cp312`, with no ABI3 or manylinux claim.
 
 The [versioned contract](../docs/designs/python_binding_v1.md) specifies exact
 representations, ownership, errors, and supported shapes. The
 [compatibility and qualification guide](../docs/project/p05-python-compatibility.md)
-records pending bound native/CI qualification and the separate P04 → P05 commands.
-Packaging/import or injected host tests do not qualify native execution.
-PyTorch custom operators and full P05 acceptance remain unearned; this package
-has no CPU matmul fallback, general model loader, autograd, or CUDA compatibility.
+records the separate P04 → P05 commands and
+[accepted P05-A01 evidence](../docs/project/evidence/p05-python/acceptance-binding.json)
+at source `e1420fd550f716df33a2556057b7086a03032cbe`. Both installed formats passed
+native comparison, lifetime/error review and clean-install provenance checks.
+Their shared 22-input binding-source SHA-256 is
+`c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a`.
+See the [execution packet](../docs/project/evidence/p05-python/README.md) for the
+144 native/Python launches, 660 profile pairs and clean hosted 2,174-test result.
+Host failure injection and unbound import checks remain separately scoped.
+
+P05 remains `in_progress`: the PyTorch custom-op route and its tested framework
+compatibility matrix, P05-A02/A03, remain unearned. No PyTorch version is currently
+qualified. This package has no CPU matmul fallback, general model loader,
+autograd, training, multi-device support or CUDA binary compatibility.
 
 ## Package identity and native startup
 
@@ -45,6 +57,14 @@ only `libramulator.so`, `libramulator-vortex.so`, `libvortex.so`, `libsimx.so`, 
 and all artifacts itself and checks loaded project-library paths. It retains
 the selected runtime for process life. Compatible system ELF libraries are
 still required; the launcher is not a process/filesystem sandbox.
+
+The hosted extension records
+`RUNPATH=/opt/hostedtoolcache/Python/3.12.14/x64/lib`; `libsimx.so` retains its
+original Ramulator search paths. The installed checks establish the named
+project-library closure in the recorded environment. They do not establish
+arbitrary-host binary portability or eliminate compatible system-library and
+Python prerequisites. Exact ELF observations and required redistribution
+notices accompany the [retained archives](../docs/project/evidence/p05-python/THIRD_PARTY_NOTICES.md).
 
 Use a canonical absolute bundle root without symlink components or `:`, `;`,
 `$`, ASCII controls (0–31 and 127). Native paths must be shorter than 4096 UTF-8
@@ -129,6 +149,18 @@ sources, include paths, and header dependencies all use that staged tree, with
 the generated receipt directory first in the project include search. Unlisted
 headers in the original checkout cannot shadow the pinned native inputs.
 
+The hosted qualification runner uses its recorded `setup.py build build_ext
+bdist_wheel` command, which compiled two fresh groups of six translation units
+and linked twice. The separate local W06 unbound pip-wheel command compiled
+once. These results identify their respective command paths; the example above
+is a usage recipe, not a claim of another executed qualification run.
+
+For inspection without building or executing native code, the original archives
+have passed a [fresh relocated replay](../docs/project/evidence/p05-python/relocated-replay.json).
+The [data-replay instructions](../docs/project/evidence/p05-python/reviews/README.md#relocated-data-replay)
+verify the exact archives and run the independent auditors. Keep the associated
+dependency notices with those archives when redistributing them.
+
 ## Installed copying example
 
 Save this as `/absolute/example.py` outside the checkout, and invoke it through
@@ -173,7 +205,17 @@ session.close().raise_for_status()
 Input words are little-endian FP16/BF16, and output methods return independent
 little-endian FP32 bytes or unsigned raw-word tuples. Only `(M,N,K)` values
 `(8,4,8)`, `(8,4,16)`, and `(16,8,16)` are implemented. There is no implicit
-float, layout, stride, byte-order, or dtype conversion.
+float, layout, stride, byte-order, or dtype conversion. `strides` counts **bytes**:
+packed row-major uses `(2 * columns, 2)` and packed column-major
+uses `(2, 2 * rows)`. Arbitrary strides, transposes and broadcasting are rejected.
+
+Invalid Python types raise `TypeError`; unsupported dtype/shape/layout/stride
+values raise `ValueError`, and integer or extent overflow raises `OverflowError`.
+`BindingError` carries mapped native-status, ownership-state, cleanup or bundle
+failures with the available owner and status details. Inspect returned statuses
+and call `raise_for_status()` as in the example. Other exceptions, including
+allocation failure or interruption, can propagate while work remains owned.
+No error selects a CPU implementation or performs an implicit conversion.
 
 Keep owners on errors: `session.pending_operations()` returns retained work
 even if an interruption or allocation failure prevented normal return. Retry

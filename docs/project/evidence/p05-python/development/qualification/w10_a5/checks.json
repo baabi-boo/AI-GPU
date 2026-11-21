@@ -1,0 +1,113 @@
+{
+  "scope": "bounded ledger membership component probes and actual incomplete finalization rejection; no completion claim",
+  "builder_sha256": "42724d014f7be2ed81f122dde2c07bf1b90224044bd12f056e4af8c7d1c073ae",
+  "component_checks": [
+    {
+      "case": "synthetic_membership_control_only_no_ledger_write",
+      "expected": true,
+      "observed": true,
+      "reason": null
+    },
+    {
+      "case": "missing_assignment",
+      "expected": false,
+      "observed": false,
+      "reason": "exactly sixty observed worker assignments are required"
+    },
+    {
+      "case": "duplicate_worker_identity",
+      "expected": false,
+      "observed": false,
+      "reason": "spawn observation order, task identity or membership differs"
+    },
+    {
+      "case": "pending_receipt",
+      "expected": false,
+      "observed": false,
+      "reason": "completion remains pending: w10_a6.md"
+    },
+    {
+      "case": "wrong_wave",
+      "expected": false,
+      "observed": false,
+      "reason": "spawn observation order, task identity or membership differs"
+    },
+    {
+      "case": "duplicate_assignment",
+      "expected": false,
+      "observed": false,
+      "reason": "spawn observation order, task identity or membership differs"
+    },
+    {
+      "case": "boolean_wave",
+      "expected": false,
+      "observed": false,
+      "reason": "wave and assignment must be integers"
+    },
+    {
+      "case": "extra_spawn_field",
+      "expected": false,
+      "observed": false,
+      "reason": "spawn observation fields differ"
+    }
+  ],
+  "actual_pending_build": {
+    "command": [
+      "python3",
+      "-B",
+      "/workspace/scratch/ba0248fde989/AI-GPU/docs/project/evidence/p05-python/development/build_agent_ledger.py",
+      "build",
+      "--spawn-record",
+      "/workspace/scratch/ba0248fde989/p05-work/agent-progress.json",
+      "--original-receipts",
+      "/workspace/scratch/ba0248fde989/p05-work"
+    ],
+    "exit_code": 2,
+    "output": "{\"outcome\": \"fail\", \"reason\": \"completion remains pending: w10_a5.md\"}",
+    "ledger_created": false,
+    "readme_unchanged": true
+  },
+  "initial_manifest_sha256": "81de6faa4f785fb60a58e92c2216aaaf071eee3101d6a618bff5fb6d21f22784",
+  "initial_receipts_independently_matched_original_copy_and_git": [
+    "w01_a1.md",
+    "w01_a2.md",
+    "w01_a3.md",
+    "w01_a4.md",
+    "w01_a5.md",
+    "w01_a6.md",
+    "w02_a1.md",
+    "w02_a2.md",
+    "w02_a3.md",
+    "w02_a4.md",
+    "w02_a5.md",
+    "w02_a6.md",
+    "w03_a1.md",
+    "w03_a2.md",
+    "w03_a3.md",
+    "w03_a4.md",
+    "w03_a5.md",
+    "w03_a6.md",
+    "w04_a1.md",
+    "w04_a2.md",
+    "w04_a3.md",
+    "w04_a4.md",
+    "w04_a5.md",
+    "w04_a6.md",
+    "w05_a1.md",
+    "w05_a2.md",
+    "w05_a3.md",
+    "w05_a4.md",
+    "w05_a5.md",
+    "w05_a6.md"
+  ],
+  "checks_scope_note": "Membership probes and incomplete-build rejection preceded a one-line canonical-JSON equality hardening in portable verification; build completion remains pending and will be checked on all actual receipts by root.",
+  "final_ast_parse": "pass",
+  "local_readme_links": [
+    "initial-receipts.json",
+    "build_agent_ledger.py",
+    "../reviews/README.md",
+    "host-validation.md",
+    "../README.md"
+  ],
+  "ledger_created_by_this_worker": false
+}

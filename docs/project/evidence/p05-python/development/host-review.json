@@ -1,0 +1,128 @@
+{
+  "scope": "read-only independent host/CI history review; no new tests, native execution or acceptance",
+  "tested_hosted_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+  "native_host": {
+    "scenarios": 107,
+    "fp16": 99,
+    "bf16": 8,
+    "separate_probes": 11,
+    "recorded_source_hashes_matching_hosted_revision": 64
+  },
+  "host_packaging": {
+    "commands": 8,
+    "pinned_inputs_matching_hosted_revision": 22,
+    "source_sha256": "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a"
+  },
+  "failed_dirty_suite": {
+    "tests": 2163,
+    "failures": 49,
+    "errors": 2,
+    "changed_paths": 54,
+    "explicit_guard_blocks": [
+      "ERROR: test_bf16_direct_packet_uses_real_format_specific_validators (test_p05_bundle_producer.ProducerProvenanceTests.test_bf16_direct_packet_uses_real_format_specific_validators)",
+      "ERROR: test_direct_p04_callback_packet_produces_canonical_bundle (test_p05_bundle_producer.ProducerProvenanceTests.test_direct_p04_callback_packet_produces_canonical_bundle)",
+      "FAIL: test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps (test_p05_bundle_producer.ProducerProvenanceTests.test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps) (role='runtime')",
+      "FAIL: test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps (test_p05_bundle_producer.ProducerProvenanceTests.test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps) (role='backend')",
+      "FAIL: test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps (test_p05_bundle_producer.ProducerProvenanceTests.test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps) (role='kernel')",
+      "FAIL: test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps (test_p05_bundle_producer.ProducerProvenanceTests.test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps) (role='host')",
+      "FAIL: test_changed_configure_build_and_model_invocations_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_changed_configure_build_and_model_invocations_are_rejected) (suffix='configure')",
+      "FAIL: test_changed_configure_build_and_model_invocations_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_changed_configure_build_and_model_invocations_are_rejected) (suffix='runtime')",
+      "FAIL: test_changed_configure_build_and_model_invocations_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_changed_configure_build_and_model_invocations_are_rejected) (suffix='application')",
+      "FAIL: test_changed_configure_build_and_model_invocations_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_changed_configure_build_and_model_invocations_are_rejected) (suffix='fp16-zero')",
+      "FAIL: test_changed_model_runtime_environment_is_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_changed_model_runtime_environment_is_rejected)",
+      "FAIL: test_changed_tools_during_copy_prevent_manifest_publication (test_p05_bundle_producer.ProducerProvenanceTests.test_changed_tools_during_copy_prevent_manifest_publication)",
+      "FAIL: test_copied_build_recipe_and_live_hidden_config_are_required (test_p05_bundle_producer.ProducerProvenanceTests.test_copied_build_recipe_and_live_hidden_config_are_required)",
+      "FAIL: test_current_source_or_retained_helper_body_mutation_is_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_current_source_or_retained_helper_body_mutation_is_rejected)",
+      "FAIL: test_dependency_and_native_binary_bytes_must_match_original_binding (test_p05_bundle_producer.ProducerProvenanceTests.test_dependency_and_native_binary_bytes_must_match_original_binding) (name='third_party/ramulator/libramulator.so')",
+      "FAIL: test_dependency_and_native_binary_bytes_must_match_original_binding (test_p05_bundle_producer.ProducerProvenanceTests.test_dependency_and_native_binary_bytes_must_match_original_binding) (name='sw/runtime/libvortex.so')",
+      "FAIL: test_dirty_or_changed_source_identity_is_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_dirty_or_changed_source_identity_is_rejected)",
+      "FAIL: test_duplicate_json_keys_and_unsafe_retained_paths_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_duplicate_json_keys_and_unsafe_retained_paths_are_rejected)",
+      "FAIL: test_foreign_source_checkout_and_original_build_path_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_foreign_source_checkout_and_original_build_path_are_rejected)",
+      "FAIL: test_loaded_helper_and_required_source_retention_cannot_be_omitted (test_p05_bundle_producer.ProducerProvenanceTests.test_loaded_helper_and_required_source_retention_cannot_be_omitted)",
+      "FAIL: test_missing_and_duplicate_required_commands_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_missing_and_duplicate_required_commands_are_rejected)",
+      "FAIL: test_missing_duplicate_and_reordered_model_families_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_missing_duplicate_and_reordered_model_families_are_rejected) (ids=['fp16-seeded_dense', 'fp16-negated_dense', 'fp16-zero', 'fp16-signed_basis'])",
+      "FAIL: test_missing_duplicate_and_reordered_model_families_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_missing_duplicate_and_reordered_model_families_are_rejected) (ids=['fp16-seeded_dense', 'fp16-negated_dense', 'fp16-zero', 'fp16-signed_basis', 'fp16-seeded_dense'])",
+      "FAIL: test_missing_duplicate_and_reordered_model_families_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_missing_duplicate_and_reordered_model_families_are_rejected) (ids=['fp16-split_boundary', 'fp16-signed_basis', 'fp16-zero', 'fp16-negated_dense', 'fp16-seeded_dense'])",
+      "FAIL: test_passing_command_requires_zero_integer_exit_and_complete_cleanup (test_p05_bundle_producer.ProducerProvenanceTests.test_passing_command_requires_zero_integer_exit_and_complete_cleanup) (key='cleanup_complete', value=False)",
+      "FAIL: test_passing_command_requires_zero_integer_exit_and_complete_cleanup (test_p05_bundle_producer.ProducerProvenanceTests.test_passing_command_requires_zero_integer_exit_and_complete_cleanup) (key='cleanup_complete', value=1)",
+      "FAIL: test_passing_command_requires_zero_integer_exit_and_complete_cleanup (test_p05_bundle_producer.ProducerProvenanceTests.test_passing_command_requires_zero_integer_exit_and_complete_cleanup) (key='exit_code', value=False)",
+      "FAIL: test_passing_command_requires_zero_integer_exit_and_complete_cleanup (test_p05_bundle_producer.ProducerProvenanceTests.test_passing_command_requires_zero_integer_exit_and_complete_cleanup) (key='exit_code', value=1)",
+      "FAIL: test_passing_command_requires_zero_integer_exit_and_complete_cleanup (test_p05_bundle_producer.ProducerProvenanceTests.test_passing_command_requires_zero_integer_exit_and_complete_cleanup) (key='outcome', value='blocked')",
+      "FAIL: test_passing_command_requires_zero_integer_exit_and_complete_cleanup (test_p05_bundle_producer.ProducerProvenanceTests.test_passing_command_requires_zero_integer_exit_and_complete_cleanup) (key='reason', value='synthetic child still alive')",
+      "FAIL: test_postpublication_failure_removes_qualified_manifest (test_p05_bundle_producer.ProducerProvenanceTests.test_postpublication_failure_removes_qualified_manifest)",
+      "FAIL: test_rehashed_fixture_selection_cannot_omit_fifth_family (test_p05_bundle_producer.ProducerProvenanceTests.test_rehashed_fixture_selection_cannot_omit_fifth_family)",
+      "FAIL: test_rehashed_generated_header_must_reproduce_from_frozen_profile (test_p05_bundle_producer.ProducerProvenanceTests.test_rehashed_generated_header_must_reproduce_from_frozen_profile)",
+      "FAIL: test_rehashed_second_poison_corruption_reaches_real_model_validator (test_p05_bundle_producer.ProducerProvenanceTests.test_rehashed_second_poison_corruption_reaches_real_model_validator)",
+      "FAIL: test_rehashed_wrong_output_words_cannot_be_hidden_by_saved_pass (test_p05_bundle_producer.ProducerProvenanceTests.test_rehashed_wrong_output_words_cannot_be_hidden_by_saved_pass)",
+      "FAIL: test_retained_loaded_helper_must_be_present_in_source_snapshot (test_p05_bundle_producer.ProducerProvenanceTests.test_retained_loaded_helper_must_be_present_in_source_snapshot)",
+      "FAIL: test_saved_observations_must_equal_raw_validated_model_records (test_p05_bundle_producer.ProducerProvenanceTests.test_saved_observations_must_equal_raw_validated_model_records)",
+      "FAIL: test_symlinked_source_log_generated_and_native_files_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_symlinked_source_log_generated_and_native_files_are_rejected) (name='logs/simx-fp16-fp16-zero.log')",
+      "FAIL: test_symlinked_source_log_generated_and_native_files_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_symlinked_source_log_generated_and_native_files_are_rejected) (name='.config.stamp')",
+      "FAIL: test_symlinked_source_log_generated_and_native_files_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_symlinked_source_log_generated_and_native_files_are_rejected) (name='sw/runtime/libvortex.so')",
+      "FAIL: test_symlinked_source_log_generated_and_native_files_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_symlinked_source_log_generated_and_native_files_are_rejected) (name='artifacts/simx-fp16/.config.stamp')",
+      "FAIL: test_unhashed_raw_log_mutation_is_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_unhashed_raw_log_mutation_is_rejected)",
+      "FAIL: test_interrupted_validation_retains_failure_receipt_and_native_packet (test_p05_orchestration.NativeValidationBoundaryTests.test_interrupted_validation_retains_failure_receipt_and_native_packet)"
+    ],
+    "other_p05_stage_assertions": [
+      "FAIL: test_source_build_or_packet_mutation_during_copy_leaves_no_manifest (test_p05_bundle_producer.ProducerProvenanceTests.test_source_build_or_packet_mutation_during_copy_leaves_no_manifest) (name='sw/runtime/ai/mlp_runtime.cpp')",
+      "FAIL: test_source_build_or_packet_mutation_during_copy_leaves_no_manifest (test_p05_bundle_producer.ProducerProvenanceTests.test_source_build_or_packet_mutation_during_copy_leaves_no_manifest) (name='sw/runtime/libvortex.so')",
+      "FAIL: test_source_build_or_packet_mutation_during_copy_leaves_no_manifest (test_p05_bundle_producer.ProducerProvenanceTests.test_source_build_or_packet_mutation_during_copy_leaves_no_manifest) (name='logs/simx-fp16-fp16-zero.log')",
+      "FAIL: test_completed_validation_precedes_new_native_build_and_is_not_a_command (test_p05_orchestration.NativeValidationBoundaryTests.test_completed_validation_precedes_new_native_build_and_is_not_a_command)",
+      "FAIL: test_original_packet_drift_stops_before_new_native_build (test_p05_orchestration.NativeValidationBoundaryTests.test_original_packet_drift_stops_before_new_native_build)",
+      "FAIL: test_rejected_native_packet_stops_before_any_new_native_build (test_p05_orchestration.NativeValidationBoundaryTests.test_rejected_native_packet_stops_before_any_new_native_build)",
+      "FAIL: test_retained_packet_drift_stops_before_new_native_build (test_p05_orchestration.NativeValidationBoundaryTests.test_retained_packet_drift_stops_before_new_native_build)"
+    ],
+    "inherited_assertion": [
+      "FAIL: test_oracle_failure_does_not_verify_a_successful_workload_command (test_local_qualification_identity.QualificationIdentityTests.test_oracle_failure_does_not_verify_a_successful_workload_command)"
+    ],
+    "limitation": "Seven stage assertions are consistent with guard interruption; their inner reports are absent. The inherited workload-start failure cause is undetermined."
+  },
+  "hosted": {
+    "governance": {
+      "id": 44866368570,
+      "jobs": [
+        {
+          "id": 136730846161,
+          "name": "governance"
+        }
+      ]
+    },
+    "p05": {
+      "id": 44866368565,
+      "jobs": [
+        {
+          "id": 136730846147,
+          "name": "Installed Python (simx, fp16)"
+        },
+        {
+          "id": 136730846328,
+          "name": "Installed Python (simx, bf16)"
+        }
+      ]
+    },
+    "p04": {
+      "id": 44866368512,
+      "jobs": [
+        {
+          "id": 136730845993,
+          "name": "Native model (rtlsim, fp16)"
+        },
+        {
+          "id": 136730846133,
+          "name": "Native model (simx, bf16)"
+        },
+        {
+          "id": 136730846172,
+          "name": "Native model (rtlsim, bf16)"
+        },
+        {
+          "id": 136730846213,
+          "name": "Native model (simx, fp16)"
+        }
+      ]
+    }
+  },
+  "source_metadata_naming_correction": "Original scratch native-run/jobs contain P05, not P04; explicit p04-run/jobs were fetched and checked.",
+  "retention_count": 59,
+  "retention_bytes": 1699185
+}

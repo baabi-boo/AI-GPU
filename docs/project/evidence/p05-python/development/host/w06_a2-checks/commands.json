@@ -1,0 +1,324 @@
+[
+  {
+    "address_space_limit_bytes": 2147483648,
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "import sys; from setuptools.build_meta import build_sdist; print(build_sdist(sys.argv[1]))",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/unbound-sdist"
+    ],
+    "cwd": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/fresh-unbound-source",
+    "elapsed_seconds": 0.512,
+    "exit_code": 0,
+    "id": "clean-unbound-sdist",
+    "log": {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/clean-unbound-sdist.log",
+      "sha256": "354e975fd700e1c710ac91b12bd4c75a20e45d1062f3b473e5fadca61b2dd49a",
+      "size": 3667
+    },
+    "maximum_rss_kib": 25580,
+    "timed_argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "\nfrom pathlib import Path\nimport json, resource, subprocess, sys, time\nstarted = time.monotonic()\nprocess = subprocess.Popen(sys.argv[2:])\nresult = process.wait()\nusage = resource.getrusage(resource.RUSAGE_CHILDREN)\nPath(sys.argv[1]).write_text(json.dumps({\n    'maximum_rss_kib': usage.ru_maxrss,\n    'user_cpu_seconds': usage.ru_utime,\n    'system_cpu_seconds': usage.ru_stime,\n    'elapsed_seconds': time.monotonic() - started,\n    'exit_code': result,\n}, indent=2) + '\\n')\nsys.exit(result if result >= 0 else 128 - result)\n",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/clean-unbound-sdist.time.json",
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "import sys; from setuptools.build_meta import build_sdist; print(build_sdist(sys.argv[1]))",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/unbound-sdist"
+    ],
+    "timed_out": false,
+    "timeout_seconds": 45
+  },
+  {
+    "address_space_limit_bytes": 2147483648,
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-m",
+      "pip",
+      "--isolated",
+      "wheel",
+      "--verbose",
+      "--disable-pip-version-check",
+      "--no-index",
+      "--no-deps",
+      "--no-build-isolation",
+      "--no-cache-dir",
+      "--wheel-dir",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/wheels",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/unbound-extracted/vortex_ai-0.1.0"
+    ],
+    "cwd": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks",
+    "elapsed_seconds": 8.864,
+    "exit_code": 0,
+    "id": "unbound-offline-wheel",
+    "log": {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/unbound-offline-wheel.log",
+      "sha256": "2175409603ba81b2040a873bb112130f1a8442cc708c556ac1c6022c38812dd8",
+      "size": 17973
+    },
+    "maximum_rss_kib": 185264,
+    "timed_argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "\nfrom pathlib import Path\nimport json, resource, subprocess, sys, time\nstarted = time.monotonic()\nprocess = subprocess.Popen(sys.argv[2:])\nresult = process.wait()\nusage = resource.getrusage(resource.RUSAGE_CHILDREN)\nPath(sys.argv[1]).write_text(json.dumps({\n    'maximum_rss_kib': usage.ru_maxrss,\n    'user_cpu_seconds': usage.ru_utime,\n    'system_cpu_seconds': usage.ru_stime,\n    'elapsed_seconds': time.monotonic() - started,\n    'exit_code': result,\n}, indent=2) + '\\n')\nsys.exit(result if result >= 0 else 128 - result)\n",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/unbound-offline-wheel.time.json",
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-m",
+      "pip",
+      "--isolated",
+      "wheel",
+      "--verbose",
+      "--disable-pip-version-check",
+      "--no-index",
+      "--no-deps",
+      "--no-build-isolation",
+      "--no-cache-dir",
+      "--wheel-dir",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/wheels",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/unbound-extracted/vortex_ai-0.1.0"
+    ],
+    "timed_out": false,
+    "timeout_seconds": 240
+  },
+  {
+    "address_space_limit_bytes": 2147483648,
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "import sys; from setuptools.build_meta import build_sdist; print(build_sdist(sys.argv[1]))",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/postbuild-sdist"
+    ],
+    "cwd": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/unbound-extracted/vortex_ai-0.1.0",
+    "elapsed_seconds": 0.522,
+    "exit_code": 0,
+    "id": "postbuild-sdist-repack",
+    "log": {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/postbuild-sdist-repack.log",
+      "sha256": "cfd444ec212ff7d0a2e440d9ac54de45250a34bf0a161e46e57ecdc0483c296f",
+      "size": 3570
+    },
+    "maximum_rss_kib": 25448,
+    "timed_argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "\nfrom pathlib import Path\nimport json, resource, subprocess, sys, time\nstarted = time.monotonic()\nprocess = subprocess.Popen(sys.argv[2:])\nresult = process.wait()\nusage = resource.getrusage(resource.RUSAGE_CHILDREN)\nPath(sys.argv[1]).write_text(json.dumps({\n    'maximum_rss_kib': usage.ru_maxrss,\n    'user_cpu_seconds': usage.ru_utime,\n    'system_cpu_seconds': usage.ru_stime,\n    'elapsed_seconds': time.monotonic() - started,\n    'exit_code': result,\n}, indent=2) + '\\n')\nsys.exit(result if result >= 0 else 128 - result)\n",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/postbuild-sdist-repack.time.json",
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "import sys; from setuptools.build_meta import build_sdist; print(build_sdist(sys.argv[1]))",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/postbuild-sdist"
+    ],
+    "timed_out": false,
+    "timeout_seconds": 45
+  },
+  {
+    "address_space_limit_bytes": 2147483648,
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-m",
+      "venv",
+      "--without-pip",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/fresh-venv"
+    ],
+    "cwd": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks",
+    "elapsed_seconds": 0.248,
+    "exit_code": 0,
+    "id": "fresh-venv",
+    "log": {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/fresh-venv.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "maximum_rss_kib": 10880,
+    "timed_argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "\nfrom pathlib import Path\nimport json, resource, subprocess, sys, time\nstarted = time.monotonic()\nprocess = subprocess.Popen(sys.argv[2:])\nresult = process.wait()\nusage = resource.getrusage(resource.RUSAGE_CHILDREN)\nPath(sys.argv[1]).write_text(json.dumps({\n    'maximum_rss_kib': usage.ru_maxrss,\n    'user_cpu_seconds': usage.ru_utime,\n    'system_cpu_seconds': usage.ru_stime,\n    'elapsed_seconds': time.monotonic() - started,\n    'exit_code': result,\n}, indent=2) + '\\n')\nsys.exit(result if result >= 0 else 128 - result)\n",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/fresh-venv.time.json",
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-m",
+      "venv",
+      "--without-pip",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/fresh-venv"
+    ],
+    "timed_out": false,
+    "timeout_seconds": 45
+  },
+  {
+    "address_space_limit_bytes": 2147483648,
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-m",
+      "pip",
+      "--isolated",
+      "--python",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/fresh-venv/bin/python",
+      "install",
+      "--disable-pip-version-check",
+      "--no-index",
+      "--no-deps",
+      "--no-cache-dir",
+      "--no-compile",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/wheels/vortex_ai-0.1.0-cp312-cp312-linux_x86_64.whl"
+    ],
+    "cwd": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks",
+    "elapsed_seconds": 0.92,
+    "exit_code": 0,
+    "id": "offline-install",
+    "log": {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/offline-install.log",
+      "sha256": "862eeefcaebd65e6499ac5c6a579446e5a5f52d2d4277e82e9a6068b6f6de03d",
+      "size": 145
+    },
+    "maximum_rss_kib": 39364,
+    "timed_argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "\nfrom pathlib import Path\nimport json, resource, subprocess, sys, time\nstarted = time.monotonic()\nprocess = subprocess.Popen(sys.argv[2:])\nresult = process.wait()\nusage = resource.getrusage(resource.RUSAGE_CHILDREN)\nPath(sys.argv[1]).write_text(json.dumps({\n    'maximum_rss_kib': usage.ru_maxrss,\n    'user_cpu_seconds': usage.ru_utime,\n    'system_cpu_seconds': usage.ru_stime,\n    'elapsed_seconds': time.monotonic() - started,\n    'exit_code': result,\n}, indent=2) + '\\n')\nsys.exit(result if result >= 0 else 128 - result)\n",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/offline-install.time.json",
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-m",
+      "pip",
+      "--isolated",
+      "--python",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/fresh-venv/bin/python",
+      "install",
+      "--disable-pip-version-check",
+      "--no-index",
+      "--no-deps",
+      "--no-cache-dir",
+      "--no-compile",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/wheels/vortex_ai-0.1.0-cp312-cp312-linux_x86_64.whl"
+    ],
+    "timed_out": false,
+    "timeout_seconds": 45
+  },
+  {
+    "address_space_limit_bytes": 2147483648,
+    "argv": [
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/fresh-venv/bin/python",
+      "-I",
+      "-B",
+      "-c",
+      "\nimport importlib.metadata, importlib.util, json, pathlib, sys\nroot, expected_pin = pathlib.Path(sys.argv[1]), sys.argv[2]\nassert not pathlib.Path.cwd().is_relative_to(root)\nimport vortex_ai\nimport vortex_ai.launch\nassert 'vortex_ai._native' not in sys.modules\nassert all(importlib.util.find_spec(name) is None for name in ('numpy','torch','setuptools'))\nidentity = vortex_ai.build_info()\nassert identity == {'binding_api': 1, 'bundle_sha256': '', 'source_sha256': expected_pin}\nfrom vortex_ai import _native\nprefix = pathlib.Path(sys.prefix)\nfor path in (vortex_ai.__file__, _native.__file__, vortex_ai.launch.__file__):\n    assert pathlib.Path(path).is_relative_to(prefix), path\n    assert not pathlib.Path(path).is_relative_to(root), path\ndistribution = importlib.metadata.distribution('vortex-ai')\nassert distribution.version == vortex_ai.__version__ == '0.1.0'\nassert not distribution.metadata.get_all('Requires-Dist')\ncases = vortex_ai.fixture_cases()\nassert len(cases) == len(set(cases)) == 10\ntry:\n    vortex_ai.Session.open('/intentionally-absent-unbound-bundle')\nexcept vortex_ai.BindingError as error:\n    assert 'unbound' in str(error) and 'wheel' in str(error)\n    failure = {'type': type(error).__name__, 'kind': error.kind, 'message': str(error)}\nelse:\n    raise AssertionError('unbound wheel unexpectedly opened a session')\ntry:\n    vortex_ai.launch.verified_environment('/intentionally-absent-unbound-bundle', environment={})\nexcept ValueError as error:\n    assert 'not a bound API-1 package' in str(error)\nelse:\n    raise AssertionError('unbound launcher accepted a bundle')\nmaps = pathlib.Path('/proc/self/maps').read_text()\nproject_names = ('libvortex', 'libsimx', 'libramulator')\nassert not any(name in maps for name in project_names)\npackage_root = pathlib.Path(vortex_ai.__file__).parent\npayload = sorted(path.relative_to(package_root).as_posix() for path in package_root.rglob('*') if path.is_file())\nassert len(payload) == 5 and len([name for name in payload if name.endswith('.py')]) == 4\nassert not any(name.endswith('.pyc') for name in payload)\nprint(json.dumps({'package': vortex_ai.__file__, 'extension': _native.__file__,\n                  'launcher': vortex_ai.launch.__file__, 'build_info': identity,\n                  'fixture_count': len(cases), 'failure': failure,\n                  'loaded_project_libraries': [], 'runtime_requirements': [],\n                  'installed_package_payload': payload,\n                  'installed_files': sorted(str(path) for path in distribution.files)}, indent=2))\n",
+      "/workspace/scratch/ba0248fde989/AI-GPU",
+      "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a"
+    ],
+    "cwd": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/outside-checkout",
+    "elapsed_seconds": 0.188,
+    "exit_code": 0,
+    "id": "clean-installed-import",
+    "log": {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/clean-installed-import.log",
+      "sha256": "d9bd382ec03507d24b5dbbc6302873bdabaf60fa61a2027d78fb59f7f71606da",
+      "size": 1753
+    },
+    "maximum_rss_kib": 18100,
+    "timed_argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "\nfrom pathlib import Path\nimport json, resource, subprocess, sys, time\nstarted = time.monotonic()\nprocess = subprocess.Popen(sys.argv[2:])\nresult = process.wait()\nusage = resource.getrusage(resource.RUSAGE_CHILDREN)\nPath(sys.argv[1]).write_text(json.dumps({\n    'maximum_rss_kib': usage.ru_maxrss,\n    'user_cpu_seconds': usage.ru_utime,\n    'system_cpu_seconds': usage.ru_stime,\n    'elapsed_seconds': time.monotonic() - started,\n    'exit_code': result,\n}, indent=2) + '\\n')\nsys.exit(result if result >= 0 else 128 - result)\n",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/clean-installed-import.time.json",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/fresh-venv/bin/python",
+      "-I",
+      "-B",
+      "-c",
+      "\nimport importlib.metadata, importlib.util, json, pathlib, sys\nroot, expected_pin = pathlib.Path(sys.argv[1]), sys.argv[2]\nassert not pathlib.Path.cwd().is_relative_to(root)\nimport vortex_ai\nimport vortex_ai.launch\nassert 'vortex_ai._native' not in sys.modules\nassert all(importlib.util.find_spec(name) is None for name in ('numpy','torch','setuptools'))\nidentity = vortex_ai.build_info()\nassert identity == {'binding_api': 1, 'bundle_sha256': '', 'source_sha256': expected_pin}\nfrom vortex_ai import _native\nprefix = pathlib.Path(sys.prefix)\nfor path in (vortex_ai.__file__, _native.__file__, vortex_ai.launch.__file__):\n    assert pathlib.Path(path).is_relative_to(prefix), path\n    assert not pathlib.Path(path).is_relative_to(root), path\ndistribution = importlib.metadata.distribution('vortex-ai')\nassert distribution.version == vortex_ai.__version__ == '0.1.0'\nassert not distribution.metadata.get_all('Requires-Dist')\ncases = vortex_ai.fixture_cases()\nassert len(cases) == len(set(cases)) == 10\ntry:\n    vortex_ai.Session.open('/intentionally-absent-unbound-bundle')\nexcept vortex_ai.BindingError as error:\n    assert 'unbound' in str(error) and 'wheel' in str(error)\n    failure = {'type': type(error).__name__, 'kind': error.kind, 'message': str(error)}\nelse:\n    raise AssertionError('unbound wheel unexpectedly opened a session')\ntry:\n    vortex_ai.launch.verified_environment('/intentionally-absent-unbound-bundle', environment={})\nexcept ValueError as error:\n    assert 'not a bound API-1 package' in str(error)\nelse:\n    raise AssertionError('unbound launcher accepted a bundle')\nmaps = pathlib.Path('/proc/self/maps').read_text()\nproject_names = ('libvortex', 'libsimx', 'libramulator')\nassert not any(name in maps for name in project_names)\npackage_root = pathlib.Path(vortex_ai.__file__).parent\npayload = sorted(path.relative_to(package_root).as_posix() for path in package_root.rglob('*') if path.is_file())\nassert len(payload) == 5 and len([name for name in payload if name.endswith('.py')]) == 4\nassert not any(name.endswith('.pyc') for name in payload)\nprint(json.dumps({'package': vortex_ai.__file__, 'extension': _native.__file__,\n                  'launcher': vortex_ai.launch.__file__, 'build_info': identity,\n                  'fixture_count': len(cases), 'failure': failure,\n                  'loaded_project_libraries': [], 'runtime_requirements': [],\n                  'installed_package_payload': payload,\n                  'installed_files': sorted(str(path) for path in distribution.files)}, indent=2))\n",
+      "/workspace/scratch/ba0248fde989/AI-GPU",
+      "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a"
+    ],
+    "timed_out": false,
+    "timeout_seconds": 45
+  },
+  {
+    "address_space_limit_bytes": 2147483648,
+    "argv": [
+      "readelf",
+      "-d",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/fresh-venv/lib/python3.12/site-packages/vortex_ai/_native.cpython-312-x86_64-linux-gnu.so"
+    ],
+    "cwd": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/outside-checkout",
+    "elapsed_seconds": 0.061,
+    "exit_code": 0,
+    "id": "elf-dynamic",
+    "log": {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/elf-dynamic.log",
+      "sha256": "6cedda64236a5e200eb70ec91bfc0f635171bf80bc4da696be9cbf7ce7d6f4c8",
+      "size": 1552
+    },
+    "maximum_rss_kib": 9088,
+    "timed_argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "\nfrom pathlib import Path\nimport json, resource, subprocess, sys, time\nstarted = time.monotonic()\nprocess = subprocess.Popen(sys.argv[2:])\nresult = process.wait()\nusage = resource.getrusage(resource.RUSAGE_CHILDREN)\nPath(sys.argv[1]).write_text(json.dumps({\n    'maximum_rss_kib': usage.ru_maxrss,\n    'user_cpu_seconds': usage.ru_utime,\n    'system_cpu_seconds': usage.ru_stime,\n    'elapsed_seconds': time.monotonic() - started,\n    'exit_code': result,\n}, indent=2) + '\\n')\nsys.exit(result if result >= 0 else 128 - result)\n",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/elf-dynamic.time.json",
+      "readelf",
+      "-d",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/fresh-venv/lib/python3.12/site-packages/vortex_ai/_native.cpython-312-x86_64-linux-gnu.so"
+    ],
+    "timed_out": false,
+    "timeout_seconds": 45
+  },
+  {
+    "address_space_limit_bytes": 2147483648,
+    "argv": [
+      "nm",
+      "-D",
+      "--defined-only",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/fresh-venv/lib/python3.12/site-packages/vortex_ai/_native.cpython-312-x86_64-linux-gnu.so"
+    ],
+    "cwd": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/outside-checkout",
+    "elapsed_seconds": 0.044,
+    "exit_code": 0,
+    "id": "elf-exports",
+    "log": {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/elf-exports.log",
+      "sha256": "9768151611a7eb4ddd16b55dc4fb6139d61d767de549602da00a93cea4d818c2",
+      "size": 1333
+    },
+    "maximum_rss_kib": 9088,
+    "timed_argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-B",
+      "-c",
+      "\nfrom pathlib import Path\nimport json, resource, subprocess, sys, time\nstarted = time.monotonic()\nprocess = subprocess.Popen(sys.argv[2:])\nresult = process.wait()\nusage = resource.getrusage(resource.RUSAGE_CHILDREN)\nPath(sys.argv[1]).write_text(json.dumps({\n    'maximum_rss_kib': usage.ru_maxrss,\n    'user_cpu_seconds': usage.ru_utime,\n    'system_cpu_seconds': usage.ru_stime,\n    'elapsed_seconds': time.monotonic() - started,\n    'exit_code': result,\n}, indent=2) + '\\n')\nsys.exit(result if result >= 0 else 128 - result)\n",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/logs/elf-exports.time.json",
+      "nm",
+      "-D",
+      "--defined-only",
+      "/workspace/scratch/ba0248fde989/p05-work/w06_a2-checks/fresh-venv/lib/python3.12/site-packages/vortex_ai/_native.cpython-312-x86_64-linux-gnu.so"
+    ],
+    "timed_out": false,
+    "timeout_seconds": 45
+  }
+]

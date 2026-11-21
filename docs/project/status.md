@@ -17,11 +17,14 @@ The complete host suite passed **1,816 tests in 366.568 seconds** at the same
 revision. The [executor packet](evidence/p04-executor/README.md) retains the
 original archives, failed attempts, exact auditors and successful relocated replay.
 
-**P05-T01 is in progress**, following the
-[Python binding handoff](p05-entry-handoff.md) and
-[copying-binding audit](p05-binding-audit.md). The first plain-Python binding is
-being implemented and independently qualified. P05 acceptance remains unearned;
-P04 does not establish a Python/framework backend or physical GPU performance.
+**P05-T01 remains in progress; its plain-Python binding now has
+[P05-A01 acceptance](evidence/p05-python/acceptance-binding.json).** The
+[installed SimX packet](evidence/p05-python/README.md) binds the supported
+representations, ownership/error checks and clean installation to
+`e1420fd550f716df33a2556057b7086a03032cbe`. The next bounded action is the scoped
+PyTorch custom-op route in the [binding handoff](p05-entry-handoff.md).
+P05-A02 and P05-A03 remain unearned; this result establishes no framework backend
+or physical GPU performance.
 
 **P03 is complete with independently reviewed A01–A03 evidence.** The
 [historical operator contract](evidence/p03-operators/acceptance.json) remains
@@ -60,7 +63,7 @@ the linked reports define the exact accepted scope.
 | P02 — tensor numerical contract | `complete` | A01 source contract, A02 ordinary WMMA and A03 bounded WGMMA evidence accepted after required review; T01/T02 complete |
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
 | P04 — tiny-model inference | `complete` | A01 fixed fixture preserved; A02/A03 accept the full four-variant composed-model matrix at native processor RTL scope |
-| P05 — Python binding | `in_progress` | First copying binding development; Python/framework acceptance remains unearned |
+| P05 — Python/framework bridge | `in_progress` | A01 accepts the bounded copying Python binding on SimX; custom-op execution and tested framework compatibility (A02/A03) remain unearned |
 | P06–P11 | `not_started` | Later performance, hardware and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -75,15 +78,34 @@ The [development audit](p05-binding-audit.md) selected the first P05-T01 slice:
 a Linux CPython 3.12 extension around the unchanged managed native owners.
 The [binding contract](../designs/python_binding_v1.md) defines exact packed
 FP16/BF16 inputs, owned FP32 results, explicit close and retryable timeouts.
-The [compatibility matrix](p05-python-compatibility.md) separates implemented
-behavior, host-only tests and pending native qualification.
+The [compatibility matrix](p05-python-compatibility.md) separates qualified
+SimX execution, host-only failure tests and unsupported framework behavior.
 
-The package binds a wheel to exact native bundle and source hashes. Its
-qualification workflow builds the unchanged native comparison path, rebuilds
-the bound source archive offline, installs the wheel in a fresh environment and
-compares actual Python outputs and dispatch records in separate FP16/BF16 SimX
-processes. Qualification is pending; no P05 gate is accepted by these additions.
-The scoped PyTorch custom-op route remains the following work package.
+The [A01 record](evidence/p05-python/acceptance-binding.json) accepts the copying
+binding at `e1420fd550f716df33a2556057b7086a03032cbe`, with binding-source SHA-256
+`c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a`.
+The installed FP16/BF16 matrix passed all six supported matmul signatures and ten
+frozen model cases, using two output poisons per route. The combined matrix has
+**144 native launches: 72 through Python and 72 through the native comparison**.
+Its **660 event/profile pairs** comprise 360 Python and 300 native pairs; the
+twelve standalone native comparison launches are unprofiled. The copied original
+native packet is not an additional execution.
+
+Each variant rebuilt a bound source archive offline and installed its wheel in a
+fresh external environment. Hosted qualification used **CPython 3.12.14 and
+G++ 11.4.0**; the separate local packaging checks used GCC/G++ 14.2.0.
+The clean hosted source suite passed **2,174 tests in 421.584 seconds** at the
+implementation revision. Independent numerical, dispatch and provenance audits
+reconcile the original archives, actual outputs, source/build identities and
+installation records in the [evidence packet](evidence/p05-python/README.md).
+
+The [host history](evidence/p05-python/development/host-validation.md) retains
+107 host-native lifecycle scenarios, eleven targeted probes, actual package
+build checks and earlier failures. The changing-source local full-suite failure,
+its isolated rechecks and the inherited configure timeout are not relabelled as
+passes. Host fault injection does not establish accelerator arithmetic. Current
+documentation records the tested implementation revision; it does not claim a
+new execution at a later evidence-delivery commit.
 
 Independent review found two inherited constraints at the new caller boundary:
 SimX uses process-wide simulation state, and distinct queues can interleave
@@ -736,18 +758,18 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**P05-T01 — qualify the first copying Python binding.** Follow the
-[entry handoff](p05-entry-handoff.md) and
-[implemented contract](../designs/python_binding_v1.md): independently verify all
-six declared signatures, frozen model cases, lifetimes, errors and clean package
-installation against the native comparison path. P05 is `in_progress`; its
-acceptance gates require their own evidence. After the plain-Python route is
-qualified, implement and qualify the scoped PyTorch custom operators under the
-[P05 phase guide](phases/p05-framework.md).
-The [accepted executor packet](evidence/p04-executor/README.md) supplies the
-unchanged native comparison path. See the [backlog](backlog.md) for the bounded
-work item. P06 still needs a frozen benchmark/counter policy before performance
-optimization claims.
+**P05-T01 — implement and qualify the scoped PyTorch custom-op route.**
+Start from the [accepted copying binding](evidence/p05-python/acceptance-binding.json)
+and [handoff](p05-entry-handoff.md). First freeze one tested framework version,
+operator schemas, tensor devices/layouts, copying rules and explicit rejection of
+unsupported gradients. Then route the declared operators through the existing
+owners and reproduce the fixed model against the unchanged native executable,
+retaining exact outputs, native dispatch, host bridge work and clean installation.
+No PyTorch version is qualified yet. P05 remains `in_progress`; A02 needs actual
+framework execution and A03 needs its versioned compatibility/failure matrix.
+See the [phase guide](phases/p05-framework.md) and [backlog](backlog.md).
+P06 still needs a frozen benchmark/counter policy before performance optimization
+claims; the accepted Python binding does not supply those measurements.
 
 **Parallel blocked hardware task:** P01-T05 still needs a qualified vendor
 release/platform, matching prepared `hw_emu` artifact packet and actual reviewed

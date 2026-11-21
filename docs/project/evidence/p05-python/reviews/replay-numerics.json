@@ -1,0 +1,597 @@
+{
+  "accumulation_prefix_peaks": {
+    "hidden": 26,
+    "output": 86
+  },
+  "audit": "independent-p05-retained-numerics-v1",
+  "auditor_sha256": "608b16c80a1a40816ef15f04b2670c736e2abca7768e7c6ad546c8a96f23e736",
+  "counts": {
+    "native": {
+      "event_profile_pairs": 300,
+      "matmul_launches": 12,
+      "matmul_runs": 12,
+      "matmul_words": 768,
+      "model_bridge_words": 1280,
+      "model_hidden_words": 2560,
+      "model_launches": 60,
+      "model_output_block_words": 1280,
+      "model_output_words": 1280,
+      "model_runs": 20,
+      "total_launches": 72
+    },
+    "python": {
+      "event_profile_pairs": 360,
+      "matmul_launches": 12,
+      "matmul_runs": 12,
+      "matmul_words": 768,
+      "model_bridge_words": 1280,
+      "model_hidden_words": 2560,
+      "model_launches": 60,
+      "model_output_block_words": 1280,
+      "model_output_words": 1280,
+      "model_runs": 20,
+      "total_launches": 72
+    }
+  },
+  "event_profile_pairs": 660,
+  "execution_performed_by_audit": false,
+  "fixture_sha256": {
+    "p02_layout_v1.json": "0543f9f4208de3ff4743fe1894d97ccf3b8cca4707e9a26acd1f3dde884725b2",
+    "p02_wmma_numerical_v1.json": "4102d74024e92e9887d7324b9326c0d6ad1fff206b5fad33f45c530d5bd03a73",
+    "p04_tiny_mlp_v1.json": "d22a899827afb3e8c22a528fc6a27fd12ff114ef39caf9ffa0cccd77e849cd03"
+  },
+  "full_matrix_verified": true,
+  "inputs": [
+    {
+      "path": "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/fixtures/p02_layout_v1.json",
+      "sha256": "0543f9f4208de3ff4743fe1894d97ccf3b8cca4707e9a26acd1f3dde884725b2",
+      "size_bytes": 83960
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/fixtures/p02_wmma_numerical_v1.json",
+      "sha256": "4102d74024e92e9887d7324b9326c0d6ad1fff206b5fad33f45c530d5bd03a73",
+      "size_bytes": 260308
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/fixtures/p04_tiny_mlp_v1.json",
+      "sha256": "d22a899827afb3e8c22a528fc6a27fd12ff114ef39caf9ffa0cccd77e849cd03",
+      "size_bytes": 92301
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/AI-GPU/docs/project/evidence/p04-executor/reviews/audit_numerics.py",
+      "sha256": "d7130898b8d3d0690c7cf03459d50e2301ab9fcbcd928562c599bdaea32d918e",
+      "size_bytes": 22886
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/AI-GPU/docs/project/evidence/p05-python/reviews/audit_numerics.py",
+      "sha256": "608b16c80a1a40816ef15f04b2670c736e2abca7768e7c6ad546c8a96f23e736",
+      "size_bytes": 38177
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/report.json",
+      "sha256": "2e8c73dd7faceac8976216e47eb09399d0b1015119f612f76457bfa1665801e0",
+      "size_bytes": 182046
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/snapshots/source-before.json",
+      "sha256": "9f0fd8b7c73268af6e95068befb27c0402af84bc86db6a95cb5aecb8373900ed",
+      "size_bytes": 174241
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/snapshots/source-after.json",
+      "sha256": "9f0fd8b7c73268af6e95068befb27c0402af84bc86db6a95cb5aecb8373900ed",
+      "size_bytes": 174241
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/logs/package-tools-before.log",
+      "sha256": "be506acc091a27438f713c27444661f687eafea770308d054927da6058baf50a",
+      "size_bytes": 149124
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/logs/native-matmul-build.log",
+      "sha256": "b86ac8fd33526054584faf0b8307a5a76e244d7882e11102ca013ef9455ef2de",
+      "size_bytes": 64207
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/logs/native-matmul-effective-header.log",
+      "sha256": "bf0e5fcf8553f41670ede440566f00f2ea54e1c2e580eef7bf5d78282798a692",
+      "size_bytes": 31109
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/logs/native-fp16-single-dense_boundaries.log",
+      "sha256": "59cee57365330d8bc1dd8ea16bf9b4ffc1f3ce7fa05d675e71bb8cdd0e08cc8e",
+      "size_bytes": 2071
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/logs/native-fp16-numerical-cross_tile_rounding_positive.log",
+      "sha256": "5010b11c4b6af631d7006ff776d80ef3549d7f13b9f8dab19524a9cdde78a145",
+      "size_bytes": 2105
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/logs/native-fp16-multi-dense_boundaries.log",
+      "sha256": "dd6345bb15c258a7b466d60ee9aea83a87e03f71cbdad4eb1d0ab224f8d188a2",
+      "size_bytes": 4189
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/logs/package-bound-sdist.log",
+      "sha256": "9a541cf37a326f944afdbfa450b51d43fab6b112f7125f378ed2957f75e91fc4",
+      "size_bytes": 3644
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/logs/package-offline-wheel.log",
+      "sha256": "dc5abc1545bc2e3fd9c64779bf9afd4f2b8f0b445eddb9e22fb44c22fa849033",
+      "size_bytes": 24034
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/logs/package-create-venv.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/logs/package-install-wheel.log",
+      "sha256": "ba9af4fd3a94290f2199cf3b3e3f03525bba8a973fd9df911de613e30f2cbd12",
+      "size_bytes": 268
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/logs/installed-matrix.log",
+      "sha256": "91be707f02cb9cb96d6f92fc54d4c89a0f3331135c144ed282cbebee88622888",
+      "size_bytes": 158074
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/logs/package-tools-after.log",
+      "sha256": "be506acc091a27438f713c27444661f687eafea770308d054927da6058baf50a",
+      "size_bytes": 149124
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/snapshots/selection.json",
+      "sha256": "d9620ac044bc685944e23265718154da915e289c1210c63b6f84d667f54f41ba",
+      "size_bytes": 64767
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/snapshots/installed-request.json",
+      "sha256": "1e5597d9e103585b32397fd0be162d13e1d8415f90345ac87a1963d81161c341",
+      "size_bytes": 15889
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/report.json",
+      "sha256": "4478a4cc2b49e4fe57d5eea51fab672535afef904585a7a0da2297086b4a733e",
+      "size_bytes": 501771
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/snapshots/source-before.json",
+      "sha256": "314eac5d835432550884cfa8ca064bf4f289829e8ae4137e6e2906ac47b4b53f",
+      "size_bytes": 171630
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/snapshots/source-after.json",
+      "sha256": "314eac5d835432550884cfa8ca064bf4f289829e8ae4137e6e2906ac47b4b53f",
+      "size_bytes": 171630
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/snapshots/fixtures.json",
+      "sha256": "b544fc18d5afbe77b3daa53a8308a4e0343af5df759b81721232fd2653bebebd",
+      "size_bytes": 44788
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/snapshots/native-matmul-binding.json",
+      "sha256": "a26c4330f42127bdb846a12d5b5010a02b6ec5e2b2712f1e61b59b5615aef242",
+      "size_bytes": 77138
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/snapshots/simx-fp16-binding.json",
+      "sha256": "323115a293af30ae1b446d39ba891dee9001d00d845e28b5219120877958c987",
+      "size_bytes": 77241
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/version-gpp.log",
+      "sha256": "9eaf9b7f4b11c2e84e2478c2ceb0e4f48f4ba88565bcfc832b3bce49847dda6d",
+      "size_bytes": 246
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/version-clang.log",
+      "sha256": "5c82310dd02189c08a5f2900661fd62a86123f0489feb6562b01d9943c5c2fd7",
+      "size_bytes": 228
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/version-make.log",
+      "sha256": "8ee498ee2fc27e8dcdf99191b454077df95e3840d841ec94321748b6d7f36819",
+      "size_bytes": 297
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/simx-fp16-configure.log",
+      "sha256": "125be4ad212849077dabb6b165b5818d33c28018e2d288e335d7ba2b49d0739f",
+      "size_bytes": 1454
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/simx-fp16-header.log",
+      "sha256": "5c0c86b3a54df488c163ffe1cec735f492323020559e5394f178979c181633c2",
+      "size_bytes": 30589
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/simx-fp16-cpp-header-reproduce.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/simx-fp16-verilog-header-reproduce.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/simx-fp16-runtime.log",
+      "sha256": "740e3c82333dadaacd4523d1507a2ff5c50be81d74ba5d0045e87e0fbfa7f367",
+      "size_bytes": 118311
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/simx-fp16-application.log",
+      "sha256": "f6a379bfa22196ab82d2084167b9e71a1e829be49bafe8c98c10262241fe9572",
+      "size_bytes": 174572
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/simx-fp16-effective-header.log",
+      "sha256": "bf0e5fcf8553f41670ede440566f00f2ea54e1c2e580eef7bf5d78282798a692",
+      "size_bytes": 31109
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/simx-fp16-fp16-seeded_dense.log",
+      "sha256": "413164c927cdc30141a6d23005a0e90506be260321907adb6b6ee92cb570d636",
+      "size_bytes": 28857
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/simx-fp16-fp16-negated_dense.log",
+      "sha256": "06fa6dce2ac8b91193f8aba5f3a44618d2c0aa5db41326fea7a4c7fa2e67c88d",
+      "size_bytes": 28863
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/simx-fp16-fp16-zero.log",
+      "sha256": "f59a33c4518386683e70604ae4fd565d721628476b03064d6c061d46c7f49a49",
+      "size_bytes": 28843
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/simx-fp16-fp16-signed_basis.log",
+      "sha256": "5b36aea4391b82dfc12854531fdf4242bcbcb427943e10232025abee72310ef2",
+      "size_bytes": 28860
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/native/logs/simx-fp16-fp16-split_boundary.log",
+      "sha256": "273aceb24a7b9734b4fc30d5bab6ebf24540448b407a92c74a72d47cec87bf47",
+      "size_bytes": 28863
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python/artifacts/installed-observations.json",
+      "sha256": "34019d286c72402601e47fe8413a87a29f7778beeb75293e5d2bc8bb381a7f61",
+      "size_bytes": 159837
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/report.json",
+      "sha256": "47e44eef2a0f44944be17bdf87a9ffaab33486be9840c8c147faea624b279e8a",
+      "size_bytes": 182038
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/snapshots/source-before.json",
+      "sha256": "9f0fd8b7c73268af6e95068befb27c0402af84bc86db6a95cb5aecb8373900ed",
+      "size_bytes": 174241
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/snapshots/source-after.json",
+      "sha256": "9f0fd8b7c73268af6e95068befb27c0402af84bc86db6a95cb5aecb8373900ed",
+      "size_bytes": 174241
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/logs/package-tools-before.log",
+      "sha256": "be506acc091a27438f713c27444661f687eafea770308d054927da6058baf50a",
+      "size_bytes": 149124
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/logs/native-matmul-build.log",
+      "sha256": "061ad2043844d068aeba5eef7e4e8b9be356232570436fef3ebd5b5d697b107c",
+      "size_bytes": 64207
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/logs/native-matmul-effective-header.log",
+      "sha256": "fcd53d392374d876a1787de54beb1269c470f62df7d5bc4867a6566b0d51aa6e",
+      "size_bytes": 31109
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/logs/native-bf16-single-dense_boundaries.log",
+      "sha256": "4d058126e49ab0633463c7ede47a9d6e510cc4fcfee2226c83397b4036a26762",
+      "size_bytes": 2071
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/logs/native-bf16-numerical-cross_tile_rounding_positive.log",
+      "sha256": "37683f6e8231f51d3bb644546dcba15858d680529e6af1be730e49542da93cc2",
+      "size_bytes": 2105
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/logs/native-bf16-multi-dense_boundaries.log",
+      "sha256": "c8826dadfd4464792ffd066cc5a8c5b283b9a5c428a47713223dd32bc39e85ac",
+      "size_bytes": 4189
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/logs/package-bound-sdist.log",
+      "sha256": "9a541cf37a326f944afdbfa450b51d43fab6b112f7125f378ed2957f75e91fc4",
+      "size_bytes": 3644
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/logs/package-offline-wheel.log",
+      "sha256": "9670a4f55c0cbe1b7f34172a9b9f22031c1c50295f24725209779cbf396f466c",
+      "size_bytes": 24034
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/logs/package-create-venv.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/logs/package-install-wheel.log",
+      "sha256": "e3698cfe3b3e851c2cac8af91fb325f11926d1510cf79e795ada48a6f79f0708",
+      "size_bytes": 268
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/logs/installed-matrix.log",
+      "sha256": "9a52c4be37f7acf44cff1acde31dd906c558873b600a25165f5a563f2829c27d",
+      "size_bytes": 158072
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/logs/package-tools-after.log",
+      "sha256": "be506acc091a27438f713c27444661f687eafea770308d054927da6058baf50a",
+      "size_bytes": 149124
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/snapshots/selection.json",
+      "sha256": "ba5bd39f85784bc3d5b669288c3e523fb1dad9a26998a208ee065fc2bf266da6",
+      "size_bytes": 64767
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/snapshots/installed-request.json",
+      "sha256": "ff6cb15d56997d666b1598038c4d9c12b98144d95fc2656036855964da7d3bd2",
+      "size_bytes": 15889
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/report.json",
+      "sha256": "fa58bf21e0f6544f9c4afc8f1ccbda14b41e1feaf6d95666753c88e3d32224d9",
+      "size_bytes": 501758
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/snapshots/source-before.json",
+      "sha256": "314eac5d835432550884cfa8ca064bf4f289829e8ae4137e6e2906ac47b4b53f",
+      "size_bytes": 171630
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/snapshots/source-after.json",
+      "sha256": "314eac5d835432550884cfa8ca064bf4f289829e8ae4137e6e2906ac47b4b53f",
+      "size_bytes": 171630
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/snapshots/fixtures.json",
+      "sha256": "ca6a974f0db53b4eb630534498c598bf675d662d0caa6a3eb4878bc7fc17bf0c",
+      "size_bytes": 44788
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/snapshots/native-matmul-binding.json",
+      "sha256": "844e8fb27023bdeb7492ef7d42a5584e55db07cdebc0e109c2dee20b1cb2b4f9",
+      "size_bytes": 77138
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/snapshots/simx-bf16-binding.json",
+      "sha256": "b3694983d7b5801386a7f7113f344808f697f8466e263c26c1ee78b037feb6ed",
+      "size_bytes": 77241
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/version-gpp.log",
+      "sha256": "9eaf9b7f4b11c2e84e2478c2ceb0e4f48f4ba88565bcfc832b3bce49847dda6d",
+      "size_bytes": 246
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/version-clang.log",
+      "sha256": "5c82310dd02189c08a5f2900661fd62a86123f0489feb6562b01d9943c5c2fd7",
+      "size_bytes": 228
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/version-make.log",
+      "sha256": "8ee498ee2fc27e8dcdf99191b454077df95e3840d841ec94321748b6d7f36819",
+      "size_bytes": 297
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/simx-bf16-configure.log",
+      "sha256": "125be4ad212849077dabb6b165b5818d33c28018e2d288e335d7ba2b49d0739f",
+      "size_bytes": 1454
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/simx-bf16-header.log",
+      "sha256": "5c0c86b3a54df488c163ffe1cec735f492323020559e5394f178979c181633c2",
+      "size_bytes": 30589
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/simx-bf16-cpp-header-reproduce.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/simx-bf16-verilog-header-reproduce.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/simx-bf16-runtime.log",
+      "sha256": "8b19ae625304646fff58e42936512899f15cb7cc95e490fddb7c1fdb6fa9dae8",
+      "size_bytes": 118311
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/simx-bf16-application.log",
+      "sha256": "a3c7bd2d74aa7f18510dc69098392dbb77c0933ab22104a740fcff431deb2259",
+      "size_bytes": 174572
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/simx-bf16-effective-header.log",
+      "sha256": "fcd53d392374d876a1787de54beb1269c470f62df7d5bc4867a6566b0d51aa6e",
+      "size_bytes": 31109
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/simx-bf16-bf16-seeded_dense.log",
+      "sha256": "944984db8db70e9b93310bc1ea3875f5a4ce823c57abba9cabf4362954529af4",
+      "size_bytes": 28855
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/simx-bf16-bf16-negated_dense.log",
+      "sha256": "394effab2555bb749d29795b50039a43ef27296327e0405a9685ed65d89348b0",
+      "size_bytes": 28859
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/simx-bf16-bf16-zero.log",
+      "sha256": "c37e3864c863e647b4a700a96a9ca1619105f163fa7b4671a58ce4b9eb12f450",
+      "size_bytes": 28840
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/simx-bf16-bf16-signed_basis.log",
+      "sha256": "6c30d7e7a8f4ebea81e7d91d1ecd32847b0cde543bc71f41aca3aad663025244",
+      "size_bytes": 28856
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/native/logs/simx-bf16-bf16-split_boundary.log",
+      "sha256": "d7a3bfe596beab3f35ac168dd510951a0f6dadade4431d0c022ecf4933be62e7",
+      "size_bytes": 28860
+    },
+    {
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python/artifacts/installed-observations.json",
+      "sha256": "72d7387cccba9a8d531db914ff8d976609494cbafc05a21e84eb9466cea09bf4",
+      "size_bytes": 159835
+    }
+  ],
+  "limitations": [
+    "Retained-data audit only; it does not execute or authenticate a native backend.",
+    "Source/build/package provenance and dispatch/timing review remain complementary obligations.",
+    "P02 standalone inputs are identified by frozen requests and native source provenance; their logs do not retain uploaded operand contents.",
+    "Only the selected six signatures and ten fixed model cases on SimX are in scope; no complete P03 rerun, RTL, physical performance or framework claim.",
+    "Trusted-builder/nonadversarial-filesystem scope; archives are not opened or extracted."
+  ],
+  "matrix_scope": "complete",
+  "outcome": "pass",
+  "packets": [
+    {
+      "counts": {
+        "native": {
+          "event_profile_pairs": 150,
+          "matmul_launches": 6,
+          "matmul_runs": 6,
+          "matmul_words": 384,
+          "model_bridge_words": 640,
+          "model_hidden_words": 1280,
+          "model_launches": 30,
+          "model_output_block_words": 640,
+          "model_output_words": 640,
+          "model_runs": 10,
+          "total_launches": 36
+        },
+        "python": {
+          "event_profile_pairs": 180,
+          "matmul_launches": 6,
+          "matmul_runs": 6,
+          "matmul_words": 384,
+          "model_bridge_words": 640,
+          "model_hidden_words": 1280,
+          "model_launches": 30,
+          "model_output_block_words": 640,
+          "model_output_words": 640,
+          "model_runs": 10,
+          "total_launches": 36
+        }
+      },
+      "format": "fp16",
+      "matmul_case_ids": [
+        "fp16-single-dense_boundaries",
+        "fp16-numerical-cross_tile_rounding_positive",
+        "fp16-multi-dense_boundaries"
+      ],
+      "matmul_qualification_id": "360459424b10a97f38f2c6fa1357901617006a6b0f24f9ddd970156263c5d8f4",
+      "model_case_ids": [
+        "fp16-seeded_dense",
+        "fp16-negated_dense",
+        "fp16-zero",
+        "fp16-signed_basis",
+        "fp16-split_boundary"
+      ],
+      "native_qualification_id": "bdf65307dae6237099fbe96341e01762bf4f8818b191d8fbee590aeb0a816a78",
+      "native_report_sha256": "4478a4cc2b49e4fe57d5eea51fab672535afef904585a7a0da2297086b4a733e",
+      "observations_sha256": "34019d286c72402601e47fe8413a87a29f7778beeb75293e5d2bc8bb381a7f61",
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python",
+      "report_sha256": "2e8c73dd7faceac8976216e47eb09399d0b1015119f612f76457bfa1665801e0",
+      "source_checkout_sha256": "ac3de34a470f26b6be7998e985a39ffb018ef45091aaa264ad3665d440df3615",
+      "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+      "source_snapshot_sha256": "9f0fd8b7c73268af6e95068befb27c0402af84bc86db6a95cb5aecb8373900ed",
+      "source_tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049"
+    },
+    {
+      "counts": {
+        "native": {
+          "event_profile_pairs": 150,
+          "matmul_launches": 6,
+          "matmul_runs": 6,
+          "matmul_words": 384,
+          "model_bridge_words": 640,
+          "model_hidden_words": 1280,
+          "model_launches": 30,
+          "model_output_block_words": 640,
+          "model_output_words": 640,
+          "model_runs": 10,
+          "total_launches": 36
+        },
+        "python": {
+          "event_profile_pairs": 180,
+          "matmul_launches": 6,
+          "matmul_runs": 6,
+          "matmul_words": 384,
+          "model_bridge_words": 640,
+          "model_hidden_words": 1280,
+          "model_launches": 30,
+          "model_output_block_words": 640,
+          "model_output_words": 640,
+          "model_runs": 10,
+          "total_launches": 36
+        }
+      },
+      "format": "bf16",
+      "matmul_case_ids": [
+        "bf16-single-dense_boundaries",
+        "bf16-numerical-cross_tile_rounding_positive",
+        "bf16-multi-dense_boundaries"
+      ],
+      "matmul_qualification_id": "b2de7d128ace5d7a90f212b9b425a935d847c36d168eb7273935428c675d5ce8",
+      "model_case_ids": [
+        "bf16-seeded_dense",
+        "bf16-negated_dense",
+        "bf16-zero",
+        "bf16-signed_basis",
+        "bf16-split_boundary"
+      ],
+      "native_qualification_id": "c5fd995f8fa7f941d44714e282f1bbc5897c4d62a4989cb2563608ff7e437262",
+      "native_report_sha256": "fa58bf21e0f6544f9c4afc8f1ccbda14b41e1feaf6d95666753c88e3d32224d9",
+      "observations_sha256": "72d7387cccba9a8d531db914ff8d976609494cbafc05a21e84eb9466cea09bf4",
+      "path": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python",
+      "report_sha256": "47e44eef2a0f44944be17bdf87a9ffaab33486be9840c8c147faea624b279e8a",
+      "source_checkout_sha256": "ac3de34a470f26b6be7998e985a39ffb018ef45091aaa264ad3665d440df3615",
+      "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+      "source_snapshot_sha256": "9f0fd8b7c73268af6e95068befb27c0402af84bc86db6a95cb5aecb8373900ed",
+      "source_tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049"
+    }
+  ],
+  "phase_acceptance": false,
+  "reused_helper": {
+    "functions": [
+      "fixture_oracles",
+      "observed"
+    ],
+    "path": "docs/project/evidence/p04-executor/reviews/audit_numerics.py",
+    "purpose": "Accepted P04 independent integer mathematics and live hidden/bridge/stage lineage; no P05 helper imports.",
+    "sha256": "d7130898b8d3d0690c7cf03459d50e2301ab9fcbcd928562c599bdaea32d918e"
+  },
+  "schema_version": 1,
+  "selected_scope_requested": false,
+  "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+  "source_tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049",
+  "total_launches": 144,
+  "variants": [
+    "simx-fp16",
+    "simx-bf16"
+  ]
+}

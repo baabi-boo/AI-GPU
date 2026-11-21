@@ -1,0 +1,388 @@
+{
+  "acceptance_claimed": false,
+  "archives": [
+    {
+      "member_count": 304,
+      "path": "docs/project/evidence/p05-python/archives/simx-fp16.zip",
+      "provider_artifact_id": 14692495937,
+      "sha256": "467122e41bee4e67f9eef285e015b2dee3a52522f0bcb3f497e3cec87e6c7380",
+      "size_bytes": 6417582
+    },
+    {
+      "member_count": 304,
+      "path": "docs/project/evidence/p05-python/archives/simx-bf16.zip",
+      "provider_artifact_id": 14692690399,
+      "sha256": "e951f943ece1878f3767180c4ce2b859939722d2d639c1afb37b8a72c76006d8",
+      "size_bytes": 6417108
+    }
+  ],
+  "combined_comparisons": {
+    "assembled_fp32_words": 2560,
+    "model_bridge_packed_32bit_words": 2560,
+    "model_hidden_fp32_words": 5120,
+    "model_stage_output_fp32_words": 7680,
+    "standalone_fp32_words": 1536
+  },
+  "commands": [
+    {
+      "audit": "numerics",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "/workspace/scratch/ba0248fde989/AI-GPU/docs/project/evidence/p05-python/reviews/audit_numerics.py",
+        "--source-dir",
+        "/workspace/scratch/ba0248fde989/AI-GPU",
+        "--packet",
+        "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-fp16/python",
+        "--packet",
+        "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-bf16/python",
+        "--output",
+        "/workspace/scratch/ba0248fde989/AI-GPU/docs/project/evidence/p05-python/reviews/full-numerics.json"
+      ],
+      "cwd": "/workspace/scratch/ba0248fde989/AI-GPU",
+      "elapsed_seconds": 0.6623150129998976,
+      "exit_code": 0,
+      "full_matrix": true,
+      "input_source_auditor_stable": true,
+      "log": {
+        "path": "docs/project/evidence/p05-python/reviews/full-numerics.log",
+        "sha256": "32603fe4f034eb96d97b70c4865341d4c2b9dc71cd3fc4a89425b8fbda234ab9",
+        "size_bytes": 178
+      },
+      "outcome": "pass",
+      "result": {
+        "path": "docs/project/evidence/p05-python/reviews/full-numerics.json",
+        "sha256": "0cd0c01504a50501ed2e6bf6bac8bc4cb3cfef09754b3ed47c0924d069125cb9",
+        "size_bytes": 27144
+      }
+    },
+    {
+      "audit": "dispatch",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "/workspace/scratch/ba0248fde989/AI-GPU/docs/project/evidence/p05-python/reviews/audit_dispatch.py",
+        "--source-dir",
+        "/workspace/scratch/ba0248fde989/AI-GPU",
+        "--packet",
+        "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-fp16/python",
+        "--packet",
+        "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-bf16/python",
+        "--output",
+        "/workspace/scratch/ba0248fde989/AI-GPU/docs/project/evidence/p05-python/reviews/full-dispatch.json"
+      ],
+      "cwd": "/workspace/scratch/ba0248fde989/AI-GPU",
+      "elapsed_seconds": 0.7573075749969576,
+      "exit_code": 0,
+      "full_matrix": true,
+      "input_source_auditor_stable": true,
+      "log": {
+        "path": "docs/project/evidence/p05-python/reviews/full-dispatch.log",
+        "sha256": "73aaefe9c280e1092b7aae31fa1831f3873c970b0e0bdd746b9d1807d6334989",
+        "size_bytes": 50489
+      },
+      "outcome": "pass",
+      "result": {
+        "path": "docs/project/evidence/p05-python/reviews/full-dispatch.json",
+        "sha256": "73aaefe9c280e1092b7aae31fa1831f3873c970b0e0bdd746b9d1807d6334989",
+        "size_bytes": 50489
+      }
+    },
+    {
+      "audit": "provenance",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "/workspace/scratch/ba0248fde989/AI-GPU/docs/project/evidence/p05-python/reviews/audit_provenance.py",
+        "--source-dir",
+        "/workspace/scratch/ba0248fde989/AI-GPU",
+        "--packet",
+        "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-fp16/python",
+        "--packet",
+        "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-bf16/python",
+        "--output",
+        "/workspace/scratch/ba0248fde989/AI-GPU/docs/project/evidence/p05-python/reviews/full-provenance.json"
+      ],
+      "cwd": "/workspace/scratch/ba0248fde989/AI-GPU",
+      "elapsed_seconds": 8.960562879001372,
+      "exit_code": 0,
+      "full_matrix": true,
+      "input_source_auditor_stable": true,
+      "log": {
+        "path": "docs/project/evidence/p05-python/reviews/full-provenance.log",
+        "sha256": "1f31b388edc139e546e70f8d79e97d7efde779f50e328d74998331bd3bad9d17",
+        "size_bytes": 68913
+      },
+      "outcome": "pass",
+      "result": {
+        "path": "docs/project/evidence/p05-python/reviews/full-provenance.json",
+        "sha256": "1f31b388edc139e546e70f8d79e97d7efde779f50e328d74998331bd3bad9d17",
+        "size_bytes": 68913
+      }
+    }
+  ],
+  "counts": {
+    "dispatch": {
+      "combined": {
+        "argument_block_bytes": 8064,
+        "d2h_transfers": 144,
+        "event_profile_pairs": 660,
+        "h2d_transfers": 432,
+        "host_assembly_bytes": 10240,
+        "host_bridge_bytes": 10240,
+        "matmul_launches": 24,
+        "matmul_runs": 24,
+        "model_launches": 120,
+        "model_runs": 40,
+        "profiled_launches": 132,
+        "tensor_d2h_bytes": 36864,
+        "tensor_h2d_bytes": 93696,
+        "total_launches": 144,
+        "unprofiled_launches": 12
+      },
+      "native_comparison": {
+        "argument_block_bytes": 4032,
+        "d2h_transfers": 72,
+        "event_profile_pairs": 300,
+        "h2d_transfers": 216,
+        "host_assembly_bytes": 5120,
+        "host_bridge_bytes": 5120,
+        "matmul_launches": 12,
+        "matmul_runs": 12,
+        "model_launches": 60,
+        "model_runs": 20,
+        "profiled_launches": 60,
+        "tensor_d2h_bytes": 18432,
+        "tensor_h2d_bytes": 46848,
+        "total_launches": 72,
+        "unprofiled_launches": 12
+      },
+      "python": {
+        "argument_block_bytes": 4032,
+        "d2h_transfers": 72,
+        "event_profile_pairs": 360,
+        "h2d_transfers": 216,
+        "host_assembly_bytes": 5120,
+        "host_bridge_bytes": 5120,
+        "matmul_launches": 12,
+        "matmul_runs": 12,
+        "model_launches": 60,
+        "model_runs": 20,
+        "profiled_launches": 72,
+        "tensor_d2h_bytes": 18432,
+        "tensor_h2d_bytes": 46848,
+        "total_launches": 72,
+        "unprofiled_launches": 0
+      }
+    },
+    "numerics": {
+      "native": {
+        "event_profile_pairs": 300,
+        "matmul_launches": 12,
+        "matmul_runs": 12,
+        "matmul_words": 768,
+        "model_bridge_words": 1280,
+        "model_hidden_words": 2560,
+        "model_launches": 60,
+        "model_output_block_words": 1280,
+        "model_output_words": 1280,
+        "model_runs": 20,
+        "total_launches": 72
+      },
+      "python": {
+        "event_profile_pairs": 360,
+        "matmul_launches": 12,
+        "matmul_runs": 12,
+        "matmul_words": 768,
+        "model_bridge_words": 1280,
+        "model_hidden_words": 2560,
+        "model_launches": 60,
+        "model_output_block_words": 1280,
+        "model_output_words": 1280,
+        "model_runs": 20,
+        "total_launches": 72
+      }
+    }
+  },
+  "host_history": {
+    "path": "docs/project/evidence/p05-python/development/host-validation.md",
+    "sha256": "d66b9a7b7642bd0bdf239ed5768546dc93c1b6c855af8c5704d28078cca46234",
+    "size_bytes": 9538
+  },
+  "hosted": {
+    "governance": {
+      "job_ids": [
+        136730846161
+      ],
+      "jobs": {
+        "path": "docs/project/evidence/p05-python/hosted/governance-jobs.json",
+        "sha256": "91499b8aa9b6e18b8f39b38ad5b16a9c5896ff95b91a1432f3f77c660c63dc08",
+        "size_bytes": 2416
+      },
+      "outcome": "success",
+      "raw_log": {
+        "path": "docs/project/evidence/p05-python/hosted/governance-job.log",
+        "sha256": "77177f540b1f64f9816721757c86ac2198d486a20b48dfdce52f9fa980d86b73",
+        "size_bytes": 19510
+      },
+      "run": {
+        "path": "docs/project/evidence/p05-python/hosted/governance-run.json",
+        "sha256": "34c4a22824f241fcd20618511bb2f024536b677355ead08ff6637de71b8a692c",
+        "size_bytes": 13360
+      },
+      "run_id": 44866368570,
+      "seconds": 421.584,
+      "tests": 2174
+    },
+    "p04": {
+      "job_ids": [
+        136730845993,
+        136730846133,
+        136730846172,
+        136730846213
+      ],
+      "jobs": {
+        "path": "docs/project/evidence/p05-python/hosted/p04-jobs.json",
+        "sha256": "c09fb6f526cd7fb40abb580e50401b606debc9dd4f0161b156633cace13176ad",
+        "size_bytes": 11991
+      },
+      "outcome": "success",
+      "run": {
+        "path": "docs/project/evidence/p05-python/hosted/p04-run.json",
+        "sha256": "655a4cf74de11bf9e9a901a2365783d9589f971b3448f56554b0f9f6b1c2a293",
+        "size_bytes": 13349
+      },
+      "run_id": 44866368512
+    },
+    "p05": {
+      "job_ids": [
+        136730846147,
+        136730846328
+      ],
+      "jobs": {
+        "path": "docs/project/evidence/p05-python/hosted/p05-jobs.json",
+        "sha256": "2bc8557b3f11d455744e831cfb72f42d42cd8dfb9f83b4bbd195272487b21fe3",
+        "size_bytes": 7475
+      },
+      "outcome": "success",
+      "run": {
+        "path": "docs/project/evidence/p05-python/hosted/p05-run.json",
+        "sha256": "fb2841488a719bfaf59477c511a6a6797732cdc866570b0bf0a15cac8b32d549",
+        "size_bytes": 13354
+      },
+      "run_id": 44866368565
+    }
+  },
+  "limitations": [
+    "Trusted-builder retained observations establish consistency, not cryptographic execution attestation or reproducible transitive compilation.",
+    "The top-level native packet and python/native are copies of the same comparison evidence, not separate executions. Supplemental P04 workflow results are not counted in this P05 matrix.",
+    "Native standalone comparison has twelve unprofiled launches; 132 profiled launches produce 660 event/profile pairs, not 720.",
+    "Host allocator/fault injection and packaging checks are separate from real installed SimX arithmetic. The clean hosted suite includes overlapping coverage and is not added to the 107+11 host-child count.",
+    "Command timings are host simulator measurements; clocks across processes are not aligned, and wait/advance intervals overlap event timings. No physical speed or power claim.",
+    "Submodule and cached prerequisite library identities are retained; missing transitive source/compiler/system-library bodies are not reconstructed.",
+    "Hosted bound extension and libsimx retain reported RUNPATH entries; arbitrary-host portability, manylinux and complete OS/runtime replay are unqualified.",
+    "Source-changing local full-suite and baseline timeout failures remain retained; isolated rechecks and later clean hosted success do not erase them.",
+    "No Python RTL/XRT qualification, physical FPGA evidence, arbitrary models, autograd, training, full framework device backend or CUDA compatibility.",
+    "P01-A03 vendor hw_emu and inherited DSP267-to283 finding remain unresolved."
+  ],
+  "matrix": {
+    "backend": "simx",
+    "formats": [
+      "fp16",
+      "bf16"
+    ],
+    "frozen_model_cases": 10,
+    "iterations": 2,
+    "supported_matmul_signatures": 6
+  },
+  "outcome": "pass",
+  "phase_complete": false,
+  "recommendation": {
+    "P05": "Remain in_progress.",
+    "P05-A01": "Supports bounded acceptance when combined with the independently reviewed host lifecycle/error tests and source-matched clean hosted suite; separate gate reviewer makes the decision.",
+    "P05-A02": "Unearned: no implemented or tested PyTorch custom operator.",
+    "P05-A03": "Unearned for the framework obligation: no tested framework version; the plain-Python matrix is separately documented."
+  },
+  "record_id": "p05-copying-binding-full-matrix-independent-review-v1",
+  "reviewer": "/root/w09_a1_full_matrix_evidence_review",
+  "schema_version": 1,
+  "scope": "Full two-format retained-data numerical, dispatch and provenance review of the installed copying Python binding on SimX; no new native execution",
+  "selected_reviews": [
+    {
+      "audit": "numerics",
+      "format": "fp16",
+      "full_matrix": false,
+      "packet_identical_to_full_result": true,
+      "path": "docs/project/evidence/p05-python/reviews/fp16-numerics.json",
+      "selected_scope": true,
+      "sha256": "7136b4641808e36dbf8d2b744cb6acf4029b77a1db1aea0d79d8e15193ff6f79",
+      "size_bytes": 15501
+    },
+    {
+      "audit": "numerics",
+      "format": "bf16",
+      "full_matrix": false,
+      "packet_identical_to_full_result": true,
+      "path": "docs/project/evidence/p05-python/reviews/bf16-numerics.json",
+      "selected_scope": true,
+      "sha256": "58858feda4712f979370d3bc50cf9ae239b72b3276f22ecfdbba42d33171803e",
+      "size_bytes": 15501
+    },
+    {
+      "audit": "dispatch",
+      "format": "fp16",
+      "full_matrix": false,
+      "packet_identical_to_full_result": true,
+      "path": "docs/project/evidence/p05-python/reviews/fp16-dispatch.json",
+      "selected_scope": true,
+      "sha256": "df5ea11b2334840cbc979b072181238633d8c31b8dd32a593da1179025d0d7a5",
+      "size_bytes": 29601
+    },
+    {
+      "audit": "dispatch",
+      "format": "bf16",
+      "full_matrix": false,
+      "packet_identical_to_full_result": true,
+      "path": "docs/project/evidence/p05-python/reviews/bf16-dispatch.json",
+      "selected_scope": true,
+      "sha256": "ae63f756c4a623de9544ad7a20ba3e7e52390596f493f5d68f9d40eaf22b150b",
+      "size_bytes": 29593
+    },
+    {
+      "audit": "provenance",
+      "format": "fp16",
+      "full_matrix": false,
+      "packet_identical_to_full_result": true,
+      "path": "docs/project/evidence/p05-python/reviews/fp16-provenance.json",
+      "selected_scope": true,
+      "sha256": "6d2906f390dc2bafcc3558fb9a74c8b6bbcbd8a3670121c44bb00c9065a7bf59",
+      "size_bytes": 35507
+    },
+    {
+      "audit": "provenance",
+      "format": "bf16",
+      "full_matrix": false,
+      "packet_identical_to_full_result": true,
+      "path": "docs/project/evidence/p05-python/reviews/bf16-provenance.json",
+      "selected_scope": true,
+      "sha256": "339417f60be16258ec8e0555b5fe706c50f02b28b0de6724909edd228d6d8e3e",
+      "size_bytes": 35507
+    }
+  ],
+  "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+  "source_tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049",
+  "wrapper_correction": {
+    "affected_audit": "dispatch",
+    "auditor_exit": 0,
+    "initial_wrapper_exit": 1,
+    "observed_full_matrix_checked": true,
+    "original_execution_record": {
+      "path": "dispatch-execution.json",
+      "sha256": "5f21c41eabb6d7711cce3b63dfc9bd8d1e04bd2292b3a1a57ce9e8ce53fbd480"
+    },
+    "reason": "wrapper read full_matrix_verified/full_matrix but dispatch uses full_matrix_checked",
+    "result": "scope independently reconciled against both packets and six selected reports",
+    "scope": "aggregation-wrapper correction; auditor outputs and commands not rerun",
+    "source_and_auditors_modified": false
+  }
+}

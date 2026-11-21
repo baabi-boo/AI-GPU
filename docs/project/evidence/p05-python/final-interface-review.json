@@ -1,0 +1,612 @@
+{
+  "acceptance_claimed": false,
+  "approval": "The reviewed final documentation and handoff accurately describe the qualified e1420fd implementation and its limits. No interface-documentation correction is required before the parent performs its final publication checks.",
+  "binding_source_sha256": "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a",
+  "findings": [],
+  "implementation_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+  "implementation_tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049",
+  "limitations": [
+    "This is an agent-authored documentation/interface review, not human maintainer approval, an additional acceptance record or a waiver of any gate.",
+    "Installed execution, numerical equality, clean builds, failure injection, auditor replay and governance totals are retained prior observations; this reviewer did not re-execute them.",
+    "Only read-only source/metadata comparisons, AST parsing, bash syntax checks and local link-target existence were performed. No project module import, native code, package build, suite or auditor was run.",
+    "External URLs were not crawled and local Markdown fragments were not exhaustively validated; the relocated-data-replay target heading was checked.",
+    "The documentation refers to qualified implementation e1420fd. Later documentation/evidence publication does not itself create a new executed implementation or qualify a new environment.",
+    "P05 remains in_progress. PyTorch A02/A03, processor RTL/full-AFU/XRT/physical FPGA execution, performance and arbitrary-host package portability remain unqualified.",
+    "No production source, public guide, acceptance record, branch or remote was changed by this reviewer."
+  ],
+  "manual_contract_review": [
+    {
+      "basis": [
+        "python/vortex_ai/_api.py",
+        "python/native/module.cpp",
+        "docs/designs/python_binding_v1.md"
+      ],
+      "finding": "Exact bytes, bytearray or memoryview storage remains raw little-endian FP16/BF16. Rank-two metadata, byte strides, exact extent and contiguous rank-one byte storage are validated without implicit conversion. A is packed row-major and B packed column-major; FP32 output is independent copied raw bytes or words.",
+      "outcome": "pass",
+      "topic": "raw_tensor_representation"
+    },
+    {
+      "basis": [
+        "python/vortex_ai/_api.py",
+        "python/native/module.cpp",
+        "sw/runtime/ai/contract.cpp"
+      ],
+      "finding": "The three (M,N,K) shapes (8,4,8), (8,4,16), (16,8,16) for each of FP16 and BF16 match source dispatch and both installed observation packets.",
+      "outcome": "pass",
+      "topic": "six_matmul_signatures"
+    },
+    {
+      "basis": [
+        "python/vortex_ai/_api.py",
+        "python/native/module.cpp",
+        "sw/runtime/ai/mlp_host.cpp",
+        "docs/designs/python_binding_v1.md"
+      ],
+      "finding": "The API accepts the ten compiled P04 cases, matching the selected bundle format. The 16-to-8-to-4 batch-16 model uses three matmuls and explicit host ReLU, exact cast and row assembly; general weights/models and a tensor framework adapter remain outside the API.",
+      "outcome": "pass",
+      "topic": "frozen_models"
+    },
+    {
+      "basis": [
+        "python/vortex_ai/_api.py",
+        "python/native/module.cpp",
+        "docs/designs/python_binding_v1.md"
+      ],
+      "finding": "Only one live native context is permitted per process. A successful matmul wait does not release the operation lease; completed explicit close is required. Model creation suspends an idle matmul session and later submission/memory queries can resume it after the model releases its lease.",
+      "outcome": "pass",
+      "topic": "one_context_and_explicit_close"
+    },
+    {
+      "basis": [
+        "python/vortex_ai/_api.py",
+        "python/native/module.cpp",
+        "docs/designs/python_binding_v1.md"
+      ],
+      "finding": "Operations are registered in Session pending ownership before native work. An allocation failure or interruption can leave a recoverable owner in pending_operations(); a completed status alone is not permission to discard it. Context exit can raise after a bounded close.",
+      "outcome": "pass",
+      "topic": "pending_owner_recovery"
+    },
+    {
+      "basis": [
+        "python/vortex_ai/_api.py",
+        "python/native/module.cpp",
+        "docs/designs/python_binding_v1.md"
+      ],
+      "finding": "Timeouts are retryable, not cancellation; the 100 ms default and 1 s maximum apply to each native wait, and model advance can perform multiple waits. Destructors may drain indefinitely. Cleanup failure poisons subsequent context/work acquisition while retained owners can still be drained; no reset or broad device-fault recovery is promised.",
+      "outcome": "pass",
+      "topic": "timeouts_and_cleanup"
+    },
+    {
+      "basis": [
+        "python/vortex_ai/_api.py",
+        "python/native/module.cpp",
+        "python/README.md"
+      ],
+      "finding": "Model output success requires terminal model success and successful execution, then completed close/resource validation. The public example checks the model status separately after close; it does not confuse generic close success with a successful model.",
+      "outcome": "pass",
+      "topic": "model_success"
+    },
+    {
+      "basis": [
+        "python/native/module.cpp",
+        "python/native/runtime_loader.cpp",
+        "python/README.md",
+        "docs/designs/python_binding_v1.md"
+      ],
+      "finding": "Qualified execution is Linux x86_64 GIL CPython 3.12.14 in the main interpreter. Free-threaded/subinterpreter and post-fork native work are unsupported. One selected format/bundle is retained for process life and changing it requires a fresh process.",
+      "outcome": "pass",
+      "topic": "interpreter_and_process_limits"
+    },
+    {
+      "basis": [
+        "python/vortex_ai/launch.py",
+        "python/vortex_ai/_bundle.py",
+        "python/native/runtime_loader.cpp",
+        "python/README.md"
+      ],
+      "finding": "The launcher verifies the compiled bundle pin, sets LD_LIBRARY_PATH exactly to the canonical bundle lib directory and VORTEX_DRIVER=simx, and starts the same interpreter with -I -B. Nonempty loader overrides and conflicting drivers fail. Five regular nonsymlink project libraries and the kernel are verified; native checks enforce provenance independently of the Python helper. Documented path and symlink restrictions agree with native validation.",
+      "outcome": "pass",
+      "topic": "immutable_loader_and_launcher"
+    },
+    {
+      "basis": [
+        "setup.py",
+        "pyproject.toml",
+        "MANIFEST.in",
+        "python/vortex_ai/_bundle.py",
+        "python/README.md"
+      ],
+      "finding": "The staged source inventory, pinned build dependencies, clean external output directories and offline wheel commands agree with setup.py and pyproject.toml. A bound sdist retains its exact manifest/configuration, cannot be rebound by environment override and does not require the original bundle for wheel compilation; execution still requires that bundle. The recipe is explicitly not another qualification run.",
+      "outcome": "pass",
+      "topic": "offline_package_recipe"
+    },
+    {
+      "basis": [
+        "python/README.md",
+        "docs/project/p05-python-compatibility.md",
+        "docs/project/evidence/p05-python/reviews/full-provenance.json",
+        "docs/project/evidence/p05-python/development/host-validation.md"
+      ],
+      "finding": "The package/version/API/source identity, hosted CPython/compiler/build-tool versions and both installed observations match the current guides. Hosted G++ 11.4.0 and its two compile/link groups remain separate from the local unbound G++ 14.2.0/glibc 2.41 check and single extension build.",
+      "outcome": "pass",
+      "topic": "qualified_versions_and_source"
+    },
+    {
+      "basis": [
+        "python/README.md",
+        "docs/project/p05-python-compatibility.md",
+        "docs/project/evidence/p05-python/reviews/full-provenance.json",
+        "docs/project/evidence/p05-python/THIRD_PARTY_NOTICES.md"
+      ],
+      "finding": "The hosted extension RUNPATH and original libsimx Ramulator paths are disclosed. The five-library observed closure, system prerequisites, notices, trusted-builder evidence and absence of ABI3/manylinux/arbitrary-host portability or transitive reproducible-build guarantees are stated without overclaiming.",
+      "outcome": "pass",
+      "topic": "elf_and_distribution_limits"
+    },
+    {
+      "basis": [
+        "README.md",
+        "ROADMAP.md",
+        "docs/project/status.md",
+        "docs/project/backlog.md",
+        "docs/project/p05-entry-handoff.md",
+        "docs/project/p05-binding-audit.md",
+        "docs/project/roadmap.json",
+        "docs/project/evidence/p05-python/acceptance-binding.json"
+      ],
+      "finding": "The handoff consistently accepts only P05-A01 at simulated evidence level. P05 is in_progress; P05-A02/A03 and all PyTorch versions/operators remain unearned. The next scoped work is to freeze the framework/operator/tensor/error contract and qualify an explicit copying custom-op path against the unchanged native model, without unsupported gradients or silent fallback.",
+      "outcome": "pass",
+      "topic": "acceptance_and_next_step"
+    },
+    {
+      "basis": [
+        "docs/project/p05-python-compatibility.md",
+        "docs/project/p05-entry-handoff.md",
+        "docs/project/status.md",
+        "docs/project/evidence/p05-python/acceptance-binding.json"
+      ],
+      "finding": "The guides retain 144 combined Python/native launches and 660 profile pairs without double-counting copied packets or unprofiled standalone native matmuls. Host fake-library injection remains separate from real SimX arithmetic; clean hosted governance does not erase older failed/timeout runs. P01-A03 hw_emu remains blocked and the inherited DSP267-to283 area finding remains unresolved.",
+      "outcome": "pass",
+      "topic": "honest_evidence_and_blockers"
+    }
+  ],
+  "outcome": "pass",
+  "phase_complete": false,
+  "retained_observation_checks": {
+    "acceptance_scope": {
+      "ids": [
+        "P05-A01"
+      ],
+      "level": "simulated",
+      "phase_status": "in_progress"
+    },
+    "frozen_model_cases": [
+      "bf16-negated_dense",
+      "bf16-seeded_dense",
+      "bf16-signed_basis",
+      "bf16-split_boundary",
+      "bf16-zero",
+      "fp16-negated_dense",
+      "fp16-seeded_dense",
+      "fp16-signed_basis",
+      "fp16-split_boundary",
+      "fp16-zero"
+    ],
+    "hosted_versions_and_runpaths": [
+      {
+        "extension_runpath": [
+          "/opt/hostedtoolcache/Python/3.12.14/x64/lib"
+        ],
+        "format": "fp16",
+        "native_versions": {
+          "clang": "20.1.8",
+          "g++": "11.4.0",
+          "make": "4.3"
+        },
+        "package_versions": {
+          "packaging": "26.3",
+          "setuptools": "84.2.1",
+          "wheel": "0.48.0"
+        },
+        "simx_runpath": [
+          "/home/runner/work/AI-GPU/AI-GPU/third_party/ramulator:/home/runner/work/AI-GPU/AI-GPU/third_party/ramulator_ext"
+        ]
+      },
+      {
+        "extension_runpath": [
+          "/opt/hostedtoolcache/Python/3.12.14/x64/lib"
+        ],
+        "format": "bf16",
+        "native_versions": {
+          "clang": "20.1.8",
+          "g++": "11.4.0",
+          "make": "4.3"
+        },
+        "package_versions": {
+          "packaging": "26.3",
+          "setuptools": "84.2.1",
+          "wheel": "0.48.0"
+        },
+        "simx_runpath": [
+          "/home/runner/work/AI-GPU/AI-GPU/third_party/ramulator:/home/runner/work/AI-GPU/AI-GPU/third_party/ramulator_ext"
+        ]
+      }
+    ],
+    "installed_python_launches": 72,
+    "installed_routes": [
+      {
+        "build_info": {
+          "binding_api": 1,
+          "bundle_sha256": "504852a59f0654e94a2eef5a15fd8d141f70d59fc278590aada3ff24e29e2fd1",
+          "source_sha256": "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a"
+        },
+        "counts": {
+          "matmul_launches": 6,
+          "matmul_runs": 6,
+          "model_launches": 30,
+          "model_runs": 10,
+          "total_launches": 36
+        },
+        "distribution_version": "0.1.0",
+        "format": "fp16",
+        "python_implementation": "CPython",
+        "python_version": [
+          3,
+          12,
+          14
+        ],
+        "runtime_libraries": [
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libramulator.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libramulator-vortex.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libvortex.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libsimx.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libvortex-simx.so"
+        ],
+        "source": "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-fp16/python/artifacts/installed-observations.json"
+      },
+      {
+        "build_info": {
+          "binding_api": 1,
+          "bundle_sha256": "27b7f19ce9dfd239c7ff9a68e67e6a9fb0fe950076c25a694544be5b539eeb58",
+          "source_sha256": "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a"
+        },
+        "counts": {
+          "matmul_launches": 6,
+          "matmul_runs": 6,
+          "model_launches": 30,
+          "model_runs": 10,
+          "total_launches": 36
+        },
+        "distribution_version": "0.1.0",
+        "format": "bf16",
+        "python_implementation": "CPython",
+        "python_version": [
+          3,
+          12,
+          14
+        ],
+        "runtime_libraries": [
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libramulator.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libramulator-vortex.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libvortex.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libsimx.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libvortex-simx.so"
+        ],
+        "source": "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-bf16/python/artifacts/installed-observations.json"
+      }
+    ],
+    "supported_signatures": [
+      [
+        "bf16",
+        8,
+        4,
+        8
+      ],
+      [
+        "bf16",
+        8,
+        4,
+        16
+      ],
+      [
+        "bf16",
+        16,
+        8,
+        16
+      ],
+      [
+        "fp16",
+        8,
+        4,
+        8
+      ],
+      [
+        "fp16",
+        8,
+        4,
+        16
+      ],
+      [
+        "fp16",
+        16,
+        8,
+        16
+      ]
+    ]
+  },
+  "review_id": "p05-final-interface-review-w10-a2",
+  "reviewed_document_sha256": {
+    "README.md": "d3197a11aec26a952205860498ea03b7d1f82b10ab9fd9c964dd1e40316aa54c",
+    "ROADMAP.md": "672ea8edcd29f732dfc941df1c413d6875f9a9d8071f3a6e4f2be8ff97ef298d",
+    "docs/designs/python_binding_v1.md": "b80326f97e947e8930def218fbdc0b4aa6d13d454471dc55fd67109cdd074a3c",
+    "docs/project/backlog.md": "0c77ee7335ee1b80f207541b46b283614d06802ac3f56e46644d1cf2ba58190a",
+    "docs/project/p05-binding-audit.md": "aef6e709f1527709c9f15020405c40457bcf0aa6e188a5990f3d8338da886261",
+    "docs/project/p05-entry-handoff.md": "da7b7f019863f5bbdbf6ec54f0114d0628208853519f1da05348bffe11aaf7d9",
+    "docs/project/p05-python-compatibility.md": "da5c9a9470985f4c100dc46e6dc5909540b04f141a09bcb78854f0b760fb69a0",
+    "docs/project/roadmap.json": "9114ec56fefd2a5732d67a45dc1bf7ab76ef5a000fec7214b4c8bf4297134869",
+    "docs/project/status.md": "081564a502b3b0e5f2bb106677f7cf657f73c8f9c8147e029f9fbe8f80be5c50",
+    "python/README.md": "3fc591670907a2ce97006222f0ca3931185c236c0c6f6528674899a160929529"
+  },
+  "reviewer": "/root/w10_a2_final_api_documentation_review (distinct agent 56 of 60)",
+  "schema_version": 1,
+  "scope": "Independent bounded review of the final public Python API, compatibility documentation and development handoff against the qualified implementation and retained installed observations.",
+  "source_identity": {
+    "input_count": 22,
+    "inputs": [
+      {
+        "path": "MANIFEST.in",
+        "same_as_qualified_commit": true,
+        "sha256": "4261573e864bd1a0e602aaa4d020808a84a61cc7f90d9b1a5e11dc846d1c25e7",
+        "size": 868
+      },
+      {
+        "path": "pyproject.toml",
+        "same_as_qualified_commit": true,
+        "sha256": "ad53f6709fcbd49656e48f01503b6917bb20a0fcdea27d95ea954a9da0bf4713",
+        "size": 780
+      },
+      {
+        "path": "python/native/module.cpp",
+        "same_as_qualified_commit": true,
+        "sha256": "3e0688fef091dcc58bfaeb13e1ab18d2bcc147a601ceaa3a48cc91a34464170e",
+        "size": 37547
+      },
+      {
+        "path": "python/native/runtime_loader.cpp",
+        "same_as_qualified_commit": true,
+        "sha256": "8b75dfb415deadaa48b756b7db2f8a540329f838f804f2532e4bdcca5f001a60",
+        "size": 36859
+      },
+      {
+        "path": "python/native/runtime_loader.h",
+        "same_as_qualified_commit": true,
+        "sha256": "81e85468517838e43c9814720def49a11e06ebb767e9e5b7f1464a5d41a49542",
+        "size": 1238
+      },
+      {
+        "path": "python/vortex_ai/__init__.py",
+        "same_as_qualified_commit": true,
+        "sha256": "19d006db3a52bac6b3a7eec0111edd7fa2927e6fc31c1a23308178fa05783465",
+        "size": 523
+      },
+      {
+        "path": "python/vortex_ai/_api.py",
+        "same_as_qualified_commit": true,
+        "sha256": "f66748c6657ddd55e8753343f49b43cce87003df770e8bbb20c70ee57e3d0db2",
+        "size": 32061
+      },
+      {
+        "path": "python/vortex_ai/_bundle.py",
+        "same_as_qualified_commit": true,
+        "sha256": "e25ccf8a7fbe93b60b38507f3261f8936dcfad64c1d8012b307065ab6d94751d",
+        "size": 12251
+      },
+      {
+        "path": "python/vortex_ai/launch.py",
+        "same_as_qualified_commit": true,
+        "sha256": "e09c48119bb73c3209d9ac163c5f3667ecc53a86630cbf677b444a07a68b5267",
+        "size": 3197
+      },
+      {
+        "path": "setup.py",
+        "same_as_qualified_commit": true,
+        "sha256": "697024fc8074f31aa9def1ebeb2d923104ff731f0dcfb80dbeefc6974d267e65",
+        "size": 14712
+      },
+      {
+        "path": "sw/common/ai_matmul_args.h",
+        "same_as_qualified_commit": true,
+        "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+        "size": 4342
+      },
+      {
+        "path": "sw/runtime/ai/contract.cpp",
+        "same_as_qualified_commit": true,
+        "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+        "size": 10833
+      },
+      {
+        "path": "sw/runtime/ai/contract.h",
+        "same_as_qualified_commit": true,
+        "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+        "size": 3285
+      },
+      {
+        "path": "sw/runtime/ai/mlp_host.cpp",
+        "same_as_qualified_commit": true,
+        "sha256": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256",
+        "size": 2225
+      },
+      {
+        "path": "sw/runtime/ai/mlp_host.h",
+        "same_as_qualified_commit": true,
+        "sha256": "309e437aa9ca80c3a9c7c8ca7544478cdce4861203d32280709e2e940425cd0b",
+        "size": 774
+      },
+      {
+        "path": "sw/runtime/ai/mlp_runtime.cpp",
+        "same_as_qualified_commit": true,
+        "sha256": "0dab325434c513b85b66b108ca3b896304ab797252b9fd01919435fc8655ddd1",
+        "size": 13857
+      },
+      {
+        "path": "sw/runtime/ai/mlp_runtime.h",
+        "same_as_qualified_commit": true,
+        "sha256": "56750815b71361eb036aa8000716b977569a657a2cee650f9bdd048c06b81182",
+        "size": 5030
+      },
+      {
+        "path": "sw/runtime/ai/runtime.cpp",
+        "same_as_qualified_commit": true,
+        "sha256": "5540092240fb926f1c3066b0e8956a0096cb6be42b71f8b60d075434518e0be5",
+        "size": 17429
+      },
+      {
+        "path": "sw/runtime/ai/runtime.h",
+        "same_as_qualified_commit": true,
+        "sha256": "dc9c5f789c0a58dfbdce10420fce32f1d17c8e71fb83a7608d6e38489d4d4ad1",
+        "size": 3428
+      },
+      {
+        "path": "sw/runtime/include/vortex2.h",
+        "same_as_qualified_commit": true,
+        "sha256": "9738cdf35a7344d6a974b4d78f7b02d3c1e7ce87cfe68ef668b03c8eb1832614",
+        "size": 27464
+      },
+      {
+        "path": "tests/regression/ai_mlp/p04_fixtures.h",
+        "same_as_qualified_commit": true,
+        "sha256": "61a1368572b0cee5e67e0cc803b32e57b19557f53eb6b8e32e079a55b237e773",
+        "size": 67840
+      },
+      {
+        "path": "tests/regression/ai_mlp/records.h",
+        "same_as_qualified_commit": true,
+        "sha256": "13a4d51ab7058a799b9598c0ba410b64b6bd28d77c305f88de702ef0db8daf29",
+        "size": 10862
+      }
+    ],
+    "same_as_qualified_commit": true
+  },
+  "static_checks": {
+    "api_signatures": {
+      "ModelOperation": {
+        "advance": "self, timeout_ns=_DEFAULT_TIMEOUT_NS",
+        "close": "self, timeout_ns=_DEFAULT_TIMEOUT_NS",
+        "output_bytes": "self",
+        "record": "self, iteration=0"
+      },
+      "Operation": {
+        "close": "self, timeout_ns=_DEFAULT_TIMEOUT_NS",
+        "output_bytes": "self",
+        "wait": "self, timeout_ns=_DEFAULT_TIMEOUT_NS"
+      },
+      "Session": {
+        "close": "self",
+        "model": "self, case_id, *, poison=_DEFAULT_POISON",
+        "open": "cls, bundle_root",
+        "pending_operations": "self",
+        "submit": "self, a, b, *, poison=_DEFAULT_POISON"
+      }
+    },
+    "command": [
+      "python",
+      "/workspace/scratch/ba0248fde989/p05-work/w10_a2/review.py"
+    ],
+    "detailed_checks_sha256": "557c0dd5a07625f0bdb8d24da8d006967f76e3244d8b2cbaa502c7ac36223d97",
+    "exit_code": 0,
+    "input_hash_count": 42,
+    "input_sha256": {
+      "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-bf16/python/artifacts/bundle/manifest.json": "27b7f19ce9dfd239c7ff9a68e67e6a9fb0fe950076c25a694544be5b539eeb58",
+      "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-bf16/python/artifacts/installed-observations.json": "72d7387cccba9a8d531db914ff8d976609494cbafc05a21e84eb9466cea09bf4",
+      "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-fp16/python/artifacts/bundle/manifest.json": "504852a59f0654e94a2eef5a15fd8d141f70d59fc278590aada3ff24e29e2fd1",
+      "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-fp16/python/artifacts/installed-observations.json": "34019d286c72402601e47fe8413a87a29f7778beeb75293e5d2bc8bb381a7f61",
+      "MANIFEST.in": "4261573e864bd1a0e602aaa4d020808a84a61cc7f90d9b1a5e11dc846d1c25e7",
+      "README.md": "d3197a11aec26a952205860498ea03b7d1f82b10ab9fd9c964dd1e40316aa54c",
+      "ROADMAP.md": "672ea8edcd29f732dfc941df1c413d6875f9a9d8071f3a6e4f2be8ff97ef298d",
+      "docs/designs/python_binding_v1.md": "b80326f97e947e8930def218fbdc0b4aa6d13d454471dc55fd67109cdd074a3c",
+      "docs/project/backlog.md": "0c77ee7335ee1b80f207541b46b283614d06802ac3f56e46644d1cf2ba58190a",
+      "docs/project/evidence/p05-python/acceptance-binding.json": "1896bae3b59273f51448b554b965dc7d98d6beafcd446527c41c878a32c740c5",
+      "docs/project/evidence/p05-python/binding-acceptance-review.json": "3727a33b843e91d9faa9218182d03a80672d23f2b5cf9ab226edb280abd29ce3",
+      "docs/project/evidence/p05-python/relocated-replay.json": "95326c3aff7ae8eeead0ede3e6d611d626ed82f2f946ca94e01741feb8c47117",
+      "docs/project/evidence/p05-python/reviews/full-dispatch.json": "73aaefe9c280e1092b7aae31fa1831f3873c970b0e0bdd746b9d1807d6334989",
+      "docs/project/evidence/p05-python/reviews/full-numerics.json": "0cd0c01504a50501ed2e6bf6bac8bc4cb3cfef09754b3ed47c0924d069125cb9",
+      "docs/project/evidence/p05-python/reviews/full-provenance.json": "1f31b388edc139e546e70f8d79e97d7efde779f50e328d74998331bd3bad9d17",
+      "docs/project/p05-binding-audit.md": "aef6e709f1527709c9f15020405c40457bcf0aa6e188a5990f3d8338da886261",
+      "docs/project/p05-entry-handoff.md": "da7b7f019863f5bbdbf6ec54f0114d0628208853519f1da05348bffe11aaf7d9",
+      "docs/project/p05-python-compatibility.md": "da5c9a9470985f4c100dc46e6dc5909540b04f141a09bcb78854f0b760fb69a0",
+      "docs/project/roadmap.json": "9114ec56fefd2a5732d67a45dc1bf7ab76ef5a000fec7214b4c8bf4297134869",
+      "docs/project/status.md": "081564a502b3b0e5f2bb106677f7cf657f73c8f9c8147e029f9fbe8f80be5c50",
+      "pyproject.toml": "ad53f6709fcbd49656e48f01503b6917bb20a0fcdea27d95ea954a9da0bf4713",
+      "python/README.md": "3fc591670907a2ce97006222f0ca3931185c236c0c6f6528674899a160929529",
+      "python/native/module.cpp": "3e0688fef091dcc58bfaeb13e1ab18d2bcc147a601ceaa3a48cc91a34464170e",
+      "python/native/runtime_loader.cpp": "8b75dfb415deadaa48b756b7db2f8a540329f838f804f2532e4bdcca5f001a60",
+      "python/native/runtime_loader.h": "81e85468517838e43c9814720def49a11e06ebb767e9e5b7f1464a5d41a49542",
+      "python/vortex_ai/__init__.py": "19d006db3a52bac6b3a7eec0111edd7fa2927e6fc31c1a23308178fa05783465",
+      "python/vortex_ai/_api.py": "f66748c6657ddd55e8753343f49b43cce87003df770e8bbb20c70ee57e3d0db2",
+      "python/vortex_ai/_bundle.py": "e25ccf8a7fbe93b60b38507f3261f8936dcfad64c1d8012b307065ab6d94751d",
+      "python/vortex_ai/launch.py": "e09c48119bb73c3209d9ac163c5f3667ecc53a86630cbf677b444a07a68b5267",
+      "setup.py": "697024fc8074f31aa9def1ebeb2d923104ff731f0dcfb80dbeefc6974d267e65",
+      "sw/common/ai_matmul_args.h": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+      "sw/runtime/ai/contract.cpp": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+      "sw/runtime/ai/contract.h": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+      "sw/runtime/ai/mlp_host.cpp": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256",
+      "sw/runtime/ai/mlp_host.h": "309e437aa9ca80c3a9c7c8ca7544478cdce4861203d32280709e2e940425cd0b",
+      "sw/runtime/ai/mlp_runtime.cpp": "0dab325434c513b85b66b108ca3b896304ab797252b9fd01919435fc8655ddd1",
+      "sw/runtime/ai/mlp_runtime.h": "56750815b71361eb036aa8000716b977569a657a2cee650f9bdd048c06b81182",
+      "sw/runtime/ai/runtime.cpp": "5540092240fb926f1c3066b0e8956a0096cb6be42b71f8b60d075434518e0be5",
+      "sw/runtime/ai/runtime.h": "dc9c5f789c0a58dfbdce10420fce32f1d17c8e71fb83a7608d6e38489d4d4ad1",
+      "sw/runtime/include/vortex2.h": "9738cdf35a7344d6a974b4d78f7b02d3c1e7ce87cfe68ef668b03c8eb1832614",
+      "tests/regression/ai_mlp/p04_fixtures.h": "61a1368572b0cee5e67e0cc803b32e57b19557f53eb6b8e32e079a55b237e773",
+      "tests/regression/ai_mlp/records.h": "13a4d51ab7058a799b9598c0ba410b64b6bd28d77c305f88de702ef0db8daf29"
+    },
+    "inputs_unchanged_during_checks": true,
+    "local_link_scope": "Inline Markdown local target existence across nine documents; relocated-data-replay heading checked separately. Other fragments and external URLs were not crawled.",
+    "local_markdown_target_count": 441,
+    "script_sha256": "14205c6a08cf4aeecaf9869ff9362f21296d9fbf51069c6e834b86e568c92acf",
+    "syntax_blocks": [
+      {
+        "block": 1,
+        "document": "python/README.md",
+        "executed": false,
+        "language": "sh",
+        "outcome": "pass"
+      },
+      {
+        "block": 2,
+        "document": "python/README.md",
+        "executed": false,
+        "language": "sh",
+        "outcome": "pass"
+      },
+      {
+        "block": 3,
+        "document": "python/README.md",
+        "executed": false,
+        "language": "sh",
+        "outcome": "pass"
+      },
+      {
+        "block": 4,
+        "document": "python/README.md",
+        "executed": false,
+        "language": "python",
+        "outcome": "pass"
+      },
+      {
+        "block": 1,
+        "document": "docs/project/p05-python-compatibility.md",
+        "executed": false,
+        "language": "sh",
+        "outcome": "pass"
+      },
+      {
+        "block": 2,
+        "document": "docs/project/p05-python-compatibility.md",
+        "executed": false,
+        "language": "sh",
+        "outcome": "pass"
+      }
+    ],
+    "syntax_method": "Five bash -n checks and one ast.parse check; examples were not executed."
+  }
+}

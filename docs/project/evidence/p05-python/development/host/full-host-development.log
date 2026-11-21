@@ -1,0 +1,744 @@
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................F.......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................FFFFEFFFFFFFFFF.EFF.FFFFFF..FFFFFFFFFFF.FFFFF.FFFF.F.....................................................................................................................................................................................................FFFFF................................................................................................................................begin sst tests...
+=== sst: hello ===
+=== sst: fibonacci ===
+sst tests done!
+..................................................................................................................................................................................................................................................................................................................................................
+======================================================================
+ERROR: test_bf16_direct_packet_uses_real_format_specific_validators (test_p05_bundle_producer.ProducerProvenanceTests.test_bf16_direct_packet_uses_real_format_specific_validators)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 73, in test_bf16_direct_packet_uses_real_format_specific_validators
+    manifest = fixture.create()
+               ^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/p05_bundle_test_fixture.py", line 237, in create
+    return producer.create_bundle(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/p05_bundle.py", line 277, in create_bundle
+    _same(inputs.records(source, [row["path"] for row in _LOADED_HELPERS]), _LOADED_HELPERS,
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/p05_bundle.py", line 61, in _same
+    require(_bundle.canonical_bytes(actual) == _bundle.canonical_bytes(expected), message)
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/p02_matrix_records.py", line 36, in require
+    raise ValueError(message)
+ValueError: executing producer/helper bytes changed after import
+
+======================================================================
+ERROR: test_direct_p04_callback_packet_produces_canonical_bundle (test_p05_bundle_producer.ProducerProvenanceTests.test_direct_p04_callback_packet_produces_canonical_bundle)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 54, in test_direct_p04_callback_packet_produces_canonical_bundle
+    manifest = fixture.create()
+               ^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/p05_bundle_test_fixture.py", line 237, in create
+    return producer.create_bundle(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/p05_bundle.py", line 277, in create_bundle
+    _same(inputs.records(source, [row["path"] for row in _LOADED_HELPERS]), _LOADED_HELPERS,
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/p05_bundle.py", line 61, in _same
+    require(_bundle.canonical_bytes(actual) == _bundle.canonical_bytes(expected), message)
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/p02_matrix_records.py", line 36, in require
+    raise ValueError(message)
+ValueError: executing producer/helper bytes changed after import
+
+======================================================================
+FAIL: test_oracle_failure_does_not_verify_a_successful_workload_command (test_local_qualification_identity.QualificationIdentityTests.test_oracle_failure_does_not_verify_a_successful_workload_command)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_local_qualification_identity.py", line 310, in test_oracle_failure_does_not_verify_a_successful_workload_command
+    self.assertIs(report["workload_command_started"], True)
+AssertionError: False is not True
+
+======================================================================
+FAIL: test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps (test_p05_bundle_producer.ProducerProvenanceTests.test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps) (role='runtime')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 146, in test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps
+    self.reject("ITYPE")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "ITYPE" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps (test_p05_bundle_producer.ProducerProvenanceTests.test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps) (role='backend')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 146, in test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps
+    self.reject("ITYPE")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "ITYPE" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps (test_p05_bundle_producer.ProducerProvenanceTests.test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps) (role='kernel')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 146, in test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps
+    self.reject("ITYPE")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "ITYPE" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps (test_p05_bundle_producer.ProducerProvenanceTests.test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps) (role='host')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 146, in test_all_four_compiler_roles_reject_rehashed_wrong_format_stamps
+    self.reject("ITYPE")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "ITYPE" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_changed_configure_build_and_model_invocations_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_changed_configure_build_and_model_invocations_are_rejected) (suffix='configure')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 223, in test_changed_configure_build_and_model_invocations_are_rejected
+    self.reject("invocation differs")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "invocation differs" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_changed_configure_build_and_model_invocations_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_changed_configure_build_and_model_invocations_are_rejected) (suffix='runtime')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 223, in test_changed_configure_build_and_model_invocations_are_rejected
+    self.reject("invocation differs")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "invocation differs" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_changed_configure_build_and_model_invocations_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_changed_configure_build_and_model_invocations_are_rejected) (suffix='application')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 223, in test_changed_configure_build_and_model_invocations_are_rejected
+    self.reject("invocation differs")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "invocation differs" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_changed_configure_build_and_model_invocations_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_changed_configure_build_and_model_invocations_are_rejected) (suffix='fp16-zero')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 223, in test_changed_configure_build_and_model_invocations_are_rejected
+    self.reject("invocation differs")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "invocation differs" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_changed_model_runtime_environment_is_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_changed_model_runtime_environment_is_rejected)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 229, in test_changed_model_runtime_environment_is_rejected
+    self.reject("native model launch environment differs")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "native model launch environment differs" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_changed_tools_during_copy_prevent_manifest_publication (test_p05_bundle_producer.ProducerProvenanceTests.test_changed_tools_during_copy_prevent_manifest_publication)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 367, in test_changed_tools_during_copy_prevent_manifest_publication
+    self.reject("tools changed during bundle copying")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "tools changed during bundle copying" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_copied_build_recipe_and_live_hidden_config_are_required (test_p05_bundle_producer.ProducerProvenanceTests.test_copied_build_recipe_and_live_hidden_config_are_required)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 242, in test_copied_build_recipe_and_live_hidden_config_are_required
+    self.reject("generated Makefile/helper differs")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "generated Makefile/helper differs" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_current_source_or_retained_helper_body_mutation_is_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_current_source_or_retained_helper_body_mutation_is_rejected)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 102, in test_current_source_or_retained_helper_body_mutation_is_rejected
+    self.reject("retained native source differs")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "retained native source differs" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_dependency_and_native_binary_bytes_must_match_original_binding (test_p05_bundle_producer.ProducerProvenanceTests.test_dependency_and_native_binary_bytes_must_match_original_binding) (name='third_party/ramulator/libramulator.so')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 255, in test_dependency_and_native_binary_bytes_must_match_original_binding
+    self.reject(error)
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "native dependencies changed" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_dependency_and_native_binary_bytes_must_match_original_binding (test_p05_bundle_producer.ProducerProvenanceTests.test_dependency_and_native_binary_bytes_must_match_original_binding) (name='sw/runtime/libvortex.so')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 255, in test_dependency_and_native_binary_bytes_must_match_original_binding
+    self.reject(error)
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "artifact inventory differs" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_dirty_or_changed_source_identity_is_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_dirty_or_changed_source_identity_is_rejected)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 89, in test_dirty_or_changed_source_identity_is_rejected
+    self.reject("clean source")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "clean source" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_duplicate_json_keys_and_unsafe_retained_paths_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_duplicate_json_keys_and_unsafe_retained_paths_are_rejected)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 382, in test_duplicate_json_keys_and_unsafe_retained_paths_are_rejected
+    self.reject("invalid strict JSON")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "invalid strict JSON" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_foreign_source_checkout_and_original_build_path_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_foreign_source_checkout_and_original_build_path_are_rejected)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 85, in test_foreign_source_checkout_and_original_build_path_are_rejected
+    self.reject("original variant build")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "original variant build" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_loaded_helper_and_required_source_retention_cannot_be_omitted (test_p05_bundle_producer.ProducerProvenanceTests.test_loaded_helper_and_required_source_retention_cannot_be_omitted)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 109, in test_loaded_helper_and_required_source_retention_cannot_be_omitted
+    self.reject("omits required runner or source bodies")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "omits required runner or source bodies" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_missing_and_duplicate_required_commands_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_missing_and_duplicate_required_commands_are_rejected)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 211, in test_missing_and_duplicate_required_commands_are_rejected
+    self.reject("lacks required commands")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "lacks required commands" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_missing_duplicate_and_reordered_model_families_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_missing_duplicate_and_reordered_model_families_are_rejected) (ids=['fp16-seeded_dense', 'fp16-negated_dense', 'fp16-zero', 'fp16-signed_basis'])
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 185, in test_missing_duplicate_and_reordered_model_families_are_rejected
+    self.reject("all five cases exactly once in fixture order")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "all five cases exactly once in fixture order" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_missing_duplicate_and_reordered_model_families_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_missing_duplicate_and_reordered_model_families_are_rejected) (ids=['fp16-seeded_dense', 'fp16-negated_dense', 'fp16-zero', 'fp16-signed_basis', 'fp16-seeded_dense'])
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 185, in test_missing_duplicate_and_reordered_model_families_are_rejected
+    self.reject("all five cases exactly once in fixture order")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "all five cases exactly once in fixture order" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_missing_duplicate_and_reordered_model_families_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_missing_duplicate_and_reordered_model_families_are_rejected) (ids=['fp16-split_boundary', 'fp16-signed_basis', 'fp16-zero', 'fp16-negated_dense', 'fp16-seeded_dense'])
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 185, in test_missing_duplicate_and_reordered_model_families_are_rejected
+    self.reject("all five cases exactly once in fixture order")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "all five cases exactly once in fixture order" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_passing_command_requires_zero_integer_exit_and_complete_cleanup (test_p05_bundle_producer.ProducerProvenanceTests.test_passing_command_requires_zero_integer_exit_and_complete_cleanup) (key='cleanup_complete', value=False)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 203, in test_passing_command_requires_zero_integer_exit_and_complete_cleanup
+    self.reject("did not complete successfully")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "did not complete successfully" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_passing_command_requires_zero_integer_exit_and_complete_cleanup (test_p05_bundle_producer.ProducerProvenanceTests.test_passing_command_requires_zero_integer_exit_and_complete_cleanup) (key='cleanup_complete', value=1)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 203, in test_passing_command_requires_zero_integer_exit_and_complete_cleanup
+    self.reject("did not complete successfully")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "did not complete successfully" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_passing_command_requires_zero_integer_exit_and_complete_cleanup (test_p05_bundle_producer.ProducerProvenanceTests.test_passing_command_requires_zero_integer_exit_and_complete_cleanup) (key='exit_code', value=False)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 203, in test_passing_command_requires_zero_integer_exit_and_complete_cleanup
+    self.reject("did not complete successfully")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "did not complete successfully" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_passing_command_requires_zero_integer_exit_and_complete_cleanup (test_p05_bundle_producer.ProducerProvenanceTests.test_passing_command_requires_zero_integer_exit_and_complete_cleanup) (key='exit_code', value=1)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 203, in test_passing_command_requires_zero_integer_exit_and_complete_cleanup
+    self.reject("did not complete successfully")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "did not complete successfully" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_passing_command_requires_zero_integer_exit_and_complete_cleanup (test_p05_bundle_producer.ProducerProvenanceTests.test_passing_command_requires_zero_integer_exit_and_complete_cleanup) (key='outcome', value='blocked')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 203, in test_passing_command_requires_zero_integer_exit_and_complete_cleanup
+    self.reject("did not complete successfully")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "did not complete successfully" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_passing_command_requires_zero_integer_exit_and_complete_cleanup (test_p05_bundle_producer.ProducerProvenanceTests.test_passing_command_requires_zero_integer_exit_and_complete_cleanup) (key='reason', value='synthetic child still alive')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 203, in test_passing_command_requires_zero_integer_exit_and_complete_cleanup
+    self.reject("did not complete successfully")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "did not complete successfully" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_postpublication_failure_removes_qualified_manifest (test_p05_bundle_producer.ProducerProvenanceTests.test_postpublication_failure_removes_qualified_manifest)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 374, in test_postpublication_failure_removes_qualified_manifest
+    self.reject("synthetic final readback failure")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "synthetic final readback failure" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_rehashed_fixture_selection_cannot_omit_fifth_family (test_p05_bundle_producer.ProducerProvenanceTests.test_rehashed_fixture_selection_cannot_omit_fifth_family)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 192, in test_rehashed_fixture_selection_cannot_omit_fifth_family
+    self.reject("native case selection differs")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "native case selection differs" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_rehashed_generated_header_must_reproduce_from_frozen_profile (test_p05_bundle_producer.ProducerProvenanceTests.test_rehashed_generated_header_must_reproduce_from_frozen_profile)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 235, in test_rehashed_generated_header_must_reproduce_from_frozen_profile
+    self.reject("generated native header differs")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "generated native header differs" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_rehashed_second_poison_corruption_reaches_real_model_validator (test_p05_bundle_producer.ProducerProvenanceTests.test_rehashed_second_poison_corruption_reaches_real_model_validator)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 162, in test_rehashed_second_poison_corruption_reaches_real_model_validator
+    self.reject("poison")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "poison" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_rehashed_wrong_output_words_cannot_be_hidden_by_saved_pass (test_p05_bundle_producer.ProducerProvenanceTests.test_rehashed_wrong_output_words_cannot_be_hidden_by_saved_pass)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 172, in test_rehashed_wrong_output_words_cannot_be_hidden_by_saved_pass
+    self.reject("output|logits")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "output|logits" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_retained_loaded_helper_must_be_present_in_source_snapshot (test_p05_bundle_producer.ProducerProvenanceTests.test_retained_loaded_helper_must_be_present_in_source_snapshot)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 117, in test_retained_loaded_helper_must_be_present_in_source_snapshot
+    self.reject("helper.*snapshot|snapshot.*helper")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "helper.*snapshot|snapshot.*helper" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_saved_observations_must_equal_raw_validated_model_records (test_p05_bundle_producer.ProducerProvenanceTests.test_saved_observations_must_equal_raw_validated_model_records)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 177, in test_saved_observations_must_equal_raw_validated_model_records
+    self.reject("observations differ from raw")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "observations differ from raw" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_source_build_or_packet_mutation_during_copy_leaves_no_manifest (test_p05_bundle_producer.ProducerProvenanceTests.test_source_build_or_packet_mutation_during_copy_leaves_no_manifest) (name='sw/runtime/ai/mlp_runtime.cpp')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 349, in test_source_build_or_packet_mutation_during_copy_leaves_no_manifest
+    self.assertEqual(len(changed), 1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_source_build_or_packet_mutation_during_copy_leaves_no_manifest (test_p05_bundle_producer.ProducerProvenanceTests.test_source_build_or_packet_mutation_during_copy_leaves_no_manifest) (name='sw/runtime/libvortex.so')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 349, in test_source_build_or_packet_mutation_during_copy_leaves_no_manifest
+    self.assertEqual(len(changed), 1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_source_build_or_packet_mutation_during_copy_leaves_no_manifest (test_p05_bundle_producer.ProducerProvenanceTests.test_source_build_or_packet_mutation_during_copy_leaves_no_manifest) (name='logs/simx-fp16-fp16-zero.log')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 349, in test_source_build_or_packet_mutation_during_copy_leaves_no_manifest
+    self.assertEqual(len(changed), 1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_symlinked_source_log_generated_and_native_files_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_symlinked_source_log_generated_and_native_files_are_rejected) (name='logs/simx-fp16-fp16-zero.log')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 322, in test_symlinked_source_log_generated_and_native_files_are_rejected
+    self.reject("symlink")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "symlink" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_symlinked_source_log_generated_and_native_files_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_symlinked_source_log_generated_and_native_files_are_rejected) (name='.config.stamp')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 322, in test_symlinked_source_log_generated_and_native_files_are_rejected
+    self.reject("symlink")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "symlink" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_symlinked_source_log_generated_and_native_files_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_symlinked_source_log_generated_and_native_files_are_rejected) (name='sw/runtime/libvortex.so')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 322, in test_symlinked_source_log_generated_and_native_files_are_rejected
+    self.reject("symlink")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "symlink" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_symlinked_source_log_generated_and_native_files_are_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_symlinked_source_log_generated_and_native_files_are_rejected) (name='artifacts/simx-fp16/.config.stamp')
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 322, in test_symlinked_source_log_generated_and_native_files_are_rejected
+    self.reject("symlink")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "symlink" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_unhashed_raw_log_mutation_is_rejected (test_p05_bundle_producer.ProducerProvenanceTests.test_unhashed_raw_log_mutation_is_rejected)
+----------------------------------------------------------------------
+ValueError: executing producer/helper bytes changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 154, in test_unhashed_raw_log_mutation_is_rejected
+    self.reject("native command log changed")
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_bundle_producer.py", line 29, in reject
+    with manager:
+         ^^^^^^^
+AssertionError: "native command log changed" does not match "executing producer/helper bytes changed after import"
+
+======================================================================
+FAIL: test_completed_validation_precedes_new_native_build_and_is_not_a_command (test_p05_orchestration.NativeValidationBoundaryTests.test_completed_validation_precedes_new_native_build_and_is_not_a_command)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_orchestration.py", line 336, in test_completed_validation_precedes_new_native_build_and_is_not_a_command
+    self.assertEqual(harness.events, ["package-tools-before"])
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'blocked' != 'fail'
+- blocked
++ fail
+
+
+======================================================================
+FAIL: test_interrupted_validation_retains_failure_receipt_and_native_packet (test_p05_orchestration.NativeValidationBoundaryTests.test_interrupted_validation_retains_failure_receipt_and_native_packet)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_orchestration.py", line 351, in test_interrupted_validation_retains_failure_receipt_and_native_packet
+    receipt = report["bundle_validation"]
+AssertionError: Tuples differ: ('blocked', 'executing P05 runner/helper bytes changed after import') != ('fail', 'interrupted')
+
+First differing element 0:
+'blocked'
+'fail'
+
+- ('blocked', 'executing P05 runner/helper bytes changed after import')
++ ('fail', 'interrupted')
+
+======================================================================
+FAIL: test_original_packet_drift_stops_before_new_native_build (test_p05_orchestration.NativeValidationBoundaryTests.test_original_packet_drift_stops_before_new_native_build)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_orchestration.py", line 376, in test_original_packet_drift_stops_before_new_native_build
+    harness = SyntheticStageHarness(self)
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_orchestration.py", line 368, in check_packet_drift
+    self.assertEqual(report["bundle_validation"]["state"], "passed")
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'blocked' != 'fail'
+- blocked
++ fail
+
+
+======================================================================
+FAIL: test_rejected_native_packet_stops_before_any_new_native_build (test_p05_orchestration.NativeValidationBoundaryTests.test_rejected_native_packet_stops_before_any_new_native_build)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_orchestration.py", line 315, in test_rejected_native_packet_stops_before_any_new_native_build
+    with self.subTest(value=value):
+AssertionError: 'blocked' != 'fail'
+- blocked
++ fail
+
+
+======================================================================
+FAIL: test_retained_packet_drift_stops_before_new_native_build (test_p05_orchestration.NativeValidationBoundaryTests.test_retained_packet_drift_stops_before_new_native_build)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_orchestration.py", line 379, in test_retained_packet_drift_stops_before_new_native_build
+    self.assertEqual((report["outcome"], report["reason"]), ("fail", "interrupted"))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_p05_orchestration.py", line 368, in check_packet_drift
+    self.assertEqual(report["bundle_validation"]["state"], "passed")
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'blocked' != 'fail'
+- blocked
++ fail
+
+
+----------------------------------------------------------------------
+Ran 2163 tests in 1164.874s
+
+FAILED (failures=49, errors=2)

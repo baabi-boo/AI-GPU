@@ -1,0 +1,205 @@
+{
+  "authorization_boundary": "The originating user requested implementation and direct master publication. This record is the named agent technical review, not an invented human review, maintainer waiver, procurement approval or phase-completion decision.",
+  "coverage": [
+    {
+      "disposition": "satisfied in bounded scope",
+      "evidence": [
+        "docs/designs/python_binding_v1.md",
+        "ci/project/test_p05_python_api.py",
+        "docs/project/evidence/p05-python/reviews/full-numerics.json",
+        "docs/project/evidence/p05-python/hosted/governance-job.log"
+      ],
+      "obligation": "Declared dtypes, shapes, strides and representations",
+      "reason": "All three (M,N,K) tuples (8,4,8), (8,4,16), (16,8,16) ran in each format through installed Python and the unchanged native comparison, twice with distinct poisons. Exact standalone/intermediate/final words and input lineage pass independent numerical review. Source-matched host tests explicitly reject nonpacked, negative/zero/mismatched strides, rank/extent/type errors, bool/subclass confusion, overflows, layout mismatch and unsupported signatures before native submission."
+    },
+    {
+      "disposition": "satisfied in bounded scope",
+      "evidence": [
+        "ci/project/test_p05_native_binding.py",
+        "docs/project/evidence/p05-python/development/host/w06_a1_run.json",
+        "docs/project/evidence/p05-python/development/host/w06_a1-native/results.json",
+        "docs/project/evidence/p05-python/development/host/w06_a1-probes/results.json",
+        "docs/project/evidence/p05-python/reviews/full-dispatch.json"
+      ],
+      "obligation": "Lifetimes, copying and completion",
+      "reason": "Actual installed SimX runs complete and explicitly close sequential owners with restored declared allocator snapshots. The 107 maintained compiled-boundary scenarios and 11 probes additionally check copy ownership, output lifetime, pending owners, single-context and single-operation leases, session suspension/resume, partial submissions, timeout retry, context exits, destruction/fork behavior and sticky cleanup poison. All 64 recorded host-check source hashes match the qualified Git revision; fake-runtime failure evidence remains host-only."
+    },
+    {
+      "disposition": "satisfied in bounded scope",
+      "evidence": [
+        "python/vortex_ai/_api.py",
+        "python/native/module.cpp",
+        "ci/project/test_p05_python_api.py",
+        "docs/project/evidence/p05-python/development/host/w06_a1-probes/results.json",
+        "docs/project/evidence/p05-python/hosted/governance-jobs.json",
+        "docs/project/evidence/p05-python/hosted/governance-job.log"
+      ],
+      "obligation": "Explicit validation, state and native error behavior",
+      "reason": "Clean hosted coverage and source-matched compiled probes check separate validation/primary/cleanup/completion dimensions, explicit TypeError/ValueError/OverflowError/BindingError mappings, detached diagnostics, closed/reentrant/inherited state refusal, failed lazy resume and recovery of retained empty or pending owners. Model output requires successful terminal inference and completed close. The complete clean source suite passed 2174 tests."
+    },
+    {
+      "disposition": "satisfied in bounded scope",
+      "evidence": [
+        "pyproject.toml",
+        "setup.py",
+        "docs/project/evidence/p05-python/reviews/full-provenance.json",
+        "docs/project/evidence/p05-python/archives/simx-fp16.zip",
+        "docs/project/evidence/p05-python/archives/simx-bf16.zip",
+        "docs/project/evidence/p05-python/development/host/w06_a2-checks/commands.json",
+        "docs/project/evidence/p05-python/THIRD_PARTY_NOTICES.md"
+      ],
+      "obligation": "Clean installation and dependency lock/provenance",
+      "reason": "Each format produced a bound sdist outside source, rebuilt its wheel offline without the original bundle environment, created a fresh copied-interpreter venv, installed with --no-index --no-deps and imported/executed from outside the checkout. The independent provenance review verifies 22 pinned binding inputs, generated receipt/header, six bundle artifacts, 32 sdist files, 10 wheel members, 13 installed members, both RECORD tables, tool/package identities, ELF dependencies and actual project-library paths. Eight real local unbound package commands supply separate packaging evidence; all 22 inputs match the qualified source."
+    }
+  ],
+  "decision": {
+    "P05": "remain in_progress",
+    "P05-A01": "accept at simulated evidence level for the explicitly bounded plain-Python contract",
+    "P05-A02": "unearned",
+    "P05-A03": "unearned"
+  },
+  "independent_review_chain": {
+    "auditor_adversarial_rechecks": [
+      "reviews/history/numerics-after.json",
+      "reviews/history/dispatch-after.json",
+      "reviews/history/provenance-after.json",
+      "reviews/history/provenance-cli-recheck.json"
+    ],
+    "production_boundary": [
+      "development/w05_a1.md",
+      "development/w05_a2.md",
+      "development/w05_a3.md",
+      "development/w05_a4.md",
+      "development/w05_a5.md",
+      "development/w05_a6.md",
+      "development/w06_a3.md"
+    ],
+    "selected_and_full_matrix": [
+      "reviews/fp16-numerics.json",
+      "reviews/fp16-dispatch.json",
+      "reviews/fp16-provenance.json",
+      "reviews/bf16-numerics.json",
+      "reviews/bf16-dispatch.json",
+      "reviews/bf16-provenance.json",
+      "reviews/full-numerics.json",
+      "reviews/full-dispatch.json",
+      "reviews/full-provenance.json"
+    ]
+  },
+  "input_reconciliation": {
+    "clean_hosted_governance": {
+      "conclusion": "success",
+      "job_id": 136730846161,
+      "run_id": 44866368570,
+      "seconds": 421.584,
+      "tests": 2174
+    },
+    "host_lifecycle": {
+      "historical_head": "6aac9c421180805a5621156e3d914c685fc6f4a5",
+      "matching_recorded_source_hashes": 64,
+      "scenarios": 107,
+      "scope": "host-only-fault-injection",
+      "separate_probes": 11
+    },
+    "host_packaging": {
+      "matching_binding_source_hashes": 22,
+      "scope": "unbound host packaging and isolated import",
+      "successful_real_commands": 8
+    },
+    "independent_audits": {
+      "auditor_hashes": {
+        "dispatch": "ab0a1d1d6d0268b0766e5d3bc211e2830efb5e9683a413854fc1a16a3d5de391",
+        "numerics": "608b16c80a1a40816ef15f04b2670c736e2abca7768e7c6ad546c8a96f23e736",
+        "provenance": "4684a4e928ff672d371bdb78ab5f646b61ae59d1147c3c690e722a22a89186ac"
+      },
+      "counts": {
+        "argument_block_bytes": 8064,
+        "d2h_transfers": 144,
+        "event_profile_pairs": 660,
+        "h2d_transfers": 432,
+        "host_assembly_bytes": 10240,
+        "host_bridge_bytes": 10240,
+        "matmul_launches": 24,
+        "matmul_runs": 24,
+        "model_launches": 120,
+        "model_runs": 40,
+        "profiled_launches": 132,
+        "tensor_d2h_bytes": 36864,
+        "tensor_h2d_bytes": 93696,
+        "total_launches": 144,
+        "unprofiled_launches": 12
+      },
+      "six_selected_objects_match_full_matrix": [
+        "fp16-numerics",
+        "bf16-numerics",
+        "fp16-dispatch",
+        "bf16-dispatch",
+        "fp16-provenance",
+        "bf16-provenance"
+      ]
+    },
+    "original_archives": [
+      {
+        "member_hashes_verified": 304,
+        "native_commands": 15,
+        "p05_commands": 12,
+        "sha256": "467122e41bee4e67f9eef285e015b2dee3a52522f0bcb3f497e3cec87e6c7380",
+        "size_bytes": 6417582,
+        "variant": "simx-fp16"
+      },
+      {
+        "member_hashes_verified": 304,
+        "native_commands": 15,
+        "p05_commands": 12,
+        "sha256": "e951f943ece1878f3767180c4ce2b859939722d2d639c1afb37b8a72c76006d8",
+        "size_bytes": 6417108,
+        "variant": "simx-bf16"
+      }
+    ],
+    "outcome": "pass",
+    "qualification_review": {
+      "path": "docs/project/evidence/p05-python/qualification-review.json",
+      "sha256": "208308e22bb473a114171f2dd70a04af874da7d023c711d015e1f8a7c2883246",
+      "size_bytes": 15028
+    },
+    "scope": "Independent read-only A01 evidence reconciliation; no runtime execution or full suite",
+    "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+    "source_tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049"
+  },
+  "limitations": [
+    "P05-A01 only. P05 remains in_progress. P05-A02 and P05-A03 remain unearned: no implemented or tested PyTorch custom operator or tested framework-version matrix is accepted.",
+    "Qualified installed execution is Linux x86_64, GIL CPython 3.12.14, RV64 SimX with the p02-tfr profile. Python processor-RTL, full-AFU/XRT, physical FPGA and silicon execution are not qualified by this record.",
+    "Only six packed little-endian FP16/BF16-to-FP32 matmul signatures and the ten frozen P04 model cases are supported. Arbitrary strides, transposes, broadcasting, models, weights, autograd, training, multi-device execution and CUDA binary compatibility are outside scope.",
+    "Inputs and outputs are copied. One format/bundle and one live native context are permitted per process; a completed wait alone does not release the outstanding matmul ownership restriction. Explicit completed close is required.",
+    "Timeouts are retryable and never cancellation. Native destruction may drain indefinitely. Cleanup failure poisons new work in the process; no device reset, broad physical fault recovery or exhaustive process-heap leak guarantee is established.",
+    "The 107 compiled-boundary scenarios and 11 fresh-process probes use host-only fake runtime libraries. Their injected failures, status-publication MemoryError and interruption cases are not actual SimX/device-fault or global CPython out-of-memory tests. Actual installed SimX normal execution is separately retained.",
+    "The local unbound packaging check used GCC/G++ 14.2.0 and one six-translation-unit build. Hosted bound qualification used G++ 11.4.0 and its wheel command compiled two groups of six translation units and linked twice. These source scopes and observations remain separate.",
+    "The hosted extension and libsimx retain recorded RUNPATH entries. System ELF dependencies and compatible host Python/build tools remain prerequisites; ABI3, manylinux and arbitrary-host binary portability are not claimed.",
+    "Source, compiler, dependency and package byte identities are retained, including required adjacent notices. This is trusted-builder consistency evidence, not authenticated binary authorship, a reproducible transitive toolchain build or a complete archived operating-system runtime.",
+    "The allowed host ReLU, exact representation cast and row assembly are explicit. Host steady-clock event service, wait and advance intervals overlap and clocks from separate processes are not aligned. No physical latency, speedup, power or whole-system throughput claim follows.",
+    "The native top-level packet and its python/native copy identify the same executions. The twelve native standalone launches are unprofiled; 132 profiled launches account for 660 event/profile pairs. Supplemental P04 workflow runs and overlapping host suites are not added to these counts.",
+    "Earlier baseline timeout and source-changing local full-suite failures remain retained. One inherited workload-start assertion failed and later passed in isolation without a retained original inner report; its root cause is not asserted. Clean hosted 2174-test success qualifies the integrated implementation without erasing that history.",
+    "P01-A03 vendor hw_emu remains blocked and the inherited tensor DSP267-to283 area-gate finding remains unresolved. Neither is waived or closed by Python acceptance."
+  ],
+  "outcome": "pass",
+  "reconciliation_execution": {
+    "command": "cwd=/workspace/scratch/ba0248fde989/AI-GPU; python -B /workspace/scratch/ba0248fde989/p05-work/w09_a2/verify_gate_inputs.py",
+    "exit_code": 0,
+    "log_sha256": "94990580eb304259c46ee5376772bebf6fc9b1b414cbbf54acc30bc0ed9cbe70",
+    "outcome": "pass",
+    "result_sha256": "1df3f421bc69ddd70009996824da8caa1dfa546b6f0e79a8f34e5c48fc7931bc",
+    "scope": "Read-only JSON, archive/member, source Git blob and log checks; no native/package execution or full suite",
+    "script_sha256": "c1c0cd295bbb2d38fd7e80d55e2f1d9d80511d885e1a513a3f312eebd9b5d235"
+  },
+  "record_id": "p05-a01-independent-binding-review-e1420fd",
+  "reviewed_source_contract": {
+    "path": "docs/designs/python_binding_v1.md",
+    "sha256": "b80326f97e947e8930def218fbdc0b4aa6d13d454471dc55fd67109cdd074a3c"
+  },
+  "reviewer": "/root/w09_a2_binding_acceptance_review",
+  "schema_version": 1,
+  "scope": "Independent technical gate review of supported plain-Python binding representations, lifetimes, explicit errors and clean installation",
+  "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+  "source_tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049",
+  "unresolved_findings_in_scope": []
+}

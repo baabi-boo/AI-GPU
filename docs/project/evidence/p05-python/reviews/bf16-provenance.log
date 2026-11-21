@@ -1,0 +1,891 @@
+{
+  "acceptance_claimed": false,
+  "audit": "independent-p05-retained-provenance-v1",
+  "auditor_sha256": "4684a4e928ff672d371bdb78ab5f646b61ae59d1147c3c690e722a22a89186ac",
+  "full_matrix": false,
+  "limitations": [
+    "Retained provenance and clean-install consistency only; no native rerun, numerical/dispatch acceptance, phase completion, framework support or hardware claim.",
+    "Trusted-builder/nonhostile-filesystem scope: hashes bind recorded observations; this is not a hostile-process sandbox or authenticated execution attestation.",
+    "Original absolute build/source/venv paths are compared as recorded names and are never required to exist after relocation.",
+    "Main-repository bytes use actual Git commit objects; submodule file hashes/pins are recorded without fetching or reconstructing missing bodies.",
+    "Native configure templates, stamps, compiler roles, effective-header observations and retained header identities are checked; configuration generators are not executed by this auditor.",
+    "System Python, compiler-support files, package-build prerequisites and system ELF dependencies are identified rather than replay-archived. Tool semantic versions beyond retained g++/Clang/Make banners and VERSION/package/Python metadata are unavailable.",
+    "P04 kernel ELF, libvortex2.a and softfloat.a are identity-only where absent from the retained packet; retained bundle libraries, host binaries, matmul kernel ELF and installed extension are parsed without execution.",
+    "The existing independent P04 provenance auditor is reused only after its full body matches the explicitly reported SHA-256 pin; no P05 runner/record/package module is imported."
+  ],
+  "outcome": "pass",
+  "p04_helper": {
+    "path": "docs/project/evidence/p04-executor/reviews/audit_provenance.py",
+    "sha256": "32f18937591df8e91dd86d6693550748a4d3ed8f1cfd766733d20f0617fa4ab9",
+    "source": "recorded Git commit object"
+  },
+  "packets": [
+    {
+      "backend": "simx",
+      "binding_source_sha256": "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a",
+      "binding_sources": [
+        {
+          "path": "MANIFEST.in",
+          "sha256": "4261573e864bd1a0e602aaa4d020808a84a61cc7f90d9b1a5e11dc846d1c25e7",
+          "size": 868
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "ad53f6709fcbd49656e48f01503b6917bb20a0fcdea27d95ea954a9da0bf4713",
+          "size": 780
+        },
+        {
+          "path": "python/native/module.cpp",
+          "sha256": "3e0688fef091dcc58bfaeb13e1ab18d2bcc147a601ceaa3a48cc91a34464170e",
+          "size": 37547
+        },
+        {
+          "path": "python/native/runtime_loader.cpp",
+          "sha256": "8b75dfb415deadaa48b756b7db2f8a540329f838f804f2532e4bdcca5f001a60",
+          "size": 36859
+        },
+        {
+          "path": "python/native/runtime_loader.h",
+          "sha256": "81e85468517838e43c9814720def49a11e06ebb767e9e5b7f1464a5d41a49542",
+          "size": 1238
+        },
+        {
+          "path": "python/vortex_ai/__init__.py",
+          "sha256": "19d006db3a52bac6b3a7eec0111edd7fa2927e6fc31c1a23308178fa05783465",
+          "size": 523
+        },
+        {
+          "path": "python/vortex_ai/_api.py",
+          "sha256": "f66748c6657ddd55e8753343f49b43cce87003df770e8bbb20c70ee57e3d0db2",
+          "size": 32061
+        },
+        {
+          "path": "python/vortex_ai/_bundle.py",
+          "sha256": "e25ccf8a7fbe93b60b38507f3261f8936dcfad64c1d8012b307065ab6d94751d",
+          "size": 12251
+        },
+        {
+          "path": "python/vortex_ai/launch.py",
+          "sha256": "e09c48119bb73c3209d9ac163c5f3667ecc53a86630cbf677b444a07a68b5267",
+          "size": 3197
+        },
+        {
+          "path": "setup.py",
+          "sha256": "697024fc8074f31aa9def1ebeb2d923104ff731f0dcfb80dbeefc6974d267e65",
+          "size": 14712
+        },
+        {
+          "path": "sw/common/ai_matmul_args.h",
+          "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+          "size": 4342
+        },
+        {
+          "path": "sw/runtime/ai/contract.cpp",
+          "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+          "size": 10833
+        },
+        {
+          "path": "sw/runtime/ai/contract.h",
+          "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+          "size": 3285
+        },
+        {
+          "path": "sw/runtime/ai/mlp_host.cpp",
+          "sha256": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256",
+          "size": 2225
+        },
+        {
+          "path": "sw/runtime/ai/mlp_host.h",
+          "sha256": "309e437aa9ca80c3a9c7c8ca7544478cdce4861203d32280709e2e940425cd0b",
+          "size": 774
+        },
+        {
+          "path": "sw/runtime/ai/mlp_runtime.cpp",
+          "sha256": "0dab325434c513b85b66b108ca3b896304ab797252b9fd01919435fc8655ddd1",
+          "size": 13857
+        },
+        {
+          "path": "sw/runtime/ai/mlp_runtime.h",
+          "sha256": "56750815b71361eb036aa8000716b977569a657a2cee650f9bdd048c06b81182",
+          "size": 5030
+        },
+        {
+          "path": "sw/runtime/ai/runtime.cpp",
+          "sha256": "5540092240fb926f1c3066b0e8956a0096cb6be42b71f8b60d075434518e0be5",
+          "size": 17429
+        },
+        {
+          "path": "sw/runtime/ai/runtime.h",
+          "sha256": "dc9c5f789c0a58dfbdce10420fce32f1d17c8e71fb83a7608d6e38489d4d4ad1",
+          "size": 3428
+        },
+        {
+          "path": "sw/runtime/include/vortex2.h",
+          "sha256": "9738cdf35a7344d6a974b4d78f7b02d3c1e7ce87cfe68ef668b03c8eb1832614",
+          "size": 27464
+        },
+        {
+          "path": "tests/regression/ai_mlp/p04_fixtures.h",
+          "sha256": "61a1368572b0cee5e67e0cc803b32e57b19557f53eb6b8e32e079a55b237e773",
+          "size": 67840
+        },
+        {
+          "path": "tests/regression/ai_mlp/records.h",
+          "sha256": "13a4d51ab7058a799b9598c0ba410b64b6bd28d77c305f88de702ef0db8daf29",
+          "size": 10862
+        }
+      ],
+      "bundle_artifacts": [
+        {
+          "path": "lib/libramulator.so",
+          "role": "ramulator",
+          "sha256": "10bcf59a01fecb757c6e54f1f490ee9d12f97ff127685907b3d11a8902bf9286",
+          "size": 5560480
+        },
+        {
+          "path": "lib/libramulator-vortex.so",
+          "role": "ramulator_extension",
+          "sha256": "bffe1f935b7de7cf926b6a997137e8e4eef43a3ecd72fa33f6bf95feffa19d0f",
+          "size": 691624
+        },
+        {
+          "path": "lib/libvortex.so",
+          "role": "runtime",
+          "sha256": "5998918e904b7d93d4d159515fb5830ab8d221c6d959a797b52c7d168e2e8ffe",
+          "size": 320392
+        },
+        {
+          "path": "lib/libsimx.so",
+          "role": "simulator",
+          "sha256": "28c09331081d2bdaa95467f946fca759249d4715870c531d6259c52c05f8f475",
+          "size": 2455968
+        },
+        {
+          "path": "lib/libvortex-simx.so",
+          "role": "backend",
+          "sha256": "b0985391810b9b2ea56748ff539e2807cf2b4a0523255849d3794d7434a33690",
+          "size": 97512
+        },
+        {
+          "path": "kernel.vxbin",
+          "role": "module",
+          "sha256": "1f63549c59b346c09f0f647f43f92f79ead20e426bec145e51de89443ca37b14",
+          "size": 6192
+        }
+      ],
+      "bundle_sha256": "27b7f19ce9dfd239c7ff9a68e67e6a9fb0fe950076c25a694544be5b539eeb58",
+      "commands": [
+        {
+          "cleanup_complete": true,
+          "exit_code": 0,
+          "id": "package-tools-before",
+          "log_sha256": "be506acc091a27438f713c27444661f687eafea770308d054927da6058baf50a",
+          "log_size_bytes": 149124,
+          "process_started": true
+        },
+        {
+          "cleanup_complete": true,
+          "exit_code": 0,
+          "id": "native-matmul-build",
+          "log_sha256": "061ad2043844d068aeba5eef7e4e8b9be356232570436fef3ebd5b5d697b107c",
+          "log_size_bytes": 64207,
+          "process_started": true
+        },
+        {
+          "cleanup_complete": true,
+          "exit_code": 0,
+          "id": "native-matmul-effective-header",
+          "log_sha256": "fcd53d392374d876a1787de54beb1269c470f62df7d5bc4867a6566b0d51aa6e",
+          "log_size_bytes": 31109,
+          "process_started": true
+        },
+        {
+          "cleanup_complete": true,
+          "exit_code": 0,
+          "id": "native-bf16-single-dense_boundaries",
+          "log_sha256": "4d058126e49ab0633463c7ede47a9d6e510cc4fcfee2226c83397b4036a26762",
+          "log_size_bytes": 2071,
+          "process_started": true
+        },
+        {
+          "cleanup_complete": true,
+          "exit_code": 0,
+          "id": "native-bf16-numerical-cross_tile_rounding_positive",
+          "log_sha256": "37683f6e8231f51d3bb644546dcba15858d680529e6af1be730e49542da93cc2",
+          "log_size_bytes": 2105,
+          "process_started": true
+        },
+        {
+          "cleanup_complete": true,
+          "exit_code": 0,
+          "id": "native-bf16-multi-dense_boundaries",
+          "log_sha256": "c8826dadfd4464792ffd066cc5a8c5b283b9a5c428a47713223dd32bc39e85ac",
+          "log_size_bytes": 4189,
+          "process_started": true
+        },
+        {
+          "cleanup_complete": true,
+          "exit_code": 0,
+          "id": "package-bound-sdist",
+          "log_sha256": "9a541cf37a326f944afdbfa450b51d43fab6b112f7125f378ed2957f75e91fc4",
+          "log_size_bytes": 3644,
+          "process_started": true
+        },
+        {
+          "cleanup_complete": true,
+          "exit_code": 0,
+          "id": "package-offline-wheel",
+          "log_sha256": "9670a4f55c0cbe1b7f34172a9b9f22031c1c50295f24725209779cbf396f466c",
+          "log_size_bytes": 24034,
+          "process_started": true
+        },
+        {
+          "cleanup_complete": true,
+          "exit_code": 0,
+          "id": "package-create-venv",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "log_size_bytes": 0,
+          "process_started": true
+        },
+        {
+          "cleanup_complete": true,
+          "exit_code": 0,
+          "id": "package-install-wheel",
+          "log_sha256": "e3698cfe3b3e851c2cac8af91fb325f11926d1510cf79e795ada48a6f79f0708",
+          "log_size_bytes": 268,
+          "process_started": true
+        },
+        {
+          "cleanup_complete": true,
+          "exit_code": 0,
+          "id": "installed-matrix",
+          "log_sha256": "9a52c4be37f7acf44cff1acde31dd906c558873b600a25165f5a563f2829c27d",
+          "log_size_bytes": 158072,
+          "process_started": true
+        },
+        {
+          "cleanup_complete": true,
+          "exit_code": 0,
+          "id": "package-tools-after",
+          "log_sha256": "be506acc091a27438f713c27444661f687eafea770308d054927da6058baf50a",
+          "log_size_bytes": 149124,
+          "process_started": true
+        }
+      ],
+      "commands_verified": 12,
+      "dependencies": [
+        {
+          "path": "third_party/softfloat/build/Linux-x86_64-GCC/softfloat.a",
+          "sha256": "23da7e10a92a73dfdae924be9d4e4490837a5a7639a6e71a03c9fe07cb1276ae",
+          "size_bytes": 530042
+        },
+        {
+          "path": "third_party/ramulator/libramulator.so",
+          "sha256": "10bcf59a01fecb757c6e54f1f490ee9d12f97ff127685907b3d11a8902bf9286",
+          "size_bytes": 5560480
+        },
+        {
+          "path": "third_party/ramulator_ext/libramulator-vortex.so",
+          "sha256": "bffe1f935b7de7cf926b6a997137e8e4eef43a3ecd72fa33f6bf95feffa19d0f",
+          "size_bytes": 691624
+        }
+      ],
+      "elf_identities": [
+        {
+          "byte_order": "little",
+          "class": 64,
+          "machine": 62,
+          "needed": [
+            "libstdc++.so.6",
+            "libm.so.6",
+            "libgcc_s.so.1",
+            "libc.so.6",
+            "ld-linux-x86-64.so.2"
+          ],
+          "path": "artifacts/bundle/lib/libramulator.so",
+          "role": "ramulator",
+          "rpath": [],
+          "runpath": [],
+          "sha256": "10bcf59a01fecb757c6e54f1f490ee9d12f97ff127685907b3d11a8902bf9286",
+          "size_bytes": 5560480,
+          "soname": [
+            "libramulator.so"
+          ],
+          "type": 3
+        },
+        {
+          "byte_order": "little",
+          "class": 64,
+          "machine": 62,
+          "needed": [
+            "libramulator.so",
+            "libstdc++.so.6",
+            "libgcc_s.so.1",
+            "libc.so.6",
+            "ld-linux-x86-64.so.2"
+          ],
+          "path": "artifacts/bundle/lib/libramulator-vortex.so",
+          "role": "ramulator_extension",
+          "rpath": [],
+          "runpath": [],
+          "sha256": "bffe1f935b7de7cf926b6a997137e8e4eef43a3ecd72fa33f6bf95feffa19d0f",
+          "size_bytes": 691624,
+          "soname": [],
+          "type": 3
+        },
+        {
+          "byte_order": "little",
+          "class": 64,
+          "machine": 62,
+          "needed": [
+            "libstdc++.so.6",
+            "libm.so.6",
+            "libgcc_s.so.1",
+            "libc.so.6",
+            "ld-linux-x86-64.so.2"
+          ],
+          "path": "artifacts/bundle/lib/libvortex.so",
+          "role": "runtime",
+          "rpath": [],
+          "runpath": [
+            "$ORIGIN"
+          ],
+          "sha256": "5998918e904b7d93d4d159515fb5830ab8d221c6d959a797b52c7d168e2e8ffe",
+          "size_bytes": 320392,
+          "soname": [
+            "libvortex.so"
+          ],
+          "type": 3
+        },
+        {
+          "byte_order": "little",
+          "class": 64,
+          "machine": 62,
+          "needed": [
+            "libramulator.so",
+            "libramulator-vortex.so",
+            "libstdc++.so.6",
+            "libm.so.6",
+            "libgcc_s.so.1",
+            "libc.so.6",
+            "ld-linux-x86-64.so.2"
+          ],
+          "path": "artifacts/bundle/lib/libsimx.so",
+          "role": "simulator",
+          "rpath": [],
+          "runpath": [
+            "/home/runner/work/AI-GPU/AI-GPU/third_party/ramulator:/home/runner/work/AI-GPU/AI-GPU/third_party/ramulator_ext"
+          ],
+          "sha256": "28c09331081d2bdaa95467f946fca759249d4715870c531d6259c52c05f8f475",
+          "size_bytes": 2455968,
+          "soname": [],
+          "type": 3
+        },
+        {
+          "byte_order": "little",
+          "class": 64,
+          "machine": 62,
+          "needed": [
+            "libsimx.so",
+            "libstdc++.so.6",
+            "libgcc_s.so.1",
+            "libc.so.6",
+            "ld-linux-x86-64.so.2"
+          ],
+          "path": "artifacts/bundle/lib/libvortex-simx.so",
+          "role": "backend",
+          "rpath": [],
+          "runpath": [
+            "$ORIGIN"
+          ],
+          "sha256": "b0985391810b9b2ea56748ff539e2807cf2b4a0523255849d3794d7434a33690",
+          "size_bytes": 97512,
+          "soname": [],
+          "type": 3
+        },
+        {
+          "byte_order": "little",
+          "class": 64,
+          "machine": 62,
+          "needed": [
+            "libvortex.so",
+            "libstdc++.so.6",
+            "libgcc_s.so.1",
+            "libc.so.6"
+          ],
+          "path": "artifacts/native-model/ai_mlp",
+          "rpath": [],
+          "runpath": [],
+          "sha256": "b786e0913f66c1dd8ec518f1fa21fa54fa0b2e740fa5ce7ae5ed64e7e12523ca",
+          "size_bytes": 127152,
+          "soname": [],
+          "type": 3
+        },
+        {
+          "byte_order": "little",
+          "class": 64,
+          "machine": 62,
+          "needed": [
+            "libvortex.so",
+            "libstdc++.so.6",
+            "libgcc_s.so.1",
+            "libc.so.6"
+          ],
+          "path": "artifacts/native-matmul/tests/regression/ai_matmul/ai_matmul",
+          "rpath": [],
+          "runpath": [],
+          "sha256": "f7a2086127a5bbe392857715fe1c34fd2785757f90231516aa9ca5fb5d2562d2",
+          "size_bytes": 118016,
+          "soname": [],
+          "type": 3
+        },
+        {
+          "byte_order": "little",
+          "class": 64,
+          "machine": 243,
+          "needed": [],
+          "path": "artifacts/native-matmul/tests/regression/ai_matmul/kernel.elf",
+          "rpath": [],
+          "runpath": [],
+          "sha256": "78405fbdf91d495fe759da74a670e9d3f76f4601a6223d23d08365db8f7630ca",
+          "size_bytes": 7776,
+          "soname": [],
+          "type": 2
+        },
+        {
+          "byte_order": "little",
+          "class": 64,
+          "machine": 62,
+          "needed": [
+            "libstdc++.so.6",
+            "libgcc_s.so.1",
+            "libc.so.6"
+          ],
+          "path": "vortex_ai/_native.cpython-312-x86_64-linux-gnu.so",
+          "rpath": [],
+          "runpath": [
+            "/opt/hostedtoolcache/Python/3.12.14/x64/lib"
+          ],
+          "sha256": "0108d344c11c608e5f2833f02a10b90e899da43f1998306530329dd01d908512",
+          "size_bytes": 2372672,
+          "soname": [],
+          "type": 3
+        }
+      ],
+      "fixture_sha256": "d22a899827afb3e8c22a528fc6a27fd12ff114ef39caf9ffa0cccd77e849cd03",
+      "format": "bf16",
+      "installation": {
+        "base_prefix": "/opt/hostedtoolcache/Python/3.12.14/x64",
+        "build_info": {
+          "binding_api": 1,
+          "bundle_sha256": "27b7f19ce9dfd239c7ff9a68e67e6a9fb0fe950076c25a694544be5b539eeb58",
+          "source_sha256": "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a"
+        },
+        "distribution_version": "0.1.0",
+        "executable": "/home/runner/work/_temp/p05-python/work/venv/bin/python",
+        "extension_file": "/home/runner/work/_temp/p05-python/work/venv/lib/python3.12/site-packages/vortex_ai/_native.cpython-312-x86_64-linux-gnu.so",
+        "package_file": "/home/runner/work/_temp/p05-python/work/venv/lib/python3.12/site-packages/vortex_ai/__init__.py",
+        "prefix": "/home/runner/work/_temp/p05-python/work/venv",
+        "python_implementation": "CPython",
+        "python_version": [
+          3,
+          12,
+          14
+        ],
+        "runtime_libraries": [
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libramulator.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libramulator-vortex.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libvortex.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libsimx.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libvortex-simx.so"
+        ]
+      },
+      "native_commands_verified": 15,
+      "native_matmul_qualification_id": "b2de7d128ace5d7a90f212b9b425a935d847c36d168eb7273935428c675d5ce8",
+      "native_packet_files": 90,
+      "native_provenance_audit": {
+        "commands_verified": 15,
+        "dependencies": [
+          {
+            "path": "third_party/softfloat/build/Linux-x86_64-GCC/softfloat.a",
+            "sha256": "23da7e10a92a73dfdae924be9d4e4490837a5a7639a6e71a03c9fe07cb1276ae",
+            "size_bytes": 530042
+          },
+          {
+            "path": "third_party/ramulator/libramulator.so",
+            "sha256": "10bcf59a01fecb757c6e54f1f490ee9d12f97ff127685907b3d11a8902bf9286",
+            "size_bytes": 5560480
+          },
+          {
+            "path": "third_party/ramulator_ext/libramulator-vortex.so",
+            "sha256": "bffe1f935b7de7cf926b6a997137e8e4eef43a3ecd72fa33f6bf95feffa19d0f",
+            "size_bytes": 691624
+          }
+        ],
+        "external_submodule_file_identities_recorded": 193,
+        "fixture_sha256": "d22a899827afb3e8c22a528fc6a27fd12ff114ef39caf9ffa0cccd77e849cd03",
+        "git_source_bodies_verified": 773,
+        "packet": "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-bf16/python/native",
+        "preparation_checked": false,
+        "profile_sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+        "report_sha256": "fa58bf21e0f6544f9c4afc8f1ccbda14b41e1feaf6d95666753c88e3d32224d9",
+        "retained_source_bodies_verified": 57,
+        "revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+        "source_inventory_entries": 966,
+        "tool_names": [
+          "ar",
+          "as",
+          "bash",
+          "clang",
+          "clang++",
+          "g++",
+          "gcc",
+          "ld",
+          "libc64/lib/libc.a",
+          "libc64/lib/libm.a",
+          "libcrt64/lib/baremetal/libclang_rt.builtins-riscv64.a",
+          "llvm-objcopy",
+          "llvm-objdump",
+          "make",
+          "perl",
+          "python3",
+          "riscv-gcc",
+          "riscv-gcc-ar",
+          "riscv-objcopy",
+          "riscv-objdump"
+        ],
+        "tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049",
+        "variants": [
+          [
+            "simx",
+            "bf16"
+          ]
+        ]
+      },
+      "native_qualification_id": "c5fd995f8fa7f941d44714e282f1bbc5897c4d62a4989cb2563608ff7e437262",
+      "native_report_sha256": "fa58bf21e0f6544f9c4afc8f1ccbda14b41e1feaf6d95666753c88e3d32224d9",
+      "native_tool_versions": {
+        "clang": {
+          "banner": "clang version 20.1.8 (https://github.com/vortexgpgpu/llvm.git f44a6bb2af4c62847585305bbdc760fbe0e3645f)",
+          "log_sha256": "5c82310dd02189c08a5f2900661fd62a86123f0489feb6562b01d9943c5c2fd7",
+          "version": "20.1.8"
+        },
+        "g++": {
+          "banner": "g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+          "log_sha256": "9eaf9b7f4b11c2e84e2478c2ceb0e4f48f4ba88565bcfc832b3bce49847dda6d",
+          "version": "11.4.0"
+        },
+        "make": {
+          "banner": "GNU Make 4.3",
+          "log_sha256": "8ee498ee2fc27e8dcdf99191b454077df95e3840d841ec94321748b6d7f36819",
+          "version": "4.3"
+        }
+      },
+      "package_prerequisite_file_counts": {
+        "packaging": 53,
+        "setuptools": 579,
+        "wheel": 38
+      },
+      "package_prerequisite_inventory_sha256": "7c95c80af7318bfb8779beefb8c5492be2e5043c2b2e0c1f6d8f6ac6d1fc7e19",
+      "package_versions": {
+        "packaging": "26.3",
+        "setuptools": "84.2.1",
+        "wheel": "0.48.0"
+      },
+      "packages": {
+        "extension": {
+          "path": "vortex_ai/_native.cpython-312-x86_64-linux-gnu.so",
+          "sha256": "0108d344c11c608e5f2833f02a10b90e899da43f1998306530329dd01d908512",
+          "size_bytes": 2372672
+        },
+        "installed_members": 13,
+        "pin_header_sha256": "67116a57de611b12f3c11ae2895cabb108733421f654424c52795ddf90e4d2e6",
+        "sdist": {
+          "path": "packages/sdist/vortex_ai-0.1.0.tar.gz",
+          "sha256": "d67a0d75c476438ccdae96f46e849e6207f891f12bb7e61f535681cb8558b03e",
+          "size_bytes": 86047
+        },
+        "sdist_members": 32,
+        "wheel": {
+          "path": "packages/wheel/vortex_ai-0.1.0-127b7f19ce9dfd239c7ff9a68e67e6a9fb0fe950076c25a694544be5b539eeb58-cp312-cp312-linux_x86_64.whl",
+          "sha256": "1857dd6401f496ee3830e6a815a46bd2773f0c0dd882acabdb1e2d13cfc4222e",
+          "size_bytes": 865042
+        },
+        "wheel_members": 10
+      },
+      "packet": "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-bf16/python",
+      "profile_sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+      "relocated_original_paths_required": false,
+      "report_sha256": "47e44eef2a0f44944be17bdf87a9ffaab33486be9840c8c147faea624b279e8a",
+      "retained_packet_inventory_sha256": "b425b309d625afa016201c2f1a490122c152fe97f288bac19aa86d40db5ed5eb",
+      "revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+      "source_evidence": {
+        "git_source_bodies_verified": 789,
+        "loaded_helpers": [
+          {
+            "path": "ci/project/baseline_inventory.py",
+            "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+            "size_bytes": 20466
+          },
+          {
+            "path": "ci/project/baseline_matrix.py",
+            "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+            "size_bytes": 8890
+          },
+          {
+            "path": "ci/project/baseline_packet_contract.py",
+            "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+            "size_bytes": 53680
+          },
+          {
+            "path": "ci/project/baseline_packet_io.py",
+            "sha256": "53ac39e541628a68b3d405201734195e8ed606b26eab5ee72746e96b3148515d",
+            "size_bytes": 14315
+          },
+          {
+            "path": "ci/project/baseline_process.py",
+            "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+            "size_bytes": 12627
+          },
+          {
+            "path": "ci/project/compiler_records.py",
+            "sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+            "size_bytes": 7143
+          },
+          {
+            "path": "ci/project/p02_fixture_oracle.py",
+            "sha256": "12e546864a4fef5b05e10c7a04b1006bcd59376e5921ea1221c4d42668490145",
+            "size_bytes": 23351
+          },
+          {
+            "path": "ci/project/p02_layout_fixture_oracle.py",
+            "sha256": "34e78c0313e2b032930615f02a790729d1c49293349728b55f7d04a29a2568a7",
+            "size_bytes": 10910
+          },
+          {
+            "path": "ci/project/p02_matrix.py",
+            "sha256": "e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17",
+            "size_bytes": 30055
+          },
+          {
+            "path": "ci/project/p02_matrix_records.py",
+            "sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+            "size_bytes": 12332
+          },
+          {
+            "path": "ci/project/p02_wmma_fixtures.py",
+            "sha256": "4a672a5d3357f220120f43e5f5d7e880f7d0ba36df380d69cd1873ea4879835e",
+            "size_bytes": 16440
+          },
+          {
+            "path": "ci/project/p02_wmma_numerical_fixture_oracle.py",
+            "sha256": "083450dc11712e5fc6dce7d19fb854bd9ef25b738347efd56bd07e81b079570b",
+            "size_bytes": 15556
+          },
+          {
+            "path": "ci/project/p03_execute.py",
+            "sha256": "bee5c380eb0d328e72586e2c51e4162b8ca5314ef68d2987a7d744fc1c05aa82",
+            "size_bytes": 17105
+          },
+          {
+            "path": "ci/project/p03_execution_records.py",
+            "sha256": "b26449105f17f9487cc4fbaab36884ceea42be9f502a26aa58331ed4cf1140de",
+            "size_bytes": 6961
+          },
+          {
+            "path": "ci/project/p04_execute.py",
+            "sha256": "02f4254bab32b40212f7276453c4e5d449ebdae07a8e26f4933e81feb1f9f793",
+            "size_bytes": 19620
+          },
+          {
+            "path": "ci/project/p04_execution_records.py",
+            "sha256": "abddfb06fb48bbd064c09d61879b278bca22778f5a8289f4c1ac93fb882b33e0",
+            "size_bytes": 16283
+          },
+          {
+            "path": "ci/project/p04_fixture_adapter.py",
+            "sha256": "37a50f6f0f80fd79b926b7ed5d13a233de6bf518590da7fa7d40800dcc91094a",
+            "size_bytes": 5364
+          },
+          {
+            "path": "ci/project/p04_model_contract.py",
+            "sha256": "c184d980d57aec54567d79025845c5fb34887741697ac78a66692a65da02e4b3",
+            "size_bytes": 15901
+          },
+          {
+            "path": "ci/project/p04_reference.py",
+            "sha256": "115a7db51948d69fc6267d5fe658d1a8e68c22e9f200d5ddc3f0a5181d7140a9",
+            "size_bytes": 11855
+          },
+          {
+            "path": "ci/project/p05_bundle.py",
+            "sha256": "209610324c3bb1d9f4ae9b833759bec3c7823d7590d5d3bc8e3bfd414373000c",
+            "size_bytes": 28204
+          },
+          {
+            "path": "ci/project/p05_execute.py",
+            "sha256": "18f63ebd5bb04fbe9bcdf094d6d2464dbd8196ba3602d064f9b27ee87f9f7ef4",
+            "size_bytes": 41467
+          },
+          {
+            "path": "ci/project/p05_execution_records.py",
+            "sha256": "34ca711b60137515a03316ab3406069acc6743611726dd45d5265badae55fdb2",
+            "size_bytes": 16533
+          },
+          {
+            "path": "ci/project/preflight.py",
+            "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+            "size_bytes": 15124
+          },
+          {
+            "path": "python/vortex_ai/_bundle.py",
+            "sha256": "e25ccf8a7fbe93b60b38507f3261f8936dcfad64c1d8012b307065ab6d94751d",
+            "size_bytes": 12251
+          }
+        ],
+        "retained_source_bodies_verified": 48,
+        "submodule_file_identities_only": 193
+      },
+      "system_elf_dependencies_identified_not_archived": [
+        "ld-linux-x86-64.so.2",
+        "libc.so.6",
+        "libgcc_s.so.1",
+        "libm.so.6",
+        "libstdc++.so.6"
+      ],
+      "tool_identities": {
+        "ar": {
+          "path": "/usr/bin/ar",
+          "resolved_path": "/usr/bin/x86_64-linux-gnu-ar",
+          "sha256": "5b394f8752fde1776992d405d76034d5017b24b9b922bedaeeaff8cc344ef044",
+          "size_bytes": 55792
+        },
+        "as": {
+          "path": "/usr/bin/as",
+          "resolved_path": "/usr/bin/x86_64-linux-gnu-as",
+          "sha256": "4e6b50c3faaa834150db32be778fd7d9440a4e1f5fa8beb8a72277b12159d689",
+          "size_bytes": 467352
+        },
+        "bash": {
+          "path": "/usr/bin/bash",
+          "resolved_path": "/usr/bin/bash",
+          "sha256": "59474588a312b6b6e73e5a42a59bf71e62b55416b6c9d5e4a6e1c630c2a9ecd4",
+          "size_bytes": 1396520
+        },
+        "clang": {
+          "path": "/home/runner/work/_temp/p05-python/tools/llvm-vortex/bin/clang",
+          "resolved_path": "/home/runner/work/_temp/p05-python/tools/llvm-vortex/bin/clang-20",
+          "sha256": "92f2fbf93bb013f414871b9dde08174f42832b169389f59cd373451d373cf3cf",
+          "size_bytes": 189776
+        },
+        "clang++": {
+          "path": "/home/runner/work/_temp/p05-python/tools/llvm-vortex/bin/clang++",
+          "resolved_path": "/home/runner/work/_temp/p05-python/tools/llvm-vortex/bin/clang-20",
+          "sha256": "92f2fbf93bb013f414871b9dde08174f42832b169389f59cd373451d373cf3cf",
+          "size_bytes": 189776
+        },
+        "g++": {
+          "path": "/usr/bin/g++",
+          "resolved_path": "/usr/bin/x86_64-linux-gnu-g++-11",
+          "sha256": "2360901d864cf10bfd6296e261cb2c14053552a80377761ab07146ec9ec9a2c0",
+          "size_bytes": 932680
+        },
+        "gcc": {
+          "path": "/usr/bin/gcc",
+          "resolved_path": "/usr/bin/x86_64-linux-gnu-gcc-11",
+          "sha256": "821af3c74506283c179ca413bb33e6b528805a4dd8a5c09df125e5ad560a9e89",
+          "size_bytes": 928584
+        },
+        "ld": {
+          "path": "/usr/bin/ld",
+          "resolved_path": "/usr/bin/x86_64-linux-gnu-ld.bfd",
+          "sha256": "58937fc20c21e147883b4fdaa0fc7438a8e8f2bb886cfcaa4896100ca91139e7",
+          "size_bytes": 1736184
+        },
+        "libc64/lib/libc.a": {
+          "path": "/home/runner/work/_temp/p05-python/tools/libc64/lib/libc.a",
+          "resolved_path": "/home/runner/work/_temp/p05-python/tools/libc64/lib/libc.a",
+          "sha256": "7eb0e3b5bdc7397b6fa4d93637b29379d01107111148e8f0372a5c999e359a94",
+          "size_bytes": 4040594
+        },
+        "libc64/lib/libm.a": {
+          "path": "/home/runner/work/_temp/p05-python/tools/libc64/lib/libm.a",
+          "resolved_path": "/home/runner/work/_temp/p05-python/tools/libc64/lib/libm.a",
+          "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5",
+          "size_bytes": 8
+        },
+        "libcrt64/lib/baremetal/libclang_rt.builtins-riscv64.a": {
+          "path": "/home/runner/work/_temp/p05-python/tools/libcrt64/lib/baremetal/libclang_rt.builtins-riscv64.a",
+          "resolved_path": "/home/runner/work/_temp/p05-python/tools/libcrt64/lib/baremetal/libclang_rt.builtins-riscv64.a",
+          "sha256": "3879b774af20a252d708fb4486eb8ef7acd567ddc900d54ef866858cad436f16",
+          "size_bytes": 335280
+        },
+        "llvm-objcopy": {
+          "path": "/home/runner/work/_temp/p05-python/tools/llvm-vortex/bin/llvm-objcopy",
+          "resolved_path": "/home/runner/work/_temp/p05-python/tools/llvm-vortex/bin/llvm-objcopy",
+          "sha256": "31fab24ae51dc48a17e6a899001fc3238e2736831f0f87c6b833411df36e73ac",
+          "size_bytes": 250184
+        },
+        "llvm-objdump": {
+          "path": "/home/runner/work/_temp/p05-python/tools/llvm-vortex/bin/llvm-objdump",
+          "resolved_path": "/home/runner/work/_temp/p05-python/tools/llvm-vortex/bin/llvm-objdump",
+          "sha256": "b7fd1a8c8d365ffb4fa28316e9cdd9d635b0a5ac1934a04f4ea0da80f03de449",
+          "size_bytes": 1015552
+        },
+        "make": {
+          "path": "/usr/bin/make",
+          "resolved_path": "/usr/bin/make",
+          "sha256": "92f646030615cd98490a68a94c0aefd87b552be3158b941c02e43b0bfdb576db",
+          "size_bytes": 255696
+        },
+        "perl": {
+          "path": "/usr/bin/perl",
+          "resolved_path": "/usr/bin/perl",
+          "sha256": "07e7486bf369c5c603cbcf8d0bca0f1d28c7e48406f2cb84bea79dd93b5c4d85",
+          "size_bytes": 3806200
+        },
+        "python3": {
+          "path": "/opt/hostedtoolcache/Python/3.12.14/x64/bin/python3",
+          "resolved_path": "/opt/hostedtoolcache/Python/3.12.14/x64/bin/python3.12",
+          "sha256": "d13074847cd54749b1189cd5a798fdbf32328ecfa297fd61ee457d767de3e6bd",
+          "size_bytes": 17712
+        },
+        "riscv-gcc": {
+          "path": "/home/runner/work/_temp/p05-python/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-gcc",
+          "resolved_path": "/home/runner/work/_temp/p05-python/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-gcc",
+          "sha256": "1d45ae00898529ef4781942ffa2ac403abc2fe2dc559b4eb01014d170d52e408",
+          "size_bytes": 7775360
+        },
+        "riscv-gcc-ar": {
+          "path": "/home/runner/work/_temp/p05-python/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-gcc-ar",
+          "resolved_path": "/home/runner/work/_temp/p05-python/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-gcc-ar",
+          "sha256": "afc1c8f4f9255aacf3b644d227f1a76b5712f1ad34f785fe33957f22a59f9f54",
+          "size_bytes": 173336
+        },
+        "riscv-objcopy": {
+          "path": "/home/runner/work/_temp/p05-python/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-objcopy",
+          "resolved_path": "/home/runner/work/_temp/p05-python/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-objcopy",
+          "sha256": "723ad896894f5ab6718eb00f83fc3a1436f89a29022cff8d54dd74ea1c1b66ca",
+          "size_bytes": 7517840
+        },
+        "riscv-objdump": {
+          "path": "/home/runner/work/_temp/p05-python/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-objdump",
+          "resolved_path": "/home/runner/work/_temp/p05-python/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-objdump",
+          "sha256": "9287eaec3b3dc0393f793e62834c897b6d08f2b9a032260397dc0c8f42dccf5e",
+          "size_bytes": 10824144
+        }
+      },
+      "toolchain_version_pins": {
+        "FIRESIM_REV": "57bb93f1e23daf46198659ddd93608f70121fee0",
+        "GEM5_REV": "v25.0.0.1",
+        "TOOLCHAIN_REV": "v3.0.2",
+        "VORTEX_VERSION": "3.0"
+      },
+      "tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049"
+    }
+  ],
+  "phase_complete": false,
+  "schema_version": 1,
+  "scope": "incomplete_selected_format_matrix",
+  "selected_scope_requested": true
+}

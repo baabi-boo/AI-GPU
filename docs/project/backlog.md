@@ -7,7 +7,7 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Start here: P05-T01 Python binding to the qualified native path
+## Start here: P05-T01 scoped PyTorch custom operators
 
 **P02-A03 is accepted, completing P02-T02 and P02.** The
 [acceptance record](evidence/p02-wgmma/processor/acceptance.json),
@@ -61,16 +61,25 @@ retains exact intermediate/output comparisons, actual-input lineage, complete
 source/build records, independent review and replayable original archives.
 Earlier cache-preparation and missing-stamp failures remain separately recorded.
 
-**Current bounded task: P05-T01 — qualify the first copying Python binding.**
-Use the [entry handoff](p05-entry-handoff.md),
-[implemented contract](../designs/python_binding_v1.md) and
-[compatibility matrix](p05-python-compatibility.md) to verify accepted native
-ownership, exact representations, partial failure and trusted frozen model cases.
-Keep the native executable as an independent comparison path. P05 is
-`in_progress`; package installation, all declared signatures and the later scoped
-framework route require their own evidence before acceptance.
+**P05-A01 now accepts the first copying Python binding** at
+`e1420fd550f716df33a2556057b7086a03032cbe`; its
+[acceptance record](evidence/p05-python/acceptance-binding.json) and
+[execution packet](evidence/p05-python/README.md) retain the two-format installed
+SimX matrix, clean packaging, ownership/error tests and independent audits.
+The matrix has 144 combined Python/native launches and 660 event/profile pairs;
+the clean hosted suite passed 2,174 tests at that source revision.
+
+**Current bounded task: P05-T01 — implement and qualify the scoped PyTorch
+custom-op route.** Use the [handoff](p05-entry-handoff.md),
+[binding contract](../designs/python_binding_v1.md) and
+[compatibility matrix](p05-python-compatibility.md). Freeze one framework version
+and explicit dtype/shape/stride/device/copy/error rules before implementing its
+operators through the existing owners. Reject unsupported gradients and layouts,
+then reproduce the fixed model against the native comparison path in a fresh
+installation with actual dispatch and separately recorded host work.
+P05 remains `in_progress`; A02/A03 are unearned and no PyTorch version is qualified.
 The [executor audit](p04-executor-audit.md) retains the unresolved inherited
-267 → 283 DSP area-gate failure; P04 does not resolve it.
+267 → 283 DSP area-gate failure; Python qualification does not resolve it.
 
 The [ordinary WMMA handoff](p02-wmma-handoff.md) and
 [P02-A02 record](evidence/p02-wmma/acceptance.json) bind full-processor checks to
@@ -270,9 +279,10 @@ acceptance; P03-T02 now has accepted A02 numerical and A03 lifecycle evidence,
 completing P03 for the declared six signatures. P04-T01 is complete with
 source-level P04-A01 acceptance. P04-T02 now has accepted A02/A03 execution and
 trace evidence for the fixed model, completing P04 at bounded processor RTL
-scope. P05-T01 is in progress with the first copying Python binding; detailed
-work packages remain in the phase guides, the [development audit](p05-binding-audit.md)
-and the [Python binding handoff](p05-entry-handoff.md).
+scope. P05-A01 now accepts the bounded copying Python binding; P05-T01 remains
+in progress for the scoped framework route. Detailed work packages remain in the
+phase guides, the [development audit](p05-binding-audit.md) and the
+[Python binding handoff](p05-entry-handoff.md).
 
 | Work item | First bounded deliverable | Entry / accountable role | Gates |
 |---|---|---|---|
@@ -282,7 +292,7 @@ and the [Python binding handoff](p05-entry-handoff.md).
 | **P03-T02 — Operator implementations and lifetime tests — complete** | Managed six-signature matmul has independent SimX/native-RTL arithmetic and actual common-runtime lifecycle acceptance; exact scope and partial-transfer limits remain recorded. | T01; kernel and runtime lead | [P03-A02](evidence/p03-managed-matmul/acceptance-numerics.json), [P03-A03](evidence/p03-managed-matmul/acceptance-lifecycle.json) |
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
 | **P04-T02 — Native model execution — complete** | Four clean SimX/native processor RTL × FP16/BF16 variants pass exact intermediate/final comparisons, live-input lineage, native placement and separate host/transfer accounting after independent review. | T01; model runtime lead | [P04-A02](evidence/p04-executor/acceptance-numerics.json), [P04-A03](evidence/p04-executor/acceptance-dispatch.json) |
-| **P05-T01 — Python/custom-op bridge — in progress** | Qualify the implemented copying binding, native owners, trusted fixed cases and clean installation; then implement and qualify the scoped framework route. | P04; framework integration lead; [entry handoff](p05-entry-handoff.md) | P05-A01, P05-A02, P05-A03 unearned |
+| **P05-T01 — Python/custom-op bridge — in progress** | Preserve the accepted copying binding; freeze the framework version/operator contract, implement scoped custom operators and qualify fixed-model dispatch plus explicit failure behavior. | P04; framework integration lead; [handoff](p05-entry-handoff.md) | [P05-A01 accepted](evidence/p05-python/acceptance-binding.json); P05-A02/P05-A03 unearned |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),
 [P04](phases/p04-inference.md) and [P05](phases/p05-framework.md). A custom-op

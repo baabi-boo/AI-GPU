@@ -1,0 +1,30 @@
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................E.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................begin sst tests...
+=== sst: hello ===
+=== sst: fibonacci ===
+sst tests done!
+..................................................................................................................................................................................................................................................................................................................................................
+======================================================================
+ERROR: setUpClass (test_compiler_records_generated.GeneratedCompilerRecordTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_compiler_records_generated.py", line 53, in setUpClass
+    run([str(SOURCE / "configure"), "--xlen=64", "--osversion=ubuntu/focal",
+  File "/workspace/scratch/ba0248fde989/AI-GPU/ci/project/test_compiler_records_generated.py", line 47, in run
+    result = subprocess.run(arguments, cwd=cwd, env=environment, capture_output=True,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 550, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1209, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 2116, in _communicate
+    self._check_timeout(endtime, orig_timeout, stdout, stderr)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1253, in _check_timeout
+    raise TimeoutExpired(
+subprocess.TimeoutExpired: Command '['/workspace/scratch/ba0248fde989/AI-GPU/configure', '--xlen=64', '--osversion=ubuntu/focal', '--profile=', '--tooldir=/tmp/ai-gpu-compiler-records-i0c04n3h/unused-tools', '--prefix=/tmp/ai-gpu-compiler-records-i0c04n3h/unused-install']' timed out after 30 seconds
+
+----------------------------------------------------------------------
+Ran 1813 tests in 1576.307s
+
+FAILED (errors=1)

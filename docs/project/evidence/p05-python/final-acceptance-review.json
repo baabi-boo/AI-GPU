@@ -1,0 +1,219 @@
+{
+  "disposition": {
+    "P05": "remain in_progress",
+    "P05-A01": "The existing simulated acceptance is supported within the declared plain-Python copying contract.",
+    "P05-A02": "unearned",
+    "P05-A03": "unearned",
+    "acceptance_decision_changed": false,
+    "unresolved_F2_F3_findings": []
+  },
+  "independent_reconciliation": {
+    "acceptance_artifacts_verified": 57,
+    "acceptance_command_receipts_matched": 14,
+    "command": [
+      "python",
+      "-B",
+      "/workspace/scratch/ba0248fde989/p05-work/w10_a1/reconcile_acceptance.py"
+    ],
+    "counts": {
+      "combined": {
+        "assembled_words": 2560,
+        "bridge_bytes": 10240,
+        "d2h_bytes": 36864,
+        "h2d_bytes": 93696,
+        "launches": 144,
+        "matmul_runs": 24,
+        "model_runs": 40,
+        "model_stage_words": 7680,
+        "profile_pairs": 660,
+        "standalone_words": 1536
+      },
+      "native": {
+        "assembled_words": 1280,
+        "bridge_bytes": 5120,
+        "d2h_bytes": 18432,
+        "h2d_bytes": 46848,
+        "launches": 72,
+        "matmul_runs": 12,
+        "model_runs": 20,
+        "model_stage_words": 3840,
+        "profile_pairs": 300,
+        "standalone_words": 768
+      },
+      "python": {
+        "assembled_words": 1280,
+        "bridge_bytes": 5120,
+        "d2h_bytes": 18432,
+        "h2d_bytes": 46848,
+        "launches": 72,
+        "matmul_runs": 12,
+        "model_runs": 20,
+        "model_stage_words": 3840,
+        "profile_pairs": 360,
+        "standalone_words": 768
+      }
+    },
+    "cwd": "/workspace/scratch/ba0248fde989/AI-GPU",
+    "exit_code": 0,
+    "original_archive_members_verified": 608,
+    "raw_native_python_value_equalities": 92,
+    "receipt": {
+      "path": "docs/project/evidence/p05-python/development/qualification/w10_a1/reconciliation.json",
+      "sha256": "bff89da2013769ee338d6bee763d6526fc9f837ebe063f79bffe9bb379323b41"
+    },
+    "relocated_full_report_matches": 3,
+    "result": "pass",
+    "script_sha256": "06d5ad79f9fae022a29480ef8cf2b8fe46e088415e0e09e83974630ca6d8ec89",
+    "selected_full_packet_matches": 6,
+    "unchanged_source_artifacts_against_qualified_git": [
+      "docs/designs/python_binding_v1.md",
+      "python/vortex_ai/_api.py",
+      "python/native/module.cpp",
+      "python/native/runtime_loader.cpp",
+      "python/vortex_ai/_bundle.py",
+      "python/vortex_ai/launch.py",
+      "setup.py",
+      "pyproject.toml",
+      "MANIFEST.in",
+      "ci/project/test_p05_python_api.py",
+      "ci/project/test_p05_native_binding.py",
+      "ci/project/test_p05_packaging.py",
+      "ci/project/test_p05_bundle.py",
+      "ci/project/test_p05_launcher.py"
+    ],
+    "underlying_native_and_python_commands": 54
+  },
+  "limitations": [
+    "This is read-only evidence/claim reconciliation and independent review, not new native execution, a full-suite rerun or a rerun of the three auditors.",
+    "Qualified installed execution remains Linux x86_64 GIL CPython 3.12.14, RV64 SimX, six declared packed FP16/BF16 matmul signatures and ten frozen model cases.",
+    "No PyTorch route/version, complete framework backend, unsupported gradients, training, arbitrary models/weights, zero-copy, concurrency, CUDA compatibility, Python RTL/XRT, physical FPGA/silicon or performance claim is accepted.",
+    "Hashes and reviewed command observations establish trusted-builder consistency. They do not authenticate binary authorship, reproduce all transitive builds, provide hostile-filesystem isolation, or establish arbitrary-host wheel portability.",
+    "Publication freshness, final mutable compatibility documentation and the complete agent ledger are separate final-wave obligations.",
+    "The reviewer preliminary schema-inspection KeyError is retained separately; it occurred before reconciliation and changed no product, auditor or evidence input."
+  ],
+  "outcome": "pass",
+  "phase_and_authorization_boundary": {
+    "P01-A03": "still blocked",
+    "human_approval_or_waiver_fabricated": false,
+    "inherited_DSP_267_to_283_finding": "preserved; not closed by this review",
+    "only_new_roadmap_evidence": "P05-A01",
+    "other_phase_records_equal_implementation_revision": true,
+    "publication_performed_by_reviewer": false
+  },
+  "record_id": "p05-python-final-acceptance-scope-review-v1",
+  "review_observations": [
+    {
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "observation": "The acceptance references actual installed SimX commands and source-matched host tests. Numerical references use frozen upstream fixtures and a hash-pinned independent P04 helper; the final acceptance record is not used as its own numerical or command-success oracle.",
+      "severity": "F0"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "observation": "The 14 passing command entries match retained zero exits and exact argument strings. The aggregate wrapper failure remains separate from the three successful auditor exits; the independent full/selected and relocated comparisons agree.",
+      "severity": "F0"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "observation": "Native packet copies are not counted again. Raw traces independently yield 72 Python and 72 native launches, with 360 and 300 profile pairs respectively; native standalone observations are unprofiled.",
+      "severity": "F0"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "observation": "The clean 2174-test hosted suite is tied to e1420fd. The earlier dirty 2163-test failure, baseline configure timeout and inherited workload-start assertion are retained; no unobserved cause or waiver is asserted.",
+      "severity": "F0"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "observation": "Host fake-runtime failure injection is explicitly distinct from normal installed SimX execution; modeled recovery and status-publication MemoryError are not presented as hardware-fault recovery or global CPython OOM proof.",
+      "severity": "F0"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "observation": "Hosted G++ 11.4 / CPython 3.12.14 and local G++ 14.2 evidence remain separately scoped. RUNPATH, external system libraries, copied representations, explicit close and potentially unbounded destruction remain limitations.",
+      "severity": "F0"
+    }
+  ],
+  "reviewed_records": [
+    {
+      "path": "docs/project/evidence/p05-python/acceptance-binding.json",
+      "sha256": "1896bae3b59273f51448b554b965dc7d98d6beafcd446527c41c878a32c740c5",
+      "size_bytes": 24130
+    },
+    {
+      "path": "docs/project/evidence/p05-python/binding-acceptance-review.json",
+      "sha256": "3727a33b843e91d9faa9218182d03a80672d23f2b5cf9ab226edb280abd29ce3",
+      "size_bytes": 12938
+    },
+    {
+      "path": "docs/project/evidence/p05-python/qualification-review.json",
+      "sha256": "208308e22bb473a114171f2dd70a04af874da7d023c711d015e1f8a7c2883246",
+      "size_bytes": 15028
+    },
+    {
+      "path": "docs/project/evidence/p05-python/relocated-replay.json",
+      "sha256": "95326c3aff7ae8eeead0ede3e6d611d626ed82f2f946ca94e01741feb8c47117",
+      "size_bytes": 18299
+    },
+    {
+      "path": "docs/project/evidence/p05-python/development/host-validation.md",
+      "sha256": "d66b9a7b7642bd0bdf239ed5768546dc93c1b6c855af8c5704d28078cca46234",
+      "size_bytes": 9538
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/full-numerics.json",
+      "sha256": "0cd0c01504a50501ed2e6bf6bac8bc4cb3cfef09754b3ed47c0924d069125cb9",
+      "size_bytes": 27144
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/full-dispatch.json",
+      "sha256": "73aaefe9c280e1092b7aae31fa1831f3873c970b0e0bdd746b9d1807d6334989",
+      "size_bytes": 50489
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/full-provenance.json",
+      "sha256": "1f31b388edc139e546e70f8d79e97d7efde779f50e328d74998331bd3bad9d17",
+      "size_bytes": 68913
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/fp16-numerics.json",
+      "sha256": "7136b4641808e36dbf8d2b744cb6acf4029b77a1db1aea0d79d8e15193ff6f79",
+      "size_bytes": 15501
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/fp16-dispatch.json",
+      "sha256": "df5ea11b2334840cbc979b072181238633d8c31b8dd32a593da1179025d0d7a5",
+      "size_bytes": 29601
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/fp16-provenance.json",
+      "sha256": "6d2906f390dc2bafcc3558fb9a74c8b6bbcbd8a3670121c44bb00c9065a7bf59",
+      "size_bytes": 35507
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/bf16-numerics.json",
+      "sha256": "58858feda4712f979370d3bc50cf9ae239b72b3276f22ecfdbba42d33171803e",
+      "size_bytes": 15501
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/bf16-dispatch.json",
+      "sha256": "ae63f756c4a623de9544ad7a20ba3e7e52390596f493f5d68f9d40eaf22b150b",
+      "size_bytes": 29593
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/bf16-provenance.json",
+      "sha256": "339417f60be16258ec8e0555b5fe706c50f02b28b0de6724909edd228d6d8e3e",
+      "size_bytes": 35507
+    }
+  ],
+  "reviewer": "/root/w10_a1_final_acceptance_scope_review",
+  "schema_version": 1,
+  "scope": "Independent final technical review of the bounded P05-A01 acceptance and its retained proof. This review does not execute native code, rerun the auditors or tests, grant a waiver, publish a commit or change the existing acceptance decision.",
+  "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+  "source_tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049"
+}

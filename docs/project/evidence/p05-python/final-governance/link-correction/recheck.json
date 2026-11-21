@@ -1,0 +1,172 @@
+{
+  "after_check": {
+    "command": {
+      "path": "docs/project/evidence/p05-python/final-governance/link-correction/after-command.json",
+      "sha256": "1fe8035416791b3c15ca5f2cc2763c1521b152636b7841d720bd4b35f2096ce5",
+      "size_bytes": 276
+    },
+    "exit_code": 0,
+    "log": {
+      "path": "docs/project/evidence/p05-python/final-governance/link-correction/after.log",
+      "sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+      "size_bytes": 96
+    },
+    "state": "completed"
+  },
+  "cause": "A verbatim review-policy Markdown snapshot was moved below the evidence directory, where seven original relative links no longer resolved. The copied bytes remain authoritative as a Git-base snapshot, not a relocated authored Markdown document.",
+  "changes": {
+    "manifest": "Updated only the copied review-policy retained_path; source_path, source_revision and content identity remain unchanged",
+    "policy_snapshot": "Renamed code-review-policy.md to code-review-policy.txt without changing any bytes",
+    "readme": "Added a correction/recheck link and explained non-Markdown retention",
+    "relocations": [
+      {
+        "current": {
+          "path": "docs/project/evidence/p05-python/final-governance/immutable-base.json",
+          "sha256": "ad407e2fc97ff59586a7442a54f48f3faebe9a990542ad955c93df8a99db7897",
+          "size_bytes": 1148
+        },
+        "original_body_retained": {
+          "path": "docs/project/evidence/p05-python/final-governance/link-correction/immutable-base.json.before.txt",
+          "sha256": "bd19048ecfcf75f33df3e1fe5f5009b548133b8b64dd5cdcda7430658f19551f",
+          "size_bytes": 1147
+        },
+        "original_path": "docs/project/evidence/p05-python/final-governance/immutable-base.json"
+      },
+      {
+        "current": {
+          "path": "docs/project/evidence/p05-python/final-governance/review.json",
+          "sha256": "3fa418f4e011840d5368a106be43c40c248217561d415145b070c6be057bd547",
+          "size_bytes": 4328
+        },
+        "original_body_retained": {
+          "path": "docs/project/evidence/p05-python/final-governance/link-correction/review.json.before.txt",
+          "sha256": "d4626836710e1c77a19d71c5f5eead72fc1d16b7a9714ea9fb080684a3de1fab",
+          "size_bytes": 4328
+        },
+        "original_path": "docs/project/evidence/p05-python/final-governance/review.json"
+      },
+      {
+        "current": {
+          "path": "docs/project/evidence/p05-python/final-governance/README.md",
+          "sha256": "df740b93c966f262049b955bdcfa530b0e80f756f67aa90949c0ed543f4314cb",
+          "size_bytes": 3083
+        },
+        "original_body_retained": {
+          "path": "docs/project/evidence/p05-python/final-governance/link-correction/README.md.before.txt",
+          "sha256": "09d6f9b989f4a47b342477b81d48650d6615e09a6f925d3076e7014782fddec7",
+          "size_bytes": 2745
+        },
+        "original_path": "docs/project/evidence/p05-python/final-governance/README.md"
+      },
+      {
+        "body_changed": false,
+        "current": {
+          "path": "docs/project/evidence/p05-python/final-governance/immutable-base/code-review-policy.txt",
+          "sha256": "99426ced05c04c1b14422f4fdacabcce3c680600461c4887b14e5eabf8b0587d",
+          "size_bytes": 9318
+        },
+        "original_path": "docs/project/evidence/p05-python/final-governance/immutable-base/code-review-policy.md"
+      }
+    ],
+    "review": "Updated only immutable_base.sha256 and immutable_base.size_bytes to describe the current manifest"
+  },
+  "classification": {
+    "actual_classification_performed_in_correction": false,
+    "candidate_sha": null,
+    "note": "The wrapper reads classifier/policy from immutable Git objects; it does not depend on the renamed copied review-policy filename. No class, approval, final commit or successful publication is invented.",
+    "plan": {
+      "path": "docs/project/evidence/p05-python/final-governance/classifier-plan.json",
+      "sha256": "0447609d13226fe40eff9aa15effc576ccbaeffe7d12bcc6f80d36e28208a255",
+      "size_bytes": 1902
+    },
+    "state": "prepared_not_run",
+    "wrapper": {
+      "path": "docs/project/evidence/p05-python/final-governance/classify_candidate.py",
+      "sha256": "3e564996bedf30816254c2fc3b83eeb13086119e76c882659fd0efdb79815415",
+      "size_bytes": 4371
+    }
+  },
+  "downstream_records": {
+    "all_final_delivery_retained_check_hashes_match": true,
+    "disposition": "The original W10 A4 receipt and W10 A6 inventory remain historical observations. Their earlier paths/hashes are mapped above; they are not rewritten or asserted as the corrected current tree. The final-delivery review still correctly pins that unchanged historical inventory and explicitly reserves subsequent additions for root review.",
+    "final_delivery_review": {
+      "path": "docs/project/evidence/p05-python/final-delivery-review.json",
+      "sha256": "de4abb7762600e25e658289fe3e96a9539e63cdf4696cd31932a194b4a02a56f",
+      "size_bytes": 10059
+    },
+    "inventory_original_bodies_still_retained": true,
+    "original_w10_a4_receipt": {
+      "path": "docs/project/evidence/p05-python/development/w10_a4.md",
+      "sha256": "aedbe4e4006a0d9f1236be2e2a5d9669a63edca0968065499ebf02992283dbbc",
+      "size_bytes": 4946
+    },
+    "original_w10_a6_inventory": {
+      "path": "docs/project/evidence/p05-python/development/qualification/w10_a6/checks.json",
+      "sha256": "814a6579b3a3d09a6924b33612e5e711d505e4318b088e937440b1d3a0836fa9",
+      "size_bytes": 231576
+    },
+    "supplemental_current_state_check": "This record supplies the corrected policy/manifest/review/README identities, protected-file checks and actual governance recheck. Root must also inspect the added correction records and perform its final tree/object/publication checks."
+  },
+  "original_failure": {
+    "broken_link_count": 7,
+    "command": {
+      "path": "docs/project/evidence/p05-python/final-governance/link-correction/before-command.json",
+      "sha256": "092c2efc64a6f97efca1278918aa228475c61009bd17d9c7156e98e0638b9b8b",
+      "size_bytes": 275
+    },
+    "exit_code": 1,
+    "initial_w10_a4_pass_scope": "The original project checker passed before the policy snapshot was added; this later integration failure is retained separately.",
+    "log": {
+      "path": "docs/project/evidence/p05-python/final-governance/link-correction/before.log",
+      "sha256": "5217c241cb93ff949b3b885ab2e75f8ae9038c4237410a2af38a3c7521635adf",
+      "size_bytes": 998
+    }
+  },
+  "outcome": "pass",
+  "policy_authority": {
+    "matches_qualified_implementation": "e1420fd550f716df33a2556057b7086a03032cbe",
+    "retained": {
+      "path": "docs/project/evidence/p05-python/final-governance/immutable-base/code-review-policy.txt",
+      "sha256": "99426ced05c04c1b14422f4fdacabcce3c680600461c4887b14e5eabf8b0587d",
+      "size_bytes": 9318
+    },
+    "source_bytes_equal_current_and_both_git_blobs": true,
+    "source_path": "docs/review/code-review-policy.md",
+    "source_revision": "6aac9c421180805a5621156e3d914c685fc6f4a5"
+  },
+  "preservation": {
+    "acceptance_artifacts": 57,
+    "actual_policy_checker_and_classifier_unchanged": true,
+    "after": {
+      "path": "docs/project/evidence/p05-python/final-governance/link-correction/protected-after.json",
+      "sha256": "3645bd0161e0fc83229016b826dcff5922620adb8f79b70c68e36c81666c9836",
+      "size_bytes": 16262
+    },
+    "all_equal": true,
+    "all_untracked_files_inside_p05_evidence": true,
+    "before": {
+      "path": "docs/project/evidence/p05-python/final-governance/link-correction/protected-before.json",
+      "sha256": "3645bd0161e0fc83229016b826dcff5922620adb8f79b70c68e36c81666c9836",
+      "size_bytes": 16262
+    },
+    "frozen_wave_receipts": 60,
+    "ledger_builder_and_final_review_unchanged": true,
+    "protected_file_count": 127,
+    "tracked_changes_after_implementation": [
+      "README.md",
+      "ROADMAP.md",
+      "docs/project/backlog.md",
+      "docs/project/evidence/p05-python/development/README.md",
+      "docs/project/p05-binding-audit.md",
+      "docs/project/p05-entry-handoff.md",
+      "docs/project/p05-python-compatibility.md",
+      "docs/project/roadmap.json",
+      "docs/project/status.md",
+      "python/README.md"
+    ],
+    "wrapper_and_plan_unchanged": true
+  },
+  "reviewer": "/root/w10_a4_final_governance_review",
+  "schema_version": 1,
+  "scope": "Supplemental evidence-snapshot path correction and current governance recheck; historical receipts and inventories remain unchanged"
+}

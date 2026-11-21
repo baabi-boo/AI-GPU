@@ -1,0 +1,435 @@
+{
+  "outcome": "pass",
+  "scope": "independent raw BF16 retained-data reconciliation; no native execution or producer/auditor imports",
+  "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+  "matmul_case_ids": [
+    "bf16-single-dense_boundaries",
+    "bf16-numerical-cross_tile_rounding_positive",
+    "bf16-multi-dense_boundaries"
+  ],
+  "model_case_ids": [
+    "bf16-seeded_dense",
+    "bf16-negated_dense",
+    "bf16-zero",
+    "bf16-signed_basis",
+    "bf16-split_boundary"
+  ],
+  "poisons": [
+    "7fc0dead",
+    "deadbeef"
+  ],
+  "counts": {
+    "python": {
+      "matmul_runs": 6,
+      "matmul_words": 384,
+      "model_runs": 10,
+      "model_stage_words": 1920,
+      "hidden_values": 1280,
+      "bridge_bytes": 2560,
+      "bridge_packed_words": 640,
+      "assembled_words": 640,
+      "launches": 36,
+      "profile_pairs": 180
+    },
+    "native": {
+      "matmul_runs": 6,
+      "matmul_words": 384,
+      "model_runs": 10,
+      "model_stage_words": 1920,
+      "hidden_values": 1280,
+      "bridge_bytes": 2560,
+      "bridge_packed_words": 640,
+      "assembled_words": 640,
+      "launches": 36,
+      "profile_pairs": 150
+    }
+  },
+  "combined_launches": 72,
+  "combined_profile_pairs": 330,
+  "model_arithmetic": "Exact Fraction BF16 input decoding and matrix products; FP32 values checked for exact representability; independent nearest-even BF16 packing after ReLU",
+  "standalone_scope": "Raw native/Python words compared with immutable P02 fixtures, including the cross-tile rounding case; no replacement standalone arithmetic oracle claimed",
+  "boundaries": [
+    {
+      "route": "python",
+      "case_id": "bf16-seeded_dense",
+      "iteration": 0,
+      "row7": [
+        "41000000",
+        "41000000",
+        "c1800000",
+        "41000000"
+      ],
+      "row8": [
+        "40400000",
+        "40400000",
+        "c0c00000",
+        "40400000"
+      ],
+      "bridge_row7_hex": "00000000000000000000000000000041",
+      "bridge_row8_hex": "00000000000000000000000000004040"
+    },
+    {
+      "route": "native",
+      "case_id": "bf16-seeded_dense",
+      "iteration": 0,
+      "row7": [
+        "41000000",
+        "41000000",
+        "c1800000",
+        "41000000"
+      ],
+      "row8": [
+        "40400000",
+        "40400000",
+        "c0c00000",
+        "40400000"
+      ],
+      "bridge_row7_hex": "00000000000000000000000000000041",
+      "bridge_row8_hex": "00000000000000000000000000004040"
+    },
+    {
+      "route": "python",
+      "case_id": "bf16-seeded_dense",
+      "iteration": 1,
+      "row7": [
+        "41000000",
+        "41000000",
+        "c1800000",
+        "41000000"
+      ],
+      "row8": [
+        "40400000",
+        "40400000",
+        "c0c00000",
+        "40400000"
+      ],
+      "bridge_row7_hex": "00000000000000000000000000000041",
+      "bridge_row8_hex": "00000000000000000000000000004040"
+    },
+    {
+      "route": "native",
+      "case_id": "bf16-seeded_dense",
+      "iteration": 1,
+      "row7": [
+        "41000000",
+        "41000000",
+        "c1800000",
+        "41000000"
+      ],
+      "row8": [
+        "40400000",
+        "40400000",
+        "c0c00000",
+        "40400000"
+      ],
+      "bridge_row7_hex": "00000000000000000000000000000041",
+      "bridge_row8_hex": "00000000000000000000000000004040"
+    },
+    {
+      "route": "python",
+      "case_id": "bf16-negated_dense",
+      "iteration": 0,
+      "row7": [
+        "00000000",
+        "c1100000",
+        "c2380000",
+        "c0800000"
+      ],
+      "row8": [
+        "c1200000",
+        "42380000",
+        "c2700000",
+        "c22c0000"
+      ],
+      "bridge_row7_hex": "8040a040c0402041a040804100000000",
+      "bridge_row8_hex": "00404041404150410000803fc0400000"
+    },
+    {
+      "route": "native",
+      "case_id": "bf16-negated_dense",
+      "iteration": 0,
+      "row7": [
+        "00000000",
+        "c1100000",
+        "c2380000",
+        "c0800000"
+      ],
+      "row8": [
+        "c1200000",
+        "42380000",
+        "c2700000",
+        "c22c0000"
+      ],
+      "bridge_row7_hex": "8040a040c0402041a040804100000000",
+      "bridge_row8_hex": "00404041404150410000803fc0400000"
+    },
+    {
+      "route": "python",
+      "case_id": "bf16-negated_dense",
+      "iteration": 1,
+      "row7": [
+        "00000000",
+        "c1100000",
+        "c2380000",
+        "c0800000"
+      ],
+      "row8": [
+        "c1200000",
+        "42380000",
+        "c2700000",
+        "c22c0000"
+      ],
+      "bridge_row7_hex": "8040a040c0402041a040804100000000",
+      "bridge_row8_hex": "00404041404150410000803fc0400000"
+    },
+    {
+      "route": "native",
+      "case_id": "bf16-negated_dense",
+      "iteration": 1,
+      "row7": [
+        "00000000",
+        "c1100000",
+        "c2380000",
+        "c0800000"
+      ],
+      "row8": [
+        "c1200000",
+        "42380000",
+        "c2700000",
+        "c22c0000"
+      ],
+      "bridge_row7_hex": "8040a040c0402041a040804100000000",
+      "bridge_row8_hex": "00404041404150410000803fc0400000"
+    },
+    {
+      "route": "python",
+      "case_id": "bf16-zero",
+      "iteration": 0,
+      "row7": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ],
+      "row8": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ],
+      "bridge_row7_hex": "00000000000000000000000000000000",
+      "bridge_row8_hex": "00000000000000000000000000000000"
+    },
+    {
+      "route": "native",
+      "case_id": "bf16-zero",
+      "iteration": 0,
+      "row7": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ],
+      "row8": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ],
+      "bridge_row7_hex": "00000000000000000000000000000000",
+      "bridge_row8_hex": "00000000000000000000000000000000"
+    },
+    {
+      "route": "python",
+      "case_id": "bf16-zero",
+      "iteration": 1,
+      "row7": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ],
+      "row8": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ],
+      "bridge_row7_hex": "00000000000000000000000000000000",
+      "bridge_row8_hex": "00000000000000000000000000000000"
+    },
+    {
+      "route": "native",
+      "case_id": "bf16-zero",
+      "iteration": 1,
+      "row7": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ],
+      "row8": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ],
+      "bridge_row7_hex": "00000000000000000000000000000000",
+      "bridge_row8_hex": "00000000000000000000000000000000"
+    },
+    {
+      "route": "python",
+      "case_id": "bf16-signed_basis",
+      "iteration": 0,
+      "row7": [
+        "00000000",
+        "00000000",
+        "40c00000",
+        "40800000"
+      ],
+      "row8": [
+        "40000000",
+        "41400000",
+        "c0800000",
+        "c0800000"
+      ],
+      "bridge_row7_hex": "00000000000000408040000000000000",
+      "bridge_row8_hex": "00000000004080400000000080400000"
+    },
+    {
+      "route": "native",
+      "case_id": "bf16-signed_basis",
+      "iteration": 0,
+      "row7": [
+        "00000000",
+        "00000000",
+        "40c00000",
+        "40800000"
+      ],
+      "row8": [
+        "40000000",
+        "41400000",
+        "c0800000",
+        "c0800000"
+      ],
+      "bridge_row7_hex": "00000000000000408040000000000000",
+      "bridge_row8_hex": "00000000004080400000000080400000"
+    },
+    {
+      "route": "python",
+      "case_id": "bf16-signed_basis",
+      "iteration": 1,
+      "row7": [
+        "00000000",
+        "00000000",
+        "40c00000",
+        "40800000"
+      ],
+      "row8": [
+        "40000000",
+        "41400000",
+        "c0800000",
+        "c0800000"
+      ],
+      "bridge_row7_hex": "00000000000000408040000000000000",
+      "bridge_row8_hex": "00000000004080400000000080400000"
+    },
+    {
+      "route": "native",
+      "case_id": "bf16-signed_basis",
+      "iteration": 1,
+      "row7": [
+        "00000000",
+        "00000000",
+        "40c00000",
+        "40800000"
+      ],
+      "row8": [
+        "40000000",
+        "41400000",
+        "c0800000",
+        "c0800000"
+      ],
+      "bridge_row7_hex": "00000000000000408040000000000000",
+      "bridge_row8_hex": "00000000004080400000000080400000"
+    },
+    {
+      "route": "python",
+      "case_id": "bf16-split_boundary",
+      "iteration": 0,
+      "row7": [
+        "c0c00000",
+        "c1c00000",
+        "c1880000",
+        "41300000"
+      ],
+      "row8": [
+        "00000000",
+        "00000000",
+        "40e00000",
+        "40e00000"
+      ],
+      "bridge_row7_hex": "00408040000000400000504120410000",
+      "bridge_row8_hex": "000000000000000000000000e0400000"
+    },
+    {
+      "route": "native",
+      "case_id": "bf16-split_boundary",
+      "iteration": 0,
+      "row7": [
+        "c0c00000",
+        "c1c00000",
+        "c1880000",
+        "41300000"
+      ],
+      "row8": [
+        "00000000",
+        "00000000",
+        "40e00000",
+        "40e00000"
+      ],
+      "bridge_row7_hex": "00408040000000400000504120410000",
+      "bridge_row8_hex": "000000000000000000000000e0400000"
+    },
+    {
+      "route": "python",
+      "case_id": "bf16-split_boundary",
+      "iteration": 1,
+      "row7": [
+        "c0c00000",
+        "c1c00000",
+        "c1880000",
+        "41300000"
+      ],
+      "row8": [
+        "00000000",
+        "00000000",
+        "40e00000",
+        "40e00000"
+      ],
+      "bridge_row7_hex": "00408040000000400000504120410000",
+      "bridge_row8_hex": "000000000000000000000000e0400000"
+    },
+    {
+      "route": "native",
+      "case_id": "bf16-split_boundary",
+      "iteration": 1,
+      "row7": [
+        "c0c00000",
+        "c1c00000",
+        "c1880000",
+        "41300000"
+      ],
+      "row8": [
+        "00000000",
+        "00000000",
+        "40e00000",
+        "40e00000"
+      ],
+      "bridge_row7_hex": "00408040000000400000504120410000",
+      "bridge_row8_hex": "000000000000000000000000e0400000"
+    }
+  ],
+  "inputs_unchanged": true,
+  "script_sha256": "21409a32e61a81e347c9c579a867d355df873becf97525ef9edcdae3c3b485bc"
+}

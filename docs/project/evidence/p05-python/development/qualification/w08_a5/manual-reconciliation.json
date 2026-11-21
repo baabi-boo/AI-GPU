@@ -1,0 +1,465 @@
+{
+  "acceptance_claimed": false,
+  "commands": {
+    "native": 15,
+    "outer": 12
+  },
+  "native_comparison": {
+    "argument_block_bytes": 2016,
+    "bridge_row_boundaries": [
+      {
+        "case": "bf16-seeded_dense",
+        "input_row7_last_element": "0041",
+        "input_row8_first_element": "0000",
+        "iteration": 0,
+        "output_row7_last_word": "41000000",
+        "output_row8_first_word": "40400000"
+      },
+      {
+        "case": "bf16-seeded_dense",
+        "input_row7_last_element": "0041",
+        "input_row8_first_element": "0000",
+        "iteration": 1,
+        "output_row7_last_word": "41000000",
+        "output_row8_first_word": "40400000"
+      },
+      {
+        "case": "bf16-negated_dense",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0040",
+        "iteration": 0,
+        "output_row7_last_word": "c0800000",
+        "output_row8_first_word": "c1200000"
+      },
+      {
+        "case": "bf16-negated_dense",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0040",
+        "iteration": 1,
+        "output_row7_last_word": "c0800000",
+        "output_row8_first_word": "c1200000"
+      },
+      {
+        "case": "bf16-zero",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0000",
+        "iteration": 0,
+        "output_row7_last_word": "00000000",
+        "output_row8_first_word": "00000000"
+      },
+      {
+        "case": "bf16-zero",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0000",
+        "iteration": 1,
+        "output_row7_last_word": "00000000",
+        "output_row8_first_word": "00000000"
+      },
+      {
+        "case": "bf16-signed_basis",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0000",
+        "iteration": 0,
+        "output_row7_last_word": "40800000",
+        "output_row8_first_word": "40000000"
+      },
+      {
+        "case": "bf16-signed_basis",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0000",
+        "iteration": 1,
+        "output_row7_last_word": "40800000",
+        "output_row8_first_word": "40000000"
+      },
+      {
+        "case": "bf16-split_boundary",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0000",
+        "iteration": 0,
+        "output_row7_last_word": "41300000",
+        "output_row8_first_word": "00000000"
+      },
+      {
+        "case": "bf16-split_boundary",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0000",
+        "iteration": 1,
+        "output_row7_last_word": "41300000",
+        "output_row8_first_word": "00000000"
+      }
+    ],
+    "close_to_next_model_gap_ns": {
+      "count": 5,
+      "maximum": 279603,
+      "minimum": 257956
+    },
+    "d2h_transfers": 36,
+    "event_profile_pairs": 150,
+    "h2d_transfers": 108,
+    "host_assembly_bytes": 2560,
+    "host_bridge_bytes": 2560,
+    "host_duration_ns": {
+      "advance_ns": {
+        "count": 10,
+        "maximum": 25484902,
+        "minimum": 23513473
+      },
+      "assembly_ns": {
+        "count": 10,
+        "maximum": 190,
+        "minimum": 30
+      },
+      "bridge_compare_ns": {
+        "count": 10,
+        "maximum": 250,
+        "minimum": 180
+      },
+      "bridge_ns": {
+        "count": 10,
+        "maximum": 1472,
+        "minimum": 311
+      },
+      "close_ns": {
+        "count": 10,
+        "maximum": 3894145,
+        "minimum": 514728
+      },
+      "output_compare_ns": {
+        "count": 10,
+        "maximum": 240,
+        "minimum": 100
+      }
+    },
+    "live_context_used_bytes": [
+      139264
+    ],
+    "matmul_runs": 6,
+    "model_runs": 10,
+    "model_spans": [
+      {
+        "begin_ns": 143406640468,
+        "case": "bf16-seeded_dense",
+        "close_ns": 670904,
+        "command": "simx-bf16-bf16-seeded_dense",
+        "command_ns": 163166000,
+        "iteration": 0,
+        "last_read_ns": 143434428204
+      },
+      {
+        "begin_ns": 143435357064,
+        "case": "bf16-seeded_dense",
+        "close_ns": 514728,
+        "command": "simx-bf16-bf16-seeded_dense",
+        "command_ns": 163166000,
+        "iteration": 1,
+        "last_read_ns": 143459818058
+      },
+      {
+        "begin_ns": 143590088870,
+        "case": "bf16-negated_dense",
+        "close_ns": 892259,
+        "command": "simx-bf16-bf16-negated_dense",
+        "command_ns": 164581000,
+        "iteration": 0,
+        "last_read_ns": 143617770836
+      },
+      {
+        "begin_ns": 143618931035,
+        "case": "bf16-negated_dense",
+        "close_ns": 711044,
+        "command": "simx-bf16-bf16-negated_dense",
+        "command_ns": 164581000,
+        "iteration": 1,
+        "last_read_ns": 143644510363
+      },
+      {
+        "begin_ns": 143777338575,
+        "case": "bf16-zero",
+        "close_ns": 859999,
+        "command": "simx-bf16-bf16-zero",
+        "command_ns": 163820000,
+        "iteration": 0,
+        "last_read_ns": 143805193763
+      },
+      {
+        "begin_ns": 143806316867,
+        "case": "bf16-zero",
+        "close_ns": 629521,
+        "command": "simx-bf16-bf16-zero",
+        "command_ns": 163820000,
+        "iteration": 1,
+        "last_read_ns": 143830947547
+      },
+      {
+        "begin_ns": 143965737378,
+        "case": "bf16-signed_basis",
+        "close_ns": 859740,
+        "command": "simx-bf16-bf16-signed_basis",
+        "command_ns": 163791000,
+        "iteration": 0,
+        "last_read_ns": 143993333750
+      },
+      {
+        "begin_ns": 143994459302,
+        "case": "bf16-signed_basis",
+        "close_ns": 661700,
+        "command": "simx-bf16-bf16-signed_basis",
+        "command_ns": 163791000,
+        "iteration": 1,
+        "last_read_ns": 144019110998
+      },
+      {
+        "begin_ns": 144157838535,
+        "case": "bf16-split_boundary",
+        "close_ns": 3894145,
+        "command": "simx-bf16-bf16-split_boundary",
+        "command_ns": 168434000,
+        "iteration": 0,
+        "last_read_ns": 144187037559
+      },
+      {
+        "begin_ns": 144191211307,
+        "case": "bf16-split_boundary",
+        "close_ns": 648119,
+        "command": "simx-bf16-bf16-split_boundary",
+        "command_ns": 168434000,
+        "iteration": 1,
+        "last_read_ns": 144215950415
+      }
+    ],
+    "tensor_d2h_bytes": 9216,
+    "tensor_h2d_bytes": 23424,
+    "total_launches": 36
+  },
+  "outcome": "pass",
+  "python": {
+    "argument_block_bytes": 2016,
+    "bridge_row_boundaries": [
+      {
+        "case": "bf16-seeded_dense",
+        "input_row7_last_element": "0041",
+        "input_row8_first_element": "0000",
+        "iteration": 0,
+        "output_row7_last_word": "41000000",
+        "output_row8_first_word": "40400000"
+      },
+      {
+        "case": "bf16-seeded_dense",
+        "input_row7_last_element": "0041",
+        "input_row8_first_element": "0000",
+        "iteration": 1,
+        "output_row7_last_word": "41000000",
+        "output_row8_first_word": "40400000"
+      },
+      {
+        "case": "bf16-negated_dense",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0040",
+        "iteration": 0,
+        "output_row7_last_word": "c0800000",
+        "output_row8_first_word": "c1200000"
+      },
+      {
+        "case": "bf16-negated_dense",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0040",
+        "iteration": 1,
+        "output_row7_last_word": "c0800000",
+        "output_row8_first_word": "c1200000"
+      },
+      {
+        "case": "bf16-zero",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0000",
+        "iteration": 0,
+        "output_row7_last_word": "00000000",
+        "output_row8_first_word": "00000000"
+      },
+      {
+        "case": "bf16-zero",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0000",
+        "iteration": 1,
+        "output_row7_last_word": "00000000",
+        "output_row8_first_word": "00000000"
+      },
+      {
+        "case": "bf16-signed_basis",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0000",
+        "iteration": 0,
+        "output_row7_last_word": "40800000",
+        "output_row8_first_word": "40000000"
+      },
+      {
+        "case": "bf16-signed_basis",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0000",
+        "iteration": 1,
+        "output_row7_last_word": "40800000",
+        "output_row8_first_word": "40000000"
+      },
+      {
+        "case": "bf16-split_boundary",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0000",
+        "iteration": 0,
+        "output_row7_last_word": "41300000",
+        "output_row8_first_word": "00000000"
+      },
+      {
+        "case": "bf16-split_boundary",
+        "input_row7_last_element": "0000",
+        "input_row8_first_element": "0000",
+        "iteration": 1,
+        "output_row7_last_word": "41300000",
+        "output_row8_first_word": "00000000"
+      }
+    ],
+    "close_to_next_model_gap_ns": {
+      "count": 9,
+      "maximum": 2026546,
+      "minimum": 1504267
+    },
+    "d2h_transfers": 36,
+    "event_profile_pairs": 180,
+    "h2d_transfers": 108,
+    "host_assembly_bytes": 2560,
+    "host_bridge_bytes": 2560,
+    "host_duration_ns": {
+      "advance_ns": {
+        "count": 10,
+        "maximum": 25854912,
+        "minimum": 24406463
+      },
+      "assembly_ns": {
+        "count": 10,
+        "maximum": 491,
+        "minimum": 30
+      },
+      "bridge_compare_ns": {
+        "count": 10,
+        "maximum": 390,
+        "minimum": 181
+      },
+      "bridge_ns": {
+        "count": 10,
+        "maximum": 1662,
+        "minimum": 580
+      },
+      "close_ns": {
+        "count": 10,
+        "maximum": 4213727,
+        "minimum": 582991
+      },
+      "output_compare_ns": {
+        "count": 10,
+        "maximum": 431,
+        "minimum": 120
+      }
+    },
+    "installed_command_ns": 609280000,
+    "installed_profile_span_ns": 347145420,
+    "live_context_used_bytes": [
+      139264
+    ],
+    "matmul_runs": 6,
+    "model_runs": 10,
+    "model_spans": [
+      {
+        "begin_ns": 178202710577,
+        "case": "bf16-seeded_dense",
+        "close_ns": 582991,
+        "command": "installed-matrix",
+        "command_ns": 609280000,
+        "iteration": 0,
+        "last_read_ns": 178228428989
+      },
+      {
+        "begin_ns": 178231038526,
+        "case": "bf16-seeded_dense",
+        "close_ns": 709653,
+        "command": "installed-matrix",
+        "command_ns": 609280000,
+        "iteration": 1,
+        "last_read_ns": 178258228621
+      },
+      {
+        "begin_ns": 178260484274,
+        "case": "bf16-negated_dense",
+        "close_ns": 728851,
+        "command": "installed-matrix",
+        "command_ns": 609280000,
+        "iteration": 0,
+        "last_read_ns": 178286047110
+      },
+      {
+        "begin_ns": 178288545500,
+        "case": "bf16-negated_dense",
+        "close_ns": 738977,
+        "command": "installed-matrix",
+        "command_ns": 609280000,
+        "iteration": 1,
+        "last_read_ns": 178314246966
+      },
+      {
+        "begin_ns": 178316490210,
+        "case": "bf16-zero",
+        "close_ns": 3161447,
+        "command": "installed-matrix",
+        "command_ns": 609280000,
+        "iteration": 0,
+        "last_read_ns": 178343071555
+      },
+      {
+        "begin_ns": 178348198797,
+        "case": "bf16-zero",
+        "close_ns": 4213727,
+        "command": "installed-matrix",
+        "command_ns": 609280000,
+        "iteration": 1,
+        "last_read_ns": 178375180228
+      },
+      {
+        "begin_ns": 178380927497,
+        "case": "bf16-signed_basis",
+        "close_ns": 723714,
+        "command": "installed-matrix",
+        "command_ns": 609280000,
+        "iteration": 0,
+        "last_read_ns": 178406981986
+      },
+      {
+        "begin_ns": 178409262026,
+        "case": "bf16-signed_basis",
+        "close_ns": 739428,
+        "command": "installed-matrix",
+        "command_ns": 609280000,
+        "iteration": 1,
+        "last_read_ns": 178434847617
+      },
+      {
+        "begin_ns": 178437172073,
+        "case": "bf16-split_boundary",
+        "close_ns": 786429,
+        "command": "installed-matrix",
+        "command_ns": 609280000,
+        "iteration": 0,
+        "last_read_ns": 178463201545
+      },
+      {
+        "begin_ns": 178465987779,
+        "case": "bf16-split_boundary",
+        "close_ns": 758346,
+        "command": "installed-matrix",
+        "command_ns": 609280000,
+        "iteration": 1,
+        "last_read_ns": 178493434493
+      }
+    ],
+    "tensor_d2h_bytes": 9216,
+    "tensor_h2d_bytes": 23424,
+    "total_launches": 36
+  },
+  "scope": "independent BF16 raw-line reconciliation; no auditor or producer imports; no native execution"
+}

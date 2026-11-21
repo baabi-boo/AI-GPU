@@ -1,0 +1,227 @@
+{
+  "outcome": "pass",
+  "scope": "read-only raw count, poison, exact bridge and row-boundary reconciliation; no auditor/producer imports or native execution",
+  "counts": {
+    "python": {
+      "matmul_words": 384,
+      "model_hidden_words": 1280,
+      "model_bridge_words": 640,
+      "model_output_block_words": 640,
+      "model_output_words": 640,
+      "event_profile_pairs": 180
+    },
+    "native": {
+      "matmul_words": 384,
+      "model_hidden_words": 1280,
+      "model_bridge_words": 640,
+      "model_output_block_words": 640,
+      "model_output_words": 640,
+      "event_profile_pairs": 150
+    }
+  },
+  "standalone_shapes": [
+    [
+      8,
+      4,
+      8
+    ],
+    [
+      8,
+      4,
+      16
+    ],
+    [
+      16,
+      8,
+      16
+    ]
+  ],
+  "model_case_ids": [
+    "fp16-seeded_dense",
+    "fp16-negated_dense",
+    "fp16-zero",
+    "fp16-signed_basis",
+    "fp16-split_boundary"
+  ],
+  "poisons": [
+    "7fc0dead",
+    "deadbeef"
+  ],
+  "row_boundaries": [
+    {
+      "case": "fp16-seeded_dense",
+      "iteration": 0,
+      "poison": "7fc0dead",
+      "row7": [
+        "41000000",
+        "41000000",
+        "c1800000",
+        "41000000"
+      ],
+      "row8": [
+        "40400000",
+        "40400000",
+        "c0c00000",
+        "40400000"
+      ]
+    },
+    {
+      "case": "fp16-seeded_dense",
+      "iteration": 1,
+      "poison": "deadbeef",
+      "row7": [
+        "41000000",
+        "41000000",
+        "c1800000",
+        "41000000"
+      ],
+      "row8": [
+        "40400000",
+        "40400000",
+        "c0c00000",
+        "40400000"
+      ]
+    },
+    {
+      "case": "fp16-negated_dense",
+      "iteration": 0,
+      "poison": "7fc0dead",
+      "row7": [
+        "00000000",
+        "c1100000",
+        "c2380000",
+        "c0800000"
+      ],
+      "row8": [
+        "c1200000",
+        "42380000",
+        "c2700000",
+        "c22c0000"
+      ]
+    },
+    {
+      "case": "fp16-negated_dense",
+      "iteration": 1,
+      "poison": "deadbeef",
+      "row7": [
+        "00000000",
+        "c1100000",
+        "c2380000",
+        "c0800000"
+      ],
+      "row8": [
+        "c1200000",
+        "42380000",
+        "c2700000",
+        "c22c0000"
+      ]
+    },
+    {
+      "case": "fp16-zero",
+      "iteration": 0,
+      "poison": "7fc0dead",
+      "row7": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ],
+      "row8": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ]
+    },
+    {
+      "case": "fp16-zero",
+      "iteration": 1,
+      "poison": "deadbeef",
+      "row7": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ],
+      "row8": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ]
+    },
+    {
+      "case": "fp16-signed_basis",
+      "iteration": 0,
+      "poison": "7fc0dead",
+      "row7": [
+        "00000000",
+        "00000000",
+        "40c00000",
+        "40800000"
+      ],
+      "row8": [
+        "40000000",
+        "41400000",
+        "c0800000",
+        "c0800000"
+      ]
+    },
+    {
+      "case": "fp16-signed_basis",
+      "iteration": 1,
+      "poison": "deadbeef",
+      "row7": [
+        "00000000",
+        "00000000",
+        "40c00000",
+        "40800000"
+      ],
+      "row8": [
+        "40000000",
+        "41400000",
+        "c0800000",
+        "c0800000"
+      ]
+    },
+    {
+      "case": "fp16-split_boundary",
+      "iteration": 0,
+      "poison": "7fc0dead",
+      "row7": [
+        "c0c00000",
+        "c1c00000",
+        "c1880000",
+        "41300000"
+      ],
+      "row8": [
+        "00000000",
+        "00000000",
+        "40e00000",
+        "40e00000"
+      ]
+    },
+    {
+      "case": "fp16-split_boundary",
+      "iteration": 1,
+      "poison": "deadbeef",
+      "row7": [
+        "c0c00000",
+        "c1c00000",
+        "c1880000",
+        "41300000"
+      ],
+      "row8": [
+        "00000000",
+        "00000000",
+        "40e00000",
+        "40e00000"
+      ]
+    }
+  ],
+  "standalone_raw_records_per_route": 6,
+  "model_raw_records_per_route": 10,
+  "model_stages_per_route": 30,
+  "independent_bridge_conversions": 2560,
+  "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe"
+}

@@ -1,0 +1,2259 @@
+{
+  "acceptance": {
+    "ids": [
+      "P05-A01"
+    ],
+    "level": "simulated",
+    "phase_status": "in_progress"
+  },
+  "api_signatures": {
+    "ModelOperation": {
+      "advance": "self, timeout_ns=_DEFAULT_TIMEOUT_NS",
+      "close": "self, timeout_ns=_DEFAULT_TIMEOUT_NS",
+      "output_bytes": "self",
+      "record": "self, iteration=0"
+    },
+    "Operation": {
+      "close": "self, timeout_ns=_DEFAULT_TIMEOUT_NS",
+      "output_bytes": "self",
+      "wait": "self, timeout_ns=_DEFAULT_TIMEOUT_NS"
+    },
+    "Session": {
+      "close": "self",
+      "model": "self, case_id, *, poison=_DEFAULT_POISON",
+      "open": "cls, bundle_root",
+      "pending_operations": "self",
+      "submit": "self, a, b, *, poison=_DEFAULT_POISON"
+    }
+  },
+  "binding_source_sha256_from_both_manifests": "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a",
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "e1420fd550f716df33a2556057b7086a03032cbe^{tree}"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "bash",
+        "-n",
+        "/workspace/scratch/ba0248fde989/p05-work/w10_a2/README-1.sh"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "bash",
+        "-n",
+        "/workspace/scratch/ba0248fde989/p05-work/w10_a2/README-2.sh"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "bash",
+        "-n",
+        "/workspace/scratch/ba0248fde989/p05-work/w10_a2/README-3.sh"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "bash",
+        "-n",
+        "/workspace/scratch/ba0248fde989/p05-work/w10_a2/p05-python-compatibility-1.sh"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "bash",
+        "-n",
+        "/workspace/scratch/ba0248fde989/p05-work/w10_a2/p05-python-compatibility-2.sh"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "frozen_model_cases_observed": [
+    "bf16-negated_dense",
+    "bf16-seeded_dense",
+    "bf16-signed_basis",
+    "bf16-split_boundary",
+    "bf16-zero",
+    "fp16-negated_dense",
+    "fp16-seeded_dense",
+    "fp16-signed_basis",
+    "fp16-split_boundary",
+    "fp16-zero"
+  ],
+  "git_source_comparisons": 22,
+  "hosted_provenance": [
+    {
+      "extension_runpath": [
+        "/opt/hostedtoolcache/Python/3.12.14/x64/lib"
+      ],
+      "format": "fp16",
+      "native_versions": {
+        "clang": "20.1.8",
+        "g++": "11.4.0",
+        "make": "4.3"
+      },
+      "package_versions": {
+        "packaging": "26.3",
+        "setuptools": "84.2.1",
+        "wheel": "0.48.0"
+      },
+      "simx_runpath": [
+        "/home/runner/work/AI-GPU/AI-GPU/third_party/ramulator:/home/runner/work/AI-GPU/AI-GPU/third_party/ramulator_ext"
+      ]
+    },
+    {
+      "extension_runpath": [
+        "/opt/hostedtoolcache/Python/3.12.14/x64/lib"
+      ],
+      "format": "bf16",
+      "native_versions": {
+        "clang": "20.1.8",
+        "g++": "11.4.0",
+        "make": "4.3"
+      },
+      "package_versions": {
+        "packaging": "26.3",
+        "setuptools": "84.2.1",
+        "wheel": "0.48.0"
+      },
+      "simx_runpath": [
+        "/home/runner/work/AI-GPU/AI-GPU/third_party/ramulator:/home/runner/work/AI-GPU/AI-GPU/third_party/ramulator_ext"
+      ]
+    }
+  ],
+  "implementation_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+  "implementation_tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049",
+  "installed_observations": [
+    {
+      "binding": {
+        "backend": "simx",
+        "bundle_root": "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle",
+        "bundle_sha256": "504852a59f0654e94a2eef5a15fd8d141f70d59fc278590aada3ff24e29e2fd1",
+        "format": "fp16",
+        "qualification_id": "bdf65307dae6237099fbe96341e01762bf4f8818b191d8fbee590aeb0a816a78",
+        "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+        "source_sha256": "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a"
+      },
+      "counts": {
+        "matmul_launches": 6,
+        "matmul_runs": 6,
+        "model_launches": 30,
+        "model_runs": 10,
+        "total_launches": 36
+      },
+      "format": "fp16",
+      "installation": {
+        "base_prefix": "/opt/hostedtoolcache/Python/3.12.14/x64",
+        "build_info": {
+          "binding_api": 1,
+          "bundle_sha256": "504852a59f0654e94a2eef5a15fd8d141f70d59fc278590aada3ff24e29e2fd1",
+          "source_sha256": "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a"
+        },
+        "distribution_version": "0.1.0",
+        "executable": "/home/runner/work/_temp/p05-python/work/venv/bin/python",
+        "extension_file": "/home/runner/work/_temp/p05-python/work/venv/lib/python3.12/site-packages/vortex_ai/_native.cpython-312-x86_64-linux-gnu.so",
+        "package_file": "/home/runner/work/_temp/p05-python/work/venv/lib/python3.12/site-packages/vortex_ai/__init__.py",
+        "prefix": "/home/runner/work/_temp/p05-python/work/venv",
+        "python_implementation": "CPython",
+        "python_version": [
+          3,
+          12,
+          14
+        ],
+        "runtime_libraries": [
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libramulator.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libramulator-vortex.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libvortex.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libsimx.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libvortex-simx.so"
+        ]
+      },
+      "source": "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-fp16/python/artifacts/installed-observations.json"
+    },
+    {
+      "binding": {
+        "backend": "simx",
+        "bundle_root": "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle",
+        "bundle_sha256": "27b7f19ce9dfd239c7ff9a68e67e6a9fb0fe950076c25a694544be5b539eeb58",
+        "format": "bf16",
+        "qualification_id": "c5fd995f8fa7f941d44714e282f1bbc5897c4d62a4989cb2563608ff7e437262",
+        "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+        "source_sha256": "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a"
+      },
+      "counts": {
+        "matmul_launches": 6,
+        "matmul_runs": 6,
+        "model_launches": 30,
+        "model_runs": 10,
+        "total_launches": 36
+      },
+      "format": "bf16",
+      "installation": {
+        "base_prefix": "/opt/hostedtoolcache/Python/3.12.14/x64",
+        "build_info": {
+          "binding_api": 1,
+          "bundle_sha256": "27b7f19ce9dfd239c7ff9a68e67e6a9fb0fe950076c25a694544be5b539eeb58",
+          "source_sha256": "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a"
+        },
+        "distribution_version": "0.1.0",
+        "executable": "/home/runner/work/_temp/p05-python/work/venv/bin/python",
+        "extension_file": "/home/runner/work/_temp/p05-python/work/venv/lib/python3.12/site-packages/vortex_ai/_native.cpython-312-x86_64-linux-gnu.so",
+        "package_file": "/home/runner/work/_temp/p05-python/work/venv/lib/python3.12/site-packages/vortex_ai/__init__.py",
+        "prefix": "/home/runner/work/_temp/p05-python/work/venv",
+        "python_implementation": "CPython",
+        "python_version": [
+          3,
+          12,
+          14
+        ],
+        "runtime_libraries": [
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libramulator.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libramulator-vortex.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libvortex.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libsimx.so",
+          "/home/runner/work/_temp/p05-python/evidence/python/artifacts/bundle/lib/libvortex-simx.so"
+        ]
+      },
+      "source": "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-bf16/python/artifacts/installed-observations.json"
+    }
+  ],
+  "local_links": [
+    {
+      "document": "python/README.md",
+      "target": "../docs/designs/python_binding_v1.md"
+    },
+    {
+      "document": "python/README.md",
+      "target": "../docs/project/p05-python-compatibility.md"
+    },
+    {
+      "document": "python/README.md",
+      "target": "../docs/project/evidence/p05-python/acceptance-binding.json"
+    },
+    {
+      "document": "python/README.md",
+      "target": "../docs/project/evidence/p05-python/README.md"
+    },
+    {
+      "document": "python/README.md",
+      "target": "../docs/project/evidence/p05-python/THIRD_PARTY_NOTICES.md"
+    },
+    {
+      "document": "python/README.md",
+      "target": "../docs/project/evidence/p05-python/relocated-replay.json"
+    },
+    {
+      "document": "python/README.md",
+      "target": "../docs/project/evidence/p05-python/reviews/README.md#relocated-data-replay"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "../designs/python_binding_v1.md"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "evidence/p05-python/acceptance-binding.json"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "evidence/p05-python/README.md"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "evidence/p05-python/development/host-validation.md"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "status.md"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "roadmap.json"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "../../pyproject.toml"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "../../python/README.md"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "evidence/p05-python/THIRD_PARTY_NOTICES.md"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "evidence/p05-python/relocated-replay.json"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "evidence/p05-python/reviews/README.md#relocated-data-replay"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "developer-guide.md"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "../../.github/workflows/p05-python.yml"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "../../ci/project/p05_installed_check.py"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "evidence/p05-python/acceptance-binding.json"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "acceptance.md"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "phases/p05-framework.md"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "evidence/p01-xrt-blocked.json"
+    },
+    {
+      "document": "docs/project/p05-python-compatibility.md",
+      "target": "p04-executor-audit.md"
+    },
+    {
+      "document": "docs/designs/python_binding_v1.md",
+      "target": "../../python/vortex_ai/_api.py"
+    },
+    {
+      "document": "docs/designs/python_binding_v1.md",
+      "target": "../../python/native/module.cpp"
+    },
+    {
+      "document": "docs/designs/python_binding_v1.md",
+      "target": "../project/p05-python-compatibility.md"
+    },
+    {
+      "document": "docs/designs/python_binding_v1.md",
+      "target": "../../python/README.md"
+    },
+    {
+      "document": "docs/designs/python_binding_v1.md",
+      "target": "../../ci/project/p03_operator_manifest.json"
+    },
+    {
+      "document": "docs/designs/python_binding_v1.md",
+      "target": "tensor_numerics_v1.md"
+    },
+    {
+      "document": "docs/designs/python_binding_v1.md",
+      "target": "ai_operator_contract_v1.md"
+    },
+    {
+      "document": "docs/designs/python_binding_v1.md",
+      "target": "../../sw/runtime/include/vortex2.h"
+    },
+    {
+      "document": "docs/designs/python_binding_v1.md",
+      "target": "tiny_mlp_fixture_v1.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p04-executor/acceptance-numerics.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p04-executor/acceptance-dispatch.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p04-executor/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p04-fixture/acceptance.json"
+    },
+    {
+      "document": "README.md",
+      "target": "ci/project/p04_model_manifest.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p05-python/acceptance-binding.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p05-python/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p05-entry-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/designs/python_binding_v1.md"
+    },
+    {
+      "document": "README.md",
+      "target": "python/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p04-executor-audit.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/designs/ai_operator_contract_v1.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p03-managed-matmul/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p03-operators-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p02-numerics/acceptance.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p02-wmma/acceptance.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p02-wgmma/processor/acceptance.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p02-wgmma-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p01-build.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p01-native.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p01-xrt-blocked.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/status.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/roadmap.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/charter.md"
+    },
+    {
+      "document": "README.md",
+      "target": "ROADMAP.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p03-operators-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "ci/project/p03_operator_manifest.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/designs/tiny_mlp_fixture_v1.md"
+    },
+    {
+      "document": "README.md",
+      "target": "ci/project/p04_model_manifest.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p04-fixture/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p04-executor/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p04-executor-plan.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/phases/p04-inference.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p02-wgmma-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p02-wgmma/processor/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p02-wmma-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p02-wmma/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p02-numerics-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p02-numerics/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p05-entry-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/status.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/backlog.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-baseline-runbook.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-tensor-oracles.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p01-tensor-oracles/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-local-qualification.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-local-qualification-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-compiler-records-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-packet-verification.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-packet-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-hwemu-runbook.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-hwemu-manifest.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-hwemu-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-xrt-integration.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/developer-guide.md"
+    },
+    {
+      "document": "README.md",
+      "target": "CONTRIBUTING.md"
+    },
+    {
+      "document": "README.md",
+      "target": "AGENTS.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/index.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/index.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/baseline.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/roadmap.json"
+    },
+    {
+      "document": "README.md",
+      "target": "ROADMAP.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/developer-guide.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/designs/tensor_numerics_v1.md"
+    },
+    {
+      "document": "README.md",
+      "target": "ci/project/p02_tensor_contract.json"
+    },
+    {
+      "document": "README.md",
+      "target": "profiles/p02-tfr.json"
+    },
+    {
+      "document": "README.md",
+      "target": "ci/project/fixtures/p02_layout_v1.json"
+    },
+    {
+      "document": "README.md",
+      "target": "hw/unittest/tcu_contract/main.cpp"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p02-numerics/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p02-wmma/acceptance.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/status.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p02-wmma-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p02-wgmma/processor/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p02-wgmma/unit/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p02-wgmma/processor/acceptance.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p03-operators/acceptance.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p03-operators/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "sw/runtime/ai/contract.h"
+    },
+    {
+      "document": "README.md",
+      "target": "sw/runtime/ai/runtime.h"
+    },
+    {
+      "document": "README.md",
+      "target": "sw/kernel/ai/matmul.cpp"
+    },
+    {
+      "document": "README.md",
+      "target": "ci/project/p03_operator_manifest.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p03-managed-matmul/acceptance-numerics.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p03-managed-matmul/acceptance-lifecycle.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p03-managed-matmul/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p03-operators-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-tensor-oracles.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p01-tensor-oracles/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "ci/project/p01_baseline.json"
+    },
+    {
+      "document": "README.md",
+      "target": "ci/project/p01_toolchain.lock.json"
+    },
+    {
+      "document": "README.md",
+      "target": "ci/project/baseline_bootstrap.py"
+    },
+    {
+      "document": "README.md",
+      "target": "ci/project/baseline.py"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-baseline-runbook.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p01/attention-operand-erratum.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-packet-verification.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-packet-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "ci/project/hwemu.py"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-hwemu-runbook.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-hwemu-manifest.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-hwemu-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "ci/project/xrt_baseline.py"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-xrt-integration.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-compiler-records.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/p01-compiler-records/verification.json"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/p01-compiler-records-handoff.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/decisions.md#adr-004--staged-native-development-entry-with-vendor-integration-retained"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/requirements.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/decisions.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/risks.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/architecture.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/software.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/hardware.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/configurations.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/acceptance.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/verification.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/benchmarks.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/evidence/README.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/releases.md"
+    },
+    {
+      "document": "README.md",
+      "target": "SECURITY.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/review/code-review-policy.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/ci-contract.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/project/maintainer-checklist.md"
+    },
+    {
+      "document": "README.md",
+      "target": "CHANGELOG.md"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/codebase.md"
+    },
+    {
+      "document": "README.md",
+      "target": "LICENSE"
+    },
+    {
+      "document": "README.md",
+      "target": "docs/references.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/status.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/roadmap.json"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/charter.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/baseline.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/architecture.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/phases/p00-foundation.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/phases/p01-baseline.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/phases/p02-tensor.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/phases/p03-operators.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/phases/p04-inference.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/phases/p05-framework.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/phases/p06-performance.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/phases/p07-fpga.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/phases/p08-reliability.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/phases/p09-research.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/phases/p10-asic.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/phases/p11-silicon.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/acceptance.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/evidence/README.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/status.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/backlog.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/p02-wgmma-handoff.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/evidence/p02-wgmma/processor/README.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/evidence/p02-wgmma/processor/acceptance.json"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/evidence/p02-wmma/acceptance.json"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/evidence/p02-numerics/acceptance.json"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/designs/ai_operator_contract_v1.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "ci/project/p03_operator_manifest.json"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/evidence/p03-managed-matmul/README.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/p03-operators-handoff.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/evidence/p04-fixture/acceptance.json"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/evidence/p04-executor/acceptance-numerics.json"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/evidence/p04-executor/acceptance-dispatch.json"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/designs/tiny_mlp_fixture_v1.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "ci/project/p04_model_manifest.json"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/evidence/p04-fixture/README.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/evidence/p04-executor/README.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/p04-executor-plan.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/evidence/p05-python/acceptance-binding.json"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/evidence/p05-python/README.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/p05-entry-handoff.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/designs/python_binding_v1.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/p04-executor-audit.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/developer-guide.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/requirements.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/verification.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/benchmarks.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/decisions.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/risks.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "AGENTS.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "CONTRIBUTING.md"
+    },
+    {
+      "document": "ROADMAP.md",
+      "target": "docs/project/handoff.example.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p04-fixture/acceptance.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p04-executor/acceptance-numerics.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p04-executor/acceptance-dispatch.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../ci/project/p04_model_manifest.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p04-executor/README.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p05-python/acceptance-binding.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p05-python/README.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p05-entry-handoff.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p03-operators/acceptance.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p03-managed-matmul/acceptance-numerics.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p03-managed-matmul/acceptance-lifecycle.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p03-operators-handoff.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p02-numerics/acceptance.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p02-wmma/acceptance.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p02-wgmma/processor/acceptance.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "roadmap.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p05-binding-audit.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../designs/python_binding_v1.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p05-python-compatibility.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p05-python/acceptance-binding.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p05-python/README.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p05-python/development/host-validation.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p04-executor-audit.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../designs/mlp_execution_records_v1.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p04-executor/README.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p04-audit.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p04-fixture/acceptance.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p03-managed-matmul/README.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p03-operators/acceptance.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p03-operators/README.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../ci/project/p03_operator_manifest.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../designs/ai_operator_contract_v1.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../sw/runtime/ai/contract.h"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p03-operators-handoff.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p02-wgmma/processor/reviews/closure-review.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p02-wgmma/processor/README.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p02-wgmma-handoff.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p02-wgmma/unit/README.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p02-wgmma/processor/reviews/w10d.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "developer-guide.md#host-compiler-compatibility-for-wgmma"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p02-wgmma/processor/acceptance.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p02-wmma/README.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p02-wmma-handoff.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p02-wmma/ci-recovery.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p02-wmma/recovery-review.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p02-numerics/README.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p02-numerics/agent-execution.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "roadmap.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p02-entry-handoff.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "decisions.md#adr-004--staged-native-development-entry-with-vendor-integration-retained"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-tensor-oracles.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01-tensor-oracles/README.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-local-qualification.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../ci/project/local_qualification.py"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-local-qualification-handoff.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01-local-qualification/README.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01-local-qualification/ci-followup/README.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-compiler-records.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01-compiler-records/verification.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01-compiler-records/publication-map.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-compiler-records-handoff.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-compiler-records-agent-execution.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01-compiler-records/code-ci-final.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-baseline-runbook.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../ci/project/p01_toolchain.lock.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../ci/project/baseline_bootstrap.py"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../ci/project/p01_baseline.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../ci/project/baseline_matrix.py"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../ci/project/baseline_inventory.py"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../ci/project/baseline_process.py"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../ci/project/baseline.py"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01/attention-operand-erratum.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01-native.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01-build.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01/xrtsim/report.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01/resource-observation.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01/history/README.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01/history-manifest.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01-review.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-handoff.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-packet-verification.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../ci/project/check_baseline_packets.py"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-packet-handoff.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-packet-agent-execution.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-hwemu-runbook.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-hwemu-manifest.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-hwemu-handoff.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../ci/project/hwemu.py"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../ci/project/xrt_baseline.py"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-xrt-integration.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-xrt-handoff.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-xrt-review.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-xrt-agent-execution.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01-xrt-merge/merge-verification.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p01-xrt-tooling/verification.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-xrt-publication-map.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-compiler-records.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/p05-python/acceptance-binding.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p05-entry-handoff.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "phases/p05-framework.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "backlog.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-xrt-integration.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/setup-accepted.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/setup-merged.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/setup-validation.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/setup-validation.log"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/setup-review.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/setup-publication.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "evidence/setup-delivery.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "agent-execution.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-agent-execution.json"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "baseline.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "../../AGENTS.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "handoff.example.md"
+    },
+    {
+      "document": "docs/project/status.md",
+      "target": "p01-agent-execution.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "roadmap.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "status.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "status.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p02-wgmma/processor/acceptance.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p02-wgmma-handoff.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p02-wgmma/processor/README.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p03-operators/acceptance.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p03-managed-matmul/acceptance-numerics.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p03-managed-matmul/acceptance-lifecycle.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p04-fixture/acceptance.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p04-fixture/README.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "../designs/tiny_mlp_fixture_v1.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "../../ci/project/p04_reference.py"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "../../ci/project/p04_model_manifest.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "../../ci/project/p03_operator_manifest.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p03-operators-handoff.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p04-executor/acceptance-numerics.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p04-executor/acceptance-dispatch.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p04-executor/README.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p05-python/acceptance-binding.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p05-python/README.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p05-entry-handoff.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "../designs/python_binding_v1.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p05-python-compatibility.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p04-executor-audit.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p02-wmma-handoff.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p02-wmma/acceptance.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "status.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p02-numerics-handoff.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p02-numerics/acceptance.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p02-entry-handoff.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p01-baseline-runbook.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p01-xrt-integration.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "developer-guide.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "status.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p01-tensor-oracles.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p01-tensor-oracles/README.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p01-local-qualification.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "../../ci/project/local_qualification.py"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p01-local-qualification-handoff.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p01-build.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p01-native.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p01-xrt-blocked.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p01-handoff.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "../../ci/project/hwemu.py"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p01-hwemu-runbook.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p01-hwemu-manifest.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p01-hwemu-handoff.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p01-compiler-records.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p01-compiler-records/verification.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p01-compiler-records-handoff.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "../../ci/project/p01_baseline.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "../../ci/project/baseline_matrix.py"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "../../ci/testcases/tensor.yaml"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "../../ci/testcases/tensor_wg.yaml"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "../../ci/project/baseline.py"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p05-binding-audit.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p05-entry-handoff.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p02-numerics/acceptance.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p02-wmma/acceptance.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p02-wgmma/processor/acceptance.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p03-managed-matmul/acceptance-numerics.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p03-managed-matmul/acceptance-lifecycle.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p04-fixture/acceptance.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p04-executor/acceptance-numerics.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p04-executor/acceptance-dispatch.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "p05-entry-handoff.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "evidence/p05-python/acceptance-binding.json"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "phases/p02-tensor.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "phases/p03-operators.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "phases/p04-inference.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "phases/p05-framework.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "phases/p06-performance.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "phases/p07-fpga.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "phases/p08-reliability.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "phases/p09-research.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "phases/p10-asic.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "phases/p11-silicon.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "decisions.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "risks.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "acceptance.md"
+    },
+    {
+      "document": "docs/project/backlog.md",
+      "target": "status.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "evidence/p05-python/acceptance-binding.json"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "evidence/p05-python/README.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "p05-binding-audit.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "../designs/python_binding_v1.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "p05-python-compatibility.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "phases/p05-framework.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "roadmap.json"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "evidence/p04-fixture/acceptance.json"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "evidence/p04-executor/README.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "../../ci/project/p03_operator_manifest.json"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "../designs/ai_operator_contract_v1.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "../../sw/runtime/ai/runtime.h"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "../../sw/runtime/ai/runtime.cpp"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "../../sw/runtime/ai/mlp_runtime.h"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "../../sw/runtime/ai/mlp_runtime.cpp"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "../designs/tiny_mlp_fixture_v1.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "../../ci/project/p04_model_manifest.json"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "../designs/mlp_execution_records_v1.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "p03-operators-handoff.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "p04-executor-plan.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "../designs/python_binding_v1.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "evidence/p05-python/README.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "p05-python-compatibility.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "phases/p06-performance.md"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "evidence/p01-xrt-blocked.json"
+    },
+    {
+      "document": "docs/project/p05-entry-handoff.md",
+      "target": "evidence/p04-executor/initial-ci.json"
+    },
+    {
+      "document": "docs/project/p05-binding-audit.md",
+      "target": "p05-entry-handoff.md"
+    },
+    {
+      "document": "docs/project/p05-binding-audit.md",
+      "target": "phases/p05-framework.md"
+    },
+    {
+      "document": "docs/project/p05-binding-audit.md",
+      "target": "evidence/p05-python/acceptance-binding.json"
+    },
+    {
+      "document": "docs/project/p05-binding-audit.md",
+      "target": "evidence/p05-python/README.md"
+    },
+    {
+      "document": "docs/project/p05-binding-audit.md",
+      "target": "evidence/p05-python/development/host-validation.md"
+    }
+  ],
+  "local_links_scope": "Inline Markdown local target existence across nine documents; relocated-data-replay heading checked separately. Other fragments and external URLs were not crawled.",
+  "outcome": "pass",
+  "read_only_inputs_unchanged": true,
+  "scope_limit": "Read-only source/metadata inspection and bash -n / ast.parse only; no project import, native execution, package build, tests or auditor replay.",
+  "source_files": [
+    {
+      "path": "MANIFEST.in",
+      "same_as_qualified_commit": true,
+      "sha256": "4261573e864bd1a0e602aaa4d020808a84a61cc7f90d9b1a5e11dc846d1c25e7",
+      "size": 868
+    },
+    {
+      "path": "pyproject.toml",
+      "same_as_qualified_commit": true,
+      "sha256": "ad53f6709fcbd49656e48f01503b6917bb20a0fcdea27d95ea954a9da0bf4713",
+      "size": 780
+    },
+    {
+      "path": "python/native/module.cpp",
+      "same_as_qualified_commit": true,
+      "sha256": "3e0688fef091dcc58bfaeb13e1ab18d2bcc147a601ceaa3a48cc91a34464170e",
+      "size": 37547
+    },
+    {
+      "path": "python/native/runtime_loader.cpp",
+      "same_as_qualified_commit": true,
+      "sha256": "8b75dfb415deadaa48b756b7db2f8a540329f838f804f2532e4bdcca5f001a60",
+      "size": 36859
+    },
+    {
+      "path": "python/native/runtime_loader.h",
+      "same_as_qualified_commit": true,
+      "sha256": "81e85468517838e43c9814720def49a11e06ebb767e9e5b7f1464a5d41a49542",
+      "size": 1238
+    },
+    {
+      "path": "python/vortex_ai/__init__.py",
+      "same_as_qualified_commit": true,
+      "sha256": "19d006db3a52bac6b3a7eec0111edd7fa2927e6fc31c1a23308178fa05783465",
+      "size": 523
+    },
+    {
+      "path": "python/vortex_ai/_api.py",
+      "same_as_qualified_commit": true,
+      "sha256": "f66748c6657ddd55e8753343f49b43cce87003df770e8bbb20c70ee57e3d0db2",
+      "size": 32061
+    },
+    {
+      "path": "python/vortex_ai/_bundle.py",
+      "same_as_qualified_commit": true,
+      "sha256": "e25ccf8a7fbe93b60b38507f3261f8936dcfad64c1d8012b307065ab6d94751d",
+      "size": 12251
+    },
+    {
+      "path": "python/vortex_ai/launch.py",
+      "same_as_qualified_commit": true,
+      "sha256": "e09c48119bb73c3209d9ac163c5f3667ecc53a86630cbf677b444a07a68b5267",
+      "size": 3197
+    },
+    {
+      "path": "setup.py",
+      "same_as_qualified_commit": true,
+      "sha256": "697024fc8074f31aa9def1ebeb2d923104ff731f0dcfb80dbeefc6974d267e65",
+      "size": 14712
+    },
+    {
+      "path": "sw/common/ai_matmul_args.h",
+      "same_as_qualified_commit": true,
+      "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+      "size": 4342
+    },
+    {
+      "path": "sw/runtime/ai/contract.cpp",
+      "same_as_qualified_commit": true,
+      "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+      "size": 10833
+    },
+    {
+      "path": "sw/runtime/ai/contract.h",
+      "same_as_qualified_commit": true,
+      "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+      "size": 3285
+    },
+    {
+      "path": "sw/runtime/ai/mlp_host.cpp",
+      "same_as_qualified_commit": true,
+      "sha256": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256",
+      "size": 2225
+    },
+    {
+      "path": "sw/runtime/ai/mlp_host.h",
+      "same_as_qualified_commit": true,
+      "sha256": "309e437aa9ca80c3a9c7c8ca7544478cdce4861203d32280709e2e940425cd0b",
+      "size": 774
+    },
+    {
+      "path": "sw/runtime/ai/mlp_runtime.cpp",
+      "same_as_qualified_commit": true,
+      "sha256": "0dab325434c513b85b66b108ca3b896304ab797252b9fd01919435fc8655ddd1",
+      "size": 13857
+    },
+    {
+      "path": "sw/runtime/ai/mlp_runtime.h",
+      "same_as_qualified_commit": true,
+      "sha256": "56750815b71361eb036aa8000716b977569a657a2cee650f9bdd048c06b81182",
+      "size": 5030
+    },
+    {
+      "path": "sw/runtime/ai/runtime.cpp",
+      "same_as_qualified_commit": true,
+      "sha256": "5540092240fb926f1c3066b0e8956a0096cb6be42b71f8b60d075434518e0be5",
+      "size": 17429
+    },
+    {
+      "path": "sw/runtime/ai/runtime.h",
+      "same_as_qualified_commit": true,
+      "sha256": "dc9c5f789c0a58dfbdce10420fce32f1d17c8e71fb83a7608d6e38489d4d4ad1",
+      "size": 3428
+    },
+    {
+      "path": "sw/runtime/include/vortex2.h",
+      "same_as_qualified_commit": true,
+      "sha256": "9738cdf35a7344d6a974b4d78f7b02d3c1e7ce87cfe68ef668b03c8eb1832614",
+      "size": 27464
+    },
+    {
+      "path": "tests/regression/ai_mlp/p04_fixtures.h",
+      "same_as_qualified_commit": true,
+      "sha256": "61a1368572b0cee5e67e0cc803b32e57b19557f53eb6b8e32e079a55b237e773",
+      "size": 67840
+    },
+    {
+      "path": "tests/regression/ai_mlp/records.h",
+      "same_as_qualified_commit": true,
+      "sha256": "13a4d51ab7058a799b9598c0ba410b64b6bd28d77c305f88de702ef0db8daf29",
+      "size": 10862
+    }
+  ],
+  "stable_input_sha256": {
+    "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-bf16/python/artifacts/bundle/manifest.json": "27b7f19ce9dfd239c7ff9a68e67e6a9fb0fe950076c25a694544be5b539eeb58",
+    "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-bf16/python/artifacts/installed-observations.json": "72d7387cccba9a8d531db914ff8d976609494cbafc05a21e84eb9466cea09bf4",
+    "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-fp16/python/artifacts/bundle/manifest.json": "504852a59f0654e94a2eef5a15fd8d141f70d59fc278590aada3ff24e29e2fd1",
+    "/workspace/scratch/ba0248fde989/p05-work/ci-e1420fd/simx-fp16/python/artifacts/installed-observations.json": "34019d286c72402601e47fe8413a87a29f7778beeb75293e5d2bc8bb381a7f61",
+    "MANIFEST.in": "4261573e864bd1a0e602aaa4d020808a84a61cc7f90d9b1a5e11dc846d1c25e7",
+    "README.md": "d3197a11aec26a952205860498ea03b7d1f82b10ab9fd9c964dd1e40316aa54c",
+    "ROADMAP.md": "672ea8edcd29f732dfc941df1c413d6875f9a9d8071f3a6e4f2be8ff97ef298d",
+    "docs/designs/python_binding_v1.md": "b80326f97e947e8930def218fbdc0b4aa6d13d454471dc55fd67109cdd074a3c",
+    "docs/project/backlog.md": "0c77ee7335ee1b80f207541b46b283614d06802ac3f56e46644d1cf2ba58190a",
+    "docs/project/evidence/p05-python/acceptance-binding.json": "1896bae3b59273f51448b554b965dc7d98d6beafcd446527c41c878a32c740c5",
+    "docs/project/evidence/p05-python/binding-acceptance-review.json": "3727a33b843e91d9faa9218182d03a80672d23f2b5cf9ab226edb280abd29ce3",
+    "docs/project/evidence/p05-python/relocated-replay.json": "95326c3aff7ae8eeead0ede3e6d611d626ed82f2f946ca94e01741feb8c47117",
+    "docs/project/evidence/p05-python/reviews/full-dispatch.json": "73aaefe9c280e1092b7aae31fa1831f3873c970b0e0bdd746b9d1807d6334989",
+    "docs/project/evidence/p05-python/reviews/full-numerics.json": "0cd0c01504a50501ed2e6bf6bac8bc4cb3cfef09754b3ed47c0924d069125cb9",
+    "docs/project/evidence/p05-python/reviews/full-provenance.json": "1f31b388edc139e546e70f8d79e97d7efde779f50e328d74998331bd3bad9d17",
+    "docs/project/p05-binding-audit.md": "aef6e709f1527709c9f15020405c40457bcf0aa6e188a5990f3d8338da886261",
+    "docs/project/p05-entry-handoff.md": "da7b7f019863f5bbdbf6ec54f0114d0628208853519f1da05348bffe11aaf7d9",
+    "docs/project/p05-python-compatibility.md": "da5c9a9470985f4c100dc46e6dc5909540b04f141a09bcb78854f0b760fb69a0",
+    "docs/project/roadmap.json": "9114ec56fefd2a5732d67a45dc1bf7ab76ef5a000fec7214b4c8bf4297134869",
+    "docs/project/status.md": "081564a502b3b0e5f2bb106677f7cf657f73c8f9c8147e029f9fbe8f80be5c50",
+    "pyproject.toml": "ad53f6709fcbd49656e48f01503b6917bb20a0fcdea27d95ea954a9da0bf4713",
+    "python/README.md": "3fc591670907a2ce97006222f0ca3931185c236c0c6f6528674899a160929529",
+    "python/native/module.cpp": "3e0688fef091dcc58bfaeb13e1ab18d2bcc147a601ceaa3a48cc91a34464170e",
+    "python/native/runtime_loader.cpp": "8b75dfb415deadaa48b756b7db2f8a540329f838f804f2532e4bdcca5f001a60",
+    "python/native/runtime_loader.h": "81e85468517838e43c9814720def49a11e06ebb767e9e5b7f1464a5d41a49542",
+    "python/vortex_ai/__init__.py": "19d006db3a52bac6b3a7eec0111edd7fa2927e6fc31c1a23308178fa05783465",
+    "python/vortex_ai/_api.py": "f66748c6657ddd55e8753343f49b43cce87003df770e8bbb20c70ee57e3d0db2",
+    "python/vortex_ai/_bundle.py": "e25ccf8a7fbe93b60b38507f3261f8936dcfad64c1d8012b307065ab6d94751d",
+    "python/vortex_ai/launch.py": "e09c48119bb73c3209d9ac163c5f3667ecc53a86630cbf677b444a07a68b5267",
+    "setup.py": "697024fc8074f31aa9def1ebeb2d923104ff731f0dcfb80dbeefc6974d267e65",
+    "sw/common/ai_matmul_args.h": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+    "sw/runtime/ai/contract.cpp": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+    "sw/runtime/ai/contract.h": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+    "sw/runtime/ai/mlp_host.cpp": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256",
+    "sw/runtime/ai/mlp_host.h": "309e437aa9ca80c3a9c7c8ca7544478cdce4861203d32280709e2e940425cd0b",
+    "sw/runtime/ai/mlp_runtime.cpp": "0dab325434c513b85b66b108ca3b896304ab797252b9fd01919435fc8655ddd1",
+    "sw/runtime/ai/mlp_runtime.h": "56750815b71361eb036aa8000716b977569a657a2cee650f9bdd048c06b81182",
+    "sw/runtime/ai/runtime.cpp": "5540092240fb926f1c3066b0e8956a0096cb6be42b71f8b60d075434518e0be5",
+    "sw/runtime/ai/runtime.h": "dc9c5f789c0a58dfbdce10420fce32f1d17c8e71fb83a7608d6e38489d4d4ad1",
+    "sw/runtime/include/vortex2.h": "9738cdf35a7344d6a974b4d78f7b02d3c1e7ce87cfe68ef668b03c8eb1832614",
+    "tests/regression/ai_mlp/p04_fixtures.h": "61a1368572b0cee5e67e0cc803b32e57b19557f53eb6b8e32e079a55b237e773",
+    "tests/regression/ai_mlp/records.h": "13a4d51ab7058a799b9598c0ba410b64b6bd28d77c305f88de702ef0db8daf29"
+  },
+  "supported_signatures": [
+    [
+      "bf16",
+      8,
+      4,
+      8
+    ],
+    [
+      "bf16",
+      8,
+      4,
+      16
+    ],
+    [
+      "bf16",
+      16,
+      8,
+      16
+    ],
+    [
+      "fp16",
+      8,
+      4,
+      8
+    ],
+    [
+      "fp16",
+      8,
+      4,
+      16
+    ],
+    [
+      "fp16",
+      16,
+      8,
+      16
+    ]
+  ],
+  "syntax_checks": [
+    {
+      "block": 1,
+      "document": "python/README.md",
+      "executed": false,
+      "language": "sh",
+      "outcome": "pass"
+    },
+    {
+      "block": 2,
+      "document": "python/README.md",
+      "executed": false,
+      "language": "sh",
+      "outcome": "pass"
+    },
+    {
+      "block": 3,
+      "document": "python/README.md",
+      "executed": false,
+      "language": "sh",
+      "outcome": "pass"
+    },
+    {
+      "block": 4,
+      "document": "python/README.md",
+      "executed": false,
+      "language": "python",
+      "outcome": "pass"
+    },
+    {
+      "block": 1,
+      "document": "docs/project/p05-python-compatibility.md",
+      "executed": false,
+      "language": "sh",
+      "outcome": "pass"
+    },
+    {
+      "block": 2,
+      "document": "docs/project/p05-python-compatibility.md",
+      "executed": false,
+      "language": "sh",
+      "outcome": "pass"
+    }
+  ]
+}

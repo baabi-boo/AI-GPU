@@ -1,0 +1,1423 @@
+{
+  "audit": "p05-independent-dispatch-v1",
+  "auditor_sha256": "ab0a1d1d6d0268b0766e5d3bc211e2830efb5e9683a413854fc1a16a3d5de391",
+  "counts": {
+    "combined": {
+      "argument_block_bytes": 8064,
+      "d2h_transfers": 144,
+      "event_profile_pairs": 660,
+      "h2d_transfers": 432,
+      "host_assembly_bytes": 10240,
+      "host_bridge_bytes": 10240,
+      "matmul_launches": 24,
+      "matmul_runs": 24,
+      "model_launches": 120,
+      "model_runs": 40,
+      "profiled_launches": 132,
+      "tensor_d2h_bytes": 36864,
+      "tensor_h2d_bytes": 93696,
+      "total_launches": 144,
+      "unprofiled_launches": 12
+    },
+    "native_comparison": {
+      "argument_block_bytes": 4032,
+      "d2h_transfers": 72,
+      "event_profile_pairs": 300,
+      "h2d_transfers": 216,
+      "host_assembly_bytes": 5120,
+      "host_bridge_bytes": 5120,
+      "matmul_launches": 12,
+      "matmul_runs": 12,
+      "model_launches": 60,
+      "model_runs": 20,
+      "profiled_launches": 60,
+      "tensor_d2h_bytes": 18432,
+      "tensor_h2d_bytes": 46848,
+      "total_launches": 72,
+      "unprofiled_launches": 12
+    },
+    "python": {
+      "argument_block_bytes": 4032,
+      "d2h_transfers": 72,
+      "event_profile_pairs": 360,
+      "h2d_transfers": 216,
+      "host_assembly_bytes": 5120,
+      "host_bridge_bytes": 5120,
+      "matmul_launches": 12,
+      "matmul_runs": 12,
+      "model_launches": 60,
+      "model_runs": 20,
+      "profiled_launches": 72,
+      "tensor_d2h_bytes": 18432,
+      "tensor_h2d_bytes": 46848,
+      "total_launches": 72,
+      "unprofiled_launches": 0
+    }
+  },
+  "findings": [
+    "Every required matmul has native allocation extents within the pinned SimX user pool, exact ABI arguments, three writes, one launch, one read and exactly one successful wait.",
+    "Every model has three ordered native stages; actual hidden outputs produce its host ReLU/exact conversion bytes, consumed by both output stages.",
+    "Operation/model cleanup and successful free/used memory baseline restoration are checked independently of pass/count labels.",
+    "Native-only P03 comparisons expose no event profiling; only native P04 model launches contribute native comparison profiles.",
+    "Required native dispatches are present, explicit CPU/host matmul fallback diagnostics are absent, and accepted native runtime/kernel/model bodies remain hash pinned.",
+    "Frozen command membership and numerical record placement are exact. Per-process timestamps and disjoint host durations fit the enclosing command, and model close bounds precede dependent creation."
+  ],
+  "fixture_sha256": "d22a899827afb3e8c22a528fc6a27fd12ff114ef39caf9ffa0cccd77e849cd03",
+  "formats": [
+    "bf16",
+    "fp16"
+  ],
+  "full_matrix_checked": true,
+  "independent_helper": {
+    "path": "docs/project/evidence/p04-executor/reviews/audit_dispatch.py",
+    "sha256": "8f83c5bf7986ef99f6580a1bea3dc645ee7736549f3af454be56fc96f9351781",
+    "use": "pure audit_record and duration aggregation; no P05 producer imports"
+  },
+  "limitations": [
+    "Retained observations are audited without execution or authentication of the originating runner, within the trusted-builder/nonadversarial-filesystem boundary.",
+    "Required native dispatch evidence cannot exclude additional unrecorded host computation; this is not a proof of absence of all possible fallback code.",
+    "Frozen outputs are compared where retained; independent numerical dot-product recomputation and complete compiler/package/Git provenance are separate reviews.",
+    "Actual bytes prove observed lineage together with pinned native bodies; equal bytes alone cannot identify which host pointer supplied them.",
+    "Per-operation memory snapshots bracket allocations while the context/module is live; they do not prove exhaustive heap leak freedom.",
+    "The checker writes its final observations after Session.close, but does not retain a separate top-level session-close status record.",
+    "Host waits overlap event profiles; advance contains nested work. Disjoint bounds are checked with a one-millisecond allowance only for enclosing rounded command duration; categories must not be added as independent cost.",
+    "Absolute steady-clock timestamps from separate processes/jobs are not aligned. Durations describe host runtime queue/staging observations, never physical GPU latency, throughput or speedup.",
+    "Tensor byte totals include destination poison and exclude argument/control, module/setup and implicit host copies; argument-block bytes are an ABI inventory, not measured bus traffic.",
+    "This reads extracted regular members only, opens no archives and follows no symlinks. No phase acceptance, PyTorch, training, vendor hw_emu, FPGA or silicon claim follows."
+  ],
+  "outcome": "pass",
+  "packets": [
+    {
+      "binding_source_sha256": "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a",
+      "bundle_sha256": "27b7f19ce9dfd239c7ff9a68e67e6a9fb0fe950076c25a694544be5b539eeb58",
+      "consumed_files": [
+        {
+          "path": "artifacts/bundle/manifest.json",
+          "sha256": "27b7f19ce9dfd239c7ff9a68e67e6a9fb0fe950076c25a694544be5b539eeb58",
+          "size_bytes": 62083
+        },
+        {
+          "path": "artifacts/installed-observations.json",
+          "sha256": "72d7387cccba9a8d531db914ff8d976609494cbafc05a21e84eb9466cea09bf4",
+          "size_bytes": 159835
+        },
+        {
+          "path": "artifacts/source/sw/common/ai_matmul_args.h",
+          "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+          "size_bytes": 4342
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/contract.cpp",
+          "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+          "size_bytes": 10833
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/contract.h",
+          "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+          "size_bytes": 3285
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/mlp_host.cpp",
+          "sha256": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256",
+          "size_bytes": 2225
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/mlp_host.h",
+          "sha256": "309e437aa9ca80c3a9c7c8ca7544478cdce4861203d32280709e2e940425cd0b",
+          "size_bytes": 774
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/mlp_runtime.cpp",
+          "sha256": "0dab325434c513b85b66b108ca3b896304ab797252b9fd01919435fc8655ddd1",
+          "size_bytes": 13857
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/mlp_runtime.h",
+          "sha256": "56750815b71361eb036aa8000716b977569a657a2cee650f9bdd048c06b81182",
+          "size_bytes": 5030
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/runtime.cpp",
+          "sha256": "5540092240fb926f1c3066b0e8956a0096cb6be42b71f8b60d075434518e0be5",
+          "size_bytes": 17429
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/runtime.h",
+          "sha256": "dc9c5f789c0a58dfbdce10420fce32f1d17c8e71fb83a7608d6e38489d4d4ad1",
+          "size_bytes": 3428
+        },
+        {
+          "path": "artifacts/source/tests/regression/ai_mlp/records.h",
+          "sha256": "13a4d51ab7058a799b9598c0ba410b64b6bd28d77c305f88de702ef0db8daf29",
+          "size_bytes": 10862
+        },
+        {
+          "path": "logs/installed-matrix.log",
+          "sha256": "9a52c4be37f7acf44cff1acde31dd906c558873b600a25165f5a563f2829c27d",
+          "size_bytes": 158072
+        },
+        {
+          "path": "logs/native-bf16-multi-dense_boundaries.log",
+          "sha256": "c8826dadfd4464792ffd066cc5a8c5b283b9a5c428a47713223dd32bc39e85ac",
+          "size_bytes": 4189
+        },
+        {
+          "path": "logs/native-bf16-numerical-cross_tile_rounding_positive.log",
+          "sha256": "37683f6e8231f51d3bb644546dcba15858d680529e6af1be730e49542da93cc2",
+          "size_bytes": 2105
+        },
+        {
+          "path": "logs/native-bf16-single-dense_boundaries.log",
+          "sha256": "4d058126e49ab0633463c7ede47a9d6e510cc4fcfee2226c83397b4036a26762",
+          "size_bytes": 2071
+        },
+        {
+          "path": "logs/native-matmul-build.log",
+          "sha256": "061ad2043844d068aeba5eef7e4e8b9be356232570436fef3ebd5b5d697b107c",
+          "size_bytes": 64207
+        },
+        {
+          "path": "logs/native-matmul-effective-header.log",
+          "sha256": "fcd53d392374d876a1787de54beb1269c470f62df7d5bc4867a6566b0d51aa6e",
+          "size_bytes": 31109
+        },
+        {
+          "path": "logs/package-bound-sdist.log",
+          "sha256": "9a541cf37a326f944afdbfa450b51d43fab6b112f7125f378ed2957f75e91fc4",
+          "size_bytes": 3644
+        },
+        {
+          "path": "logs/package-create-venv.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "logs/package-install-wheel.log",
+          "sha256": "e3698cfe3b3e851c2cac8af91fb325f11926d1510cf79e795ada48a6f79f0708",
+          "size_bytes": 268
+        },
+        {
+          "path": "logs/package-offline-wheel.log",
+          "sha256": "9670a4f55c0cbe1b7f34172a9b9f22031c1c50295f24725209779cbf396f466c",
+          "size_bytes": 24034
+        },
+        {
+          "path": "logs/package-tools-after.log",
+          "sha256": "be506acc091a27438f713c27444661f687eafea770308d054927da6058baf50a",
+          "size_bytes": 149124
+        },
+        {
+          "path": "logs/package-tools-before.log",
+          "sha256": "be506acc091a27438f713c27444661f687eafea770308d054927da6058baf50a",
+          "size_bytes": 149124
+        },
+        {
+          "path": "native/artifacts/source/sw/common/ai_matmul_args.h",
+          "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+          "size_bytes": 4342
+        },
+        {
+          "path": "native/artifacts/source/sw/common/ai_matmul_profile.h",
+          "sha256": "8b2eb9a819506227808537612672c08a574230736f13f840a9d83bbd35675680",
+          "size_bytes": 2675
+        },
+        {
+          "path": "native/artifacts/source/sw/kernel/ai/matmul.cpp",
+          "sha256": "ad3b6107f0eef91ec676412bc795ab70cd1c9f31647b2cea854de6234fe71d3e",
+          "size_bytes": 1565
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/contract.cpp",
+          "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+          "size_bytes": 10833
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/contract.h",
+          "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+          "size_bytes": 3285
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/mlp_host.cpp",
+          "sha256": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256",
+          "size_bytes": 2225
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/mlp_host.h",
+          "sha256": "309e437aa9ca80c3a9c7c8ca7544478cdce4861203d32280709e2e940425cd0b",
+          "size_bytes": 774
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/mlp_runtime.cpp",
+          "sha256": "0dab325434c513b85b66b108ca3b896304ab797252b9fd01919435fc8655ddd1",
+          "size_bytes": 13857
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/mlp_runtime.h",
+          "sha256": "56750815b71361eb036aa8000716b977569a657a2cee650f9bdd048c06b81182",
+          "size_bytes": 5030
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/runtime.cpp",
+          "sha256": "5540092240fb926f1c3066b0e8956a0096cb6be42b71f8b60d075434518e0be5",
+          "size_bytes": 17429
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/runtime.h",
+          "sha256": "dc9c5f789c0a58dfbdce10420fce32f1d17c8e71fb83a7608d6e38489d4d4ad1",
+          "size_bytes": 3428
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/common/device.cpp",
+          "sha256": "9b32e38a9bbc0460a7f2af522fd5efdc96e1c06e359e28c5151285557f89d90a",
+          "size_bytes": 66201
+        },
+        {
+          "path": "native/artifacts/source/tests/regression/ai_matmul/main.cpp",
+          "sha256": "31428ef514ba3f3f8ba687fd3cecf4f032126a8e0055fd37ca6f7eab99f54317",
+          "size_bytes": 6919
+        },
+        {
+          "path": "native/artifacts/source/tests/regression/ai_mlp/main.cpp",
+          "sha256": "1abf4706aaa5265a4ddd959587d2095e2a01f32ad6b1ca94d30fffd8e562eb9b",
+          "size_bytes": 8070
+        },
+        {
+          "path": "native/artifacts/source/tests/regression/ai_mlp/records.h",
+          "sha256": "13a4d51ab7058a799b9598c0ba410b64b6bd28d77c305f88de702ef0db8daf29",
+          "size_bytes": 10862
+        },
+        {
+          "path": "native/logs/simx-bf16-application.log",
+          "sha256": "a3c7bd2d74aa7f18510dc69098392dbb77c0933ab22104a740fcff431deb2259",
+          "size_bytes": 174572
+        },
+        {
+          "path": "native/logs/simx-bf16-bf16-negated_dense.log",
+          "sha256": "394effab2555bb749d29795b50039a43ef27296327e0405a9685ed65d89348b0",
+          "size_bytes": 28859
+        },
+        {
+          "path": "native/logs/simx-bf16-bf16-seeded_dense.log",
+          "sha256": "944984db8db70e9b93310bc1ea3875f5a4ce823c57abba9cabf4362954529af4",
+          "size_bytes": 28855
+        },
+        {
+          "path": "native/logs/simx-bf16-bf16-signed_basis.log",
+          "sha256": "6c30d7e7a8f4ebea81e7d91d1ecd32847b0cde543bc71f41aca3aad663025244",
+          "size_bytes": 28856
+        },
+        {
+          "path": "native/logs/simx-bf16-bf16-split_boundary.log",
+          "sha256": "d7a3bfe596beab3f35ac168dd510951a0f6dadade4431d0c022ecf4933be62e7",
+          "size_bytes": 28860
+        },
+        {
+          "path": "native/logs/simx-bf16-bf16-zero.log",
+          "sha256": "c37e3864c863e647b4a700a96a9ca1619105f163fa7b4671a58ce4b9eb12f450",
+          "size_bytes": 28840
+        },
+        {
+          "path": "native/logs/simx-bf16-configure.log",
+          "sha256": "125be4ad212849077dabb6b165b5818d33c28018e2d288e335d7ba2b49d0739f",
+          "size_bytes": 1454
+        },
+        {
+          "path": "native/logs/simx-bf16-cpp-header-reproduce.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "native/logs/simx-bf16-effective-header.log",
+          "sha256": "fcd53d392374d876a1787de54beb1269c470f62df7d5bc4867a6566b0d51aa6e",
+          "size_bytes": 31109
+        },
+        {
+          "path": "native/logs/simx-bf16-header.log",
+          "sha256": "5c0c86b3a54df488c163ffe1cec735f492323020559e5394f178979c181633c2",
+          "size_bytes": 30589
+        },
+        {
+          "path": "native/logs/simx-bf16-runtime.log",
+          "sha256": "8b19ae625304646fff58e42936512899f15cb7cc95e490fddb7c1fdb6fa9dae8",
+          "size_bytes": 118311
+        },
+        {
+          "path": "native/logs/simx-bf16-verilog-header-reproduce.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "native/logs/version-clang.log",
+          "sha256": "5c82310dd02189c08a5f2900661fd62a86123f0489feb6562b01d9943c5c2fd7",
+          "size_bytes": 228
+        },
+        {
+          "path": "native/logs/version-gpp.log",
+          "sha256": "9eaf9b7f4b11c2e84e2478c2ceb0e4f48f4ba88565bcfc832b3bce49847dda6d",
+          "size_bytes": 246
+        },
+        {
+          "path": "native/logs/version-make.log",
+          "sha256": "8ee498ee2fc27e8dcdf99191b454077df95e3840d841ec94321748b6d7f36819",
+          "size_bytes": 297
+        },
+        {
+          "path": "native/report.json",
+          "sha256": "fa58bf21e0f6544f9c4afc8f1ccbda14b41e1feaf6d95666753c88e3d32224d9",
+          "size_bytes": 501758
+        },
+        {
+          "path": "native/snapshots/simx-bf16-binding.json",
+          "sha256": "b3694983d7b5801386a7f7113f344808f697f8466e263c26c1ee78b037feb6ed",
+          "size_bytes": 77241
+        },
+        {
+          "path": "native/snapshots/source-after.json",
+          "sha256": "314eac5d835432550884cfa8ca064bf4f289829e8ae4137e6e2906ac47b4b53f",
+          "size_bytes": 171630
+        },
+        {
+          "path": "native/snapshots/source-before.json",
+          "sha256": "314eac5d835432550884cfa8ca064bf4f289829e8ae4137e6e2906ac47b4b53f",
+          "size_bytes": 171630
+        },
+        {
+          "path": "report.json",
+          "sha256": "47e44eef2a0f44944be17bdf87a9ffaab33486be9840c8c147faea624b279e8a",
+          "size_bytes": 182038
+        },
+        {
+          "path": "snapshots/installed-request.json",
+          "sha256": "ff6cb15d56997d666b1598038c4d9c12b98144d95fc2656036855964da7d3bd2",
+          "size_bytes": 15889
+        },
+        {
+          "path": "snapshots/native-matmul-binding.json",
+          "sha256": "844e8fb27023bdeb7492ef7d42a5584e55db07cdebc0e109c2dee20b1cb2b4f9",
+          "size_bytes": 77138
+        },
+        {
+          "path": "snapshots/source-after.json",
+          "sha256": "9f0fd8b7c73268af6e95068befb27c0402af84bc86db6a95cb5aecb8373900ed",
+          "size_bytes": 174241
+        },
+        {
+          "path": "snapshots/source-before.json",
+          "sha256": "9f0fd8b7c73268af6e95068befb27c0402af84bc86db6a95cb5aecb8373900ed",
+          "size_bytes": 174241
+        }
+      ],
+      "counts": {
+        "native_comparison": {
+          "argument_block_bytes": 2016,
+          "d2h_transfers": 36,
+          "event_profile_pairs": 150,
+          "h2d_transfers": 108,
+          "host_assembly_bytes": 2560,
+          "host_bridge_bytes": 2560,
+          "matmul_launches": 6,
+          "matmul_runs": 6,
+          "model_launches": 30,
+          "model_runs": 10,
+          "profiled_launches": 30,
+          "tensor_d2h_bytes": 9216,
+          "tensor_h2d_bytes": 23424,
+          "total_launches": 36,
+          "unprofiled_launches": 6
+        },
+        "python": {
+          "argument_block_bytes": 2016,
+          "d2h_transfers": 36,
+          "event_profile_pairs": 180,
+          "h2d_transfers": 108,
+          "host_assembly_bytes": 2560,
+          "host_bridge_bytes": 2560,
+          "matmul_launches": 6,
+          "matmul_runs": 6,
+          "model_launches": 30,
+          "model_runs": 10,
+          "profiled_launches": 36,
+          "tensor_d2h_bytes": 9216,
+          "tensor_h2d_bytes": 23424,
+          "total_launches": 36,
+          "unprofiled_launches": 0
+        }
+      },
+      "format": "bf16",
+      "matmul_qualification_id": "b2de7d128ace5d7a90f212b9b425a935d847c36d168eb7273935428c675d5ce8",
+      "model_qualification_id": "c5fd995f8fa7f941d44714e282f1bbc5897c4d62a4989cb2563608ff7e437262",
+      "packet": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-bf16/python",
+      "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+      "source_tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049",
+      "timings_ns": {
+        "native_model": {
+          "event.d2h.preparation": {
+            "max_ns": 410,
+            "min_ns": 30,
+            "samples": 30,
+            "sum_ns": 3044
+          },
+          "event.d2h.queue": {
+            "max_ns": 12996470,
+            "min_ns": 5749748,
+            "samples": 30,
+            "sum_ns": 236829624
+          },
+          "event.d2h.service": {
+            "max_ns": 192791,
+            "min_ns": 33561,
+            "samples": 30,
+            "sum_ns": 2559728
+          },
+          "event.h2d.preparation": {
+            "max_ns": 360,
+            "min_ns": 30,
+            "samples": 90,
+            "sum_ns": 5423
+          },
+          "event.h2d.queue": {
+            "max_ns": 56534,
+            "min_ns": 745,
+            "samples": 90,
+            "sum_ns": 791380
+          },
+          "event.h2d.service": {
+            "max_ns": 44387,
+            "min_ns": 540,
+            "samples": 90,
+            "sum_ns": 285800
+          },
+          "event.launch.preparation": {
+            "max_ns": 15794,
+            "min_ns": 6179,
+            "samples": 30,
+            "sum_ns": 272624
+          },
+          "event.launch.queue": {
+            "max_ns": 56675,
+            "min_ns": 2783,
+            "samples": 30,
+            "sum_ns": 363167
+          },
+          "event.launch.service": {
+            "max_ns": 12924492,
+            "min_ns": 5737216,
+            "samples": 30,
+            "sum_ns": 236183832
+          },
+          "host.advance": {
+            "max_ns": 25484902,
+            "min_ns": 23513473,
+            "samples": 10,
+            "sum_ns": 241344401
+          },
+          "host.assembly": {
+            "max_ns": 190,
+            "min_ns": 30,
+            "samples": 10,
+            "sum_ns": 943
+          },
+          "host.bridge": {
+            "max_ns": 1472,
+            "min_ns": 311,
+            "samples": 10,
+            "sum_ns": 11049
+          },
+          "host.bridge_compare": {
+            "max_ns": 250,
+            "min_ns": 180,
+            "samples": 10,
+            "sum_ns": 2023
+          },
+          "host.close": {
+            "max_ns": 3894145,
+            "min_ns": 514728,
+            "samples": 10,
+            "sum_ns": 10342159
+          },
+          "host.create": {
+            "max_ns": 3740592,
+            "min_ns": 973691,
+            "samples": 10,
+            "sum_ns": 23117193
+          },
+          "host.output_compare": {
+            "max_ns": 240,
+            "min_ns": 100,
+            "samples": 10,
+            "sum_ns": 1490
+          },
+          "host.submit": {
+            "max_ns": 60281,
+            "min_ns": 12559,
+            "samples": 30,
+            "sum_ns": 839399
+          },
+          "stage.close": {
+            "max_ns": 35895,
+            "min_ns": 14952,
+            "samples": 30,
+            "sum_ns": 663682
+          },
+          "stage.compare": {
+            "max_ns": 440,
+            "min_ns": 40,
+            "samples": 30,
+            "sum_ns": 7213
+          },
+          "stage.wait": {
+            "max_ns": 13191284,
+            "min_ns": 5797671,
+            "samples": 30,
+            "sum_ns": 239764333
+          }
+        },
+        "python": {
+          "event.d2h.preparation": {
+            "max_ns": 301,
+            "min_ns": 30,
+            "samples": 36,
+            "sum_ns": 3687
+          },
+          "event.d2h.queue": {
+            "max_ns": 13034174,
+            "min_ns": 5916107,
+            "samples": 36,
+            "sum_ns": 296836285
+          },
+          "event.d2h.service": {
+            "max_ns": 189176,
+            "min_ns": 36756,
+            "samples": 36,
+            "sum_ns": 3178983
+          },
+          "event.h2d.preparation": {
+            "max_ns": 371,
+            "min_ns": 30,
+            "samples": 108,
+            "sum_ns": 5386
+          },
+          "event.h2d.queue": {
+            "max_ns": 86046,
+            "min_ns": 898,
+            "samples": 108,
+            "sum_ns": 850765
+          },
+          "event.h2d.service": {
+            "max_ns": 54833,
+            "min_ns": 591,
+            "samples": 108,
+            "sum_ns": 244742
+          },
+          "event.launch.preparation": {
+            "max_ns": 42474,
+            "min_ns": 5709,
+            "samples": 36,
+            "sum_ns": 385118
+          },
+          "event.launch.queue": {
+            "max_ns": 84454,
+            "min_ns": 2100,
+            "samples": 36,
+            "sum_ns": 308653
+          },
+          "event.launch.service": {
+            "max_ns": 13016580,
+            "min_ns": 5900366,
+            "samples": 36,
+            "sum_ns": 296137214
+          },
+          "host.advance": {
+            "max_ns": 25854912,
+            "min_ns": 24406463,
+            "samples": 10,
+            "sum_ns": 249712584
+          },
+          "host.assembly": {
+            "max_ns": 491,
+            "min_ns": 30,
+            "samples": 10,
+            "sum_ns": 2093
+          },
+          "host.bridge": {
+            "max_ns": 1662,
+            "min_ns": 580,
+            "samples": 10,
+            "sum_ns": 12405
+          },
+          "host.bridge_compare": {
+            "max_ns": 390,
+            "min_ns": 181,
+            "samples": 10,
+            "sum_ns": 2342
+          },
+          "host.close": {
+            "max_ns": 4213727,
+            "min_ns": 582991,
+            "samples": 10,
+            "sum_ns": 13143563
+          },
+          "host.create": {
+            "max_ns": 1604065,
+            "min_ns": 1096257,
+            "samples": 10,
+            "sum_ns": 12761415
+          },
+          "host.output_compare": {
+            "max_ns": 431,
+            "min_ns": 120,
+            "samples": 10,
+            "sum_ns": 2195
+          },
+          "host.submit": {
+            "max_ns": 87602,
+            "min_ns": 25458,
+            "samples": 30,
+            "sum_ns": 1278651
+          },
+          "stage.close": {
+            "max_ns": 39329,
+            "min_ns": 18909,
+            "samples": 30,
+            "sum_ns": 758928
+          },
+          "stage.compare": {
+            "max_ns": 490,
+            "min_ns": 40,
+            "samples": 30,
+            "sum_ns": 7682
+          },
+          "stage.wait": {
+            "max_ns": 13233248,
+            "min_ns": 5979396,
+            "samples": 30,
+            "sum_ns": 247537704
+          }
+        }
+      }
+    },
+    {
+      "binding_source_sha256": "c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a",
+      "bundle_sha256": "504852a59f0654e94a2eef5a15fd8d141f70d59fc278590aada3ff24e29e2fd1",
+      "consumed_files": [
+        {
+          "path": "artifacts/bundle/manifest.json",
+          "sha256": "504852a59f0654e94a2eef5a15fd8d141f70d59fc278590aada3ff24e29e2fd1",
+          "size_bytes": 62083
+        },
+        {
+          "path": "artifacts/installed-observations.json",
+          "sha256": "34019d286c72402601e47fe8413a87a29f7778beeb75293e5d2bc8bb381a7f61",
+          "size_bytes": 159837
+        },
+        {
+          "path": "artifacts/source/sw/common/ai_matmul_args.h",
+          "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+          "size_bytes": 4342
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/contract.cpp",
+          "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+          "size_bytes": 10833
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/contract.h",
+          "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+          "size_bytes": 3285
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/mlp_host.cpp",
+          "sha256": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256",
+          "size_bytes": 2225
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/mlp_host.h",
+          "sha256": "309e437aa9ca80c3a9c7c8ca7544478cdce4861203d32280709e2e940425cd0b",
+          "size_bytes": 774
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/mlp_runtime.cpp",
+          "sha256": "0dab325434c513b85b66b108ca3b896304ab797252b9fd01919435fc8655ddd1",
+          "size_bytes": 13857
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/mlp_runtime.h",
+          "sha256": "56750815b71361eb036aa8000716b977569a657a2cee650f9bdd048c06b81182",
+          "size_bytes": 5030
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/runtime.cpp",
+          "sha256": "5540092240fb926f1c3066b0e8956a0096cb6be42b71f8b60d075434518e0be5",
+          "size_bytes": 17429
+        },
+        {
+          "path": "artifacts/source/sw/runtime/ai/runtime.h",
+          "sha256": "dc9c5f789c0a58dfbdce10420fce32f1d17c8e71fb83a7608d6e38489d4d4ad1",
+          "size_bytes": 3428
+        },
+        {
+          "path": "artifacts/source/tests/regression/ai_mlp/records.h",
+          "sha256": "13a4d51ab7058a799b9598c0ba410b64b6bd28d77c305f88de702ef0db8daf29",
+          "size_bytes": 10862
+        },
+        {
+          "path": "logs/installed-matrix.log",
+          "sha256": "91be707f02cb9cb96d6f92fc54d4c89a0f3331135c144ed282cbebee88622888",
+          "size_bytes": 158074
+        },
+        {
+          "path": "logs/native-fp16-multi-dense_boundaries.log",
+          "sha256": "dd6345bb15c258a7b466d60ee9aea83a87e03f71cbdad4eb1d0ab224f8d188a2",
+          "size_bytes": 4189
+        },
+        {
+          "path": "logs/native-fp16-numerical-cross_tile_rounding_positive.log",
+          "sha256": "5010b11c4b6af631d7006ff776d80ef3549d7f13b9f8dab19524a9cdde78a145",
+          "size_bytes": 2105
+        },
+        {
+          "path": "logs/native-fp16-single-dense_boundaries.log",
+          "sha256": "59cee57365330d8bc1dd8ea16bf9b4ffc1f3ce7fa05d675e71bb8cdd0e08cc8e",
+          "size_bytes": 2071
+        },
+        {
+          "path": "logs/native-matmul-build.log",
+          "sha256": "b86ac8fd33526054584faf0b8307a5a76e244d7882e11102ca013ef9455ef2de",
+          "size_bytes": 64207
+        },
+        {
+          "path": "logs/native-matmul-effective-header.log",
+          "sha256": "bf0e5fcf8553f41670ede440566f00f2ea54e1c2e580eef7bf5d78282798a692",
+          "size_bytes": 31109
+        },
+        {
+          "path": "logs/package-bound-sdist.log",
+          "sha256": "9a541cf37a326f944afdbfa450b51d43fab6b112f7125f378ed2957f75e91fc4",
+          "size_bytes": 3644
+        },
+        {
+          "path": "logs/package-create-venv.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "logs/package-install-wheel.log",
+          "sha256": "ba9af4fd3a94290f2199cf3b3e3f03525bba8a973fd9df911de613e30f2cbd12",
+          "size_bytes": 268
+        },
+        {
+          "path": "logs/package-offline-wheel.log",
+          "sha256": "dc5abc1545bc2e3fd9c64779bf9afd4f2b8f0b445eddb9e22fb44c22fa849033",
+          "size_bytes": 24034
+        },
+        {
+          "path": "logs/package-tools-after.log",
+          "sha256": "be506acc091a27438f713c27444661f687eafea770308d054927da6058baf50a",
+          "size_bytes": 149124
+        },
+        {
+          "path": "logs/package-tools-before.log",
+          "sha256": "be506acc091a27438f713c27444661f687eafea770308d054927da6058baf50a",
+          "size_bytes": 149124
+        },
+        {
+          "path": "native/artifacts/source/sw/common/ai_matmul_args.h",
+          "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+          "size_bytes": 4342
+        },
+        {
+          "path": "native/artifacts/source/sw/common/ai_matmul_profile.h",
+          "sha256": "8b2eb9a819506227808537612672c08a574230736f13f840a9d83bbd35675680",
+          "size_bytes": 2675
+        },
+        {
+          "path": "native/artifacts/source/sw/kernel/ai/matmul.cpp",
+          "sha256": "ad3b6107f0eef91ec676412bc795ab70cd1c9f31647b2cea854de6234fe71d3e",
+          "size_bytes": 1565
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/contract.cpp",
+          "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+          "size_bytes": 10833
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/contract.h",
+          "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+          "size_bytes": 3285
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/mlp_host.cpp",
+          "sha256": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256",
+          "size_bytes": 2225
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/mlp_host.h",
+          "sha256": "309e437aa9ca80c3a9c7c8ca7544478cdce4861203d32280709e2e940425cd0b",
+          "size_bytes": 774
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/mlp_runtime.cpp",
+          "sha256": "0dab325434c513b85b66b108ca3b896304ab797252b9fd01919435fc8655ddd1",
+          "size_bytes": 13857
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/mlp_runtime.h",
+          "sha256": "56750815b71361eb036aa8000716b977569a657a2cee650f9bdd048c06b81182",
+          "size_bytes": 5030
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/runtime.cpp",
+          "sha256": "5540092240fb926f1c3066b0e8956a0096cb6be42b71f8b60d075434518e0be5",
+          "size_bytes": 17429
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/ai/runtime.h",
+          "sha256": "dc9c5f789c0a58dfbdce10420fce32f1d17c8e71fb83a7608d6e38489d4d4ad1",
+          "size_bytes": 3428
+        },
+        {
+          "path": "native/artifacts/source/sw/runtime/common/device.cpp",
+          "sha256": "9b32e38a9bbc0460a7f2af522fd5efdc96e1c06e359e28c5151285557f89d90a",
+          "size_bytes": 66201
+        },
+        {
+          "path": "native/artifacts/source/tests/regression/ai_matmul/main.cpp",
+          "sha256": "31428ef514ba3f3f8ba687fd3cecf4f032126a8e0055fd37ca6f7eab99f54317",
+          "size_bytes": 6919
+        },
+        {
+          "path": "native/artifacts/source/tests/regression/ai_mlp/main.cpp",
+          "sha256": "1abf4706aaa5265a4ddd959587d2095e2a01f32ad6b1ca94d30fffd8e562eb9b",
+          "size_bytes": 8070
+        },
+        {
+          "path": "native/artifacts/source/tests/regression/ai_mlp/records.h",
+          "sha256": "13a4d51ab7058a799b9598c0ba410b64b6bd28d77c305f88de702ef0db8daf29",
+          "size_bytes": 10862
+        },
+        {
+          "path": "native/logs/simx-fp16-application.log",
+          "sha256": "f6a379bfa22196ab82d2084167b9e71a1e829be49bafe8c98c10262241fe9572",
+          "size_bytes": 174572
+        },
+        {
+          "path": "native/logs/simx-fp16-configure.log",
+          "sha256": "125be4ad212849077dabb6b165b5818d33c28018e2d288e335d7ba2b49d0739f",
+          "size_bytes": 1454
+        },
+        {
+          "path": "native/logs/simx-fp16-cpp-header-reproduce.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "native/logs/simx-fp16-effective-header.log",
+          "sha256": "bf0e5fcf8553f41670ede440566f00f2ea54e1c2e580eef7bf5d78282798a692",
+          "size_bytes": 31109
+        },
+        {
+          "path": "native/logs/simx-fp16-fp16-negated_dense.log",
+          "sha256": "06fa6dce2ac8b91193f8aba5f3a44618d2c0aa5db41326fea7a4c7fa2e67c88d",
+          "size_bytes": 28863
+        },
+        {
+          "path": "native/logs/simx-fp16-fp16-seeded_dense.log",
+          "sha256": "413164c927cdc30141a6d23005a0e90506be260321907adb6b6ee92cb570d636",
+          "size_bytes": 28857
+        },
+        {
+          "path": "native/logs/simx-fp16-fp16-signed_basis.log",
+          "sha256": "5b36aea4391b82dfc12854531fdf4242bcbcb427943e10232025abee72310ef2",
+          "size_bytes": 28860
+        },
+        {
+          "path": "native/logs/simx-fp16-fp16-split_boundary.log",
+          "sha256": "273aceb24a7b9734b4fc30d5bab6ebf24540448b407a92c74a72d47cec87bf47",
+          "size_bytes": 28863
+        },
+        {
+          "path": "native/logs/simx-fp16-fp16-zero.log",
+          "sha256": "f59a33c4518386683e70604ae4fd565d721628476b03064d6c061d46c7f49a49",
+          "size_bytes": 28843
+        },
+        {
+          "path": "native/logs/simx-fp16-header.log",
+          "sha256": "5c0c86b3a54df488c163ffe1cec735f492323020559e5394f178979c181633c2",
+          "size_bytes": 30589
+        },
+        {
+          "path": "native/logs/simx-fp16-runtime.log",
+          "sha256": "740e3c82333dadaacd4523d1507a2ff5c50be81d74ba5d0045e87e0fbfa7f367",
+          "size_bytes": 118311
+        },
+        {
+          "path": "native/logs/simx-fp16-verilog-header-reproduce.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "native/logs/version-clang.log",
+          "sha256": "5c82310dd02189c08a5f2900661fd62a86123f0489feb6562b01d9943c5c2fd7",
+          "size_bytes": 228
+        },
+        {
+          "path": "native/logs/version-gpp.log",
+          "sha256": "9eaf9b7f4b11c2e84e2478c2ceb0e4f48f4ba88565bcfc832b3bce49847dda6d",
+          "size_bytes": 246
+        },
+        {
+          "path": "native/logs/version-make.log",
+          "sha256": "8ee498ee2fc27e8dcdf99191b454077df95e3840d841ec94321748b6d7f36819",
+          "size_bytes": 297
+        },
+        {
+          "path": "native/report.json",
+          "sha256": "4478a4cc2b49e4fe57d5eea51fab672535afef904585a7a0da2297086b4a733e",
+          "size_bytes": 501771
+        },
+        {
+          "path": "native/snapshots/simx-fp16-binding.json",
+          "sha256": "323115a293af30ae1b446d39ba891dee9001d00d845e28b5219120877958c987",
+          "size_bytes": 77241
+        },
+        {
+          "path": "native/snapshots/source-after.json",
+          "sha256": "314eac5d835432550884cfa8ca064bf4f289829e8ae4137e6e2906ac47b4b53f",
+          "size_bytes": 171630
+        },
+        {
+          "path": "native/snapshots/source-before.json",
+          "sha256": "314eac5d835432550884cfa8ca064bf4f289829e8ae4137e6e2906ac47b4b53f",
+          "size_bytes": 171630
+        },
+        {
+          "path": "report.json",
+          "sha256": "2e8c73dd7faceac8976216e47eb09399d0b1015119f612f76457bfa1665801e0",
+          "size_bytes": 182046
+        },
+        {
+          "path": "snapshots/installed-request.json",
+          "sha256": "1e5597d9e103585b32397fd0be162d13e1d8415f90345ac87a1963d81161c341",
+          "size_bytes": 15889
+        },
+        {
+          "path": "snapshots/native-matmul-binding.json",
+          "sha256": "a26c4330f42127bdb846a12d5b5010a02b6ec5e2b2712f1e61b59b5615aef242",
+          "size_bytes": 77138
+        },
+        {
+          "path": "snapshots/source-after.json",
+          "sha256": "9f0fd8b7c73268af6e95068befb27c0402af84bc86db6a95cb5aecb8373900ed",
+          "size_bytes": 174241
+        },
+        {
+          "path": "snapshots/source-before.json",
+          "sha256": "9f0fd8b7c73268af6e95068befb27c0402af84bc86db6a95cb5aecb8373900ed",
+          "size_bytes": 174241
+        }
+      ],
+      "counts": {
+        "native_comparison": {
+          "argument_block_bytes": 2016,
+          "d2h_transfers": 36,
+          "event_profile_pairs": 150,
+          "h2d_transfers": 108,
+          "host_assembly_bytes": 2560,
+          "host_bridge_bytes": 2560,
+          "matmul_launches": 6,
+          "matmul_runs": 6,
+          "model_launches": 30,
+          "model_runs": 10,
+          "profiled_launches": 30,
+          "tensor_d2h_bytes": 9216,
+          "tensor_h2d_bytes": 23424,
+          "total_launches": 36,
+          "unprofiled_launches": 6
+        },
+        "python": {
+          "argument_block_bytes": 2016,
+          "d2h_transfers": 36,
+          "event_profile_pairs": 180,
+          "h2d_transfers": 108,
+          "host_assembly_bytes": 2560,
+          "host_bridge_bytes": 2560,
+          "matmul_launches": 6,
+          "matmul_runs": 6,
+          "model_launches": 30,
+          "model_runs": 10,
+          "profiled_launches": 36,
+          "tensor_d2h_bytes": 9216,
+          "tensor_h2d_bytes": 23424,
+          "total_launches": 36,
+          "unprofiled_launches": 0
+        }
+      },
+      "format": "fp16",
+      "matmul_qualification_id": "360459424b10a97f38f2c6fa1357901617006a6b0f24f9ddd970156263c5d8f4",
+      "model_qualification_id": "bdf65307dae6237099fbe96341e01762bf4f8818b191d8fbee590aeb0a816a78",
+      "packet": "/workspace/scratch/ba0248fde989/p05-work/w09_a4/relocated/simx-fp16/python",
+      "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+      "source_tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049",
+      "timings_ns": {
+        "native_model": {
+          "event.d2h.preparation": {
+            "max_ns": 441,
+            "min_ns": 50,
+            "samples": 30,
+            "sum_ns": 3466
+          },
+          "event.d2h.queue": {
+            "max_ns": 20580587,
+            "min_ns": 9843051,
+            "samples": 30,
+            "sum_ns": 401787131
+          },
+          "event.d2h.service": {
+            "max_ns": 308838,
+            "min_ns": 69851,
+            "samples": 30,
+            "sum_ns": 4172430
+          },
+          "event.h2d.preparation": {
+            "max_ns": 220,
+            "min_ns": 29,
+            "samples": 90,
+            "sum_ns": 5239
+          },
+          "event.h2d.queue": {
+            "max_ns": 63263,
+            "min_ns": 3875,
+            "samples": 90,
+            "sum_ns": 1432081
+          },
+          "event.h2d.service": {
+            "max_ns": 47209,
+            "min_ns": 1042,
+            "samples": 90,
+            "sum_ns": 478433
+          },
+          "event.launch.preparation": {
+            "max_ns": 19055,
+            "min_ns": 10079,
+            "samples": 30,
+            "sum_ns": 465562
+          },
+          "event.launch.queue": {
+            "max_ns": 64305,
+            "min_ns": 9205,
+            "samples": 30,
+            "sum_ns": 661450
+          },
+          "event.launch.service": {
+            "max_ns": 20498878,
+            "min_ns": 9817084,
+            "samples": 30,
+            "sum_ns": 400640167
+          },
+          "host.advance": {
+            "max_ns": 41941314,
+            "min_ns": 40325629,
+            "samples": 10,
+            "sum_ns": 409016284
+          },
+          "host.assembly": {
+            "max_ns": 131,
+            "min_ns": 30,
+            "samples": 10,
+            "sum_ns": 822
+          },
+          "host.bridge": {
+            "max_ns": 1252,
+            "min_ns": 421,
+            "samples": 10,
+            "sum_ns": 9939
+          },
+          "host.bridge_compare": {
+            "max_ns": 431,
+            "min_ns": 241,
+            "samples": 10,
+            "sum_ns": 2706
+          },
+          "host.close": {
+            "max_ns": 1026623,
+            "min_ns": 560320,
+            "samples": 10,
+            "sum_ns": 8088980
+          },
+          "host.create": {
+            "max_ns": 5909026,
+            "min_ns": 1307098,
+            "samples": 10,
+            "sum_ns": 33465099
+          },
+          "host.output_compare": {
+            "max_ns": 411,
+            "min_ns": 130,
+            "samples": 10,
+            "sum_ns": 2003
+          },
+          "host.submit": {
+            "max_ns": 78597,
+            "min_ns": 25237,
+            "samples": 30,
+            "sum_ns": 1184005
+          },
+          "stage.close": {
+            "max_ns": 73538,
+            "min_ns": 32381,
+            "samples": 30,
+            "sum_ns": 1168901
+          },
+          "stage.compare": {
+            "max_ns": 631,
+            "min_ns": 80,
+            "samples": 30,
+            "sum_ns": 6344
+          },
+          "stage.wait": {
+            "max_ns": 20912013,
+            "min_ns": 9937430,
+            "samples": 30,
+            "sum_ns": 406584034
+          }
+        },
+        "python": {
+          "event.d2h.preparation": {
+            "max_ns": 200,
+            "min_ns": 60,
+            "samples": 36,
+            "sum_ns": 2814
+          },
+          "event.d2h.queue": {
+            "max_ns": 24018927,
+            "min_ns": 9972271,
+            "samples": 36,
+            "sum_ns": 500037163
+          },
+          "event.d2h.service": {
+            "max_ns": 264776,
+            "min_ns": 67286,
+            "samples": 36,
+            "sum_ns": 4557882
+          },
+          "event.h2d.preparation": {
+            "max_ns": 731,
+            "min_ns": 29,
+            "samples": 108,
+            "sum_ns": 6922
+          },
+          "event.h2d.queue": {
+            "max_ns": 93760,
+            "min_ns": 596,
+            "samples": 108,
+            "sum_ns": 1094571
+          },
+          "event.h2d.service": {
+            "max_ns": 49223,
+            "min_ns": 1082,
+            "samples": 108,
+            "sum_ns": 423584
+          },
+          "event.launch.preparation": {
+            "max_ns": 23725,
+            "min_ns": 10239,
+            "samples": 36,
+            "sum_ns": 536265
+          },
+          "event.launch.queue": {
+            "max_ns": 94141,
+            "min_ns": 4834,
+            "samples": 36,
+            "sum_ns": 494508
+          },
+          "event.launch.service": {
+            "max_ns": 23988254,
+            "min_ns": 9949453,
+            "samples": 36,
+            "sum_ns": 499009221
+          },
+          "host.advance": {
+            "max_ns": 44842039,
+            "min_ns": 40228563,
+            "samples": 10,
+            "sum_ns": 414431385
+          },
+          "host.assembly": {
+            "max_ns": 110,
+            "min_ns": 30,
+            "samples": 10,
+            "sum_ns": 441
+          },
+          "host.bridge": {
+            "max_ns": 1593,
+            "min_ns": 291,
+            "samples": 10,
+            "sum_ns": 10709
+          },
+          "host.bridge_compare": {
+            "max_ns": 632,
+            "min_ns": 260,
+            "samples": 10,
+            "sum_ns": 3139
+          },
+          "host.close": {
+            "max_ns": 2086558,
+            "min_ns": 540402,
+            "samples": 10,
+            "sum_ns": 7778960
+          },
+          "host.create": {
+            "max_ns": 2262056,
+            "min_ns": 1276090,
+            "samples": 10,
+            "sum_ns": 14910594
+          },
+          "host.output_compare": {
+            "max_ns": 200,
+            "min_ns": 100,
+            "samples": 10,
+            "sum_ns": 1193
+          },
+          "host.submit": {
+            "max_ns": 77014,
+            "min_ns": 29796,
+            "samples": 30,
+            "sum_ns": 1204286
+          },
+          "stage.close": {
+            "max_ns": 63729,
+            "min_ns": 36288,
+            "samples": 30,
+            "sum_ns": 1206757
+          },
+          "stage.compare": {
+            "max_ns": 330,
+            "min_ns": 80,
+            "samples": 30,
+            "sum_ns": 4626
+          },
+          "stage.wait": {
+            "max_ns": 24265935,
+            "min_ns": 10063747,
+            "samples": 30,
+            "sum_ns": 411944759
+          }
+        }
+      }
+    }
+  ],
+  "phase_acceptance": false,
+  "profile_sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+  "schema_version": 1,
+  "scope": "complete-two-format-simx-installed-matrix",
+  "selected_scope": false,
+  "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+  "source_tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049",
+  "trusted_source_files": [
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/audit_dispatch.py",
+      "sha256": "8f83c5bf7986ef99f6580a1bea3dc645ee7736549f3af454be56fc96f9351781",
+      "size_bytes": 27342
+    },
+    {
+      "path": "sw/runtime/common/device.cpp",
+      "sha256": "9b32e38a9bbc0460a7f2af522fd5efdc96e1c06e359e28c5151285557f89d90a",
+      "size_bytes": 66201
+    },
+    {
+      "path": "sw/common/ai_matmul_args.h",
+      "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+      "size_bytes": 4342
+    },
+    {
+      "path": "sw/common/ai_matmul_profile.h",
+      "sha256": "8b2eb9a819506227808537612672c08a574230736f13f840a9d83bbd35675680",
+      "size_bytes": 2675
+    },
+    {
+      "path": "sw/kernel/ai/matmul.cpp",
+      "sha256": "ad3b6107f0eef91ec676412bc795ab70cd1c9f31647b2cea854de6234fe71d3e",
+      "size_bytes": 1565
+    },
+    {
+      "path": "sw/runtime/ai/contract.cpp",
+      "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+      "size_bytes": 10833
+    },
+    {
+      "path": "sw/runtime/ai/contract.h",
+      "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+      "size_bytes": 3285
+    },
+    {
+      "path": "sw/runtime/ai/runtime.cpp",
+      "sha256": "5540092240fb926f1c3066b0e8956a0096cb6be42b71f8b60d075434518e0be5",
+      "size_bytes": 17429
+    },
+    {
+      "path": "sw/runtime/ai/runtime.h",
+      "sha256": "dc9c5f789c0a58dfbdce10420fce32f1d17c8e71fb83a7608d6e38489d4d4ad1",
+      "size_bytes": 3428
+    },
+    {
+      "path": "sw/runtime/ai/mlp_runtime.cpp",
+      "sha256": "0dab325434c513b85b66b108ca3b896304ab797252b9fd01919435fc8655ddd1",
+      "size_bytes": 13857
+    },
+    {
+      "path": "sw/runtime/ai/mlp_runtime.h",
+      "sha256": "56750815b71361eb036aa8000716b977569a657a2cee650f9bdd048c06b81182",
+      "size_bytes": 5030
+    },
+    {
+      "path": "sw/runtime/ai/mlp_host.cpp",
+      "sha256": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256",
+      "size_bytes": 2225
+    },
+    {
+      "path": "sw/runtime/ai/mlp_host.h",
+      "sha256": "309e437aa9ca80c3a9c7c8ca7544478cdce4861203d32280709e2e940425cd0b",
+      "size_bytes": 774
+    },
+    {
+      "path": "tests/regression/ai_matmul/main.cpp",
+      "sha256": "31428ef514ba3f3f8ba687fd3cecf4f032126a8e0055fd37ca6f7eab99f54317",
+      "size_bytes": 6919
+    },
+    {
+      "path": "tests/regression/ai_mlp/main.cpp",
+      "sha256": "1abf4706aaa5265a4ddd959587d2095e2a01f32ad6b1ca94d30fffd8e562eb9b",
+      "size_bytes": 8070
+    },
+    {
+      "path": "tests/regression/ai_mlp/records.h",
+      "sha256": "13a4d51ab7058a799b9598c0ba410b64b6bd28d77c305f88de702ef0db8daf29",
+      "size_bytes": 10862
+    },
+    {
+      "path": "sw/runtime/common/common.h",
+      "sha256": "3504e28ddde5e0ab5f34de9dbe5f9b51ffc637cdb303c31f0d2ddd4f81b03c83",
+      "size_bytes": 1997
+    },
+    {
+      "path": "VX_types.toml",
+      "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+      "size_bytes": 36543
+    },
+    {
+      "path": "ci/project/fixtures/p02_layout_v1.json",
+      "sha256": "0543f9f4208de3ff4743fe1894d97ccf3b8cca4707e9a26acd1f3dde884725b2",
+      "size_bytes": 83960
+    },
+    {
+      "path": "ci/project/fixtures/p02_wmma_numerical_v1.json",
+      "sha256": "4102d74024e92e9887d7324b9326c0d6ad1fff206b5fad33f45c530d5bd03a73",
+      "size_bytes": 260308
+    },
+    {
+      "path": "ci/project/fixtures/p04_tiny_mlp_v1.json",
+      "sha256": "d22a899827afb3e8c22a528fc6a27fd12ff114ef39caf9ffa0cccd77e849cd03",
+      "size_bytes": 92301
+    }
+  ]
+}

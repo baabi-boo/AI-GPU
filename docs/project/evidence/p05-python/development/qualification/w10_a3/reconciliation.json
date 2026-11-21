@@ -1,0 +1,611 @@
+{
+  "archive_summary": [
+    {
+      "archive": {
+        "path": "simx-fp16.zip",
+        "sha256": "467122e41bee4e67f9eef285e015b2dee3a52522f0bcb3f497e3cec87e6c7380",
+        "size_bytes": 6417582
+      },
+      "hidden_stamps": [
+        "native-model/artifacts/simx-fp16/.config.stamp",
+        "python/artifacts/native-matmul/.config.stamp",
+        "python/native/artifacts/simx-fp16/.config.stamp"
+      ],
+      "members": 304,
+      "variant": "simx-fp16"
+    },
+    {
+      "archive": {
+        "path": "simx-bf16.zip",
+        "sha256": "e951f943ece1878f3767180c4ce2b859939722d2d639c1afb37b8a72c76006d8",
+        "size_bytes": 6417108
+      },
+      "hidden_stamps": [
+        "native-model/artifacts/simx-bf16/.config.stamp",
+        "python/artifacts/native-matmul/.config.stamp",
+        "python/native/artifacts/simx-bf16/.config.stamp"
+      ],
+      "members": 304,
+      "variant": "simx-bf16"
+    }
+  ],
+  "auditors_executed": false,
+  "combined_comparisons": {
+    "assembled_fp32_words": 2560,
+    "model_bridge_packed_32bit_words": 2560,
+    "model_hidden_fp32_words": 5120,
+    "model_stage_output_fp32_words": 7680,
+    "standalone_fp32_words": 1536
+  },
+  "combined_dispatch_counts": {
+    "argument_block_bytes": 8064,
+    "d2h_transfers": 144,
+    "event_profile_pairs": 660,
+    "h2d_transfers": 432,
+    "host_assembly_bytes": 10240,
+    "host_bridge_bytes": 10240,
+    "matmul_launches": 24,
+    "matmul_runs": 24,
+    "model_launches": 120,
+    "model_runs": 40,
+    "profiled_launches": 132,
+    "tensor_d2h_bytes": 36864,
+    "tensor_h2d_bytes": 93696,
+    "total_launches": 144,
+    "unprofiled_launches": 12
+  },
+  "current_source_pins": {
+    "audit_dispatch.py": "ab0a1d1d6d0268b0766e5d3bc211e2830efb5e9683a413854fc1a16a3d5de391",
+    "audit_numerics.py": "608b16c80a1a40816ef15f04b2670c736e2abca7768e7c6ad546c8a96f23e736",
+    "audit_provenance.py": "4684a4e928ff672d371bdb78ab5f646b61ae59d1147c3c690e722a22a89186ac",
+    "extract_retained.py": "3abfe1aac9bbeef648389bcfc45c569b58a52db849b0575f23bac6c80f6507be"
+  },
+  "fresh_counterexamples_run": 0,
+  "full_and_replay_results_equal_after_only_packet_root_normalization": [
+    "numerics",
+    "dispatch",
+    "provenance"
+  ],
+  "historical_repairs": {
+    "dispatch": {
+      "after_receipt": {
+        "path": "docs/project/evidence/p05-python/reviews/history/dispatch-after.json",
+        "sha256": "64f4001352c8fd8d37623355bc9be20fcf20d4f6b7837a317cd8308164f36c15",
+        "size_bytes": 55774
+      },
+      "before_receipt": {
+        "path": "docs/project/evidence/p05-python/reviews/history/dispatch-before.json",
+        "sha256": "a17f896cffec304f034e7d22dc03dc818222b2b50f5c8753acb80bc5b6c61a0a",
+        "size_bytes": 55591
+      },
+      "former_false_accepts": [
+        "address_outside_simx_pool",
+        "address_below_user_pool",
+        "profile_duration_exceeds_command_timeout",
+        "model_host_duration_exceeds_command_timeout",
+        "model_close_overlaps_next_model",
+        "extra_successful_matmul_wait",
+        "extra_native_p03_wait",
+        "model_submission_claims_complete",
+        "memory_impossible_zero_capacity",
+        "additional_native_equals_case_invocation",
+        "explicit_fallback_in_execution_log"
+      ],
+      "resolved": [
+        {
+          "case": "address_outside_simx_pool",
+          "outcome": "rejected",
+          "reason": "allocation is misaligned or outside pinned SimX user pool"
+        },
+        {
+          "case": "address_below_user_pool",
+          "outcome": "rejected",
+          "reason": "allocation is misaligned or outside pinned SimX user pool"
+        },
+        {
+          "case": "profile_duration_exceeds_command_timeout",
+          "outcome": "rejected",
+          "reason": "native timestamp span exceeds enclosing command duration"
+        },
+        {
+          "case": "model_host_duration_exceeds_command_timeout",
+          "outcome": "rejected",
+          "reason": "native timestamp span exceeds enclosing command duration"
+        },
+        {
+          "case": "model_close_overlaps_next_model",
+          "outcome": "rejected",
+          "reason": "native timestamp span exceeds enclosing command duration"
+        },
+        {
+          "case": "extra_successful_matmul_wait",
+          "outcome": "rejected",
+          "reason": "successful native wait count differs"
+        },
+        {
+          "case": "extra_native_p03_wait",
+          "outcome": "rejected",
+          "reason": "successful native wait count differs"
+        },
+        {
+          "case": "model_submission_claims_complete",
+          "outcome": "rejected",
+          "reason": "successful asynchronous submission claims completion"
+        },
+        {
+          "case": "memory_impossible_zero_capacity",
+          "outcome": "rejected",
+          "reason": "memory capacity differs from pinned SimX allocator"
+        },
+        {
+          "case": "additional_native_equals_case_invocation",
+          "outcome": "rejected",
+          "reason": "frozen Python command inventory/order differs"
+        },
+        {
+          "case": "explicit_fallback_in_execution_log",
+          "outcome": "rejected",
+          "reason": "explicit CPU/host matmul fallback diagnostic"
+        }
+      ],
+      "unchanged_case_count": 42
+    },
+    "numerics": {
+      "after_receipt": {
+        "path": "docs/project/evidence/p05-python/reviews/history/numerics-after.json",
+        "sha256": "b0dd4353cfe2c0642f7693bf622b6c365a1c7b4b97267e066bea84e19fb186c4",
+        "size_bytes": 29326
+      },
+      "before_receipt": {
+        "path": "docs/project/evidence/p05-python/reviews/history/numerics-before.json",
+        "sha256": "6e11127d4978103b67d82a9647c7ddad57ecdfff45394b2cb24000dba24e38e9",
+        "size_bytes": 29156
+      },
+      "former_false_accepts": [
+        "rehashed-malformed-observation-prefix",
+        "rehashed-observation-in-auxiliary-log"
+      ],
+      "resolved": [
+        {
+          "case": "rehashed-malformed-observation-prefix",
+          "outcome": "fail",
+          "reason": "ValueError: malformed or extra observation marker"
+        },
+        {
+          "case": "rehashed-observation-in-auxiliary-log",
+          "outcome": "fail",
+          "reason": "ValueError: numerical observation in an unauthorized command log: package-create-venv"
+        }
+      ],
+      "unchanged_case_count": 24
+    },
+    "provenance": {
+      "after_receipt": {
+        "path": "docs/project/evidence/p05-python/reviews/history/provenance-after.json",
+        "sha256": "bdc553ed82c5dc367027325738cf89549861894a369928807c43066ccd656c9a",
+        "size_bytes": 12859
+      },
+      "before_receipt": {
+        "path": "docs/project/evidence/p05-python/reviews/history/provenance-before.json",
+        "sha256": "94633c2d03b87fdefb2765c8707b3301b6c08a3d68265cba46a58d94d6a83265",
+        "size_bytes": 12403
+      },
+      "former_false_accepts": [
+        "command-duration-after-timeout",
+        "command-timeout-exceeds-fixed-contract",
+        "command-log-raw-failure",
+        "command-path-foreign-directory",
+        "native-initial-resource-insufficient",
+        "native-budget-zero-memory"
+      ],
+      "resolved": [
+        {
+          "case": "command-duration-after-timeout",
+          "outcome": "fail",
+          "reason": "ValueError: invalid command duration/timeout"
+        },
+        {
+          "case": "command-timeout-exceeds-fixed-contract",
+          "outcome": "fail",
+          "reason": "ValueError: inconsistent shared command timeout"
+        },
+        {
+          "case": "command-log-raw-failure",
+          "outcome": "fail",
+          "reason": "ValueError: failure, malformed or misplaced runtime marker in package-create-venv"
+        },
+        {
+          "case": "command-path-foreign-directory",
+          "outcome": "fail",
+          "reason": "ValueError: clean PATH differs from the recorded interpreter and source contract"
+        },
+        {
+          "case": "native-initial-resource-insufficient",
+          "outcome": "fail",
+          "reason": "ValueError: initial resource reserve was insufficient"
+        },
+        {
+          "case": "native-budget-zero-memory",
+          "outcome": "fail",
+          "reason": "ValueError: resource budget differs from the runner contract"
+        }
+      ],
+      "unchanged_case_count": 26
+    }
+  },
+  "initial_source_pins": {
+    "dispatch": "61d53c9bb72a6e2dee72d2baf6a7e86b2270ae6e35bfe62d0d24374dc425fc43",
+    "numerics": "d7a04f989b031e69d230c74e00d97b004bcf1b21625c3eeef7d7aaf5b4a165e0",
+    "provenance": "cc0e18b5e241ad6301f949f393cfa3f0918829106cc8a3af1b8ff83a81bb7e62"
+  },
+  "native_executed": false,
+  "outcome": "pass",
+  "p04_helper_pins_checked_against_git": [
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/audit_numerics.py",
+      "sha256": "d7130898b8d3d0690c7cf03459d50e2301ab9fcbcd928562c599bdaea32d918e"
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/audit_dispatch.py",
+      "sha256": "8f83c5bf7986ef99f6580a1bea3dc645ee7736549f3af454be56fc96f9351781"
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/audit_provenance.py",
+      "sha256": "32f18937591df8e91dd86d6693550748a4d3ed8f1cfd766733d20f0617fa4ab9"
+    }
+  ],
+  "provenance_cli_controls_passed": 4,
+  "relocated_negative_commands": 3,
+  "relocated_positive_commands": 4,
+  "reviewed_files": [
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/audit_dispatch.py",
+      "sha256": "8f83c5bf7986ef99f6580a1bea3dc645ee7736549f3af454be56fc96f9351781",
+      "size_bytes": 27342
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/audit_numerics.py",
+      "sha256": "d7130898b8d3d0690c7cf03459d50e2301ab9fcbcd928562c599bdaea32d918e",
+      "size_bytes": 22886
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/reviews/audit_provenance.py",
+      "sha256": "32f18937591df8e91dd86d6693550748a4d3ed8f1cfd766733d20f0617fa4ab9",
+      "size_bytes": 29030
+    },
+    {
+      "path": "docs/project/evidence/p05-python/archive-index.json",
+      "sha256": "4295bc5eb96f34e0bf9dfbcea9752b6db493e0eb89669cc097ec0105e33646bd",
+      "size_bytes": 130451
+    },
+    {
+      "path": "docs/project/evidence/p05-python/archives/simx-bf16.zip",
+      "sha256": "e951f943ece1878f3767180c4ce2b859939722d2d639c1afb37b8a72c76006d8",
+      "size_bytes": 6417108
+    },
+    {
+      "path": "docs/project/evidence/p05-python/archives/simx-fp16.zip",
+      "sha256": "467122e41bee4e67f9eef285e015b2dee3a52522f0bcb3f497e3cec87e6c7380",
+      "size_bytes": 6417582
+    },
+    {
+      "path": "docs/project/evidence/p05-python/development/qualification/w09_a4/extraction.json",
+      "sha256": "2c3168ce903aa7ab07bdd46fe9599aae8e25900e63a8cbfef020bbfb346f1245",
+      "size_bytes": 628
+    },
+    {
+      "path": "docs/project/evidence/p05-python/development/qualification/w09_a4/extraction.log",
+      "sha256": "75a620e2600b48e050220aa9db435ff9940ad7f41005a1ef0906f4790be4d803",
+      "size_bytes": 108
+    },
+    {
+      "path": "docs/project/evidence/p05-python/development/qualification/w09_a4/negative-archive.log",
+      "sha256": "3b099c4cbd2f3cc61206525882013c4e36ca72ef8b1d43443bf8a04609bbf2e1",
+      "size_bytes": 45
+    },
+    {
+      "path": "docs/project/evidence/p05-python/development/qualification/w09_a4/negative-existing.log",
+      "sha256": "f82b08bfcb8d290ec8289a35e2e110173c9442447e9ea0fc8231d29fd7c468d1",
+      "size_bytes": 21
+    },
+    {
+      "path": "docs/project/evidence/p05-python/development/qualification/w09_a4/negative-index.log",
+      "sha256": "7b95aeb6d9e0e7c876c00e805d8f31f364785467751ea7c0a375777e39fd1ede",
+      "size_bytes": 31
+    },
+    {
+      "path": "docs/project/evidence/p05-python/development/w06_a4.md",
+      "sha256": "c8323c97239bd1186a25af82239b6d588e838560ec60120f679f14e5f504db02",
+      "size_bytes": 4675
+    },
+    {
+      "path": "docs/project/evidence/p05-python/development/w06_a5.md",
+      "sha256": "9ab0dc971ecb46720586fa8fcba3b07bfa599b074fa7c2c4eb2f226adcde5279",
+      "size_bytes": 3476
+    },
+    {
+      "path": "docs/project/evidence/p05-python/development/w06_a6.md",
+      "sha256": "a74b7668f28e1e8bb44710bc67cd7107688eb00c5ed688a3173c6d587a80bb2a",
+      "size_bytes": 3905
+    },
+    {
+      "path": "docs/project/evidence/p05-python/development/w07_a1.md",
+      "sha256": "5f07edf9243928aecdf14e2f476ea22a7638afdf0fd06695fca234af2f51f1a9",
+      "size_bytes": 6346
+    },
+    {
+      "path": "docs/project/evidence/p05-python/development/w07_a2.md",
+      "sha256": "b35ed2963cb37c8cade763abafa4e1727b1a8a84e50507b51d0ef1c8a85c0cdf",
+      "size_bytes": 8896
+    },
+    {
+      "path": "docs/project/evidence/p05-python/development/w07_a3.md",
+      "sha256": "14f20231ae1dcbe124105c9c667fc4ed46e1010dd2ea04d8a3f51c1a8d53bd6c",
+      "size_bytes": 6240
+    },
+    {
+      "path": "docs/project/evidence/p05-python/development/w07_a4.md",
+      "sha256": "9a41ddb6048b6d077e21a32ed065704ec0a30b82c94ced300d5c0ce406d0c19f",
+      "size_bytes": 4714
+    },
+    {
+      "path": "docs/project/evidence/p05-python/qualification-review.json",
+      "sha256": "208308e22bb473a114171f2dd70a04af874da7d023c711d015e1f8a7c2883246",
+      "size_bytes": 15028
+    },
+    {
+      "path": "docs/project/evidence/p05-python/relocated-replay.json",
+      "sha256": "95326c3aff7ae8eeead0ede3e6d611d626ed82f2f946ca94e01741feb8c47117",
+      "size_bytes": 18299
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/README.md",
+      "sha256": "de9b760770c3343ede16ef5744c9c2854e3c35cb135be4eb13c562757d1d7e4a",
+      "size_bytes": 4597
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/audit_dispatch.py",
+      "sha256": "ab0a1d1d6d0268b0766e5d3bc211e2830efb5e9683a413854fc1a16a3d5de391",
+      "size_bytes": 56652
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/audit_numerics.py",
+      "sha256": "608b16c80a1a40816ef15f04b2670c736e2abca7768e7c6ad546c8a96f23e736",
+      "size_bytes": 38177
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/audit_provenance.py",
+      "sha256": "4684a4e928ff672d371bdb78ab5f646b61ae59d1147c3c690e722a22a89186ac",
+      "size_bytes": 72768
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/bf16-dispatch.json",
+      "sha256": "ae63f756c4a623de9544ad7a20ba3e7e52390596f493f5d68f9d40eaf22b150b",
+      "size_bytes": 29593
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/bf16-numerics.json",
+      "sha256": "58858feda4712f979370d3bc50cf9ae239b72b3276f22ecfdbba42d33171803e",
+      "size_bytes": 15501
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/bf16-provenance.json",
+      "sha256": "339417f60be16258ec8e0555b5fe706c50f02b28b0de6724909edd228d6d8e3e",
+      "size_bytes": 35507
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/extract_retained.py",
+      "sha256": "3abfe1aac9bbeef648389bcfc45c569b58a52db849b0575f23bac6c80f6507be",
+      "size_bytes": 5707
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/fp16-dispatch.json",
+      "sha256": "df5ea11b2334840cbc979b072181238633d8c31b8dd32a593da1179025d0d7a5",
+      "size_bytes": 29601
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/fp16-numerics.json",
+      "sha256": "7136b4641808e36dbf8d2b744cb6acf4029b77a1db1aea0d79d8e15193ff6f79",
+      "size_bytes": 15501
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/fp16-provenance.json",
+      "sha256": "6d2906f390dc2bafcc3558fb9a74c8b6bbcbd8a3670121c44bb00c9065a7bf59",
+      "size_bytes": 35507
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/full-dispatch.json",
+      "sha256": "73aaefe9c280e1092b7aae31fa1831f3873c970b0e0bdd746b9d1807d6334989",
+      "size_bytes": 50489
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/full-dispatch.log",
+      "sha256": "73aaefe9c280e1092b7aae31fa1831f3873c970b0e0bdd746b9d1807d6334989",
+      "size_bytes": 50489
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/full-numerics.json",
+      "sha256": "0cd0c01504a50501ed2e6bf6bac8bc4cb3cfef09754b3ed47c0924d069125cb9",
+      "size_bytes": 27144
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/full-numerics.log",
+      "sha256": "32603fe4f034eb96d97b70c4865341d4c2b9dc71cd3fc4a89425b8fbda234ab9",
+      "size_bytes": 178
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/full-provenance.json",
+      "sha256": "1f31b388edc139e546e70f8d79e97d7efde779f50e328d74998331bd3bad9d17",
+      "size_bytes": 68913
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/full-provenance.log",
+      "sha256": "1f31b388edc139e546e70f8d79e97d7efde779f50e328d74998331bd3bad9d17",
+      "size_bytes": 68913
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/history/audit_dispatch-initial.py",
+      "sha256": "61d53c9bb72a6e2dee72d2baf6a7e86b2270ae6e35bfe62d0d24374dc425fc43",
+      "size_bytes": 48896
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/history/audit_numerics-initial.py",
+      "sha256": "d7a04f989b031e69d230c74e00d97b004bcf1b21625c3eeef7d7aaf5b4a165e0",
+      "size_bytes": 36922
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/history/audit_provenance-initial.py",
+      "sha256": "cc0e18b5e241ad6301f949f393cfa3f0918829106cc8a3af1b8ff83a81bb7e62",
+      "size_bytes": 69702
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/history/dispatch-after.json",
+      "sha256": "64f4001352c8fd8d37623355bc9be20fcf20d4f6b7837a317cd8308164f36c15",
+      "size_bytes": 55774
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/history/dispatch-before.json",
+      "sha256": "a17f896cffec304f034e7d22dc03dc818222b2b50f5c8753acb80bc5b6c61a0a",
+      "size_bytes": 55591
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/history/dispatch-initial-positive-rejection.json",
+      "sha256": "1a5c50d05cba2a4c4320d90f9b6740c159d9464c2df0c152ae07349346343c20",
+      "size_bytes": 161
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/history/dispatch-repair-check.json",
+      "sha256": "64f4001352c8fd8d37623355bc9be20fcf20d4f6b7837a317cd8308164f36c15",
+      "size_bytes": 55774
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/history/numerics-after.json",
+      "sha256": "b0dd4353cfe2c0642f7693bf622b6c365a1c7b4b97267e066bea84e19fb186c4",
+      "size_bytes": 29326
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/history/numerics-before.json",
+      "sha256": "6e11127d4978103b67d82a9647c7ddad57ecdfff45394b2cb24000dba24e38e9",
+      "size_bytes": 29156
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/history/provenance-after.json",
+      "sha256": "bdc553ed82c5dc367027325738cf89549861894a369928807c43066ccd656c9a",
+      "size_bytes": 12859
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/history/provenance-before.json",
+      "sha256": "94633c2d03b87fdefb2765c8707b3301b6c08a3d68265cba46a58d94d6a83265",
+      "size_bytes": 12403
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/history/provenance-cli-recheck.json",
+      "sha256": "9889217d51ed2084e11e628a4ae790470da4b239f0bef462e69864681235986d",
+      "size_bytes": 4238
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/history/provenance-initial-control-full.json",
+      "sha256": "5108e143f4908c502cec833b20b4c82523d46c146246b77904b5ece21717052e",
+      "size_bytes": 2088
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/replay-dispatch.json",
+      "sha256": "10230cbff3866d0c3e28cbaaadc69d61dbf3cc006057961f61ef4bf9e2fa1916",
+      "size_bytes": 50501
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/replay-dispatch.log",
+      "sha256": "10230cbff3866d0c3e28cbaaadc69d61dbf3cc006057961f61ef4bf9e2fa1916",
+      "size_bytes": 50501
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/replay-numerics.json",
+      "sha256": "09682f5566dfb3baaaf74bc470e94b228a43a36de987b37a114750795cea510b",
+      "size_bytes": 27624
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/replay-numerics.log",
+      "sha256": "67be887deca7718572366dab609a27b4b6965c00a1bdb012ebf291a2d4b4499f",
+      "size_bytes": 180
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/replay-provenance.json",
+      "sha256": "1c4f5f6afe2b8800d1631118179ce5acdf7a7536613eb429d05aafb5754a7ca5",
+      "size_bytes": 68937
+    },
+    {
+      "path": "docs/project/evidence/p05-python/reviews/replay-provenance.log",
+      "sha256": "1c4f5f6afe2b8800d1631118179ce5acdf7a7536613eb429d05aafb5754a7ca5",
+      "size_bytes": 68937
+    }
+  ],
+  "reviewed_inputs_unchanged": true,
+  "reviewer": "/root/w10_a3_final_auditor_review",
+  "schema_version": 1,
+  "scope": "Read-only source and existing W07-W09 evidence reconciliation; no auditor, probe, package or native execution",
+  "selected_packet_results_equal_complete_packet_results": 6,
+  "source_revision": "e1420fd550f716df33a2556057b7086a03032cbe",
+  "source_tree": "3a168adfd345ecb3c15dc02b2583dc832bef6049",
+  "static_imports": {
+    "audit_dispatch.py": [
+      "__future__",
+      "argparse",
+      "hashlib",
+      "json",
+      "math",
+      "os",
+      "pathlib",
+      "re",
+      "stat",
+      "struct",
+      "sys",
+      "types"
+    ],
+    "audit_numerics.py": [
+      "argparse",
+      "hashlib",
+      "importlib.util",
+      "json",
+      "math",
+      "os",
+      "pathlib",
+      "re",
+      "stat",
+      "struct",
+      "sys"
+    ],
+    "audit_provenance.py": [
+      "__future__",
+      "argparse",
+      "ast",
+      "base64",
+      "csv",
+      "email.parser",
+      "hashlib",
+      "io",
+      "json",
+      "math",
+      "os",
+      "pathlib",
+      "re",
+      "stat",
+      "struct",
+      "subprocess",
+      "sys",
+      "tarfile",
+      "types",
+      "zipfile"
+    ],
+    "extract_retained.py": [
+      "argparse",
+      "hashlib",
+      "io",
+      "json",
+      "os",
+      "pathlib",
+      "stat",
+      "sys",
+      "zipfile"
+    ]
+  }
+}

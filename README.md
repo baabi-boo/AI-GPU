@@ -33,14 +33,23 @@ archives, build provenance, independent audits and replay instructions. The
 earlier [P04-A01 fixture acceptance](docs/project/evidence/p04-fixture/acceptance.json)
 and [hashed manifest](ci/project/p04_model_manifest.json) remain unchanged.
 
-**Current work: P05-T01 — the Python/custom-op bridge (`in_progress`).** The
-first copying binding is implemented and undergoing independent qualification.
-Start with the [binding handoff](docs/project/p05-entry-handoff.md),
-[API contract](docs/designs/python_binding_v1.md) and
-[package guide](python/README.md). The scoped PyTorch route remains subsequent work.
-Processor RTL qualification does not establish full-AFU integration, physical
-FPGA performance or a full framework backend. The
-[executor audit](docs/project/p04-executor-audit.md) also preserves the unresolved
+**Current work: P05-T01 — the Python/custom-op bridge (`in_progress`).**
+[P05-A01 now accepts the copying Python binding](docs/project/evidence/p05-python/acceptance-binding.json)
+on SimX at
+[`e1420fd`](https://github.com/baabi-boo/AI-GPU/commit/e1420fd550f716df33a2556057b7086a03032cbe).
+Both fresh installed formats passed the six supported matmul signatures and ten
+frozen model cases: **144 combined Python/native launches and 660 event/profile
+pairs**, plus **2,174 clean hosted source tests**. The
+[Python evidence packet](docs/project/evidence/p05-python/README.md) retains exact
+source/build/package identities, independent reviews and earlier failures.
+
+The next bounded step is to freeze, implement and qualify the scoped PyTorch
+custom-op route. **P05-A02/A03 remain unearned; no PyTorch version is qualified.**
+Start with the [handoff](docs/project/p05-entry-handoff.md),
+[API contract](docs/designs/python_binding_v1.md) and [package guide](python/README.md).
+This simulated binding result establishes no Python RTL/XRT qualification,
+physical FPGA performance or full framework backend. The
+[executor audit](docs/project/p04-executor-audit.md) preserves the unresolved
 inherited tensor DSP area-gate failure.
 
 **Earlier completed phase: P03 — native AI operator library (`complete`).**
@@ -125,7 +134,7 @@ the exact starting revision and evidence boundaries.
 |---|---|---|
 | Compute | RISC-V parallel cores; WMMA/WGMMA tensor units and structured sparsity | Reproduce a supported native configuration and prove its numerical behavior |
 | Memory and platform | Caches, shared memory, asynchronous tile copies and FPGA integration | Measure useful data movement, usable external memory and real-board behavior |
-| Software | Accepted bounded matmul library and fixed tiny-model execution, native tensor kernels and existing OpenCL/basic HIP routes | Add the qualified Python/custom-op bridge and preserve explicit placement/lifetimes |
+| Software | Accepted bounded matmul library, fixed tiny-model execution and copying Python binding; native tensor kernels and existing OpenCL/basic HIP routes | Add scoped PyTorch custom operators while preserving explicit placement/lifetimes |
 | Verification | Simulators, RTL tests and regression catalogs | Attach reproducible results to every claimed capability and preserve inherited gates |
 
 Source presence is not a fresh passing test. Tensor acceleration is not enabled

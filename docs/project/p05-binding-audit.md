@@ -1,13 +1,14 @@
 # P05 copying-binding development audit
 
-## Decision
+## Initial decision
 
-The audited base is `6aac9c421180805a5621156e3d914c685fc6f4a5` on `master`.
-The next bounded development step is the first plain-Python implementation of
-P05-T01: a copying binding to the existing managed matmul owners and the frozen
-P04 model-case executor. The [entry handoff](p05-entry-handoff.md) already names
-this step, and inspection of the runtime and retained evidence supports it.
-The Python route must earn its own execution and installation evidence.
+The audited base was `6aac9c421180805a5621156e3d914c685fc6f4a5` on `master`.
+The selected bounded development step was the first plain-Python implementation
+of P05-T01: a copying binding to the existing managed matmul owners and frozen
+P04 model-case executor. The entry handoff and inspection of the runtime and
+retained evidence supported that choice. The resulting implementation and
+qualification are recorded below; the [current handoff](p05-entry-handoff.md)
+now carries the scoped framework work forward.
 
 P04's accepted numerical and dispatch records identify four SimX/processor-RTL
 variants at `c9d139cc9f84839b6a56b6228dd304460cbfe45c`. The GitHub CI and governance
@@ -59,10 +60,38 @@ device backend, arbitrary model loading, autograd, training, CUDA compatibility,
 zero-copy execution, physical GPU speed or a new processor-RTL qualification.
 The complete P05 exit conditions remain in the [phase guide](phases/p05-framework.md).
 
+## Qualification outcome and next development step
+
+The implementation at `e1420fd550f716df33a2556057b7086a03032cbe` now has
+[bounded P05-A01 acceptance](evidence/p05-python/acceptance-binding.json).
+The [packet](evidence/p05-python/README.md) preserves both installed SimX variants,
+all six matmul signatures and ten frozen model cases, native comparison logs,
+exact source/build/package identities and independent numerical, dispatch and
+provenance audits. Its 144 launches comprise 72 through Python and 72 through
+the native comparison; 660 event/profile pairs exclude the unprofiled standalone
+native calls. Fresh external installations passed with CPython 3.12.14 and
+G++ 11.4.0, and the clean hosted suite passed 2,174 tests in 421.584 seconds.
+The binding-source digest is
+`c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a`.
+
+Host-native lifecycle probes and local packaging evidence retain their exact
+source scopes in the [host history](evidence/p05-python/development/host-validation.md).
+The earlier source-changing local full-suite failure and inherited configure
+timeout remain failures; later isolated and clean hosted passes do not erase
+them. Independent counterexample reviews also found and repaired evidence-auditor
+gaps before the formal matrix review, retaining the original failures.
+
+The next bounded development step is the scoped PyTorch custom-op route:
+freeze its framework version and operator/representation/error contract, reuse
+the qualified owners, reject unsupported gradients/layouts and reproduce the
+fixed model with new installation and native-dispatch evidence. A02 and A03
+remain unearned; P05 stays `in_progress`. Neither a documentation delivery commit
+nor the number of worker assignments establishes new execution or phase closure.
+
 ## Local execution prerequisites and preserved blockers
 
-The audit environment has CPython 3.12.14, GCC 14.2.0, setuptools 84.2.1 and
-wheel 0.48.0. Its governance check passes. Simulation preflight reports missing
+The initial local audit environment has CPython 3.12.14, GCC 14.2.0, setuptools
+84.2.1 and wheel 0.48.0. Its governance check passes. Simulation preflight reports missing
 RISC-V/LLVM/Verilator tools and uninitialized required submodules; no local native
 execution is inferred from host checks. Hosted qualification reuses the existing
 reviewed cache preparation and fresh-build path with explicit resource limits.
