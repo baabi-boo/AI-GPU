@@ -33,8 +33,11 @@ archives, build provenance, independent audits and replay instructions. The
 earlier [P04-A01 fixture acceptance](docs/project/evidence/p04-fixture/acceptance.json)
 and [hashed manifest](ci/project/p04_model_manifest.json) remain unchanged.
 
-**Next bounded action: P05-T01 — the Python/custom-op bridge.** Start with the
-[binding handoff](docs/project/p05-entry-handoff.md); P05 remains `not_started`.
+**Current work: P05-T01 — the Python/custom-op bridge (`in_progress`).** The
+first copying binding is implemented and undergoing independent qualification.
+Start with the [binding handoff](docs/project/p05-entry-handoff.md),
+[API contract](docs/designs/python_binding_v1.md) and
+[package guide](python/README.md). The scoped PyTorch route remains subsequent work.
 Processor RTL qualification does not establish full-AFU integration, physical
 FPGA performance or a full framework backend. The
 [executor audit](docs/project/p04-executor-audit.md) also preserves the unresolved
@@ -73,8 +76,8 @@ review. [P01-A03](docs/project/evidence/p01-xrt-blocked.json) remains blocked by
 missing qualified vendor XRT `hw_emu` tools/platform.
 The authoritative [status](docs/project/status.md) and
 [phase gates](docs/project/roadmap.json) separate implementation from acceptance;
-P00, P02, P03 and P04 are complete, P01 is blocked, and P05–P11
-are not started.
+P00, P02, P03 and P04 are complete, P01 is blocked, P05 is in progress,
+and P06–P11 are not started.
 
 ## Start here
 

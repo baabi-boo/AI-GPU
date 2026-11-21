@@ -61,13 +61,14 @@ retains exact intermediate/output comparisons, actual-input lineage, complete
 source/build records, independent review and replayable original archives.
 Earlier cache-preparation and missing-stamp failures remain separately recorded.
 
-**Current bounded task: P05-T01 — specify and implement the first copying
-Python binding.** Use the [entry handoff](p05-entry-handoff.md) to wrap accepted
-session/operation owners, preserve tensor representations, partial-failure and
-timeout ownership, and expose trusted frozen model cases. Keep the native
-executable as an independent comparison path. Qualify package installation,
-all declared signatures and the scoped framework route before claiming P05
-acceptance. P05 remains `not_started` until this implementation begins.
+**Current bounded task: P05-T01 — qualify the first copying Python binding.**
+Use the [entry handoff](p05-entry-handoff.md),
+[implemented contract](../designs/python_binding_v1.md) and
+[compatibility matrix](p05-python-compatibility.md) to verify accepted native
+ownership, exact representations, partial failure and trusted frozen model cases.
+Keep the native executable as an independent comparison path. P05 is
+`in_progress`; package installation, all declared signatures and the later scoped
+framework route require their own evidence before acceptance.
 The [executor audit](p04-executor-audit.md) retains the unresolved inherited
 267 → 283 DSP area-gate failure; P04 does not resolve it.
 
@@ -120,7 +121,7 @@ the missing vendor run; they do not replace it or grant acceptance.
 It requires its own manifest/receipt, CLI budgets and fresh build directory;
 there is no automatic adapter from the read-only `hwemu.py` candidate.
 P00, P02, P03 and P04 are complete, P01 remains blocked on A03,
-and P05–P11 remain `not_started`. Check the actual
+P05 is `in_progress`, and P06–P11 remain `not_started`. Check the actual
 execution state and accepted reports before extending the baseline:
 
 ```sh
@@ -269,8 +270,9 @@ acceptance; P03-T02 now has accepted A02 numerical and A03 lifecycle evidence,
 completing P03 for the declared six signatures. P04-T01 is complete with
 source-level P04-A01 acceptance. P04-T02 now has accepted A02/A03 execution and
 trace evidence for the fixed model, completing P04 at bounded processor RTL
-scope. P05-T01 is the next implementation task; detailed work packages remain
-in the phase guides and the [Python binding handoff](p05-entry-handoff.md).
+scope. P05-T01 is in progress with the first copying Python binding; detailed
+work packages remain in the phase guides, the [development audit](p05-binding-audit.md)
+and the [Python binding handoff](p05-entry-handoff.md).
 
 | Work item | First bounded deliverable | Entry / accountable role | Gates |
 |---|---|---|---|
@@ -280,7 +282,7 @@ in the phase guides and the [Python binding handoff](p05-entry-handoff.md).
 | **P03-T02 — Operator implementations and lifetime tests — complete** | Managed six-signature matmul has independent SimX/native-RTL arithmetic and actual common-runtime lifecycle acceptance; exact scope and partial-transfer limits remain recorded. | T01; kernel and runtime lead | [P03-A02](evidence/p03-managed-matmul/acceptance-numerics.json), [P03-A03](evidence/p03-managed-matmul/acceptance-lifecycle.json) |
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
 | **P04-T02 — Native model execution — complete** | Four clean SimX/native processor RTL × FP16/BF16 variants pass exact intermediate/final comparisons, live-input lineage, native placement and separate host/transfer accounting after independent review. | T01; model runtime lead | [P04-A02](evidence/p04-executor/acceptance-numerics.json), [P04-A03](evidence/p04-executor/acceptance-dispatch.json) |
-| **P05-T01 — Python/custom-op bridge — next** | Specify the copying binding, preserve native owners and trusted fixed cases, then qualify representations/lifetimes/errors, clean installation and the scoped framework route. | P04; framework integration lead; [entry handoff](p05-entry-handoff.md) | P05-A01, P05-A02, P05-A03 unearned |
+| **P05-T01 — Python/custom-op bridge — in progress** | Qualify the implemented copying binding, native owners, trusted fixed cases and clean installation; then implement and qualify the scoped framework route. | P04; framework integration lead; [entry handoff](p05-entry-handoff.md) | P05-A01, P05-A02, P05-A03 unearned |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),
 [P04](phases/p04-inference.md) and [P05](phases/p05-framework.md). A custom-op

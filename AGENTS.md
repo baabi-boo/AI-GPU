@@ -43,6 +43,14 @@ snapshots of the validator and its transitive local helpers in execution packets
 See the [compiler-record contract](docs/project/p01-compiler-records.md) and
 [compiler-record handoff](docs/project/p01-compiler-records-handoff.md).
 
+For the copying Python interface, follow the
+[binding contract](docs/designs/python_binding_v1.md). SimX has process-wide
+simulation state, and distinct native queues do not share the full launch-setup
+critical section. Keep one live native context and require completed explicit
+matmul close before resubmission until separately qualified native concurrency
+work changes that contract; a completed wait alone does not release an
+operation's ownership.
+
 ---
 
 ## 1. Documentation Map

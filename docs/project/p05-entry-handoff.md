@@ -1,10 +1,13 @@
 # P05 entry handoff — bind the qualified native path
 
-**Next bounded action:** specify and implement a copying Python binding to the
-existing managed matmul owner, then expose the frozen P04 case runner through
-that binding. Keep the native executable as an independent comparison path.
+**Current bounded action:** independently qualify the implemented copying Python
+binding to the managed matmul owner and frozen P04 case runner. The
+[development audit](p05-binding-audit.md),
+[implemented contract](../designs/python_binding_v1.md) and
+[compatibility matrix](p05-python-compatibility.md) record this continuation.
+Keep the native executable as an independent comparison path.
 The [P05 phase guide](phases/p05-framework.md) defines the complete phase;
-this document prepares its first work package and implements no Python API.
+this handoff retains the entry requirements for its first work package.
 
 ## Readiness and retained inputs
 
@@ -14,9 +17,9 @@ Implementation entry requires P04 to be `complete` in the
 [P04-A01 fixture acceptance](evidence/p04-fixture/acceptance.json).
 Review the [executor evidence](evidence/p04-executor/README.md) and its independent
 qualification decision before changing phase status. Individual passing CI jobs,
-an incomplete packet, or this handoff do not satisfy that condition. P05 remains
-`not_started` until its own implementation work begins; none of its acceptance
-gates is earned by P04 execution.
+an incomplete packet, or this handoff do not satisfy that condition. P05 is now
+`in_progress`; its acceptance gates require their own evidence and are not earned
+by P04 execution.
 
 Use these versioned inputs without broadening their accepted behavior:
 
@@ -50,8 +53,8 @@ FP32 bits with the unchanged native executable/reference. This is an integration
 checkpoint only. Expand to all six accepted signatures and both model formats
 before claiming the package's declared support matrix.
 
-The proposed surface has three responsibilities; these names describe the design
-to implement, not currently available Python functions:
+The entry design has three responsibilities. Their implemented names and exact
+behavior are now versioned in the [binding contract](../designs/python_binding_v1.md):
 
 1. **Qualified session.** Load the identified module/runtime/backend through a
    trusted package or launcher configuration, then create `ManagedMatmul`.

@@ -169,9 +169,11 @@ and output comparisons, source/build provenance and separate host/transfer
 accounting passed independent review; 1,816 host tests passed in 366.568 seconds.
 Original packets and replayable audits are retained in the executor packet.
 The [executor plan](docs/project/p04-executor-plan.md) remains the reproduction
-contract. **P05-T01 is the next bounded action**, using the
-[Python binding handoff](docs/project/p05-entry-handoff.md); P05–P11 remain
-`not_started`.
+contract. **P05-T01 is in progress**, with the first copying Python binding and
+its independent qualification described in the
+[binding handoff](docs/project/p05-entry-handoff.md) and
+[implemented contract](docs/designs/python_binding_v1.md). P05 acceptance remains
+unearned; P06–P11 remain `not_started`.
 The [executor audit](docs/project/p04-executor-audit.md) records why this step
 follows P03 and preserves the unresolved inherited CI area-gate failure.
 
