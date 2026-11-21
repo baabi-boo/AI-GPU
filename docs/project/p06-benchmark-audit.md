@@ -122,11 +122,24 @@ starting hosted run took 394.779 seconds; the new focused receipts came from
 different environments and cannot be added into an exact hosted prediction.
 Independent review nevertheless found the previous ten-minute host-job budget
 too tight for the expanded coverage. Project Governance now has a bounded
-twenty-minute allowance, with all three strict budget assertions updated
-together. Every checker and test remains unconditional. Native process limits,
+twenty-minute allowance, with all four budget assertions requiring that exact
+value. Every checker and test remains unconditional. Native process limits,
 memory/disk prerequisites, numerical tolerances and performance gates are
 unchanged. The exact-checkpoint hosted run supplies the corrected full-suite
 result before any P06 acceptance.
+
+At source `fd7129aebe6e07cdaaad62c715755537b100006d`,
+[Project Governance run 44899351470](https://github.com/baabi-boo/AI-GPU/actions/runs/44899351470)
+executed all 2,401 tests in 542.193 seconds and failed one assertion: the
+repository-level workflow guard still required a timeout of at most ten
+minutes. The initial correction had updated three exact assertions but missed
+this fourth range check. It now requires twenty minutes exactly, while
+preserving the surrounding permission, runner, checkout and command checks.
+The original hosted log remains a failed result. The successful FP16/BF16
+[native run 44899351475](https://github.com/baabi-boo/AI-GPU/actions/runs/44899351475)
+belongs to the same source and is retained separately. Fresh host and native
+qualification at the corrected source must precede acceptance; no earlier
+result is relabeled or assigned to a different commit.
 
 P06-A01 requires the actual frozen execution matrix and independent review of
 its original results. A source or host-test pass cannot earn it. The baseline

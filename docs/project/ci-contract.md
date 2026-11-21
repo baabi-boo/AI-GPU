@@ -31,7 +31,7 @@ Tensor host tests compile and run in temporary directories under explicit time
 and resource budgets. No initialized GPU submodules, RISC-V compiler, Verilator,
 vendor tools or board are needed. The workflow uses
 GitHub-hosted `ubuntu-24.04`, explicitly checks system **Python 3.12**, and has a
-**ten-minute job timeout**. It does not install GPU dependencies. Checkout still
+**twenty-minute job timeout**. It does not install GPU dependencies. Checkout still
 requires ordinary GitHub access; the local validation commands themselves are
 offline. Follow the [developer guide](developer-guide.md) for resource requirements
 and other tiers.
@@ -75,7 +75,7 @@ project workflow's path filter. Its event defaults select SimX smoke coverage
 for pushes and SimX/RTL smoke/full coverage for pull requests. **A toolchain cache
 miss overrides those push/PR defaults to broad driver/tier coverage**, and an
 indeterminate change base can also broaden driver selection. A documentation
-change therefore does not guarantee a small inherited run. The ten-minute
+change therefore does not guarantee a small inherited run. The twenty-minute
 governance timeout does not bound other workflows, downloads or test matrices.
 
 The `full` setup profile builds the pinned SST **core** from source, because its
