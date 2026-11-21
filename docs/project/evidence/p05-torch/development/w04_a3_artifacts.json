@@ -1,0 +1,574 @@
+{
+  "schema_version": 1,
+  "scope": "host-only-real-pytorch-compiled-native-fault-runtime",
+  "acceptance_claimed": false,
+  "backend_execution": "not_run",
+  "simx_execution": "not_run",
+  "formats_run": [
+    "fp16"
+  ],
+  "formats_not_run": [
+    "bf16"
+  ],
+  "single_compiled_runtime": true,
+  "sanitizer": "undefined, no recovery",
+  "resource_budget": {
+    "jobs": 1,
+    "minimum_free_disk_bytes": 10737418240,
+    "initial_free_disk_bytes": 15937363968,
+    "initial_available_memory_bytes": 4663144448,
+    "final_free_disk_bytes": 15907934208
+  },
+  "compiler": {
+    "path": "/usr/bin/x86_64-linux-gnu-g++-14",
+    "sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+    "version": "x86_64-linux-gnu-g++-14 (Debian 14.2.0-19) 14.2.0"
+  },
+  "source_files": [
+    {
+      "path": "ci/project/p05_torch_native_host_tests.py",
+      "sha256": "243692bc213f235d8ea852daebb9ffb450b52523645f19e75c2608cd6e570017",
+      "size_bytes": 13695
+    },
+    {
+      "path": "python/vortex_ai/torch_ops.py",
+      "sha256": "95497fe03cb64655cbaeeaba5f1c92cdbb99c7899345b10da53204d869808218",
+      "size_bytes": 14372
+    },
+    {
+      "path": "ci/project/p05_test_runtime.py",
+      "sha256": "89aed60290c2d6eef76cca1e4205f89bcb83a0056ef748b6050a3c40aa526356",
+      "size_bytes": 17447
+    },
+    {
+      "path": "ci/project/fixtures/p05_python_runtime.cpp",
+      "sha256": "a080adf4f4ada0aa0be58c32e739544cfffa8b3199d365303541e10c56813df4",
+      "size_bytes": 35697
+    },
+    {
+      "path": "python/native/module.cpp",
+      "sha256": "3e0688fef091dcc58bfaeb13e1ab18d2bcc147a601ceaa3a48cc91a34464170e",
+      "size_bytes": 37547
+    },
+    {
+      "path": "python/native/runtime_loader.cpp",
+      "sha256": "8b75dfb415deadaa48b756b7db2f8a540329f838f804f2532e4bdcca5f001a60",
+      "size_bytes": 36859
+    },
+    {
+      "path": "sw/runtime/ai/runtime.cpp",
+      "sha256": "5540092240fb926f1c3066b0e8956a0096cb6be42b71f8b60d075434518e0be5",
+      "size_bytes": 17429
+    },
+    {
+      "path": "sw/runtime/ai/mlp_runtime.cpp",
+      "sha256": "0dab325434c513b85b66b108ca3b896304ab797252b9fd01919435fc8655ddd1",
+      "size_bytes": 13857
+    },
+    {
+      "path": "sw/runtime/ai/mlp_host.cpp",
+      "sha256": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256",
+      "size_bytes": 2225
+    }
+  ],
+  "original": {
+    "outcome": "fail",
+    "scenarios": 9,
+    "passed": 7,
+    "failures": 2,
+    "reason": "Two test-harness assumptions corrected; no production change"
+  },
+  "recheck": {
+    "outcome": "pass",
+    "scenarios": 9,
+    "failures": 0,
+    "reused_same_compiled_runtime": true
+  },
+  "artifacts": [
+    {
+      "path": "w04_a3-native-initial/children/async_failure/command.json",
+      "sha256": "5c77ead6560af346ec9ac10fc7f0dd78dc224f8e400627bb4b7e0cabdfa74e00",
+      "size_bytes": 772
+    },
+    {
+      "path": "w04_a3-native-initial/children/async_failure/launcher.py",
+      "sha256": "7137fbff1081009e1d86e41874e512c59a62c47dce1e1916e3b73f2c24724a03",
+      "size_bytes": 292
+    },
+    {
+      "path": "w04_a3-native-initial/children/async_failure/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-initial/children/async_failure/stdout.log",
+      "sha256": "854afaa58c50c921b3a40eaf856e3a8b0e76dfe761a9d8c413e55187b8a23ea5",
+      "size_bytes": 1248
+    },
+    {
+      "path": "w04_a3-native-initial/children/cleanup_failure/command.json",
+      "sha256": "66daa7879bf157f4144faa6aebc593582c81b0f42b6169f8f828475e11070dcc",
+      "size_bytes": 774
+    },
+    {
+      "path": "w04_a3-native-initial/children/cleanup_failure/launcher.py",
+      "sha256": "76ad19e43bbbc51b92e48584c7d76e8f54e9840ec54da5d143aad08607efab11",
+      "size_bytes": 294
+    },
+    {
+      "path": "w04_a3-native-initial/children/cleanup_failure/stderr.log",
+      "sha256": "17765484d2a47acc7c3968250bec89e41a35ee463dbd681020d442c625a822c3",
+      "size_bytes": 806
+    },
+    {
+      "path": "w04_a3-native-initial/children/cleanup_failure/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-initial/children/fixed_models/command.json",
+      "sha256": "8f34fc31bb93b73793299452b7399a29d211811358d51c7cb67b479fe11fa1bd",
+      "size_bytes": 771
+    },
+    {
+      "path": "w04_a3-native-initial/children/fixed_models/launcher.py",
+      "sha256": "c3662f4a061872fcd879c331c1c1548055d56bd098b45eeb65fc6a573f456500",
+      "size_bytes": 291
+    },
+    {
+      "path": "w04_a3-native-initial/children/fixed_models/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-initial/children/fixed_models/stdout.log",
+      "sha256": "6f3cdf035db4c154671a635b004ab94c42acefb2ddbb9fe7088fdf984a472009",
+      "size_bytes": 1787
+    },
+    {
+      "path": "w04_a3-native-initial/children/matmul_deadline/command.json",
+      "sha256": "50a06a8070246595fa334a1c79966728aea3e7d6692b2988b6eb7cf32f1fe2f2",
+      "size_bytes": 774
+    },
+    {
+      "path": "w04_a3-native-initial/children/matmul_deadline/launcher.py",
+      "sha256": "ee32a2d1125d90b70808990e572c1897f37c99353ebaaf2eef80d9b857176b0a",
+      "size_bytes": 294
+    },
+    {
+      "path": "w04_a3-native-initial/children/matmul_deadline/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-initial/children/matmul_deadline/stdout.log",
+      "sha256": "34a6441bfa9655f23fd904bdef9ecd2ce7f13d9616d62f6e2468d26feb464bc8",
+      "size_bytes": 1282
+    },
+    {
+      "path": "w04_a3-native-initial/children/matmul_shapes/command.json",
+      "sha256": "3d023563b2b17885eb2b9e1b49c73fe480c94ea650daa56e93a00776f5f88358",
+      "size_bytes": 772
+    },
+    {
+      "path": "w04_a3-native-initial/children/matmul_shapes/launcher.py",
+      "sha256": "8ec074ed7a1a0cc8e8e00ce3430c252d4425a25ed8f147705894fe7f417ff910",
+      "size_bytes": 292
+    },
+    {
+      "path": "w04_a3-native-initial/children/matmul_shapes/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-initial/children/matmul_shapes/stdout.log",
+      "sha256": "959f77514cf82b206ef3a7aaa4e749e7d528409ffe28108a2ba3a6dec4bd23a5",
+      "size_bytes": 1249
+    },
+    {
+      "path": "w04_a3-native-initial/children/model_deadline/command.json",
+      "sha256": "7845da9303adfce5ef2255e0a119eac2dcbe52aed5b5bf52c26d6dc4f6cf9fbc",
+      "size_bytes": 773
+    },
+    {
+      "path": "w04_a3-native-initial/children/model_deadline/launcher.py",
+      "sha256": "76caee74a6c161982d8b6410c21242f49f6b9a5da5a9fc9e5cb2a2c1114b728b",
+      "size_bytes": 293
+    },
+    {
+      "path": "w04_a3-native-initial/children/model_deadline/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-initial/children/model_deadline/stdout.log",
+      "sha256": "a493a8ab1e006f4a8da7c36246143802dcd4aabcc2d61c7404c13d2a89716f89",
+      "size_bytes": 1507
+    },
+    {
+      "path": "w04_a3-native-initial/children/model_mismatch/command.json",
+      "sha256": "818109f3d6457f5783e3803ba0ed4536300ab89657c3c6fbc126f5e01f3d29f2",
+      "size_bytes": 773
+    },
+    {
+      "path": "w04_a3-native-initial/children/model_mismatch/launcher.py",
+      "sha256": "5c5ba8ae92f0e3ea80e5a0e6f12ac832594fe9a78004983e95c80fceaf2cf5bd",
+      "size_bytes": 293
+    },
+    {
+      "path": "w04_a3-native-initial/children/model_mismatch/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-initial/children/model_mismatch/stdout.log",
+      "sha256": "598ee230d061f35d4a91ce7107cde13d71ae7a8c430d02e8ccc2de53f240b158",
+      "size_bytes": 1471
+    },
+    {
+      "path": "w04_a3-native-initial/children/partial_submit/command.json",
+      "sha256": "cdbef0e31b00b6e91ab6aeca95acdcf7cd0cd0342dad66f01f9842012c986473",
+      "size_bytes": 773
+    },
+    {
+      "path": "w04_a3-native-initial/children/partial_submit/launcher.py",
+      "sha256": "67830e66f5669e3dbf6ff80a444ee7f45ecf69f5cd9d0587702e0cda11be2f46",
+      "size_bytes": 293
+    },
+    {
+      "path": "w04_a3-native-initial/children/partial_submit/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-initial/children/partial_submit/stdout.log",
+      "sha256": "b1aa162364a7151458f6496709b90fe4979112e6ccd21f65540c3f01913ab97c",
+      "size_bytes": 1245
+    },
+    {
+      "path": "w04_a3-native-initial/children/transient_timeout/command.json",
+      "sha256": "c5618909450d7db4c0797b0d32f2209bcaf592b256447e38026a01e726659935",
+      "size_bytes": 776
+    },
+    {
+      "path": "w04_a3-native-initial/children/transient_timeout/launcher.py",
+      "sha256": "83276c1ce6008c795f2aaca9a28b706295efec626a247cac670255915191c284",
+      "size_bytes": 296
+    },
+    {
+      "path": "w04_a3-native-initial/children/transient_timeout/stderr.log",
+      "sha256": "d53912ddb86574825fd4bcdfdb5140bfbb9de4331bec9a7de3342e4e0ddf3ae3",
+      "size_bytes": 645
+    },
+    {
+      "path": "w04_a3-native-initial/children/transient_timeout/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-initial/report.json",
+      "sha256": "9010170548c0c3bc5829829d1847be88c2b601e9fac53335e8ec7e539877637d",
+      "size_bytes": 37910
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/build.log",
+      "sha256": "ef28d263e1abcab0c5385791e93c100ac227e54f30e313a48b4a268a52091182",
+      "size_bytes": 5275
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/build_commands.json",
+      "sha256": "e3a37b89706c4f8c09d9d3471c072d31eecfd05df136f0f8b684ff80358942ac",
+      "size_bytes": 3954
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/bundle/kernel.vxbin",
+      "sha256": "061a01ed8ed2b9201a1946bcea07fb69820043a1bfd53fdff267f7857cb813f2",
+      "size_bytes": 66
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/bundle/lib/libramulator-vortex.so",
+      "sha256": "9fcd7ed9e8cfb1b709f9f964bca8feb90d8b94b106b0143bc606c69ef10b2019",
+      "size_bytes": 15032
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/bundle/lib/libramulator.so",
+      "sha256": "9204a883669cc18f1e6b7c4647dbe345050e05e249dc18c4b7ebc895a00a96c7",
+      "size_bytes": 15032
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/bundle/lib/libsimx.so",
+      "sha256": "8a6d598baa9048f16f1024186ad74c288a1afa2d428591cf03181d757c2731ca",
+      "size_bytes": 15032
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/bundle/lib/libvortex-simx.so",
+      "sha256": "b654ab4ad3474054dca87c6ef0bbb15abdd5dffbbd67a68f3d09914a10a263d1",
+      "size_bytes": 15184
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/bundle/lib/libvortex.so",
+      "sha256": "e329960cc2dac49e4b52be549b661eb66ce609872d6ce4f7902d3c3152731618",
+      "size_bytes": 318456
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/bundle/manifest.json",
+      "sha256": "8686943162ebd7bb13675541b2b94397da3d92616b310b3d0d383da2014b665b",
+      "size_bytes": 9163
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/generated/dummy.cpp",
+      "sha256": "811c7b5d08f138c3587ca167e71ba9967ceef9b5857fc4ed0190806173cfbeeb",
+      "size_bytes": 182
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/generated/fake.exports",
+      "sha256": "498ec146e666f34583f5e132e7f76200915ea8bc19b06ad9ee80b7883e67297d",
+      "size_bytes": 41
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/generated/p05_build_config.h",
+      "sha256": "e561234ed21bdcba1ca4719eb33fe5128277fce9854dced8e556c7bf0bbdf5a2",
+      "size_bytes": 1512
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/python/vortex_ai/__init__.py",
+      "sha256": "19d006db3a52bac6b3a7eec0111edd7fa2927e6fc31c1a23308178fa05783465",
+      "size_bytes": 523
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/python/vortex_ai/_api.py",
+      "sha256": "f66748c6657ddd55e8753343f49b43cce87003df770e8bbb20c70ee57e3d0db2",
+      "size_bytes": 32061
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/python/vortex_ai/_bundle.py",
+      "sha256": "cf438f291359314844b6489545ad1b263639a36706ae3b86f94d9832c6ee4679",
+      "size_bytes": 12288
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/python/vortex_ai/_native.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "332358232295bcc0d84126c5e8b7be1c815c441c1689db36de224ea5a5f4d43e",
+      "size_bytes": 609176
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/python/vortex_ai/launch.py",
+      "sha256": "e09c48119bb73c3209d9ac163c5f3667ecc53a86630cbf677b444a07a68b5267",
+      "size_bytes": 3197
+    },
+    {
+      "path": "w04_a3-native-initial/runtime/python/vortex_ai/torch_ops.py",
+      "sha256": "95497fe03cb64655cbaeeaba5f1c92cdbb99c7899345b10da53204d869808218",
+      "size_bytes": 14372
+    },
+    {
+      "path": "w04_a3-native-initial/test.snapshot.py",
+      "sha256": "6accfd202f48068606a3f2ed398ecd0972a35d8799a822bc497a2b9d428e1ee9",
+      "size_bytes": 13354
+    },
+    {
+      "path": "w04_a3-native-initial.log",
+      "sha256": "0db27a9023e1df2e1dd85c2514676750ecfd3fc665c1bca72e28d1df852c8582",
+      "size_bytes": 190
+    },
+    {
+      "path": "w04_a3-native-recheck/async_failure/command.json",
+      "sha256": "7037ac833d77da829366e8df0ef5b218464a36848ea80dc08fa783af9f45ea9a",
+      "size_bytes": 736
+    },
+    {
+      "path": "w04_a3-native-recheck/async_failure/launcher.py",
+      "sha256": "60d0737bb1288f5fbdf24380244ef92379da5828f5f14f47631c883ffc555516",
+      "size_bytes": 272
+    },
+    {
+      "path": "w04_a3-native-recheck/async_failure/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-recheck/async_failure/stdout.log",
+      "sha256": "854afaa58c50c921b3a40eaf856e3a8b0e76dfe761a9d8c413e55187b8a23ea5",
+      "size_bytes": 1248
+    },
+    {
+      "path": "w04_a3-native-recheck/cleanup_failure/command.json",
+      "sha256": "408ac691e3c330d93abd5ed8373c97493edf99be5f92fdc9a55585e0395e00b3",
+      "size_bytes": 738
+    },
+    {
+      "path": "w04_a3-native-recheck/cleanup_failure/launcher.py",
+      "sha256": "efb70f6d7f9f14c374a179c2be1df68dc8648efc961fec21fb47de67072820e0",
+      "size_bytes": 274
+    },
+    {
+      "path": "w04_a3-native-recheck/cleanup_failure/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-recheck/cleanup_failure/stdout.log",
+      "sha256": "7f20441aca58fc47e517d5e90b4479cd0955f1b382ec78153119e87d98948d57",
+      "size_bytes": 1279
+    },
+    {
+      "path": "w04_a3-native-recheck/fixed_models/command.json",
+      "sha256": "23cc4ca8dfcb4cb947465243f76a86c10ef3fd173b5633f4243cd7f7823558f2",
+      "size_bytes": 735
+    },
+    {
+      "path": "w04_a3-native-recheck/fixed_models/launcher.py",
+      "sha256": "e8749e3a9eb39d1fae904d44b0fae6b95a8fe292fcabb36f342e341862dc73aa",
+      "size_bytes": 271
+    },
+    {
+      "path": "w04_a3-native-recheck/fixed_models/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-recheck/fixed_models/stdout.log",
+      "sha256": "6f3cdf035db4c154671a635b004ab94c42acefb2ddbb9fe7088fdf984a472009",
+      "size_bytes": 1787
+    },
+    {
+      "path": "w04_a3-native-recheck/matmul_deadline/command.json",
+      "sha256": "c743d16dacec53eb3423cb8cf4ceb929db6d184b6d861a6aea3850462a543c12",
+      "size_bytes": 738
+    },
+    {
+      "path": "w04_a3-native-recheck/matmul_deadline/launcher.py",
+      "sha256": "c401a74ddcf2f2bd37ab7487c8874eb4f0827224938004a08fd3e5db0003dd25",
+      "size_bytes": 274
+    },
+    {
+      "path": "w04_a3-native-recheck/matmul_deadline/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-recheck/matmul_deadline/stdout.log",
+      "sha256": "6adff7486773a83a9502fa08c4aeb32750df2d485ec70682d254f5b04f3a0b28",
+      "size_bytes": 1282
+    },
+    {
+      "path": "w04_a3-native-recheck/matmul_shapes/command.json",
+      "sha256": "fc952dc3b929bb9241eede4b2943e6758dddf60220931b9b4f76ad7e91d68717",
+      "size_bytes": 736
+    },
+    {
+      "path": "w04_a3-native-recheck/matmul_shapes/launcher.py",
+      "sha256": "7cfb9bff2805f9e2a9665694f7d7a1a3d5e93e5307f84ff439a0ff1ac0768075",
+      "size_bytes": 272
+    },
+    {
+      "path": "w04_a3-native-recheck/matmul_shapes/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-recheck/matmul_shapes/stdout.log",
+      "sha256": "959f77514cf82b206ef3a7aaa4e749e7d528409ffe28108a2ba3a6dec4bd23a5",
+      "size_bytes": 1249
+    },
+    {
+      "path": "w04_a3-native-recheck/model_deadline/command.json",
+      "sha256": "a92788f766fcde3825a6bf006844ee631d9919227e11626c27dc8b6dba1c90de",
+      "size_bytes": 737
+    },
+    {
+      "path": "w04_a3-native-recheck/model_deadline/launcher.py",
+      "sha256": "3d9a537b45a781b7ed6640d208cf2b5a507b18e6b6e63f7993fc71939915a677",
+      "size_bytes": 273
+    },
+    {
+      "path": "w04_a3-native-recheck/model_deadline/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-recheck/model_deadline/stdout.log",
+      "sha256": "b6d5147285af2ffcbbcb575b5847b2ddeadbe3f2f91a402913e0c718342c9c67",
+      "size_bytes": 1507
+    },
+    {
+      "path": "w04_a3-native-recheck/model_mismatch/command.json",
+      "sha256": "e2a8b9bc23c08068efc8493d769a2c629d8b7b9bb6b6b41f97e77d883d662460",
+      "size_bytes": 737
+    },
+    {
+      "path": "w04_a3-native-recheck/model_mismatch/launcher.py",
+      "sha256": "d39a93e483eb3642b5bd4117ed1dc33eeeb518c7753f30daadf9a985af52dec0",
+      "size_bytes": 273
+    },
+    {
+      "path": "w04_a3-native-recheck/model_mismatch/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-recheck/model_mismatch/stdout.log",
+      "sha256": "598ee230d061f35d4a91ce7107cde13d71ae7a8c430d02e8ccc2de53f240b158",
+      "size_bytes": 1471
+    },
+    {
+      "path": "w04_a3-native-recheck/partial_submit/command.json",
+      "sha256": "17c0a8b76aede854893521e9b800b014e1a9940b31e840f2dae67a9c1f51ced5",
+      "size_bytes": 737
+    },
+    {
+      "path": "w04_a3-native-recheck/partial_submit/launcher.py",
+      "sha256": "4abff0a58ee5c6d2469faa28206f6daf03d21d5dc44ef1e65375243ffa31f251",
+      "size_bytes": 273
+    },
+    {
+      "path": "w04_a3-native-recheck/partial_submit/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-recheck/partial_submit/stdout.log",
+      "sha256": "b1aa162364a7151458f6496709b90fe4979112e6ccd21f65540c3f01913ab97c",
+      "size_bytes": 1245
+    },
+    {
+      "path": "w04_a3-native-recheck/report.json",
+      "sha256": "ac1ee3ab041ae698b567e07274ad0207998c16e1aee2a2531f9b4005e3199de9",
+      "size_bytes": 23716
+    },
+    {
+      "path": "w04_a3-native-recheck/test.snapshot.py",
+      "sha256": "243692bc213f235d8ea852daebb9ffb450b52523645f19e75c2608cd6e570017",
+      "size_bytes": 13695
+    },
+    {
+      "path": "w04_a3-native-recheck/transient_timeout/command.json",
+      "sha256": "41eec8f824bce2d862ae35308035b336c46af8a13f9ccece68b9a40faebeba9e",
+      "size_bytes": 740
+    },
+    {
+      "path": "w04_a3-native-recheck/transient_timeout/launcher.py",
+      "sha256": "689bc5180e9ffaa40387244159a89fb830703945e84c92b4f13fb8f8a6f5bf6f",
+      "size_bytes": 276
+    },
+    {
+      "path": "w04_a3-native-recheck/transient_timeout/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "w04_a3-native-recheck/transient_timeout/stdout.log",
+      "sha256": "1efd8e6cf9223debb7a34e0c2e226fc2033306418af11db61f024e176fca6609",
+      "size_bytes": 1248
+    },
+    {
+      "path": "w04_a3-native-recheck.log",
+      "sha256": "f2229f70c0baa4e79bd59b1e8006e6945357af09ea498bf6a6e115c455cbcd72",
+      "size_bytes": 190
+    },
+    {
+      "path": "w04_a3_recheck.py",
+      "sha256": "6b37ae8c9050e7daaa5be3291313c88fa2bb10078f78fee4b856e364ac8ffb7a",
+      "size_bytes": 2919
+    }
+  ]
+}

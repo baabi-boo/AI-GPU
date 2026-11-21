@@ -1,0 +1,41 @@
+--- a/ci/project/p05_torch_execute.py
++++ b/ci/project/p05_torch_execute.py
+@@ -184,6 +184,11 @@
+     return value, result
+ 
+ 
++def _top_level_metadata(name, leaf):
++    parts = name.split("/")
++    return len(parts) == 2 and parts[0].endswith(".dist-info") and parts[1] == leaf
++
++
+ def _wheel_payload(wheel):
+     """Derive installed paths/hashes directly from a bounded locked archive."""
+     rows, names, scripts, total = [], set(), set(), 0
+@@ -204,7 +209,7 @@
+             total += item.file_size
+             require(total <= MAX_FRAMEWORK_TOTAL, "framework wheel exceeds its expanded byte budget")
+             digest, count = hashlib.sha256(), 0
+-            metadata = bytearray() if name.endswith(".dist-info/entry_points.txt") else None
++            metadata = bytearray() if _top_level_metadata(name, "entry_points.txt") else None
+             with archive.open(item) as stream:
+                 while raw := stream.read(MIB):
+                     count += len(raw)
+@@ -252,13 +257,15 @@
+     actual = {row["path"]: row for row in rows}
+     expected = {row["path"]: row for row in payload}
+     require(len(expected) == len(payload), "wheel payloads overlap")
++    rewritten_records = {name for name in expected if name.startswith(SITE)
++                         and _top_level_metadata(name[len(SITE):], "RECORD")}
+     for name, row in expected.items():
+-        if name.endswith(".dist-info/RECORD"):
++        if name in rewritten_records:
+             require(name in actual, "installed distribution omitted RECORD")
+         else:
+             _same(actual.get(name), row, "installed file differs from locked wheel: " + name)
+     allowed = set(expected) | set(scripts) | {row["path"] for row in seed}
+-    roots = {name.rsplit("/", 1)[0] for name in expected if name.endswith(".dist-info/RECORD")}
++    roots = {name.rsplit("/", 1)[0] for name in rewritten_records}
+     allowed.update(root + "/" + leaf for root in roots for leaf in ("INSTALLER", "REQUESTED", "direct_url.json"))
+     require(set(actual) <= allowed and set(scripts) <= set(actual), "installed framework has unexplained or missing files")
+     for row in seed:

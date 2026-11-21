@@ -1,0 +1,14 @@
+Initial read-only probe invocation failed in the review harness before comparing bytes.
+The probe passed a relative venv root to the existing contained-file reader.
+Captured diagnostic:
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/ci/project/p05_bundle.py", line 86, in _consume
+    path = _bundle._relative(root, relative)
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/python/vortex_ai/_bundle.py", line 93, in _relative
+    _require(path.resolve().is_relative_to(root), "bundle path escapes its root")
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/python/vortex_ai/_bundle.py", line 54, in _require
+    raise BundleError(message)
+p05_bundle_contract.BundleError: bundle path escapes its root
+Correction: resolve the review harness's work root before calling _consume.
+No runner source or validation rule was changed for this harness error.

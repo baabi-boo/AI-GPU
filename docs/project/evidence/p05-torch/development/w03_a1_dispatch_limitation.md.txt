@@ -1,0 +1,11 @@
+The rejection guards cover the enumerated dispatch paths and original tensor
+preconditions. Higher-level APIs can evaluate an ordinary eager call before
+entering a detectable transform. In the pinned version, `torch.func.linearize`
+evaluates its callable on ordinary primal tensors first; FX symbolic tracing
+can evaluate the input-free fixed model as a constant; a scripted TorchScript
+graph can invoke a registered operator. These contexts are outside this
+version's qualification and may submit and finish native work. Call the
+operators only from the qualified eager contexts. A later transform exception
+is not evidence that no work ran; retained native owners and execution records
+remain authoritative. Arbitrary user dispatch overrides and graph-break
+behavior also remain unqualified.

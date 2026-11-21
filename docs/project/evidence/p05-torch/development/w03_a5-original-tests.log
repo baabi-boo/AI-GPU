@@ -1,0 +1,49 @@
+test_changed_live_helper_is_rejected (test_p05_torch_runner_review.SourceHandoffContracts.test_changed_live_helper_is_rejected) ... ok
+test_integer_stability_claim_is_not_a_boolean (test_p05_torch_runner_review.SourceHandoffContracts.test_integer_stability_claim_is_not_a_boolean) ... ok
+test_omitted_native_source_inventory_member_is_rejected (test_p05_torch_runner_review.SourceHandoffContracts.test_omitted_native_source_inventory_member_is_rejected) ... ok
+test_omitted_retained_helper_is_rejected (test_p05_torch_runner_review.SourceHandoffContracts.test_omitted_retained_helper_is_rejected) ... ok
+test_original_helpers_need_not_include_new_entry_point (test_p05_torch_runner_review.SourceHandoffContracts.test_original_helpers_need_not_include_new_entry_point) ... ok
+test_rehashed_retained_helper_cannot_substitute_for_actual_source (test_p05_torch_runner_review.SourceHandoffContracts.test_rehashed_retained_helper_cannot_substitute_for_actual_source) ... ok
+test_rehashed_stale_checkout_is_rejected (test_p05_torch_runner_review.SourceHandoffContracts.test_rehashed_stale_checkout_is_rejected) ... ok
+test_only_root_distribution_entry_points_create_commands (test_p05_torch_runner_review.VendorMetadataContracts.test_only_root_distribution_entry_points_create_commands) ... FAIL
+test_top_level_installer_metadata_remains_supported (test_p05_torch_runner_review.VendorMetadataContracts.test_top_level_installer_metadata_remains_supported) ... ok
+test_vendored_metadata_cannot_authorize_unexplained_files (test_p05_torch_runner_review.VendorMetadataContracts.test_vendored_metadata_cannot_authorize_unexplained_files) ... FAIL
+test_vendored_record_is_immutable_payload (test_p05_torch_runner_review.VendorMetadataContracts.test_vendored_record_is_immutable_payload) ... FAIL
+
+======================================================================
+FAIL: test_only_root_distribution_entry_points_create_commands (test_p05_torch_runner_review.VendorMetadataContracts.test_only_root_distribution_entry_points_create_commands)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/ci/project/test_p05_torch_runner_review.py", line 42, in test_only_root_distribution_entry_points_create_commands
+    self.assertEqual(scripts, ["bin/tiny"])
+AssertionError: Lists differ: ['bin/tiny', 'bin/vendor-only'] != ['bin/tiny']
+
+First list contains 1 additional elements.
+First extra element 1:
+'bin/vendor-only'
+
+- ['bin/tiny', 'bin/vendor-only']
++ ['bin/tiny']
+
+======================================================================
+FAIL: test_vendored_metadata_cannot_authorize_unexplained_files (test_p05_torch_runner_review.VendorMetadataContracts.test_vendored_metadata_cannot_authorize_unexplained_files)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/ci/project/test_p05_torch_runner_review.py", line 59, in test_vendored_metadata_cannot_authorize_unexplained_files
+    with self.assertRaisesRegex(ValueError, "unexplained"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_vendored_record_is_immutable_payload (test_p05_torch_runner_review.VendorMetadataContracts.test_vendored_record_is_immutable_payload)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/ci/project/test_p05_torch_runner_review.py", line 51, in test_vendored_record_is_immutable_payload
+    with self.assertRaisesRegex(ValueError, "differs from locked wheel"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.070s
+
+FAILED (failures=3)

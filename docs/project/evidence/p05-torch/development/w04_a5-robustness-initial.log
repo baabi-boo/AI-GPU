@@ -1,0 +1,50 @@
+test_failed_payload_reads_still_consume_the_read_budget (__main__.ArchiveReaderTests.test_failed_payload_reads_still_consume_the_read_budget) ... FAIL
+test_zip_comment_signature_does_not_hide_its_actual_end_record (__main__.ArchiveReaderTests.test_zip_comment_signature_does_not_hide_its_actual_end_record) ... ERROR
+
+======================================================================
+ERROR: test_zip_comment_signature_does_not_hide_its_actual_end_record (__main__.ArchiveReaderTests.test_zip_comment_signature_does_not_hide_its_actual_end_record)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/../p05-torch-work/w04_a5_test_archive_reader.py", line 186, in test_zip_comment_signature_does_not_hide_its_actual_end_record
+    with reader.ArchiveReader(self.path, digest) as archive:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/docs/project/evidence/p05-torch/reviews/archive_reader.py", line 159, in __init__
+    self._directory_check()
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/docs/project/evidence/p05-torch/reviews/archive_reader.py", line 225, in _directory_check
+    require(offset >= 0 and offset + EOCD.size <= len(tail), "missing ZIP end record")
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/docs/project/evidence/p05-torch/reviews/archive_reader.py", line 42, in require
+    raise ArchiveError(message)
+trusted_p05_archive_reader.ArchiveError: missing ZIP end record
+
+======================================================================
+FAIL: test_failed_payload_reads_still_consume_the_read_budget (__main__.ArchiveReaderTests.test_failed_payload_reads_still_consume_the_read_budget)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/docs/project/evidence/p05-torch/reviews/archive_reader.py", line 251, in _consume
+    while raw := stream.read(MIB):
+                 ^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/zipfile/__init__.py", line 1008, in read
+    data = self._read1(n)
+           ^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/zipfile/__init__.py", line 1098, in _read1
+    self._update_crc(data)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/zipfile/__init__.py", line 1026, in _update_crc
+    raise BadZipFile("Bad CRC-32 for file %r" % self.name)
+zipfile.BadZipFile: Bad CRC-32 for file 'a'
+
+The above exception was the direct cause of the following exception:
+
+trusted_p05_archive_reader.ArchiveError: invalid retained member payload: a
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/../p05-torch-work/w04_a5_test_archive_reader.py", line 181, in test_failed_payload_reads_still_consume_the_read_budget
+    with self.assertRaisesRegex(reader.ArchiveError, "aggregate"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "aggregate" does not match "invalid retained member payload: a"
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.006s
+
+FAILED (failures=1, errors=1)

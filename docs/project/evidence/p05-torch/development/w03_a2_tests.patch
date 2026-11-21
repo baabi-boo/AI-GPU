@@ -1,0 +1,77 @@
+--- a/ci/project/p05_torch_host_tests.py
++++ b/ci/project/p05_torch_host_tests.py
+@@ -304,6 +304,74 @@
+         self.owners.append((self.session, replacement))
+         self.assertNotEqual(replacement.token, original_token)
+         self.assertEqual(tuple(replacement.matmul(*self.tensors()[:2]).shape), (8, 4))
++
++    def test_failed_session_initialization_rejected_before_attach(self):
++        self.close_current()
++        failures = (
++            ("native_status", "session_open", {"return_value": (
++                {"ops": [], "closed": False}, native_status(primary=6))}),
++            ("identity_schema", "session_info", {"return_value": {"format": "fp16"}}),
++            ("identity_interruption", "session_info", {
++                "side_effect": KeyboardInterrupt("injected identity interruption")}),
++            ("status_schema", "session_open", {"return_value": (
++                {"ops": [], "closed": False}, {"primary": 6})}),
++        )
++        for name, method, fault in failures:
++            with self.subTest(failure=name):
++                with mock.patch.object(self.native, method, **fault):
++                    try:
++                        api.Session.open("/host-only/scripted-bundle")
++                    except BaseException as error:
++                        failed_session = error.session
++                    else:
++                        self.fail("scripted opening fault did not raise")
++                attempted_adapter = None
++                try:
++                    with self.assertRaises(api.BindingError) as caught:
++                        attempted_adapter = ops.TorchSession(failed_session)
++                    self.assertIs(caught.exception.session, failed_session)
++                    self.assertEqual(dict(failed_session.info), {})
++                    self.assertFalse(failed_session.pending_operations())
++                finally:
++                    if attempted_adapter is not None:
++                        attempted_adapter.close()
++                    self.assertTrue(failed_session.close().ok)
++        self.assertEqual(self.counts(), 0)
++
++    def test_duplicate_attach_error_retains_existing_adapter(self):
++        with self.assertRaises(api.BindingError) as caught:
++            ops.TorchSession(self.session)
++        self.assertIs(caught.exception.adapter, self.adapter)
++        self.assertIs(caught.exception.session, self.session)
++        self.assertIs(caught.exception.adapter.session, self.session)
++        self.assertEqual(self.counts(), 0)
++
++    def test_constructor_return_interruption_keeps_recoverable_adapter(self):
++        self.adapter.close()
++        previous_trace = sys.gettrace()
++        def interrupt_return(frame, event, _arg):
++            if frame.f_code is ops.TorchSession.__init__.__code__ and event == "return":
++                raise KeyboardInterrupt("injected constructor return interruption")
++            return interrupt_return
++        try:
++            sys.settrace(interrupt_return)
++            with self.assertRaises(KeyboardInterrupt):
++                ops.TorchSession(self.session)
++        finally:
++            sys.settrace(previous_trace)
++        with self.assertRaises(api.BindingError) as caught:
++            ops.TorchSession(self.session)
++        recovered = caught.exception.adapter
++        self.owners.append((self.session, recovered))
++        self.assertIs(recovered.session, self.session)
++        self.assertNotEqual(recovered.token, 0)
++        self.assertFalse(recovered.pending_operations())
++        recovered.close()
++        replacement = ops.TorchSession(self.session)
++        self.owners.append((self.session, replacement))
++        self.assertNotEqual(replacement.token, recovered.token)
++        output = replacement.matmul(*self.tensors()[:2])
++        self.assert_output(output, replacement.last_operation, (8, 4))
+ 
+     def test_repeated_matmul_model_matmul_closes_every_owner(self):
+         for _ in range(3):

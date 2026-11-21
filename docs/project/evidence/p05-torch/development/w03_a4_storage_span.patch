@@ -1,0 +1,57 @@
+--- a/ci/project/p05_torch_installed_check.py
++++ b/ci/project/p05_torch_installed_check.py
+@@ -126,6 +126,12 @@
+     return value.reshape(shape[1], shape[0]).t() if column else value.reshape(shape)
+ 
+ 
++def _storage_span(tensor):
++    storage = tensor.untyped_storage()
++    address = storage.data_ptr()
++    return address, address + storage.nbytes()
++
++
+ def run_matrix(request, api, torch, adapter_module, installation, framework, state):
+     base_request = request["base_request"]
+     binding = base_request["binding"]
+@@ -136,23 +142,26 @@
+     adapter = state.adapter = adapter_module.TorchSession(session)
+     matmuls, models, framework_matmuls, framework_models = [], [], [], []
+     retained_outputs = []
+-    storage_addresses = set()
++    retained_inputs = []
++    storage_spans = []
+     dtype = torch.float16 if binding["format"] == "fp16" else torch.bfloat16
+     previous_end = 0
+     check.emit("P05_TORCH_FRAMEWORK", framework)
+ 
+-    def retain_output(value, observation, inputs=()):
+-        address = value.untyped_storage().data_ptr()
+-        require(address > 0 and address not in storage_addresses
+-                and all(address != tensor.untyped_storage().data_ptr() for tensor in inputs),
++    def retain_output(value, observation):
++        begin, end = _storage_span(value)
++        previous = storage_spans + [_storage_span(tensor) for tensor in retained_inputs]
++        require(begin > 0 and begin < end
++                and all(end <= left or right <= begin for left, right in previous),
+                 "framework result aliases an input or an earlier live result")
+-        storage_addresses.add(address)
++        storage_spans.append((begin, end))
+         retained_outputs.append((value, observation))
+ 
+     for case in base_request["matmul_cases"]:
+         m, n, k = (case[key] for key in ("m", "n", "k"))
+         a = _input(torch, check.packed(case["a_words"]), (m, k), dtype)
+         b = _input(torch, check.packed(case["b_words"]), (k, n), dtype, column=True)
++        retained_inputs.extend((a, b))
+         for iteration, poison in enumerate(check.POISONS):
+             check.timeout_ns(deadline)
+             require(not session.pending_operations(), "a native owner remains before a framework matmul")
+@@ -191,7 +200,7 @@
+             require(previous_end <= trace["event_profiles"][0]["queued_ns"],
+                     "framework matmul precedes its completed predecessor")
+             previous_end = end
+-            retain_output(result, returned, (a, b))
++            retain_output(result, returned)
+             matmuls.append(native_row)
+             framework_matmuls.append(framework_row)
+     for case_id in base_request["model_cases"]:

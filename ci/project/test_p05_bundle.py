@@ -676,10 +676,15 @@ print('bounded manifest read')
 
 class BundleSourceBindingTests(BundleTestCase):
     def test_changed_actual_source_is_not_hidden_by_an_unchanged_inventory(self):
-        path = self.fixture.source / "python/vortex_ai/_api.py"
-        path.write_bytes(path.read_bytes() + b"\n# local source mutation\n")
-        with self.assertRaisesRegex(BUNDLE.BundleError, "sources differ"):
-            BUNDLE.build_binding(self.root, self.fixture.source)
+        for relative in ("python/vortex_ai/_api.py", "python/vortex_ai/torch_ops.py"):
+            path = self.fixture.source / relative
+            raw = path.read_bytes()
+            path.write_bytes(raw + b"\n# local source mutation\n")
+            try:
+                with self.subTest(path=relative), self.assertRaisesRegex(BUNDLE.BundleError, "sources differ"):
+                    BUNDLE.build_binding(self.root, self.fixture.source)
+            finally:
+                path.write_bytes(raw)
 
     def test_rehashed_but_inaccurate_source_inventory_is_rejected(self):
         data = copy.deepcopy(self.fixture.manifest)

@@ -1,0 +1,256 @@
+name: P05 Installed PyTorch
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/p05-python.yml'
+      - '.github/workflows/p05-torch.yml'
+      - '.github/workflows/p04-model.yml'
+      - 'python/**'
+      - 'setup.py'
+      - 'pyproject.toml'
+      - 'MANIFEST.in'
+      - 'LICENSE'
+      - 'ci/project/**'
+      - 'ci/toolchain_rev.sh'
+      - 'ci/install_dependencies.sh'
+      - 'ci/gen_config.py'
+      - 'configure'
+      - 'config.mk.in'
+      - 'sw/**'
+      - 'sim/**'
+      - 'hw/rtl/**'
+      - 'hw/dpi/**'
+      - 'tests/regression/ai_matmul/**'
+      - 'tests/regression/ai_mlp/**'
+      - 'tests/regression/sgemm_tcu/**'
+      - 'tests/regression/common.mk'
+      - 'tests/runtime/**'
+      - 'third_party/**'
+      - 'profiles/p02-tfr.json'
+      - 'docs/designs/torch_custom_ops_v1.md'
+      - 'docs/designs/python_binding_v1.md'
+      - 'docs/designs/tiny_mlp_fixture_v1.md'
+      - 'docs/designs/mlp_execution_records_v1.md'
+      - 'docs/designs/tensor_numerics_v1.md'
+      - 'VERSION'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - '.gitmodules'
+  pull_request:
+    paths:
+      - '.github/workflows/p05-python.yml'
+      - '.github/workflows/p05-torch.yml'
+      - '.github/workflows/p04-model.yml'
+      - 'python/**'
+      - 'setup.py'
+      - 'pyproject.toml'
+      - 'MANIFEST.in'
+      - 'LICENSE'
+      - 'ci/project/**'
+      - 'ci/toolchain_rev.sh'
+      - 'ci/install_dependencies.sh'
+      - 'ci/gen_config.py'
+      - 'configure'
+      - 'config.mk.in'
+      - 'sw/**'
+      - 'sim/**'
+      - 'hw/rtl/**'
+      - 'hw/dpi/**'
+      - 'tests/regression/ai_matmul/**'
+      - 'tests/regression/ai_mlp/**'
+      - 'tests/regression/sgemm_tcu/**'
+      - 'tests/regression/common.mk'
+      - 'tests/runtime/**'
+      - 'third_party/**'
+      - 'profiles/p02-tfr.json'
+      - 'docs/designs/torch_custom_ops_v1.md'
+      - 'docs/designs/python_binding_v1.md'
+      - 'docs/designs/tiny_mlp_fixture_v1.md'
+      - 'docs/designs/mlp_execution_records_v1.md'
+      - 'docs/designs/tensor_numerics_v1.md'
+      - 'VERSION'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - '.gitmodules'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p05-torch-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  qualification:
+    name: Installed PyTorch (simx, ${{ matrix.format }})
+    runs-on: ubuntu-22.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        format: [fp16, bf16]
+    defaults:
+      run:
+        shell: bash
+    env:
+      P05_BACKEND: simx
+      P05_FORMAT: ${{ matrix.format }}
+      PYTHONDONTWRITEBYTECODE: '1'
+      MAKEFLAGS: '-j2'
+      THREADS: '2'
+      CMAKE_BUILD_PARALLEL_LEVEL: '2'
+      CCACHE_DISABLE: '1'
+      OBJCACHE: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          submodules: recursive
+          persist-credentials: false
+      - name: Initialize retained job identity
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'p05-torch'
+          root.mkdir(mode=0o700)
+          (root / 'evidence').mkdir(mode=0o700)
+          with open(os.environ['GITHUB_ENV'], 'a') as environment:
+              environment.write('P05_ROOT=' + str(root) + '\n')
+          workflow = Path('.github/workflows/p05-torch.yml').read_bytes()
+          (root / 'evidence' / 'workflow.yml').write_bytes(workflow)
+          data = {key: os.environ[key] for key in (
+              'GITHUB_SHA', 'GITHUB_EVENT_NAME', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT',
+              'P05_BACKEND', 'P05_FORMAT')}
+          data.update(scope='simx-installed-pytorch', native_execution='not_run',
+                      python_execution='not_run', torch_execution='not_run', acceptance_claimed=False,
+                      workflow_sha256=hashlib.sha256(workflow).hexdigest())
+          (root / 'evidence' / 'job.json').write_text(json.dumps(data, indent=2) + '\n')
+          PY
+      - name: Provision pinned CPython
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+          architecture: x64
+          check-latest: false
+      - name: Provision pinned Python build tools
+        timeout-minutes: 10
+        run: |
+          python3 -I -m pip --isolated install \
+            --disable-pip-version-check --no-cache-dir --only-binary=:all: --no-deps \
+            'setuptools==84.2.1' 'wheel==0.48.0' 'packaging==26.3' \
+            2>&1 | tee "$P05_ROOT/evidence/python-provision.log"
+          python3 -I - <<'PY'
+          import importlib.metadata, json, os, platform, sys
+          from pathlib import Path
+          expected = {'setuptools': '84.2.1', 'wheel': '0.48.0', 'packaging': '26.3'}
+          data = {'python_version': list(sys.version_info[:3]),
+                  'implementation': platform.python_implementation(),
+                  'platform': sys.platform, 'executable': sys.executable,
+                  'build_requirements': {name: importlib.metadata.version(name) for name in expected}}
+          target = Path(os.environ['P05_ROOT']) / 'evidence' / 'python-provision.json'
+          target.write_text(json.dumps(data, indent=2) + '\n')
+          if (data['python_version'] != [3, 12, 14] or data['implementation'] != 'CPython'
+                  or data['platform'] != 'linux' or data['build_requirements'] != expected):
+              raise SystemExit('Python interpreter or build-tool identity differs from the pinned inputs')
+          PY
+      - name: Resolve pinned toolchain cache identity
+        id: pins
+        run: |
+          set -euo pipefail
+          P05_TOOLCHAIN_ID=$(bash ci/toolchain_rev.sh)
+          [[ "$P05_TOOLCHAIN_ID" =~ ^[A-Za-z0-9._-]+-[0-9a-f]{40}$ ]]
+          echo "toolchain=$P05_TOOLCHAIN_ID" >> "$GITHUB_OUTPUT"
+      - name: Restore pinned toolchain without writing cache
+        id: toolchain
+        uses: actions/cache/restore@v4
+        with:
+          path: tools
+          key: ${{ runner.os }}-toolchain-${{ steps.pins.outputs.toolchain }}-lite
+          restore-keys: ${{ runner.os }}-toolchain-${{ steps.pins.outputs.toolchain }}-
+      - name: Restore dependency inputs without writing cache
+        id: dependencies
+        uses: actions/cache/restore@v4
+        with:
+          path: third_party
+          key: ${{ runner.os }}-thirdparty-${{ hashFiles('third_party/Makefile', '.gitmodules') }}
+      - name: Install baseline host dependencies
+        if: steps.toolchain.outputs.cache-matched-key != '' && steps.dependencies.outputs.cache-matched-key != ''
+        timeout-minutes: 15
+        run: sudo bash ci/install_dependencies.sh
+      - name: Verify clean source and relocate restored tools
+        env:
+          P05_TOOLCHAIN_ID: ${{ steps.pins.outputs.toolchain }}
+          P05_TOOLCHAIN_CACHE: ${{ steps.toolchain.outputs.cache-matched-key }}
+          P05_DEPENDENCY_CACHE: ${{ steps.dependencies.outputs.cache-matched-key }}
+          P05_DEPENDENCY_KEY: ${{ runner.os }}-thirdparty-${{ hashFiles('third_party/Makefile', '.gitmodules') }}
+        run: |
+          python3 ci/project/p04_ci_prepare.py \
+            --source-dir "$PWD" --workspace-dir "$P05_ROOT" \
+            --expected-revision "$GITHUB_SHA" --toolchain-id "$P05_TOOLCHAIN_ID" \
+            --toolchain-cache-key "$P05_TOOLCHAIN_CACHE" \
+            --third-party-cache-key "$P05_DEPENDENCY_CACHE" \
+            --expected-third-party-key "$P05_DEPENDENCY_KEY" \
+            --backend "$P05_BACKEND" --format "$P05_FORMAT" \
+            2>&1 | tee "$P05_ROOT/evidence/preparation.log"
+      - name: Provision hash-locked CPU framework wheels
+        timeout-minutes: 10
+        run: |
+          mkdir "$P05_ROOT/framework-wheels"
+          cp ci/project/p05_torch_contract.json "$P05_ROOT/evidence/p05_torch_contract.json"
+          cp ci/project/p05_torch_requirements.lock "$P05_ROOT/evidence/p05_torch_requirements.lock"
+          python3 -I -m pip --isolated download \
+            --disable-pip-version-check --no-cache-dir --only-binary=:all: \
+            --no-deps --require-hashes \
+            --index-url https://download.pytorch.org/whl/cpu \
+            --extra-index-url https://pypi.org/simple \
+            --dest "$P05_ROOT/framework-wheels" \
+            --requirement ci/project/p05_torch_requirements.lock \
+            2>&1 | tee "$P05_ROOT/evidence/framework-provision.log"
+      - name: Execute unchanged native model reference
+        run: |
+          python3 ci/project/p04_execute.py run \
+            --source-dir "$PWD" --tools-dir "$P05_ROOT/tools" \
+            --work-dir "$P05_ROOT/native-work" --output "$P05_ROOT/evidence/native-model" \
+            --backend simx --format "$P05_FORMAT" --iterations 2 --jobs 2 \
+            --timeout-seconds 1800 --run-timeout-seconds 180 \
+            2>&1 | tee "$P05_ROOT/evidence/native-execution.log"
+      - name: Execute installed Python variant against native results
+        run: |
+          python3 ci/project/p05_execute.py run \
+            --source-dir "$PWD" --tools-dir "$P05_ROOT/tools" \
+            --work-dir "$P05_ROOT/work" --output "$P05_ROOT/evidence/python" \
+            --native-build "$P05_ROOT/native-work/simx-$P05_FORMAT" \
+            --native-output "$P05_ROOT/evidence/native-model" \
+            --format "$P05_FORMAT" --jobs 2 \
+            --timeout-seconds 1800 --run-timeout-seconds 180 \
+            2>&1 | tee "$P05_ROOT/evidence/execution.log"
+      - name: Execute installed PyTorch variant against native results
+        run: |
+          python3 ci/project/p05_torch_execute.py run \
+            --source-dir "$PWD" \
+            --python-work "$P05_ROOT/work" --python-output "$P05_ROOT/evidence/python" \
+            --wheelhouse "$P05_ROOT/framework-wheels" --work-dir "$P05_ROOT/torch-work" \
+            --output "$P05_ROOT/evidence/torch" --format "$P05_FORMAT" \
+            --timeout-seconds 600 --run-timeout-seconds 300 \
+            2>&1 | tee "$P05_ROOT/evidence/torch-execution.log"
+      - name: Test real PyTorch with scripted native failures
+        timeout-minutes: 10
+        run: |
+          "$P05_ROOT/torch-work/venv/bin/python" -I -B ci/project/p05_torch_host_tests.py \
+            --source-dir "$PWD" --output "$P05_ROOT/evidence/torch-host.json" \
+            2>&1 | tee "$P05_ROOT/evidence/torch-host.log"
+      - name: Retain native Python and PyTorch execution packets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p05-torch-simx-${{ matrix.format }}-${{ github.sha }}-attempt${{ github.run_attempt }}
+          path: ${{ runner.temp }}/p05-torch/evidence
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 6
+          include-hidden-files: true

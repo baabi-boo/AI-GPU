@@ -1,0 +1,108 @@
+test_malformed_or_nonutf8_json_is_failed_and_retained (test_w04_a6_retention.HostBoundaryRetentionTests.test_malformed_or_nonutf8_json_is_failed_and_retained) ... 
+  test_malformed_or_nonutf8_json_is_failed_and_retained (test_w04_a6_retention.HostBoundaryRetentionTests.test_malformed_or_nonutf8_json_is_failed_and_retained) (stdout=b'noise\r\n{}\n') ... ERROR
+  test_malformed_or_nonutf8_json_is_failed_and_retained (test_w04_a6_retention.HostBoundaryRetentionTests.test_malformed_or_nonutf8_json_is_failed_and_retained) (stdout=b'\xff\x00\r\n') ... ERROR
+test_nonzero_child_keeps_opaque_output_bytes (test_w04_a6_retention.HostBoundaryRetentionTests.test_nonzero_child_keeps_opaque_output_bytes) ... ERROR
+test_timeout_keeps_partial_bytes_without_repr_conversion (test_w04_a6_retention.HostBoundaryRetentionTests.test_timeout_keeps_partial_bytes_without_repr_conversion) ... FAIL
+test_valid_json_keeps_original_line_endings (test_w04_a6_retention.HostBoundaryRetentionTests.test_valid_json_keeps_original_line_endings) ... FAIL
+
+======================================================================
+ERROR: test_malformed_or_nonutf8_json_is_failed_and_retained (test_w04_a6_retention.HostBoundaryRetentionTests.test_malformed_or_nonutf8_json_is_failed_and_retained) (stdout=b'noise\r\n{}\n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/55f1fb23ad42/p05-torch-work/drafts/w04_a6/test_p05_torch_native_host_orchestration.py", line 76, in test_malformed_or_nonutf8_json_is_failed_and_retained
+    code, report, output = self.exercise(subprocess.CompletedProcess([], 0, stdout, b""))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/55f1fb23ad42/p05-torch-work/drafts/w04_a6/test_p05_torch_native_host_orchestration.py", line 53, in exercise
+    code = host.main()
+           ^^^^^^^^^^^
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/ci/project/p05_torch_native_host_tests.py", line 266, in main
+    row["observations"] = json.loads(stdout)
+                          ^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/json/decoder.py", line 356, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+======================================================================
+ERROR: test_malformed_or_nonutf8_json_is_failed_and_retained (test_w04_a6_retention.HostBoundaryRetentionTests.test_malformed_or_nonutf8_json_is_failed_and_retained) (stdout=b'\xff\x00\r\n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/55f1fb23ad42/p05-torch-work/drafts/w04_a6/test_p05_torch_native_host_orchestration.py", line 76, in test_malformed_or_nonutf8_json_is_failed_and_retained
+    code, report, output = self.exercise(subprocess.CompletedProcess([], 0, stdout, b""))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/55f1fb23ad42/p05-torch-work/drafts/w04_a6/test_p05_torch_native_host_orchestration.py", line 53, in exercise
+    code = host.main()
+           ^^^^^^^^^^^
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/ci/project/p05_torch_native_host_tests.py", line 261, in main
+    result = runtime.run_python(source, timeout=30, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/55f1fb23ad42/p05-torch-work/drafts/w04_a6/test_p05_torch_native_host_orchestration.py", line 41, in legacy_text_capture
+    observed.stdout.decode("utf-8").replace("\r\n", "\n"),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
+
+======================================================================
+ERROR: test_nonzero_child_keeps_opaque_output_bytes (test_w04_a6_retention.HostBoundaryRetentionTests.test_nonzero_child_keeps_opaque_output_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/55f1fb23ad42/p05-torch-work/drafts/w04_a6/test_p05_torch_native_host_orchestration.py", line 93, in test_nonzero_child_keeps_opaque_output_bytes
+    code, report, output = self.exercise(subprocess.CompletedProcess([], 23, stdout, stderr))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/55f1fb23ad42/p05-torch-work/drafts/w04_a6/test_p05_torch_native_host_orchestration.py", line 53, in exercise
+    code = host.main()
+           ^^^^^^^^^^^
+  File "/workspace/scratch/55f1fb23ad42/AI-GPU/ci/project/p05_torch_native_host_tests.py", line 261, in main
+    result = runtime.run_python(source, timeout=30, check=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/55f1fb23ad42/p05-torch-work/drafts/w04_a6/test_p05_torch_native_host_orchestration.py", line 41, in legacy_text_capture
+    observed.stdout.decode("utf-8").replace("\r\n", "\n"),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 6: invalid start byte
+
+======================================================================
+FAIL: test_timeout_keeps_partial_bytes_without_repr_conversion (test_w04_a6_retention.HostBoundaryRetentionTests.test_timeout_keeps_partial_bytes_without_repr_conversion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/55f1fb23ad42/p05-torch-work/drafts/w04_a6/test_p05_torch_native_host_orchestration.py", line 89, in test_timeout_keeps_partial_bytes_without_repr_conversion
+    self.assert_logs(output, stdout, stderr)
+  File "/workspace/scratch/55f1fb23ad42/p05-torch-work/drafts/w04_a6/test_p05_torch_native_host_orchestration.py", line 63, in assert_logs
+    self.assertEqual((output / "children" / scenario / "stdout.log").read_bytes(), stdout)
+AssertionError: b"b'partial\\r\\n\\x00\\xff'" != b'partial\r\n\x00\xff'
+
+======================================================================
+FAIL: test_valid_json_keeps_original_line_endings (test_w04_a6_retention.HostBoundaryRetentionTests.test_valid_json_keeps_original_line_endings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/55f1fb23ad42/p05-torch-work/drafts/w04_a6/test_p05_torch_native_host_orchestration.py", line 71, in test_valid_json_keeps_original_line_endings
+    self.assert_logs(output, stdout, b"")
+  File "/workspace/scratch/55f1fb23ad42/p05-torch-work/drafts/w04_a6/test_p05_torch_native_host_orchestration.py", line 63, in assert_logs
+    self.assertEqual((output / "children" / scenario / "stdout.log").read_bytes(), stdout)
+AssertionError: b'{"scope":"orchestration-control"}\n' != b'{"scope":"orchestration-control"}\r\n'
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.030s
+
+FAILED (failures=2, errors=3)

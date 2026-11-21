@@ -1,0 +1,87 @@
+# Framework qualification interface — wave 2 coordination
+
+Contract manifest: ci/project/p05_torch_contract.json (root draft in drafts).
+Requirements lock: ci/project/p05_torch_requirements.lock (root draft at work root).
+Version and 10 wheel identities frozen therein; no source tree dependency on torch.
+
+Artifacts owned by independent implementers:
+- a4: ci/project/p05_torch_installed_check.py, ci/project/p05_torch_records.py,
+  test_p05_torch_records.py plus synthetic fixture helper if needed.
+- a5: ci/project/p05_torch_execute.py and test_p05_torch_orchestration.py.
+- a6: .github/workflows/p05-torch.yml, new test_p05_torch_ci.py, narrow governance
+  path-filter extensions for workflow/design contract. Existing Python workflow
+  remains unchanged and independently running on source changes.
+
+Runner CLI (freeze):
+python3 ci/project/p05_torch_execute.py run --source-dir ROOT \
+ --python-work ABS_P05_WORK --python-output ABS_P05_OUTPUT \
+ --wheelhouse ABS_WHEELHOUSE --work-dir NEW_ABS_TORCH_WORK \
+ --output NEW_ABS_TORCH_OUTPUT --format fp16 \
+ --timeout-seconds 600 --run-timeout-seconds 300
+
+python-work/python-output come from fresh successful p05_execute on exact current
+clean commit. Consume its bound wheel/bundle and native comparison records; verify
+whole packet snapshot/digests and current implementation identity. No outcome-only
+trust. Use p05_execute verification helpers for live original paths; preserve
+historic scripts and strict schemas. No native or GPU compilation in this third
+stage. Fresh copied-interpreter venv, offline --require-hashes --no-deps install
+locked wheels, then exact new bound vortex wheel. Probe/retain full framework
+version and distribution-file hash inventories before/after (stream large files;
+PyTorch binaries exceed original 16MiB limit, do not weaken existing checker).
+Reject symlink/missing/extra wheelhouse entries. Preserve report+logs on failure.
+No nested process monitors/import-and-run of earlier runners.
+
+Installed checker helpers copied beside checker outside source: unchanged
+p05_installed_check.py and any other reviewed pure validator needed. python -I
+via vortex_ai.launch sets trusted native environment; checker may import only
+explicit sibling helper by file location, not add source root to sys.path.
+
+Request contract: schema_version=1, contract_id=p05-torch-request-v1,
+base_request = original P05 installed request with expected_prefix replaced by new
+framework venv, framework={version:'2.15.0+cpu', contract_sha256, adapter_sha256}.
+Same fixed matmul/model selection/poisons/binding used; validate strict fields.
+
+Observation contract: schema_version=1, contract_id=p05-torch-observations-v1,
+scope='simx-installed-pytorch', outcome='pass'|'fail', acceptance_claimed=false,
+framework={version, distribution_version, adapter_file, adapter_sha256, contract_sha256,
+           operator_schemas: {matmul_v1: observed str(schema), fixed_mlp_v1: ...}},
+base_observations = P05-shaped native observations for framework executions only,
+framework_matmuls = six rows (case_id,iteration,a,b,result) and framework_models =
+ten rows(case_id,iteration,result). Tensor record fields to freeze by a4 include
+shape,strides,dtype,device,storage_offset,requires_grad,exact physical bytes hex.
+Result actual torch bytes must match corresponding native owner output and fixed
+native comparator words. Never generate rows from native reference values.
+Base matmul/model rows use unchanged P05_MATMUL/P05_MODEL raw markers so existing
+pure numeric validators can be reused on observed native traces. Add raw
+P05_TORCH_MATMUL/P05_TORCH_MODEL markers for torch-specific rows, and retain
+identity marker. File/log comparison strict membership/order/no duplicates.
+Using existing schema inside nested field describes shape only, not an extra
+plain-Python execution: new outer scope controls the claim.
+
+Checker execution: open exact native Session, wrap TorchSession(session), direct
+raw torch.ops calls. After each successful return read adapter.last_operation
+for status/close/trace/record. Independent returned tensor byte extraction with
+integer view reads actual framework result; input construction uses frozen raw
+bytes with exact explicit layouts. CPU torch.matmul/mm is never a reference or
+fallback. Native memory before/after, full model stage/bridge trace and profiles
+retained. Close adapter then native Session. Failed work retained and drained
+boundedly, process exits nonzero; no hang hidden as success.
+
+Records module seam (a4 agree with a5 directly):
+verify_observations(value, request, *, native_matmuls, native_models, model_cases,
+                    raw_log) -> independently derived counts/verification summary.
+Expose read_request/validate_request or shared strict JSON helper as needed.
+Pure verifier must not import torch or execute retained code. Offline independent
+archive review will be separate; do not relax live installation path checks.
+
+Workflow: clone existing P05 Python job structure to new P05 Installed PyTorch
+with both fp16/bf16 matrix entries, read-only contents, ubuntu-22.04, no secrets,
+no self-hosted or fork trust expansion. Exact CPython/build deps and unchanged
+native/Python two-stage runs. Provision wheelhouse in RUNNER_TEMP from lock with
+--require-hashes --only-binary=:all: --no-deps, CPU+PyPI indexes, no cache writes.
+Run third stage CLI above; explicit real-torch host suite from its new venv,
+source-dir ROOT only for clearly host-mock tests. Upload evidence always incl
+hidden stamps and failures. 120 minute max budget; jobs2 builds. Original p05
+Python workflow remains all prior scope. Contract tests check behavior/coverage.
+
+Checker CLI additionally requires --contract ABS_COPIED_CONTRACT. Runner copies and hashes the contract manifest beside checker; checker verifies its sha matches request and pins. Tensor record fields are shape,strides,dtype,device,storage_offset,requires_grad,bytes (lowercase physical-order hex).

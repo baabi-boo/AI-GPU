@@ -1,0 +1,38 @@
+--- a/python/vortex_ai/torch_ops.py
++++ b/python/vortex_ai/torch_ops.py
+@@ -209,10 +209,14 @@
+         self._last_operation = None
+         self._token = 0
+         self._ready()
++        retained_adapter = self
+         try:
+             with _REGISTRY_GATE:
+                 for existing in _REGISTRY.values():
+                     if existing._session is session:
++                        # A prior constructor may have registered successfully
++                        # before interruption prevented assignment by its caller.
++                        retained_adapter = existing
+                         raise _api.BindingError("This native session already has a PyTorch adapter",
+                                                 session=session, kind="state")
+                 token = next(_TOKENS)
+@@ -221,7 +225,7 @@
+                 self._token = token
+                 _REGISTRY[token] = self
+         except BaseException as error:
+-            _retain_error(error, self)
++            _retain_error(error, retained_adapter)
+             raise
+ 
+     def _ready(self):
+@@ -229,6 +233,11 @@
+             raise _api.BindingError("The PyTorch adapter is detached", session=self._session, kind="state")
+         with self._session._gate:
+             self._session._ensure_open()
++            if not self._session.info:
++                raise _api.BindingError(
++                    "Native session initialization did not finish; close the retained "
++                    "session before opening a new qualified session",
++                    session=self._session, kind="state")
+         if self._session.pending_operations():
+             raise _api.BindingError("Native work is still owned; complete explicit close before a new call",
+                                     session=self._session, kind="state")

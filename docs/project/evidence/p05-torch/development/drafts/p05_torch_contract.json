@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "contract_id": "p05-torch-custom-ops-v1",
+  "framework": {
+    "name": "torch",
+    "version": "2.15.0+cpu",
+    "distribution": "cpu",
+    "python": "3.12.14",
+    "implementation": "CPython",
+    "gil": true,
+    "platform": "linux",
+    "machine": "x86_64",
+    "byteorder": "little"
+  },
+  "requirements": {
+    "path": "ci/project/p05_torch_requirements.lock",
+    "sha256": "a4186e5b4f85ae6e9519e42d1bf063ac3cad11fedbe1dbf5a03ab746e4002d5b"
+  },
+  "wheels": [
+    {
+      "name": "filelock",
+      "version": "4.2.12",
+      "filename": "filelock-4.2.12-py3-none-any.whl",
+      "size": 222442,
+      "sha256": "21decfec02f116ed4c954433cdb31f28c3b346b784543177b6d7059da2702ee9"
+    },
+    {
+      "name": "fsspec",
+      "version": "2026.9.0",
+      "filename": "fsspec-2026.9.0-py3-none-any.whl",
+      "size": 221738,
+      "sha256": "8dd6e646e99ea382bd85f97a45e6b526a442d79423a7dc673f1e2756d05fcb5f"
+    },
+    {
+      "name": "Jinja2",
+      "version": "3.1.6",
+      "filename": "jinja2-3.1.6-py3-none-any.whl",
+      "size": 134899,
+      "sha256": "85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67"
+    },
+    {
+      "name": "MarkupSafe",
+      "version": "3.0.4",
+      "filename": "markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "size": 22985,
+      "sha256": "8e124f974786f831d6043728e38296969d3579db8896fe004682f5758e613581"
+    },
+    {
+      "name": "mpmath",
+      "version": "1.3.0",
+      "filename": "mpmath-1.3.0-py3-none-any.whl",
+      "size": 536198,
+      "sha256": "a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c"
+    },
+    {
+      "name": "networkx",
+      "version": "3.7",
+      "filename": "networkx-3.7-py3-none-any.whl",
+      "size": 2142205,
+      "sha256": "e3fd2c13a7814cee3746340d8d7f8598a67f16a58bf47fb7f8793fab6efca1b0"
+    },
+    {
+      "name": "numpy",
+      "version": "2.3.5",
+      "filename": "numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "size": 16606086,
+      "sha256": "0d8163f43acde9a73c2a33605353a4f1bc4798745a8b1d73183b28e5b435ae28"
+    },
+    {
+      "name": "setuptools",
+      "version": "84.2.1",
+      "filename": "setuptools-84.2.1-py3-none-any.whl",
+      "size": 876263,
+      "sha256": "ca140b45d5325a9478f880e351484f62fef15f336462e449ca0c03c873d589c2"
+    },
+    {
+      "name": "sympy",
+      "version": "1.14.0",
+      "filename": "sympy-1.14.0-py3-none-any.whl",
+      "size": 6299353,
+      "sha256": "e091cc3e99d2141a0ba2847328f5479b05d94a6635cb96148ccb3f34671bd8f5"
+    },
+    {
+      "name": "torch",
+      "version": "2.15.0+cpu",
+      "filename": "torch-2.15.0+cpu-cp312-cp312-manylinux_2_28_x86_64.whl",
+      "size": 209530490,
+      "sha256": "0955c7e3446326293f48af18fad67872fa31dee5a36a87690eb9e5be8b465be3"
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0",
+      "filename": "typing_extensions-4.16.0-py3-none-any.whl",
+      "size": 45571,
+      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+    }
+  ],
+  "operators": [
+    {
+      "name": "vortex_ai::matmul_v1",
+      "schema": "matmul_v1(Tensor a, Tensor b, int session_token, int poison) -> Tensor",
+      "native_entry": "Session.submit",
+      "result_dtype": "torch.float32"
+    },
+    {
+      "name": "vortex_ai::fixed_mlp_v1",
+      "schema": "fixed_mlp_v1(str case_id, int session_token, int poison) -> Tensor",
+      "native_entry": "Session.model",
+      "result_shape": [
+        16,
+        4
+      ],
+      "result_dtype": "torch.float32"
+    }
+  ],
+  "input_formats": [
+    "fp16",
+    "bf16"
+  ],
+  "matmul_signatures": [
+    [
+      8,
+      4,
+      8
+    ],
+    [
+      8,
+      4,
+      16
+    ],
+    [
+      16,
+      8,
+      16
+    ]
+  ],
+  "matmul_cases": [
+    "single-dense_boundaries",
+    "numerical-cross_tile_rounding_positive",
+    "multi-dense_boundaries"
+  ],
+  "model_families": [
+    "seeded_dense",
+    "negated_dense",
+    "zero",
+    "signed_basis",
+    "split_boundary"
+  ],
+  "output_poisons": [
+    "7fc0dead",
+    "deadbeef"
+  ],
+  "qualification_per_format": {
+    "matmul_runs": 6,
+    "model_runs": 10,
+    "matmul_launches": 6,
+    "model_launches": 30,
+    "total_launches": 36,
+    "event_profile_pairs": 180
+  },
+  "unsupported": [
+    "autograd",
+    "training",
+    "forward_ad",
+    "autocast",
+    "vmap",
+    "functionalization",
+    "fake_meta",
+    "torchscript",
+    "fullgraph_compile",
+    "cuda_tensor_input",
+    "tensor_subclasses",
+    "arbitrary_models",
+    "arbitrary_shapes",
+    "zero_copy",
+    "concurrent_sessions"
+  ],
+  "evidence_level": "simulated",
+  "acceptance_claimed": false
+}

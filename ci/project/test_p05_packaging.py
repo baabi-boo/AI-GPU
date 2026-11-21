@@ -18,6 +18,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import tomllib
 import types
 import unittest
 from unittest import mock
@@ -92,13 +93,77 @@ class PackagingIdentityTests(PackagingTestCase):
         self.assertEqual(identity.header_bytes.count(b'{"", "", "", 0ULL}'), 6)
         self.assertFalse((self.source / "python/p05_build").exists())
 
-    def test_binding_inventory_covers_every_shipped_python_module_including_launcher(self):
+    def test_binding_inventory_covers_launcher_and_optional_framework_adapter(self):
         expected = {row["path"] for row in self.loaded.identity.sources
                     if row["path"].startswith("python/vortex_ai/")}
-        self.assertIn("python/vortex_ai/launch.py", expected)
+        self.assertTrue({"python/vortex_ai/launch.py",
+                         "python/vortex_ai/torch_ops.py"}.issubset(expected))
+        includes = {line.removeprefix("include ")
+                    for line in (self.source / "MANIFEST.in").read_text().splitlines()
+                    if line.startswith("include ")}
+        self.assertTrue(expected.issubset(includes))
         self.assertEqual(expected, {path.relative_to(ROOT).as_posix()
                                     for path in (ROOT / "python/vortex_ai").glob("*.py")})
         self.assertEqual(self.loaded.declarations["ext_modules"][0].name, "vortex_ai._native")
+
+    def test_base_import_does_not_load_framework_or_native_dependencies(self):
+        metadata = tomllib.loads((self.source / "pyproject.toml").read_text())
+        self.assertEqual(metadata["project"]["dependencies"], [])
+        code = """
+import importlib.abc
+import sys
+
+class RejectOptional(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        if (fullname in ('vortex_ai._native', 'vortex_ai._bundle', 'vortex_ai.torch_ops')
+                or fullname == 'torch' or fullname.startswith('torch.')):
+            raise AssertionError('base import requested optional dependency: ' + fullname)
+
+sys.path.insert(0, sys.argv[1])
+sys.meta_path.insert(0, RejectOptional())
+import vortex_ai
+assert vortex_ai.BINDING_API == 1
+assert 'torch' not in sys.modules
+assert 'vortex_ai.torch_ops' not in sys.modules
+print('dependency-free base import')
+"""
+        result = subprocess.run(
+            [sys.executable, "-I", "-S", "-B", "-c", code, str(self.source / "python")],
+            cwd=self.area, capture_output=True, text=True, timeout=5)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(result.stdout, "dependency-free base import\n")
+
+    def test_optional_framework_import_reports_missing_torch_without_loading_native(self):
+        code = """
+import importlib.abc
+import sys
+
+class MissingTorch(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname == 'torch':
+            raise ModuleNotFoundError('No module named torch', name='torch')
+        if fullname in ('vortex_ai._native', 'vortex_ai._bundle'):
+            raise AssertionError('missing-framework import requested native code: ' + fullname)
+
+sys.path.insert(0, sys.argv[1])
+sys.meta_path.insert(0, MissingTorch())
+import vortex_ai
+try:
+    import vortex_ai.torch_ops
+except ImportError as error:
+    message = str(error).lower()
+    assert 'torch' in message and 'install' in message, message
+else:
+    raise AssertionError('optional framework import succeeded without torch')
+assert 'vortex_ai._native' not in sys.modules
+assert 'vortex_ai._bundle' not in sys.modules
+print('actionable missing-framework error')
+"""
+        result = subprocess.run(
+            [sys.executable, "-I", "-S", "-B", "-c", code, str(self.source / "python")],
+            cwd=self.area, capture_output=True, text=True, timeout=5)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(result.stdout, "actionable missing-framework error\n")
 
     def test_loading_setup_leaves_no_imported_package_or_source_bytecode(self):
         prior = {key: value for key, value in sys.modules.items() if key.startswith("vortex_ai")}
@@ -211,9 +276,16 @@ class PackagingIdentityTests(PackagingTestCase):
                         load_setup(self.source)
                 finally:
                     path.unlink()
-        (self.source / "python/vortex_ai/launch.py").unlink()
-        with self.assertRaisesRegex(RuntimeError, "sources differ from the binding inventory"):
-            load_setup(self.source)
+        for relative in ("python/vortex_ai/launch.py", "python/vortex_ai/torch_ops.py"):
+            path = self.source / relative
+            raw = path.read_bytes()
+            path.unlink()
+            try:
+                with self.subTest(missing=relative), self.assertRaisesRegex(
+                        RuntimeError, "sources differ from the binding inventory"):
+                    load_setup(self.source)
+            finally:
+                path.write_bytes(raw)
 
     def test_prepared_source_rejects_replacement_bundle_and_unbound_rebinding(self):
         self.prepare()
@@ -435,7 +507,7 @@ class PackagingCommandTests(PackagingTestCase):
             str(metadata), generator="host-only-test")
         self.assertFalse((root / native).read_bytes().startswith(b"\x7fELF"))
 
-    def test_wheel_rejects_extra_root_module_package_library_and_missing_launcher(self):
+    def test_wheel_rejects_extra_payload_and_missing_launcher_or_adapter(self):
         command, root, metadata, _ = self.payload()
         for relative in ("unexpected.py", "vortex_ai/extra.so", "vortex_ai/extra.py"):
             path = root / relative
@@ -443,19 +515,28 @@ class PackagingCommandTests(PackagingTestCase):
             with self.subTest(extra=relative), self.assertRaisesRegex(RuntimeError, "wheel payload differs"):
                 command.write_wheelfile(str(metadata))
             path.unlink()
-        (root / "vortex_ai/launch.py").unlink()
-        with self.assertRaisesRegex(RuntimeError, "wheel payload differs"):
-            command.write_wheelfile(str(metadata))
+        for relative in ("vortex_ai/launch.py", "vortex_ai/torch_ops.py"):
+            path = root / relative
+            raw = path.read_bytes()
+            path.unlink()
+            try:
+                with self.subTest(missing=relative), self.assertRaisesRegex(RuntimeError, "wheel payload differs"):
+                    command.write_wheelfile(str(metadata))
+            finally:
+                path.write_bytes(raw)
         self.loaded.bases["bdist_wheel"].write_wheelfile.assert_not_called()
 
     def test_wheel_rejects_stale_python_bytes_and_symlinked_extension(self):
         command, root, metadata, native = self.payload()
-        launcher = root / "vortex_ai/launch.py"
-        raw = launcher.read_bytes()
-        launcher.write_bytes(raw + b"\n# stale payload\n")
-        with self.assertRaisesRegex(RuntimeError, "Python source differs"):
-            command.write_wheelfile(str(metadata))
-        launcher.write_bytes(raw)
+        for relative in ("vortex_ai/launch.py", "vortex_ai/torch_ops.py"):
+            path = root / relative
+            raw = path.read_bytes()
+            path.write_bytes(raw + b"\n# stale payload\n")
+            try:
+                with self.subTest(stale=relative), self.assertRaisesRegex(RuntimeError, "Python source differs"):
+                    command.write_wheelfile(str(metadata))
+            finally:
+                path.write_bytes(raw)
         extension = root / native
         moved = self.area / "external-inert-extension"
         extension.rename(moved)
@@ -471,9 +552,10 @@ class PackagingCommandTests(PackagingTestCase):
             command.make_release_tree(str(existing), list(BUNDLE.SOURCE_PATHS))
         command.get_finalized_command = mock.Mock(return_value=types.SimpleNamespace(
             egg_info="python/vortex_ai.egg-info"))
-        files = [path for path in BUNDLE.SOURCE_PATHS if not path.endswith("launch.py")]
-        with self.assertRaisesRegex(RuntimeError, "omits a binding build input"):
-            command.make_release_tree(str(self.area / "new-release"), files)
+        for missing in ("python/vortex_ai/launch.py", "python/vortex_ai/torch_ops.py"):
+            files = [path for path in BUNDLE.SOURCE_PATHS if path != missing]
+            with self.subTest(missing=missing), self.assertRaisesRegex(RuntimeError, "omits a binding build input"):
+                command.make_release_tree(str(self.area / "new-release"), files)
         self.loaded.bases["sdist"].make_release_tree.assert_not_called()
 
 

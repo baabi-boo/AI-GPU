@@ -17,7 +17,8 @@ FIXTURE_SHA256 = "d22a899827afb3e8c22a528fc6a27fd12ff114ef39caf9ffa0cccd77e849cd
 SOURCE_PATHS = tuple(sorted((
     "pyproject.toml", "setup.py", "MANIFEST.in",
     "python/vortex_ai/__init__.py", "python/vortex_ai/_api.py",
-    "python/vortex_ai/_bundle.py", "python/vortex_ai/launch.py", "python/native/module.cpp",
+    "python/vortex_ai/_bundle.py", "python/vortex_ai/launch.py",
+    "python/vortex_ai/torch_ops.py", "python/native/module.cpp",
     "python/native/runtime_loader.cpp", "python/native/runtime_loader.h",
     "sw/runtime/ai/contract.cpp", "sw/runtime/ai/contract.h",
     "sw/runtime/ai/runtime.cpp", "sw/runtime/ai/runtime.h",

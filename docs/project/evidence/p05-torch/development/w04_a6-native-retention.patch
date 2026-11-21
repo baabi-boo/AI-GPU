@@ -1,0 +1,47 @@
+--- a/ci/project/p05_torch_native_host_tests.py
++++ b/ci/project/p05_torch_native_host_tests.py
+@@ -211,7 +211,7 @@
+     controls.assert_no_resources()
+     assert controls.counter("max_live_devices") <= 1
+     assert controls.counter("input_copy_mismatches") == 0
+-    print(json.dumps({"scope": SCOPE, "scenario": name, "format": fmt,
++    print(json.dumps({"scope": SCOPE, "scenario": name, "format": fmt, "outcome": "pass",
+                       "torch_version": str(torch.__version__), "extension_file": _native.__file__,
+                       "counters": controls.counters, "metrics": metrics}, sort_keys=True))
+ 
+@@ -258,17 +258,29 @@
+                 "timeout_seconds": 30, "scope": SCOPE})
+             began = time.monotonic()
+             try:
+-                result = runtime.run_python(source, timeout=30, check=False)
++                result = subprocess.run([sys.executable, "-c", source], cwd=runtime.root,
++                                        env=runtime.environment(), capture_output=True,
++                                        timeout=30, check=False)
+                 row = {"scenario": scenario, "exit_code": result.returncode,
+                        "outcome": "pass" if result.returncode == 0 and not result.stderr else "fail"}
+                 stdout, stderr = result.stdout, result.stderr
+-                if row["outcome"] == "pass":
+-                    row["observations"] = json.loads(stdout)
+             except subprocess.TimeoutExpired as error:
+                 row = {"scenario": scenario, "exit_code": None, "outcome": "fail", "reason": "30-second child timeout"}
+-                stdout, stderr = str(error.stdout or ""), str(error.stderr or "")
+-            (target / "stdout.log").write_text(stdout)
+-            (target / "stderr.log").write_text(stderr)
++                stdout, stderr = error.stdout or b"", error.stderr or b""
++            (target / "stdout.log").write_bytes(stdout)
++            (target / "stderr.log").write_bytes(stderr)
++            if row["outcome"] == "pass":
++                try:
++                    observation = json.loads(stdout)
++                    expected = {"scope": SCOPE, "scenario": scenario,
++                                "format": args.format, "outcome": "pass"}
++                    if type(observation) is not dict or any(observation.get(key) != value
++                                                           for key, value in expected.items()):
++                        row.update(outcome="fail", reason="child observation identity differs")
++                    else:
++                        row["observations"] = observation
++                except (ValueError, UnicodeError) as error:
++                    row.update(outcome="fail", reason="invalid child JSON: " + str(error))
+             row["seconds"] = round(time.monotonic() - began, 3)
+             row["stdout_sha256"], row["stderr_sha256"] = digest(target / "stdout.log"), digest(target / "stderr.log")
+             report["results"].append(row)

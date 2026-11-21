@@ -1,0 +1,68 @@
+--- a/.github/workflows/p05-torch.yml
++++ b/.github/workflows/p05-torch.yml
+@@ -244,6 +244,13 @@
+           "$P05_ROOT/torch-work/venv/bin/python" -I -B ci/project/p05_torch_host_tests.py \
+             --source-dir "$PWD" --output "$P05_ROOT/evidence/torch-host.json" \
+             2>&1 | tee "$P05_ROOT/evidence/torch-host.log"
++      - name: Test compiled native ownership with real PyTorch
++        timeout-minutes: 20
++        run: |
++          "$P05_ROOT/torch-work/venv/bin/python" -I -B ci/project/p05_torch_native_host_tests.py \
++            --source-dir "$PWD" --work-dir "$P05_ROOT/evidence/torch-native-host" \
++            --format "$P05_FORMAT" \
++            2>&1 | tee "$P05_ROOT/evidence/torch-native-host.log"
+       - name: Retain native Python and PyTorch execution packets
+         if: always()
+         uses: actions/upload-artifact@v4
+--- a/ci/project/test_p05_torch_ci.py
++++ b/ci/project/test_p05_torch_ci.py
+@@ -158,10 +158,11 @@
+             "Verify clean source and relocate restored tools", "Provision hash-locked CPU framework wheels",
+             "Execute unchanged native model reference", "Execute installed Python variant against native results",
+             "Execute installed PyTorch variant against native results", "Test real PyTorch with scripted native failures",
++            "Test compiled native ownership with real PyTorch",
+             "Retain native Python and PyTorch execution packets",
+         ]
+         positions = [self.steps.index(named(self.steps, name)) for name in names]
+-        self.assertEqual(positions, list(range(8, 15)))
++        self.assertEqual(positions, list(range(8, 16)))
+         run = named(self.steps, names[4])
+         self.assertEqual(command(run), [
+             "python3", "ci/project/p05_torch_execute.py", "run", "--source-dir", "$PWD",
+@@ -203,6 +204,36 @@
+                       "scope='simx-installed-pytorch'", "native_execution='not_run'", "python_execution='not_run'",
+                       "torch_execution='not_run'", "acceptance_claimed=False", "'workflow.yml'"):
+             self.assertIn(token, identity)
++
++    def test_compiled_host_runtime_is_explicit_bounded_and_retained_separately(self):
++        host = named(self.steps, "Test compiled native ownership with real PyTorch")
++        self.assertEqual(host["timeout-minutes"], ("20", []))
++        self.assertEqual(command(host), [
++            "$P05_ROOT/torch-work/venv/bin/python", "-I", "-B", "ci/project/p05_torch_native_host_tests.py",
++            "--source-dir", "$PWD", "--work-dir", "$P05_ROOT/evidence/torch-native-host",
++            "--format", "$P05_FORMAT",
++            "2>&1", "|", "tee", "$P05_ROOT/evidence/torch-native-host.log",
++        ])
++        self.assertNotIn("--bundle", flattened(host))
++        self.assertNotIn("if", host)
++
++    def test_compiled_host_failure_propagates_and_preserves_raw_log(self):
++        bash = shutil.which("bash")
++        self.assertIsNotNone(bash)
++        with tempfile.TemporaryDirectory(prefix="p05-compiled-host-workflow-") as directory:
++            root = Path(directory)
++            (root / "evidence").mkdir()
++            stub = root / "torch-work/venv/bin/python"
++            stub.parent.mkdir(parents=True)
++            stub.write_text("#!/bin/sh\nprintf '%s\\n' 'injected compiled host failure'\nexit 23\n")
++            stub.chmod(0o700)
++            env = {"PATH": os.defpath, "P05_ROOT": str(root), "P05_FORMAT": "bf16"}
++            body = script(named(self.steps, "Test compiled native ownership with real PyTorch"))
++            result = subprocess.run([bash, "--noprofile", "--norc", "-e", "-o", "pipefail", "-c", body],
++                                    cwd=root, env=env, capture_output=True, text=True, timeout=10)
++            self.assertEqual(result.returncode, 23, result.stdout + result.stderr)
++            self.assertEqual((root / "evidence/torch-native-host.log").read_text(),
++                             "injected compiled host failure\n")
+ 
+     def test_shell_pipeline_propagates_runner_failure_and_preserves_raw_log(self):
+         bash = shutil.which("bash")

@@ -2,13 +2,15 @@
 
 `vortex-ai==0.1.0` exposes binding API **1** as `vortex_ai`, with a C++17 CPython
 extension wrapping the existing managed matmul and frozen P04 model owners.
-The qualified target is Linux x86_64 CPython **3.12.14** with the GIL and main
-interpreter, using separate installed SimX FP16 and BF16 bundles. Hosted bound
-qualification used G++ **11.4.0**, Clang **20.1.8** and GNU Make **4.3**.
+The historical copying-binding qualification targeted Linux x86_64 CPython
+**3.12.14** with the GIL and main interpreter, using separate installed SimX
+FP16 and BF16 bundles. That hosted qualification used G++ **11.4.0**,
+Clang **20.1.8** and GNU Make **4.3**.
 The separate local unbound packaging check used GCC/G++ **14.2.0** and glibc
 **2.41**. Build dependencies are pinned to setuptools **84.2.1**, wheel **0.48.0**,
-and packaging **26.3**; there are no Python runtime dependencies. Wheels are
-platform-specific `cp312`, with no ABI3 or manylinux claim.
+and packaging **26.3**; the core package declares no Python runtime
+dependencies. Wheels are platform-specific `cp312`, with no ABI3 or manylinux
+claim.
 
 The [versioned contract](../docs/designs/python_binding_v1.md) specifies exact
 representations, ownership, errors, and supported shapes. The
@@ -17,16 +19,26 @@ records the separate P04 → P05 commands and
 [accepted P05-A01 evidence](../docs/project/evidence/p05-python/acceptance-binding.json)
 at source `e1420fd550f716df33a2556057b7086a03032cbe`. Both installed formats passed
 native comparison, lifetime/error review and clean-install provenance checks.
-Their shared 22-input binding-source SHA-256 is
+Those historical packages share the 22-input binding-source SHA-256
 `c4d476be1ab3dd73fbbe9b3027aac78db4a4890e536efea57319aecffcd6b19a`.
 See the [execution packet](../docs/project/evidence/p05-python/README.md) for the
 144 native/Python launches, 660 profile pairs and clean hosted 2,174-test result.
 Host failure injection and unbound import checks remain separately scoped.
 
-P05 remains `in_progress`: the PyTorch custom-op route and its tested framework
-compatibility matrix, P05-A02/A03, remain unearned. No PyTorch version is currently
-qualified. This package has no CPU matmul fallback, general model loader,
-autograd, training, multi-device support or CUDA binary compatibility.
+The current package adds the optional `vortex_ai.torch_ops` module and its
+[eager custom-operator contract](../docs/designs/torch_custom_ops_v1.md).
+`import vortex_ai` remains independent of PyTorch; importing the optional module
+requires the separately installed **PyTorch 2.15.0+cpu** closure below. The
+[framework compatibility matrix](../docs/project/p05-torch-compatibility.md)
+separates implemented behavior and actual host tests from installed SimX
+qualification, which is still pending. P05 remains `in_progress`; P05-A02/A03
+are unearned. No PyTorch version has installed-framework acceptance yet.
+
+Adding this module changes the current package inventory to **23 inputs**.
+Build a fresh matching bundle, sdist and wheel; the historical 22-input packages
+above do not contain the adapter. This package has no CPU matmul fallback,
+general model loader, autograd, training, multi-device support or CUDA binary
+compatibility.
 
 ## Package identity and native startup
 
@@ -143,7 +155,7 @@ Wheel building recopies verified Python sources and rebuilds the extension;
 stale/extra payloads and `--skip-build` are rejected. The bundle remains external
 and is needed for execution, even though the offline wheel build needs no bundle.
 
-Each extension build copies and verifies exactly the 22 inventoried inputs into
+Each current extension build copies and verifies exactly the 23 inventoried inputs into
 a fresh private directory under its build temporary directory. Its native project
 sources, include paths, and header dependencies all use that staged tree, with
 the generated receipt directory first in the project include search. Unlisted
@@ -227,3 +239,127 @@ completed explicit close before new work. Models suspend an idle matmul session;
 later submission/memory queries resume it only after the model releases its
 lease. Cleanup failure blocks new work in that process. See the versioned
 contract for recovery and process restrictions.
+
+## Optional PyTorch installation
+
+Provision Linux x86_64 CPython **3.12.14**, with the GIL and main interpreter,
+before using this recipe. The selected framework is exactly **2.15.0+cpu**.
+Its eleven dependency wheels and hashes are frozen in the
+[requirements lock](../ci/project/p05_torch_requirements.lock) and
+[framework manifest](../ci/project/p05_torch_contract.json). The base binding
+package does not install this optional dependency set automatically.
+
+Use the newly built bound wheel from the current 23-input source inventory and
+its exact matching bundle. The package-output directory below must contain
+exactly that one wheel. Create a separate venv and use a fresh process for each
+FP16/BF16 bundle. These are installation instructions; successful installation
+alone does not earn framework qualification.
+
+```sh
+P05_TORCH_LOCK=/absolute/AI-GPU/ci/project/p05_torch_requirements.lock
+P05_TORCH_WHEELS=/absolute/new/framework-wheels
+P05_TORCH_PACKAGE=/absolute/new/package-run/wheel
+P05_TORCH_VENV=/absolute/new/torch-venv
+mkdir "$P05_TORCH_WHEELS"
+python3.12 -I -B -m pip --isolated download \
+  --disable-pip-version-check --no-cache-dir --only-binary=:all: \
+  --no-deps --require-hashes \
+  --index-url https://download.pytorch.org/whl/cpu \
+  --extra-index-url https://pypi.org/simple \
+  --dest "$P05_TORCH_WHEELS" -r "$P05_TORCH_LOCK"
+python3.12 -I -B -m venv --copies "$P05_TORCH_VENV"
+"$P05_TORCH_VENV/bin/python" -I -B -m pip --isolated install \
+  --no-index --find-links "$P05_TORCH_WHEELS" --require-hashes --no-deps \
+  --no-compile --no-cache-dir --disable-pip-version-check \
+  -r "$P05_TORCH_LOCK"
+"$P05_TORCH_VENV/bin/python" -I -B -m pip --isolated install \
+  --no-index --no-deps --no-compile --no-cache-dir \
+  --disable-pip-version-check "$P05_TORCH_PACKAGE"/*.whl
+```
+
+The network download prepares a local wheelhouse. Both installation commands
+then run offline. The lock fixes the optional framework closure; the bound
+wheel and launcher independently enforce the native bundle/source identity.
+Keep the wheel's full manifest-derived build tag when copying it.
+
+## Eager PyTorch example
+
+Save the following successful-call example as `/absolute/torch_example.py`
+outside the checkout. It invokes both registered operators, using the selected
+bundle's format. `TorchSession` borrows the native session and supplies its
+process-local token; closing the adapter does not close that native session.
+
+```python
+import sys
+import torch
+from vortex_ai import Session
+from vortex_ai.torch_ops import TorchSession
+
+session = Session.open(sys.argv[1])
+adapter = TorchSession(session, timeout_seconds=30.0)
+format_name = session.info["format"]
+dtype = {"fp16": torch.float16, "bf16": torch.bfloat16}[format_name]
+
+# M=8, N=4, K=8. B's caller-requested copy packs columns physically.
+a = torch.zeros((8, 8), dtype=dtype, device="cpu")
+b_row_major = torch.zeros((8, 4), dtype=dtype, device="cpu")
+b = b_row_major.t().contiguous().t()
+assert a.stride() == (8, 1)
+assert b.stride() == (1, 8)
+result = torch.ops.vortex_ai.matmul_v1(a, b, adapter.token, 0x7FC0DEAD)
+
+# This executor owns frozen inputs and weights; it is not a model loader.
+model_result = adapter.fixed_mlp(format_name + "-seeded_dense")
+assert result.shape == (8, 4) and result.dtype == torch.float32
+assert model_result.shape == (16, 4) and model_result.dtype == torch.float32
+assert not session.pending_operations()
+adapter.close()
+session.close().raise_for_status()
+
+# Both results retain independent CPU storage after native shutdown.
+print("matmul:", result.shape, result.dtype, result.device)
+print("fixed MLP:", model_result.shape, model_result.dtype, model_result.device)
+```
+
+Launch it with the framework venv and the bundle paired with its installed wheel:
+
+```sh
+P05_BUNDLE=/absolute/qualified/bundle
+"$P05_TORCH_VENV/bin/python" -I -B -m vortex_ai.launch --bundle "$P05_BUNDLE" -- \
+  /absolute/torch_example.py "$P05_BUNDLE"
+```
+
+PyTorch strides count **elements**, unlike the binding `Tensor` byte strides in
+the earlier example. A must be row major `(K,1)` and B column major `(1,K)`;
+both need offset zero and exactly their packed storage extent. The adapter
+preserves FP16/BF16 bits and returns independent CPU FP32 results only after
+successful native completion and explicit close. CPU tensors supply storage;
+the declared matmul work goes through the native SimX owner.
+
+The example shows the normal path. An application must keep `session` and
+`adapter` alive when a call raises, including on interruption or allocation
+failure. Inspect `session.pending_operations()` and explicitly retry the
+retained operations' bounded wait, advance and close methods; the authoritative
+owners can exist even when assignment of a returned operation failed. Inspect
+all resulting status channels before detaching the adapter and closing the
+native session. A timeout is not cancellation, and destructors may drain
+indefinitely. The retry deadline is checked between native calls; it is not a
+strict whole-call wall-clock limit.
+
+If construction registers an adapter but interruption prevents assignment,
+retry `TorchSession(session)`. The duplicate-attachment `BindingError.adapter`
+identifies the existing adapter even if the native session now has pending
+work or is closed. Complete any pending operation before detaching it; recovery
+does not reopen a closed native session. A failed `Session.open` can retain its
+native owner on the error;
+close that owner before creating another session. An incompletely initialized
+session cannot be attached to the adapter.
+
+Use ordinary eager inference, `torch.no_grad()` or `torch.inference_mode()`
+with non-differentiable inputs. Original reverse-gradient requests and forward
+tangents are rejected, including under those contexts. Autocast, transforms,
+graph capture and scripted execution are unqualified. Some higher-level APIs
+evaluate ordinary eager work before entering a detectable transform; a later
+exception therefore does not prove that no native work ran. See the
+[matrix and failure boundaries](../docs/project/p05-torch-compatibility.md)
+for exact tested paths and limitations.

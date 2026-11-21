@@ -1,0 +1,45 @@
+--- a/python/vortex_ai/torch_ops.py
++++ b/python/vortex_ai/torch_ops.py
+@@ -78,7 +78,9 @@
+         raise ValueError(f"{name} must use ordinary strided CPU storage")
+     if value.dtype not in (torch.float16, torch.bfloat16):
+         raise ValueError(f"{name} must have dtype torch.float16 or torch.bfloat16")
+-    if value.requires_grad or torch.autograd.forward_ad.unpack_dual(value).tangent is not None:
++    with torch.inference_mode(False):
++        tangent = torch.autograd.forward_ad.unpack_dual(value).tangent
++    if value.requires_grad or tangent is not None:
+         raise ValueError("Vortex custom operators do not support reverse or forward differentiation")
+     if value.is_neg() or value.is_conj():
+         raise ValueError(f"{name} has an unsupported unresolved negative or conjugate view")
+--- a/ci/project/p05_torch_host_tests.py
++++ b/ci/project/p05_torch_host_tests.py
+@@ -232,6 +232,29 @@
+             dual = torch.autograd.forward_ad.make_dual(a, torch.ones_like(a))
+             self.assertFalse(dual.requires_grad)
+             self.rejected_before_submit(lambda: self.raw(dual, b))
++
++    def test_forward_ad_duals_rejected_inside_inference_mode(self):
++        a, b, *_ = self.tensors()
++        with torch.autograd.forward_ad.dual_level():
++            dual_a = torch.autograd.forward_ad.make_dual(a, torch.ones_like(a))
++            dual_b = torch.autograd.forward_ad.make_dual(b, torch.ones_like(b))
++            with torch.inference_mode():
++                self.rejected_before_submit(lambda: self.raw(dual_a, b))
++                self.rejected_before_submit(lambda: self.raw(a, dual_b))
++
++    def test_inference_primal_tensors_remain_supported(self):
++        with torch.inference_mode():
++            a, b, *_ = self.tensors()
++            self.assertTrue(a.is_inference())
++            self.assertTrue(b.is_inference())
++            self.assert_output(self.raw(a, b), self.adapter.last_operation, (8, 4))
++        self.assert_output(self.raw(a, b), self.adapter.last_operation, (8, 4))
++
++    def test_primal_inference_tensors_inside_forward_ad_level(self):
++        with torch.autograd.forward_ad.dual_level():
++            with torch.inference_mode():
++                a, b, *_ = self.tensors()
++                self.assert_output(self.raw(a, b), self.adapter.last_operation, (8, 4))
+ 
+     def test_autocast_rejected_for_both_operators(self):
+         a, b, *_ = self.tensors()

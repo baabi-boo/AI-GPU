@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/w04_a1_patch_acceptance",
+  "scope": "independent-nonauthor-review-of-integrated-adapter-and-storage-checker-corrections",
+  "disposition": "approve",
+  "acceptance_claimed": false,
+  "native_execution": "not_run",
+  "source_stable": true,
+  "source_files": [
+    {
+      "path": "python/vortex_ai/torch_ops.py",
+      "sha256": "95497fe03cb64655cbaeeaba5f1c92cdbb99c7899345b10da53204d869808218",
+      "size_bytes": 14372
+    },
+    {
+      "path": "python/vortex_ai/_api.py",
+      "sha256": "f66748c6657ddd55e8753343f49b43cce87003df770e8bbb20c70ee57e3d0db2",
+      "size_bytes": 32061
+    },
+    {
+      "path": "ci/project/p05_torch_host_tests.py",
+      "sha256": "2e25ce47a2aab79aea2363877462aa32527167957b2463e36ac264bcbfe134e6",
+      "size_bytes": 31636
+    },
+    {
+      "path": "ci/project/p05_torch_installed_check.py",
+      "sha256": "84fb3f257db05f560bdf102d6aba3c50334cd664c96fdf3d1b88e25c68df48fc",
+      "size_bytes": 18238
+    },
+    {
+      "path": "ci/project/test_p05_torch_adversarial.py",
+      "sha256": "876d0aad8e99593980465224c8cf210c264578b215e707b86e8b5ff6804487e0",
+      "size_bytes": 5303
+    },
+    {
+      "path": "ci/project/p05_installed_check.py",
+      "sha256": "72c8d2413cd278b0021785c6d0a88269b0f7859b232e317c11034d0808de98a0",
+      "size_bytes": 33256
+    },
+    {
+      "path": "docs/designs/torch_custom_ops_v1.md",
+      "sha256": "eaa6f55be5bbd1d6471aea98314baa6324a021870e459b73899fe9bbb2f2eba7",
+      "size_bytes": 9580
+    }
+  ],
+  "unchanged_from_base": {
+    "python/vortex_ai/_api.py": true,
+    "ci/project/p05_installed_check.py": true
+  },
+  "tests": [
+    {
+      "command": "../p05-torch-work/torch-venv/bin/python -I -B ci/project/p05_torch_host_tests.py --source-dir \"$PWD\" --output ../p05-torch-work/w04_a1-torch-host.json",
+      "scope": "host-only-real-pytorch-scripted-native-mock",
+      "exit_code": 0,
+      "tests_run": 43,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "duration_seconds": 6.004
+    },
+    {
+      "command": "env PYTHONPATH=ci/project python3 -B -m unittest test_p05_torch_adversarial -v",
+      "scope": "dependency-free-host-checker-policy",
+      "exit_code": 0,
+      "tests_run": 4,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "duration_seconds": 0.006
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    }
+  ],
+  "unresolved_blocking_findings": [],
+  "limitations": [
+    "No installed wheel/native extension/SimX execution performed by this review.",
+    "Constructor-publication recovery requires the borrowed native Session to remain open; closing it first may retain a closed registry entry until process exit.",
+    "Higher-level linearize/FX/scripted execution remains unqualified and can evaluate ordinary eager work."
+  ],
+  "artifacts": [
+    {
+      "path": "w04_a1-torch-host.json",
+      "sha256": "9acfa40dd7d0f0b7b004a3bc7484371ecd92c293b870a3e56c113ec9dd97208e",
+      "size_bytes": 8526
+    },
+    {
+      "path": "w04_a1-torch-host.log",
+      "sha256": "91a64349bea95d9475188dd4fc800e4acf7e27c99bd574f1546d103b742217c7",
+      "size_bytes": 6185
+    },
+    {
+      "path": "w04_a1-checker.log",
+      "sha256": "69e3fbd9bc25265398acd728a22636ceda1f485cb4c4a14c4da7573e2fc1231a",
+      "size_bytes": 810
+    },
+    {
+      "path": "w04_a1-sources-before.json",
+      "sha256": "db16506159fb5b4a0ae540a6f10c51962edc40c3b8c216ff90ecc8835b43090b",
+      "size_bytes": 1152
+    },
+    {
+      "path": "w04_a1-sources-after.json",
+      "sha256": "db16506159fb5b4a0ae540a6f10c51962edc40c3b8c216ff90ecc8835b43090b",
+      "size_bytes": 1152
+    }
+  ]
+}

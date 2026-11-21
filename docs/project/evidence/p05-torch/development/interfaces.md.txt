@@ -1,0 +1,68 @@
+# P05 Torch implementation seams — draft for wave 2
+
+Exact tested framework candidate: torch==2.15.0+cpu on Linux x86_64,
+CPython 3.12.14 with GIL. Base package keeps dependencies=[] and version 0.1.0.
+Module: python/vortex_ai/torch_ops.py, explicit opt-in only.
+
+Public owner: TorchSession(session, *, timeout_seconds=30.0), wrapping an exact
+existing vortex_ai.Session (caller owns native session closure). Strong process
+registry token monotonically allocated, no id reuse. `.token`, `.session`,
+`.last_operation`, `.pending_operations()`, `.matmul(a,b,*,poison=...)`,
+`.fixed_mlp(case_id,*,poison=...)`, `.close()` to detach only when no pending work.
+The adapter must retain its native session until explicit successful detach.
+Never make session-open implicit per op. Error owner remains queryable via native
+Session.pending_operations even if Python assignment/publication was interrupted.
+No automatic native session close inside adapter detach.
+
+Registered schemas (all positional, no default parameters in schema):
+vortex_ai::matmul_v1(Tensor a, Tensor b, int session_token, int poison) -> Tensor
+vortex_ai::fixed_mlp_v1(str case_id, int session_token, int poison) -> Tensor
+
+Eager-only low-level torch.library.Library registration per w01_a4 actual probes:
+CPU + Autograd matmul bodies; CompositeExplicitAutograd for no-Tensor fixed MLP.
+Reject transforming dispatch keys before native work, including tracer/vmap,
+functionalization, meta/fake, autocast and lazy negative/conjugate handling.
+Read final w01_a4 report before implementing. Strict raw entry guards and facade.
+
+Inputs: exact ordinary CPU torch.Tensor, rank2, same torch.float16/bfloat16,
+matching native session format; no gradients/forward duals/autocast; A (M,K)
+strides(K,1), B(K,N) strides(1,K); storage_offset0, exact dense storage extent,
+no neg/conj flags or subclass. Supported triples (8,4,8),(8,4,16),(16,8,16).
+Use int16 reinterpretation after validation, A physical contiguous and B.t()
+physical contiguous, tolist then struct.pack explicit little endian. No numpy,
+float/dtype conversion, implicit contiguous/reordering or pointer access.
+Output: frombuffer(bytearray(native.output_bytes()),dtype=float32).clone().view
+rows/columns; independent owned row-major CPU float32, exact raw bits.
+
+Execution: validate everything before submit; retain last_operation; wait/advance
+through only transient incomplete timeout; complete explicit close before output.
+Model status checked before and after close. Aggregate monotonic retry deadline
+is advisory between native calls, not a strict cancellation bound; individual
+native waits bounded <=100ms. Exceptions retain owners with no CPU fallback.
+Closed/unknown/stale/cross-process tokens, reentry/concurrency rejected.
+
+Diagnostics seam for installed checker: adapter.last_operation is actual completed
+Operation/ModelOperation, so checker reads status, trace(), record(iteration),
+output_bytes(), close() idempotently. This adds zero native launches. Native
+Session.memory_info before/after records resource restoration. Checker must read
+actual returned torch tensor bits independently, not substitute native bytes.
+
+Packaging owner adds module to _bundle.SOURCE_PATHS and MANIFEST.in, updates only
+current-source metadata tests/host fault runtime copying; historical evidence
+scripts and accepted source pins remain byte-for-byte. No new base dependencies.
+
+Qualification architecture: separate p05_torch_execute.py after unchanged fresh
+p04_execute.py and p05_execute.py. New isolated torch venv uses fresh matching
+wheel/bundle and a complete hash-locked CPU wheelhouse. Copy checker/helpers into
+outside-checkout directory, invoke installed verified vortex_ai.launch under -I.
+Retain frozen input/output bits, exact operator calls, native status/trace/record,
+framework version/distribution identities, raw logs and source/p05 packet digests.
+Reconcile framework route against fresh independent native records, not old data.
+Six matmul + ten model runs per format =>36 native launches per format; 72 total.
+Native + plain Python + torch workflow total216; no duplicate copied-native count.
+
+Root owns design contract/compatibility docs, lock and final phase integration.
+Wave2 separate ownership:
+a1 adapter; a2 packaging/inventory; a3 real-torch host tests;
+a4 installed checker+record verifier; a5 framework runner; a6 CI workflow/tests.
+Each new artifact self-contained and bounded, fail closed, no skip-as-pass.
