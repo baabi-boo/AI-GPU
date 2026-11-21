@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/w09_a6",
+  "assignment": "w09_a6",
+  "reviewed_at_utc": "2026-11-21T14:31:10.665808+00:00",
+  "scope": "Independent release-candidate synthesis of the named local integration commit and retained original/checkpoint evidence; no new execution or final publication claim.",
+  "outcome": "pass_for_observed_candidate_scope",
+  "blocking_findings": [],
+  "candidate": {
+    "local_commit": "1dac15c680499836abda6d017c007abf33f299eb",
+    "local_tree": "22af9083c55ae67003f89b13e581ffaf06943cd6",
+    "worktree_scope": "The reviewed status.md correction and new change-impact/hosted-CI observations are later evidence edits; final ledger and publication remain integration-owner work.",
+    "final_published_commit": null
+  },
+  "review_inputs": {
+    "completed_assignments": [
+      "w08_a5",
+      "w09_a1",
+      "w09_a3"
+    ],
+    "receipt_ledger": "docs/project/p06-qualification-agent-execution.json",
+    "receipt_integration": "Completed raw receipts were read; wave 9 embedding is still pending in the observed ledger.",
+    "canonical_acceptance": "docs/project/evidence/p06-baseline/acceptance.json",
+    "canonical_roadmap": "docs/project/roadmap.json",
+    "impact_review": "docs/project/evidence/p06-analysis-validation/change-impact-review.json"
+  },
+  "implemented_result": {
+    "analyzer": "ci/project/p06_analyze.py replays both digest-pinned archives, validates complete compatible inventories and derives six per-sample diagnostics with measured-only statistics and explicit unavailable values.",
+    "timing_validation": "ci/project/p06_records.py enforces serial model work within advance and create+advance+close within process duration; Fraction preserves the existing 1000 ns process-rounding allowance exactly, with no serial-advance allowance.",
+    "new_test_methods": 48,
+    "test_modules": {
+      "ci/project/test_p06_analysis_compatibility.py": 10,
+      "ci/project/test_p06_analysis_metrics.py": 10,
+      "ci/project/test_p06_analyze.py": 10,
+      "ci/project/test_p06_published_baseline.py": 7,
+      "ci/project/test_p06_timing.py": 11
+    },
+    "source_binding": "Read current implementation and original-to-candidate timing/workflow diffs; git diff --quiet confirms both implementation files and all five new test modules equal the tested 9036b37 checkpoint.",
+    "next_experiment": "Serial workspace amortization and native ownership matrices remain reviewed drafts. No reuse implementation, concurrency qualification, optimization or new speed result is claimed."
+  },
+  "acceptance_boundary": {
+    "accepted_ids": [
+      "P06-A01"
+    ],
+    "evidence_level": "simulated",
+    "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+    "run_id": 44901052221,
+    "run_attempt": 1,
+    "inventory": {
+      "workloads": 8,
+      "processes": 48,
+      "launches": 72,
+      "measured_processes": 40,
+      "measured_launches": 60
+    },
+    "phase_status": "in_progress",
+    "unaccepted_ids": [
+      "P06-A02",
+      "P06-A03"
+    ],
+    "unchanged_blockers": [
+      "P01-A03 vendor XRT hw_emu",
+      "Inherited 267 to 283 DSP area-gate finding"
+    ],
+    "acceptance_changed_by_this_review": false
+  },
+  "checkpoint_verification": {
+    "published_commit": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+    "local_suite_commit": "9b02c09a2cd249582632d02192cca3357f41e655",
+    "identical_tested_tree": "43b8b18f4bb4d6dab557b18a4b73ef17a2699664",
+    "local_suite": {
+      "tests": 2449,
+      "result": "OK",
+      "test_seconds": 1114.149,
+      "supervisor_seconds": 1116.052,
+      "unchanged_bound_seconds": 1200,
+      "receipt": "candidate-governance.json",
+      "log": "candidate-governance.log"
+    },
+    "hosted_suite": {
+      "tests": 2449,
+      "result": "OK",
+      "test_seconds": 663.127,
+      "run_id": 44911907504,
+      "job_id": 136869306715,
+      "receipt": "hosted-workflows.json",
+      "log": "hosted-governance.log"
+    },
+    "bounded_workflows": [
+      {
+        "name": "P06 Native Baseline",
+        "run_id": 44911907463,
+        "successful_jobs": 2
+      },
+      {
+        "name": "P04 Native Model",
+        "run_id": 44911907438,
+        "successful_jobs": 4
+      },
+      {
+        "name": "P05 Installed Python",
+        "run_id": 44911907477,
+        "successful_jobs": 2
+      },
+      {
+        "name": "P05 Installed PyTorch",
+        "run_id": 44911907532,
+        "successful_jobs": 2
+      }
+    ],
+    "fresh_packet_comparison": "checkpoint-analysis-comparison.json retains all 48 samples: 2160 counter entries and 288 derived metric records agree; all 48 process durations and 316/324 host timing values differ. No correction, outlier removal or speed claim.",
+    "later_change_boundary": "The two positive workflow filters have author and independent 11-test receipts. Later workflow/docs/evidence/ledger edits are outside both 2449-test full-suite runs.",
+    "general_ci": "Run 44911907451 remains pending in hosted-ci-observation.json at 2026-11-21T14:24:15.224Z: 13 successful jobs, 20 in progress and 9 queued; no aggregate pass. This review makes no fresh remote observation."
+  },
+  "preservation": {
+    "raw_archives": "Original p06-baseline and fresh p06-analysis-validation FP16/BF16 ZIPs remain distinct; each observed ZIP has 1159 members, 48 .log members, baseline/report.json, baseline/snapshots/summary.json and job.json.",
+    "identity_basis": "Existing source/archive/log hash audits in w08_a5 and w09_a1 were reconciled with checkpoint-source-review.json; this review did not repeat an archive or repository hash sweep.",
+    "failed_attempt": "p06-baseline/hosted/prior-attempt.json and prior-failed-governance.log retain fd7129a run 44899351470: 2401 tests, one failed budget assertion. Its separate native success is not reassigned to corrected source.",
+    "checkpoint_publication": "checkpoint-publication.json preserves the failed shell push and the verified API publication; no final remote SHA is inferred.",
+    "protected_paths": "Read-only Git comparison found no changes from 84b6ca0 in native software, RTL/SimX, tests, profiles, golden baselines, CI cases, toolchain/configuration pins or the protected illustration."
+  },
+  "review_policy": {
+    "classification": "R2 at 1dac15c, from the independently executed original base classifier and policy; no R3 detector or evidence-check finding.",
+    "independence": "w03_a6 and w08_a5 cover implementation/integration; w06_a4 and w07_a6 cover the exact workflow hunks and focused rerun; w09_a1 covers current documentation and w09_a3 reconciles the R2 obligations.",
+    "unchanged_budgets": "Workflow diff adds only the analysis-contract path to push and pull_request filters. No job, permission, timeout, budget, golden or tolerance adjustment.",
+    "existing_observation": "Retained F0 notes that a durable workflow test does not explicitly name the new design path; exact-byte/parser checks cover both positive filters.",
+    "engineering_review_only": true,
+    "human_approval_claimed": false,
+    "waiver_granted": false,
+    "release_authorization_granted": false
+  },
+  "verification_by_this_reviewer": "Read-only code/document/receipt synthesis, narrow Git comparisons, static AST method count, ZIP member inventory and retained log result inspection. No test import, test run, analyzer/replay run, build, native execution, broad hash rescan or remote query.",
+  "remaining_integration_checks": [
+    "Finalize the actual completed-agent ledger and reconcile raw/canonical receipt digests. Observed ledger has 48 completed entries, in_progress, against 60 requested; requested totals are not completion evidence.",
+    "Review final documentation/status/evidence edits, run applicable metadata/link checks, and classify the final immutable commit with the original base classifier/policy; the current R2 record is bound to 1dac15c.",
+    "Recheck the authorized remote branch immediately before non-force publication, preserve concurrent work, and retain the actual published commit/tree and read-back verification.",
+    "Carry general CI as pending until actual terminal evidence exists; do not extend checkpoint suite results to later code or documents or claim P06 closure."
+  ],
+  "limitations": [
+    "This report covers observed source/evidence only and does not freeze or approve a future final tree.",
+    "Physical FPGA/silicon speed, power, native-RTL performance, synthesis/resource closure and native reuse/concurrency remain unqualified.",
+    "No commit or push was performed by this reviewer."
+  ]
+}

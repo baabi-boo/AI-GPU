@@ -1,0 +1,206 @@
+﻿2026-11-21T14:03:10.8296457Z Current runner version: '2.338.2'
+2026-11-21T14:03:10.8314324Z ##[group]Runner Image Provisioner
+2026-11-21T14:03:10.8314956Z Hosted Compute Agent
+2026-11-21T14:03:10.8315372Z Version: 20261111.635
+2026-11-21T14:03:10.8315836Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+2026-11-21T14:03:10.8316331Z Build Date: 2026-11-11T01:49:01Z
+2026-11-21T14:03:10.8316818Z Worker ID: {76f966f8-55a8-4314-ab33-52289e59982e}
+2026-11-21T14:03:10.8317308Z Region: centralus
+2026-11-21T14:03:10.8317714Z Cloud: Azure
+2026-11-21T14:03:10.8318092Z ##[endgroup]
+2026-11-21T14:03:10.8319223Z ##[group]Operating System
+2026-11-21T14:03:10.8319670Z Ubuntu
+2026-11-21T14:03:10.8320067Z 24.04.5
+2026-11-21T14:03:10.8320438Z LTS
+2026-11-21T14:03:10.8320786Z ##[endgroup]
+2026-11-21T14:03:10.8321235Z ##[group]Runner Image
+2026-11-21T14:03:10.8321664Z Image: ubuntu-24.04
+2026-11-21T14:03:10.8322082Z Version: 20261116.376.1
+2026-11-21T14:03:10.8323011Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261116.376/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-21T14:03:10.8324077Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261116.376
+2026-11-21T14:03:10.8324720Z ##[endgroup]
+2026-11-21T14:03:10.8325895Z ##[group]GITHUB_TOKEN Permissions
+2026-11-21T14:03:10.8327599Z Contents: read
+2026-11-21T14:03:10.8328093Z Metadata: read
+2026-11-21T14:03:10.8328488Z ##[endgroup]
+2026-11-21T14:03:10.8330196Z Secret source: Actions
+2026-11-21T14:03:10.8330895Z Cache mode: write
+2026-11-21T14:03:10.8331366Z Prepare workflow directory
+2026-11-21T14:03:10.8632892Z Prepare all required actions
+2026-11-21T14:03:10.8667718Z Getting action download info
+2026-11-21T14:03:11.0796433Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-21T14:03:11.2771338Z Complete job name: governance
+2026-11-21T14:03:11.3398184Z ##[group]Run actions/checkout@v4
+2026-11-21T14:03:11.3399085Z with:
+2026-11-21T14:03:11.3399537Z   fetch-depth: 1
+2026-11-21T14:03:11.3399914Z   submodules: false
+2026-11-21T14:03:11.3400276Z   lfs: false
+2026-11-21T14:03:11.3400657Z   persist-credentials: false
+2026-11-21T14:03:11.3401090Z   repository: baabi-boo/AI-GPU
+2026-11-21T14:03:11.3403622Z   token: ***
+2026-11-21T14:03:11.3403984Z   ssh-strict: true
+2026-11-21T14:03:11.3404325Z   ssh-user: git
+2026-11-21T14:03:11.3404693Z   clean: true
+2026-11-21T14:03:11.3405096Z   sparse-checkout-cone-mode: true
+2026-11-21T14:03:11.3405538Z   fetch-tags: false
+2026-11-21T14:03:11.3405916Z   show-progress: true
+2026-11-21T14:03:11.3406276Z   set-safe-directory: true
+2026-11-21T14:03:11.3406699Z   allow-unsafe-pr-checkout: false
+2026-11-21T14:03:11.3407278Z env:
+2026-11-21T14:03:11.3407622Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-21T14:03:11.3408040Z ##[endgroup]
+2026-11-21T14:03:11.5660419Z Syncing repository: baabi-boo/AI-GPU
+2026-11-21T14:03:11.5662654Z ##[group]Getting Git version info
+2026-11-21T14:03:11.5663259Z Working directory is '/home/runner/work/AI-GPU/AI-GPU'
+2026-11-21T14:03:11.5664659Z [command]/usr/bin/git version
+2026-11-21T14:03:11.5725793Z git version 2.56.1
+2026-11-21T14:03:11.5739459Z ##[endgroup]
+2026-11-21T14:03:11.5749271Z Temporarily overriding HOME='/home/runner/work/_temp/43dba9f9-070d-4218-b2b9-acfb99df647e' before making global git config changes
+2026-11-21T14:03:11.5751089Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-21T14:03:11.5753138Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/AI-GPU/AI-GPU
+2026-11-21T14:03:11.5790314Z Deleting the contents of '/home/runner/work/AI-GPU/AI-GPU'
+2026-11-21T14:03:11.5795385Z ##[group]Initializing the repository
+2026-11-21T14:03:11.5796780Z [command]/usr/bin/git init /home/runner/work/AI-GPU/AI-GPU
+2026-11-21T14:03:11.5889888Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-21T14:03:11.5891459Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-21T14:03:11.5892728Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-21T14:03:11.5903555Z hint: call:
+2026-11-21T14:03:11.5904287Z hint:
+2026-11-21T14:03:11.5904967Z hint: 	git config --global init.defaultBranch <name>
+2026-11-21T14:03:11.5905745Z hint:
+2026-11-21T14:03:11.5906632Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-21T14:03:11.5907843Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-21T14:03:11.5908973Z hint:
+2026-11-21T14:03:11.5909619Z hint: 	git branch -m <name>
+2026-11-21T14:03:11.5910731Z hint:
+2026-11-21T14:03:11.5911647Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-21T14:03:11.5912858Z Initialized empty Git repository in /home/runner/work/AI-GPU/AI-GPU/.git/
+2026-11-21T14:03:11.5915609Z [command]/usr/bin/git remote add origin https://github.com/baabi-boo/AI-GPU
+2026-11-21T14:03:11.5957815Z ##[endgroup]
+2026-11-21T14:03:11.5959872Z ##[group]Disabling automatic garbage collection
+2026-11-21T14:03:11.5960956Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-21T14:03:11.6163776Z ##[endgroup]
+2026-11-21T14:03:11.6166091Z ##[group]Setting up auth
+2026-11-21T14:03:11.6167929Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-21T14:03:11.6187079Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-21T14:03:11.6463179Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-21T14:03:11.6486317Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-21T14:03:11.6626869Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-21T14:03:11.6653341Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-21T14:03:11.6795410Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-21T14:03:11.6827191Z ##[endgroup]
+2026-11-21T14:03:11.6827953Z ##[group]Fetching the repository
+2026-11-21T14:03:11.6836199Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +9036b379e3dbdf2b68d1590ca37a47cbf099b7b4:refs/remotes/origin/master
+2026-11-21T14:03:16.5670477Z From https://github.com/baabi-boo/AI-GPU
+2026-11-21T14:03:16.5671607Z  * [new ref]         9036b379e3dbdf2b68d1590ca37a47cbf099b7b4 -> origin/master
+2026-11-21T14:03:16.5674491Z ##[endgroup]
+2026-11-21T14:03:16.5675123Z ##[group]Determining the checkout info
+2026-11-21T14:03:16.5676880Z ##[endgroup]
+2026-11-21T14:03:16.5682676Z [command]/usr/bin/git sparse-checkout disable
+2026-11-21T14:03:16.5736905Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-21T14:03:16.5762732Z ##[group]Checking out the ref
+2026-11-21T14:03:16.5766624Z [command]/usr/bin/git checkout --progress --force -B master refs/remotes/origin/master
+2026-11-21T14:03:17.4973022Z Reset branch 'master'
+2026-11-21T14:03:17.4976592Z branch 'master' set up to track 'origin/master'.
+2026-11-21T14:03:17.5006257Z ##[endgroup]
+2026-11-21T14:03:17.5049410Z [command]/usr/bin/git log -1 --format=%H
+2026-11-21T14:03:17.5065616Z 9036b379e3dbdf2b68d1590ca37a47cbf099b7b4
+2026-11-21T14:03:17.5073576Z ##[group]Removing auth
+2026-11-21T14:03:17.5077189Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-21T14:03:17.5101448Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-21T14:03:17.5260893Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-21T14:03:17.5280195Z http.https://github.com/.extraheader
+2026-11-21T14:03:17.5284296Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-21T14:03:17.5309147Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-21T14:03:17.5456103Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-21T14:03:17.5481632Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-21T14:03:17.5633594Z ##[endgroup]
+2026-11-21T14:03:17.5794873Z ##[group]Run python3 -c 'import sys; assert sys.version_info[:2] == (3, 12), sys.version; print(sys.version)'
+2026-11-21T14:03:17.5795526Z [36;1mpython3 -c 'import sys; assert sys.version_info[:2] == (3, 12), sys.version; print(sys.version)'[0m
+2026-11-21T14:03:17.5811034Z shell: /usr/bin/bash -e {0}
+2026-11-21T14:03:17.5811344Z env:
+2026-11-21T14:03:17.5811567Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-21T14:03:17.5811893Z ##[endgroup]
+2026-11-21T14:03:17.5959345Z 3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]
+2026-11-21T14:03:17.6015394Z ##[group]Run python3 ci/project/preflight.py --tier governance
+2026-11-21T14:03:17.6015856Z [36;1mpython3 ci/project/preflight.py --tier governance[0m
+2026-11-21T14:03:17.6025877Z shell: /usr/bin/bash -e {0}
+2026-11-21T14:03:17.6026145Z env:
+2026-11-21T14:03:17.6026369Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-21T14:03:17.6026623Z ##[endgroup]
+2026-11-21T14:03:17.9184759Z Preflight: pass (governance)
+2026-11-21T14:03:17.9185430Z Source: 9036b379e3dbdf2b68d1590ca37a47cbf099b7b4 (tracked changes: False)
+2026-11-21T14:03:17.9186135Z Pins: VORTEX_VERSION=3.0, TOOLCHAIN_REV=v3.0.2, GEM5_REV=v25.0.0.1, FIRESIM_REV=57bb93f1e23daf46198659ddd93608f70121fee0
+2026-11-21T14:03:17.9186683Z Tool git: available (required)
+2026-11-21T14:03:17.9187032Z Tool make: available (optional)
+2026-11-21T14:03:17.9187355Z Tool host_cxx: available (optional)
+2026-11-21T14:03:17.9187658Z Tool cmake: available (optional)
+2026-11-21T14:03:17.9187937Z Tool riscv_compiler: missing (optional)
+2026-11-21T14:03:17.9188320Z Tool llvm_clang: available (optional)
+2026-11-21T14:03:17.9188582Z Tool verilator: missing (optional)
+2026-11-21T14:03:17.9189035Z Tool vivado: missing (optional)
+2026-11-21T14:03:17.9189288Z Tool vitis_linker: missing (optional)
+2026-11-21T14:03:17.9189540Z Tool xrt_inventory: missing (optional)
+2026-11-21T14:03:17.9189823Z Tool yosys: missing (optional)
+2026-11-21T14:03:17.9190061Z Tool circt_verilog: missing (optional)
+2026-11-21T14:03:17.9190324Z Tool circt_opt: missing (optional)
+2026-11-21T14:03:17.9190565Z Tool firtool: missing (optional)
+2026-11-21T14:03:17.9190915Z Submodule third_party/cocogfx: not_initialized b1befdb36df8af7ac9e2c96acaf81957aab5d107
+2026-11-21T14:03:17.9191395Z Submodule third_party/cvfpu: not_initialized 79e453139072df42c9ec8f697132ba485d74e23d
+2026-11-21T14:03:17.9191883Z Submodule third_party/hardfloat: not_initialized aaf5736dffa521603b681fd5853760c671446c85
+2026-11-21T14:03:17.9192359Z Submodule third_party/ramulator: not_initialized e62c84a6f0e06566ba6e182d308434b4532068a5
+2026-11-21T14:03:17.9192814Z Submodule third_party/softfloat: not_initialized b51ef8f3201669b2288104c28546fc72532a1ea4
+2026-11-21T14:03:17.9193223Z Resources: free disk=90994589696 bytes; available RAM=15558533120 bytes
+2026-11-21T14:03:17.9193550Z Protected illustration: unchanged
+2026-11-21T14:03:17.9193887Z Warning: submodules are not fully verified/initialized; not required for governance
+2026-11-21T14:03:17.9194391Z Limitation: Read-only offline prerequisite screen; no installer, download, build, test workload or cleanup ran.
+2026-11-21T14:03:17.9195012Z Limitation: Tool availability means executable names are on PATH, not verified versions or Vortex target support.
+2026-11-21T14:03:17.9195550Z Limitation: Configured tools outside PATH are not searched; activate the intended environment before this screen.
+2026-11-21T14:03:17.9196332Z Limitation: Toolchain tags are source pins, not verification of installed binaries, libraries or bundle hashes.
+2026-11-21T14:03:17.9196905Z Limitation: Working-tree status covers tracked files only; inventory untracked inputs before recording evidence.
+2026-11-21T14:03:17.9197430Z Limitation: Resource values are a snapshot, not a build budget; nested builds may exceed an outer job limit.
+2026-11-21T14:03:17.9198022Z Limitation: Linux MemAvailable may describe host RAM rather than a container/cgroup limit; verify the effective allocation separately.
+2026-11-21T14:03:17.9198677Z Limitation: No board, license, platform, PDK, IP, physical measurement, funding or manufacturing approval is certified.
+2026-11-21T14:03:17.9269190Z ##[group]Run python3 ci/project/check_project.py
+2026-11-21T14:03:17.9269543Z [36;1mpython3 ci/project/check_project.py[0m
+2026-11-21T14:03:17.9279989Z shell: /usr/bin/bash -e {0}
+2026-11-21T14:03:17.9280227Z env:
+2026-11-21T14:03:17.9280477Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-21T14:03:17.9280721Z ##[endgroup]
+2026-11-21T14:03:18.6400420Z Project governance validation passed (structure and metadata only; no GPU execution certified).
+2026-11-21T14:03:18.6491837Z ##[group]Run python3 ci/project/check_baseline_packets.py
+2026-11-21T14:03:18.6492243Z [36;1mpython3 ci/project/check_baseline_packets.py[0m
+2026-11-21T14:03:18.6504927Z shell: /usr/bin/bash -e {0}
+2026-11-21T14:03:18.6505267Z env:
+2026-11-21T14:03:18.6505573Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-21T14:03:18.6505873Z ##[endgroup]
+2026-11-21T14:03:18.7939543Z {"outcome": "pass", "packets": {"clean-build": {"native_matrix_records_consistent": false, "outcome": "pass", "path": "docs/project/evidence/p01/clean-build", "published_integrity": "verified", "require_native_records": false, "run_outcome": "pass"}, "native": {"native_matrix_records_consistent": true, "outcome": "pass", "path": "docs/project/evidence/p01/native", "published_integrity": "verified", "require_native_records": true, "run_outcome": "pass"}}, "phase_complete": false, "raw_log_bytes_verified": false, "redaction_relationship_verified": false, "schema_version": 1, "scope": "Published evidence consistency only; no project-gate acceptance."}
+2026-11-21T14:03:18.8051380Z ##[group]Run python3 -m unittest discover -s ci/project -p 'test_*.py'
+2026-11-21T14:03:18.8052132Z [36;1mpython3 -m unittest discover -s ci/project -p 'test_*.py'[0m
+2026-11-21T14:03:18.8069958Z shell: /usr/bin/bash -e {0}
+2026-11-21T14:03:18.8070534Z env:
+2026-11-21T14:03:18.8070873Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-21T14:03:18.8071299Z ##[endgroup]
+2026-11-21T14:13:37.7367539Z begin sst tests...
+2026-11-21T14:13:37.7405841Z === sst: hello ===
+2026-11-21T14:13:37.7413612Z === sst: fibonacci ===
+2026-11-21T14:13:37.7420607Z sst tests done!
+2026-11-21T14:14:23.1551333Z .................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+2026-11-21T14:14:23.1555590Z ----------------------------------------------------------------------
+2026-11-21T14:14:23.1556055Z Ran 2449 tests in 663.127s
+2026-11-21T14:14:23.1556238Z 
+2026-11-21T14:14:23.1556332Z OK
+2026-11-21T14:14:23.2453511Z Post job cleanup.
+2026-11-21T14:14:23.3150926Z [command]/usr/bin/git version
+2026-11-21T14:14:23.3182768Z git version 2.56.1
+2026-11-21T14:14:23.3211341Z Temporarily overriding HOME='/home/runner/work/_temp/922624b8-3903-4a00-b17f-9eb3c88bc9bf' before making global git config changes
+2026-11-21T14:14:23.3212539Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-21T14:14:23.3214541Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/AI-GPU/AI-GPU
+2026-11-21T14:14:23.3244580Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-21T14:14:23.3271160Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-21T14:14:23.3457881Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-21T14:14:23.3483117Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-21T14:14:23.3659826Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-21T14:14:23.3723284Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-21T14:14:23.4144426Z Cleaning up orphan processes
+2026-11-21T14:14:23.4469411Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

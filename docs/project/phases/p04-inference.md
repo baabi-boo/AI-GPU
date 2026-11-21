@@ -51,8 +51,9 @@ bridge, 2,560 output-block and 2,560 assembled-output words. Explicit tensor
 traffic is 76,800 H2D and 30,720 D2H bytes; host row assembly copies 10,240 bytes.
 Argument/control, module and setup traffic remain outside those totals.
 
-**P04-T02 is complete. P05-T01 is the next bounded action**, using the
-[Python binding handoff](../p05-entry-handoff.md). The
+**P04-T02 is complete. P05-T01 continues as the parallel framework track**, using
+the [Python binding handoff](../p05-entry-handoff.md). Current measured-optimization
+work follows the [P06 qualification handoff](../p06-qualification-handoff.md). The
 [executor plan](../p04-executor-plan.md) retains actual-output lineage,
 completion/ownership rules, resource limits and trace obligations for reproduction.
 
@@ -123,7 +124,8 @@ overruns. A test not run stays not run; do not relax tolerances to close the pha
 The exact fixture, operator contract and accepted native results now supply
 the [P05 handoff](../p05-entry-handoff.md) for Python integration and
 [P06](p06-performance.md) for a separately frozen performance workload/counter
-policy. P05 and P06 remain `not_started`. Neither the simulator model nor this
+policy. P05 and P06 are `in_progress`; [roadmap.json](../roadmap.json) records
+their live state and accepted evidence. Neither the simulator model nor this
 document closes the later
 physical FPGA gate. Vendor XRT `hw_emu` remains the blocked P01-A03 obligation;
 full P01 completion is still required before P07 can close. The inherited

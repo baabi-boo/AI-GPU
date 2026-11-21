@@ -13,7 +13,7 @@ that a GPU workload or physical device has passed its checks.
 | What should I work on next? | [Developer guide](developer-guide.md), [backlog](backlog.md) | [Architecture](architecture.md), [contribution process](../../CONTRIBUTING.md), [agent rules](../../AGENTS.md) |
 | How can P02 progress without vendor FPGA tools? | [P02 staged-entry handoff](p02-entry-handoff.md), [numerical phase guide](phases/p02-tensor.md) | [Staging decision ADR-004](decisions.md#adr-004--staged-native-development-entry-with-vendor-integration-retained), [roadmap gates](roadmap.json) |
 | What arithmetic is the next AI configuration built on? | [TFR numerical contract v1](../designs/tensor_numerics_v1.md), [numerical handoff](p02-numerics-handoff.md) | [P02 evidence](evidence/p02-numerics/README.md), [frozen contract manifest](../../ci/project/p02_tensor_contract.json), [independent fixtures](../../ci/project/fixtures/p02_tfr_v1.json) |
-| Which tiny model is being prepared for native execution? | [Tiny-MLP fixture contract](../designs/tiny_mlp_fixture_v1.md), [model manifest](../../ci/project/p04_model_manifest.json), [accepted source qualification](evidence/p04-fixture/README.md) | [P04 executor plan](p04-executor-plan.md), [development audit](p04-audit.md), [P04 phase guide](phases/p04-inference.md) |
+| Which tiny model has native qualification? | [Tiny-MLP fixture contract](../designs/tiny_mlp_fixture_v1.md), [model manifest](../../ci/project/p04_model_manifest.json), [accepted native packet](evidence/p04-executor/README.md) | [P04 phase guide](phases/p04-inference.md), [P06 qualification handoff](p06-qualification-handoff.md), [Python binding handoff](p05-entry-handoff.md) |
 | What would prove this works? | [Acceptance policy](acceptance.md), [verification strategy](verification.md) | [Evidence format](evidence/README.md), [benchmark protocol](benchmarks.md), [review policy](../review/code-review-policy.md) |
 | How do I prepare the remaining P01 vendor integration? | [hw_emu runbook](p01-hwemu-runbook.md), [manifest contract](p01-hwemu-manifest.md) | [Preparation handoff](p01-hwemu-handoff.md), [current status](status.md) |
 | How do I run the prepared integer integration smoke? | [Vendor XRT integration guide](p01-xrt-integration.md), with its separate manifest/receipt contract | [Vendor integration handoff](p01-xrt-handoff.md), [current status](status.md) |
@@ -46,13 +46,20 @@ unexecuted template as a completion record.
   [model manifest](../../ci/project/p04_model_manifest.json): completed P04-T01,
   with deterministic weights, exact FP16/BF16 reference bits and a declared
   native-matmul/host-ReLU boundary. [P04-A01 is accepted at source scope](evidence/p04-fixture/acceptance.json).
-  P04 remains `in_progress`; A02/A03 are unearned and no composed model or GPU
-  execution is claimed.
-- [P04 executor plan](p04-executor-plan.md): the next bounded implementation,
-  including actual-output dependencies, owned results,
-  dispatch evidence and separate host/transfer accounting.
-- [P04 development audit](p04-audit.md): selection of the next step, inherited
+  P04 is `complete`; the [accepted native executor packet](evidence/p04-executor/README.md)
+  supplies P04-A02/A03 at native processor RTL scope, with explicit host ReLU,
+  format conversion and row assembly boundaries.
+- [P04 executor plan](p04-executor-plan.md): historical implementation scope,
+  including actual-output dependencies, owned results, dispatch evidence and
+  separate host/transfer accounting.
+- [P04 development audit](p04-audit.md): historical task selection, inherited
   capability limits and the unresolved CI area-gate failure.
+- [P06 qualification handoff](p06-qualification-handoff.md): the current measured
+  optimization track, accepted original P06-A01 baseline and open A02/A03 gates.
+- [Draft workspace experiment](p06-next-experiment-proposal.md) and
+  [ownership review matrix](p06-ownership-review-matrix.md): the next protocol to
+  review and freeze; neither is an implemented optimization or acceptance result.
+- [Python binding handoff](p05-entry-handoff.md): the parallel P05 framework track.
 - [Backlog](backlog.md): ordered work items with deliverables and gate mappings.
 - [P01 hw_emu preparation](p01-hwemu-runbook.md): read-only inventory and candidate
   planning, the corrected XRT hook and lean opt-in tracing; P01-A03 remains blocked.

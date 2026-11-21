@@ -1,0 +1,3576 @@
+{
+  "schema_version": 1,
+  "scope": "final-bounded-pre-publication-hosted-ci-status-observation-and-workflow-trigger-prediction",
+  "repository": "baabi-boo/AI-GPU",
+  "observer": "/root/w10_a5",
+  "observation_recorded_at_utc": "2026-11-21T14:35:31.559Z",
+  "source_revision": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+  "acceptance_claimed": false,
+  "overall_ci_pass_claimed": false,
+  "result": "pending",
+  "method": {
+    "provider": "Connected GitHub read-only fetch",
+    "run_query": "https://api.github.com/repos/baabi-boo/AI-GPU/actions/runs/44911907451",
+    "jobs_query": "https://api.github.com/repos/baabi-boo/AI-GPU/actions/runs/44911907451/jobs?filter=latest&per_page=100&page=1",
+    "fresh_run_reads": 1,
+    "fresh_jobs_reads": 1,
+    "collection": "Run and latest-attempt jobs were requested concurrently once. GitHub endpoints are not an atomic transaction; each reported status is retained without reconciling it to a later state.",
+    "returned_job_count": 42,
+    "reported_total_job_count": 42,
+    "all_reported_jobs_returned": true,
+    "all_job_head_shas_match_source": true,
+    "all_job_run_ids_match": true,
+    "all_job_attempts_match": true,
+    "job_projection": "All returned jobs retain identity, status, conclusion and timestamps. Every step is counted; incomplete or non-success steps retain number/name/status/conclusion. Completed successful step details are omitted.",
+    "additional_polling_performed": false,
+    "workflow_mutations_performed": false,
+    "failure_log_inspection": "Not needed in this snapshot: no failed job or failed step was reported. Passing and running job logs were not re-read."
+  },
+  "run": {
+    "id": 44911907451,
+    "name": "CI",
+    "path": ".github/workflows/ci.yml",
+    "head_branch": "master",
+    "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+    "event": "push",
+    "run_number": 50,
+    "run_attempt": 1,
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-21T14:03:06Z",
+    "run_started_at": "2026-11-21T14:03:06Z",
+    "updated_at": "2026-11-21T14:31:48Z",
+    "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451"
+  },
+  "job_summary": {
+    "all_jobs": 42,
+    "status_conclusion_counts": {
+      "completed/success": 26,
+      "in_progress/null": 16,
+      "queued/null": 0,
+      "completed/skipped": 0,
+      "completed/failure": 0,
+      "completed/cancelled": 0,
+      "completed/timed_out": 0
+    },
+    "support_jobs": 5,
+    "test_cells": 37,
+    "test_cell_status_conclusion_counts": {
+      "completed/success": 21,
+      "in_progress/null": 16
+    },
+    "pending_test_cells": 16,
+    "skipped_jobs": 0,
+    "failed_jobs": 0,
+    "aggregate_complete_job_returned": false,
+    "all_steps": 686,
+    "step_status_conclusion_counts": {
+      "completed/success": 331,
+      "completed/skipped": 275,
+      "in_progress/null": 16,
+      "pending/null": 64
+    },
+    "failed_steps": 0,
+    "interpretation": "CI remains in_progress with null conclusion. Five support jobs and 21 of 37 test cells completed successfully; 16 test cells are still in_progress. No overall pass is established."
+  },
+  "skipped_pending_and_unselected_scope": {
+    "pending_jobs": "The 16 in-progress test jobs are unfinished, not skipped or passed; no job is queued in this snapshot.",
+    "skipped_jobs": "No returned job has conclusion skipped.",
+    "skipped_steps": "275 conditional steps are completed/skipped. These are step outcomes, not skipped jobs or pytest test items.",
+    "unfinished_steps": "16 steps are in_progress/null and 64 are pending/null; these statuses are retained separately.",
+    "test_item_outcomes": "Individual pytest passed/failed/skipped/deselected totals were not re-read in this bounded status snapshot and are not inferred from successful job conclusions.",
+    "unselected_scope": "All 37 returned test cells name SimX. Absent driver/configuration cells have no result in this snapshot; no full-catalog, RTL, synthesis or physical-device pass is implied."
+  },
+  "jobs": [
+    {
+      "id": 136869306463,
+      "name": "plan",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136869306463",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:03:06Z",
+      "started_at": "2026-11-21T14:03:09Z",
+      "completed_at": "2026-11-21T14:03:37Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 9
+      },
+      "incomplete_or_non_success_steps": []
+    },
+    {
+      "id": 136869306749,
+      "name": "change-impact",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136869306749",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:03:06Z",
+      "started_at": "2026-11-21T14:03:09Z",
+      "completed_at": "2026-11-21T14:03:33Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 5
+      },
+      "incomplete_or_non_success_steps": []
+    },
+    {
+      "id": 136869445648,
+      "name": "setup",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136869445648",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:03:38Z",
+      "started_at": "2026-11-21T14:03:40Z",
+      "completed_at": "2026-11-21T14:04:54Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 6
+      },
+      "incomplete_or_non_success_steps": []
+    },
+    {
+      "id": 136869776973,
+      "name": "build (64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136869776973",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:04:55Z",
+      "started_at": "2026-11-21T14:04:57Z",
+      "completed_at": "2026-11-21T14:12:01Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 8
+      },
+      "incomplete_or_non_success_steps": []
+    },
+    {
+      "id": 136869777000,
+      "name": "build (32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136869777000",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:04:55Z",
+      "started_at": "2026-11-21T14:04:57Z",
+      "completed_at": "2026-11-21T14:13:50Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 8
+      },
+      "incomplete_or_non_success_steps": []
+    },
+    {
+      "id": 136872120938,
+      "name": "tests (debug, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120938",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": "2026-11-21T14:22:00Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872120947,
+      "name": "tests (isa, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120947",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": "2026-11-21T14:28:04Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872120948,
+      "name": "tests (graphics, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120948",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": "2026-11-21T14:35:04Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872120953,
+      "name": "tests (config2, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120953",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": "2026-11-21T14:22:03Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872120956,
+      "name": "tests (dxa, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120956",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872120959,
+      "name": "tests (cache, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120959",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": "2026-11-21T14:30:25Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872120964,
+      "name": "tests (config2, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120964",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": "2026-11-21T14:21:36Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872120968,
+      "name": "tests (graphics_parity, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120968",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:21:38Z",
+      "completed_at": "2026-11-21T14:29:07Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872120970,
+      "name": "tests (graphics, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120970",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": "2026-11-21T14:34:34Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872120975,
+      "name": "tests (sw, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120975",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": "2026-11-21T14:21:48Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872120976,
+      "name": "tests (regression, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120976",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:20:10Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872120979,
+      "name": "tests (config1, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120979",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:23:53Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872120982,
+      "name": "tests (config1, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120982",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:29:09Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872120988,
+      "name": "tests (p04_mlp, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120988",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": "2026-11-21T14:17:46Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 15,
+        "completed/skipped": 3
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872120992,
+      "name": "tests (debug, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120992",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": "2026-11-21T14:20:07Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872120995,
+      "name": "tests (tensor_sp, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120995",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": "2026-11-21T14:23:51Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872120996,
+      "name": "tests (p02_wgmma, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120996",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": "2026-11-21T14:16:50Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872120997,
+      "name": "tests (isa, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872120997",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:16:53Z",
+      "completed_at": "2026-11-21T14:27:45Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872121008,
+      "name": "tests (perf, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121008",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:27:47Z",
+      "completed_at": "2026-11-21T14:32:13Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872121011,
+      "name": "tests (dxa, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121011",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:29:47Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872121012,
+      "name": "tests (tensor_wg, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121012",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": "2026-11-21T14:25:00Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872121014,
+      "name": "tests (raytracing, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121014",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:30:27Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872121031,
+      "name": "tests (vulkan, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121031",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872121034,
+      "name": "tests (tensor_sp, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121034",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": "2026-11-21T14:31:45Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872121037,
+      "name": "tests (sw, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121037",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:28:06Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872121039,
+      "name": "tests (graphics_parity, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121039",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:22:03Z",
+      "completed_at": "2026-11-21T14:31:27Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872121043,
+      "name": "tests (vm, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121043",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:54Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872121044,
+      "name": "tests (vm, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121044",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:25:02Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872121046,
+      "name": "tests (tensor, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121046",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:22:05Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872121053,
+      "name": "tests (tensor, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121053",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:14:27Z",
+      "completed_at": "2026-11-21T14:31:19Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872121055,
+      "name": "tests (raytracing, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121055",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:31:21Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872121065,
+      "name": "tests (tensor_mx, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121065",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:21:51Z",
+      "completed_at": "2026-11-21T14:29:45Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872121066,
+      "name": "tests (regression, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121066",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:54Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872121067,
+      "name": "tests (vulkan, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121067",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:13:53Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872121072,
+      "name": "tests (tensor_wg, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121072",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:17:49Z",
+      "completed_at": "2026-11-21T14:34:56Z",
+      "step_status_conclusion_counts": {
+        "completed/success": 10,
+        "completed/skipped": 8
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 136872121127,
+      "name": "tests (cache, simx, 32)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121127",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:31:30Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    },
+    {
+      "id": 136872121144,
+      "name": "tests (tensor_mx, simx, 64)",
+      "run_id": 44911907451,
+      "workflow_name": "CI",
+      "head_sha": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+      "head_branch": "master",
+      "run_attempt": 1,
+      "html_url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44911907451/job/136872121144",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-21T14:13:51Z",
+      "started_at": "2026-11-21T14:31:47Z",
+      "completed_at": null,
+      "step_status_conclusion_counts": {
+        "completed/success": 5,
+        "completed/skipped": 7,
+        "in_progress/null": 1,
+        "pending/null": 4
+      },
+      "incomplete_or_non_success_steps": [
+        {
+          "number": 3,
+          "name": "Initialize model qualification workspace",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 4,
+          "name": "Initialize model submodule metadata",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 5,
+          "name": "Resolve model toolchain identity",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Verify and isolate model qualification inputs",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 10,
+          "name": "Per-case deps",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Cache ASAP7 downloads",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 12,
+          "name": "Per-case tools",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 13,
+          "name": "Run cell",
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "number": 14,
+          "name": "Run actions/upload-artifact@v4",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 15,
+          "name": "Retain native model catalog packet",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 29,
+          "name": "Post Setup Vortex",
+          "status": "pending",
+          "conclusion": null
+        },
+        {
+          "number": 30,
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null
+        }
+      ]
+    }
+  ],
+  "publication_trigger_prediction": {
+    "classification": "prediction_only_not_execution",
+    "reviewed_at_utc": "2026-11-21T14:36:37.311744+00:00",
+    "base_revision": "9036b379e3dbdf2b68d1590ca37a47cbf099b7b4",
+    "observed_local_head": "1dac15c680499836abda6d017c007abf33f299eb",
+    "final_publication_source_revision": null,
+    "proposed_event": "push",
+    "proposed_branch": "master",
+    "assumption": "Publish the observed docs/evidence/README changes and the two governance filter additions from 9036b37 to master; final source SHA has not yet been created. Later path or event changes require reassessment.",
+    "changed_path_basis": "Union of git diff --name-only <base> against the working tree, git ls-files --others --exclude-standard, and this new observation path planned before creation.",
+    "tracked_changed_paths": [
+      ".github/workflows/project-governance.yml",
+      "README.md",
+      "docs/project/evidence/p06-analysis-validation/README.md",
+      "docs/project/evidence/p06-analysis-validation/archive-index.json",
+      "docs/project/evidence/p06-analysis-validation/archives/simx-bf16.zip",
+      "docs/project/evidence/p06-analysis-validation/archives/simx-fp16.zip",
+      "docs/project/evidence/p06-analysis-validation/candidate-governance.json",
+      "docs/project/evidence/p06-analysis-validation/candidate-governance.log",
+      "docs/project/evidence/p06-analysis-validation/checkpoint-analysis-comparison.json",
+      "docs/project/evidence/p06-analysis-validation/checkpoint-analysis.json",
+      "docs/project/evidence/p06-analysis-validation/checkpoint-publication.json",
+      "docs/project/evidence/p06-analysis-validation/checkpoint-source-review.json",
+      "docs/project/evidence/p06-analysis-validation/hosted-governance.log",
+      "docs/project/evidence/p06-analysis-validation/hosted-p06-observation.json",
+      "docs/project/evidence/p06-analysis-validation/hosted-workflows.json",
+      "docs/project/index.md",
+      "docs/project/p06-next-experiment-proposal.md",
+      "docs/project/p06-ownership-review-matrix.md",
+      "docs/project/p06-qualification-agent-execution.json",
+      "docs/project/p06-qualification-handoff.md",
+      "docs/project/phases/p04-inference.md",
+      "docs/project/status.md"
+    ],
+    "observed_untracked_paths": [
+      "docs/project/evidence/p06-analysis-validation/change-impact-review.json",
+      "docs/project/evidence/p06-analysis-validation/hosted-ci-observation.json",
+      "docs/project/evidence/p06-analysis-validation/release-candidate-review.json",
+      "docs/project/evidence/p06-analysis-validation/verification-index.json"
+    ],
+    "planned_new_paths_added_for_prediction": [
+      "docs/project/evidence/p06-analysis-validation/hosted-ci-final-observation.json"
+    ],
+    "evaluated_changed_paths": [
+      ".github/workflows/project-governance.yml",
+      "README.md",
+      "docs/project/evidence/p06-analysis-validation/README.md",
+      "docs/project/evidence/p06-analysis-validation/archive-index.json",
+      "docs/project/evidence/p06-analysis-validation/archives/simx-bf16.zip",
+      "docs/project/evidence/p06-analysis-validation/archives/simx-fp16.zip",
+      "docs/project/evidence/p06-analysis-validation/candidate-governance.json",
+      "docs/project/evidence/p06-analysis-validation/candidate-governance.log",
+      "docs/project/evidence/p06-analysis-validation/change-impact-review.json",
+      "docs/project/evidence/p06-analysis-validation/checkpoint-analysis-comparison.json",
+      "docs/project/evidence/p06-analysis-validation/checkpoint-analysis.json",
+      "docs/project/evidence/p06-analysis-validation/checkpoint-publication.json",
+      "docs/project/evidence/p06-analysis-validation/checkpoint-source-review.json",
+      "docs/project/evidence/p06-analysis-validation/hosted-ci-final-observation.json",
+      "docs/project/evidence/p06-analysis-validation/hosted-ci-observation.json",
+      "docs/project/evidence/p06-analysis-validation/hosted-governance.log",
+      "docs/project/evidence/p06-analysis-validation/hosted-p06-observation.json",
+      "docs/project/evidence/p06-analysis-validation/hosted-workflows.json",
+      "docs/project/evidence/p06-analysis-validation/release-candidate-review.json",
+      "docs/project/evidence/p06-analysis-validation/verification-index.json",
+      "docs/project/index.md",
+      "docs/project/p06-next-experiment-proposal.md",
+      "docs/project/p06-ownership-review-matrix.md",
+      "docs/project/p06-qualification-agent-execution.json",
+      "docs/project/p06-qualification-handoff.md",
+      "docs/project/phases/p04-inference.md",
+      "docs/project/status.md"
+    ],
+    "production_or_test_paths_changed": [],
+    "workflow_change": {
+      "path": ".github/workflows/project-governance.yml",
+      "additions": 2,
+      "deletions": 0,
+      "added_path": "docs/designs/native_baseline_analysis_v1.md",
+      "events": [
+        "push",
+        "pull_request"
+      ],
+      "scope": "Two path-filter entries only; no jobs, commands, budgets, dependencies or gate semantics change."
+    },
+    "six_workflow_filter_review": [
+      {
+        "workflow": "CI",
+        "path": ".github/workflows/ci.yml",
+        "sha256": "c151c36e48dcdb6161dc5006744a29189389508e4297d7ffa2eae4fb0a8bf576",
+        "push_branch_filter": [],
+        "push_path_filter": [],
+        "pull_request_path_filter_identical": true,
+        "predicted_push_trigger": true,
+        "matching_changed_paths": [],
+        "reason": "Every push is eligible; no workflow-level branch or path filter."
+      },
+      {
+        "workflow": "P04 Native Model",
+        "path": ".github/workflows/p04-model.yml",
+        "sha256": "6454942f5a9ce84b51edffe8bd95acd1618990b89082a31cf6465b9a8f5b2c23",
+        "push_branch_filter": [
+          "master"
+        ],
+        "push_path_filter": [
+          ".github/workflows/p04-model.yml",
+          "ci/project/**",
+          "ci/toolchain_rev.sh",
+          "ci/install_dependencies.sh",
+          "ci/gen_config.py",
+          "configure",
+          "config.mk.in",
+          "sw/**",
+          "sim/**",
+          "hw/rtl/**",
+          "hw/dpi/**",
+          "tests/regression/ai_mlp/**",
+          "tests/regression/common.mk",
+          "third_party/**",
+          "profiles/p02-tfr.json",
+          "docs/designs/tiny_mlp_fixture_v1.md",
+          "docs/designs/mlp_execution_records_v1.md",
+          "docs/designs/tensor_numerics_v1.md",
+          "VERSION",
+          "VX_config.toml",
+          "VX_types.toml",
+          ".gitmodules"
+        ],
+        "pull_request_path_filter_identical": true,
+        "predicted_push_trigger": false,
+        "matching_changed_paths": [],
+        "reason": "No changed path matches any push path filter; the master branch condition alone is insufficient."
+      },
+      {
+        "workflow": "P05 Installed Python",
+        "path": ".github/workflows/p05-python.yml",
+        "sha256": "dc22f840b235d3abee1bac9b205392331ea684de1c1d03ab1ca3e6c91990f195",
+        "push_branch_filter": [
+          "master"
+        ],
+        "push_path_filter": [
+          ".github/workflows/p05-python.yml",
+          ".github/workflows/p04-model.yml",
+          "python/**",
+          "setup.py",
+          "pyproject.toml",
+          "MANIFEST.in",
+          "LICENSE",
+          "ci/project/**",
+          "ci/toolchain_rev.sh",
+          "ci/install_dependencies.sh",
+          "ci/gen_config.py",
+          "configure",
+          "config.mk.in",
+          "sw/**",
+          "sim/**",
+          "hw/rtl/**",
+          "hw/dpi/**",
+          "tests/regression/ai_matmul/**",
+          "tests/regression/ai_mlp/**",
+          "tests/regression/sgemm_tcu/**",
+          "tests/regression/common.mk",
+          "tests/runtime/**",
+          "third_party/**",
+          "profiles/p02-tfr.json",
+          "docs/designs/tiny_mlp_fixture_v1.md",
+          "docs/designs/mlp_execution_records_v1.md",
+          "docs/designs/tensor_numerics_v1.md",
+          "VERSION",
+          "VX_config.toml",
+          "VX_types.toml",
+          ".gitmodules"
+        ],
+        "pull_request_path_filter_identical": true,
+        "predicted_push_trigger": false,
+        "matching_changed_paths": [],
+        "reason": "No changed path matches any push path filter; the master branch condition alone is insufficient."
+      },
+      {
+        "workflow": "P05 Installed PyTorch",
+        "path": ".github/workflows/p05-torch.yml",
+        "sha256": "67db9d8ca9223b51ffe1165f08f3999eb1d93a849ca1c64a207a1c4b47ad9a26",
+        "push_branch_filter": [
+          "master"
+        ],
+        "push_path_filter": [
+          ".github/workflows/p05-python.yml",
+          ".github/workflows/p05-torch.yml",
+          ".github/workflows/p04-model.yml",
+          "python/**",
+          "setup.py",
+          "pyproject.toml",
+          "MANIFEST.in",
+          "LICENSE",
+          "ci/project/**",
+          "ci/toolchain_rev.sh",
+          "ci/install_dependencies.sh",
+          "ci/gen_config.py",
+          "configure",
+          "config.mk.in",
+          "sw/**",
+          "sim/**",
+          "hw/rtl/**",
+          "hw/dpi/**",
+          "tests/regression/ai_matmul/**",
+          "tests/regression/ai_mlp/**",
+          "tests/regression/sgemm_tcu/**",
+          "tests/regression/common.mk",
+          "tests/runtime/**",
+          "third_party/**",
+          "profiles/p02-tfr.json",
+          "docs/designs/torch_custom_ops_v1.md",
+          "docs/designs/python_binding_v1.md",
+          "docs/designs/tiny_mlp_fixture_v1.md",
+          "docs/designs/mlp_execution_records_v1.md",
+          "docs/designs/tensor_numerics_v1.md",
+          "VERSION",
+          "VX_config.toml",
+          "VX_types.toml",
+          ".gitmodules"
+        ],
+        "pull_request_path_filter_identical": true,
+        "predicted_push_trigger": false,
+        "matching_changed_paths": [],
+        "reason": "No changed path matches any push path filter; the master branch condition alone is insufficient."
+      },
+      {
+        "workflow": "P06 Native Baseline",
+        "path": ".github/workflows/p06-baseline.yml",
+        "sha256": "a70a451dab4aeafff25555f9c4976f4dfcba7ca02ae2d5be8a81943a75caa89d",
+        "push_branch_filter": [
+          "master"
+        ],
+        "push_path_filter": [
+          ".github/workflows/p06-baseline.yml",
+          ".github/workflows/p04-model.yml",
+          "ci/project/**",
+          "ci/toolchain_rev.sh",
+          "ci/install_dependencies.sh",
+          "ci/gen_config.py",
+          "ci/blackbox.sh",
+          "configure",
+          "Makefile.in",
+          "config.mk.in",
+          "*.toml",
+          "sw/**",
+          "sim/**",
+          "hw/**",
+          "tests/regression/ai_bench_common/**",
+          "tests/regression/ai_bench_matmul/**",
+          "tests/regression/ai_bench_mlp/**",
+          "tests/regression/ai_matmul/**",
+          "tests/regression/ai_mlp/**",
+          "tests/regression/sgemm_tcu/**",
+          "tests/regression/common.mk",
+          "tests/runtime/**",
+          "third_party/**",
+          "profiles/**",
+          "docs/designs/native_benchmark_v1.md",
+          "docs/designs/tiny_mlp_fixture_v1.md",
+          "docs/designs/mlp_execution_records_v1.md",
+          "docs/designs/tensor_numerics_v1.md",
+          "VERSION",
+          "VX_config.toml",
+          "VX_types.toml",
+          ".gitmodules"
+        ],
+        "pull_request_path_filter_identical": true,
+        "predicted_push_trigger": false,
+        "matching_changed_paths": [],
+        "reason": "No changed path matches any push path filter; the master branch condition alone is insufficient."
+      },
+      {
+        "workflow": "Project Governance",
+        "path": ".github/workflows/project-governance.yml",
+        "sha256": "fb64e9abd44fa0fff65243a831e98dae65c827e75c433c323bc84b4b259148e8",
+        "push_branch_filter": [],
+        "push_path_filter": [
+          ".github/workflows/project-governance.yml",
+          ".github/workflows/p05-python.yml",
+          ".github/workflows/p05-torch.yml",
+          ".github/workflows/p06-baseline.yml",
+          ".github/ISSUE_TEMPLATE/**",
+          ".github/pull_request_template.md",
+          "ci/project/**",
+          "ci/gen_config.py",
+          "python/**",
+          "setup.py",
+          "pyproject.toml",
+          "MANIFEST.in",
+          "sw/runtime/ai/**",
+          "sw/runtime/common/**",
+          "sw/runtime/include/**",
+          "sw/common/ai_matmul*.h",
+          "sw/kernel/ai/**",
+          "tests/regression/ai_matmul/**",
+          "tests/regression/ai_mlp/**",
+          "tests/regression/ai_bench_common/**",
+          "tests/regression/ai_bench_matmul/**",
+          "tests/regression/ai_bench_mlp/**",
+          "tests/runtime/**",
+          "docs/project/**",
+          "docs/designs/tiny_mlp_fixture_v1.md",
+          "docs/designs/mlp_execution_records_v1.md",
+          "docs/designs/tensor_numerics_v1.md",
+          "docs/designs/python_binding_v1.md",
+          "docs/designs/torch_custom_ops_v1.md",
+          "docs/designs/native_benchmark_v1.md",
+          "docs/designs/native_baseline_analysis_v1.md",
+          "docs/index.md",
+          "docs/assets/img/vortex_framework_stack.svg",
+          "profiles/**",
+          "README.md",
+          "ROADMAP.md",
+          "AGENTS.md",
+          "CONTRIBUTING.md",
+          "SECURITY.md",
+          "CHANGELOG.md",
+          "LICENSE",
+          "VERSION",
+          "VX_config.toml",
+          "VX_types.toml",
+          ".gitmodules"
+        ],
+        "pull_request_path_filter_identical": true,
+        "predicted_push_trigger": true,
+        "matching_changed_paths": [
+          ".github/workflows/project-governance.yml",
+          "README.md",
+          "docs/project/evidence/p06-analysis-validation/README.md",
+          "docs/project/evidence/p06-analysis-validation/archive-index.json",
+          "docs/project/evidence/p06-analysis-validation/archives/simx-bf16.zip",
+          "docs/project/evidence/p06-analysis-validation/archives/simx-fp16.zip",
+          "docs/project/evidence/p06-analysis-validation/candidate-governance.json",
+          "docs/project/evidence/p06-analysis-validation/candidate-governance.log",
+          "docs/project/evidence/p06-analysis-validation/change-impact-review.json",
+          "docs/project/evidence/p06-analysis-validation/checkpoint-analysis-comparison.json",
+          "docs/project/evidence/p06-analysis-validation/checkpoint-analysis.json",
+          "docs/project/evidence/p06-analysis-validation/checkpoint-publication.json",
+          "docs/project/evidence/p06-analysis-validation/checkpoint-source-review.json",
+          "docs/project/evidence/p06-analysis-validation/hosted-ci-final-observation.json",
+          "docs/project/evidence/p06-analysis-validation/hosted-ci-observation.json",
+          "docs/project/evidence/p06-analysis-validation/hosted-governance.log",
+          "docs/project/evidence/p06-analysis-validation/hosted-p06-observation.json",
+          "docs/project/evidence/p06-analysis-validation/hosted-workflows.json",
+          "docs/project/evidence/p06-analysis-validation/release-candidate-review.json",
+          "docs/project/evidence/p06-analysis-validation/verification-index.json",
+          "docs/project/index.md",
+          "docs/project/p06-next-experiment-proposal.md",
+          "docs/project/p06-ownership-review-matrix.md",
+          "docs/project/p06-qualification-agent-execution.json",
+          "docs/project/p06-qualification-handoff.md",
+          "docs/project/phases/p04-inference.md",
+          "docs/project/status.md"
+        ],
+        "reason": "Changed workflow, README and docs/project paths match the retained push filters."
+      }
+    ],
+    "predicted_triggered_workflows": [
+      {
+        "name": "CI",
+        "path": ".github/workflows/ci.yml"
+      },
+      {
+        "name": "Project Governance",
+        "path": ".github/workflows/project-governance.yml"
+      }
+    ],
+    "predicted_not_triggered_selected_workflows": [
+      {
+        "name": "P04 Native Model",
+        "path": ".github/workflows/p04-model.yml"
+      },
+      {
+        "name": "P05 Installed Python",
+        "path": ".github/workflows/p05-python.yml"
+      },
+      {
+        "name": "P05 Installed PyTorch",
+        "path": ".github/workflows/p05-torch.yml"
+      },
+      {
+        "name": "P06 Native Baseline",
+        "path": ".github/workflows/p06-baseline.yml"
+      }
+    ],
+    "additional_workflow_review": [
+      {
+        "name": "Apptainer CI",
+        "path": ".github/workflows/apptainer-ci.yml",
+        "sha256": "dcf4fd7d5e84b0d3f4000cd36a7f573eacccbe88e2f4dce0b3f3a0d7fa63ea36",
+        "trigger_events": [
+          "workflow_dispatch",
+          "schedule",
+          "push",
+          "pull_request"
+        ],
+        "push_paths": [
+          "miscs/apptainer/**",
+          "ci/install_dependencies.sh",
+          "VERSION"
+        ],
+        "predicted_push_trigger": false,
+        "reason": "No changed path matches its push filters."
+      },
+      {
+        "name": "ASIC Gate",
+        "path": ".github/workflows/asic_gate.yml",
+        "sha256": "52131b60089538e66a84afae9383a1574316e9980e5d33eceadfecc9d9c0b19e",
+        "trigger_events": [
+          "schedule",
+          "workflow_dispatch"
+        ],
+        "push_paths": [],
+        "predicted_push_trigger": false,
+        "reason": "This workflow has no push trigger."
+      },
+      {
+        "name": "FPGA Gate",
+        "path": ".github/workflows/fpga_gate.yml",
+        "sha256": "92537a8133cbedff401f06110922cedaf0ac650f30a0cc97210ca5f9cbe2961a",
+        "trigger_events": [
+          "workflow_dispatch"
+        ],
+        "push_paths": [],
+        "predicted_push_trigger": false,
+        "reason": "This workflow has no push trigger."
+      },
+      {
+        "name": "Timing Gate",
+        "path": ".github/workflows/logic_gate.yml",
+        "sha256": "d6e0962575ce0abfb1015fc1fc22e1f5ba8b7ade5a9dd59b3622930b3d07699c",
+        "trigger_events": [
+          "workflow_dispatch"
+        ],
+        "push_paths": [],
+        "predicted_push_trigger": false,
+        "reason": "This workflow has no push trigger."
+      }
+    ],
+    "ci_matrix_limit": "Only workflow eligibility is predicted. CI's ordinary cached push policy starts with SimX/smoke, while a toolchain cache miss or indeterminate change base can broaden coverage. Future planned cells and their outcomes are not asserted.",
+    "scheduled_or_manual_work": "Scheduled/manual workflows are separate from this push prediction. This bounded review dispatched, reran, enabled and disabled no workflow. The observed diff contains no CI ASIC-arm synthesis-input path; with an available before commit, that step leaves the existing ASIC workflow enabled/disabled state unchanged.",
+    "execution_observed_for_final_publication": false
+  },
+  "preserved_historical_snapshots_and_indexes": {
+    "hosted-ci-observation.json": "e8a96b3a6753368202d772617c7e69c2b93d22e97dee4f85d88f7454b7524cc8",
+    "hosted-workflows.json": "03067e434bba31148c99a736ea6a3ce660524c8928eb8ad603af09894ceabac8",
+    "hosted-p06-observation.json": "b7b5379253fffcc023574be7c28134db2c174028af056d15b994a2e93c113b08",
+    "verification-index.json": "0398ba7f5f25067b1306508b593cbb19d5f74225e10afac85e8cc787fa3ccb1f",
+    "archive-index.json": "4347a4dd08014f6376a7b4de28e2b3a9855a66903dd80f8ae6b9aa463d1edddc"
+  },
+  "limitations": [
+    "This observation is immutable evidence of one in-flight read at the checkpoint source. It is not a terminal run result and must not be relabelled after publication.",
+    "The existing hosted-ci-observation.json, hosted-workflows.json, hosted-p06-observation.json, archive-index.json and verification-index.json remain unchanged by this assignment. Their hashes above bind the observed historical files; the selected verification index does not implicitly include this later record.",
+    "No new tests, native execution, source implementation changes, acceptance decision or performance claim were made.",
+    "No publication commit existed when the trigger prediction was recorded. A future CI result must retain the actual new source SHA and complete selected-job outcomes."
+  ]
+}

@@ -11,6 +11,8 @@ launches. The [qualification audit](p06-qualification-audit.md),
 scope and new validation. P06-A02/A03 remain open. Next, freeze one small-workload
 amortization experiment; resolve native multiple-live-operation ownership before
 any reuse or concurrency claim.
+Resume with the [qualification handoff](p06-qualification-handoff.md) and
+[DRAFT next experiment proposal](p06-next-experiment-proposal.md).
 
 **P04 is complete for the fixed tiny-model contract.**
 [P04-A01](evidence/p04-fixture/acceptance.json) retains its accepted source scope;
@@ -120,8 +122,10 @@ while preserving the original measurements and the 1,000 ns process allowance.
 A separate host-only reproduction found an approximately 100 ms supervisor
 exit-observation delay. Original host durations remain unchanged; exact exit
 timestamps are unavailable, so no guessed correction or fine-grained host speedup
-is inferred. This continuation reviews original data and adds host validation,
-without new native execution. The cold SimX counts motivate a small-workload
+is inferred. Original-artifact qualification reviews the historical run; fresh
+checkpoint regression execution at `9036b37` is recorded in the
+[implementation validation packet](evidence/p06-analysis-validation/README.md),
+with acceptance kept at its original source. The cold SimX counts motivate a small-workload
 amortization experiment; they do not establish a causal bottleneck or successful optimization. Native
 multiple-live-operation ownership needs separate resolution before reuse or
 concurrency claims.
@@ -829,6 +833,8 @@ accepted model serializes and explicitly closes each operation. P06-A02 still
 requires matched correctness, native RTL and applicable parity/performance
 evidence; A03 requires a reviewed target budget and synthesis reports. See the
 [phase guide](phases/p06-performance.md) and [backlog](backlog.md).
+Resume with the [qualification handoff](p06-qualification-handoff.md) and
+[DRAFT next experiment proposal](p06-next-experiment-proposal.md).
 
 **Parallel framework task:** preserve the
 [accepted copying binding](evidence/p05-python/acceptance-binding.json) and

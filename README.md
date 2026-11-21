@@ -60,6 +60,8 @@ amortization experiment with matched before/after criteria, as described in the
 [qualification audit](docs/project/p06-qualification-audit.md). Resolve native
 multiple-live-operation ownership before any reuse or concurrency claim; the
 accepted baseline serializes and explicitly closes each operation.
+Resume with the [qualification handoff](docs/project/p06-qualification-handoff.md)
+and [DRAFT next experiment proposal](docs/project/p06-next-experiment-proposal.md).
 
 **Parallel work: P05-T01 — the Python/custom-op bridge (`in_progress`).**
 [P05-A01 now accepts the copying Python binding](docs/project/evidence/p05-python/acceptance-binding.json)
@@ -138,6 +140,8 @@ and P07–P11 are not started.
 - Read the earlier contract checkpoint: [P02 numerical handoff](docs/project/p02-numerics-handoff.md)
   and [A01 evidence](docs/project/evidence/p02-numerics/README.md).
 - Start the next bounded task: [P06 qualification audit](docs/project/p06-qualification-audit.md),
+  [qualification handoff](docs/project/p06-qualification-handoff.md),
+  [DRAFT next experiment proposal](docs/project/p06-next-experiment-proposal.md),
   [accepted baseline packet](docs/project/evidence/p06-baseline/README.md),
   [benchmark contract](docs/designs/native_benchmark_v1.md),
   [status](docs/project/status.md) and [backlog](docs/project/backlog.md).

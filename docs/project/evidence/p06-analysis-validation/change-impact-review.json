@@ -1,0 +1,464 @@
+{
+  "schema_version": 1,
+  "agent": "/root/w09_a3",
+  "assignment": "w09_a3",
+  "wave": 9,
+  "observed_at_utc": "2026-11-21T14:27:31.755666+00:00",
+  "scope": "Independent local base-copy change-impact classification of the entire original-to-integration diff and reconciliation of applicable review obligations.",
+  "outcome": "pass_for_named_integration_commit",
+  "base_commit": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+  "base_tree": "6e96c99cc5a26bfacf398cd263b71f1d6ec7aab2",
+  "head_commit": "1dac15c680499836abda6d017c007abf33f299eb",
+  "head_tree": "22af9083c55ae67003f89b13e581ffaf06943cd6",
+  "review_policy": {
+    "path": "docs/review/code-review-policy.md",
+    "base_git_blob": "d9fea38a9526c1de19311eb6fbe97e739955ec03",
+    "sha256": "99426ced05c04c1b14422f4fdacabcce3c680600461c4887b14e5eabf8b0587d",
+    "unchanged_at_head": true,
+    "trust_boundary": "Section 5 requires a local run of the base classifier and base YAML policy for a change touching .github; no CI classifier summary is relied on."
+  },
+  "classifier_execution": {
+    "started_at_utc": "2026-11-21T14:25:08.867307+00:00",
+    "finished_at_utc": "2026-11-21T14:25:09.043812+00:00",
+    "base_commit": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+    "base_tree": "6e96c99cc5a26bfacf398cd263b71f1d6ec7aab2",
+    "head_commit": "1dac15c680499836abda6d017c007abf33f299eb",
+    "head_tree": "22af9083c55ae67003f89b13e581ffaf06943cd6",
+    "base_files": {
+      "ci/change_impact.py": {
+        "base_git_blob": "e7283ed7e348c3ddf63d6ecc8acceaf67a4e6534",
+        "sha256": "bd2ef579de90b14b7ab4cd5ef2f6b7c911753e154c4201aaf0f0d0b25a460779",
+        "size_bytes": 80757,
+        "materialized_path": "/workspace/scratch/00f618e398e9/p06-audit/w09_a3-base-h0j8qlhe/change_impact.py"
+      },
+      "docs/review/change-impact.yaml": {
+        "base_git_blob": "f9f5693f22acf7ffffa80a66c209cfe288d8dc91",
+        "sha256": "489d1018c790bb6c383b774b119223889bb508be6c63db654d5c6c80520d0333",
+        "size_bytes": 11511,
+        "materialized_path": "/workspace/scratch/00f618e398e9/p06-audit/w09_a3-base-h0j8qlhe/change-impact.yaml"
+      }
+    },
+    "command_argv": [
+      "python3",
+      "-I",
+      "/workspace/scratch/00f618e398e9/p06-audit/w09_a3-base-h0j8qlhe/change_impact.py",
+      "--repo",
+      "/workspace/scratch/00f618e398e9/AI-GPU",
+      "--policy",
+      "/workspace/scratch/00f618e398e9/p06-audit/w09_a3-base-h0j8qlhe/change-impact.yaml",
+      "explain",
+      "--base",
+      "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+      "--head",
+      "1dac15c680499836abda6d017c007abf33f299eb"
+    ],
+    "cwd": "/workspace/scratch/00f618e398e9/p06-audit/w09_a3-base-h0j8qlhe",
+    "exit_code": 0,
+    "stdout": "R2  84b6ca0ca..1dac15c68  (57 files)\n  reasons: path:ci-enforcement\n  R2  M .github/workflows/project-governance.yml  [ci-enforcement]\n  R0  M README.md  [prose]\n  R0  M ROADMAP.md  [prose]\n  R1  A ci/project/p06_analyze.py  [default]\n  R1  M ci/project/p06_records.py  [default]\n  R1  A ci/project/test_p06_analysis_compatibility.py  [default]\n  R1  A ci/project/test_p06_analysis_metrics.py  [default]\n  R1  A ci/project/test_p06_analyze.py  [default]\n  R1  A ci/project/test_p06_published_baseline.py  [default]\n  R1  A ci/project/test_p06_timing.py  [default]\n  R1  A docs/designs/native_baseline_analysis_v1.md  [prose, normative-docs]\n  R0  M docs/project/backlog.md  [prose]\n  R0  M docs/project/benchmarks.md  [prose]\n  R0  A docs/project/evidence/p06-analysis-validation/README.md  [prose]\n  R0  A docs/project/evidence/p06-analysis-validation/archive-index.json  [prose]\n  R0  A docs/project/evidence/p06-analysis-validation/archives/simx-bf16.zip  [prose]\n  R0  A docs/project/evidence/p06-analysis-validation/archives/simx-fp16.zip  [prose]\n  R0  A docs/project/evidence/p06-analysis-validation/candidate-governance.json  [prose]\n  R0  A docs/project/evidence/p06-analysis-validation/candidate-governance.log  [prose]\n  R0  A docs/project/evidence/p06-analysis-validation/checkpoint-analysis-comparison.json  [prose]\n  R0  A docs/project/evidence/p06-analysis-validation/checkpoint-analysis.json  [prose]\n  R0  A docs/project/evidence/p06-analysis-validation/checkpoint-publication.json  [prose]\n  R0  A docs/project/evidence/p06-analysis-validation/checkpoint-source-review.json  [prose]\n  R0  A docs/project/evidence/p06-analysis-validation/hosted-governance.log  [prose]\n  R0  A docs/project/evidence/p06-analysis-validation/hosted-p06-observation.json  [prose]\n  R0  A docs/project/evidence/p06-analysis-validation/hosted-workflows.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/README.md  [prose]\n  R0  A docs/project/evidence/p06-baseline/acceptance.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/archive-index.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/archives/simx-bf16.zip  [prose]\n  R0  A docs/project/evidence/p06-baseline/archives/simx-fp16.zip  [prose]\n  R0  A docs/project/evidence/p06-baseline/hosted/governance.log  [prose]\n  R0  A docs/project/evidence/p06-baseline/hosted/observation.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/hosted/prior-attempt.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/hosted/prior-failed-governance.log  [prose]\n  R0  A docs/project/evidence/p06-baseline/reviews/acceptance-review.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/reviews/analysis.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/reviews/audit_measurements.py  [prose]\n  R0  A docs/project/evidence/p06-baseline/reviews/audit_sources.py  [prose]\n  R0  A docs/project/evidence/p06-baseline/reviews/measurement-review.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/reviews/source-provenance.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/reviews/supervisor-observation.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/reviews/timing-summary-conservation.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/reviews/w01_a3.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/reviews/w02_a1.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/reviews/w02_a2.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/reviews/w02_a5.json  [prose]\n  R0  A docs/project/evidence/p06-baseline/reviews/w03_a1.json  [prose]\n  R0  A docs/project/p06-next-experiment-proposal.md  [prose]\n  R0  A docs/project/p06-ownership-review-matrix.md  [prose]\n  R0  A docs/project/p06-qualification-agent-execution.json  [prose]\n  R0  A docs/project/p06-qualification-audit.md  [prose]\n  R0  A docs/project/p06-qualification-handoff.md  [prose]\n  R0  M docs/project/phases/p04-inference.md  [prose]\n  R0  M docs/project/phases/p06-performance.md  [prose]\n  R0  M docs/project/roadmap.json  [prose]\n  R0  M docs/project/status.md  [prose]\n",
+    "stderr": "",
+    "stdout_sha256": "200194e8186b5347299724ec3d46568e02f361997317f047ac8582164fef905c",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "command_shell_rendering": "python3 -I /workspace/scratch/00f618e398e9/p06-audit/w09_a3-base-h0j8qlhe/change_impact.py --repo /workspace/scratch/00f618e398e9/AI-GPU --policy /workspace/scratch/00f618e398e9/p06-audit/w09_a3-base-h0j8qlhe/change-impact.yaml explain --base 84b6ca0ca75fba248ba330642bbf8764db3d459c --head 1dac15c680499836abda6d017c007abf33f299eb",
+    "python": "3.12.14",
+    "fresh_scratch_directory": true,
+    "isolated_python": true,
+    "materialized_inputs_rehashed_after_execution": true,
+    "stdout_encoding": "UTF-8; exact bytes represented by the JSON string, including its final newline",
+    "result_is_advisory_not_approval": true
+  },
+  "classification": {
+    "class": "R2",
+    "reasons": [
+      "path:ci-enforcement"
+    ],
+    "changed_file_count": 57,
+    "file_class_counts": {
+      "R0": 48,
+      "R1": 8,
+      "R2": 1
+    },
+    "r2_paths": [
+      ".github/workflows/project-governance.yml"
+    ],
+    "r3_detected": false,
+    "r3_detectors_reported": [],
+    "evidence_findings_reported": []
+  },
+  "workflow_hunk_review": {
+    "path": ".github/workflows/project-governance.yml",
+    "base_sha256": "f442662f5e88d11e71995782651b36f1b762ac66d1dd28c0329290f469f1db9b",
+    "head_sha256": "fb64e9abd44fa0fff65243a831e98dae65c827e75c433c323bc84b4b259148e8",
+    "exact_diff": "diff --git a/.github/workflows/project-governance.yml b/.github/workflows/project-governance.yml\nindex d77b35b..3520044 100644\n--- a/.github/workflows/project-governance.yml\n+++ b/.github/workflows/project-governance.yml\n@@ -33,6 +33,7 @@ on:\n       - 'docs/designs/python_binding_v1.md'\n       - 'docs/designs/torch_custom_ops_v1.md'\n       - 'docs/designs/native_benchmark_v1.md'\n+      - 'docs/designs/native_baseline_analysis_v1.md'\n       - 'docs/index.md'\n       - 'docs/assets/img/vortex_framework_stack.svg'\n       - 'profiles/**'\n@@ -79,6 +80,7 @@ on:\n       - 'docs/designs/python_binding_v1.md'\n       - 'docs/designs/torch_custom_ops_v1.md'\n       - 'docs/designs/native_benchmark_v1.md'\n+      - 'docs/designs/native_baseline_analysis_v1.md'\n       - 'docs/index.md'\n       - 'docs/assets/img/vortex_framework_stack.svg'\n       - 'profiles/**'\n",
+    "positive_filter_additions": 2,
+    "added_path": "docs/designs/native_baseline_analysis_v1.md",
+    "events": [
+      "push",
+      "pull_request"
+    ],
+    "removing_exact_additions_reproduces_base_bytes": true,
+    "all_other_workflow_bytes_unchanged": true,
+    "trust_boundary_observation": "Existing push, pull_request and manual events, read-only contents permission, hosted ubuntu-24.04 runner, checkout isolation, 20-minute budget and unconditional checks are unchanged. No new trust exposure or self-hosted runner is introduced.",
+    "author_receipt": {
+      "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+      "task_name": "/root/w06_a3",
+      "completed_receipt_sha256": "0a7ecfbba31d72c2bb371291d805c21bf72cbe93950b078da262aec4a138190d",
+      "receipt_canonical_sha256": "e4d7435633e7e8c884b05789bbdc2aa0250a399f9d2a74c184682f8592bc377c"
+    },
+    "independent_hunk_review": {
+      "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+      "task_name": "/root/w06_a4",
+      "completed_receipt_sha256": "07dd5e5575074b624bb35ebf770abf24953930c3edc4f4246dd53b24d2d19f93",
+      "receipt_canonical_sha256": "f7450ee1558109a8c9122eab216ed9e66e940c8f7d703489440d20a81aa7b126"
+    },
+    "independent_focused_test_rerun": {
+      "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+      "task_name": "/root/w07_a6",
+      "completed_receipt_sha256": "932091bb13c12f989c33f3a050f45a724e80ba4e0ae55652c214e36551e1478c",
+      "receipt_canonical_sha256": "a031a36f1c204de71c7b37aa0ec56cff2047dd1c56fb6e959a476e7c2298ed5a"
+    },
+    "receipt_and_head_hashes_match": true
+  },
+  "review_obligations": [
+    {
+      "obligation": "Local base-copy classification for .github changes",
+      "status": "met",
+      "evidence": "Fresh base classifier and YAML extracted from the original base; python3 -I explain ran with absolute repository/policy paths and immutable full commit IDs; exact stdout/stderr and hashes retained above."
+    },
+    {
+      "obligation": "R2 changed-hunk review",
+      "status": "met_for_the_reviewed_scope",
+      "evidence": "w06_a4 independently reviewed both workflow hunks and the P04 handoff correction; this reviewer rechecked the exact workflow diff and all nonfilter byte conservation. Existing analyzer line review w03_a6 and final integration review w08_a5 bind the production/test source identities below; draft review w06_a6 and w08_a4 remain explicitly design-only.",
+      "reviews": [
+        {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w03_a1",
+          "completed_receipt_sha256": "7c2b2a84ecda48a7286eb239f1da87ab2abcc3dc5a719151f750ed4e00c9f546",
+          "receipt_canonical_sha256": "e5a74b2d452007f7062d5a6b8a0e323c17216e82d8eea27d01e2f4e209841556"
+        },
+        {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w03_a2",
+          "completed_receipt_sha256": "f0a80a51d9b2be145fa9822de3d9b7701af9086abb54583b804a18f857a21c51",
+          "receipt_canonical_sha256": "b4f0260208ad856bd7714df90c8d99ec1cfadec4172226b423887d306b3bb4f7"
+        },
+        {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w03_a3",
+          "completed_receipt_sha256": "8dc977de16589adcfedb43836cfb59c27047317d3244a74016a9b08bcd42bf3f",
+          "receipt_canonical_sha256": "7ac19d1c17eb1656d8828d1066276bf4d2d77028e3061c8192b011f991aa3896"
+        },
+        {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w03_a6",
+          "completed_receipt_sha256": "8a37adc939dc4e0bea79aec55e5c7995d581d3ed340fd2d24f34cb88b72b482a",
+          "receipt_canonical_sha256": "c0409dbaa9b672942987e172b86ebf8ac67e9f8c997c9e93b350f1ce7d881aa9"
+        },
+        {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w04_a5",
+          "completed_receipt_sha256": "c5094f30b2bf44b868516fdece2627c4a9314eb877f312e84b5733ade9865adf",
+          "receipt_canonical_sha256": "d3ec3ccba67df27fdb00256ac4d5869f5e9f0edb876988c59a899c7fd37c750d"
+        },
+        {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w05_a2",
+          "completed_receipt_sha256": "f7b2acf9095db8a132a1efa26c701b63544f64b4df9122f0d61fad2628fbc473",
+          "receipt_canonical_sha256": "c16cd31b189ba6915db506bff16b7feff5d74566edc74a314ad838399f041fbe"
+        },
+        {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w06_a4",
+          "completed_receipt_sha256": "07dd5e5575074b624bb35ebf770abf24953930c3edc4f4246dd53b24d2d19f93",
+          "receipt_canonical_sha256": "f7450ee1558109a8c9122eab216ed9e66e940c8f7d703489440d20a81aa7b126"
+        },
+        {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w06_a6",
+          "completed_receipt_sha256": "339d2bccd7582738bda6649b89e044d7e4ab3f89a9bce6321d6fade1e52d2788",
+          "receipt_canonical_sha256": "09ccc09c95e9ccb94de0d3ab7c02cf8fe6acd9655baf5a2ce0a9ee7916f99275"
+        },
+        {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w08_a4",
+          "completed_receipt_sha256": "764e0fc5bb85db2dbb274312825e320bd9fab6fb3cf4be349a513b38a0157db0",
+          "receipt_canonical_sha256": "9882926fa814314770c318c35622c4321854405a48dd51fdd0b4d81db247b9f6"
+        },
+        {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w08_a5",
+          "completed_receipt_sha256": "90a7b686fee018c28cebaf3cfc22f28555b6bf04a4dc6e4ec99308092b40a6d0",
+          "receipt_canonical_sha256": "4f7ab7d0e6f3757037d20310299402d6c14215fe40bc1ba914e3334b506fd695"
+        }
+      ]
+    },
+    {
+      "obligation": "R2 evidence names what ran, what did not and why",
+      "status": "met",
+      "evidence": "Author and independent focused workflow tests cover the two positive-filter additions. The full 2449-test suite belongs to its earlier exact tree; production/test files are unchanged at this integration commit. The later workflow and documentation are not relabelled as part of that full-suite run."
+    },
+    {
+      "obligation": "RTL/SimX area skills, Beacon for timing changes and model_parity for cycle changes",
+      "status": "not_applicable",
+      "evidence": "The complete diff changes no hw/, sim/, sw/, tests/ or configuration paths. This is host-side retained-data validation, workflow selection and documentation/evidence; no native RTL or SimX timing implementation changes."
+    },
+    {
+      "obligation": "Publication authorization and any required maintainer decision",
+      "status": "explicit_session_authorization_for_direct_master_publication",
+      "evidence": "The user explicitly requests implementation, commit and push to the named repository master branch. This records session authorization only; no separate human code-review approval, PR approval or waiver is asserted or supplied by this reviewer."
+    },
+    {
+      "obligation": "Additional R3 independent-review and detector-specific contract obligations",
+      "status": "not_triggered",
+      "evidence": "The authoritative base-copy result is R2 with no R3 detector findings. Existing independent agent review is retained as engineering evidence; it is not recast as human approval."
+    }
+  ],
+  "evidence": {
+    "workflow_author_tests": {
+      "source": {
+        "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+        "task_name": "/root/w06_a3",
+        "completed_receipt_sha256": "0a7ecfbba31d72c2bb371291d805c21bf72cbe93950b078da262aec4a138190d",
+        "receipt_canonical_sha256": "e4d7435633e7e8c884b05789bbdc2aa0250a399f9d2a74c184682f8592bc377c"
+      },
+      "status": "run",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=ci/project python3 -m unittest -v test_p04_ci_contract test_p05_governance_integration test_p06_ci_contract.NativeBaselineWorkflowTests.test_governance_covers_new_inputs_and_keeps_existing_checks_unconditional test_p05_torch_ci.InstalledTorchWorkflowTests.test_governance_covers_new_contract_without_replacing_existing_gates test_baseline_packet_ci.BaselinePacketCIWorkflowTests test_repository_contract.RepositoryContractTests.test_workflow_retains_declared_low_privilege_guardrails",
+      "tests_run": 11,
+      "seconds": 0.013,
+      "exit_code": 0,
+      "result": "pass; no failures/errors/skips",
+      "tested_workflow_sha256": "fb64e9abd44fa0fff65243a831e98dae65c827e75c433c323bc84b4b259148e8",
+      "new_path_parser_check": "Author receipt also records both positive-filter parsers matching the new contract path and exact two-line-only workflow change."
+    },
+    "workflow_independent_rerun": {
+      "source": {
+        "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+        "task_name": "/root/w07_a6",
+        "completed_receipt_sha256": "932091bb13c12f989c33f3a050f45a724e80ba4e0ae55652c214e36551e1478c",
+        "receipt_canonical_sha256": "a031a36f1c204de71c7b37aa0ec56cff2047dd1c56fb6e959a476e7c2298ed5a"
+      },
+      "status": "run",
+      "tests_run": 11,
+      "seconds": 0.014,
+      "exit_code": 0,
+      "result": "pass; no failures/errors/skips",
+      "tested_workflow_sha256": "fb64e9abd44fa0fff65243a831e98dae65c827e75c433c323bc84b4b259148e8",
+      "rerun_by_this_agent": false
+    },
+    "full_host_suite": {
+      "source": {
+        "path": "docs/project/evidence/p06-analysis-validation/candidate-governance.json",
+        "sha256": "cf662ec02942878d47887113e1d9b8f9b551be78c0da064bdb6e87138d4950e0",
+        "size_bytes": 764
+      },
+      "log": {
+        "path": "docs/project/evidence/p06-analysis-validation/candidate-governance.log",
+        "sha256": "a88d7701afa637067aba5f42e05a75de4e0d6135b2e10577d0577d0ba1a633a9",
+        "size_bytes": 2630
+      },
+      "independent_log_review": {
+        "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+        "task_name": "/root/w07_a6",
+        "completed_receipt_sha256": "932091bb13c12f989c33f3a050f45a724e80ba4e0ae55652c214e36551e1478c",
+        "receipt_canonical_sha256": "a031a36f1c204de71c7b37aa0ec56cff2047dd1c56fb6e959a476e7c2298ed5a"
+      },
+      "source_revision": "9b02c09a2cd249582632d02192cca3357f41e655",
+      "source_tree": "43b8b18f4bb4d6dab557b18a4b73ef17a2699664",
+      "status": "run",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/project",
+        "-p",
+        "test_*.py"
+      ],
+      "tests_run": 2449,
+      "unittest_seconds": 1114.149,
+      "supervisor_elapsed_seconds": 1116.052,
+      "exit_code": 0,
+      "result": "pass; no failures/errors/skips in retained final summary",
+      "all_production_and_test_code_identical_at_integration_head": true,
+      "later_non_documentation_changes": [
+        ".github/workflows/project-governance.yml"
+      ],
+      "later_workflow_and_documentation_part_of_full_suite_tree": false,
+      "rerun_by_this_agent": false
+    },
+    "head_source_identities_matching_reviewed_receipts": {
+      ".github/workflows/project-governance.yml": {
+        "sha256": "fb64e9abd44fa0fff65243a831e98dae65c827e75c433c323bc84b4b259148e8",
+        "git_blob": "35200445019f3b3f8d9ba9e619502146043d8def"
+      },
+      "ci/project/p06_analyze.py": {
+        "sha256": "fb4bee2291748c2d12701f7b25c4830db2c8380d28738bca8bb763f07279c783",
+        "git_blob": "907d9dee10a6782ce3df230de97097708fbdc418"
+      },
+      "ci/project/p06_records.py": {
+        "sha256": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7",
+        "git_blob": "09cbc96e8240cfd9413dc716e195ecb9d2574deb"
+      },
+      "ci/project/test_p06_analysis_compatibility.py": {
+        "sha256": "6b22842d3633141594e02d06b306c3e45236842047f87785875bb67f3e585a46",
+        "git_blob": "848caeb9b6948e2e910e1b3679ccc38b52282073"
+      },
+      "ci/project/test_p06_analysis_metrics.py": {
+        "sha256": "a2198451cf4a5366c09f1e9682e1580aec9440152b9a34e648e22bcde0fe70c2",
+        "git_blob": "ce485fad98a01e7bd278bc721e6c45cd8a274b92"
+      },
+      "ci/project/test_p06_analyze.py": {
+        "sha256": "06bca4641e595ecbd7c42211ddbd434b69ae5d546743d79c3a1c9a10568bf026",
+        "git_blob": "8f2648b40c6219e0beaa718c1d9f8d98fbb8e71f"
+      },
+      "ci/project/test_p06_published_baseline.py": {
+        "sha256": "92190bbf6303a5f770398e71b0bac359423dc55bd219d67866e91cdc10a7452a",
+        "git_blob": "da768a059be2cc5c7eedead561fd85ecca95e6c8"
+      },
+      "ci/project/test_p06_timing.py": {
+        "sha256": "97e00af2b899e903cb86a8f6dd491ba49cf9bb90b28e7c69f50cd925ce6583e1",
+        "git_blob": "f61cb6782a88b523f87525a577d8e5bfcc6a50c5"
+      }
+    },
+    "protected_scope": {
+      "compared_base": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+      "compared_head": "1dac15c680499836abda6d017c007abf33f299eb",
+      "pathspecs": [
+        "ci/change_impact.py",
+        "docs/review/change-impact.yaml",
+        "docs/review/code-review-policy.md",
+        ".gitattributes",
+        "hw",
+        "sim",
+        "sw",
+        "tests",
+        "ci/testcases",
+        "ci/baselines",
+        "VERSION",
+        "VX_config.toml",
+        "VX_types.toml",
+        "configure",
+        "ci/gen_config.py",
+        "profiles"
+      ],
+      "changed_paths": [],
+      "interpretation": "No classifier/policy change, native implementation/configuration change, inherited test-case/golden change, toolchain pin move or build-surface change in these paths."
+    },
+    "retained_ledger_receipt_verification": {
+      "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+      "ledger_git_blob_at_head": "30a9f4c4fb4d1f9e0fe1988f7b6c6fc85065f20b",
+      "verified_receipts": {
+        "w03_a1": {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w03_a1",
+          "completed_receipt_sha256": "7c2b2a84ecda48a7286eb239f1da87ab2abcc3dc5a719151f750ed4e00c9f546",
+          "receipt_canonical_sha256": "e5a74b2d452007f7062d5a6b8a0e323c17216e82d8eea27d01e2f4e209841556"
+        },
+        "w03_a2": {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w03_a2",
+          "completed_receipt_sha256": "f0a80a51d9b2be145fa9822de3d9b7701af9086abb54583b804a18f857a21c51",
+          "receipt_canonical_sha256": "b4f0260208ad856bd7714df90c8d99ec1cfadec4172226b423887d306b3bb4f7"
+        },
+        "w03_a3": {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w03_a3",
+          "completed_receipt_sha256": "8dc977de16589adcfedb43836cfb59c27047317d3244a74016a9b08bcd42bf3f",
+          "receipt_canonical_sha256": "7ac19d1c17eb1656d8828d1066276bf4d2d77028e3061c8192b011f991aa3896"
+        },
+        "w03_a6": {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w03_a6",
+          "completed_receipt_sha256": "8a37adc939dc4e0bea79aec55e5c7995d581d3ed340fd2d24f34cb88b72b482a",
+          "receipt_canonical_sha256": "c0409dbaa9b672942987e172b86ebf8ac67e9f8c997c9e93b350f1ce7d881aa9"
+        },
+        "w04_a5": {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w04_a5",
+          "completed_receipt_sha256": "c5094f30b2bf44b868516fdece2627c4a9314eb877f312e84b5733ade9865adf",
+          "receipt_canonical_sha256": "d3ec3ccba67df27fdb00256ac4d5869f5e9f0edb876988c59a899c7fd37c750d"
+        },
+        "w05_a2": {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w05_a2",
+          "completed_receipt_sha256": "f7b2acf9095db8a132a1efa26c701b63544f64b4df9122f0d61fad2628fbc473",
+          "receipt_canonical_sha256": "c16cd31b189ba6915db506bff16b7feff5d74566edc74a314ad838399f041fbe"
+        },
+        "w06_a3": {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w06_a3",
+          "completed_receipt_sha256": "0a7ecfbba31d72c2bb371291d805c21bf72cbe93950b078da262aec4a138190d",
+          "receipt_canonical_sha256": "e4d7435633e7e8c884b05789bbdc2aa0250a399f9d2a74c184682f8592bc377c"
+        },
+        "w06_a4": {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w06_a4",
+          "completed_receipt_sha256": "07dd5e5575074b624bb35ebf770abf24953930c3edc4f4246dd53b24d2d19f93",
+          "receipt_canonical_sha256": "f7450ee1558109a8c9122eab216ed9e66e940c8f7d703489440d20a81aa7b126"
+        },
+        "w06_a6": {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w06_a6",
+          "completed_receipt_sha256": "339d2bccd7582738bda6649b89e044d7e4ab3f89a9bce6321d6fade1e52d2788",
+          "receipt_canonical_sha256": "09ccc09c95e9ccb94de0d3ab7c02cf8fe6acd9655baf5a2ce0a9ee7916f99275"
+        },
+        "w07_a6": {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w07_a6",
+          "completed_receipt_sha256": "932091bb13c12f989c33f3a050f45a724e80ba4e0ae55652c214e36551e1478c",
+          "receipt_canonical_sha256": "a031a36f1c204de71c7b37aa0ec56cff2047dd1c56fb6e959a476e7c2298ed5a"
+        },
+        "w08_a4": {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w08_a4",
+          "completed_receipt_sha256": "764e0fc5bb85db2dbb274312825e320bd9fab6fb3cf4be349a513b38a0157db0",
+          "receipt_canonical_sha256": "9882926fa814314770c318c35622c4321854405a48dd51fdd0b4d81db247b9f6"
+        },
+        "w08_a5": {
+          "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+          "task_name": "/root/w08_a5",
+          "completed_receipt_sha256": "90a7b686fee018c28cebaf3cfc22f28555b6bf04a4dc6e4ec99308092b40a6d0",
+          "receipt_canonical_sha256": "4f7ab7d0e6f3757037d20310299402d6c14215fe40bc1ba914e3334b506fd695"
+        }
+      },
+      "method": "Scratch receipt SHA-256 and parsed object compared with the actual embedded receipt and completed_receipt_sha256 at the named integration commit."
+    }
+  },
+  "publication_authorization": {
+    "source": "Root supplied the exact current-session user request to this reviewer in a task message.",
+    "exact_user_request": "do a deep audit here see what the next step in development is and then when you have a solid lead, spawn 60 agents work across 10 waves to impllement the next step commit and push to the master branch :[https://github.com/baabi-boo/AI-GPU.git](https://github.com/baabi-boo/AI-GPU.git)",
+    "authorized_target": "https://github.com/baabi-boo/AI-GPU.git",
+    "authorized_branch": "master",
+    "interpretation": "Authorization to implement and publish directly to master; no fabricated separate maintainer review, human approval or waiver.",
+    "account_observation": "Root reports selected account baabi-boo with push/admin metadata; this subagent did not independently query remote account permissions.",
+    "publication_by_this_agent": false
+  },
+  "findings": [
+    {
+      "severity": "F0",
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "source": {
+        "ledger_path": "docs/project/p06-qualification-agent-execution.json",
+        "task_name": "/root/w06_a4",
+        "completed_receipt_sha256": "07dd5e5575074b624bb35ebf770abf24953930c3edc4f4246dd53b24d2d19f93",
+        "receipt_canonical_sha256": "f7450ee1558109a8c9122eab216ed9e66e940c8f7d703489440d20a81aa7b126"
+      },
+      "summary": "Existing nonblocking observation: the durable P06 workflow coverage test names native_benchmark_v1.md but does not explicitly require native_baseline_analysis_v1.md. Exact-byte and parser checks cover this two-line addition.",
+      "disposition": "Preserved as nonblocking observation; no failed gate or waiver."
+    }
+  ],
+  "new_missing_gate_found": false,
+  "not_run_by_this_agent": [
+    "Focused unit suite (already run by author and independently rerun by w07_a6).",
+    "Full governance suite (retained exact-tree execution and independent log review used).",
+    "Native GPU, RTL, synthesis, Beacon or model_parity (no affected implementation paths).",
+    "Hosted CI or fresh remote ref/account verification (outside this local classifier assignment)."
+  ],
+  "limitations": [
+    "This report classifies only 1dac15c680499836abda6d017c007abf33f299eb, not this newly written evidence file or later documentation/ledger edits.",
+    "Root reports a later documentation correction and plans a new base-copy classification of the eventual final commit; this report is not substituted for that final candidate check.",
+    "No phase acceptance, physical-performance result, human approval, waiver, commit or push is granted or performed by this reviewer."
+  ],
+  "repository_file_written": "docs/project/evidence/p06-analysis-validation/change-impact-review.json"
+}
