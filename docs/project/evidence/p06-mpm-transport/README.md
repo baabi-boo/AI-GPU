@@ -123,7 +123,16 @@ python3 -B -m unittest discover -s ci/project -p 'test_p06_mpm*.py' -v
 The [final hosted CI snapshot](hosted/final-ci-validation.json) records separately
 scoped workflow results. Both hosted governance runs and all seven dedicated
 workflows pass. The 92-job general PR workflow remains in progress; completed
-transport/host checks do not imply that every repository CI job passed. Ordinary PR/push driver filters do
+transport/host checks do not imply that every repository CI job passed.
+After publication, its [standard logic-gate job](hosted/broader-logic-gate.json)
+failed the existing tensor DSP comparison: **267 → 283 (+6.0%)**, beyond the
+unchanged 5% limit. Thirteen other standard builds passed. The retained
+[raw log](hosted/broader-logic-gate.log.gz) and
+[independent attribution](reviews/broader-logic-gate-review.md) match the prior
+failure and identify a tensor wrapper that does not instantiate the changed
+host counter decoder. The failure remains unresolved and unwaived; broader CI
+is not green. Earlier timestamped snapshots are preserved as observed.
+Ordinary PR/push driver filters do
 not select the new driverless catalog case; the dedicated workflow provides the
 required native matrix. The [enforcement review](reviews/enforcement-review.md)
 finds no F2/F3 in the hosted path. Its F1 follow-up is standalone interpreter

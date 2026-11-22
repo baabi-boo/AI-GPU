@@ -98,6 +98,13 @@ state their exact scopes and outstanding integration status. A standalone CLI
 provenance follow-up remains: record `sys.executable` separately from PATH
 `python3`. Hosted execution already requires those interpreters to agree.
 
+The broader CI subsequently [failed its standard tensor DSP area check](evidence/p06-mpm-transport/hosted/broader-logic-gate.json):
+267 → 283 exceeds the unchanged 5% limit. An
+[independent comparison](evidence/p06-mpm-transport/reviews/broader-logic-gate-review.md)
+matches the prior failure; the failing wrapper does not instantiate the changed
+counter decoder. Thirteen other standard builds pass. This inherited issue
+remains unresolved, and broader CI is not reported as green.
+
 ## Retained failures
 
 The [evidence index](evidence/p06-mpm-transport/README.md) preserves both early
