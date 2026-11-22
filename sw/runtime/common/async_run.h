@@ -59,6 +59,19 @@ public:
     }
   }
 
+  template <typename Task>
+  void invoke(Task&& task) {
+    // Processor hooks can execute the model synchronously as well. Keep their
+    // failures terminal without poisoning the owner for unrelated CP errors.
+    try {
+      wait();
+      std::forward<Task>(task)();
+    } catch (...) {
+      failed_ = true;
+      throw;
+    }
+  }
+
   template <typename Rep, typename Period>
   void wait_for(const std::chrono::duration<Rep, Period>& duration) {
     require_healthy();
@@ -69,6 +82,10 @@ public:
 
   void fail() noexcept {
     failed_ = true;
+  }
+
+  bool failed() const noexcept {
+    return failed_;
   }
 
   void join() noexcept {

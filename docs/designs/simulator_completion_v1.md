@@ -60,14 +60,24 @@ be observed before the busy hook permits successful launch completion.
 ## Failure visibility and retained state
 
 Each backend checks completion around CP register transactions. DCR and
-last-level-cache memory hooks wait for and consume pending execution before
-touching processor state; processor RTL's drain hook does the same. Both CP
-register callbacks catch exceptions from their guarded transaction, latch
-terminal failure, and return the existing nonzero HAL error. Async task creation
-failure takes this path too.
+last-level-cache memory hooks use `AsyncRun::invoke()` to wait for and consume
+pending execution before touching processor state; processor RTL's drain hook
+does the same. An exception from any of these synchronous processor operations
+latches terminal failure before propagating to the CP callback. Exceptions from
+asynchronous execution and asynchronous task creation also latch terminal
+failure. This classification depends on the operation that failed, not on its
+exception type: a processor `std::bad_alloc` is terminal too.
 
-The failing launch must not retire successfully or permit later work in the
-same serial CP burst. Later CP reads and writes remain rejected for that backend
+Both CP register callbacks return the existing nonzero HAL error when the
+completion owner has latched failure. If an unrelated CP or host operation
+throws while that owner is healthy, the callback rethrows it through the
+inherited runtime exception path; it does not mark the processor as failed.
+Direct host-backed RAM access keeps that inherited path. This preserves
+existing error classification and CP-specific recovery behavior without
+promising that arbitrary CP exceptions are recoverable.
+
+On a processor-origin failure, the failing launch must not retire successfully
+or permit later work in the same serial CP burst. Later CP reads and writes remain rejected for that backend
 device's lifetime. A failed read must not publish its output as a successful
 register observation. This provides no rollback of commands or memory writes
 that completed before the failure.
@@ -81,12 +91,31 @@ before accepting the completion sequence number. The existing
 public waits and retain the event's error on repeated observations. This
 contract adds no public error code, callback member or on-wire status.
 
-Consuming a queue-local error with `vx_queue_finish` does not clear the backend
-failure. A subsequent command using that device must still fail at the backend
-boundary. Successful cleanup or a completed future does not authorize reuse of
-the failed simulator state. A new device instance owns a new completion owner;
-any claim that recreation succeeds must be demonstrated within the separately
-declared simulator/context scope.
+For a processor failure, consuming the queue-local error with `vx_queue_finish`
+does not clear the backend failure. A subsequent command using that device must
+still fail at the backend boundary. Successful cleanup or a completed future
+does not authorize reuse of the failed simulator state. A new device instance
+owns a new completion owner; any claim that recreation succeeds must be
+demonstrated within the separately declared simulator/context scope.
+
+### Recoverable CP allocation failure
+
+The inherited [lifecycle test](../../tests/runtime/test_ai_lifecycle.cpp)
+requires recovery from allocation failures in host transfer staging and the
+CP copy scratch buffer. In the scratch case, the CP selects `EngState::Retire`
+before allocating the buffer. A `std::bad_alloc` there occurs outside processor
+invocation and propagates to the queue's existing
+`VX_ERR_OUT_OF_HOST_MEMORY` mapping. The failing event and its dependent event
+retain that error; unwinding releases captured staging, and queue finish reports
+and consumes the queue-local error.
+
+A later CP transaction retires the abandoned descriptor without repeating its
+copy, so it must not access the released staging. The test reads the seeded
+destination before a recovery transfer can overwrite it, then requires a fresh
+write/read to succeed on the same device and queue. Preserving the OOM result
+alone is insufficient: the completion owner must remain healthy for this
+specific path. These guarantees do not roll back a copy that already wrote
+bytes, or authorize recovery from a processor-origin fault.
 
 ## Destruction and whole-platform accounting
 
@@ -132,7 +161,8 @@ A host wait timeout does not cancel, detach or safely reclaim an executing
 worker. A worker that never finishes can still block destruction. Safe forced
 cancellation, recovery of a failed context, simultaneous callers, signals,
 process termination and Verilator fatal aborts are outside this contract.
-Only C++ exceptions reaching the future can be consumed by this mechanism.
+Only C++ exceptions reaching the future or the guarded synchronous processor
+hooks can be reported through this failure mechanism.
 
 A direct caller's tick exception can leave that thread's execution-domain and
 cycle thread-local state at the fault site. Same-thread direct exception reuse
@@ -156,18 +186,22 @@ timeout does not substitute for it.
 | [Actual backend and CP host fixture](../../ci/project/test_p06_simulator_completion.py) | Both backends; pending and serial success; standard and unknown exceptions; failure before retirement; suppressed later work; sticky reads/writes; RAM/LLC and drain synchronization; join before release | Controlled Processor/RAM faults establish host transport behavior, not native processor arithmetic or an RTL fault mechanism |
 | [Actual timing/functional framework checks](../../ci/project/test_p06_simulator_platform.py), using the [platform cleanup fixture](../../ci/project/fixtures/simulator_platform_cleanup.cpp) | Compile each production header separately; queued model exception leaves live accounting nonzero; full cleanup retires queued work and scheduled undelivered reservations; fresh work is consumed exactly once and reaches idle; late owner destruction preserves new accounting; normal completion, launch-keep state and repeated clean finalization remain valid | Actual `SimObject`/`SimChannel` host checks with one executor worker and a joined asynchronous fault task; no substitute headers or manual count reset; no native `Processor`/RAM, native functional execution, multiworker exception transport or performance qualification |
 | Deterministic immediate-completion fixture | Complete the task before the first busy observation; preserve busy then idle after each supported success-consumption path; reject exceptions and overlapping starts without losing failure | A helper or scripted-CP test must disclose its seam; sleeps or repeated lucky scheduling do not prove the boundary |
-| Public runtime failure integration | Actual callback adapter, device polling, queue worker and event paths; repeated waits retain failure; consuming queue error does not rehabilitate the backend; cleanup stays usable | Source inspection and direct HAL tests alone do not establish the whole public error path |
+| Public runtime failure integration | Actual callback adapter, device polling, queue worker and event paths; repeated waits retain processor failure; consuming queue error does not rehabilitate the failed backend; cleanup stays usable | Source inspection and direct HAL tests alone do not establish the whole public error path |
+| [Error-origin compatibility regression](../../ci/project/test_p06_simulator_error_boundary.py) | Run the inherited lifecycle test unchanged through actual common runtime, CP and both backends; cover all three transfer allocation stages, OOM propagation, released captures, unchanged seeded data and same-device continuation; separately keep asynchronous and synchronous processor faults terminal | Controlled Processor/RAM establishes the host exception boundary; native arithmetic, physical recovery and arbitrary CP exception recovery require separate evidence |
 | [Linked native SimX unit](../../tests/unittest/simx_completion/main.cpp) | Real `Processor`/RAM; normal x3 values `7` and `-1`; unchanged legacy success and caught-exception behavior; a real bounded-RAM `OutOfRange` exception reaches asynchronous `get()`; complete destruction of the failed context is followed by a fresh normal context | Fixed timing SimX, RV64 `p02-tfr`, `PERF=1`; directed native model evidence does not establish a native public-runtime failure or physical-device recovery |
 | [Native public success regression](../../tests/regression/simx_completion/main.cpp) | Real generated kernel and runtime; global-data access with nonzero low `gp`; exact output checks; six successful serial launches across two contexts, event waits, cleanup and context recreation | Fixed timing SimX, RV64 `p02-tfr`, `PERF=1`; positive native execution does not replace fault-path evidence |
 
 The actual-framework timing/functional checks and injected host failures do not
-replace either native obligation. Native completion execution remains `not_run`
-pending the hosted [completion workflow](../../.github/workflows/p06-simulator-completion.yml)
-and its [native runner](../../ci/project/p06_simulator_execute.py). The required
-bounded-RAM exception followed by a fresh normal context must remain in the
-native unit; a host-header probe, weakened fixture or timeout cannot substitute
-for that sequence. Native functional SimX and other configurations remain
-unqualified by these fixed native cells.
+replace either native obligation. The [evidence packet](../project/evidence/p06-simulator-completion/README.md)
+records the exact tested revisions and outcomes from the hosted
+[completion workflow](../../.github/workflows/p06-simulator-completion.yml)
+and its [native runner](../../ci/project/p06_simulator_execute.py). A result
+applies only to its retained source and configuration; a subsequent production
+repair requires corresponding verification. The required bounded-RAM exception
+followed by a fresh normal context must remain in the native unit; a host-header
+probe, weakened fixture or timeout cannot substitute for that sequence. Native
+functional SimX and other configurations remain unqualified by these fixed
+native cells.
 
 Native tests run from fresh configured build trees with identified tools and
 unchanged resource limits. The additive [completion build fragment](../../sim/simx/completion.mk)

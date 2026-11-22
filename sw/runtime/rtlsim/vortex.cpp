@@ -70,6 +70,8 @@ public:
   // functional CommandProcessor C++ model. A bounded tick burst around
   // each MMIO transaction keeps the CP responsive without a dedicated
   // simulation thread.
+  // Only processor failures poison the device. Other CP/host exceptions retain
+  // the common runtime's existing error classification and recovery behavior.
   int cp_reg_write(uint32_t off, uint32_t value) {
     try {
       run_.check();
@@ -80,7 +82,9 @@ public:
       run_.check();
       return 0;
     } catch (...) {
-      run_.fail();
+      if (!run_.failed()) {
+        throw;
+      }
       return -1;
     }
   }
@@ -94,7 +98,9 @@ public:
       *value = cp_.mmio_read(off);
       return 0;
     } catch (...) {
-      run_.fail();
+      if (!run_.failed()) {
+        throw;
+      }
       return -1;
     }
   }
@@ -165,8 +171,7 @@ private:
         return;
       }
       if (processor_.cp_llc_client()) {
-        run_.wait();
-        processor_.cp_mem_read(addr, dst, bytes);
+        run_.invoke([&]() { processor_.cp_mem_read(addr, dst, bytes); });
         return;
       }
       ram_.read(static_cast<uint8_t*>(dst), addr, bytes);
@@ -177,8 +182,7 @@ private:
         return;
       }
       if (processor_.cp_llc_client()) {
-        run_.wait();
-        processor_.cp_mem_write(addr, src, bytes, false);
+        run_.invoke([&]() { processor_.cp_mem_write(addr, src, bytes, false); });
         return;
       }
       ram_.write(static_cast<const uint8_t*>(src), addr, bytes);
@@ -191,8 +195,7 @@ private:
           std::memcpy(hp, src, bytes);
           return;
         }
-        run_.wait();
-        processor_.cp_mem_write(addr, src, bytes, no_alloc);
+        run_.invoke([&]() { processor_.cp_mem_write(addr, src, bytes, no_alloc); });
       };
       h.dma_llc_client = true;
       h.dma_no_alloc_min = processor_.cp_llc_size() / 2;
@@ -201,13 +204,11 @@ private:
       }
     }
     h.vortex_dcr_write = [this](uint32_t addr, uint32_t value) {
-      run_.wait();
-      processor_.dcr_write(addr, value);
+      run_.invoke([&]() { processor_.dcr_write(addr, value); });
     };
     h.vortex_dcr_read = [this](uint32_t addr, uint32_t tag) -> uint32_t {
-      run_.wait();
       uint32_t v = 0;
-      processor_.dcr_read(addr, tag, &v);
+      run_.invoke([&]() { processor_.dcr_read(addr, tag, &v); });
       return v;
     };
     h.vortex_start = [this]() {
@@ -217,8 +218,7 @@ private:
       return run_.busy();
     };
     h.vortex_drain = [this]() {
-      run_.wait();
-      processor_.drain();
+      run_.invoke([&]() { processor_.drain(); });
     };
 #ifdef VX_CFG_VM_ENABLE
     // The device MMU control surface answers the fault-report DCRs.
