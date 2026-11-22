@@ -11,13 +11,16 @@ import builtins
 from contextlib import ExitStack, redirect_stdout
 import copy
 import hashlib
+import importlib.machinery
 import io
 import json
 import os
 from pathlib import Path
 import stat
 import subprocess
+import sys
 import tempfile
+from types import CodeType
 import unittest
 from unittest import mock
 import warnings
@@ -46,6 +49,175 @@ OLD_SELECTORS = (
     "core_stall_tcu", "core_instr_tcu", "core_loads", "core_stores", "lmem_reads", "lmem_writes",
     "lmem_bank_st", "coalescer_miss", "tcu_tbuf_stalls", "tcu_tbuf_cache_hits",
 )
+CURRENT_READER_SOURCES = tuple("ci/project/" + name + ".py" for name in (
+    "baseline_inventory", "baseline_matrix", "baseline_packet_contract", "baseline_packet_io",
+    "baseline_process", "compiler_records", "p02_fixture_oracle", "p02_layout_fixture_oracle",
+    "p02_matrix_records", "p02_wmma_fixtures", "p02_wmma_numerical_fixture_oracle",
+    "p03_execution_records", "p04_execution_records", "p04_fixture_adapter", "p04_model_contract",
+    "p04_reference", "p06_checked_execute", "p06_compiler_records", "p06_contract",
+    "p06_counter_diagnostics_replay", "p06_counter_source_inventory", "p06_mpm_execute",
+    "p06_records", "p06_replay", "preflight",
+))
+ARCHIVE_READER_SOURCE = "docs/project/evidence/p05-torch/reviews/archive_reader.py"
+ARCHIVE_READER_SHA256 = "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3"
+PATH_OPERATIONS = (
+    (builtins, "open", ("rb",)), (io, "open", ("rb",)), (os, "open", (os.O_RDONLY,)),
+    (os, "stat", ()), (os, "lstat", ()), (os, "readlink", ()),
+    (os, "listdir", ()), (os, "scandir", ()), (os, "access", (os.R_OK,)),
+    (Path, "open", ("rb",)), (Path, "resolve", ()), (Path, "stat", ()),
+    (Path, "lstat", ()), (Path, "exists", ()), (Path, "is_file", ()),
+    (Path, "is_dir", ()), (Path, "glob", ("*",)), (Path, "rglob", ("*",)),
+)
+
+
+class ProducerPathGuard:
+    def __init__(self, test, roots, identities, reader_sources):
+        self.test = test
+        self.roots = tuple(Path(path) for path in roots)
+        self.identities = {Path(path) for path in identities}
+        # Trust is supplied independently of the archive and the reader's own inventory.
+        self.helpers = {ROOT / path for path in (*reader_sources, ARCHIVE_READER_SOURCE)}
+        self.resolving = []
+        self.opened_helpers = set()
+
+    def guarded(self, owner, name):
+        method = getattr(owner, name)
+
+        def call(path, *args, **kwargs):
+            candidate = Path(os.fsdecode(path)) if isinstance(path, (str, bytes, os.PathLike)) else None
+            helper = candidate in self.helpers
+            # realpath probes ancestors while resolving an approved file; direct probes stay forbidden.
+            ancestor = (owner is os and name == "lstat" and self.resolving
+                        and candidate in self.resolving[-1].parents)
+            if candidate is not None and not helper and not ancestor:
+                self.test.assertFalse(candidate in self.identities or any(
+                    candidate == root or root in candidate.parents for root in self.roots),
+                    "reader accessed recorded producer path: " + str(candidate))
+            if helper and name == "open":
+                if owner is os:
+                    flags = kwargs.get("flags", args[0] if args else os.O_RDONLY)
+                    self.test.assertFalse(flags & (os.O_ACCMODE | os.O_CREAT | os.O_TRUNC | os.O_APPEND),
+                                          "current reader helpers may only be opened for reading")
+                else:
+                    mode = kwargs.get("mode", args[0] if args else "r")
+                    self.test.assertIn(mode, ("r", "rb", "rt"),
+                                       "current reader helpers may only be opened for reading")
+                self.opened_helpers.add(candidate)
+            resolving = owner is Path and name == "resolve" and helper
+            if resolving:
+                self.resolving.append(candidate)
+            try:
+                return method(path, *args, **kwargs)
+            finally:
+                if resolving:
+                    self.resolving.pop()
+
+        return call
+
+    def install(self, stack):
+        for owner, name, _ in PATH_OPERATIONS:
+            stack.enter_context(mock.patch.object(owner, name, self.guarded(owner, name)))
+
+
+class ArchiveReaderExecGuard:
+    def __init__(self, test):
+        self.test = test
+        self.path = ROOT / ARCHIVE_READER_SOURCE
+        body = self.path.read_bytes()
+        test.assertEqual(hashlib.sha256(body).hexdigest(), ARCHIVE_READER_SHA256,
+                         "current archive reader differs from the independent source pin")
+        code = compile(body, str(self.path), "exec", flags=0, dont_inherit=True, optimize=sys.flags.optimize)
+        self.expected = self.identity(code)
+        self.original_exec = builtins.exec
+        self.executed = []
+
+    @staticmethod
+    def identity(code):
+        # CodeType equality omits these fields, including on nested code objects.
+        return (code, code.co_filename, code.co_stacksize, code.co_qualname,
+                tuple(ArchiveReaderExecGuard.identity(value) for value in code.co_consts
+                      if type(value) is CodeType))
+
+    def __call__(self, code, globals=None, locals=None, **kwargs):
+        self.test.assertIs(type(code), CodeType, "pinned current archive reader code differs")
+        self.test.assertEqual(self.identity(code), self.expected, "pinned current archive reader code differs")
+        self.executed.append(str(self.path))
+        return self.original_exec(code, globals, locals, **kwargs)
+
+
+def assert_forged_archive_parser_rejected(test, run_replay):
+    path = ROOT / ARCHIVE_READER_SOURCE
+    body = path.read_bytes()
+    forged = compile(body + b'\n__import__("builtins")._p06_forged_parser_effects.append("executed")\n',
+                     str(path), "exec", flags=0, dont_inherit=True, optimize=sys.flags.optimize)
+    original_get_code = importlib.machinery.SourceFileLoader.get_code
+    effects = []
+
+    def substituted_code(loader, fullname):
+        if Path(loader.path) == path:
+            return forged
+        return original_get_code(loader, fullname)
+
+    with mock.patch.object(importlib.machinery.SourceFileLoader, "get_code", substituted_code), \
+         mock.patch.object(builtins, "_p06_forged_parser_effects", effects, create=True), \
+         mock.patch.object(builtins, "exec", wraps=builtins.exec) as original_exec:
+        with test.assertRaisesRegex(AssertionError, "pinned current archive reader code differs"):
+            run_replay()
+        original_exec.assert_not_called()
+        test.assertEqual(effects, [])
+    test.assertEqual(path.read_bytes(), body)
+
+
+def assert_collocated_paths_blocked(test, recorded_path):
+    paths = (ROOT, ROOT / "ci", ROOT / "ci/project", ROOT / "sim/simx/core.cpp",
+             ROOT / "ci/project/p06_counter_public_execute.py",
+             ROOT / "ci/project/baseline_inventory.py.sibling",
+             ROOT / (ARCHIVE_READER_SOURCE + ".sibling"), Path(recorded_path))
+    for path in paths:
+        for owner, name, args in (*PATH_OPERATIONS, (Path, "read_bytes", ()), (Path, "read_text", ())):
+            with test.subTest(path=str(path), operation=owner.__name__ + "." + name):
+                with test.assertRaisesRegex(AssertionError, "recorded producer path"):
+                    getattr(owner, name)(path, *args)
+
+
+class ProducerPathGuardTests(unittest.TestCase):
+    def test_current_helper_allowance_rejects_write_capable_opens(self):
+        helper = ROOT / "ci/project/baseline_inventory.py"
+        calls = [(owner, (mode,), {}) for owner in (builtins, io, Path)
+                 for mode in ("w", "wb", "a", "r+", "x")]
+        calls.extend((owner, (), {"mode": "w"}) for owner in (builtins, io, Path))
+        calls.extend((os, (flags,), {}) for flags in
+                     (os.O_WRONLY, os.O_RDWR, os.O_RDONLY | os.O_CREAT,
+                      os.O_RDONLY | os.O_TRUNC, os.O_RDONLY | os.O_APPEND))
+        calls.append((os, (), {"flags": os.O_RDONLY | os.O_CREAT}))
+        for owner, args, kwargs in calls:
+            with self.subTest(operation=owner.__name__ + ".open", args=args, kwargs=kwargs):
+                with mock.patch.object(owner, "open") as underlying:
+                    guard = ProducerPathGuard(self, (ROOT,), (), CURRENT_READER_SOURCES)
+                    with self.assertRaisesRegex(AssertionError, "only be opened for reading"):
+                        guard.guarded(owner, "open")(helper, *args, **kwargs)
+                    underlying.assert_not_called()
+
+    def test_active_helper_resolution_rejects_sibling_access_and_ancestor_reads(self):
+        helper = ROOT / "ci/project/baseline_inventory.py"
+        sibling = ROOT / "ci/project/p06_counter_public_execute.py"
+        original_lstat = os.lstat
+        operations = ((Path, "read_bytes", sibling), (Path, "resolve", sibling),
+                      (os, "stat", sibling), (os, "lstat", sibling),
+                      (os, "listdir", ROOT), (Path, "open", ROOT))
+        for owner, name, forbidden in operations:
+            def probe(path, *args, **kwargs):
+                if Path(path) == ROOT:
+                    getattr(owner, name)(forbidden)
+                return original_lstat(path, *args, **kwargs)
+
+            with self.subTest(operation=owner.__name__ + "." + name), ExitStack() as stack:
+                stack.enter_context(mock.patch.object(os, "lstat", probe))
+                guard = ProducerPathGuard(self, (ROOT,), (), CURRENT_READER_SOURCES)
+                guard.install(stack)
+                with self.assertRaisesRegex(AssertionError, "recorded producer path"):
+                    helper.resolve()
+                self.assertEqual(guard.resolving, [])
 
 
 def encoded(value):
@@ -219,6 +391,15 @@ class CounterDiagnosticsReplayTests(unittest.TestCase):
         self.assertEqual(log["log_size_bytes"], len(members[PREFIX + log["log"]]))
 
     def test_replay_never_opens_producer_paths_extracts_or_executes_retained_code(self):
+        self.check_inert_replay(collocated=False)
+
+    def test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout(self):
+        self.check_inert_replay(collocated=True)
+
+    def test_replay_rejects_forged_archive_parser_before_any_execution(self):
+        assert_forged_archive_parser_rejected(self, lambda: self.check_inert_replay(collocated=True))
+
+    def check_inert_replay(self, *, collocated):
         members = dict(self.original)
         # This retained producer module would fail immediately if imported.
         replace_source(members, "ci/project/p06_checked_execute.py",
@@ -226,41 +407,17 @@ class CounterDiagnosticsReplayTests(unittest.TestCase):
         digest = write_archive(self.path, members)
         report = json.loads(members[REPORT])
         roots = tuple(Path(value) for value in report["paths"].values())
+        if collocated:
+            roots += (ROOT,)
         tool_paths = {Path(row[key]) for row in report["tools_before"]["tools"].values()
                       for key in ("path", "resolved_path")}
-        trusted_reader = str(ROOT / replay.trusted.ARCHIVE_READER_PATH)
-        executed = []
-        original_exec = builtins.exec
-
-        def guard(path):
-            if isinstance(path, (str, bytes, os.PathLike)):
-                candidate = Path(os.fsdecode(path))
-                self.assertNotIn(candidate, tool_paths, "reader opened a recorded tool identity")
-                self.assertFalse(any(candidate == root or root in candidate.parents for root in roots),
-                                 "reader accessed recorded producer path: " + str(candidate))
-
-        def guarded(method):
-            def call(path, *args, **kwargs):
-                guard(path)
-                return method(path, *args, **kwargs)
-            return call
-
-        def trusted_exec(code, globals=None, locals=None, **kwargs):
-            # The current, digest-pinned archive-reader module is imported once.
-            # Executing that trusted helper is distinct from archive-code replay.
-            filename = getattr(code, "co_filename", None)
-            self.assertEqual(filename, trusted_reader, "executed code outside the pinned current archive reader")
-            executed.append(filename)
-            return original_exec(code, globals, locals, **kwargs)
+        self.assertEqual(replay.trusted.ARCHIVE_READER_PATH, ARCHIVE_READER_SOURCE)
+        trusted_reader = str(ROOT / ARCHIVE_READER_SOURCE)
+        guard = ProducerPathGuard(self, roots, tool_paths, CURRENT_READER_SOURCES)
+        trusted_exec = ArchiveReaderExecGuard(self)
 
         with ExitStack() as patches:
-            for owner, name in ((builtins, "open"), (io, "open"), (os, "open"),
-                                (os, "stat"), (os, "lstat"), (os, "readlink"),
-                                (os, "listdir"), (os, "scandir"), (os, "access"),
-                                (Path, "open"), (Path, "resolve"), (Path, "stat"),
-                                (Path, "lstat"), (Path, "exists"), (Path, "is_file"),
-                                (Path, "is_dir"), (Path, "glob"), (Path, "rglob")):
-                patches.enter_context(mock.patch.object(owner, name, guarded(getattr(owner, name))))
+            guard.install(patches)
             for owner, name in ((subprocess, "Popen"), (subprocess, "run"), (subprocess, "call"),
                                 (subprocess, "check_call"), (subprocess, "check_output"),
                                 (os, "system"), (os, "popen"), (os, "fork"),
@@ -271,8 +428,12 @@ class CounterDiagnosticsReplayTests(unittest.TestCase):
                 if hasattr(owner, name):
                     patches.enter_context(mock.patch.object(owner, name, side_effect=AssertionError(name)))
             patches.enter_context(mock.patch.object(builtins, "exec", trusted_exec))
+            if collocated:
+                assert_collocated_paths_blocked(self, min(tool_paths))
             result = replay.replay_archive(self.path, digest, expected_revision=REVISION)
-        self.assertEqual(executed, [trusted_reader])
+        self.assertEqual(trusted_exec.executed, [trusted_reader])
+        self.assertEqual(guard.opened_helpers, guard.helpers)
+        self.assertEqual({row["path"] for row in result["trusted_replay_sources"]}, set(CURRENT_READER_SOURCES))
         self.assertEqual(result["outcome"], "pass")
         self.assert_nonacceptance(result)
 

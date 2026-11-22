@@ -20,6 +20,10 @@ import warnings
 import zipfile
 
 import p06_counter_public_replay as replay
+from test_p06_counter_diagnostics_replay import (ARCHIVE_READER_SOURCE, CURRENT_READER_SOURCES,
+                                                ArchiveReaderExecGuard, ProducerPathGuard,
+                                                assert_collocated_paths_blocked,
+                                                assert_forged_archive_parser_rejected)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -34,6 +38,8 @@ REPORT = PREFIX + "report.json"
 FALSE_CLAIMS = ("qualified", "ready_for_warm", "warm_execution", "acceptance",
                 "acceptance_claimed", "phase_acceptance", "performance_acceptance",
                 "full_warm_coverage", "retained_code_executed")
+PUBLIC_READER_SOURCES = (*CURRENT_READER_SOURCES, "ci/project/p06_counter_public_build.py",
+                        "ci/project/p06_counter_public_records.py", "ci/project/p06_counter_public_replay.py")
 
 
 def encoded(value):
@@ -322,12 +328,23 @@ class OriginalPublicReplayTests(unittest.TestCase):
         self.assertFalse(result["archive_read"]["retained_code_executed"])
 
     def test_replay_never_extracts_executes_or_opens_producer_paths(self):
+        self.check_inert_replay(collocated=False)
+
+    def test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout(self):
+        self.check_inert_replay(collocated=True)
+
+    def test_replay_rejects_forged_archive_parser_before_any_execution(self):
+        assert_forged_archive_parser_rejected(self, lambda: self.check_inert_replay(collocated=True))
+
+    def check_inert_replay(self, *, collocated):
         members = dict(self.original)
         source = "ci/project/p06_counter_public_execute.py"
         body = members[PREFIX + "artifacts/source/" + source] + b"\nraise AssertionError('archived code ran')\n"
         replace_payload(members, "artifacts/source/" + source, body, (source,))
         report = json.loads(members[REPORT])
         roots = tuple(PurePosixPath(value) for value in report["paths"].values())
+        if collocated:
+            roots += (PurePosixPath(ROOT),)
         identities = set()
 
         def collect(value):
@@ -341,30 +358,19 @@ class OriginalPublicReplayTests(unittest.TestCase):
                     collect(child)
         collect(report)
         digest = self.write_archive(members)
-
-        def guard(path):
-            if isinstance(path, (str, bytes, os.PathLike)):
-                candidate = PurePosixPath(os.fsdecode(path))
-                self.assertFalse(str(candidate) in identities or any(candidate == root or root in candidate.parents
-                                 for root in roots), "opened or resolved producer path: " + str(candidate))
-
-        def guarded(function):
-            def call(path, *args, **kwargs):
-                guard(path)
-                return function(path, *args, **kwargs)
-            return call
+        guard = ProducerPathGuard(self, roots, identities, PUBLIC_READER_SOURCES)
 
         original_spec = importlib.util.spec_from_file_location
-        archive_parser = ROOT / replay.diagnostics.trusted.ARCHIVE_READER_PATH
+        self.assertEqual(replay.diagnostics.trusted.ARCHIVE_READER_PATH, ARCHIVE_READER_SOURCE)
+        archive_parser = ROOT / ARCHIVE_READER_SOURCE
+        trusted_exec = ArchiveReaderExecGuard(self)
 
         def local_spec(name, location, *args, **kwargs):
             self.assertEqual(Path(location), archive_parser)
             return original_spec(name, location, *args, **kwargs)
 
         with ExitStack() as stack:
-            for owner, name in ((builtins, "open"), (io, "open"), (os, "open"),
-                                (Path, "resolve"), (Path, "stat")):
-                stack.enter_context(mock.patch.object(owner, name, guarded(getattr(owner, name))))
+            guard.install(stack)
             for owner, name in ((subprocess, "Popen"), (subprocess, "run"), (subprocess, "call"),
                                 (subprocess, "check_call"), (subprocess, "check_output"),
                                 (os, "system"), (os, "popen"), (os, "posix_spawn"),
@@ -374,7 +380,13 @@ class OriginalPublicReplayTests(unittest.TestCase):
                                 (replay.checked.native, "file_identity")):
                 stack.enter_context(mock.patch.object(owner, name, side_effect=AssertionError(name)))
             stack.enter_context(mock.patch.object(importlib.util, "spec_from_file_location", local_spec))
+            stack.enter_context(mock.patch.object(builtins, "exec", trusted_exec))
+            if collocated:
+                assert_collocated_paths_blocked(self, min(identities))
             result = replay.replay_archive(self.changed_path, digest, expected_revision=self.revision)
+        self.assertEqual(trusted_exec.executed, [str(archive_parser)])
+        self.assertEqual(guard.opened_helpers, guard.helpers)
+        self.assertEqual({row["path"] for row in result["trusted_replay_sources"]}, set(PUBLIC_READER_SOURCES))
         self.assertEqual(result["outcome"], "pass")
         self.assertFalse(result["retained_code_executed"])
 
