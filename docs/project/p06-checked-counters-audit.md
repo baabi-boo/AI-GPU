@@ -35,10 +35,15 @@ change the frozen warm-v1 decision or accept P06-A02/A03.
 
 A lifetime tick cap was considered and rejected for this slice. It would need
 independent event-rate and occupancy bounds for every selector, plus a count
-that survives platform resets. Checked arithmetic instead establishes the
-invariant by induction at every contributing addition: a fully instrumented context whose guarded operations all complete normally
-has not performed an overflowing guarded addition. Reset meaning, source coverage, coherent reads and actual execution
-remain separate review obligations.
+that survives platform resets. Checked arithmetic instead establishes a
+per-operation invariant by induction at every guarded source update and formed
+aggregate: a fully instrumented context whose guarded operations all complete
+normally has not performed an overflowing guarded addition. A derived total
+across independently updated components is checked when
+formed; a successful process alone does not prove its unobserved lifetime sum
+never exceeded the bound. A complete future lifetime proof must close that
+aggregate-observation gap. Reset meaning, source coverage, coherent reads and
+actual execution remain separate review obligations.
 
 ## Integrated upstream development
 

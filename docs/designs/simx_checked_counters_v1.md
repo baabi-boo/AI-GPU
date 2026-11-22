@@ -6,7 +6,8 @@ This contract defines the opt-in arithmetic guard implemented in
 [`perf_counter.h`](../../sim/common/perf_counter.h) and its integration into the
 33 available counters of the
 [warm-workspace manifest](../../ci/project/p06_warm_contract.json). It supplies
-a source-level no-wrap invariant for an instrumented SimX build. It does not
+a source-level no-wrap invariant for audited stored updates and successful
+aggregate reads in an instrumented SimX build. It does not
 itself establish native execution, complete selector transport coverage, a
 qualified warm attempt, or any phase acceptance.
 
@@ -106,9 +107,9 @@ cache-internal collision sources for non-warm cache bank-stall counters and
 operand-stall sources remain outside the reviewed 33-selector claim. This is
 not an every-counter, every-extension or whole-simulator no-wrap contract.
 
-## Absolute arithmetic bound and its assumptions
+## Guarded arithmetic invariant and remaining lifetime obligations
 
-Let `U = 2^64 - 1`. At construction a cumulative source counter is zero.
+Let `U = 2^64 - 1`. At construction each cumulative source component is zero.
 Assume its stored value equals the true nonnegative integer total `c`, with
 `0 <= c <= U`, and that the next exact event increment is `d >= 0`. A successful
 guarded update requires `d <= U - c`, so its new value is exactly `c + d <= U`.
@@ -123,6 +124,18 @@ the TCU buffer read total, CSR coalescer sum and underlying crossbar collision
 storage must also be checked. Pending-read subtraction must preserve its
 nonnegative accounting invariant before it contributes to latency.
 
+A mathematical sum across independently updated components can exceed `U`
+before it is queried even when each component still fits. A checked query
+rejects that unrepresentable total; it does not continuously enforce the
+aggregate total between queries. This prerequisite therefore does not establish
+an absolute all-33 context-lifetime bound merely because a process succeeds.
+A future qualification must either enforce the aggregate bound during updates,
+or prove monotonic components from zero through a terminal quiescent checked
+observation and prove that no later update occurs. In the latter case every
+earlier aggregate is bounded by its successfully observed terminal value.
+The argument must include initialization, primes, measurement, close and
+relevant teardown work, not only the timed interval.
+
 This proof depends on source inspection as well as the counter class. The
 class permits assignment and conversion for existing interfaces; it does not
 recognize a cumulative counter reset, an explicit narrowing cast, an already
@@ -132,11 +145,12 @@ checked `+=` cannot detect overflow that already occurred while computing its
 argument. The supported update paths supply exact nonnegative counts or checked
 component totals; any changed source path requires renewed review.
 
-The bound applies across initialization, excluded primes, measured operations,
-and teardown because the same stored counters remain guarded throughout the
-process. It relies on no estimated event rate, wall-clock timeout, small observed
-value, sampled monotonicity or simulator tick limit. A passing standalone class
-test proves its arithmetic behavior; it does not prove every model object in a
+The arithmetic checks remain active during initialization, excluded primes,
+measured operations and teardown wherever those stored counters are updated.
+This does not discharge the separate aggregate-lifetime obligation above. The
+per-operation invariant relies on no estimated event rate, wall-clock timeout,
+small observed value, sampled monotonicity or simulator tick limit. A passing
+standalone class test proves its arithmetic behavior; it does not prove every model object in a
 particular executable used that class.
 
 ## Lifetime and coherent observation
@@ -152,7 +166,10 @@ an arbitrary reset while requests remain outstanding a supported operation.
 `cycles` counts active core cycles, not elapsed platform ticks. Instructions,
 warp/thread events, memory requests, accumulated pending-read latency and tensor
 buffer events keep their existing distinct meanings and units in the manifest.
-No-wrap alone proves neither event semantics nor reset correctness.
+`memory_lt` adds pending-read occupancy in the existing run/cycle entry points;
+separate flush and CP-transfer loops can tick the platform without adding to
+that counter. It is not an integral over every platform tick. No-wrap alone
+proves neither event semantics nor reset correctness.
 
 Coherence is scoped to the serial owner in the
 [workspace contract](serial_matmul_workspace_v1.md). The benchmark observes
@@ -170,7 +187,8 @@ snapshot, lock, arbitrary-client concurrency guarantee or RTL coherence proof.
 A new versioned qualification route must establish all of the following:
 
 1. Independent review of the guard, all 33 storage/update/aggregation paths,
-   reset semantics and serial coherence assumptions at the exact source bodies.
+   reset semantics, aggregate-lifetime closure and serial coherence assumptions
+   at the exact source bodies.
 2. Real positive and negative guard tests, including overflow, aggregate carry,
    underflow, signed-negative operands, release builds, unchanged rejected
    primitive values and persistent asynchronous/synchronous failure.
