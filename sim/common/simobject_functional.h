@@ -1356,6 +1356,9 @@ inline void SimPlatform::cleanup() {
   domains_.clear();
   cross_inbox_.clear();
   cross_pending_ = 0;
+  // The finalized context cannot resume. Retire its abandoned packet count
+  // here, even when external shared owners defer channel destruction.
+  SimChannelBase::inflight_count().store(0, std::memory_order_relaxed);
   num_domains_ = 1;
   cycles_ = 0;
   // Allow a subsequent initialize() to elaborate and parallelize afresh.

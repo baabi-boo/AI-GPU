@@ -57,6 +57,11 @@ For the native serial ownership and opt-in resident workspace, follow the
 The [workspace evidence packet](docs/project/evidence/p06-serial-workspace/README.md)
 separates host fault checks from native execution and future performance acceptance.
 
+For simulator completion and exceptional full-platform teardown, follow the
+[completion contract](docs/designs/simulator_completion_v1.md). It separates
+injected host faults, actual timing/functional framework checks and required
+native execution.
+
 ---
 
 ## 1. Documentation Map

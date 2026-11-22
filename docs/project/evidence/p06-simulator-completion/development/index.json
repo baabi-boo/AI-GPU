@@ -1,0 +1,255 @@
+{
+  "artifacts": [
+    {
+      "archive": "development/w03-a05-runner-review.tar.gz",
+      "id": "w03-a05-runner-review",
+      "key_paths": [
+        "w03-a05-runner-review/initial-runner-failures.json",
+        "w03-a05-runner-review/initial-runner-failures.log",
+        "w03-a05-runner-review/preprocessor-probe.json",
+        "w03-a05-runner-review/probe.py"
+      ],
+      "manifest": "development/w03-a05-runner-review.manifest.json",
+      "omitted_file_count": 0,
+      "retained_file_count": 8,
+      "retained_original_bytes": 95584,
+      "scope": "26 host tests ran; 10 subtest failures reproduce fast-math and unretained include-search acceptance across five roles. Two host preprocessor comparisons retain the actual macro divergence.",
+      "sha256": "49236e7c4bece9c73cebaa242fb6b4320ca0e058fa884130791546838b2e30ba",
+      "size_bytes": 10328,
+      "title": "Initial compiler-record findings"
+    },
+    {
+      "archive": "development/w04-a01-runner-repair.tar.gz",
+      "id": "w04-a01-runner-repair",
+      "key_paths": [
+        "w04-a01-runner-repair/generated-proof.json",
+        "w04-a01-runner-repair/config-template-proof.json",
+        "w04-a01-runner-repair/stamps/"
+      ],
+      "manifest": "development/w04-a01-runner-repair.manifest.json",
+      "omitted_file_count": 0,
+      "retained_file_count": 26,
+      "retained_original_bytes": 208807,
+      "scope": "Generated stamp, option/include rejection, four host preprocessing and complete config-template checks pass. Pinned RISC-V kernel preprocessing and native execution are not_run.",
+      "sha256": "2023949353023565087a4c814468b54cfca71cbe913eccce99409153b83891ab",
+      "size_bytes": 26309,
+      "title": "Runner record and configuration repair"
+    },
+    {
+      "archive": "development/w04-a02.tar.gz",
+      "id": "w04-a02",
+      "key_paths": [
+        "w04-a02/assertion-preservation.json",
+        "w04-a02/runner-tests-final.json",
+        "w04-a02/runner-tests-final.log",
+        "w04-a02/generated-compiler-selection-gap.json",
+        "w04-a02/fixture.diff"
+      ],
+      "manifest": "development/w04-a02.manifest.json",
+      "omitted_file_count": 0,
+      "retained_file_count": 9,
+      "retained_original_bytes": 65330,
+      "scope": "All 15 original test methods and existing assertions retained; final source-stable receipt records 26 passing host tests. The earlier generated compiler-selection gap is retained.",
+      "sha256": "22a3f2bfbfc2e61362d7176535cdbec944708aeee431cd6d77f02906889b9e77",
+      "size_bytes": 13590,
+      "title": "Failure assertion preservation"
+    },
+    {
+      "archive": "development/w04-a03.tar.gz",
+      "id": "w04-a03",
+      "key_paths": [
+        "w04-a03/report.md",
+        "w04-a03/probe.json",
+        "w04-a03/successful-check-mutation.diff",
+        "w04-a03/mutant-immediate_check.log",
+        "w04-a03/source/"
+      ],
+      "manifest": "development/w04-a03.manifest.json",
+      "omitted_file_count": 2,
+      "retained_file_count": 29,
+      "retained_original_bytes": 63550,
+      "scope": "Eight helper groups pass. All seven older groups pass the built targeted mutant, while the new immediate_check group fails its intended busy-edge assertion.",
+      "sha256": "14c74383662ed364f3565b4d3a2039465b970dbe2d9cd4c543380350510a5fd6",
+      "size_bytes": 21951,
+      "title": "Successful ready-check sensitivity"
+    },
+    {
+      "archive": "development/w04-a04-native-probe.tar.gz",
+      "id": "w04-a04-native-probe",
+      "key_paths": [
+        "w04-a04-native-probe/commands.json",
+        "w04-a04-native-probe/review-inputs.json",
+        "w04-a04-native-probe/abandoned_channel.cpp",
+        "w04-a04-native-probe/run.log"
+      ],
+      "manifest": "development/w04-a04-native-probe.manifest.json",
+      "omitted_file_count": 1,
+      "retained_file_count": 5,
+      "retained_original_bytes": 12577,
+      "scope": "The actual-header probe compiles and exits zero because it reproduces the defect: inflight=1 and idle=0 survive full destruction and fresh-context consumption. Its historical name does not signify native Processor execution.",
+      "sha256": "520b4f545b330303254b076b2a907ada4b7dbacda177c9532f115c7666ac00e6",
+      "size_bytes": 5909,
+      "title": "Original timing-framework leak"
+    },
+    {
+      "archive": "development/w05-a01.tar.gz",
+      "id": "w05-a01",
+      "key_paths": [
+        "w05-a01/report.md",
+        "w05-a01/report.json",
+        "w05-a01/commands.json",
+        "w05-a01/simobject.before.h",
+        "w05-a01/simobject.after.h",
+        "w05-a01/before_run.log",
+        "w05-a01/after_release_run.log",
+        "w05-a01/after_debug_run.log"
+      ],
+      "manifest": "development/w05-a01.manifest.json",
+      "omitted_file_count": 3,
+      "retained_file_count": 18,
+      "retained_original_bytes": 116134,
+      "scope": "The old header builds and fails the recovery assertion; the repaired header passes in release and debug. The failed live context remains non-idle until teardown.",
+      "sha256": "6d635a7a4887972c1887eaf64520f175b88fcd688cbd0bd8961e14811f1827a9",
+      "size_bytes": 34225,
+      "title": "Timing-framework before and after"
+    },
+    {
+      "archive": "development/w05-a02.tar.gz",
+      "id": "w05-a02",
+      "key_paths": [
+        "w05-a02/summary.json",
+        "w05-a02/metadata.json",
+        "w05-a02/commands.json",
+        "w05-a02/unittest-current.log",
+        "w05-a02/sources/"
+      ],
+      "manifest": "development/w05-a02.manifest.json",
+      "omitted_file_count": 4,
+      "retained_file_count": 54,
+      "retained_original_bytes": 367133,
+      "scope": "Four groups times two actual production headers: eight candidate cells pass, six built parent cells fail intended behavioral assertions, and both parent normal controls pass.",
+      "sha256": "aaee062893873aa48f524ebcde25a05922f9d1e5aad35c0490fa077a4bb811da",
+      "size_bytes": 92235,
+      "title": "Actual framework regression and parent sensitivity"
+    },
+    {
+      "archive": "development/w05-a03.tar.gz",
+      "id": "w05-a03",
+      "key_paths": [
+        "w05-a03/report.json",
+        "w05-a03/functional-cleanup.patch",
+        "w05-a03/before/manifest.json",
+        "w05-a03/after/manifest.json",
+        "w05-a03/before/source/",
+        "w05-a03/after/source/"
+      ],
+      "manifest": "development/w05-a03.manifest.json",
+      "omitted_file_count": 4,
+      "retained_file_count": 35,
+      "retained_original_bytes": 193095,
+      "scope": "Old functional header builds in release and debug and fails both recovery assertions; repaired header builds and passes both cells. Joined asynchronous host fault task; no native functional Processor execution.",
+      "sha256": "a82f2d9ec914d3c923fa87d14c370d2ee71b011f2365035b52c900d6a79256fe",
+      "size_bytes": 54256,
+      "title": "Functional-framework before and after"
+    },
+    {
+      "archive": "development/w05-a04-cleanup-probe.tar.gz",
+      "id": "w05-a04-cleanup-probe",
+      "key_paths": [
+        "w05-a04-cleanup-probe/summary.json",
+        "w05-a04-cleanup-probe/commands.json",
+        "w05-a04-cleanup-probe/lifecycle_probe.cpp",
+        "w05-a04-cleanup-probe/run_probe.py",
+        "w05-a04-cleanup-probe/source/"
+      ],
+      "manifest": "development/w05-a04-cleanup-probe.manifest.json",
+      "omitted_file_count": 4,
+      "retained_file_count": 50,
+      "retained_original_bytes": 470665,
+      "scope": "Four timing/functional times debug/release cells pass: healthy two-worker stop, discarded scheduled/immediate/cross-inbox payloads, destruction-only late owners, and fresh-context accounting. No internal-worker fault transport is tested.",
+      "sha256": "9ee243e88c47e094743b170bf44efbc17e6d57a00f2b5b08c69a2deffc49236f",
+      "size_bytes": 140281,
+      "title": "Independent lifecycle checks"
+    },
+    {
+      "archive": "development/source-at-assembly.tar.gz",
+      "id": "source-at-assembly",
+      "key_paths": [
+        "source-at-assembly/ci/project/p06_simulator_execute.py",
+        "source-at-assembly/sim/common/simobject.h",
+        "source-at-assembly/sim/common/simobject_functional.h"
+      ],
+      "manifest": "development/source-at-assembly.manifest.json",
+      "omitted_file_count": 0,
+      "retained_file_count": 70,
+      "retained_original_bytes": 1090247,
+      "scope": "Later source snapshot at packet assembly; match recorded per-file hashes before associating with any execution. Includes local Python validator import closure; no build products.",
+      "sha256": "cdf08797eab51e231d921717a2852e58927baf7e9afcd26b6139b70d075c5cef",
+      "size_bytes": 283371,
+      "title": "Source bytes at assembly"
+    }
+  ],
+  "assembled_utc": "2026-11-22T09:04:52.697260+00:00",
+  "assembly_head": "42809ff0c1b81384d7c9b079e4ef786be8407600",
+  "base_revision": "42809ff0c1b81384d7c9b079e4ef786be8407600",
+  "format": "development-evidence-index-v1",
+  "limitations": [
+    "Development worktree evidence based on the recorded base; the base commit alone does not identify any modified candidate.",
+    "No clean-checkpoint native qualification, final full-governance receipt, final parent refresh or exact-final-commit review is supplied by this assembly.",
+    "Actual native linked SimX Processor/RAM unit and native public-success regression remain not_run pending hosted CI; pinned RISC-V preprocessing is also not_run in these host proofs.",
+    "Original commands, temporary absolute paths, recorded hashes and outcome text are retained verbatim. Some referenced ephemeral paths and deliberately excluded binaries no longer have a retained counterpart.",
+    "Initial runner b3b5013f4ab8bf3c5bae44a57cfc534ccd306fa98c23b46283161eaf5b0e2843 and intermediate runner 9326bbc6931e9bcb0713173c41440357514b59fdda0b5e9ec70833cafddb0561 have original receipts and identities, but a complete source snapshot for those exact runner versions was not available to this assembly.",
+    "The source-at-assembly archive is a later byte snapshot. Only explicitly matched recorded hashes bind it to an earlier proof; it does not retroactively fill missing execution-time provenance.",
+    "Review reports remain historical, scope-bound advisory reviews. Their findings and severity labels are copied unchanged; no maintainer approval or waiver is inferred.",
+    "No agent completion total, acceptance gate closure, cycle/performance gain, warm qualification, native functional qualification, RTL execution, or physical-device result is claimed."
+  ],
+  "missing_requested_reviews": [],
+  "native_execution": "not_run",
+  "qualification": "development-only; no acceptance decision",
+  "reviews": [
+    {
+      "original_path": "/workspace/scratch/ea983fdea786/w03-a06-r3-review.md",
+      "path": "reviews/w03-a06-r3-review.md",
+      "sha256": "c8c15d5911cd50d3182148a8196c9f503127ac350dba348413f82ed18324b88e",
+      "size_bytes": 17241
+    },
+    {
+      "display_path": "reviews/w04-a04-native-review.md",
+      "display_sha256": "36f013900ee69cd0826d43a609835353ad193a1f1796287d00351f75883fa9a9",
+      "display_size_bytes": 15125,
+      "display_transform": "Remove trailing spaces/tabs from each line; preserve all other bytes.",
+      "original_path": "/workspace/scratch/ea983fdea786/w04-a04-native-review.md",
+      "original_sha256": "4e218e64cddc3e8c7f7d4a7babc4d006dff4f63cad106dffda71db44d52ecf64",
+      "original_size_bytes": 15131,
+      "path": "reviews/w04-a04-native-review.md.gz",
+      "sha256": "a271db0a9a8df31a7eda98e4ff1cc8f0799fb91b2eca5e7301e643e601adeeba",
+      "size_bytes": 7252,
+      "storage_encoding": "gzip"
+    },
+    {
+      "original_path": "/workspace/scratch/ea983fdea786/w04-a06-runner-review.md",
+      "path": "reviews/w04-a06-runner-review.md",
+      "sha256": "f4350fa97a0c17fa88eb47d332defce421b85d85b2560d12e52e6c8e97a1434b",
+      "size_bytes": 15657
+    },
+    {
+      "original_path": "/workspace/scratch/ea983fdea786/w04-a06-runner-proof.json",
+      "path": "reviews/w04-a06-runner-proof.json",
+      "sha256": "604fdc1600458ef2d2349eec940eff831e9d2544ed9ebd72cf7d97d7e931cbb3",
+      "size_bytes": 4679
+    },
+    {
+      "display_path": "reviews/w05-a04-cleanup-review.md",
+      "display_sha256": "54852f5b492eab2c8465827a885db2c10e56cfb2b324940a9b95802605803da1",
+      "display_size_bytes": 18127,
+      "display_transform": "Remove trailing spaces/tabs from each line; preserve all other bytes.",
+      "original_path": "/workspace/scratch/ea983fdea786/w05-a04-cleanup-review.md",
+      "original_sha256": "d4eb8cb98eb51432553ec6b899b25a727e32d63884458548b3546e42f66e8f4a",
+      "original_size_bytes": 18133,
+      "path": "reviews/w05-a04-cleanup-review.md.gz",
+      "sha256": "05da361847aafafc5c7aac2822cbf977870a26a9fd78b95ee72b2829d71b7f29",
+      "size_bytes": 7732,
+      "storage_encoding": "gzip"
+    }
+  ]
+}

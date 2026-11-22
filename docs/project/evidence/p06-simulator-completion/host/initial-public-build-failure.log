@@ -1,0 +1,29 @@
+setUpClass (test_p06_simulator_public.SimulatorPublicCompletionTests) ... ERROR
+
+======================================================================
+ERROR: setUpClass (test_p06_simulator_public.SimulatorPublicCompletionTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/ea983fdea786/AI-GPU/ci/project/test_p06_simulator_public.py", line 160, in setUpClass
+    run_host_command([*flags, *includes, "-fPIC", "-shared", *map(str, runtime_sources),
+  File "/workspace/scratch/ea983fdea786/AI-GPU/ci/project/tensor_host_tools.py", line 20, in run_host_command
+    raise AssertionError(
+AssertionError: Host command failed: nonzero_exit (exit 1)
+/workspace/scratch/ea983fdea786/AI-GPU/sw/runtime/common/device.cpp: In member function 'vx_result_t vx::Device::query_caps(uint32_t, uint64_t*)':
+/workspace/scratch/ea983fdea786/AI-GPU/sw/runtime/common/device.cpp:1293:48: error: 'VX_CFG_PLATFORM_CLOCK_RATE' was not declared in this scope
+ 1293 |     case VX_CAPS_CLOCK_RATE:      *out_value = VX_CFG_PLATFORM_CLOCK_RATE;   break;
+      |                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/scratch/ea983fdea786/AI-GPU/sw/runtime/common/device.cpp:1294:48: error: 'VX_CFG_PLATFORM_MEMORY_PEAK_BW' was not declared in this scope
+ 1294 |     case VX_CAPS_PEAK_MEM_BW:     *out_value = VX_CFG_PLATFORM_MEMORY_PEAK_BW; break;
+      |                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/scratch/ea983fdea786/AI-GPU/sw/runtime/common/legacy_utils.cpp: In function 'int vx_check_occupancy(vx_device_h, uint32_t, uint32_t)':
+/workspace/scratch/ea983fdea786/AI-GPU/sw/runtime/common/legacy_utils.cpp:181:39: error: 'VX_CFG_MEM_BLOCK_SIZE' was not declared in this scope; did you mean 'VX_CAPS_MEM_BANK_SIZE'?
+  181 |     uint32_t stride = (max_localmem + VX_CFG_MEM_BLOCK_SIZE - 1u)
+      |                                       ^~~~~~~~~~~~~~~~~~~~~
+      |                                       VX_CAPS_MEM_BANK_SIZE
+
+
+----------------------------------------------------------------------
+Ran 0 tests in 13.555s
+
+FAILED (errors=1)

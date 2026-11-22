@@ -33,6 +33,9 @@ public:
 
   int run();
 
+  // Propagate execution failures without interpreting the legacy register result.
+  void run_checked();
+
   // Advance the simulator by one cycle. On the first call after a
   // reset() (or on the very first call), the KMU is started so warps
   // dispatch into the cluster. Returns true while work remains

@@ -1,0 +1,109 @@
+{
+  "scope": "Independent configure / generated Makefile tool-prefix expansion and retained-record validation only. No compiler, native GPU build, or simulator was executed.",
+  "started_at": "2026-11-22T08:50:56.884058+00:00",
+  "source_revision": "42809ff0c1b81384d7c9b079e4ef786be8407600",
+  "runner_sha256": "373ed9ba9141db73e740c87ec812872bb1dc2131b29819a7f001eda7e59e5641",
+  "commands": [
+    {
+      "id": "configure",
+      "argv": [
+        "/workspace/scratch/ea983fdea786/AI-GPU/configure",
+        "--xlen=64",
+        "--profile=p02-tfr",
+        "--osversion=ubuntu/focal",
+        "--tooldir=/workspace/scratch/ea983fdea786/w04a06-prefix-fw558f90/unused-tools"
+      ],
+      "cwd": "/workspace/scratch/ea983fdea786/w04a06-prefix-fw558f90/build",
+      "timeout_seconds": 45,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "id": "expand-tool-prefix",
+      "argv": [
+        "/usr/bin/make",
+        "--no-print-directory",
+        "-s",
+        "-j1",
+        "--old-file=.depend",
+        "-f",
+        "review-tool-prefix.mk",
+        "review-tool-prefix"
+      ],
+      "cwd": "/workspace/scratch/ea983fdea786/w04a06-prefix-fw558f90/build/tests/regression/simx_completion",
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "stdout": "g++\n/workspace/scratch/ea983fdea786/w04a06-prefix-fw558f90/unused-tools/llvm-vortex/bin/clang++ --target=riscv64-unknown-elf --sysroot=/workspace/scratch/ea983fdea786/w04a06-prefix-fw558f90/unused-tools/riscv64-gnu-toolchain/riscv64-unknown-elf --gcc-toolchain=/workspace/scratch/ea983fdea786/w04a06-prefix-fw558f90/unused-tools/riscv64-gnu-toolchain -Xclang -target-feature -Xclang +xvortex -Xclang -target-feature -Xclang +zicond -mllvm -disable-loop-idiom-all  -Wno-unused-command-line-argument\n",
+      "stderr": ""
+    }
+  ],
+  "generated_identity_count": 20,
+  "config_mk_sha256": "cce42aa4320c900de9ebc1a4306473138e3f8f5e5c87b3a6ffd512e9bcb4ca92",
+  "kernel_prefix_matches_generated_makefile": true,
+  "host_tool_matches_clean_path_gpp": true,
+  "native_artifacts_present": false,
+  "compiler_execution": "not_run",
+  "native_execution": "not_run",
+  "independently_validated_retained_generated_records": [
+    {
+      "role": "unit_model",
+      "stamp_path": "sim/simx/simx_config.stamp",
+      "stamp_sha256": "5ea14c7587f112d7c85393fd4025b4c6a02b684c4c1f3850ae1e35193f30336c",
+      "record_sha256": "8c9cd82d2a55a0977c3fea6fd1e788ddfefc19135fdd1ac8efd889439bfe0cbe",
+      "include_count": 19,
+      "removed_arguments": [
+        "-MMD",
+        "-MP",
+        "-MF",
+        "/workspace/scratch/ea983fdea786/completion-generated-stamps-duw2phfd/build/sim/simx/simx_config.stamp"
+      ],
+      "probe_preserves_other_arguments_in_order": true
+    },
+    {
+      "role": "runtime_model",
+      "stamp_path": "sw/runtime/simx_config.stamp",
+      "stamp_sha256": "6eb76d6bc3fa700cd2086e185a6862428a57388663c67fb0f09b706b51d148b1",
+      "record_sha256": "2877e908bb1a49180c8509c373f88d4aeb0c60390056965c48ebaabec0390030",
+      "include_count": 19,
+      "removed_arguments": [
+        "-MMD",
+        "-MP",
+        "-MF",
+        "/workspace/scratch/ea983fdea786/completion-generated-stamps-duw2phfd/build/sw/runtime/simx_config.stamp"
+      ],
+      "probe_preserves_other_arguments_in_order": true
+    },
+    {
+      "role": "runtime",
+      "stamp_path": "sw/runtime/simx_rt_config.stamp",
+      "stamp_sha256": "b4ac95728d80a2614862836441b7aed0daf6c2bee121dff1e9e533721ed7d49f",
+      "record_sha256": "15811c9b7530d3dcb9c93cd61c43d7ec8e5a1d60d878f86d426068805c168d43",
+      "include_count": 8,
+      "removed_arguments": [],
+      "probe_preserves_other_arguments_in_order": true
+    },
+    {
+      "role": "kernel",
+      "stamp_path": "tests/regression/simx_completion/config.stamp",
+      "stamp_sha256": "36411970310c8504e6d318c0e215abfd64f3a8a3a55d92d2b3721fbb4c69d401",
+      "record_sha256": "ec52382c3d1c793b22d3320646c7cdf5c10915bb832843b78d541ec5163e0cba",
+      "include_count": 4,
+      "removed_arguments": [],
+      "probe_preserves_other_arguments_in_order": true
+    },
+    {
+      "role": "host",
+      "stamp_path": "tests/regression/simx_completion/config.stamp",
+      "stamp_sha256": "36411970310c8504e6d318c0e215abfd64f3a8a3a55d92d2b3721fbb4c69d401",
+      "record_sha256": "13140ec741a7f2a26cd95382ffccc55ce469d55c30ac118f5cfe8a8d6fdcf667",
+      "include_count": 5,
+      "removed_arguments": [],
+      "probe_preserves_other_arguments_in_order": true
+    }
+  ],
+  "original_failure_test_names_and_assertions_retained": true,
+  "original_failure_test_count": 15,
+  "outcome": "pass",
+  "finished_at": "2026-11-22T08:50:59.489572+00:00"
+}

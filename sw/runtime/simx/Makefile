@@ -37,7 +37,7 @@ driver: $(DESTDIR)/libsimx.so
 $(DESTDIR)/libsimx.so: force
 	DESTDIR=$(DESTDIR) $(MAKE) -C $(ROOT_DIR)/sim/simx $(DESTDIR)/libsimx.so
 
-$(DESTDIR)/$(PROJECT): $(SRCS) $(DESTDIR)/libsimx.so $(CONFIG_FILE)
+$(DESTDIR)/$(PROJECT): $(SRCS) $(RT_COMMON_DIR)/async_run.h $(DESTDIR)/libsimx.so $(CONFIG_FILE)
 	$(CXX) $(CXXFLAGS) $(SRCS) $(LDFLAGS) -o $@
 
 # updates the timestamp when flags changed.

@@ -7,9 +7,9 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Start here: P06-T01 counter qualification before warm performance
+## Start here: P06-T01 completion verification before counter qualification
 
-**Current bounded task: P06-T01 — qualify the repaired RV64 host counter route.**
+**Current bounded task: P06-T01 — complete native simulator completion verification.**
 [P06-A01 is accepted](evidence/p06-baseline/acceptance.json) for the original
 [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
 at `84b6ca0ca75fba248ba330642bbf8764db3d459c`. The
@@ -38,9 +38,22 @@ closes the concrete comparison finding and retains the direct decoder, preservin
 raw area failures. Broader CI is still running at this checkpoint; the
 [transport handoff](p06-mpm-transport-handoff.md) tracks final integration/publication.
 
-Next, implement and independently review the [versioned qualification binding](p06-mpm-qualification-plan.md),
-rejecting old or source/configuration/binary-mismatched packets and binding the
-actual executing interpreter for standalone receipts.
+The [completion audit](p06-simulator-completion-audit.md) found that discarded
+asynchronous results and a missed immediate-completion busy edge must be repaired
+before a counter guard can fail reliably. The
+[completion contract](../designs/simulator_completion_v1.md) guides the ongoing
+implementation, with host backend/public checks and built-parent behavioral
+sensitivity. A production-SimObject host probe found an outstanding-channel count
+surviving exceptional teardown and leaving the next context non-idle; repair and
+verify that cleanup accounting first. Native completion execution remains
+`not_run` pending hosted CI; then finish native verification, exact-source
+evidence reconciliation and independent review.
+This checkpoint is incomplete and claims no native pass.
+
+Then implement and independently review the [versioned qualification binding](p06-mpm-qualification-plan.md),
+covering the exact warm configuration and selectors, coherent reads and an
+absolute cumulative no-wrap bound. Reject old packets or mismatched source,
+configuration or binaries; bind the actual executing interpreter for standalone receipts.
 Follow it with a fresh complete matched warm attempt: 24 processes, 792 launches
 and 25,344 exact output words under the unchanged
 [implemented sampling/rejection contract](../designs/warm_workspace_benchmark_v1.md).
@@ -326,8 +339,10 @@ in progress for the scoped framework route. P06-T01 is also in progress, with
 [P06-A01 accepted](evidence/p06-baseline/acceptance.json). Original serial-workspace
 correctness has [independent artifact review](evidence/p06-warm-workspace/README.md).
 The [transport handoff](p06-mpm-transport-handoff.md) tracks the RV64 counter
-repair's broader integration/publication status; versioned counter qualification and a fresh
-complete warm attempt are the next performance work.
+repair's broader integration/publication status. Complete the
+[simulator completion prerequisite](p06-simulator-completion-audit.md), including
+the open exceptional channel-cleanup repair and native execution still `not_run`,
+before versioned counter qualification and a fresh complete warm attempt.
 Detailed work packages remain in the
 phase guides, the [development audit](p05-binding-audit.md) and the
 [Python binding handoff](p05-entry-handoff.md).
@@ -341,7 +356,7 @@ phase guides, the [development audit](p05-binding-audit.md) and the
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
 | **P04-T02 — Native model execution — complete** | Four clean SimX/native processor RTL × FP16/BF16 variants pass exact intermediate/final comparisons, live-input lineage, native placement and separate host/transfer accounting after independent review. | T01; model runtime lead | [P04-A02](evidence/p04-executor/acceptance-numerics.json), [P04-A03](evidence/p04-executor/acceptance-dispatch.json) |
 | **P05-T01 — Python/custom-op bridge — in progress** | Preserve the accepted copying binding; independently review the existing custom-op implementation's installed dispatch, compatibility and explicit failure evidence before an acceptance decision. | P04; framework integration lead; [handoff](p05-entry-handoff.md) | [P05-A01 accepted](evidence/p05-python/acceptance-binding.json); P05-A02/P05-A03 unearned |
-| **P06-T01 — Measured optimization — in progress** | Implement a reviewed versioned qualification binding for the repaired counter route, then run a fresh complete warm attempt with unchanged sampling and rejection rules; track broader CI/publication separately. | P04; performance and memory lead; [handoff](p06-mpm-transport-handoff.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
+| **P06-T01 — Measured optimization — in progress** | Resolve exceptional channel cleanup, complete native simulator completion verification and independent review, then qualify exact counter configuration/selectors, coherent reads and absolute no-wrap bounds before the unchanged fresh warm matrix; track broader CI/publication separately. | P04; performance and memory lead; [completion audit](p06-simulator-completion-audit.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),
 [P04](phases/p04-inference.md), [P05](phases/p05-framework.md) and

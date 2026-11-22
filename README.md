@@ -33,7 +33,7 @@ archives, build provenance, independent audits and replay instructions. The
 earlier [P04-A01 fixture acceptance](docs/project/evidence/p04-fixture/acceptance.json)
 and [hashed manifest](ci/project/p04_model_manifest.json) remain unchanged.
 
-**Current work: P06-T01 — counter qualification before warm performance measurement
+**Current work: P06-T01 — simulator completion verification before counter qualification
 (`in_progress`), with [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
 Independent review qualifies the original
 [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
@@ -72,12 +72,23 @@ expected numeric defect, and 2,910 immutable governance tests pass. Paired circu
 and alternative reviews retain the direct decoder; raw area failures remain
 visible. Broader CI is still in progress at this checkpoint, as separately
 tracked in the [transport evidence packet](docs/project/evidence/p06-mpm-transport/README.md).
-**P06 and P06-T01 remain `in_progress`; P06-A02/A03 remain open.** The next
-development action is to implement and independently review the
-[versioned qualification binding](docs/project/p06-mpm-qualification-plan.md), then
-run a fresh complete matched warm experiment under unchanged rules. Resume with
-the [transport handoff](docs/project/p06-mpm-transport-handoff.md).
-The repair does not qualify historical warm measurements or establish a speedup.
+The [completion audit](docs/project/p06-simulator-completion-audit.md) found a
+prerequisite: simulator exceptions could disappear, and an immediately completed
+task could miss the command processor's busy edge. The
+[completion changes](docs/designs/simulator_completion_v1.md) preserve valid
+SimX `gp` values, including `-1`, while consuming asynchronous results, retaining
+terminal failure and joining pending work before teardown. Host backend/public
+checks and built-parent behavioral failures are available. A further host probe
+found an outstanding simulated-channel count surviving exceptional teardown;
+that cleanup repair remains in progress. **Native completion execution remains
+`not_run` pending hosted CI**, and checkpoint evidence is incomplete. Resolve
+and verify that blocker, complete native verification and independent review,
+then follow the [versioned counter qualification plan](docs/project/p06-mpm-qualification-plan.md)
+for exact configuration/selector coverage, coherent reads and an absolute no-wrap
+bound. Only then collect the unchanged fresh warm matrix: 24 processes,
+792 launches and 25,344 exact output words. **P06 and P06-T01 remain
+`in_progress`; P06-A02/A03 remain open.** Warm v1 stays unconditionally blocked;
+these repairs do not qualify historical measurements or establish a speedup.
 
 **Parallel work: P05-T01 — the Python/custom-op bridge (`in_progress`).**
 [P05-A01 now accepts the copying Python binding](docs/project/evidence/p05-python/acceptance-binding.json)
@@ -155,9 +166,12 @@ and P07–P11 are not started.
   and [P02 WMMA evidence](docs/project/evidence/p02-wmma/README.md).
 - Read the earlier contract checkpoint: [P02 numerical handoff](docs/project/p02-numerics-handoff.md)
   and [A01 evidence](docs/project/evidence/p02-numerics/README.md).
-- Start the next bounded task: [counter transport audit](docs/project/p06-mpm-transport-audit.md),
-  [transport handoff](docs/project/p06-mpm-transport-handoff.md) and
-  [transport evidence](docs/project/evidence/p06-mpm-transport/README.md).
+- Start the next bounded task: [simulator completion audit](docs/project/p06-simulator-completion-audit.md)
+  and [completion contract](docs/designs/simulator_completion_v1.md), then the
+  [counter qualification plan](docs/project/p06-mpm-qualification-plan.md).
+  The [transport handoff](docs/project/p06-mpm-transport-handoff.md) and
+  [transport evidence](docs/project/evidence/p06-mpm-transport/README.md) retain
+  the earlier counter repair's separate scope.
   The [reviewed workspace packet](docs/project/evidence/p06-warm-workspace/README.md),
   [warm measurement contract](docs/designs/warm_workspace_benchmark_v1.md) and
   [accepted cold baseline](docs/project/evidence/p06-baseline/README.md) retain

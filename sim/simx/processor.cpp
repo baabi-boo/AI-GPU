@@ -619,6 +619,10 @@ int Processor::run() {
   return -1;
 }
 
+void Processor::run_checked() {
+  impl_->run();
+}
+
 bool Processor::cycle() {
   return impl_->cycle();
 }

@@ -46,6 +46,16 @@ Follow the
 directed transport tests do not replace this workspace correctness matrix or
 unlock historical warm measurements.
 
+The [completion audit](p06-simulator-completion-audit.md) identifies a further
+prerequisite before counter qualification: asynchronous simulator failures must
+reach public waits, and immediate completion must preserve the busy edge.
+The [completion contract](../designs/simulator_completion_v1.md) has host checks;
+its implementation remains in progress because exceptional teardown can retain
+an outstanding-channel count and leave a fresh context non-idle. Native completion
+execution remains `not_run` pending hosted CI. Its incomplete development
+checkpoint does not requalify the historical workspace run or establish a new
+performance result.
+
 ## Runtime contract to preserve
 
 | Boundary | Implemented behavior |
@@ -224,10 +234,17 @@ output is never native arithmetic evidence.
 
 ## Remaining development and acceptance
 
-Track the transport repair's broader integration/publication status separately.
-Implement and independently review the [versioned qualification route](p06-mpm-qualification-plan.md)
-that rejects historical or source/configuration/binary-mismatched packets. The existing warm v1 block remains in force. After that qualification
-work, collect one fresh complete matched warm attempt under the unchanged
+Resolve and verify exceptional channel cleanup, then complete native verification
+of the [simulator completion prerequisite](p06-simulator-completion-audit.md)
+and reconcile its exact-source host/native evidence under independent review.
+Actual native execution remains `not_run` pending hosted CI, with the 15 GiB
+disk reserve preserved. Track the transport repair's broader
+integration/publication status separately.
+Then implement and independently review the [versioned qualification route](p06-mpm-qualification-plan.md)
+for the exact warm configuration and selectors, coherent reads and absolute
+cumulative no-wrap bounds. Reject historical packets or mismatched source,
+configuration or binaries. The existing warm v1 block remains in force. After
+that qualification work, collect one fresh complete matched warm attempt under the unchanged
 sampling, numerical and rejection rules: 24 processes, 792 native launches and
 25,344 exact output words, including excluded primes and warm-ups. Keep the
 accepted cold baseline and archived measurements separate. A source repair

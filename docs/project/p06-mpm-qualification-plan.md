@@ -2,9 +2,11 @@
 
 ## Decision and current boundary
 
-Implement a separately versioned qualification layer, independently review its
-enforcement, then collect one fresh complete matched warm attempt. This is a
-prospective plan: the qualification layer and its evidence format are not
+Resolve exceptional channel cleanup and complete native verification and
+independent review of the [simulator completion prerequisite](p06-simulator-completion-audit.md).
+Then implement a separately versioned qualification layer, independently review its
+enforcement and collect one fresh complete matched warm attempt. This remains a
+prospective counter plan: its qualification layer and evidence format are not
 implemented by this document.
 
 The [transport audit](p06-mpm-transport-audit.md) identifies the original RV64
@@ -25,6 +27,28 @@ The [warm v1 contract](../designs/warm_workspace_benchmark_v1.md), its
 `absolute_no_wrap_bound="not_established"`. Preserve their historical rejection
 behavior, original cold execution pins and accepted archives. Missing historical
 high bits cannot be recovered from low words.
+
+## Completion prerequisite
+
+The [completion contract](../designs/simulator_completion_v1.md) addresses
+exceptions lost by the old SimX run entry and both asynchronous backend wrappers,
+plus tasks that completed before their first busy poll. A prospective counter
+guard must reach public waits as a persistent error instead of apparent success.
+The checked entry preserves legitimate `gp` values, including `-1`; `AsyncRun`
+consumes futures, retains failure, preserves the launch edge and joins pending
+execution before teardown. The existing public error mapping remains unchanged.
+
+Host backend/public fixtures, deterministic helper checks and compiled-parent
+behavioral failures supply development evidence. A separate host probe using the
+actual SimObject/SimChannel implementation found `inflight_count=1` surviving
+exceptional teardown and a fresh context remaining non-idle. Repair and verify
+that accounting before claiming successful cleanup or context recreation.
+Native checked-model and public-success tests, a bounded runner and a hosted
+workflow are implemented, but actual
+native execution is still `not_run` pending hosted CI. Complete that verification
+and reconcile the final source-bound packet under independent review before
+using this mechanism to enforce counter qualification. Host fault injection is
+not a native processor or RTL fault result. Preserve the 15 GiB native disk reserve.
 
 ## Qualification work to implement and review
 

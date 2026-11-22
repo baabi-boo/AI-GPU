@@ -41,7 +41,7 @@ driver: $(DESTDIR)/librtlsim.so
 $(DESTDIR)/librtlsim.so: force
 	DESTDIR=$(DESTDIR) $(MAKE) -C $(ROOT_DIR)/sim/rtlsim $(DESTDIR)/librtlsim.so
 
-$(DESTDIR)/$(PROJECT): $(SRCS) $(DESTDIR)/librtlsim.so $(CONFIG_FILE)
+$(DESTDIR)/$(PROJECT): $(SRCS) $(RT_COMMON_DIR)/async_run.h $(DESTDIR)/librtlsim.so $(CONFIG_FILE)
 	$(CXX) $(CXXFLAGS) $(SRCS) $(LDFLAGS) -o $@
 
 # updates the timestamp when flags changed.

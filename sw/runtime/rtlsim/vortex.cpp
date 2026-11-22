@@ -25,6 +25,7 @@
 
 #include <VX_types.h>
 #include <common.h>
+#include <async_run.h>
 
 #include <mem.h>
 #include <util.h>
@@ -35,10 +36,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstring>
-#include <future>
 #include <map>
 #include <mutex>
-#include <chrono>
 
 using namespace vortex;
 
@@ -53,11 +52,10 @@ public:
   }
 
   ~vx_device() {
-    if (future_.valid()) {
-      future_.wait();
-    }
-    for (auto& kv : host_regions_)
+    run_.join();
+    for (auto& kv : host_regions_) {
       free(reinterpret_cast<void*>(kv.first));
+    }
     host_regions_.clear();
   }
 
@@ -73,14 +71,32 @@ public:
   // each MMIO transaction keeps the CP responsive without a dedicated
   // simulation thread.
   int cp_reg_write(uint32_t off, uint32_t value) {
-    cp_.mmio_write(off, value);
-    for (int i = 0; i < 256 && cp_.busy(); ++i) cp_.tick();
-    return 0;
+    try {
+      run_.check();
+      cp_.mmio_write(off, value);
+      for (int i = 0; i < 256 && cp_.busy(); ++i) {
+        cp_.tick();
+      }
+      run_.check();
+      return 0;
+    } catch (...) {
+      run_.fail();
+      return -1;
+    }
   }
   int cp_reg_read(uint32_t off, uint32_t* value) {
-    for (int i = 0; i < 256 && cp_.busy(); ++i) cp_.tick();
-    *value = cp_.mmio_read(off);
-    return 0;
+    try {
+      run_.check();
+      for (int i = 0; i < 256 && cp_.busy(); ++i) {
+        cp_.tick();
+      }
+      run_.check();
+      *value = cp_.mmio_read(off);
+      return 0;
+    } catch (...) {
+      run_.fail();
+      return -1;
+    }
   }
 
   // ----- CP-visible host memory (command ring + DMA staging) -----
@@ -149,9 +165,7 @@ private:
         return;
       }
       if (processor_.cp_llc_client()) {
-        if (future_.valid()) {
-          future_.wait();
-        }
+        run_.wait();
         processor_.cp_mem_read(addr, dst, bytes);
         return;
       }
@@ -163,9 +177,7 @@ private:
         return;
       }
       if (processor_.cp_llc_client()) {
-        if (future_.valid()) {
-          future_.wait();
-        }
+        run_.wait();
         processor_.cp_mem_write(addr, src, bytes, false);
         return;
       }
@@ -179,9 +191,7 @@ private:
           std::memcpy(hp, src, bytes);
           return;
         }
-        if (future_.valid()) {
-          future_.wait();
-        }
+        run_.wait();
         processor_.cp_mem_write(addr, src, bytes, no_alloc);
       };
       h.dma_llc_client = true;
@@ -191,30 +201,23 @@ private:
       }
     }
     h.vortex_dcr_write = [this](uint32_t addr, uint32_t value) {
-      // Wait for any background processor_.run() to finish so dcr_write
-      // does not race the Verilator state.
-      if (future_.valid()) {
-        future_.wait();
-      }
+      run_.wait();
       processor_.dcr_write(addr, value);
     };
     h.vortex_dcr_read = [this](uint32_t addr, uint32_t tag) -> uint32_t {
-      // Wait for any background processor_.run() to finish so dcr_read
-      // does not race the Verilator state.
-      if (future_.valid()) future_.wait();
+      run_.wait();
       uint32_t v = 0;
       processor_.dcr_read(addr, tag, &v);
       return v;
     };
     h.vortex_start = [this]() {
-      future_ = std::async(std::launch::async, [&] { processor_.run(); });
+      run_.start([this]() { processor_.run(); });
     };
     h.vortex_busy = [this]() -> bool {
-      if (!future_.valid()) return false;
-      return future_.wait_for(std::chrono::seconds(0)) != std::future_status::ready;
+      return run_.busy();
     };
     h.vortex_drain = [this]() {
-      if (future_.valid()) future_.wait();
+      run_.wait();
       processor_.drain();
     };
 #ifdef VX_CFG_VM_ENABLE
@@ -226,7 +229,7 @@ private:
 
   RAM                 ram_;
   Processor           processor_;
-  std::future<void>   future_;
+  AsyncRun            run_;
   vortex::CommandProcessor cp_;
   std::mutex          host_mu_;
   std::map<uint64_t, uint64_t> host_regions_;   // base -> size
