@@ -18,6 +18,7 @@ import warnings
 import zipfile
 
 import p06_warm_replay as replay
+from p06_warm_test_fixture import raw_records, render_log
 from p06_warm_test_packets import (NATIVE_HELPERS, PREFIX, REPORT, REVISION, ROOT,
                                    descriptor, encoded, hosted, synthetic_packet, write_archive)
 
@@ -116,12 +117,40 @@ def edit_binding(members, *, process, change):
     members[REPORT] = encoded(report)
 
 
+def favorable_reported_packet(original):
+    """Invent a faster candidate while retaining full raw-record reconciliation."""
+    members = dict(original)
+    report = json.loads(members[REPORT])
+    contract = replay.load_contract()
+    for process in report["processes"]:
+        if process["policy"] != "reusable_single_tile":
+            continue
+        case, operations, summary = raw_records(process["format"], process["policy"],
+            pair_index=process["pair_index"], binding_id=process["qualification_id"],
+            durations_ns=95, contract=contract)
+        raw = render_log(operations, summary)
+        body = raw.encode("utf-8")
+        members[PREFIX + process["log"]] = body
+        process["observation"] = replay.verify_output(raw, case=case, fmt=process["format"],
+            policy=process["policy"], binding_id=process["qualification_id"],
+            sample_id=process["id"], pair_index=process["pair_index"], phase=process["phase"],
+            contract=contract)
+        identity = descriptor(process["log"], body)
+        command = next(row for row in report["commands"] if row["id"] == process["id"])
+        command.update(log_sha256=identity["sha256"], log_size_bytes=identity["size_bytes"])
+        retained = next(row for row in report["raw_logs"] if row["path"] == process["log"])
+        retained.update(identity)
+    members[REPORT] = encoded(report)
+    return members
+
+
 class WarmReplayTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.members = synthetic_packet()
         cls.hosted_members = hosted(cls.members)
         cls.hosted_relocated = hosted(cls.members, relocated=True)
+        cls.favorable_members = favorable_reported_packet(cls.members)
         cls.original_hashes = {name: hashlib.sha256(body).hexdigest() for name, body in cls.members.items()}
 
     @classmethod
@@ -135,6 +164,23 @@ class WarmReplayTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         self.directory = Path(temporary.name)
         self.path = self.directory / "packet.zip"
+
+    def assert_blocked(self, result, conditional):
+        self.assertEqual(result["schema_version"], 2)
+        self.assertEqual(result["hypothesis_evaluation"], "blocked")
+        self.assertEqual(result["conditional_evaluation"], conditional)
+        qualification = result["full_hypothesis_qualification"]
+        self.assertEqual(qualification["status"], "blocked")
+        self.assertIs(qualification["qualified"], False)
+        self.assertEqual(qualification["finding_id"], "P06-WARM-RV64-MPM-HIGH-HALF")
+        self.assertEqual(qualification["counter_transport"], "unqualified_low_32_bits")
+        self.assertEqual(qualification["absolute_no_wrap_bound"], "not_established")
+        self.assertEqual(result["analysis"]["schema_version"], 2)
+        self.assertEqual(result["analysis"]["hypothesis_evaluation"], "blocked")
+        self.assertEqual(result["analysis"]["conditional_evaluation"], conditional)
+        self.assertEqual(result["analysis"]["full_hypothesis_qualification"], qualification)
+        for row in result["analysis"]["formats"]:
+            self.assertNotIn("hypothesis_supported", row)
 
     def check(self, members=None, *, revision=REVISION, sha256=None, prefix="warm-workspace"):
         digest = write_archive(self.path, self.members if members is None else members)
@@ -186,10 +232,10 @@ class WarmReplayTests(unittest.TestCase):
         self.assertFalse(result["archive_read"]["retained_code_executed"])
         self.assertIsNone(result["hosted_job_identity"])
         self.assertIsNone(result["preparation"])
-        self.assertEqual(result["analysis"]["hypothesis_evaluation"], "not_supported")
+        self.assert_blocked(result, "not_satisfied")
         self.assertEqual(result["analysis"]["raw_record_validation"], "pass")
         for row in result["analysis"]["formats"]:
-            self.assertEqual(row["failed_criteria"], ["median_at_most_95_percent_of_reference"])
+            self.assertEqual(row["failed_conditional_criteria"], ["host_median_at_most_95_percent_of_reference"])
 
     def test_fresh_entry_point_helper_inventory_is_independent_of_test_imports(self):
         code = ("import json,sys;sys.path.insert(0,sys.argv[1]);import p06_warm_execute as r;"
@@ -199,6 +245,49 @@ class WarmReplayTests(unittest.TestCase):
         self.assertEqual(json.loads(run.stdout), list(NATIVE_HELPERS))
         self.assertEqual(len(NATIVE_HELPERS), 28)
 
+    def test_favorable_host_and_reported_cycles_never_qualify_complete_replay(self):
+        result = self.check(self.favorable_members)
+        self.assertEqual(result["outcome"], "pass")
+        self.assertEqual(result["archive_provenance_validation"], "pass")
+        self.assertEqual(result["analysis"]["raw_record_validation"], "pass")
+        self.assert_blocked(result, "satisfied")
+        for row in result["analysis"]["formats"]:
+            self.assertTrue(row["conditional_criteria_satisfied"])
+            self.assertEqual(row["failed_conditional_criteria"], [])
+            self.assertEqual(row["candidate_reference_median_ratio"]["numerator"], 19)
+            self.assertEqual(row["candidate_reference_median_ratio"]["denominator"], 20)
+
+    def test_fresh_cli_exposes_block_for_both_conditional_outcomes(self):
+        for members, conditional in ((self.members, "not_satisfied"), (self.favorable_members, "satisfied")):
+            digest = write_archive(self.path, members)
+            for write_output in (False, True):
+                output = self.directory / (conditional + "-fresh-result.json")
+                command = [sys.executable, "-B", str(ROOT / "ci/project/p06_warm_replay.py"),
+                           "--archive", str(self.path), "--sha256", digest, "--source-revision", REVISION]
+                if write_output:
+                    command.extend(("--output", str(output)))
+                with self.subTest(conditional=conditional, write_output=write_output):
+                    run = subprocess.run(command, cwd=ROOT, text=True, capture_output=True,
+                                         check=False, timeout=60)
+                    self.assertEqual((run.returncode, run.stderr), (0, ""))
+                    emitted = json.loads(run.stdout)
+                    self.assertEqual(emitted["hypothesis_evaluation"], "blocked")
+                    self.assertEqual(emitted["conditional_evaluation"], conditional)
+                    result = json.loads(output.read_bytes()) if write_output else emitted
+                    self.assertEqual(emitted["full_hypothesis_qualification"],
+                                     result["full_hypothesis_qualification"])
+                    self.assertEqual(result["outcome"], "pass")
+                    self.assert_blocked(result, conditional)
+
+    def test_packet_cannot_assert_transport_qualification(self):
+        for key, value in (("full_hypothesis_qualification", {"status": "pass", "qualified": True}),
+                           ("counter_transport_qualified", True), ("conditional_evaluation", "satisfied")):
+            with self.subTest(field=key):
+                self.reject(self.changed_report(lambda row, k=key, v=value: row.update({k: v})), "fields")
+        with self.assertRaises(TypeError):
+            replay.replay_archive(self.path, "0" * 64, expected_revision=REVISION,
+                                  counter_transport_qualified=True)
+
     def test_hosted_clean_and_relocated_preparation_replay_end_to_end(self):
         for members, expected in ((self.hosted_members, "not_needed"), (self.hosted_relocated, "relocated")):
             with self.subTest(quarantine=expected):
@@ -206,7 +295,7 @@ class WarmReplayTests(unittest.TestCase):
                 self.assertEqual(result["preparation"]["cache_quarantine_state"], expected)
                 self.assertEqual(result["hosted_job_identity"]["GITHUB_SHA"], REVISION)
                 self.assertEqual(result["hosted_job_identity"]["record_stage"], "job-initialization")
-                self.assertEqual(result["analysis"]["hypothesis_evaluation"], "not_supported")
+                self.assert_blocked(result, "not_satisfied")
 
     def test_replay_executes_no_archive_content_and_opens_no_recorded_root(self):
         roots = tuple(Path(value) for value in json.loads(self.members[REPORT])["paths"].values()
@@ -579,7 +668,10 @@ class WarmReplayTests(unittest.TestCase):
             status = replay.main(args)
         self.assertEqual(status, 0)
         summary = json.loads(captured.getvalue())
-        self.assertEqual(summary["hypothesis_evaluation"], "not_supported")
+        self.assertEqual(summary["hypothesis_evaluation"], "blocked")
+        self.assertEqual(summary["conditional_evaluation"], "not_satisfied")
+        self.assertEqual(summary["full_hypothesis_qualification"]["status"], "blocked")
+        self.assertIs(summary["full_hypothesis_qualification"]["qualified"], False)
         self.assertEqual(summary["native_execution"], "not_run")
         original = output.read_bytes()
         with mock.patch.object(replay, "replay_archive", return_value=json.loads(original)), redirect_stdout(io.StringIO()):

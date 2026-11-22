@@ -9,6 +9,17 @@ performance evaluation. Its machine definition is
 fields, values, types and immutable numerical/configuration inputs. This is a
 measurement contract, not evidence of execution, improvement or phase acceptance.
 
+**Full hypothesis qualification is blocked.** Before any native warm attempt,
+the [independent transport review](../project/evidence/p06-warm-workspace/reviews/counter-transport-review.json)
+confirmed inherited finding `P06-WARM-RV64-MPM-HIGH-HALF`: the RV64 host MPM
+query loses the high half in both SimX and RTL while reporting success. This
+2026-11-22 pre-execution clarification leaves the statistical manifest, workload,
+sampling, numerical checks and thresholds unchanged. It separates useful
+host-time and reported-counter diagnostics from the missing full-width counter
+qualification. Sections 6 and 7 specify the enforced block; section 8 records
+the next development prerequisites. Neither favorable nor unfavorable reported
+statistics establish a fully qualified experiment on the current route.
+
 The hypothesis is that retaining A/B/D allocations for serial `(8,4,8)` matmuls
 reduces **instrumented host time per validated operation** without a correctness,
 cleanup or modeled-cycle regression. The reference is `per_operation`; the
@@ -209,12 +220,38 @@ query overlaps a primary operation interval. Preserve ordering:
 4. Operation-32 end ≤ after-batch query begin ≤ end ≤ owner-close begin.
 5. Owner-close begin ≤ before-release query begin ≤ end ≤ owner-close end.
 
-Available cumulative counters cannot decrease or wrap across any snapshot.
-The measured batch delta is **after-batch minus after-prime**, spanning the
-32 sample operations and their data movement. Cycles and retired
-macroinstructions must have positive batch deltas. Divide cycles by 16,384
-useful FLOPs only under that valid batch scope. No per-kernel attribution,
-physical latency/bandwidth, power or energy follows from these observations.
+The frozen full hypothesis requires available true cumulative counters not to
+decrease or wrap across any snapshot. Raw readers continue to reject decreasing
+reported values and require positive reported cycle and retired-macroinstruction
+batch deltas. Their monotonicity check is necessary but does not prove the
+true no-wrap requirement. The reported batch delta is **after-batch minus
+after-prime**, spanning the 32 sample operations and their data movement.
+Reported cycles divided by 16,384 useful FLOPs remain a conditional diagnostic,
+not a qualified modeled-cycle result on the current route. No per-kernel
+attribution, physical latency/bandwidth, power or energy follows from these
+observations.
+
+### Counter qualification block
+
+The installed public API promises a 64-bit result and combines two 32-bit DCR
+replies. The RV64 SimX decoder and the corresponding host-only RTL decoder
+omit the high-half case. The lower half can still increase across all observed
+snapshots while a hidden wrap reverses the true comparison. The retained
+[monotonic alias](../project/evidence/p06-warm-workspace/reviews/counter-transport/monotonic-alias.json)
+gives a concrete synthetic counterexample:
+
+| Arm | True begin → end | Reported begin → end | True delta | Reported delta |
+|---|---|---|---:|---:|
+| Reference | 0 → 4,294,967,295 | 0 → 4,294,967,295 | 4,294,967,295 | 4,294,967,295 |
+| Candidate | 1 → 4,294,967,303 | 1 → 7 | 4,294,967,302 | 6 |
+
+Both reported deltas are positive and monotonic. The candidate appears to use
+fewer cycles while its true delta is larger. These are source-derived diagnostic
+states, not measured warm-workload counts. Small reported values, a tiny fixed
+workload, process timeout and observed monotonicity do not establish an absolute
+bound on every true cumulative counter. No such bound is currently qualified.
+Do not infer missing high bits, reconstruct them modulo 2^32, or treat a host
+timing improvement as evidence for the missing cycle predicate.
 
 `memory` has five entries: `after_open`, `after_create`, `after_prime`,
 `after_batch`, `before_release`. Each has exactly `queried=true`, `status=0`,
@@ -242,17 +279,18 @@ owner close. The prime's initial default peak is zero; every later peak and
 the resident peak are 320. Native allocation calls from separately compiled
 runtime internals are not implied to be tensor calls observed by these wrappers.
 
-## 7. Analysis and predetermined decision
+## 7. Conditional analysis and predetermined decision
 
 Compute one arithmetic mean of the 32 primary intervals for each process.
-Exclude every prime and both format warm-up pairs from the decision. For each
+Exclude every prime and both format warm-up pairs from the conditional criteria. For each
 format/policy report count, minimum, maximum, median and population standard
 deviation across its **five measured batch means**. Retain all
 operation durations, paired ratios, excluded warm-ups and raw counters as
 diagnostics. Process separation does not establish statistical independence;
 the 640 serial calls are not 640 independent batches.
 
-The hypothesis is supported only when all validity requirements pass and:
+The unchanged frozen hypothesis requires all validity and counter-qualification
+requirements to pass, in addition to these three predetermined predicates:
 
 - Candidate median batch mean is at most 95% of the reference median in
   **each** format.
@@ -260,14 +298,50 @@ The hypothesis is supported only when all validity requirements pass and:
 - No measured candidate batch's active-cycle delta exceeds its paired
   reference delta.
 
-Use exact integer/rational comparisons for these decision boundaries. Floating
-summaries do not choose a different outcome at the threshold. No hidden retries,
+Use exact integer/rational comparisons for these boundaries. Floating summaries
+do not choose a different conditional outcome at the threshold. No hidden retries,
 outlier removal, optional stopping or threshold adjustment follows a rejection.
 An attempt with incomplete/failed correctness, cleanup, provenance, timing or
 resource observations is invalid, rather than a successful negative experiment.
-A valid failure to improve rejects the treatment under this contract and is
-retained as such. Five pairs support descriptive findings, not a confidence,
+A fully qualified valid failure to improve would reject the treatment under
+this contract and be retained as such. While the counter prerequisite is
+blocked, a failed host-time predicate or reported-cycle predicate remains an
+explicit diagnostic; it does not turn this attempt into a valid full negative
+experiment. Five pairs support descriptive findings, not a confidence,
 tail-latency or production-performance guarantee.
+
+The [analyzer](../../ci/project/p06_warm_analyze.py) and
+[offline replay](../../ci/project/p06_warm_replay.py) emit **result schema 2**.
+Native records, analyzer input and the frozen statistical manifest remain
+schema 1. Every otherwise valid result has `hypothesis_evaluation="blocked"`
+and `full_hypothesis_qualification.status="blocked"`, with `qualified=false`,
+the inherited finding ID, `counter_transport="unqualified_low_32_bits"` and
+`absolute_no_wrap_bound="not_established"`. This is unconditional for the
+supported route; neither a caller-supplied claim nor a different revision label
+can unlock qualification. There is no API or CLI qualification override.
+
+The separate `conditional_evaluation` is `satisfied` or `not_satisfied`.
+Each format retains `conditional_criteria`, `failed_conditional_criteria` and
+`conditional_criteria_satisfied`. The exact predicates are named
+`host_median_at_most_95_percent_of_reference`, `no_slower_measured_host_pair`
+and `no_increased_measured_pair_reported_cycles`. All emitted cycle deltas,
+ratios and pair comparisons use explicit `reported` names. Batch selection is
+`included_in_conditional_criteria`; original populations and arithmetic remain
+unchanged. There is no `hypothesis_supported` field that could be mistaken for
+a qualified GO.
+
+Raw-data validity and provenance checks still run in full before any successful
+result. Malformed or incomplete inputs reject rather than receiving a blocked
+success. Direct analysis reports `raw_record_validation="pass"` only for valid
+records and still requires archive provenance from the caller. Replay reports
+`outcome="pass"` only after its complete retained-data checks; its top level,
+embedded analysis and CLI summary all expose the qualification block. **Exit
+zero means successful data verification and conditional analysis, not GO or full
+hypothesis support.** Both favorable and unfavorable conditional statistics
+retain the same block. With `--output`, each CLI writes the full result and
+prints a verification/qualification summary instead of a silent successful exit;
+without it, the full blocked result is printed. Neither reader executes retained
+code or native GPU work.
 
 ## 8. Provenance, budgets and remaining gates
 
@@ -291,3 +365,31 @@ RTL/applicable inherited-gate qualification, synthesis fit, physical FPGA or
 silicon performance. Vendor P01-A03 and the inherited 267-to-283 DSP finding
 remain separate obligations. A new successful result does not rewrite any
 historical acceptance record or turn an unavailable measurement into a pass.
+
+### Next bounded development step
+
+The [counter qualification plan](../project/evidence/p06-warm-workspace/reviews/counter-qualification-plan.json)
+defines the required preflight before a coupled host-transport repair. Keep
+SimX and the host-only RTL DCR decoder consistent, preserve architectural kernel
+CSR semantics, and qualify real production paths at deterministic seeded
+boundaries around 2^32 and the RTL's 44-bit limit. Cover RV32/RV64, relevant
+PERF configurations and all enabled counter selectors, with independent
+source/configuration-bound results. Source-extracted host diagnostics alone
+do not establish native SimX or RTL execution.
+
+Establish a bounded native leaf route and the applicable parity, Beacon,
+synthesis and timing obligations before changing those paths. Tool identities,
+resource use, parent/candidate inputs and actual execution must be retained;
+the plan does not assert that a licensed timing runner is available. Do not
+waive an inherited gate or alter golden data to make the repair appear qualified.
+A rigorous independently reviewed absolute no-wrap proof for every available
+true cumulative counter would be a separate possible qualification route, but
+small observations, guessed event rates and asserted flags are not that proof.
+
+Any future qualification change requires independent review of the analyzer's
+qualification layer and a fresh complete source-bound matched attempt with the
+unchanged statistical rules. Existing unqualified low-word archives cannot be
+upgraded by relabeling their source, importing an archive's helper, or claiming
+that the repair applies retroactively. The current continuation changes no
+SimX/RTL transport, grants no waiver and preserves the original historical
+evidence and acceptance scopes.

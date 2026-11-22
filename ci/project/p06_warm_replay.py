@@ -52,9 +52,9 @@ LIMITATIONS = [
     "No archive member, retained helper, binary, command or recorded absolute path is executed or opened as local source.",
     "Binaries, toolchains, dependencies and quarantined cache products are identities, not executable replay payloads.",
     "Host time includes fixed allocation-observer bookkeeping and numerical validation, not physical-device latency.",
-    "Cumulative SimX counter differences are modeled batch observations, not individual-kernel or physical throughput.",
+    "RV64 host MPM counter differences are unqualified low-32-bit observations; positive monotonic values do not prove no wrap or true paired modeled-cycle comparisons.",
     "Requested tensor bytes and simulator allocator observations do not establish physical memory reclamation.",
-    "A supported hypothesis remains descriptive evidence from five paired batches per format; phase acceptance is separate.",
+    "Replay pass and exit zero establish retained-data consistency only; full hypothesis qualification remains blocked regardless of conditional host-time and reported-counter predicates.",
 ]
 
 
@@ -524,9 +524,12 @@ class _Replay(common._Replay):
         _same(set(self.view.files()), self.used_members, "complete warm packet member inventory")
         analysis = analyze_processes(self.report["processes"], self.raw_logs, build_bindings=self.bindings,
                                      contract=self.contract, expected_revision=self.revision)
-        return {"schema_version": 1, "scope": "p06-warm-workspace-complete-retained-data-replay", "outcome": "pass",
+        return {"schema_version": 2, "scope": "p06-warm-workspace-complete-retained-data-replay", "outcome": "pass",
             "native_execution": "not_run", "acceptance_claimed": False, "performance_acceptance": False,
             "phase_acceptance": False, "phase_complete": False, "full_matrix_completed": True,
+            "hypothesis_evaluation": analysis["hypothesis_evaluation"],
+            "full_hypothesis_qualification": analysis["full_hypothesis_qualification"],
+            "conditional_evaluation": analysis["conditional_evaluation"],
             "source_revision": self.revision, "source_tree": self.source["checkout"]["tree"],
             "source_snapshot_sha256": qualification_id(self.source), "report_identity": self.view.identity("report.json"),
             "commands_checked": self.command_index, "retained_source_files_checked": len(self.sources), "counts": counts,
@@ -568,8 +571,11 @@ def main(argv=None):
         if args.output:
             with args.output.open("x", encoding="utf-8") as stream:
                 stream.write(body)
-            print(json.dumps({"outcome": "pass", "counts": result["counts"], "native_execution": "not_run",
-                "hypothesis_evaluation": result["analysis"]["hypothesis_evaluation"],
+            print(json.dumps({"schema_version": result["schema_version"],
+                "outcome": "pass", "counts": result["counts"], "native_execution": "not_run",
+                "hypothesis_evaluation": result["hypothesis_evaluation"],
+                "full_hypothesis_qualification": result["full_hypothesis_qualification"],
+                "conditional_evaluation": result["conditional_evaluation"],
                 "acceptance_claimed": False, "report": str(args.output)}))
         else:
             print(body, end="")

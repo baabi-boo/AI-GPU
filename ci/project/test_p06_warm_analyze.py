@@ -15,6 +15,7 @@ import json
 import math
 import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -117,11 +118,11 @@ def metric_batches(reference, candidate, *, reference_cycles=1000, candidate_cyc
                                    (CANDIDATE, candidate, candidate_cycles)):
         for index, total in enumerate(totals, 1):
             mean = Fraction(total, 32)
-            batches.append({"format": "fp16", "included_in_decision": True,
+            batches.append({"format": "fp16", "included_in_conditional_criteria": True,
                 "pair_index": index, "policy": policy,
                 "id": f"warm-simx-fp16-pair{index}-{policy}", "timed_total_ns": total,
                 "batch_mean_ns": {"numerator": mean.numerator, "denominator": mean.denominator,
-                                  "value": float(mean)}, "active_cycles": cycles})
+                                  "value": float(mean)}, "reported_active_cycles": cycles})
     return batches
 
 
@@ -140,6 +141,24 @@ class WarmAnalysisTests(unittest.TestCase):
 
     def setUp(self):
         self.input = deepcopy(self.original)
+
+    def assert_blocked(self, result, conditional):
+        self.assertEqual(result["schema_version"], 2)
+        self.assertEqual(result["hypothesis_evaluation"], "blocked")
+        self.assertEqual(result["conditional_evaluation"], conditional)
+        self.assertEqual(result["conditional_evaluation_scope"],
+                         "instrumented_host_time_and_unqualified_reported_counter_predicates")
+        qualification = result["full_hypothesis_qualification"]
+        self.assertEqual(qualification["status"], "blocked")
+        self.assertIs(qualification["qualified"], False)
+        self.assertEqual(qualification["finding_id"], "P06-WARM-RV64-MPM-HIGH-HALF")
+        self.assertEqual(qualification["counter_transport"], "unqualified_low_32_bits")
+        self.assertEqual(qualification["absolute_no_wrap_bound"], "not_established")
+        for row in result["formats"]:
+            self.assertNotIn("hypothesis_supported", row)
+        for row in result["batches"]:
+            self.assertNotIn("active_cycles", row)
+            self.assertNotIn("counter_deltas", row)
 
     @classmethod
     def check(cls, envelope, *, contract=None, revision=REVISION):
@@ -167,7 +186,7 @@ class WarmAnalysisTests(unittest.TestCase):
 
     def test_full_ordered_matrix_at_exact_threshold_remains_descriptive(self):
         result = self.valid_result
-        self.assertEqual(result["hypothesis_evaluation"], "supported")
+        self.assert_blocked(result, "satisfied")
         self.assertEqual(result["raw_record_validation"], "pass")
         self.assertEqual(result["archive_provenance_validation"], "required_from_caller")
         self.assertEqual(result["native_execution"], "not_run")
@@ -187,51 +206,84 @@ class WarmAnalysisTests(unittest.TestCase):
         for fmt in result["formats"]:
             self.assertEqual(rational(fmt["candidate_reference_median_ratio"]), Fraction(19, 20))
             self.assertEqual(len(fmt["pairs"]), 5)
-            self.assertTrue(all(fmt["criteria"].values()))
+            self.assertTrue(all(fmt["conditional_criteria"].values()))
             for policy in (REFERENCE, CANDIDATE):
                 self.assertEqual(fmt["policy_statistics"][policy]["count"], 5)
                 self.assertEqual(fmt["policy_statistics"][policy]["population_stddev"], 0.0)
         for batch in result["batches"]:
             self.assertEqual(batch["timed_operations"], 32)
             self.assertEqual(batch["timed_total_ns"], sum(batch["operation_durations_ns"][1:]))
-            self.assertEqual(rational(batch["active_cycles_per_useful_flop"]), Fraction(1000, 16384))
+            self.assertEqual(rational(batch["reported_active_cycles_per_useful_flop"]), Fraction(1000, 16384))
 
-    def test_one_format_missing_threshold_is_valid_negative(self):
+    def test_one_format_missing_host_threshold_is_conditionally_negative_and_blocked(self):
         for row in self.input["processes"]:
             if row["format"] == "bf16" and row["policy"] == CANDIDATE and row["phase"] == "measured":
                 replace_batch(self.input, self.contract, row["id"], durations=96)
         result = self.check(self.input)
         self.assertEqual(result["raw_record_validation"], "pass")
-        self.assertEqual(result["hypothesis_evaluation"], "not_supported")
-        self.assertTrue(result["formats"][0]["hypothesis_supported"])
-        self.assertFalse(result["formats"][1]["hypothesis_supported"])
-        self.assertEqual(result["formats"][1]["failed_criteria"], ["median_at_most_95_percent_of_reference"])
+        self.assert_blocked(result, "not_satisfied")
+        self.assertTrue(result["formats"][0]["conditional_criteria_satisfied"])
+        self.assertFalse(result["formats"][1]["conditional_criteria_satisfied"])
+        self.assertEqual(result["formats"][1]["failed_conditional_criteria"], ["host_median_at_most_95_percent_of_reference"])
 
-    def test_one_slow_pair_rejects_treatment_despite_passing_median(self):
+    def test_one_slow_host_pair_fails_conditional_criteria_despite_passing_median(self):
         identifier = "warm-simx-fp16-pair5-" + CANDIDATE
         replace_batch(self.input, self.contract, identifier, durations=101)
         result = self.check(self.input)
-        self.assertEqual(result["hypothesis_evaluation"], "not_supported")
+        self.assert_blocked(result, "not_satisfied")
         self.assertEqual(result["raw_record_validation"], "pass")
         fmt = result["formats"][0]
-        self.assertEqual(fmt["failed_criteria"], ["no_slower_measured_pair"])
+        self.assertEqual(fmt["failed_conditional_criteria"], ["no_slower_measured_host_pair"])
         self.assertEqual(rational(fmt["candidate_reference_median_ratio"]), Fraction(19, 20))
         self.assertEqual(rational(fmt["pairs"][4]["candidate_reference_host_ratio"]), Fraction(101, 100))
         self.assertEqual(len(result["batches"]), 24)
 
-    def test_one_extra_modeled_cycle_is_valid_negative_even_when_host_improves(self):
+    def test_one_extra_reported_cycle_fails_conditional_criteria_even_when_host_improves(self):
         replace_batch(self.input, self.contract, "warm-simx-bf16-pair3-" + CANDIDATE,
                       durations=90, cycles=1001)
         result = self.check(self.input)
-        self.assertEqual(result["hypothesis_evaluation"], "not_supported")
+        self.assert_blocked(result, "not_satisfied")
         self.assertEqual(result["raw_record_validation"], "pass")
         fmt = result["formats"][1]
-        self.assertEqual(fmt["failed_criteria"], ["no_increased_measured_pair_cycles"])
-        self.assertEqual(rational(fmt["pairs"][2]["candidate_reference_cycle_ratio"]), Fraction(1001, 1000))
+        self.assertEqual(fmt["failed_conditional_criteria"], ["no_increased_measured_pair_reported_cycles"])
+        self.assertEqual(rational(fmt["pairs"][2]["candidate_reference_reported_cycle_ratio"]), Fraction(1001, 1000))
         for claim in ("acceptance_claimed", "performance_acceptance", "phase_acceptance"):
             self.assertIs(result[claim], False)
 
-    def test_primes_and_whole_warmup_pairs_cannot_change_decision(self):
+    def test_monotonic_low_words_can_reverse_true_cycles_but_never_qualify_hypothesis(self):
+        true_endpoints = {REFERENCE: (0, (1 << 32) - 1), CANDIDATE: (1, (1 << 32) + 7)}
+        true_deltas = {policy: end - begin for policy, (begin, end) in true_endpoints.items()}
+        self.assertGreater(true_deltas[CANDIDATE], true_deltas[REFERENCE])
+        reported_deltas = {}
+        for process in self.input["processes"]:
+            begin, end = (value & ((1 << 32) - 1) for value in true_endpoints[process["policy"]])
+            self.assertGreater(end, begin)
+            reported_deltas[process["policy"]] = end - begin
+            operations, summary = decode_log(self.input["raw_logs"][process["id"]])
+            for name, value in (("after_open", begin), ("after_prime", begin),
+                                ("after_batch", end), ("before_release", end)):
+                cycle = next(row for row in summary["snapshots"][name]["counters"]
+                             if row["name"] == "cycles")
+                cycle["value"] = value
+            raw = render_log(operations, summary)
+            self.input["raw_logs"][process["id"]] = raw
+            case = manifest.select_cases(self.contract, formats=[process["format"]])[0]
+            process["observation"] = verify_output(raw, case=case, fmt=process["format"],
+                policy=process["policy"], binding_id=process["qualification_id"],
+                sample_id=process["id"], pair_index=process["pair_index"], phase=process["phase"],
+                contract=self.contract)
+        self.assertEqual(reported_deltas, {REFERENCE: (1 << 32) - 1, CANDIDATE: 6})
+        result = self.check(self.input)
+        self.assertEqual(result["raw_record_validation"], "pass")
+        self.assert_blocked(result, "satisfied")
+        for fmt in result["formats"]:
+            self.assertTrue(fmt["conditional_criteria_satisfied"])
+            for pair in fmt["pairs"]:
+                self.assertTrue(pair["candidate_reported_cycles_not_increased"])
+                self.assertEqual(rational(pair["candidate_reference_reported_cycle_ratio"]),
+                                 Fraction(6, (1 << 32) - 1))
+
+    def test_primes_and_whole_warmup_pairs_cannot_change_conditional_criteria(self):
         for row in self.input["processes"]:
             candidate = row["policy"] == CANDIDATE
             samples = (100000 if candidate else 1) if row["phase"] == "warmup" else (95 if candidate else 100)
@@ -241,12 +293,12 @@ class WarmAnalysisTests(unittest.TestCase):
                           durations=[prime, *([samples] * 32)], cycles=cycles)
         result = self.check(self.input)
         self.assertEqual(result["formats"], self.valid_result["formats"])
-        self.assertEqual(result["hypothesis_evaluation"], "supported")
+        self.assert_blocked(result, "satisfied")
         for batch in result["batches"]:
             self.assertEqual(batch["prime_duration_ns"], 500000000 if batch["policy"] == CANDIDATE else 1)
-            self.assertEqual(batch["included_in_decision"], batch["pair_index"] != 0)
+            self.assertEqual(batch["included_in_conditional_criteria"], batch["pair_index"] != 0)
         self.assertEqual(sum(row["timed_operations"] for row in result["batches"]
-                             if row["included_in_decision"]), 640)
+                             if row["included_in_conditional_criteria"]), 640)
 
     def test_statistics_reduce_five_batch_means_and_preserve_fractional_nanoseconds(self):
         totals = [3200, 3232, 6401, 9615, 12799]
@@ -277,12 +329,12 @@ class WarmAnalysisTests(unittest.TestCase):
             with self.subTest(offset=offset):
                 rows = metric_batches([reference] * 5, [threshold + offset] * 5)
                 result = analyze._format_result("fp16", rows, self.contract, "7" * 64)
-                self.assertIs(result["criteria"]["median_at_most_95_percent_of_reference"], expected)
-                self.assertIs(result["hypothesis_supported"], expected)
+                self.assertIs(result["conditional_criteria"]["host_median_at_most_95_percent_of_reference"], expected)
+                self.assertIs(result["conditional_criteria_satisfied"], expected)
                 self.assertEqual(rational(result["candidate_reference_median_ratio"]),
                                  Fraction(threshold + offset, reference))
 
-    def test_pair_host_and_cycle_decisions_do_not_round_away_one_unit(self):
+    def test_conditional_host_and_reported_cycle_comparisons_do_not_round_away_one_unit(self):
         base = 1 << 63
         self.assertEqual(float(base), float(base + 1))
         for host_extra, cycle_extra in ((1, 0), (0, 1)):
@@ -290,8 +342,8 @@ class WarmAnalysisTests(unittest.TestCase):
                 rows = metric_batches([base] * 5, [base + host_extra] * 5,
                     reference_cycles=base, candidate_cycles=base + cycle_extra)
                 result = analyze._format_result("fp16", rows, self.contract, "7" * 64)
-                self.assertIs(result["criteria"]["no_slower_measured_pair"], not host_extra)
-                self.assertIs(result["criteria"]["no_increased_measured_pair_cycles"], not cycle_extra)
+                self.assertIs(result["conditional_criteria"]["no_slower_measured_host_pair"], not host_extra)
+                self.assertIs(result["conditional_criteria"]["no_increased_measured_pair_reported_cycles"], not cycle_extra)
 
     def test_exact_population_variance_preserves_small_spread_at_large_offsets(self):
         base = (1 << 63) + 1
@@ -435,7 +487,7 @@ class WarmAnalysisTests(unittest.TestCase):
         intervals = row["observation"]["summary"]["host_intervals_ns"]
         span = intervals["close"]["end_ns"] - intervals["create"]["begin_ns"]
         row["process_duration_seconds"] = (span - 1000) / 1_000_000_000
-        self.assertEqual(self.check(self.input)["hypothesis_evaluation"], "supported")
+        self.assert_blocked(self.check(self.input), "satisfied")
         row["process_duration_seconds"] = (span - 1002) / 1_000_000_000
         with self.assertRaisesRegex(analyze.AnalysisError, "supervised"):
             self.check(self.input)
@@ -455,10 +507,54 @@ class WarmAnalysisTests(unittest.TestCase):
             result = self.check(self.input)
         self.assertEqual(encoded(self.input), before)
         result["batches"][0]["operation_durations_ns"][0] = 0
-        result["batches"][0]["counter_deltas"][0]["value"] = 0
+        result["batches"][0]["reported_counter_deltas"][0]["value"] = 0
         result["counts"]["processes"] = 0
+        result["full_hypothesis_qualification"]["qualified"] = True
         self.assertEqual(encoded(self.input), before)
         self.assertEqual(self.contract["complete_matrix"]["processes"], 24)
+        self.assertIs(analyze._full_hypothesis_qualification()["qualified"], False)
+
+    def test_fresh_cli_exposes_block_for_positive_and_negative_conditional_predicates(self):
+        negative = deepcopy(self.original)
+        replace_batch(negative, self.contract, "warm-simx-fp16-pair5-" + CANDIDATE, durations=101)
+        for label, value, conditional in (("positive", self.original, "satisfied"),
+                                          ("negative", negative, "not_satisfied")):
+            incoming = self.directory / (label + "-fresh-input.json")
+            incoming.write_bytes(encoded(value))
+            for write_output in (False, True):
+                command = [sys.executable, "-B", str(ROOT / "ci/project/p06_warm_analyze.py"),
+                           "--input", str(incoming), "--source-revision", REVISION]
+                output = self.directory / (label + "-fresh-result.json")
+                if write_output:
+                    command.extend(("--output", str(output)))
+                with self.subTest(conditional=conditional, write_output=write_output):
+                    run = subprocess.run(command, cwd=ROOT, text=True, capture_output=True,
+                                         check=False, timeout=60)
+                    self.assertEqual((run.returncode, run.stderr), (0, ""))
+                    emitted = json.loads(run.stdout)
+                    self.assertEqual(emitted["hypothesis_evaluation"], "blocked")
+                    self.assertEqual(emitted["conditional_evaluation"], conditional)
+                    result = json.loads(output.read_bytes()) if write_output else emitted
+                    self.assertEqual(emitted["full_hypothesis_qualification"],
+                                     result["full_hypothesis_qualification"])
+                    self.assertEqual(result["raw_record_validation"], "pass")
+                    self.assert_blocked(result, conditional)
+
+    def test_caller_cannot_supply_a_qualification_flag_or_claim(self):
+        with self.assertRaises(TypeError):
+            analyze.analyze_processes(self.original["processes"], self.original["raw_logs"],
+                build_bindings=self.original["build_bindings"], contract=self.contract,
+                expected_revision=REVISION, counter_transport_qualified=True)
+        with self.assertRaises(SystemExit) as error:
+            self.cli("--counter-transport-qualified")
+        self.assertEqual(error.exception.code, 2)
+        claimed = deepcopy(self.original)
+        claimed["full_hypothesis_qualification"] = {"status": "pass", "qualified": True}
+        incoming = self.directory / "claimed-qualification.json"
+        incoming.write_bytes(encoded(claimed))
+        status, output, errors = self.cli(incoming=incoming)
+        self.assertEqual((status, output), (2, ""))
+        self.assertIn("incorrect fields", errors)
 
     def test_cli_stdout_and_exclusive_file_output_agree(self):
         status, output, errors = self.cli()
@@ -466,7 +562,16 @@ class WarmAnalysisTests(unittest.TestCase):
         self.assertEqual(json.loads(output), self.valid_result)
         destination = self.directory / "exclusive-analysis.json"
         status, output, errors = self.cli("--output", str(destination))
-        self.assertEqual((status, output, errors), (0, "", ""))
+        self.assertEqual((status, errors), (0, ""))
+        summary = json.loads(output)
+        self.assertEqual(summary["schema_version"], 2)
+        self.assertEqual(summary["hypothesis_evaluation"], "blocked")
+        self.assertEqual(summary["conditional_evaluation"], "satisfied")
+        self.assertEqual(summary["raw_record_validation"], "pass")
+        self.assertEqual(summary["archive_provenance_validation"], "required_from_caller")
+        self.assertEqual(summary["full_hypothesis_qualification"],
+                         self.valid_result["full_hypothesis_qualification"])
+        self.assertEqual(summary["report"], str(destination))
         original = destination.read_bytes()
         self.assertEqual(json.loads(original), self.valid_result)
         status, output, errors = self.cli("--output", str(destination))
