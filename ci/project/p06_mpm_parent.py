@@ -81,6 +81,11 @@ def verify_expected_failure(text, engine, result):
             "expected_high": "00000001", "actual_high": "00000000"}
 
 
+def reference_checkout_argv(source, reference, git="git"):
+    # A shallow clone can omit a fetched commit outside its advertised history.
+    return [git, "-C", str(source), "worktree", "add", "--detach", str(reference), PARENT]
+
+
 def reference_snapshot(reference):
     native.require(_git(reference, "rev-parse", "HEAD").decode().strip() == PARENT, "reference revision changed")
     changed = _git(reference, "diff", "--name-only", "--ignore-submodules=all", PARENT,
@@ -175,8 +180,7 @@ def execute(args, paths):
         for tool in ("make", "g++", "python3", "verilator"):
             success(command("version-" + tool.replace("+", "p"),
                             [original_tools["tools"][tool]["path"], "--version"], work, 30))
-        success(command("clone-reference", [git, "clone", "--shared", "--no-checkout", str(source), str(reference)], work, 120))
-        success(command("checkout-reference", [git, "checkout", "--detach", PARENT], reference, 120))
+        success(command("checkout-reference", reference_checkout_argv(source, reference, git), work, 120))
         native.require(not _git(reference, "status", "--porcelain", "--ignore-submodules=all"), "reference checkout is dirty")
         report["parent_production_before_overlay"] = hash_artifacts(reference, (
             "sim/simx/core.cpp", "sim/simx/csr_unit.cpp", "hw/rtl/core/VX_csr_mpm.sv", "hw/rtl/core/VX_csr_data.sv"))

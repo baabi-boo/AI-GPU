@@ -73,6 +73,11 @@ def identity(path):
     return {"path": str(path), "resolved_path": str(resolved), "sha256": digest, "size_bytes": size}
 
 
+def reference_checkout_argv(source, reference, git="git"):
+    # A shallow clone can omit a fetched commit outside its advertised history.
+    return [git, "-C", str(source), "worktree", "add", "--detach", str(reference), REFERENCE]
+
+
 def source_identity(source, parent=False):
     names = [name for name in INPUTS if not parent or not name.startswith("ci/project/p06_mpm_")]
     names += sorted(path.relative_to(source).as_posix() for path in (source / "hw/rtl").rglob("*")
@@ -215,8 +220,7 @@ def execute(args, paths):
                 "import json,yaml,pyslang; print(json.dumps({'yaml':yaml.__version__,'pyslang':pyslang.__version__}))"], work, 30)
         for tool in ("circt-verilog", "foldsim-opt", "yosys"):
             command("version-" + tool, [initial_tools[tool]["path"], "--version"], work, 30)
-        command("reference-clone", ["git", "clone", "--shared", "--no-checkout", str(source), str(parent)], work, 120)
-        command("reference-checkout", ["git", "-C", str(parent), "checkout", "--detach", REFERENCE], work, 120)
+        command("reference-checkout", reference_checkout_argv(source, parent), work, 120)
         require(_git(parent, "rev-parse", "HEAD").decode().strip() == REFERENCE, "reference revision differs")
         for name in OVERLAY:
             target = parent / name

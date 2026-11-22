@@ -133,7 +133,7 @@ class CircuitFixture:
         result.update(self.results.get(name, {}))
         text = "fixture process output\n"
         if result["process_started"] and result["reason"] in (None, "nonzero_exit"):
-            if name == "reference-clone":
+            if name == "reference-checkout":
                 reference = self.paths["work"] / "reference"
                 shutil.copytree(self.paths["source"], reference)
                 (reference / "hw/rtl/core/VX_csr_mpm.sv").write_bytes(self.old_decoder)

@@ -84,20 +84,20 @@ class ParentFixture(NativeFixture):
         result.update(self.results.get(name, {}))
         output = "fixture command completed\n"
         if result["outcome"] == "pass":
-            if name == "clone-reference":
-                Path(argv[-1]).mkdir()
-            elif name == "checkout-reference":
+            if name == "checkout-reference":
+                reference = Path(argv[-2])
+                reference.mkdir()
                 for relative in parent.REFERENCE_INPUTS:
                     if relative in parent.OVERLAY:
                         continue
-                    path = cwd / relative
+                    path = reference / relative
                     path.parent.mkdir(parents=True, exist_ok=True)
                     content = (self.paths["source"] / relative).read_bytes()
                     if relative in {"sim/simx/core.cpp", "hw/rtl/core/VX_csr_mpm.sv"}:
                         content += b"fixture original production implementation\n"
                     path.write_bytes(content)
                     self.reference_files[relative] = content
-                (cwd / "third_party").mkdir()
+                (reference / "third_party").mkdir()
             elif name == "configure-rv64-perf-on":
                 reference = self.paths["work"] / "reference"
                 for relative in parent.native.GENERATED:
