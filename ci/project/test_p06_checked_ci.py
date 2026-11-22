@@ -29,6 +29,7 @@ IDENTITY = "Initialize retained job identity and resource observations"
 PYTHON_IDENTITY = "Retain and verify Python interpreter identity"
 PREPARE = "Verify clean source and relocate restored tools"
 EXECUTE = "Execute ordinary and checked native prerequisites"
+PUBLIC_EXECUTE = "Execute real public runtime counter diagnostics"
 GIB = 1024**3
 
 
@@ -41,13 +42,21 @@ def python_body(step, invocation):
 
 def required_sources():
     tracked = subprocess.check_output([
-        "git", "ls-files", "-z", "--", "sim", "sw/common", "third_party/ramulator_ext",
+        "git", "ls-files", "-z", "--", "sim", "sw/common", "sw/runtime",
+        "sw/kernel/include", "tests/regression/ai_bench_common", "third_party/ramulator_ext",
     ], cwd=ROOT, text=True, timeout=5)
     return set(filter(None, tracked.split("\0"))) | set(runner.CRITICAL + runner.COPIED) | {
         WORKFLOW.relative_to(ROOT).as_posix(), Path(__file__).relative_to(ROOT).as_posix(),
         ".github/workflows/p04-model.yml", "ci/toolchain_rev.sh", "ci/install_dependencies.sh",
         "ci/project/p04_ci_prepare.py", "Makefile.in", "third_party/Makefile",
         "docs/designs/simx_checked_counters_v1.md", "docs/designs/simulator_completion_v1.md",
+        "docs/designs/simx_counter_diagnostics_v2.md",
+        "tests/unittest/checked_counters/public.mk",
+        "tests/unittest/checked_counters/public_main.cpp",
+        "tests/unittest/checked_counters/public_hooks.cpp",
+        "tests/unittest/checked_counters/public_hooks.h",
+        "ci/project/p06_counter_public_execute.py", "ci/project/p06_counter_public_build.py",
+        "ci/project/p06_counter_public_records.py",
     }
 
 
@@ -85,7 +94,9 @@ class CheckedCounterWorkflowTests(unittest.TestCase):
         witnesses = {
             "sim/**": "sim/common/perf_counter.h",
             "tests/unittest/checked_counters/**": "tests/unittest/checked_counters/main.cpp",
-            "sw/runtime/common/async_run.h": "sw/runtime/common/async_run.h",
+            "sw/runtime/**": "sw/runtime/common/async_run.h",
+            "sw/kernel/include/**": "sw/kernel/include/vx_intrinsics.h",
+            "tests/regression/ai_bench_common/**": "tests/regression/ai_bench_common/counters.h",
             "ci/project/**": "ci/project/p06_checked_execute.py",
             "ci/blackbox.sh": "ci/blackbox.sh",
         }
@@ -171,6 +182,7 @@ class CheckedCounterWorkflowTests(unittest.TestCase):
                    self.one("uses", "actions/setup-python@v5"), self.one("name", PYTHON_IDENTITY),
                    self.one("id", "pins"), self.one("id", "toolchain"), self.one("id", "dependencies"),
                    install, self.one("name", PREPARE), self.one("name", EXECUTE),
+                   self.one("name", PUBLIC_EXECUTE),
                    self.one("uses", "actions/upload-artifact@v4")]
         self.assertEqual([self.steps.index(step) for step in ordered],
                          sorted(self.steps.index(step) for step in ordered))
@@ -213,6 +225,18 @@ class CheckedCounterWorkflowTests(unittest.TestCase):
                 parser.parse_args([*arguments, option, "1"])
             self.assertEqual(error.exception.code, 2)
 
+    def test_public_command_requires_a_fresh_source_bound_diagnostic_after_native_controls(self):
+        execute = self.one("name", PUBLIC_EXECUTE)
+        self.assertEqual(set(execute), {"name", "run"})
+        self.assertEqual(one_command(execute, pipefail=True), [
+            "python3", "ci/project/p06_counter_public_execute.py", "--source-dir", "$PWD",
+            "--tools-dir", "$P06_CHECKED_ROOT/tools", "--expected-revision", "$GITHUB_SHA",
+            "--work-dir", "$P06_CHECKED_ROOT/public-work", "--output", "$P06_CHECKED_ROOT/evidence/public-counters",
+            "2>&1", "|", "tee", "$P06_CHECKED_ROOT/evidence/public-execution.log",
+        ])
+        self.assertLess(self.steps.index(self.one("name", EXECUTE)), self.steps.index(execute))
+        self.assertLess(self.steps.index(execute), self.steps.index(self.one("uses", "actions/upload-artifact@v4")))
+
     def test_resource_preflight_retains_identity_before_rejecting_insufficient_or_unknown_resources(self):
         body = python_body(self.one("name", IDENTITY), "python3 - <<'PY'")
         for disk, memory, blocked in ((15 * GIB, 4 * GIB, False), (15 * GIB - 1, 4 * GIB, True),
@@ -240,6 +264,8 @@ class CheckedCounterWorkflowTests(unittest.TestCase):
                         self.assertIs(data[key], False)
                     self.assertEqual(data["native_execution"], "not_run")
                     self.assertEqual(data["requested_modes"], ["ordinary", "checked"])
+                    self.assertEqual(data["requested_public_modes"], [
+                        "normal", "immediate-overflow", "delayed-overflow", "cache-overflow", "coherent-terminal"])
                     for key, value in env.items():
                         if key.startswith("GITHUB_") and key != "GITHUB_ENV":
                             self.assertEqual(data[key], value)
@@ -288,7 +314,8 @@ class CheckedCounterWorkflowTests(unittest.TestCase):
         for label, log_name, program, first_argument in (
                 ("Install baseline host dependencies", "host-dependencies.log", "sudo", "bash"),
                 (PREPARE, "preparation.log", "python3", "ci/project/p04_ci_prepare.py"),
-                (EXECUTE, "execution.log", "python3", "ci/project/p06_checked_execute.py")):
+                (EXECUTE, "execution.log", "python3", "ci/project/p06_checked_execute.py"),
+                (PUBLIC_EXECUTE, "public-execution.log", "python3", "ci/project/p06_counter_public_execute.py")):
             with self.subTest(step=label), tempfile.TemporaryDirectory(prefix="checked-ci-pipeline-") as temporary:
                 root = Path(temporary)
                 (root / "evidence").mkdir()

@@ -17,14 +17,16 @@ on:
       - 'sim/**'
       - 'sw/common/**'
       - 'sw/include/**'
-      - 'sw/runtime/common/perf.cpp'
-      - 'sw/runtime/common/async_run.h'
+      - 'sw/runtime/**'
+      - 'sw/kernel/include/**'
       - 'hw/**'
       - 'tests/unittest/checked_counters/**'
       - 'tests/unittest/mpm_transport/**'
+      - 'tests/regression/ai_bench_common/**'
       - 'third_party/**'
       - 'profiles/p02-tfr.json'
       - 'docs/designs/simx_checked_counters_v1.md'
+      - 'docs/designs/simx_counter_diagnostics_v2.md'
       - 'docs/designs/simulator_completion_v1.md'
       - 'docs/designs/host_mpm_transport_v1.md'
       - 'VERSION'
@@ -47,14 +49,16 @@ on:
       - 'sim/**'
       - 'sw/common/**'
       - 'sw/include/**'
-      - 'sw/runtime/common/perf.cpp'
-      - 'sw/runtime/common/async_run.h'
+      - 'sw/runtime/**'
+      - 'sw/kernel/include/**'
       - 'hw/**'
       - 'tests/unittest/checked_counters/**'
       - 'tests/unittest/mpm_transport/**'
+      - 'tests/regression/ai_bench_common/**'
       - 'third_party/**'
       - 'profiles/p02-tfr.json'
       - 'docs/designs/simx_checked_counters_v1.md'
+      - 'docs/designs/simx_counter_diagnostics_v2.md'
       - 'docs/designs/simulator_completion_v1.md'
       - 'docs/designs/host_mpm_transport_v1.md'
       - 'VERSION'
@@ -73,7 +77,7 @@ concurrency:
 
 jobs:
   native-counters:
-    name: Native ordinary and checked counter prerequisites
+    name: Native counter sources and public runtime diagnostics
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     defaults:
@@ -112,6 +116,8 @@ jobs:
                       record_stage='job-initialization',
                       requested_xlen=64, requested_profile='p02-tfr',
                       requested_modes=['ordinary', 'checked'], requested_perf='on',
+                      requested_public_modes=['normal', 'immediate-overflow', 'delayed-overflow',
+                                              'cache-overflow', 'coherent-terminal'],
                       native_execution='not_run', qualified=False,
                       ready_for_warm=False, acceptance_claimed=False,
                       workflow_sha256=hashlib.sha256(workflow).hexdigest())
@@ -200,6 +206,15 @@ jobs:
             --work-dir "$P06_CHECKED_ROOT/native-work" \
             --output "$P06_CHECKED_ROOT/evidence/checked-counters" \
             2>&1 | tee "$P06_CHECKED_ROOT/evidence/execution.log"
+      - name: Execute real public runtime counter diagnostics
+        run: |
+          set -euo pipefail
+          python3 ci/project/p06_counter_public_execute.py \
+            --source-dir "$PWD" --tools-dir "$P06_CHECKED_ROOT/tools" \
+            --expected-revision "$GITHUB_SHA" \
+            --work-dir "$P06_CHECKED_ROOT/public-work" \
+            --output "$P06_CHECKED_ROOT/evidence/public-counters" \
+            2>&1 | tee "$P06_CHECKED_ROOT/evidence/public-execution.log"
       - name: Retain preparation and native execution packet
         if: always()
         uses: actions/upload-artifact@v4
