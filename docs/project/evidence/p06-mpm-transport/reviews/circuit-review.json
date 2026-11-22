@@ -1,0 +1,49 @@
+{
+  "acceptance_claimed": false,
+  "artifact_index": "../hosted/attempt3-circuits.json",
+  "artifact_index_sha256": "9fcba9df2da4d0a01c83930454578391dbf5de37e3b726a334b254da697f7ea5",
+  "candidate_checkout": "6e6426a0bf761baab11e932a4c86b49a5de81217",
+  "candidate_revision": "18c888058ac851b802350c99770ed9ac2d27b582",
+  "candidate_tree": "d6dd742a905e0f3e76c7374cc678ba87e5c2a19e",
+  "findings": [
+    {
+      "confidence": "high",
+      "evidence_type": "missing-test",
+      "finding": "Combinational cost is attributed but has no cheapest-correct-alternative comparison.",
+      "path": "hw/rtl/core/VX_csr_mpm.sv",
+      "required_action": "Measure same-module normalized-address/full-counter-select/final-half-select alternative under matched tools/configurations and native correctness checks; retain a cheaper repair or evidence justifying original cost.",
+      "rule": "docs/bug_fixes.md \u00a76.5; host_mpm_transport_v1 \u00a76",
+      "scenario": "RV64 PERF off/on restores high-half decode with Beacon +21/+417 LUT and generic Yosys +53/+155 combinational cells.",
+      "severity": "F2"
+    }
+  ],
+  "measurements_complete": true,
+  "netlist_control_equivalence": [
+    {
+      "comparison": "all module contents except attributes; exact structure/bit identifiers retained",
+      "normalized_module_sha256": "dee3980c42470dd7c1a7fa5c2403f6536818333f8485307221d763c195bc90b0",
+      "parent_rv32_equals_candidate_rv32_equals_candidate_rv64": true,
+      "perf": "off"
+    },
+    {
+      "comparison": "all module contents except attributes; exact structure/bit identifiers retained",
+      "normalized_module_sha256": "ab08c303037cbaf6ba8e24f59f9276f90b16464e07d2a755fc76594c470316d4",
+      "parent_rv32_equals_candidate_rv32_equals_candidate_rv64": true,
+      "perf": "on"
+    }
+  ],
+  "proven_ff_delta": {
+    "rv64_off": 24,
+    "rv64_on": 72
+  },
+  "qualification_claimed": false,
+  "raw_beacon_build_verdict": "NO-BASELINE",
+  "raw_gate_outcome": "fail",
+  "reference_revision": "4df7186edbca82b21b2b8cba9b3b192248b99209",
+  "review_markdown_sha256": "f62b5877e8f0389877c5bf32fb89f6dd50b4894ef09d044f7d22152b5e0bece9",
+  "reviewer": "/root/w09_a01",
+  "schema_version": 1,
+  "scope": "independent-circuit-cost-review",
+  "verdict": "land_after_cost_comparison_and_separate_native_integration_reviews",
+  "waiver_claimed": false
+}

@@ -200,11 +200,29 @@ The [qualification packet](docs/project/evidence/p06-baseline/README.md),
 [audit](docs/project/p06-qualification-audit.md) and
 [analysis contract](docs/designs/native_baseline_analysis_v1.md) retain the original
 measurements, stricter serial timing validation and supervisor timing limitation.
-P06-A02/A03 remain open. Next, freeze one small-workload amortization experiment
-with matched before/after criteria. Native multiple-live-operation ownership
-must be resolved before any reuse or concurrency claim. No optimization,
-synthesis or physical performance result is established by this SimX baseline.
-P07–P11 remain `not_started`. The
+The serial ownership and opt-in fixed workspace are implemented. Independent
+[original workspace review](docs/project/evidence/p06-warm-workspace/README.md)
+at `13dc0d1fdb6d5322104e381aa342dc139c7bb80c`,
+[run 44925627664](https://github.com/baabi-boo/AI-GPU/actions/runs/44925627664),
+reconciles 8 processes, 32 native launches, 1,024 exact output words and 60
+buffer lifetimes. This is serial correctness evidence, not a concurrency or
+performance result. The separate [warm measurement contract](docs/designs/warm_workspace_benchmark_v1.md)
+and runner exist; warm v1 remains unconditionally blocked by
+`P06-WARM-RV64-MPM-HIGH-HALF`.
+
+The [transport audit](docs/project/p06-mpm-transport-audit.md) identified and
+repaired that RV64 high-word defect in SimX and the host RTL decoder. At `18c8880`,
+independent review verifies eight strict native passes and both numeric parent
+failures; the immutable governance suite passes 2,910 tests. Paired circuit
+measurements and the concrete alternative comparison are reviewed: retain the
+direct decoder, with raw RV64 area failures preserved. Broader CI and publication
+remain separately tracked in the [transport packet](docs/project/evidence/p06-mpm-transport/README.md).
+The next development action is to implement and independently review the
+[versioned qualification binding](docs/project/p06-mpm-qualification-plan.md),
+followed by a fresh complete matched warm experiment under unchanged rules. The
+[transport handoff](docs/project/p06-mpm-transport-handoff.md) records the route.
+P06-A02/A03 remain open; the source repair cannot recover historical high bits
+or establish a warm speedup. P07–P11 remain `not_started`. The
 [executor audit](docs/project/p04-executor-audit.md) preserves the unresolved
 inherited 267 → 283 DSP area-gate failure.
 

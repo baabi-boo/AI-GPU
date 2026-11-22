@@ -1,0 +1,1273 @@
+{
+  "acceptance_claimed": false,
+  "artifact": {
+    "artifact_id": 14738467101,
+    "crc_valid": true,
+    "extracted_copy_matches_archive": true,
+    "job_id": 137087375767,
+    "member_count": 105,
+    "path": "attempt2-native.zip",
+    "run_attempt": 1,
+    "run_id": 44982938688,
+    "safe_unique_regular_members": true,
+    "sha256": "07d24b55bc6490a39e2c0d72edeca65010c0ab2785ccf5766a392b4193c5dce1",
+    "size_bytes": 233156,
+    "uncompressed_bytes": 1315869,
+    "url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44982938688/artifacts/14738467101"
+  },
+  "budget": {
+    "jobs": 2,
+    "max_log_bytes": 16777216,
+    "max_rss_bytes": 4294967296,
+    "min_free_bytes": 16106127360,
+    "threads": 1,
+    "timeouts_seconds": {
+      "build": 1800,
+      "configure": 120,
+      "run": 180
+    }
+  },
+  "candidate_native_matrix_outcome": "pass",
+  "checks": {
+    "all_eight_recorded_binary_identities_stable": true,
+    "before_after_source_and_tool_records_equal": true,
+    "completed_job_metadata_verified": {
+      "api_url": "https://api.github.com/repos/baabi-boo/AI-GPU/actions/runs/44982938688/jobs?per_page=100",
+      "conclusion": "failure",
+      "failed_step": "Verify the pinned parent fails the same native high-half assertions",
+      "job_id": 137087375767
+    },
+    "credential_pattern_findings": [],
+    "credential_pattern_scope": "Private-key headers and long GitHub token patterns only; not a complete secret audit.",
+    "native_binaries_rehashed_from_archive": false,
+    "retained_configuration_and_compiler_artifacts_verified": 64,
+    "structured_command_logs_verified": 30,
+    "workflow_matches_original_head_and_job_hash": true
+  },
+  "command_logs": [
+    {
+      "argv": [
+        "/usr/bin/make",
+        "--version"
+      ],
+      "exit_code": 0,
+      "id": "version-make",
+      "member": "transport/logs/version-make.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "8ee498ee2fc27e8dcdf99191b454077df95e3840d841ec94321748b6d7f36819",
+      "size_bytes": 297
+    },
+    {
+      "argv": [
+        "/usr/bin/g++",
+        "--version"
+      ],
+      "exit_code": 0,
+      "id": "version-gpp",
+      "member": "transport/logs/version-gpp.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "9eaf9b7f4b11c2e84e2478c2ceb0e4f48f4ba88565bcfc832b3bce49847dda6d",
+      "size_bytes": 246
+    },
+    {
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.14/x64/bin/python3",
+        "--version"
+      ],
+      "exit_code": 0,
+      "id": "version-python3",
+      "member": "transport/logs/version-python3.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "4c3569f5da09975434dd9fd9a91fadbc4367a91d8f3c3fab59e9241ab9ee4bd8",
+      "size_bytes": 15
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/p06-mpm-transport/tools/verilator/bin/verilator",
+        "--version"
+      ],
+      "exit_code": 0,
+      "id": "version-verilator",
+      "member": "transport/logs/version-verilator.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "46aedd5b30efdd94426c9eebbcf4a6ae7a9680526cc90ce8fec95977c2d6b12d",
+      "size_bytes": 38
+    },
+    {
+      "argv": [
+        "/home/runner/work/AI-GPU/AI-GPU/configure",
+        "--xlen=32",
+        "--profile=",
+        "--tooldir=/home/runner/work/_temp/p06-mpm-transport/tools"
+      ],
+      "exit_code": 0,
+      "id": "rv32-perf-off-configure",
+      "member": "transport/logs/rv32-perf-off-configure.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/make",
+        "--no-print-directory",
+        "-j2",
+        "THREADS=1",
+        "CONFIGS=",
+        "PROFILE=",
+        "PERF=",
+        "all"
+      ],
+      "exit_code": 0,
+      "id": "rv32-perf-off-rtl-build",
+      "member": "transport/logs/rv32-perf-off-rtl-build.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "0894145d349b238e968885f55452be9821bd54b525afb8fb3b05de6ccf7e383b",
+      "size_bytes": 6566
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/p06-mpm-transport/work/rv32-perf-off/hw/unittest/mpm_transport/mpm_transport"
+      ],
+      "exit_code": 0,
+      "id": "rv32-perf-off-rtl-run",
+      "member": "transport/logs/rv32-perf-off-rtl-run.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "435383ae207922ee8271a4ac318383df59c3ca6feadf88143bee5f6ba3aef8e7",
+      "size_bytes": 118
+    },
+    {
+      "argv": [
+        "/usr/bin/make",
+        "--no-print-directory",
+        "-j2",
+        "THREADS=1",
+        "CONFIGS=",
+        "PROFILE=",
+        "PERF=",
+        "-f",
+        "mpm_transport.mk",
+        "/home/runner/work/_temp/p06-mpm-transport/work/rv32-perf-off/sim/simx/mpm_transport_test"
+      ],
+      "exit_code": 0,
+      "id": "rv32-perf-off-simx-build",
+      "member": "transport/logs/rv32-perf-off-simx-build.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "438a4f7830a6004f58acd8857bc96af6578a6473d516b43b085e9b7c2d2c4471",
+      "size_bytes": 63612
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/p06-mpm-transport/work/rv32-perf-off/sim/simx/mpm_transport_test"
+      ],
+      "exit_code": 0,
+      "id": "rv32-perf-off-simx-run",
+      "member": "transport/logs/rv32-perf-off-simx-run.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "7acda58f5afefc4736d526834c546e31b8e188ea957768a188517d39bce4f657",
+      "size_bytes": 66
+    },
+    {
+      "argv": [
+        "/home/runner/work/AI-GPU/AI-GPU/configure",
+        "--xlen=32",
+        "--profile=",
+        "--tooldir=/home/runner/work/_temp/p06-mpm-transport/tools"
+      ],
+      "exit_code": 0,
+      "id": "rv32-perf-on-configure",
+      "member": "transport/logs/rv32-perf-on-configure.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/make",
+        "--no-print-directory",
+        "-j2",
+        "THREADS=1",
+        "CONFIGS=",
+        "PROFILE=",
+        "PERF=1",
+        "all"
+      ],
+      "exit_code": 0,
+      "id": "rv32-perf-on-rtl-build",
+      "member": "transport/logs/rv32-perf-on-rtl-build.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "b77ff2dce2711534790e93b2dc3915d38919f1edde34a668ce9a786b3be521c9",
+      "size_bytes": 6635
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/p06-mpm-transport/work/rv32-perf-on/hw/unittest/mpm_transport/mpm_transport"
+      ],
+      "exit_code": 0,
+      "id": "rv32-perf-on-rtl-run",
+      "member": "transport/logs/rv32-perf-on-rtl-run.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "d57775d3d76ba2e27c68d1c4f79fff057d01bab9a59ca5d62518630a911486af",
+      "size_bytes": 118
+    },
+    {
+      "argv": [
+        "/usr/bin/make",
+        "--no-print-directory",
+        "-j2",
+        "THREADS=1",
+        "CONFIGS=",
+        "PROFILE=",
+        "PERF=1",
+        "-f",
+        "mpm_transport.mk",
+        "/home/runner/work/_temp/p06-mpm-transport/work/rv32-perf-on/sim/simx/mpm_transport_test"
+      ],
+      "exit_code": 0,
+      "id": "rv32-perf-on-simx-build",
+      "member": "transport/logs/rv32-perf-on-simx-build.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "6b689c534e092ada27c7742c98d8ccd7b9114755e7bdd88015f17f4952a7824a",
+      "size_bytes": 64000
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/p06-mpm-transport/work/rv32-perf-on/sim/simx/mpm_transport_test"
+      ],
+      "exit_code": 0,
+      "id": "rv32-perf-on-simx-run",
+      "member": "transport/logs/rv32-perf-on-simx-run.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "9c104495f1ec85ab0756957401d3a9036ea4749e8303b2445c82087dbb983b49",
+      "size_bytes": 65
+    },
+    {
+      "argv": [
+        "/home/runner/work/AI-GPU/AI-GPU/configure",
+        "--xlen=64",
+        "--profile=",
+        "--tooldir=/home/runner/work/_temp/p06-mpm-transport/tools"
+      ],
+      "exit_code": 0,
+      "id": "rv64-perf-off-configure",
+      "member": "transport/logs/rv64-perf-off-configure.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/make",
+        "--no-print-directory",
+        "-j2",
+        "THREADS=1",
+        "CONFIGS=",
+        "PROFILE=",
+        "PERF=",
+        "all"
+      ],
+      "exit_code": 0,
+      "id": "rv64-perf-off-rtl-build",
+      "member": "transport/logs/rv64-perf-off-rtl-build.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "eec6a9da935efe2e8e4a3a5d7e3e4c04e1d6f5d0c7e7d6ad9538fe3e2f14fce2",
+      "size_bytes": 6564
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/p06-mpm-transport/work/rv64-perf-off/hw/unittest/mpm_transport/mpm_transport"
+      ],
+      "exit_code": 0,
+      "id": "rv64-perf-off-rtl-run",
+      "member": "transport/logs/rv64-perf-off-rtl-run.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "bfe8e824b5311598f7084bf5f1cc0dd26f301ec8183fc0a7dd0c4e925d8a68b8",
+      "size_bytes": 118
+    },
+    {
+      "argv": [
+        "/usr/bin/make",
+        "--no-print-directory",
+        "-j2",
+        "THREADS=1",
+        "CONFIGS=",
+        "PROFILE=",
+        "PERF=",
+        "-f",
+        "mpm_transport.mk",
+        "/home/runner/work/_temp/p06-mpm-transport/work/rv64-perf-off/sim/simx/mpm_transport_test"
+      ],
+      "exit_code": 0,
+      "id": "rv64-perf-off-simx-build",
+      "member": "transport/logs/rv64-perf-off-simx-build.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "74928a75ae1a8c0d0943e08b305b65eee5a11a0a557ddb2cfbda103d0afdad3a",
+      "size_bytes": 63612
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/p06-mpm-transport/work/rv64-perf-off/sim/simx/mpm_transport_test"
+      ],
+      "exit_code": 0,
+      "id": "rv64-perf-off-simx-run",
+      "member": "transport/logs/rv64-perf-off-simx-run.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "4563c371a9e4daa7f1af836c8b2974ea61240bb812d8993b3bfa143f551527ad",
+      "size_bytes": 66
+    },
+    {
+      "argv": [
+        "/home/runner/work/AI-GPU/AI-GPU/configure",
+        "--xlen=64",
+        "--profile=",
+        "--tooldir=/home/runner/work/_temp/p06-mpm-transport/tools"
+      ],
+      "exit_code": 0,
+      "id": "rv64-perf-on-configure",
+      "member": "transport/logs/rv64-perf-on-configure.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/make",
+        "--no-print-directory",
+        "-j2",
+        "THREADS=1",
+        "CONFIGS=",
+        "PROFILE=",
+        "PERF=1",
+        "all"
+      ],
+      "exit_code": 0,
+      "id": "rv64-perf-on-rtl-build",
+      "member": "transport/logs/rv64-perf-on-rtl-build.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "11e156edff319e21f3390d7cccf44b4ea6bdbff82f7d7ca1a9d1f11bb06d5c37",
+      "size_bytes": 6635
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/p06-mpm-transport/work/rv64-perf-on/hw/unittest/mpm_transport/mpm_transport"
+      ],
+      "exit_code": 0,
+      "id": "rv64-perf-on-rtl-run",
+      "member": "transport/logs/rv64-perf-on-rtl-run.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "6c6097ae6ef670191bf2955e99751d1d5346a0d697e4cece31344edc357ae45b",
+      "size_bytes": 118
+    },
+    {
+      "argv": [
+        "/usr/bin/make",
+        "--no-print-directory",
+        "-j2",
+        "THREADS=1",
+        "CONFIGS=",
+        "PROFILE=",
+        "PERF=1",
+        "-f",
+        "mpm_transport.mk",
+        "/home/runner/work/_temp/p06-mpm-transport/work/rv64-perf-on/sim/simx/mpm_transport_test"
+      ],
+      "exit_code": 0,
+      "id": "rv64-perf-on-simx-build",
+      "member": "transport/logs/rv64-perf-on-simx-build.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "21a9c6b6c935f240b0765ac4c30d160cf6ba2abe18ef3555ca4b124c5fc0c521",
+      "size_bytes": 64000
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/p06-mpm-transport/work/rv64-perf-on/sim/simx/mpm_transport_test"
+      ],
+      "exit_code": 0,
+      "id": "rv64-perf-on-simx-run",
+      "member": "transport/logs/rv64-perf-on-simx-run.log",
+      "outcome": "pass",
+      "report": "transport",
+      "sha256": "3f003bcb92c26694282d22c4b36285c36ccf8de4c79d33558d4ea5b7579de3de",
+      "size_bytes": 65
+    },
+    {
+      "argv": [
+        "/usr/bin/make",
+        "--version"
+      ],
+      "exit_code": 0,
+      "id": "version-make",
+      "member": "parent/logs/version-make.log",
+      "outcome": "pass",
+      "report": "parent",
+      "sha256": "8ee498ee2fc27e8dcdf99191b454077df95e3840d841ec94321748b6d7f36819",
+      "size_bytes": 297
+    },
+    {
+      "argv": [
+        "/usr/bin/g++",
+        "--version"
+      ],
+      "exit_code": 0,
+      "id": "version-gpp",
+      "member": "parent/logs/version-gpp.log",
+      "outcome": "pass",
+      "report": "parent",
+      "sha256": "9eaf9b7f4b11c2e84e2478c2ceb0e4f48f4ba88565bcfc832b3bce49847dda6d",
+      "size_bytes": 246
+    },
+    {
+      "argv": [
+        "/opt/hostedtoolcache/Python/3.12.14/x64/bin/python3",
+        "--version"
+      ],
+      "exit_code": 0,
+      "id": "version-python3",
+      "member": "parent/logs/version-python3.log",
+      "outcome": "pass",
+      "report": "parent",
+      "sha256": "4c3569f5da09975434dd9fd9a91fadbc4367a91d8f3c3fab59e9241ab9ee4bd8",
+      "size_bytes": 15
+    },
+    {
+      "argv": [
+        "/home/runner/work/_temp/p06-mpm-transport/tools/verilator/bin/verilator",
+        "--version"
+      ],
+      "exit_code": 0,
+      "id": "version-verilator",
+      "member": "parent/logs/version-verilator.log",
+      "outcome": "pass",
+      "report": "parent",
+      "sha256": "46aedd5b30efdd94426c9eebbcf4a6ae7a9680526cc90ce8fec95977c2d6b12d",
+      "size_bytes": 38
+    },
+    {
+      "argv": [
+        "/usr/bin/git",
+        "clone",
+        "--shared",
+        "--no-checkout",
+        "/home/runner/work/AI-GPU/AI-GPU",
+        "/home/runner/work/_temp/p06-mpm-transport/parent-work/reference"
+      ],
+      "exit_code": 0,
+      "id": "clone-reference",
+      "member": "parent/logs/clone-reference.log",
+      "outcome": "pass",
+      "report": "parent",
+      "sha256": "6cf3d65e6fdcde379a2e6455066fb7620597e394c2db003f67618922228f9078",
+      "size_bytes": 82
+    },
+    {
+      "argv": [
+        "/usr/bin/git",
+        "checkout",
+        "--detach",
+        "4df7186edbca82b21b2b8cba9b3b192248b99209"
+      ],
+      "exit_code": 128,
+      "id": "checkout-reference",
+      "member": "parent/logs/checkout-reference.log",
+      "outcome": "fail",
+      "report": "parent",
+      "sha256": "989aeea47cabdcd5247b5ad82cdfdf2e2d08e5cb332979c1e7c473c57f1bca97",
+      "size_bytes": 70
+    }
+  ],
+  "hosted_job_outcome": "failure",
+  "limitations": [
+    "This verifies an existing archive; no native rerun occurred during review.",
+    "The strict candidate matrix reports formal_qualification_eligible=true while qualified=false, acceptance_claimed=false and absolute_no_wrap_bound=not_established remain unchanged.",
+    "The native job failed in parent staging after candidate success. Parent high-half sensitivity did not execute and is not established by this packet.",
+    "The source checkout is the PR merge commit, distinct from the original PR head; their complete tree identities match. Source bytes were compared to the original head Git objects, not the later working tree.",
+    "Native binaries, object files and full tool/library bytes are not archived. Their recorded hashes and before/after equality are reviewed observations; the compile/link commands are retained, not fresh binary rehashes.",
+    "The RTL directed leaf includes VX_dcr_data and VX_csr_mpm; it does not exercise the complete AFU or architectural CSR datapath. Linked SimX uses the real model route with stable seeded counter state and no simulation ticks.",
+    "The reviewed configurations have TCU disabled. Wider topology, enabled extensions, moving counters, concurrency, atomic snapshots and an absolute no-wrap bound remain unqualified.",
+    "No phase acceptance, historical warm qualification, timing/resource gate pass, physical hardware result or performance claim is made.",
+    "Resource bounds are sampled process budgets rather than hard cgroup quotas; peak RSS may miss between-poll peaks and exclude page cache."
+  ],
+  "matrix": [
+    {
+      "binary_recorded_sha256": "f8a8fa02a3c83b034a7b198aa9d2bef402d7e3646451aeaccdd0cf928d1792bd",
+      "counter_bits": 44,
+      "engine": "rtl",
+      "id": "rv32-perf-off-rtl",
+      "observations": {
+        "assertion_count": 3610,
+        "ignored": 7,
+        "read_count": 188,
+        "tcu_enabled": 0
+      },
+      "outcome": "pass",
+      "perf": "off",
+      "response_edges": 2,
+      "run_log": "transport/logs/rv32-perf-off-rtl-run.log",
+      "xlen": 32
+    },
+    {
+      "binary_recorded_sha256": "a708d842bd61e82885e3e8d31880e576e8f05baf3da99f5689819b7ce0bd877c",
+      "compiled_objects": 42,
+      "engine": "simx",
+      "id": "rv32-perf-off-simx",
+      "linked_objects": 42,
+      "observations": {
+        "checks": 3781
+      },
+      "outcome": "pass",
+      "perf": "off",
+      "production_model_objects": 41,
+      "run_log": "transport/logs/rv32-perf-off-simx-run.log",
+      "xlen": 32
+    },
+    {
+      "binary_recorded_sha256": "346b733f2549562695ec1ccd05ce982f0c32f3f86f59d556bd6c940689d7ef7f",
+      "counter_bits": 44,
+      "engine": "rtl",
+      "id": "rv32-perf-on-rtl",
+      "observations": {
+        "assertion_count": 6346,
+        "ignored": 7,
+        "read_count": 340,
+        "tcu_enabled": 0
+      },
+      "outcome": "pass",
+      "perf": "on",
+      "response_edges": 2,
+      "run_log": "transport/logs/rv32-perf-on-rtl-run.log",
+      "xlen": 32
+    },
+    {
+      "binary_recorded_sha256": "ac4580e694a576bb5654e8d68fc2cc0f1122516cb86ec20ccb1445804e0adac6",
+      "compiled_objects": 42,
+      "engine": "simx",
+      "id": "rv32-perf-on-simx",
+      "linked_objects": 42,
+      "observations": {
+        "checks": 5251
+      },
+      "outcome": "pass",
+      "perf": "on",
+      "production_model_objects": 41,
+      "run_log": "transport/logs/rv32-perf-on-simx-run.log",
+      "xlen": 32
+    },
+    {
+      "binary_recorded_sha256": "896d9df18abd2d9a3d2b12664b4946bd2efd0309fc0b55adbe536eaeb4b40819",
+      "counter_bits": 44,
+      "engine": "rtl",
+      "id": "rv64-perf-off-rtl",
+      "observations": {
+        "assertion_count": 3610,
+        "ignored": 7,
+        "read_count": 188,
+        "tcu_enabled": 0
+      },
+      "outcome": "pass",
+      "perf": "off",
+      "response_edges": 2,
+      "run_log": "transport/logs/rv64-perf-off-rtl-run.log",
+      "xlen": 64
+    },
+    {
+      "binary_recorded_sha256": "0d3de175ce6b092592d4d4b83784c8957656ebbc25dea23b4f28a566acd5d771",
+      "compiled_objects": 42,
+      "engine": "simx",
+      "id": "rv64-perf-off-simx",
+      "linked_objects": 42,
+      "observations": {
+        "checks": 3781
+      },
+      "outcome": "pass",
+      "perf": "off",
+      "production_model_objects": 41,
+      "run_log": "transport/logs/rv64-perf-off-simx-run.log",
+      "xlen": 64
+    },
+    {
+      "binary_recorded_sha256": "a3622cecfff4130a658007cab278e190580f66703933b299f88e4c41211186da",
+      "counter_bits": 44,
+      "engine": "rtl",
+      "id": "rv64-perf-on-rtl",
+      "observations": {
+        "assertion_count": 6346,
+        "ignored": 7,
+        "read_count": 340,
+        "tcu_enabled": 0
+      },
+      "outcome": "pass",
+      "perf": "on",
+      "response_edges": 2,
+      "run_log": "transport/logs/rv64-perf-on-rtl-run.log",
+      "xlen": 64
+    },
+    {
+      "binary_recorded_sha256": "b543669f3f147fcab3e8f1af3277888dc207d5e0b859b74f7d57858bbc42a3ff",
+      "compiled_objects": 42,
+      "engine": "simx",
+      "id": "rv64-perf-on-simx",
+      "linked_objects": 42,
+      "observations": {
+        "checks": 5251
+      },
+      "outcome": "pass",
+      "perf": "on",
+      "production_model_objects": 41,
+      "run_log": "transport/logs/rv64-perf-on-simx-run.log",
+      "xlen": 64
+    }
+  ],
+  "parent_failure": {
+    "command": "checkout-reference",
+    "expected_high_half_failure_observed_in_this_packet": false,
+    "git_checkout_exit_code": 128,
+    "git_clone_exit_code": 0,
+    "log_member": "parent/logs/checkout-reference.log",
+    "message": "fatal: unable to read tree (4df7186edbca82b21b2b8cba9b3b192248b99209)",
+    "native_builds_started": 0,
+    "native_runs_started": 0,
+    "outcome": "fail",
+    "reason": "checkout-reference failed: nonzero_exit",
+    "reference_revision": "4df7186edbca82b21b2b8cba9b3b192248b99209",
+    "report_member": "parent/report.json"
+  },
+  "parent_sensitivity_outcome": "not_run",
+  "qualified": false,
+  "resources": {
+    "matrix_available_memory_bytes": 15589912576,
+    "matrix_initial_free_disk_bytes": {
+      "output": 86569566208,
+      "source": 86569566208,
+      "tools": 86569566208,
+      "work": 86569566208
+    },
+    "maximum_recorded_log_bytes": 64000,
+    "maximum_recorded_process_group_rss_bytes": 859566080
+  },
+  "retained_member_manifest": [
+    {
+      "path": "execution.log",
+      "sha256": "1dc4e9c8a2a8d1257aa1d6ac21d32fd80918f2abdcc6c608a1c071aafdacb07f",
+      "size_bytes": 171
+    },
+    {
+      "path": "host-dependencies.log",
+      "sha256": "7dd3b251dcc2cb2781ff147cb716abe06a2db2a432b3c528067680b052c6deb2",
+      "size_bytes": 19461
+    },
+    {
+      "path": "job.json",
+      "sha256": "3febc9032b4f30bc2963160e60f68ccdbaef26cbf82e935886d6c2d76fc31551",
+      "size_bytes": 735
+    },
+    {
+      "path": "parent-execution.log",
+      "sha256": "229690818f4b3f793029195302397f15d5026211fe294383b15f5d6d2b74e6b1",
+      "size_bytes": 152
+    },
+    {
+      "path": "parent/logs/checkout-reference.log",
+      "sha256": "989aeea47cabdcd5247b5ad82cdfdf2e2d08e5cb332979c1e7c473c57f1bca97",
+      "size_bytes": 70
+    },
+    {
+      "path": "parent/logs/clone-reference.log",
+      "sha256": "6cf3d65e6fdcde379a2e6455066fb7620597e394c2db003f67618922228f9078",
+      "size_bytes": 82
+    },
+    {
+      "path": "parent/logs/version-gpp.log",
+      "sha256": "9eaf9b7f4b11c2e84e2478c2ceb0e4f48f4ba88565bcfc832b3bce49847dda6d",
+      "size_bytes": 246
+    },
+    {
+      "path": "parent/logs/version-make.log",
+      "sha256": "8ee498ee2fc27e8dcdf99191b454077df95e3840d841ec94321748b6d7f36819",
+      "size_bytes": 297
+    },
+    {
+      "path": "parent/logs/version-python3.log",
+      "sha256": "4c3569f5da09975434dd9fd9a91fadbc4367a91d8f3c3fab59e9241ab9ee4bd8",
+      "size_bytes": 15
+    },
+    {
+      "path": "parent/logs/version-verilator.log",
+      "sha256": "46aedd5b30efdd94426c9eebbcf4a6ae7a9680526cc90ce8fec95977c2d6b12d",
+      "size_bytes": 38
+    },
+    {
+      "path": "parent/report.json",
+      "sha256": "54294436e387872f679750c71ebf51b56e1cd4f85d62b0d773f77e37784802a6",
+      "size_bytes": 43627
+    },
+    {
+      "path": "preparation.json",
+      "sha256": "1c2f10af5dd24747d38d286025834ea630dfa5afabaf3ccce4f7c67375ff02ce",
+      "size_bytes": 17404
+    },
+    {
+      "path": "preparation.log",
+      "sha256": "ee06d5bef5b81ffc3be5add1a4f93bfebf275606aa3f1e09817201b75edd3e05",
+      "size_bytes": 67
+    },
+    {
+      "path": "python-provision.json",
+      "sha256": "bd4dfc0033007224824b87003fccabd90f5ac12a5f65c07225789e2d7133c02e",
+      "size_bytes": 253
+    },
+    {
+      "path": "reference-fetch.log",
+      "sha256": "86445ceb94f31a9c1c72dcfe10958b833e7ca34a78abd7db6f9c721bf63a445c",
+      "size_bytes": 117
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/.config.stamp",
+      "sha256": "51d7d9d75c5a0f26822a07d34e9195c4f3a39f42c165fa239ac2ab6f55b5906e",
+      "size_bytes": 397
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/ci/gen_config.py",
+      "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+      "size_bytes": 60839
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/config.mk",
+      "sha256": "f1fbfebd7b5ee673da604e62fd18833cc3820d10420b319b7b2be0a9caa4eafd",
+      "size_bytes": 3378
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/hw/VX_config.vh",
+      "sha256": "ae0d0729b61e6cdb1520cf3eb571329867f73b545f0b5920ae1813ff01a75ca5",
+      "size_bytes": 36066
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/hw/VX_types.vh",
+      "sha256": "24e5aa7201b882d1d8cc3e836fde8182b658b60cfa2b3db36b05195f7c544920",
+      "size_bytes": 22921
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/hw/unittest/common.mk",
+      "sha256": "e1b4248b6f94b2c89b0f62014f181b7f083d3f9902ab90748304ff67672d52dc",
+      "size_bytes": 2113
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/hw/unittest/mpm_transport/Makefile",
+      "sha256": "4ff9079ff51fedc67f9b00db9392ecf33d339015c74497b9bea59dea73f309a9",
+      "size_bytes": 558
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/hw/unittest/verilator.vlt",
+      "sha256": "9027f9daa8e7c59c0d7e579a56e280508f1363af704304e4b9e478d04eeb1c36",
+      "size_bytes": 512
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/hw/vortex_opae.vh",
+      "sha256": "c836cff4a5ce8448c382f1eed53aac7c1a1ff2d4e4b0508c5d4f6c03558d6218",
+      "size_bytes": 1744
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/sim/common.mk",
+      "sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+      "size_bytes": 170
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/sim/simx/Makefile",
+      "sha256": "c719966647f32fef5421dd798a89d3eeddccd692e7c61046e5744b7a8e722403",
+      "size_bytes": 10608
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/sim/simx/mpm_transport.mk",
+      "sha256": "5d96723c7478573bba27434c068605625eb9b301d89aefb3ea9c987218dd633e",
+      "size_bytes": 653
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/sim/simx/simx_config.stamp",
+      "sha256": "a2f80d68230c148e5b246e7d2f4b52490b1abe28bf503df5e5297ece1eb5941f",
+      "size_bytes": 1218
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/sw/VX_config.h",
+      "sha256": "f3cb3f0794318bd031aa2492ed48fc9a516785b13358cb3482c7323dda37872b",
+      "size_bytes": 36239
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/sw/VX_types.h",
+      "sha256": "829fac29cfe8675bd14bc7a538303fc413f107c96b7d00ea1e110e82bd9882dd",
+      "size_bytes": 22152
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-off/sw/vortex_opae.h",
+      "sha256": "6551ef6a3ccd5ab0b711c4c48ff5923d24500f5c1f86fb3fe627362dd5a389bc",
+      "size_bytes": 1738
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/.config.stamp",
+      "sha256": "ccda75f7a0a1c565bb36b2ce32749c6913753a06edaafba65f3c3335128e17eb",
+      "size_bytes": 395
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/ci/gen_config.py",
+      "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+      "size_bytes": 60839
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/config.mk",
+      "sha256": "15a869af073f5d0f5940dd531fdc17b50594dc993bdd894499e50abf7a6fcf99",
+      "size_bytes": 3377
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/hw/VX_config.vh",
+      "sha256": "ae0d0729b61e6cdb1520cf3eb571329867f73b545f0b5920ae1813ff01a75ca5",
+      "size_bytes": 36066
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/hw/VX_types.vh",
+      "sha256": "24e5aa7201b882d1d8cc3e836fde8182b658b60cfa2b3db36b05195f7c544920",
+      "size_bytes": 22921
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/hw/unittest/common.mk",
+      "sha256": "e1b4248b6f94b2c89b0f62014f181b7f083d3f9902ab90748304ff67672d52dc",
+      "size_bytes": 2113
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/hw/unittest/mpm_transport/Makefile",
+      "sha256": "4ff9079ff51fedc67f9b00db9392ecf33d339015c74497b9bea59dea73f309a9",
+      "size_bytes": 558
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/hw/unittest/verilator.vlt",
+      "sha256": "9027f9daa8e7c59c0d7e579a56e280508f1363af704304e4b9e478d04eeb1c36",
+      "size_bytes": 512
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/hw/vortex_opae.vh",
+      "sha256": "c836cff4a5ce8448c382f1eed53aac7c1a1ff2d4e4b0508c5d4f6c03558d6218",
+      "size_bytes": 1744
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/sim/common.mk",
+      "sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+      "size_bytes": 170
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/sim/simx/Makefile",
+      "sha256": "c719966647f32fef5421dd798a89d3eeddccd692e7c61046e5744b7a8e722403",
+      "size_bytes": 10608
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/sim/simx/mpm_transport.mk",
+      "sha256": "5d96723c7478573bba27434c068605625eb9b301d89aefb3ea9c987218dd633e",
+      "size_bytes": 653
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/sim/simx/simx_config.stamp",
+      "sha256": "d52b7d397c6931d5b09d7e3e50618dbe594a2667db43274b27a1840da692c550",
+      "size_bytes": 1229
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/sw/VX_config.h",
+      "sha256": "f3cb3f0794318bd031aa2492ed48fc9a516785b13358cb3482c7323dda37872b",
+      "size_bytes": 36239
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/sw/VX_types.h",
+      "sha256": "829fac29cfe8675bd14bc7a538303fc413f107c96b7d00ea1e110e82bd9882dd",
+      "size_bytes": 22152
+    },
+    {
+      "path": "transport/artifacts/rv32-perf-on/sw/vortex_opae.h",
+      "sha256": "6551ef6a3ccd5ab0b711c4c48ff5923d24500f5c1f86fb3fe627362dd5a389bc",
+      "size_bytes": 1738
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/.config.stamp",
+      "sha256": "39b3e4f8355028153f813df07f9bb63d31164bd30b013772bb8e871756dc1edd",
+      "size_bytes": 397
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/ci/gen_config.py",
+      "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+      "size_bytes": 60839
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/config.mk",
+      "sha256": "538f9d8953e6fbdbcf1258f9e7742ecbea993c56dff35d0a5caa45f303680b8c",
+      "size_bytes": 3378
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/hw/VX_config.vh",
+      "sha256": "ae0d0729b61e6cdb1520cf3eb571329867f73b545f0b5920ae1813ff01a75ca5",
+      "size_bytes": 36066
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/hw/VX_types.vh",
+      "sha256": "1896f4b7c3872b40bd0f953e0f200ffa143da631f49150399ca098cc7f5cb120",
+      "size_bytes": 22924
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/hw/unittest/common.mk",
+      "sha256": "e1b4248b6f94b2c89b0f62014f181b7f083d3f9902ab90748304ff67672d52dc",
+      "size_bytes": 2113
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/hw/unittest/mpm_transport/Makefile",
+      "sha256": "4ff9079ff51fedc67f9b00db9392ecf33d339015c74497b9bea59dea73f309a9",
+      "size_bytes": 558
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/hw/unittest/verilator.vlt",
+      "sha256": "9027f9daa8e7c59c0d7e579a56e280508f1363af704304e4b9e478d04eeb1c36",
+      "size_bytes": 512
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/hw/vortex_opae.vh",
+      "sha256": "c836cff4a5ce8448c382f1eed53aac7c1a1ff2d4e4b0508c5d4f6c03558d6218",
+      "size_bytes": 1744
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/sim/common.mk",
+      "sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+      "size_bytes": 170
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/sim/simx/Makefile",
+      "sha256": "c719966647f32fef5421dd798a89d3eeddccd692e7c61046e5744b7a8e722403",
+      "size_bytes": 10608
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/sim/simx/mpm_transport.mk",
+      "sha256": "5d96723c7478573bba27434c068605625eb9b301d89aefb3ea9c987218dd633e",
+      "size_bytes": 653
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/sim/simx/simx_config.stamp",
+      "sha256": "5c13b2be884134b321d78e48545c8e8c16e23d69bc2f1b9f8a2df01be6fd1dbc",
+      "size_bytes": 1218
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/sw/VX_config.h",
+      "sha256": "f3cb3f0794318bd031aa2492ed48fc9a516785b13358cb3482c7323dda37872b",
+      "size_bytes": 36239
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/sw/VX_types.h",
+      "sha256": "5d6e9d58fd7aad098761dce9973310f7a302ac0364bc3a8117a525c74da5f4f0",
+      "size_bytes": 22153
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-off/sw/vortex_opae.h",
+      "sha256": "6551ef6a3ccd5ab0b711c4c48ff5923d24500f5c1f86fb3fe627362dd5a389bc",
+      "size_bytes": 1738
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/.config.stamp",
+      "sha256": "9f31b4651aacfa725530af18ef01f7e7f1e09cd777e7bf27a845d7f187e34bf5",
+      "size_bytes": 395
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/ci/gen_config.py",
+      "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+      "size_bytes": 60839
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/config.mk",
+      "sha256": "9473c50ff7e7c28ad9114c8d130c8957353147f166712a7a2c01fa61a49b8b97",
+      "size_bytes": 3377
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/hw/VX_config.vh",
+      "sha256": "ae0d0729b61e6cdb1520cf3eb571329867f73b545f0b5920ae1813ff01a75ca5",
+      "size_bytes": 36066
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/hw/VX_types.vh",
+      "sha256": "1896f4b7c3872b40bd0f953e0f200ffa143da631f49150399ca098cc7f5cb120",
+      "size_bytes": 22924
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/hw/unittest/common.mk",
+      "sha256": "e1b4248b6f94b2c89b0f62014f181b7f083d3f9902ab90748304ff67672d52dc",
+      "size_bytes": 2113
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/hw/unittest/mpm_transport/Makefile",
+      "sha256": "4ff9079ff51fedc67f9b00db9392ecf33d339015c74497b9bea59dea73f309a9",
+      "size_bytes": 558
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/hw/unittest/verilator.vlt",
+      "sha256": "9027f9daa8e7c59c0d7e579a56e280508f1363af704304e4b9e478d04eeb1c36",
+      "size_bytes": 512
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/hw/vortex_opae.vh",
+      "sha256": "c836cff4a5ce8448c382f1eed53aac7c1a1ff2d4e4b0508c5d4f6c03558d6218",
+      "size_bytes": 1744
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/sim/common.mk",
+      "sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+      "size_bytes": 170
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/sim/simx/Makefile",
+      "sha256": "c719966647f32fef5421dd798a89d3eeddccd692e7c61046e5744b7a8e722403",
+      "size_bytes": 10608
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/sim/simx/mpm_transport.mk",
+      "sha256": "5d96723c7478573bba27434c068605625eb9b301d89aefb3ea9c987218dd633e",
+      "size_bytes": 653
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/sim/simx/simx_config.stamp",
+      "sha256": "aab9d0a7fcfbb9b696147fa5d394fff432e171046392e72bc0710d39d20da13b",
+      "size_bytes": 1229
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/sw/VX_config.h",
+      "sha256": "f3cb3f0794318bd031aa2492ed48fc9a516785b13358cb3482c7323dda37872b",
+      "size_bytes": 36239
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/sw/VX_types.h",
+      "sha256": "5d6e9d58fd7aad098761dce9973310f7a302ac0364bc3a8117a525c74da5f4f0",
+      "size_bytes": 22153
+    },
+    {
+      "path": "transport/artifacts/rv64-perf-on/sw/vortex_opae.h",
+      "sha256": "6551ef6a3ccd5ab0b711c4c48ff5923d24500f5c1f86fb3fe627362dd5a389bc",
+      "size_bytes": 1738
+    },
+    {
+      "path": "transport/logs/rv32-perf-off-configure.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "transport/logs/rv32-perf-off-rtl-build.log",
+      "sha256": "0894145d349b238e968885f55452be9821bd54b525afb8fb3b05de6ccf7e383b",
+      "size_bytes": 6566
+    },
+    {
+      "path": "transport/logs/rv32-perf-off-rtl-run.log",
+      "sha256": "435383ae207922ee8271a4ac318383df59c3ca6feadf88143bee5f6ba3aef8e7",
+      "size_bytes": 118
+    },
+    {
+      "path": "transport/logs/rv32-perf-off-simx-build.log",
+      "sha256": "438a4f7830a6004f58acd8857bc96af6578a6473d516b43b085e9b7c2d2c4471",
+      "size_bytes": 63612
+    },
+    {
+      "path": "transport/logs/rv32-perf-off-simx-run.log",
+      "sha256": "7acda58f5afefc4736d526834c546e31b8e188ea957768a188517d39bce4f657",
+      "size_bytes": 66
+    },
+    {
+      "path": "transport/logs/rv32-perf-on-configure.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "transport/logs/rv32-perf-on-rtl-build.log",
+      "sha256": "b77ff2dce2711534790e93b2dc3915d38919f1edde34a668ce9a786b3be521c9",
+      "size_bytes": 6635
+    },
+    {
+      "path": "transport/logs/rv32-perf-on-rtl-run.log",
+      "sha256": "d57775d3d76ba2e27c68d1c4f79fff057d01bab9a59ca5d62518630a911486af",
+      "size_bytes": 118
+    },
+    {
+      "path": "transport/logs/rv32-perf-on-simx-build.log",
+      "sha256": "6b689c534e092ada27c7742c98d8ccd7b9114755e7bdd88015f17f4952a7824a",
+      "size_bytes": 64000
+    },
+    {
+      "path": "transport/logs/rv32-perf-on-simx-run.log",
+      "sha256": "9c104495f1ec85ab0756957401d3a9036ea4749e8303b2445c82087dbb983b49",
+      "size_bytes": 65
+    },
+    {
+      "path": "transport/logs/rv64-perf-off-configure.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "transport/logs/rv64-perf-off-rtl-build.log",
+      "sha256": "eec6a9da935efe2e8e4a3a5d7e3e4c04e1d6f5d0c7e7d6ad9538fe3e2f14fce2",
+      "size_bytes": 6564
+    },
+    {
+      "path": "transport/logs/rv64-perf-off-rtl-run.log",
+      "sha256": "bfe8e824b5311598f7084bf5f1cc0dd26f301ec8183fc0a7dd0c4e925d8a68b8",
+      "size_bytes": 118
+    },
+    {
+      "path": "transport/logs/rv64-perf-off-simx-build.log",
+      "sha256": "74928a75ae1a8c0d0943e08b305b65eee5a11a0a557ddb2cfbda103d0afdad3a",
+      "size_bytes": 63612
+    },
+    {
+      "path": "transport/logs/rv64-perf-off-simx-run.log",
+      "sha256": "4563c371a9e4daa7f1af836c8b2974ea61240bb812d8993b3bfa143f551527ad",
+      "size_bytes": 66
+    },
+    {
+      "path": "transport/logs/rv64-perf-on-configure.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "transport/logs/rv64-perf-on-rtl-build.log",
+      "sha256": "11e156edff319e21f3390d7cccf44b4ea6bdbff82f7d7ca1a9d1f11bb06d5c37",
+      "size_bytes": 6635
+    },
+    {
+      "path": "transport/logs/rv64-perf-on-rtl-run.log",
+      "sha256": "6c6097ae6ef670191bf2955e99751d1d5346a0d697e4cece31344edc357ae45b",
+      "size_bytes": 118
+    },
+    {
+      "path": "transport/logs/rv64-perf-on-simx-build.log",
+      "sha256": "21a9c6b6c935f240b0765ac4c30d160cf6ba2abe18ef3555ca4b124c5fc0c521",
+      "size_bytes": 64000
+    },
+    {
+      "path": "transport/logs/rv64-perf-on-simx-run.log",
+      "sha256": "3f003bcb92c26694282d22c4b36285c36ccf8de4c79d33558d4ea5b7579de3de",
+      "size_bytes": 65
+    },
+    {
+      "path": "transport/logs/version-gpp.log",
+      "sha256": "9eaf9b7f4b11c2e84e2478c2ceb0e4f48f4ba88565bcfc832b3bce49847dda6d",
+      "size_bytes": 246
+    },
+    {
+      "path": "transport/logs/version-make.log",
+      "sha256": "8ee498ee2fc27e8dcdf99191b454077df95e3840d841ec94321748b6d7f36819",
+      "size_bytes": 297
+    },
+    {
+      "path": "transport/logs/version-python3.log",
+      "sha256": "4c3569f5da09975434dd9fd9a91fadbc4367a91d8f3c3fab59e9241ab9ee4bd8",
+      "size_bytes": 15
+    },
+    {
+      "path": "transport/logs/version-verilator.log",
+      "sha256": "46aedd5b30efdd94426c9eebbcf4a6ae7a9680526cc90ce8fec95977c2d6b12d",
+      "size_bytes": 38
+    },
+    {
+      "path": "transport/report.json",
+      "sha256": "2882e1898d823139f2342ed38ad2e4e0672eb2d9844bc305a2cf59a347711367",
+      "size_bytes": 125606
+    },
+    {
+      "path": "workflow.yml",
+      "sha256": "127a38dc4cff8d6fc9aa3b5b070654c96c6a1cce7e337987771812350b08a4be",
+      "size_bytes": 19326
+    }
+  ],
+  "reviewer": "/root/w08_a05",
+  "schema_version": 1,
+  "scope": "independent-review-second-hosted-native-attempt",
+  "source": {
+    "clean_and_stable_recorded_source": true,
+    "critical_input_count": 36,
+    "original_head_tree_matches_recorded_checkout_tree": true,
+    "pull_request_head": "7396ded85ed3768264f914dc95377e3b1ed62d1f",
+    "recorded_checkout_revision": "00fdd88d54ef70f62812c4a410f974ad9b3a07fd",
+    "recorded_checkout_tree": "1e0a74cf1d0fbf421a0ee147286a5cddd1c32417",
+    "remote_merge_commit_verified": {
+      "api_url": "https://api.github.com/repos/baabi-boo/AI-GPU/git/commits/00fdd88d54ef70f62812c4a410f974ad9b3a07fd",
+      "parents": [
+        "4df7186edbca82b21b2b8cba9b3b192248b99209",
+        "7396ded85ed3768264f914dc95377e3b1ed62d1f"
+      ],
+      "tree": "1e0a74cf1d0fbf421a0ee147286a5cddd1c32417"
+    },
+    "source_identity_members": [
+      "transport/report.json:source_before",
+      "parent/report.json:source_before",
+      "preparation.json:preparation_sources"
+    ],
+    "source_paths_verified_from_original_head_git_objects": [
+      ".github/workflows/p04-model.yml",
+      ".gitmodules",
+      "VERSION",
+      "VX_config.toml",
+      "VX_types.toml",
+      "ci/blackbox.sh",
+      "ci/gen_config.py",
+      "ci/install_dependencies.sh",
+      "ci/project/baseline_inventory.py",
+      "ci/project/baseline_process.py",
+      "ci/project/p04_ci_prepare.py",
+      "ci/project/p06_mpm_execute.py",
+      "ci/project/preflight.py",
+      "ci/toolchain_rev.sh",
+      "config.mk.in",
+      "configure",
+      "docs/designs/host_mpm_transport_v1.md",
+      "hw/rtl/VX_gpu_pkg.sv",
+      "hw/rtl/VX_trace_pkg.sv",
+      "hw/rtl/core/VX_csr_data.sv",
+      "hw/rtl/core/VX_csr_mpm.sv",
+      "hw/rtl/core/VX_dcr_data.sv",
+      "hw/unittest/common.mk",
+      "hw/unittest/common/vl_simulator.h",
+      "hw/unittest/mpm_transport/Makefile",
+      "hw/unittest/mpm_transport/VX_mpm_transport_top.sv",
+      "hw/unittest/mpm_transport/main.cpp",
+      "hw/unittest/verilator.vlt.in",
+      "sim/common.mk",
+      "sim/simx/Makefile",
+      "sim/simx/cluster.cpp",
+      "sim/simx/core.cpp",
+      "sim/simx/core.h",
+      "sim/simx/csr_unit.cpp",
+      "sim/simx/csr_unit.h",
+      "sim/simx/mpm_transport.mk",
+      "sim/simx/processor.cpp",
+      "sim/simx/socket.cpp",
+      "sw/runtime/common/perf.cpp",
+      "tests/unittest/mpm_transport/main.cpp",
+      "vortex_opae.toml"
+    ],
+    "workflow_sha256": "127a38dc4cff8d6fc9aa3b5b070654c96c6a1cce7e337987771812350b08a4be"
+  },
+  "totals": {
+    "candidate_cells_passed": 8,
+    "rtl_assertions": 19912,
+    "rtl_ignored_requests": 28,
+    "rtl_reads": 1056,
+    "simx_checks": 18064
+  },
+  "verification_outcome": "pass"
+}

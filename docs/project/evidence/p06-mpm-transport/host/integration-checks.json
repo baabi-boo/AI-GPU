@@ -1,0 +1,56 @@
+{
+  "scope": "integration-checks",
+  "source_base": "4df7186edbca82b21b2b8cba9b3b192248b99209",
+  "source_state": "development dirty source; see individual file hashes",
+  "acceptance_claimed": false,
+  "events": [
+    {
+      "command": "python3 -B ci/project/check_project.py",
+      "initial_exit_code": 1,
+      "finding": "P02-A02 pins sim/simx/Makefile; changing it invalidated historical artifact identity.",
+      "resolution": "Restored pinned Makefile byte-for-byte; additive sim/simx/mpm_transport.mk includes existing Makefile for the new unit. No checker or historical pin changed.",
+      "final_exit_code": 0
+    },
+    {
+      "command": "python3 -B -m unittest discover -s ci/project -p 'test_p06_mpm_execute.py' -v",
+      "after_fragment_exit_code": 0,
+      "tests": 18,
+      "seconds": 1.069
+    }
+  ],
+  "inputs": [
+    {
+      "path": "sim/simx/Makefile",
+      "sha256": "c719966647f32fef5421dd798a89d3eeddccd692e7c61046e5744b7a8e722403",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "sim/simx/mpm_transport.mk",
+      "sha256": "5d96723c7478573bba27434c068605625eb9b301d89aefb3ea9c987218dd633e"
+    },
+    {
+      "path": "ci/project/p06_mpm_execute.py",
+      "sha256": "731ce3dbef5e90f00f086b9aeee25fcbc3501d585329024c2a2f8f10d1919864"
+    },
+    {
+      "path": "ci/project/p06_contract.py",
+      "sha256": "780086070739b6d3586f9b3695ad4dc31d209a7817cf1af3651160a9fe6e1376",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "sim/simx/csr_unit.cpp",
+      "sha256": "cbf5c80ea96d8a74bd2c04e62c8f0e7c258d251af13605c94a2de83fb1d3f14c",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "hw/rtl/core/VX_csr_data.sv",
+      "sha256": "69c6642dc667af8d292a84d5e8bd21f03a7166cc7588ee95bfb004ac27e09a63",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "docs/assets/img/vortex_framework_stack.svg",
+      "sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+      "unchanged_from_base": true
+    }
+  ]
+}

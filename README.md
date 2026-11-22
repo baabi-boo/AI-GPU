@@ -33,7 +33,7 @@ archives, build provenance, independent audits and replay instructions. The
 earlier [P04-A01 fixture acceptance](docs/project/evidence/p04-fixture/acceptance.json)
 and [hashed manifest](ci/project/p04_model_manifest.json) remain unchanged.
 
-**Current work: P06-T01 — serial workspace correctness before measured optimization
+**Current work: P06-T01 — counter qualification before warm performance measurement
 (`in_progress`), with [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
 Independent review qualifies the original
 [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
@@ -54,24 +54,30 @@ their measurements. Host durations include supervision with a documented
 exit-observation limitation; these results establish modeled counters, not
 physical speed.
 
-The [workspace development audit](docs/project/p06-workspace-audit.md) selected
-the ownership prerequisite for that experiment. The internal managed runtime now
-reserves one context per linked runtime instance and one operation until completed
-explicit close, retains execution/cleanup errors, and blocks new work after an
-observed cleanup failure. Its opt-in `(8,4,8)` workspace keeps **320 requested
-A/B/D bytes**; the default six FP16/BF16 signatures and model allocation policy
-remain available. Targeted host checks pass in the
-[workspace evidence packet](docs/project/evidence/p06-serial-workspace/README.md);
-complete checkpoint integration and fresh native execution are still pending.
+The managed runtime now enforces serial context/operation ownership and offers
+an opt-in `(8,4,8)` workspace with **320 requested A/B/D bytes**. Independent
+[original workspace reviews](docs/project/evidence/p06-warm-workspace/README.md)
+cover source `13dc0d1fdb6d5322104e381aa342dc139c7bb80c`,
+[run 44925627664](https://github.com/baabi-boo/AI-GPU/actions/runs/44925627664):
+**8 processes, 32 native launches, 1,024 exact output words and 60 reconciled
+buffer lifetimes**. The default six signatures and model allocation policy remain
+available. The separate [warm measurement contract](docs/designs/warm_workspace_benchmark_v1.md)
+and runner are implemented, but warm v1 qualification remains blocked by
+`P06-WARM-RV64-MPM-HIGH-HALF`.
 
-**P06 and P06-T01 remain `in_progress`; P06-A02/A03 remain open.** P04 supplies
-the prerequisite and P05 is independent. Next, qualify the frozen correctness
-matrix on a clean checkpoint, then review and freeze the separate warm-context
-measurement protocol. Resume with the
-[workspace handoff](docs/project/p06-workspace-handoff.md),
-[runtime/correctness contract](docs/designs/serial_matmul_workspace_v1.md) and
-[DRAFT performance proposal](docs/project/p06-next-experiment-proposal.md).
-The workspace implementation establishes no speedup or new phase acceptance.
+The [counter transport audit](docs/project/p06-mpm-transport-audit.md) found and
+repaired the RV64 high-word defect in SimX and the host RTL decoder. At `18c8880`,
+all eight strict native cells pass, both old-production targets demonstrate the
+expected numeric defect, and 2,910 immutable governance tests pass. Paired circuit
+and alternative reviews retain the direct decoder; raw area failures remain
+visible. Broader CI is still in progress at this checkpoint, as separately
+tracked in the [transport evidence packet](docs/project/evidence/p06-mpm-transport/README.md).
+**P06 and P06-T01 remain `in_progress`; P06-A02/A03 remain open.** The next
+development action is to implement and independently review the
+[versioned qualification binding](docs/project/p06-mpm-qualification-plan.md), then
+run a fresh complete matched warm experiment under unchanged rules. Resume with
+the [transport handoff](docs/project/p06-mpm-transport-handoff.md).
+The repair does not qualify historical warm measurements or establish a speedup.
 
 **Parallel work: P05-T01 — the Python/custom-op bridge (`in_progress`).**
 [P05-A01 now accepts the copying Python binding](docs/project/evidence/p05-python/acceptance-binding.json)
@@ -149,14 +155,14 @@ and P07–P11 are not started.
   and [P02 WMMA evidence](docs/project/evidence/p02-wmma/README.md).
 - Read the earlier contract checkpoint: [P02 numerical handoff](docs/project/p02-numerics-handoff.md)
   and [A01 evidence](docs/project/evidence/p02-numerics/README.md).
-- Start the next bounded task: [workspace development audit](docs/project/p06-workspace-audit.md),
-  [workspace handoff](docs/project/p06-workspace-handoff.md),
-  [runtime/correctness contract](docs/designs/serial_matmul_workspace_v1.md),
-  [workspace evidence](docs/project/evidence/p06-serial-workspace/README.md),
-  [DRAFT performance proposal](docs/project/p06-next-experiment-proposal.md),
-  [accepted baseline packet](docs/project/evidence/p06-baseline/README.md),
-  [benchmark contract](docs/designs/native_benchmark_v1.md),
-  [status](docs/project/status.md) and [backlog](docs/project/backlog.md).
+- Start the next bounded task: [counter transport audit](docs/project/p06-mpm-transport-audit.md),
+  [transport handoff](docs/project/p06-mpm-transport-handoff.md) and
+  [transport evidence](docs/project/evidence/p06-mpm-transport/README.md).
+  The [reviewed workspace packet](docs/project/evidence/p06-warm-workspace/README.md),
+  [warm measurement contract](docs/designs/warm_workspace_benchmark_v1.md) and
+  [accepted cold baseline](docs/project/evidence/p06-baseline/README.md) retain
+  their separate scopes; [status](docs/project/status.md) and
+  [backlog](docs/project/backlog.md) track the open gates.
 - Follow parallel framework work: [P05 binding handoff](docs/project/p05-entry-handoff.md).
 - Reproduce the accepted baseline: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
 - Follow current supplemental work: [P01 tensor-oracle hardening](docs/project/p01-tensor-oracles.md)

@@ -1,0 +1,89 @@
+{
+  "acceptance_claimed": false,
+  "checks": {
+    "failure_or_error_markers": 0,
+    "reported_test_lines_match_footer": true,
+    "source_clean_at_both_independent_observations": true,
+    "source_revision_and_tree_stable_between_observations": true
+  },
+  "command": "timeout --signal=TERM --kill-after=10s 2400s python3 -B -m unittest discover -s ci/project -p 'test_*.py' -v",
+  "command_argv": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=10s",
+    "2400s",
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "ci/project",
+    "-p",
+    "test_*.py",
+    "-v"
+  ],
+  "duration_seconds": 1516.847,
+  "errors": 0,
+  "execution_directory": "/workspace/scratch/171f2d46670c/mpm-governance-source",
+  "exit_code": 0,
+  "exit_confirmation": {
+    "completion_chunk_id": "c2a9bb",
+    "exit_code": 0,
+    "observer": "/root",
+    "session_id": 83690,
+    "tool": "write_stdin"
+  },
+  "failures": 0,
+  "footer": "Ran 2910 tests in 1516.847s\n\nOK",
+  "limitations": [
+    "Independent source observations were made during and after execution; no pre-launch clean snapshot was retained.",
+    "The actual process exit was confirmed by the parent agent that owned the execution session; this review did not infer it from the unittest footer.",
+    "Interpreter executable, installed host dependencies and their binary identities were not retained for this local run.",
+    "The clean-source checks establish the observed checkout states; they do not defend against malicious transient concurrent filesystem changes.",
+    "This suite covers project metadata, host tooling and bounded host tests. It establishes no GPU native execution, physical hardware result or performance qualification.",
+    "This evidence binds revision 18c8880 and does not validate the separate later RTL alternative experiment.",
+    "The earlier concurrent-edit development failure remains retained and is not reclassified as a pass."
+  ],
+  "log_archive": {
+    "complete_log": true,
+    "compression_level": 9,
+    "decompressed_bytes_match_original": true,
+    "format": "gzip",
+    "mtime": 0,
+    "path": "governance-18c8880.log.gz",
+    "sha256": "6ad20229f700b922eb46dd2957f12396913df5820aae8c0f7cb622d38bc6c6df",
+    "size_bytes": 72826
+  },
+  "log_sha256": "de19e19d1dbe7d5731d38e6ae84b25ce5bcfa177e455aeb4b04be3e516030b56",
+  "log_size_bytes": 502190,
+  "original_log": "/workspace/scratch/171f2d46670c/mpm-governance-18c8880.log",
+  "outcome": "pass",
+  "prior_failed_attempt": "governance-development-attempt.json",
+  "qualification_claimed": false,
+  "schema_version": 1,
+  "scope": "immutable-source host project governance unit suite",
+  "skipped": 0,
+  "source": {
+    "independent_after_execution": {
+      "observed_at": "2026-11-22T04:35:10.285081+00:00",
+      "revision": "18c888058ac851b802350c99770ed9ac2d27b582",
+      "scope": "independent post-execution observation",
+      "status_porcelain": "",
+      "tree": "d6dd742a905e0f3e76c7374cc678ba87e5c2a19e"
+    },
+    "independent_during_execution": {
+      "observed_at": "2026-11-22T04:29:39.065184+00:00",
+      "revision": "18c888058ac851b802350c99770ed9ac2d27b582",
+      "scope": "independent mid-execution observation; not a pre-launch observation",
+      "status_porcelain": "",
+      "tree": "d6dd742a905e0f3e76c7374cc678ba87e5c2a19e"
+    },
+    "prelaunch_clean_snapshot_retained": false,
+    "revision": "18c888058ac851b802350c99770ed9ac2d27b582",
+    "tree": "d6dd742a905e0f3e76c7374cc678ba87e5c2a19e"
+  },
+  "termination_grace_seconds": 10,
+  "tests": 2910,
+  "timeout_seconds": 2400
+}

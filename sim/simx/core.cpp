@@ -1260,10 +1260,15 @@ public:
       uint32_t mpm_tag_idx = tag & 0x3f;
       bool     is_hi       = (mpm_tag_idx >> 5) & 1;
       uint32_t idx         = mpm_tag_idx & 0x1f;
-      uint32_t csr_addr    = is_hi ? (VX_CSR_MPM_BASE_H + idx) : (VX_CSR_MPM_BASE + idx);
       auto saved_class = mpm_class_;
       mpm_class_ = mpm_class;
+    #ifdef VX_CFG_XLEN_64
+      auto csr_value = this->csr_unit().get_csr(VX_CSR_MPM_BASE + idx, 0, 0);
+      *value = static_cast<uint32_t>(csr_value >> (is_hi ? 32 : 0));
+    #else
+      uint32_t csr_addr = is_hi ? (VX_CSR_MPM_BASE_H + idx) : (VX_CSR_MPM_BASE + idx);
       *value = static_cast<uint32_t>(this->csr_unit().get_csr(csr_addr, 0, 0));
+    #endif
       mpm_class_ = saved_class;
       break;
     }

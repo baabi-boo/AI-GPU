@@ -88,6 +88,41 @@ tests:
 # ---------------------------------------------------------------------------
 builds:
 
+# --- host MPM transport (opt-in): registered base/CORE counter slice ----------
+# Parent/head comparisons use the identical wrapper and four configurations.
+# PERF-off leaves PERF_ENABLE undefined; no extension counters are measured.
+- id: mpm_transport_rv32_off
+  group: mpm_transport
+  opt_in: true
+  dut: mpm_transport
+  clock_mhz: 300
+  xlen: 32
+  configs: ""
+
+- id: mpm_transport_rv32_on
+  group: mpm_transport
+  opt_in: true
+  dut: mpm_transport
+  clock_mhz: 300
+  xlen: 32
+  configs: -DPERF_ENABLE
+
+- id: mpm_transport_rv64_off
+  group: mpm_transport
+  opt_in: true
+  dut: mpm_transport
+  clock_mhz: 300
+  xlen: 64
+  configs: ""
+
+- id: mpm_transport_rv64_on
+  group: mpm_transport
+  opt_in: true
+  dut: mpm_transport
+  clock_mhz: 300
+  xlen: 64
+  configs: -DPERF_ENABLE
+
 # --- core: the base pipeline and its memory system ---------------------------
 
 # L1/LLC datapath with atomics: tag/data pipeline, MSHR, AMO unit.

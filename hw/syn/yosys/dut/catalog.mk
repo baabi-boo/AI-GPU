@@ -9,7 +9,7 @@
 # synthesizes, so both gates measure the same modules and a divergence between
 # them is meaningful rather than an artefact of two DUT lists.
 
-DUTS := cache core lmem tcu gfx gfxvm tex raster om rtu dxa mufu vm tensor top vortex
+DUTS := cache core lmem mpm_transport tcu gfx gfxvm tex raster om rtu dxa mufu vm tensor top vortex
 
 UNITTEST_DIR ?= $(VORTEX_HOME)/hw/unittest
 AFU_RTL_DIR  ?= $(VORTEX_HOME)/hw/rtl/afu
@@ -27,6 +27,11 @@ core_CFG := -DVX_CFG_NUM_THREADS=16 -DVX_CFG_NUM_WARPS=16 -DVX_CFG_EXT_C_ENABLE 
 lmem_TOP := VX_lmem_unit_top
 lmem_INC := -I$(UNITTEST_DIR)/lmem_unit
 lmem_CFG :=
+
+# Same registered host DCR/MPM slice and per-build PERF_ENABLE as Xilinx.
+mpm_transport_TOP := VX_mpm_transport_synth_top
+mpm_transport_INC := -I$(UNITTEST_DIR)/mpm_transport
+mpm_transport_CFG :=
 
 tcu_TOP := VX_tcu_unit_top
 tcu_INC := -I$(UNITTEST_DIR)/tcu_unit

@@ -13,10 +13,17 @@ qualified result; consult the current status and evidence before making a claim.
 - [Current status](project/status.md) and [backlog](project/backlog.md): observed progress, blockers and the next bounded work item
 - [Developer guide](project/developer-guide.md): source-only checks, execution prerequisites and resource safeguards
 - [Acceptance and evidence](project/acceptance.md): what phase completion actually requires
+- [P06 counter transport audit](project/p06-mpm-transport-audit.md),
+  [handoff](project/p06-mpm-transport-handoff.md) and
+  [evidence packet](project/evidence/p06-mpm-transport/README.md): RV64 high-word
+  repair, reviewed native/parent checks and measured decoder selection; continue with
+  the [versioned qualification plan](project/p06-mpm-qualification-plan.md)
 - [P06 serial workspace handoff](project/p06-workspace-handoff.md),
   [runtime/correctness contract](designs/serial_matmul_workspace_v1.md) and
-  [evidence packet](project/evidence/p06-serial-workspace/README.md): implemented
-  managed ownership, opt-in fixed workspace and separately scoped verification
+  [reviewed original packet](project/evidence/p06-warm-workspace/README.md):
+  implemented ownership and opt-in workspace, with original native correctness
+  reviewed separately from warm measurement qualification, which remains blocked
+  under the [warm contract](designs/warm_workspace_benchmark_v1.md)
 - [P01 local qualification](project/p01-local-qualification.md) and [handoff](project/p01-local-qualification-handoff.md):
   supplemental vendor-free full-AFU `xrtsim` and focused unit checks, separate
   from the vendor `hw_emu` gate (`P01-A03`)
@@ -89,6 +96,7 @@ Detailed architectural specifications for Vortex subsystems live under
 - **System and host interface**
   - [Command Processor](designs/command_processor.md)
   - [Vortex Runtime API](designs/vortex_runtime_api.md)
+  - [Host MPM Transport Contract](designs/host_mpm_transport_v1.md)
   - [FPGA AFU Shell](designs/fpga_afu_shell.md)
   - [`aved` Driver (Alveo V80)](designs/aved_driver_architecture.md)
   - [Build Configuration System](designs/build_configuration_system.md)

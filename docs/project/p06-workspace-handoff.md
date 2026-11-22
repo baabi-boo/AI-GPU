@@ -14,16 +14,37 @@ Targeted host checks are passing. The [first clean implementation integration ru
 at `5da357f0f4a3cd3581919b35941db7a07d0d9fbe` ran 2,484 tests and failed with
 two failures and twelve errors, all caused by the original cold-baseline source
 pins rejecting the changed runtime. The separation described below is implemented;
-a complete rerun on its corrected frozen checkpoint, independent enforcement
-review and fresh SimX/processor-RTL execution remain pending here. The earlier
-2,449-test baseline predates the runtime changes and did not select the added
-workspace tests. Historical native passes do not qualify the changed runtime.
+that failed attempt remains retained. The subsequent
+[original correctness review](evidence/p06-warm-workspace/README.md#reviewed-original-workspace-correctness)
+reconciles all four artifacts from
+[run 44925627664, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44925627664)
+at `13dc0d1fdb6d5322104e381aa342dc139c7bb80c`, tree
+`b10ca275377103ad94941847ee4efb1b3f296efd`: **8 processes, 32 native launches,
+1,024 exact output words and 60 reconciled tensor-buffer lifetimes**. The review
+reads retained artifacts as data and establishes no fresh native execution.
+Its source-specific result does not qualify every later runtime revision.
 
 P06-A01 retains its original cold SimX acceptance at
 `84b6ca0ca75fba248ba330642bbf8764db3d459c`. P06 and P06-T01 remain `in_progress`;
-P06-A02/A03 are open. The [warm performance proposal](p06-next-experiment-proposal.md)
-still needs a separate reviewed sampling and measurement freeze. Fewer tensor
-allocations are not a measured speedup.
+P06-A02/A03 are open. The [warm measurement contract](../designs/warm_workspace_benchmark_v1.md),
+runner and analyzer are implemented. The v1 qualification block
+`P06-WARM-RV64-MPM-HIGH-HALF` remains unconditional, with `qualified=false` and
+`absolute_no_wrap_bound="not_established"`. Fewer tensor allocations are not a
+measured speedup.
+
+The coupled SimX/host-only RTL transport repair has reviewed native evidence:
+eight candidate passes and both numeric parent failures at checkout
+`6e6426a0bf761baab11e932a4c86b49a5de81217`, tree
+`d6dd742a905e0f3e76c7374cc678ba87e5c2a19e`, identical to `18c8880`.
+Its immutable governance suite passes 2,910 tests. Paired circuit and alternative
+reviews retain the direct decoder and close the specific missing-comparison F2;
+raw area failures remain. Broader CI and publication are separately pending.
+Follow the
+[transport audit](p06-mpm-transport-audit.md),
+[handoff](p06-mpm-transport-handoff.md) and
+[evidence index](evidence/p06-mpm-transport/README.md) for that work. These
+directed transport tests do not replace this workspace correctness matrix or
+unlock historical warm measurements.
 
 ## Runtime contract to preserve
 
@@ -120,9 +141,9 @@ Use the dedicated [runner](../../ci/project/p06_workspace_execute.py),
 [manifest](../../ci/project/p06_workspace_contract.json) and
 [hosted workflow](../../.github/workflows/p06-workspace.yml). The runner creates
 fresh configured build trees and runs the two policies in separate application
-processes. It installs no tools or dependencies. The local development host
-lacks the pinned GPU toolchain and required disk reserve; host-only checks are
-not a substitute for this run.
+processes. It installs no tools or dependencies. Provisioned tools and the
+required disk reserve must be checked for each attempt; host-only checks are
+not a substitute for native execution.
 
 Before execution, provide a clean committed checkout, existing identified
 toolchain and dependency libraries, at least **15 GiB free disk** at every
@@ -162,7 +183,9 @@ options without changing the frozen matrix.
 | One backend/format variant | 2 | 8 | 256 |
 | SimX and processor RTL × FP16 and BF16 | 8 | 32 | 1,024 |
 
-These are required totals, not results already observed. Each process runs
+The original review at `13dc0d1…` observed the full totals above. They remain
+required totals for a fresh source-bound execution; historical review does not
+establish a new run. Each process runs
 `single-dense_boundaries`, `numerical-zero`, `single-k03`, then
 `single-dense_boundaries` again, with the format prefix and alternating frozen
 poisons. All four calls explicitly close before the next. A selected workflow
@@ -201,11 +224,14 @@ output is never native arithmetic evidence.
 
 ## Remaining development and acceptance
 
-Finish and independently review the clean correctness checkpoint first. Then
-freeze the warm performance schema, matched reference/candidate source pair,
-identical inputs, repetitions, timing boundaries and rejection criteria before
-collecting performance samples. Keep the accepted cold baseline and its archived
-measurements separate from that future experiment.
+Track the transport repair's broader integration/publication status separately.
+Implement and independently review the [versioned qualification route](p06-mpm-qualification-plan.md)
+that rejects historical or source/configuration/binary-mismatched packets. The existing warm v1 block remains in force. After that qualification
+work, collect one fresh complete matched warm attempt under the unchanged
+sampling, numerical and rejection rules: 24 processes, 792 native launches and
+25,344 exact output words, including excluded primes and warm-ups. Keep the
+accepted cold baseline and archived measurements separate. A source repair
+cannot restore high counter bits absent from historical archives.
 
 | Open obligation | Required evidence |
 |---|---|

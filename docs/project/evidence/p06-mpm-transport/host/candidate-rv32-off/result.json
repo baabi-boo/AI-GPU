@@ -1,0 +1,103 @@
+{
+  "scope": "native RTL unit; source overlay explicitly hashed",
+  "revision": "4df7186edbca82b21b2b8cba9b3b192248b99209",
+  "dirty_paths": [
+    " M hw/rtl/core/VX_csr_mpm.sv",
+    " M sim/simx/Makefile",
+    " M sim/simx/core.cpp",
+    "?? ci/project/fixtures/p06_mpm_transport_host.cpp",
+    "?? ci/project/test_p06_mpm_transport.py",
+    "?? docs/designs/host_mpm_transport_v1.md",
+    "?? docs/project/evidence/p06-mpm-transport/",
+    "?? docs/project/p06-mpm-transport-audit.md",
+    "?? hw/unittest/mpm_transport/",
+    "?? tests/unittest/mpm_transport/"
+  ],
+  "source_files": {
+    "hw/rtl/core/VX_csr_mpm.sv": "ec1f19380d0d1f08de92f33475b7436bdbd89ffcc13d3a5d5f5717006c1e3987",
+    "hw/rtl/core/VX_dcr_data.sv": "847cc21ba0d1f32336cdbedd8623f1a8da70435981e6b245b0c1cbc5f1a87794",
+    "hw/unittest/mpm_transport/VX_mpm_transport_top.sv": "f6fadec5934dcfed052b3f6f50f6986995d3826fe6486f065aca8561d5d61b8b",
+    "hw/unittest/mpm_transport/main.cpp": "a9d16510c90b9674234309afc9957fa8769b483a30fee0f9d977ff0d26511321",
+    "hw/unittest/mpm_transport/Makefile": "4ff9079ff51fedc67f9b00db9392ecf33d339015c74497b9bea59dea73f309a9",
+    "hw/unittest/common.mk": "e1b4248b6f94b2c89b0f62014f181b7f083d3f9902ab90748304ff67672d52dc"
+  },
+  "xlen": 32,
+  "perf": "off",
+  "configs": "",
+  "commands": [
+    {
+      "name": "configure",
+      "argv": [
+        "/workspace/scratch/171f2d46670c/AI-GPU/configure",
+        "--xlen=32",
+        "--osversion=ubuntu/focal",
+        "--tooldir=/workspace/scratch/171f2d46670c/mpm-tools"
+      ],
+      "outcome": "pass",
+      "exit_code": 0,
+      "reason": null,
+      "process_started": true,
+      "duration_seconds": 3.977274,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_size_bytes": 0,
+      "peak_rss_bytes": 17301504,
+      "cleanup_complete": true,
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ]
+    },
+    {
+      "name": "build",
+      "argv": [
+        "make",
+        "-j1",
+        "-C",
+        "hw/unittest/mpm_transport",
+        "THREADS=1",
+        "PERF="
+      ],
+      "outcome": "pass",
+      "exit_code": 0,
+      "reason": null,
+      "process_started": true,
+      "duration_seconds": 10.066032,
+      "log_sha256": "1edf41584e24ecda745272d2d8e401f5818165e1af0705c05ee13703133a4e65",
+      "log_size_bytes": 6674,
+      "peak_rss_bytes": 376074240,
+      "cleanup_complete": true,
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ]
+    },
+    {
+      "name": "run",
+      "argv": [
+        "/workspace/scratch/171f2d46670c/mpm-local-rv32-off/hw/unittest/mpm_transport/mpm_transport"
+      ],
+      "outcome": "pass",
+      "exit_code": 0,
+      "reason": null,
+      "process_started": true,
+      "duration_seconds": 0.003324,
+      "log_sha256": "435383ae207922ee8271a4ac318383df59c3ca6feadf88143bee5f6ba3aef8e7",
+      "log_size_bytes": 118,
+      "peak_rss_bytes": 0,
+      "cleanup_complete": true,
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ]
+    }
+  ]
+}

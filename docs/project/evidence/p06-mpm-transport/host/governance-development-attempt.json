@@ -1,0 +1,25 @@
+{
+  "scope": "host-governance-development-run",
+  "command": "timeout --signal=TERM --kill-after=10s 2400s python3 -B -m unittest discover -s ci/project -p 'test_*.py' -v",
+  "outcome": "fail",
+  "tests": 2873,
+  "failure_subtests": 104,
+  "duration_seconds": 1292.579,
+  "log_sha256": "8ea2bed300a06aa39d35dd23ab7637b72a872d01e173e6cdeaa90c24525c62b3",
+  "log_size_bytes": 592264,
+  "source_state": "The source checkout and imported helper/test files changed during this run; this is not a frozen-source qualification.",
+  "diagnosis": {
+    "test_p06_mpm_ci": 3,
+    "test_p06_warm_runner": 55,
+    "test_p06_workspace_runner": 46
+  },
+  "reason": "Tests retained import-time helper identities. Concurrent implementation updates caused the existing warm/workspace runners to reject changed helper bytes, and initial CI test definitions predated the additive second job.",
+  "follow_up": "Run the full suite again in an immutable detached source worktree at 18c8880; retain focused corrected tests separately.",
+  "acceptance_claimed": false,
+  "exit_code": 1,
+  "log_archive": {
+    "path": "governance-development-attempt.log.gz",
+    "sha256": "56a418cd462445104593d7178aa54619dff343e6a618a5bd4672cbbe0a1d2b75",
+    "size_bytes": 76976
+  }
+}

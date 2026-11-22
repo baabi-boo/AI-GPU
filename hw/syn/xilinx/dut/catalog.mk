@@ -10,7 +10,7 @@
 # Add a DUT: append its name to DUTS and define the five variables. No new
 # directory, no dispatcher edit.
 
-DUTS := cache core cp dxa fpu gfx gfxvm issue lmem mem_unit mufu om raster rtu \
+DUTS := cache core cp dxa fpu gfx gfxvm issue lmem mem_unit mpm_transport mufu om raster rtu \
         scope tcu tensor tex top vm vortex
 
 # ---------------------------------------------------------------------------
@@ -100,6 +100,11 @@ lmem_INC  = $(BASE_INC) -I$(RTL_DIR)/mem -I$(RTL_DIR)/vm -I$(RTL_DIR)/cache -I$(
 
 mem_unit_PRJ := VX_mem_unit_top
 mem_unit_INC  = $(BASE_INC) -I$(RTL_DIR)/mem -I$(RTL_DIR)/vm -I$(RTL_DIR)/core -I$(RTL_DIR)/fpu -I$(UNITTEST_DIR)/mem_unit
+
+# Registered host DCR/MPM slice; PERF_ENABLE is selected by each build.
+mpm_transport_PRJ := VX_mpm_transport_synth_top
+mpm_transport_INC  = $(BASE_INC) -I$(RTL_DIR)/core -I$(RTL_DIR)/fpu -I$(UNITTEST_DIR)/mpm_transport
+mpm_transport_PKG  = $(RTL_DIR)/vm/VX_tlb_pkg.sv
 
 om_PRJ := VX_om_core_top
 om_CFG := -DVX_CFG_EXT_OM_ENABLE

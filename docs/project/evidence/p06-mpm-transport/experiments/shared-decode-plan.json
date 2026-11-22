@@ -1,0 +1,25 @@
+{
+  "acceptance_claimed": false,
+  "alternative_candidate": "27a18d4908aaec6c3f9431ec0d5e751fd46de4ce",
+  "alternative_source_sha256": "646bba7809ee5afefc625df08ba0fd2be348577201d1411325cbcfaa70c16715",
+  "comparison_requirements": [
+    "Same source except the production decoder, same wrapper, native vectors, tool identities and four XLEN/PERF configurations.",
+    "Both native engines must pass every candidate cell; parent numeric sensitivity remains required.",
+    "Compare every Beacon resource and depth and every generic Yosys cell/depth metric; preserve raw failures.",
+    "Prefer the lower-cost correct implementation without worsening measured depth or another resource. Any conflicting metric needs explicit independent review rather than hiding it.",
+    "This tests the concrete lowest-cost alternative proposed by independent review, not a proof of global synthesis optimality."
+  ],
+  "direct_candidate": "18c888058ac851b802350c99770ed9ac2d27b582",
+  "experiment_run": 44985166238,
+  "mechanism": "Normalize the high-alias bit once, select one full counter, then select the 32-bit response half. All 106 mappings and original response state remain.",
+  "predictions": [
+    "Both correct candidates must preserve the 24/72 extra observable high-counter FF bits identified by generic Yosys relative to broken RV64, for PERF off/on.",
+    "Shared selection removes duplicated alias comparisons, but widens the common counter mux and adds a final half mux. It may reduce combinational area at the cost of a longer path; this experiment will distinguish that trade-off.",
+    "No protocol cycle or state-stage increase is permitted."
+  ],
+  "qualified": false,
+  "recorded_at": "2026-11-22T04:32:35.784315+00:00",
+  "result_state_when_recorded": "native and circuit measurement steps in_progress; alternative numeric outcomes not yet inspected",
+  "schema_version": 1,
+  "scope": "prospective shared-decoder cost comparison"
+}

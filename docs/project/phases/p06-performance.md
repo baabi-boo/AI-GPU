@@ -59,17 +59,36 @@ operation through completed explicit close, sticky execution/cleanup errors, and
 an opt-in `(8,4,8)` workspace retaining 320 requested A/B/D bytes. Default
 allocation preserves all six signatures; the MLP rejects non-default policy.
 The [workspace packet](../evidence/p06-serial-workspace/README.md) records
-targeted host checks and their synthetic/fault-injection limits.
+targeted host checks and their synthetic/fault-injection limits. The subsequent
+[original correctness review](../evidence/p06-warm-workspace/README.md#reviewed-original-workspace-correctness)
+reconciles run `44925627664`, attempt 1, at
+`13dc0d1fdb6d5322104e381aa342dc139c7bb80c`: **8 processes, 32 native launches,
+1,024 exact output words and 60 tensor-buffer lifetimes**. This is reviewed
+historical execution, not qualification of every later source revision.
 
-**Next action:** finish checkpoint integration and run/review the frozen native
-correctness matrix through the [workspace handoff](../p06-workspace-handoff.md).
-The new native matrix is pending; existing historical passes do not qualify
-changed sources. Then independently freeze matched workloads, source revisions,
-numerical inputs, repetitions, measurement boundaries and rejection criteria
-for the [draft warm performance experiment](../p06-next-experiment-proposal.md).
-Retain the cold baseline separately. Keep the two-job, 4 GiB memory and 15 GiB
-disk prerequisites unchanged. Neither host tests nor the correctness smoke
-establish a speedup or P06-A02/A03 acceptance.
+The [warm measurement contract](../../designs/warm_workspace_benchmark_v1.md)
+and its runner/analyzer are implemented. Warm v1 remains unconditionally blocked
+by `P06-WARM-RV64-MPM-HIGH-HALF`, with `qualified=false` and
+`absolute_no_wrap_bound="not_established"`. The coupled SimX/host-only RTL
+[transport repair](../p06-mpm-transport-audit.md) has reviewed strict native
+coverage at `18c8880`: all eight RV32/RV64 × PERF off/on × engine cells pass,
+and both old-production targets demonstrate the expected numeric high-half
+failure. The immutable governance suite passes 2,910 tests. The
+[transport evidence](../evidence/p06-mpm-transport/README.md) retains completed
+paired circuit measurements and raw RV64 area failures. The
+[alternative review](../evidence/p06-mpm-transport/reviews/alternative-review.md)
+closes the concrete comparison finding and selects the direct decoder. Broader
+CI and publication remain separately tracked; no overall CI success is asserted.
+
+**Next development action:** implement and independently review the
+[versioned qualification binding](../p06-mpm-qualification-plan.md), using the
+[transport handoff](../p06-mpm-transport-handoff.md) for source/evidence scope. Run a fresh
+complete matched warm attempt only under that reviewed binding and unchanged
+statistical rules: **24 processes, 792 launches and 25,344 exact output words**.
+Preserve the v1 block and original cold baseline; source repair cannot recover
+missing historical high bits. Keep the two-job, 4 GiB memory and 15 GiB disk
+prerequisites unchanged. Correctness and transport tests establish no speedup
+or P06-A02/A03 acceptance.
 
 P06 and P06-T01 remain `in_progress`; P06-A02/A03 remain open. P04 supplies the
 entry dependency and P05 is independent. The missing P01 vendor `hw_emu` evidence
@@ -125,6 +144,6 @@ After the P06 gates are accepted, hand P07 the selected configuration,
 constraints, bounded workloads, memory-map assumptions and reproducible reports.
 P07 also requires P01's vendor integration gate. Update [status](../status.md)
 and [backlog](../backlog.md) as each gate earns evidence. The current next action
-is qualification of a clean workspace checkpoint and its native executions,
-followed by the separate warm performance protocol freeze described above. A
-documented board-readiness decision and physical implementation plan follow later.
+is the versioned qualification binding and fresh matched warm execution
+above, with transport publication/integration tracked separately. A documented board-readiness decision
+and physical implementation plan follow later.

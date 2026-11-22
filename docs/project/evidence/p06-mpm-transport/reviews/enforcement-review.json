@@ -1,0 +1,90 @@
+{
+  "archive_checks": {
+    "beacon_measurements": 8,
+    "beacon_precedes_yosys": true,
+    "candidate_logs": 24,
+    "circuit_archive_sha256": "42bfd452643d56aa0a9fe9d5070dcb38ad63a291c2d3a83e452799334e1a5754",
+    "crc_valid": true,
+    "native_archive_sha256": "abc1423ab4f6089ab38a71a5a4bddee8b3afc59214aaae88120f8714035b2cd1",
+    "native_cells_passed": 8,
+    "parent_expected_numeric_failures": 2,
+    "parent_logs": 10,
+    "raw_circuit_gate_outcome": "fail",
+    "runner_logs_verified": 75,
+    "source_tools_generated_before_after_equal": true,
+    "synthesis_logs": 41,
+    "workflow_matches_head": true,
+    "yosys_measurements": 8
+  },
+  "base_classifier": {
+    "class": "R2",
+    "exit_code": 0,
+    "files": 75
+  },
+  "base_revision": "4df7186edbca82b21b2b8cba9b3b192248b99209",
+  "candidate_revision": "18c888058ac851b802350c99770ed9ac2d27b582",
+  "candidate_tree": "d6dd742a905e0f3e76c7374cc678ba87e5c2a19e",
+  "findings": [
+    {
+      "confidence": "high",
+      "current_hosted_evidence_invalidated": false,
+      "evidence_type": "static-proof",
+      "finding": "Standalone execution may record a different PATH python3 instead of the orchestrating interpreter.",
+      "hosted_mitigation": "Workflow requires identical resolved PATH python3 and sys.executable before native execution.",
+      "path": "ci/project/p06_mpm_execute.py",
+      "probe": {
+        "executing_python": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+        "executing_python_field_present": false,
+        "native_process_started": false,
+        "recorded_python3": "/usr/bin/python3.13"
+      },
+      "required_followup": "Add executing interpreter identity before standalone receipts support future qualification bindings.",
+      "severity": "F1",
+      "symbol": "tools_snapshot"
+    }
+  ],
+  "human_review": {
+    "path": "enforcement-review.md",
+    "sha256": "9b0ebb7f044b4522efaca837c71844c6a4827f5f2075390b010e5df15f0a9bba"
+  },
+  "independent_of_implementation": true,
+  "new_f2_f3_findings": [],
+  "retained_boundaries": {
+    "absolute_no_wrap_bound": "not_established",
+    "acceptance_claimed": false,
+    "gate_thresholds_changed": false,
+    "goldens_changed": false,
+    "qualified": false
+  },
+  "review_class": "R3",
+  "review_script_initial_errors": [
+    "Used nonexistent log_bytes instead of log_size_bytes.",
+    "Initially counted version-yosys as a measurement; corrected to parent/candidate command IDs."
+  ],
+  "reviewer": "/root/w09_a06",
+  "schema_version": 1,
+  "scope": "runner/workflow/native-build/catalog enforcement at the validated checkpoint",
+  "separate_open_obligations": [
+    "circuit cheapest-correct-alternative comparison",
+    "immutable governance and integration disposition",
+    "final source/publication identity"
+  ],
+  "source_sha256": {
+    ".github/workflows/p06-mpm-transport.yml": "127a38dc4cff8d6fc9aa3b5b070654c96c6a1cce7e337987771812350b08a4be",
+    "ci/project/p06_mpm_execute.py": "731ce3dbef5e90f00f086b9aeee25fcbc3501d585329024c2a2f8f10d1919864",
+    "ci/project/p06_mpm_parent.py": "c0eede88b88f658d3a75001c667a5dfaa1f7ff2823b646a0e632fa87bc880ac2",
+    "ci/project/p06_mpm_synthesis.py": "67de50053798fb0468659959a192ad2a32f54cafe7e5e0627149cb3b3cdfdddf",
+    "ci/testcases/logic_gate.yaml": "f6191eba423394b3480c97cc5e48ba282314d5e6904549c3e65813eb563899fb",
+    "ci/testcases/unittest.yaml": "c774b8ea85abd91c93aec8bd7b98566c74b098df4b8e206325ad4ed7f0584b41",
+    "hw/unittest/Makefile": "822c2f8e617ce5f50aabcf247a2054303e03751b927a85e4d092c2750d520084",
+    "sim/simx/mpm_transport.mk": "5d96723c7478573bba27434c068605625eb9b301d89aefb3ea9c987218dd633e"
+  },
+  "test_execution": {
+    "base_classifier_and_read_only_identity_probe": true,
+    "full_governance_rerun": false,
+    "heavy_builds": false,
+    "native_reruns": false
+  },
+  "verdict": "hosted enforcement scope ready with F1 standalone provenance follow-up; landing depends on separate obligations",
+  "waiver_claimed": false
+}

@@ -10,17 +10,31 @@ launches. The [qualification audit](p06-qualification-audit.md),
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
 scope and new validation. P06-A02/A03 remain open.
 
-The [serial workspace prerequisite](../designs/serial_matmul_workspace_v1.md) is
-now implemented: one managed context per linked runtime instance, one operation
-until completed explicit close, sticky execution/cleanup errors, and an opt-in
-320-byte requested A/B/D workspace for `(8,4,8)` in FP16/BF16. Targeted host
-checks pass; the complete integration suite on a frozen new checkpoint and its
-fresh native correctness matrix remain pending in the
-[workspace packet](evidence/p06-serial-workspace/README.md). The next action is
-checkpoint qualification, followed by a separate freeze of warm-context sampling.
-Resume with the [workspace handoff](p06-workspace-handoff.md) and
-[DRAFT performance proposal](p06-next-experiment-proposal.md). No speedup or new
-P06 gate is accepted by the implementation.
+The [serial workspace prerequisite](../designs/serial_matmul_workspace_v1.md)
+is implemented, and the [reviewed original correctness packet](evidence/p06-warm-workspace/README.md)
+binds eight processes, 32 launches, 1,024 exact output words and 60 reconciled
+tensor-buffer lifetimes to `13dc0d1fdb6d5322104e381aa342dc139c7bb80c`,
+[run 44925627664](https://github.com/baabi-boo/AI-GPU/actions/runs/44925627664).
+That historical artifact review establishes its declared correctness scope;
+it is not a new execution or performance acceptance.
+
+The [current transport audit](p06-mpm-transport-audit.md) repairs the RV64 host
+counter high-half defect in SimX and RTL. The
+[reviewed native packet](evidence/p06-mpm-transport/reviews/native-review.md)
+verifies all eight candidate cells and both numeric parent failures at `18c8880`;
+its immutable governance suite passes 2,910 tests. Eight Beacon and eight generic
+Yosys measurements are complete. The
+[alternative review](evidence/p06-mpm-transport/reviews/alternative-review.md)
+closes the specific comparison finding and retains the direct `18c8880` decoder;
+raw RV64 area failures remain failures. Broader CI is still running at this
+checkpoint, with final integration/publication tracked in the
+[handoff](p06-mpm-transport-handoff.md).
+The next performance-development step is the
+[versioned qualification plan](p06-mpm-qualification-plan.md), followed by a fresh
+complete warm attempt under the [implemented contract](../designs/warm_workspace_benchmark_v1.md).
+Its unconditional v1 block, `P06-WARM-RV64-MPM-HIGH-HALF`, remains in force with
+`qualified=false`; the repair cannot recover missing historical high bits.
+No warm speedup or new P06 gate is accepted.
 
 **P04 is complete for the fixed tiny-model contract.**
 [P04-A01](evidence/p04-fixture/acceptance.json) retains its accepted source scope;
@@ -89,7 +103,7 @@ the linked reports define the exact accepted scope.
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
 | P04 — tiny-model inference | `complete` | A01 fixed fixture preserved; A02/A03 accept the full four-variant composed-model matrix at native processor RTL scope |
 | P05 — Python/framework bridge | `in_progress` | A01 accepts the bounded copying Python binding on SimX; the custom-op implementation and prior CI still need independent artifact review for A02/A03 |
-| P06 — Memory and performance scaling | `in_progress` | A01 retains the accepted cold SimX baseline; serial ownership/workspace implementation has targeted host checks, with checkpoint/native qualification pending; A02/A03 remain open |
+| P06 — Memory and performance scaling | `in_progress` | A01 cold acceptance and original workspace correctness are preserved; the RV64 repair has reviewed native/parent/cost evidence and 2,910 governance passes; broader CI/publication and versioned warm qualification remain separate; A02/A03 stay open |
 | P07–P11 | `not_started` | Later hardware, reliability, research and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -98,7 +112,29 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — serial ownership and fixed workspace
+## Latest continuation — host counter transport
+
+The [transport contract](../designs/host_mpm_transport_v1.md) preserves the
+32-bit DCR wire format and public API while repairing RV64 half selection in
+both production implementations. Architectural CSR semantics and the response
+stage count stay unchanged. The [evidence index](evidence/p06-mpm-transport/README.md)
+separates reviewed native/parent execution, completed circuit measurements and
+retained failed setup attempts. The strict run used checkout
+`6e6426a0bf761baab11e932a4c86b49a5de81217`, tree
+`d6dd742a905e0f3e76c7374cc678ba87e5c2a19e`, identical to candidate
+`18c888058ac851b802350c99770ed9ac2d27b582`. The
+[alternative review](evidence/p06-mpm-transport/reviews/alternative-review.md)
+closes the original cost review's specific missing-comparison F2. Shared decoding
+saves 2/68 Beacon LUTs but adds 9/21 generic cells, worsens PERF-off path 7 → 8
+and increases PERF-on watch endpoints 12 → 32. Retain the direct decoder; the
+experimental code is not adopted. This is a measured choice between the tested
+candidates, not global optimality or an area-gate pass. The
+[enforcement review](evidence/p06-mpm-transport/reviews/enforcement-review.md)
+records an F1 standalone executing-interpreter identity follow-up, with hosted
+execution already checking interpreter equality. None of these results qualifies
+older warm observations. Resume from the [transport handoff](p06-mpm-transport-handoff.md).
+
+## Previous continuation — serial ownership and fixed workspace
 
 The [development audit](p06-workspace-audit.md) at
 `3235cd59d724663dda1bece20645d5ccf30462e1` found unguarded native context/operation
@@ -115,21 +151,22 @@ operation. Default `per_operation` keeps all six supported format/shape
 signatures. Real MLP, Python, PyTorch and cold-benchmark callers keep their
 default allocation policy; the MLP rejects non-default policy before native open.
 
-The [packet](evidence/p06-serial-workspace/README.md) links source-bound host
-fault/control checks, real model/managed-wrapper composition, simultaneous
-create and allocation-failure tests, strict parser/runner tests and independent
-reviews. Synthetic output and mocked native observations are identified as host
-evidence. The initial full-suite baseline precedes runtime implementation; it
-does not validate the new sources. Complete checkpoint integration and the new
-SimX/processor-RTL correctness executions remain pending.
+The [implementation packet](evidence/p06-serial-workspace/README.md) retains
+source-bound host fault/control checks and their original limitations. The later
+[original-artifact review](evidence/p06-warm-workspace/README.md) reconciles all
+four SimX/processor-RTL × FP16/BF16 variants at `13dc0d1`, run `44925627664`:
+eight processes, 32 native launches, 1,024 exact FP32 output words with no
+mismatches, and all 60 observed tensor-buffer lifetimes. Offline replay checks
+retained data; it does not rerun native binaries or establish physical memory
+reclamation. Processor RTL still bypasses the AFU.
 
-The separate [correctness runner](../../ci/project/p06_workspace_execute.py) and
-[hosted workflow](../../.github/workflows/p06-workspace.yml) freeze four calls
-with changed inputs per policy/format/backend process. Review actual artifacts against
-the [manifest](../../ci/project/p06_workspace_contract.json) before claiming any
-completed native matrix. The [handoff](p06-workspace-handoff.md) states commands,
-expected counts and observation limits. Warm performance sampling remains a
-[draft](p06-next-experiment-proposal.md); P06-A02/A03 are open.
+The [correctness runner](../../ci/project/p06_workspace_execute.py),
+[manifest](../../ci/project/p06_workspace_contract.json) and
+[handoff](p06-workspace-handoff.md) preserve that separate scope. Warm sampling
+now has an [implemented contract](../designs/warm_workspace_benchmark_v1.md)
+and runner, but the v1 analyzer unconditionally blocks full qualification on
+counter transport. Neither the correctness review nor the transport repair
+accepts performance or P06-A02/A03.
 
 ## Previous continuation — accepted native performance baseline
 
@@ -864,21 +901,25 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**P06-T01 — qualify the serial workspace correctness checkpoint.** Follow the
-[workspace handoff](p06-workspace-handoff.md) to finish independent review, run
-the complete host integration suite and execute the frozen native matrix on a
-clean checkpoint. Retain exact source/tool/configuration identities, failed
-attempts, all output words and live-device allocation/release observations. A
-selected variant is not the full matrix, and this smoke is not performance
-evidence. See the current [packet](evidence/p06-serial-workspace/README.md).
+**P06-T01 — qualify the repaired counter route before evaluating warm performance.**
+Native parent sensitivity, the concrete circuit-cost comparison and local host
+checks are complete; broader CI and publication remain separately tracked in the
+[transport handoff](p06-mpm-transport-handoff.md). Implement and independently review the
+[versioned qualification binding](p06-mpm-qualification-plan.md) that rejects historical
+or source/configuration/binary-mismatched packets. Keep the existing v1
+`qualified=false` block and `absolute_no_wrap_bound="not_established"` intact;
+any future no-wrap claim needs its own evidence.
 
-Then review and freeze the [warm performance proposal](p06-next-experiment-proposal.md):
-matched reference/candidate revisions, identical numerical inputs, workload/layout,
-repetitions, measurement boundaries and rejection criteria. Preserve the
-[accepted cold baseline](evidence/p06-baseline/README.md) separately. P06-A02 still
-requires matched correctness, native RTL and applicable parity/performance
-evidence; A03 requires a reviewed target budget and synthesis/resource/timing
-reports. See the [phase guide](phases/p06-performance.md) and [backlog](backlog.md).
+Run a fresh complete matched warm attempt only under the reviewed qualification
+route and unchanged [sampling/rejection rules](../designs/warm_workspace_benchmark_v1.md):
+24 processes, 792 launches and 25,344 exact output words, including excluded
+primes and warm-ups. Retain all failed attempts and exact identities. Preserve
+the [accepted cold baseline](evidence/p06-baseline/README.md) separately.
+P06-A02 still requires matched correctness, native RTL and applicable
+parity/performance evidence; A03 requires a reviewed target budget and
+synthesis/resource/timing reports. See the [phase guide](phases/p06-performance.md)
+and [backlog](backlog.md). The two-job, 4 GiB memory and 15 GiB disk prerequisites
+and inherited 267 → 283 DSP area finding remain unchanged.
 
 **Parallel framework task:** preserve the
 [accepted copying binding](evidence/p05-python/acceptance-binding.json) and

@@ -13,14 +13,10 @@
 
 `include "VX_define.vh"
 
-`ifdef VX_CFG_XLEN_64
-    `define CSR_READ_64(addr, dst, src) \
-        addr : dst = `VX_CFG_XLEN'(src)
-`else
-    `define CSR_READ_64(addr, dst, src) \
-        addr : dst = src[31:0]; \
-        addr+12'h80 : dst = 32'(src[$bits(src)-1:32])
-`endif
+// The host DCR bus transfers 32-bit halves regardless of architectural XLEN.
+`define CSR_READ_64(addr, dst, src) \
+    addr : dst = src[31:0]; \
+    addr+12'h80 : dst = 32'(src[$bits(src)-1:32])
 
 // Host-side machine performance-monitor reads (DCR path). The counters are not
 // reachable from kernel CSR instructions, so one instance serves the whole core.
@@ -40,7 +36,7 @@ module VX_csr_mpm import VX_gpu_pkg::*; #(
 
     wire [7:0]                   dcr_mpm_class = dcr_csr_if.mpm_class;
     wire [`VX_CSR_ADDR_BITS-1:0] dcr_addr      = dcr_csr_if.addr;
-    wire [`VX_CFG_XLEN-1:0]      dcr_data;
+    wire [VX_DCR_DATA_WIDTH-1:0] dcr_data;
 
     // Host counter reads decode their own address and never wait on a request.
     assign dcr_csr_if.ready = 1'b1;
@@ -50,7 +46,7 @@ module VX_csr_mpm import VX_gpu_pkg::*; #(
 
     // Host performance-counter reads ////////////////////////////////////////
 
-    reg [`VX_CFG_XLEN-1:0] dcr_data_w;
+    reg [VX_DCR_DATA_WIDTH-1:0] dcr_data_w;
 
     always @(*) begin
         dcr_data_w = '0;

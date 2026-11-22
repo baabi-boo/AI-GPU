@@ -1,0 +1,71 @@
+{
+  "absolute_no_wrap_bound": "not_established",
+  "acceptance_claimed": false,
+  "archive": {
+    "artifact_id": 14738787973,
+    "job_id": 137089144698,
+    "path": "../hosted/attempt3-native.zip",
+    "run_id": 44983573225,
+    "sha256": "abc1423ab4f6089ab38a71a5a4bddee8b3afc59214aaae88120f8714035b2cd1"
+  },
+  "binary_bytes_independently_rehashed": false,
+  "candidate_head": "18c888058ac851b802350c99770ed9ac2d27b582",
+  "candidate_matrix": {
+    "candidate_cells_passed": 8,
+    "rtl_assertions": 19912,
+    "rtl_ignored_requests": 28,
+    "rtl_reads": 1056,
+    "simx_checks": 18064
+  },
+  "change_impact": "R3",
+  "closed_prior_findings": [
+    {
+      "disposition": "closed by current source-bound native execution and parent regression evidence",
+      "finding": "Full linked SimX matrix and old-production numeric sensitivity missing",
+      "severity": "F2",
+      "source": "../agents/w03_a04.md",
+      "type": "missing-test"
+    }
+  ],
+  "executed_checkout": "6e6426a0bf761baab11e932a4c86b49a5de81217",
+  "executed_tree": "d6dd742a905e0f3e76c7374cc678ba87e5c2a19e",
+  "findings": [],
+  "human_review": {
+    "path": "native-review.md",
+    "sha256": "b9a6e5b643ac72b975886cfbdd132f24c6678a630f125c47fd4af908096b46f3"
+  },
+  "independent_of_implementation": true,
+  "index": {
+    "path": "../hosted/attempt3-native.json",
+    "sha256": "ec2257171c9d8f5f7a40d41676c3c2d115af6a24de68d982d1236aa9fbe8f6af"
+  },
+  "native_obligation": "satisfied",
+  "native_rerun_during_review": false,
+  "parent_revision": "4df7186edbca82b21b2b8cba9b3b192248b99209",
+  "parent_sensitivity": {
+    "all_failures_independently_attributed_to_missing_high_bits": true,
+    "rtl_assertion": "FAIL RV64 tick=32 tag=00220001: expected=00000001 actual=00000000",
+    "rtl_build_exit_code": 0,
+    "rtl_run_exit_code": 1,
+    "simx_build_exit_code": 0,
+    "simx_failed_checks": 714,
+    "simx_failure_types": {
+      "high-first reconstruction": 119,
+      "host high reply": 357,
+      "low-first reconstruction": 238
+    },
+    "simx_run_exit_code": 1,
+    "simx_total_checks": 5251
+  },
+  "qualified": false,
+  "reviewer": "/root/w09_a02",
+  "schema_version": 1,
+  "scope": "native matrix and same-harness parent sensitivity",
+  "separate_obligations": [
+    "paired circuit-cost review",
+    "immutable governance/integration disposition",
+    "final publication identity"
+  ],
+  "verdict": "native scope ready; land after separate cost and integration dispositions",
+  "warm_v1_block_preserved": true
+}

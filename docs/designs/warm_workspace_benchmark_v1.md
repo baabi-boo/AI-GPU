@@ -9,10 +9,11 @@ performance evaluation. Its machine definition is
 fields, values, types and immutable numerical/configuration inputs. This is a
 measurement contract, not evidence of execution, improvement or phase acceptance.
 
-**Full hypothesis qualification is blocked.** Before any native warm attempt,
-the [independent transport review](../project/evidence/p06-warm-workspace/reviews/counter-transport-review.json)
-confirmed inherited finding `P06-WARM-RV64-MPM-HIGH-HALF`: the RV64 host MPM
-query loses the high half in both SimX and RTL while reporting success. This
+**Full hypothesis qualification is blocked.** The frozen v1 block records
+inherited finding `P06-WARM-RV64-MPM-HIGH-HALF`: the original RV64 host MPM
+query loses the high half in both SimX and RTL while reporting success. The
+[current transport audit](../project/p06-mpm-transport-audit.md) documents the
+defect and its separately evidenced repair; it does not qualify v1 records. This
 2026-11-22 pre-execution clarification leaves the statistical manifest, workload,
 sampling, numerical checks and thresholds unchanged. It separates useful
 host-time and reported-counter diagnostics from the missing full-width counter
@@ -234,11 +235,12 @@ observations.
 ### Counter qualification block
 
 The installed public API promises a 64-bit result and combines two 32-bit DCR
-replies. The RV64 SimX decoder and the corresponding host-only RTL decoder
-omit the high-half case. The lower half can still increase across all observed
-snapshots while a hidden wrap reverses the true comparison. The retained
-[monotonic alias](../project/evidence/p06-warm-workspace/reviews/counter-transport/monotonic-alias.json)
-gives a concrete synthetic counterexample:
+replies. The original RV64 SimX decoder and corresponding host-only RTL decoder
+omit the high-half case; the [transport evidence](../project/evidence/p06-mpm-transport/README.md)
+separates the repair from historical qualification. On the original route, the
+lower half can still increase across all observed snapshots while a hidden wrap
+reverses the true comparison. This synthetic monotonic-alias example is
+self-contained:
 
 | Arm | True begin → end | Reported begin → end | True delta | Reported delta |
 |---|---|---|---:|---:|
@@ -368,8 +370,10 @@ historical acceptance record or turn an unavailable measurement into a pass.
 
 ### Next bounded development step
 
-The [counter qualification plan](../project/evidence/p06-warm-workspace/reviews/counter-qualification-plan.json)
-defines the required preflight before a coupled host-transport repair. Keep
+The [counter qualification plan](../project/p06-mpm-qualification-plan.md)
+defines the prospective qualification work after the coupled transport repair
+and its required independent review. The
+[transport contract](host_mpm_transport_v1.md) governs the repair evidence. Keep
 SimX and the host-only RTL DCR decoder consistent, preserve architectural kernel
 CSR semantics, and qualify real production paths at deterministic seeded
 boundaries around 2^32 and the RTL's 44-bit limit. Cover RV32/RV64, relevant
@@ -390,6 +394,6 @@ Any future qualification change requires independent review of the analyzer's
 qualification layer and a fresh complete source-bound matched attempt with the
 unchanged statistical rules. Existing unqualified low-word archives cannot be
 upgraded by relabeling their source, importing an archive's helper, or claiming
-that the repair applies retroactively. The current continuation changes no
-SimX/RTL transport, grants no waiver and preserves the original historical
-evidence and acceptance scopes.
+that the repair applies retroactively. This frozen warm v1 contract grants no
+qualification override or waiver and preserves the original historical evidence
+and acceptance scopes.

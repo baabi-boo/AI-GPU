@@ -1,0 +1,176 @@
+{
+  "acceptance_claimed": false,
+  "actual_alternative_checkout": "7a983db12dcbb6294f42eb7f290300c791e9db0c",
+  "actual_alternative_tree": "26211e4ff56dd0d2290a897f9fe99106d03c4734",
+  "adopt_alternative": false,
+  "alternative_candidate": "27a18d4908aaec6c3f9431ec0d5e751fd46de4ce",
+  "circuits": {
+    "alternative_vs_direct": [
+      {
+        "alternative_minus_direct": {
+          "beacon": {
+            "bram": 0.0,
+            "dsp": 0,
+            "endpoints": 0,
+            "ff": 0,
+            "lut": -2,
+            "lutram": 0,
+            "max_levels": 0,
+            "uram": 0,
+            "watch_endpoints": 0
+          },
+          "yosys": {
+            "cells": 9,
+            "flip_flop_cells": 0,
+            "longest_topological_path": 1
+          }
+        },
+        "id": "candidate-rv32-off"
+      },
+      {
+        "alternative_minus_direct": {
+          "beacon": {
+            "bram": 0.0,
+            "dsp": 0,
+            "endpoints": 0,
+            "ff": 0,
+            "lut": -68,
+            "lutram": 0,
+            "max_levels": 0,
+            "uram": 0,
+            "watch_endpoints": 20
+          },
+          "yosys": {
+            "cells": 21,
+            "flip_flop_cells": 0,
+            "longest_topological_path": 0
+          }
+        },
+        "id": "candidate-rv32-on"
+      },
+      {
+        "alternative_minus_direct": {
+          "beacon": {
+            "bram": 0.0,
+            "dsp": 0,
+            "endpoints": 0,
+            "ff": 0,
+            "lut": -2,
+            "lutram": 0,
+            "max_levels": 0,
+            "uram": 0,
+            "watch_endpoints": 0
+          },
+          "yosys": {
+            "cells": 9,
+            "flip_flop_cells": 0,
+            "longest_topological_path": 1
+          }
+        },
+        "id": "candidate-rv64-off"
+      },
+      {
+        "alternative_minus_direct": {
+          "beacon": {
+            "bram": 0.0,
+            "dsp": 0,
+            "endpoints": 0,
+            "ff": 0,
+            "lut": -68,
+            "lutram": 0,
+            "max_levels": 0,
+            "uram": 0,
+            "watch_endpoints": 20
+          },
+          "yosys": {
+            "cells": 21,
+            "flip_flop_cells": 0,
+            "longest_topological_path": 0
+          }
+        },
+        "id": "candidate-rv64-on"
+      }
+    ],
+    "artifact": {
+      "artifact_id": 14739354232,
+      "crc_valid": true,
+      "extracted_copy_matches_archive": true,
+      "job_id": 137094033563,
+      "member_count": 263,
+      "path": "attempt4-circuits.zip",
+      "run_attempt": 1,
+      "run_id": 44985166238,
+      "safe_unique_regular_members": true,
+      "sha256": "cd062de3169ac597bd9fe4f739f8852ff029081ef5e27f97fd3f989c95359665",
+      "size_bytes": 719927,
+      "uncompressed_bytes": 6819526,
+      "url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44985166238/artifacts/14739354232"
+    },
+    "gate_outcome": "fail",
+    "index": "../hosted/attempt4-circuits.json",
+    "index_sha256": "0ac0aaa13ec919efbf2fee37a1aca9d9de60af7b09a6fd52795ec75b1ebaece3"
+  },
+  "class": "R3",
+  "cost_gate_pass_claimed": false,
+  "direct_candidate": "18c888058ac851b802350c99770ed9ac2d27b582",
+  "finding_disposition": {
+    "finding": "missing concrete cheapest-correct-alternative comparison",
+    "original_review": "circuit-review.json",
+    "reason": "Shared decoding passes native correctness and reduces Beacon LUTs but increases Yosys generic cells at both PERF settings, increases PERF-off topological depth, and increases PERF-on watch endpoints. It does not preserve all measured resources/depths.",
+    "severity": "F2",
+    "state": "closed_by_experiment"
+  },
+  "global_optimality_claimed": false,
+  "independent_of_implementation": true,
+  "initial_audit_assumptions_corrected": [
+    "Exclude version-yosys probe from eight-measurement ordering count",
+    "Parse actual FAILED: 714 of 5251 summary spelling"
+  ],
+  "merge_lineage_independently_checked_via_github": true,
+  "native": {
+    "artifact": {
+      "artifact_id": 14739492960,
+      "crc_valid": true,
+      "extracted_copy_matches_archive": true,
+      "job_id": 137094033412,
+      "member_count": 125,
+      "path": "attempt4-native.zip",
+      "run_attempt": 1,
+      "run_id": 44985166238,
+      "safe_unique_regular_members": true,
+      "sha256": "4f2cac6d5f4dbf2f48f695474f256a23a36e6b2245206dc54197aa34fd338cc1",
+      "size_bytes": 286545,
+      "uncompressed_bytes": 1736644,
+      "url": "https://github.com/baabi-boo/AI-GPU/actions/runs/44985166238/artifacts/14739492960"
+    },
+    "index": "../hosted/attempt4-native.json",
+    "index_sha256": "b57f5fbf4e86c5d6ba1f4da5e72105ac25a1f38f32d70d9ba063cd91a06cd539",
+    "parent_simx_failure_classes": {
+      "high-first reconstruction": 119,
+      "host high reply": 357,
+      "low-first reconstruction": 238
+    },
+    "totals": {
+      "rtl_assertions": 19912,
+      "rtl_ignored": 28,
+      "rtl_reads": 1056,
+      "simx_checks": 18064
+    }
+  },
+  "open_outside_scope": [
+    "broader integration disposition",
+    "final publication identity",
+    "standalone native CLI executing-interpreter F1",
+    "versioned warm qualification and absolute no-wrap proof",
+    "phase acceptance and full AFU/physical evidence",
+    "inherited DSP finding"
+  ],
+  "qualified": false,
+  "review_execution": "offline verification only; no native or synthesis rerun",
+  "review_markdown_sha256": "30bc8e836417561c370f96803e2b8ac40f18eebdf80c1a5a30ba701dfa285b65",
+  "reviewer": "/root/w10_a01",
+  "schema_version": 1,
+  "scope": "same-source native and paired circuit alternative comparison",
+  "verdict": "retain_direct_repair; land_after_separate_integration_and_publication_reviews",
+  "waiver_granted": false
+}
