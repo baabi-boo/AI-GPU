@@ -1,0 +1,306 @@
+diff --git a/ci/project/p06_counter_public_records.py b/ci/project/p06_counter_public_records.py
+index 64da6397a..7920d707e 100644
+--- a/ci/project/p06_counter_public_records.py
++++ b/ci/project/p06_counter_public_records.py
+@@ -13,6 +13,7 @@ import re
+ 
+ MODES = ("normal", "immediate-overflow", "delayed-overflow", "cache-overflow", "coherent-terminal")
+ RESULT_PREFIX = "COUNTER_PUBLIC_RESULT "
++RESULT_MARKERS = ("CHECKED_COUNTERS_RESULT", "CHECKED_COUNTERS_FAILURE_RESULT", "COUNTER_PUBLIC_RESULT")
+ MAX_OUTPUT_BYTES = 16 * 1024 * 1024
+ MAX_RESULT_BYTES = 256 * 1024
+ MAX_UINT64 = (1 << 64) - 1
+@@ -45,8 +46,8 @@ SELECTORS = (
+ )
+ 
+ # Derived from the fixed harness control flow, not a native execution receipt.
+-CHECKS = {"normal": 1652, "coherent-terminal": 1798,
+-          "immediate-overflow": 1168, "delayed-overflow": 1168, "cache-overflow": 1165}
++CHECKS = {"normal": 1668, "coherent-terminal": 1814,
++          "immediate-overflow": 1176, "delayed-overflow": 1176, "cache-overflow": 1173}
+ PROGRAM_WORDS = [0x00700193, 0x0000700B, 0x0000000B]
+ MODEL_FIELDS = {"live", "inventory_ready", "idle", "any_running", "generation", "ticks",
+                 "reset_generation", "pending_reads", "core_cycles", "core_instructions",
+@@ -54,7 +55,9 @@ MODEL_FIELDS = {"live", "inventory_ready", "idle", "any_running", "generation",
+ READ_FIELDS = {"sequence", "generation", "addr", "tag", "value", "status", "completed",
+                "overflow", "ticks_before", "ticks_after", "reset_before", "reset_after",
+                "class_before", "class_after"}
+-CP_FIELDS = {"control", "queue_control", "status", "error", "retired", "expected", "head", "tail"}
++CP_FIELDS = {"control", "queue_control", "status", "error", "retired", "expected",
++             "head_writeback_raw", "head_writeback_status", "runtime_tail", "tail_register",
++             "drain_basis"}
+ TERMINAL_FIELDS = {"seeded", "selectors", "components", "unavailable_unqueried", "device_refs",
+                    "queues", "buffers", "extra_retain_rejected", "witness", "before", "after",
+                    "cp_before", "cp_after", "rows"}
+@@ -136,12 +139,22 @@ def _cp(value, label):
+     _fields(value, CP_FIELDS, label)
+     for name, item in (("control", 1), ("queue_control", 1), ("status", 0), ("error", 0)):
+         _fixed(value[name], item, label + "." + name)
++    # The backend never publishes its internal head to the zero-initialized
++    # host buffer. Its raw bytes are retained, not used as a drain observation.
++    _fixed(value["head_writeback_raw"], 0, label + ".head_writeback_raw")
++    _fixed(value["head_writeback_status"], "not-published", label + ".head_writeback_status")
++    _fixed(value["drain_basis"], "enabled-idle-status-and-retired-sequence", label + ".drain_basis")
+     for name in ("retired", "expected"):
+         _uint(value[name], label + "." + name, bits=32, minimum=22)
+-    for name in ("head", "tail"):
++    for name in ("runtime_tail", "tail_register"):
+         _uint(value[name], label + "." + name, minimum=64)
+-    require(value["retired"] == value["expected"] and value["head"] == value["tail"]
+-            and value["tail"] == 64 * value["expected"], label + ": CP work is not fully retired")
++    # Enabled zero busy status excludes unconsumed ring/engine work by the
++    # source contract. Check exact single-cacheline retirement and both actual
++    # tail observations; this inference makes no claim to read an internal head.
++    require(value["retired"] == value["expected"]
++            and value["tail_register"] == value["runtime_tail"]
++            and value["runtime_tail"] == 64 * value["expected"],
++            label + ": CP retirement or observed tail accounting differs")
+ 
+ 
+ def _terminal(value, generation, seeded, first_sequence, label):
+@@ -265,7 +278,7 @@ def verify_record(value, mode):
+     asynchronous = mode in ("immediate-overflow", "delayed-overflow")
+     read_errors = int(mode == "cache-overflow")
+     reads = (66 if negative else 132) + read_errors
+-    fixed = {"schema_version": 1, "mode": mode, "backend": "simx", "memory_route": "direct-ram",
++    fixed = {"schema_version": 2, "mode": mode, "backend": "simx", "memory_route": "direct-ram",
+              "xlen": 64, "checked": True, "native_model": True, "public_runtime": True,
+              "checks": CHECKS[mode], "failures": 0, "constructed": 2, "destroyed": 2,
+              "run_entries": 2, "run_completed": 1 if asynchronous else 2,
+@@ -325,10 +338,10 @@ def verify_output(text, mode):
+             "public output contains unsupported record separators")
+     lines = [line for line in text.split("\n") if line.strip()]
+     selected = [line for line in lines if line.startswith(RESULT_PREFIX)]
+-    require(len(selected) == 1 and text.count(RESULT_PREFIX) == 1 and lines[-1] == selected[0],
++    require(len(selected) == 1 and sum(text.count(marker) for marker in RESULT_MARKERS) == 1
++            and lines[-1] == selected[0],
+             "public output lacks its unique final result")
+-    require(re.search(r"(?:^|\n)[ \t]*(?:FAIL(?:ED)?\b|ERROR\b)|SIMX_CHECKED_COUNTER_FAILURE", text) is None
+-            and "CHECKED_COUNTERS_RESULT " not in text and "CHECKED_COUNTERS_FAILURE_RESULT " not in text,
++    require(re.search(r"(?:^|\n)[ \t]*(?:FAIL(?:ED)?\b|ERROR\b)|SIMX_CHECKED_COUNTER_FAILURE", text) is None,
+             "public output is accompanied by a failure or unrelated result")
+     payload = selected[0][len(RESULT_PREFIX):]
+     require(len(payload.encode("utf-8")) <= MAX_RESULT_BYTES, "public result exceeds its byte bound")
+diff --git a/ci/project/test_p06_counter_public_records.py b/ci/project/test_p06_counter_public_records.py
+index a031ea716..e17571be1 100644
+--- a/ci/project/test_p06_counter_public_records.py
++++ b/ci/project/test_p06_counter_public_records.py
+@@ -17,8 +17,8 @@ SENTINEL = 0xDECAFBAD12345678
+ INVENTORY = tuple((row[0], row[1], row[2],
+                    2 if row[0].startswith("dcache_") or row[0] == "tcu_lmem_reads" else 1)
+                   for row in _COUNTERS if row[1] not in (5, 6))
+-ASSERTIONS = {"normal": 1652, "coherent-terminal": 1798, "immediate-overflow": 1168,
+-              "delayed-overflow": 1168, "cache-overflow": 1165}
++ASSERTIONS = {"normal": 1668, "coherent-terminal": 1814, "immediate-overflow": 1176,
++              "delayed-overflow": 1176, "cache-overflow": 1173}
+ 
+ 
+ def model(generation):
+@@ -40,7 +40,9 @@ def read(state, selected, sequence, value, high=False, failed=False):
+ 
+ def cp(expected):
+     return {"control": 1, "queue_control": 1, "status": 0, "error": 0,
+-            "retired": expected, "expected": expected, "head": expected * 64, "tail": expected * 64}
++            "retired": expected, "expected": expected, "head_writeback_raw": 0,
++            "head_writeback_status": "not-published", "runtime_tail": expected * 64,
++            "tail_register": expected * 64, "drain_basis": "enabled-idle-status-and-retired-sequence"}
+ 
+ 
+ def terminal(generation, sequence, seeded=False):
+@@ -61,7 +63,7 @@ def terminal(generation, sequence, seeded=False):
+     return {"seeded": seeded, "selectors": 33, "components": 40, "unavailable_unqueried": 12,
+             "device_refs": 1, "queues": 0, "buffers": 0, "extra_retain_rejected": True,
+             "witness": witness, "before": before, "after": deepcopy(before),
+-            "cp_before": cp(24), "cp_after": cp(90), "rows": rows}
++            "cp_before": cp(26), "cp_after": cp(92), "rows": rows}
+ 
+ 
+ def query(selected=INVENTORY[0]):
+@@ -105,7 +107,7 @@ def result(mode="normal"):
+     terminals = ([terminal(2, 1 + read_errors)] if negative else
+                  [terminal(1, 1, mode == "coherent-terminal"), terminal(2, 67)])
+     states = [failure["after"], terminals[0]["after"]] if negative else [item["after"] for item in terminals]
+-    return {"schema_version": 1, "mode": mode, "backend": "simx", "memory_route": "direct-ram",
++    return {"schema_version": 2, "mode": mode, "backend": "simx", "memory_route": "direct-ram",
+             "xlen": 64, "checked": True, "native_model": True, "public_runtime": True,
+             "checks": ASSERTIONS[mode], "failures": 0, "constructed": 2, "destroyed": 2,
+             "run_entries": 2, "run_completed": 1 if asynchronous else 2, "run_errors": int(asynchronous),
+@@ -173,7 +175,7 @@ class PublicRecordsTests(unittest.TestCase):
+             records.verify_output(output(result()), "coherent-terminal")
+ 
+     def test_top_level_claims_cannot_be_promoted_or_relabeled(self):
+-        for key, replacement in (("schema_version", 2), ("native_model", False), ("checked", False),
++        for key, replacement in (("schema_version", 1), ("native_model", False), ("checked", False),
+                                  ("public_runtime", False), ("xlen", 32), ("memory_route", "llc"),
+                                  ("backend", "mock"), ("qualified", True), ("ready_for_warm", True),
+                                  ("warm_execution", True), ("acceptance_claimed", True),
+@@ -307,15 +309,45 @@ class PublicRecordsTests(unittest.TestCase):
+             state["core_instructions"] = state["components"][1] = 0
+         self.reject(value)
+ 
+-    def test_cp_must_be_enabled_drained_and_retire_each_half(self):
++    def test_cp_must_be_enabled_idle_and_retire_each_half(self):
+         for key, replacement in (("control", 0), ("queue_control", 0), ("status", 1), ("error", 1),
+-                                 ("retired", 23), ("head", 0), ("tail", 23 * 64), ("expected", 0)):
++                                 ("retired", 25), ("runtime_tail", 25 * 64),
++                                 ("tail_register", 25 * 64), ("expected", 0)):
+             self.changed(("terminal_snapshots", 0, "cp_before", key), replacement)
+-        self.changed(("terminal_snapshots", 0, "cp_after"), cp(89))
++        self.changed(("terminal_snapshots", 0, "cp_after"), cp(91))
+         value = result()
+-        value["terminal_snapshots"][0]["cp_before"].update(head=64, tail=64)
++        value["terminal_snapshots"][0]["cp_before"].update(runtime_tail=64, tail_register=64)
+         self.reject(value)
+ 
++    def test_cp_raw_head_is_retained_without_claiming_published_head(self):
++        value = result()
++        observed = value["terminal_snapshots"][0]["cp_before"]
++        self.assertEqual(observed["head_writeback_raw"], 0)
++        self.assertNotEqual(observed["head_writeback_raw"], observed["tail_register"])
++        self.assertEqual(records.verify_output(output(value), "normal"), value)
++        for key, replacement in (("head_writeback_raw", observed["tail_register"]),
++                                 ("head_writeback_raw", True),
++                                 ("head_writeback_status", "published"),
++                                 ("drain_basis", "observed-head-equals-tail")):
++            self.changed(("terminal_snapshots", 0, "cp_before", key), replacement)
++        value = result()
++        for key in ("cp_before", "cp_after"):
++            observed = value["terminal_snapshots"][0][key]
++            observed["head"] = observed.pop("head_writeback_raw")
++        self.reject(value)
++
++    def test_cp_tail_observations_are_bounded_integers_and_account_for_every_cacheline(self):
++        for key in ("runtime_tail", "tail_register"):
++            for replacement in (True, -1, 0, UINT64_MAX + 1):
++                with self.subTest(key=key, replacement=replacement):
++                    self.changed(("terminal_snapshots", 0, "cp_before", key), replacement)
++        for delta in (-64, 1, 64):
++            value = result()
++            observed = value["terminal_snapshots"][0]["cp_before"]
++            observed["runtime_tail"] += delta
++            observed["tail_register"] += delta
++            self.reject(value)
++
+     def test_actual_destruction_must_match_last_observation(self):
+         for path, replacement in ((("completed",), False), (("ticks_after",), 1),
+                                   (("reset_after",), 0), (("idle_after",), False),
+@@ -408,7 +440,7 @@ class PublicRecordsTests(unittest.TestCase):
+ 
+     def test_duplicate_json_keys_are_rejected_at_all_depths(self):
+         text = output(result())
+-        for needle, replacement in (("\"schema_version\":1", "\"schema_version\":1,\"schema_version\":1"),
++        for needle, replacement in (("\"schema_version\":2", "\"schema_version\":2,\"schema_version\":2"),
+                                     ("\"generation\":1", "\"generation\":1,\"generation\":1"),
+                                     ("\"status\":0", "\"status\":0,\"status\":0")):
+             with self.subTest(needle=needle), self.assertRaises(ValueError):
+@@ -424,11 +456,20 @@ class PublicRecordsTests(unittest.TestCase):
+             with self.subTest(index=index), self.assertRaises(ValueError):
+                 records.verify_output(value, "normal")
+ 
++    def test_reserved_result_markers_cannot_be_mixed_or_malformed_noise(self):
++        text = output(result())
++        markers = ("CHECKED_COUNTERS_RESULT", "CHECKED_COUNTERS_FAILURE_RESULT", "COUNTER_PUBLIC_RESULT")
++        for marker in markers:
++            for suffix in ("", " {}", "\t{}", ": malformed", "_EXTRA {}"):
++                for leading in ("", " ", "dependency statistics: "):
++                    with self.subTest(marker=marker, suffix=suffix, leading=leading), self.assertRaises(ValueError):
++                        records.verify_output(leading + marker + suffix + "\n" + text, "normal")
++
+     def test_malformed_nonfinite_float_and_oversized_integer_json_is_rejected(self):
+         text = output(result())
+-        for replacement in ("NaN", "Infinity", "-Infinity", "1652.0", "1e3", "1" * 21, "null", '"1652"'):
++        for replacement in ("NaN", "Infinity", "-Infinity", "1668.0", "1e3", "1" * 21, "null", '"1668"'):
+             with self.subTest(replacement=replacement), self.assertRaises(ValueError):
+-                records.verify_output(text.replace("\"checks\":1652", "\"checks\":" + replacement), "normal")
++                records.verify_output(text.replace("\"checks\":1668", "\"checks\":" + replacement), "normal")
+         for payload in ("{", "[]", "true", "[" * 17 + "0" + "]" * 17):
+             with self.subTest(payload=payload), self.assertRaises(ValueError):
+                 records.verify_output(records.RESULT_PREFIX + payload + "\n", "normal")
+diff --git a/tests/unittest/checked_counters/public_main.cpp b/tests/unittest/checked_counters/public_main.cpp
+index c04e705fa..8191ba9aa 100644
+--- a/tests/unittest/checked_counters/public_main.cpp
++++ b/tests/unittest/checked_counters/public_main.cpp
+@@ -31,6 +31,8 @@ constexpr std::array<uint32_t, 3> kRejectedProgram{{~kProgram[0], ~kProgram[1],
+ constexpr uint32_t kCpControl = 0x000;
+ constexpr uint32_t kCpStatus = 0x004;
+ constexpr uint32_t kQueueControl = 0x11c;
++constexpr uint32_t kQueueTailLow = 0x120;
++constexpr uint32_t kQueueTailHigh = 0x124;
+ constexpr uint32_t kQueueSequence = 0x128;
+ constexpr uint32_t kQueueError = 0x12c;
+ 
+@@ -244,8 +246,9 @@ struct CpState {
+   uint32_t error;
+   uint32_t retired;
+   uint64_t expected;
+-  uint64_t head;
+-  uint64_t tail;
++  uint64_t head_writeback_raw;
++  uint64_t runtime_tail;
++  uint64_t tail_register;
+ };
+ 
+ uint32_t cp_read(vx::Device& device, uint32_t address) {
+@@ -266,18 +269,33 @@ CpState terminal_cp(vx_device_h handle) {
+   CpState result{cp_read(device, kCpControl), cp_read(device, kQueueControl),
+                  cp_read(device, kCpStatus), cp_read(device, kQueueError),
+                  cp_read(device, kQueueSequence), device.*member(CpExpected{}),
+-                 0, device.*member(CpTail{})};
++                 0, device.*member(CpTail{}), 0};
++  const uint64_t tail_low = cp_read(device, kQueueTailLow);
++  const uint64_t tail_high = cp_read(device, kQueueTailHigh);
++  result.tail_register = tail_low | (tail_high << 32);
+   const auto& head = device.*member(CpHead{});
+-  require(head.host_ptr != nullptr && head.size >= sizeof(result.head),
++  require(head.host_ptr != nullptr && head.size >= sizeof(result.head_writeback_raw),
+           "terminal CP head storage is absent");
+   success(device.platform()->host_mem_pull(head.cp_addr), "terminal CP head pull failed");
+-  std::memcpy(&result.head, head.host_ptr, sizeof(result.head));
++  std::memcpy(&result.head_writeback_raw, head.host_ptr, sizeof(result.head_writeback_raw));
++  // This backend programs a head-writeback address but never publishes the
++  // internal head there. Retain its actual initialized bytes as unsupported
++  // writeback evidence; they cannot be compared with the submitted tail.
++  require(result.head_writeback_raw == 0,
++          "terminal CP head storage changed without a published-head contract");
+   require(result.control == 1 && result.queue_control == 1,
+           "terminal CP was not enabled during drain observation");
+   require(result.status == 0 && result.error == 0, "terminal CP is busy or failed");
+   require(result.expected > 0 && result.expected <= std::numeric_limits<uint32_t>::max()
+           && result.retired == result.expected, "terminal CP did not retire all submissions");
+-  require(result.head == result.tail && result.tail > 0, "terminal CP ring is not drained");
++  require(result.tail_register == result.runtime_tail && result.runtime_tail > 0,
++          "terminal CP tail register differs from submitted runtime tail");
++  require(result.runtime_tail == result.expected * 64,
++          "terminal CP submissions are not one cacheline per retired command");
++  // With exclusive ownership, the enabled CP's zero busy status excludes
++  // head < tail, a loaded cacheline, and active command/launch engines. The
++  // single-cacheline commands and exact retirement/tail accounting establish
++  // drain by that source invariant, without observing an internal head value.
+   return result;
+ }
+ 
+@@ -672,9 +690,12 @@ void print_read(const hooks::DcrRead& read) {
+ 
+ void print_cp(const CpState& state) {
+   std::printf("{\"control\":%u,\"queue_control\":%u,\"status\":%u,\"error\":%u,"
+-              "\"retired\":%u,\"expected\":%" PRIu64 ",\"head\":%" PRIu64
+-              ",\"tail\":%" PRIu64 "}", state.control, state.queue_control, state.status,
+-              state.error, state.retired, state.expected, state.head, state.tail);
++              "\"retired\":%u,\"expected\":%" PRIu64 ",\"head_writeback_raw\":%" PRIu64
++              ",\"head_writeback_status\":\"not-published\",\"runtime_tail\":%" PRIu64
++              ",\"tail_register\":%" PRIu64
++              ",\"drain_basis\":\"enabled-idle-status-and-retired-sequence\"}",
++              state.control, state.queue_control, state.status, state.error, state.retired,
++              state.expected, state.head_writeback_raw, state.runtime_tail, state.tail_register);
+ }
+ 
+ void print_terminal(const TerminalSnapshot& snapshot) {
+@@ -740,7 +761,7 @@ void print_result(const char* mode, const FailureRecord& failure,
+   require(observed.dcr_read_entries == observed.dcr_read_completed + observed.dcr_read_errors
+           && observed.dcr_write_entries == observed.dcr_write_completed,
+           "diagnostic contains an unaccounted model entry");
+-  std::printf("COUNTER_PUBLIC_RESULT {\"schema_version\":1,\"mode\":\"%s\","
++  std::printf("COUNTER_PUBLIC_RESULT {\"schema_version\":2,\"mode\":\"%s\","
+               "\"backend\":\"simx\",\"memory_route\":\"direct-ram\",\"xlen\":64,"
+               "\"checked\":true,\"native_model\":true,\"public_runtime\":true,"
+               "\"checks\":%zu,\"failures\":0,\"constructed\":%" PRIu64

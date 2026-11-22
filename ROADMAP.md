@@ -218,14 +218,42 @@ measurements and the concrete alternative comparison are reviewed: retain the
 direct decoder, with raw RV64 area failures preserved. Broader CI and publication
 remain separately tracked in the [transport packet](docs/project/evidence/p06-mpm-transport/README.md).
 The [checked-counter prerequisite](docs/designs/simx_checked_counters_v1.md)
-is now implemented, with [independently reviewed native evidence](docs/project/evidence/p06-checked-counters/reviews/native-review.md)
-for five directed cells at `9fd7eac203c77fa54c7af80fa0220ae09553cd55`.
-Nineteen available selectors are seeded; fourteen still need native backing-source
-coverage. The next development action is to close the terminal lifetime and
-ownership proof and native public failure/coherence diagnostics, then implement
-the [versioned qualification binding](docs/project/p06-mpm-qualification-plan.md)
-before a fresh complete matched warm experiment under unchanged rules. The
-[development handoff](docs/project/p06-checked-counters-handoff.md) records that sequence.
+is implemented. Its subsequent [diagnostic continuation](docs/project/p06-counter-diagnostics-audit.md)
+has an independently reviewed original pass at `e5f1524`: all 33 available
+selectors and 40 backing components, seven model cases and six public-runner
+cases through actual Processor/RAM. Twelve unavailable L2/L3 rows remain
+unqueried. The [evidence packet](docs/project/evidence/p06-counter-diagnostics/README.md)
+separates those native results, the 3,158-test host pass and later inert replay
+validation at `4268d2d5`.
+
+The latest [native run 45034575685](https://github.com/baabi-boo/AI-GPU/actions/runs/45034575685)
+separately passes the same **13 diagnostic process cases** at `4268d2d5`.
+Its [independent audit](docs/project/evidence/p06-counter-diagnostics/native/w10-native-checkpoint-audit.md)
+matches the 270 model/683 public source bodies to that exact Git tree and
+validates both inert replays; public replay requires the explicit 683-source
+manifest. The separate [hosted governance original](docs/project/evidence/p06-counter-diagnostics/host/checkpoint-4268d2d/receipt.json),
+run `45034575638`, executed **3,312 tests in 1,811.712 seconds and failed two
+isolation-guard tests**; 3,310 passed, with no errors or skips. The
+[test-only repair](docs/project/evidence/p06-counter-diagnostics/reviews/wave10/w10-replay-guard-review.md)
+is independently reviewed and published at `142b2d6`, with both F2 findings
+closed. The subsequent [clean local governance receipt](docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/receipt.json)
+at `142b2d6` records **all 3,318 tests passing in 1,918.414 seconds on CPython
+3.12.14**, with four successful commands and independent source/log review.
+The separate [hosted retry](docs/project/evidence/p06-counter-diagnostics/host/checkpoint-142b2d6/pending-receipt-20261122T165509Z.json)
+`45040805357` and native retry `45040805341` remain queued with no executed
+result; the latest audited native scope stays at `4268d2d5`. Every original
+failure remains retained.
+
+The next bounded action is to implement and independently review the separately
+versioned [qualification binding](docs/project/p06-mpm-qualification-plan.md)
+for actual seed-free measurement binaries and the full managed warm caller.
+Apply the [conditional lifetime argument](docs/designs/simx_counter_lifetime_v1.md)
+with actual terminal ownership and loaded dependency/source-to-binary provenance;
+review the pure validator and rejection controls before the managed-caller
+preflight and unchanged 24-process, 792-launch, 25,344-word warm attempt. The
+[diagnostic handoff](docs/project/p06-counter-diagnostics-handoff.md) records the
+remaining boundary. Diagnostic/replay qualification, readiness, warm execution
+and acceptance remain false.
 P06-A02/A03 remain open; the source repair cannot recover historical high bits
 or establish a warm speedup. P07–P11 remain `not_started`. The
 [executor audit](docs/project/p04-executor-audit.md) preserves the unresolved

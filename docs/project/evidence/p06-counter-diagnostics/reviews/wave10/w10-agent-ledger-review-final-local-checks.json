@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/w10_agent_ledger_review",
+  "checked_at": "2026-11-22T17:08:50.189398+00:00",
+  "scope": "Read-only data checks of retained local execution evidence and immutable source; no tests, replay, native work or CI polling.",
+  "outcome": "pass",
+  "errors": [],
+  "canonical_local_receipt_identity": {
+    "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/receipt.json",
+    "size_bytes": 3763,
+    "sha256": "b2d7e598f897d4a9e0db96f79e5af6356f70c2554b20927af3a0a7cea37ba437"
+  },
+  "unique_ids": 3318,
+  "method_headers": 3318,
+  "ok_terminal_results": 3318,
+  "single_line_results": 3316,
+  "multiline_results": [
+    {
+      "id": "test_check_project.RoadmapTests.test_accepts_staged_entry_with_blocked_upstream_phase",
+      "method": "test_accepts_staged_entry_with_blocked_upstream_phase",
+      "start_line": 456,
+      "result": "ok",
+      "result_line": 457
+    },
+    {
+      "id": "test_sst_setup.SstSetupTests.test_hostless_dispatch_passes_plugin_path_to_both_kernels",
+      "method": "test_hostless_dispatch_passes_plugin_path_to_both_kernels",
+      "start_line": 2982,
+      "result": "ok",
+      "result_line": 2986
+    }
+  ],
+  "suite_seconds": 1918.414,
+  "commands": [
+    {
+      "label": "preflight",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "ci/project/preflight.py",
+        "--tier",
+        "governance",
+        "--json"
+      ],
+      "returncode": 0,
+      "termination_reason": null,
+      "log_identity": {
+        "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/preflight.log",
+        "size_bytes": 4496,
+        "sha256": "5ee6d4ac9aec977b779b231c0b7c2bd341b819c4b7edf65070965df6ba592032"
+      }
+    },
+    {
+      "label": "project-metadata",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "ci/project/check_project.py"
+      ],
+      "returncode": 0,
+      "termination_reason": null,
+      "log_identity": {
+        "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/project-metadata.log",
+        "size_bytes": 96,
+        "sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993"
+      }
+    },
+    {
+      "label": "baseline-packets",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "ci/project/check_baseline_packets.py"
+      ],
+      "returncode": 0,
+      "termination_reason": null,
+      "log_identity": {
+        "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/baseline-packets.log",
+        "size_bytes": 657,
+        "sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be"
+      }
+    },
+    {
+      "label": "unittest",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/project",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "termination_reason": null,
+      "log_identity": {
+        "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/unittest.log",
+        "size_bytes": 578913,
+        "sha256": "dd05f5f1b09e8e97ae5fc13b2da5c739d39ef6d22a34d035f1cc9142f564e4c7"
+      }
+    }
+  ],
+  "source_records": 365,
+  "source_records_equal_before_after": true,
+  "source_records_match_immutable_git_and_current_checkout": true,
+  "clean_before_after": "Reported by producer and independently checked by agent54; no new observation of execution is claimed by agent58.",
+  "current_source_revision": "142b2d6aaea2fa4226118b857514113032d2e26c",
+  "current_source_tree": "754ef8577f9a72785c0809048762c70b16cb4857",
+  "python_version": "3.12.14",
+  "native_execution": "not_run",
+  "hosted_execution": false,
+  "prior_host_attempts_preserved": 4,
+  "host_index_attempts": 5,
+  "failed4268_result_preserved": true,
+  "native_original_archives": 4,
+  "latest_audited_native_revision": "4268d2d5d811063bb886cde7bd0e27e61a79c9b4",
+  "pending_hosted_observation": {
+    "schema_version": 1,
+    "evidence_kind": "hosted-governance-as-of-pending-observation",
+    "observed_at_utc": "2026-11-22T16:55:09Z",
+    "source_revision": "142b2d6aaea2fa4226118b857514113032d2e26c",
+    "source_tree": "754ef8577f9a72785c0809048762c70b16cb4857",
+    "workflow_run_id": 45040805357,
+    "workflow_run_attempt": 1,
+    "job_id": 137264592244,
+    "url": "https://github.com/baabi-boo/AI-GPU/actions/runs/45040805357",
+    "api_status": "queued",
+    "api_conclusion": null,
+    "runner_id": 0,
+    "steps_started": 0,
+    "expected_discovery_total": 3318,
+    "executed_tests": null,
+    "seconds": null,
+    "exit_code": null,
+    "python_version": null,
+    "hosted_final_result": "not_observed",
+    "complete_log_fetched": false,
+    "full_host_gate_pass_claimed": false,
+    "scope": "As-of observation only, independently confirmed by run API, full run-jobs API and purpose-built jobs wrapper. No eventual hosted conclusion is inferred.",
+    "separate_local_receipt": "../local-clean-142b2d6/receipt.json",
+    "api_artifacts": [
+      {
+        "path": "pending-20261122T165509Z-jobs-api.json",
+        "sha256": "2c2afd32fddad5ac37d7a91494468fb3fb2978ac1374b986941d8f8782212563",
+        "size_bytes": 836
+      },
+      {
+        "path": "pending-20261122T165509Z-jobs-tool.json",
+        "sha256": "b29017ce24984b097246ef5565cbe7a72517c72f2b08a8240c80977749254c8d",
+        "size_bytes": 211
+      },
+      {
+        "path": "pending-20261122T165509Z-run-api.json",
+        "sha256": "7eec58a10c1c2091d694138e88f14f5d5ae757f2679f0dcb008a59859446c4b9",
+        "size_bytes": 11838
+      }
+    ],
+    "api_representation": "Exact UTF-8 encoding of decoded GitHub fetch content; purpose-built jobs object separately serialized as JSON.",
+    "earlier_pending_observations_preserved": true,
+    "qualified": false,
+    "ready_for_warm": false,
+    "warm_execution": false,
+    "acceptance": false
+  },
+  "local_artifact_identities": [
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/baseline-packets.log",
+      "size_bytes": 657,
+      "sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be"
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/execution-receipt.json",
+      "size_bytes": 133908,
+      "sha256": "7572f52d74385fafe4c26364e663f1c4c43fa800ca8249495c70ac6cd3191355"
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/host-index-before.json",
+      "size_bytes": 4345,
+      "sha256": "448b5f4cf5b7dd345c87bfff10b07415b40a40b9ea546b537938ae87c3a2c4fc"
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/preflight.log",
+      "size_bytes": 4496,
+      "sha256": "5ee6d4ac9aec977b779b231c0b7c2bd341b819c4b7edf65070965df6ba592032"
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/project-metadata.log",
+      "size_bytes": 96,
+      "sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993"
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/review-audit.py",
+      "size_bytes": 9466,
+      "sha256": "b9dd525e104f28bf8ef9b3cdc46a7d0deade84bed5fb2aed6e105d18684eb79b"
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/review.json",
+      "size_bytes": 75820,
+      "sha256": "0c4919153b22bb89de3a9eedc69f833f9ec139ca3a7e4d8853a85c226bba893c"
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/review.md",
+      "size_bytes": 9435,
+      "sha256": "3934baccdfa80dbd2ff852eb14f82db09ef09ae9600af89687063b151e7be32a"
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/run-wrapper.py",
+      "size_bytes": 7004,
+      "sha256": "cbd21f05dceafb5e1f057c897ddd1a405a1b7db6413deb39a8156a0d02b1e7c5"
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/status.json",
+      "size_bytes": 102,
+      "sha256": "e5c275b3f68f1bc910916dffb6d6e04b1ff4c075b9dc7f5d90e11bea2ca40eb1"
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/test-results.json",
+      "size_bytes": 955296,
+      "sha256": "8cf88f44850ac32c946e1baf3fe4fac453e67d63e3dc26aa906e2d35aa10cb65"
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/unittest.log",
+      "size_bytes": 578913,
+      "sha256": "dd05f5f1b09e8e97ae5fc13b2da5c739d39ef6d22a34d035f1cc9142f564e4c7"
+    }
+  ],
+  "raw_local_log_identity": {
+    "path": "docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/unittest.log",
+    "size_bytes": 578913,
+    "sha256": "dd05f5f1b09e8e97ae5fc13b2da5c739d39ef6d22a34d035f1cc9142f564e4c7"
+  }
+}

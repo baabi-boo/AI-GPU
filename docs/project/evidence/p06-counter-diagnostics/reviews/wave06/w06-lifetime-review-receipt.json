@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/w06_lifetime_review",
+  "proof_author": "/root/w05_lifetime_proof",
+  "review_kind": "independent-read-only-source-proof",
+  "review_completed_at": "2026-11-22T14:14:03.569610+00:00",
+  "outcome": "pass",
+  "source_revision": "407ab9fea5e4f793a2a5088f566a87f3e631aa84",
+  "audited_base_revision": "7455e008c1e001d3329e74fd55ffcd942592ec5f",
+  "working_head": "81ed6871634fefbf5c78fb27cf10dce913bd4d9c",
+  "dependency_revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+  "checks": {
+    "source_bindings": 55,
+    "current_source_bodies_identical": 55,
+    "production_byte_identity": 45,
+    "dependency_body_digests": 21,
+    "selectors": 33,
+    "components": 40,
+    "unique_components": 40,
+    "unavailable_selectors": 12,
+    "frozen_contract_tuples": 45,
+    "local_links": 41,
+    "retained_model_passed_cells": 7
+  },
+  "errors": [],
+  "raw_dependency_json_identical_to_initial_audit": true,
+  "final_snapshot_files": [
+    {
+      "path": "docs/designs/simx_counter_lifetime_v1.md",
+      "sha256": "85c265c2af0e5ced9641135fb8cc606885601a1cbd3fbf52c4da878cfb0fef3b",
+      "size_bytes": 23128
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/lifetime-source-manifest.json",
+      "sha256": "601ba960e5c57687d6cd2ee3c6cc6b3e60c53cdf5cc64158ebdee6c8a3d0fb3c",
+      "size_bytes": 63560
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/dependency-source-manifest.json",
+      "sha256": "3fb3332ecf76c5ee136bf68e2840f8e4e612a15f660a983d0913662cf8c469b6",
+      "size_bytes": 16601
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/dependency-source-bodies.json",
+      "sha256": "e5fd3d919e3c8f446381cc33e527c230c463010fc4178168e0ef52d21b187bbd",
+      "size_bytes": 99341
+    }
+  ],
+  "supplemental_public_main": {
+    "path": "tests/unittest/checked_counters/public_main.cpp",
+    "sha256": "4a408a3b4485050366ed330e652769e884fdd56433dceb5c6c3f80186f4950be",
+    "binding": "working-tree source only; no native qualification"
+  },
+  "closed_findings": [
+    {
+      "id": "F1-LIFETIME-01",
+      "severity": "F1",
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "status": "closed",
+      "summary": "Root corrected HBM2 finalizer dispatch to inherited Implementation::finalize through Implementation*; independently rechecked."
+    }
+  ],
+  "open_findings": [],
+  "clarifications_verified": [
+    "enabled idle and retirement/tail inference; unsupported raw head writeback; staged-low/committed-high tail pair",
+    "normal two unseeded contexts; coherent seeded context plus fresh unseeded; each overflow seeded failure plus fresh unseeded",
+    "81ed actual public-normal failure and four blocked cells; corrected checkpoint native result remains pending",
+    "retained dependency bodies descriptor and chained manifest hash"
+  ],
+  "historical_public_native": {
+    "revision": "81ed6871634fefbf5c78fb27cf10dce913bd4d9c",
+    "run_id": 45029135146,
+    "outcome": "fail",
+    "cells": {
+      "public-normal": "fail",
+      "public-immediate-overflow": "blocked",
+      "public-delayed-overflow": "blocked",
+      "public-cache-overflow": "blocked",
+      "public-coherent-terminal": "blocked"
+    },
+    "raw_failure": "terminal CP ring is not drained"
+  },
+  "execution_by_reviewer": {
+    "native_build": "not_run",
+    "gpu_execution": "not_run",
+    "network": "not_used",
+    "repository_edits": false
+  },
+  "qualified": false,
+  "ready_for_warm": false,
+  "absolute_no_wrap_bound": "not_established",
+  "acceptance_claimed": false,
+  "review_report": {
+    "path": "/workspace/scratch/98908dfa3444/w06-lifetime-review.md",
+    "sha256": "a84a87893210a10e226edbc367f8351aafbf4d6a0063cc0208ac9ed12946a9b8",
+    "size_bytes": 16625
+  }
+}

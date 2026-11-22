@@ -1,0 +1,370 @@
+# SimX terminal counter lifetime argument, version 1
+
+## Status and source boundary
+
+This document supplies a **conditional source argument** for the 33 available
+P06 selectors and their 40 backing components on one precisely bound SimX
+route. It explains what a successful terminal observation can establish about
+the preceding device lifetime, and what must still be observed before that
+argument applies to a real warm run. It does not qualify warm-v1 or establish
+an absolute no-wrap bound for a measurement binary.
+
+The [lifetime source manifest](../project/evidence/p06-counter-diagnostics/lifetime-source-manifest.json)
+records the exact SHA-256, size and Git blob identity of 45 production files
+and 10 inventory/caller files at
+`407ab9fea5e4f793a2a5088f566a87f3e631aa84`. The 45 production bodies match
+audited base `7455e008c1e001d3329e74fd55ffcd942592ec5f` and the working
+production bodies inspected for this argument. The manifest enumerates source
+premises; it is not a complete transitive build closure. Its companion
+[dependency source manifest](../project/evidence/p06-counter-diagnostics/dependency-source-manifest.json)
+binds 21 original Ramulator source bodies to the repository's gitlink,
+`e62c84a6f0e06566ba6e182d308434b4532068a5`. Both SHA-256 and Git blob SHA-1
+were recomputed over the original UTF-8 bytes, preserving line endings.
+
+P06 and P06-T01 remain `in_progress`; P06-T01-A02 and A03 remain open.
+The `P06-WARM-RV64-MPM-HIGH-HALF` blocker remains unconditional in warm-v1.
+The manifests retain `qualified: false`, `ready_for_warm: false` and
+`absolute_no_wrap_bound: not_established`. This document supplies no RTL
+parity, vendor hardware-emulation or hardware result and does not change P05
+or the P01-A03 vendor hardware-emulation blocker.
+
+## Exact admitted route
+
+The argument admits RV64 **timing** SimX with `PERF_ENABLE` and
+`SIMX_CHECKED_COUNTERS=1`, the `p02-tfr`/STD configuration, one cluster, one
+socket containing one core, four warps, four threads, issue width one, one
+LSU block and one TCU block. Instruction/data caches and local memory are
+enabled; there is one instruction-cache bank, two data-cache banks and two
+external memory channels. VM, L2, L3 and WGMMA are disabled. There is one
+simulation worker, no concurrent host submitter, and every selected query
+uses `core_id = 0`. The exact generated configuration and loaded artifacts
+must establish these conditions; the profile name alone is insufficient.
+The inventory helper has corresponding compile-time checks and checks the
+actual cache and tensor-buffer owners.
+([Inventory](../../tests/unittest/checked_counters/counter_access.cpp),
+[topology](../../sim/simx/socket.cpp),
+[selector contract](../../ci/project/p06_contract.py).)
+
+`CP_ON_L2 = CP_ON_L3 = 0` means that the backend's CP memory hooks use
+registered host `memcpy` or direct functional `RAM::read/write`. They do not
+enter `ProcessorImpl::cp_mem_transfer`. The LLC-client branch does enter the
+processor and can tick the GPU platform; it is excluded. VM-off releases use
+the common allocator bookkeeping rather than a VM walker. A change to these
+routes requires a new teardown argument.
+([Backend hooks](../../sw/runtime/simx/vortex.cpp),
+[processor transfer/reset paths](../../sim/simx/processor.cpp),
+[allocator release](../../sw/runtime/common/device.cpp).)
+
+External timing memory is the default Ramulator adapter with HBM2.
+`VORTEX_DRAM_MODEL` and `DRAM_TRACE` are absent. The bank-model alternative,
+GDDR6/HBM3 selection and controller plugins are outside this binding.
+
+## Terminal theorem
+
+Let `M = 2^64 - 1`. For selector `j`, let its mathematical aggregate at time
+`t` be `S_j(t) = sum_k c_jk(t)`, where `c_jk` are its actual backing
+components, not a temporary returned statistics structure. Consider one
+accepted device lifetime from construction until destruction of that storage.
+The following are premises, not conclusions inferred from endpoint values:
+
+1. All 40 selected components start at zero. Their admitted production
+   updates add nonnegative quantities; no selected component is decremented,
+   reseeded, replaced or reset to a lower value during that lifetime.
+2. Every component update uses the checked counter operations. A rejected
+   update, failed launch or failed aggregate observation invalidates the
+   lifetime as numeric evidence.
+3. Every permitted launch reset preserves the selected components. Prior
+   work is drained, and transient accounting is reconciled before reset.
+4. At a terminal boundary `T`, every one of the 33 aggregates is evaluated
+   successfully through the production checked accumulation path, from zero,
+   with the complete exact component inventory. The returned 64-bit value is
+   reconstructed and verified from both public low/high halves.
+5. No selected component changes during this readout or after it until the
+   component's storage is destroyed. This requires the caller, execution,
+   ownership, CP and finalizer conditions below.
+
+For each component, premises 1–3 give `0 <= c_jk(t) <= c_jk(T)` for every
+earlier `t`. Summing nonnegative terms gives
+
+```text
+0 <= S_j(t) <= S_j(T) <= M.
+```
+
+The final inequality follows from successful checked accumulation at `T`.
+Every earlier aggregate therefore fits, including an aggregate that was never
+queried earlier. Nonnegative partial sums cannot exceed the complete sum.
+Premise 5 extends this bound through the remaining storage lifetime. For an
+accepted run this is an absolute, per-lifetime argument; it is not modular
+endpoint subtraction and is not a workload-independent maximum for all future
+runs.
+
+Checking individual components is insufficient. Two data-cache banks can
+each fit while their sum overflows. Six data-cache selectors and the two
+tensor-buffer read components require checked final aggregation. Conversely,
+successful terminal sums cannot rescue a lifetime in which an earlier checked
+update failed: that process must already have been rejected.
+
+`PerfCounter` checks signed negative operands and checks overflow/underflow
+before modifying its value. The type also supports assignment and
+subtraction. **The type alone does not imply monotonicity.** The audit of the
+selected production storage and reset paths supplies that premise. Diagnostic
+seed assignments are outside it. In an ordinary build, `PerfCounter` is an
+unsigned integer alias; a checked diagnostic result does not automatically
+establish this theorem for a later ordinary measurement binary.
+([Checked type](../../sim/common/perf_counter.h).)
+
+## Inventory and update/reset obligations
+
+The manifest lists every `(name, mpm_class, csr, core_id)` tuple, all 40
+component identities and the associated source paths. The aggregate counts
+are:
+
+| Selected group | Selectors | Backing components | Production storage and accumulation |
+|---|---:|---:|---|
+| Core/base: cycles, instructions, scheduler idle, active/stalled/issued warps, issued threads, scoreboard/LSU/TCU stalls, TCU instructions, loads, stores | 13 | 13 | `Core::Impl::perf_stats_`; core stage updates and LSU issued-lane counts |
+| Instruction-cache reads, read misses, MSHR stalls | 3 | 3 | One `CacheBank::perf_stats_` per field |
+| Data-cache reads, writes, read/write misses, evictions, MSHR stalls | 6 | 12 | Two `CacheBank::perf_stats_` components per field |
+| Local-memory reads, writes, bank stalls | 3 | 3 | `LocalMem::Impl::perf_stats_` |
+| Coalescer misses | 1 | 1 | One `MemCoalescer::perf_stats_.misses` |
+| External-memory reads, writes, latency | 3 | 3 | `ProcessorImpl::perf_mem_*` cumulative fields |
+| External-memory bank stalls | 1 | 1 | The memory crossbar's `TxCrossBar::collisions_` |
+| TCU tensor-buffer stalls/cache hits | 2 | 2 | `TcuUnit::Impl::perf_stats_` |
+| TCU local-memory reads | 1 | 2 | `TcuTbuf::Impl::bufs_[0/1].reads_` |
+| **Total** | **33** | **40** | **26 single-component and seven two-component aggregates** |
+
+The 12 L2/L3 selector tuples are unavailable in this route and must remain
+unqueried. A successful subset of enabled selectors is not the required exact
+inventory. The data-cache bank-collision selector is not among these 33.
+
+Core counters add one, mask/popcount values or issued lane counts. Core
+`reset()` preserves `perf_stats_`. Cache-bank read/write/miss/eviction/stall
+updates increment the selected fields; `CacheBank::on_reset()` preserves
+those fields. `Cache::Impl::perf_stats()`, `CacheCluster::perf_stats()` and
+socket readout aggregate through zero-initialized `Cache::PerfStats` and
+checked `operator+=`. Local-memory updates increment their selected fields,
+and its reset preserves them. Coalescing adds the nonnegative extra-round
+indicator; its reset clears request state, not misses. Its CSR accumulator is
+also checked.
+([Core](../../sim/simx/core.cpp), [LSU](../../sim/simx/lsu_unit.cpp),
+[cache](../../sim/simx/mem/cache.cpp),
+[cache accumulator](../../sim/simx/mem/cache.h),
+[cache cluster](../../sim/simx/mem/cache_cluster.cpp),
+[local memory](../../sim/simx/mem/local_mem.cpp),
+[coalescer](../../sim/simx/mem/mem_coalescer.cpp),
+[CSR dispatch](../../sim/simx/csr_unit.cpp).)
+
+Processor memory read/write callbacks add request indicators. Memory latency
+adds the pending-read balance in `run()`/`cycle()`; it is not incremented by
+every possible platform tick. The pending-read balance is checked but is
+decremented on responses and cleared on reset. It is a **transient invariant**,
+not one of the 40 monotone components. It must be zero and reconciled before a
+permitted reset and at the terminal boundary. The memory-bank statistic reads
+the crossbar's cumulative checked collision storage; crossbar reset changes
+arbitration state without clearing collisions.
+([Processor storage](../../sim/simx/processor_impl.h),
+[processor updates](../../sim/simx/processor.cpp),
+[crossbar](../../sim/simx/types.h), [memory readout](../../sim/simx/mem/memory.cpp).)
+
+TCU stalls/cache hits increment checked fields that survive reset. Tensor
+buffer read issuance increments each `Buffer::reads_`; buffer reset preserves
+it. `TcuTbuf::Impl::reads()` sums both buffers in a checked accumulator before
+returning `uint64_t`. The assigned `TcuUnit` readout field is a derived copy,
+not a third cumulative component.
+([TCU](../../sim/simx/tcu/tcu_unit.cpp),
+[tensor buffer](../../sim/simx/tcu/tcu_tbuf.cpp).)
+
+For the direct-RAM route, `launch_reset()` calls the full processor reset.
+`SimPlatform::reset()` discards old event bookkeeping and invokes object
+resets; its own comment requires quiescent callers. It must never be used to
+erase unfinished work or to recover evidence from a failed checked run.
+Platform clock/reset-generation state is separate from the selected cycle
+counter. This proof does not assert that every derived statistic is unchanged:
+for example, `Core::perf_stats()` recomputes the unselected operand-stall
+statistic.
+([Reset implementation](../../sim/common/simobject.h),
+[processor reset](../../sim/simx/processor.cpp),
+[core readout](../../sim/simx/core.cpp).)
+
+## Establishing the last valid observation
+
+The terminal boundary is after all work and before device destruction disables
+CP submission. The following ordering must be demonstrated by the actual
+caller and retained observations:
+
+1. Finish each launch and required download/flush successfully. In the
+   admitted VM-off path, `ProcessorImpl::run()` stops only when cores no longer
+   run and `SimPlatform::idle()` reports no undelivered channel/cross-domain
+   work. Cache-flush loops also tick until their surfaces and platform drain.
+   Those flushes can update counters, so they belong before the terminal
+   vector. Require collected asynchronous execution and zero pending reads.
+2. Release each operation's events and its queue. `OperationState::release()`
+   releases the queue before operation buffers; the actual `Queue` destructor
+   requests shutdown, joins the worker, unregisters the queue and then
+   releases its device reference. A successful `vx_queue_release` call is not
+   by itself evidence that an extra retained queue reference did not defer
+   that destructor.
+3. Close the owner only after all operations are gone. `ManagedMatmul::close()`
+   rejects a shared context. `RuntimeContext::release()` releases resident
+   buffers, kernel and module before its device release. Establish the actual
+   final device-reference condition and absence of other submitters, not just
+   the wrapper's count of release calls.
+4. While CP is still enabled, establish completed CP work and take the exact
+   33-selector terminal vector. Exclude a current CP batch and concurrent
+   submitters. `cp_submit_dcr_read()` reads `Q_LAST_DCR_RSP` after submission
+   without holding the submission mutex across that final response read, so
+   exclusivity is necessary to bind the response to this query.
+5. Retain each raw query status and both halves. The public MPM API issues low
+   and high DCR reads and combines them as `(uint64_t(hi) << 32) | lo`.
+   Successful MPM reads restore the saved class. Their processor hooks use
+   `AsyncRun::invoke()` to collect prior execution; the MPM getter itself does
+   not tick the GPU. At the established idle boundary the halves and the
+   sequential selector vector therefore describe stable storage. The
+   `core_id = 0xffffffff` public host summation is unchecked and is excluded.
+6. Only then perform actual final release and observe completion of the
+   destructor path. `vx_device_release()` returns success for a reference
+   decrement even when it is not the final reference. `RefCounted::release()`
+   deletes only on the final reference; public release status cannot establish
+   backend destruction on its own.
+
+These claims are tied to
+[queue destruction](../../sw/runtime/common/queue.cpp),
+[AI ownership](../../sw/runtime/ai/runtime.cpp),
+[reference counting and backend ownership](../../sw/runtime/common/vortex2_internal.h),
+[CP submission](../../sw/runtime/common/device.cpp),
+[public MPM readout](../../sw/runtime/common/perf.cpp),
+[asynchronous execution](../../sw/runtime/common/async_run.h) and
+[core DCR readout](../../sim/simx/core.cpp).
+
+The functional CP stores a host head-writeback address but never publishes its
+internal head there. A retained zero in `head_writeback_raw` therefore denotes
+unsupported writeback, not a drained head value. Its tail low register exposes
+the staging word and its high register exposes committed high bits;
+`tail_register_pair_raw` retains that pair without claiming an independent
+full committed-tail read. Under exclusive serialized submissions, enabled idle
+status, exact retirement and one-cacheline-per-command tail accounting supply
+the drain inference. The CP `busy()` predicate covers unconsumed ring, loaded
+cacheline, command-engine and launch work.
+([CP state and registers](../../sim/common/cmd_processor.cpp).)
+
+`Device::cp_quiesce_()` is **not a drain certificate**. It returns `void`,
+clears enable before polling, and can return on a write/read failure,
+all-ones status or exhausted polling. Terminal readout must precede it and
+must independently establish that no work remains. The existing warm caller
+does destroy operations before snapshots, close the owner, and save a
+before-release snapshot through its observer. Those source orderings are
+useful, but its capability-derived inventory and subset-oriented snapshot
+validation do not establish the exact 33 available/12 unavailable requirement
+or the additional reference/CP premises.
+([Warm caller](../../tests/regression/ai_warm_workspace/main.cpp),
+[observer](../../tests/regression/ai_warm_workspace/observer.cpp).)
+
+A checked aggregate can throw before the saved MPM class is restored.
+`AsyncRun` makes a processor-hook failure sticky; the failed device context
+must be discarded. Subsequent success in a fresh context is a separate
+control, not rehabilitation of the failed lifetime. Public failure handling
+must retain raw statuses and prove that later processor work **and direct-RAM
+DMA side effects** were suppressed; absence of processor entries alone cannot
+prove the latter on this route.
+
+## Why the admitted finalizer suffix cannot advance counters
+
+Given the preceding idle/ownership conditions, the VM-off allocator and host
+buffer frees perform bookkeeping and host-memory release. Backend destruction
+joins the already-collected run. `CallbacksAdapter` closes its backend; the
+processor destructor calls `SimPlatform::finalize()`. Platform cleanup stops
+workers, clears owned objects, deletes queued events without firing them and
+clears queue bookkeeping. It resets its clock to zero. That zero is cleanup
+control state, not a monotonic terminal-clock equality or a new selected
+counter update. Outstanding work would invalidate the earlier premises;
+discarding it during cleanup cannot certify successful execution.
+([Device destruction](../../sw/runtime/common/device.cpp),
+[backend close callback](../../sw/runtime/common/callbacks.inc),
+[backend destruction](../../sw/runtime/simx/vortex.cpp),
+[platform cleanup](../../sim/common/simobject.h).)
+
+The memory object's adapter destructor calls the Ramulator frontend and
+memory-system finalizers. The selected graph is:
+
+| Object | Selected implementation | Finalization behavior in the pinned source |
+|---|---|---|
+| Frontend | GEM5 | No children created by `init`; no implementation finalizer override |
+| Memory system | GenericDRAM | Interface finalizer visits gathered children and emits statistics |
+| DRAM | HBM2 | Empty inherited `Implementation::finalize` through the gathered child pointer |
+| Controller | Generic | Computes five average statistics; does not serve requests |
+| Scheduler | FRFCFS | Empty implementation finalization |
+| Refresh manager | AllBank | Empty implementation finalization |
+| Row policy | OpenRowPolicy | Empty implementation finalization |
+| Address mapper | RoBaRaCoCh | Empty implementation finalization |
+
+The pinned factory gathers these children as `Implementation*`. HBM2 has no
+override for that empty inherited finalizer; its separate `IDRAM::finalize`
+slot is not the child-dispatch target. The two interface finalizers visit
+them and print statistics; the selected `print_stats`/`Stats`/`StatWrapper`
+path emits registered scalar/vector values. The Generic controller's request
+callback occurs in `serve_completed_reads()`, reached from `tick()`, not its
+statistics-only finalizer. The manifest provides each upstream path, immutable
+URL, exact digest and relevant symbol.
+([Pinned factory](https://github.com/CMU-SAFARI/ramulator2/blob/e62c84a6f0e06566ba6e182d308434b4532068a5/src/base/factory.cpp),
+[pinned memory interface](https://github.com/CMU-SAFARI/ramulator2/blob/e62c84a6f0e06566ba6e182d308434b4532068a5/src/memory_system/memory_system.h),
+[pinned controller](https://github.com/CMU-SAFARI/ramulator2/blob/e62c84a6f0e06566ba6e182d308434b4532068a5/src/dram_controller/impl/generic_dram_controller.cpp).)
+
+There is a second boundary in the adapter: the callback supplied to Ramulator
+only appends a response to the adapter queue. The GPU-facing callback runs
+inside `RamulatorDram::drain()`, which is called from `tick()`. The adapter
+destructor invokes neither tick, drain nor request submission. It also does
+not delete its raw frontend/memory-system pointers, so this path does not add
+an unexamined dependency destructor call. This is a statement about the
+counter-update boundary, not proof that dependency cleanup is leak-free.
+([Adapter](../../sim/common/dram_sim.cpp).)
+
+This reasoning remains conditional on the **actual loaded dependency**
+implementing the pinned selected graph. A SHA-256 of a cached Ramulator
+library identifies its bytes; it does not establish compilation origin.
+Neither source-body hashes nor a successful diagnostic alone supply that
+missing source-to-binary attestation. A later qualifying record must bind the
+actual dependency or explicitly carry and resolve that condition. The source
+analysis also assumes normal C++ execution, the bound build/configuration and
+no external storage mutation, memory corruption or replacement plugin.
+
+## Evidence levels and remaining work
+
+The retained model diagnostic at
+[run 45026112992](https://github.com/baabi-boo/AI-GPU/actions/runs/45026112992)
+used source `407ab9fea5e4f793a2a5088f566a87f3e631aa84`. Its seven cells passed:
+ordinary and checked boundaries, core overflow, cache aggregate overflow,
+pending underflow, actual cache backing overflow and actual TCU backing
+overflow. Each boundary cell reported 6,389 checks and 1,788 half reads across
+all 33 selectors and 40 backing components. The manifest binds the original
+ZIP and report bytes. These are seeded model transport/checked-arithmetic
+prerequisites; the report explicitly does not claim public-runtime or warm
+execution.
+
+| Evidence level | What it can establish | What it cannot inherit |
+|---|---|---|
+| Seeded all-selector transport | Full-width encoding, checked component/aggregate behavior and reset preservation for the seeded model inventory | An unseeded workload's numeric bound, public CP behavior or warm lifetime |
+| Real public scalar diagnostic | Once run and reviewed: public CP/API error propagation, unseeded scalar lifetime observations, terminal ordering and teardown controls for that caller | Full managed warm-workspace operation coverage or later measurement binaries |
+| Full unseeded warm caller | Once bound and reviewed: the theorem's ownership/reset/terminal premises for its complete managed operation sequence | A different caller, topology, loader dependency or binary |
+| Later measurement process | Only its own qualified artifact/configuration/environment and admitted lifetime evidence | Automatic qualification from diagnostic success |
+
+The initial public-runtime checkpoint is
+`81ed6871634fefbf5c78fb27cf10dce913bd4d9c`. Its native build and model boundary
+control passed, but the normal public cell failed because its diagnostic
+incorrectly treated unsupported host head writeback as an internal head. The
+four remaining public cells were blocked. That original failed packet is
+retained; the corrected diagnostic requires a separate fresh native result.
+This source audit does **not claim a native pass for that checkpoint**.
+
+The normal scenario contains two unseeded successful scalar contexts. The
+coherent-terminal scenario contains a seeded terminal observation and a
+separate fresh unseeded control. Each overflow scenario contains a seeded
+failed context and a separate fresh unseeded control. These evidence levels
+remain distinct; none substitutes for the complete warm caller or dependency
+provenance.
+
+Before applying the theorem to warm measurements, bind the complete caller
+and its 33/12 inventory, preserve actual queue joins/final references and
+CP-before-disable observations, retain all raw errors and failed attempts,
+resolve the selected dependency's executable provenance, and independently
+review the exact source and binary chain. Qualification then applies only to
+that proven process/configuration/lifetime. No acceptance threshold, golden
+data, phase status or warm-v1 gate is relaxed by this document.

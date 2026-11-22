@@ -2,15 +2,28 @@
 
 ## Decision and current boundary
 
-**Next bounded development: close and independently review the terminal
-snapshot/lifetime argument for the exact 33-selector RV64 `p02-tfr`, timing
-SimX, `PERF=1` route; complete the remaining native selector and public-failure
-diagnostics; then implement a separately versioned qualification reader.**
-The [checked-counter prerequisite](../designs/simx_checked_counters_v1.md) is now
-implemented. It guards audited stored updates and formed aggregates, but does
-not itself establish a complete context-lifetime bound, all-33 native transport,
-coherent public snapshots or warm readiness. The qualification record/reader
-and fresh complete matched warm attempt remain future work.
+**Next bounded development: specify, implement and independently review a
+separately versioned qualification path for the actual seed-free measurement
+binaries and complete managed warm caller.** The all-33 native model transport
+and directed public-runtime diagnostics have a latest independently audited
+original pass at `4268d2d5d811063bb886cde7bd0e27e61a79c9b4`, separately repeating
+the earlier corrected `e5f152464dda5e488d6d1a030c1fcdc49b5a9701` execution. The
+[terminal lifetime argument](../designs/simx_counter_lifetime_v1.md) supplies a
+conditional source proof for the exact 33-selector/40-component RV64
+`p02-tfr`, timing SimX, `PERF=1` route. Applying it to measurement still requires
+the full caller's ownership, reset and terminal observations, and provenance
+from the actual loaded dependencies and binaries to the reviewed sources.
+
+The [checked-counter prerequisite](../designs/simx_checked_counters_v1.md)
+guards stored updates and formed aggregates. The
+[model](../../ci/project/p06_counter_diagnostics_replay.py) and
+[public](../../ci/project/p06_counter_public_replay.py) offline readers, plus
+the [explicit source-inventory helper](../../ci/project/p06_counter_source_inventory.py),
+are published at
+[`4268d2d5d811063bb886cde7bd0e27e61a79c9b4`](https://github.com/baabi-boo/AI-GPU/commit/4268d2d5d811063bb886cde7bd0e27e61a79c9b4).
+They check retained-data consistency and preserve diagnostic nonacceptance.
+This is a bounded diagnostic advance; neither the qualification record/reader
+nor a fresh complete matched warm attempt has been completed.
 
 The [transport audit](p06-mpm-transport-audit.md) identifies the original RV64
 high-half defect and paired SimX/RTL repair. The
@@ -29,7 +42,91 @@ The [warm v1 contract](../designs/warm_workspace_benchmark_v1.md), its
 `P06-WARM-RV64-MPM-HIGH-HALF` block, `qualified=false` and
 `absolute_no_wrap_bound="not_established"`. Preserve their historical rejection
 behavior, original cold execution pins and accepted archives. Missing historical
-high bits cannot be recovered from low words.
+high bits cannot be recovered from low words. Diagnostic and replay results
+retain `qualified=false`, `ready_for_warm=false`, `warm_execution=false` and
+`acceptance=false`. P06 and P06-T01 remain `in_progress`; P06-A02/A03 remain open.
+P01-A03 remains blocked on vendor XRT `hw_emu`. P05 acceptance obligations and
+the inherited tensor area finding remain separate, as recorded in the
+[canonical roadmap](roadmap.json) and [current status](status.md).
+
+## Completed diagnostic checkpoint and evidence limits
+
+The [native index](evidence/p06-counter-diagnostics/native/index.json) preserves
+the earlier corrected original from
+[run 45031746149, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45031746149),
+job `137236632765`, artifact `14758252829`, at source `e5f1524` and tree
+`74f5ce6e13d86d4f9a961c52aa9a04584a6ef0e8`. The retained
+[original archive](evidence/p06-counter-diagnostics/native/run-45031746149-attempt1.zip)
+has SHA-256
+`05f79eef4c9e30b97302e02fec9e2cca47e08fc10c4d5f8235b21f40f41d7276`.
+
+The latest independently audited original is
+[run 45034575685, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45034575685),
+job `137245341329`, artifact `14760051170`, at source
+`4268d2d5d811063bb886cde7bd0e27e61a79c9b4` and tree
+`061ecbddc9b321edbd70c054c8efce4d188de04f`. Its retained
+[archive](evidence/p06-counter-diagnostics/native/run-45034575685-attempt1.zip)
+has 4,290,949 bytes and 1,046 members, SHA-256
+`6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb`.
+The [independent original-packet audit](evidence/p06-counter-diagnostics/native/w10-native-checkpoint-audit.md)
+matches all 270 model and 683 public source bodies to immutable Git, reconciles
+17 model/14 public commands and confirms the same thirteen passing diagnostic
+process cases and public observation counts. Both inert replay routes pass;
+public replay uses the explicit independently Git-pinned 683-source manifest.
+
+| Completed evidence | Established scope | Remaining qualification boundary |
+|---|---|---|
+| Seven model cells | Ordinary/checked all-33 boundaries, Core updater overflow, cache aggregate overflow, pending primitive underflow, actual cache backing overflow and actual TCU backing overflow; each boundary has 6,389 assertions and 1,788 half reads across all 40 components | Seeded diagnostic storage and builds do not qualify a later seed-free measurement binary |
+| Public build boundary control and five public modes | Normal, immediate/delayed overflow, cache overflow and coherent-terminal cases pass through actual Processor/RAM, runtime, CP and backend; the combined packet has 13 native test process cases | Directed scalar controls do not exercise the complete managed warm-workspace caller or its FP16/BF16 policy matrix |
+| Public lifetime observations | Ten actual Processor constructions/disposals, seven complete terminal vectors, 231 selector queries, 462 successful native half reads and one additional failed cache half read | Each observation belongs to its original caller/context; seeded terminal values and fresh unseeded controls retain distinct scopes |
+| Conditional lifetime source argument | Exact 33-selector/40-component inventory, monotone production updates/reset preservation, terminal checked sums and selected finalizer suffix | Actual loaded dependency provenance and every full warm-caller premise must still be established |
+| Offline model/public replay and explicit source expectations | Current trusted readers validate original archives, raw observations, build/command bindings and complete source descriptors without executing retained code | A consistent archive is not proof of native execution, source-to-binary provenance, warm readiness or acceptance |
+
+The [public diagnostic contract](../designs/simx_counter_public_diagnostics_v1.md)
+defines these scenarios, their exact terminal/CP conditions and their replay
+boundary. The earlier original at
+`81ed6871634fefbf5c78fb27cf10dce913bd4d9c`, run `45029135146`, remains a
+native failure: model cells and the public build control passed, public normal
+failed, and four public modes were blocked. Its diagnostic incorrectly treated
+unsupported host head writeback as an internal CP head. The corrected
+observation contract does not change production CP behavior or relabel that
+failed original. The earlier `407ab9f` pass remains model-only evidence.
+
+The [host index](evidence/p06-counter-diagnostics/host/index.json) separately
+retains the failed concurrent local run and the failed `81ed687` hosted suite.
+The latter exposed the host's Python 3.12.3 observation through a controlled
+fixture to the strict native interpreter validator; its repair isolates
+synthetic observations and keeps the native CPython 3.12.14 pin. The clean
+`e5f1524` hosted governance run `45031746158`, job `137236633104`, passed
+**3,158 tests in 1,305.183 seconds**, with zero failures/errors. This full-suite
+receipt excludes the later replay/source-inventory additions at `4268d2d5`;
+their focused tests and independent review are separate evidence. The new
+[completed hosted receipt](evidence/p06-counter-diagnostics/host/checkpoint-4268d2d/receipt.json)
+for run `45034575638`, job `137245340992`, records **3,312 executed tests in
+1,811.712 seconds: 3,310 `ok`, two `FAIL`, no errors or skips, exit 1**, on
+Python 3.12.3. Independent original-log review matches all executed IDs to the
+earlier discovery. Both failed test isolation guards reject the current trusted
+helper when checkout and recorded producer pathnames coincide; those guards
+did not complete, and this original remains failed. The
+[independently reviewed test-only repair](evidence/p06-counter-diagnostics/reviews/wave10/w10-replay-guard-review.md)
+is published at `142b2d6aaea2fa4226118b857514113032d2e26c`, tree
+`754ef8577f9a72785c0809048762c70b16cb4857`, with both F2 findings closed.
+Its 89 affected methods pass in 139.141 seconds; separate independent scopes
+pass eight methods / 670 subtests in 4.956 seconds and three methods / 15
+subtests in 4.437 seconds. The subsequent
+[clean local full-suite receipt](evidence/p06-counter-diagnostics/host/local-clean-142b2d6/receipt.json)
+and [independent review](evidence/p06-counter-diagnostics/host/local-clean-142b2d6/review.md)
+record **all 3,318 tests passing in 1,918.414 seconds on CPython 3.12.14**, with
+all four governance commands exiting 0. The detached source checkout is clean
+before/after; all 365 source records match immutable `142b2d6` and remain
+unchanged. Both formerly failed guards and all six new methods actually pass.
+This is the completed local full-suite verification, separate from the focused
+counts above. The [hosted retry](evidence/p06-counter-diagnostics/host/checkpoint-142b2d6/pending-receipt-20261122T165509Z.json)
+`45040805357`, job `137264592244`, and native retry `45040805341`, job
+`137264592580`, remain queued with no executed results. The latest audited
+native scope stays at `4268d2d5`. None of
+these results changes production timing, runtime/RTL semantics, public ABI,
+goldens or tolerances.
 
 ## Implemented checked-counter prerequisite
 
@@ -94,11 +191,13 @@ subsequent CP error-boundary repair at `4781ca9` has separate source-bound
 receipts. Use the index's receipts and independent review to assess that
 repair; do not relabel the initial packet as later-code evidence. The implemented
 counter guard uses this processor-failure path. Its controlled public tests
-exercise persistent waits/query rejection; native public counter-fault execution
-remains a separate obligation. Host injection does not establish native public
-fault or RTL execution. Preserve the 15 GiB native disk reserve.
+exercise persistent waits/query rejection. The later original `e5f1524`
+packet supplies separately scoped native public counter-fault execution as
+described above; the older controlled tests are not relabeled as native
+evidence. Neither establishes RTL execution or the complete warm caller's
+lifetime. Preserve the 15 GiB native disk reserve.
 
-## Exact route and selector gap
+## Exact route and completed selector coverage
 
 Bind the [frozen manifest](../../ci/project/p06_warm_contract.json),
 [profile](../../profiles/p02-tfr.json), actual
@@ -141,19 +240,24 @@ selectors of those classes. The
 33**, leaving 14 omissions. Its extra L2/L3 seeds do not make those unavailable
 warm rows available.
 
-The new [checked-counter harness](../../tests/unittest/checked_counters/main.cpp)
-is built in the actual RV64 `p02-tfr`, PERF-enabled timing configuration. Its
-directed transport matrix seeds **19 available selectors**: thirteen Core/base,
-three local-memory, one coalescer and two TCU fields. Each receives ten vectors,
-with both half-read orders, for 760 half reads and 2,749 assertions per boundary
-cell. These are declared harness obligations; an actual execution result must
-come from its source-bound packet.
+The original checked-counter packet at `9fd7eac20` advanced that coverage to
+**19 available selectors**: thirteen Core/base, three local-memory, one
+coalescer and two TCU fields, with ten vectors and both half-read orders.
+Its 760 half reads and 2,749 assertions per boundary cell remain the original
+scope. Nine I/D-cache selectors, four global-memory selectors and private
+TCU-buffer local-memory reads were then unseeded.
 
-The **14 remaining available sources** are nine I/D-cache selectors, global
-memory reads/writes/latency/bank stalls, and private TCU-buffer local-memory
-reads. They are explicitly unseeded. The twelve unavailable L2/L3 rows receive
-no query. Neither naturally zero TCU values nor the nineteen seeded sources
-establish all-33 transport coverage.
+The current [model diagnostic contract](../designs/simx_counter_diagnostics_v2.md),
+[harness](../../tests/unittest/checked_counters/main.cpp) and
+[backing-source accessors](../../tests/unittest/checked_counters/counter_access.cpp)
+close that fourteen-selector diagnostic gap. The latest audited `4268d2d5` original
+seeds **all 33 available selectors and all 40 contributing components** through
+the actual ownership/CSR route, including distinct banks and private TCU
+buffers. Its ten-vector coverage, both half-read orders, repeated/interleaved
+reads and high values produce 1,788 half reads and 6,389 assertions per model
+boundary cell. The twelve unavailable L2/L3 rows remain unqueried. This is full
+coverage of the declared SimX diagnostic inventory; it is not seed-free
+workload qualification or coverage of a later FP16/BF16 measurement artifact.
 
 `memory_bank_st` at class 7, CSR `0xB06`, has a
 [SimX backing source](../../sim/simx/csr_unit.cpp) but no case in the
@@ -166,54 +270,78 @@ the high-half selector is internal, not a second public CSR argument.
 
 ## Qualification work to implement and review
 
-1. **Specify the supported route.** Name the exact RV64 `p02-tfr` SimX timing
-   configuration, enabled tensor/performance features, topology and available
-   counter selectors used by the warm experiment. The earlier transport tests
-   use a TCU-disabled configuration; the new harness selects the warm profile
-   but still leaves fourteen sources unseeded. Complete actual backing-source
-   coverage for every required available selector before claiming all-33
-   transport. Preserve architectural CSR semantics and public ABI.
-2. **Bind evidence to execution.** Define a new versioned qualification record
-   that binds reviewed transport evidence and its scope to the complete source
-   revision/tree, relevant source bodies, generated configuration, original
-   compiler/linker records, tools/dependencies and actual host/runtime/kernel
-   binary identities. The [standalone interpreter finding](evidence/p06-mpm-transport/reviews/enforcement-review.md)
-   is addressed by separately recording the actual executing interpreter and
-   PATH `python3`; consume and verify both identities in the new qualification
-   binding. The hosted workflow requires their equality. Require identical
-   binaries for both policies within each format, with before/after stability
-   checks. A revision label, caller flag or
-   self-asserted qualification ID is insufficient.
-3. **Prove counter meaning and read coherence.** Document each counter's width,
-   reset/lifetime, accumulation semantics and availability. Establish whether
-   every snapshot is taken while the model is quiescent and prove that its two
-   32-bit reads observe one stable value. If a counter can advance during the
-   read, require a separately reviewed coherent-read contract and adversarial
-   rollover evidence. The transport repair itself introduces no atomic snapshot
-   or concurrency guarantee.
-4. **Establish the absolute no-wrap bound.** Supply an independently reviewed
-   bound for every required true cumulative counter over the complete interval,
-   including initialization, primes, measured calls and teardown observations.
-   Bind its assumptions to the executed configuration and reject violations.
-   Guarded components and formed reads are implemented; the complete aggregate
-   lifetime argument below remains to be closed. Observed monotonicity, small
-   reported values, a process timeout or guessed event rates cannot substitute
-   for source-proved monotonicity and complete lifetime coverage. Missing bounds
-   remain blocked.
-5. **Review rejection and replay behavior.** Keep the frozen v1 path blocked and
-   introduce the new qualification path explicitly. Reject old, absent,
+1. **Freeze a new qualification contract.** Specify its record, reader and
+   explicit admission path separately from warm-v1 and the diagnostic replay
+   contracts. Preserve the measurement-contract digest and every workload,
+   timing, population and statistical rule below. Require the exact generated
+   RV64 `p02-tfr` timing configuration, 33 available/12 unavailable selectors,
+   all 40 backing components, one worker and exclusive submission. Name the
+   exact diagnostic originals and lifetime source premises that it consumes;
+   their passing outcomes are prerequisites, not an acceptance flag to reuse.
+2. **Bind actual seed-free binaries and loaded dependencies.** Retain the
+   complete source revision/tree, relevant transitive source bodies, generated
+   configuration, original compiler/linker records, tool identities and actual
+   host/runtime/kernel and loaded-library bytes or independently verifiable
+   payload attestations. Demonstrate that measurement builds enable the checked
+   guard consistently and contain no test seeding/accessors, diagnostic object
+   substitutions or tiny guard limits. Bind the actual Ramulator artifact to
+   the pinned selected source graph and its build, rather than treating a
+   cached-library hash as compilation provenance. Independently review any
+   source projection from diagnostic/proof revisions to the measurement tree.
+   Require identical guarded binaries across both policies within each format
+   and before/after stability. Consume both the actual executing interpreter
+   and PATH `python3` identities, preserving the equality rule and the
+   [standalone interpreter finding](evidence/p06-mpm-transport/reviews/enforcement-review.md).
+3. **Apply the lifetime proof to the complete managed caller.** Bind zero
+   origins, every admitted updater and reset, all initialization/prime/warm-up/
+   measured operations, downloads/flushes and final cleanup. At the existing
+   `before_release` boundary, establish actual queue-worker joins, final owner
+   references, enabled-CP retirement and absence of concurrent submissions.
+   Validate all 33 successful checked aggregates and both raw half replies;
+   require the twelve unavailable rows to remain unqueried. Prove that every
+   selected component is stable through the readout and until destruction,
+   with no future event delivery, launch reset, flush, storage replacement or
+   finalizer adjustment. The proof must cover the whole storage lifetime;
+   observed monotonicity, small values and process timeouts are insufficient.
+4. **Implement pure qualification validation.** Bind pre-execution expectations
+   separately from final archive identities, then join each process's original
+   commands, raw observations, resource records and terminal result. Use the
+   reviewed diagnostic readers as scoped inputs while retaining their
+   `retained-data-consistency-only` result. The new contract must supply its own
+   complete warm-caller/build/dependency closure; the diagnostic source manifest
+   does not silently expand to cover it. Do not execute retained helpers or
+   resolve recorded producer paths on the replay host. Explicit version and
+   source-manifest selection must fail closed without fallback or a new live
+   source glob.
+5. **Exercise and independently review rejection.** Reject old, absent,
    unsupported, truncated, source/configuration/binary-mismatched or unreviewed
-   evidence. Exercise both favorable and unfavorable statistics with invalid
-   qualification data. Offline replay treats retained code as data and checks
-   original archives, commands, resource observations and bindings independently.
-   Require review by an agent that did not author the enforcement change under
-   the [review policy](../review/code-review-policy.md).
+   inputs; disabled guards; seeded measurement builds; wrong/partial selector
+   inventories; unsafe ownership/reset/CP/finalizer conditions; any guard or
+   query error; incomplete cleanup; and changed process populations. Include
+   consistent rehashing, copied diagnostic success and favorable/unfavorable
+   statistics among invalid inputs. Require review by an agent that did not
+   author the enforcement change under the
+   [review policy](../review/code-review-policy.md), before fresh performance
+   results are inspected.
+6. **Run the bounded seed-free warm-caller preflight.** Once the new reader and
+   provenance requirements are ready, use the four-process FP16/BF16 × policy
+   matrix below to establish the actual managed caller's complete lifecycle
+   and snapshot obligations. Keep its outputs separate from performance
+   samples. Reassess diagnostic coverage against the exact new artifacts and
+   repeat only the controls needed for changed source/configuration/build
+   boundaries; a historical scalar control cannot qualify a new warm binary.
+7. **Collect the fresh complete matched attempt.** Only after the prerequisites
+   and independent review pass, run all 24 processes under the frozen sampling
+   and resource rules. Validate every process, including excluded primes and
+   warm-ups, through its terminal destruction boundary before analyzing the
+   measured populations. Retain valid negative performance results and all
+   failures. P06-A02/A03 still require their separate reviewed acceptance.
 
 Freeze the new qualification contract and review its tests before inspecting
 fresh performance results. Do not widen a statistical threshold, change a
 fixture, alter a golden or remove a failed attempt to obtain qualification.
 
-## Implemented arithmetic guard and prospective lifetime closure
+## Implemented arithmetic guard and conditional lifetime proof
 
 The [guard contract](../designs/simx_checked_counters_v1.md) establishes a
 per-operation invariant: each audited stored component remains in
@@ -247,20 +375,29 @@ Four RV64 LSU lanes cover 32 bytes; the 16-byte D-cache word yields two
 coalesced channels and two D-cache banks. The six active D-cache sums are the
 nontrivial aggregate-lifetime obligation. The TCU-buffer sources remain zero
 on ordinary execution of this WGMMA-disabled route, but remain available and
-still require distinct transport evidence. These formulas must be checked
+have distinct seeded transport evidence. These formulas must be checked
 against actual generated configuration, not inferred from a profile name.
 
-### Candidate terminal-observation proof
+### Applying the terminal-observation proof
 
-**Recommended next proof, not an established native qualification:** retain the
-existing `before_release` observation and prove that it is terminal for all
-required backing sources. For nonnegative, monotonic components `c_i(t)`, a
-successful checked read at terminal time `T` gives
-`sum(c_i(T)) <= UINT64_MAX`; therefore every earlier sum is no larger. Proving
-that no component can increase after `T` extends the bound through disposal.
-This combines guarded source updates, source-proved monotonicity and complete
-terminal readout; snapshot-only overflow checks or sampled monotonicity do not
-supply those premises.
+The [versioned source argument](../designs/simx_counter_lifetime_v1.md) now
+establishes the conditional theorem and audits the selected update/reset and
+finalization paths. Its [source manifest](evidence/p06-counter-diagnostics/lifetime-source-manifest.json)
+binds 45 production and 10 inventory/caller bodies at `407ab9f`; its
+[dependency manifest](evidence/p06-counter-diagnostics/dependency-source-manifest.json)
+binds 21 Ramulator bodies at `e62c84a6f0e06566ba6e182d308434b4532068a5`.
+These are source premises, not a complete transitive build attestation.
+
+For nonnegative, monotone components `c_i(t)` with checked updates and
+zero origins, a successful checked terminal read at `T` gives
+`sum(c_i(T)) <= UINT64_MAX`; every earlier sum is no larger. Proving no later
+component update extends the bound until storage destruction. This requires
+all 33 final aggregates, including the six two-bank D-cache sums and the
+two-buffer TCU sum, even if those aggregates were not queried earlier.
+The checked type alone does not prove monotonicity: assignments, subtraction,
+diagnostic seeding and reset behavior need their separate source constraints.
+A guard failure anywhere invalidates the entire lifetime, even if a later
+snapshot would fit.
 
 The current [warm caller](../../tests/regression/ai_warm_workspace/main.cpp)
 waits, closes and destroys each operation before its post-operation snapshot.
@@ -270,20 +407,23 @@ and module before the wrapped device release. The
 [observer](../../tests/regression/ai_warm_workspace/observer.cpp) takes all
 available `before_release` queries immediately before the real device-release
 call, while checking owner-close phase and zero observed live buffers. This
-ordering supplies a promising proof location without changing timing intervals,
-policy order or sample populations.
+ordering identifies the proof location without changing timing intervals,
+policy order or sample populations. Its capability-derived subset checks do
+not yet enforce the complete exact 33/12 inventory or demonstrate every final
+reference/CP premise; the separately versioned integration must do so for the
+actual complete warm caller.
 
 The proof and future reader must bind all of the following; none may be inferred
 from a successful release return alone:
 
 | Boundary | Required source proof and native observation |
 |---|---|
-| Origins and updates | Every contributing source starts at zero, survives the permitted resets monotonically and uses checked arithmetic; transient pending balance still needs matched requests/responses and quiescent reset. |
+| Origins and updates | All 40 components start at zero and remain monotone through checked production updates and permitted resets, with no diagnostic seeds or replacement storage; transient pending balance needs matched requests/responses and quiescent reset. |
 | Exact inventory | All 33 expected enabled rows are queried successfully and the twelve unavailable rows are not queried; validation of a dynamically enabled subset is insufficient. |
 | Exclusive ownership | One context and one submitter; no surviving operation/queue worker, external Device retain or legacy/debug submitter can advance the model or replace a DCR reply. |
-| Terminal readout | All operations and synchronous CP transactions have retired before the complete checked snapshot; both halves succeed and refer to one stable source value. |
-| After the snapshot | VM is off, `CP_ON_L2=CP_ON_L3=0`, and no later launch, cache flush or model-ticking memory operation is submitted. Bound allocator release, CP bookkeeping, backend join and full platform disposal separately. |
-| Dependency teardown | Bind the selected DRAM backend and dependency revision, including Ramulator frontend/memory-system finalization; inspect its callbacks and finalization contract. |
+| Terminal readout | All operations and synchronous CP transactions retire before CP disable and the complete checked snapshot; both halves succeed, saved class is restored and every selected source remains stable through the entire vector. |
+| After the snapshot | VM is off, `CP_ON_L2=CP_ON_L3=0`, and no later launch, reset, cache flush, event delivery or model-ticking transfer can update selected storage. Apply the source proof across allocator release, CP bookkeeping, backend join and actual final destruction. |
+| Dependency teardown | Bind the actual loaded DRAM backend and its source-to-binary provenance to the pinned Ramulator graph; no finalizer may update selected components or deliver their callbacks after the terminal vector. |
 | Failure | Any guard/query/cleanup failure invalidates the attempt, including excluded primes or warm-ups. Retain terminal processor failure and prohibit failed-context reuse. |
 
 Three concrete boundaries prevent overstating this argument:
@@ -301,13 +441,15 @@ Three concrete boundaries prevent overstating this argument:
   `Q_LAST_DCR_RSP` outside its submit/poll lock. The proof must exclude all
   concurrent submitters as well as concurrent counter updates; successful
   replies alone do not make this an atomic snapshot API.
-- [Platform cleanup](../../sim/common/simobject.h) discards queued events,
-  but the [DRAM adapter](../../sim/common/dram_sim.cpp) also calls Ramulator
-  frontend and memory-system `finalize()` functions during destruction.
-  Adapter responses normally reach GPU callbacks through a later drain/tick,
-  but that does not replace inspection of the bound dependency's finalization
-  behavior. No complete finalizer proof or native lifetime closure is claimed
-  by this plan.
+- [Platform cleanup](../../sim/common/simobject.h) discards queued events
+  without delivering them and resets its clock; neither action certifies
+  that earlier work completed. The [DRAM adapter](../../sim/common/dram_sim.cpp)
+  calls Ramulator frontend/memory-system finalizers. The pinned source proof
+  establishes statistics-only finalization for the selected graph and confines
+  GPU callback delivery to `tick()`/`drain()`, which the adapter destructor does
+  not call. That resolves the selected source-level finalizer question; the
+  actual loaded dependency must still be bound to those sources. Its binary
+  hash or a successful diagnostic alone does not prove compilation origin.
 
 `memory_lt` retains its existing run/cycle accumulation meaning. Other flush or
 CP-transfer loops can tick the platform without adding pending occupancy to
@@ -330,33 +472,32 @@ Keep test-only seeds or tiny guard limits out of the measurement binary. Require
 actual updater/aggregate boundaries, pending underflow and flush/close coverage;
 reject unsupported topology, worker count, features or guard configuration.
 
-## Smallest useful native diagnostic matrix
+## Remaining native warm-caller qualification preflight
 
-The implemented native prerequisite has five cells: ordinary and checked
-nineteen-selector boundaries, checked real-Core updater overflow/fresh-context
-success, checked cache-aggregate overflow and checked pending-counter primitive
-underflow. It does not replace the remaining matrix below. The controlled
-public host tests similarly leave actual native public fault injection open.
+The seven model cells and five public modes now close their declared diagnostic
+gaps at `4268d2d5`, repeating the earlier corrected `e5f1524` scope. They do not
+execute managed FP16/BF16 matmul, workspace
+reuse or the complete warm caller. The next native obligation is the seed-free
+managed-caller preflight below, after its new contract, provenance and reader
+are independently reviewed. Freeze it before collecting performance results.
 
-Freeze the additional diagnostic matrix before collecting performance results.
-Each cell uses the exact supported warm configuration and retains its own
-execution scope:
-
-| Diagnostic | Minimum scope | Pass/fail boundary |
+| Obligation | Minimum scope | Pass/fail boundary |
 |---|---|---|
-| Actual selector transport | All 33 rows against each distinct FP16/BF16-bound timing SimX backend artifact | Reuse all ten frozen SimX vectors at each actual backing source. Verify both halves and reconstruction, repeat and alternate unequal classes/selectors, including values above bit 43. Missing, wrong, stale or truncated replies fail. |
-| Public snapshot coherence | FP16/BF16 × both policies: four processes, each one prime plus 32 operations | 132 launches and 4,224 exact words. All four snapshot locations yield 16 snapshots, 528 enabled queries/1,056 half replies and 192 unavailable rows receiving no query. Prove ownership/quiescence through each pair, numerical correctness and complete cleanup. |
-| Guard failure containment | Directed bound violations at the actual guarded model entry plus normal controls in the same configuration | Immediately failing and delayed tasks retain failure through waits/queries and queue-error consumption. No successful retirement, later work or qualified partial snapshot is accepted. Join/teardown remain required; failed-context reuse stays forbidden. |
+| Scope-matched transport and guard evidence | Compare the reviewed diagnostic source/configuration/build projection with each distinct FP16/BF16 measurement backend | Account for every selected updater/aggregate, guard selection and generated dimension. A changed or unbound component requires its own relevant diagnostic evidence; a revision label alone is insufficient. Diagnostic seeds remain outside the actual measurement binaries. |
+| Complete managed caller and coherent snapshots | FP16/BF16 × both policies: four seed-free processes, each one prime plus 32 serial operations | 132 launches and 4,224 exact output words. The four snapshot locations yield 16 snapshots, 528 enabled queries/1,056 successful half replies and 192 unavailable rows receiving no query. Require exact inventory, correctness, exclusive ownership and quiescence across each pair. |
+| Terminal lifetime and actual disposal | Every preflight process from construction through all operation/owner cleanup and final destruction | All 40 components satisfy the bound source premises; all 33 checked terminal aggregates succeed before CP disable; pending balance is zero; workers are joined; the final reference and loaded dependency provenance are established; no selected source can update afterward. |
+| Native failure containment applicable to these artifacts | Bind the original immediate/delayed/cache faults and fresh-context controls, refreshing controls for changed relevant code or configuration | Sticky failure survives waits, query failure and queue-error consumption; later processor entries and direct-RAM DMA side effects remain suppressed. No failed-context reuse or partial snapshot is admitted, and teardown is complete. |
 
-Seed real backing counters with distinct nonconstant values through the actual
+The completed source-access diagnostics use real backing counters through the
 Processor → Cluster → Socket → Core → CSR route. A copied decoder, synthetic
-selector array or zero-only TCU test cannot establish source selection. In
+selector array or zero-only TCU test would not establish source selection. In
 particular, [TcuUnit::perf_stats](../../sim/simx/tcu/tcu_unit.cpp) derives its
-local-memory reads from the TCU buffer; assigning a temporary stats copy does
-not exercise that source. SimX's 64-bit backing fields and RTL's 44-bit fields
-remain separate scopes.
+local-memory reads from private TCU buffers; assigning a temporary stats copy
+would not exercise them. Preserve this distinction when projecting diagnostic
+coverage to a measurement build. SimX's 64-bit backing fields and RTL's 44-bit
+fields remain separate scopes.
 
-The candidate coherence argument uses the
+The conditional coherence argument uses the
 [processor run loop](../../sim/simx/processor.cpp) finishing only when cores
 stop and the platform is idle, synchronized
 [backend DCR hooks](../../sw/runtime/simx/vortex.cpp), a DCR/CSR route that
@@ -369,19 +510,64 @@ must not be silently included. If a required source can advance between halves,
 require a separately reviewed coherent-read algorithm and adversarial rollover
 tests. Repeated equality alone does not prove coherence.
 
-These four public diagnostic processes do not replace the full warm matrix.
-Controlled host faults, native selector checks, actual public execution and
-source lifetime proofs have different scopes. General internal-worker
+These four preflight processes are future work and are not measured samples
+or substitutes for the full 24-process attempt. Their terminal observations
+cannot be copied into a later process's record. Controlled host faults, seeded
+selector checks, unseeded scalar controls, full managed-caller execution and
+source lifetime proofs retain distinct scopes. General internal-worker
 exception transport, fatal-abort recovery, simultaneous contexts and forced
 cancellation remain outside this qualification route.
 
 ## New qualification binding and replay
 
-Use a separately named versioned record and execution binding, retaining the
-unchanged measurement-contract digest. Derive qualification from verified
-evidence. The existing `qualification_id` is an execution-binding digest, not
-proof of counter qualification. Keep pre-execution identities distinct from
-final archive identities to avoid circular bindings.
+Use a separately named versioned record, reader and execution binding,
+retaining the unchanged measurement-contract digest. Select this new route
+explicitly; do not add a caller flag, permissive branch or fallback that makes
+the historical warm-v1 reader accept its blocked archives. Derive qualification
+from verified evidence for the actual process. The existing `qualification_id`
+is an execution-binding digest, not proof of counter qualification. Keep
+pre-execution identities distinct from final archive identities to avoid
+circular bindings.
+
+### Reuse diagnostic validation within its original scope
+
+The published `4268d2d5` readers accept the complete original **270-name model**
+and **676-name public** source inventories. These are fixed inventories, not
+compiled-unit subsets or results of a current-checkout glob. A later diagnostic
+producer with additional source names must supply an independently reviewed,
+complete [versioned source manifest](../../ci/project/p06_counter_source_inventory.py)
+and its independently supplied exact-byte SHA-256 via both
+`--source-inventory` and `--source-inventory-sha256`. All original names remain
+mandatory, additions stay within the reviewed producer roots, and every path,
+size and hash must equal the retained descriptors and source bodies.
+
+The actual `4268d2d5` original adds seven public source names. Its
+[683-source manifest](evidence/p06-counter-diagnostics/native/public-source-inventory-4268d2d5.json)
+has independently verified exact-byte SHA-256
+`bd81faa7590e053685dfa78d8baa41478969c3b4ec750646cddb5796b949ba0c`.
+The latest [public replay receipt](evidence/p06-counter-diagnostics/native/w10-native-checkpoint-audit-public-replay.json)
+passes with that explicit manifest; the fixed 676-name route rejects the same
+expanded packet. This is retained-data validation of an actual later original,
+not qualification of measurement artifacts.
+
+Missing either option, an invalid explicit manifest, a changed descriptor or
+an unsafe path fails closed. There is no fallback to the original inventory
+after explicit-manifest failure and no discovery of new files on the replay
+host. Preserve external archive/revision/manifest expectations with the receipt
+and its actual `trusted_replay_sources` closure. A manifest digest establishes
+the chosen expected bytes; it does not authenticate a Git origin, a build or
+execution. New warm-caller roots or a different producer contract require
+separate review rather than silently widening this diagnostic helper.
+
+Keep diagnostic replay results at `scope="retained-data-consistency-only"`,
+`native_execution="not_run"` and `retained_code_executed=false`, with all
+qualification/readiness/warm-execution/acceptance claims false. Their current
+validation of recorded object/library/tool identities does not supply absent
+payloads or establish a cached dependency's compilation origin. A qualifying
+record must independently resolve the chain from source to actual binary and
+loaded dependency before relying on the lifetime theorem.
+
+### Bind and review the new qualification record
 
 In addition to the source/configuration/tool/binary requirements above, bind
 the reviewed 33-selector inventory, true backing sources, widths, availability,

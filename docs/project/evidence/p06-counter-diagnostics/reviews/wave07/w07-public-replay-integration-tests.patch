@@ -1,0 +1,121 @@
+--- before/ci/project/test_p06_counter_public_replay.py
++++ after/ci/project/test_p06_counter_public_replay.py
+@@ -75,6 +75,9 @@
+ 
+ 
+ def replace(value, path, replacement):
++    previous = at(value, path)
++    if type(previous) is type(replacement) and previous == replacement:
++        raise AssertionError("mutation did not change its selected value")
+     at(value, path[:-1])[path[-1]] = replacement
+ 
+ 
+@@ -112,6 +115,8 @@
+ 
+ def replace_payload(members, relative, body, aliases=()):
+     """Update every retained/original identity so semantic validation is reached."""
++    if body == members[PREFIX + relative]:
++        raise AssertionError("payload mutation did not change its selected bytes")
+     members[PREFIX + relative] = body
+     names = {relative, *aliases}
+     digest = hashlib.sha256(body).hexdigest()
+@@ -136,7 +141,10 @@
+         if len(selected) != 1:
+             raise AssertionError("build mutation must select exactly one original command")
+         index = selected[0]
+-        lines[index] = transform(lines[index])
++        changed = transform(lines[index])
++        if changed == lines[index]:
++            raise AssertionError("build mutation did not change its selected command")
++        lines[index] = changed
+         return ("\n".join(lines) + "\n").encode()
+     replace_log(members, command_id, changed)
+ 
+@@ -305,6 +313,9 @@
+                           result["public"]["reused_model_objects"]), (19, 4, 44))
+         self.assertEqual([cell["id"] for cell in result["public"]["cells"]],
+                          ["public-" + mode for mode in replay.MODES])
++        self.assertEqual([(cell["observations"]["schema_version"], cell["observations"]["checks"])
++                          for cell in result["public"]["cells"]],
++                         [(2, 1668), (2, 1176), (2, 1176), (2, 1173), (2, 1814)])
+         for name in FALSE_CLAIMS:
+             self.assertIs(result[name], False, name)
+         self.assertEqual(result["native_execution"], "not_run")
+@@ -595,9 +606,10 @@
+     def test_suppressed_dma_requires_original_ram_and_complemented_attempt(self):
+         for mode in ("immediate-overflow", "delayed-overflow", "cache-overflow"):
+             for name in ("before", "attempted", "after"):
+-                with self.subTest(mode=mode, name=name):
+-                    self.reject_observation(mode, ("failure", "suppression", "dma", name, 0), 0,
+-                                            "failure.suppression.dma")
++                for index in range(3):
++                    with self.subTest(mode=mode, name=name, index=index):
++                        self.reject_observation(mode, ("failure", "suppression", "dma", name, index), 0,
++                                                "failure.suppression.dma")
+             self.reject_observation(mode, ("failure", "suppression", "dma", "status"), 0, "dma.status")
+ 
+     def test_terminal_counters_components_halves_and_clock_are_verified(self):
+@@ -617,13 +629,16 @@
+         for path, value in ((("device_refs",), 2), (("queues",), 1), (("buffers",), 1),
+                             (("extra_retain_rejected",), False), (("before", "idle"), False),
+                             (("before", "any_running"), True), (("before", "pending_reads"), 1),
+-                            (("cp_after", "head"), 1), (("cp_after", "retired"), 0)):
++                            (("cp_after", "head_writeback_raw"), 1),
++                            (("cp_after", "tail_register_pair_raw"), 64),
++                            (("cp_after", "runtime_tail"), 64), (("cp_after", "retired"), 0)):
+             with self.subTest(path=path):
+                 self.reject_observation("normal", ("terminal_snapshots", 0) + path, value, "terminal_snapshots")
+-        for path, value in ((("completed",), False), (("ticks_after",), 1), (("idle_after",), False),
+-                            (("before", "generation"), 9)):
+-            with self.subTest(path=path):
+-                self.reject_observation("normal", ("destructions", 0) + path, value, "destructions")
++        for index in range(2):
++            for path, value in ((("completed",), False), (("ticks_after",), 1), (("reset_after",), 0),
++                                (("idle_after",), False), (("before", "generation"), 9)):
++                with self.subTest(index=index, path=path):
++                    self.reject_observation("normal", ("destructions", index) + path, value, "destructions")
+ 
+     def test_overflow_requires_original_callback_and_fresh_context_evidence(self):
+         for mode in ("immediate-overflow", "delayed-overflow", "cache-overflow"):
+@@ -650,7 +665,8 @@
+                                   ("cache-overflow", ("failure", "suppression", "dma", "before", 0), True)):
+             with self.subTest(mode=mode, path=path):
+                 self.reject_observation(mode, path, value)
+-        for path in ((), ("terminal_snapshots", 0), ("terminal_snapshots", 0, "rows", 0, "high")):
++        for path in ((), ("terminal_snapshots", 0), ("terminal_snapshots", 0, "cp_after"),
++                     ("terminal_snapshots", 0, "rows", 0, "high")):
+             members = dict(self.original)
+             edit_observation(members, "normal", lambda value: at(value, path).__setitem__("unknown", False))
+             with self.subTest(path=path):
+@@ -658,9 +674,16 @@
+ 
+     def test_public_result_duplicate_keys_numbers_and_record_boundaries_are_strict(self):
+         marker = replay.public_records.RESULT_PREFIX.encode()
++
++        def schema_number(body, replacement):
++            token = b'"schema_version":2'
++            self.assertEqual(body.count(token), 1, "original schema-2 token is not unique")
++            return body.replace(token, b'"schema_version":' + replacement, 1)
++
+         transformations = [lambda body: body.replace(marker + b"{", marker + b'{"checked":true,', 1),
+-                           lambda body: body.replace(b'"schema_version":1', b'"schema_version":1.0'),
+-                           lambda body: body.replace(b'"schema_version":1', b'"schema_version":NaN'),
++                           lambda body: schema_number(body, b"2.0"),
++                           lambda body: schema_number(body, b"NaN"),
++                           lambda body: schema_number(body, b"Infinity"),
+                            lambda body: body + b"extra trailing result\n",
+                            lambda body: b"ERROR unrelated crash\n" + body,
+                            lambda body: body + body]
+@@ -669,7 +692,11 @@
+                 members = dict(self.original)
+                 # Canonicalize the native JSON first so token replacements are exact.
+                 edit_observation(members, "normal", lambda value: None)
+-                replace_log(members, "public-normal", transform)
++                def changed(body):
++                    mutated = transform(body)
++                    self.assertNotEqual(mutated, body, "raw result mutation did not change its input")
++                    return mutated
++                replace_log(members, "public-normal", changed)
+                 self.reject(members, "public")
+ 
+     def test_raw_observations_cannot_be_replaced_by_a_summary_only(self):

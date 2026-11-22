@@ -33,8 +33,8 @@ archives, build provenance, independent audits and replay instructions. The
 earlier [P04-A01 fixture acceptance](docs/project/evidence/p04-fixture/acceptance.json)
 and [hashed manifest](ci/project/p04_model_manifest.json) remain unchanged.
 
-**Current work: P06-T01 — complete counter qualification after the implemented
-checked-counter prerequisite (`in_progress`), with [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
+**Current work: P06-T01 — bind the completed counter diagnostics to a separately
+versioned measurement qualification path (`in_progress`), with [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
 Independent review qualifies the original
 [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
 at source `84b6ca0ca75fba248ba330642bbf8764db3d459c`. The frozen
@@ -108,7 +108,7 @@ native result remains bound to `4781ca9`. The
 [delivery ledger](docs/project/evidence/p06-simulator-completion/delivery-ledger.md)
 records **60 actual agents across ten logical waves**, six assignments per wave.
 
-The next prerequisite is now implemented at
+The checked-counter prerequisite was implemented at
 [`9fd7eac20`](https://github.com/baabi-boo/AI-GPU/commit/9fd7eac203c77fa54c7af80fa0220ae09553cd55):
 opt-in `SIMX_CHECKED_COUNTERS=1` guards counter sources and intermediate sums,
 throws before an affected field wraps, and propagates failure through simulator
@@ -129,19 +129,54 @@ The five public methods exercise **10 RAM/LLC cells** through the actual runtime
 with controlled Processor/RAM components. They do not inject native model faults.
 [Native run 45017731063, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45017731063)
 passed at `9fd7eac20`; the [independent original-artifact review](docs/project/evidence/p06-checked-counters/reviews/native-review.md)
-confirms its behavior and source/build bindings. Its directed transport
-scope covers **19 seeded available selectors**, leaving **14 available selectors
-unseeded** and **12 unavailable**. Full qualification remains `qualified=false`
-and `ready_for_warm=false`.
+confirms its behavior and source/build bindings. That checkpoint seeded
+19 available selectors; the subsequent diagnostic continuation closes its
+fourteen remaining backing-source gaps.
 
-The [remaining qualification plan](docs/project/p06-mpm-qualification-plan.md)
-requires a terminal lifetime/no-wrap proof for all **33 available counters**,
-coverage of the fourteen native backing-source transport gaps, native public
-snapshot coherence/failure diagnostics and a separately versioned qualification
-reader. Only after those gates should the unchanged fresh warm matrix run:
-24 processes, 792 launches and 25,344 exact output words. **P06 and P06-T01 remain
-`in_progress`; P06-A02/A03 remain open.** Warm v1 stays unconditionally blocked;
-these repairs do not qualify historical measurements or establish a speedup.
+The [counter diagnostic audit](docs/project/p06-counter-diagnostics-audit.md) and
+[evidence packet](docs/project/evidence/p06-counter-diagnostics/README.md) now
+record **all 33 available selectors and all 40 backing components**, with the
+12 unavailable L2/L3 rows unqueried. The corrected original
+[run 45031746149](https://github.com/baabi-boo/AI-GPU/actions/runs/45031746149)
+at `e5f152464dda5e488d6d1a030c1fcdc49b5a9701` passes seven model cases and six
+public-runner cases: one boundary control plus five actual Processor/RAM public
+modes. The public modes record ten actual context disposals and seven terminal
+snapshots. Its separate [host governance receipt](docs/project/evidence/p06-counter-diagnostics/host/index.json)
+passes **3,158 tests in 1,305.183 seconds**; that receipt excludes the later
+offline replay and explicit source-inventory additions at `4268d2d5`.
+
+The latest native [run 45034575685](https://github.com/baabi-boo/AI-GPU/actions/runs/45034575685)
+at `4268d2d5d811063bb886cde7bd0e27e61a79c9b4` separately passes all **13 diagnostic
+process cases**. Its [independent original-packet audit](docs/project/evidence/p06-counter-diagnostics/native/w10-native-checkpoint-audit.md)
+matches all 270 model and 683 public source bodies to that immutable tree.
+Model replay passes; public replay passes with the independently Git-pinned
+683-source manifest, while the original fixed 676-name route rejects the
+expanded packet. The separate [completed host receipt](docs/project/evidence/p06-counter-diagnostics/host/checkpoint-4268d2d/receipt.json)
+for run `45034575638` records **3,312 executed tests in 1,811.712 seconds:
+3,310 pass and two fail**, with no errors or skips. Two test isolation guards
+mistook a current trusted helper for a recorded producer path when the checkout
+pathnames coincided. The [test-only repair](docs/project/evidence/p06-counter-diagnostics/reviews/wave10/w10-replay-guard-review.md)
+is independently reviewed and published at `142b2d6`, closing both F2 findings;
+89 affected methods pass in 139.141 seconds. The subsequent
+[clean local governance run](docs/project/evidence/p06-counter-diagnostics/host/local-clean-142b2d6/receipt.json)
+at `142b2d6` passes **all 3,318 tests in 1,918.414 seconds on CPython 3.12.14**.
+Independent review confirms four commands with exit 0, a clean detached checkout
+before/after and 365 unchanged source records matching immutable Git. The
+separate [hosted retry](docs/project/evidence/p06-counter-diagnostics/host/checkpoint-142b2d6/pending-receipt-20261122T165509Z.json)
+`45040805357` and native retry `45040805341` remain queued with no executed
+result. The latest audited native cases remain at `4268d2d5`, whose original
+hosted failure is preserved.
+
+The [conditional lifetime argument](docs/designs/simx_counter_lifetime_v1.md)
+still requires the actual seed-free measurement binaries, full managed caller's
+terminal premises and loaded dependency provenance. The
+[next qualification plan](docs/project/p06-mpm-qualification-plan.md) specifies
+a separately versioned admission record and pure validator, independent
+rejection review, and a seed-free managed-caller preflight before the unchanged
+fresh warm matrix: **24 processes, 792 launches and 25,344 exact output words**.
+Diagnostic/replay qualification, readiness, warm execution and acceptance remain
+false. **P06 and P06-T01 remain `in_progress`; P06-A02/A03 remain open.** Warm v1
+stays unconditionally blocked; these diagnostics establish no warm speedup.
 
 **Parallel work: P05-T01 — the Python/custom-op bridge (`in_progress`).**
 [P05-A01 now accepts the copying Python binding](docs/project/evidence/p05-python/acceptance-binding.json)
@@ -220,9 +255,11 @@ and P07–P11 are not started.
 - Read the earlier contract checkpoint: [P02 numerical handoff](docs/project/p02-numerics-handoff.md)
   and [A01 evidence](docs/project/evidence/p02-numerics/README.md).
 - Continue the [counter qualification plan](docs/project/p06-mpm-qualification-plan.md)
-  from the implemented [checked-counter contract](docs/designs/simx_checked_counters_v1.md),
-  [audit](docs/project/p06-checked-counters-audit.md) and
-  [evidence packet](docs/project/evidence/p06-checked-counters/README.md).
+  from the completed [diagnostic audit](docs/project/p06-counter-diagnostics-audit.md),
+  [evidence packet](docs/project/evidence/p06-counter-diagnostics/README.md) and
+  [handoff](docs/project/p06-counter-diagnostics-handoff.md). The
+  [checked-counter contract](docs/designs/simx_checked_counters_v1.md) retains
+  the underlying guard's separate scope.
   The [simulator completion audit](docs/project/p06-simulator-completion-audit.md),
   [contract](docs/designs/simulator_completion_v1.md) and
   [source-bound verification packet](docs/project/evidence/p06-simulator-completion/README.md)

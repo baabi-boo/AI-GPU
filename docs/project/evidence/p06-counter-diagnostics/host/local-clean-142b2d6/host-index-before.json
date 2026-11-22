@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "retained-host-governance-attempts",
+  "qualified": false,
+  "ready_for_warm": false,
+  "warm_execution": false,
+  "acceptance": false,
+  "attempts": [
+    {
+      "id": "local-concurrent-development",
+      "outcome": "fail",
+      "tests": 3070,
+      "failures": 149,
+      "errors": 0,
+      "seconds": 1517.531,
+      "log": "local-concurrent-governance-attempt.log",
+      "limitation": "The workspace changed while the suite ran. Loaded-helper stability guards blocked later fixtures; this attempt does not establish an immutable-checkout full-suite result."
+    },
+    {
+      "id": "hosted-81ed687",
+      "source_revision": "81ed6871634fefbf5c78fb27cf10dce913bd4d9c",
+      "workflow_run_id": 45029135196,
+      "job_id": 137228604836,
+      "url": "https://github.com/baabi-boo/AI-GPU/actions/runs/45029135196",
+      "outcome": "fail",
+      "tests": 3146,
+      "failures": 18,
+      "errors": 6,
+      "seconds": 1333.263,
+      "python_version": "3.12.3",
+      "log": "run-45029135196-job-137228604836.log",
+      "root_cause": "The controlled PublicFixture exposed the unpinned host interpreter observation to the strict native interpreter validator; all reported failures/errors belong to that fixture. The repair isolates synthetic observations and leaves the native CPython 3.12.14 pin unchanged."
+    },
+    {
+      "id": "hosted-e5f1524",
+      "source_revision": "e5f152464dda5e488d6d1a030c1fcdc49b5a9701",
+      "workflow_run_id": 45031746158,
+      "job_id": 137236633104,
+      "url": "https://github.com/baabi-boo/AI-GPU/actions/runs/45031746158",
+      "outcome": "pass",
+      "tests": 3158,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 1305.183,
+      "python_version": "3.12.3",
+      "log": "run-45031746158-job-137236633104.log",
+      "scope": "Immutable hosted checkout after CP drain, contradictory-log and controlled interpreter-fixture repairs; excludes later replay/source-inventory additions."
+    },
+    {
+      "id": "hosted-4268d2d",
+      "source_revision": "4268d2d5d811063bb886cde7bd0e27e61a79c9b4",
+      "source_tree": "061ecbddc9b321edbd70c054c8efce4d188de04f",
+      "workflow_run_id": 45034575638,
+      "workflow_run_attempt": 1,
+      "job_id": 137245340992,
+      "url": "https://github.com/baabi-boo/AI-GPU/actions/runs/45034575638",
+      "outcome": "fail",
+      "tests": 3312,
+      "ok": 3310,
+      "failures": 2,
+      "errors": 0,
+      "skips": 0,
+      "seconds": 1811.712,
+      "python_version": "3.12.3",
+      "exit_code": 1,
+      "log": "checkpoint-4268d2d/run-45034575638-job-137245340992.log",
+      "receipt": "checkpoint-4268d2d/receipt.json",
+      "independent_review": "checkpoint-4268d2d/failed-review.md",
+      "log_representation": "Exact UTF-8 encoding of connector-decoded completed log, including BOM; raw redirected HTTP response bytes are not independently available.",
+      "root_cause": "Both no-producer-path test guards reject resolution of current trusted baseline_inventory.py because the GitHub checkout absolute pathname equals the archived producer source root. The two tests fail early; this original attempt remains failed and a separate repaired checkpoint is required.",
+      "scope": "Immutable 4268 hosted checkout, including all 154 new replay/inventory methods. All 3,312 unique methods executed; two failed and none skipped. Later test repairs and narrative/evidence edits are outside this failed result.",
+      "qualified": false,
+      "ready_for_warm": false,
+      "warm_execution": false,
+      "acceptance": false
+    }
+  ],
+  "logs": [
+    {
+      "path": "local-concurrent-governance-attempt.log",
+      "sha256": "eee213aeb2cbe8446b39c9862dc8309218e6d6b527b28b2a79d999bb8c612a1e",
+      "size_bytes": 124677
+    },
+    {
+      "path": "run-45029135196-job-137228604836.log",
+      "sha256": "b67117ecc27ab323ae9b622ec3cb8607d6d8d910db2f3a7ba9c7fedd8251abed",
+      "size_bytes": 687856
+    },
+    {
+      "path": "run-45031746158-job-137236633104.log",
+      "sha256": "c789496a9e29f55df97ff54da55595397cdb33f0c64f9839b0d612a3a9dbe59f",
+      "size_bytes": 657711
+    },
+    {
+      "path": "checkpoint-4268d2d/run-45034575638-job-137245340992.log",
+      "sha256": "1d093819f62493536a2444b6efec31a75e522e7e3a3cfc197a0a101c833160a8",
+      "size_bytes": 696999
+    }
+  ]
+}

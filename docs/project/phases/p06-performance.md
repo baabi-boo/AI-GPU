@@ -84,24 +84,55 @@ The [checked-counter prerequisite](../../designs/simx_checked_counters_v1.md)
 is implemented at `9fd7eac203c77fa54c7af80fa0220ae09553cd55`. Its
 [reviewed original native packet](../evidence/p06-checked-counters/reviews/native-review.md)
 supports five directed cells, with ordinary and checked builds compiling
-44 translation units each. Native boundary coverage seeds nineteen available
-selectors; fourteen available selectors remain unseeded and twelve L2/L3 rows
-remain unavailable. Guarded source updates and formed aggregates do not
-establish a complete aggregate lifetime bound, native public snapshot coherence
-or warm readiness. The [development handoff](../p06-checked-counters-handoff.md)
-records the remaining proof and diagnostic sequence.
+44 translation units each. That checkpoint seeded nineteen available selectors.
+The subsequent [diagnostic audit](../p06-counter-diagnostics-audit.md) and
+[original evidence](../evidence/p06-counter-diagnostics/README.md) close all
+fourteen remaining gaps: **33 available selectors, 40 backing components and
+12 unavailable L2/L3 rows receiving no query**. The corrected original at
+`e5f1524`, run `45031746149`, passes seven model cases and six public-runner
+cases (one boundary control plus five modes). Each model boundary variant has
+6,389 checks and 1,788 half reads; actual Processor/RAM public modes provide
+ten context disposals and seven terminal snapshots. Offline readers published
+at `4268d2d5` check retained-data consistency without executing retained code.
 
-**Next development action:** close and independently review the terminal
-`before_release` lifetime and ownership argument, complete the fourteen remaining
-native backing-source diagnostics and actual public failure/coherence checks,
-then implement the separately versioned
-[qualification binding](../p06-mpm-qualification-plan.md). Run a fresh complete
-matched warm attempt only under that reviewed binding and unchanged
-statistical rules: **24 processes, 792 launches and 25,344 exact output words**.
+The latest [native run 45034575685](https://github.com/baabi-boo/AI-GPU/actions/runs/45034575685)
+separately passes all thirteen diagnostic process cases at `4268d2d5`. Its
+[independent original-packet audit](../evidence/p06-counter-diagnostics/native/w10-native-checkpoint-audit.md)
+matches the 270 model/683 public source bodies to that immutable tree and
+validates both inert replay routes. Public replay requires its independently
+Git-pinned 683-source manifest; the fixed original 676-name route rejects the
+expanded packet. The separate [completed host receipt](../evidence/p06-counter-diagnostics/host/checkpoint-4268d2d/receipt.json)
+for run `45034575638` records **3,312 executed tests in 1,811.712 seconds:
+3,310 pass and two isolation-guard failures**, with no errors or skips. The
+[test-only repair](../evidence/p06-counter-diagnostics/reviews/wave10/w10-replay-guard-review.md)
+is independently reviewed and published at `142b2d6`, closing both F2 findings.
+The subsequent [clean local governance receipt](../evidence/p06-counter-diagnostics/host/local-clean-142b2d6/receipt.json)
+records **all 3,318 tests passing in 1,918.414 seconds on CPython 3.12.14**, with
+four successful commands and independently verified clean source/log bindings.
+The separate [hosted retry](../evidence/p06-counter-diagnostics/host/checkpoint-142b2d6/pending-receipt-20261122T165509Z.json)
+`45040805357` and native retry `45040805341` remain queued with no executed
+result. The original failed attempt remains retained, and the latest audited
+native execution stays at `4268d2d5`.
+
+The [lifetime argument](../../designs/simx_counter_lifetime_v1.md) remains
+conditional on the complete managed caller's ownership, resets and terminal
+observations, plus actual loaded dependency/source-to-binary provenance.
+Seeded diagnostics and directed scalar controls do not bind those premises to
+measurement binaries. The [diagnostic handoff](../p06-counter-diagnostics-handoff.md)
+separates the completed diagnostics from this remaining qualification work.
+
+**Next development action:** specify, implement and independently review the
+separately versioned [qualification binding](../p06-mpm-qualification-plan.md)
+for actual seed-free binaries and the complete managed warm caller. Bind all
+terminal lifetime premises and loaded dependencies; review the pure validator
+and rejection controls, then run the four-process managed-caller preflight.
+Only after those prerequisites pass, run the unchanged fresh matched warm attempt:
+**24 processes, 792 launches and 25,344 exact output words**.
 Preserve the v1 block and original cold baseline; source repair cannot recover
 missing historical high bits. Keep the two-job, 4 GiB memory and 15 GiB disk
 prerequisites unchanged. Correctness and transport tests establish no speedup
-or P06-A02/A03 acceptance.
+or P06-A02/A03 acceptance; diagnostic/replay qualification, readiness, warm
+execution and acceptance remain false.
 
 P06 and P06-T01 remain `in_progress`; P06-A02/A03 remain open. P04 supplies the
 entry dependency and P05 is independent. The missing P01 vendor `hw_emu` evidence
@@ -157,7 +188,7 @@ After the P06 gates are accepted, hand P07 the selected configuration,
 constraints, bounded workloads, memory-map assumptions and reproducible reports.
 P07 also requires P01's vendor integration gate. Update [status](../status.md)
 and [backlog](../backlog.md) as each gate earns evidence. The current next action
-is the terminal lifetime proof and remaining native counter diagnostics
-described above, followed by the versioned qualification binding and fresh
-matched warm execution. A documented board-readiness decision and physical
+is the versioned qualification binding for the seed-free measurement artifacts
+and complete managed caller described above, followed by its preflight and the
+fresh matched warm attempt. A documented board-readiness decision and physical
 implementation plan follow later.

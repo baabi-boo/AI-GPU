@@ -1,0 +1,1801 @@
+{
+  "schema_version": 1,
+  "contract": "simx-counter-terminal-source-argument-v1",
+  "evidence_kind": "conditional-source-analysis",
+  "source_repository": "baabi-boo/AI-GPU",
+  "source_revision": "407ab9fea5e4f793a2a5088f566a87f3e631aa84",
+  "audited_base_revision": "7455e008c1e001d3329e74fd55ffcd942592ec5f",
+  "production_sources_unchanged_from_base": true,
+  "binding_scope": "Listed source premises, inventory helpers and caller ordering; not a complete transitive build closure or source-to-binary attestation.",
+  "scope": {
+    "xlen": 64,
+    "simulator": "SimX",
+    "timing": true,
+    "performance_counters": true,
+    "checked_counters_macro": "SIMX_CHECKED_COUNTERS=1",
+    "profile": "p02-tfr",
+    "tensor_mode": "STD",
+    "clusters": 1,
+    "cores": 1,
+    "socket_size": 1,
+    "warps": 4,
+    "threads": 4,
+    "issue_width": 1,
+    "lsu_blocks": 1,
+    "tcu_blocks": 1,
+    "icache_enabled": true,
+    "icache_banks": 1,
+    "dcache_enabled": true,
+    "dcache_banks": 2,
+    "local_memory_enabled": true,
+    "memory_channels": 2,
+    "virtual_memory": false,
+    "l2": false,
+    "l3": false,
+    "wgmma": false,
+    "cp_on_l2": 0,
+    "cp_on_l3": 0,
+    "cp_dma_route": "direct RAM / host memcpy; no LLC client",
+    "workers": 1,
+    "dram": "Ramulator HBM2",
+    "mpm_core_id": 0,
+    "concurrent_submitters": false,
+    "unavailable_selector_queries": false
+  },
+  "theorem": {
+    "maximum": 18446744073709551615,
+    "selected_aggregates": 33,
+    "backing_components": 40,
+    "statement": "For one accepted unseeded lifetime, each selected component is nonnegative and monotone through admitted resets, and a successful final checked aggregate at T fits uint64. Thus for every earlier t each aggregate S_j(t) <= S_j(T) <= 2^64-1. No component or aggregate can have wrapped in that lifetime. A no-update suffix extends the bound until selected storage destruction.",
+    "conditional_on": [
+      "P01",
+      "P02",
+      "P03",
+      "P04",
+      "P05",
+      "P06",
+      "P07",
+      "P08",
+      "P09",
+      "P10"
+    ],
+    "not_established_by": [
+      "endpoint subtraction alone",
+      "component overflow checks without aggregate readout",
+      "seeded transport fixtures",
+      "a small unseeded scalar caller standing in for warm workspace",
+      "a cached dependency library hash standing in for build origin"
+    ]
+  },
+  "selectors": [
+    {
+      "name": "cycles",
+      "mpm_class": 0,
+      "csr": 2816,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "active_core_cycles",
+      "class_macro": "VX_DCR_MPM_CLASS_BASE",
+      "csr_macro": "VX_CSR_MCYCLE",
+      "component_count": 1,
+      "components": [
+        "Core::Impl::perf_stats_.cycles"
+      ],
+      "source_paths": [
+        "sim/simx/core.h",
+        "sim/simx/core.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "instructions",
+      "mpm_class": 0,
+      "csr": 2818,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "retired_macroinstructions",
+      "class_macro": "VX_DCR_MPM_CLASS_BASE",
+      "csr_macro": "VX_CSR_MINSTRET",
+      "component_count": 1,
+      "components": [
+        "Core::Impl::perf_stats_.instrs"
+      ],
+      "source_paths": [
+        "sim/simx/core.h",
+        "sim/simx/core.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "core_sched_idle",
+      "mpm_class": 1,
+      "csr": 2819,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "cycles",
+      "class_macro": "VX_DCR_MPM_CLASS_CORE",
+      "csr_macro": "VX_CSR_MPM_SCHED_IDLE",
+      "component_count": 1,
+      "components": [
+        "Core::Impl::perf_stats_.sched_idle"
+      ],
+      "source_paths": [
+        "sim/simx/core.h",
+        "sim/simx/core.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "core_active_warps",
+      "mpm_class": 1,
+      "csr": 2820,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "warp_cycles",
+      "class_macro": "VX_DCR_MPM_CLASS_CORE",
+      "csr_macro": "VX_CSR_MPM_ACTIVE_WARPS",
+      "component_count": 1,
+      "components": [
+        "Core::Impl::perf_stats_.active_warps"
+      ],
+      "source_paths": [
+        "sim/simx/core.h",
+        "sim/simx/core.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "core_stalled_warps",
+      "mpm_class": 1,
+      "csr": 2821,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "warp_cycles",
+      "class_macro": "VX_DCR_MPM_CLASS_CORE",
+      "csr_macro": "VX_CSR_MPM_STALLED_WARPS",
+      "component_count": 1,
+      "components": [
+        "Core::Impl::perf_stats_.stalled_warps"
+      ],
+      "source_paths": [
+        "sim/simx/core.h",
+        "sim/simx/core.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "core_issued_warps",
+      "mpm_class": 1,
+      "csr": 2822,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "warps",
+      "class_macro": "VX_DCR_MPM_CLASS_CORE",
+      "csr_macro": "VX_CSR_MPM_ISSUED_WARPS",
+      "component_count": 1,
+      "components": [
+        "Core::Impl::perf_stats_.issued_warps"
+      ],
+      "source_paths": [
+        "sim/simx/core.h",
+        "sim/simx/core.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "core_issued_threads",
+      "mpm_class": 1,
+      "csr": 2823,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "threads",
+      "class_macro": "VX_DCR_MPM_CLASS_CORE",
+      "csr_macro": "VX_CSR_MPM_ISSUED_THREADS",
+      "component_count": 1,
+      "components": [
+        "Core::Impl::perf_stats_.issued_threads"
+      ],
+      "source_paths": [
+        "sim/simx/core.h",
+        "sim/simx/core.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "core_stall_scrb",
+      "mpm_class": 1,
+      "csr": 2826,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "cycles",
+      "class_macro": "VX_DCR_MPM_CLASS_CORE",
+      "csr_macro": "VX_CSR_MPM_STALL_SCRB",
+      "component_count": 1,
+      "components": [
+        "Core::Impl::perf_stats_.scrb_stalls"
+      ],
+      "source_paths": [
+        "sim/simx/core.h",
+        "sim/simx/core.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "core_stall_lsu",
+      "mpm_class": 1,
+      "csr": 2830,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "cycles",
+      "class_macro": "VX_DCR_MPM_CLASS_CORE",
+      "csr_macro": "VX_CSR_MPM_STALL_LSU",
+      "component_count": 1,
+      "components": [
+        "Core::Impl::perf_stats_.lsu_stalls"
+      ],
+      "source_paths": [
+        "sim/simx/core.h",
+        "sim/simx/core.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "core_stall_tcu",
+      "mpm_class": 1,
+      "csr": 2832,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "cycles",
+      "class_macro": "VX_DCR_MPM_CLASS_CORE",
+      "csr_macro": "VX_CSR_MPM_STALL_TCU",
+      "component_count": 1,
+      "components": [
+        "Core::Impl::perf_stats_.tcu_stalls"
+      ],
+      "source_paths": [
+        "sim/simx/core.h",
+        "sim/simx/core.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "core_instr_tcu",
+      "mpm_class": 1,
+      "csr": 2839,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "instructions",
+      "class_macro": "VX_DCR_MPM_CLASS_CORE",
+      "csr_macro": "VX_CSR_MPM_INSTR_TCU",
+      "component_count": 1,
+      "components": [
+        "Core::Impl::perf_stats_.tcu_instrs"
+      ],
+      "source_paths": [
+        "sim/simx/core.h",
+        "sim/simx/core.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "core_loads",
+      "mpm_class": 1,
+      "csr": 2844,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "issued_lane_requests",
+      "class_macro": "VX_DCR_MPM_CLASS_CORE",
+      "csr_macro": "VX_CSR_MPM_LOADS",
+      "component_count": 1,
+      "components": [
+        "Core::Impl::perf_stats_.loads"
+      ],
+      "source_paths": [
+        "sim/simx/core.h",
+        "sim/simx/core.cpp",
+        "sim/simx/lsu_unit.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "core_stores",
+      "mpm_class": 1,
+      "csr": 2846,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "issued_lane_requests",
+      "class_macro": "VX_DCR_MPM_CLASS_CORE",
+      "csr_macro": "VX_CSR_MPM_STORES",
+      "component_count": 1,
+      "components": [
+        "Core::Impl::perf_stats_.stores"
+      ],
+      "source_paths": [
+        "sim/simx/core.h",
+        "sim/simx/core.cpp",
+        "sim/simx/lsu_unit.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "icache_reads",
+      "mpm_class": 3,
+      "csr": 2819,
+      "core_id": 0,
+      "scope": "socket",
+      "unit": "requests",
+      "class_macro": "VX_DCR_MPM_CLASS_ICACHE",
+      "csr_macro": "VX_CSR_MPM_ICACHE_READS",
+      "component_count": 1,
+      "components": [
+        "icache.CacheBank[0]::perf_stats_.reads"
+      ],
+      "source_paths": [
+        "sim/simx/mem/cache.h",
+        "sim/simx/mem/cache.cpp",
+        "sim/simx/mem/cache_cluster.cpp",
+        "sim/simx/socket.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "zero-initialized checked Cache::PerfStats::operator+= at bank, cluster and socket readout",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "icache_miss_r",
+      "mpm_class": 3,
+      "csr": 2820,
+      "core_id": 0,
+      "scope": "socket",
+      "unit": "requests",
+      "class_macro": "VX_DCR_MPM_CLASS_ICACHE",
+      "csr_macro": "VX_CSR_MPM_ICACHE_MISS_R",
+      "component_count": 1,
+      "components": [
+        "icache.CacheBank[0]::perf_stats_.read_misses"
+      ],
+      "source_paths": [
+        "sim/simx/mem/cache.h",
+        "sim/simx/mem/cache.cpp",
+        "sim/simx/mem/cache_cluster.cpp",
+        "sim/simx/socket.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "zero-initialized checked Cache::PerfStats::operator+= at bank, cluster and socket readout",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "icache_mshr_st",
+      "mpm_class": 3,
+      "csr": 2821,
+      "core_id": 0,
+      "scope": "socket",
+      "unit": "cycles",
+      "class_macro": "VX_DCR_MPM_CLASS_ICACHE",
+      "csr_macro": "VX_CSR_MPM_ICACHE_MSHR_ST",
+      "component_count": 1,
+      "components": [
+        "icache.CacheBank[0]::perf_stats_.mshr_stalls"
+      ],
+      "source_paths": [
+        "sim/simx/mem/cache.h",
+        "sim/simx/mem/cache.cpp",
+        "sim/simx/mem/cache_cluster.cpp",
+        "sim/simx/socket.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "zero-initialized checked Cache::PerfStats::operator+= at bank, cluster and socket readout",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "dcache_reads",
+      "mpm_class": 4,
+      "csr": 2819,
+      "core_id": 0,
+      "scope": "socket",
+      "unit": "requests",
+      "class_macro": "VX_DCR_MPM_CLASS_DCACHE",
+      "csr_macro": "VX_CSR_MPM_DCACHE_READS",
+      "component_count": 2,
+      "components": [
+        "dcache.CacheBank[0]::perf_stats_.reads",
+        "dcache.CacheBank[1]::perf_stats_.reads"
+      ],
+      "source_paths": [
+        "sim/simx/mem/cache.h",
+        "sim/simx/mem/cache.cpp",
+        "sim/simx/mem/cache_cluster.cpp",
+        "sim/simx/socket.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "zero-initialized checked Cache::PerfStats::operator+= at bank, cluster and socket readout",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "dcache_writes",
+      "mpm_class": 4,
+      "csr": 2820,
+      "core_id": 0,
+      "scope": "socket",
+      "unit": "requests",
+      "class_macro": "VX_DCR_MPM_CLASS_DCACHE",
+      "csr_macro": "VX_CSR_MPM_DCACHE_WRITES",
+      "component_count": 2,
+      "components": [
+        "dcache.CacheBank[0]::perf_stats_.writes",
+        "dcache.CacheBank[1]::perf_stats_.writes"
+      ],
+      "source_paths": [
+        "sim/simx/mem/cache.h",
+        "sim/simx/mem/cache.cpp",
+        "sim/simx/mem/cache_cluster.cpp",
+        "sim/simx/socket.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "zero-initialized checked Cache::PerfStats::operator+= at bank, cluster and socket readout",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "dcache_miss_r",
+      "mpm_class": 4,
+      "csr": 2821,
+      "core_id": 0,
+      "scope": "socket",
+      "unit": "requests",
+      "class_macro": "VX_DCR_MPM_CLASS_DCACHE",
+      "csr_macro": "VX_CSR_MPM_DCACHE_MISS_R",
+      "component_count": 2,
+      "components": [
+        "dcache.CacheBank[0]::perf_stats_.read_misses",
+        "dcache.CacheBank[1]::perf_stats_.read_misses"
+      ],
+      "source_paths": [
+        "sim/simx/mem/cache.h",
+        "sim/simx/mem/cache.cpp",
+        "sim/simx/mem/cache_cluster.cpp",
+        "sim/simx/socket.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "zero-initialized checked Cache::PerfStats::operator+= at bank, cluster and socket readout",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "dcache_miss_w",
+      "mpm_class": 4,
+      "csr": 2822,
+      "core_id": 0,
+      "scope": "socket",
+      "unit": "requests",
+      "class_macro": "VX_DCR_MPM_CLASS_DCACHE",
+      "csr_macro": "VX_CSR_MPM_DCACHE_MISS_W",
+      "component_count": 2,
+      "components": [
+        "dcache.CacheBank[0]::perf_stats_.write_misses",
+        "dcache.CacheBank[1]::perf_stats_.write_misses"
+      ],
+      "source_paths": [
+        "sim/simx/mem/cache.h",
+        "sim/simx/mem/cache.cpp",
+        "sim/simx/mem/cache_cluster.cpp",
+        "sim/simx/socket.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "zero-initialized checked Cache::PerfStats::operator+= at bank, cluster and socket readout",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "dcache_evicts",
+      "mpm_class": 4,
+      "csr": 2823,
+      "core_id": 0,
+      "scope": "socket",
+      "unit": "requests",
+      "class_macro": "VX_DCR_MPM_CLASS_DCACHE",
+      "csr_macro": "VX_CSR_MPM_DCACHE_EVICTS",
+      "component_count": 2,
+      "components": [
+        "dcache.CacheBank[0]::perf_stats_.evictions",
+        "dcache.CacheBank[1]::perf_stats_.evictions"
+      ],
+      "source_paths": [
+        "sim/simx/mem/cache.h",
+        "sim/simx/mem/cache.cpp",
+        "sim/simx/mem/cache_cluster.cpp",
+        "sim/simx/socket.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "zero-initialized checked Cache::PerfStats::operator+= at bank, cluster and socket readout",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "dcache_mshr_st",
+      "mpm_class": 4,
+      "csr": 2825,
+      "core_id": 0,
+      "scope": "socket",
+      "unit": "cycles",
+      "class_macro": "VX_DCR_MPM_CLASS_DCACHE",
+      "csr_macro": "VX_CSR_MPM_DCACHE_MSHR_ST",
+      "component_count": 2,
+      "components": [
+        "dcache.CacheBank[0]::perf_stats_.mshr_stalls",
+        "dcache.CacheBank[1]::perf_stats_.mshr_stalls"
+      ],
+      "source_paths": [
+        "sim/simx/mem/cache.h",
+        "sim/simx/mem/cache.cpp",
+        "sim/simx/mem/cache_cluster.cpp",
+        "sim/simx/socket.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "zero-initialized checked Cache::PerfStats::operator+= at bank, cluster and socket readout",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "lmem_reads",
+      "mpm_class": 7,
+      "csr": 2823,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "requests",
+      "class_macro": "VX_DCR_MPM_CLASS_MEM",
+      "csr_macro": "VX_CSR_MPM_LMEM_READS",
+      "component_count": 1,
+      "components": [
+        "LocalMem::Impl::perf_stats_.reads"
+      ],
+      "source_paths": [
+        "sim/simx/mem/local_mem.h",
+        "sim/simx/mem/local_mem.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "lmem_writes",
+      "mpm_class": 7,
+      "csr": 2824,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "requests",
+      "class_macro": "VX_DCR_MPM_CLASS_MEM",
+      "csr_macro": "VX_CSR_MPM_LMEM_WRITES",
+      "component_count": 1,
+      "components": [
+        "LocalMem::Impl::perf_stats_.writes"
+      ],
+      "source_paths": [
+        "sim/simx/mem/local_mem.h",
+        "sim/simx/mem/local_mem.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "lmem_bank_st",
+      "mpm_class": 7,
+      "csr": 2825,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "cycles",
+      "class_macro": "VX_DCR_MPM_CLASS_MEM",
+      "csr_macro": "VX_CSR_MPM_LMEM_BANK_ST",
+      "component_count": 1,
+      "components": [
+        "LocalMem::Impl::perf_stats_.bank_stalls"
+      ],
+      "source_paths": [
+        "sim/simx/mem/local_mem.h",
+        "sim/simx/mem/local_mem.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "coalescer_miss",
+      "mpm_class": 7,
+      "csr": 2826,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "extra_coalescing_rounds",
+      "class_macro": "VX_DCR_MPM_CLASS_MEM",
+      "csr_macro": "VX_CSR_MPM_COALESCER_MISS",
+      "component_count": 1,
+      "components": [
+        "MemCoalescer[0]::perf_stats_.misses"
+      ],
+      "source_paths": [
+        "sim/simx/mem/mem_coalescer.h",
+        "sim/simx/mem/mem_coalescer.cpp",
+        "sim/simx/csr_unit.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "zero-initialized checked PerfCounter sum over exactly one LSU block",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "memory_reads",
+      "mpm_class": 7,
+      "csr": 2819,
+      "core_id": 0,
+      "scope": "global",
+      "unit": "requests",
+      "class_macro": "VX_DCR_MPM_CLASS_MEM",
+      "csr_macro": "VX_CSR_MPM_MEM_READS",
+      "component_count": 1,
+      "components": [
+        "ProcessorImpl::perf_mem_reads_"
+      ],
+      "source_paths": [
+        "sim/simx/processor_impl.h",
+        "sim/simx/processor.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component; latency adds the checked pending-read balance in run/cycle loops",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "memory_writes",
+      "mpm_class": 7,
+      "csr": 2820,
+      "core_id": 0,
+      "scope": "global",
+      "unit": "requests",
+      "class_macro": "VX_DCR_MPM_CLASS_MEM",
+      "csr_macro": "VX_CSR_MPM_MEM_WRITES",
+      "component_count": 1,
+      "components": [
+        "ProcessorImpl::perf_mem_writes_"
+      ],
+      "source_paths": [
+        "sim/simx/processor_impl.h",
+        "sim/simx/processor.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component; latency adds the checked pending-read balance in run/cycle loops",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "memory_lt",
+      "mpm_class": 7,
+      "csr": 2821,
+      "core_id": 0,
+      "scope": "global",
+      "unit": "request_cycles",
+      "class_macro": "VX_DCR_MPM_CLASS_MEM",
+      "csr_macro": "VX_CSR_MPM_MEM_LT",
+      "component_count": 1,
+      "components": [
+        "ProcessorImpl::perf_mem_latency_"
+      ],
+      "source_paths": [
+        "sim/simx/processor_impl.h",
+        "sim/simx/processor.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component; latency adds the checked pending-read balance in run/cycle loops",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "memory_bank_st",
+      "mpm_class": 7,
+      "csr": 2822,
+      "core_id": 0,
+      "scope": "global",
+      "unit": "cycles",
+      "class_macro": "VX_DCR_MPM_CLASS_MEM",
+      "csr_macro": "VX_CSR_MPM_MEM_BANK_ST",
+      "component_count": 1,
+      "components": [
+        "Memory::Impl::mem_xbar_->collisions_"
+      ],
+      "source_paths": [
+        "sim/simx/types.h",
+        "sim/simx/mem/memory.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single TxCrossBar cumulative component copied to returned statistics",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "tcu_tbuf_stalls",
+      "mpm_class": 11,
+      "csr": 2819,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "cycles",
+      "class_macro": "VX_DCR_MPM_CLASS_TCU",
+      "csr_macro": "VX_CSR_MPM_TCU_TBUF_STALLS",
+      "component_count": 1,
+      "components": [
+        "TcuUnit::Impl::perf_stats_.tbuf_stalls"
+      ],
+      "source_paths": [
+        "sim/simx/tcu/tcu_unit.h",
+        "sim/simx/tcu/tcu_unit.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "tcu_tbuf_cache_hits",
+      "mpm_class": 11,
+      "csr": 2820,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "tile_reuse_hits",
+      "class_macro": "VX_DCR_MPM_CLASS_TCU",
+      "csr_macro": "VX_CSR_MPM_TCU_TBUF_CACHE_HITS",
+      "component_count": 1,
+      "components": [
+        "TcuUnit::Impl::perf_stats_.tbuf_cache_hits"
+      ],
+      "source_paths": [
+        "sim/simx/tcu/tcu_unit.h",
+        "sim/simx/tcu/tcu_unit.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "single cumulative component",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    },
+    {
+      "name": "tcu_lmem_reads",
+      "mpm_class": 11,
+      "csr": 2821,
+      "core_id": 0,
+      "scope": "core",
+      "unit": "requests",
+      "class_macro": "VX_DCR_MPM_CLASS_TCU",
+      "csr_macro": "VX_CSR_MPM_TCU_LMEM_READS",
+      "component_count": 2,
+      "components": [
+        "TcuTbuf::Impl::bufs_[0].reads_",
+        "TcuTbuf::Impl::bufs_[1].reads_"
+      ],
+      "source_paths": [
+        "sim/simx/tcu/tcu_tbuf.cpp",
+        "sim/simx/tcu/tcu_unit.cpp"
+      ],
+      "readout_path": "sim/simx/csr_unit.cpp",
+      "aggregation": "TcuTbuf::Impl::reads zero-initialized checked total over NUM_TCU_BLOCKS + 1 buffers",
+      "initial_value": 0,
+      "launch_reset_preserves_components": true,
+      "monotonicity_condition": "bound production updaters only; no diagnostic assignment, decrement, reseed, replacement or reset of selected storage"
+    }
+  ],
+  "unavailable_selectors": [
+    {
+      "name": "l2cache_reads",
+      "mpm_class": 5,
+      "csr": 2819,
+      "core_id": 0,
+      "reason": "cache capability disabled; do not query"
+    },
+    {
+      "name": "l2cache_writes",
+      "mpm_class": 5,
+      "csr": 2820,
+      "core_id": 0,
+      "reason": "cache capability disabled; do not query"
+    },
+    {
+      "name": "l2cache_miss_r",
+      "mpm_class": 5,
+      "csr": 2821,
+      "core_id": 0,
+      "reason": "cache capability disabled; do not query"
+    },
+    {
+      "name": "l2cache_miss_w",
+      "mpm_class": 5,
+      "csr": 2822,
+      "core_id": 0,
+      "reason": "cache capability disabled; do not query"
+    },
+    {
+      "name": "l2cache_evicts",
+      "mpm_class": 5,
+      "csr": 2823,
+      "core_id": 0,
+      "reason": "cache capability disabled; do not query"
+    },
+    {
+      "name": "l2cache_mshr_st",
+      "mpm_class": 5,
+      "csr": 2825,
+      "core_id": 0,
+      "reason": "cache capability disabled; do not query"
+    },
+    {
+      "name": "l3cache_reads",
+      "mpm_class": 6,
+      "csr": 2819,
+      "core_id": 0,
+      "reason": "cache capability disabled; do not query"
+    },
+    {
+      "name": "l3cache_writes",
+      "mpm_class": 6,
+      "csr": 2820,
+      "core_id": 0,
+      "reason": "cache capability disabled; do not query"
+    },
+    {
+      "name": "l3cache_miss_r",
+      "mpm_class": 6,
+      "csr": 2821,
+      "core_id": 0,
+      "reason": "cache capability disabled; do not query"
+    },
+    {
+      "name": "l3cache_miss_w",
+      "mpm_class": 6,
+      "csr": 2822,
+      "core_id": 0,
+      "reason": "cache capability disabled; do not query"
+    },
+    {
+      "name": "l3cache_evicts",
+      "mpm_class": 6,
+      "csr": 2823,
+      "core_id": 0,
+      "reason": "cache capability disabled; do not query"
+    },
+    {
+      "name": "l3cache_mshr_st",
+      "mpm_class": 6,
+      "csr": 2825,
+      "core_id": 0,
+      "reason": "cache capability disabled; do not query"
+    }
+  ],
+  "premises": [
+    {
+      "id": "P01",
+      "statement": "Exact route and inventory: RV64 serial timing, checked PERF, p02-tfr STD topology, 33 available core-zero selectors and 12 unavailable selectors.",
+      "source_references": [
+        {
+          "path": "tests/unittest/checked_counters/counter_access.cpp",
+          "symbols": [
+            "selectors",
+            "static_assert"
+          ]
+        },
+        {
+          "path": "ci/project/p06_contract.py",
+          "symbols": [
+            "_COUNTERS"
+          ]
+        },
+        {
+          "path": "sim/simx/socket.cpp",
+          "symbols": [
+            "Socket::Impl"
+          ]
+        }
+      ],
+      "runtime_obligation": "Retain generated configuration, compile flags, loaded executable/runtime/dependency identities, environment, capabilities and exact inventories for each real process; do not infer them from a profile name."
+    },
+    {
+      "id": "P02",
+      "statement": "All 40 selected backing components are zero at construction and undergo only nonnegative additions on the admitted production route.",
+      "source_references": [
+        {
+          "path": "sim/common/perf_counter.h",
+          "symbols": [
+            "PerfCounter::add",
+            "PerfCounter::nonnegative"
+          ]
+        },
+        {
+          "path": "sim/simx/core.h",
+          "symbols": [
+            "Core::PerfStats"
+          ]
+        },
+        {
+          "path": "sim/simx/processor_impl.h",
+          "symbols": [
+            "perf_mem_reads_",
+            "perf_mem_writes_",
+            "perf_mem_latency_"
+          ]
+        },
+        {
+          "path": "sim/simx/tcu/tcu_tbuf.cpp",
+          "symbols": [
+            "Buffer::reads_"
+          ]
+        }
+      ],
+      "runtime_obligation": "Use an unseeded new device lifetime; record all launch/reset generations and reject any checked failure. Type assignment/subtraction support alone does not establish monotonicity."
+    },
+    {
+      "id": "P03",
+      "statement": "Permitted launch reset preserves all selected cumulative backing storage; transient balances are reconciled before reset.",
+      "source_references": [
+        {
+          "path": "sim/simx/processor.cpp",
+          "symbols": [
+            "ProcessorImpl::reset",
+            "ProcessorImpl::launch_reset"
+          ]
+        },
+        {
+          "path": "sim/common/simobject.h",
+          "symbols": [
+            "SimPlatform::reset",
+            "SimPlatform::idle"
+          ]
+        },
+        {
+          "path": "sim/simx/core.cpp",
+          "symbols": [
+            "Core::Impl::reset"
+          ]
+        },
+        {
+          "path": "sim/simx/mem/cache.cpp",
+          "symbols": [
+            "CacheBank::on_reset"
+          ]
+        },
+        {
+          "path": "sim/simx/mem/local_mem.cpp",
+          "symbols": [
+            "LocalMem::Impl::reset"
+          ]
+        },
+        {
+          "path": "sim/simx/mem/mem_coalescer.cpp",
+          "symbols": [
+            "MemCoalescer::on_reset"
+          ]
+        },
+        {
+          "path": "sim/simx/types.h",
+          "symbols": [
+            "TxCrossBar::on_reset"
+          ]
+        },
+        {
+          "path": "sim/simx/tcu/tcu_unit.cpp",
+          "symbols": [
+            "TcuUnit::Impl::reset"
+          ]
+        },
+        {
+          "path": "sim/simx/tcu/tcu_tbuf.cpp",
+          "symbols": [
+            "Buffer::reset"
+          ]
+        }
+      ],
+      "runtime_obligation": "Before each direct-RAM launch reset, establish drained prior work, platform idle and zero pending reads; reset cannot rescue a failed or abandoned context."
+    },
+    {
+      "id": "P04",
+      "statement": "The final aggregate is evaluated with checked additions from zero before uint64 conversion; every component and every partial sum must fit.",
+      "source_references": [
+        {
+          "path": "sim/simx/mem/cache.h",
+          "symbols": [
+            "Cache::PerfStats::operator+="
+          ]
+        },
+        {
+          "path": "sim/simx/mem/cache.cpp",
+          "symbols": [
+            "Cache::Impl::perf_stats"
+          ]
+        },
+        {
+          "path": "sim/simx/mem/cache_cluster.cpp",
+          "symbols": [
+            "CacheCluster::perf_stats"
+          ]
+        },
+        {
+          "path": "sim/simx/tcu/tcu_tbuf.cpp",
+          "symbols": [
+            "TcuTbuf::Impl::reads"
+          ]
+        },
+        {
+          "path": "sim/simx/csr_unit.cpp",
+          "symbols": [
+            "CsrUnit::get_csr"
+          ]
+        }
+      ],
+      "runtime_obligation": "Successfully query every one of the 33 exact selectors at the terminal boundary; a subset or per-component check alone is insufficient."
+    },
+    {
+      "id": "P05",
+      "statement": "Every operation queue has actually been destroyed and joined; no retained owner can submit later work.",
+      "source_references": [
+        {
+          "path": "sw/runtime/ai/runtime.cpp",
+          "symbols": [
+            "OperationState::release",
+            "RuntimeContext::release",
+            "ManagedMatmul::close"
+          ]
+        },
+        {
+          "path": "sw/runtime/common/queue.cpp",
+          "symbols": [
+            "Queue::~Queue"
+          ]
+        },
+        {
+          "path": "sw/runtime/common/vortex2_internal.h",
+          "symbols": [
+            "RefCounted::release",
+            "RefCounted::refs"
+          ]
+        }
+      ],
+      "runtime_obligation": "Retain operation/event completion statuses and actual queue destruction/join and final owner-reference observations. Public release success alone is insufficient."
+    },
+    {
+      "id": "P06",
+      "statement": "All launch, download and cache flush activity precedes the terminal readout; processor execution is collected and all queues are idle.",
+      "source_references": [
+        {
+          "path": "sim/simx/processor.cpp",
+          "symbols": [
+            "ProcessorImpl::run",
+            "ProcessorImpl::flush_caches"
+          ]
+        },
+        {
+          "path": "sw/runtime/common/async_run.h",
+          "symbols": [
+            "AsyncRun::collect",
+            "AsyncRun::invoke",
+            "AsyncRun::join"
+          ]
+        },
+        {
+          "path": "sw/runtime/simx/vortex.cpp",
+          "symbols": [
+            "vx_device::make_cp_hooks"
+          ]
+        }
+      ],
+      "runtime_obligation": "Establish successful execution, collected async run, zero pending reads, platform idle, CP completion and no residual DMA or flush before the terminal vector."
+    },
+    {
+      "id": "P07",
+      "statement": "Exclusive core-zero public low/high readout occurs while CP submission remains enabled; these MPM DCR reads do not tick the GPU model.",
+      "source_references": [
+        {
+          "path": "sw/runtime/common/perf.cpp",
+          "symbols": [
+            "vx_device_mpm_query"
+          ]
+        },
+        {
+          "path": "sw/runtime/common/device.cpp",
+          "symbols": [
+            "Device::cp_submit_dcr_read",
+            "Device::cp_quiesce_"
+          ]
+        },
+        {
+          "path": "sw/runtime/simx/vortex.cpp",
+          "symbols": [
+            "vx_device::cp_reg_read",
+            "vx_device::make_cp_hooks"
+          ]
+        },
+        {
+          "path": "sim/simx/core.cpp",
+          "symbols": [
+            "Core::Impl::dcr_read"
+          ]
+        },
+        {
+          "path": "sim/simx/csr_unit.cpp",
+          "symbols": [
+            "CsrUnit::get_csr"
+          ]
+        }
+      ],
+      "runtime_obligation": "Exclude concurrent submitters/batches and all-core unchecked host summation. Preserve raw status and both halves, full width reconstruction, no reset/tick during observation, and success before CP disable."
+    },
+    {
+      "id": "P08",
+      "statement": "After the last accepted read, destruction on the VM-off/direct-RAM route has no selected-counter updater or new GPU tick.",
+      "source_references": [
+        {
+          "path": "sw/runtime/common/device.cpp",
+          "symbols": [
+            "Device::~Device",
+            "Device::cp_quiesce_",
+            "Device::mem_free"
+          ]
+        },
+        {
+          "path": "sw/runtime/common/vortex2_internal.h",
+          "symbols": [
+            "CallbacksAdapter::~CallbacksAdapter"
+          ]
+        },
+        {
+          "path": "sw/runtime/common/callbacks.inc",
+          "symbols": [
+            "vx_dev_init: callbacks->dev_close"
+          ]
+        },
+        {
+          "path": "sw/runtime/simx/vortex.cpp",
+          "symbols": [
+            "vx_device::~vx_device",
+            "vx_device::host_mem_free",
+            "vx_device::make_cp_hooks"
+          ]
+        },
+        {
+          "path": "sim/simx/processor.cpp",
+          "symbols": [
+            "ProcessorImpl::~ProcessorImpl"
+          ]
+        },
+        {
+          "path": "sim/common/simobject.h",
+          "symbols": [
+            "SimPlatform::finalize",
+            "SimPlatform::cleanup"
+          ]
+        }
+      ],
+      "runtime_obligation": "Enter destruction only after P05-P07, with actual final reference. CP disable polling is not a replacement drain certificate; capture completion of the destructor path."
+    },
+    {
+      "id": "P09",
+      "statement": "The selected dependency finalizers and statistics emitters do not tick, send or deliver a GPU callback; the adapter does not drain at destruction.",
+      "source_references": [
+        {
+          "path": "sim/common/dram_sim.cpp",
+          "symbols": [
+            "RamulatorDram::~RamulatorDram",
+            "RamulatorDram::drain",
+            "RamulatorDram::tick",
+            "RamulatorDram::issue"
+          ]
+        }
+      ],
+      "runtime_obligation": "Bind the actual dependency binary to the selected source behavior; the companion source manifest alone and a cache hash do not establish compilation origin."
+    },
+    {
+      "id": "P10",
+      "statement": "A checked failure invalidates the process context and its numeric evidence; no reset, later query or fresh allocation rehabilitates that same lifetime.",
+      "source_references": [
+        {
+          "path": "sim/common/perf_counter.h",
+          "symbols": [
+            "PerfCounterError"
+          ]
+        },
+        {
+          "path": "sw/runtime/common/async_run.h",
+          "symbols": [
+            "AsyncRun::invoke",
+            "AsyncRun::require_healthy",
+            "AsyncRun::collect"
+          ]
+        },
+        {
+          "path": "sim/simx/core.cpp",
+          "symbols": [
+            "Core::Impl::dcr_read"
+          ]
+        },
+        {
+          "path": "sw/runtime/simx/vortex.cpp",
+          "symbols": [
+            "vx_device::cp_reg_read",
+            "vx_device::cp_reg_write"
+          ]
+        }
+      ],
+      "runtime_obligation": "Retain raw public failure/side-effect observations and independently fresh-context success. An interrupted MPM aggregate may leave mpm_class changed, so discard the failed context."
+    }
+  ],
+  "files": [
+    {
+      "path": "sim/common/perf_counter.h",
+      "role": "production-source",
+      "sha256": "8635c832c9fc4ad60cf3bf21665a5bc22a6d3500b1f5c012dd056fb4c6907417",
+      "size_bytes": 3979,
+      "git_blob": "f701f42b60b547ec7f0b042407760f333d75146c",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/common/simobject.h",
+      "role": "production-source",
+      "sha256": "0e0369f5ea1ba85f5e461e03b85e9723bb47f0e118499ba2b21a7923594f7004",
+      "size_bytes": 49004,
+      "git_blob": "6b7c422559d107338b7aaa64b827aa0f0eac298a",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/common/dram_sim.cpp",
+      "role": "production-source",
+      "sha256": "aaf02d73ca7801d93c0fa010c4682e8e0476e7a55fa0104d4e48587f55dc40f1",
+      "size_bytes": 14483,
+      "git_blob": "4c019d38cedaa79868f71a75359a65e2636b1722",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/common/dram_sim.h",
+      "role": "production-source",
+      "sha256": "8245f87d313387bdc7bc8eb8244395aade8c78c3aa8ace7df85543094f2839ac",
+      "size_bytes": 1988,
+      "git_blob": "cf260c132bbf8eb117e6940f032ed4cee5e0c9b0",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/common/cmd_processor.cpp",
+      "role": "production-source",
+      "sha256": "c7090583f8dd1774d71755dc96f11845ff4d96340e51451643ec1ab16b14dd42",
+      "size_bytes": 27823,
+      "git_blob": "2e8c510594feb4ef028c4a2b6ff89487991eedbf",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/common/cmd_processor.h",
+      "role": "production-source",
+      "sha256": "8efce8fe5ff166cc0742b3846dc37ae5dd93463a10e71c154959d4b2daacda11",
+      "size_bytes": 12851,
+      "git_blob": "de5199979ab0f914cffd95cff8c3f7fa0f5621f0",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/common/mem.cpp",
+      "role": "production-source",
+      "sha256": "2dc21e7ccb04e773b091f209652107bac673edbc6d6640cfca0418ad89a73cba",
+      "size_bytes": 23576,
+      "git_blob": "59f379b0f66a969e93b5b516bb645ec9fd187d38",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/common/mem.h",
+      "role": "production-source",
+      "sha256": "c6fb3dc152b641edac6d1d373f7b7425d038a902b3ef2899d39f5aab00baf152",
+      "size_bytes": 9109,
+      "git_blob": "5687613d84f7842b61ad0e7bdf7dc399552cc016",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/core.cpp",
+      "role": "production-source",
+      "sha256": "f95003971a6052962b761b1ee8e815ead42f6a60fccf8157fa94c3ded3e44f31",
+      "size_bytes": 65344,
+      "git_blob": "bfc689bb258a77f3cd85fa5ce864511d2a51075e",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/core.h",
+      "role": "production-source",
+      "sha256": "642af0adfae25333fc822289293a0d10273f58c8b1442a4acad63fad5a2f8609",
+      "size_bytes": 5800,
+      "git_blob": "41db531a9f6c64c464f8422ffc0c2a0285196dcf",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/csr_unit.cpp",
+      "role": "production-source",
+      "sha256": "c35bd6a80120f76c9cf65076c736aaf577329285a74aac8c11c03f0ce829fc3d",
+      "size_bytes": 19085,
+      "git_blob": "229ccb7ab5387f3b288e86ec73203061aef79017",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/lsu_unit.cpp",
+      "role": "production-source",
+      "sha256": "d1105256786bc7f2227d4c963a0b4368d84d480aba93fdf3188019ae466b30fb",
+      "size_bytes": 32227,
+      "git_blob": "837cb0f5c17af9503a7eac10565529a1938b693e",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/processor.cpp",
+      "role": "production-source",
+      "sha256": "569cf629d1e25ec9a295b20bfadfabbe21cd0989127f2b825fceee99a8062b78",
+      "size_bytes": 21405,
+      "git_blob": "07afb4510f429fca60ba94cd3e8f4cfdc4ea71a4",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/processor_impl.h",
+      "role": "production-source",
+      "sha256": "f72e86ce9204a80a8246ab9c6ec1fab9bfccaf334a5ee487e4dc9dc01a7f921b",
+      "size_bytes": 4393,
+      "git_blob": "f0aeaa84d504b327e6c7e012f8c22f3a71644c1e",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/processor.h",
+      "role": "production-source",
+      "sha256": "588db10c3997e91dd471771cd12bb0329dacbc3902248b84353beebd19bc0438",
+      "size_bytes": 2549,
+      "git_blob": "ebd2c790058c23835798c7a7dd6fbae9bf6c660a",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/socket.cpp",
+      "role": "production-source",
+      "sha256": "e30e63d3523411bad58eb49c8526aabe032bed584c8d044b677c18906cf844d4",
+      "size_bytes": 26124,
+      "git_blob": "74db221def4912cdb0cfcfc3742fd3d1fd64fa1e",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/cluster.cpp",
+      "role": "production-source",
+      "sha256": "caf8ed6865e91d7f6b1cc7392ef1e5c2c410f13535a31236cbf7da7f80a39a6c",
+      "size_bytes": 31886,
+      "git_blob": "222fce9185bab9d1ea113f23c69c505e9c09292b",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/types.h",
+      "role": "production-source",
+      "sha256": "c09d02ca868b9b7fd28142c4c5aa922b9500975feddaf92695d220a5be6bd546",
+      "size_bytes": 54373,
+      "git_blob": "f5a1787a520908813b207834ec30af0203e8974e",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/constants.h",
+      "role": "production-source",
+      "sha256": "d7d9a69db704475a698b2ae652874250dc866f4d3eacf8a07f7c65e55e180113",
+      "size_bytes": 9231,
+      "git_blob": "3a8fff8b79c4c1606e06fd74d400cce07fd22033",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/mem/cache.cpp",
+      "role": "production-source",
+      "sha256": "c8eacd73616bb9f82533bbe45ba8a317524717948de08d73ecdb78dfb0c4a53d",
+      "size_bytes": 137410,
+      "git_blob": "c9128b0804e24d4f035c044159ad5d12614b0a4e",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/mem/cache.h",
+      "role": "production-source",
+      "sha256": "839637e7738c774b02f1f556da86a4c716215696a70dd384d9e413ad6943653b",
+      "size_bytes": 4452,
+      "git_blob": "82bf8a111fc8c4f5e7356bcdaacd595a9a153ef9",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/mem/cache_cluster.cpp",
+      "role": "production-source",
+      "sha256": "ad5e592d87234764df3186c8fdd9dbfc18b2a7dbdfdb207ba2cc6071d4e3fa44",
+      "size_bytes": 3697,
+      "git_blob": "5b8bddc2b85b5925dc86dad82d1fc87bb16e9998",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/mem/local_mem.cpp",
+      "role": "production-source",
+      "sha256": "07aa27331d6ef604a432b99e70df12b7853787d4151cc1517092d76406cd4d33",
+      "size_bytes": 21068,
+      "git_blob": "69d3ee00d1126ac2231f95b8ba5e3abcdc92af43",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/mem/local_mem.h",
+      "role": "production-source",
+      "sha256": "708446110e56f8cce88f50bcbca8fb8e1ff741a4019e16b4c9fda48d86f67635",
+      "size_bytes": 2652,
+      "git_blob": "f166149a8b4d0f726204d93cb3e4888b3942404d",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/mem/mem_coalescer.cpp",
+      "role": "production-source",
+      "sha256": "9fcf09145f6fee29c5f5494fff155f2c0fa90e5f984893cb756c31d75b155a88",
+      "size_bytes": 10432,
+      "git_blob": "e7d0a6444957f5bacd7c8b24df6f6aecf09c43f6",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/mem/mem_coalescer.h",
+      "role": "production-source",
+      "sha256": "3368578b678a354eb5a876d1121351cd22987c729514fcfb7bfe4d86795961c7",
+      "size_bytes": 2407,
+      "git_blob": "043b5692850155ac40993444285f93b27c3ee137",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/mem/memory.cpp",
+      "role": "production-source",
+      "sha256": "4d73809cd63a0c768115c5de0205989f6f941446895de1831587002fc94ed474",
+      "size_bytes": 5976,
+      "git_blob": "50db7006ae1f881323b9f6c28dbac4a27e0c8326",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/mem/memory.h",
+      "role": "production-source",
+      "sha256": "8cdd7e1945842b3f58f64bcb3fad1fd3e61555cbc82d9063996e53453a71301a",
+      "size_bytes": 2042,
+      "git_blob": "81dc66f701e30054a5a3e1383151dcbf523ed8a8",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/tcu/tcu_unit.cpp",
+      "role": "production-source",
+      "sha256": "b48d0e7fe5145292ad354168d3fe73b0bcdbbb508335656ce6fe07608af8fb5b",
+      "size_bytes": 75472,
+      "git_blob": "f3fb1d911dd3457c2289c57c65fb6cdd74632231",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/tcu/tcu_unit.h",
+      "role": "production-source",
+      "sha256": "8546c4db53cc938c9a91ddcab002fa020195d39b93f9e35de3c21d9ecee28cb8",
+      "size_bytes": 4561,
+      "git_blob": "1759c0695346011a33037028a5298fd8912c3e0a",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/tcu/tcu_tbuf.cpp",
+      "role": "production-source",
+      "sha256": "eb20f6c16dd0915bebf39a0f85f7c11ee28a0ed681418385205b898f4b557463",
+      "size_bytes": 7231,
+      "git_blob": "6644b6bbf6123b1b450f1d7b91f7befe3a43428f",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sim/simx/tcu/tcu_tbuf.h",
+      "role": "production-source",
+      "sha256": "8b05c6d23de3d5fb5423d7ce93d1d1a1395a4d474856371281ed943abe8c2be3",
+      "size_bytes": 2667,
+      "git_blob": "91d3f32224f891f74b0909103c00edde36017040",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sw/runtime/common/async_run.h",
+      "role": "production-source",
+      "sha256": "a9f63b2a896c5e512f7c592c758618ea88b774c9dac4bca29e847e2e3719a24e",
+      "size_bytes": 2383,
+      "git_blob": "b033563668b795aa8a95432697f66d1e8759d79b",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sw/runtime/common/device.cpp",
+      "role": "production-source",
+      "sha256": "9b32e38a9bbc0460a7f2af522fd5efdc96e1c06e359e28c5151285557f89d90a",
+      "size_bytes": 66201,
+      "git_blob": "91bef3c7a931b2f31871e59e2d4ad9aaace67d7f",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sw/runtime/common/queue.cpp",
+      "role": "production-source",
+      "sha256": "1d785262d128de3ffbf1feb32cc2b32f6457a6644df6ef9a04d4e8b4d45c962e",
+      "size_bytes": 64122,
+      "git_blob": "ec8676a0680697f67e22e10d7d5a17a131a66891",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sw/runtime/common/buffer.cpp",
+      "role": "production-source",
+      "sha256": "e0f4c550a7591f723d6cf18e43302fd1955a56e2c2ecc53e0f5eb037482c1366",
+      "size_bytes": 6787,
+      "git_blob": "7f536f02d33951ab9178651d94d5e84a8690cdcb",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sw/runtime/common/module.cpp",
+      "role": "production-source",
+      "sha256": "5d2efe2ba92801d3dbb1e836b077e7d966bc9a6b2beb8d29c50f89ce4ee67f06",
+      "size_bytes": 13216,
+      "git_blob": "07894f129c38d8a3dd2079ade000ac94f57070b6",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sw/runtime/common/perf.cpp",
+      "role": "production-source",
+      "sha256": "fa6945cf379ae184d4e3edca5fcbc147d11f725e5ad3574ff3f89a16167099b3",
+      "size_bytes": 43664,
+      "git_blob": "8489a3a59ddfa779b0c73997d8ce03a7ecfc13b4",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sw/runtime/common/vortex2_internal.h",
+      "role": "production-source",
+      "sha256": "3997d6ecca442eb04cf1df3129d0b90a9c0ec66015c798fc4d4510b93dd1f9ce",
+      "size_bytes": 44458,
+      "git_blob": "891658648b1f4594fc4633f720f6802c14ebab6a",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sw/runtime/common/callbacks.h",
+      "role": "production-source",
+      "sha256": "2105743e37226644faf52b4766738b85dd1de687af614fd548723bf08fee9a0d",
+      "size_bytes": 4532,
+      "git_blob": "4f032dfd72352baa04a3ba80cf23deb9dfa9b85b",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sw/runtime/simx/vortex.cpp",
+      "role": "production-source",
+      "sha256": "0d890c95fecb67da26d23ea4a0af10ac328dddf110cd2575baff3aa5d4c905cb",
+      "size_bytes": 7552,
+      "git_blob": "31d7b2e83d8f7abdc18c980a4b4ed5a9743eaa9e",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sw/runtime/ai/runtime.cpp",
+      "role": "production-source",
+      "sha256": "f55365110aed41cfaa290b69da8d91d9fa0ae04063dda591b94ae6ca626cf675",
+      "size_bytes": 22983,
+      "git_blob": "2b26d3af38bb7f49c1df4d977fb84f835f69d27f",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "VX_config.toml",
+      "role": "production-source",
+      "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+      "size_bytes": 30127,
+      "git_blob": "fdf49ad7e1459dff3bd4bb607ffb607a92a88fa5",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "VX_types.toml",
+      "role": "production-source",
+      "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+      "size_bytes": 36543,
+      "git_blob": "10a5a39505ee6d89cf260f00d620af4f1d0ffbbf",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "sw/runtime/common/callbacks.inc",
+      "role": "production-source",
+      "sha256": "13852934ab10776964fd2a68036ac8876303a60d2a3f3fce415186a3a13d10f2",
+      "size_bytes": 3813,
+      "git_blob": "f52108fda56d93ade279cd90d17d5a3b5b1e1c56",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "ci/project/p06_contract.py",
+      "role": "inventory-or-caller-evidence",
+      "sha256": "780086070739b6d3586f9b3695ad4dc31d209a7817cf1af3651160a9fe6e1376",
+      "size_bytes": 31500,
+      "git_blob": "8bb2fcad360acbfa6699d5bf75f8f3ceb8d991a4",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "tests/unittest/checked_counters/counter_access.h",
+      "role": "inventory-or-caller-evidence",
+      "sha256": "b0b1591ff79595dba77961460e3e0f946ddb5673a1a5eefbfdee274dae1aba5b",
+      "size_bytes": 1122,
+      "git_blob": "9ded3aa3416bc53d024481165036d738a61d8dd5",
+      "unchanged_from_audited_base": false
+    },
+    {
+      "path": "tests/unittest/checked_counters/counter_access.cpp",
+      "role": "inventory-or-caller-evidence",
+      "sha256": "f687b107b27048b5cd6265911c872326996035f86dec10bc2917b84438205db7",
+      "size_bytes": 7112,
+      "git_blob": "e231e6d728e13134732c08f49b9ee05f10a2e243",
+      "unchanged_from_audited_base": false
+    },
+    {
+      "path": "tests/unittest/checked_counters/access_cache.cpp",
+      "role": "inventory-or-caller-evidence",
+      "sha256": "362d67fd919ec97ef90d6a8b45179886b1b19dc65d2165ee02627744a6771e5c",
+      "size_bytes": 1632,
+      "git_blob": "6787da0ba8be6074be1d583009697e4551e48a0b",
+      "unchanged_from_audited_base": false
+    },
+    {
+      "path": "tests/unittest/checked_counters/access_memory.cpp",
+      "role": "inventory-or-caller-evidence",
+      "sha256": "cf8e614d3e1fd197f849282a08bd68bed4012bbcfacd09edae9d564f19c233e0",
+      "size_bytes": 1523,
+      "git_blob": "8274e6d4d4efcd6f8569c731ae8b8d1e3f12eba4",
+      "unchanged_from_audited_base": false
+    },
+    {
+      "path": "tests/unittest/checked_counters/access_socket.cpp",
+      "role": "inventory-or-caller-evidence",
+      "sha256": "33ddaa82618fa644489b7aad40bc193818908eb0eb34e65f5a5a27fdc2b7cf73",
+      "size_bytes": 1648,
+      "git_blob": "6b9798b9ba7e74fae13e33cb655251fc5368925b",
+      "unchanged_from_audited_base": false
+    },
+    {
+      "path": "tests/unittest/checked_counters/access_tcu.cpp",
+      "role": "inventory-or-caller-evidence",
+      "sha256": "82625e07f4cfee0c7e4e55bd0a8aaef28a6ec9e9ab7064292fe11815e8a6ec7f",
+      "size_bytes": 862,
+      "git_blob": "cbc70770883add430d40201c4e267975bcc231e5",
+      "unchanged_from_audited_base": false
+    },
+    {
+      "path": "tests/unittest/checked_counters/main.cpp",
+      "role": "inventory-or-caller-evidence",
+      "sha256": "a4a5ed88b75730222e8f7977f23232ac276ff5360e9c7edd7d8db4bf196580ee",
+      "size_bytes": 21081,
+      "git_blob": "85f55dbd63a904da34dc63bccbea8dd82bf3b220",
+      "unchanged_from_audited_base": false
+    },
+    {
+      "path": "tests/regression/ai_warm_workspace/main.cpp",
+      "role": "inventory-or-caller-evidence",
+      "sha256": "0bec5ac729b3aa6c5ffcf7ff95084d84e4d47d54e470d21e234d00aa16556ce0",
+      "size_bytes": 20984,
+      "git_blob": "25ecceee37a77cfbf5a4ecb1dca36186b3e412d3",
+      "unchanged_from_audited_base": true
+    },
+    {
+      "path": "tests/regression/ai_warm_workspace/observer.cpp",
+      "role": "inventory-or-caller-evidence",
+      "sha256": "ac12eddcbfb2cf04981a8b8a945134ce763b93cd881fe5da549d28b7ed02021c",
+      "size_bytes": 9647,
+      "git_blob": "bf68f0cb25f52188a6e2537532c2cae2b1b1b3d1",
+      "unchanged_from_audited_base": true
+    }
+  ],
+  "dependency_manifest": {
+    "path": "docs/project/evidence/p06-counter-diagnostics/dependency-source-manifest.json",
+    "sha256": "3fb3332ecf76c5ee136bf68e2840f8e4e612a15f660a983d0913662cf8c469b6"
+  },
+  "observed_native_evidence": {
+    "kind": "seeded model diagnostic prerequisites",
+    "source_revision": "407ab9fea5e4f793a2a5088f566a87f3e631aa84",
+    "github_run_id": 45026112992,
+    "url": "https://github.com/baabi-boo/AI-GPU/actions/runs/45026112992",
+    "artifact_id": 14756780371,
+    "original_archive_name": "run-45026112992-attempt1.zip",
+    "original_archive_sha256": "c4a7ae49259bbb72066d55f7c3e733ce5696f215175ce308f654e1cec9e9c13f",
+    "original_archive_size_bytes": 1137709,
+    "report_member": "checked-counters/report.json",
+    "report_sha256": "3e7fb048cf8c1a9e6b274104fb5d6c2581fa50cb9dfabe68b6bab955ffd967f0",
+    "passed_cells": [
+      "ordinary-boundaries",
+      "checked-boundaries",
+      "checked-core-overflow",
+      "checked-cache-aggregate-overflow",
+      "checked-pending-underflow",
+      "checked-cache-backing-overflow",
+      "checked-tcu-backing-overflow"
+    ],
+    "ordinary_and_checked_each": {
+      "checks": 6389,
+      "transport_half_reads": 1788,
+      "selectors": 33,
+      "components": 40
+    },
+    "public_runtime": false,
+    "warm_execution": false,
+    "qualified": false
+  },
+  "public_diagnostic_checkpoint": {
+    "source_revision": "81ed6871634fefbf5c78fb27cf10dce913bd4d9c",
+    "native_result": "not claimed by this source audit",
+    "relationship": "Separate new public-runtime diagnostics; requires its own retained native result and independent review."
+  },
+  "remaining_obligations": [
+    "Run and retain the real public-runtime diagnostics with raw failure statuses, suppressed processor and direct-RAM DMA side effects, terminal ordering, fresh-context controls and unchanged configuration.",
+    "Bind a full unseeded warm-workspace caller and its reset/queue/refcount/CP/terminal/dependency behavior to this argument; the existing dynamic enabled-selector snapshot is insufficient.",
+    "Qualify the precise later measurement binaries, generated configuration, loader dependencies, full caller, data and environment; no automatic inheritance from a diagnostic binary.",
+    "Resolve dependency source-to-binary provenance or retain an explicit condition on actual loaded dependency behavior; never infer build origin from content hash alone.",
+    "Complete required independent review and preserve failures/not-run evidence without weakening phase or acceptance gates."
+  ],
+  "transient_and_unselected_exclusions": [
+    "ProcessorImpl::perf_mem_pending_reads_ (checked balance, decremented/reset, required zero before reset/terminal)",
+    "SimPlatform clock and reset generation (control state; clock zeroing at cleanup is not counter preservation)",
+    "Core::PerfStats::opds_stalls and cache bank-collision statistic outside the exact 33-selector inventory",
+    "Dependency-internal statistics and nonselected GPU counters"
+  ],
+  "absolute_no_wrap_bound": "not_established",
+  "qualified": false,
+  "ready_for_warm": false,
+  "acceptance_authority": false,
+  "rtl_parity_claimed": false,
+  "hardware_claimed": false,
+  "phase_state": "P06/P06-T01 remain in_progress; P06-T01-A02/A03 remain open; warm-v1 remains blocked by P06-WARM-RV64-MPM-HIGH-HALF."
+}

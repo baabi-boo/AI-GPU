@@ -1,0 +1,95 @@
+diff --git a/ci/project/test_p06_counter_public_execute.py b/ci/project/test_p06_counter_public_execute.py
+index 4fc5fcb9f..294b61b36 100644
+--- a/ci/project/test_p06_counter_public_execute.py
++++ b/ci/project/test_p06_counter_public_execute.py
+@@ -8,6 +8,8 @@ import io
+ import json
+ import os
+ from pathlib import Path
++import platform
++import sys
+ import unittest
+ from unittest import mock
+ 
+@@ -15,9 +17,26 @@ import p06_counter_public_execute as runner
+ from test_p06_checked_execute import NativeFixture, boundary_output, header_output
+ 
+ 
++class ModuleObservations:
++    """Override controlled observations without changing shared host modules."""
++
++    def __init__(self, module, **observations):
++        self._module = module
++        self.__dict__.update(observations)
++
++    def __getattr__(self, name):
++        return getattr(self._module, name)
++
++
+ class PublicFixture(NativeFixture):
+     def __enter__(self):
+         super().__enter__()
++        # These are synthetic inputs to the real validator, not native evidence.
++        # Delegate other attributes dynamically so stderr redirects still work.
++        self.stack.enter_context(mock.patch.object(runner, "sys", ModuleObservations(
++            runner.sys, version_info=(3, 12, 14), platform="linux")))
++        self.stack.enter_context(mock.patch.object(runner, "platform", ModuleObservations(
++            runner.platform, python_implementation=lambda: "CPython")))
+         self.tracked.update(runner.CRITICAL)
+         self.tracked.update(runner.COPIED)
+         self.tracked.update(("sw/runtime/common/device.cpp", "sw/runtime/common/queue.cpp",
+@@ -202,18 +221,52 @@ class PublicExecuteTests(unittest.TestCase):
+                 self.assertEqual(fixture.calls, [])
+ 
+     def test_interpreter_identity_must_match_path_and_pin(self):
+-        for kind in ("path", "version", "implementation"):
++        for kind in ("path", "version", "implementation", "platform"):
+             with self.subTest(kind=kind), PublicFixture() as fixture:
+                 if kind == "path":
+                     fixture.tool_paths["executing_python"] = fixture.paths["tools"] / "executing_python"
+                 elif kind == "version":
+                     fixture.stack.enter_context(mock.patch.object(runner.sys, "version_info", (3, 12, 13)))
+-                else:
++                elif kind == "implementation":
+                     fixture.stack.enter_context(mock.patch.object(runner.platform, "python_implementation", return_value="Other"))
++                else:
++                    fixture.stack.enter_context(mock.patch.object(runner.sys, "platform", "darwin"))
+                 code, report = fixture.run()
+                 self.assert_failed(code, report, "interpreter")
+                 self.assertEqual(fixture.calls, [])
+ 
++    def test_controlled_interpreter_restores_mismatched_outer_observations(self):
++        original_sys, original_platform = runner.sys, runner.platform
++        validator = runner.interpreter_identity
++        host_observations = (sys.version_info, sys.platform, platform.python_implementation())
++        outer_sys = ModuleObservations(runner.sys, version_info=(3, 12, 3), platform="darwin")
++        outer_platform = ModuleObservations(runner.platform, python_implementation=lambda: "Other")
++        with mock.patch.object(runner, "sys", outer_sys), mock.patch.object(runner, "platform", outer_platform):
++            with self.assertRaisesRegex(ValueError, "executing interpreter differs"):
++                validator({})
++            with PublicFixture() as fixture:
++                self.assertIs(runner.interpreter_identity, validator)
++                self.assertEqual((sys.version_info, sys.platform, platform.python_implementation()), host_observations)
++                code, report = fixture.run()
++                self.assertEqual(code, 0, report["errors"])
++                self.assert_nonqualifying(report)
++                self.assertEqual(report["interpreter"], {
++                    "version": [3, 12, 14], "implementation": "CPython", "platform": "linux"})
++                self.assertEqual(len(fixture.calls), 14)
++            self.assertIs(runner.sys, outer_sys)
++            self.assertIs(runner.platform, outer_platform)
++            with self.assertRaisesRegex(ValueError, "executing interpreter differs"):
++                validator({})
++        self.assertIs(runner.sys, original_sys)
++        self.assertIs(runner.platform, original_platform)
++        self.assertEqual((sys.version_info, sys.platform, platform.python_implementation()), host_observations)
++
++    def test_controlled_interpreter_preserves_redirected_validation_error(self):
++        with PublicFixture() as fixture:
++            self.assertEqual(fixture.run("--expected-revision", "invalid"), (2, None))
++            self.assertIn("Public counter runner blocked: invalid expected revision", fixture.stderr.getvalue())
++            self.assertEqual(fixture.calls, [])
++
+     def test_failed_build_or_missing_cleanup_is_retained_and_stops_public_runs(self):
+         for command, changes in (
+                 ("checked-build", {"outcome": "fail", "exit_code": 1, "reason": "exit_code"}),

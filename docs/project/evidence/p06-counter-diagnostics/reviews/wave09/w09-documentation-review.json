@@ -1,0 +1,810 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/w09_documentation_review",
+  "agent_number": 53,
+  "wave": 9,
+  "slot": 5,
+  "reviewed_at": "2026-11-22T15:08:54.341740+00:00",
+  "review_policy": "docs/review/code-review-policy.md",
+  "head_at_review": "4268d2d5d811063bb886cde7bd0e27e61a79c9b4",
+  "base_revision": "7455e008c1e001d3329e74fd55ffcd942592ec5f",
+  "repository_edits_by_reviewer": false,
+  "outcome": "pass_for_scoped_documentation_checkpoint",
+  "release_disposition": "No unresolved F2/F3 findings and the F1 wording finding is fixed. The captured documentation is suitable for the scoped diagnostic checkpoint. Final publication still requires acknowledged latest-CI intake/status updates and later actual-task ledger deltas; this is not qualification, phase acceptance, maintainer approval or full-suite evidence for 4268.",
+  "findings": [
+    {
+      "id": "DOC-53-01",
+      "severity": "F1",
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "status": "resolved",
+      "passage": "docs/project/evidence/p06-counter-diagnostics/README.md:29-34 (earlier wording: empty CP FIFO)",
+      "failure_scenario": "A reader could treat FIFO-empty as an independently retained native observation, although the raw schema contains no such field. The drain claim must remain a source-backed inference from enabled idle status, exact retirement and scoped ownership.",
+      "source_evidence": [
+        "sim/common/cmd_processor.cpp:65-73",
+        "tests/unittest/checked_counters/public_main.cpp:265-303",
+        "docs/designs/simx_counter_public_diagnostics_v1.md:146-164"
+      ],
+      "resolution": "Agent52 replaced the unsupported wording with enabled idle status and exact retirement; staged-low/committed-high and head-writeback limitations remain explicit. Reviewer reread the fixed paragraph.",
+      "fixed_sha256": "a9cfb40c3b45f6db8f20e8e83c4b01cd69efd01cc2cfa6c1a683bf075f9d2b5e"
+    },
+    {
+      "id": "DOC-53-02",
+      "severity": "F0",
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "status": "historical_scope_explicit",
+      "passage": "docs/project/evidence/p06-counter-diagnostics/README.md:67-76",
+      "observation": "The immutable 407-bound lifetime manifest retains old public-native-pending text and P06-T01-A02/A03 typo. The current packet explicitly explains the historical meaning, later e5 corrected native pass and correct P06-A02/P06-A03 IDs without altering original bytes."
+    },
+    {
+      "id": "DOC-53-03",
+      "severity": "F0",
+      "confidence": "high",
+      "evidence_type": "reasoned-risk",
+      "status": "publication_followup_pending",
+      "passage": "docs/project/status.md:204-207; docs/project/p06-counter-diagnostics-audit.md:107-112; docs/project/p06-counter-diagnostics-handoff.md:146-152",
+      "observation": "These passages retain the earlier 4268 host-in-progress/native-queued checkpoint. During this review root reported a newer native result for separate agent55 intake. This review intentionally remains scoped to the three currently indexed originals; latest CI prose and receipts need the separately reviewed final update before final publication. No pending job was promoted to pass by this reviewer."
+    }
+  ],
+  "fixed_document_identities": [
+    {
+      "path": "README.md",
+      "sha256": "22b026f4a4afde960e7e19e15151e54293f9a238964a7c6d69adedc9a5349477",
+      "size_bytes": 40496
+    },
+    {
+      "path": "ROADMAP.md",
+      "sha256": "f67421afed6b1677a0c96dedd2fb05c8079458b86e5038bb00d61a61379162cf",
+      "size_bytes": 18539
+    },
+    {
+      "path": "docs/project/status.md",
+      "sha256": "e2613f1730b00f999fad966820890afc23f00458ea6fc692754a296d839f696a",
+      "size_bytes": 84181
+    },
+    {
+      "path": "docs/project/backlog.md",
+      "sha256": "365c34e19bbb558ed3b11bbdc64394ea85d414b91bb28f9160dfea5cf28548e6",
+      "size_bytes": 34479
+    },
+    {
+      "path": "docs/project/phases/p06-performance.md",
+      "sha256": "385b1a292d5911307cf24d720994ac3264cecaf5f416e8efbf90a51037f48a36",
+      "size_bytes": 11652
+    },
+    {
+      "path": "docs/project/p06-mpm-qualification-plan.md",
+      "sha256": "37349a766731325b7222136cf99a2651961fe70c67f5f52461e4cd0c83b1da77",
+      "size_bytes": 40857
+    },
+    {
+      "path": "docs/project/p06-counter-diagnostics-audit.md",
+      "sha256": "7aa7f9160ce396e7ab6c2bbcd4806d0c30518292e8bdee6f89879532528c8871",
+      "size_bytes": 15447
+    },
+    {
+      "path": "docs/project/p06-counter-diagnostics-handoff.md",
+      "sha256": "da89aefd3185c1e40b8e122542c700544a77ae0f8541b8e7eaaeddc23c3314b8",
+      "size_bytes": 10889
+    },
+    {
+      "path": "docs/designs/simx_counter_diagnostics_v2.md",
+      "sha256": "1d46c118522ef2c67b7046a8f9538f3fc3d305963efeff350b75898dd3b2e199",
+      "size_bytes": 7404
+    },
+    {
+      "path": "docs/designs/simx_counter_public_diagnostics_v1.md",
+      "sha256": "025c9e58c4fb2d0d8eeb78ed1ab6d5fc65255f2e3bfeb9c454ac658a454a5ca5",
+      "size_bytes": 20458
+    },
+    {
+      "path": "docs/designs/simx_counter_lifetime_v1.md",
+      "sha256": "6b555d2920af3405c4af588de7e43d46e77619dc43dad263bf92141a60a4672d",
+      "size_bytes": 24927
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/README.md",
+      "sha256": "a9cfb40c3b45f6db8f20e8e83c4b01cd69efd01cc2cfa6c1a683bf075f9d2b5e",
+      "size_bytes": 11075
+    }
+  ],
+  "supporting_source_identities": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "fdd82f39a11d5b9bc96fe2c15f5779e2c08d359e89dc666595adbf30a01d1e0b",
+      "size_bytes": 25764
+    },
+    {
+      "path": "docs/review/code-review-policy.md",
+      "sha256": "99426ced05c04c1b14422f4fdacabcce3c680600461c4887b14e5eabf8b0587d",
+      "size_bytes": 9318
+    },
+    {
+      "path": "docs/project/roadmap.json",
+      "sha256": "c3409db37618927f585a590031e0fd50205d650d79b7750ea09ffb53475e5b18",
+      "size_bytes": 21091
+    },
+    {
+      "path": "docs/project/acceptance.md",
+      "sha256": "065251c27555d2c588693a85546b2d18701352d939bd81ccf9daec984cc55bc0",
+      "size_bytes": 9059
+    },
+    {
+      "path": "ci/project/p06_warm_contract.json",
+      "sha256": "893d85401b1d5f7757d82cb7c743a89b36264fe19c7d08c239b7f216b7a8cbbd",
+      "size_bytes": 25793
+    },
+    {
+      "path": "ci/project/p06_warm_analyze.py",
+      "sha256": "ac273f587f759900d16ad41c7c63c2d2b10ca0864d5018f8403572f75e5a3e88",
+      "size_bytes": 19568
+    },
+    {
+      "path": "ci/project/p06_warm_replay.py",
+      "sha256": "8982c9ec5b1599080c8df09dd685ecf7aae7488af4708463dda819c4bcb62890",
+      "size_bytes": 42783
+    },
+    {
+      "path": "ci/project/p06_counter_source_inventory.py",
+      "sha256": "8961331993ceb112f80a83314ee7a6a3020163a89ca1b8781139c103e98f6862",
+      "size_bytes": 33730
+    },
+    {
+      "path": "ci/project/p06_counter_diagnostics_replay.py",
+      "sha256": "4d959363229859bd1ac5f4ede4f09937b8418e50f85a1c2eab3f131956532f0b",
+      "size_bytes": 36762
+    },
+    {
+      "path": "ci/project/p06_counter_public_replay.py",
+      "sha256": "6489dff8b39bda3d18df97fb72092fd2014d86d8c0129bcd56a13f08acd942a0",
+      "size_bytes": 22122
+    },
+    {
+      "path": "ci/project/p06_counter_public_records.py",
+      "sha256": "d947be071b670edcbc0b7d613860c288ee1b013f16e256679747afe0353a7e78",
+      "size_bytes": 20774
+    },
+    {
+      "path": "ci/project/p06_counter_public_build.py",
+      "sha256": "22982ed2264626fb1be2b86785fddb89655c9e0f82a2257ce0e9ab7c89eab758",
+      "size_bytes": 15413
+    },
+    {
+      "path": "ci/project/p06_counter_public_execute.py",
+      "sha256": "0da2aba310b5451ef1bff54195bb831a64c416ae6fd62abb69d8333d5da269b6",
+      "size_bytes": 21557
+    },
+    {
+      "path": "sim/common/cmd_processor.cpp",
+      "sha256": "c7090583f8dd1774d71755dc96f11845ff4d96340e51451643ec1ab16b14dd42",
+      "size_bytes": 27823
+    },
+    {
+      "path": "sw/runtime/common/device.cpp",
+      "sha256": "9b32e38a9bbc0460a7f2af522fd5efdc96e1c06e359e28c5151285557f89d90a",
+      "size_bytes": 66201
+    },
+    {
+      "path": "sw/runtime/common/perf.cpp",
+      "sha256": "fa6945cf379ae184d4e3edca5fcbc147d11f725e5ad3574ff3f89a16167099b3",
+      "size_bytes": 43664
+    },
+    {
+      "path": "sw/runtime/common/queue.cpp",
+      "sha256": "1d785262d128de3ffbf1feb32cc2b32f6457a6644df6ef9a04d4e8b4d45c962e",
+      "size_bytes": 64122
+    },
+    {
+      "path": "sw/runtime/common/async_run.h",
+      "sha256": "a9f63b2a896c5e512f7c592c758618ea88b774c9dac4bca29e847e2e3719a24e",
+      "size_bytes": 2383
+    },
+    {
+      "path": "sw/runtime/common/vortex2_internal.h",
+      "sha256": "3997d6ecca442eb04cf1df3129d0b90a9c0ec66015c798fc4d4510b93dd1f9ce",
+      "size_bytes": 44458
+    },
+    {
+      "path": "sw/runtime/simx/vortex.cpp",
+      "sha256": "0d890c95fecb67da26d23ea4a0af10ac328dddf110cd2575baff3aa5d4c905cb",
+      "size_bytes": 7552
+    },
+    {
+      "path": "tests/unittest/checked_counters/public.mk",
+      "sha256": "ce65fef47f9c977ef5cb7f40f2e6ece0c4975f1999c607f63d6f0fc72ce3882a",
+      "size_bytes": 6713
+    },
+    {
+      "path": "tests/unittest/checked_counters/public_main.cpp",
+      "sha256": "4a408a3b4485050366ed330e652769e884fdd56433dceb5c6c3f80186f4950be",
+      "size_bytes": 38666
+    },
+    {
+      "path": "tests/unittest/checked_counters/public_hooks.cpp",
+      "sha256": "6665821766a403269eda2e0c145fe60782f5563b9e25d4fc67dddfc74152a76f",
+      "size_bytes": 11714
+    },
+    {
+      "path": "tests/unittest/checked_counters/counter_access.cpp",
+      "sha256": "f687b107b27048b5cd6265911c872326996035f86dec10bc2917b84438205db7",
+      "size_bytes": 7112
+    },
+    {
+      "path": "tests/unittest/checked_counters/main.cpp",
+      "sha256": "a4a5ed88b75730222e8f7977f23232ac276ff5360e9c7edd7d8db4bf196580ee",
+      "size_bytes": 21081
+    },
+    {
+      "path": "sim/simx/checked_counters.mk",
+      "sha256": "5080bbe88f3c6612258932953ada6d7ac983617bbba56806f37d3ab488b9ae99",
+      "size_bytes": 2365
+    },
+    {
+      "path": "tests/regression/ai_warm_workspace/main.cpp",
+      "sha256": "0bec5ac729b3aa6c5ffcf7ff95084d84e4d47d54e470d21e234d00aa16556ce0",
+      "size_bytes": 20984
+    },
+    {
+      "path": "tests/regression/ai_warm_workspace/observer.cpp",
+      "sha256": "ac12eddcbfb2cf04981a8b8a945134ce763b93cd881fe5da549d28b7ed02021c",
+      "size_bytes": 9647
+    },
+    {
+      "path": "hw/rtl/core/VX_csr_mpm.sv",
+      "sha256": "ec1f19380d0d1f08de92f33475b7436bdbd89ffcc13d3a5d5f5717006c1e3987",
+      "size_bytes": 17101
+    },
+    {
+      "path": "sim/simx/csr_unit.cpp",
+      "sha256": "c35bd6a80120f76c9cf65076c736aaf577329285a74aac8c11c03f0ce829fc3d",
+      "size_bytes": 19085
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/native/index.json",
+      "sha256": "8f18fa59a25643e4e8607287b7f6dc6bfb84f43468579dfef4e376325b5c0530",
+      "size_bytes": 7595
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/host/index.json",
+      "sha256": "cdfee6c210e62a98cc27543fe2c80c05b9a4185c90b246408a3ede33bee73e7c",
+      "size_bytes": 2555
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/lifetime-source-manifest.json",
+      "sha256": "601ba960e5c57687d6cd2ee3c6cc6b3e60c53cdf5cc64158ebdee6c8a3d0fb3c",
+      "size_bytes": 63560
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/dependency-source-manifest.json",
+      "sha256": "3fb3332ecf76c5ee136bf68e2840f8e4e612a15f660a983d0913662cf8c469b6",
+      "size_bytes": 16601
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/dependency-source-bodies.json",
+      "sha256": "e5fd3d919e3c8f446381cc33e527c230c463010fc4178168e0ef52d21b187bbd",
+      "size_bytes": 99341
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/agent-ledger.json",
+      "sha256": "c085ee743835b0cc36097952594d609256aad93853e6817f2936391af5ab2464",
+      "size_bytes": 78652
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/reviews/README.md",
+      "sha256": "2934e12a01c05c20a221652f5d8901951c44c58279ec8918f5c6d83a00d739e3",
+      "size_bytes": 17901
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/reviews/session-agents-wave08.json",
+      "sha256": "590328e2d4143a900eb940f7afa224ff16811695327af81793098a651d4a1ec6",
+      "size_bytes": 5867
+    }
+  ],
+  "local_links": {
+    "checked": 807,
+    "per_document": {
+      "README.md": 164,
+      "ROADMAP.md": 69,
+      "docs/project/status.md": 192,
+      "docs/project/backlog.md": 117,
+      "docs/project/phases/p06-performance.md": 37,
+      "docs/project/p06-mpm-qualification-plan.md": 68,
+      "docs/project/p06-counter-diagnostics-audit.md": 27,
+      "docs/project/p06-counter-diagnostics-handoff.md": 17,
+      "docs/designs/simx_counter_diagnostics_v2.md": 2,
+      "docs/designs/simx_counter_public_diagnostics_v1.md": 30,
+      "docs/designs/simx_counter_lifetime_v1.md": 46,
+      "docs/project/evidence/p06-counter-diagnostics/README.md": 38
+    },
+    "broken": [],
+    "markdown_anchors_checked": 9,
+    "unmatched_anchors": []
+  },
+  "native_archives": [
+    {
+      "archive": "run-45026112992-attempt1.zip",
+      "revision": "407ab9fea5e4f793a2a5088f566a87f3e631aa84",
+      "sha256": "c4a7ae49259bbb72066d55f7c3e733ce5696f215175ce308f654e1cec9e9c13f",
+      "size_bytes": 1137709,
+      "members": 327,
+      "reports": [
+        {
+          "path": "checked-counters/report.json",
+          "sha256": "3e7fb048cf8c1a9e6b274104fb5d6c2581fa50cb9dfabe68b6bab955ffd967f0",
+          "outcome": "pass",
+          "cells": [
+            [
+              "ordinary-boundaries",
+              "pass"
+            ],
+            [
+              "checked-boundaries",
+              "pass"
+            ],
+            [
+              "checked-core-overflow",
+              "pass"
+            ],
+            [
+              "checked-cache-aggregate-overflow",
+              "pass"
+            ],
+            [
+              "checked-pending-underflow",
+              "pass"
+            ],
+            [
+              "checked-cache-backing-overflow",
+              "pass"
+            ],
+            [
+              "checked-tcu-backing-overflow",
+              "pass"
+            ]
+          ],
+          "commands": 17,
+          "model_control_outcome": null,
+          "retained_source_count": 270,
+          "qualified": false,
+          "ready_for_warm": false,
+          "warm_execution": false,
+          "full_warm_coverage": false
+        }
+      ]
+    },
+    {
+      "archive": "run-45029135146-attempt1.zip",
+      "revision": "81ed6871634fefbf5c78fb27cf10dce913bd4d9c",
+      "sha256": "d628813ec8815140830825adef22cd2ea9191707686931e49145d5a4e4247db5",
+      "size_bytes": 4193299,
+      "members": 1035,
+      "reports": [
+        {
+          "path": "checked-counters/report.json",
+          "sha256": "9f57ded33597ae5dda914d4b0b2203b79dd62beebd92f5361bed77bfd07e4df1",
+          "outcome": "pass",
+          "cells": [
+            [
+              "ordinary-boundaries",
+              "pass"
+            ],
+            [
+              "checked-boundaries",
+              "pass"
+            ],
+            [
+              "checked-core-overflow",
+              "pass"
+            ],
+            [
+              "checked-cache-aggregate-overflow",
+              "pass"
+            ],
+            [
+              "checked-pending-underflow",
+              "pass"
+            ],
+            [
+              "checked-cache-backing-overflow",
+              "pass"
+            ],
+            [
+              "checked-tcu-backing-overflow",
+              "pass"
+            ]
+          ],
+          "commands": 17,
+          "model_control_outcome": null,
+          "retained_source_count": 270,
+          "qualified": false,
+          "ready_for_warm": false,
+          "warm_execution": false,
+          "full_warm_coverage": false
+        },
+        {
+          "path": "public-counters/report.json",
+          "sha256": "c0b889295eba1dec1ab102fb480399fb596c1362bfd6550992d8279c7a593e8b",
+          "outcome": "fail",
+          "cells": [
+            [
+              "public-normal",
+              "fail"
+            ],
+            [
+              "public-immediate-overflow",
+              "blocked"
+            ],
+            [
+              "public-delayed-overflow",
+              "blocked"
+            ],
+            [
+              "public-cache-overflow",
+              "blocked"
+            ],
+            [
+              "public-coherent-terminal",
+              "blocked"
+            ]
+          ],
+          "commands": 10,
+          "model_control_outcome": "pass",
+          "retained_source_count": 676,
+          "qualified": false,
+          "ready_for_warm": false,
+          "warm_execution": false,
+          "full_warm_coverage": false
+        }
+      ]
+    },
+    {
+      "archive": "run-45031746149-attempt1.zip",
+      "revision": "e5f152464dda5e488d6d1a030c1fcdc49b5a9701",
+      "sha256": "05f79eef4c9e30b97302e02fec9e2cca47e08fc10c4d5f8235b21f40f41d7276",
+      "size_bytes": 4228429,
+      "members": 1039,
+      "reports": [
+        {
+          "path": "checked-counters/report.json",
+          "sha256": "f33058445b0ce4e7284baaa2c2c49c4819c2708ddff0fc49bc6854cf20f75d18",
+          "outcome": "pass",
+          "cells": [
+            [
+              "ordinary-boundaries",
+              "pass"
+            ],
+            [
+              "checked-boundaries",
+              "pass"
+            ],
+            [
+              "checked-core-overflow",
+              "pass"
+            ],
+            [
+              "checked-cache-aggregate-overflow",
+              "pass"
+            ],
+            [
+              "checked-pending-underflow",
+              "pass"
+            ],
+            [
+              "checked-cache-backing-overflow",
+              "pass"
+            ],
+            [
+              "checked-tcu-backing-overflow",
+              "pass"
+            ]
+          ],
+          "commands": 17,
+          "model_control_outcome": null,
+          "retained_source_count": 270,
+          "qualified": false,
+          "ready_for_warm": false,
+          "warm_execution": false,
+          "full_warm_coverage": false
+        },
+        {
+          "path": "public-counters/report.json",
+          "sha256": "a81c6a997a2a220b4db6d2ddecac21e08dfa32a522de0fabc2e0f89acfb2d925",
+          "outcome": "pass",
+          "cells": [
+            [
+              "public-normal",
+              "pass"
+            ],
+            [
+              "public-immediate-overflow",
+              "pass"
+            ],
+            [
+              "public-delayed-overflow",
+              "pass"
+            ],
+            [
+              "public-cache-overflow",
+              "pass"
+            ],
+            [
+              "public-coherent-terminal",
+              "pass"
+            ]
+          ],
+          "commands": 14,
+          "model_control_outcome": "pass",
+          "retained_source_count": 676,
+          "qualified": false,
+          "ready_for_warm": false,
+          "warm_execution": false,
+          "full_warm_coverage": false
+        }
+      ]
+    }
+  ],
+  "corrected_public_modes": [
+    {
+      "mode": "normal",
+      "checks": 1668,
+      "constructed": 2,
+      "destroyed": 2,
+      "terminal_snapshots": 2,
+      "successful_native_halves": 132,
+      "failed_native_halves": 0,
+      "terminal_inventories": [
+        {
+          "selectors": 33,
+          "components": 40,
+          "unavailable_unqueried": 12,
+          "device_refs": 1,
+          "queues": 0,
+          "buffers": 0,
+          "seeded": false
+        },
+        {
+          "selectors": 33,
+          "components": 40,
+          "unavailable_unqueried": 12,
+          "device_refs": 1,
+          "queues": 0,
+          "buffers": 0,
+          "seeded": false
+        }
+      ]
+    },
+    {
+      "mode": "immediate-overflow",
+      "checks": 1176,
+      "constructed": 2,
+      "destroyed": 2,
+      "terminal_snapshots": 1,
+      "successful_native_halves": 66,
+      "failed_native_halves": 0,
+      "terminal_inventories": [
+        {
+          "selectors": 33,
+          "components": 40,
+          "unavailable_unqueried": 12,
+          "device_refs": 1,
+          "queues": 0,
+          "buffers": 0,
+          "seeded": false
+        }
+      ]
+    },
+    {
+      "mode": "delayed-overflow",
+      "checks": 1176,
+      "constructed": 2,
+      "destroyed": 2,
+      "terminal_snapshots": 1,
+      "successful_native_halves": 66,
+      "failed_native_halves": 0,
+      "terminal_inventories": [
+        {
+          "selectors": 33,
+          "components": 40,
+          "unavailable_unqueried": 12,
+          "device_refs": 1,
+          "queues": 0,
+          "buffers": 0,
+          "seeded": false
+        }
+      ]
+    },
+    {
+      "mode": "cache-overflow",
+      "checks": 1173,
+      "constructed": 2,
+      "destroyed": 2,
+      "terminal_snapshots": 1,
+      "successful_native_halves": 66,
+      "failed_native_halves": 1,
+      "terminal_inventories": [
+        {
+          "selectors": 33,
+          "components": 40,
+          "unavailable_unqueried": 12,
+          "device_refs": 1,
+          "queues": 0,
+          "buffers": 0,
+          "seeded": false
+        }
+      ]
+    },
+    {
+      "mode": "coherent-terminal",
+      "checks": 1814,
+      "constructed": 2,
+      "destroyed": 2,
+      "terminal_snapshots": 2,
+      "successful_native_halves": 132,
+      "failed_native_halves": 0,
+      "terminal_inventories": [
+        {
+          "selectors": 33,
+          "components": 40,
+          "unavailable_unqueried": 12,
+          "device_refs": 1,
+          "queues": 0,
+          "buffers": 0,
+          "seeded": true
+        },
+        {
+          "selectors": 33,
+          "components": 40,
+          "unavailable_unqueried": 12,
+          "device_refs": 1,
+          "queues": 0,
+          "buffers": 0,
+          "seeded": false
+        }
+      ]
+    }
+  ],
+  "original_build_log_counts": {
+    "checked-build": {
+      "compilations": 45,
+      "links": 1
+    },
+    "public-build": {
+      "compilations": 19,
+      "links": 4
+    }
+  },
+  "corrected_source_body_binding": [
+    {
+      "scope": "checked-counters",
+      "retained_files": 270,
+      "descriptors_and_immutable_git_bytes_match": true,
+      "revision": "e5f152464dda5e488d6d1a030c1fcdc49b5a9701"
+    },
+    {
+      "scope": "public-counters",
+      "retained_files": 676,
+      "descriptors_and_immutable_git_bytes_match": true,
+      "revision": "e5f152464dda5e488d6d1a030c1fcdc49b5a9701"
+    }
+  ],
+  "host_log_integrity_and_recount": [
+    {
+      "path": "local-concurrent-governance-attempt.log",
+      "sha256": "eee213aeb2cbe8446b39c9862dc8309218e6d6b527b28b2a79d999bb8c612a1e",
+      "size_bytes": 124677,
+      "footer": [
+        "Ran 3070 tests in 1517.531s",
+        "FAILED (failures=149)"
+      ]
+    },
+    {
+      "path": "run-45029135196-job-137228604836.log",
+      "sha256": "b67117ecc27ab323ae9b622ec3cb8607d6d8d910db2f3a7ba9c7fedd8251abed",
+      "size_bytes": 687856,
+      "footer": [
+        "Ran 3146 tests in 1333.263s",
+        "FAILED (failures=18, errors=6)"
+      ]
+    },
+    {
+      "path": "run-45031746158-job-137236633104.log",
+      "sha256": "c789496a9e29f55df97ff54da55595397cdb33f0c64f9839b0d612a3a9dbe59f",
+      "size_bytes": 657711,
+      "footer": [
+        "Ran 3158 tests in 1305.183s"
+      ],
+      "distinct_methods": 3158,
+      "successful_result_lines": 3158,
+      "split_docstring_result": "test_accepts_staged_entry_with_blocked_upstream_phase",
+      "skips": 0,
+      "failures": 0,
+      "errors": 0
+    }
+  ],
+  "distinct_focused_review_scopes": [
+    {
+      "scope": "checked replay review",
+      "methods": 43,
+      "subtests": 167
+    },
+    {
+      "scope": "complete genuine-original public replay",
+      "methods": 40,
+      "subtests": 247
+    },
+    {
+      "scope": "source-inventory helper review",
+      "methods": 48,
+      "subtests": 278
+    },
+    {
+      "scope": "independent reader integration review",
+      "methods": 37,
+      "subtests": 110
+    }
+  ],
+  "immutable_gates_and_asset": [
+    {
+      "path": "ci/project/p06_warm_contract.json",
+      "sha256": "893d85401b1d5f7757d82cb7c743a89b36264fe19c7d08c239b7f216b7a8cbbd",
+      "size_bytes": 25793,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p06_warm_analyze.py",
+      "sha256": "ac273f587f759900d16ad41c7c63c2d2b10ca0864d5018f8403572f75e5a3e88",
+      "size_bytes": 19568,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p06_warm_replay.py",
+      "sha256": "8982c9ec5b1599080c8df09dd685ecf7aae7488af4708463dda819c4bcb62890",
+      "size_bytes": 42783,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "docs/project/roadmap.json",
+      "sha256": "c3409db37618927f585a590031e0fd50205d650d79b7750ea09ffb53475e5b18",
+      "size_bytes": 21091,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "docs/assets/img/vortex_framework_stack.svg",
+      "sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+      "size_bytes": 48225,
+      "unchanged_from_base": true
+    }
+  ],
+  "ledger_checkpoint": {
+    "actual_distinct_tasks": 54,
+    "root_confirmed_completed": 51,
+    "in_progress": 3,
+    "unrecorded_requested": 6,
+    "actual_60_10_complete": false
+  },
+  "late_reported_native_outside_review": {
+    "source": "root message; separate agent55 intake pending",
+    "revision": "4268d2d5d811063bb886cde7bd0e27e61a79c9b4",
+    "run_id": 45034575685,
+    "job_id": 137245341329,
+    "artifact_id": 14760051170,
+    "size_bytes": 4290949,
+    "sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb",
+    "independently_reviewed_here": false
+  },
+  "not_run": [
+    "native execution",
+    "native builds",
+    "full host test discovery",
+    "repeated focused suites",
+    "new warm-caller preflight",
+    "warm performance matrix",
+    "live CI status polling"
+  ],
+  "qualification": false,
+  "ready_for_warm": false,
+  "warm_execution": false,
+  "phase_acceptance": false,
+  "performance_acceptance": false
+}

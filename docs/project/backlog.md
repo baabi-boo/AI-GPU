@@ -9,8 +9,9 @@ remain unassigned until an actual owner is identified.
 
 ## Start here: P06-T01 exact counter qualification
 
-**Current bounded task: P06-T01 — qualify the implemented checked-counter
-route and its complete lifetime before a fresh warm attempt.**
+**Current bounded task: P06-T01 — implement and independently review a separately
+versioned qualification path for actual seed-free measurement binaries and the
+complete managed warm caller.**
 [P06-A01 is accepted](evidence/p06-baseline/acceptance.json) for the original
 [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
 at `84b6ca0ca75fba248ba330642bbf8764db3d459c`. The
@@ -85,28 +86,59 @@ equals published `a9227933`; 19 later workflow/public-runtime methods initially
 passed separately. A subsequent [actual hosted governance run](evidence/p06-checked-counters/hosted/governance-index.json)
 at `9fd7eac` passed **3,062 tests**, with independent original-log review.
 That is a distinct execution, not an inferred sum of earlier results. The native
-boundary matrix covers **19 seeded available selectors**, with **14 available sources
-unseeded** and **12 L2/L3 rows unavailable**. The successful directed packet
+boundary matrix at that checkpoint covered **19 seeded available selectors**,
+with **14 available sources unseeded** and **12 L2/L3 rows unavailable**.
+The successful directed packet
 retains `qualified=false` and `ready_for_warm=false`.
 
-The next work follows the [versioned qualification plan](p06-mpm-qualification-plan.md):
-fill the fourteen remaining backing-source gaps and exercise native public
-counter-failure and coherent two-half reads
-for all **33 available selectors** in the exact configuration. Freeze the
-terminal lifetime argument separately: a successful checked aggregate query
-bounds the formed value, not every unobserved sum without monotonicity and
-no-later-update proof. Bind exclusive submission ownership, completed queues
-and exact teardown/dependency behavior; release success alone does not prove
-a drained model. Then implement a qualification reader that rejects missing,
-partial, historical or mismatched source/configuration/tool/binary and terminal
-observation evidence. The actual executing interpreter is now retained.
+The [diagnostic continuation](p06-counter-diagnostics-audit.md) closes those
+fourteen gaps. Its [reviewed original packet](evidence/p06-counter-diagnostics/README.md)
+at `e5f1524`, run `45031746149`, covers **33 available selectors and 40 backing
+components**, leaving twelve unavailable L2/L3 rows unqueried. Seven model cases
+and six public-runner cases pass; the latter combine one boundary control with
+five actual Processor/RAM modes and retain ten context disposals and seven
+terminal snapshots. The separate clean host receipt passes 3,158 tests and
+excludes later offline replay/source-inventory additions at `4268d2d5`.
+
+The latest [native run 45034575685](https://github.com/baabi-boo/AI-GPU/actions/runs/45034575685)
+separately passes all **13 diagnostic process cases** at `4268d2d5`. Its
+[independent original-packet audit](evidence/p06-counter-diagnostics/native/w10-native-checkpoint-audit.md)
+matches all 270 model and 683 public source bodies to immutable Git and validates
+both inert replays. The explicit Git-pinned 683-source manifest is required for
+this public packet; the fixed original 676-name route rejects it. The separate
+[completed host receipt](evidence/p06-counter-diagnostics/host/checkpoint-4268d2d/receipt.json)
+for run `45034575638` records **3,312 executed tests in 1,811.712 seconds:
+3,310 pass and two isolation-guard failures**, with no errors or skips. The
+[test-only repair](evidence/p06-counter-diagnostics/reviews/wave10/w10-replay-guard-review.md)
+is independently reviewed and published at `142b2d6`, closing both F2 findings.
+The subsequent [clean local governance receipt](evidence/p06-counter-diagnostics/host/local-clean-142b2d6/receipt.json)
+records **all 3,318 tests passing in 1,918.414 seconds on CPython 3.12.14**, with
+four successful commands and independent review of the clean source/log record.
+The separate [hosted retry](evidence/p06-counter-diagnostics/host/checkpoint-142b2d6/pending-receipt-20261122T165509Z.json)
+`45040805357` and native retry `45040805341` remain queued with no executed
+result. The original failed attempt remains retained, and the latest audited
+native scope stays at `4268d2d5`.
+
+The next work follows the [versioned qualification plan](p06-mpm-qualification-plan.md)
+and [diagnostic handoff](p06-counter-diagnostics-handoff.md): bind a new admission
+record to actual seed-free measurement binaries, the full managed caller's
+terminal premises and actual loaded dependency/source-to-binary provenance.
+The [conditional lifetime proof](../designs/simx_counter_lifetime_v1.md) requires
+zero origins, admitted updates/resets, exclusive ownership, complete worker and
+queue cleanup, successful terminal sums and no later component update. Directed
+scalar diagnostics and release success alone do not establish the full caller's
+premises. Independently review the pure validator and rejection of missing,
+partial, historical, seeded or mismatched evidence, then run the four-process
+managed-caller preflight. Preserve the diagnostic readers' retained-data-only
+scope, explicit pinned source inventories and inert retained code.
 
 Follow only a qualified route with the unchanged fresh matched warm attempt:
 24 processes, 792 launches and 25,344 exact output words under the
 [implemented sampling/rejection contract](../designs/warm_workspace_benchmark_v1.md).
 Keep the unconditional v1 `P06-WARM-RV64-MPM-HIGH-HALF` block, `qualified=false`
 and unestablished absolute no-wrap bound; source repair cannot recover historical
-high bits. Preserve the cold baseline separately. P04 supplies the prerequisite;
+high bits. Diagnostic/replay readiness, warm execution and acceptance also remain
+false. Preserve the cold baseline separately. P04 supplies the prerequisite;
 P05 is independent. P06 and P06-T01 remain `in_progress`, with A02/A03 open.
 Keep the two-job, 4 GiB memory and 15 GiB disk prerequisites unchanged, together
 with the inherited 267 → 283 DSP finding and vendor `hw_emu` blocker.
@@ -390,10 +422,11 @@ repair's separate integration/publication history. The
 [simulator completion prerequisite](p06-simulator-completion-audit.md) now has
 independently reviewed host and fresh native evidence for the repaired CP-error
 boundary at `4781ca9`. The [checked-counter prerequisite](../designs/simx_checked_counters_v1.md)
-is now implemented with independent source review and focused host tests.
-Complete native source coverage, public failure/coherence evidence and the
-terminal lifetime proof before implementing qualification and collecting a
-fresh complete warm attempt.
+is implemented, and the [diagnostic packet](evidence/p06-counter-diagnostics/README.md)
+now covers all 33 available selectors plus native public failure/coherence cases.
+Bind the conditional lifetime proof to actual seed-free measurement binaries,
+the full managed warm caller and loaded dependencies through a separately
+versioned qualification path before its preflight and fresh complete warm attempt.
 Detailed work packages remain in the
 phase guides, the [development audit](p05-binding-audit.md) and the
 [Python binding handoff](p05-entry-handoff.md).
@@ -407,7 +440,7 @@ phase guides, the [development audit](p05-binding-audit.md) and the
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
 | **P04-T02 — Native model execution — complete** | Four clean SimX/native processor RTL × FP16/BF16 variants pass exact intermediate/final comparisons, live-input lineage, native placement and separate host/transfer accounting after independent review. | T01; model runtime lead | [P04-A02](evidence/p04-executor/acceptance-numerics.json), [P04-A03](evidence/p04-executor/acceptance-dispatch.json) |
 | **P05-T01 — Python/custom-op bridge — in progress** | Preserve the accepted copying binding; independently review the existing custom-op implementation's installed dispatch, compatibility and explicit failure evidence before an acceptance decision. | P04; framework integration lead; [handoff](p05-entry-handoff.md) | [P05-A01 accepted](evidence/p05-python/acceptance-binding.json); P05-A02/P05-A03 unearned |
-| **P06-T01 — Measured optimization — in progress** | Qualify the implemented counter guard: complete all 33 native backing-source diagnostics, public failure/coherent reads and terminal context-lifetime proof; bind a new qualification reader before the unchanged fresh warm matrix. | P04; performance and memory lead; [counter audit](p06-checked-counters-audit.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
+| **P06-T01 — Measured optimization — in progress** | Bind completed all-33/public diagnostics and the conditional lifetime proof to actual seed-free binaries, the full managed warm caller and loaded dependencies; independently review the new qualification validator and rejections before preflight and the unchanged fresh warm matrix. | P04; performance and memory lead; [diagnostic handoff](p06-counter-diagnostics-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),
 [P04](phases/p04-inference.md), [P05](phases/p05-framework.md) and

@@ -1,0 +1,260 @@
+{
+  "base_revision": "7455e008c1e001d3329e74fd55ffcd942592ec5f",
+  "requested_agents": 60,
+  "requested_waves": 10,
+  "waves": [
+    {
+      "wave": 1,
+      "tasks": [
+        "w01_lifetime",
+        "w01_selectors",
+        "w01_public",
+        "w01_build",
+        "w01_reader",
+        "w01_dependency"
+      ],
+      "state": "completed"
+    },
+    {
+      "wave": 2,
+      "tasks": [
+        "w02_access",
+        "w02_harness",
+        "w02_runner",
+        "w02_harness_review",
+        "w02_access_review",
+        "w02_runner_review"
+      ],
+      "state": "completed"
+    },
+    {
+      "wave": 3,
+      "tasks": [
+        "w03_public_hooks",
+        "w03_public_main",
+        "w03_public_build",
+        "w03_public_runner",
+        "w03_public_build_records",
+        "w03_public_records"
+      ],
+      "state": "completed"
+    },
+    {
+      "wave": 4,
+      "tasks": [
+        "w04_hooks_review",
+        "w04_main_review",
+        "w04_build_ci_review",
+        "w04_runner_review",
+        "w04_build_records_review",
+        "w04_records_review"
+      ],
+      "state": "completed"
+    },
+    {
+      "wave": 5,
+      "tasks": [
+        "w05_lifetime_proof",
+        "w05_native_all33_audit",
+        "w05_checked_replay",
+        "w05_public_replay",
+        "w05_checked_replay_tests",
+        "w05_public_replay_tests"
+      ],
+      "state": "completed"
+    },
+    {
+      "wave": 6,
+      "tasks": [
+        "w06_cp_drain_fix",
+        "w06_checked_log_fix",
+        "w06_cp_drain_review",
+        "w06_lifetime_review",
+        "w06_governance_fixture_fix",
+        "w06_checked_replay_review"
+      ],
+      "state": "completed"
+    },
+    {
+      "wave": 7,
+      "tasks": [
+        "w07_public_replay_review",
+        "w07_source_inventory",
+        "w07_source_inventory_tests",
+        "w07_replay_inventory_integration",
+        "w07_public_replay_integration_tests",
+        "w07_native_public_audit"
+      ],
+      "state": "completed"
+    },
+    {
+      "wave": 8,
+      "tasks": [
+        "w08_source_inventory_review",
+        "w08_replay_integration_review",
+        "w08_public_design",
+        "w08_evidence_retention",
+        "w08_qualification_plan",
+        "w08_governance_review"
+      ],
+      "state": "completed",
+      "completed_tasks": [
+        "w08_source_inventory_review",
+        "w08_replay_integration_review",
+        "w08_public_design",
+        "w08_evidence_retention",
+        "w08_qualification_plan",
+        "w08_governance_review"
+      ]
+    },
+    {
+      "wave": 9,
+      "tasks": [
+        "w09_project_status",
+        "w09_audit_handoff",
+        "w09_lifetime_dependency_review",
+        "w09_evidence_finalization",
+        "w09_documentation_review",
+        "w09_hosted_checkpoint_review"
+      ],
+      "state": "in_progress",
+      "completed_tasks": [
+        "w09_project_status",
+        "w09_audit_handoff",
+        "w09_lifetime_dependency_review",
+        "w09_evidence_finalization",
+        "w09_documentation_review"
+      ]
+    },
+    {
+      "wave": 10,
+      "tasks": [
+        "w10_native_checkpoint_audit",
+        "w10_current_receipts_docs",
+        "w10_integrated_code_review",
+        "w10_agent_ledger_review"
+      ],
+      "state": "in_progress",
+      "completed_tasks": [
+        "w10_native_checkpoint_audit"
+      ]
+    }
+  ],
+  "checkpoints": [
+    {
+      "commit": "407ab9fea5e4f793a2a5088f566a87f3e631aa84",
+      "tree": "b5e1f32c73bee17bb963aebca5681cb2526d40af",
+      "scope": "all 33 native source diagnostics; seven native cells passed, original archive independently reviewed",
+      "native_run_id": 45026112992,
+      "native_job_id": 137219393978,
+      "native_conclusion": "success",
+      "native_artifact_id": 14756780371,
+      "native_zip_sha256": "c4a7ae49259bbb72066d55f7c3e733ce5696f215175ce308f654e1cec9e9c13f",
+      "native_cells_passed": 7
+    },
+    {
+      "commit": "81ed6871634fefbf5c78fb27cf10dce913bd4d9c",
+      "tree": "424d8694c2a8a73cfd77eccebf9096a1ca5952b7",
+      "scope": "five real public-runtime diagnostic scenarios; native validation pending",
+      "native_run_id": 45029135146,
+      "governance_run_id": 45029135196,
+      "native_status": "completed",
+      "governance_job_id": 137228604836,
+      "native_conclusion": "failure",
+      "native_artifact_id": 14756979623,
+      "native_zip_sha256": "d628813ec8815140830825adef22cd2ea9191707686931e49145d5a4e4247db5",
+      "native_failure": "public-normal: terminal CP ring is not drained; SimX host head writeback is not published",
+      "native_model_cells_passed": 7,
+      "governance_conclusion": "failure",
+      "governance_tests": 3146,
+      "governance_failures": 18,
+      "governance_errors": 6,
+      "governance_failure": "Controlled public-runner fixture exposed unpinned host interpreter observation; production native CPython pin unchanged"
+    },
+    {
+      "commit": "e5f152464dda5e488d6d1a030c1fcdc49b5a9701",
+      "tree": "74f5ce6e13d86d4f9a961c52aa9a04584a6ef0e8",
+      "scope": "correct CP drain evidence; reject contradictory logs; isolate host fixture interpreter observations",
+      "native_status": "completed",
+      "governance_status": "completed",
+      "native_run_id": 45031746149,
+      "native_job_id": 137236632765,
+      "governance_run_id": 45031746158,
+      "governance_job_id": 137236633104,
+      "native_conclusion": "success",
+      "native_artifact_id": 14758252829,
+      "native_zip_sha256": "05f79eef4c9e30b97302e02fec9e2cca47e08fc10c4d5f8235b21f40f41d7276",
+      "native_model_cells_passed": 7,
+      "native_public_runner_cells_passed": 6,
+      "governance_conclusion": "success",
+      "governance_tests": 3158,
+      "governance_failures": 0,
+      "governance_errors": 0,
+      "governance_seconds": 1305.183
+    },
+    {
+      "commit": "4268d2d5d811063bb886cde7bd0e27e61a79c9b4",
+      "tree": "061ecbddc9b321edbd70c054c8efce4d188de04f",
+      "scope": "Inert native evidence replay, exact external source inventory, complete original ZIP retention and regression suites",
+      "governance_status": "in_progress",
+      "native_status": "completed",
+      "governance_run_id": 45034575638,
+      "native_run_id": 45034575685,
+      "governance_job_id": 137245340992,
+      "native_job_id": 137245341329,
+      "native_conclusion": "success",
+      "native_artifact_id": 14760051170,
+      "native_zip_sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb",
+      "native_model_cells_passed": 7,
+      "native_public_runner_cells_passed": 6,
+      "native_public_source_bodies": 683,
+      "native_original_audit": "passed",
+      "native_public_source_manifest_sha256": "bd81faa7590e053685dfa78d8baa41478969c3b4ec750646cddb5796b949ba0c",
+      "native_explicit_manifest_replay": "passed",
+      "native_legacy_public_inventory_rejection": "passed"
+    }
+  ],
+  "open_findings": [
+    {
+      "id": "F2-PUBLIC-REPLAY-TEST-SCHEMA",
+      "path": "ci/project/test_p06_counter_public_replay.py",
+      "detail": "Two raw JSON mutations still replace schema_version1 after records moved to schema2; they become no-ops and will fail when successful-original integration tests are enabled. Obsolete cp_after.head mutation also needs correct field targeting.",
+      "assigned": "w07_public_replay_integration_tests",
+      "state": "closed",
+      "resolution": "Schema2/current-field mutations verified to change inputs; independent delta review and complete genuine-original40method247subtest suite passed without skips",
+      "test_sha256": "6d9c4c541a0e68acd021a3d2bf3ffb989ed4300b8339314e80551947498df6e0"
+    },
+    {
+      "id": "F3-EVIDENCE-PROSE-COUNTS",
+      "path": "docs/project/evidence/p06-counter-diagnostics/README.md",
+      "detail": "Agent50 found CP tail pair described as complete committed tail and backend link described as three objects rather than three backend objects plus hook.",
+      "assigned": "root",
+      "state": "closed",
+      "resolution": "Current packet and review indexes corrected against public.mk and public design; original retained notes unchanged. Independent final documentation review pending."
+    },
+    {
+      "id": "F3-RETAINED-MARKDOWN-LINKS",
+      "path": "docs/project/evidence/p06-counter-diagnostics/reviews/wave08/w08-lifetime-before.md",
+      "detail": "Relocated original Markdown retains designs-relative links and fails project metadata link validation; original content must remain byte-identical.",
+      "assigned": "w09_evidence_finalization",
+      "state": "closed",
+      "resolution": "Agent52 first pass preserved original bytes, packaged relocated Markdown as .md.txt, updated current catalogs and added historical manifest clarification; global check_project passed."
+    },
+    {
+      "id": "NOTE-HISTORICAL-LIFETIME-STATUS",
+      "path": "docs/project/evidence/p06-counter-diagnostics/lifetime-source-manifest.json",
+      "detail": "407-bound source snapshot predates later native public success and preserves original P06-T01-A02/A03 identifier typo; current index needs explicit historical-status clarification without altering source snapshot.",
+      "assigned": "w09_evidence_finalization",
+      "state": "closed",
+      "resolution": "Agent52 first pass preserved original bytes, packaged relocated Markdown as .md.txt, updated current catalogs and added historical manifest clarification; global check_project passed."
+    },
+    {
+      "id": "F1-EVIDENCE-FIFO-WORDING",
+      "path": "docs/project/evidence/p06-counter-diagnostics/README.md",
+      "detail": "Current index described an empty CP FIFO as observed though raw schema records enabled idle state plus exact retirement; use the actual observation and conditional source inference.",
+      "assigned": "w09_evidence_finalization",
+      "state": "closed",
+      "resolution": "Agent52 replaced unsupported empty-FIFO wording with actual enabled idle status and exact retirement; agent53 reviewing final prose."
+    }
+  ]
+}

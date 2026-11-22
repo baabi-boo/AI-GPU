@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "retained-host-governance-attempts",
+  "qualified": false,
+  "ready_for_warm": false,
+  "warm_execution": false,
+  "acceptance": false,
+  "attempts": [
+    {
+      "id": "local-concurrent-development",
+      "outcome": "fail",
+      "tests": 3070,
+      "failures": 149,
+      "errors": 0,
+      "seconds": 1517.531,
+      "log": "local-concurrent-governance-attempt.log",
+      "limitation": "The workspace changed while the suite ran. Loaded-helper stability guards blocked later fixtures; this attempt does not establish an immutable-checkout full-suite result."
+    },
+    {
+      "id": "hosted-81ed687",
+      "source_revision": "81ed6871634fefbf5c78fb27cf10dce913bd4d9c",
+      "workflow_run_id": 45029135196,
+      "job_id": 137228604836,
+      "url": "https://github.com/baabi-boo/AI-GPU/actions/runs/45029135196",
+      "outcome": "fail",
+      "tests": 3146,
+      "failures": 18,
+      "errors": 6,
+      "seconds": 1333.263,
+      "python_version": "3.12.3",
+      "log": "run-45029135196-job-137228604836.log",
+      "root_cause": "The controlled PublicFixture exposed the unpinned host interpreter observation to the strict native interpreter validator; all reported failures/errors belong to that fixture. The repair isolates synthetic observations and leaves the native CPython 3.12.14 pin unchanged."
+    },
+    {
+      "id": "hosted-e5f1524",
+      "source_revision": "e5f152464dda5e488d6d1a030c1fcdc49b5a9701",
+      "workflow_run_id": 45031746158,
+      "job_id": 137236633104,
+      "url": "https://github.com/baabi-boo/AI-GPU/actions/runs/45031746158",
+      "outcome": "pass",
+      "tests": 3158,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 1305.183,
+      "python_version": "3.12.3",
+      "log": "run-45031746158-job-137236633104.log",
+      "scope": "Immutable hosted checkout after CP drain, contradictory-log and controlled interpreter-fixture repairs; excludes later replay/source-inventory additions."
+    }
+  ],
+  "logs": [
+    {
+      "path": "local-concurrent-governance-attempt.log",
+      "sha256": "eee213aeb2cbe8446b39c9862dc8309218e6d6b527b28b2a79d999bb8c612a1e",
+      "size_bytes": 124677
+    },
+    {
+      "path": "run-45029135196-job-137228604836.log",
+      "sha256": "b67117ecc27ab323ae9b622ec3cb8607d6d8d910db2f3a7ba9c7fedd8251abed",
+      "size_bytes": 687856
+    },
+    {
+      "path": "run-45031746158-job-137236633104.log",
+      "sha256": "c789496a9e29f55df97ff54da55595397cdb33f0c64f9839b0d612a3a9dbe59f",
+      "size_bytes": 657711
+    }
+  ]
+}

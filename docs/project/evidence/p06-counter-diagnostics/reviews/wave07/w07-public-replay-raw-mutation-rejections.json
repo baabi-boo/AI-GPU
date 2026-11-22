@@ -1,0 +1,597 @@
+{
+  "scope": "synthetic raw parser mutation probes only; no archive or native execution",
+  "baseline_noops": [
+    {
+      "transformation": "lambda body: body.replace(b'\"schema_version\":1', b'\"schema_version\":1.0')",
+      "bytes_changed": false,
+      "parser_accepted_schema": 2
+    },
+    {
+      "transformation": "lambda body: body.replace(b'\"schema_version\":1', b'\"schema_version\":NaN')",
+      "bytes_changed": false,
+      "parser_accepted_schema": 2
+    }
+  ],
+  "rejections": [
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_observation_types_keys_and_integer_bounds_are_strict",
+      "mode": "normal",
+      "reason": "result.checked: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_observation_types_keys_and_integer_bounds_are_strict",
+      "mode": "normal",
+      "reason": "result.checks: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_observation_types_keys_and_integer_bounds_are_strict",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].before.ticks: integer is outside its bound"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_observation_types_keys_and_integer_bounds_are_strict",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].rows[0].value: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_observation_types_keys_and_integer_bounds_are_strict",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].rows[0].low.value: integer is outside its bound"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_observation_types_keys_and_integer_bounds_are_strict",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.dma.before[0]: integer is outside its bound"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_observation_types_keys_and_integer_bounds_are_strict",
+      "mode": "normal",
+      "reason": "result: missing or unknown fields"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_observation_types_keys_and_integer_bounds_are_strict",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0]: missing or unknown fields"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_observation_types_keys_and_integer_bounds_are_strict",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].cp_after: missing or unknown fields"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_observation_types_keys_and_integer_bounds_are_strict",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].rows[0].high: missing or unknown fields"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "immediate-overflow",
+      "reason": "result.overflow_errors: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "immediate-overflow",
+      "reason": "result.run_entries: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "immediate-overflow",
+      "reason": "result.dcr_write_completed: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "immediate-overflow",
+      "reason": "result.suppressed_requests: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "immediate-overflow",
+      "reason": "result.fresh_context_success: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "immediate-overflow",
+      "reason": "result.terminal_failure: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.after_entries.run: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.after_entries.read: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.after_entries.write: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.after_entries.overflows: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "delayed-overflow",
+      "reason": "result.overflow_errors: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "delayed-overflow",
+      "reason": "result.run_entries: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "delayed-overflow",
+      "reason": "result.dcr_write_completed: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "delayed-overflow",
+      "reason": "result.suppressed_requests: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "delayed-overflow",
+      "reason": "result.fresh_context_success: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "delayed-overflow",
+      "reason": "result.terminal_failure: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "delayed-overflow",
+      "reason": "failure.suppression.after_entries.run: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "delayed-overflow",
+      "reason": "failure.suppression.after_entries.read: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "delayed-overflow",
+      "reason": "failure.suppression.after_entries.write: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "delayed-overflow",
+      "reason": "failure.suppression.after_entries.overflows: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "cache-overflow",
+      "reason": "result.overflow_errors: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "cache-overflow",
+      "reason": "result.run_entries: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "cache-overflow",
+      "reason": "result.dcr_write_completed: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "cache-overflow",
+      "reason": "result.suppressed_requests: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "cache-overflow",
+      "reason": "result.fresh_context_success: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "cache-overflow",
+      "reason": "result.terminal_failure: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.after_entries.run: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.after_entries.read: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.after_entries.write: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.after_entries.overflows: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "delayed-overflow",
+      "reason": "failure: delayed native updater made no observed progress"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "cache-overflow",
+      "reason": "failure.reads[0].overflow: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "cache-overflow",
+      "reason": "failure.trigger_query.after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_overflow_requires_original_callback_and_fresh_context_evidence",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.queries[0].after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_public_result_duplicate_keys_numbers_and_record_boundaries_are_strict",
+      "mode": "normal",
+      "reason": "public result repeats a JSON key"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_public_result_duplicate_keys_numbers_and_record_boundaries_are_strict",
+      "mode": "normal",
+      "reason": "public result contains a noninteger or nonfinite number"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_public_result_duplicate_keys_numbers_and_record_boundaries_are_strict",
+      "mode": "normal",
+      "reason": "public result contains a noninteger or nonfinite number"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_public_result_duplicate_keys_numbers_and_record_boundaries_are_strict",
+      "mode": "normal",
+      "reason": "public result contains a noninteger or nonfinite number"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_public_result_duplicate_keys_numbers_and_record_boundaries_are_strict",
+      "mode": "normal",
+      "reason": "public output lacks its unique final result"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_public_result_duplicate_keys_numbers_and_record_boundaries_are_strict",
+      "mode": "normal",
+      "reason": "public output is accompanied by a failure or unrelated result"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_public_result_duplicate_keys_numbers_and_record_boundaries_are_strict",
+      "mode": "normal",
+      "reason": "public output lacks its unique final result"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.dma.before: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.dma.before: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.dma.before: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.dma.attempted: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.dma.attempted: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.dma.attempted: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.dma.after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.dma.after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.dma.after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "immediate-overflow",
+      "reason": "failure.suppression.dma.status: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "delayed-overflow",
+      "reason": "failure.suppression.dma.before: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "delayed-overflow",
+      "reason": "failure.suppression.dma.before: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "delayed-overflow",
+      "reason": "failure.suppression.dma.before: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "delayed-overflow",
+      "reason": "failure.suppression.dma.attempted: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "delayed-overflow",
+      "reason": "failure.suppression.dma.attempted: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "delayed-overflow",
+      "reason": "failure.suppression.dma.attempted: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "delayed-overflow",
+      "reason": "failure.suppression.dma.after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "delayed-overflow",
+      "reason": "failure.suppression.dma.after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "delayed-overflow",
+      "reason": "failure.suppression.dma.after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "delayed-overflow",
+      "reason": "failure.suppression.dma.status: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.dma.before: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.dma.before: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.dma.before: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.dma.attempted: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.dma.attempted: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.dma.attempted: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.dma.after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.dma.after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.dma.after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_suppressed_dma_requires_original_ram_and_complemented_attempt",
+      "mode": "cache-overflow",
+      "reason": "failure.suppression.dma.status: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_counters_components_halves_and_clock_are_verified",
+      "mode": "coherent-terminal",
+      "reason": "terminal_snapshots[0].rows[16].value: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_counters_components_halves_and_clock_are_verified",
+      "mode": "coherent-terminal",
+      "reason": "terminal_snapshots[0].rows[0].low.value: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_counters_components_halves_and_clock_are_verified",
+      "mode": "coherent-terminal",
+      "reason": "terminal_snapshots[0].rows[0].high.value: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_counters_components_halves_and_clock_are_verified",
+      "mode": "coherent-terminal",
+      "reason": "terminal_snapshots[0].rows[32].components: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_counters_components_halves_and_clock_are_verified",
+      "mode": "coherent-terminal",
+      "reason": "terminal_snapshots[0].rows[16].low.tag: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_counters_components_halves_and_clock_are_verified",
+      "mode": "coherent-terminal",
+      "reason": "terminal_snapshots[0].rows[0].high.sequence: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_counters_components_halves_and_clock_are_verified",
+      "mode": "coherent-terminal",
+      "reason": "terminal_snapshots[0].rows[0].low.ticks_after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_counters_components_halves_and_clock_are_verified",
+      "mode": "coherent-terminal",
+      "reason": "terminal_snapshots[0].rows[0].high.reset_after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_counters_components_halves_and_clock_are_verified",
+      "mode": "coherent-terminal",
+      "reason": "terminal_snapshots[0].rows[0].low.class_after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_counters_components_halves_and_clock_are_verified",
+      "mode": "coherent-terminal",
+      "reason": "terminal_snapshots[0].after: successful native scalar witness is absent"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_counters_components_halves_and_clock_are_verified",
+      "mode": "coherent-terminal",
+      "reason": "terminal_snapshots[0].before.components: inventory length differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_counters_components_halves_and_clock_are_verified",
+      "mode": "coherent-terminal",
+      "reason": "terminal_snapshots[0].components: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_counters_components_halves_and_clock_are_verified",
+      "mode": "coherent-terminal",
+      "reason": "terminal_snapshots[0].selectors: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_counters_components_halves_and_clock_are_verified",
+      "mode": "coherent-terminal",
+      "reason": "terminal_snapshots[0].unavailable_unqueried: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].device_refs: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].queues: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].buffers: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].extra_retain_rejected: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].before: successful model is not quiescent"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].before: successful model is not quiescent"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].before: successful model is not quiescent"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].cp_after.head_writeback_raw: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].cp_after: CP retirement or observed tail accounting differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].cp_after: CP retirement or observed tail accounting differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "terminal_snapshots[0].cp_after.retired: integer is outside its bound"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "destructions[0].completed: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "destructions[0].ticks_after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "destructions[0].reset_after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "destructions[0].idle_after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "destructions[0].before.generation: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "destructions[1].completed: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "destructions[1].ticks_after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "destructions[1].reset_after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "destructions[1].idle_after: value or type differs"
+    },
+    {
+      "method": "__main__.SyntheticRawReplayMutationProbes.test_terminal_requires_exclusive_ownership_retired_cp_and_destruction",
+      "mode": "normal",
+      "reason": "destructions[1].before.generation: value or type differs"
+    }
+  ]
+}

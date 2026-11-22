@@ -1,0 +1,81 @@
+{
+  "observed_at": "2026-11-22T15:22:30.982811+00:00",
+  "source_path": "/workspace/scratch/98908dfa3444/session-agents.json",
+  "captured_copy_path": "/workspace/scratch/98908dfa3444/w10-agent-ledger-review-snapshot/session-agents-59-during-review.json",
+  "size_bytes": 10788,
+  "sha256": "09be045cc0e9b2e4548d7ccff070964bccc9a3b268bad96aed9401a49811cf1c",
+  "actual_distinct_task_count": 59,
+  "task_row_count": 59,
+  "root_confirmed_completed_task_count": 54,
+  "waves": [
+    {
+      "wave": 9,
+      "tasks": [
+        "w09_project_status",
+        "w09_audit_handoff",
+        "w09_lifetime_dependency_review",
+        "w09_evidence_finalization",
+        "w09_documentation_review",
+        "w09_hosted_checkpoint_review"
+      ],
+      "state": "in_progress",
+      "completed_tasks": [
+        "w09_project_status",
+        "w09_audit_handoff",
+        "w09_lifetime_dependency_review",
+        "w09_evidence_finalization",
+        "w09_documentation_review"
+      ]
+    },
+    {
+      "wave": 10,
+      "tasks": [
+        "w10_native_checkpoint_audit",
+        "w10_current_receipts_docs",
+        "w10_integrated_code_review",
+        "w10_agent_ledger_review",
+        "w10_replay_guard_fix"
+      ],
+      "state": "in_progress",
+      "completed_tasks": [
+        "w10_native_checkpoint_audit"
+      ]
+    }
+  ],
+  "checkpoint": {
+    "commit": "4268d2d5d811063bb886cde7bd0e27e61a79c9b4",
+    "tree": "061ecbddc9b321edbd70c054c8efce4d188de04f",
+    "scope": "Inert native evidence replay, exact external source inventory, complete original ZIP retention and regression suites",
+    "governance_status": "completed",
+    "native_status": "completed",
+    "governance_run_id": 45034575638,
+    "native_run_id": 45034575685,
+    "governance_job_id": 137245340992,
+    "native_job_id": 137245341329,
+    "native_conclusion": "success",
+    "native_artifact_id": 14760051170,
+    "native_zip_sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb",
+    "native_model_cells_passed": 7,
+    "native_public_runner_cells_passed": 6,
+    "native_public_source_bodies": 683,
+    "native_original_audit": "passed",
+    "native_public_source_manifest_sha256": "bd81faa7590e053685dfa78d8baa41478969c3b4ec750646cddb5796b949ba0c",
+    "native_explicit_manifest_replay": "passed",
+    "native_legacy_public_inventory_rejection": "passed",
+    "governance_conclusion": "failure",
+    "governance_tests": 3312,
+    "governance_failures": 2,
+    "governance_errors": 0,
+    "governance_seconds": 1811.712,
+    "governance_failure": "Replay isolation test guards confuse trusted current reader files with recorded producer paths when hosted checkout path collides; production replayers unchanged."
+  },
+  "open_findings": [
+    {
+      "id": "F2-REPLAY-GUARD-PATH-COLLISION",
+      "path": "ci/project/test_p06_counter_diagnostics_replay.py; ci/project/test_p06_counter_public_replay.py",
+      "detail": "Two genuine replay guards reject trusted current helper paths when archived producer root equals current hosted checkout; 3312-test clean CI has exactly these two failures.",
+      "assigned": "w10_replay_guard_fix",
+      "state": "open"
+    }
+  ]
+}

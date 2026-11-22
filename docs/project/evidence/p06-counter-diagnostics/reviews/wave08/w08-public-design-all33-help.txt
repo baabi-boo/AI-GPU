@@ -1,0 +1,31 @@
+usage: p06_counter_diagnostics_replay.py [-h] --archive ARCHIVE --sha256
+                                         SHA256 --source-revision
+                                         SOURCE_REVISION
+                                         [--source-inventory SOURCE_INVENTORY]
+                                         [--source-inventory-sha256 SOURCE_INVENTORY_SHA256]
+                                         [--prefix PREFIX]
+                                         [--expected-contract EXPECTED_CONTRACT]
+                                         [--output OUTPUT]
+
+Check all-33 native counter packets as inert retained data. An independently
+supplied original ZIP digest and source revision are required. Later source
+inventories require an explicit external manifest and its digest. This reader
+checks consistency, not execution authenticity or qualification. It never
+extracts archive members, executes retained code, opens recorded producer
+paths, or rehashes the absent object/binary payloads. The reusable packet
+helpers also support the separately versioned public-runtime diagnostic
+reader.
+
+options:
+  -h, --help            show this help message and exit
+  --archive ARCHIVE
+  --sha256 SHA256
+  --source-revision SOURCE_REVISION
+  --source-inventory SOURCE_INVENTORY
+                        external complete source manifest; requires --source-
+                        inventory-sha256
+  --source-inventory-sha256 SOURCE_INVENTORY_SHA256
+                        independently supplied external manifest SHA-256
+  --prefix PREFIX
+  --expected-contract EXPECTED_CONTRACT
+  --output OUTPUT

@@ -1,0 +1,29 @@
+usage: p06_counter_public_replay.py [-h] --archive ARCHIVE --sha256 SHA256
+                                    --source-revision SOURCE_REVISION
+                                    [--source-inventory SOURCE_INVENTORY]
+                                    [--source-inventory-sha256 SOURCE_INVENTORY_SHA256]
+                                    [--prefix PREFIX]
+                                    [--expected-contract EXPECTED_CONTRACT]
+                                    [--output OUTPUT]
+
+Recheck public native counter diagnostics as inert retained data. An
+externally supplied original ZIP digest and source revision are mandatory.
+Later source inventories require an explicit external manifest and its digest.
+Archive members and producer paths are data: no member is extracted, imported
+or executed, and no recorded producer file is opened. Successful consistency
+checking never establishes a new native execution, authentication or
+acceptance.
+
+options:
+  -h, --help            show this help message and exit
+  --archive ARCHIVE
+  --sha256 SHA256
+  --source-revision SOURCE_REVISION
+  --source-inventory SOURCE_INVENTORY
+                        external complete source manifest; requires --source-
+                        inventory-sha256
+  --source-inventory-sha256 SOURCE_INVENTORY_SHA256
+                        independently supplied external manifest SHA-256
+  --prefix PREFIX
+  --expected-contract EXPECTED_CONTRACT
+  --output OUTPUT

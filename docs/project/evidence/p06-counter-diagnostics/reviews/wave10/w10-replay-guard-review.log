@@ -1,0 +1,216 @@
+Independent reviewer: agent60 /root/w10_replay_guard_review
+Python: 3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]
+Base revision: 4268d2d5d811063bb886cde7bd0e27e61a79c9b4
+Original hosted log SHA-256: 1d093819f62493536a2444b6efec31a75e522e7e3a3cfc197a0a101c833160a8
+PROBE: immutable original guards with current ROOT appended to denied producer roots; genuine replay is unchanged
+Immutable test source: ci/project/test_p06_counter_diagnostics_replay.py sha256=f954840178f739f21ef7f352985e9bbd3f6080d762bdf6fba72bd7665ac1956a
+Immutable test source: ci/project/test_p06_counter_public_replay.py sha256=6d9c4c541a0e68acd021a3d2bf3ffb989ed4300b8339314e80551947498df6e0
+test_replay_never_opens_producer_paths_extracts_or_executes_retained_code (w10_review_original_test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_never_opens_producer_paths_extracts_or_executes_retained_code) ... FAIL
+test_replay_never_extracts_executes_or_opens_producer_paths (w10_review_original_test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_never_extracts_executes_or_opens_producer_paths) ... FAIL
+
+======================================================================
+FAIL: test_replay_never_opens_producer_paths_extracts_or_executes_retained_code (w10_review_original_test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_never_opens_producer_paths_extracts_or_executes_retained_code)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/test_p06_counter_diagnostics_replay.py", line 274, in test_replay_never_opens_producer_paths_extracts_or_executes_retained_code
+    result = replay.replay_archive(self.path, digest, expected_revision=REVISION)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/p06_counter_diagnostics_replay.py", line 505, in replay_archive
+    with open_archive(path, sha256, prefix=prefix) as (packet, archive):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/p06_counter_diagnostics_replay.py", line 420, in open_archive
+    original_readers = _reader_sources()
+                       ^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/p06_counter_diagnostics_replay.py", line 107, in _reader_sources
+    path = Path(module.__file__).resolve()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/test_p06_counter_diagnostics_replay.py", line 244, in call
+    guard(path)
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/test_p06_counter_diagnostics_replay.py", line 239, in guard
+    self.assertFalse(any(candidate == root or root in candidate.parents for root in roots),
+AssertionError: True is not false : reader accessed recorded producer path: /workspace/scratch/98908dfa3444/AI-GPU/ci/project/baseline_inventory.py
+
+======================================================================
+FAIL: test_replay_never_extracts_executes_or_opens_producer_paths (w10_review_original_test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_never_extracts_executes_or_opens_producer_paths)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/test_p06_counter_public_replay.py", line 377, in test_replay_never_extracts_executes_or_opens_producer_paths
+    result = replay.replay_archive(self.changed_path, digest, expected_revision=self.revision)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/p06_counter_public_replay.py", line 261, in replay_archive
+    readers = _reader_sources()
+              ^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/p06_counter_public_replay.py", line 104, in _reader_sources
+    rows = diagnostics._reader_sources()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/p06_counter_diagnostics_replay.py", line 107, in _reader_sources
+    path = Path(module.__file__).resolve()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/test_p06_counter_public_replay.py", line 353, in call
+    guard(path)
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/test_p06_counter_public_replay.py", line 348, in guard
+    self.assertFalse(str(candidate) in identities or any(candidate == root or root in candidate.parents
+AssertionError: True is not false : opened or resolved producer path: /workspace/scratch/98908dfa3444/AI-GPU/ci/project/baseline_inventory.py
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.865s
+
+FAILED (failures=2)
+EXPECTED-FAILURE REPRODUCTION VERIFIED: 2 targeted original guards fail at exact current baseline_inventory.py under forced collocation
+
+FINAL HASH-BOUND INDEPENDENT TARGETED TEST RUN {'ci/project/test_p06_counter_diagnostics_replay.py': 'e5ac78f0662d8d32c93b3d518a934b7dd57c6d04af81fe1264fae8f3a8754874', 'ci/project/test_p06_counter_public_replay.py': 'f1c5f13b34794f3cb53c96fce68236445591ac6446436ecbed27d3566be776ec'}
+Command equivalent: PYTHONPATH=ci/project python3 -B -m unittest -v test_p06_counter_diagnostics_replay.ProducerPathGuardTests test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_never_opens_producer_paths_extracts_or_executes_retained_code test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_never_extracts_executes_or_opens_producer_paths test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout
+test_active_helper_resolution_rejects_sibling_access_and_ancestor_reads (test_p06_counter_diagnostics_replay.ProducerPathGuardTests.test_active_helper_resolution_rejects_sibling_access_and_ancestor_reads) ... ok
+test_current_helper_allowance_rejects_write_capable_opens (test_p06_counter_diagnostics_replay.ProducerPathGuardTests.test_current_helper_allowance_rejects_write_capable_opens) ... ok
+test_replay_never_opens_producer_paths_extracts_or_executes_retained_code (test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_never_opens_producer_paths_extracts_or_executes_retained_code) ... ok
+test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout (test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout) ... ok
+test_replay_never_extracts_executes_or_opens_producer_paths (test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_never_extracts_executes_or_opens_producer_paths) ... ok
+test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout (test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 4.156s
+
+OK
+Independent targeted summary: {'tests': 6, 'subtests': 350, 'failures': 0, 'errors': 0, 'skips': 0, 'elapsed_seconds': 4.278}
+FINAL TARGETED TEST HASH STABILITY: PASS
+
+INDEPENDENT ADVERSARIAL AND GENUINE REPLAY PROBES AT FINAL TWO-FILE HASHES
+test_actual_replay_rejects_changed_current_reader_snapshot (__main__.IndependentGuardReview.test_actual_replay_rejects_changed_current_reader_snapshot) ... 
+  test_actual_replay_rejects_changed_current_reader_snapshot (__main__.IndependentGuardReview.test_actual_replay_rejects_changed_current_reader_snapshot) (reader='p06_counter_diagnostics_replay') ... FAIL
+test_exact_independent_allowlists_and_protected_bytes (__main__.IndependentGuardReview.test_exact_independent_allowlists_and_protected_bytes) ... ok
+test_genuine_latest_archive_and_manifest_replay_under_forced_collocation (__main__.IndependentGuardReview.test_genuine_latest_archive_and_manifest_replay_under_forced_collocation) ... 
+  test_genuine_latest_archive_and_manifest_replay_under_forced_collocation (__main__.IndependentGuardReview.test_genuine_latest_archive_and_manifest_replay_under_forced_collocation) (reader='checked-counters') ... FAIL
+  test_genuine_latest_archive_and_manifest_replay_under_forced_collocation (__main__.IndependentGuardReview.test_genuine_latest_archive_and_manifest_replay_under_forced_collocation) (reader='public-counters') ... ERROR
+test_nested_resolution_uses_only_top_scope_and_restores_after_exception (__main__.IndependentGuardReview.test_nested_resolution_uses_only_top_scope_and_restores_after_exception) ... ok
+test_normal_scope_closes_and_prefix_metadata_variants_are_denied (__main__.IndependentGuardReview.test_normal_scope_closes_and_prefix_metadata_variants_are_denied) ... ok
+test_original_fixture_sentinels_remain_live (__main__.IndependentGuardReview.test_original_fixture_sentinels_remain_live) ... ok
+test_outer_resolution_exception_also_restores_denial (__main__.IndependentGuardReview.test_outer_resolution_exception_also_restores_denial) ... ok
+
+======================================================================
+ERROR: test_genuine_latest_archive_and_manifest_replay_under_forced_collocation (__main__.IndependentGuardReview.test_genuine_latest_archive_and_manifest_replay_under_forced_collocation) (reader='public-counters')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/p06_counter_source_inventory.py", line 885, in load_source_inventory
+    with PacketReader(selected.parent, max_total_bytes=MAX_MANIFEST_BYTES, max_files=1) as reader:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/baseline_packet_io.py", line 225, in __init__
+    self._root = _DirectoryChain(root)
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/baseline_packet_io.py", line 178, in __init__
+    _require_nofollow()
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/baseline_packet_io.py", line 137, in _require_nofollow
+    raise PacketError("this platform cannot enforce no-follow packet access")
+baseline_packet_io.PacketError: this platform cannot enforce no-follow packet access
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<stdin>", line 227, in test_genuine_latest_archive_and_manifest_replay_under_forced_collocation
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/p06_counter_public_replay.py", line 263, in replay_archive
+    expected_inventory = diagnostics.load_expected_inventory(source_inventory, source_inventory_sha256,
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/p06_counter_diagnostics_replay.py", line 127, in load_expected_inventory
+    return source_inventory_contract.load_source_inventory(path, expected_sha256=sha256,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/98908dfa3444/AI-GPU/ci/project/p06_counter_source_inventory.py", line 888, in load_source_inventory
+    raise SourceInventoryError("external source inventory cannot be read safely: " + str(error)) from error
+p06_counter_source_inventory.SourceInventoryError: external source inventory cannot be read safely: this platform cannot enforce no-follow packet access
+
+======================================================================
+FAIL: test_actual_replay_rejects_changed_current_reader_snapshot (__main__.IndependentGuardReview.test_actual_replay_rejects_changed_current_reader_snapshot) (reader='p06_counter_diagnostics_replay')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<stdin>", line 280, in test_actual_replay_rejects_changed_current_reader_snapshot
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_genuine_latest_archive_and_manifest_replay_under_forced_collocation (__main__.IndependentGuardReview.test_genuine_latest_archive_and_manifest_replay_under_forced_collocation) (reader='checked-counters')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<stdin>", line 235, in test_genuine_latest_archive_and_manifest_replay_under_forced_collocation
+AssertionError: 3 != 2
+
+----------------------------------------------------------------------
+Ran 7 tests in 2.687s
+
+FAILED (failures=2, errors=1)
+Independent probe summary: {"elapsed_seconds": 2.687, "errors": 1, "failures": 2, "methods": 7, "skips": 0, "subtests": 300}
+Traceback (most recent call last):
+  File "<stdin>", line 326, in <module>
+AssertionError
+
+CORRECTION TO REVIEWER-ONLY PROBE ASSUMPTIONS: checked source snapshots are initial/result/final; preserve capabilities of forwarded os.open/os.stat wrappers. No production/test file modified.
+test_changed_final_current_reader_snapshot_is_rejected (__main__.CorrectedReplayProbes.test_changed_final_current_reader_snapshot_is_rejected) ... ok
+test_genuine_selected_archive_and_manifest_with_capability_faithful_wrappers (__main__.CorrectedReplayProbes.test_genuine_selected_archive_and_manifest_with_capability_faithful_wrappers) ... GENUINE GUARDED REPLAY FINAL: {"acceptance": false, "actual_manifest_os_open_nofollow_readonly_verified": false, "archive_data_files": 1046, "archive_sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb", "capability_membership_preserves_original_forwarded_functions_only": true, "cells_checked": 7, "commands_checked": 17, "current_pinned_archive_reader_exec_count": 1, "full_warm_coverage": false, "io_open_counts_minimum_per_reader_source": 3, "native_execution": "not_run", "opened_exact_helpers": 26, "outcome": "pass", "performance_acceptance": false, "phase_acceptance": false, "qualified": false, "reader": "checked-counters", "reader_snapshot_calls": {"checked": 3, "public": 0}, "reader_snapshots_identical": true, "ready_for_warm": false, "retained_code_executed": false, "retained_source_files": 270, "selected_archive_opened": true, "selected_manifest_opened": false, "source_inventory_manifest_sha256": null, "unrelated_opened_paths": [], "warm_execution": false}
+
+  test_genuine_selected_archive_and_manifest_with_capability_faithful_wrappers (__main__.CorrectedReplayProbes.test_genuine_selected_archive_and_manifest_with_capability_faithful_wrappers) (reader='public-counters') ... FAIL
+
+======================================================================
+FAIL: test_genuine_selected_archive_and_manifest_with_capability_faithful_wrappers (__main__.CorrectedReplayProbes.test_genuine_selected_archive_and_manifest_with_capability_faithful_wrappers) (reader='public-counters')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<stdin>", line 100, in test_genuine_selected_archive_and_manifest_with_capability_faithful_wrappers
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 2 tests in 2.624s
+
+FAILED (failures=1)
+Corrected independent summary: {"elapsed_seconds": 2.624, "errors": 0, "failures": 1, "methods": 2, "skips": 0, "subtests": 4}
+Traceback (most recent call last):
+  File "<stdin>", line 147, in <module>
+AssertionError
+
+REVIEWER OBSERVATION CORRECTION: public._reader_sources extends the diagnostic list it receives; copy snapshot rows at observation time so the trace does not alias later list extension. Production unchanged.
+test_genuine_public683_with_copied_observed_source_snapshots (__main__.PublicSnapshotCopyProbe.test_genuine_public683_with_copied_observed_source_snapshots) ... GENUINE GUARDED PUBLIC683 REPLAY FINAL: {"acceptance": false, "actual_manifest_os_open_nofollow_readonly_verified": true, "archive_data_files": 1046, "archive_sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb", "capability_membership_preserves_original_forwarded_functions_only": true, "cells_checked": 6, "commands_checked": 14, "current_pinned_archive_reader_exec_count": 1, "full_warm_coverage": false, "io_open_counts_minimum_per_reader_source": 2, "native_execution": "not_run", "observed_snapshot_values_copied_before_public_closure_extends_list": true, "opened_exact_helpers": 29, "outcome": "pass", "performance_acceptance": false, "phase_acceptance": false, "qualified": false, "reader": "public-counters", "reader_snapshot_calls": {"checked": 4, "public": 2}, "reader_snapshot_source_counts": {"checked": [25, 25, 25, 25], "public": [28, 28]}, "reader_snapshots_identical": true, "ready_for_warm": false, "retained_code_executed": false, "retained_source_files": 683, "selected_archive_opened": true, "selected_manifest_opened": true, "source_inventory_manifest_sha256": "bd81faa7590e053685dfa78d8baa41478969c3b4ec750646cddb5796b949ba0c", "unrelated_opened_paths": [], "warm_execution": false}
+ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.191s
+
+OK
+Final public snapshot-copy probe: {"elapsed_seconds": 1.191, "errors": 0, "failures": 0, "methods": 1, "skips": 0}
+ALL INDEPENDENT PROBE CATEGORIES HAVE PASSED; HISTORICAL REVIEWER-HARNESS FAILURES RETAINED
+
+ROOT-REQUESTED EXEC IDENTITY NEGATIVE: compile exact pinned parser bytes plus an extra marker statement under the identical trusted co_filename; source bytes remain unchanged.
+OPEN FINDING: {"appended_untrusted_marker_executed": true, "co_filename": "/workspace/scratch/98908dfa3444/AI-GPU/docs/project/evidence/p05-torch/reviews/archive_reader.py", "fixture": "CounterDiagnosticsReplayTests", "genuine_replay_fixture_passed": true, "pinned_parser_source_unchanged": true}
+OPEN FINDING: {"appended_untrusted_marker_executed": true, "co_filename": "/workspace/scratch/98908dfa3444/AI-GPU/docs/project/evidence/p05-torch/reviews/archive_reader.py", "fixture": "OriginalPublicReplayTests", "genuine_replay_fixture_passed": true, "pinned_parser_source_unchanged": true}
+REVIEW APPROVAL WITHHELD UNTIL EXECUTABLE IDENTITY IS BOUND AND THIS NEGATIVE IS REJECTED
+
+FINAL EXEC-IDENTITY REPAIRED HASH-BOUND INDEPENDENT FOCUSED RUN
+Final hashes: {"ci/project/test_p06_counter_diagnostics_replay.py": "c8d213737b6332a5e6c924114b3e403a2ddcea3e0a2eac2f1fd431a5f4842430", "ci/project/test_p06_counter_public_replay.py": "241299ec7abfbbafe857c9d23ea10a0350b2606b10af4d942912780068d01a5d"}
+Command equivalent: PYTHONPATH=ci/project python3 -B -m unittest -v test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_rejects_forged_archive_parser_before_any_execution test_p06_counter_diagnostics_replay.ProducerPathGuardTests.test_active_helper_resolution_rejects_sibling_access_and_ancestor_reads test_p06_counter_diagnostics_replay.ProducerPathGuardTests.test_current_helper_allowance_rejects_write_capable_opens test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_never_opens_producer_paths_extracts_or_executes_retained_code test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_rejects_forged_archive_parser_before_any_execution test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_never_extracts_executes_or_opens_producer_paths
+test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout (test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout) ... ok
+test_replay_rejects_forged_archive_parser_before_any_execution (test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_rejects_forged_archive_parser_before_any_execution) ... ok
+test_active_helper_resolution_rejects_sibling_access_and_ancestor_reads (test_p06_counter_diagnostics_replay.ProducerPathGuardTests.test_active_helper_resolution_rejects_sibling_access_and_ancestor_reads) ... ok
+test_current_helper_allowance_rejects_write_capable_opens (test_p06_counter_diagnostics_replay.ProducerPathGuardTests.test_current_helper_allowance_rejects_write_capable_opens) ... ok
+test_replay_never_opens_producer_paths_extracts_or_executes_retained_code (test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_never_opens_producer_paths_extracts_or_executes_retained_code) ... ok
+test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout (test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout) ... ok
+test_replay_rejects_forged_archive_parser_before_any_execution (test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_rejects_forged_archive_parser_before_any_execution) ... ok
+test_replay_never_extracts_executes_or_opens_producer_paths (test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_never_extracts_executes_or_opens_producer_paths) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 4.956s
+
+OK
+FINAL INDEPENDENT TARGETED RESULT: {"elapsed_seconds": 5.043, "errors": 0, "failures": 0, "skips": 0, "subtests": 670, "test_names": ["test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout", "test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_rejects_forged_archive_parser_before_any_execution", "test_p06_counter_diagnostics_replay.ProducerPathGuardTests.test_active_helper_resolution_rejects_sibling_access_and_ancestor_reads", "test_p06_counter_diagnostics_replay.ProducerPathGuardTests.test_current_helper_allowance_rejects_write_capable_opens", "test_p06_counter_diagnostics_replay.CounterDiagnosticsReplayTests.test_replay_never_opens_producer_paths_extracts_or_executes_retained_code", "test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_allows_only_current_helpers_when_producer_root_is_current_checkout", "test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_rejects_forged_archive_parser_before_any_execution", "test_p06_counter_public_replay.OriginalPublicReplayTests.test_replay_never_extracts_executes_or_opens_producer_paths"], "tests": 8}
+FINAL TARGETED HASH STABILITY: PASS
+
+FINAL EXEC IDENTITY AND GENUINE REPLAY INDEPENDENT PROBES
+test_compiled_identity_rejects_forged_and_nested_omitted_fields_before_dispatch (__main__.FinalIndependentProbes.test_compiled_identity_rejects_forged_and_nested_omitted_fields_before_dispatch) ... ok
+test_latest_original_replays_with_final_path_and_compiled_exec_guards (__main__.FinalIndependentProbes.test_latest_original_replays_with_final_path_and_compiled_exec_guards) ... FINAL GUARDED GENUINE REPLAY: {"acceptance": false, "archive_sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb", "cells_checked": 7, "commands_checked": 17, "current_compiled_parser_executions": 1, "full_warm_coverage": false, "manifest_sha256": null, "minimum_actual_source_reads": 3, "native_execution": "not_run", "no_follow_manifest_calls_verified": false, "opened_exact_helpers": 26, "outcome": "pass", "performance_acceptance": false, "phase_acceptance": false, "qualified": false, "reader": "checked-counters", "reader_snapshot_calls": {"checked": 3, "public": 0}, "reader_snapshots_identical": true, "ready_for_warm": false, "retained_code_executed": false, "retained_source_files": 270, "selected_archive_opened": true, "selected_manifest_opened": false, "unrelated_opens": [], "warm_execution": false}
+FINAL GUARDED GENUINE REPLAY: {"acceptance": false, "archive_sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb", "cells_checked": 6, "commands_checked": 14, "current_compiled_parser_executions": 1, "full_warm_coverage": false, "manifest_sha256": "bd81faa7590e053685dfa78d8baa41478969c3b4ec750646cddb5796b949ba0c", "minimum_actual_source_reads": 2, "native_execution": "not_run", "no_follow_manifest_calls_verified": true, "opened_exact_helpers": 29, "outcome": "pass", "performance_acceptance": false, "phase_acceptance": false, "qualified": false, "reader": "public-counters", "reader_snapshot_calls": {"checked": 4, "public": 2}, "reader_snapshots_identical": true, "ready_for_warm": false, "retained_code_executed": false, "retained_source_files": 683, "selected_archive_opened": true, "selected_manifest_opened": true, "unrelated_opens": [], "warm_execution": false}
+ok
+test_previous_complete_forged_loader_exploit_is_rejected_without_effects (__main__.FinalIndependentProbes.test_previous_complete_forged_loader_exploit_is_rejected_without_effects) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 4.437s
+
+OK
+FINAL IDENTITY/REPLAY PROBE RESULT: {"elapsed_seconds": 4.437, "errors": 0, "failures": 0, "methods": 3, "skips": 0, "subtests": 15}
+FINAL TEST/PRODUCTION/ORIGINAL HASH STABILITY AND EXEC FINDING DISPOSITION: PASS
+
+FINAL R3 DISPOSITION: F2-01 and F2-02 resolved; exact c8d213737b6332a5e6c924114b3e403a2ddcea3e0a2eac2f1fd431a5f4842430 / 241299ec7abfbbafe857c9d23ea10a0350b2606b10af4d942912780068d01a5d files suitable for test-only checkpoint publication and clean hosted retry. Local root-created commit 142b2d6aaea2fa4226118b857514113032d2e26c independently matches exact two-file patch. Hosted full-suite retry remains pending. All qualification/warm/acceptance claims remain false.
