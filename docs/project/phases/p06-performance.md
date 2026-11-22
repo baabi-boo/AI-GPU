@@ -80,10 +80,23 @@ paired circuit measurements and raw RV64 area failures. The
 closes the concrete comparison finding and selects the direct decoder. Broader
 CI and publication remain separately tracked; no overall CI success is asserted.
 
-**Next development action:** implement and independently review the
-[versioned qualification binding](../p06-mpm-qualification-plan.md), using the
-[transport handoff](../p06-mpm-transport-handoff.md) for source/evidence scope. Run a fresh
-complete matched warm attempt only under that reviewed binding and unchanged
+The [checked-counter prerequisite](../../designs/simx_checked_counters_v1.md)
+is implemented at `9fd7eac203c77fa54c7af80fa0220ae09553cd55`. Its
+[reviewed original native packet](../evidence/p06-checked-counters/reviews/native-review.md)
+supports five directed cells, with ordinary and checked builds compiling
+44 translation units each. Native boundary coverage seeds nineteen available
+selectors; fourteen available selectors remain unseeded and twelve L2/L3 rows
+remain unavailable. Guarded source updates and formed aggregates do not
+establish a complete aggregate lifetime bound, native public snapshot coherence
+or warm readiness. The [development handoff](../p06-checked-counters-handoff.md)
+records the remaining proof and diagnostic sequence.
+
+**Next development action:** close and independently review the terminal
+`before_release` lifetime and ownership argument, complete the fourteen remaining
+native backing-source diagnostics and actual public failure/coherence checks,
+then implement the separately versioned
+[qualification binding](../p06-mpm-qualification-plan.md). Run a fresh complete
+matched warm attempt only under that reviewed binding and unchanged
 statistical rules: **24 processes, 792 launches and 25,344 exact output words**.
 Preserve the v1 block and original cold baseline; source repair cannot recover
 missing historical high bits. Keep the two-job, 4 GiB memory and 15 GiB disk
@@ -144,6 +157,7 @@ After the P06 gates are accepted, hand P07 the selected configuration,
 constraints, bounded workloads, memory-map assumptions and reproducible reports.
 P07 also requires P01's vendor integration gate. Update [status](../status.md)
 and [backlog](../backlog.md) as each gate earns evidence. The current next action
-is the versioned qualification binding and fresh matched warm execution
-above, with transport publication/integration tracked separately. A documented board-readiness decision
-and physical implementation plan follow later.
+is the terminal lifetime proof and remaining native counter diagnostics
+described above, followed by the versioned qualification binding and fresh
+matched warm execution. A documented board-readiness decision and physical
+implementation plan follow later.

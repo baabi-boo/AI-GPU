@@ -45,13 +45,25 @@ The earlier `db5ebb3` native and 2,988-test receipts remain historical. The
 [evidence packet](evidence/p06-simulator-completion/README.md) records each result's
 source and scope, including the later documentation/evidence source projection.
 
-The next development is the [exact counter qualification contract](p06-mpm-qualification-plan.md):
-all 33 available selectors, coherent reads and an enforceable cumulative no-wrap
-proof, followed only then by a fresh complete warm attempt. The
+The [checked-counter prerequisite](../designs/simx_checked_counters_v1.md) is now
+implemented in published checkpoint `9fd7eac203c77fa54c7af80fa0220ae09553cd55`.
+It guards the selected SimX storage and formed aggregates, raising typed errors
+through the existing terminal processor-failure path. Ordinary builds retain
+the exact `uint64_t` alias. The [development audit](p06-checked-counters-audit.md)
+separates the actual **3,062-test hosted governance pass** from the independently
+reviewed five-cell native pass, both at `9fd7eac20`. The native run is
+`45017731063`, attempt 1; the [governance receipt](evidence/p06-checked-counters/hosted/governance-index.json)
+records run `45017731138`, attempt 1.
+
+The next development is to qualify that guard's [exact counter route](p06-mpm-qualification-plan.md):
+all 33 available selectors, coherent reads and a complete cumulative lifetime
+argument, followed only then by a fresh complete warm attempt. Guarded source
+components and successful aggregate reads do not alone establish a bound on
+unobserved aggregate totals. The
 [implemented warm v1 contract](../designs/warm_workspace_benchmark_v1.md) remains
 unconditionally blocked by `P06-WARM-RV64-MPM-HIGH-HALF`, with `qualified=false`
-and no absolute no-wrap bound. No counter guard, warm speedup or new P06 gate is
-established by the completion repair.
+and `absolute_no_wrap_bound="not_established"`. No warm speedup or new P06 gate
+is established by this prerequisite.
 
 **P04 is complete for the fixed tiny-model contract.**
 [P04-A01](evidence/p04-fixture/acceptance.json) retains its accepted source scope;
@@ -120,7 +132,7 @@ the linked reports define the exact accepted scope.
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
 | P04 — tiny-model inference | `complete` | A01 fixed fixture preserved; A02/A03 accept the full four-variant composed-model matrix at native processor RTL scope |
 | P05 — Python/framework bridge | `in_progress` | A01 accepts the bounded copying Python binding on SimX; the custom-op implementation and prior CI still need independent artifact review for A02/A03 |
-| P06 — Memory and performance scaling | `in_progress` | A01 cold acceptance, original workspace correctness and reviewed RV64 transport evidence are preserved; repaired completion/teardown and CP-error behavior have independent host/native review at `4781ca9`; counter/coherence/no-wrap qualification and A02/A03 remain open |
+| P06 — Memory and performance scaling | `in_progress` | A01 cold acceptance, workspace correctness, RV64 transport and repaired completion evidence remain preserved; the opt-in checked-counter prerequisite has independent source review and focused host tests, while native counter/coherence/lifetime qualification and A02/A03 remain open |
 | P07–P11 | `not_started` | Later hardware, reliability, research and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -129,7 +141,69 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — simulator completion prerequisite
+## Latest continuation — checked counter prerequisite
+
+The [counter audit](p06-checked-counters-audit.md) selected checked arithmetic as
+the next prerequisite after the high-half transport and simulator completion
+repairs. `SIMX_CHECKED_COUNTERS=1` checks the actual selected backing counters,
+pending-read balance and intermediate reductions before overflow or underflow.
+The dedicated `PerfCounterError` follows `run_checked()` and guarded synchronous
+processor queries into persistent failure; it does not terminate the process
+outside the completion owner. The initial abort candidate was rejected during
+independent review and is retained only as historical work.
+
+The [implemented contract](../designs/simx_checked_counters_v1.md) covers audited
+stored updates and successfully formed aggregates. It does not claim a complete
+context-lifetime bound from process success alone. The
+[integrated review](evidence/p06-checked-counters/reviews/integrated-review.md)
+found no open F2/F3 in its bounded scope. The
+[publication map](evidence/p06-checked-counters/publication.json) records exact
+file-tree equivalence between reviewed local and published checkpoints; it does
+not relabel earlier executions as runs under a later commit identity.
+
+The implementation-stage runs passed **64 focused host test methods**:
+
+| Suite | Methods | Scope |
+|---|---:|---|
+| Counter primitive and completion owner | 12 | Release/UBSan arithmetic, unchanged rejected values and actual `AsyncRun` failure retention |
+| Production statistics integration | 6 | 48 field types, layout parity, actual aggregate operators and harness syntax |
+| Native-runner enforcement | 27 | Real temporary identities with explicitly mocked native process execution |
+| Hosted workflow contract | 14 | Actual preflight/interpreter bodies, failure pipelines and trust/resource invariants |
+| Public counter-fault transport | 5 | Ten RAM/LLC cells through the actual runtime/backend/CP, with controlled Processor/RAM |
+
+Five additional executing-interpreter tests extend the existing transport-runner
+suite. These are separately scoped host results on their recorded input bytes.
+The [immutable full-governance receipt](evidence/p06-checked-counters/local/governance-53f4ad08c/index.json)
+records **3,043 passing tests in 1,647.227 seconds** at actual local checkpoint
+`53f4ad08c469a1cc73fa604249b302f9416055e0`, with source and Python identity stable.
+Its tree `80553bb237af44b187dd6d18178e851cd6671ec8` is identical to published
+`a9227933c340fd44e73deaffafdd353fecf65492`; the receipt retains the actual local
+execution identity. The 19 later workflow/public-runtime methods passed
+separately. Those earlier results are not relabeled as a later full-suite run.
+The subsequent [actual hosted governance receipt](evidence/p06-checked-counters/hosted/governance-index.json)
+independently records **3,062 passing tests in 1,295.925 seconds** at published
+`9fd7eac`, run `45017731138`, attempt 1, with zero failures/errors/skips and
+successful job cleanup. Its original log passed independent review.
+
+The [dedicated native run 45017731063](https://github.com/baabi-boo/AI-GPU/actions/runs/45017731063)
+passed at published `9fd7eac203c77fa54c7af80fa0220ae09553cd55`, attempt 1.
+The [independent original-packet review](evidence/p06-checked-counters/reviews/native-review.md)
+confirms both real builds, 44 translation units and one link per variant, and
+all five cells. The boundary matrix seeds **19 available selectors**, leaving
+**14 available selectors unseeded** and **12 unavailable**. The other cells
+exercise an actual Core updater fault with fresh-context success, a production
+cache aggregate fault and a separately scoped pending-counter primitive fault.
+The original source, configuration, command and log bindings passed independent
+review. Local native execution remains separately blocked by the unchanged
+15 GiB disk reserve. The successful hosted packet keeps `qualified=false` and
+`ready_for_warm=false`.
+
+Complete the remaining backing-source coverage, native public failure/coherence
+checks and terminal aggregate-lifetime proof before a new qualification reader
+can admit a fresh warm attempt. Historical warm-v1 rejection, accepted cold
+results, statistical predicates and P06-A02/A03 remain unchanged.
+
+## Previous continuation — simulator completion prerequisite
 
 The [audit](p06-simulator-completion-audit.md) begins at
 `42809ff0c1b81384d7c9b079e4ef786be8407600`. SimX's legacy run swallowed model
@@ -998,23 +1072,30 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**P06-T01 — freeze and independently review the exact counter-qualification
-contract.** The [completion packet](evidence/p06-simulator-completion/README.md)
-now has fresh independently reviewed native evidence for repaired `4781ca9`,
-alongside its host and parent controls. Preserve the recorded source scopes,
-failed controls and 15 GiB native disk reserve.
+**P06-T01 — qualify the implemented checked-counter route and its complete
+lifetime before collecting new warm results.** Start with the
+[counter audit](p06-checked-counters-audit.md),
+[arithmetic/failure contract](../designs/simx_checked_counters_v1.md) and
+[qualification plan](p06-mpm-qualification-plan.md). The original five-cell native
+packet has passed independent behavior and source/build review; its directed
+transport coverage remains nineteen seeded selectors out of 33 required sources.
 
-The next implementation is the [versioned qualification route](p06-mpm-qualification-plan.md)
-for the exact RV64 `p02-tfr`, timing SimX, `PERF=1` configuration. Independently
-review a source-bound contract covering all **33 available counter selectors**,
-the 12 unavailable L2/L3 rows, coherent two-half reads and an enforceable absolute
-bound over the entire cumulative context lifetime. Existing representative
-TCU-disabled transport tests cover only five of those 33 SimX sources; the
-launch-relative clock cannot bound cumulative counters across resets. No guard
-or absolute bound is implemented by the completion repair. Reject historical
-packets or mismatched source/configuration/tools/binaries on the future route,
-and preserve v1 `qualified=false` and
-`absolute_no_wrap_bound="not_established"`.
+Complete the **fourteen remaining available backing-source diagnostics** and
+native public counter-failure/coherence checks in the exact RV64 `p02-tfr`,
+timing SimX, `PERF=1` route. Keep the twelve unavailable L2/L3 rows explicit.
+Freeze and independently review a terminal aggregate-lifetime argument: checked
+component updates plus a complete quiescent terminal read can bound earlier
+aggregates only with proved monotonicity and no later model updates. Bind serial
+submission ownership and exact teardown/dependency behavior; device-release
+success alone is not a drain certificate. The plan records the remaining proof
+edges.
+
+Then implement the separately versioned qualification reader with complete
+source/configuration/compiler/tool/binary and original command bindings. Reject
+missing, stale, partial or mismatched evidence, including invalid terminal
+observations or cleanup. Preserve v1 `qualified=false` and
+`absolute_no_wrap_bound="not_established"`; new guards cannot repair historical
+high bits or qualify earlier binaries.
 
 Run a fresh complete matched warm attempt only under the reviewed qualification
 route and unchanged [sampling/rejection rules](../designs/warm_workspace_benchmark_v1.md):

@@ -217,10 +217,15 @@ failures; the immutable governance suite passes 2,910 tests. Paired circuit
 measurements and the concrete alternative comparison are reviewed: retain the
 direct decoder, with raw RV64 area failures preserved. Broader CI and publication
 remain separately tracked in the [transport packet](docs/project/evidence/p06-mpm-transport/README.md).
-The next development action is to implement and independently review the
-[versioned qualification binding](docs/project/p06-mpm-qualification-plan.md),
-followed by a fresh complete matched warm experiment under unchanged rules. The
-[transport handoff](docs/project/p06-mpm-transport-handoff.md) records the route.
+The [checked-counter prerequisite](docs/designs/simx_checked_counters_v1.md)
+is now implemented, with [independently reviewed native evidence](docs/project/evidence/p06-checked-counters/reviews/native-review.md)
+for five directed cells at `9fd7eac203c77fa54c7af80fa0220ae09553cd55`.
+Nineteen available selectors are seeded; fourteen still need native backing-source
+coverage. The next development action is to close the terminal lifetime and
+ownership proof and native public failure/coherence diagnostics, then implement
+the [versioned qualification binding](docs/project/p06-mpm-qualification-plan.md)
+before a fresh complete matched warm experiment under unchanged rules. The
+[development handoff](docs/project/p06-checked-counters-handoff.md) records that sequence.
 P06-A02/A03 remain open; the source repair cannot recover historical high bits
 or establish a warm speedup. P07–P11 remain `not_started`. The
 [executor audit](docs/project/p04-executor-audit.md) preserves the unresolved

@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "scope": "host-governance-only",
+  "source_before": {
+    "revision": "53f4ad08c469a1cc73fa604249b302f9416055e0",
+    "tree": "80553bb237af44b187dd6d18178e851cd6671ec8",
+    "dirty": false,
+    "changed_paths": [],
+    "untracked_paths": [],
+    "submodules": {
+      "entries": [
+        {
+          "path": "third_party/cocogfx",
+          "revision": "b1befdb36df8af7ac9e2c96acaf81957aab5d107",
+          "status": "not_initialized"
+        },
+        {
+          "path": "third_party/cvfpu",
+          "revision": "79e453139072df42c9ec8f697132ba485d74e23d",
+          "status": "not_initialized"
+        },
+        {
+          "path": "third_party/hardfloat",
+          "revision": "aaf5736dffa521603b681fd5853760c671446c85",
+          "status": "not_initialized"
+        },
+        {
+          "path": "third_party/ramulator",
+          "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+          "status": "not_initialized"
+        },
+        {
+          "path": "third_party/softfloat",
+          "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4",
+          "status": "not_initialized"
+        }
+      ],
+      "declared_count": 5,
+      "errors": []
+    },
+    "pins": {
+      "VORTEX_VERSION": "3.0",
+      "TOOLCHAIN_REV": "v3.0.2",
+      "GEM5_REV": "v25.0.0.1",
+      "FIRESIM_REV": "57bb93f1e23daf46198659ddd93608f70121fee0"
+    },
+    "blockers": [
+      "submodule is not at its recorded revision: third_party/cocogfx",
+      "submodule is not at its recorded revision: third_party/cvfpu",
+      "submodule is not at its recorded revision: third_party/hardfloat",
+      "submodule is not at its recorded revision: third_party/ramulator",
+      "submodule is not at its recorded revision: third_party/softfloat"
+    ],
+    "inputs": [
+      {
+        "path": "VERSION",
+        "sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+        "size_bytes": 112
+      },
+      {
+        "path": ".gitmodules",
+        "sha256": "632677b727feb911c5d2fa9d2991d9f87434fc83d99fc4ae15ee8e4556ecbabb",
+        "size_bytes": 575
+      },
+      {
+        "path": "configure",
+        "sha256": "645cdad95c31a959a36c795c37b2b7e4c0202f19c53093aa9067cda3ef23a0be",
+        "size_bytes": 11438
+      },
+      {
+        "path": "config.mk.in",
+        "sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+        "size_bytes": 3264
+      },
+      {
+        "path": "VX_config.toml",
+        "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+        "size_bytes": 30127
+      },
+      {
+        "path": "VX_types.toml",
+        "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+        "size_bytes": 36543
+      },
+      {
+        "path": "ci/gen_config.py",
+        "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+        "size_bytes": 60839
+      },
+      {
+        "path": "ci/blackbox.sh",
+        "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+        "size_bytes": 9153
+      }
+    ],
+    "outcome": "blocked"
+  },
+  "executing_python": {
+    "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "resolved_path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+    "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+    "size_bytes": 30894944
+  },
+  "commands": [
+    {
+      "name": "preflight",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "ci/project/preflight.py",
+        "--tier",
+        "governance"
+      ],
+      "cwd": "/tmp/ai-gpu-checked-verify-53f4ad08c",
+      "outcome": "pass",
+      "exit_code": 0,
+      "reason": null,
+      "process_started": true,
+      "duration_seconds": 0.098327,
+      "log_sha256": "154a6d76d37c719639bcf88916f2134fb586e544369a3922a14e704fd15ac771",
+      "log_size_bytes": 2273,
+      "peak_rss_bytes": 0,
+      "cleanup_complete": true,
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ]
+    },
+    {
+      "name": "structure",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "ci/project/check_project.py"
+      ],
+      "cwd": "/tmp/ai-gpu-checked-verify-53f4ad08c",
+      "outcome": "pass",
+      "exit_code": 0,
+      "reason": null,
+      "process_started": true,
+      "duration_seconds": 1.006772,
+      "log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+      "log_size_bytes": 96,
+      "peak_rss_bytes": 14954496,
+      "cleanup_complete": true,
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ]
+    },
+    {
+      "name": "governance",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/project",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "cwd": "/tmp/ai-gpu-checked-verify-53f4ad08c",
+      "outcome": "pass",
+      "exit_code": 0,
+      "reason": null,
+      "process_started": true,
+      "duration_seconds": 1648.96231,
+      "log_sha256": "e52d80f9df1545219bec0cdbce2dfa428a8d7c5815b1a2d6454436a2bef3fa79",
+      "log_size_bytes": 527529,
+      "peak_rss_bytes": 326823936,
+      "cleanup_complete": true,
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ]
+    }
+  ],
+  "source_after": {
+    "revision": "53f4ad08c469a1cc73fa604249b302f9416055e0",
+    "tree": "80553bb237af44b187dd6d18178e851cd6671ec8",
+    "dirty": false,
+    "changed_paths": [],
+    "untracked_paths": [],
+    "submodules": {
+      "entries": [
+        {
+          "path": "third_party/cocogfx",
+          "revision": "b1befdb36df8af7ac9e2c96acaf81957aab5d107",
+          "status": "not_initialized"
+        },
+        {
+          "path": "third_party/cvfpu",
+          "revision": "79e453139072df42c9ec8f697132ba485d74e23d",
+          "status": "not_initialized"
+        },
+        {
+          "path": "third_party/hardfloat",
+          "revision": "aaf5736dffa521603b681fd5853760c671446c85",
+          "status": "not_initialized"
+        },
+        {
+          "path": "third_party/ramulator",
+          "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+          "status": "not_initialized"
+        },
+        {
+          "path": "third_party/softfloat",
+          "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4",
+          "status": "not_initialized"
+        }
+      ],
+      "declared_count": 5,
+      "errors": []
+    },
+    "pins": {
+      "VORTEX_VERSION": "3.0",
+      "TOOLCHAIN_REV": "v3.0.2",
+      "GEM5_REV": "v25.0.0.1",
+      "FIRESIM_REV": "57bb93f1e23daf46198659ddd93608f70121fee0"
+    },
+    "blockers": [
+      "submodule is not at its recorded revision: third_party/cocogfx",
+      "submodule is not at its recorded revision: third_party/cvfpu",
+      "submodule is not at its recorded revision: third_party/hardfloat",
+      "submodule is not at its recorded revision: third_party/ramulator",
+      "submodule is not at its recorded revision: third_party/softfloat"
+    ],
+    "inputs": [
+      {
+        "path": "VERSION",
+        "sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+        "size_bytes": 112
+      },
+      {
+        "path": ".gitmodules",
+        "sha256": "632677b727feb911c5d2fa9d2991d9f87434fc83d99fc4ae15ee8e4556ecbabb",
+        "size_bytes": 575
+      },
+      {
+        "path": "configure",
+        "sha256": "645cdad95c31a959a36c795c37b2b7e4c0202f19c53093aa9067cda3ef23a0be",
+        "size_bytes": 11438
+      },
+      {
+        "path": "config.mk.in",
+        "sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+        "size_bytes": 3264
+      },
+      {
+        "path": "VX_config.toml",
+        "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+        "size_bytes": 30127
+      },
+      {
+        "path": "VX_types.toml",
+        "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+        "size_bytes": 36543
+      },
+      {
+        "path": "ci/gen_config.py",
+        "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+        "size_bytes": 60839
+      },
+      {
+        "path": "ci/blackbox.sh",
+        "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+        "size_bytes": 9153
+      }
+    ],
+    "outcome": "blocked"
+  },
+  "source_stable": true,
+  "executing_python_after": {
+    "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "resolved_path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+    "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+    "size_bytes": 30894944
+  },
+  "qualified": false,
+  "native_execution": false
+}

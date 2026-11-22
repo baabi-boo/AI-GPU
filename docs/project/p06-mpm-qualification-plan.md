@@ -2,13 +2,15 @@
 
 ## Decision and current boundary
 
-**Next bounded development: freeze and independently review a versioned
-counter, coherence and lifetime contract for the exact 33-selector RV64
-`p02-tfr`, timing SimX, `PERF=1` warm route.** Then implement the reviewed narrow
-guard and qualification reader, qualify their actual native/public execution,
-and collect one fresh complete matched warm attempt. This is a prospective
-plan: the guard, qualification record and new evidence format described below
-are not implemented, and no absolute no-wrap bound is established by this document.
+**Next bounded development: close and independently review the terminal
+snapshot/lifetime argument for the exact 33-selector RV64 `p02-tfr`, timing
+SimX, `PERF=1` route; complete the remaining native selector and public-failure
+diagnostics; then implement a separately versioned qualification reader.**
+The [checked-counter prerequisite](../designs/simx_checked_counters_v1.md) is now
+implemented. It guards audited stored updates and formed aggregates, but does
+not itself establish a complete context-lifetime bound, all-33 native transport,
+coherent public snapshots or warm readiness. The qualification record/reader
+and fresh complete matched warm attempt remain future work.
 
 The [transport audit](p06-mpm-transport-audit.md) identifies the original RV64
 high-half defect and paired SimX/RTL repair. The
@@ -29,6 +31,48 @@ The [warm v1 contract](../designs/warm_workspace_benchmark_v1.md), its
 behavior, original cold execution pins and accepted archives. Missing historical
 high bits cannot be recovered from low words.
 
+## Implemented checked-counter prerequisite
+
+The [development audit](p06-checked-counters-audit.md) selected checked
+arithmetic after source review of all 33 available counter paths. Published
+checkpoint [9fd7eac20](https://github.com/baabi-boo/AI-GPU/commit/9fd7eac203c77fa54c7af80fa0220ae09553cd55)
+contains the opt-in guard, model integration, directed native runner and host
+tests. The original reviewed local implementation checkpoint `53f4ad08c` and
+published parent `a9227933c` have the same file tree; their commit identities
+remain distinct. Keep every execution receipt attached to its actual original
+source, rather than relabeling a local run as a published-commit execution.
+The immutable local governance suite passed 3,043 tests at `53f4ad08c`.
+The later [hosted governance receipt](evidence/p06-checked-counters/hosted/governance-index.json)
+records a distinct **3,062-test pass** at actual published `9fd7eac20`, run
+`45017731138`, attempt 1. Independent original-log review establishes that
+later count without relabeling or adding earlier executions.
+
+`SIMX_CHECKED_COUNTERS=1` selects checked counter storage and accumulation;
+ordinary builds retain the exact `uint64_t` alias. Overflow, underflow and
+negative operands throw `PerfCounterError` before the rejected primitive
+changes. The processor completion owner makes those failures terminal. An
+aggregate may have earlier successful member updates before a later member
+throws; failed-context reuse and publication of a partial snapshot remain
+forbidden.
+
+| Implemented verification | Established scope | Remaining boundary |
+|---|---|---|
+| [Primitive tests](../../ci/project/test_p06_checked_counter.py) | Release arithmetic, typed failure, unchanged rejected values, ordinary compatibility and actual `AsyncRun` containment | No native processor or public-runtime execution |
+| [Production-header tests](../../ci/project/test_p06_checked_integration.py) | Actual counter field types/layouts and aggregate operators | Syntax/header checks do not link or run the model |
+| [Controlled public-fault tests](../../ci/project/test_p06_checked_public.py) | Actual runtime, CP, backend, events, queries and cleanup with real counter exceptions | Processor/RAM are controlled substitutes; no native backing-source fault injection |
+| [Native runner](../../ci/project/p06_checked_execute.py) and [workflow](../../.github/workflows/p06-checked-counters.yml) | Actual fresh ordinary/checked builds and all five cells pass at `9fd7eac…`; independent original-packet review confirms source/build/command bindings | Nineteen seeded selectors; no complete lifetime or native public-runtime qualification |
+
+Dedicated [run 45017731063, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45017731063)
+at `9fd7eac20` **passed all five native cells**. The
+[independent original-packet review](evidence/p06-checked-counters/reviews/native-review.md)
+confirms behavior and exact source/build bindings, including 264 retained
+source files and 44 compiled translation units plus one link in each mode.
+The [evidence index](evidence/p06-checked-counters/README.md) retains the original
+receipts and review limits. The successful prerequisite keeps `qualified=false`,
+`ready_for_warm=false`, `full_warm_coverage=false` and `warm_execution=false`.
+The local 15 GiB disk block remains a separate blocked result, not an executed
+native control.
+
 ## Completion prerequisite
 
 The [completion contract](../designs/simulator_completion_v1.md) addresses
@@ -46,12 +90,13 @@ The [completion evidence index](evidence/p06-simulator-completion/README.md)
 separates controlled host faults, actual framework checks, built negative
 controls and native execution by exact source. The initial native checkpoint
 `db5ebb3` passed checked-model/fresh-context and public-success controls; the
-subsequent CP error-boundary repair at `4781ca9` requires its own source-bound
-verification. Use the index's receipts and independent review to assess that
-repair; do not relabel the initial packet as later-code evidence. A prospective
-counter guard must use the verified processor-failure path and reach public
-waits persistently. Host injection does not establish native public fault or
-RTL execution. Preserve the 15 GiB native disk reserve.
+subsequent CP error-boundary repair at `4781ca9` has separate source-bound
+receipts. Use the index's receipts and independent review to assess that
+repair; do not relabel the initial packet as later-code evidence. The implemented
+counter guard uses this processor-failure path. Its controlled public tests
+exercise persistent waits/query rejection; native public counter-fault execution
+remains a separate obligation. Host injection does not establish native public
+fault or RTL execution. Preserve the 15 GiB native disk reserve.
 
 ## Exact route and selector gap
 
@@ -96,6 +141,20 @@ selectors of those classes. The
 33**, leaving 14 omissions. Its extra L2/L3 seeds do not make those unavailable
 warm rows available.
 
+The new [checked-counter harness](../../tests/unittest/checked_counters/main.cpp)
+is built in the actual RV64 `p02-tfr`, PERF-enabled timing configuration. Its
+directed transport matrix seeds **19 available selectors**: thirteen Core/base,
+three local-memory, one coalescer and two TCU fields. Each receives ten vectors,
+with both half-read orders, for 760 half reads and 2,749 assertions per boundary
+cell. These are declared harness obligations; an actual execution result must
+come from its source-bound packet.
+
+The **14 remaining available sources** are nine I/D-cache selectors, global
+memory reads/writes/latency/bank stalls, and private TCU-buffer local-memory
+reads. They are explicitly unseeded. The twelve unavailable L2/L3 rows receive
+no query. Neither naturally zero TCU values nor the nineteen seeded sources
+establish all-33 transport coverage.
+
 `memory_bank_st` at class 7, CSR `0xB06`, has a
 [SimX backing source](../../sim/simx/csr_unit.cpp) but no case in the
 [RTL MEM decoder](../../hw/rtl/core/VX_csr_mpm.sv). A future all-33 SimX
@@ -109,17 +168,19 @@ the high-half selector is internal, not a second public CSR argument.
 
 1. **Specify the supported route.** Name the exact RV64 `p02-tfr` SimX timing
    configuration, enabled tensor/performance features, topology and available
-   counter selectors used by the warm experiment. The directed transport tests
-   use stable injected counters and TCU-disabled configurations; extend evidence
-   to the actual warm configuration and each required available selector before
-   claiming that coverage. Preserve architectural CSR semantics and public ABI.
+   counter selectors used by the warm experiment. The earlier transport tests
+   use a TCU-disabled configuration; the new harness selects the warm profile
+   but still leaves fourteen sources unseeded. Complete actual backing-source
+   coverage for every required available selector before claiming all-33
+   transport. Preserve architectural CSR semantics and public ABI.
 2. **Bind evidence to execution.** Define a new versioned qualification record
    that binds reviewed transport evidence and its scope to the complete source
    revision/tree, relevant source bodies, generated configuration, original
    compiler/linker records, tools/dependencies and actual host/runtime/kernel
-   binary identities. Resolve the [standalone interpreter finding](evidence/p06-mpm-transport/reviews/enforcement-review.md)
-   by recording the actual executing interpreter separately from PATH `python3`;
-   the current hosted workflow already requires their equality. Require identical
+   binary identities. The [standalone interpreter finding](evidence/p06-mpm-transport/reviews/enforcement-review.md)
+   is addressed by separately recording the actual executing interpreter and
+   PATH `python3`; consume and verify both identities in the new qualification
+   binding. The hosted workflow requires their equality. Require identical
    binaries for both policies within each format, with before/after stability
    checks. A revision label, caller flag or
    self-asserted qualification ID is insufficient.
@@ -134,8 +195,11 @@ the high-half selector is internal, not a second public CSR argument.
    bound for every required true cumulative counter over the complete interval,
    including initialization, primes, measured calls and teardown observations.
    Bind its assumptions to the executed configuration and reject violations.
-   Observed monotonicity, small reported values, a process timeout or guessed
-   event rates cannot substitute for that proof. Missing bounds remain blocked.
+   Guarded components and formed reads are implemented; the complete aggregate
+   lifetime argument below remains to be closed. Observed monotonicity, small
+   reported values, a process timeout or guessed event rates cannot substitute
+   for source-proved monotonicity and complete lifetime coverage. Missing bounds
+   remain blocked.
 5. **Review rejection and replay behavior.** Keep the frozen v1 path blocked and
    introduce the new qualification path explicitly. Reject old, absent,
    unsupported, truncated, source/configuration/binary-mismatched or unreviewed
@@ -149,59 +213,130 @@ Freeze the new qualification contract and review its tests before inspecting
 fresh performance results. Do not widen a statistical threshold, change a
 fixture, alter a golden or remove a failed attempt to obtain qualification.
 
-## Prospective lifetime guard and proof obligations
+## Implemented arithmetic guard and prospective lifetime closure
 
-The [platform clock](../../sim/common/simobject.h) resets on ordinary launch
-reset, while the required cumulative MPM counters survive. Active-core cycles
-also omit idle platform work. A per-launch cycle ceiling, a fixed launch count,
-observed monotonicity, small readings or a wall-time deadline therefore cannot
-establish an absolute bound for the device context.
+The [guard contract](../designs/simx_checked_counters_v1.md) establishes a
+per-operation invariant: each audited stored component remains in
+`[0, UINT64_MAX]`, and each formed aggregate either returns the exact value in
+that range or throws before an overflowing addition. It preserves cumulative
+statistics across launches and checks pending-read subtraction too. A successful
+process alone does not continuously bound a mathematical sum of independently
+growing components between its observations.
 
-**Design candidate for review, not implemented limits:** allow at most
-`T = 2^32 - 1` charged platform ticks per context, with separate cumulative
-memory-read and memory-write caps `E = 2^32 - 1`. These values are mathematical
-guard choices, not measured workload requirements. A smaller reviewed ceiling
-is possible; freeze the choice before inspecting performance.
+The [profile](../../profiles/p02-tfr.json), expanded
+[configuration](../../VX_config.toml),
+[LSU/cache formulas](../../sim/simx/constants.h),
+[socket construction](../../sim/simx/socket.cpp) and
+[tensor-buffer construction](../../sim/simx/tcu/tcu_tbuf.cpp) give these exact
+aggregation boundaries:
 
-| Boundary | Required proof or enforcement |
+| Required selectors | Count | Components per published value in the selected route |
+|---|---:|---|
+| Core/base | 13 | One checked Core field |
+| I-cache | 3 | One cache with one bank |
+| D-cache | 6 | One cache with **two independent bank counters** |
+| Local memory | 3 | One shared stats object, despite four physical banks |
+| Coalescer misses | 1 | One coalescer/LSU block |
+| Global memory reads, writes, latency | 3 | One Processor field each |
+| Global memory bank stalls | 1 | One crossbar collision accumulator |
+| TCU buffer stalls and cache hits | 2 | One TCU field each; zero with WGMMA disabled |
+| TCU local-memory reads | 1 | Two private buffer sources; zero with WGMMA disabled |
+| **Available total** | **33** | Twelve unavailable L2/L3 rows remain unqueried |
+
+Four RV64 LSU lanes cover 32 bytes; the 16-byte D-cache word yields two
+coalesced channels and two D-cache banks. The six active D-cache sums are the
+nontrivial aggregate-lifetime obligation. The TCU-buffer sources remain zero
+on ordinary execution of this WGMMA-disabled route, but remain available and
+still require distinct transport evidence. These formulas must be checked
+against actual generated configuration, not inferred from a profile name.
+
+### Candidate terminal-observation proof
+
+**Recommended next proof, not an established native qualification:** retain the
+existing `before_release` observation and prove that it is terminal for all
+required backing sources. For nonnegative, monotonic components `c_i(t)`, a
+successful checked read at terminal time `T` gives
+`sum(c_i(T)) <= UINT64_MAX`; therefore every earlier sum is no larger. Proving
+that no component can increase after `T` extends the bound through disposal.
+This combines guarded source updates, source-proved monotonicity and complete
+terminal readout; snapshot-only overflow checks or sampled monotonicity do not
+supply those premises.
+
+The current [warm caller](../../tests/regression/ai_warm_workspace/main.cpp)
+waits, closes and destroys each operation before its post-operation snapshot.
+[Queue destruction](../../sw/runtime/common/queue.cpp) joins the worker.
+[Owner release](../../sw/runtime/ai/runtime.cpp) frees resident buffers, kernel
+and module before the wrapped device release. The
+[observer](../../tests/regression/ai_warm_workspace/observer.cpp) takes all
+available `before_release` queries immediately before the real device-release
+call, while checking owner-close phase and zero observed live buffers. This
+ordering supplies a promising proof location without changing timing intervals,
+policy order or sample populations.
+
+The proof and future reader must bind all of the following; none may be inferred
+from a successful release return alone:
+
+| Boundary | Required source proof and native observation |
 |---|---|
-| Context birth | Establish zero origins and install one lifetime ledger before any initialization/model work; identify a definite owner/epoch for the process-global platform. |
-| Every platform tick | Compare before increment and before any domain, immediate/due-event or worker action. Reject an exhausted or invalid ledger before counter mutation; charge partially executed ticks. |
-| Launch/reset/flush/close | Preserve ledger and failure through `reset()`, `reset_launch()`, queries and explicit close. Include initialization, cache flushing, stepping and before-release observations. Only complete disposal permits a new lifetime. |
-| Memory callbacks | Before any mutation, bound cumulative reads/writes and pending reads by `E`; reject a response at pending zero; justify pending resets by quiescence. Cover callbacks outside the kernel run loop. |
-| Readout and growth | Inventory every increment and aggregate addition, derive conservative rates from actual compiled dimensions, and evaluate bounds with checked arithmetic. |
-| Guard failure | Use the processor-origin terminal path, require repeated public wait/query failure and suppress later work. Invalidate the entire attempt even when a prime or excluded warm-up trips the guard. |
+| Origins and updates | Every contributing source starts at zero, survives the permitted resets monotonically and uses checked arithmetic; transient pending balance still needs matched requests/responses and quiescent reset. |
+| Exact inventory | All 33 expected enabled rows are queried successfully and the twelve unavailable rows are not queried; validation of a dynamically enabled subset is insufficient. |
+| Exclusive ownership | One context and one submitter; no surviving operation/queue worker, external Device retain or legacy/debug submitter can advance the model or replace a DCR reply. |
+| Terminal readout | All operations and synchronous CP transactions have retired before the complete checked snapshot; both halves succeed and refer to one stable source value. |
+| After the snapshot | VM is off, `CP_ON_L2=CP_ON_L3=0`, and no later launch, cache flush or model-ticking memory operation is submitted. Bound allocator release, CP bookkeeping, backend join and full platform disposal separately. |
+| Dependency teardown | Bind the selected DRAM backend and dependency revision, including Ramulator frontend/memory-system finalization; inspect its callbacks and finalization contract. |
+| Failure | Any guard/query/cleanup failure invalidates the attempt, including excluded primes or warm-ups. Retain terminal processor failure and prohibit failed-context reuse. |
 
-If pending reads are bounded by `E` and
-[memory latency](../../sim/simx/processor.cpp) adds that quantity at most once
-per charged tick, then
-`memory_lt <= T * E = (2^32 - 1)^2 = 2^64 - 2^33 + 1 < 2^64`.
-This candidate argument requires proof of the unique accumulation sites and
-checked pending bookkeeping; a tick ceiling alone does not bound latency.
-For every other required value, independently prove zero origin and
-`C_j(t) <= R_j * t`, including all summed objects, with
-`R_j <= (2^64 - 1) / T`. Do not perform an overflowing multiplication to check
-that inequality.
+Three concrete boundaries prevent overstating this argument:
 
-The updater review must close the full call graph, including retirement's
-per-FU gather path, simultaneous cache admission/pipe misses, nested dirty-sector
-flush walks, local-memory/coalescer aggregation, memory crossbar collisions and
-TCU-buffer backing sums. One increment per port, instruction or bank cannot be
-assumed from names or comments. Each object must tick at most once per charged
-platform tick; every out-of-tick update must have a directly proved bound.
-Resetting required counters or saturating without failure would change their
-semantics. If complete rate proofs cannot be closed, the wider alternative is
-checked arithmetic before every relevant increment and aggregate addition.
-Snapshot-only overflow checks are insufficient.
+- [`Device::cp_quiesce_()`](../../sw/runtime/common/device.cpp) returns no result
+  and can stop on backend failure or exhausted polling. The functional
+  [CP busy predicate](../../sim/common/cmd_processor.cpp) includes `enabled()`;
+  disabling the queue can report not busy despite pending command state.
+  Consequently, release success or not-busy-after-disable is **not a drain
+  certificate**. `vx_device_release()` also reports release of a reference,
+  not proof that this was the final reference that destroyed the Device.
+- The [public MPM query](../../sw/runtime/common/perf.cpp) combines low/high
+  values only after both reads succeed. However,
+  [`cp_submit_dcr_read()`](../../sw/runtime/common/device.cpp) retrieves
+  `Q_LAST_DCR_RSP` outside its submit/poll lock. The proof must exclude all
+  concurrent submitters as well as concurrent counter updates; successful
+  replies alone do not make this an atomic snapshot API.
+- [Platform cleanup](../../sim/common/simobject.h) discards queued events,
+  but the [DRAM adapter](../../sim/common/dram_sim.cpp) also calls Ramulator
+  frontend and memory-system `finalize()` functions during destruction.
+  Adapter responses normally reach GPU callbacks through a later drain/tick,
+  but that does not replace inspection of the bound dependency's finalization
+  behavior. No complete finalizer proof or native lifetime closure is claimed
+  by this plan.
 
-Require tests below, at and beyond lifetime/request limits; successive
-individually short launches crossing the cumulative limit; pending underflow;
-flush/close coverage; and actual updater/aggregate boundaries. Keep test-only
-seeds or tiny guard limits out of the measurement binary. Reject unsupported
-topology, worker count, features or guard configuration. No environment opt-out
-or caller assertion may bypass enforcement.
+`memory_lt` retains its existing run/cycle accumulation meaning. Other flush or
+CP-transfer loops can tick the platform without adding pending occupancy to
+that counter. Qualification must preserve these event semantics rather than
+reinterpreting it as an integral over all platform ticks.
+
+### Earlier cap alternative
+
+The earlier candidate proposed a context ledger with
+`T = 2^32 - 1` charged ticks and memory-event caps `E = 2^32 - 1`. Those limits
+are **not implemented** and are not the selected checked-counter contract.
+They would additionally require complete event-rate, out-of-tick update,
+ledger-reset and pending-occupancy proofs; active-core cycles omit idle work
+and the platform clock resets on launch. A conservative per-component cap or
+continuously maintained aggregate could be reconsidered if terminal closure
+cannot be proved, but requires its own reviewed contract and tests. No guessed
+rate, timeout, clamp, saturation or caller opt-out can substitute for a bound.
+
+Keep test-only seeds or tiny guard limits out of the measurement binary. Require
+actual updater/aggregate boundaries, pending underflow and flush/close coverage;
+reject unsupported topology, worker count, features or guard configuration.
 
 ## Smallest useful native diagnostic matrix
+
+The implemented native prerequisite has five cells: ordinary and checked
+nineteen-selector boundaries, checked real-Core updater overflow/fresh-context
+success, checked cache-aggregate overflow and checked pending-counter primitive
+underflow. It does not replace the remaining matrix below. The controlled
+public host tests similarly leave actual native public fault injection open.
 
 Freeze the additional diagnostic matrix before collecting performance results.
 Each cell uses the exact supported warm configuration and retains its own
@@ -236,7 +371,7 @@ tests. Repeated equality alone does not prove coherence.
 
 These four public diagnostic processes do not replace the full warm matrix.
 Controlled host faults, native selector checks, actual public execution and
-static maximum-rate proofs have different scopes. General internal-worker
+source lifetime proofs have different scopes. General internal-worker
 exception transport, fatal-abort recovery, simultaneous contexts and forced
 cancellation remain outside this qualification route.
 
@@ -250,16 +385,19 @@ final archive identities to avoid circular bindings.
 
 In addition to the source/configuration/tool/binary requirements above, bind
 the reviewed 33-selector inventory, true backing sources, widths, availability,
-coherence proof, complete lifetime/updater proof, guard constants and supported
-execution route. Include scope-matched transport/completion records and the
-actual executing interpreter. Require identical guarded binaries across both
+coherence proof, complete lifetime/updater proof, guard selection/width and
+supported execution route. Bind terminal-observation coverage and all ownership,
+post-observation and dependency-finalization premises used by the lifetime
+proof. Include scope-matched transport/completion records and the actual
+executing interpreter. Require identical guarded binaries across both
 policies within each format and before/after stability observations.
 
 The qualification digest must be bound before each fresh process launches.
 The final verification result joins that digest to the original command/log/
 resource packet and all 24 completed processes. Reject disabled guards, invalid
-epochs, false coherence/bound claims, guard trips, incomplete close/cleanup and
-mismatched source/configuration/selector/compiler/tool/binary/attempt identities.
+context ownership, missing terminal rows, false coherence/bound claims, guard
+trips, incomplete close/cleanup and mismatched
+source/configuration/selector/compiler/tool/binary/attempt identities.
 Test invalid qualification with favorable and unfavorable statistics.
 Rehashing inconsistent records must not make them valid; attaching new metadata
 cannot qualify a historical archive. Retained helpers are data, never trusted

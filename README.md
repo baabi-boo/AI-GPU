@@ -33,8 +33,8 @@ archives, build provenance, independent audits and replay instructions. The
 earlier [P04-A01 fixture acceptance](docs/project/evidence/p04-fixture/acceptance.json)
 and [hashed manifest](ci/project/p04_model_manifest.json) remain unchanged.
 
-**Current work: P06-T01 — qualify the exact counter route after the reviewed
-simulator completion repair (`in_progress`), with [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
+**Current work: P06-T01 — complete counter qualification after the implemented
+checked-counter prerequisite (`in_progress`), with [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
 Independent review qualifies the original
 [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
 at source `84b6ca0ca75fba248ba330642bbf8764db3d459c`. The frozen
@@ -108,12 +108,38 @@ native result remains bound to `4781ca9`. The
 [delivery ledger](docs/project/evidence/p06-simulator-completion/delivery-ledger.md)
 records **60 actual agents across ten logical waves**, six assignments per wave.
 
-The next development step is the [versioned counter qualification plan](docs/project/p06-mpm-qualification-plan.md):
-cover all **33 available counters** in the exact RV64 tensor configuration,
-prove coherent reads and establish an enforceable cumulative no-wrap bound.
-No such guard or bound is implemented by this completion repair. Only after
-that qualification should the unchanged fresh warm matrix run: 24 processes,
-792 launches and 25,344 exact output words. **P06 and P06-T01 remain
+The next prerequisite is now implemented at
+[`9fd7eac20`](https://github.com/baabi-boo/AI-GPU/commit/9fd7eac203c77fa54c7af80fa0220ae09553cd55):
+opt-in `SIMX_CHECKED_COUNTERS=1` guards counter sources and intermediate sums,
+throws before an affected field wraps, and propagates failure through simulator
+completion and public-runtime cleanup. Ordinary builds retain the exact
+`uint64_t` alias. The [checked-counter contract](docs/designs/simx_checked_counters_v1.md),
+[development audit](docs/project/p06-checked-counters-audit.md) and
+[evidence packet](docs/project/evidence/p06-checked-counters/README.md) define
+this scope; the earlier completion repair alone did not implement these guards.
+
+The final implementation's [hosted governance run](docs/project/evidence/p06-checked-counters/hosted/governance-index.json)
+passed **3,062 tests** at actual published `9fd7eac20`, with independent
+original-log review. The earlier local run passed **3,043 tests** at `53f4ad08c`
+(tree `80553bb237af44b187dd6d18178e851cd6671ec8`); published `a9227933c`
+has that identical tree, with the local execution identity preserved. Including
+later focused additions, **64 new focused methods** pass: 12 primitive, six
+production-header, 27 runner, 14 workflow and five public-runtime methods.
+The five public methods exercise **10 RAM/LLC cells** through the actual runtime
+with controlled Processor/RAM components. They do not inject native model faults.
+[Native run 45017731063, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45017731063)
+passed at `9fd7eac20`; the [independent original-artifact review](docs/project/evidence/p06-checked-counters/reviews/native-review.md)
+confirms its behavior and source/build bindings. Its directed transport
+scope covers **19 seeded available selectors**, leaving **14 available selectors
+unseeded** and **12 unavailable**. Full qualification remains `qualified=false`
+and `ready_for_warm=false`.
+
+The [remaining qualification plan](docs/project/p06-mpm-qualification-plan.md)
+requires a terminal lifetime/no-wrap proof for all **33 available counters**,
+coverage of the fourteen native backing-source transport gaps, native public
+snapshot coherence/failure diagnostics and a separately versioned qualification
+reader. Only after those gates should the unchanged fresh warm matrix run:
+24 processes, 792 launches and 25,344 exact output words. **P06 and P06-T01 remain
 `in_progress`; P06-A02/A03 remain open.** Warm v1 stays unconditionally blocked;
 these repairs do not qualify historical measurements or establish a speedup.
 
@@ -193,10 +219,14 @@ and P07–P11 are not started.
   and [P02 WMMA evidence](docs/project/evidence/p02-wmma/README.md).
 - Read the earlier contract checkpoint: [P02 numerical handoff](docs/project/p02-numerics-handoff.md)
   and [A01 evidence](docs/project/evidence/p02-numerics/README.md).
-- Review the [simulator completion audit](docs/project/p06-simulator-completion-audit.md),
+- Continue the [counter qualification plan](docs/project/p06-mpm-qualification-plan.md)
+  from the implemented [checked-counter contract](docs/designs/simx_checked_counters_v1.md),
+  [audit](docs/project/p06-checked-counters-audit.md) and
+  [evidence packet](docs/project/evidence/p06-checked-counters/README.md).
+  The [simulator completion audit](docs/project/p06-simulator-completion-audit.md),
   [contract](docs/designs/simulator_completion_v1.md) and
-  [source-bound verification packet](docs/project/evidence/p06-simulator-completion/README.md),
-  then start the [exact counter qualification plan](docs/project/p06-mpm-qualification-plan.md).
+  [source-bound verification packet](docs/project/evidence/p06-simulator-completion/README.md)
+  retain that prerequisite's separate scope.
   The [transport handoff](docs/project/p06-mpm-transport-handoff.md) and
   [transport evidence](docs/project/evidence/p06-mpm-transport/README.md) retain
   the earlier counter repair's separate scope.

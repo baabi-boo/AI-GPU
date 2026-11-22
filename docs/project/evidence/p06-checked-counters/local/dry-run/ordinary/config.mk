@@ -1,0 +1,85 @@
+# Copyright © 2019-2023
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+VORTEX_VERSION ?= 3.0
+
+VORTEX_HOME ?= /workspace/scratch/48f8dfc5759d/AI-GPU
+
+VERILATOR_PATH ?= $(TOOLDIR)/verilator
+
+# Checksum Verilator PCH so ccache invalidates on model-layout changes.
+export CCACHE_PCH_EXTSUM := true
+
+XLEN ?= 64
+
+TOOLDIR ?= /tmp/w07-counter-dryrun-2uhikccd/tools
+
+OSVERSION ?= ubuntu/focal
+
+INSTALLDIR ?= /tmp/w07-counter-dryrun-2uhikccd/ordinary/install
+
+LLVM_PATH ?= $(TOOLDIR)/llvm-vortex
+
+LIBC_PATH ?= $(TOOLDIR)/libc$(XLEN)
+LIBCRT_PATH ?= $(TOOLDIR)/libcrt$(XLEN)
+
+RISCV_TOOLCHAIN_PATH ?= $(TOOLDIR)/riscv$(XLEN)-gnu-toolchain
+
+# A FireSim 1.21.0 checkout. Vortex compiles against its driver headers and
+# stages the Chisel targets and patches into it, so both the simulator build and
+# the synthesis flow need to find it. It sits with the other external tools
+# rather than under a build directory: one checkout serves every Vortex tree,
+# and a path derived from VORTEX_HOME would make the dependency's location a
+# function of which tree is being built.
+FIRESIM_PATH ?= $(TOOLDIR)/firesim
+# vortexgpgpu/firesim commit this tree is built and tested against (VERSION).
+FIRESIM_REV := 57bb93f1e23daf46198659ddd93608f70121fee0
+# A Foldsim installation (ci/foldsim_install.sh): the compiler that builds a
+# FAME-5 simulator of Vortex (hw/syn/foldsim), and the FPGA shell the simulator
+# runs in, which the image, the in-process simulator (sim/foldsim) and the
+# runtime (sw/runtime/foldsim) all take from it.
+FOLDSIM_PATH ?= $(TOOLDIR)/foldsim
+FOLDSIM_SHELL ?= $(FOLDSIM_PATH)/share/foldsim/shell
+
+RISCV_PREFIX  ?= riscv$(XLEN)-unknown-elf
+RISCV_SYSROOT ?= $(RISCV_TOOLCHAIN_PATH)/$(RISCV_PREFIX)
+
+THIRD_PARTY_DIR ?= $(VORTEX_HOME)/third_party
+
+SW_COMMON_DIR ?= $(VORTEX_HOME)/sw/common
+
+SIM_COMMON_DIR ?= $(VORTEX_HOME)/sim/common
+
+# V80 runtime install prefix; only consulted by the aved backend when it
+# targets real hardware or the vendor simulator.
+VRT_HOME ?= /usr/local
+
+# Hardware profile (profiles/<name>.json), folded into CONFIGS once here so every
+# flow that includes config.mk builds the same machine. Explicit -D flags in
+# CONFIGS win over the profile.
+PROFILE ?= p02-tfr
+ifneq ($(strip $(PROFILE)),)
+PROFILE_CONFIGS := $(shell python3 $(VORTEX_HOME)/ci/gen_config.py --config=$(VORTEX_HOME)/VX_config.toml --profile=$(PROFILE) --xlen=$(XLEN) --merge-configs --cflags='$(CONFIGS)')
+ifneq ($(.SHELLSTATUS),0)
+$(error invalid hardware profile '$(PROFILE)')
+endif
+# A Makefile that includes this one appends its own -D flags to CONFIGS, and an
+# override would silently drop them. A command-line CONFIGS, or one the
+# including Makefile already overrode, ignores a plain assignment, so those take
+# the override.
+ifneq ($(filter command line override,$(origin CONFIGS)),)
+override CONFIGS := $(PROFILE_CONFIGS)
+else
+CONFIGS := $(PROFILE_CONFIGS)
+endif
+endif
