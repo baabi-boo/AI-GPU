@@ -13,6 +13,7 @@ import re
 
 MODES = ("normal", "immediate-overflow", "delayed-overflow", "cache-overflow", "coherent-terminal")
 RESULT_PREFIX = "COUNTER_PUBLIC_RESULT "
+RESULT_MARKERS = ("CHECKED_COUNTERS_RESULT", "CHECKED_COUNTERS_FAILURE_RESULT", "COUNTER_PUBLIC_RESULT")
 MAX_OUTPUT_BYTES = 16 * 1024 * 1024
 MAX_RESULT_BYTES = 256 * 1024
 MAX_UINT64 = (1 << 64) - 1
@@ -45,8 +46,8 @@ SELECTORS = (
 )
 
 # Derived from the fixed harness control flow, not a native execution receipt.
-CHECKS = {"normal": 1652, "coherent-terminal": 1798,
-          "immediate-overflow": 1168, "delayed-overflow": 1168, "cache-overflow": 1165}
+CHECKS = {"normal": 1668, "coherent-terminal": 1814,
+          "immediate-overflow": 1176, "delayed-overflow": 1176, "cache-overflow": 1173}
 PROGRAM_WORDS = [0x00700193, 0x0000700B, 0x0000000B]
 MODEL_FIELDS = {"live", "inventory_ready", "idle", "any_running", "generation", "ticks",
                 "reset_generation", "pending_reads", "core_cycles", "core_instructions",
@@ -54,7 +55,9 @@ MODEL_FIELDS = {"live", "inventory_ready", "idle", "any_running", "generation", 
 READ_FIELDS = {"sequence", "generation", "addr", "tag", "value", "status", "completed",
                "overflow", "ticks_before", "ticks_after", "reset_before", "reset_after",
                "class_before", "class_after"}
-CP_FIELDS = {"control", "queue_control", "status", "error", "retired", "expected", "head", "tail"}
+CP_FIELDS = {"control", "queue_control", "status", "error", "retired", "expected",
+             "head_writeback_raw", "head_writeback_status", "runtime_tail", "tail_register_pair_raw",
+             "drain_basis"}
 TERMINAL_FIELDS = {"seeded", "selectors", "components", "unavailable_unqueried", "device_refs",
                    "queues", "buffers", "extra_retain_rejected", "witness", "before", "after",
                    "cp_before", "cp_after", "rows"}
@@ -136,12 +139,24 @@ def _cp(value, label):
     _fields(value, CP_FIELDS, label)
     for name, item in (("control", 1), ("queue_control", 1), ("status", 0), ("error", 0)):
         _fixed(value[name], item, label + "." + name)
+    # The backend never publishes its internal head to the zero-initialized
+    # host buffer. Its raw bytes are retained, not used as a drain observation.
+    _fixed(value["head_writeback_raw"], 0, label + ".head_writeback_raw")
+    _fixed(value["head_writeback_status"], "not-published", label + ".head_writeback_status")
+    _fixed(value["drain_basis"], "enabled-idle-status-and-retired-sequence", label + ".drain_basis")
     for name in ("retired", "expected"):
         _uint(value[name], label + "." + name, bits=32, minimum=22)
-    for name in ("head", "tail"):
+    for name in ("runtime_tail", "tail_register_pair_raw"):
         _uint(value[name], label + "." + name, minimum=64)
-    require(value["retired"] == value["expected"] and value["head"] == value["tail"]
-            and value["tail"] == 64 * value["expected"], label + ": CP work is not fully retired")
+    # Enabled zero busy status excludes unconsumed ring/engine work by the
+    # source contract. Check exact single-cacheline retirement and both actual
+    # tail observations: runtime storage and the raw staged-low/committed-high
+    # register pair. Completed serialized submissions establish correspondence;
+    # this is not an independent full committed-tail or internal-head read.
+    require(value["retired"] == value["expected"]
+            and value["tail_register_pair_raw"] == value["runtime_tail"]
+            and value["runtime_tail"] == 64 * value["expected"],
+            label + ": CP retirement or observed tail accounting differs")
 
 
 def _terminal(value, generation, seeded, first_sequence, label):
@@ -265,7 +280,7 @@ def verify_record(value, mode):
     asynchronous = mode in ("immediate-overflow", "delayed-overflow")
     read_errors = int(mode == "cache-overflow")
     reads = (66 if negative else 132) + read_errors
-    fixed = {"schema_version": 1, "mode": mode, "backend": "simx", "memory_route": "direct-ram",
+    fixed = {"schema_version": 2, "mode": mode, "backend": "simx", "memory_route": "direct-ram",
              "xlen": 64, "checked": True, "native_model": True, "public_runtime": True,
              "checks": CHECKS[mode], "failures": 0, "constructed": 2, "destroyed": 2,
              "run_entries": 2, "run_completed": 1 if asynchronous else 2,
@@ -325,10 +340,10 @@ def verify_output(text, mode):
             "public output contains unsupported record separators")
     lines = [line for line in text.split("\n") if line.strip()]
     selected = [line for line in lines if line.startswith(RESULT_PREFIX)]
-    require(len(selected) == 1 and text.count(RESULT_PREFIX) == 1 and lines[-1] == selected[0],
+    require(len(selected) == 1 and sum(text.count(marker) for marker in RESULT_MARKERS) == 1
+            and lines[-1] == selected[0],
             "public output lacks its unique final result")
-    require(re.search(r"(?:^|\n)[ \t]*(?:FAIL(?:ED)?\b|ERROR\b)|SIMX_CHECKED_COUNTER_FAILURE", text) is None
-            and "CHECKED_COUNTERS_RESULT " not in text and "CHECKED_COUNTERS_FAILURE_RESULT " not in text,
+    require(re.search(r"(?:^|\n)[ \t]*(?:FAIL(?:ED)?\b|ERROR\b)|SIMX_CHECKED_COUNTER_FAILURE", text) is None,
             "public output is accompanied by a failure or unrelated result")
     payload = selected[0][len(RESULT_PREFIX):]
     require(len(payload.encode("utf-8")) <= MAX_RESULT_BYTES, "public result exceeds its byte bound")

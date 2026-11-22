@@ -687,6 +687,30 @@ class CheckedExecuteBoundaryTests(unittest.TestCase):
                 self.assert_failed(code, report, "failure result")
                 self.assertEqual(fixture.calls[-1]["id"], "checked-" + mode)
 
+    def test_mixed_result_families_fail_the_attempt_without_warm_qualification(self):
+        cases = (
+            ("ordinary-boundaries", failure_output("core-overflow")),
+            ("checked-boundaries", failure_output("cache-backing-overflow")),
+            ("checked-core-overflow", boundary_output(False)),
+            ("checked-pending-underflow", "COUNTER_PUBLIC_RESULT {}\n"),
+        )
+        for command, extra in cases:
+            with self.subTest(command=command), NativeFixture() as fixture:
+                fixture.logs[command] = lambda text, extra=extra: text + extra
+                code, report = fixture.run()
+                self.assert_failed(code, report)
+                self.assertEqual(fixture.calls[-1]["id"], command)
+
+    def test_failure_lines_fail_the_attempt_without_warm_qualification(self):
+        cases = (("ordinary-boundaries", "FAIL"), ("checked-boundaries", "ERROR"),
+                 ("checked-core-overflow", "FAIL"), ("checked-pending-underflow", "ERROR"))
+        for command, marker in cases:
+            with self.subTest(command=command, marker=marker), NativeFixture() as fixture:
+                fixture.logs[command] = lambda text, marker=marker: text + marker + " diagnostic contradiction\n"
+                code, report = fixture.run()
+                self.assert_failed(code, report)
+                self.assertEqual(fixture.calls[-1]["id"], command)
+
 
 class CheckedOutputParserTests(unittest.TestCase):
     def test_boundary_json_rejects_duplicates_types_extra_results_and_diagnostics(self):
@@ -701,6 +725,78 @@ class CheckedOutputParserTests(unittest.TestCase):
         for text in bad:
             with self.subTest(text=text[-120:]), self.assertRaises(ValueError):
                 runner.verify_output(text, True)
+
+    def test_boundary_results_reject_every_negative_family_before_or_after(self):
+        for checked in (False, True):
+            boundary = boundary_output(checked)
+            for mode in NEGATIVE_MODES:
+                failure = failure_output(mode)
+                for text in (failure + boundary, boundary + failure):
+                    with self.subTest(checked=checked, mode=mode, text=text), self.assertRaises(ValueError):
+                        runner.verify_output(text, checked)
+
+    def test_negative_results_reject_boundary_and_public_records_before_or_after(self):
+        result = {"outcome": "pass", "exit_code": 0, "reason": None,
+                  "process_started": True, "cleanup_complete": True}
+        for mode in NEGATIVE_MODES:
+            failure = failure_output(mode)
+            for other in (boundary_output(False), boundary_output(True), "COUNTER_PUBLIC_RESULT {}\n"):
+                for text in (other + failure, failure + other):
+                    with self.subTest(mode=mode, text=text), self.assertRaises(ValueError):
+                        runner.verify_negative(text, result, mode)
+
+    def test_malformed_and_embedded_reserved_markers_cannot_hide_next_to_valid_results(self):
+        result = {"outcome": "pass", "exit_code": 0, "reason": None,
+                  "process_started": True, "cleanup_complete": True}
+        cases = (
+            ("ordinary", boundary_output(False), lambda text: runner.verify_output(text, False)),
+            ("checked", boundary_output(True), lambda text: runner.verify_output(text, True)),
+            ("negative", failure_output("core-overflow"),
+             lambda text: runner.verify_negative(text, result, "core-overflow")),
+        )
+        for case, valid, verify in cases:
+            for marker in ("CHECKED_COUNTERS_RESULT", "CHECKED_COUNTERS_FAILURE_RESULT", "COUNTER_PUBLIC_RESULT"):
+                extras = (marker + "\n", marker + "\t{}\n", marker + "{}\n", marker + ": {}\n",
+                          marker + "_EXTRA {}\n", "prefix " + marker + " {}\n",
+                          " " + marker + " {}\n", marker + " {}\n")
+                for extra in extras:
+                    for text in (extra + valid, valid + extra):
+                        with self.subTest(case=case, extra=extra, text=text), self.assertRaises(ValueError):
+                            verify(text)
+
+    def test_dependency_noise_before_and_after_results_remains_allowed(self):
+        noise = ("ramulator.total_num_read_requests\t0\nunrelated dependency RESULT summary: 0 requests\n"
+                 "ERROR_COUNT 0\nFAILED_COUNT 0\ndependency ERROR/FAILED counters: 0\n")
+        for checked in (False, True):
+            record = boundary_output(checked)
+            for text in (noise + record, record + noise, noise + record + noise):
+                with self.subTest(checked=checked, text=text):
+                    self.assertEqual(runner.verify_output(text, checked), boundary_record(checked))
+        result = {"outcome": "pass", "exit_code": 0, "reason": None,
+                  "process_started": True, "cleanup_complete": True}
+        for mode in NEGATIVE_MODES:
+            record = failure_output(mode)
+            for text in (noise + record, record + noise, noise + record + noise):
+                with self.subTest(mode=mode, text=text):
+                    self.assertEqual(runner.verify_negative(text, result, mode), failure_record(mode))
+
+    def test_failure_lines_rejected_before_and_after_boundary_and_negative_results(self):
+        result = {"outcome": "pass", "exit_code": 0, "reason": None,
+                  "process_started": True, "cleanup_complete": True}
+        cases = [
+            ("ordinary", boundary_output(False), lambda text: runner.verify_output(text, False)),
+            ("checked", boundary_output(True), lambda text: runner.verify_output(text, True)),
+        ]
+        for mode in NEGATIVE_MODES:
+            cases.append((mode, failure_output(mode),
+                          lambda text, mode=mode: runner.verify_negative(text, result, mode)))
+        for case, valid, verify in cases:
+            for marker in ("FAIL", "FAILED", "ERROR"):
+                for indent in ("", " ", "\t", " \t"):
+                    failure = indent + marker + " diagnostic contradiction\n"
+                    for text in (failure + valid, valid + failure):
+                        with self.subTest(case=case, failure=failure, text=text), self.assertRaises(ValueError):
+                            verify(text)
 
     def test_all_negative_scenarios_require_completed_successful_diagnostics(self):
         result = {"outcome": "pass", "exit_code": 0, "reason": None,

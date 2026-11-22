@@ -31,6 +31,8 @@ constexpr std::array<uint32_t, 3> kRejectedProgram{{~kProgram[0], ~kProgram[1], 
 constexpr uint32_t kCpControl = 0x000;
 constexpr uint32_t kCpStatus = 0x004;
 constexpr uint32_t kQueueControl = 0x11c;
+constexpr uint32_t kQueueTailLow = 0x120;
+constexpr uint32_t kQueueTailHigh = 0x124;
 constexpr uint32_t kQueueSequence = 0x128;
 constexpr uint32_t kQueueError = 0x12c;
 
@@ -244,8 +246,9 @@ struct CpState {
   uint32_t error;
   uint32_t retired;
   uint64_t expected;
-  uint64_t head;
-  uint64_t tail;
+  uint64_t head_writeback_raw;
+  uint64_t runtime_tail;
+  uint64_t tail_register_pair_raw;
 };
 
 uint32_t cp_read(vx::Device& device, uint32_t address) {
@@ -266,18 +269,37 @@ CpState terminal_cp(vx_device_h handle) {
   CpState result{cp_read(device, kCpControl), cp_read(device, kQueueControl),
                  cp_read(device, kCpStatus), cp_read(device, kQueueError),
                  cp_read(device, kQueueSequence), device.*member(CpExpected{}),
-                 0, device.*member(CpTail{})};
+                 0, device.*member(CpTail{}), 0};
+  // The low register exposes the staged low word; the high register exposes
+  // committed high bits. Retain this raw pair, not an independent observation
+  // of the internal committed tail. Completed serialized submissions and exact
+  // retirement accounting below establish their correspondence.
+  const uint64_t tail_low = cp_read(device, kQueueTailLow);
+  const uint64_t tail_high = cp_read(device, kQueueTailHigh);
+  result.tail_register_pair_raw = tail_low | (tail_high << 32);
   const auto& head = device.*member(CpHead{});
-  require(head.host_ptr != nullptr && head.size >= sizeof(result.head),
+  require(head.host_ptr != nullptr && head.size >= sizeof(result.head_writeback_raw),
           "terminal CP head storage is absent");
   success(device.platform()->host_mem_pull(head.cp_addr), "terminal CP head pull failed");
-  std::memcpy(&result.head, head.host_ptr, sizeof(result.head));
+  std::memcpy(&result.head_writeback_raw, head.host_ptr, sizeof(result.head_writeback_raw));
+  // This backend programs a head-writeback address but never publishes the
+  // internal head there. Retain its actual initialized bytes as unsupported
+  // writeback evidence; they cannot be compared with the submitted tail.
+  require(result.head_writeback_raw == 0,
+          "terminal CP head storage changed without a published-head contract");
   require(result.control == 1 && result.queue_control == 1,
           "terminal CP was not enabled during drain observation");
   require(result.status == 0 && result.error == 0, "terminal CP is busy or failed");
   require(result.expected > 0 && result.expected <= std::numeric_limits<uint32_t>::max()
           && result.retired == result.expected, "terminal CP did not retire all submissions");
-  require(result.head == result.tail && result.tail > 0, "terminal CP ring is not drained");
+  require(result.tail_register_pair_raw == result.runtime_tail && result.runtime_tail > 0,
+          "terminal CP tail register differs from submitted runtime tail");
+  require(result.runtime_tail == result.expected * 64,
+          "terminal CP submissions are not one cacheline per retired command");
+  // With exclusive ownership, the enabled CP's zero busy status excludes
+  // head < tail, a loaded cacheline, and active command/launch engines. The
+  // single-cacheline commands and exact retirement/tail accounting establish
+  // drain by that source invariant, without observing an internal head value.
   return result;
 }
 
@@ -672,9 +694,12 @@ void print_read(const hooks::DcrRead& read) {
 
 void print_cp(const CpState& state) {
   std::printf("{\"control\":%u,\"queue_control\":%u,\"status\":%u,\"error\":%u,"
-              "\"retired\":%u,\"expected\":%" PRIu64 ",\"head\":%" PRIu64
-              ",\"tail\":%" PRIu64 "}", state.control, state.queue_control, state.status,
-              state.error, state.retired, state.expected, state.head, state.tail);
+              "\"retired\":%u,\"expected\":%" PRIu64 ",\"head_writeback_raw\":%" PRIu64
+              ",\"head_writeback_status\":\"not-published\",\"runtime_tail\":%" PRIu64
+              ",\"tail_register_pair_raw\":%" PRIu64
+              ",\"drain_basis\":\"enabled-idle-status-and-retired-sequence\"}",
+              state.control, state.queue_control, state.status, state.error, state.retired,
+              state.expected, state.head_writeback_raw, state.runtime_tail, state.tail_register_pair_raw);
 }
 
 void print_terminal(const TerminalSnapshot& snapshot) {
@@ -740,7 +765,7 @@ void print_result(const char* mode, const FailureRecord& failure,
   require(observed.dcr_read_entries == observed.dcr_read_completed + observed.dcr_read_errors
           && observed.dcr_write_entries == observed.dcr_write_completed,
           "diagnostic contains an unaccounted model entry");
-  std::printf("COUNTER_PUBLIC_RESULT {\"schema_version\":1,\"mode\":\"%s\","
+  std::printf("COUNTER_PUBLIC_RESULT {\"schema_version\":2,\"mode\":\"%s\","
               "\"backend\":\"simx\",\"memory_route\":\"direct-ram\",\"xlen\":64,"
               "\"checked\":true,\"native_model\":true,\"public_runtime\":true,"
               "\"checks\":%zu,\"failures\":0,\"constructed\":%" PRIu64

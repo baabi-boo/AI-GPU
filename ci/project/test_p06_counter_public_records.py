@@ -17,8 +17,8 @@ SENTINEL = 0xDECAFBAD12345678
 INVENTORY = tuple((row[0], row[1], row[2],
                    2 if row[0].startswith("dcache_") or row[0] == "tcu_lmem_reads" else 1)
                   for row in _COUNTERS if row[1] not in (5, 6))
-ASSERTIONS = {"normal": 1652, "coherent-terminal": 1798, "immediate-overflow": 1168,
-              "delayed-overflow": 1168, "cache-overflow": 1165}
+ASSERTIONS = {"normal": 1668, "coherent-terminal": 1814, "immediate-overflow": 1176,
+              "delayed-overflow": 1176, "cache-overflow": 1173}
 
 
 def model(generation):
@@ -40,7 +40,9 @@ def read(state, selected, sequence, value, high=False, failed=False):
 
 def cp(expected):
     return {"control": 1, "queue_control": 1, "status": 0, "error": 0,
-            "retired": expected, "expected": expected, "head": expected * 64, "tail": expected * 64}
+            "retired": expected, "expected": expected, "head_writeback_raw": 0,
+            "head_writeback_status": "not-published", "runtime_tail": expected * 64,
+            "tail_register_pair_raw": expected * 64, "drain_basis": "enabled-idle-status-and-retired-sequence"}
 
 
 def terminal(generation, sequence, seeded=False):
@@ -61,7 +63,7 @@ def terminal(generation, sequence, seeded=False):
     return {"seeded": seeded, "selectors": 33, "components": 40, "unavailable_unqueried": 12,
             "device_refs": 1, "queues": 0, "buffers": 0, "extra_retain_rejected": True,
             "witness": witness, "before": before, "after": deepcopy(before),
-            "cp_before": cp(24), "cp_after": cp(90), "rows": rows}
+            "cp_before": cp(26), "cp_after": cp(92), "rows": rows}
 
 
 def query(selected=INVENTORY[0]):
@@ -105,7 +107,7 @@ def result(mode="normal"):
     terminals = ([terminal(2, 1 + read_errors)] if negative else
                  [terminal(1, 1, mode == "coherent-terminal"), terminal(2, 67)])
     states = [failure["after"], terminals[0]["after"]] if negative else [item["after"] for item in terminals]
-    return {"schema_version": 1, "mode": mode, "backend": "simx", "memory_route": "direct-ram",
+    return {"schema_version": 2, "mode": mode, "backend": "simx", "memory_route": "direct-ram",
             "xlen": 64, "checked": True, "native_model": True, "public_runtime": True,
             "checks": ASSERTIONS[mode], "failures": 0, "constructed": 2, "destroyed": 2,
             "run_entries": 2, "run_completed": 1 if asynchronous else 2, "run_errors": int(asynchronous),
@@ -173,7 +175,7 @@ class PublicRecordsTests(unittest.TestCase):
             records.verify_output(output(result()), "coherent-terminal")
 
     def test_top_level_claims_cannot_be_promoted_or_relabeled(self):
-        for key, replacement in (("schema_version", 2), ("native_model", False), ("checked", False),
+        for key, replacement in (("schema_version", 1), ("native_model", False), ("checked", False),
                                  ("public_runtime", False), ("xlen", 32), ("memory_route", "llc"),
                                  ("backend", "mock"), ("qualified", True), ("ready_for_warm", True),
                                  ("warm_execution", True), ("acceptance_claimed", True),
@@ -307,14 +309,44 @@ class PublicRecordsTests(unittest.TestCase):
             state["core_instructions"] = state["components"][1] = 0
         self.reject(value)
 
-    def test_cp_must_be_enabled_drained_and_retire_each_half(self):
+    def test_cp_must_be_enabled_idle_and_retire_each_half(self):
         for key, replacement in (("control", 0), ("queue_control", 0), ("status", 1), ("error", 1),
-                                 ("retired", 23), ("head", 0), ("tail", 23 * 64), ("expected", 0)):
+                                 ("retired", 25), ("runtime_tail", 25 * 64),
+                                 ("tail_register_pair_raw", 25 * 64), ("expected", 0)):
             self.changed(("terminal_snapshots", 0, "cp_before", key), replacement)
-        self.changed(("terminal_snapshots", 0, "cp_after"), cp(89))
+        self.changed(("terminal_snapshots", 0, "cp_after"), cp(91))
         value = result()
-        value["terminal_snapshots"][0]["cp_before"].update(head=64, tail=64)
+        value["terminal_snapshots"][0]["cp_before"].update(runtime_tail=64, tail_register_pair_raw=64)
         self.reject(value)
+
+    def test_cp_raw_head_is_retained_without_claiming_published_head(self):
+        value = result()
+        observed = value["terminal_snapshots"][0]["cp_before"]
+        self.assertEqual(observed["head_writeback_raw"], 0)
+        self.assertNotEqual(observed["head_writeback_raw"], observed["tail_register_pair_raw"])
+        self.assertEqual(records.verify_output(output(value), "normal"), value)
+        for key, replacement in (("head_writeback_raw", observed["tail_register_pair_raw"]),
+                                 ("head_writeback_raw", True),
+                                 ("head_writeback_status", "published"),
+                                 ("drain_basis", "observed-head-equals-tail")):
+            self.changed(("terminal_snapshots", 0, "cp_before", key), replacement)
+        value = result()
+        for key in ("cp_before", "cp_after"):
+            observed = value["terminal_snapshots"][0][key]
+            observed["head"] = observed.pop("head_writeback_raw")
+        self.reject(value)
+
+    def test_cp_tail_observations_are_bounded_integers_and_account_for_every_cacheline(self):
+        for key in ("runtime_tail", "tail_register_pair_raw"):
+            for replacement in (True, -1, 0, UINT64_MAX + 1):
+                with self.subTest(key=key, replacement=replacement):
+                    self.changed(("terminal_snapshots", 0, "cp_before", key), replacement)
+        for delta in (-64, 1, 64):
+            value = result()
+            observed = value["terminal_snapshots"][0]["cp_before"]
+            observed["runtime_tail"] += delta
+            observed["tail_register_pair_raw"] += delta
+            self.reject(value)
 
     def test_actual_destruction_must_match_last_observation(self):
         for path, replacement in ((("completed",), False), (("ticks_after",), 1),
@@ -408,7 +440,7 @@ class PublicRecordsTests(unittest.TestCase):
 
     def test_duplicate_json_keys_are_rejected_at_all_depths(self):
         text = output(result())
-        for needle, replacement in (("\"schema_version\":1", "\"schema_version\":1,\"schema_version\":1"),
+        for needle, replacement in (("\"schema_version\":2", "\"schema_version\":2,\"schema_version\":2"),
                                     ("\"generation\":1", "\"generation\":1,\"generation\":1"),
                                     ("\"status\":0", "\"status\":0,\"status\":0")):
             with self.subTest(needle=needle), self.assertRaises(ValueError):
@@ -424,11 +456,20 @@ class PublicRecordsTests(unittest.TestCase):
             with self.subTest(index=index), self.assertRaises(ValueError):
                 records.verify_output(value, "normal")
 
+    def test_reserved_result_markers_cannot_be_mixed_or_malformed_noise(self):
+        text = output(result())
+        markers = ("CHECKED_COUNTERS_RESULT", "CHECKED_COUNTERS_FAILURE_RESULT", "COUNTER_PUBLIC_RESULT")
+        for marker in markers:
+            for suffix in ("", " {}", "\t{}", ": malformed", "_EXTRA {}"):
+                for leading in ("", " ", "dependency statistics: "):
+                    with self.subTest(marker=marker, suffix=suffix, leading=leading), self.assertRaises(ValueError):
+                        records.verify_output(leading + marker + suffix + "\n" + text, "normal")
+
     def test_malformed_nonfinite_float_and_oversized_integer_json_is_rejected(self):
         text = output(result())
-        for replacement in ("NaN", "Infinity", "-Infinity", "1652.0", "1e3", "1" * 21, "null", '"1652"'):
+        for replacement in ("NaN", "Infinity", "-Infinity", "1668.0", "1e3", "1" * 21, "null", '"1668"'):
             with self.subTest(replacement=replacement), self.assertRaises(ValueError):
-                records.verify_output(text.replace("\"checks\":1652", "\"checks\":" + replacement), "normal")
+                records.verify_output(text.replace("\"checks\":1668", "\"checks\":" + replacement), "normal")
         for payload in ("{", "[]", "true", "[" * 17 + "0" + "]" * 17):
             with self.subTest(payload=payload), self.assertRaises(ValueError):
                 records.verify_output(records.RESULT_PREFIX + payload + "\n", "normal")

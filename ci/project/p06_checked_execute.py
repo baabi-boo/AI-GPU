@@ -304,6 +304,11 @@ def verify_header(text, checked):
     return records.validate_header_macros(ordinary, performance=True)
 
 
+def _unique_result_family(text, prefix):
+    prefixes = (RESULT_PREFIX, FAILURE_PREFIX, "COUNTER_PUBLIC_RESULT ")
+    return all(text.count(item.rstrip(" ")) == (1 if item == prefix else 0) for item in prefixes)
+
+
 def verify_output(text, checked):
     def unique(pairs):
         result = {}
@@ -313,8 +318,9 @@ def verify_output(text, checked):
         return result
 
     lines = [line for line in _records(text, "boundary output") if line.startswith(RESULT_PREFIX)]
-    require(len(lines) == 1 and not re.search(r"FAILED|SIMX_CHECKED_COUNTER_FAILURE", text),
-            "boundary result missing, repeated or accompanied by failure")
+    require(len(lines) == 1 and _unique_result_family(text, RESULT_PREFIX)
+            and re.search(r"(?:^|\n)[ \t]*(?:FAIL(?:ED)?\b|ERROR\b)|SIMX_CHECKED_COUNTER_FAILURE", text) is None,
+            "boundary result missing, repeated, malformed or accompanied by failure or unrelated result")
     value = json.loads(lines[0][len(RESULT_PREFIX):], object_pairs_hook=unique,
                        parse_constant=lambda _: require(False, "boundary result is not finite JSON"))
     expected = {"schema_version": 2, "mode": "boundaries", "xlen": 64, "perf": True,
@@ -344,9 +350,9 @@ def verify_negative(text, result, mode):
         return value
 
     lines = [line for line in _records(text, "negative output") if line.startswith(FAILURE_PREFIX)]
-    require(len(lines) == 1 and text.count(FAILURE_PREFIX) == 1
-            and not re.search(r"FAILED|SIMX_CHECKED_COUNTER_FAILURE", text)
-            and RESULT_PREFIX not in text, "negative scenario lacks its unique failure result")
+    require(len(lines) == 1 and _unique_result_family(text, FAILURE_PREFIX)
+            and re.search(r"(?:^|\n)[ \t]*(?:FAIL(?:ED)?\b|ERROR\b)|SIMX_CHECKED_COUNTER_FAILURE", text) is None,
+            "negative scenario lacks its unique failure result")
     value = json.loads(lines[0][len(FAILURE_PREFIX):], object_pairs_hook=unique,
                        parse_constant=lambda _: require(False, "failure result is not finite JSON"))
     expected = {"schema_version": 2 if mode in BACKING_NEGATIVE else 1, "mode": mode, "reason": NEGATIVE[mode], "checked": True,
