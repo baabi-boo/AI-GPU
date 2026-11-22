@@ -1,0 +1,172 @@
+{
+  "actual_runs": [
+    {
+      "kind": "synthetic resource-boundary reproducer",
+      "process_exit_status": 0,
+      "production_revision": "pre-fix runner SHA-256 listed in finding",
+      "result": "reproduced defect"
+    },
+    {
+      "details": "Existing full positive matrix method passed. New regression reached its resource/count/failure assertions then errored on a helper belonging to another class. Reviewer corrected the test-only helper reference.",
+      "kind": "two-method focused unittest invocation",
+      "methods": 2,
+      "process_exit_status": 1,
+      "result": "failed",
+      "seconds": 29.09
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=ci/project python3 -m unittest -v test_p06_warm_runner.WarmFailureAndRetentionTests.test_final_disk_shortfall_invalidates_complete_attempt_and_retains_all_verified_counts",
+      "kind": "fresh-import final focused regression",
+      "methods": 1,
+      "process_exit_status": 0,
+      "result": "pass",
+      "seconds": 16.113
+    }
+  ],
+  "assignment": "W05-A02",
+  "assignment_number": 26,
+  "audited_sources_sha256": {
+    "AGENTS.md": "cf282720e32b644553893bee801d4beb2c39f521a3454193a8b7e91aaa06f8a7",
+    "ci/project/baseline_inventory.py": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+    "ci/project/baseline_packet_contract.py": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+    "ci/project/baseline_process.py": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+    "ci/project/compiler_records.py": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+    "ci/project/p02_matrix.py": "e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17",
+    "ci/project/p02_matrix_records.py": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+    "ci/project/p06_compiler_records.py": "f441c12f4c9e4b9ef10eca13f8b5291fc41ffb86f1f42e42dfd320056dedd6da",
+    "ci/project/p06_warm_compiler_records.py": "fe32aa772439e98975cdcb4807b269022d461c5e99c0021c4689c9712d7988f9",
+    "ci/project/p06_warm_contract.json": "893d85401b1d5f7757d82cb7c743a89b36264fe19c7d08c239b7f216b7a8cbbd",
+    "ci/project/p06_warm_contract.py": "d311c5fb77e651a93fde368f0e41d517f40199a3bd43e27c302d4d00888cc31e",
+    "ci/project/p06_warm_execute.py": "03bf714d1c227406661cb7f12ccd39e8b3c201fb86607d9243ffd11320a93495",
+    "ci/project/p06_workspace_compiler_records.py": "d89496a4e08737c6bb5c72b5b05a94994bb70a63e17b88c11547f38d47c06375",
+    "ci/project/p06_workspace_replay.py": "aa039e92123ceed8b83eddb8362457c2214f96cbd2dc058739bf14c47ef938e6",
+    "ci/project/test_p06_warm_compiler_records.py": "7773f63620e806a67bcc2af0ce981222458455c1fb7b365d3d013c663806ddf4",
+    "ci/project/test_p06_warm_runner.py": "b48cfa4a583e0ba726174d5e86d2112c56e33cad65b7bf77882452467536bbb2",
+    "config.mk.in": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+    "docs/designs/warm_workspace_benchmark_v1.md": "2b29b8d91dc06be104793780de965329bd346f9a5f8a434dbe9676116fe6e525",
+    "docs/project/developer-guide.md": "b8b5a737ecff8ed5be41e2a85b5600bd93ff0b81fa638e90a761d104a5293341",
+    "docs/review/code-review-policy.md": "99426ced05c04c1b14422f4fdacabcce3c680600461c4887b14e5eabf8b0587d",
+    "sim/common.mk": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+    "sim/simx/Makefile": "c719966647f32fef5421dd798a89d3eeddccd692e7c61046e5744b7a8e722403",
+    "sw/kernel/Makefile": "b1c359421ca2b1b8c31b9dc98893fac772daa239e236e9d1c9225a1eb431238c",
+    "sw/runtime/common.mk": "2af4343c0738db4a665c96e24f90f78912302b20597dda74d9592afb6676736e",
+    "sw/runtime/simx/Makefile": "c59dfb1850b0e19c77edc8cbc1fc1c96df11f5779724efefde437b83003bb97c",
+    "tests/regression/ai_warm_workspace/Makefile": "fce388818d9bac36e698f8c21bded739da742127f5798c135437f169fe74d2ad",
+    "tests/regression/common.mk": "4164a783137b2f6e594ff3795f5911233227c3e4bfcb0319095cd6e78acf9b56"
+  },
+  "base_revision": "13dc0d1fdb6d5322104e381aa342dc139c7bb80c",
+  "base_revision_identifies_new_files": false,
+  "commit_created": false,
+  "findings": [
+    {
+      "confidence": "high",
+      "corroboration": "Executed synthetic WarmHarness probe changes output free_disk_bytes to 15 * 1024**3 - 1 after LAST_PROCESS; no real disk exhaustion or native GPU execution.",
+      "evidence_type": "static-proof",
+      "fix": "Require every final free-disk observation to be at least BUDGET[min_free_bytes] inside the existing final-resources failure boundary.",
+      "fix_author": "/root",
+      "id": "W05-A02-F2-01",
+      "location": "ci/project/p06_warm_execute.py: execute final-resources block",
+      "new_final_memory_gate_added": false,
+      "observed_before": {
+        "completed_processes": 24,
+        "failures": [],
+        "final_output_disk_free": 16106127359,
+        "full_matrix_completed": true,
+        "minimum": 16106127360,
+        "outcome": "pass",
+        "scope": "synthetic-resource-boundary-reproducer"
+      },
+      "regression": "WarmFailureAndRetentionTests.test_final_disk_shortfall_invalidates_complete_attempt_and_retains_all_verified_counts",
+      "reserve_changed": false,
+      "runner_after_sha256": "03bf714d1c227406661cb7f12ccd39e8b3c201fb86607d9243ffd11320a93495",
+      "runner_before_sha256": "c470eaf930a6b3924460751092cc011ef98c2e1a507ecd6f01577cef85eb2e84",
+      "scenario": "Free space crosses below 15 GiB after the last supervised process but before the final resource snapshot. All native-observation records have already passed. The previous runner recorded the shortfall without failing, while replay rejects it.",
+      "severity": "F2",
+      "status": "resolved",
+      "verified_after": {
+        "acceptance_claimed": false,
+        "checked_words": 25344,
+        "commands": 53,
+        "completed_launches": 792,
+        "completed_processes": 24,
+        "failure_stages": [
+          "final-resources"
+        ],
+        "full_matrix_completed": false,
+        "hypothesis_evaluation": "not_evaluated",
+        "outcome": "fail",
+        "performance_acceptance": false,
+        "phase_acceptance": false,
+        "phase_complete": false,
+        "process_outcomes_all_pass": true,
+        "returned_report_equals_retained_report": true,
+        "selected_scope_completed": false,
+        "state": "finished"
+      }
+    }
+  ],
+  "hunk_coverage": {
+    "ci/project/p06_warm_compiler_records.py": "all newly added hunks",
+    "ci/project/p06_warm_execute.py": "all newly added hunks, plus root final-resources correction"
+  },
+  "limits": [
+    "Supervision polls RSS and disk; these are not hard operating-system quotas.",
+    "Recorded source/tool/dependency equality is scoped to its inventory, not an exhaustive operating-system attestation.",
+    "Synthetic runner observations do not establish actual native execution, numerical hardware evidence or performance.",
+    "Review is advisory and does not grant phase acceptance or a review waiver."
+  ],
+  "not_run_by_this_review": [
+    "full runner suite",
+    "full compiler suite",
+    "native backend/kernel compilation",
+    "native warm SimX execution matrix",
+    "performance/hypothesis evaluation",
+    "RTL simulation",
+    "vendor integration",
+    "physical FPGA",
+    "silicon"
+  ],
+  "production_author_disjoint": true,
+  "production_edited_by_reviewer": false,
+  "push_performed": false,
+  "reviewed_at_utc": "2026-11-22T00:14:03+00:00",
+  "reviewed_prior_test_evidence": [
+    {
+      "distinct_passing_methods": 22,
+      "evidence_level": "real runner with synthetic external observations",
+      "original_test_sha256": "e63c43bc11c02959ae5629a6b8bc009fbaf6a14beaa217d74cf802da43cf0d8e",
+      "qualification_runs": [
+        {
+          "methods": 21,
+          "seconds": 169.569
+        },
+        {
+          "methods": 1,
+          "seconds": 0.316
+        }
+      ],
+      "receipt": "docs/project/evidence/p06-warm-workspace/agents/w04_a02.md",
+      "rerun_by_this_review": false
+    },
+    {
+      "actual_preprocessor_observations": 8,
+      "additional_invalid_format_rejections": 5,
+      "counted_rejections": 682,
+      "evidence_level": "fresh generated original PERF=1 stamps and host preprocessing; no native backend/kernel objects compiled",
+      "passing_methods": 21,
+      "receipt": "docs/project/evidence/p06-warm-workspace/agents/w04_a03.md",
+      "rerun_by_this_review": false,
+      "seconds": 18.87
+    }
+  ],
+  "reviewer": "/root/w05_a02_runner_review",
+  "schema": "ai-gpu-warm-runner-review-v1",
+  "status": "advisory_review_complete",
+  "subagents_spawned": 0,
+  "unresolved_f2_f3": [],
+  "worker_changes": [
+    "ci/project/test_p06_warm_runner.py: one authorized final-disk regression",
+    "docs/project/evidence/p06-warm-workspace/agents/w05_a02.md",
+    "docs/project/evidence/p06-warm-workspace/reviews/runner-review.json"
+  ]
+}

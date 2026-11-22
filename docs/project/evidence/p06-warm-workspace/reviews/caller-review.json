@@ -1,0 +1,106 @@
+{
+  "assignment": "W05-A01",
+  "base_revision": "13dc0d1fdb6d5322104e381aa342dc139c7bb80c",
+  "checks": [
+    "Exact CLI identity, policy, phase and pair validation precede native open; module reads are bounded to 16 bytes through 16 MiB.",
+    "Actual output words are compared before close; submit, wait, comparison, explicit close and success checks precede the end timestamp.",
+    "Trace/output retention, reset of the already closed operation and serialization occur after the primary timer; post-reset counts catch native cleanup deferred beyond close.",
+    "One context and 33 serial closed operations use the fixed fixture and alternating poison; failed batches stop without resubmission.",
+    "The observer scans exactly three live slots, has scalar counts, forwards native calls and performs no native query, output or heap allocation in tensor-buffer wrappers.",
+    "Open/release and post-prime/post-batch snapshots query live native state outside primary intervals; disabled counters remain unqueried/unreturned.",
+    "Same source and Makefile compile both policy arms into one binary per format; the CLI policy enum selects the existing runtime implementation.",
+    "The runtime, runtime API and native matmul kernel have no diff from base HEAD in this review."
+  ],
+  "findings": [],
+  "limitations": [
+    "Review is limited to the four named source files and their API use; full runner/archive/workflow enforcement is independently reviewed elsewhere.",
+    "Host synthetic tests do not prove native tensor arithmetic or speedup.",
+    "The 320-byte figure is requested tensor payload, not device-wide allocator overhead, host RSS or physical reclamation."
+  ],
+  "native_execution": "not_run",
+  "observations": [
+    {
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "severity": "F0",
+      "subject": "A rejected operation is serialized and a failure marker is flushed before operation.reset() when bounded close returns. The existing destructor drains indefinitely. Each requested wait/close timeout is 120 seconds; the external runner caps the entire process at 180 seconds. A persistently blocking wait plus close may be killed before a native failure prefix, so the supervised timeout receipt is the failure evidence in that case."
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "severity": "F0",
+      "subject": "Failed native releases remain errors. Zero observer bookkeeping after a failed release is not proof of native or physical memory reclamation; successful output requires zero errors and complete cleanup results."
+    }
+  ],
+  "ordinal": 25,
+  "outcome": "no_blocking_finding_in_reviewed_scope",
+  "performance_acceptance": false,
+  "phase_acceptance": false,
+  "resolved_observations": [
+    {
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "resolution": "Root expanded the bodies. Reconstructing the old bodies reproduced the previously tested observer SHA-256; whitespace-stripped contents are identical.",
+      "severity": "F0",
+      "subject": "Seven one-line observer accessors/phase functions differed from the written closing-brace style."
+    }
+  ],
+  "reviewer": "/root/w05_a01_caller_review",
+  "schema_version": 1,
+  "scope": "author-disjoint complete-hunk caller/observer/Makefile review",
+  "source_review": "All four newly added files were read completely, alongside the managed runtime lifetime implementation, C++ rules, review policy, frozen measurement design and record contract.",
+  "sources": [
+    {
+      "path": "tests/regression/ai_warm_workspace/Makefile",
+      "sha256": "fce388818d9bac36e698f8c21bded739da742127f5798c135437f169fe74d2ad",
+      "size_bytes": 974
+    },
+    {
+      "path": "tests/regression/ai_warm_workspace/main.cpp",
+      "sha256": "0bec5ac729b3aa6c5ffcf7ff95084d84e4d47d54e470d21e234d00aa16556ce0",
+      "size_bytes": 20984
+    },
+    {
+      "path": "tests/regression/ai_warm_workspace/observer.h",
+      "sha256": "7c5236827536b9faf286f6cbfb3e13459b7f43aa895207213125cc67299d488e",
+      "size_bytes": 1777
+    },
+    {
+      "path": "tests/regression/ai_warm_workspace/observer.cpp",
+      "sha256": "ac12eddcbfb2cf04981a8b8a945134ce763b93cd881fe5da549d28b7ed02021c",
+      "size_bytes": 9647
+    }
+  ],
+  "validation": {
+    "existing_evidence_reviewed": [
+      {
+        "bounded_processes": 166,
+        "receipt": "agents/w03_a03.md",
+        "scope": "C++17/UBSan caller, managed runtime, linker wrappers and strict-reader host transport integration",
+        "tests": 11
+      },
+      {
+        "bounded_processes": 43,
+        "receipt": "agents/w04_a01.md",
+        "scope": "C++17/UBSan direct observer faults and query/allocation/output sentinels",
+        "tests": 8
+      }
+    ],
+    "not_run_this_assignment": [
+      "Compilation or unit-test reruns",
+      "A permanent native timeout",
+      "Fresh SimX or processor RTL execution",
+      "Physical FPGA/silicon execution",
+      "Performance evaluation"
+    ],
+    "reason_not_repeated": "The reviewed production bytes match prior host evidence apart from the verified whitespace-only accessor expansion. Root schedules the final full host suite on the integrated checkpoint.",
+    "run_this_assignment": [
+      "Complete static source review",
+      "Final four-file SHA-256 inventory",
+      "Whitespace-only accessor-resolution proof",
+      "git diff --cached --check -- tests/regression/ai_warm_workspace",
+      "git diff --check -- tests/regression/ai_warm_workspace",
+      "Unchanged runtime/kernel diff check"
+    ]
+  }
+}

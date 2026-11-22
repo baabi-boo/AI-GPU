@@ -1,0 +1,532 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/w01_a04_native_numerics",
+  "assignment": "W01-A04",
+  "scope": "original workspace numerical and native dispatch evidence",
+  "outcome": "pass",
+  "review_date": "2026-11-21",
+  "workflow_run_id": 44925627664,
+  "workflow_attempt": 1,
+  "source_revision": "13dc0d1fdb6d5322104e381aa342dc139c7bb80c",
+  "source_tree": "b10ca275377103ad94941847ee4efb1b3f296efd",
+  "native_execution_in_this_review": "not_run",
+  "reviewed_original_execution": "pass",
+  "totals": {
+    "backend_format_variants": 4,
+    "processes": 8,
+    "native_launches": 32,
+    "checked_fp32_output_words": 1024,
+    "mismatches": 0,
+    "tensor_h2d_bytes_including_poison": 10240,
+    "tensor_d2h_bytes": 4096
+  },
+  "method": [
+    "Read original archive bytes directly; verified every archive size and SHA-256 against retained GitHub artifact metadata.",
+    "Verified all source revisions/trees are the same clean checkpoint and rehashed source/contract/binding/raw-log descriptors used by this numerical review.",
+    "Loaded independent local P02 producers and required exact matching frozen input corpus/header/profile/kernel bytes in originals.",
+    "Recomputed qualification IDs from complete bindings and matched process policy/backend/format/sequence to launch command and hosted job identity.",
+    "Re-ran trusted verify_output on original raw logs and independently compared all 1,024 output words and 56-byte ABI arguments; no archived code executed.",
+    "Reconciled the exact four-variant and eight-process matrix; every selected job remains individually scoped to two processes."
+  ],
+  "command": "python3 /workspace/scratch/4dab691e69d0/audit-logs/w01_a04_numerics.py",
+  "audit_script_sha256": "54ac6a85044e33d305583ce0ce2dffab8fad36775ea650e6483a46731c6198ef",
+  "trusted_reader_sources": [
+    {
+      "path": "ci/project/p06_workspace_records.py",
+      "sha256": "9e3f9af15f2981d19a05fcd83ddd369bae43f6530fd4383831c9d2942d8fee21"
+    },
+    {
+      "path": "ci/project/p03_execution_records.py",
+      "sha256": "b26449105f17f9487cc4fbaab36884ceea42be9f502a26aa58331ed4cf1140de"
+    },
+    {
+      "path": "ci/project/p02_wmma_fixtures.py",
+      "sha256": "4a672a5d3357f220120f43e5f5d7e880f7d0ba36df380d69cd1873ea4879835e"
+    },
+    {
+      "path": "ci/project/p02_layout_fixture_oracle.py",
+      "sha256": "34e78c0313e2b032930615f02a790729d1c49293349728b55f7d04a29a2568a7"
+    },
+    {
+      "path": "ci/project/p02_wmma_numerical_fixture_oracle.py",
+      "sha256": "083450dc11712e5fc6dce7d19fb854bd9ef25b738347efd56bd07e81b079570b"
+    },
+    {
+      "path": "ci/project/p02_fixture_oracle.py",
+      "sha256": "12e546864a4fef5b05e10c7a04b1006bcd59376e5921ea1221c4d42668490145"
+    }
+  ],
+  "archives": [
+    {
+      "archive": "docs/project/evidence/p06-warm-workspace/originals/workspace-simx-fp16.zip",
+      "archive_sha256": "dec4bd9f2a57b808cbce046a63ed68849fcc6fe4271eeaea819c8b637189ac05",
+      "artifact_id": 14716020262,
+      "report_sha256": "6b1e82e89fa833e862ada7cd51d7baf80e7e4970af00dd5e3b9e66f721e29617",
+      "source_revision": "13dc0d1fdb6d5322104e381aa342dc139c7bb80c",
+      "source_tree": "b10ca275377103ad94941847ee4efb1b3f296efd",
+      "processes": [
+        {
+          "id": "simx-fp16-per_operation",
+          "backend": "simx",
+          "format": "fp16",
+          "policy": "per_operation",
+          "qualification_id": "029489d0c2b0e1b8d70e596987aa61f86f82a32f4c149bf60cf16fee134cdbdd",
+          "command_id": "simx-fp16-per_operation",
+          "exit_code": 0,
+          "raw_log_path": "workspace/logs/simx-fp16-per_operation.log",
+          "raw_log_sha256": "294c3c8702f999a4a78ce1d9696b34de4936d6280f023f392de28befccf43917",
+          "native_launches": 4,
+          "checked_words": 128,
+          "operations": [
+            {
+              "sequence_index": 0,
+              "fixture_id": "fp16-single-dense_boundaries",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 1,
+              "fixture_id": "fp16-numerical-zero",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 2,
+              "fixture_id": "fp16-single-k03",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "a9303290be6bd5f667bc5b00aabcd3e32414df79a10caf64f155d07cdbb00cf4",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 3,
+              "fixture_id": "fp16-single-dense_boundaries",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            }
+          ]
+        },
+        {
+          "id": "simx-fp16-reusable_single_tile",
+          "backend": "simx",
+          "format": "fp16",
+          "policy": "reusable_single_tile",
+          "qualification_id": "af52800d2cfef4887d1ad00ea4ceb1a02e4e87ef35ba1163b3caf5f5a63b5860",
+          "command_id": "simx-fp16-reusable_single_tile",
+          "exit_code": 0,
+          "raw_log_path": "workspace/logs/simx-fp16-reusable_single_tile.log",
+          "raw_log_sha256": "f04823a8bf329b02c914a41bf2ef91522e5f6434f77c4b377f907b1946cbbde8",
+          "native_launches": 4,
+          "checked_words": 128,
+          "operations": [
+            {
+              "sequence_index": 0,
+              "fixture_id": "fp16-single-dense_boundaries",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 1,
+              "fixture_id": "fp16-numerical-zero",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 2,
+              "fixture_id": "fp16-single-k03",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "a9303290be6bd5f667bc5b00aabcd3e32414df79a10caf64f155d07cdbb00cf4",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 3,
+              "fixture_id": "fp16-single-dense_boundaries",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "archive": "docs/project/evidence/p06-warm-workspace/originals/workspace-rtlsim-bf16.zip",
+      "archive_sha256": "64ff960a65582f76df9f1699fc70edacce075c6ed3764dbb2cb050611fabf760",
+      "artifact_id": 14715886368,
+      "report_sha256": "5471bf36fd0d419ea260dd01012bef13ca7c2e646e7b4728623888a5cd3e455a",
+      "source_revision": "13dc0d1fdb6d5322104e381aa342dc139c7bb80c",
+      "source_tree": "b10ca275377103ad94941847ee4efb1b3f296efd",
+      "processes": [
+        {
+          "id": "rtlsim-bf16-per_operation",
+          "backend": "rtlsim",
+          "format": "bf16",
+          "policy": "per_operation",
+          "qualification_id": "c1ae03f93ac132a607c17eb9e2e6f0f0ecdd166a64f53aaa43bbd1efe4ae728e",
+          "command_id": "rtlsim-bf16-per_operation",
+          "exit_code": 0,
+          "raw_log_path": "workspace/logs/rtlsim-bf16-per_operation.log",
+          "raw_log_sha256": "847db1bf6857018f84ccf26b2901c5594ee1eca19ffe8c58f30fe00f7cd00f18",
+          "native_launches": 4,
+          "checked_words": 128,
+          "operations": [
+            {
+              "sequence_index": 0,
+              "fixture_id": "bf16-single-dense_boundaries",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 1,
+              "fixture_id": "bf16-numerical-zero",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 2,
+              "fixture_id": "bf16-single-k03",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "a9303290be6bd5f667bc5b00aabcd3e32414df79a10caf64f155d07cdbb00cf4",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 3,
+              "fixture_id": "bf16-single-dense_boundaries",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            }
+          ]
+        },
+        {
+          "id": "rtlsim-bf16-reusable_single_tile",
+          "backend": "rtlsim",
+          "format": "bf16",
+          "policy": "reusable_single_tile",
+          "qualification_id": "d87eedc0ef1064d2fd5e6f408911a04c803e0b6d53587e05f592159966432b2a",
+          "command_id": "rtlsim-bf16-reusable_single_tile",
+          "exit_code": 0,
+          "raw_log_path": "workspace/logs/rtlsim-bf16-reusable_single_tile.log",
+          "raw_log_sha256": "99f0f6a8b5ee8e964c0dbedd1f7490cef9a381fb24098da9f0a0693b89d7ca5d",
+          "native_launches": 4,
+          "checked_words": 128,
+          "operations": [
+            {
+              "sequence_index": 0,
+              "fixture_id": "bf16-single-dense_boundaries",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 1,
+              "fixture_id": "bf16-numerical-zero",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 2,
+              "fixture_id": "bf16-single-k03",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "a9303290be6bd5f667bc5b00aabcd3e32414df79a10caf64f155d07cdbb00cf4",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 3,
+              "fixture_id": "bf16-single-dense_boundaries",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "archive": "docs/project/evidence/p06-warm-workspace/originals/workspace-rtlsim-fp16.zip",
+      "archive_sha256": "3a8bc281ac24b32bd613fdf1096cea61b209f2b54a542b42fad3c39a2f1b6a7b",
+      "artifact_id": 14715671250,
+      "report_sha256": "e426e222806fa456cda3c5daba35f062a550214d40d2f0330d16dbf3da00416b",
+      "source_revision": "13dc0d1fdb6d5322104e381aa342dc139c7bb80c",
+      "source_tree": "b10ca275377103ad94941847ee4efb1b3f296efd",
+      "processes": [
+        {
+          "id": "rtlsim-fp16-per_operation",
+          "backend": "rtlsim",
+          "format": "fp16",
+          "policy": "per_operation",
+          "qualification_id": "183ed397fab6981e2103d4022b1187bb757358a3d63cdc885862bce9adb70393",
+          "command_id": "rtlsim-fp16-per_operation",
+          "exit_code": 0,
+          "raw_log_path": "workspace/logs/rtlsim-fp16-per_operation.log",
+          "raw_log_sha256": "5ef51f63aef29dc5c323e92b1bfc9abd58e87e3ce3b39497e5c0f7f57df923a5",
+          "native_launches": 4,
+          "checked_words": 128,
+          "operations": [
+            {
+              "sequence_index": 0,
+              "fixture_id": "fp16-single-dense_boundaries",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 1,
+              "fixture_id": "fp16-numerical-zero",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 2,
+              "fixture_id": "fp16-single-k03",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "a9303290be6bd5f667bc5b00aabcd3e32414df79a10caf64f155d07cdbb00cf4",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 3,
+              "fixture_id": "fp16-single-dense_boundaries",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            }
+          ]
+        },
+        {
+          "id": "rtlsim-fp16-reusable_single_tile",
+          "backend": "rtlsim",
+          "format": "fp16",
+          "policy": "reusable_single_tile",
+          "qualification_id": "e0a6454607e6aae734867712586077d8bda2541dfb90487a78fdc5ea5773e001",
+          "command_id": "rtlsim-fp16-reusable_single_tile",
+          "exit_code": 0,
+          "raw_log_path": "workspace/logs/rtlsim-fp16-reusable_single_tile.log",
+          "raw_log_sha256": "c6ad3cd8199a00cfb39770edd95cb499612246a4e13c3acf8a0caf702f7e05b0",
+          "native_launches": 4,
+          "checked_words": 128,
+          "operations": [
+            {
+              "sequence_index": 0,
+              "fixture_id": "fp16-single-dense_boundaries",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 1,
+              "fixture_id": "fp16-numerical-zero",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 2,
+              "fixture_id": "fp16-single-k03",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "a9303290be6bd5f667bc5b00aabcd3e32414df79a10caf64f155d07cdbb00cf4",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 3,
+              "fixture_id": "fp16-single-dense_boundaries",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "archive": "docs/project/evidence/p06-warm-workspace/originals/workspace-simx-bf16.zip",
+      "archive_sha256": "7775d29d06db73b2bc75341fc0bf0acce6415326bd6f4e976598a36778f5bd42",
+      "artifact_id": 14715294065,
+      "report_sha256": "849228c8e3e23e72da7697643debbff4b58476234fb9d334f8c66bfffc506126",
+      "source_revision": "13dc0d1fdb6d5322104e381aa342dc139c7bb80c",
+      "source_tree": "b10ca275377103ad94941847ee4efb1b3f296efd",
+      "processes": [
+        {
+          "id": "simx-bf16-per_operation",
+          "backend": "simx",
+          "format": "bf16",
+          "policy": "per_operation",
+          "qualification_id": "103d1f86dff8873b2bd2e5ab9bf735e127a26ea1da0d3e3b13754fa80b785386",
+          "command_id": "simx-bf16-per_operation",
+          "exit_code": 0,
+          "raw_log_path": "workspace/logs/simx-bf16-per_operation.log",
+          "raw_log_sha256": "27588711ad9d2c07327c03386822fe0865410ddc90294cd068b37a88d924bd52",
+          "native_launches": 4,
+          "checked_words": 128,
+          "operations": [
+            {
+              "sequence_index": 0,
+              "fixture_id": "bf16-single-dense_boundaries",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 1,
+              "fixture_id": "bf16-numerical-zero",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 2,
+              "fixture_id": "bf16-single-k03",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "a9303290be6bd5f667bc5b00aabcd3e32414df79a10caf64f155d07cdbb00cf4",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 3,
+              "fixture_id": "bf16-single-dense_boundaries",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            }
+          ]
+        },
+        {
+          "id": "simx-bf16-reusable_single_tile",
+          "backend": "simx",
+          "format": "bf16",
+          "policy": "reusable_single_tile",
+          "qualification_id": "8acd7764aa166519378ad200eadfc64fc5196a826aae210afb365e7b8163c2e0",
+          "command_id": "simx-bf16-reusable_single_tile",
+          "exit_code": 0,
+          "raw_log_path": "workspace/logs/simx-bf16-reusable_single_tile.log",
+          "raw_log_sha256": "a1f92364951db8b53c41a29f2a587381911e6960416b14008fb5c640009d9670",
+          "native_launches": 4,
+          "checked_words": 128,
+          "operations": [
+            {
+              "sequence_index": 0,
+              "fixture_id": "bf16-single-dense_boundaries",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 1,
+              "fixture_id": "bf16-numerical-zero",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 2,
+              "fixture_id": "bf16-single-k03",
+              "poison": 3735928559,
+              "checked_words": 32,
+              "actual_bits_sha256": "a9303290be6bd5f667bc5b00aabcd3e32414df79a10caf64f155d07cdbb00cf4",
+              "native_launches": 1,
+              "mismatches": 0
+            },
+            {
+              "sequence_index": 3,
+              "fixture_id": "bf16-single-dense_boundaries",
+              "poison": 2143346349,
+              "checked_words": 32,
+              "actual_bits_sha256": "df2a84cc79765faa36f96cef56fcd0d9add6953882de0a8e9ad96482fbde4e07",
+              "native_launches": 1,
+              "mismatches": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "findings": [],
+  "acceptance_claimed": false,
+  "performance_acceptance": false,
+  "limitations": [
+    "This is an independent numerical/dispatch review of retained original executions, not a new native run or a complete compiler/tool/provenance audit.",
+    "The same trusted strict parser also checked recorded ownership/resources, but independent lifetime and provenance reviews remain separate obligations.",
+    "Only four ordered (8,4,8) calls per process are covered; this does not qualify every supported matmul shape or all numerical cases.",
+    "Processor rtlsim bypasses the AFU and retains integer DPI helpers; there is no vendor hw_emu, physical FPGA or silicon result.",
+    "No timing comparison, speedup, P06-A02/A03 closure or P05 acceptance follows from this review.",
+    "The initialized job.json native_execution=not_run field is preparation metadata; actual execution is established by the original runner report, bounded command receipts and raw numerical/dispatch records."
+  ],
+  "audit_development_attempts": [
+    {
+      "outcome": "fail",
+      "scope": "independent audit script only",
+      "reason": "The first additional manual comparison converted actual hexadecimal words to integers but compared them with the fixture hexadecimal strings; this type mismatch was corrected in the audit script. Original native records and production sources were unchanged."
+    },
+    {
+      "outcome": "pass",
+      "scope": "corrected independent audit script",
+      "reason": "Converted both actual and expected hexadecimal words to integers; all four archive checks and all 1,024 word comparisons passed."
+    }
+  ]
+}
