@@ -15,8 +15,7 @@
 
 // The host DCR bus transfers 32-bit halves regardless of architectural XLEN.
 `define CSR_READ_64(addr, dst, src) \
-    addr : dst = src[31:0]; \
-    addr+12'h80 : dst = 32'(src[$bits(src)-1:32])
+    addr : dst = src
 
 // Host-side machine performance-monitor reads (DCR path). The counters are not
 // reachable from kernel CSR instructions, so one instance serves the whole core.
@@ -34,8 +33,12 @@ module VX_csr_mpm import VX_gpu_pkg::*; #(
 );
     `UNUSED_SPARAM (INSTANCE_ID)
 
-    wire [7:0]                   dcr_mpm_class = dcr_csr_if.mpm_class;
-    wire [`VX_CSR_ADDR_BITS-1:0] dcr_addr      = dcr_csr_if.addr;
+    localparam [`VX_CSR_ADDR_BITS-1:0] MPM_HIGH_MASK =
+        `VX_CSR_ADDR_BITS'(`VX_CSR_MPM_BASE_H ^ `VX_CSR_MPM_BASE);
+
+    wire [7:0]                  dcr_mpm_class = dcr_csr_if.mpm_class;
+    wire [`VX_CSR_ADDR_BITS-1:0] dcr_addr = dcr_csr_if.addr & ~MPM_HIGH_MASK;
+    wire dcr_is_hi = |(dcr_csr_if.addr & MPM_HIGH_MASK);
     wire [VX_DCR_DATA_WIDTH-1:0] dcr_data;
 
     // Host counter reads decode their own address and never wait on a request.
@@ -46,7 +49,7 @@ module VX_csr_mpm import VX_gpu_pkg::*; #(
 
     // Host performance-counter reads ////////////////////////////////////////
 
-    reg [VX_DCR_DATA_WIDTH-1:0] dcr_data_w;
+    reg [PERF_CTR_BITS-1:0] dcr_data_w;
 
     always @(*) begin
         dcr_data_w = '0;
@@ -55,8 +58,7 @@ module VX_csr_mpm import VX_gpu_pkg::*; #(
             `CSR_READ_64(`VX_CSR_MINSTRET, dcr_data_w, instret);
             default: begin
             `ifdef PERF_ENABLE
-                if ((dcr_addr >= `VX_CSR_MPM_USER   && dcr_addr < (`VX_CSR_MPM_USER + 32))
-                 || (dcr_addr >= `VX_CSR_MPM_USER_H && dcr_addr < (`VX_CSR_MPM_USER_H + 32))) begin
+                if (dcr_addr >= `VX_CSR_MPM_USER && dcr_addr < (`VX_CSR_MPM_USER + 32)) begin
                     case (dcr_mpm_class)
                     `VX_DCR_MPM_CLASS_CORE: begin
                         case (dcr_addr)
@@ -255,7 +257,9 @@ module VX_csr_mpm import VX_gpu_pkg::*; #(
         endcase
     end
 
-    assign dcr_data = dcr_data_w;
+    assign dcr_data = dcr_is_hi
+        ? VX_DCR_DATA_WIDTH'(dcr_data_w[PERF_CTR_BITS-1:VX_DCR_DATA_WIDTH])
+        : dcr_data_w[VX_DCR_DATA_WIDTH-1:0];
 `ifndef PERF_ENABLE
     `UNUSED_VAR (dcr_mpm_class)
 `endif
