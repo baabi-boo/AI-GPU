@@ -1,0 +1,421 @@
+name: P06 Host MPM Transport
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/p06-mpm-transport.yml'
+      - 'ci/project/**'
+      - 'ci/testcases/unittest.yaml'
+      - 'ci/testcases/logic_gate.yaml'
+      - 'ci/logic_gate.py'
+      - 'ci/synth_gate.py'
+      - 'ci/beacon.py'
+      - 'ci/toolchain_install.sh.in'
+      - 'ci/toolchain_rev.sh'
+      - 'ci/install_dependencies.sh'
+      - 'ci/gen_config.py'
+      - 'configure'
+      - 'Makefile.in'
+      - 'config.mk.in'
+      - 'hw/unittest/Makefile'
+      - 'hw/unittest/common.mk'
+      - 'hw/unittest/verilator.vlt.in'
+      - 'hw/unittest/common/**'
+      - 'hw/unittest/mpm_transport/**'
+      - 'hw/rtl/**'
+      - 'hw/dpi/**'
+      - 'hw/scripts/**'
+      - 'hw/syn/**'
+      - 'sim/simx/**'
+      - 'sim/common/**'
+      - 'sim/common.mk'
+      - 'tests/unittest/mpm_transport/**'
+      - 'sw/common/**'
+      - 'sw/include/**'
+      - 'sw/runtime/**'
+      - 'third_party/**'
+      - 'docs/designs/host_mpm_transport_v1.md'
+      - 'VERSION'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - 'vortex_opae.toml'
+      - '.gitmodules'
+  pull_request:
+    paths:
+      - '.github/workflows/p06-mpm-transport.yml'
+      - 'ci/project/**'
+      - 'ci/testcases/unittest.yaml'
+      - 'ci/testcases/logic_gate.yaml'
+      - 'ci/logic_gate.py'
+      - 'ci/synth_gate.py'
+      - 'ci/beacon.py'
+      - 'ci/toolchain_install.sh.in'
+      - 'ci/toolchain_rev.sh'
+      - 'ci/install_dependencies.sh'
+      - 'ci/gen_config.py'
+      - 'configure'
+      - 'Makefile.in'
+      - 'config.mk.in'
+      - 'hw/unittest/Makefile'
+      - 'hw/unittest/common.mk'
+      - 'hw/unittest/verilator.vlt.in'
+      - 'hw/unittest/common/**'
+      - 'hw/unittest/mpm_transport/**'
+      - 'hw/rtl/**'
+      - 'hw/dpi/**'
+      - 'hw/scripts/**'
+      - 'hw/syn/**'
+      - 'sim/simx/**'
+      - 'sim/common/**'
+      - 'sim/common.mk'
+      - 'tests/unittest/mpm_transport/**'
+      - 'sw/common/**'
+      - 'sw/include/**'
+      - 'sw/runtime/**'
+      - 'third_party/**'
+      - 'docs/designs/host_mpm_transport_v1.md'
+      - 'VERSION'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - 'vortex_opae.toml'
+      - '.gitmodules'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p06-mpm-transport-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  native-transport:
+    name: Native MPM transport (RV32/RV64, PERF off/on)
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      MAKEFLAGS: '-j2'
+      THREADS: '1'
+      CMAKE_BUILD_PARALLEL_LEVEL: '2'
+      CCACHE_DISABLE: '1'
+      OBJCACHE: ''
+      PROFILE: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          submodules: recursive
+          persist-credentials: false
+      - name: Initialize retained job identity
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, os, shutil, sys
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'p06-mpm-transport'
+          root.mkdir(mode=0o700)
+          (root / 'evidence').mkdir(mode=0o700)
+          with open(os.environ['GITHUB_ENV'], 'a') as environment:
+              environment.write('P06_MPM_ROOT=' + str(root) + '\n')
+          workflow = Path('.github/workflows/p06-mpm-transport.yml').read_bytes()
+          (root / 'evidence' / 'workflow.yml').write_bytes(workflow)
+          data = {key: os.environ[key] for key in (
+              'GITHUB_SHA', 'GITHUB_EVENT_NAME', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT',
+              'GITHUB_JOB', 'GITHUB_REPOSITORY', 'GITHUB_REF')}
+          data.update(scope='native-host-mpm-transport-regression',
+                      requested_xlen=[32, 64], requested_engines=['rtl', 'simx'],
+                      requested_perf=['off', 'on'], initial_native_execution='not_run',
+                      acceptance_claimed=False,
+                      workflow_sha256=hashlib.sha256(workflow).hexdigest())
+          sys.path.insert(0, str(Path('ci/project').resolve()))
+          from preflight import available_memory_bytes
+          data['free_disk_bytes_before_cache'] = shutil.disk_usage(root).free
+          data['available_memory_bytes_before_cache'] = available_memory_bytes()
+          (root / 'evidence' / 'job.json').write_text(json.dumps(data, indent=2) + '\n')
+          if (data['free_disk_bytes_before_cache'] < 15 * 2**30
+                  or (data['available_memory_bytes_before_cache'] or 0) < 4 * 2**30):
+              raise SystemExit('15 GiB disk reserve and 4 GiB available memory are required')
+          PY
+      - name: Provision pinned CPython
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+          architecture: x64
+          check-latest: false
+      - name: Retain and verify Python interpreter identity
+        run: |
+          set -euo pipefail
+          python3 -I - <<'PY'
+          import json, os, platform, shutil, sys
+          from pathlib import Path
+          data = {'python_version': list(sys.version_info[:3]),
+                  'implementation': platform.python_implementation(),
+                  'platform': sys.platform, 'executable': sys.executable,
+                  'python3_on_path': shutil.which('python3')}
+          target = Path(os.environ['P06_MPM_ROOT']) / 'evidence' / 'python-provision.json'
+          target.write_text(json.dumps(data, indent=2) + '\n')
+          if (data['python_version'] != [3, 12, 14] or data['implementation'] != 'CPython'
+                  or data['platform'] != 'linux'
+                  or Path(data['python3_on_path']).resolve() != Path(sys.executable).resolve()):
+              raise SystemExit('Python interpreter identity differs from the pinned inputs')
+          PY
+      - name: Resolve pinned toolchain cache identity
+        id: pins
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          P06_MPM_TOOLCHAIN_ID=$(bash ci/toolchain_rev.sh)
+          [[ "$P06_MPM_TOOLCHAIN_ID" =~ ^[A-Za-z0-9._-]+-[0-9a-f]{40}$ ]]
+          echo "toolchain=$P06_MPM_TOOLCHAIN_ID" >> "$GITHUB_OUTPUT"
+      - name: Restore pinned toolchain without writing cache
+        id: toolchain
+        uses: actions/cache/restore@v4
+        with:
+          path: tools
+          key: ${{ runner.os }}-toolchain-${{ steps.pins.outputs.toolchain }}-lite
+          restore-keys: ${{ runner.os }}-toolchain-${{ steps.pins.outputs.toolchain }}-
+      - name: Restore dependency inputs without writing cache
+        id: dependencies
+        uses: actions/cache/restore@v4
+        with:
+          path: third_party
+          key: ${{ runner.os }}-thirdparty-${{ hashFiles('third_party/Makefile', '.gitmodules') }}
+      - name: Install baseline host dependencies
+        if: steps.toolchain.outputs.cache-matched-key != '' && steps.dependencies.outputs.cache-matched-key != ''
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          sudo bash ci/install_dependencies.sh \
+            2>&1 | tee "$P06_MPM_ROOT/evidence/host-dependencies.log"
+      - name: Validate cached inputs or retain a blocked preparation receipt
+        id: preparation
+        env:
+          P06_MPM_TOOLCHAIN_ID: ${{ steps.pins.outputs.toolchain }}
+          P06_MPM_TOOLCHAIN_CACHE: ${{ steps.toolchain.outputs.cache-matched-key }}
+          P06_MPM_DEPENDENCY_CACHE: ${{ steps.dependencies.outputs.cache-matched-key }}
+          P06_MPM_DEPENDENCY_KEY: ${{ runner.os }}-thirdparty-${{ hashFiles('third_party/Makefile', '.gitmodules') }}
+        run: |
+          set -euo pipefail
+          python3 ci/project/p04_ci_prepare.py \
+            --source-dir "$PWD" --workspace-dir "$P06_MPM_ROOT" \
+            --expected-revision "$GITHUB_SHA" --toolchain-id "$P06_MPM_TOOLCHAIN_ID" \
+            --toolchain-cache-key "$P06_MPM_TOOLCHAIN_CACHE" \
+            --third-party-cache-key "$P06_MPM_DEPENDENCY_CACHE" \
+            --expected-third-party-key "$P06_MPM_DEPENDENCY_KEY" \
+            --backend rtlsim --format both \
+            2>&1 | tee "$P06_MPM_ROOT/evidence/preparation.log"
+      - name: Fetch the pinned production reference
+        id: reference
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          git -c protocol.version=2 fetch --no-tags --depth=1 origin \
+            4df7186edbca82b21b2b8cba9b3b192248b99209 \
+            2>&1 | tee "$P06_MPM_ROOT/evidence/reference-fetch.log"
+          git cat-file -e 4df7186edbca82b21b2b8cba9b3b192248b99209^{commit}
+      - name: Execute both native engines at both widths and PERF settings
+        run: |
+          set -euo pipefail
+          python3 ci/project/p06_mpm_execute.py \
+            --source-dir "$PWD" --tools-dir "$P06_MPM_ROOT/tools" \
+            --work-dir "$P06_MPM_ROOT/work" --output "$P06_MPM_ROOT/evidence/transport" \
+            --xlen both --engines both \
+            2>&1 | tee "$P06_MPM_ROOT/evidence/execution.log"
+      - name: Verify the pinned parent fails the same native high-half assertions
+        if: ${{ !cancelled() && steps.preparation.outcome == 'success' && steps.reference.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python3 ci/project/p06_mpm_parent.py \
+            --source-dir "$PWD" --tools-dir "$P06_MPM_ROOT/tools" \
+            --work-dir "$P06_MPM_ROOT/parent-work" --output "$P06_MPM_ROOT/evidence/parent" \
+            2>&1 | tee "$P06_MPM_ROOT/evidence/parent-execution.log"
+      - name: Retain preparation and native execution packet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p06-mpm-transport-${{ github.sha }}-run${{ github.run_id }}-attempt${{ github.run_attempt }}
+          path: ${{ runner.temp }}/p06-mpm-transport/evidence
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 6
+          include-hidden-files: true
+
+  paired-synthesis:
+    name: Paired MPM circuit measurements
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      MAKEFLAGS: '-j2'
+      THREADS: '1'
+      CMAKE_BUILD_PARALLEL_LEVEL: '2'
+      CCACHE_DISABLE: '1'
+      OBJCACHE: ''
+      PROFILE: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          submodules: recursive
+          persist-credentials: false
+      - name: Initialize retained circuit-measurement identity
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, os, shutil, sys
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'p06-mpm-circuits'
+          root.mkdir(mode=0o700)
+          (root / 'evidence').mkdir(mode=0o700)
+          with open(os.environ['GITHUB_ENV'], 'a') as environment:
+              environment.write('P06_MPM_CIRCUITS=' + str(root) + '\n')
+          workflow = Path('.github/workflows/p06-mpm-transport.yml').read_bytes()
+          (root / 'evidence' / 'workflow.yml').write_bytes(workflow)
+          data = {key: os.environ[key] for key in (
+              'GITHUB_SHA', 'GITHUB_EVENT_NAME', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT',
+              'GITHUB_JOB', 'GITHUB_REPOSITORY', 'GITHUB_REF')}
+          data.update(scope='paired-leaf-beacon-and-generic-yosys-measurements',
+                      reference_revision='4df7186edbca82b21b2b8cba9b3b192248b99209',
+                      initial_measurements='not_run', acceptance_claimed=False,
+                      physical_timing_claimed=False, baseline_gate_pass_claimed=False,
+                      workflow_sha256=hashlib.sha256(workflow).hexdigest())
+          sys.path.insert(0, str(Path('ci/project').resolve()))
+          from preflight import available_memory_bytes
+          data['free_disk_bytes_before_cache'] = shutil.disk_usage(root).free
+          data['available_memory_bytes_before_cache'] = available_memory_bytes()
+          (root / 'evidence' / 'job.json').write_text(json.dumps(data, indent=2) + '\n')
+          if (data['free_disk_bytes_before_cache'] < 15 * 2**30
+                  or (data['available_memory_bytes_before_cache'] or 0) < 4 * 2**30):
+              raise SystemExit('15 GiB disk reserve and 4 GiB available memory are required')
+          PY
+      - name: Provision pinned circuit-check Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+          architecture: x64
+          check-latest: false
+      - name: Resolve pinned circuit toolchain identity
+        id: pins
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          P06_MPM_TOOLCHAIN_ID=$(bash ci/toolchain_rev.sh)
+          [[ "$P06_MPM_TOOLCHAIN_ID" =~ ^[A-Za-z0-9._-]+-[0-9a-f]{40}$ ]]
+          echo "toolchain=$P06_MPM_TOOLCHAIN_ID" >> "$GITHUB_OUTPUT"
+      - name: Restore circuit tools without writing cache
+        id: toolchain
+        uses: actions/cache/restore@v4
+        with:
+          path: tools
+          key: ${{ runner.os }}-toolchain-${{ steps.pins.outputs.toolchain }}-lite
+          restore-keys: ${{ runner.os }}-toolchain-${{ steps.pins.outputs.toolchain }}-
+      - name: Validate and prepare bounded circuit prerequisites
+        timeout-minutes: 15
+        env:
+          P06_MPM_TOOLCHAIN_ID: ${{ steps.pins.outputs.toolchain }}
+          P06_MPM_TOOLCHAIN_CACHE: ${{ steps.toolchain.outputs.cache-matched-key }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, os, platform, re, shutil, sys
+          from pathlib import Path
+          sys.path.insert(0, str(Path('ci/project').resolve()))
+          from baseline_process import GIB, MIB, run_bounded
+          from p06_mpm_execute import clean_environment
+          from preflight import available_memory_bytes
+          source = Path.cwd()
+          root = Path(os.environ['P06_MPM_CIRCUITS'])
+          evidence = root / 'evidence'
+          provision = root / 'provision'
+          tools = root / 'tools'
+          report = {'outcome': 'blocked', 'commands': [], 'acceptance_claimed': False,
+                    'toolchain_id': os.environ['P06_MPM_TOOLCHAIN_ID'],
+                    'cache_key': os.environ['P06_MPM_TOOLCHAIN_CACHE'],
+                    'python_version': list(sys.version_info[:3]),
+                    'implementation': platform.python_implementation(),
+                    'python_executable': sys.executable,
+                    'free_disk_bytes': shutil.disk_usage(root).free,
+                    'available_memory_bytes': available_memory_bytes()}
+          def retain():
+              (evidence / 'preparation.json').write_text(json.dumps(report, indent=2) + '\n')
+          def require(value, reason):
+              if not value:
+                  raise ValueError(reason)
+          def command(name, argv, cwd, environment, timeout):
+              item = {'id': name, 'argv': list(map(str, argv)), 'cwd': str(cwd),
+                      'environment': environment, 'log': name + '.log'}
+              report['commands'].append(item)
+              retain()
+              item.update(run_bounded(item['argv'], cwd, environment, evidence / item['log'],
+                                      timeout_seconds=timeout, max_rss_bytes=4 * GIB,
+                                      min_free_bytes=15 * GIB, max_log_bytes=16 * MIB,
+                                      resource_paths=(source, root)))
+              retain()
+              require(item['outcome'] == 'pass' and item['cleanup_complete'],
+                      name + ' failed: ' + str(item['reason']))
+          try:
+              retain()
+              require(report['python_version'] == [3, 12, 14]
+                      and report['implementation'] == 'CPython' and sys.platform == 'linux',
+                      'pinned CPython identity differs')
+              require(report['free_disk_bytes'] >= 15 * GIB
+                      and (report['available_memory_bytes'] or 0) >= 4 * GIB,
+                      '15 GiB disk reserve and 4 GiB available memory are required')
+              identity = report['toolchain_id']
+              require(re.fullmatch(r'[A-Za-z0-9._-]+-[0-9a-f]{40}', identity), 'invalid toolchain pin')
+              require(report['cache_key'].startswith('Linux-toolchain-' + identity + '-'),
+                      'matching pinned toolchain cache is unavailable')
+              require((source / 'tools').is_dir() and not (source / 'tools').is_symlink(),
+                      'cached tool directory is unavailable')
+              shutil.move(source / 'tools', tools)
+              provision.mkdir(mode=0o700)
+              for name in ('home', 'tmp'):
+                  (provision / name).mkdir()
+              environment = clean_environment(provision)
+              environment['TOOLCHAIN_REV'] = identity.rsplit('-', 1)[1]
+              command('python-packages', [sys.executable, '-I', '-m', 'pip', '--isolated', 'install',
+                      '--disable-pip-version-check', '--no-cache-dir', '--only-binary=:all:', '--no-deps',
+                      'PyYAML==6.0.2', 'pyslang==12.2.0'], provision, environment, 180)
+              command('configure-tools', [source / 'configure', '--xlen=64', '--profile=',
+                      '--tooldir=' + str(tools)], provision, environment, 120)
+              installer = provision / 'ci/toolchain_install.sh'
+              report['installer_sha256'] = hashlib.sha256(installer.read_bytes()).hexdigest()
+              command('install-foldsim', ['bash', installer, '--foldsim'], provision, environment, 300)
+              command('fetch-reference', ['git', '-c', 'protocol.version=2', 'fetch', '--no-tags',
+                      '--depth=1', 'origin', '4df7186edbca82b21b2b8cba9b3b192248b99209'],
+                      source, dict(environment, GIT_TERMINAL_PROMPT='0'), 120)
+              command('verify-reference', ['git', 'cat-file', '-e',
+                      '4df7186edbca82b21b2b8cba9b3b192248b99209^{commit}'], source, environment, 30)
+              report['outcome'] = 'pass'
+          except (OSError, ValueError, RuntimeError) as error:
+              report['reason'] = str(error)
+          finally:
+              retain()
+          if report['outcome'] != 'pass':
+              raise SystemExit(report.get('reason', 'preparation failed'))
+          PY
+      - name: Measure paired leaf circuits without modifying synthesis goldens
+        run: |
+          set -euo pipefail
+          python3 ci/project/p06_mpm_synthesis.py \
+            --source-dir "$PWD" --tools-dir "$P06_MPM_CIRCUITS/tools" \
+            --work-dir "$P06_MPM_CIRCUITS/work" --output "$P06_MPM_CIRCUITS/evidence/synthesis" \
+            2>&1 | tee "$P06_MPM_CIRCUITS/evidence/measurements.log"
+      - name: Retain paired circuit measurements and raw gate outcomes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p06-mpm-circuits-${{ github.sha }}-run${{ github.run_id }}-attempt${{ github.run_attempt }}
+          path: ${{ runner.temp }}/p06-mpm-circuits/evidence
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 6
+          include-hidden-files: true

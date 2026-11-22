@@ -1,0 +1,40 @@
+{
+  "scope": "narrow registered DCR/MPM Beacon comparison, not physical timing",
+  "revision": "4df7186edbca82b21b2b8cba9b3b192248b99209",
+  "source_files": {
+    "hw/rtl/core/VX_csr_mpm.sv": "92a5b289fa280df04e6143ecfd13bb89d7df4fba60a0d8036d5936b3ec764c67",
+    "hw/rtl/core/VX_dcr_data.sv": "847cc21ba0d1f32336cdbedd8623f1a8da70435981e6b245b0c1cbc5f1a87794",
+    "hw/unittest/mpm_transport/VX_mpm_transport_synth_top.sv": "4b82aff60d1446db7f1fe6ed05bae7bcdb816a6c6beedeb5263769528081de81",
+    "hw/syn/xilinx/dut/catalog.mk": "a231db9f22ba4eea90c92472ff4af105dc1dc7e39454f9cf46fc3653d0abee8a",
+    "hw/syn/yosys/dut/catalog.mk": "cefd12823a57baa87178cbced15432a8889db6ff397db4f49a69aa5f0cdc9bf9",
+    "ci/testcases/logic_gate.yaml": "f6191eba423394b3480c97cc5e48ba282314d5e6904549c3e65813eb563899fb"
+  },
+  "xlen": 32,
+  "commands": [
+    {
+      "name": "configure",
+      "argv": [
+        "/workspace/scratch/171f2d46670c/mpm-reference/configure",
+        "--xlen=32",
+        "--osversion=ubuntu/focal",
+        "--tooldir=/workspace/scratch/171f2d46670c/mpm-tools"
+      ],
+      "outcome": "blocked",
+      "exit_code": null,
+      "reason": "disk_reserve",
+      "process_started": false,
+      "duration_seconds": 0.0,
+      "log_sha256": null,
+      "log_size_bytes": 0,
+      "peak_rss_bytes": 0,
+      "cleanup_complete": true,
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ]
+    }
+  ]
+}

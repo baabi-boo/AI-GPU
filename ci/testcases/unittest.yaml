@@ -11,6 +11,90 @@ tests:
   - id: hw
     via: script
     run: "make -C hw/unittest"
+  # The ordinary catalog retains cached tools/build context, so these four
+  # selected-width executions are nonqualifying development regressions.
+  # The dedicated workflow supplies clean-source, full-matrix evidence.
+  - id: hw-mpm-transport
+    via: script
+    xlen: [32, 64]
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      MAKEFLAGS: "-j2"
+      THREADS: "1"
+      CMAKE_BUILD_PARALLEL_LEVEL: "2"
+      CCACHE_DISABLE: "1"
+      OBJCACHE: ""
+      PROFILE: ""
+    run: |
+      python3 - <<'PY_MPM'
+      import json, os, re, sys, tempfile
+      from pathlib import Path
+      config = Path('config.mk')
+      if config.is_symlink() or not config.is_file():
+          raise SystemExit('MPM catalog requires a regular configured config.mk')
+      with config.open('rb') as stream:
+          data = stream.read(1024 * 1024 + 1)
+      if len(data) > 1024 * 1024:
+          raise SystemExit('MPM catalog config.mk exceeds its byte bound')
+      settings = dict()
+      for name in ('VORTEX_HOME', 'TOOLDIR', 'XLEN'):
+          values = re.findall(r'^' + name + r'[ \t]*(\?=|:=|=)[ \t]*(.*?)[ \t]*$',
+                              data.decode('utf-8'), re.MULTILINE)
+          if len(values) != 1 or values[0][0] != '?=':
+              raise SystemExit('MPM catalog requires one literal setting for ' + name)
+          settings[name] = values[0][1]
+      if settings['XLEN'] != '{xlen}':
+          raise SystemExit('MPM catalog XLEN differs from the configured tree')
+      paths = dict()
+      for name in ('VORTEX_HOME', 'TOOLDIR'):
+          value = settings[name]
+          if not re.fullmatch(r'/[A-Za-z0-9_./+-]+', value):
+              raise SystemExit('MPM catalog requires an absolute literal ' + name)
+          path = Path(value)
+          if path.resolve(strict=True) != path or not path.is_dir():
+              raise SystemExit('MPM catalog directory must not traverse a symlink: ' + name)
+          paths[name] = path
+      source, tools = paths['VORTEX_HOME'], paths['TOOLDIR']
+      runner = source / 'ci/project/p06_mpm_execute.py'
+      if runner.is_symlink() or not runner.is_file():
+          raise SystemExit('MPM catalog source runner is unavailable')
+      root = Path(tempfile.mkdtemp(prefix='p06-mpm-catalog-', dir=source.parent))
+      work, output = root / 'work', root / 'evidence'
+      print(json.dumps(dict(scope='native-host-mpm-transport-regression',
+                            xlen=int(settings['XLEN']), packet=str(output))), flush=True)
+      os.execv(sys.executable, [sys.executable, str(runner),
+                               '--source-dir', str(source), '--tools-dir', str(tools),
+                               '--work-dir', str(work), '--output', str(output),
+                               '--xlen', settings['XLEN'], '--engines', 'both',
+                               '--development'])
+      PY_MPM
+    touches:
+      - ci/testcases/unittest.yaml
+      - ci/project/
+      - hw/unittest/Makefile
+      - hw/unittest/common.mk
+      - hw/unittest/verilator.vlt
+      - hw/unittest/common/
+      - hw/unittest/mpm_transport/
+      - hw/rtl/
+      - hw/dpi/
+      - sim/simx/
+      - sim/common/
+      - sim/common.mk
+      - tests/unittest/mpm_transport/
+      - sw/common/
+      - sw/include/
+      - sw/runtime/
+      - third_party/
+      - configure
+      - config.mk.in
+      - ci/gen_config.py
+      - docs/designs/host_mpm_transport_v1.md
+      - .gitmodules
+      - VERSION
+      - VX_config.toml
+      - VX_types.toml
+      - vortex_opae.toml
   # FPU arithmetic units (VX_fma/fdiv/fsqrt/fcvt/fdivsqrt): the `hw` lane above only
   # builds the unit tests; this lane executes them so a softfloat-divergent
   # regression actually fails CI (each driver checks bit-exact result+fflags over

@@ -6,6 +6,7 @@ all:
 	$(MAKE) -C issue
 	$(MAKE) -C lmem_unit
 	$(MAKE) -C mem_unit
+	$(MAKE) -C mpm_transport
 	$(MAKE) -C tcu_fedp
 	$(MAKE) -C cta_dispatcher
 	$(MAKE) -C kmu
@@ -41,6 +42,7 @@ run:
 	$(MAKE) -C issue run
 	$(MAKE) -C lmem_unit run
 	$(MAKE) -C mem_unit run
+	$(MAKE) -C mpm_transport run
 	$(MAKE) -C tcu_fedp run
 	$(MAKE) -C cta_dispatcher run
 	$(MAKE) -C kmu run
@@ -193,6 +195,7 @@ clean:
 	$(MAKE) -C issue clean
 	$(MAKE) -C lmem_unit clean
 	$(MAKE) -C mem_unit clean
+	$(MAKE) -C mpm_transport clean
 	$(MAKE) -C tcu_fedp clean
 	$(MAKE) -C cta_dispatcher clean
 	$(MAKE) -C kmu clean
