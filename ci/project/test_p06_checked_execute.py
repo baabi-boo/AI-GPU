@@ -22,37 +22,69 @@ from test_p02_matrix import STAMP_SAMPLES, sample
 TRANSPORT_SELECTORS = [
     "cycles", "instructions", "core_sched_idle", "core_active_warps", "core_stalled_warps",
     "core_issued_warps", "core_issued_threads", "core_stall_scrb", "core_stall_lsu",
-    "core_stall_tcu", "core_instr_tcu", "core_loads", "core_stores", "lmem_reads",
-    "lmem_writes", "lmem_bank_st", "coalescer_miss", "tcu_tbuf_stalls", "tcu_tbuf_cache_hits",
-]
-UNSEEDED_SELECTORS = [
+    "core_stall_tcu", "core_instr_tcu", "core_loads", "core_stores",
     "icache_reads", "icache_miss_r", "icache_mshr_st", "dcache_reads", "dcache_writes",
-    "dcache_miss_r", "dcache_miss_w", "dcache_evicts", "dcache_mshr_st", "memory_reads",
-    "memory_writes", "memory_lt", "memory_bank_st", "tcu_lmem_reads",
+    "dcache_miss_r", "dcache_miss_w", "dcache_evicts", "dcache_mshr_st",
+    "lmem_reads", "lmem_writes", "lmem_bank_st", "coalescer_miss", "memory_reads",
+    "memory_writes", "memory_lt", "memory_bank_st", "tcu_tbuf_stalls", "tcu_tbuf_cache_hits",
+    "tcu_lmem_reads",
 ]
+UNSEEDED_SELECTORS = []
+WRAPPER_SOURCES = {
+    "tests/unittest/checked_counters/access_socket.cpp": "sim/simx/socket.cpp",
+    "tests/unittest/checked_counters/access_cache.cpp": "sim/simx/mem/cache.cpp",
+    "tests/unittest/checked_counters/access_memory.cpp": "sim/simx/mem/memory.cpp",
+    "tests/unittest/checked_counters/access_tcu.cpp": "sim/simx/tcu/tcu_tbuf.cpp",
+}
+TCU_FOOTER = "tests/unittest/checked_counters/access_tcu.cpp"
+TCU_ORIGINAL = "sim/simx/tcu/tcu_tbuf.cpp"
+GENERATED_TCU = "sim/simx/obj/tests/checked_counters/access_tcu.generated.cpp"
+INCLUDED_SOURCES = {wrapper: original for wrapper, original in WRAPPER_SOURCES.items() if wrapper != TCU_FOOTER}
+ACCESS_SOURCES = (*WRAPPER_SOURCES, "tests/unittest/checked_counters/counter_access.cpp")
 MODEL_SOURCES = (
     "sw/common/util.cpp", "sim/common/mem.cpp", "sw/common/softfloat_ext.cpp",
     "sw/common/rvfloats.cpp", "sim/common/dram_sim.cpp", "sim/common/cmd_processor.cpp",
     "sim/common/elf_loader.cpp", "sim/common/host_monitor.cpp", "sim/common/cout_drainer.cpp",
     *("sim/simx/" + name + ".cpp" for name in (
-        "processor", "cluster", "socket", "core", "scheduler", "cta_dispatcher", "barrier_unit",
+        "processor", "cluster", "core", "scheduler", "cta_dispatcher", "barrier_unit",
         "gbar_unit", "kmu/kmu", "decode", "decompressor", "scoreboard", "sequencer", "opc_unit",
         "dispatcher", "alu_unit", "fpu_unit", "lsu_unit", "sfu_unit", "wctl_unit", "csr_unit",
-        "mem/cache", "mem/cache_cluster", "mem/memory", "mem/local_mem", "mem/mem_coalescer",
+        "mem/cache_cluster", "mem/local_mem", "mem/mem_coalescer",
         "mem/local_mem_switch", "mem/lsu_mem_adapter", "dtm/debug_module", "dtm/jtag_dtm",
-        "dtm/remote_bitbang", "operands", "tcu/tcu_unit", "tcu/tcu_tbuf")),
-    "tests/unittest/checked_counters/main.cpp",
+        "dtm/remote_bitbang", "operands", "tcu/tcu_unit")),
+    *ACCESS_SOURCES, "tests/unittest/checked_counters/main.cpp",
 )
 NEGATIVE_MODES = {
     "core-overflow": "overflow", "cache-aggregate-overflow": "overflow",
-    "pending-underflow": "underflow",
+    "pending-underflow": "underflow", "cache-backing-overflow": "overflow",
+    "tcu-backing-overflow": "overflow",
 }
 
 
+def fixture_object(build, relative):
+    if relative == "tests/unittest/checked_counters/main.cpp":
+        suffix = "tests/checked_counters_test.o"
+    elif relative.startswith("tests/unittest/checked_counters/"):
+        suffix = "tests/checked_counters/" + Path(relative).with_suffix(".o").name
+    elif relative.startswith("sw/common/"):
+        suffix = "common/" + relative[len("sw/common/"):].replace(".cpp", ".o")
+    elif relative.startswith("sim/common/"):
+        suffix = "sim_common/" + relative[len("sim/common/"):].replace(".cpp", ".o")
+    else:
+        suffix = relative[len("sim/simx/"):].replace(".cpp", ".o")
+    return build / "sim/simx/obj" / suffix
+
+
+def fixture_input(source, build, relative):
+    return build / GENERATED_TCU if relative == TCU_FOOTER else source / relative
+
+
 def boundary_record(checked):
-    return {"schema_version": 1, "mode": "boundaries", "xlen": 64, "perf": True,
+    return {"schema_version": 2, "mode": "boundaries", "xlen": 64, "perf": True,
             "tcu": True, "checked": checked, "transport_selectors": list(TRANSPORT_SELECTORS),
-            "vectors_per_selector": 10, "transport_reads": 760, "checks": 2749, "failures": 0,
+            "vectors_per_selector": 10, "transport_reads": 1788, "checks": 6389, "failures": 0,
+            "source_components": 40, "component_vectors": 400, "split_vectors": 14, "reset_selectors": 33,
+            "all_available_selector_transport": True,
             "unseeded_available_selectors": list(UNSEEDED_SELECTORS), "unavailable_selectors": 12,
             "full_warm_coverage": False, "warm_execution": False}
 
@@ -64,10 +96,15 @@ def boundary_output(checked_mode, **changes):
 
 
 def failure_record(mode):
-    value = {"schema_version": 1, "mode": mode, "reason": NEGATIVE_MODES[mode], "checked": True,
+    backing = mode in ("cache-backing-overflow", "tcu-backing-overflow")
+    value = {"schema_version": 2 if backing else 1, "mode": mode, "reason": NEGATIVE_MODES[mode], "checked": True,
              "exception_type": "PerfCounterError", "protected_value_unchanged": True,
              "public_runtime": False, "warm_execution": False}
-    if mode == "core-overflow":
+    if backing:
+        value.update(source_unchanged=True, actual_backing_sources=True, actual_dcr_query=True,
+                     terminal_failure=True, sticky_failure_checks=8, later_work_suppressed=True,
+                     suppressed_tasks=2, joined=True, fresh_context_success=True)
+    elif mode == "core-overflow":
         value.update(actual_model_updater=True, terminal_failure=True, sticky_failure_checks=8,
                      later_work_suppressed=True, suppressed_tasks=2, joined=True, fresh_context_success=True)
     elif mode == "cache-aggregate-overflow":
@@ -113,6 +150,14 @@ class NativeFixture:
             path = self.paths["source"] / name
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text("fixture source: " + name + "\n", encoding="utf-8")
+        for wrapper, original in INCLUDED_SOURCES.items():
+            (self.paths["source"] / wrapper).write_text(
+                '// SPDX-License-Identifier: Apache-2.0\n#include "counter_access.h"\n'
+                + '#include "../../../' + original + '"\n\n#include <stdexcept>\n', encoding="utf-8")
+        (self.paths["source"] / TCU_FOOTER).write_text(
+            '// SPDX-License-Identifier: Apache-2.0\n'
+            '#include "../../tests/unittest/checked_counters/counter_access.h"\n\n'
+            '#include <stdexcept>\n', encoding="utf-8")
         self.tool_paths = {}
         for name in ("make", "g++", "gcc", "ar", "as", "ld", "bash", "python3", "executing_python"):
             path = self.paths["tools"] / name
@@ -190,14 +235,17 @@ class NativeFixture:
         flags = shlex.split(stamp)
         compiler = str(self.tool_paths["g++"])
         commands, objects = [], []
+        generated = build / GENERATED_TCU
+        generated.parent.mkdir(parents=True, exist_ok=True)
+        generated.write_bytes((source / TCU_ORIGINAL).read_bytes() + b"\n" + (source / TCU_FOOTER).read_bytes())
         for relative in MODEL_SOURCES:
-            obj = cwd / "obj" / Path(relative).with_suffix(".o")
+            obj = fixture_object(build, relative)
             obj.parent.mkdir(parents=True, exist_ok=True)
             obj.write_text("fixture object: " + relative + "\n", encoding="utf-8")
             objects.append(str(obj))
             per_object = list(flags)
             per_object[per_object.index("-MF") + 1] = str(obj.with_suffix(".d"))
-            commands.append(shlex.join([compiler, *per_object, "-c", str(source / relative), "-o", str(obj)]))
+            commands.append(shlex.join([compiler, *per_object, "-c", str(fixture_input(source, build, relative)), "-o", str(obj)]))
         binary = cwd / "checked_counters_test"
         binary.write_text("fixture executable: " + name + "\n", encoding="utf-8")
         binary.chmod(0o700)
@@ -261,10 +309,13 @@ class CheckedExecuteBoundaryTests(unittest.TestCase):
             self.assertEqual(code, 0, report["errors"])
             self.assertEqual(report["outcome"], "pass")
             self.assertTrue(report["native_prerequisites_passed"])
+            self.assertTrue(report["all_available_selector_transport"])
+            self.assertEqual(report["schema_version"], 2)
+            self.assertEqual(report["contract_id"], "simx-checked-counters-native-v2")
             self.assert_nonqualifying(report)
-            self.assertEqual(len(fixture.calls), 15)
+            self.assertEqual(len(fixture.calls), 17)
             self.assertEqual(len(report["variants"]), 2)
-            self.assertEqual(len(report["cells"]), 5)
+            self.assertEqual(len(report["cells"]), 7)
             self.assertTrue(all(cell["outcome"] == "pass" for cell in report["cells"]))
             self.assertTrue(report["source_stable"] and report["tools_stable"])
             self.assertTrue(report["ordinary_checked_observations_equal"])
@@ -272,16 +323,27 @@ class CheckedExecuteBoundaryTests(unittest.TestCase):
             for variant in report["variants"]:
                 self.assertEqual(variant["compiler_records"]["translation_units"], len(MODEL_SOURCES))
                 self.assertEqual(variant["compiler_records"]["link_count"], 1)
-                for key in ("generated", "compiler_stamp", "binary"):
+                self.assertEqual(variant["compiler_records"]["included_production_sources"], INCLUDED_SOURCES)
+                generated_path = str(Path(variant["build_dir"]) / GENERATED_TCU)
+                self.assertEqual(variant["compiler_records"]["generated_production_sources"], {
+                    generated_path: {"production_source": TCU_ORIGINAL, "access_footer": TCU_FOOTER,
+                                     "separator_hex": "0a"}})
+                self.assertIn(generated_path, variant["compiler_records"]["compiled_sources"])
+                self.assertNotIn(str(fixture.paths["source"] / TCU_FOOTER),
+                                 variant["compiler_records"]["compiled_sources"])
+                self.assertTrue({str(fixture.paths["source"] / name) for name in WRAPPER_SOURCES.values()}.isdisjoint(
+                    variant["compiler_records"]["compiled_sources"]))
+                for key in ("generated", "compiler_stamp", "diagnostic_sources", "binary"):
                     self.assertEqual(variant[key + "_before"], variant[key + "_after"])
                 self.assertEqual(variant["compiler_records"]["object_identities"], variant["objects_after"])
-                for item in variant["retained_configuration"] + variant["retained_compiler_stamp"]:
+                for item in (variant["retained_configuration"] + variant["retained_compiler_stamp"]
+                             + variant["retained_diagnostic_sources"]):
                     path = fixture.paths["output"] / item["path"]
                     self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), item["sha256"])
             observed = [cell["observations"] for cell in report["cells"] if cell["mode"] == "boundaries"]
             for value in observed:
-                self.assertEqual(len(value["transport_selectors"]), 19)
-                self.assertEqual(len(value["unseeded_available_selectors"]), 14)
+                self.assertEqual(len(value["transport_selectors"]), 33)
+                self.assertEqual(len(value["unseeded_available_selectors"]), 0)
                 self.assertEqual(value["unavailable_selectors"], 12)
             for cell in report["cells"]:
                 if cell["mode"] in NEGATIVE_MODES:
@@ -479,8 +541,50 @@ class CheckedExecuteBoundaryTests(unittest.TestCase):
                 self.assert_failed(code, report)
                 self.assertEqual(fixture.calls[-1]["id"], "checked-build")
 
+    def test_access_control_cannot_be_disabled_for_any_translation_unit(self):
+        for relative in ("sim/simx/core.cpp", *ACCESS_SOURCES,
+                         "tests/unittest/checked_counters/main.cpp"):
+            with self.subTest(source=relative), NativeFixture() as fixture:
+                def weaken(text):
+                    path = fixture_input(fixture.paths["source"], fixture.paths["work"] / "checked", relative)
+                    return text.replace(" -c " + str(path), " -fno-access-control -c " + str(path))
+                fixture.logs["checked-build"] = weaken
+                code, report = fixture.run()
+                self.assert_failed(code, report, "translation-unit flags differ")
+                self.assertFalse(any(item["id"] == "checked-boundaries" for item in fixture.calls))
+
+    def test_original_and_wrapper_translation_units_cannot_be_substituted_or_combined(self):
+        for wrapper, original in WRAPPER_SOURCES.items():
+            for kind in ("substitute", "duplicate", "omit"):
+                with self.subTest(wrapper=wrapper, kind=kind), NativeFixture() as fixture:
+                    def replace(text):
+                        lines = text.splitlines()
+                        path = fixture_input(fixture.paths["source"], fixture.paths["work"] / "checked", wrapper)
+                        selected = next(line for line in lines
+                                        if " -c " + str(path) + " " in line)
+                        if kind == "substitute":
+                            return text.replace(str(path),
+                                                str(fixture.paths["source"] / original))
+                        if kind == "duplicate":
+                            extra = selected.replace(str(path),
+                                                     str(fixture.paths["source"] / original))
+                            return text + extra + "\n"
+                        return "\n".join(line for line in lines if line != selected) + "\n"
+                    fixture.logs["checked-build"] = replace
+                    code, report = fixture.run()
+                    self.assert_failed(code, report)
+                    self.assertEqual(fixture.calls[-1]["id"], "checked-build")
+
+    def test_exact_inventory_rejects_missing_non_counter_model_source(self):
+        with NativeFixture() as fixture:
+            fixture.logs["checked-build"] = lambda text: "\n".join(
+                line for line in text.splitlines()
+                if " -c " + str(fixture.paths["source"] / "sim/simx/decode.cpp") + " " not in line) + "\n"
+            code, report = fixture.run()
+            self.assert_failed(code, report, "exact fresh compile/link source inventory")
+
     def test_source_tools_dependencies_and_generated_evidence_drift_fail_closed(self):
-        for kind in ("source", "guard", "completion", "tool", "executing-python", "dependency", "generated", "stamp", "object", "retained", "log"):
+        for kind in ("source", "guard", "completion", "wrapper", "included-source", "access-header", "tool", "executing-python", "dependency", "generated", "generated-tcu", "stamp", "object", "retained", "retained-tcu", "log"):
             with self.subTest(kind=kind), NativeFixture() as fixture:
                 def mutate(name, cwd):
                     if name != "ordinary-boundaries":
@@ -489,13 +593,18 @@ class CheckedExecuteBoundaryTests(unittest.TestCase):
                         "source": fixture.paths["source"] / "sim/simx/core.cpp",
                         "guard": fixture.paths["source"] / "sim/common/perf_counter.h",
                         "completion": fixture.paths["source"] / "sw/runtime/common/async_run.h",
+                        "wrapper": fixture.paths["source"] / "tests/unittest/checked_counters/access_cache.cpp",
+                        "included-source": fixture.paths["source"] / "sim/simx/mem/cache.cpp",
+                        "access-header": fixture.paths["source"] / "tests/unittest/checked_counters/counter_access.h",
                         "tool": fixture.tool_paths["g++"],
                         "executing-python": fixture.tool_paths["executing_python"],
                         "dependency": next(iter(fixture.dependencies.values())),
                         "generated": cwd.parents[1] / "sw/VX_config.h",
+                        "generated-tcu": cwd.parents[1] / GENERATED_TCU,
                         "stamp": cwd / "simx_config.stamp",
-                        "object": cwd / "obj" / Path(MODEL_SOURCES[0]).with_suffix(".o"),
+                        "object": fixture_object(cwd.parents[1], MODEL_SOURCES[0]),
                         "retained": fixture.paths["output"] / "artifacts/source/sim/common/perf_counter.h",
+                        "retained-tcu": fixture.paths["output"] / "artifacts/ordinary" / GENERATED_TCU,
                         "log": fixture.paths["output"] / "logs/ordinary-build.log",
                     }
                     with targets[kind].open("a", encoding="utf-8") as stream:
@@ -518,7 +627,7 @@ class CheckedExecuteBoundaryTests(unittest.TestCase):
                     self.assertFalse(any(item["id"] == "ordinary-boundaries" for item in fixture.calls))
 
     def test_configuration_or_stamp_drift_after_header_blocks_native_launch(self):
-        for relative in ("sw/VX_config.h", "sim/simx/simx_config.stamp"):
+        for relative in ("sw/VX_config.h", "sim/simx/simx_config.stamp", GENERATED_TCU):
             with self.subTest(relative=relative), NativeFixture() as fixture:
                 def mutate(name, cwd):
                     if name == "ordinary-header":
@@ -532,7 +641,10 @@ class CheckedExecuteBoundaryTests(unittest.TestCase):
     def test_invalid_boundary_claim_or_partial_selector_scope_cannot_pass(self):
         changes = ({"checked": False}, {"xlen": 32}, {"perf": False}, {"tcu": False},
                    {"checks": 0}, {"failures": 1}, {"full_warm_coverage": True}, {"warm_execution": True},
-                   {"transport_selectors": TRANSPORT_SELECTORS[:-1]}, {"unseeded_available_selectors": []})
+                   {"transport_selectors": TRANSPORT_SELECTORS[:-1]}, {"unseeded_available_selectors": ["memory_lt"]},
+                   {"all_available_selector_transport": False}, {"source_components": 39},
+                   {"component_vectors": 399}, {"split_vectors": 13}, {"reset_selectors": 32},
+                   {"schema_version": 1})
         for change in changes:
             with self.subTest(change=change), NativeFixture() as fixture:
                 fixture.logs["checked-boundaries"] = boundary_output(True, **change)
@@ -582,9 +694,9 @@ class CheckedOutputParserTests(unittest.TestCase):
         bad = (original + original, original + "FAILED\n", original + "SIMX_CHECKED_COUNTER_FAILURE: overflow\n",
                original.replace('"checked":true', '"checked":1'),
                original.replace('"failures":0', '"failures":false'),
-               original.replace('"checks":2749', '"checks":2749.0'),
-               original.replace('"checks":2749', '"checks":NaN'),
-               original.replace('"checks":2749', '"checks":2749,"checks":2749'), "PASSED!\n")
+               original.replace('"checks":6389', '"checks":6389.0'),
+               original.replace('"checks":6389', '"checks":NaN'),
+               original.replace('"checks":6389', '"checks":6389,"checks":6389'), "PASSED!\n")
         self.assertEqual(runner.verify_output(original, True), boundary_record(True))
         for text in bad:
             with self.subTest(text=text[-120:]), self.assertRaises(ValueError):
@@ -618,9 +730,9 @@ class CheckedOutputParserTests(unittest.TestCase):
                 text + "SIMX_CHECKED_COUNTER_FAILURE: " + NEGATIVE_MODES[mode] + "\n",
                 "SIMX_CHECKED_COUNTER_FAILURE: " + NEGATIVE_MODES[mode] + "\n",
                 text[:-3] + "\n", text.replace('"checked":true', '"checked":true,"checked":true'),
-                text.replace('"schema_version":1', '"schema_version":NaN'),
-                text.replace('"schema_version":1', '"schema_version":Infinity'),
-                text.replace('"schema_version":1', '"schema_version":-Infinity'),
+                text.replace('"schema_version":' + str(failure_record(mode)["schema_version"]), '"schema_version":NaN'),
+                text.replace('"schema_version":' + str(failure_record(mode)["schema_version"]), '"schema_version":Infinity'),
+                text.replace('"schema_version":' + str(failure_record(mode)["schema_version"]), '"schema_version":-Infinity'),
                 "CHECKED_COUNTERS_FAILURE_RESULT []\n",
             )
             for bad in bad_outputs:
@@ -630,7 +742,7 @@ class CheckedOutputParserTests(unittest.TestCase):
     def test_failure_records_require_exact_typed_reason_and_protected_value(self):
         result = {"outcome": "pass", "exit_code": 0, "reason": None,
                   "process_started": True, "cleanup_complete": True}
-        changes = ({"schema_version": 2}, {"schema_version": True}, {"mode": "boundaries"},
+        changes = ({"schema_version": 3}, {"schema_version": True}, {"mode": "boundaries"},
                    {"reason": "negative operand"}, {"checked": False}, {"checked": 1},
                    {"exception_type": "std::runtime_error"}, {"protected_value_unchanged": False},
                    {"public_runtime": True}, {"public_runtime": 0}, {"warm_execution": True},
@@ -665,13 +777,123 @@ class CheckedOutputParserTests(unittest.TestCase):
                 with self.subTest(mode=mode, change=change), self.assertRaises(ValueError):
                     runner.verify_negative(failure_output(mode, **change), result, mode)
 
+    def test_backing_failures_require_real_sources_queries_and_terminal_containment(self):
+        result = {"outcome": "pass", "exit_code": 0, "reason": None,
+                  "process_started": True, "cleanup_complete": True}
+        for mode in ("cache-backing-overflow", "tcu-backing-overflow"):
+            for change in ({"schema_version": 1}, {"source_unchanged": False},
+                           {"actual_backing_sources": False}, {"actual_dcr_query": False},
+                           {"terminal_failure": False}, {"sticky_failure_checks": 8.0},
+                           {"later_work_suppressed": False}, {"suppressed_tasks": 1},
+                           {"joined": False}, {"fresh_context_success": False}):
+                with self.subTest(mode=mode, change=change), self.assertRaises(ValueError):
+                    runner.verify_negative(failure_output(mode, **change), result, mode)
+
+    def test_all_source_and_coverage_counts_require_exact_types(self):
+        for key in ("schema_version", "source_components", "component_vectors", "split_vectors",
+                    "reset_selectors", "vectors_per_selector", "transport_reads", "checks"):
+            value = boundary_record(True)[key]
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                runner.verify_output(boundary_output(True, **{key: float(value)}), True)
+        for change in ({"all_available_selector_transport": 1},
+                       {"transport_selectors": TRANSPORT_SELECTORS + ["memory_reads"]},
+                       {"transport_selectors": list(reversed(TRANSPORT_SELECTORS))},
+                       {"unavailable_selectors": 0}):
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                runner.verify_output(boundary_output(True, **change), True)
+
+    def test_pure_build_parser_does_not_open_original_paths(self):
+        with NativeFixture() as fixture:
+            source = fixture.paths["source"]
+            build = fixture.paths["work"] / "checked"
+            unit = build / "sim/simx"
+            unit.mkdir(parents=True)
+            text = fixture.build("checked-build", unit)
+            words = shlex.split(compiler_stamp(source, build, True))
+            contents = {name: (source / name).read_bytes() for name in (*WRAPPER_SOURCES, TCU_ORIGINAL)}
+            generated = {GENERATED_TCU: (build / GENERATED_TCU).read_bytes()}
+            shutil.rmtree(source)
+            shutil.rmtree(fixture.paths["work"])
+            with mock.patch.object(Path, "resolve", side_effect=AssertionError("resolved producer path")), \
+                    mock.patch.object(runner.native, "file_identity", side_effect=AssertionError("read producer file")):
+                parsed = runner.parse_build_records(text, words, source=source, build=build,
+                    binary=unit / "checked_counters_test", compiler=str(fixture.tool_paths["g++"]),
+                    source_files=fixture.tracked, source_contents=contents, generated_contents=generated)
+            self.assertEqual(parsed["translation_units"], len(MODEL_SOURCES))
+            self.assertEqual(parsed["included_production_sources"], INCLUDED_SOURCES)
+            self.assertEqual(parsed["generated_production_sources"], {
+                str(build / GENERATED_TCU): {"production_source": TCU_ORIGINAL,
+                    "access_footer": TCU_FOOTER, "separator_hex": "0a"}})
+            self.assertEqual(len(parsed["object_paths"]), len(MODEL_SOURCES))
+            self.assertNotIn("object_identities", parsed)
+
+    def test_pure_build_parser_requires_original_bodies_and_normalized_record_paths(self):
+        with NativeFixture() as fixture:
+            source = fixture.paths["source"]
+            build = fixture.paths["work"] / "checked"
+            unit = build / "sim/simx"
+            unit.mkdir(parents=True)
+            text = fixture.build("checked-build", unit)
+            words = shlex.split(compiler_stamp(source, build, True))
+            arguments = dict(source=source, build=build, binary=unit / "checked_counters_test",
+                             compiler=str(fixture.tool_paths["g++"]), source_files=fixture.tracked,
+                             source_contents={name: (source / name).read_bytes() for name in (*WRAPPER_SOURCES, TCU_ORIGINAL)},
+                             generated_contents={GENERATED_TCU: (build / GENERATED_TCU).read_bytes()})
+            for original in WRAPPER_SOURCES.values():
+                with self.subTest(original=original), self.assertRaises(ValueError):
+                    runner.parse_build_records(text, words, **dict(arguments,
+                        source_files=fixture.tracked - {original}))
+            malformed = text.replace(" -o " + str(unit / "obj"), " -o " + str(unit / "obj") + "/../obj", 1)
+            with self.assertRaisesRegex(ValueError, "normalized path"):
+                runner.parse_build_records(malformed, words, **arguments)
+
+    def test_source_bindings_reject_includes_generated_tampering_and_footer_substitution(self):
+        with NativeFixture() as fixture:
+            source, build = fixture.paths["source"], fixture.paths["work"] / "checked"
+            unit = build / "sim/simx"
+            unit.mkdir(parents=True)
+            text = fixture.build("checked-build", unit)
+            words = shlex.split(compiler_stamp(source, build, True))
+            contents = {name: (source / name).read_bytes() for name in (*WRAPPER_SOURCES, TCU_ORIGINAL)}
+            generated = {GENERATED_TCU: (build / GENERATED_TCU).read_bytes()}
+            arguments = dict(source=source, build=build, binary=unit / "checked_counters_test",
+                             compiler=str(fixture.tool_paths["g++"]), source_files=fixture.tracked,
+                             source_contents=contents, generated_contents=generated)
+            for wrapper, original in INCLUDED_SOURCES.items():
+                for body in (contents[wrapper].replace(original.encode(), b"sim/simx/core.cpp"),
+                             b"#if 0\n" + contents[wrapper] + b"#endif\n",
+                             contents[wrapper] + b'#include "../../../sim/simx/core.cpp"\n',
+                             contents[wrapper].replace(b"../../../", b"../../../sim/../")):
+                    with self.subTest(wrapper=wrapper, body=body), self.assertRaisesRegex(ValueError, "production include"):
+                        runner.parse_build_records(text, words, **dict(arguments,
+                            source_contents=dict(contents, **{wrapper: body})))
+            for replacement in (generated[GENERATED_TCU] + b"// changed\n", contents[TCU_FOOTER],
+                                contents[TCU_ORIGINAL] + contents[TCU_FOOTER],
+                                contents[TCU_ORIGINAL] + b"\n" + contents[TCU_FOOTER] + b"// other footer\n"):
+                with self.subTest(generated=replacement), self.assertRaisesRegex(ValueError, "exact production body"):
+                    runner.parse_build_records(text, words, **dict(arguments,
+                        generated_contents={GENERATED_TCU: replacement}))
+            for replacement in (b"#define private public\n" + contents[TCU_FOOTER],
+                                contents[TCU_FOOTER] + b'#include "../../../sim/simx/tcu/tcu_tbuf.cpp"\n'):
+                with self.subTest(footer=replacement), self.assertRaisesRegex(ValueError, "TCU access footer"):
+                    runner.parse_build_records(text, words, **dict(arguments,
+                        source_contents=dict(contents, **{TCU_FOOTER: replacement}),
+                        generated_contents={GENERATED_TCU: contents[TCU_ORIGINAL] + b"\n" + replacement}))
+            for alternate in (source / TCU_FOOTER, build / "other.generated.cpp", source / TCU_ORIGINAL):
+                with self.subTest(path=alternate), self.assertRaisesRegex(ValueError, "source inventory"):
+                    runner.parse_build_records(text.replace(str(build / GENERATED_TCU), str(alternate)), words, **arguments)
+            with self.assertRaisesRegex(ValueError, "exact source mapping"):
+                original = str(fixture_object(build, "sim/simx/core.cpp"))
+                runner.parse_build_records(text.replace(original, str(unit / "obj/foreign.o"))
+                    .replace(original[:-2] + ".d", str(unit / "obj/foreign.d")), words, **arguments)
+
     def test_release_profile_rejects_concurrency_unsafe_optimization_and_guard_redefinition(self):
         with tempfile.TemporaryDirectory(prefix="p06-checked-stamp-") as directory:
             source, build = Path(directory) / "source", Path(directory) / "build"
             valid = compiler_stamp(source, build, True)
             runner.compile_flags(valid, checked=True, source=source, build=build)
             for extra in ("-DSIMX_CHECKED_COUNTERS=1", "-USIMX_CHECKED_COUNTERS", "-DSIMX_MT=0",
-                          "-DSIMX_FUNCTIONAL=0", "-ffast-math", "-I/foreign", "-DVX_CFG_NUM_CORES=2"):
+                          "-DSIMX_FUNCTIONAL=0", "-ffast-math", "-fno-access-control", "-I/foreign", "-DVX_CFG_NUM_CORES=2"):
                 with self.subTest(extra=extra), self.assertRaises(ValueError):
                     runner.compile_flags(valid.rstrip() + " " + extra + "\n", checked=True, source=source, build=build)
 

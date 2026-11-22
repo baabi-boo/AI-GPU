@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <cstring>
 #include <limits>
+#include <set>
 #include <stdexcept>
 #include <type_traits>
 #include <utility>
@@ -19,6 +20,7 @@
 #include "mem_coalescer.h"
 #include "tcu_unit.h"
 #include "mem.h"
+#include "counter_access.h"
 #include "../../../sw/runtime/common/async_run.h"
 
 #if !defined(PERF_ENABLE) || !defined(VX_CFG_XLEN_64) || !defined(VX_CFG_EXT_TCU_ENABLE)
@@ -68,19 +70,7 @@ constexpr std::array<CounterValue, 10> kValues = {{
   {0xffffffffffffffffull, 0xffffffffu, 0xffffffffu},
 }};
 
-struct Selector {
-  const char* name;
-  uint32_t perf_class;
-  uint32_t csr;
-  PerfCounter* storage;
-};
-
-constexpr const char* kUnseeded[] = {
-  "icache_reads", "icache_miss_r", "icache_mshr_st",
-  "dcache_reads", "dcache_writes", "dcache_miss_r", "dcache_miss_w",
-  "dcache_evicts", "dcache_mshr_st", "memory_reads", "memory_writes",
-  "memory_lt", "memory_bank_st", "tcu_lmem_reads",
-};
+using counter_test::Selector;
 
 constexpr std::array<PerfCounter vortex::Cache::PerfStats::*, 8> kCacheFields = {{
   &vortex::Cache::PerfStats::reads,
@@ -113,35 +103,6 @@ constexpr std::array<PerfCounter vortex::MemCoalescer::PerfStats::*, 1> kCoalesc
 constexpr std::array<PerfCounter vortex::Memory::PerfStats::*, 1> kMemoryFields = {{
   &vortex::Memory::PerfStats::bank_stalls,
 }};
-
-std::array<Selector, 19> selectors(vortex::Core& core) {
-  auto& counters = core.perf_stats();
-  // These references expose storage owned by non-const model objects.
-  auto& local = const_cast<vortex::LocalMem::PerfStats&>(core.local_mem()->perf_stats());
-  auto& coalescer = const_cast<vortex::MemCoalescer::PerfStats&>(core.mem_coalescer(0)->perf_stats());
-  auto& tensor = const_cast<vortex::TcuUnit::PerfStats&>(core.tcu_unit()->perf_stats());
-  return {{
-    {"cycles", VX_DCR_MPM_CLASS_BASE, VX_CSR_MCYCLE, &counters.cycles},
-    {"instructions", VX_DCR_MPM_CLASS_BASE, VX_CSR_MINSTRET, &counters.instrs},
-    {"core_sched_idle", VX_DCR_MPM_CLASS_CORE, VX_CSR_MPM_SCHED_IDLE, &counters.sched_idle},
-    {"core_active_warps", VX_DCR_MPM_CLASS_CORE, VX_CSR_MPM_ACTIVE_WARPS, &counters.active_warps},
-    {"core_stalled_warps", VX_DCR_MPM_CLASS_CORE, VX_CSR_MPM_STALLED_WARPS, &counters.stalled_warps},
-    {"core_issued_warps", VX_DCR_MPM_CLASS_CORE, VX_CSR_MPM_ISSUED_WARPS, &counters.issued_warps},
-    {"core_issued_threads", VX_DCR_MPM_CLASS_CORE, VX_CSR_MPM_ISSUED_THREADS, &counters.issued_threads},
-    {"core_stall_scrb", VX_DCR_MPM_CLASS_CORE, VX_CSR_MPM_STALL_SCRB, &counters.scrb_stalls},
-    {"core_stall_lsu", VX_DCR_MPM_CLASS_CORE, VX_CSR_MPM_STALL_LSU, &counters.lsu_stalls},
-    {"core_stall_tcu", VX_DCR_MPM_CLASS_CORE, VX_CSR_MPM_STALL_TCU, &counters.tcu_stalls},
-    {"core_instr_tcu", VX_DCR_MPM_CLASS_CORE, VX_CSR_MPM_INSTR_TCU, &counters.tcu_instrs},
-    {"core_loads", VX_DCR_MPM_CLASS_CORE, VX_CSR_MPM_LOADS, &counters.loads},
-    {"core_stores", VX_DCR_MPM_CLASS_CORE, VX_CSR_MPM_STORES, &counters.stores},
-    {"lmem_reads", VX_DCR_MPM_CLASS_MEM, VX_CSR_MPM_LMEM_READS, &local.reads},
-    {"lmem_writes", VX_DCR_MPM_CLASS_MEM, VX_CSR_MPM_LMEM_WRITES, &local.writes},
-    {"lmem_bank_st", VX_DCR_MPM_CLASS_MEM, VX_CSR_MPM_LMEM_BANK_ST, &local.bank_stalls},
-    {"coalescer_miss", VX_DCR_MPM_CLASS_MEM, VX_CSR_MPM_COALESCER_MISS, &coalescer.misses},
-    {"tcu_tbuf_stalls", VX_DCR_MPM_CLASS_TCU, VX_CSR_MPM_TCU_TBUF_STALLS, &tensor.tbuf_stalls},
-    {"tcu_tbuf_cache_hits", VX_DCR_MPM_CLASS_TCU, VX_CSR_MPM_TCU_TBUF_CACHE_HITS, &tensor.tbuf_cache_hits},
-  }};
-}
 
 class BoundaryTest {
 public:
@@ -192,7 +153,7 @@ public:
     }
   }
 
-  int result(const std::array<Selector, 19>& selected) const {
+  int result(const std::array<Selector, 33>& selected) const {
     if (failures_ != 0) {
       return 1;
     }
@@ -201,18 +162,18 @@ public:
 #else
     constexpr const char* checked = "false";
 #endif
-    std::printf("CHECKED_COUNTERS_RESULT {\"schema_version\":1,\"mode\":\"boundaries\","
+    std::printf("CHECKED_COUNTERS_RESULT {\"schema_version\":2,\"mode\":\"boundaries\","
                 "\"xlen\":64,\"perf\":true,\"tcu\":true,\"checked\":%s,"
                 "\"transport_selectors\":[", checked);
     for (size_t index = 0; index < selected.size(); ++index) {
       std::printf("%s\"%s\"", index == 0 ? "" : ",", selected[index].name);
     }
-    std::printf("],\"vectors_per_selector\":10,\"transport_reads\":%zu,\"checks\":%zu,"
-                "\"failures\":0,\"unseeded_available_selectors\":[", reads_, checks_);
-    for (size_t index = 0; index < std::size(kUnseeded); ++index) {
-      std::printf("%s\"%s\"", index == 0 ? "" : ",", kUnseeded[index]);
-    }
-    std::puts("],\"unavailable_selectors\":12,\"full_warm_coverage\":false,\"warm_execution\":false}");
+    std::printf("],\"vectors_per_selector\":10,\"source_components\":40,"
+                "\"component_vectors\":400,\"split_vectors\":14,\"reset_selectors\":33,"
+                "\"transport_reads\":%zu,\"checks\":%zu,\"failures\":0,"
+                "\"unseeded_available_selectors\":[],\"unavailable_selectors\":12,"
+                "\"all_available_selector_transport\":true,"
+                "\"full_warm_coverage\":false,\"warm_execution\":false}\n", reads_, checks_);
     return 0;
   }
 
@@ -237,6 +198,14 @@ private:
   size_t failures_ = 0;
 };
 
+void clear_sources(const std::array<Selector, 33>& selected) {
+  for (const auto& selector : selected) {
+    for (auto* component : selector.components) {
+      *component = 0;
+    }
+  }
+}
+
 int boundaries() {
   vortex::Processor processor;
   processor.reset();
@@ -245,30 +214,65 @@ int boundaries() {
     std::fputs("FAILED: processor has no first core\n", stderr);
     return 1;
   }
-  auto selected = selectors(*core);
+  auto selected = counter_test::selectors(*core);
   BoundaryTest test(processor, *core);
+  std::set<const PerfCounter*> components;
+  size_t aggregate_selectors = 0;
   for (const auto& selector : selected) {
-    test.expect("initial zero", *selector.storage, 0);
+    const size_t expected_components = std::strncmp(selector.name, "dcache_", 7) == 0
+        || std::strcmp(selector.name, "tcu_lmem_reads") == 0 ? 2 : 1;
+    if (selector.components.size() != expected_components) {
+      throw std::runtime_error("selector backing-component count differs");
+    }
+    aggregate_selectors += expected_components == 2;
+    for (auto* component : selector.components) {
+      if (component == nullptr || !components.insert(component).second) {
+        throw std::runtime_error("selector backing storage is missing or aliased");
+      }
+      test.expect("initial zero", *component, 0);
+    }
+  }
+  if (components.size() != 40 || aggregate_selectors != 7) {
+    throw std::runtime_error("selector backing inventory differs");
   }
 
-  // Reads occur between ticks; the two halves observe the same seeded value.
+  // Isolate each real component so the other bank cannot hide a missing route.
   for (const auto& target : selected) {
-    for (const auto& value : kValues) {
-      for (size_t index = 0; index < selected.size(); ++index) {
-        *selected[index].storage = 0x13579bdf00010000ull + index;
+    for (auto* component : target.components) {
+      for (const auto& value : kValues) {
+        clear_sources(selected);
+        *component = value.value;
+        test.transport(target, value);
       }
-      *target.storage = value.value;
-      test.transport(target, value);
+    }
+    if (target.components.size() == 2) {
+      clear_sources(selected);
+      *target.components[0] = 0xffffffffull;
+      *target.components[1] = 1;
+      test.transport(target, kValues[3]);
+      clear_sources(selected);
+      *target.components[0] = kMax / 2;
+      *target.components[1] = kMax / 2 + 1;
+      test.transport(target, kValues[9]);
     }
   }
 
+  constexpr uint64_t seed = 0x13579bdf00010000ull;
   for (size_t index = 0; index < selected.size(); ++index) {
-    *selected[index].storage = 0x13579bdf00010000ull + index;
+    for (size_t component = 0; component < selected[index].components.size(); ++component) {
+      *selected[index].components[component] = seed + 2 * index + component;
+    }
   }
   processor.reset();
   for (size_t index = 0; index < selected.size(); ++index) {
-    test.expect("reset preserves cumulative storage", *selected[index].storage,
-                0x13579bdf00010000ull + index);
+    const auto& selector = selected[index];
+    uint64_t expected = 0;
+    for (size_t component = 0; component < selector.components.size(); ++component) {
+      const uint64_t value = seed + 2 * index + component;
+      test.expect("reset preserves cumulative storage", *selector.components[component], value);
+      expected += value;
+    }
+    test.transport(selector, {expected, uint32_t(expected), uint32_t(expected >> 32)});
   }
   test.aggregate(kCacheFields);
   test.aggregate(kLocalFields);
@@ -417,6 +421,64 @@ int cache_overflow() {
   return 0;
 }
 
+int backing_overflow(const char* mode, const char* name) {
+  {
+    vortex::Processor processor;
+    vortex::AsyncRun run;
+    processor.reset();
+    auto* core = processor.get_first_core();
+    require(core != nullptr, "processor has no first core");
+    auto selected = counter_test::selectors(*core);
+    clear_sources(selected);
+    const Selector* target = nullptr;
+    for (const auto& selector : selected) {
+      if (std::strcmp(selector.name, name) == 0) {
+        target = &selector;
+      }
+    }
+    require(target != nullptr && target->components.size() == 2,
+            "aggregate selector does not have two backing components");
+    *target->components[0] = kMax;
+    *target->components[1] = 1;
+    const uint32_t tag = (target->perf_class << 22)
+        | ((target->csr - VX_CSR_MPM_BASE) << 16) | core->id();
+    const uint32_t sentinel = 0xdecafbad;
+    uint32_t value = sentinel;
+    expect_counter_error([&] {
+      run.invoke([&] {
+        require(processor.dcr_read(VX_DCR_BASE_MPM_VALUE, tag, &value) == 0,
+                "aggregate DCR query failed without a counter exception");
+      });
+    }, vortex::PerfCounterError::Reason::Overflow, "SIMX_CHECKED_COUNTER_FAILURE: overflow");
+    require(uint64_t(*target->components[0]) == kMax
+            && uint64_t(*target->components[1]) == 1,
+            "aggregate overflow changed its backing sources");
+    require(value == sentinel, "aggregate overflow published a partial DCR result");
+    require(run.failed(), "aggregate counter failure was not terminal");
+    unsigned later_tasks = 0;
+    for (unsigned index = 0; index < 2; ++index) {
+      expect_terminal_error([&run] { run.wait(); });
+    }
+    expect_terminal_error([&run] { run.check(); });
+    expect_terminal_error([&run] { (void)run.busy(); });
+    expect_terminal_error([&run] { run.wait_for(std::chrono::seconds(0)); });
+    expect_terminal_error([&] { run.start([&later_tasks] { ++later_tasks; }); });
+    expect_terminal_error([&] { run.invoke([&later_tasks] { ++later_tasks; }); });
+    run.join();
+    expect_terminal_error([&run] { run.check(); });
+    require(run.failed() && later_tasks == 0, "failed aggregate owner admitted later work");
+  }
+  check_fresh_context();
+  std::printf("CHECKED_COUNTERS_FAILURE_RESULT {\"schema_version\":2,\"mode\":\"%s\","
+              "\"reason\":\"overflow\",\"checked\":true,\"exception_type\":\"PerfCounterError\","
+              "\"protected_value_unchanged\":true,\"source_unchanged\":true,"
+              "\"actual_backing_sources\":true,\"actual_dcr_query\":true,\"terminal_failure\":true,"
+              "\"sticky_failure_checks\":8,\"later_work_suppressed\":true,\"suppressed_tasks\":2,"
+              "\"joined\":true,\"fresh_context_success\":true,\"public_runtime\":false,"
+              "\"warm_execution\":false}\n", mode);
+  return 0;
+}
+
 int pending_underflow() {
   PerfCounter pending = 0;
   expect_counter_error([&pending] { --pending; }, vortex::PerfCounterError::Reason::Underflow,
@@ -448,6 +510,12 @@ int main(int argc, char** argv) {
     }
     if (std::strcmp(argv[1], "cache-aggregate-overflow") == 0) {
       return cache_overflow();
+    }
+    if (std::strcmp(argv[1], "cache-backing-overflow") == 0) {
+      return backing_overflow("cache-backing-overflow", "dcache_reads");
+    }
+    if (std::strcmp(argv[1], "tcu-backing-overflow") == 0) {
+      return backing_overflow("tcu-backing-overflow", "tcu_lmem_reads");
     }
     if (std::strcmp(argv[1], "pending-underflow") == 0) {
       return pending_underflow();

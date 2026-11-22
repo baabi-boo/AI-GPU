@@ -13,7 +13,7 @@ import argparse
 from collections import Counter
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import shutil
 import sys
@@ -37,6 +37,32 @@ RESULT_PREFIX = "CHECKED_COUNTERS_RESULT "
 FAILURE_PREFIX = "CHECKED_COUNTERS_FAILURE_RESULT "
 STAMP = "sim/simx/simx_config.stamp"
 GENERATED = native.GENERATED
+DIAGNOSTIC_ROOT = "tests/unittest/checked_counters/"
+WRAPPER_SOURCES = {
+    DIAGNOSTIC_ROOT + "access_socket.cpp": "sim/simx/socket.cpp",
+    DIAGNOSTIC_ROOT + "access_cache.cpp": "sim/simx/mem/cache.cpp",
+    DIAGNOSTIC_ROOT + "access_memory.cpp": "sim/simx/mem/memory.cpp",
+    DIAGNOSTIC_ROOT + "access_tcu.cpp": "sim/simx/tcu/tcu_tbuf.cpp",
+}
+TCU_FOOTER = DIAGNOSTIC_ROOT + "access_tcu.cpp"
+TCU_ORIGINAL = WRAPPER_SOURCES[TCU_FOOTER]
+GENERATED_TCU = "sim/simx/obj/tests/checked_counters/access_tcu.generated.cpp"
+INCLUDED_SOURCES = {wrapper: original for wrapper, original in WRAPPER_SOURCES.items() if wrapper != TCU_FOOTER}
+DIAGNOSTIC_CONTENTS = (*WRAPPER_SOURCES, TCU_ORIGINAL)
+ACCESS_SOURCES = (*WRAPPER_SOURCES, DIAGNOSTIC_ROOT + "counter_access.cpp")
+MODEL_SOURCES = (
+    "sw/common/util.cpp", "sim/common/mem.cpp", "sw/common/softfloat_ext.cpp",
+    "sw/common/rvfloats.cpp", "sim/common/dram_sim.cpp", "sim/common/cmd_processor.cpp",
+    "sim/common/elf_loader.cpp", "sim/common/host_monitor.cpp", "sim/common/cout_drainer.cpp",
+    *("sim/simx/" + name + ".cpp" for name in (
+        "processor", "cluster", "core", "scheduler", "cta_dispatcher", "barrier_unit",
+        "gbar_unit", "kmu/kmu", "decode", "decompressor", "scoreboard", "sequencer", "opc_unit",
+        "dispatcher", "alu_unit", "fpu_unit", "lsu_unit", "sfu_unit", "wctl_unit", "csr_unit",
+        "mem/cache_cluster", "mem/local_mem", "mem/mem_coalescer",
+        "mem/local_mem_switch", "mem/lsu_mem_adapter", "dtm/debug_module", "dtm/jtag_dtm",
+        "dtm/remote_bitbang", "operands", "tcu/tcu_unit")),
+    *ACCESS_SOURCES, DIAGNOSTIC_ROOT + "main.cpp",
+)
 COPIED = ("ci/gen_config.py", "sim/common.mk", "sim/simx/Makefile",
           "sim/simx/checked_counters.mk")
 HELPERS = tuple("ci/project/" + name for name in (
@@ -46,24 +72,29 @@ HELPERS = tuple("ci/project/" + name for name in (
 CRITICAL = HELPERS + ("configure", "config.mk.in", "VERSION", ".gitmodules",
     "VX_config.toml", "VX_types.toml", "vortex_opae.toml", "ci/gen_config.py",
     "ci/blackbox.sh", "profiles/p02-tfr.json", "tests/unittest/checked_counters/main.cpp",
-    "sim/common/perf_counter.h", "sim/simx/checked_counters.mk", "sw/runtime/common/async_run.h")
+    "sim/common/perf_counter.h", "sim/simx/checked_counters.mk", "sw/runtime/common/async_run.h",
+    DIAGNOSTIC_ROOT + "counter_access.h", *ACCESS_SOURCES, *WRAPPER_SOURCES.values())
 LOADED_HELPERS = hash_artifacts(ROOT, HELPERS)
 SELECTORS = (
     "cycles", "instructions", "core_sched_idle", "core_active_warps", "core_stalled_warps",
     "core_issued_warps", "core_issued_threads", "core_stall_scrb", "core_stall_lsu",
-    "core_stall_tcu", "core_instr_tcu", "core_loads", "core_stores", "lmem_reads",
-    "lmem_writes", "lmem_bank_st", "coalescer_miss", "tcu_tbuf_stalls", "tcu_tbuf_cache_hits")
-UNSEEDED = (
+    "core_stall_tcu", "core_instr_tcu", "core_loads", "core_stores",
     "icache_reads", "icache_miss_r", "icache_mshr_st", "dcache_reads", "dcache_writes",
-    "dcache_miss_r", "dcache_miss_w", "dcache_evicts", "dcache_mshr_st", "memory_reads",
-    "memory_writes", "memory_lt", "memory_bank_st", "tcu_lmem_reads")
+    "dcache_miss_r", "dcache_miss_w", "dcache_evicts", "dcache_mshr_st",
+    "lmem_reads", "lmem_writes", "lmem_bank_st", "coalescer_miss", "memory_reads",
+    "memory_writes", "memory_lt", "memory_bank_st", "tcu_tbuf_stalls", "tcu_tbuf_cache_hits",
+    "tcu_lmem_reads")
+UNSEEDED = ()
 NEGATIVE = {"core-overflow": "overflow", "cache-aggregate-overflow": "overflow",
-            "pending-underflow": "underflow"}
+            "pending-underflow": "underflow", "cache-backing-overflow": "overflow",
+            "tcu-backing-overflow": "overflow"}
+BACKING_NEGATIVE = ("cache-backing-overflow", "tcu-backing-overflow")
 NO_CORE_WRAPPER = ("import os,resource,sys; resource.setrlimit(resource.RLIMIT_CORE,(0,0)); "
                    "os.execv(sys.argv[1],sys.argv[1:])")
 LIMITATIONS = [
     "Success establishes only these directed native source/transport prerequisites, never warm qualification or phase acceptance.",
-    "Only 19 available selectors receive transport boundary seeds; 14 available selectors remain explicitly unseeded and 12 are unavailable in this topology.",
+    "All 33 available selectors receive actual backing-source seeds; the 12 unavailable selectors remain unqueried. Transport coverage does not prove a complete context-lifetime bound.",
+    "Private-source access is confined to identified diagnostic translation units; these seeded artifacts are not measurement binaries.",
     "No warm GEMM fixture, workspace reuse, cumulative launch lifetime, numerical acceptance or performance hypothesis is executed.",
     "The native updater failure uses the production AsyncRun owner directly; native public-runtime wait/query failure integration remains unqualified.",
     "The pending-underflow scenario exercises the PerfCounter primitive used by pending counters, not a private model pending-count injection.",
@@ -150,46 +181,94 @@ def dependency_flags(words, target):
     return words[:index] + words[index + 2:]
 
 
-def validate_build(text, stamp_words, *, source, build, binary, compiler, source_files):
-    """Bind actual fresh translation units and the one link to the validated stamp."""
+def _absolute_record_path(value, label):
+    text = str(value)
+    path = PurePosixPath(text)
+    require(path.is_absolute() and str(path) == text and ".." not in path.parts,
+            label + " is not an absolute normalized path")
+    return path
+
+
+def verify_diagnostic_sources(source_contents, generated_contents):
+    """Bind inert retained source bytes to the only admitted access construction."""
+    require(set(DIAGNOSTIC_CONTENTS) <= set(source_contents)
+            and all(type(source_contents[name]) is bytes for name in DIAGNOSTIC_CONTENTS),
+            "diagnostic source bodies are missing or not bytes")
+    for wrapper, original in INCLUDED_SOURCES.items():
+        directives = [b'#include "counter_access.h"', b'#include "../../../' + original.encode() + b'"',
+                      b'#include <stdexcept>']
+        body = source_contents[wrapper]
+        require(body.startswith(b"// SPDX-License-Identifier: Apache-2.0\n" + b"\n".join(directives[:2]) + b"\n")
+                and re.findall(rb"^[ \t]*#[^\n]*", body, re.MULTILINE) == directives,
+                "diagnostic wrapper changes its production include: " + wrapper)
+    footer = source_contents[TCU_FOOTER]
+    directives = [b'#include "../../tests/unittest/checked_counters/counter_access.h"',
+                  b'#include <stdexcept>']
+    require(footer.startswith(b"// SPDX-License-Identifier: Apache-2.0\n" + directives[0] + b"\n")
+            and re.findall(rb"^[ \t]*#[^\n]*", footer, re.MULTILINE) == directives,
+            "TCU access footer changes its header or injects preprocessing")
+    require(set(generated_contents) == {GENERATED_TCU}
+            and type(generated_contents[GENERATED_TCU]) is bytes
+            and generated_contents[GENERATED_TCU] == source_contents[TCU_ORIGINAL] + b"\n" + footer,
+            "generated TCU source differs from the exact production body and access footer")
+
+
+def expected_object(relative, build):
+    """Return the exact object selected by the versioned diagnostic Makefile."""
+    root = build / "sim/simx/obj"
+    if relative == DIAGNOSTIC_ROOT + "main.cpp":
+        return root / "tests/checked_counters_test.o"
+    for prefix, destination in (("sw/common/", "common"), ("sim/common/", "sim_common"),
+                                ("sim/simx/", ""), (DIAGNOSTIC_ROOT, "tests/checked_counters")):
+        if relative.startswith(prefix):
+            return root / destination / PurePosixPath(relative[len(prefix):]).with_suffix(".o")
+    raise ValueError("source has no diagnostic object mapping")
+
+
+def parse_build_records(text, stamp_words, *, source, build, binary, compiler, source_files,
+                        source_contents, generated_contents):
+    """Validate retained compiler/link records without accessing recorded paths."""
+    source = _absolute_record_path(source, "source root")
+    build = _absolute_record_path(build, "build root")
+    binary = _absolute_record_path(binary, "binary path")
+    compiler = str(_absolute_record_path(compiler, "compiler path"))
     expected_flags = dependency_flags(stamp_words, build / STAMP)
+    require(set(MODEL_SOURCES) | set(WRAPPER_SOURCES.values()) <= set(source_files),
+            "source snapshot omits diagnostic or included production bodies")
+    verify_diagnostic_sources(source_contents, generated_contents)
+    expected_inputs = {source / name: expected_object(name, build)
+                       for name in MODEL_SOURCES if name != TCU_FOOTER}
+    expected_inputs[build / GENERATED_TCU] = expected_object(TCU_FOOTER, build)
     objects, inputs, links = [], [], []
     for line in _records(text, "native build log"):
         words = _stamp_words(line, "native build command")
         if not words or words[0] != compiler:
-            # A successful fresh build must account for every object it links.
             require(not any(word.endswith((".o", ".cpp")) for word in words),
                     "build log contains an unrecognized source/object command")
             continue
         _syntax(line, "native build command")
         arguments = words[1:]
         require(arguments.count("-o") == 1 and arguments[-2] == "-o", "native build output is ambiguous")
-        target = Path(arguments[-1])
+        target = _absolute_record_path(arguments[-1], "native output")
         body = arguments[:-2]
         if "-c" in body:
             require(body.count("-c") == 1 and body[-2] == "-c", "native compile source is ambiguous")
-            original = Path(body[-1])
-            require(original.is_relative_to(source) and original.relative_to(source).as_posix() in source_files,
-                    "compiled source is absent from the source snapshot")
-            require(target.is_relative_to(build / "sim/simx/obj") and target.suffix == ".o"
-                    and target.resolve() == target and target not in objects,
-                    "compiled object is repeated or outside the fresh tree")
+            original = _absolute_record_path(body[-1], "native source")
+            require(original in expected_inputs, "compiled source is absent from the diagnostic source inventory")
+            require(target == expected_inputs[original] and target not in objects,
+                    "compiled object is repeated or differs from its exact source mapping")
             require(dependency_flags(body[:-2], target.with_suffix(".d")) == expected_flags,
                     "translation-unit flags differ from the compiler stamp")
             objects.append(target)
-            inputs.append(original.relative_to(source).as_posix())
+            inputs.append(str(original))
         else:
             require(target == binary, "unexpected native link target")
             prefix = list(stamp_words)
             prefix[prefix.index("-MF") + 1] = str(binary)
             require(body[:len(prefix)] == prefix, "link flags differ from the compiler stamp")
             links.append(body[len(prefix):])
-    require(len(links) == 1 and len(objects) >= 40 and len(inputs) == len(set(inputs)),
-            "native build lacks a unique fresh compile/link inventory")
-    required = {"sim/simx/core.cpp", "sim/simx/csr_unit.cpp", "sim/simx/processor.cpp",
-                "sim/simx/mem/cache.cpp", "sim/simx/tcu/tcu_unit.cpp", "sim/simx/tcu/tcu_tbuf.cpp",
-                "tests/unittest/checked_counters/main.cpp"}
-    require(required <= set(inputs), "native build omits required real SimX or TCU sources")
+    require(len(links) == 1 and Counter(inputs) == Counter(map(str, expected_inputs)),
+            "native build lacks the exact fresh compile/link source inventory")
     third_party = source / "third_party"
     libraries = [str(third_party / "softfloat/build/Linux-x86_64-GCC/softfloat.a"),
         "-Wl,-rpath," + str(third_party / "ramulator"), "-L" + str(third_party / "ramulator"), "-lramulator",
@@ -198,8 +277,24 @@ def validate_build(text, stamp_words, *, source, build, binary, compiler, source
     require(links[0][-len(libraries):] == libraries
             and Counter(links[0][:-len(libraries)]) == Counter(map(str, objects)),
             "native link does not bind exactly the fresh objects and identified dependencies")
-    return {"compiled_sources": sorted(inputs), "object_identities": [native.file_identity(path) for path in objects],
-            "compiler": compiler, "translation_units": len(objects), "link_count": len(links)}
+    return {"compiled_sources": sorted(inputs), "object_paths": list(map(str, objects)),
+            "included_production_sources": dict(INCLUDED_SOURCES),
+            "generated_production_sources": {str(build / GENERATED_TCU): {
+                "production_source": TCU_ORIGINAL, "access_footer": TCU_FOOTER, "separator_hex": "0a"}},
+            "compiler": compiler,
+            "translation_units": len(objects), "link_count": len(links)}
+
+
+def validate_build(text, stamp_words, *, source, build, binary, compiler, source_files):
+    parsed = parse_build_records(text, stamp_words, source=source, build=build, binary=binary,
+                                 compiler=compiler, source_files=source_files,
+                                 source_contents={name: (source / name).read_bytes() for name in DIAGNOSTIC_CONTENTS},
+                                 generated_contents={GENERATED_TCU: (build / GENERATED_TCU).read_bytes()})
+    objects = parsed.pop("object_paths")
+    require(all(Path(path).resolve() == Path(path) for path in objects),
+            "compiled object resolves outside its recorded path")
+    parsed["object_identities"] = [native.file_identity(path) for path in objects]
+    return parsed
 
 
 def verify_header(text, checked):
@@ -222,9 +317,11 @@ def verify_output(text, checked):
             "boundary result missing, repeated or accompanied by failure")
     value = json.loads(lines[0][len(RESULT_PREFIX):], object_pairs_hook=unique,
                        parse_constant=lambda _: require(False, "boundary result is not finite JSON"))
-    expected = {"schema_version": 1, "mode": "boundaries", "xlen": 64, "perf": True,
+    expected = {"schema_version": 2, "mode": "boundaries", "xlen": 64, "perf": True,
         "tcu": True, "checked": checked, "transport_selectors": list(SELECTORS), "vectors_per_selector": 10,
-        "transport_reads": 760, "checks": 2749, "failures": 0, "unseeded_available_selectors": list(UNSEEDED),
+        "transport_reads": 1788, "checks": 6389, "failures": 0, "unseeded_available_selectors": list(UNSEEDED),
+        "source_components": 40, "component_vectors": 400, "split_vectors": 14, "reset_selectors": 33,
+        "all_available_selector_transport": True,
         "unavailable_selectors": 12, "full_warm_coverage": False, "warm_execution": False}
     require(type(value) is dict and value == expected
             and all(type(value[key]) is type(item) for key, item in expected.items()),
@@ -252,10 +349,14 @@ def verify_negative(text, result, mode):
             and RESULT_PREFIX not in text, "negative scenario lacks its unique failure result")
     value = json.loads(lines[0][len(FAILURE_PREFIX):], object_pairs_hook=unique,
                        parse_constant=lambda _: require(False, "failure result is not finite JSON"))
-    expected = {"schema_version": 1, "mode": mode, "reason": NEGATIVE[mode], "checked": True,
+    expected = {"schema_version": 2 if mode in BACKING_NEGATIVE else 1, "mode": mode, "reason": NEGATIVE[mode], "checked": True,
         "exception_type": "PerfCounterError", "protected_value_unchanged": True,
         "public_runtime": False, "warm_execution": False}
-    if mode == "core-overflow":
+    if mode in BACKING_NEGATIVE:
+        expected.update(source_unchanged=True, actual_backing_sources=True, actual_dcr_query=True,
+                        terminal_failure=True, sticky_failure_checks=8, later_work_suppressed=True,
+                        suppressed_tasks=2, joined=True, fresh_context_success=True)
+    elif mode == "core-overflow":
         expected.update(actual_model_updater=True, terminal_failure=True, sticky_failure_checks=8,
                         later_work_suppressed=True, suppressed_tasks=2, joined=True, fresh_context_success=True)
     elif mode == "cache-aggregate-overflow":
@@ -273,10 +374,11 @@ def execute(args, paths):
     cells = [{"id": variant + "-" + mode, "variant": variant, "mode": mode, "outcome": "not_run"}
              for variant in ("ordinary", "checked")
              for mode in (("boundaries",) if variant == "ordinary" else ("boundaries", *NEGATIVE))]
-    report = {"schema_version": 1, "contract_id": "simx-checked-counters-native-v1", "started_at": native.now(),
+    report = {"schema_version": 2, "contract_id": "simx-checked-counters-native-v2", "started_at": native.now(),
         "state": "running", "outcome": "blocked", "qualified": False, "ready_for_warm": False,
         "acceptance_claimed": False, "full_warm_coverage": False, "warm_execution": False,
-        "native_prerequisites_passed": False, "expected_revision": args.expected_revision,
+        "native_prerequisites_passed": False, "all_available_selector_transport": False,
+        "expected_revision": args.expected_revision,
         "paths": {key: str(value) for key, value in paths.items()}, "commands": [], "variants": [],
         "cells": cells, "errors": [], "limitations": LIMITATIONS,
         "budget": dict(BUDGET, jobs=2, threads=1, timeouts_seconds=TIMEOUTS)}
@@ -372,6 +474,8 @@ def execute(args, paths):
             variant["build_command"] = built["id"]
             variant["compiler_stamp_before"] = hash_artifacts(build, [STAMP])
             variant["retained_compiler_stamp"] = retain(build, variant["compiler_stamp_before"], name)
+            variant["diagnostic_sources_before"] = hash_artifacts(build, [GENERATED_TCU])
+            variant["retained_diagnostic_sources"] = retain(build, variant["diagnostic_sources_before"], name)
             words = compile_flags((build / STAMP).read_text(encoding="utf-8"), checked=checked, source=source, build=build)
             variant["compiler_records"] = validate_build((output / built["log"]).read_text(encoding="utf-8"), words,
                 source=source, build=build, binary=binary, compiler=selected["g++"]["path"],
@@ -391,6 +495,8 @@ def execute(args, paths):
                         "generated configuration changed before native execution")
                 require(hash_artifacts(build, [STAMP]) == variant["compiler_stamp_before"],
                         "compiler stamp changed before native execution")
+                require(hash_artifacts(build, [GENERATED_TCU]) == variant["diagnostic_sources_before"],
+                        "generated diagnostic source changed before native execution")
                 require(native.file_identity(binary) == variant["binary_before"], "native binary changed before execution")
                 negative = cell["mode"] in NEGATIVE
                 result = command(cell["id"], [selected["executing_python"]["path"], "-I", "-c", NO_CORE_WRAPPER,
@@ -424,6 +530,7 @@ def execute(args, paths):
             for key, observe in (
                 ("generated", lambda: generated_identity(build, source, paths["tools"], args.osversion)),
                 ("compiler_stamp", lambda: hash_artifacts(build, [STAMP])),
+                ("diagnostic_sources", lambda: hash_artifacts(build, [GENERATED_TCU])),
                 ("binary", lambda: native.file_identity(variant["binary_path"]))):
                 if key + "_before" in variant:
                     try:
@@ -450,7 +557,7 @@ def execute(args, paths):
         try:
             identities = list(report.get("retained_sources", []))
             for variant in report["variants"]:
-                for key in ("retained_configuration", "retained_compiler_stamp", "retained_probe"):
+                for key in ("retained_configuration", "retained_compiler_stamp", "retained_diagnostic_sources", "retained_probe"):
                     identities.extend(variant.get(key, []))
             require(hash_artifacts(output, [item["path"] for item in identities]) == identities,
                     "retained evidence changed during execution")
@@ -465,6 +572,9 @@ def execute(args, paths):
             if cell["outcome"] == "not_run":
                 cell.update(outcome="blocked", reason="required execution or validation did not finish")
         report["native_prerequisites_passed"] = report["outcome"] == "pass" and all(cell["outcome"] == "pass" for cell in cells)
+        report["all_available_selector_transport"] = report["native_prerequisites_passed"] and all(
+            cell.get("observations", {}).get("all_available_selector_transport") is True
+            for cell in cells if cell["mode"] == "boundaries")
         report.update(state="finished", finished_at=native.now())
         checkpoint()
     return report
