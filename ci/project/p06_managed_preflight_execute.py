@@ -443,10 +443,10 @@ def execute(args, paths):
             variant["expected_backend_header_macros"] = dict(variant["header_macros"], PERF_ENABLE="1", **{
                 name + "_DISABLE": "1" for name in DISABLED}, **{build_records.GUARD: "1"})
             make = [tools["make"]["path"], "--no-print-directory", "-j" + str(args.jobs), "THREADS=1",
-                    "CXX=" + tools["g++"]["path"], "CC=" + tools["gcc"]["path"]]
+                    "CXX=" + tools["g++"]["path"]]
             current = dict(environment, CONFIGS=config_flags, PERF="1")
             runtime = build / "sw/runtime"
-            backend_text, backend_command = command(variant_id + "-backend", [*make,
+            backend_text, backend_command = command(variant_id + "-backend", [*make, "CC=" + tools["gcc"]["path"],
                 "DESTDIR=" + str(runtime), "-f", build / APP / "backend.mk", runtime / "libvortex-simx.so"],
                 build / "sw/runtime/simx", current, args.timeout_seconds)
             retain_build(variant, build, "backend")
@@ -459,7 +459,10 @@ def execute(args, paths):
                 source_files=[item["path"] for item in initial["files"]])
             variant["backend_build_command"] = backend_command["id"]
             app = build / APP
-            application_text, app_command = command(variant_id + "-application", [*make, "all"],
+            # The kernel-library sub-make selects its pinned RISC-V C compiler.
+            # A host CC command-line override would propagate into that build.
+            # Preserve complete original command lines from parallel sub-makes.
+            application_text, app_command = command(variant_id + "-application", [*make, "--output-sync=target", "all"],
                 app, current, args.timeout_seconds)
             app_stamp = (app / "config.stamp").read_text(encoding="utf-8")
             variant["host_build_records"] = validate_host_build(application_text, app_stamp,

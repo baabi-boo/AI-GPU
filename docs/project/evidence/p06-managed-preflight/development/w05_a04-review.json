@@ -1,0 +1,51 @@
+{
+  "archive_sha256": "4f1e177ba930c132f5e8cc7558b3087d39789c346763f00a9d1bdd2a6d17d00c",
+  "producer_revision": "8756f40029e59c87546fa22f4da33acd4e5d8e02",
+  "native_execution": "not_run",
+  "completed_counts": {
+    "available_queries": 0,
+    "cache_flush_reads": 0,
+    "checked_words": 0,
+    "dcr_reads": 0,
+    "half_replies": 0,
+    "launches": 0,
+    "processes": 0,
+    "snapshots": 0,
+    "unavailable_rows": 0
+  },
+  "backend_outcome": "pass",
+  "application_outcome": "fail",
+  "application_argv": [
+    "/usr/bin/make",
+    "--no-print-directory",
+    "-j2",
+    "THREADS=1",
+    "CXX=/usr/bin/g++",
+    "CC=/usr/bin/gcc",
+    "all"
+  ],
+  "application_log_sha256": "1298b1843e8f9e24d12fce54651855e6ce716148c4ab0f096bf3b9c4437ee6de",
+  "compiler_errors": [
+    "gcc: error: unrecognized argument in option '-mabi=lp64d'",
+    "gcc: error: unrecognized argument in option '-mcmodel=medany'"
+  ],
+  "reviewed_diff": "diff --git a/ci/project/p06_managed_preflight_execute.py b/ci/project/p06_managed_preflight_execute.py\nindex 5ad09dba1..4a82fa16a 100644\n--- a/ci/project/p06_managed_preflight_execute.py\n+++ b/ci/project/p06_managed_preflight_execute.py\n@@ -443,10 +443,10 @@ def execute(args, paths):\n             variant[\"expected_backend_header_macros\"] = dict(variant[\"header_macros\"], PERF_ENABLE=\"1\", **{\n                 name + \"_DISABLE\": \"1\" for name in DISABLED}, **{build_records.GUARD: \"1\"})\n             make = [tools[\"make\"][\"path\"], \"--no-print-directory\", \"-j\" + str(args.jobs), \"THREADS=1\",\n-                    \"CXX=\" + tools[\"g++\"][\"path\"], \"CC=\" + tools[\"gcc\"][\"path\"]]\n+                    \"CXX=\" + tools[\"g++\"][\"path\"]]\n             current = dict(environment, CONFIGS=config_flags, PERF=\"1\")\n             runtime = build / \"sw/runtime\"\n-            backend_text, backend_command = command(variant_id + \"-backend\", [*make,\n+            backend_text, backend_command = command(variant_id + \"-backend\", [*make, \"CC=\" + tools[\"gcc\"][\"path\"],\n                 \"DESTDIR=\" + str(runtime), \"-f\", build / APP / \"backend.mk\", runtime / \"libvortex-simx.so\"],\n                 build / \"sw/runtime/simx\", current, args.timeout_seconds)\n             retain_build(variant, build, \"backend\")\n@@ -459,7 +459,10 @@ def execute(args, paths):\n                 source_files=[item[\"path\"] for item in initial[\"files\"]])\n             variant[\"backend_build_command\"] = backend_command[\"id\"]\n             app = build / APP\n-            application_text, app_command = command(variant_id + \"-application\", [*make, \"all\"],\n+            # The kernel-library sub-make selects its pinned RISC-V C compiler.\n+            # A host CC command-line override would propagate into that build.\n+            # Preserve complete original command lines from parallel sub-makes.\n+            application_text, app_command = command(variant_id + \"-application\", [*make, \"--output-sync=target\", \"all\"],\n                 app, current, args.timeout_seconds)\n             app_stamp = (app / \"config.stamp\").read_text(encoding=\"utf-8\")\n             variant[\"host_build_records\"] = validate_host_build(application_text, app_stamp,\n",
+  "source_hashes": {
+    "ci/project/p06_managed_preflight_execute.py": "2dc11b4ff95845497e4223b0dbe38ccb1371f33d6ba22b28287ff32bec515805",
+    "ci/project/test_p06_managed_preflight_kernel_route.py": "e185d6a5fad272ec8d77b43f79e839b38aeb1c27dc29c565bdd4e7bebbffd07b",
+    "sw/kernel/Makefile": "b1c359421ca2b1b8c31b9dc98893fac772daa239e236e9d1c9225a1eb431238c",
+    "tests/regression/common.mk": "4164a783137b2f6e594ff3795f5911233227c3e4bfcb0319095cd6e78acf9b56"
+  },
+  "reviewed_at": "2026-11-22T23:48:07.719272+00:00",
+  "focused_tests": {
+    "methods": 8,
+    "result": "pass",
+    "duration_seconds": 8.776,
+    "command": "python3 -m unittest discover -s ci/project -p 'test_p06_managed_preflight_kernel_route.py' -v",
+    "log_sha256": "e888d5da7615bebffed5293183380dae40d2c761c1c77c9df2dc44c8364db569",
+    "native_execution": "not_run",
+    "compiler_sentinel_used": false,
+    "dry_run_build_jobs": 2,
+    "dry_run_output_sync": "target"
+  }
+}
