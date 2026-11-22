@@ -26,22 +26,32 @@ its immutable governance suite passes 2,910 tests. Eight Beacon and eight generi
 Yosys measurements are complete. The
 [alternative review](evidence/p06-mpm-transport/reviews/alternative-review.md)
 closes the specific comparison finding and retains the direct `18c8880` decoder;
-raw RV64 area failures remain failures. Broader CI is still running at this
-checkpoint, with final integration/publication tracked in the
-[handoff](p06-mpm-transport-handoff.md).
-The [completion audit](p06-simulator-completion-audit.md) identifies reliable
-asynchronous simulator completion as the prerequisite to that qualification.
-The [completion implementation](../designs/simulator_completion_v1.md) and host
-checks are present. A further production-SimObject host probe exposes an
-outstanding-channel count surviving exceptional teardown; its cleanup repair is
-in progress. Native completion execution remains `not_run` pending hosted CI,
-and checkpoint evidence reconciliation is incomplete. Resolve that blocker and
-complete native verification and independent review before the
-[versioned qualification plan](p06-mpm-qualification-plan.md), then collect a fresh
-complete warm attempt under the [implemented contract](../designs/warm_workspace_benchmark_v1.md).
-Its unconditional v1 block, `P06-WARM-RV64-MPM-HIGH-HALF`, remains in force with
-`qualified=false`; the repair cannot recover missing historical high bits.
-No warm speedup or new P06 gate is accepted.
+raw RV64 area failures remain failures. The
+[handoff](p06-mpm-transport-handoff.md) retains that repair's separate integration
+and publication history.
+
+The [completion audit](p06-simulator-completion-audit.md) identified a prerequisite:
+execution faults must reach public waits before a future counter guard can be
+trusted. The [implementation](../designs/simulator_completion_v1.md) now consumes
+asynchronous results, preserves the first busy edge, keeps processor failures
+terminal and clears abandoned channel accounting at complete platform disposal.
+It also preserves the inherited recoverable CP-copy allocation-error path.
+At repaired checkpoint `4781ca9`, **83 focused host tests**, the eight compiled-parent
+failure controls and the fresh dedicated native completion controls pass.
+Independent original-artifact review binds native execution to the exact repaired
+tree. Both repaired-checkpoint Project Governance runs passed **2,993 tests each**,
+including the 83 focused completion tests, with independent original-log review.
+The earlier `db5ebb3` native and 2,988-test receipts remain historical. The
+[evidence packet](evidence/p06-simulator-completion/README.md) records each result's
+source and scope, including the later documentation/evidence source projection.
+
+The next development is the [exact counter qualification contract](p06-mpm-qualification-plan.md):
+all 33 available selectors, coherent reads and an enforceable cumulative no-wrap
+proof, followed only then by a fresh complete warm attempt. The
+[implemented warm v1 contract](../designs/warm_workspace_benchmark_v1.md) remains
+unconditionally blocked by `P06-WARM-RV64-MPM-HIGH-HALF`, with `qualified=false`
+and no absolute no-wrap bound. No counter guard, warm speedup or new P06 gate is
+established by the completion repair.
 
 **P04 is complete for the fixed tiny-model contract.**
 [P04-A01](evidence/p04-fixture/acceptance.json) retains its accepted source scope;
@@ -110,7 +120,7 @@ the linked reports define the exact accepted scope.
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
 | P04 — tiny-model inference | `complete` | A01 fixed fixture preserved; A02/A03 accept the full four-variant composed-model matrix at native processor RTL scope |
 | P05 — Python/framework bridge | `in_progress` | A01 accepts the bounded copying Python binding on SimX; the custom-op implementation and prior CI still need independent artifact review for A02/A03 |
-| P06 — Memory and performance scaling | `in_progress` | A01 cold acceptance, original workspace correctness and reviewed RV64 transport evidence are preserved; async completion has host checks, with exceptional channel cleanup, native verification and final evidence review still pending before counter/warm qualification; A02/A03 stay open |
+| P06 — Memory and performance scaling | `in_progress` | A01 cold acceptance, original workspace correctness and reviewed RV64 transport evidence are preserved; repaired completion/teardown and CP-error behavior have independent host/native review at `4781ca9`; counter/coherence/no-wrap qualification and A02/A03 remain open |
 | P07–P11 | `not_started` | Later hardware, reliability, research and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -130,26 +140,74 @@ future counter qualification cannot rely on a failure path that loses errors.
 The [completion contract](../designs/simulator_completion_v1.md) separates
 checked SimX execution from the legacy register-derived return; valid `gp`
 values, including `-1`, remain successful. Both backends use `AsyncRun` to consume
-outcomes, retain failure for the device lifetime, preserve the launch edge and
-join outstanding execution before freeing memory or processor state. Public
-error codes, processor arithmetic and timing behavior are unchanged.
+outcomes, retain processor failure, preserve the launch edge and join outstanding
+execution before freeing owned memory or processor state. Full cleanup in both
+timing and functional SimObject frameworks disposes of abandoned channel
+accounting after workers, scheduled events and inboxes have been removed. Normal
+packet flow, reset/launch behavior, arithmetic, public error codes and ABI remain
+unchanged.
 
-Development host evidence covers six backend groups across two backends and
-two memory paths (**24 cells**), plus three public-runtime groups over the same
-matrix (**12 cells**). Pinned old backend sources compile and fail all eight
-standard/unknown-exception cells at the intended behavioral assertion. Helper
-and runner checks are separately scoped in the audit. A further host probe using
-the actual SimObject/SimChannel implementation leaves `inflight_count=1` after
-an exception, `SimPlatform::finalize()` and full object destruction. A fresh
-context consumes its own message but still reports `idle=false`. Cleanup
-accounting is therefore an open implementation blocker; successful context
-recreation is not qualified. These observations do not constitute a final
-frozen-source integration packet. The new native unit, public-success regression,
-bounded runner and hosted workflow are implemented,
-but **native execution is `not_run` pending hosted CI**. The local 15 GiB native
-disk reserve remains enforced. Repair and prove exceptional channel cleanup,
-complete native verification, reconcile exact source/log identities and finish
-independent review before counter qualification.
+The first clean checkpoint, `db5ebb3a16770004423f2456ec6d0caaa0aced6d`, passed
+78 focused host tests and the hosted
+[native completion run 45006726571](https://github.com/baabi-boo/AI-GPU/actions/runs/45006726571).
+Its unit exercised real `Processor`/RAM, nine checked normal runs, three legacy
+normal runs, one legacy caught exception and one checked `OutOfRange` exception,
+with a fresh successful context after the fault. Its separate public-runtime
+cell passed six serial launches across two contexts with nonzero `gp` and exact
+outputs. Independent review binds the executed merge tree to that checkpoint.
+The [governance run](https://github.com/baabi-boo/AI-GPU/actions/runs/45006726409)
+passed all 2,988 tests. These receipts precede the CP error-boundary correction
+described next; they are not verification of later production bytes.
+
+A late consumer audit caught a compatibility regression in the initial broad
+exception catch: CP-copy scratch `std::bad_alloc` became a terminal
+`VX_ERR_INVALID_VALUE` instead of the inherited recoverable
+`VX_ERR_OUT_OF_HOST_MEMORY`. The repair latches failures at actual processor
+operations and leaves unrelated CP/host exceptions on their existing runtime
+path. The unchanged lifecycle test now passes all three allocation-failure stages
+in SimX/rtlsim × RAM/LLC (**four full lifecycle cells**), including resource
+restoration, unchanged seeded data, no replay and same-device continuation.
+Another **34 host cells** keep asynchronous and synchronous processor faults
+terminal. All four built `db5ebb3` negative controls fail the intended OOM
+assertion. Independent review found no remaining F2/F3 defect in this boundary.
+
+At repaired production checkpoint
+`4781ca96db15a1d130626edc7a73411a4f6c2e7c`, the clean focused suite passed
+**83 tests in 87.502 seconds**, with source, tool and driver identities unchanged.
+The compiled audited-parent replay also passed all eight intended old-backend
+failure controls. The fresh
+[native run 45009314161](https://github.com/baabi-boo/AI-GPU/actions/runs/45009314161)
+passed both native cells, and independent original-artifact review verified the
+actual repaired runtime/helper and contract bytes. The executed PR merge
+`e929c52d05bad80b28dd4085a97838d7fe2de354` has the same tree,
+`6dd0d759390cda78ec63ad0caacc00a08f03e2bc`, as that checkpoint.
+The original ZIP and review are retained in the
+[repaired native packet](evidence/p06-simulator-completion/checkpoints/native-4781ca9.tar.gz).
+
+The declared native route is RV64 `p02-tfr`, timing SimX, `PERF=1`, one worker and
+direct-RAM CP. It repeats the real-model fault/legacy-success/fresh-context unit
+and six public success launches. It does not inject a native public-runtime
+fault or establish native functional SimX, multiworker exception recovery or
+processor RTL execution. The local 15 GiB native disk reserve remains enforced;
+native execution used adequately provisioned hosted CI.
+
+Both full Project Governance runs at the repaired tree passed independent
+original-log review: [PR run 45009314170](https://github.com/baabi-boo/AI-GPU/actions/runs/45009314170)
+completed **2,993 distinct tests in 1,864.865 seconds**, and
+[push run 45009309941](https://github.com/baabi-boo/AI-GPU/actions/runs/45009309941)
+completed **2,993 distinct tests in 1,891.161 seconds**. Every result was `ok`,
+and each run includes the same 83 focused completion tests. The PR executed
+same-tree merge `e929c52d`; the push executed `4781ca9` directly. These outcomes
+cover governance and bounded host tests; they do not establish that the broader
+CI matrix passed. The [completion packet](evidence/p06-simulator-completion/README.md)
+retains the original logs, historical pending observations and exact source scope.
+The later delivery
+adds only README/project documentation and evidence. Independent source
+projection checks the unchanged execution inputs against tested `4781ca9`;
+earlier CI is not represented as an execution of the later documentation tree.
+The [delivery ledger](evidence/p06-simulator-completion/delivery-ledger.md) records
+all **60 actual agents across ten logical waves**, with follow-ups retained under
+their original identities. Publication verification is recorded separately.
 
 ## Previous continuation — host counter transport
 
@@ -940,23 +998,23 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**P06-T01 — complete native simulator completion verification before counter qualification.**
-Use the [completion audit](p06-simulator-completion-audit.md) and
-[contract](../designs/simulator_completion_v1.md) to resolve the exceptional
-channel-accounting blocker, then finish the native checked-model and public-success
-controls. Retain all results and reconcile them with the host fault/parent
-evidence under independent review. Native execution is still
-`not_run`; host fixtures and runner checks cannot replace it. The native disk
-reserve remains 15 GiB. The earlier counter transport's broader integration and
-publication remain separately tracked in its [handoff](p06-mpm-transport-handoff.md).
+**P06-T01 — freeze and independently review the exact counter-qualification
+contract.** The [completion packet](evidence/p06-simulator-completion/README.md)
+now has fresh independently reviewed native evidence for repaired `4781ca9`,
+alongside its host and parent controls. Preserve the recorded source scopes,
+failed controls and 15 GiB native disk reserve.
 
-Then implement and independently review the
-[versioned qualification binding](p06-mpm-qualification-plan.md): prove the exact
-warm configuration and required selector coverage, coherent reads and an absolute
-cumulative no-wrap bound, and reject historical packets or mismatched source,
-configuration or binaries. Keep the existing v1 `qualified=false` block and
-`absolute_no_wrap_bound="not_established"` intact; any future no-wrap claim needs
-its own evidence.
+The next implementation is the [versioned qualification route](p06-mpm-qualification-plan.md)
+for the exact RV64 `p02-tfr`, timing SimX, `PERF=1` configuration. Independently
+review a source-bound contract covering all **33 available counter selectors**,
+the 12 unavailable L2/L3 rows, coherent two-half reads and an enforceable absolute
+bound over the entire cumulative context lifetime. Existing representative
+TCU-disabled transport tests cover only five of those 33 SimX sources; the
+launch-relative clock cannot bound cumulative counters across resets. No guard
+or absolute bound is implemented by the completion repair. Reject historical
+packets or mismatched source/configuration/tools/binaries on the future route,
+and preserve v1 `qualified=false` and
+`absolute_no_wrap_bound="not_established"`.
 
 Run a fresh complete matched warm attempt only under the reviewed qualification
 route and unchanged [sampling/rejection rules](../designs/warm_workspace_benchmark_v1.md):

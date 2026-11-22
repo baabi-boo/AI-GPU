@@ -33,8 +33,8 @@ archives, build provenance, independent audits and replay instructions. The
 earlier [P04-A01 fixture acceptance](docs/project/evidence/p04-fixture/acceptance.json)
 and [hashed manifest](ci/project/p04_model_manifest.json) remain unchanged.
 
-**Current work: P06-T01 — simulator completion verification before counter qualification
-(`in_progress`), with [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
+**Current work: P06-T01 — qualify the exact counter route after the reviewed
+simulator completion repair (`in_progress`), with [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
 Independent review qualifies the original
 [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
 at source `84b6ca0ca75fba248ba330642bbf8764db3d459c`. The frozen
@@ -70,22 +70,49 @@ repaired the RV64 high-word defect in SimX and the host RTL decoder. At `18c8880
 all eight strict native cells pass, both old-production targets demonstrate the
 expected numeric defect, and 2,910 immutable governance tests pass. Paired circuit
 and alternative reviews retain the direct decoder; raw area failures remain
-visible. Broader CI is still in progress at this checkpoint, as separately
-tracked in the [transport evidence packet](docs/project/evidence/p06-mpm-transport/README.md).
+visible in the [transport evidence packet](docs/project/evidence/p06-mpm-transport/README.md),
+which retains that repair's separate integration and publication history.
+
 The [completion audit](docs/project/p06-simulator-completion-audit.md) found a
-prerequisite: simulator exceptions could disappear, and an immediately completed
-task could miss the command processor's busy edge. The
-[completion changes](docs/designs/simulator_completion_v1.md) preserve valid
-SimX `gp` values, including `-1`, while consuming asynchronous results, retaining
-terminal failure and joining pending work before teardown. Host backend/public
-checks and built-parent behavioral failures are available. A further host probe
-found an outstanding simulated-channel count surviving exceptional teardown;
-that cleanup repair remains in progress. **Native completion execution remains
-`not_run` pending hosted CI**, and checkpoint evidence is incomplete. Resolve
-and verify that blocker, complete native verification and independent review,
-then follow the [versioned counter qualification plan](docs/project/p06-mpm-qualification-plan.md)
-for exact configuration/selector coverage, coherent reads and an absolute no-wrap
-bound. Only then collect the unchanged fresh warm matrix: 24 processes,
+prerequisite: simulator exceptions could disappear, an immediately completed
+task could miss the command processor's busy edge, and abandoned channel
+accounting could survive full teardown. The
+[completion implementation](docs/designs/simulator_completion_v1.md) consumes
+execution results, preserves valid `gp` values including `-1`, retains processor
+failure, joins pending work, and retires abandoned accounting only after complete
+platform disposal. The narrowed error boundary also preserves the existing
+recoverable command-processor allocation-error path and same-device continuation.
+
+At repaired checkpoint
+[`4781ca9`](https://github.com/baabi-boo/AI-GPU/commit/4781ca96db15a1d130626edc7a73411a4f6c2e7c),
+all **83 focused host tests** and the eight compiled-parent failure controls pass.
+The unchanged lifecycle suite verifies recoverable allocation errors and
+same-device continuation; separate processor-fault controls keep execution
+failures terminal. The fresh
+[native completion run 45009314161](https://github.com/baabi-boo/AI-GPU/actions/runs/45009314161)
+also passed independent original-artifact review: a real model exception is
+followed by successful fresh-context execution, and six public launches produce
+exact outputs with nonzero `gp`. This is RV64 `p02-tfr`, timing SimX, `PERF=1`,
+one worker and direct-RAM CP scope. It does not qualify native RTL or a native
+public-runtime injected fault.
+
+The [completion evidence packet](docs/project/evidence/p06-simulator-completion/README.md)
+retains both checkpoints, original failures, source/tool identities and reviews.
+Both repaired-checkpoint Project Governance runs passed **2,993 tests each**,
+including all 83 focused completion tests; independent review checked the
+original complete logs. The earlier 2,988-test `db5ebb3` result remains historical.
+The broader CI matrix is separate and is not represented as wholly passing.
+Subsequent documentation/evidence additions preserve the tested execution inputs
+and are checked separately; the
+native result remains bound to `4781ca9`. The
+[delivery ledger](docs/project/evidence/p06-simulator-completion/delivery-ledger.md)
+records **60 actual agents across ten logical waves**, six assignments per wave.
+
+The next development step is the [versioned counter qualification plan](docs/project/p06-mpm-qualification-plan.md):
+cover all **33 available counters** in the exact RV64 tensor configuration,
+prove coherent reads and establish an enforceable cumulative no-wrap bound.
+No such guard or bound is implemented by this completion repair. Only after
+that qualification should the unchanged fresh warm matrix run: 24 processes,
 792 launches and 25,344 exact output words. **P06 and P06-T01 remain
 `in_progress`; P06-A02/A03 remain open.** Warm v1 stays unconditionally blocked;
 these repairs do not qualify historical measurements or establish a speedup.
@@ -166,9 +193,10 @@ and P07–P11 are not started.
   and [P02 WMMA evidence](docs/project/evidence/p02-wmma/README.md).
 - Read the earlier contract checkpoint: [P02 numerical handoff](docs/project/p02-numerics-handoff.md)
   and [A01 evidence](docs/project/evidence/p02-numerics/README.md).
-- Start the next bounded task: [simulator completion audit](docs/project/p06-simulator-completion-audit.md)
-  and [completion contract](docs/designs/simulator_completion_v1.md), then the
-  [counter qualification plan](docs/project/p06-mpm-qualification-plan.md).
+- Review the [simulator completion audit](docs/project/p06-simulator-completion-audit.md),
+  [contract](docs/designs/simulator_completion_v1.md) and
+  [source-bound verification packet](docs/project/evidence/p06-simulator-completion/README.md),
+  then start the [exact counter qualification plan](docs/project/p06-mpm-qualification-plan.md).
   The [transport handoff](docs/project/p06-mpm-transport-handoff.md) and
   [transport evidence](docs/project/evidence/p06-mpm-transport/README.md) retain
   the earlier counter repair's separate scope.

@@ -3,114 +3,159 @@
 ## Decision
 
 The audit starts at `42809ff0c1b81384d7c9b079e4ef786be8407600` on `master`.
-The selected implementation is reliable asynchronous simulator completion at
-the host backend boundary, a prerequisite discovered while reviewing the
-[counter qualification plan](p06-mpm-qualification-plan.md). Development host
-checks are available, but implementation and checkpoint evidence remain
-incomplete: exceptional channel cleanup needs repair, and actual native
-completion execution is `not_run` pending hosted CI.
+The selected implementation is reliable simulator completion at the host backend
+boundary, a prerequisite discovered while reviewing the
+[counter qualification plan](p06-mpm-qualification-plan.md). Execution faults
+must reach the caller before a future counter-bound guard can be trusted.
 
-The repaired RV64 host counter route still needs exact warm-configuration
-coverage, coherent-read qualification and an absolute cumulative no-wrap bound.
-A prospective guard cannot be trusted if its failure disappears at the runtime
-boundary. This audit therefore addresses failure propagation before enabling
-any new warm performance qualification.
+The completion and full-platform accounting repairs are implemented. The first
+checkpoint, `db5ebb3a16770004423f2456ec6d0caaa0aced6d`, passed host tests and
+dedicated hosted native controls. A later consumer audit found and repaired an
+overbroad exception boundary that broke recoverable CP allocation errors. That
+correction has independent host regression, source review and fresh native
+verification at `4781ca96db15a1d130626edc7a73411a4f6c2e7c`.
+[Native run 45009314161](https://github.com/baabi-boo/AI-GPU/actions/runs/45009314161)
+passed both declared cells, with independent review of the original artifact.
+Its executed merge `e929c52d05bad80b28dd4085a97838d7fe2de354` has the identical
+tree `6dd0d759390cda78ec63ad0caacc00a08f03e2bc`. Both completed Project
+Governance runs at that repaired tree passed **2,993 tests each**, including all
+83 focused completion tests, with independent original-log verification. The
+[evidence packet](evidence/p06-simulator-completion/README.md) records the distinct
+revisions and original results. No performance or phase acceptance follows from
+either checkpoint.
 
-## Findings
+## Findings and disposition
 
-The first four findings describe the audited parent implementation. The channel
-cleanup finding was subsequently confirmed by a development host probe using
-the actual [SimObject/SimChannel implementation](../../sim/common/simobject.h).
+The first four findings concern the audited parent. Cleanup was reproduced
+using the actual SimObject/SimChannel framework. The CP allocation finding was
+discovered in the initial completion implementation during consumer review.
 
-| Finding | Evidence | Consequence |
+| Finding | Evidence and consequence | Disposition |
 |---|---|---|
-| SimX suppresses processor exceptions | `sim/simx/processor.cpp::Processor::run()` catches exceptions and returns `-1`; the runtime's void launch lambda discards that return | A failed simulation can appear to finish successfully |
-| Legacy return is not a reliable status | `Operands::get_exit_code()` reads register x3 (`gp`); kernel startup initializes `gp` for legitimate global-data access, while `_Exit` writes the exit-code MMIO address | Rejecting every nonzero legacy return would break valid kernels |
-| Both host simulation backends discard asynchronous exceptions | SimX and processor RTL use `future<void>` readiness/wait calls without consuming the result | An exception stored by the future need not reach the host caller |
-| Both can miss an immediate completion | `CommandProcessor::tick_launch()` requires busy to rise before falling, while the backend hooks expose only current future readiness | A task finished before its first poll can leave `WaitBusy` stuck |
-| Exceptional teardown can retain channel accounting | A host probe leaves `SimChannelBase::inflight_count()` at 1 after an exception, `SimPlatform::finalize()` and full object destruction; a fresh context consumes its own message but still reports `idle=false` | Cleanup accounting remains an implementation blocker; a new device/context is not yet qualified to run successfully after that failure |
-| Qualification remains incomplete | The directed transport packet uses TCU-disabled configurations; 33 warm counters are available and accumulate without a proved absolute bound | Existing v1 rejection and phase states must remain unchanged |
+| SimX suppresses processor exceptions | Legacy `Processor::run()` catches exceptions and returns `-1`; the runtime's void launch lambda discards that result | Add `run_checked()` to propagate model exceptions while preserving the legacy API and body |
+| Legacy return is not a reliable status | `Operands::get_exit_code()` reads x3 (`gp`), a legitimate global-data pointer; even integer `-1` can be valid | Ignore the legacy register-derived result on the checked path; native controls exercise `7` and `-1` |
+| Both host backends discard asynchronous exceptions | Future readiness/wait without `get()` can hide a stored exception | `AsyncRun` consumes outcomes and keeps processor failures terminal |
+| Immediate completion can lose the busy edge | The CP requires busy to rise before falling; current readiness alone can skip the rise and leave `WaitBusy` stuck | Preserve the unobserved launch edge independently of future completion; deterministic and mutation controls cover it |
+| Exceptional teardown can retain channel accounting | A real-framework probe left `inflight_count=1` after finalization; a fresh context consumed its message but remained non-idle | Timing and functional cleanup retire abandoned accounting after disposing all platform work; actual-framework tests and native fresh-context control exercise declared scopes |
+| Initial catch-all breaks recoverable CP OOM | CP scratch allocation throws after selecting `EngState::Retire`; blanket catch changed OOM into terminal INVALID_VALUE and prevented safe continuation | Latch only processor-origin failures, preserve inherited CP/host exception mapping, and run the original lifecycle suite unchanged |
+| Counter qualification remains incomplete | The old native SimX transport test seeds five of 33 required available sources, under a different TCU-disabled configuration; no absolute cumulative bound exists | Preserve warm v1 rejection and freeze the exact selector/coherence/lifetime contract before new qualification |
 
-Processor RTL's `Processor::run()` returns `void`; no RTL kernel-exit-code
-reporting is inferred. Its repair concerns asynchronous exceptions and completion
-ordering. The public adapter currently maps nonzero HAL results to
-`VX_ERR_INVALID_VALUE`; that ABI and mapping remain the applicable contract.
+Processor RTL's `Processor::run()` returns `void`; no RTL kernel exit-code
+reporting is inferred. Its completion repair concerns host exception transport
+and ordering. The existing callback adapter maps nonzero HAL results to
+`VX_ERR_INVALID_VALUE`; no public error code or ABI mapping is changed.
 
-## Implementation and verification scope
+## Implemented boundaries
 
-The [completion contract](../designs/simulator_completion_v1.md) preserves the
-legacy SimX `run()` interface and adds `run_checked()` to propagate model
-exceptions without interpreting `gp` as a runtime status. Valid nonzero values,
-including `-1`, remain successful. Both runtime backends now use the shared
-[AsyncRun owner](../../sw/runtime/common/async_run.h) to consume each asynchronous
-outcome, retain terminal failure for the backend device lifetime and preserve the
-launch edge before completion. A failed launch must not retire successfully or
-execute later work from the same command burst. Cleanup joins the worker before
-freeing memory or destroying the processor, but the newly observed channel-count
-leak still requires a separate repair and proof. Do not infer successful native
-cleanup or fresh-context execution from the host wrapper checks.
+The [completion contract](../designs/simulator_completion_v1.md) separates checked
+SimX execution from the legacy register result. Both backends use the shared
+[AsyncRun owner](../../sw/runtime/common/async_run.h) to consume asynchronous
+outcomes, retain an unobserved launch edge, reject work after processor failure,
+and join pending execution before freeing memory or destroying the processor.
+Synchronous DCR, LLC-memory and applicable drain hooks use the same terminal
+processor-failure boundary. Exception type alone does not determine recovery:
+a processor `std::bad_alloc` is terminal too.
 
-Verification must exercise actual production backend callbacks and command
-processor behavior, including immediately ready success, delayed completion,
-valid nonzero `gp`, standard and unknown exceptions, persistent failure,
-queued work and destruction. Parent sensitivity must distinguish a successfully
-built old implementation failing behavioral assertions from a build failure.
-Fault-injected host evidence and actual native execution are reported separately.
+Unrelated CP/host exceptions keep the inherited common-runtime path. In the
+specific CP-copy scratch case, `EngState::Retire` is selected before allocation;
+unwinding releases staging, the queue reports `VX_ERR_OUT_OF_HOST_MEMORY`, and
+the next CP transaction retires the abandoned descriptor without replaying its
+copy. The unchanged [lifecycle test](../../tests/runtime/test_ai_lifecycle.cpp)
+requires seeded data to remain unchanged before a fresh same-device transfer
+succeeds. Preserving the OOM number alone would not satisfy this contract.
 
-## Development verification checkpoint
+Both timing and functional SimObject cleanup clear abandoned global accounting
+only after workers are stopped and platform objects, scheduled events, domains
+and inboxes are disposed. Neither ordinary reset nor launch reset is a failed
+context recovery entry. External owners surviving finalization are
+destruction-only; they do not authorize concurrent live contexts or reuse of old
+channels. The normal run loop, packet scheduling and simulated-cycle behavior
+remain unchanged.
 
-These results belong to development based on the audited parent. They are not a
-completed clean-source integration or acceptance packet. The retained initial
-logs precede later helper/runner refinements; final source identities, all raw
-outcomes and independent review still need reconciliation.
+## Verification by revision and scope
 
-| Check | Observed checkpoint scope | Limit |
+The evidence index retains original logs, exact source/tool identities, review
+reports and failed attempts. The initial development logs are historical and
+must not be substituted for later clean-source receipts.
+
+| Evidence | Observed result | Scope and limit |
 |---|---|---|
-| Backend and command processor host fixture | [Six passing groups](evidence/p06-simulator-completion/host/initial-backend-tests.log) × two backends × RAM/LLC = **24 cells** | Production backend/CP code with controlled Processor/RAM faults; no native processor or RTL arithmetic result |
-| Public runtime host integration | [Three passing groups](evidence/p06-simulator-completion/host/initial-public-runtime-tests.log) × two backends × RAM/LLC = **12 cells** | Actual adapter, polling, queue and event paths with controlled Processor/RAM faults |
-| Completion-owner helper | Eight directed groups now cover immediate completion, retained launch edges, sticky exceptions, overlap and destruction; the ready-`check()` case has mutation sensitivity | The [initial retained log](evidence/p06-simulator-completion/host/initial-async-owner-tests.log) records the earlier seven-group pass; later eighth-group and mutation results require final packet reconciliation |
-| Parent sensitivity | The [pinned parent report](evidence/p06-simulator-completion/host/initial-parent-report.json) records successful old-backend compilation and intended behavioral failures in all **eight exception cells** | The failures establish sensitivity to discarded exceptions; compile failures or timeouts do not substitute for these observations |
-| Native-runner host checks | **26 focused tests** cover output, compiler/preflight and failure handling, including strengthened provenance checks | Development tooling evidence; final source/log reconciliation remains pending and no native execution is implied |
-| Production SimObject cleanup probe | `inflight_count=1` and `idle=false` survive exceptional teardown; the fresh context remains non-idle after consuming its own message | Confirms an open cleanup defect; repair, regression and retained final evidence are still required |
-| Linked native model and public-success regression | **`not_run`**, pending adequately provisioned hosted CI | The [native unit](../../tests/unittest/simx_completion/main.cpp), [public regression](../../tests/regression/simx_completion/main.cpp), [runner](../../ci/project/p06_simulator_execute.py) and [workflow](../../.github/workflows/p06-simulator-completion.yml) are implemented, not executed evidence |
+| Clean focused host suite at `db5ebb3` | **78 tests passed** in 68.480 seconds, with unchanged tracked source and tool identities | Host backend/common-runtime/framework and runner-policy checks; precedes the CP error-boundary correction |
+| Clean focused host suite at repaired `4781ca9` | **83 tests passed** in 87.502 seconds, with source, tool and driver identities unchanged | Includes the five new CP/model error-boundary methods; native verification of this revision remains separate |
+| Actual backend/CP and public runtime fixtures | **24 backend cells** and **12 public-runtime cells** pass, using controlled Processor/RAM | Real production callback, CP, adapter, queue and event paths; no native arithmetic or RTL fault mechanism |
+| Completion owner | **Eight directed groups**, including deterministic completion before first busy and a ready-`check()` mutation failure | Helper-level scheduling and failure semantics; not native model execution |
+| Timing and functional frameworks | **Eight actual-framework cells** pass; old-header controls fail six fault cases while two healthy controls pass | Actual channel/event accounting, one worker and a joined asynchronous fault task; no native functional or multiworker recovery claim |
+| Pinned audited-parent sensitivity at `4781ca9` | Both old backends compile; **eight standard/unknown exception cells** fail their intended behavioral assertions | The parent is fixed at `42809ff`; build failures or timeouts are not accepted as sensitivity; the earlier `db5ebb3` replay is retained |
+| Native runner policy | **26 focused tests** cover original compiler options/include order, preflight, outputs and failure handling | Tooling checks support the runner but do not replace native execution |
+| First dedicated native run | [Run 45006726571](https://github.com/baabi-boo/AI-GPU/actions/runs/45006726571) passes at checkpoint `db5ebb3`, executed as merge `782552fdbb5a216fe7907dde84d8f3f0dc6eb6dd` with the identical tree | RV64 `p02-tfr`, timing SimX, `PERF=1`; independent original-artifact review verifies source/build/log identities |
+| Fresh repaired native run | [Run 45009314161](https://github.com/baabi-boo/AI-GPU/actions/runs/45009314161) passes at `4781ca9`, executed as same-tree merge `e929c52d05bad80b28dd4085a97838d7fe2de354`; independent original-artifact review passes | Exact repaired runtime/helper and contract bytes; RV64 `p02-tfr`, timing SimX, `PERF=1`, one worker, direct-RAM CP |
+| Real linked processor unit in both native runs | **Five contexts:** nine checked successes, three legacy successes, one checked `OutOfRange`, one legacy caught exception; fresh normal context after the fault | Real Processor/RAM and legacy `gp` values `7`/`-1`; not native public-runtime injected failure |
+| Native public success in both native runs | **Two contexts, six launches**, nonzero `gp`, exact global-data/output witnesses and cleanup | Real generated kernel/runtime success; not processor RTL or native fault injection |
+| Initial full governance | [Run 45006726409](https://github.com/baabi-boo/AI-GPU/actions/runs/45006726409): **2,988 tests passed** in 1,191.429 seconds | Exact initial checkpoint; not a claim that all broader CI or later production bytes passed |
+| Repaired PR governance | [Run 45009314170](https://github.com/baabi-boo/AI-GPU/actions/runs/45009314170), job `137167865708`: **2,993 distinct tests passed** in 1,864.865 seconds, all `ok`, including the 83 focused completion tests | Executed same-tree merge `e929c52d`; original full log and 174 test-module identities independently reviewed |
+| Repaired push governance | [Run 45009309941](https://github.com/baabi-boo/AI-GPU/actions/runs/45009309941), job `137167851515`: **2,993 distinct tests passed** in 1,891.161 seconds, all `ok`, including the same 83 focused tests | Executed `4781ca9` directly; same ordered test inventory; Project Governance success does not establish that broader CI passed |
+| CP error-boundary correction | **Four full unchanged lifecycle cells** cover three OOM stages, no replay, released ownership and same-device continuation; **34 further cells** keep processor faults terminal | Both backend adapters with RAM/LLC as applicable, controlled Processor/RAM; the separate repaired native packet establishes only its declared native scope |
+| CP regression sensitivity | Both `db5ebb3` backends/helper compile against the same lifecycle test; **four controls fail the intended OOM assertion** after allocation stages 0/1 pass | Proves the narrower boundary repairs a reproduced regression; every expected failure is exit 1, not compile failure or timeout |
 
-The native runner's declared scope is RV64 `p02-tfr` timing SimX with performance
-counters enabled. Its real-model exception/legacy-`gp` unit and successful public
-launch controls have distinct purposes. Neither supplies a native public-runtime
-injected-failure result or processor-RTL execution. Retain the native fresh-context
-check while repairing channel cleanup. The earlier
-[public-fixture build failure](evidence/p06-simulator-completion/host/initial-public-build-failure.log)
-remains part of the development history.
+The native archive for the initial checkpoint has SHA-256
+`d5f71cec99321c5f8e6c11fab37875aa93e551270a1a15c29b3fe9af6c766588`.
+Review verified 761 retained source bodies against the checkpoint, 18 command/log
+records and five compiler/header roles. Its three backend/helper input files
+subsequently changed for CP OOM compatibility, so the earlier native pass cannot
+close verification of that repair. The fresh
+[repaired native archive](evidence/p06-simulator-completion/checkpoints/native-4781ca9.tar.gz)
+retains artifact `14749901531`, whose original ZIP is 2,792,870 bytes with SHA-256
+`461ddd226474aff20205b5ae852489fd4e88f21f7065a74efba25e706eb087b9`.
+Its independent review again checks 761 source bodies, 18 command/log records,
+five compiler/header roles and 87 actual model-object compile commands, including
+the three repaired runtime/helper files and completion contract.
 
-No pipeline, arithmetic implementation, ISA, public ABI, frozen workload,
-statistical predicate, golden or threshold change is part of this repair.
-The 15 GiB native disk reserve remains mandatory; the initial local inventory
-is below it. Host verification is available locally; formal native execution
-requires an adequately provisioned environment.
+The execution checkpoint remains `4781ca9`. Later additions are confined to
+README/project documentation and evidence; independent source projection checks
+all 3,339 existing blobs outside that allowlist, including every one of the 761
+native-retained inputs, against the tested bytes. The allowlist has no overlap
+with those native inputs. A later documentation/evidence commit is not described
+as the entire tree executed by earlier CI. Structural and manifest validation
+apply separately to the assembled documents. The
+[evidence packet](evidence/p06-simulator-completion/README.md) retains the exact
+projection and final publication observations when completed.
 
-## Next bounded action
+The original failed public-fixture build, runner provenance failures, cleanup
+probes and compiled-parent failures remain retained. Native binaries are
+identified but not archived; tool records do not inventory every host system
+header or dynamic library. Before/after hashes detect observed drift and are not
+a hermetic-execution claim. The 15 GiB native disk reserve remains mandatory;
+local host fixtures and adequately provisioned hosted native execution have
+separate resource scopes.
 
-Repair and prove exceptional channel accounting without changing normal packet
-or processor timing. Then complete native completion verification, including
-the checked real-model failure and fresh-context control, and independently
-reconcile the final host/parent/native packet. Keep any unexecuted scope marked
-`not_run`; a workflow definition or host-tooling pass cannot supply that execution.
+## Next bounded development
 
-After completion verification, implement and independently review the
-[versioned counter qualification route](p06-mpm-qualification-plan.md): exact
-warm configuration and required selectors, coherent reads and a proved absolute
-cumulative no-wrap bound. Only then collect the unchanged fresh matched warm
-attempt: **24 processes, 792 launches and 25,344 exact output words**, including
-excluded primes and warm-ups. Preserve the unconditional warm v1 rejection.
+Build on the independently reviewed host and fresh native evidence for repaired
+`4781ca9`. Freeze and review the
+[versioned counter qualification contract](p06-mpm-qualification-plan.md) before
+implementing its enforcement. It must bind the exact RV64 tensor configuration,
+all **33 available selectors** and 12 unavailable rows, real backing-source
+coverage, coherent two-half reads, and an enforceable absolute bound over the
+complete cumulative context lifetime. A per-launch clock or host timeout cannot
+bound counters that survive launch resets. No such guard is implemented here.
+
+Only after those obligations pass should a fresh matched warm attempt run under
+the unchanged sampling and rejection rules: **24 processes, 792 launches and
+25,344 exact output words**, including excluded primes and warm-ups. Historical
+warm v1 remains unconditionally blocked. A successful workload or replay does
+not establish qualified performance.
 
 ## Preserved obligations
 
-P06-A02/A03 remain open. Historical warm v1 remains blocked with
-`qualified=false` and no established absolute no-wrap bound. P01-A03 vendor
-`hw_emu`, P05-A02/A03 independent framework qualification, the inherited
-267-to-283 DSP area failure, and physical FPGA/silicon work remain separate.
-All existing acceptance records and retained failed attempts keep their scope.
+P06-A02/A03 remain open. Warm v1 keeps `qualified=false` and
+`absolute_no_wrap_bound="not_established"`. P01-A03 vendor `hw_emu`, independent
+P05-A02/A03 framework qualification, the inherited **267 → 283 DSP-area failure**
+against the unchanged **5% threshold**, and physical FPGA/silicon work remain
+separate. No pipeline, arithmetic, ISA, public ABI, frozen workload, statistical
+predicate, golden, tolerance or phase acceptance is changed by this repair.
 
-Final implementation results, independent reviews and exact source-bound
-verification will be added when complete. Requested agent counts are not evidence;
-the delivery ledger records actual completed assignments only.
+The [delivery ledger](evidence/p06-simulator-completion/delivery-ledger.md) records
+**60 actual agents across ten logical waves**, six per wave, with completed initial
+assignments and separately scoped follow-ups.
+An agent count is not a test result, native qualification, human approval or gate
+waiver. Existing acceptance records and retained failures preserve their scopes.

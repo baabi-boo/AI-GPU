@@ -38,7 +38,7 @@ eight candidate passes and both numeric parent failures at checkout
 `d6dd742a905e0f3e76c7374cc678ba87e5c2a19e`, identical to `18c8880`.
 Its immutable governance suite passes 2,910 tests. Paired circuit and alternative
 reviews retain the direct decoder and close the specific missing-comparison F2;
-raw area failures remain. Broader CI and publication are separately pending.
+raw area failures remain. Its broader CI/publication history is recorded separately.
 Follow the
 [transport audit](p06-mpm-transport-audit.md),
 [handoff](p06-mpm-transport-handoff.md) and
@@ -47,14 +47,22 @@ directed transport tests do not replace this workspace correctness matrix or
 unlock historical warm measurements.
 
 The [completion audit](p06-simulator-completion-audit.md) identifies a further
-prerequisite before counter qualification: asynchronous simulator failures must
-reach public waits, and immediate completion must preserve the busy edge.
-The [completion contract](../designs/simulator_completion_v1.md) has host checks;
-its implementation remains in progress because exceptional teardown can retain
-an outstanding-channel count and leave a fresh context non-idle. Native completion
-execution remains `not_run` pending hosted CI. Its incomplete development
-checkpoint does not requalify the historical workspace run or establish a new
-performance result.
+prerequisite before counter qualification: processor failures must reach public
+waits, and immediate completion must preserve the busy edge. The
+[completion contract](../designs/simulator_completion_v1.md) now describes the
+checked execution entry, terminal processor-error ownership, joins and retirement
+of abandoned channel accounting at whole-platform teardown in both frameworks.
+Recoverable CP scratch allocation failure retains the inherited OOM result and
+same-device continuation; it does not rehabilitate a failed processor.
+
+The [completion evidence index](evidence/p06-simulator-completion/README.md)
+separates host injection, actual framework checks, compiled negative controls and
+native execution by exact source. The initial native checkpoint `db5ebb3` passed
+its checked-model/fresh-context and public-success controls. The later CP error
+boundary repair at `4781ca9` requires its own source-bound verification; the
+index supplies exact-source receipts and review for assessing that repair; the
+initial packet retains its own scope. Completion evidence does not requalify the historical workspace
+run, prove all counter selectors or establish a performance result.
 
 ## Runtime contract to preserve
 
@@ -234,20 +242,46 @@ output is never native arithmetic evidence.
 
 ## Remaining development and acceptance
 
-Resolve and verify exceptional channel cleanup, then complete native verification
-of the [simulator completion prerequisite](p06-simulator-completion-audit.md)
-and reconcile its exact-source host/native evidence under independent review.
-Actual native execution remains `not_run` pending hosted CI, with the 15 GiB
-disk reserve preserved. Track the transport repair's broader
-integration/publication status separately.
-Then implement and independently review the [versioned qualification route](p06-mpm-qualification-plan.md)
-for the exact warm configuration and selectors, coherent reads and absolute
-cumulative no-wrap bounds. Reject historical packets or mismatched source,
-configuration or binaries. The existing warm v1 block remains in force. After
-that qualification work, collect one fresh complete matched warm attempt under the unchanged
-sampling, numerical and rejection rules: 24 processes, 792 native launches and
-25,344 exact output words, including excluded primes and warm-ups. Keep the
-accepted cold baseline and archived measurements separate. A source repair
+**Next bounded development: freeze and independently review the exact counter,
+coherence and lifetime contract for the RV64 `p02-tfr`, timing SimX, `PERF=1`
+route.** Use the [qualification plan](p06-mpm-qualification-plan.md) after checking
+the exact-source completion receipts and review in the
+[completion evidence index](evidence/p06-simulator-completion/README.md).
+The implemented teardown repair need not be repeated because an earlier handoff
+called it unfinished. Preserve the 15 GiB native disk reserve and track broader
+CI/publication separately from these scoped receipts.
+
+The frozen warm inventory has **33 available counters and 12 unavailable L2/L3
+rows**. The earlier TCU-disabled SimX transport fixture seeds only 5 of the 33
+required rows; the RTL leaf seeds 19. `memory_bank_st` at class 7, CSR `0xB06`
+has no RTL MEM-decoder mapping, so the next 33-row SimX qualification cannot be
+claimed as equivalent RTL coverage. Every unavailable row must remain null and
+receive no query. The new diagnostic matrix must exercise actual backing fields
+and both public halves under the exact tensor configuration.
+
+Launch-relative platform cycles reset while the required cumulative counters
+survive. A context-lifetime tick budget, bounded memory-request admissions and
+checked pending-read accounting are a prospective guard design, **not implemented
+or qualified limits**. Its complete updater and aggregate bounds, zero origin,
+all launch/flush/close boundaries and public terminal-failure behavior require
+independent review before implementation. Four format/policy diagnostic processes
+can establish the declared public snapshot scope; they cannot replace the full
+warm measurement. The qualification plan defines those cells and their limits.
+
+Then implement the reviewed narrow guard and a separately versioned qualification
+record and reader. Reject old, absent or mismatched evidence and bind the actual
+interpreter, tools, source, generated configuration, selector/coherence/lifetime
+proof and binaries before launch. The existing warm v1 block remains in force;
+a caller flag or the existing execution-binding `qualification_id` is not a
+counter-qualification decision.
+
+Only after all prerequisites pass, collect one fresh complete matched warm
+attempt under unchanged sampling, numerical and rejection rules: **24 processes,
+792 native launches and 25,344 exact output words**. The measured population is
+640 non-prime operations; retain the 24 excluded primes and 128 excluded
+non-prime warm-up operations as well. Do not double-count the four warm-up
+primes. Both policies use identical guarded binaries within each format. Keep
+the accepted cold baseline and archived measurements separate; a source repair
 cannot restore high counter bits absent from historical archives.
 
 | Open obligation | Required evidence |
@@ -256,7 +290,7 @@ cannot restore high counter bits absent from historical archives.
 | P06-A03 | Reviewed target budget and synthesis/resource/timing reports separating predictions from measurements. |
 | P05-A02/A03 | Independent review of the existing framework route's installed execution and compatibility artifacts; this workspace work makes no new framework acceptance. |
 | P01-A03 and P07 | Qualified vendor XRT `hw_emu` integration remains required before P07 acceptance. Processor `rtlsim` bypasses the AFU and does not supply it. |
-| Inherited area finding | Attribution and resolution of the unchanged 267 → 283 DSP area-gate failure. |
+| Inherited area finding | Attribute and resolve the retained 267 → 283 DSP area-gate failure against the unchanged 5% threshold; no source-only attribution or waiver is supplied here. |
 
 No FPGA/silicon measurement, physical speed/power claim, golden-data change,
 tolerance relaxation or resource waiver follows from this implementation.
