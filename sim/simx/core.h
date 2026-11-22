@@ -38,38 +38,38 @@ class MemCoalescer;
 class Core : public SimObject<Core> {
 public:
   struct PerfStats {
-    uint64_t cycles = 0;
-    uint64_t instrs = 0;
-    uint64_t sched_idle = 0;
-    uint64_t active_warps = 0;
-    uint64_t stalled_warps = 0;
-    uint64_t issued_warps = 0;
-    uint64_t issued_threads = 0;
-    uint64_t fetch_stalls = 0;
-    uint64_t ibuf_stalls = 0;
-    uint64_t scrb_stalls = 0;
-    uint64_t opds_stalls = 0;
-    uint64_t alu_stalls = 0;
-    uint64_t fpu_stalls = 0;
-    uint64_t lsu_stalls = 0;
-    uint64_t sfu_stalls = 0;
+    PerfCounter cycles = 0;
+    PerfCounter instrs = 0;
+    PerfCounter sched_idle = 0;
+    PerfCounter active_warps = 0;
+    PerfCounter stalled_warps = 0;
+    PerfCounter issued_warps = 0;
+    PerfCounter issued_threads = 0;
+    PerfCounter fetch_stalls = 0;
+    PerfCounter ibuf_stalls = 0;
+    PerfCounter scrb_stalls = 0;
+    PerfCounter opds_stalls = 0;
+    PerfCounter alu_stalls = 0;
+    PerfCounter fpu_stalls = 0;
+    PerfCounter lsu_stalls = 0;
+    PerfCounter sfu_stalls = 0;
   #ifdef VX_CFG_EXT_TCU_ENABLE
-    uint64_t tcu_stalls = 0;
+    PerfCounter tcu_stalls = 0;
   #endif
-    uint64_t branches   = 0;
-    uint64_t divergence = 0;
-    uint64_t alu_instrs = 0;
-    uint64_t fpu_instrs = 0;
-    uint64_t lsu_instrs = 0;
-    uint64_t sfu_instrs = 0;
+    PerfCounter branches   = 0;
+    PerfCounter divergence = 0;
+    PerfCounter alu_instrs = 0;
+    PerfCounter fpu_instrs = 0;
+    PerfCounter lsu_instrs = 0;
+    PerfCounter sfu_instrs = 0;
   #ifdef VX_CFG_EXT_TCU_ENABLE
-    uint64_t tcu_instrs = 0;
+    PerfCounter tcu_instrs = 0;
   #endif
-    uint64_t ifetches = 0;
-    uint64_t loads = 0;
-    uint64_t stores = 0;
-    uint64_t ifetch_latency = 0;
-    uint64_t load_latency = 0;
+    PerfCounter ifetches = 0;
+    PerfCounter loads = 0;
+    PerfCounter stores = 0;
+    PerfCounter ifetch_latency = 0;
+    PerfCounter load_latency = 0;
   };
 
   std::vector<SimChannel<MemReq>> icache_req_out;

@@ -25,6 +25,7 @@
 #include <functional>
 #include <util.h>
 #include <stringutil.h>
+#include <perf_counter.h>
 #include <VX_config.h>
 #include <VX_types.h>
 
@@ -1732,7 +1733,7 @@ protected:
   uint32_t lg2_inputs_;
   uint32_t lg2_outputs_;
   std::function<uint32_t(const Type& req)> output_sel_;
-  uint64_t collisions_;
+  PerfCounter collisions_;
 
   friend class SimObject<TxCrossBar<Type>>;
 };

@@ -37,7 +37,7 @@ struct Buffer {
   std::unordered_map<uint64_t, std::shared_ptr<mem_block_t>> lines_;
   bool     rsp_seen_ = false;   // a response arrived this cycle
   uint32_t next_tag_ = 0;
-  uint64_t reads_ = 0;
+  PerfCounter reads_ = 0;
 
   bool filling() const {
     return !pending_.empty() || !inflight_.empty();
@@ -104,7 +104,7 @@ public:
   }
 
   uint64_t reads() const {
-    uint64_t total = 0;
+    PerfCounter total = 0;
     for (auto& b : bufs_) {
       total += b.reads_;
     }

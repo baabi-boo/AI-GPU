@@ -212,7 +212,7 @@ Word CsrUnit::get_csr(uint32_t addr, uint32_t wid, uint32_t tid) {
       } break;
       case VX_DCR_MPM_CLASS_MEM: {
         auto lmem_perf = core_->local_mem()->perf_stats();
-        uint64_t coalescer_misses = 0;
+        PerfCounter coalescer_misses = 0;
         for (uint i = 0; i < VX_CFG_NUM_LSU_BLOCKS; ++i) {
           coalescer_misses += core_->mem_coalescer(i)->perf_stats().misses;
         }

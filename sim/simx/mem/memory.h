@@ -28,7 +28,7 @@ public:
 	};
 
 	struct PerfStats {
-		uint64_t bank_stalls = 0;
+		PerfCounter bank_stalls = 0;
 
 		PerfStats& operator+=(const PerfStats& rhs) {
 			this->bank_stalls += rhs.bank_stalls;

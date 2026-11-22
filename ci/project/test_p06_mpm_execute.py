@@ -30,7 +30,7 @@ class NativeFixture:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text("fixture input: " + name + "\n", encoding="utf-8")
         self.tool_paths = {}
-        for name in ("make", "g++", "python3", "verilator"):
+        for name in ("make", "g++", "python3", "executing_python", "verilator"):
             path = self.paths["tools"] / name
             path.write_text("fixture tool: " + name + "\n", encoding="utf-8")
             self.tool_paths[name] = path
@@ -236,6 +236,30 @@ class MpmExecuteBoundaryTests(unittest.TestCase):
                 for artifact in variant["retained_configuration"]:
                     self.assertTrue((fixture.paths["output"] / artifact["path"]).is_file())
 
+    def test_distinct_interpreter_identities_are_retained(self):
+        with NativeFixture() as fixture:
+            code, report = fixture.run("--xlen", "64", "--engines", "simx")
+            self.assertEqual((code, report["outcome"]), (0, "pass"))
+            for name in ("python3", "executing_python"):
+                identity = runner.file_identity(fixture.tool_paths[name])
+                self.assertEqual(report["tools_before"]["tools"][name], identity)
+                self.assertEqual(report["tools_after"]["tools"][name], identity)
+            self.assertNotEqual(report["tools_before"]["tools"]["python3"],
+                                report["tools_before"]["tools"]["executing_python"])
+            self.assert_nonqualifying(report)
+
+    def test_missing_executing_interpreter_blocks_before_commands(self):
+        with NativeFixture() as fixture:
+            inventory = fixture.tools_snapshot(fixture.paths, {}, ())
+            del inventory["tools"]["executing_python"]
+            inventory["missing"].append("executing_python")
+            with mock.patch.object(runner, "tools_snapshot", return_value=inventory):
+                code, report = fixture.run("--xlen", "64", "--engines", "simx")
+            self.assertEqual((code, report["outcome"]), (1, "blocked"))
+            self.assertIn("missing installed prerequisites: executing_python", report["reason"])
+            self.assertFalse(report["formal_qualification_eligible"])
+            fixture.bounded.assert_not_called()
+
     def test_subset_success_never_claims_full_matrix(self):
         with NativeFixture() as fixture:
             code, report = fixture.run("--xlen", "64", "--engines", "simx")
@@ -371,7 +395,7 @@ class MpmExecuteBoundaryTests(unittest.TestCase):
                 self.assertFalse(report["selected_matrix_complete"])
 
     def test_source_configuration_binary_and_tool_changes_fail_closed(self):
-        for changed in ("source", "configuration", "binary", "tool"):
+        for changed in ("source", "configuration", "binary", "tool", "executing_python"):
             with self.subTest(changed=changed), NativeFixture() as fixture:
                 def mutate(name, cwd):
                     if name != "rv32-perf-off-rtl-run":
@@ -381,6 +405,7 @@ class MpmExecuteBoundaryTests(unittest.TestCase):
                         "configuration": fixture.paths["work"] / "rv32-perf-off/sw/VX_config.h",
                         "binary": cwd / runner.BINARIES["rtl"],
                         "tool": fixture.tool_paths["make"],
+                        "executing_python": fixture.tool_paths["executing_python"],
                     }[changed]
                     target.write_bytes(target.read_bytes() + b"changed\n")
                 fixture.after_command = mutate
@@ -389,8 +414,13 @@ class MpmExecuteBoundaryTests(unittest.TestCase):
                 self.assertIn("changed", report["reason"])
                 self.assertFalse(report["formal_qualification_eligible"])
                 self.assertFalse(report["selected_matrix_complete"])
-                if changed in ("source", "tool"):
-                    self.assertFalse(report[("tools" if changed == "tool" else changed) + "_stable"])
+                if changed in ("source", "tool", "executing_python"):
+                    self.assertFalse(report[("source" if changed == "source" else "tools") + "_stable"])
+                if changed == "executing_python":
+                    self.assertEqual(report["tools_before"]["tools"]["python3"],
+                                     report["tools_after"]["tools"]["python3"])
+                    self.assertNotEqual(report["tools_before"]["tools"]["executing_python"],
+                                        report["tools_after"]["tools"]["executing_python"])
                 if changed == "binary":
                     cell = next(cell for cell in report["cells"] if "binary_before" in cell)
                     self.assertNotEqual(cell["binary_before"], cell["binary_after"])
@@ -438,6 +468,52 @@ class MpmExecuteBoundaryTests(unittest.TestCase):
                     self.assertEqual(cell["outcome"], "pass")
             self.assertEqual(report["full_matrix_outcome"], "not_run")
             self.assertFalse(report["selected_matrix_complete"])
+
+
+class MpmToolSnapshotTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory(prefix="p06-mpm-tools-")
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name).resolve()
+        for name in ("make", "g++", "gcc", "ar", "as", "ld", "bash", "python3", "executing-python"):
+            path = self.root / name
+            path.write_text("executable identity: " + name + "\n", encoding="utf-8")
+            path.chmod(0o700)
+        self.paths = {"source": self.root, "tools": self.root}
+        self.environment = {"PATH": str(self.root)}
+
+    def snapshot(self, executing_python):
+        with mock.patch.object(runner.sys, "executable", str(executing_python)):
+            return runner.tools_snapshot(self.paths, self.environment, ())
+
+    def test_actual_snapshot_uses_executing_interpreter_independently_of_path(self):
+        snapshot = self.snapshot(self.root / "executing-python")
+        self.assertEqual(snapshot["missing"], [])
+        self.assertEqual(snapshot["tools"]["python3"], runner.file_identity(self.root / "python3"))
+        self.assertEqual(snapshot["tools"]["executing_python"],
+                         runner.file_identity(self.root / "executing-python"))
+        self.assertNotEqual(snapshot["tools"]["python3"]["sha256"],
+                            snapshot["tools"]["executing_python"]["sha256"])
+
+    def test_missing_or_unexecutable_executing_interpreter_is_not_replaced_by_path(self):
+        unexecutable = self.root / "executing-python"
+        unexecutable.chmod(0o600)
+        for selected in ("", self.root / "absent-python", unexecutable):
+            with self.subTest(selected=selected):
+                snapshot = self.snapshot(selected)
+                self.assertEqual(snapshot["missing"], ["executing_python"])
+                self.assertNotIn("executing_python", snapshot["tools"])
+                self.assertIn("python3", snapshot["tools"])
+
+    def test_executing_interpreter_replacement_changes_real_snapshot(self):
+        selected = self.root / "executing-python"
+        before = self.snapshot(selected)
+        selected.write_text("replacement interpreter\n", encoding="utf-8")
+        after = self.snapshot(selected)
+        self.assertNotEqual(before, after)
+        self.assertNotEqual(before["tools"]["executing_python"]["sha256"],
+                            after["tools"]["executing_python"]["sha256"])
+        self.assertEqual(before["tools"]["python3"], after["tools"]["python3"])
 
 
 if __name__ == "__main__":

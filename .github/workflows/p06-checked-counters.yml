@@ -1,0 +1,210 @@
+name: P06 Checked Counters
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/p06-checked-counters.yml'
+      - '.github/workflows/p04-model.yml'
+      - 'ci/project/**'
+      - 'ci/toolchain_rev.sh'
+      - 'ci/install_dependencies.sh'
+      - 'ci/gen_config.py'
+      - 'configure'
+      - 'Makefile.in'
+      - 'config.mk.in'
+      - 'sim/**'
+      - 'sw/common/**'
+      - 'sw/include/**'
+      - 'sw/runtime/common/perf.cpp'
+      - 'sw/runtime/common/async_run.h'
+      - 'hw/**'
+      - 'tests/unittest/checked_counters/**'
+      - 'tests/unittest/mpm_transport/**'
+      - 'third_party/**'
+      - 'profiles/p02-tfr.json'
+      - 'docs/designs/simx_checked_counters_v1.md'
+      - 'docs/designs/simulator_completion_v1.md'
+      - 'docs/designs/host_mpm_transport_v1.md'
+      - 'VERSION'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - 'vortex_opae.toml'
+      - '.gitmodules'
+  pull_request:
+    paths:
+      - '.github/workflows/p06-checked-counters.yml'
+      - '.github/workflows/p04-model.yml'
+      - 'ci/project/**'
+      - 'ci/toolchain_rev.sh'
+      - 'ci/install_dependencies.sh'
+      - 'ci/gen_config.py'
+      - 'configure'
+      - 'Makefile.in'
+      - 'config.mk.in'
+      - 'sim/**'
+      - 'sw/common/**'
+      - 'sw/include/**'
+      - 'sw/runtime/common/perf.cpp'
+      - 'sw/runtime/common/async_run.h'
+      - 'hw/**'
+      - 'tests/unittest/checked_counters/**'
+      - 'tests/unittest/mpm_transport/**'
+      - 'third_party/**'
+      - 'profiles/p02-tfr.json'
+      - 'docs/designs/simx_checked_counters_v1.md'
+      - 'docs/designs/simulator_completion_v1.md'
+      - 'docs/designs/host_mpm_transport_v1.md'
+      - 'VERSION'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - 'vortex_opae.toml'
+      - '.gitmodules'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p06-checked-counters-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  native-counters:
+    name: Native ordinary and checked counter prerequisites
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      MAKEFLAGS: '-j2'
+      THREADS: '1'
+      CMAKE_BUILD_PARALLEL_LEVEL: '2'
+      CCACHE_DISABLE: '1'
+      OBJCACHE: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          submodules: recursive
+          persist-credentials: false
+      - name: Initialize retained job identity and resource observations
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, os, shutil, sys
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'p06-checked-counters'
+          root.mkdir(mode=0o700)
+          (root / 'evidence').mkdir(mode=0o700)
+          with open(os.environ['GITHUB_ENV'], 'a') as environment:
+              environment.write('P06_CHECKED_ROOT=' + str(root) + '\n')
+          workflow = Path('.github/workflows/p06-checked-counters.yml').read_bytes()
+          (root / 'evidence' / 'workflow.yml').write_bytes(workflow)
+          data = {key: os.environ[key] for key in (
+              'GITHUB_SHA', 'GITHUB_EVENT_NAME', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT',
+              'GITHUB_JOB', 'GITHUB_REPOSITORY', 'GITHUB_REF')}
+          data.update(scope='native-checked-counter-prerequisites',
+                      record_stage='job-initialization',
+                      requested_xlen=64, requested_profile='p02-tfr',
+                      requested_modes=['ordinary', 'checked'], requested_perf='on',
+                      native_execution='not_run', qualified=False,
+                      ready_for_warm=False, acceptance_claimed=False,
+                      workflow_sha256=hashlib.sha256(workflow).hexdigest())
+          sys.path.insert(0, str(Path('ci/project').resolve()))
+          from preflight import available_memory_bytes
+          data['free_disk_bytes_before_cache'] = shutil.disk_usage(root).free
+          data['available_memory_bytes_before_cache'] = available_memory_bytes()
+          (root / 'evidence' / 'job.json').write_text(json.dumps(data, indent=2) + '\n')
+          if (data['free_disk_bytes_before_cache'] < 15 * 2**30
+                  or (data['available_memory_bytes_before_cache'] or 0) < 4 * 2**30):
+              raise SystemExit('15 GiB disk reserve and 4 GiB available memory are required')
+          PY
+      - name: Provision pinned CPython
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+          architecture: x64
+          check-latest: false
+      - name: Retain and verify Python interpreter identity
+        run: |
+          set -euo pipefail
+          python3 -I - <<'PY'
+          import json, os, platform, shutil, sys
+          from pathlib import Path
+          data = {'python_version': list(sys.version_info[:3]),
+                  'implementation': platform.python_implementation(),
+                  'platform': sys.platform, 'executable': sys.executable,
+                  'python3_on_path': shutil.which('python3')}
+          target = Path(os.environ['P06_CHECKED_ROOT']) / 'evidence' / 'python-provision.json'
+          target.write_text(json.dumps(data, indent=2) + '\n')
+          if (data['python_version'] != [3, 12, 14] or data['implementation'] != 'CPython'
+                  or data['platform'] != 'linux' or data['python3_on_path'] is None
+                  or Path(data['python3_on_path']).resolve() != Path(sys.executable).resolve()):
+              raise SystemExit('Python interpreter identity differs from the pinned inputs')
+          PY
+      - name: Resolve pinned toolchain cache identity
+        id: pins
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          P06_CHECKED_TOOLCHAIN_ID=$(bash ci/toolchain_rev.sh)
+          [[ "$P06_CHECKED_TOOLCHAIN_ID" =~ ^[A-Za-z0-9._-]+-[0-9a-f]{40}$ ]]
+          echo "toolchain=$P06_CHECKED_TOOLCHAIN_ID" >> "$GITHUB_OUTPUT"
+      - name: Restore pinned toolchain without writing cache
+        id: toolchain
+        uses: actions/cache/restore@v4
+        with:
+          path: tools
+          key: ${{ runner.os }}-toolchain-${{ steps.pins.outputs.toolchain }}-lite
+          restore-keys: ${{ runner.os }}-toolchain-${{ steps.pins.outputs.toolchain }}-
+      - name: Restore dependency inputs without writing cache
+        id: dependencies
+        uses: actions/cache/restore@v4
+        with:
+          path: third_party
+          key: ${{ runner.os }}-thirdparty-${{ hashFiles('third_party/Makefile', '.gitmodules') }}
+      - name: Install baseline host dependencies
+        if: steps.toolchain.outputs.cache-matched-key != '' && steps.dependencies.outputs.cache-matched-key != ''
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          sudo bash ci/install_dependencies.sh \
+            2>&1 | tee "$P06_CHECKED_ROOT/evidence/host-dependencies.log"
+      - name: Verify clean source and relocate restored tools
+        env:
+          P06_CHECKED_TOOLCHAIN_ID: ${{ steps.pins.outputs.toolchain }}
+          P06_CHECKED_TOOLCHAIN_CACHE: ${{ steps.toolchain.outputs.cache-matched-key }}
+          P06_CHECKED_DEPENDENCY_CACHE: ${{ steps.dependencies.outputs.cache-matched-key }}
+          P06_CHECKED_DEPENDENCY_KEY: ${{ runner.os }}-thirdparty-${{ hashFiles('third_party/Makefile', '.gitmodules') }}
+        run: |
+          set -euo pipefail
+          python3 ci/project/p04_ci_prepare.py \
+            --source-dir "$PWD" --workspace-dir "$P06_CHECKED_ROOT" \
+            --expected-revision "$GITHUB_SHA" --toolchain-id "$P06_CHECKED_TOOLCHAIN_ID" \
+            --toolchain-cache-key "$P06_CHECKED_TOOLCHAIN_CACHE" \
+            --third-party-cache-key "$P06_CHECKED_DEPENDENCY_CACHE" \
+            --expected-third-party-key "$P06_CHECKED_DEPENDENCY_KEY" \
+            --backend simx --format both \
+            2>&1 | tee "$P06_CHECKED_ROOT/evidence/preparation.log"
+      - name: Execute ordinary and checked native prerequisites
+        run: |
+          set -euo pipefail
+          python3 ci/project/p06_checked_execute.py \
+            --source-dir "$PWD" --tools-dir "$P06_CHECKED_ROOT/tools" \
+            --expected-revision "$GITHUB_SHA" \
+            --work-dir "$P06_CHECKED_ROOT/native-work" \
+            --output "$P06_CHECKED_ROOT/evidence/checked-counters" \
+            2>&1 | tee "$P06_CHECKED_ROOT/evidence/execution.log"
+      - name: Retain preparation and native execution packet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p06-checked-counters-${{ github.sha }}-run${{ github.run_id }}-attempt${{ github.run_attempt }}
+          path: ${{ runner.temp }}/p06-checked-counters/evidence
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 6
+          include-hidden-files: true

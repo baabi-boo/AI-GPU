@@ -32,7 +32,7 @@ public:
   static constexpr uint32_t kRspInSize = 3;
 
   struct PerfStats {
-    uint64_t misses = 0;
+    PerfCounter misses = 0;
 
     PerfStats& operator+=(const PerfStats& rhs) {
       this->misses += rhs.misses;

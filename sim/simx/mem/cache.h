@@ -59,14 +59,14 @@ public:
 	};
 
 	struct PerfStats {
-		uint64_t reads = 0;
-		uint64_t writes = 0;
-		uint64_t read_misses = 0;
-		uint64_t write_misses = 0;
-		uint64_t evictions = 0;
-		uint64_t bank_stalls = 0;
-		uint64_t mshr_stalls = 0;
-		uint64_t mem_latency = 0;
+		PerfCounter reads = 0;
+		PerfCounter writes = 0;
+		PerfCounter read_misses = 0;
+		PerfCounter write_misses = 0;
+		PerfCounter evictions = 0;
+		PerfCounter bank_stalls = 0;
+		PerfCounter mshr_stalls = 0;
+		PerfCounter mem_latency = 0;
 
 		PerfStats& operator+=(const PerfStats& rhs) {
 			this->reads += rhs.reads;

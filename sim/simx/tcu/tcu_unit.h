@@ -66,10 +66,10 @@ public:
   static op_string_t op_string(TcuType tcu_type, IntrTcuArgs args);
 
 	struct PerfStats {
-		uint64_t latency = 0;
-		uint64_t tbuf_stalls = 0;      // cycles a WGMMA uop waits on its A stripe or the B row, summed over buffers
-		uint64_t tbuf_cache_hits = 0;  // cycles the resident B row serves the representative block
-		uint64_t lmem_reads = 0;       // bank-row reads issued by the A and B buffers
+		PerfCounter latency = 0;
+		PerfCounter tbuf_stalls = 0;      // cycles a WGMMA uop waits on its A stripe or the B row, summed over buffers
+		PerfCounter tbuf_cache_hits = 0;  // cycles the resident B row serves the representative block
+		PerfCounter lmem_reads = 0;       // bank-row reads issued by the A and B buffers
 
 		PerfStats& operator+=(const PerfStats& rhs) {
 			this->latency          += rhs.latency;

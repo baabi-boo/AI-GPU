@@ -31,9 +31,9 @@ public:
 #ifdef VX_CFG_VM_ENABLE
     Ptw::PerfStats ptw;
 #endif
-    uint64_t mem_reads = 0;
-    uint64_t mem_writes = 0;
-    uint64_t mem_latency = 0;
+    PerfCounter mem_reads = 0;
+    PerfCounter mem_writes = 0;
+    PerfCounter mem_latency = 0;
   };
 
   ProcessorImpl();
@@ -116,10 +116,10 @@ private:
   Cache::Ptr l3cache_;
   CpLlcPort::Ptr cp_llc_port_;  // CP DMA client of the last-level cache
   bool platform_reset_ = false;
-  uint64_t perf_mem_reads_ = 0;
-  uint64_t perf_mem_writes_ = 0;
-  uint64_t perf_mem_latency_ = 0;
-  uint64_t perf_mem_pending_reads_ = 0;
+  PerfCounter perf_mem_reads_ = 0;
+  PerfCounter perf_mem_writes_ = 0;
+  PerfCounter perf_mem_latency_ = 0;
+  PerfCounter perf_mem_pending_reads_ = 0;
   // Tracks whether cycle() has done its first-call init (reset +
   // kmu_->start()). reset() clears it so a back-to-back kernel launch
   // via cycle() re-dispatches the KMU.

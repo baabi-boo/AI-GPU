@@ -42,9 +42,9 @@ public:
   };
 
   struct PerfStats {
-    uint64_t reads = 0;
-    uint64_t writes = 0;
-    uint64_t bank_stalls = 0;
+    PerfCounter reads = 0;
+    PerfCounter writes = 0;
+    PerfCounter bank_stalls = 0;
 
     PerfStats& operator+=(const PerfStats& rhs) {
       this->reads += rhs.reads;

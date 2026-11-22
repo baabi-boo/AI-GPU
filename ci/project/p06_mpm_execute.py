@@ -133,6 +133,7 @@ def file_identity(path):
 def tools_snapshot(paths, env, engines):
     selected = {name: shutil.which(name, path=env["PATH"])
                 for name in ("make", "g++", "gcc", "ar", "as", "ld", "bash", "python3")}
+    selected["executing_python"] = sys.executable
     if "rtl" in engines:
         selected.update({name: paths["tools"] / "verilator/bin" / name
                          for name in ("verilator", "verilator_bin")})
