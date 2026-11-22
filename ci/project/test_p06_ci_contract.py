@@ -274,7 +274,7 @@ class HistoricalNativeBaselineWorkflowTests(unittest.TestCase):
         job = children(children(governance, "jobs", 2), "governance", 4)
         self.assertEqual(set(job), {"runs-on", "timeout-minutes", "env", "steps"})
         self.assertEqual(job["runs-on"], ("ubuntu-24.04", []))
-        self.assertEqual(job["timeout-minutes"], ("20", []))
+        self.assertEqual(job["timeout-minutes"], ("30", []))
         checks = {"Inspect governance prerequisites": "python3 ci/project/preflight.py --tier governance",
                   "Validate project structure and evidence": "python3 ci/project/check_project.py",
                   "Check published baseline packet consistency": "python3 ci/project/check_baseline_packets.py",

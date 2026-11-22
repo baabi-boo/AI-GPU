@@ -456,6 +456,9 @@ class WarmFailureAndRetentionTests(unittest.TestCase):
                 self.assertEqual(report["completed_processes"], 0)
                 self.assertFalse(report["full_matrix_completed"])
                 self.assertEqual(report["state"], "finished")
+                self.assertEqual(report["resources_after"], harness.resources)
+                self.assertEqual([failure["stage"] for failure in report["failures"]], ["execution"])
+                self.assertEqual(report, harness.saved)
 
     def test_dirty_source_stale_loaded_helper_kernel_profile_or_fixture_blocks_early(self):
         for kind in ("dirty", "helper", "kernel", "profile", "fixture"):

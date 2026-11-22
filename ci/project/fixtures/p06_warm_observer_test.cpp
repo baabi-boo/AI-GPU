@@ -344,10 +344,18 @@ void* operator new[](std::size_t bytes) {
   return ::operator new(bytes);
 }
 
-void operator delete(void* value) noexcept { std::free(value); }
-void operator delete[](void* value) noexcept { std::free(value); }
-void operator delete(void* value, std::size_t) noexcept { std::free(value); }
-void operator delete[](void* value, std::size_t) noexcept { std::free(value); }
+void operator delete(void* value) noexcept {
+  std::free(value);
+}
+void operator delete[](void* value) noexcept {
+  std::free(value);
+}
+void operator delete(void* value, std::size_t) noexcept {
+  std::free(value);
+}
+void operator delete[](void* value, std::size_t) noexcept {
+  std::free(value);
+}
 
 extern "C" vx_result_t __real_vx_device_open(uint32_t index, vx_device_h* out) {
   ++native.opens;

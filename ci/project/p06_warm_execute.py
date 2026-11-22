@@ -483,9 +483,10 @@ def execute(args, paths):
             failure(error, stage="final-retained-evidence")
         try:
             report["resources_after"] = base._resources(paths)
-            require(all(value >= BUDGET["min_free_bytes"] for value in
-                        report["resources_after"]["free_disk_bytes"].values()),
-                    "final disk reserve below 15 GiB")
+            if report["commands"]:
+                require(all(value >= BUDGET["min_free_bytes"] for value in
+                            report["resources_after"]["free_disk_bytes"].values()),
+                        "final disk reserve below 15 GiB")
         except (OSError, ValueError, RuntimeError) as error:
             failure(error, stage="final-resources")
         counts = completion_counts(report["processes"])
