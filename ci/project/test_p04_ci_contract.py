@@ -88,5 +88,5 @@ class TinyMlpCiCoverageTests(unittest.TestCase):
                 break
             body.append(line)
         self.assertEqual(body, [
-            "        run: python3 -m unittest discover -s ci/project -p 'test_*.py'",
+            "        run: python3 -m unittest discover -s ci/project -p 'test_*.py' -v",
         ], "the source test step must discover P04 tests and propagate failures")

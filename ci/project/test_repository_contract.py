@@ -203,12 +203,12 @@ class RepositoryContractTests(unittest.TestCase):
         self.assertRegex(text, r"(?m)^    runs-on: ubuntu-[0-9]{2}\.[0-9]{2}\s*$")
         timeout = re.findall(r"(?m)^    timeout-minutes: ([0-9]+)\s*$", text)
         self.assertEqual(len(timeout), 1)
-        self.assertEqual(int(timeout[0]), 30)
+        self.assertEqual(int(timeout[0]), 40)
         for setting in ("persist-credentials", "submodules", "lfs"):
             self.assertRegex(text, rf"(?m)^          {setting}: false\s*$")
         for command in ("python3 ci/project/preflight.py --tier governance",
                         "python3 ci/project/check_project.py",
-                        "python3 -m unittest discover -s ci/project -p 'test_*.py'"):
+                        "python3 -m unittest discover -s ci/project -p 'test_*.py' -v"):
             self.assertIn("run: " + command, text)
 
 

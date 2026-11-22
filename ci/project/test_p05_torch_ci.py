@@ -263,7 +263,7 @@ class InstalledTorchWorkflowTests(unittest.TestCase):
         job = children(children(self.governance, "jobs", 2), "governance", 4)
         commands = [script(step) for step in steps(job) if "run" in step]
         for required in ("python3 ci/project/check_project.py", "python3 ci/project/check_baseline_packets.py",
-                         "python3 -m unittest discover -s ci/project -p 'test_*.py'"):
+                         "python3 -m unittest discover -s ci/project -p 'test_*.py' -v"):
             self.assertIn(required, commands)
         self.assertEqual(len(commands), 5)
 

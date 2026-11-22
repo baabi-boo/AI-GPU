@@ -345,7 +345,7 @@ class BaselinePacketCIWorkflowTests(unittest.TestCase):
         self.assertEqual(re.findall(r"(?m)^([ \t]*)permissions:", workflow), [""])
         self.assertRegex(workflow, r"(?m)^permissions:\n  contents: read$")
         self.assertEqual(re.findall(r"(?m)^    runs-on: (.+)$", workflow), ["ubuntu-24.04"])
-        self.assertEqual(re.findall(r"(?m)^    timeout-minutes: (.+)$", workflow), ["30"])
+        self.assertEqual(re.findall(r"(?m)^    timeout-minutes: (.+)$", workflow), ["40"])
         self.assertIn("assert sys.version_info[:2] == (3, 12)", workflow)
         for option in ("submodules", "lfs", "persist-credentials"):
             self.assertRegex(workflow, r"(?m)^          " + option + ": false$")

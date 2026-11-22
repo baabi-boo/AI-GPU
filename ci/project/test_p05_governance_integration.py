@@ -66,7 +66,7 @@ class PythonGovernanceIntegrationTests(unittest.TestCase):
             ("Inspect governance prerequisites", "python3 ci/project/preflight.py --tier governance"),
             ("Validate project structure and evidence", "python3 ci/project/check_project.py"),
             ("Check published baseline packet consistency", "python3 ci/project/check_baseline_packets.py"),
-            ("Test governance tooling", "python3 -m unittest discover -s ci/project -p 'test_*.py'"),
+            ("Test governance tooling", "python3 -m unittest discover -s ci/project -p 'test_*.py' -v"),
         ]
         self.assertEqual(len(self.steps), len(expected) + 1)
         for step, (name, command) in zip(self.steps[1:], expected):
@@ -85,7 +85,7 @@ class PythonGovernanceIntegrationTests(unittest.TestCase):
             "cancel-in-progress": "true",
         })
         self.assertEqual(self.job["runs-on"], ("ubuntu-24.04", []))
-        self.assertEqual(self.job["timeout-minutes"], ("30", []))
+        self.assertEqual(self.job["timeout-minutes"], ("40", []))
         self.assertEqual(scalars(children(self.job, "env", 6)), {
             "PYTHONDONTWRITEBYTECODE": "'1'",
         })
