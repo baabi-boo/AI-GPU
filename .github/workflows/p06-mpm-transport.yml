@@ -383,7 +383,7 @@ jobs:
               environment['TOOLCHAIN_REV'] = identity.rsplit('-', 1)[1]
               command('python-packages', [sys.executable, '-I', '-m', 'pip', '--isolated', 'install',
                       '--disable-pip-version-check', '--no-cache-dir', '--only-binary=:all:', '--no-deps',
-                      'PyYAML==6.0.2', 'pyslang==12.2.0'], provision, environment, 180)
+                      'PyYAML==6.0.2', 'pyslang==12.2.0', 'nanobind-backend==1.0.0'], provision, environment, 180)
               command('configure-tools', [source / 'configure', '--xlen=64', '--profile=',
                       '--tooldir=' + str(tools)], provision, environment, 120)
               installer = provision / 'ci/toolchain_install.sh'

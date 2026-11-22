@@ -344,7 +344,7 @@ class MpmTransportCiTests(unittest.TestCase):
         packages = commands["python-packages"]
         for argument in ("-I", "--isolated", "--no-cache-dir", "--only-binary=:all:", "--no-deps"):
             self.assertIn(argument, packages)
-        self.assertEqual(packages[-2:], ["PyYAML==6.0.2", "pyslang==12.2.0"])
+        self.assertEqual(packages[-3:], ["PyYAML==6.0.2", "pyslang==12.2.0", "nanobind-backend==1.0.0"])
         self.assertEqual(commands["install-foldsim"][0], "bash")
         self.assertEqual(commands["install-foldsim"][2:], ["--foldsim"])
         pin = "4df7186edbca82b21b2b8cba9b3b192248b99209"
