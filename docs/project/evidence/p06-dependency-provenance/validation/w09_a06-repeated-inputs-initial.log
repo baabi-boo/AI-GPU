@@ -1,0 +1,124 @@
+test_actual_compile_input_changes_after_prepass_remain_failures (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_actual_compile_input_changes_after_prepass_remain_failures) ... ok
+test_duplicate_receipt_input_rows_still_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_duplicate_receipt_input_rows_still_reject) ... FAIL
+test_real_compiler_retains_repeated_raw_headers_and_unique_stable_inputs (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_real_compiler_retains_repeated_raw_headers_and_unique_stable_inputs) ... ERROR
+test_rehashed_added_removed_and_reordered_depfile_inputs_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_rehashed_added_removed_and_reordered_depfile_inputs_reject) ... 
+  test_rehashed_added_removed_and_reordered_depfile_inputs_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_rehashed_added_removed_and_reordered_depfile_inputs_reject) (field='dependency_prepass_file', mode='added') ... FAIL
+  test_rehashed_added_removed_and_reordered_depfile_inputs_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_rehashed_added_removed_and_reordered_depfile_inputs_reject) (field='dependency_prepass_file', mode='removed') ... FAIL
+  test_rehashed_added_removed_and_reordered_depfile_inputs_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_rehashed_added_removed_and_reordered_depfile_inputs_reject) (field='dependency_prepass_file', mode='reordered') ... FAIL
+  test_rehashed_added_removed_and_reordered_depfile_inputs_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_rehashed_added_removed_and_reordered_depfile_inputs_reject) (field='dependency_file', mode='added') ... FAIL
+  test_rehashed_added_removed_and_reordered_depfile_inputs_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_rehashed_added_removed_and_reordered_depfile_inputs_reject) (field='dependency_file', mode='removed') ... FAIL
+  test_rehashed_added_removed_and_reordered_depfile_inputs_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_rehashed_added_removed_and_reordered_depfile_inputs_reject) (field='dependency_file', mode='reordered') ... FAIL
+test_raw_prerequisite_count_remains_bounded_before_deduplication (test_p06_dependency_repeated_inputs.RepeatedPrerequisiteParserTests.test_raw_prerequisite_count_remains_bounded_before_deduplication) ... ok
+test_retained_gcc_prerequisites_replay_without_recorded_files (test_p06_dependency_repeated_inputs.RepeatedPrerequisiteParserTests.test_retained_gcc_prerequisites_replay_without_recorded_files) ... ok
+
+======================================================================
+ERROR: test_real_compiler_retains_repeated_raw_headers_and_unique_stable_inputs (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_real_compiler_retains_repeated_raw_headers_and_unique_stable_inputs)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_repeated_inputs.py", line 119, in test_real_compiler_retains_repeated_raw_headers_and_unique_stable_inputs
+    self.assertEqual(self.verify(record), record)
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_repeated_inputs.py", line 97, in verify
+    return receipt._validate_record(record, self.config, self.config_sha256,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/AI-GPU/ci/project/p06_dependency_receipt.py", line 197, in _validate_record
+    require(type(record["environment"]) is dict and set(record["environment"]) ==
+  File "/workspace/AI-GPU/ci/project/p06_dependency_receipt.py", line 51, in require
+    raise ValueError(message)
+ValueError: tool receipt used an uncontrolled input environment
+
+======================================================================
+FAIL: test_duplicate_receipt_input_rows_still_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_duplicate_receipt_input_rows_still_reject)
+----------------------------------------------------------------------
+ValueError: tool receipt used an uncontrolled input environment
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_repeated_inputs.py", line 140, in test_duplicate_receipt_input_rows_still_reject
+    with self.assertRaisesRegex(ValueError, "input inventory contains duplicates"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "input inventory contains duplicates" does not match "tool receipt used an uncontrolled input environment"
+
+======================================================================
+FAIL: test_rehashed_added_removed_and_reordered_depfile_inputs_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_rehashed_added_removed_and_reordered_depfile_inputs_reject) (field='dependency_prepass_file', mode='added')
+----------------------------------------------------------------------
+ValueError: tool receipt used an uncontrolled input environment
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_repeated_inputs.py", line 133, in test_rehashed_added_removed_and_reordered_depfile_inputs_reject
+    with self.subTest(field=field, mode=mode), self.assertRaisesRegex(ValueError, "included-input closure"):
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "included-input closure" does not match "tool receipt used an uncontrolled input environment"
+
+======================================================================
+FAIL: test_rehashed_added_removed_and_reordered_depfile_inputs_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_rehashed_added_removed_and_reordered_depfile_inputs_reject) (field='dependency_prepass_file', mode='removed')
+----------------------------------------------------------------------
+ValueError: tool receipt used an uncontrolled input environment
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_repeated_inputs.py", line 133, in test_rehashed_added_removed_and_reordered_depfile_inputs_reject
+    with self.subTest(field=field, mode=mode), self.assertRaisesRegex(ValueError, "included-input closure"):
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "included-input closure" does not match "tool receipt used an uncontrolled input environment"
+
+======================================================================
+FAIL: test_rehashed_added_removed_and_reordered_depfile_inputs_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_rehashed_added_removed_and_reordered_depfile_inputs_reject) (field='dependency_prepass_file', mode='reordered')
+----------------------------------------------------------------------
+ValueError: tool receipt used an uncontrolled input environment
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_repeated_inputs.py", line 133, in test_rehashed_added_removed_and_reordered_depfile_inputs_reject
+    with self.subTest(field=field, mode=mode), self.assertRaisesRegex(ValueError, "included-input closure"):
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "included-input closure" does not match "tool receipt used an uncontrolled input environment"
+
+======================================================================
+FAIL: test_rehashed_added_removed_and_reordered_depfile_inputs_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_rehashed_added_removed_and_reordered_depfile_inputs_reject) (field='dependency_file', mode='added')
+----------------------------------------------------------------------
+ValueError: tool receipt used an uncontrolled input environment
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_repeated_inputs.py", line 133, in test_rehashed_added_removed_and_reordered_depfile_inputs_reject
+    with self.subTest(field=field, mode=mode), self.assertRaisesRegex(ValueError, "included-input closure"):
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "included-input closure" does not match "tool receipt used an uncontrolled input environment"
+
+======================================================================
+FAIL: test_rehashed_added_removed_and_reordered_depfile_inputs_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_rehashed_added_removed_and_reordered_depfile_inputs_reject) (field='dependency_file', mode='removed')
+----------------------------------------------------------------------
+ValueError: tool receipt used an uncontrolled input environment
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_repeated_inputs.py", line 133, in test_rehashed_added_removed_and_reordered_depfile_inputs_reject
+    with self.subTest(field=field, mode=mode), self.assertRaisesRegex(ValueError, "included-input closure"):
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "included-input closure" does not match "tool receipt used an uncontrolled input environment"
+
+======================================================================
+FAIL: test_rehashed_added_removed_and_reordered_depfile_inputs_reject (test_p06_dependency_repeated_inputs.ActualRepeatedPrerequisiteTests.test_rehashed_added_removed_and_reordered_depfile_inputs_reject) (field='dependency_file', mode='reordered')
+----------------------------------------------------------------------
+ValueError: tool receipt used an uncontrolled input environment
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_repeated_inputs.py", line 133, in test_rehashed_added_removed_and_reordered_depfile_inputs_reject
+    with self.subTest(field=field, mode=mode), self.assertRaisesRegex(ValueError, "included-input closure"):
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "included-input closure" does not match "tool receipt used an uncontrolled input environment"
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.232s
+
+FAILED (failures=7, errors=1)

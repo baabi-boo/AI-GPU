@@ -6,13 +6,23 @@ is an evidence-development diagnostic, not the formal dependency producer or a
 replacement for the hosted native original. It never invokes `Builder`, stages
 measurement inputs, builds managed models or runs a native lifetime process.
 
-The [preparation record](preparation.json) identifies the current **prepared,
-unexecuted** attempt. The five pinned Git trees contain 1,294 files and
+The [preparation record](preparation.json) identifies sealed attempt `03` before
+execution. Its [actual execution summary](execution-summary.json) now records
+**failed**: three selected compiler tools passed, then a fourth successful GCC
+dependency prepass listed the same header twice and the recorder rejected the
+valid repeated name before starting that unit's final compiler. All four raw
+records, the original depfile and command log are retained. No archive, link,
+managed build or native process ran. The [independent execution review](../agents/w09_a04.md)
+identifies the exact frozen helper revision and first failure. A correction
+collects repeated normalized input names once after checking the raw token bound;
+its fresh execution requires a new sealed attempt and an exact reviewed revision.
+
+The five pinned Git trees contain 1,294 files and
 10,938,128 bytes; the source-derived plan selects 406 compilation units. Those
 are input observations and a plan. They do not establish the separately
 required 413 actual tool operations.
 
-## Reproduction
+## Historical attempt 03 commands
 
 Use a clean checkout of published helper revision
 `5527cb062e10dfff3266022d138dd7cdf63f5e5c`, the five verified bare Git object
@@ -28,8 +38,8 @@ python3 -I -B docs/project/evidence/p06-dependency-provenance/host-diagnostic/dr
   --cmake /workspace/p06-build-tools/cmake/data/bin/cmake
 ```
 
-Once the separate governance workload has finished and resources have been
-rechecked, the single execution phase is:
+After the separate governance workload finished and resources were rechecked,
+the single execution phase used:
 
 ```bash
 python3 -I -B docs/project/evidence/p06-dependency-provenance/host-diagnostic/driver.py run \
@@ -37,7 +47,8 @@ python3 -I -B docs/project/evidence/p06-dependency-provenance/host-diagnostic/dr
   --workspace /workspace/p06-host-diagnostic-5527-03
 ```
 
-The driver rejects a changed prepared record, driver, helper or selected tool,
+These commands document the original preparation and execution; attempt `03`
+is finished and cannot be resumed. The driver rejects a changed prepared record, driver, helper or selected tool,
 and rejects a second execution attempt. A retry requires another fresh
 preparation and preserves the earlier original.
 

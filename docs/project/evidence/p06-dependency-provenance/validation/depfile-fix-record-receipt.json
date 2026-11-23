@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "scope": "Focused recorder and inert receipt regression after actual GCC repeated-header failure; no complete fresh dependency or native result",
+  "base_revision": "8b71ee07392c1ed86f654b2d683d9a8d2d1f50ea",
+  "source_state": "working candidate with exact file hashes sampled immediately after passing run",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "argv": "PATH=/workspace/p06-build-tools/cmake/data/bin:$PATH PYTHONPATH=ci/project PYTHONDONTWRITEBYTECODE=1 python3 -m unittest test_p06_dependency_record test_p06_dependency_receipt -v",
+  "tests": 52,
+  "duration_seconds": 3.328,
+  "outcome": "pass",
+  "exit_code": 0,
+  "skipped": 0,
+  "files": {
+    "ci/project/p06_dependency_record.py": "79194816f9c35ef8032e18050aa7e1f4eb9168a28724cc461802bf8e327818f5",
+    "ci/project/test_p06_dependency_record.py": "016798aad3a3060cb503b8d8ca916bfcac0d4ff54ed1abd0df68af7eebf00b56",
+    "ci/project/p06_dependency_receipt.py": "437a9148f6a5db3d7a6ad477e2390f38df80c9222b6c971db82a2745b02ea3c6",
+    "docs/designs/dependency_provenance_v1.md": "4655633580e3932df8427e3abde507e6700bbfd62e56eda683ac76731aa3c26a"
+  },
+  "log": {
+    "path": "validation/depfile-fix-record-receipt.log",
+    "sha256": "8a1fd9fb43e36e13665c9d42442176b1b85376a534d4cb26e9f6748db50c25c1",
+    "size_bytes": 9734
+  },
+  "prior_attempt": {
+    "log": "validation/depfile-fix-initial-environment-error.log",
+    "outcome": "fail",
+    "tests": 43,
+    "errors": 1,
+    "reason": "Root omitted explicit pinned CMake directory from PATH; unrelated user-local cmake wrapper could not import its cmake module. Corrected invocation uses previously reviewed CMake3.22.6; no production/test change made to repair that environment error."
+  },
+  "qualification_or_acceptance_claimed": false
+}

@@ -158,3 +158,46 @@ A [later provider read](validation/provider-observation-5527.json), at
 2026-11-23 10:20:34 UTC, again found the foundation's fresh job queued, with no
 steps or runner assignment. Its queued metadata supplies no executed result or
 known queue cause.
+
+## Published replay checkpoint and completed foundation suite
+
+The [replay publication receipt](validation/replay-publication.json) joins local
+reviewed commit `ba4deccd25b8f2cd08581af6785348e5ee0781bd` to published master
+`8b71ee07392c1ed86f654b2d683d9a8d2d1f50ea`. Both have exact Git tree
+`80146459e865581508315a18ffd1e11dd1a0773c`; publication used an expected-head
+lease without force, followed by provider readback and local fetch. The full
+governance run of that candidate was still running at this receipt checkpoint.
+
+The earlier published foundation `5527cb062e10dfff3266022d138dd7cdf63f5e5c`
+completed **4,025 tests in 2,852.987 seconds**, with no failures or skips. Its
+[bounded receipt](validation/foundation-full-governance.json) and complete
+[original log](validation/foundation-full-governance.log) retain exact revision,
+tree, command, output identity and observed resource use. This result belongs
+to the foundation tree and does not substitute for the later candidate suite
+or fresh dependency/native execution.
+
+## Actual dependency-build failure and bounded parser correction
+
+The [first host diagnostic execution](host-diagnostic/execution-summary.json)
+used the frozen foundation helpers and passed three actual selected compiles.
+The fourth unit's successful GCC dependency prepass repeated `primitiveTypes.h`;
+the recorder rejected that valid input list before the final compiler started.
+The [execution review](agents/w09_a04.md) retains four original records, the
+actual depfile and first-failure log. No archive, link, managed build or native
+process ran in that failed attempt.
+
+The correction retains raw dependency bytes and their raw token limit, then
+records each normalized input name once in first-seen order. Its root-owned
+[recorder/receipt run](validation/depfile-fix-record-receipt.json) passed **52
+tests in 3.328 seconds**. The earlier environment-only failure is retained: the
+root had omitted the already reviewed CMake directory from PATH; restoring that
+explicit selection required no source workaround.
+
+The [independent correction review](agents/w09_a06.md) reports **101 tests in
+3.249 seconds**, including an actual tiny repeated-header GCC compile and inert
+validation after producer files are deleted. Changed or reordered input closure,
+duplicate receipt rows, oversized raw lists and existing graph/archive controls
+remain rejecting. Those tests overlap other runs and supply no complete fresh
+build or native result. The separately running full replay-checkpoint suite
+remains pinned to the earlier `ba4deccd`/`8b71ee07` tree and does not cover this
+later parser correction.

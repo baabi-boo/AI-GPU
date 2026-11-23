@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "assignment": "/root/w09_a06",
+  "scope": "Independent bounded repeated-prerequisite parser correction review; host compiler and inert receipt controls only",
+  "tested_working_base": "8b71ee07392c1ed86f654b2d683d9a8d2d1f50ea",
+  "source_files": {
+    "ci/project/p06_dependency_record.py": {
+      "sha256": "79194816f9c35ef8032e18050aa7e1f4eb9168a28724cc461802bf8e327818f5",
+      "size_bytes": 26467
+    },
+    "ci/project/p06_dependency_receipt.py": {
+      "sha256": "437a9148f6a5db3d7a6ad477e2390f38df80c9222b6c971db82a2745b02ea3c6",
+      "size_bytes": 61150
+    },
+    "ci/project/test_p06_dependency_record.py": {
+      "sha256": "016798aad3a3060cb503b8d8ca916bfcac0d4ff54ed1abd0df68af7eebf00b56",
+      "size_bytes": 17389
+    },
+    "ci/project/test_p06_dependency_repeated_inputs.py": {
+      "sha256": "d3a8d908d74b131c61089ca09cdae1c675c7321a7ea456c820514394935b753a",
+      "size_bytes": 9613
+    },
+    "docs/designs/dependency_provenance_v1.md": {
+      "sha256": "4655633580e3932df8427e3abde507e6700bbfd62e56eda683ac76731aa3c26a",
+      "size_bytes": 6928
+    }
+  },
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "command": "PATH=/workspace/p06-build-tools/cmake/data/bin:$PATH PYTHONPATH=ci/project PYTHONDONTWRITEBYTECODE=1 python3 -m unittest test_p06_dependency_repeated_inputs test_p06_dependency_record test_p06_dependency_receipt test_p06_dependency_binary test_p06_dependency_graph -v",
+  "result": {
+    "tests": 101,
+    "duration_seconds": 3.249,
+    "outcome": "pass",
+    "exit_code": 0,
+    "skips": 0,
+    "new_test_methods": 6
+  },
+  "logs": {
+    "initial": {
+      "path": "validation/w09_a06-repeated-inputs-initial.log",
+      "sha256": "9994145c076fbdc6a32eafa5b86fe056a67cdf200483488c5a712a035a47b1f8",
+      "size_bytes": 11307
+    },
+    "final": {
+      "path": "validation/w09_a06-repeated-inputs-final.log",
+      "sha256": "2bd214b90c22d89bc3329843ddee75867779c95acc8509e12a3bed77ad72da04",
+      "size_bytes": 18199
+    }
+  },
+  "initial_test_setup_failure": "New inert-reader fixture omitted the required clean producer environment. Only the new test fixture was corrected to compile under builder.clean_environment; the first raw log remains preserved. This was not a production parser defect.",
+  "historical_parser_functions_identical_between_5527_and_8b71": true,
+  "read_only_attempt03_record_observations": [
+    {
+      "id": "1896a50a573b50b318af9da679001a3449407c0670b5eac45087d80af80eef42",
+      "outcome": "pass",
+      "reason": null,
+      "output_path": "/workspace/p06-host-diagnostic-5527-03/dependency-sources/softfloat/build/Linux-x86_64-GCC/s_eq128.o",
+      "process_started": true,
+      "children": [
+        {
+          "stage": "dependencies",
+          "exit_code": 0,
+          "process_started": true
+        },
+        {
+          "stage": "tool",
+          "exit_code": 0,
+          "process_started": true
+        }
+      ],
+      "record_sha256": "8a03892a9bbe6da403a7e423631e38ce82be76c659dd9671cc2076721511f2dd"
+    },
+    {
+      "id": "1dba612bc9589349873136dbb271d519d76bf6f8738605ab83511d49b1d1ea13",
+      "outcome": "pass",
+      "reason": null,
+      "output_path": "/workspace/p06-host-diagnostic-5527-03/dependency-sources/softfloat/build/Linux-x86_64-GCC/s_le128.o",
+      "process_started": true,
+      "children": [
+        {
+          "stage": "dependencies",
+          "exit_code": 0,
+          "process_started": true
+        },
+        {
+          "stage": "tool",
+          "exit_code": 0,
+          "process_started": true
+        }
+      ],
+      "record_sha256": "16b19f0edfde930fd425390cd611e101f1dba6bd0b72f71d84e9b45514a00768"
+    },
+    {
+      "id": "c0bed7f69c3b387237885dff36fc66c2c796d53672d930e034ee0d3f28a665f1",
+      "outcome": "fail",
+      "reason": "dependency input inventory is empty, duplicated or oversized",
+      "output_path": "/workspace/p06-host-diagnostic-5527-03/dependency-sources/softfloat/build/Linux-x86_64-GCC/s_shortShiftLeft128.o",
+      "process_started": false,
+      "children": [
+        {
+          "stage": "dependencies",
+          "exit_code": 0,
+          "process_started": true
+        }
+      ],
+      "record_sha256": "2bb480ee5ac0c88a7fec98261043678c731da01c13e8970501fcead09926f903"
+    },
+    {
+      "id": "c23df9a0904dd9fe1f14f16b06f83eb39c0a8f96e5ea91d5259821370b22f6b9",
+      "outcome": "pass",
+      "reason": null,
+      "output_path": "/workspace/p06-host-diagnostic-5527-03/dependency-sources/softfloat/build/Linux-x86_64-GCC/s_lt128.o",
+      "process_started": true,
+      "children": [
+        {
+          "stage": "dependencies",
+          "exit_code": 0,
+          "process_started": true
+        },
+        {
+          "stage": "tool",
+          "exit_code": 0,
+          "process_started": true
+        }
+      ],
+      "record_sha256": "1fe0698f36f8df972874c1868f75546aa7fdb7b265db9fd02ec1c0b28b91aa82"
+    }
+  ],
+  "raw_depfile_sha256": "db6caaf93bafa268d5c32322b87e005f8094957f10033bcb69ecdd5060bae7e8",
+  "raw_depfile_size_bytes": 1130,
+  "fresh_complete_graph_verified": false,
+  "native_execution": "not_run",
+  "qualification_or_acceptance_claimed": false
+}

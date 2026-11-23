@@ -279,9 +279,10 @@ def dependency_paths(contents, *, target, cwd):
     require(lines and all(line.count(":") == 1 for line in lines), "malformed dependency file")
     first_target, names = lines[0].split(":", 1)
     require(_absolute(first_target.strip(), cwd) == target, "dependency target differs from its object")
-    selected = [_absolute(name, cwd) for name in names.split()]
-    require(0 < len(selected) <= MAX_INPUTS and len(selected) == len(set(selected)),
-            "dependency input inventory is empty, duplicated or oversized")
+    names = names.split()
+    require(0 < len(names) <= MAX_INPUTS,
+            "dependency input inventory is empty or oversized")
+    selected = list(dict.fromkeys(_absolute(name, cwd) for name in names))
     for line in lines[1:]:
         header, empty = line.split(":", 1)
         require(not empty.strip() and _absolute(header.strip(), cwd) in selected,

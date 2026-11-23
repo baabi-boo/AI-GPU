@@ -258,10 +258,17 @@ class DependencyRecorderTests(unittest.TestCase):
 
     def test_dependency_parser_rejects_wrong_targets_extra_rules_and_escapes(self):
         for contents in (b"wrong.o: file.c\n", b"sample.o: file.c\nother.o: hidden.c\n",
-                         b"sample.o: file\\ name.c\n", b"sample.o: $(hidden)\n",
-                         b"sample.o: file.c file.c\n"):
+                         b"sample.o: file\\ name.c\n", b"sample.o: $(hidden)\n"):
             with self.subTest(contents=contents), self.assertRaises((recorder.RecorderError, ValueError)):
                 recorder.dependency_paths(contents, target=self.output, cwd=self.roots["build"])
+
+    def test_dependency_parser_observes_each_repeated_input_once_in_first_seen_order(self):
+        result = recorder.dependency_paths(b"sample.o: file.c header.h ./header.h file.c other.h\n",
+            target=self.output, cwd=self.roots["build"])
+        self.assertEqual(result, [self.roots["build"] / name for name in ("file.c", "header.h", "other.h")])
+        with self.assertRaisesRegex(recorder.RecorderError, "oversized"):
+            recorder.dependency_paths(b"sample.o: " + b"file.c " * (recorder.MAX_INPUTS + 1),
+                target=self.output, cwd=self.roots["build"])
 
     def test_link_requires_one_explicit_map_and_fresh_outputs(self):
         self.assertEqual(self.compile()["outcome"], "pass")

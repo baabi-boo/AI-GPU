@@ -40,7 +40,12 @@ Record actual compiler/archiver/linker child execution, its selected tool,
 arguments, working directory, exit result, inputs and output bytes. A compile
 database or a favorable verbose log alone is insufficient. Capture complete
 included-input observations, including headers selected by `-isystem`; record
-system-input identity limits explicitly. Parallel compilations may complete in
+system-input identity limits explicitly. Retain the raw compiler dependency
+files. Apply their token-count bound before collecting repeated normalized
+absolute input names once in first-seen order; a compiler may list a header
+more than once. Both prepass and compile observations must reproduce that same
+ordered input inventory and its before/after byte identities.
+Parallel compilations may complete in
 either order. Unique source/output identities and prerequisite relationships,
 not an arbitrary total ordering, determine graph consistency.
 

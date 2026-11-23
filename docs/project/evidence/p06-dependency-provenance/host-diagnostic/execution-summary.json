@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "scope": "Observed partial host-only dependency diagnostic attempt03; not formal dependency or native provenance",
+  "recorded_at_utc": "2026-11-23T10:29:45.228718+00:00",
+  "helper_revision": "5527cb062e10dfff3266022d138dd7cdf63f5e5c",
+  "driver": {
+    "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/driver.py",
+    "sha256": "743439b558db9ec39b12bb0bac5b838fd33aac72f9f996f3f8569090db33b91b",
+    "size_bytes": 23759
+  },
+  "prepared": {
+    "path": "/workspace/p06-host-diagnostic-5527-03/prepared.json",
+    "sha256": "0083c760fc36ad58018c27d3ec0355fe91422d20ce4bfc58b07df52079b7e54c",
+    "size_bytes": 312958
+  },
+  "tool_config": {
+    "path": "tool-config.json",
+    "sha256": "cd4a53e560eae3df282472c04e110ed7c529d6cdd18b9e8330fdc74e1d90a756",
+    "size_bytes": 1157
+  },
+  "original_report": {
+    "path": "/workspace/p06-host-diagnostic-5527-03/evidence/host-diagnostic.json",
+    "sha256": "2d275a08f0a8547e720fa97bac99c23343fbcddfbfbd351d6d90bd2a437e2570",
+    "size_bytes": 751895
+  },
+  "original_workspace": "/workspace/p06-host-diagnostic-5527-03",
+  "execution_marker": {
+    "path": "/workspace/p06-host-diagnostic-5527-03/execution-started",
+    "sha256": "5f390d34c99264b85eb03f649aec72823893b63de0f7b1c3866cf0c979e4b525",
+    "size_bytes": 26
+  },
+  "state": "finished",
+  "outcome": "fail",
+  "reason": "host diagnostic command failed: softfloat",
+  "failures": [
+    {
+      "reason": "host diagnostic command failed: softfloat",
+      "stage": "execution-or-inert-check"
+    }
+  ],
+  "driver_exit_code": 1,
+  "driver_stdout": "{\"fresh_dependency_build_passed\": false, \"host_diagnostic_passed\": false, \"native_execution\": \"not_run\", \"outcome\": \"fail\", \"reason\": \"host diagnostic command failed: softfloat\", \"state\": \"finished\"}\n",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/make",
+        "--no-print-directory",
+        "-j2",
+        "--output-sync=target",
+        "SPECIALIZE_TYPE=RISCV",
+        "SOFTFLOAT_OPTS=-fPIC -DSOFTFLOAT_ROUND_ODD -DINLINE_LEVEL=5 -DSOFTFLOAT_FAST_DIV32TO16 -DSOFTFLOAT_FAST_DIV64TO32 -DTHREAD_LOCAL=_Thread_local",
+        "COMPILE_C=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /workspace/p06-foundation-governance/ci/project/p06_dependency_record.py --config /workspace/p06-host-diagnostic-5527-03/evidence/tool-config.json --config-sha256 cd4a53e560eae3df282472c04e110ed7c529d6cdd18b9e8330fdc74e1d90a756 --tool gcc --role compile -- -c -Werror-implicit-function-declaration -DSOFTFLOAT_FAST_INT64 -fPIC -DSOFTFLOAT_ROUND_ODD -DINLINE_LEVEL=5 -DSOFTFLOAT_FAST_DIV32TO16 -DSOFTFLOAT_FAST_DIV64TO32 -DTHREAD_LOCAL=_Thread_local -I. -I../../source/RISCV -I../../source/include -O2 -o $@",
+        "MAKELIB=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /workspace/p06-foundation-governance/ci/project/p06_dependency_record.py --config /workspace/p06-host-diagnostic-5527-03/evidence/tool-config.json --config-sha256 cd4a53e560eae3df282472c04e110ed7c529d6cdd18b9e8330fdc74e1d90a756 --tool ar --role archive -- crs $@",
+        "softfloat.a"
+      ],
+      "cleanup_complete": true,
+      "cwd": "/workspace/p06-host-diagnostic-5527-03/dependency-sources/softfloat/build/Linux-x86_64-GCC",
+      "duration_seconds": 0.320053,
+      "environment": {
+        "CCACHE_DISABLE": "1",
+        "CMAKE_BUILD_PARALLEL_LEVEL": "2",
+        "HOME": "/workspace/p06-host-diagnostic-5527-03/dependency-build/home",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "MAKEFLAGS": "-j2",
+        "OBJCACHE": "",
+        "PATH": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONUTF8": "1",
+        "THREADS": "1",
+        "TMPDIR": "/workspace/p06-host-diagnostic-5527-03/dependency-build/tmp",
+        "TZ": "UTC"
+      },
+      "exit_code": 2,
+      "id": "softfloat",
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ],
+      "log": "logs/softfloat.log",
+      "log_sha256": "bbc2a8490145cff9f0713cfe871cd94d9046d33df73be32b3a09143e73c0ae9e",
+      "log_size_bytes": 2648,
+      "outcome": "fail",
+      "peak_rss_bytes": 36192256,
+      "process_started": true,
+      "reason": "nonzero_exit",
+      "timeout_seconds": 1800
+    }
+  ],
+  "source_manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+  "source_plan_sha256": "f479cc6ed3ee4d4dd7fd305bc45943af33a3a2ba9069da48eebe627c5f817570",
+  "source_stability": [
+    {
+      "label": "sources-frozen",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 0,
+        "generated_files": 0,
+        "generated_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      }
+    },
+    {
+      "label": "before-softfloat",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 0,
+        "generated_files": 0,
+        "generated_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      }
+    },
+    {
+      "label": "final",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 11172,
+        "generated_files": 10,
+        "generated_sha256": "ffef1d29f938ca1cfdc2962ccca530f055357ca4c2725792bb5bb484fdf681b2",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      }
+    }
+  ],
+  "actual_record_roles": {
+    "compile": 4
+  },
+  "passing_record_roles": {
+    "compile": 3
+  },
+  "selected_tool_processes_started": 3,
+  "dependency_prepass_processes_started": 4,
+  "records_finished": true,
+  "retained_original_file_count": 1356,
+  "retained_original_bytes_excluding_report": 11516395,
+  "partial_inert_verification": {
+    "verified_passing_records": 3,
+    "records": [
+      {
+        "id": "1896a50a573b50b318af9da679001a3449407c0670b5eac45087d80af80eef42",
+        "role": "compile",
+        "outcome": "pass",
+        "process_started": true,
+        "record_size_bytes": 19899,
+        "record_sha256": "8a03892a9bbe6da403a7e423631e38ce82be76c659dd9671cc2076721511f2dd",
+        "source": "../../source/s_eq128.c",
+        "output": {
+          "path": "/workspace/p06-host-diagnostic-5527-03/dependency-sources/softfloat/build/Linux-x86_64-GCC/s_eq128.o",
+          "payload": "8e337eab8f5b63554970c52a2174ce8cf5be152e1c2a2de58620f7bd4bfedbd6.bin",
+          "resolved_path": "/workspace/p06-host-diagnostic-5527-03/dependency-sources/softfloat/build/Linux-x86_64-GCC/s_eq128.o",
+          "sha256": "8e337eab8f5b63554970c52a2174ce8cf5be152e1c2a2de58620f7bd4bfedbd6",
+          "size_bytes": 1104
+        },
+        "children": [
+          {
+            "stage": "dependencies",
+            "process_started": true,
+            "exit_code": 0
+          },
+          {
+            "stage": "tool",
+            "process_started": true,
+            "exit_code": 0
+          }
+        ],
+        "reason": null
+      },
+      {
+        "id": "1dba612bc9589349873136dbb271d519d76bf6f8738605ab83511d49b1d1ea13",
+        "role": "compile",
+        "outcome": "pass",
+        "process_started": true,
+        "record_size_bytes": 19899,
+        "record_sha256": "16b19f0edfde930fd425390cd611e101f1dba6bd0b72f71d84e9b45514a00768",
+        "source": "../../source/s_le128.c",
+        "output": {
+          "path": "/workspace/p06-host-diagnostic-5527-03/dependency-sources/softfloat/build/Linux-x86_64-GCC/s_le128.o",
+          "payload": "082a6ed0c479a6d4ec3919569f4eb560bec607e6b8584f547621d3dd9f1c557f.bin",
+          "resolved_path": "/workspace/p06-host-diagnostic-5527-03/dependency-sources/softfloat/build/Linux-x86_64-GCC/s_le128.o",
+          "sha256": "082a6ed0c479a6d4ec3919569f4eb560bec607e6b8584f547621d3dd9f1c557f",
+          "size_bytes": 1112
+        },
+        "children": [
+          {
+            "stage": "dependencies",
+            "process_started": true,
+            "exit_code": 0
+          },
+          {
+            "stage": "tool",
+            "process_started": true,
+            "exit_code": 0
+          }
+        ],
+        "reason": null
+      },
+      {
+        "id": "c0bed7f69c3b387237885dff36fc66c2c796d53672d930e034ee0d3f28a665f1",
+        "role": "compile",
+        "outcome": "fail",
+        "process_started": false,
+        "record_size_bytes": 3375,
+        "record_sha256": "2bb480ee5ac0c88a7fec98261043678c731da01c13e8970501fcead09926f903",
+        "source": "../../source/s_shortShiftLeft128.c",
+        "output": null,
+        "children": [
+          {
+            "stage": "dependencies",
+            "process_started": true,
+            "exit_code": 0
+          }
+        ],
+        "reason": "dependency input inventory is empty, duplicated or oversized"
+      },
+      {
+        "id": "c23df9a0904dd9fe1f14f16b06f83eb39c0a8f96e5ea91d5259821370b22f6b9",
+        "role": "compile",
+        "outcome": "pass",
+        "process_started": true,
+        "record_size_bytes": 19899,
+        "record_sha256": "1fe0698f36f8df972874c1868f75546aa7fdb7b265db9fd02ec1c0b28b91aa82",
+        "source": "../../source/s_lt128.c",
+        "output": {
+          "path": "/workspace/p06-host-diagnostic-5527-03/dependency-sources/softfloat/build/Linux-x86_64-GCC/s_lt128.o",
+          "payload": "79b4ef37cbf7a12cc85d27c342bfe0c2c967fdea8ccb88bc1a17f43ca9968610.bin",
+          "resolved_path": "/workspace/p06-host-diagnostic-5527-03/dependency-sources/softfloat/build/Linux-x86_64-GCC/s_lt128.o",
+          "sha256": "79b4ef37cbf7a12cc85d27c342bfe0c2c967fdea8ccb88bc1a17f43ca9968610",
+          "size_bytes": 1112
+        },
+        "children": [
+          {
+            "stage": "dependencies",
+            "process_started": true,
+            "exit_code": 0
+          },
+          {
+            "stage": "tool",
+            "process_started": true,
+            "exit_code": 0
+          }
+        ],
+        "reason": null
+      }
+    ],
+    "failing_prepass_sha256": "db6caaf93bafa268d5c32322b87e005f8094957f10033bcb69ecdd5060bae7e8",
+    "failing_prepass_bytes": 1130,
+    "dependency_tokens": 24,
+    "unique_normalized_dependencies": 23,
+    "duplicate_normalized_dependencies": {
+      "/workspace/p06-host-diagnostic-5527-03/dependency-sources/softfloat/source/include/primitiveTypes.h": 2
+    },
+    "actual_frozen_parser_rejection": "dependency input inventory is empty, duplicated or oversized",
+    "current_vs_frozen_function_source": {
+      "dependency_paths": {
+        "source_equal": true,
+        "sha256": "0ba787bb4a3fced28c819173a5e803b092ecd2d457efe18f2b351efc0ac601b5"
+      },
+      "_absolute": {
+        "source_equal": true,
+        "sha256": "20fe711e217a14a38d192ba08f519a4a17d57a356622fcea012bd62039e3a803"
+      }
+    }
+  },
+  "retained_small_originals": [
+    {
+      "path": "host-diagnostic/execution-softfloat.log",
+      "sha256": "bbc2a8490145cff9f0713cfe871cd94d9046d33df73be32b3a09143e73c0ae9e",
+      "size_bytes": 2648,
+      "original_path": "/workspace/p06-host-diagnostic-5527-03/evidence/logs/softfloat.log"
+    },
+    {
+      "path": "host-diagnostic/execution-failed-prepass.d",
+      "sha256": "db6caaf93bafa268d5c32322b87e005f8094957f10033bcb69ecdd5060bae7e8",
+      "size_bytes": 1130,
+      "original_path": "/workspace/p06-host-diagnostic-5527-03/dependency-sources/softfloat/build/Linux-x86_64-GCC/s_shortShiftLeft128.o.p06-before.d"
+    },
+    {
+      "path": "host-diagnostic/execution-record-1896a50a573b50b318af9da679001a3449407c0670b5eac45087d80af80eef42.json",
+      "sha256": "8a03892a9bbe6da403a7e423631e38ce82be76c659dd9671cc2076721511f2dd",
+      "size_bytes": 19899,
+      "original_path": "/workspace/p06-host-diagnostic-5527-03/evidence/records/1896a50a573b50b318af9da679001a3449407c0670b5eac45087d80af80eef42.json"
+    },
+    {
+      "path": "host-diagnostic/execution-record-1dba612bc9589349873136dbb271d519d76bf6f8738605ab83511d49b1d1ea13.json",
+      "sha256": "16b19f0edfde930fd425390cd611e101f1dba6bd0b72f71d84e9b45514a00768",
+      "size_bytes": 19899,
+      "original_path": "/workspace/p06-host-diagnostic-5527-03/evidence/records/1dba612bc9589349873136dbb271d519d76bf6f8738605ab83511d49b1d1ea13.json"
+    },
+    {
+      "path": "host-diagnostic/execution-record-c0bed7f69c3b387237885dff36fc66c2c796d53672d930e034ee0d3f28a665f1.json",
+      "sha256": "2bb480ee5ac0c88a7fec98261043678c731da01c13e8970501fcead09926f903",
+      "size_bytes": 3375,
+      "original_path": "/workspace/p06-host-diagnostic-5527-03/evidence/records/c0bed7f69c3b387237885dff36fc66c2c796d53672d930e034ee0d3f28a665f1.json"
+    },
+    {
+      "path": "host-diagnostic/execution-record-c23df9a0904dd9fe1f14f16b06f83eb39c0a8f96e5ea91d5259821370b22f6b9.json",
+      "sha256": "1fe0698f36f8df972874c1868f75546aa7fdb7b265db9fd02ec1c0b28b91aa82",
+      "size_bytes": 19899,
+      "original_path": "/workspace/p06-host-diagnostic-5527-03/evidence/records/c23df9a0904dd9fe1f14f16b06f83eb39c0a8f96e5ea91d5259821370b22f6b9.json"
+    }
+  ],
+  "host_diagnostic_passed": false,
+  "fresh_dependency_build_passed": false,
+  "dependency_source_to_loaded_binary_verified": false,
+  "formal_preparation_executed": false,
+  "measurement_staging_executed": false,
+  "cache_restoration_claimed": false,
+  "native_execution": "not_run",
+  "qualified": false,
+  "ready_for_warm": false,
+  "warm_execution": false,
+  "full_warm_coverage": false,
+  "acceptance_claimed": false,
+  "phase_acceptance": false,
+  "performance_acceptance": false,
+  "limitations": [
+    "The frozen helper revision predates the later candidate corrections.",
+    "Three passing compile records are a partial actual build, not406compiles or413selected operations.",
+    "The failed compile record contains a successful dependency-prepass child, but the selected final compiler tool did not start.",
+    "No archive, index, shared link, CMake, managed build, native workload, full graph verification or formal receipt passed.",
+    "Original source/header stability passed with only10recorded generated files; this does not protect against malicious concurrent filesystem writers.",
+    "The full original workspace remains outsideGit; the packet retains exact small raw records, failing depfile and outer command log."
+  ]
+}
