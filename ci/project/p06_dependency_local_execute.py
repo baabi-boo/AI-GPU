@@ -282,7 +282,9 @@ def execute(args):
             if (evidence / spec["report_path"]).exists():
                 identity, body = _descriptor(evidence, spec["report_path"])
                 report["reports"][name] = identity
-                child = load_json_bytes(body, "local child report")
+                json_limits = ({"max_tokens": contract.MANAGED_REPORT_MAX_JSON_TOKENS}
+                               if name == "native-lifetime" else {})
+                child = load_json_bytes(body, "local child report", **json_limits)
                 if name in ("native-lifetime", "pending-probe", "dependency-substitution") and type(child) is dict:
                     observed = child.get("native_execution")
                     if observed == "run" or (report["native_execution"] != "run" and observed in ("not_run", "unknown")):

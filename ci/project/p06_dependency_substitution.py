@@ -325,7 +325,8 @@ class Control:
             "dependency substitution control requires 15 GiB disk reserve")
         require((available_memory_bytes() or 0) >= BUDGET["max_rss_bytes"],
                 "dependency substitution control requires 4 GiB available memory")
-        managed = probe.bounded_json(self.managed_path)
+        managed = probe.managed_json(self.managed_path,
+                                    dependency_receipt_sha256=self.args.dependency_receipt_sha256)
         probe.managed_mode(managed, expected_revision=self.args.expected_revision,
                            dependency_receipt_sha256=self.args.dependency_receipt_sha256)
         variants = [row for row in managed["variants"] if row.get("build_dir") == str(self.build)]

@@ -21,7 +21,7 @@ sys.dont_write_bytecode = True
 
 from baseline_inventory import _digest, collect_source, hash_artifacts
 from baseline_packet_contract import _stamp_words
-from baseline_packet_io import load_json_bytes
+from baseline_packet_io import MAX_JSON_TOKENS, load_json_bytes
 from baseline_process import run_bounded
 import p02_matrix as base
 import p06_managed_preflight_build as build_records
@@ -55,14 +55,24 @@ def require(condition, message):
         raise ValueError(message)
 
 
-def bounded_json(path, *, expected=dict):
+def bounded_json(path, *, expected=dict, max_tokens=MAX_JSON_TOKENS):
     require(path.is_file() and 0 < path.stat().st_size <= MAX_JSON_BYTES,
             "JSON input is absent or exceeds its byte bound")
-    wrapper = load_json_bytes(b'{"value":' + path.read_bytes() + b'}', str(path.name))
+    wrapper = load_json_bytes(b'{"value":' + path.read_bytes() + b'}', str(path.name), max_tokens=max_tokens)
     preflight_contract.fields(wrapper, ("value",), "bounded JSON wrapper")
     value = wrapper["value"]
     require(type(value) is expected, "JSON input has an unexpected container type")
     return value
+
+
+def managed_json(path, *, dependency_receipt_sha256=None):
+    if dependency_receipt_sha256 is None:
+        return bounded_json(path)
+    from p06_dependency_contract import MANAGED_REPORT_MAX_JSON_TOKENS
+    require(type(dependency_receipt_sha256) is str
+            and re.fullmatch(r"[0-9a-f]{64}", dependency_receipt_sha256) is not None,
+            "dependency receipt pin is not an exact SHA256 identity")
+    return bounded_json(path, max_tokens=MANAGED_REPORT_MAX_JSON_TOKENS)
 
 
 def retained_json(directory, descriptor, expected, *, container=dict):
@@ -251,8 +261,8 @@ def execute(args):
         require(all(shutil.disk_usage(path).free >= BUDGET["min_free_bytes"]
                     for path in (source, build, output, managed_path.parent)), "probe needs 15 GiB disk reserve")
         require((available_memory_bytes() or 0) >= BUDGET["max_rss_bytes"], "probe needs 4 GiB available memory")
-        managed = bounded_json(managed_path)
         dependency_pin = getattr(args, "dependency_receipt_sha256", None)
+        managed = managed_json(managed_path, dependency_receipt_sha256=dependency_pin)
         dependency = managed_mode(managed, expected_revision=args.expected_revision,
                                   dependency_receipt_sha256=dependency_pin)
         matches = [row for row in managed["variants"] if row["build_dir"] == str(build)]

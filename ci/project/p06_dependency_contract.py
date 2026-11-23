@@ -61,6 +61,7 @@ MAX_SOURCE_BYTES = 64 * 1024**2
 MAX_FILE_BYTES = 64 * 1024**2
 MAX_PACKET_BYTES = 1024**3
 MAX_RECEIPT_BYTES = 16 * 1024**2
+MANAGED_REPORT_MAX_JSON_TOKENS = 500000
 MAX_RECORDS = 1024
 LIMITATIONS = (
     "The selected dependency source, observed commands and products are bound; complete compiler/system-input closure is not claimed.",

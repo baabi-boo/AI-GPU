@@ -13,6 +13,7 @@ MAX_FILES = 128
 READ_CHUNK_BYTES = 64 * 1024
 MAX_JSON_DEPTH = 64
 MAX_JSON_TOKENS = 250000
+MAX_JSON_TOKENS_LIMIT = 500000
 MAX_NUMBER_CHARS = 1024
 MAX_PATH_BYTES = 4096
 MAX_PATH_DEPTH = 128
@@ -28,7 +29,8 @@ def _integer(value, label, maximum):
     return value
 
 
-def _json_bounds(text):
+def _json_bounds(text, *, max_tokens=MAX_JSON_TOKENS):
+    _integer(max_tokens, "JSON structural token budget", MAX_JSON_TOKENS_LIMIT)
     depth = tokens = 0
     quoted = escaped = False
     for character in text:
@@ -51,7 +53,7 @@ def _json_bounds(text):
             depth -= 1
         elif character in ",:":
             tokens += 1
-        if tokens > MAX_JSON_TOKENS:
+        if tokens > max_tokens:
             raise PacketError("JSON structure exceeds the limit")
 
 
@@ -83,13 +85,13 @@ def _reject_constant(_value):
     raise PacketError("nonfinite JSON constant")
 
 
-def load_json_bytes(contents, label="JSON"):
+def load_json_bytes(contents, label="JSON", *, max_tokens=MAX_JSON_TOKENS):
     """Parse a bounded-depth UTF-8 object without ambiguous fields or numbers."""
     if not isinstance(contents, (bytes, bytearray)):
         raise PacketError(str(label) + ": expected UTF-8 bytes")
     try:
         text = contents.decode("utf-8", errors="strict")
-        _json_bounds(text)
+        _json_bounds(text, max_tokens=max_tokens)
         value = json.loads(text, object_pairs_hook=_unique_keys,
                            parse_int=_json_integer, parse_float=_json_float,
                            parse_constant=_reject_constant)
