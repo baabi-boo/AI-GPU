@@ -88,6 +88,39 @@ def _path(value):
         raise ExportError(str(error)) from error
 
 
+def _tree_identity(entries):
+    """Reconstruct the complete bounded Git tree from its flat leaf inventory."""
+    root = {}
+    directories = 0
+    for path, entry in entries.items():
+        parts = path.split("/")
+        node = root
+        for name in parts[:-1]:
+            if name not in node:
+                directories += 1
+                require(len(entries) + directories <= MAX_TREE_ENTRIES,
+                        "Git tree directories exceed its entry bound")
+                node[name] = {}
+            require(type(node[name]) is dict, "Git tree contains a file/directory prefix collision")
+            node = node[name]
+        require(parts[-1] not in node, "Git tree contains a file/directory prefix collision")
+        node[parts[-1]] = (entry["mode"], entry["oid"])
+
+    def identity(node):
+        records = []
+        # Git compares a directory as if its name has a trailing slash.
+        for name, value in sorted(node.items(), key=lambda item:
+                (item[0] + ("/" if type(item[1]) is dict else "")).encode("ascii")):
+            mode, oid = ("40000", identity(value)) if type(value) is dict else value
+            records.append(mode.encode("ascii") + b" " + name.encode("ascii") + b"\0"
+                           + bytes.fromhex(oid))
+        body = b"".join(records)
+        return hashlib.sha1(b"tree " + str(len(body)).encode() + b"\0" + body).hexdigest()
+
+    # _tree bounds every input path to 64 components before reaching this code.
+    return identity(root)
+
+
 def _bounded_command(argv, environment, limit, *, timeout=COMMAND_TIMEOUT):
     process = subprocess.Popen(argv, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE, env=environment)
@@ -179,6 +212,8 @@ class GitObjects:
             require((kind == "blob" and mode in ("100644", "100755", "120000"))
                     or (kind == "commit" and mode == "160000"), "unsupported Git tree entry")
             entries[name] = {"mode": mode, "kind": kind, "oid": oid}
+        require(_tree_identity(entries) == self.tree_id,
+                "Git tree reconstruction differs from the selected root identity; empty trees are unsupported")
         return entries
 
     def blob(self, name):
