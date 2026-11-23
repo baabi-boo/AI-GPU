@@ -539,7 +539,7 @@ class Builder:
             total += row["size_bytes"]
             require(total <= contract.MAX_PACKET_BYTES, "retained dependency packet exceeds its byte bound")
             rows.append(row)
-        return rows
+        return sorted(rows, key=lambda row: row["path"])
 
 
 def build(args):

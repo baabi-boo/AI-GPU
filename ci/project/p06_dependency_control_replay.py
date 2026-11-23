@@ -235,7 +235,8 @@ def verify_probe_view(view, *, native, expected_report_sha256, expected_native_r
     _same(records, variant["compiler_records"], "pending admitted compiler records")
     libraries = {name: variant["expected_loaded_libraries"][name] for name in probe.LIBRARIES}
     _same(report["expected_libraries"], libraries, "pending loaded libraries")
-    paths = [str(PurePosixPath(native.tools["executing_python"]["path"]).parent), "/usr/bin", "/bin"]
+    paths = ([str(native.paths["host_bin"])] if native.paths["host_bin"] is not None else [])
+    paths += [str(PurePosixPath(native.tools["executing_python"]["path"]).parent), "/usr/bin", "/bin"]
     environment = {"PATH": ":".join(dict.fromkeys(paths)), "LANG": "C", "LC_ALL": "C", "TZ": "UTC",
         "TMPDIR": str(output / "tmp"), "THREADS": "1", "CCACHE_DISABLE": "1", "OBJCACHE": "",
         "PYTHONDONTWRITEBYTECODE": "1", "PERF": "1", "LD_LIBRARY_PATH": ":".join((str(runtime),
@@ -348,6 +349,7 @@ def _substitution_records(packet, native, config, source, work):
         _same(packet.read("work/" + relative.as_posix()), receipts.payload(row, packet.read),
               "substitution retained work output/payload join")
     _same(packet.read("records/.records.lock"), b"", "substitution recorder lock")
+    _same(packet.read("payloads/.retention.lock"), b"", "substitution retention lock")
     derivation = {"original_source": known[original_path],
         "retained_original": packet.row("inputs/gddr6-original.cpp"),
         "derived_source": packet.row("work/" + substitution.CONTROL_SOURCE),

@@ -243,6 +243,7 @@ class SyntheticControls:
             self.put(files, "work/" + name, files["payloads/" + row["payload"]])
         records = [self.put_json(files, "records/" + row["id"] + ".json", row) for row in (compiled, linked)]
         self.put(files, "records/.records.lock", b"")
+        self.put(files, "payloads/.retention.lock", b"")
         derivation = {"original_source": descriptor(original_path, original),
             "retained_original": descriptor("inputs/gddr6-original.cpp", original),
             "derived_source": descriptor("work/" + replay.substitution.CONTROL_SOURCE, derived),
