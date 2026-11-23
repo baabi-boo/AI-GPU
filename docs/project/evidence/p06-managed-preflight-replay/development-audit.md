@@ -19,6 +19,11 @@ to the coordinator's release evidence. This document does not assert a final
 commit identity, a completed 60-agent count, a hosted CI pass, or approval of
 unreviewed enforcement changes.
 
+The [wave 8 documentation update](agents/w08_a01.md) incorporates the later
+archive-loader and Git tree integrity reviews below. Those additions preserve
+the original source-audit attribution and identify the actual repair authors
+and independent reviewers.
+
 The [implemented replay contract](../../../designs/managed_counter_preflight_replay_v1.md)
 defines the reader's interface. The original
 [preflight contract](../../../designs/managed_counter_preflight_v1.md),
@@ -77,6 +82,14 @@ uses bounded, read-only Git-object queries over five explicitly selected
 repositories. It does not discover expectations by trusting the archive or by
 executing its source. The [independent source review](agents/w04_a04.md)
 reproduced both successful- and failed-original manifests and derivation receipts.
+The later [root tree repair](agents/w07_a04.md) reconstructs canonical directory
+membership from the complete bounded leaf listing before source selection.
+It rejects an inconsistent nested listing or file/directory prefix collision;
+omitted committed empty directories remain explicitly unsupported. The
+[independent tree review](agents/w07_a05.md) checks that boundary. Both original
+exports still have 999 selected bodies and 2,020 Git commands, and all four
+inventory/derivation files retain their exact published digests. Source-tree
+membership remains distinct from dependency compilation and remote origin.
 
 The reader connects the report to the exact contract, numerical corpus, 35
 command envelopes, source/tool/dependency stability, both format builds, all
@@ -94,7 +107,14 @@ Three concrete consistency gaps were closed during implementation and review:
 | --- | --- |
 | A final application host link did not establish the full preceding application build. | The [application validator](../../../../ci/project/p06_managed_preflight_application_build.py) requires the complete 30-command graph per format and binds the contributing recipes. It verifies kernel/startup/archive/vxbin/stub/host steps, tools, flags and prerequisites. [Independent review](agents/w04_a02.md) exercises same-record shell syntax mutations. |
 | Coherently changing all retained generated copies could evade cross-copy checks. | The [generated-input validator](../../../../ci/project/p06_managed_preflight_generated.py) reproduces all four headers and the effective compiler flags from exact current trusted generator and configuration bytes. A retained `VX_DCR_DATA_BITS` change from 32 to 64 is rejected even after descriptor and binding repair. [Independent review](agents/w04_a01.md) also checks hostile bytecode and altered generator inputs. |
-| The historical backend parser ignored unrelated commands and did not close the entire build order. | The [backend validator](../../../../ci/project/p06_managed_preflight_backend_build.py) requires exactly 46 records: recursive make, 43 model compiles, model link, then backend link. Independent compiles may be permuted; missing/extra records and links preceding prerequisites reject. The [author's review and regression report](agents/w04_a03.md) distinguishes this repair from its required independent peer review. |
+| The historical backend parser ignored unrelated commands and did not close the entire build order. | The [backend validator](../../../../ci/project/p06_managed_preflight_backend_build.py) requires exactly 46 records: recursive make, 43 model compiles, model link, then backend link. Independent compiles may be permuted; missing/extra records and links preceding prerequisites reject. The [author's report](agents/w04_a03.md) and [independent core/backend review](agents/w04_a06.md) identify their separate test runs and source snapshots. |
+
+Two further integrity boundaries were hardened during independent review:
+
+| Boundary | Repair and evidence |
+| --- | --- |
+| A pinned current archive-parser source file could still be paired with different cached bytecode. | The managed-only loader compiles the exact source bytes it has verified. The [independent review](agents/w05_a03.md) checks cache exclusion, rejection before compilation, and complete original replay. It also records the corrected standard-codec prerequisite in the isolated test fixture. Other callers of the inherited loader are unchanged. |
+| Selected blob hashes did not independently close nested Git tree membership when a caller-selected object store was statically inconsistent. | The exporter reconstructs and checks the complete root tree identity using canonical modes, names, directory ordering and object IDs. The [repair report](agents/w07_a04.md) and [independent review](agents/w07_a05.md) each record 23 existing plus eight new exporter controls. Historical export bytes and receipts are unchanged; neither report identifies corruption in an actual retained project original. |
 
 These are validation changes. No native model, runtime, kernel, RTL datapath or
 numerical golden was changed by this implementation at the audited working tree.
@@ -105,9 +125,12 @@ The reader verifies the consistency of supplied records and retained bytes. It
 cannot turn a consistently fabricated packet into authenticated execution. The
 archive and source digests must be obtained independently; a record naming
 GitHub is not itself GitHub authentication. Current trusted source identities
-and before/after stability checks also do not establish freedom from malicious
-concurrent host modification. The reader's own `LIMITATIONS` is authoritative
-for these boundaries.
+record repository file bytes and path/stability checks, not every instruction
+loaded into memory. Direct compilation of verified parser and generator source
+closes their specific cached-bytecode boundaries; Python, its standard library,
+ordinary current module initialization, and the reader process remain trusted.
+These checks do not establish freedom from arbitrary or concurrent host
+modification. The reader's own `LIMITATIONS` is authoritative for these boundaries.
 
 Each format has 75 frozen artifact descriptors, including **43 model object
 identities whose bodies were not retained**. Their names and identities can be
@@ -149,7 +172,7 @@ missing observable:
   [processor storage](../../../../sim/simx/processor_impl.h) and
   [updates/reset](../../../../sim/simx/processor.cpp).
 - The current preflight `ModelState` has live/idle/running, generation, tick,
-  reset-generation, core cycle/instruction and exit status fields, but no pending
+  reset-generation, core cycle/instruction and legacy x3/gp observation fields, but no pending
   read balance. `model_locked` fills that structure. The wrapped `run_checked`
   counts successful entries/completions and exceptions without retaining a
   before/after record for every run. See
@@ -261,3 +284,10 @@ implementation/review records. It ran read-only Git comparisons and Markdown
 link checks, not a native build, a unit suite or a new original-artifact replay.
 The audit does not replace the independent enforcement review required before
 publication.
+
+The later [Git export finding](agents/w07_a02.md) has a coordinator-written
+report assembled from that agent's delivered observations after its final turn
+and report-only retry failed content screening. Its substantive contribution
+and unsuccessful final-turn status remain distinct. The later repair and
+independent validation are attributed to their own agents, without converting
+the recovered handoff into an additional completed test or a normal final turn.

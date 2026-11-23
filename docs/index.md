@@ -13,11 +13,17 @@ qualified result; consult the current status and evidence before making a claim.
 - [Current status](project/status.md) and [backlog](project/backlog.md): observed progress, blockers and the next bounded work item
 - [Developer guide](project/developer-guide.md): source-only checks, execution prerequisites and resource safeguards
 - [Acceptance and evidence](project/acceptance.md): what phase completion actually requires
+- [Complete managed-preflight replay](designs/managed_counter_preflight_replay_v1.md),
+  [evidence packet](project/evidence/p06-managed-preflight-replay/README.md) and
+  [next native handoff](project/p06-managed-preflight-handoff.md): inert verification
+  of the original four-process SimX preflight; pending-read/run-reset witnesses,
+  dependency compilation provenance and complete qualification remain open
 - [P06 counter transport audit](project/p06-mpm-transport-audit.md),
   [handoff](project/p06-mpm-transport-handoff.md) and
   [evidence packet](project/evidence/p06-mpm-transport/README.md): RV64 high-word
   repair, reviewed native/parent checks and measured decoder selection; continue with
-  the [versioned qualification plan](project/p06-mpm-qualification-plan.md)
+  the [versioned qualification plan](project/p06-mpm-qualification-plan.md) and
+  [managed-preflight handoff](project/p06-managed-preflight-handoff.md)
 - [P06 serial workspace handoff](project/p06-workspace-handoff.md),
   [runtime/correctness contract](designs/serial_matmul_workspace_v1.md) and
   [reviewed original packet](project/evidence/p06-warm-workspace/README.md):

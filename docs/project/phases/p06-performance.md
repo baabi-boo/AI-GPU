@@ -95,7 +95,7 @@ cases (one boundary control plus five modes). Each model boundary variant has
 ten context disposals and seven terminal snapshots. Offline readers published
 at `4268d2d5` check retained-data consistency without executing retained code.
 
-The latest [native run 45034575685](https://github.com/baabi-boo/AI-GPU/actions/runs/45034575685)
+The latest audited [diagnostic run 45034575685](https://github.com/baabi-boo/AI-GPU/actions/runs/45034575685)
 separately passes all thirteen diagnostic process cases at `4268d2d5`. Its
 [independent original-packet audit](../evidence/p06-counter-diagnostics/native/w10-native-checkpoint-audit.md)
 matches the 270 model/683 public source bodies to that immutable tree and
@@ -109,10 +109,26 @@ is independently reviewed and published at `142b2d6`, closing both F2 findings.
 The subsequent [clean local governance receipt](../evidence/p06-counter-diagnostics/host/local-clean-142b2d6/receipt.json)
 records **all 3,318 tests passing in 1,918.414 seconds on CPython 3.12.14**, with
 four successful commands and independently verified clean source/log bindings.
-The separate [hosted retry](../evidence/p06-counter-diagnostics/host/checkpoint-142b2d6/pending-receipt-20261122T165509Z.json)
-`45040805357` and native retry `45040805341` remain queued with no executed
-result. The original failed attempt remains retained, and the latest audited
-native execution stays at `4268d2d5`.
+The separate [retained retry receipt](../evidence/p06-counter-diagnostics/host/checkpoint-142b2d6/pending-receipt-20261122T165509Z.json)
+lists hosted `45040805357` and native `45040805341` as queued at that checkpoint,
+without executed results. The original failed attempt remains retained, and the
+latest audited native diagnostic execution stays at `4268d2d5`.
+
+The subsequent seed-free managed preflight succeeded at
+`57248e73dfce4ae2d21d2cbdb82c3953eef2e3db`,
+[run 45085300171, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45085300171):
+FP16/BF16 × both allocation policies, **four processes, 132 launches and 4,224
+exact output words**. The implemented
+[complete replay contract](../../designs/managed_counter_preflight_replay_v1.md)
+and [evidence packet](../evidence/p06-managed-preflight-replay/README.md) now bind
+all 999 retained source bodies to independent inventories and derivations,
+close the application/backend command graphs, reproduce retained generated
+configuration, and check process, loader, lifecycle and hosted records.
+The reader hashes 17 retained binary bodies; the 43 model-object bodies per
+format were not retained and cannot be independently hashed. The failed original
+at `8756f400`, run `45084009157`, remains a required negative control with exact
+`report.outcome: value differs` rejection. Replay executes no retained code and
+supplies no new native run or qualification decision.
 
 The [lifetime argument](../../designs/simx_counter_lifetime_v1.md) remains
 conditional on the complete managed caller's ownership, resets and terminal
@@ -121,18 +137,33 @@ Seeded diagnostics and directed scalar controls do not bind those premises to
 measurement binaries. The [diagnostic handoff](../p06-counter-diagnostics-handoff.md)
 separates the completed diagnostics from this remaining qualification work.
 
-**Next development action:** specify, implement and independently review the
-separately versioned [qualification binding](../p06-mpm-qualification-plan.md)
-for actual seed-free binaries and the complete managed warm caller. Bind all
-terminal lifetime premises and loaded dependencies; review the pure validator
-and rejection controls, then run the four-process managed-caller preflight.
+**Next development action:** implement and independently review the read-only
+pending-read observation and separately versioned run/reset witness in the
+[managed-preflight handoff](../p06-managed-preflight-handoff.md). Cover all
+33 boundary pairs, exact reset increments, required flushes, terminal reads,
+final ownership and completed destruction. Require zero pending balance before
+reset, after runs and flushes, and at terminal observation and destruction.
+Bind the lifetime argument's
+33 selectors to 40 checked components through its source and monotonicity
+premises; the current four-snapshot original cannot supply the missing boundary
+observations. Fresh dependency configure/compile/link/product receipts bound
+to the actual selected libraries remain a separate prerequisite; cached hashes
+do not prove their source-to-binary origin.
+
+The three unresolved obligations remain
+`all_40_component_lifetime_and_pending_balance`,
+`dependency_source_to_loaded_binary_provenance` and
+`independent_complete_counter_qualification`. Independently review the new
+[qualification binding](../p06-mpm-qualification-plan.md), pure validator and
+rejection controls, then require a fresh preflight carrying the added evidence.
 Only after those prerequisites pass, run the unchanged fresh matched warm attempt:
 **24 processes, 792 launches and 25,344 exact output words**.
 Preserve the v1 block and original cold baseline; source repair cannot recover
 missing historical high bits. Keep the two-job, 4 GiB memory and 15 GiB disk
 prerequisites unchanged. Correctness and transport tests establish no speedup
-or P06-A02/A03 acceptance; diagnostic/replay qualification, readiness, warm
-execution and acceptance remain false.
+or P06-A02/A03 acceptance. All seven claims remain false: `qualified`,
+`ready_for_warm`, `warm_execution`, `full_warm_coverage`, `acceptance_claimed`,
+`phase_acceptance` and `performance_acceptance`.
 
 P06 and P06-T01 remain `in_progress`; P06-A02/A03 remain open. P04 supplies the
 entry dependency and P05 is independent. The missing P01 vendor `hw_emu` evidence
@@ -188,7 +219,8 @@ After the P06 gates are accepted, hand P07 the selected configuration,
 constraints, bounded workloads, memory-map assumptions and reproducible reports.
 P07 also requires P01's vendor integration gate. Update [status](../status.md)
 and [backlog](../backlog.md) as each gate earns evidence. The current next action
-is the versioned qualification binding for the seed-free measurement artifacts
-and complete managed caller described above, followed by its preflight and the
-fresh matched warm attempt. A documented board-readiness decision and physical
+is the versioned pending-read/run-reset witness for the complete managed caller,
+with dependency provenance and independent qualification still required before
+a fresh preflight carrying those observations and the matched warm attempt.
+A documented board-readiness decision and physical
 implementation plan follow later.

@@ -1,0 +1,82 @@
+import datetime
+import gzip
+import hashlib
+import json
+import os
+from pathlib import Path
+import platform
+import shutil
+import subprocess
+import sys
+import time
+
+root = Path('/tmp/ai-gpu-99773/validation-5d2b2df')
+out = Path('/tmp/ai-gpu-99773/local-validation-5d2b2df')
+out.mkdir(exist_ok=False)
+env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1')
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=root, text=True).strip()
+
+def now():
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+receipt = {
+    'schema_version': 1, 'scope': 'clean-local-project-governance',
+    'source_revision': git('rev-parse', 'HEAD'),
+    'source_tree': git('rev-parse', 'HEAD^{tree}'),
+    'source_root': str(root), 'python': sys.version, 'executable': sys.executable,
+    'platform': platform.platform(), 'started_at': now(),
+    'git_status_before': git('status', '--porcelain', '--untracked-files=all'),
+    'free_disk_before': shutil.disk_usage(root).free,
+    'native_gpu_execution': 'not_run', 'phase_acceptance': False,
+    'performance_acceptance': False, 'commands': [], 'outcome': 'running',
+}
+assert receipt['source_revision'] == '5d2b2df53a619e9cde11ae9a4c3337a019a40434'
+assert not receipt['git_status_before']
+assert receipt['free_disk_before'] > 2 * 1024**3
+
+def save():
+    (out / 'receipt.json').write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
+
+save()
+commands = [
+    ('preflight.log', [sys.executable, 'ci/project/preflight.py', '--tier', 'governance', '--json']),
+    ('project.log', [sys.executable, 'ci/project/check_project.py']),
+    ('baseline.log', [sys.executable, 'ci/project/check_baseline_packets.py']),
+    ('suite.log', [sys.executable, '-m', 'unittest', 'discover', '-s', 'ci/project', '-p', 'test_*.py', '-v']),
+]
+for name, argv in commands:
+    start = time.monotonic()
+    item = {'argv': argv, 'log': name, 'started_at': now(), 'timeout_seconds': 3600}
+    receipt['commands'].append(item)
+    save()
+    with (out / name).open('wb') as log:
+        try:
+            proc = subprocess.run(argv, cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT,
+                                  timeout=3600, check=False)
+            item['exit_code'] = proc.returncode
+        except subprocess.TimeoutExpired:
+            item['exit_code'] = None
+            item['timed_out'] = True
+    item['elapsed_seconds'] = round(time.monotonic() - start, 3)
+    item['finished_at'] = now()
+    body = (out / name).read_bytes()
+    item['log_size_bytes'] = len(body)
+    item['log_sha256'] = hashlib.sha256(body).hexdigest()
+    (out / (name + '.gz')).write_bytes(gzip.compress(body, mtime=0))
+    save()
+    print(json.dumps(item), flush=True)
+    if item['exit_code'] != 0:
+        receipt['outcome'] = 'fail'
+        break
+else:
+    receipt['outcome'] = 'pass'
+receipt['git_status_after'] = git('status', '--porcelain', '--untracked-files=all')
+receipt['free_disk_after'] = shutil.disk_usage(root).free
+receipt['finished_at'] = now()
+if receipt['git_status_after']:
+    receipt['outcome'] = 'fail'
+save()
+print(json.dumps({'outcome': receipt['outcome'], 'receipt': str(out / 'receipt.json')}), flush=True)
+raise SystemExit(0 if receipt['outcome'] == 'pass' else 1)

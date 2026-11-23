@@ -10,6 +10,27 @@ launches. The [qualification audit](p06-qualification-audit.md),
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
 scope and new validation. P06-A02/A03 remain open.
 
+The current continuation implements the [complete inert managed-preflight
+reader](../designs/managed_counter_preflight_replay_v1.md). It rechecks the
+successful original at `57248e73dfce4ae2d21d2cbdb82c3953eef2e3db`,
+[run 45085300171](https://github.com/baabi-boo/AI-GPU/actions/runs/45085300171):
+four FP16/BF16 × policy processes, **132 launches and 4,224 exact output words**.
+The [evidence packet](evidence/p06-managed-preflight-replay/README.md) separates
+that historical native execution from current replay. The next native task is
+the missing pending-read and per-run/reset witness described in the
+[handoff](p06-managed-preflight-handoff.md); complete qualification remains open.
+
+The [clean governance packet](evidence/p06-managed-preflight-replay/local-governance/5d2b2df/files.json)
+records **3,725 tests passed in 2,528.577 seconds**, with all four commands
+exiting 0 and a clean checkout before and after, at local `5d2b2df` (complete
+tree equivalent to published `150f9d551`). The later standalone exporter repair
+and eight added tests are covered by the separately retained
+[203-test dedicated workflow](evidence/p06-managed-preflight-replay/local-replay/f88cccff/files.json)
+at local `f88cccff` (tree equivalent to `9c9a8ec6`), completed in 351.775 seconds.
+The [completion summary](evidence/p06-managed-preflight-replay/completion-summary.md)
+and independent reviews preserve those distinct execution scopes; no full suite
+at the later revision or hosted CI pass is inferred.
+
 The [serial workspace prerequisite](../designs/serial_matmul_workspace_v1.md)
 is implemented, and the [reviewed original correctness packet](evidence/p06-warm-workspace/README.md)
 binds eight processes, 32 launches, 1,024 exact output words and 60 reconciled
@@ -70,22 +91,26 @@ executed 3,312 tests and failed two isolation-guard tests. The test-only repair
 is independently reviewed and published at `142b2d6`. Its subsequent
 [clean local full suite](evidence/p06-counter-diagnostics/host/local-clean-142b2d6/receipt.json)
 passes **3,318 tests in 1,918.414 seconds on CPython 3.12.14**, with independent
-source/log review. Hosted and native retries remain separately queued; this is
-local governance verification, and the latest audited native scope stays at
-`4268d2d5`.
+source/log review. Hosted and native retries were queued at the
+[retained receipt's checkpoint](evidence/p06-counter-diagnostics/host/checkpoint-142b2d6/pending-receipt-20261122T165509Z.json),
+which contains no executed result for either retry. This is local governance
+verification; the latest audited native diagnostic scope stays at `4268d2d5`.
 
-**Next bounded development:** specify, implement and independently review the
-separately versioned [qualification path](p06-mpm-qualification-plan.md) for the
-actual seed-free measurement binaries and complete managed warm caller. Apply
-the [conditional lifetime argument](../designs/simx_counter_lifetime_v1.md) with
-all terminal ownership premises and actual loaded dependency/source-to-binary
-provenance, then review the pure validator and rejection controls before the
-managed-caller preflight and unchanged fresh warm attempt. The
-[implemented warm v1 contract](../designs/warm_workspace_benchmark_v1.md) remains
-unconditionally blocked by `P06-WARM-RV64-MPM-HIGH-HALF`, with `qualified=false`
-and `absolute_no_wrap_bound="not_established"`. Diagnostic/replay qualification,
-readiness, warm execution and acceptance remain false. No warm speedup or new
-P06 gate is established by these diagnostics.
+**Next bounded development:** implement and independently review the
+[versioned native lifetime witness](p06-managed-preflight-handoff.md): read-only
+pending-read observations at all 33 run/reset boundary pairs, each required
+flush, terminal readout and actual destruction, with exact reset increments.
+Apply the [conditional lifetime argument](../designs/simx_counter_lifetime_v1.md)
+to the bound 33 selectors and 40 checked components. Fresh dependency
+source/compile/link/product receipts connected to the actual loaded libraries
+remain a separate prerequisite. The current four-process original and its
+replay do not contain those missing observations. The broader
+[qualification plan](p06-mpm-qualification-plan.md) still requires a separately
+reviewed admission/final-validation path before the unchanged fresh warm matrix.
+The [implemented warm v1 contract](../designs/warm_workspace_benchmark_v1.md)
+remains unconditionally blocked by `P06-WARM-RV64-MPM-HIGH-HALF`, with
+`qualified=false` and `absolute_no_wrap_bound="not_established"`. No warm
+speedup or new P06 gate is established by this continuation.
 
 **P04 is complete for the fixed tiny-model contract.**
 [P04-A01](evidence/p04-fixture/acceptance.json) retains its accepted source scope;
@@ -163,7 +188,56 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — native counter diagnostics and inert replay
+## Latest continuation — complete managed-preflight archive replay
+
+The [development audit](evidence/p06-managed-preflight-replay/development-audit.md)
+identified the missing complete reader after the managed producer had already
+emitted its successful original. The new reader takes seven external inputs:
+the archive and its digest, source revision, source inventory and its digest,
+and an independent Git-object derivation receipt and its digest. It rechecks
+**999 retained source bodies and 17 payload bodies**, complete report/command
+and hosted-envelope inventories, build identities, loader observations, all
+four process logs, lifecycle records and before/after stability. It never
+executes retained code or commands or opens recorded producer paths.
+
+The reader closes three demonstrated consistency gaps: the application must
+have all 30 required commands per format; the four generated headers and full
+compiler flags must reproduce from pinned current trusted inputs; and each
+backend log must contain exactly 46 records in valid prerequisite order.
+The 43 model object identities per format have descriptors but no retained
+bodies; their absent bytes are not claimed to have been rehashed. Cached
+library identities do not prove dependency compilation provenance.
+
+The correctly pinned failed original at
+`8756f40029e59c87546fa22f4da33acd4e5d8e02`,
+[run 45084009157](https://github.com/baabi-boo/AI-GPU/actions/runs/45084009157),
+remains rejected with **`report.outcome: value differs`**. Its application build
+failed before managed execution. The new host-only
+[replay workflow](../../.github/workflows/p06-managed-preflight-replay.yml)
+requires that exact rejection, not an arbitrary nonzero exit.
+
+Independent [core/backend review](evidence/p06-managed-preflight-replay/agents/w04_a06.md)
+passed 20 core and 15 backend tests on its recorded snapshot. Subsequent
+[archive-loader review](evidence/p06-managed-preflight-replay/agents/w05_a03.md)
+verified the managed reader's direct compilation of hash-checked current source
+instead of cached bytecode: three new tests and two changed isolation methods
+passed, with one method also repeated alone in a fresh interpreter. These
+scoped runs are not added together as a final integrated suite. The
+[evidence index](evidence/p06-managed-preflight-replay/README.md) retains the
+other reviews and final verification/publication follow-ups; no new hosted or
+complete-suite pass is asserted here.
+
+All seven fields remain false: `qualified`, `ready_for_warm`, `warm_execution`,
+`full_warm_coverage`, `acceptance_claimed`, `phase_acceptance`, and
+`performance_acceptance`. The unresolved obligations remain
+`all_40_component_lifetime_and_pending_balance`,
+`dependency_source_to_loaded_binary_provenance`, and
+`independent_complete_counter_qualification`. Replay reports
+`native_execution="not_run"` and `retained_code_executed=false`. The
+[next native handoff](p06-managed-preflight-handoff.md) specifies the missing
+witness and separate dependency evidence without promoting any acceptance.
+
+## Previous continuation — native counter diagnostics and inert replay
 
 The [audit](p06-counter-diagnostics-audit.md) began at
 `7455e008c1e001d3329e74fd55ffcd942592ec5f`. The
@@ -245,9 +319,10 @@ the separately scoped focused tests.
 The [hosted API observation](evidence/p06-counter-diagnostics/host/checkpoint-142b2d6/pending-receipt-20261122T165509Z.json)
 records run `45040805357`, job `137264592244`, queued at 2026-11-22 16:55:09 UTC,
 with no runner, steps or conclusion. Native retry `45040805341`, job
-`137264592580`, also remains queued. Neither has an executed result here; the
-local suite does not supply a hosted or native pass. The latest independently
-audited native execution remains `4268d2d5`.
+`137264592580`, was also queued at that observation. Neither has an executed
+result in this retained receipt; the local suite does not supply a hosted or
+native pass. The latest independently audited native diagnostic execution
+remains `4268d2d5`.
 The [host index](evidence/p06-counter-diagnostics/host/index.json)
 preserves the separate concurrent local failure and `81ed687` hosted fixture
 failure. The latter exposed an unpinned host interpreter observation; its repair
@@ -256,13 +331,16 @@ isolates the controlled fixture while retaining native CPython 3.12.14. The
 CP-head writeback assertion; its failed original remains retained. Neither
 hosted failure is attributed to concurrent edits.
 
-Follow the [diagnostic handoff](p06-counter-diagnostics-handoff.md) and
-[qualification plan](p06-mpm-qualification-plan.md): bind the actual seed-free
-binaries, complete warm caller and loaded dependencies, independently review
-the new pure validator/rejections, then run the four-process managed-caller
-preflight. Only then may the unchanged **24-process, 792-launch, 25,344-word**
-warm attempt run. All diagnostic/replay qualification, readiness, warm execution
-and acceptance flags remain false; P06/P06-T01 stay `in_progress`, A02/A03 open.
+At that diagnostic checkpoint, the [handoff](p06-counter-diagnostics-handoff.md)
+and [qualification plan](p06-mpm-qualification-plan.md) still proposed the
+four-process managed-caller preflight. The current continuation above now
+records its original execution and complete inert replay; the missing lifetime
+and dependency premises remain explicit in the
+[new native handoff](p06-managed-preflight-handoff.md). The unchanged
+**24-process, 792-launch, 25,344-word** warm attempt still requires separately
+reviewed complete qualification. Diagnostic/replay qualification, readiness,
+warm execution and acceptance remain false; P06/P06-T01 stay `in_progress`,
+A02/A03 open.
 
 ## Previous continuation — checked counter prerequisite
 
@@ -1197,35 +1275,47 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**P06-T01 — specify, implement and independently review a separately versioned
-qualification path for actual seed-free measurement binaries and the complete
-managed warm caller.** Start with the
-[diagnostic handoff](p06-counter-diagnostics-handoff.md),
-[conditional lifetime argument](../designs/simx_counter_lifetime_v1.md) and
-[qualification plan](p06-mpm-qualification-plan.md). The latest independently
-audited `4268d2d5` packet repeats the corrected `e5f1524` all-33 backing-source
-and directed native public diagnostics; it does not qualify a later measurement
-binary or full caller.
+**P06-T01 — implement and independently review a separately versioned native
+pending-balance and run/reset witness.** Start with the
+[managed-preflight handoff](p06-managed-preflight-handoff.md),
+[completed replay audit](evidence/p06-managed-preflight-replay/development-audit.md),
+[conditional lifetime argument](../designs/simx_counter_lifetime_v1.md), and
+[broader qualification plan](p06-mpm-qualification-plan.md). The successful
+`57248e73` original already contains four managed processes, 132 launches and
+4,224 exact output words. Its complete inert replay is implemented; neither
+the original nor replay supplies the missing per-run pending observations.
 
-Bind the exact RV64 `p02-tfr`, timing SimX, `PERF=1` route, 33 available selectors,
-40 backing components and twelve unqueried unavailable rows. Establish the
-full caller's zero origins, update/reset coverage, exclusive ownership, worker
-joins, successful terminal observations and no later updates through actual
-destruction. Retain actual host/runtime/kernel and loaded dependency provenance
-back to reviewed sources and builds; reported hashes alone do not establish a
-cached dependency's compilation origin. Exclude diagnostic seeds/accessors and
-tiny guard limits from measurement binaries.
+Expose the live processor's pending-read balance read-only. Bind all 33 run
+boundary pairs to the owned processor, zero balance before reset and after
+successful completion, exactly one launch reset per run, each output flush,
+the terminal vector and actual destruction. Retain zero origins, checked
+updates, exclusive ownership, worker joins and absence of later updates. Apply
+the source-bound 33-selector-to-40-component theorem; a new 40-field inspector
+is not required merely to restate its monotone-storage premises. The transient
+pending balance is separate because responses decrease it and reset clears it.
+Exclude diagnostic seeds, mutation accessors and tiny guard limits from the
+actual measurement binaries.
 
-Implement a pure validator with explicit pre-execution admission and final
-archive bindings, inert retained code and fail-closed source expectations.
-Independently review rejection of absent, partial, historical, seeded,
-inconsistent or mismatched records, invalid terminal/ownership conditions and
-incomplete cleanup, including invalid inputs with favorable statistics. After
-review, run the separate four-process FP16/BF16 × policy managed-caller preflight:
-132 launches and 4,224 exact output words. Preserve warm v1's unconditional
-`P06-WARM-RV64-MPM-HIGH-HALF` block, `qualified=false` and
-`absolute_no_wrap_bound="not_established"`. Diagnostic/replay readiness, warm
-execution and acceptance also remain false.
+Fresh dependency receipts must separately connect reviewed source and complete
+build inputs to configure/compile/link products and the bytes actually loaded
+or statically linked. Cached product hashes and source inventories do not
+establish that origin. Preserve the exact RV64 `p02-tfr`, timing SimX, `PERF=1`
+route, 33 available selectors, 40 backing components and twelve unqueried
+unavailable rows.
+
+Extend the inert validation through a distinct reviewed witness version;
+retain the original v1 packet and reject it as incomplete evidence for the new
+lifetime requirement. Review controls for missing, duplicate or reordered
+boundaries, nonzero balance erased by reset, invalid terminal ownership,
+incomplete cleanup and source/product substitution. Then obtain a fresh
+four-process FP16/BF16 × policy original with the unchanged 132-launch,
+4,224-word population and the additional actual observations. Complete
+qualification still requires both lifetime and dependency obligations plus a
+separately reviewed pre-execution admission/final-validation path. All seven
+qualification/readiness/execution/coverage/acceptance fields remain false in
+the current preflight and replay; the three unresolved obligations listed above
+remain open. Preserve warm v1's unconditional `P06-WARM-RV64-MPM-HIGH-HALF`
+block and `absolute_no_wrap_bound="not_established"`.
 
 Run a fresh complete matched warm attempt only under the reviewed qualification
 route and unchanged [sampling/rejection rules](../designs/warm_workspace_benchmark_v1.md):

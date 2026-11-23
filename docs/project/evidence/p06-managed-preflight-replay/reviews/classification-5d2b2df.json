@@ -1,0 +1,189 @@
+{
+  "approval_granted": false,
+  "base_revision": "57248e73dfce4ae2d21d2cbdb82c3953eef2e3db",
+  "classifier": {
+    "path": "ci/change_impact.py",
+    "sha256": "bd2ef579de90b14b7ab4cd5ef2f6b7c911753e154c4201aaf0f0d0b25a460779",
+    "size_bytes": 80757,
+    "source_revision": "57248e73dfce4ae2d21d2cbdb82c3953eef2e3db"
+  },
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "-I",
+        "/tmp/ai-gpu-99773/w06-a03-base-classifier/change_impact.py",
+        "--repo",
+        ".",
+        "--policy",
+        "/tmp/ai-gpu-99773/w06-a03-base-classifier/change-impact.yaml",
+        "explain",
+        "--base",
+        "57248e73dfce4ae2d21d2cbdb82c3953eef2e3db",
+        "--head",
+        "5d2b2df53a619e9cde11ae9a4c3337a019a40434"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "python3",
+        "-I",
+        "/tmp/ai-gpu-99773/w06-a03-base-classifier/change_impact.py",
+        "--repo",
+        ".",
+        "--policy",
+        "/tmp/ai-gpu-99773/w06-a03-base-classifier/change-impact.yaml",
+        "classify",
+        "--base",
+        "57248e73dfce4ae2d21d2cbdb82c3953eef2e3db",
+        "--head",
+        "5d2b2df53a619e9cde11ae9a4c3337a019a40434",
+        "--format",
+        "json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "python3",
+        "-I",
+        "/tmp/ai-gpu-99773/w06-a03-base-classifier/change_impact.py",
+        "--repo",
+        ".",
+        "--policy",
+        "/tmp/ai-gpu-99773/w06-a03-base-classifier/change-impact.yaml",
+        "classify",
+        "--base",
+        "57248e73dfce4ae2d21d2cbdb82c3953eef2e3db",
+        "--head",
+        "5d2b2df53a619e9cde11ae9a4c3337a019a40434",
+        "--event",
+        "push",
+        "--format",
+        "json"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "current_ci_document": {
+    "part_of_classified_checkpoint": false,
+    "path": "docs/project/ci-contract.md",
+    "sha256": "bc3bf6832935ab3917c6d4834cbb8113b6a22d9a6f0a71c83e4ce7b5eac2f112",
+    "size_bytes": 11376
+  },
+  "explain_stdout": "R2  57248e73d..5d2b2df53  (69 files)\n  reasons: path:ci-enforcement\n  R2  A .github/workflows/p06-managed-preflight-replay.yml  [ci-enforcement]\n  R2  M .github/workflows/project-governance.yml  [ci-enforcement]\n  R1  A ci/project/p06_managed_preflight_application_build.py  [default]\n  R1  A ci/project/p06_managed_preflight_backend_build.py  [default]\n  R1  A ci/project/p06_managed_preflight_derivation.py  [default]\n  R1  A ci/project/p06_managed_preflight_generated.py  [default]\n  R1  A ci/project/p06_managed_preflight_replay.py  [default]\n  R1  A ci/project/p06_managed_preflight_replay_build.py  [default]\n  R1  A ci/project/p06_managed_preflight_replay_hosted.py  [default]\n  R1  A ci/project/p06_managed_preflight_replay_test_support.py  [default]\n  R1  A ci/project/p06_managed_preflight_source_export.py  [default]\n  R1  M ci/project/test_baseline_packet_ci.py  [default]\n  R1  M ci/project/test_p05_governance_integration.py  [default]\n  R1  M ci/project/test_p06_ci_contract.py  [default]\n  R1  A ci/project/test_p06_managed_preflight_application_build.py  [default]\n  R1  A ci/project/test_p06_managed_preflight_derivation.py  [default]\n  R1  A ci/project/test_p06_managed_preflight_generated.py  [default]\n  R1  A ci/project/test_p06_managed_preflight_replay.py  [default]\n  R1  A ci/project/test_p06_managed_preflight_replay_application_review.py  [default]\n  R1  A ci/project/test_p06_managed_preflight_replay_archive_helper.py  [default]\n  R1  A ci/project/test_p06_managed_preflight_replay_build.py  [default]\n  R1  A ci/project/test_p06_managed_preflight_replay_ci.py  [default]\n  R1  A ci/project/test_p06_managed_preflight_replay_generated_security.py  [default]\n  R1  A ci/project/test_p06_managed_preflight_replay_hosted.py  [default]\n  R1  A ci/project/test_p06_managed_preflight_replay_isolation.py  [default]\n  R1  A ci/project/test_p06_managed_preflight_replay_processes.py  [default]\n  R1  A ci/project/test_p06_managed_preflight_source_export.py  [default]\n  R1  M ci/project/test_p06_warm_ci.py  [default]\n  R1  M ci/project/test_repository_contract.py  [default]\n  R1  A docs/designs/managed_counter_preflight_replay_v1.md  [prose, normative-docs]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/README.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w01_a01.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w01_a02.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w01_a03.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w01_a04.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w01_a05.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w01_a06.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w02_a01.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w02_a02.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w02_a03.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w02_a04.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w02_a05.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w02_a06.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w03_a01.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w03_a02.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w03_a03.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w03_a04.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w03_a05.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w03_a06.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w04_a01.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w04_a02.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w04_a03.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w04_a04.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w04_a05.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w04_a06.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w05_a01.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w05_a02.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w05_a03.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/agents/w05_a04.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/development-audit.md  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/hosted/baseline-57248-governance.json  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight-replay/hosted/baseline-57248-job-137402504049.log.gz  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight/native/run-45085300171-attempt1.zip  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight/native/run-45085300171-intake.json  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight/native/source-derivation-57248e73.json  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight/native/source-derivation-8756f400-replay.json  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight/native/source-inventory-57248e73.json  [prose]\n  R0  A docs/project/evidence/p06-managed-preflight/native/source-inventory-8756f400-replay.json  [prose]\n  R0  A docs/project/p06-managed-preflight-handoff.md  [prose]\n",
+  "head_revision": "5d2b2df53a619e9cde11ae9a4c3337a019a40434",
+  "head_tree": "fa3fa306677fa1cee043740f5abcb180bb6b7cb6",
+  "hosted_ci_execution": "not_run",
+  "limitations": [
+    "Classification is advisory and does not establish test execution or phase acceptance.",
+    "The 69-file classification covers only the explicit committed checkpoint; later documentation, evidence and any further code changes require their own final diff review.",
+    "The predecessor CI test results were not rerun by this reviewer; their eight reviewed source hashes match this checkpoint.",
+    "Final complete-suite results and publication remain coordinator responsibilities."
+  ],
+  "native_execution": "not_run",
+  "policy": {
+    "path": "docs/review/change-impact.yaml",
+    "sha256": "489d1018c790bb6c383b774b119223889bb508be6c63db654d5c6c80520d0333",
+    "size_bytes": 11511,
+    "source_revision": "57248e73dfce4ae2d21d2cbdb82c3953eef2e3db"
+  },
+  "results": [
+    {
+      "base": "57248e73dfce4ae2d21d2cbdb82c3953eef2e3db",
+      "class": "R2",
+      "contracts": [],
+      "diff_base": "57248e73dfce4ae2d21d2cbdb82c3953eef2e3db",
+      "event": "pull_request",
+      "evidence": [],
+      "file_class_counts": {
+        "R0": 39,
+        "R1": 28,
+        "R2": 2
+      },
+      "file_count": 69,
+      "head": "5d2b2df53a619e9cde11ae9a4c3337a019a40434",
+      "indeterminate": false,
+      "policy_version": 3,
+      "reasons": [
+        "path:ci-enforcement"
+      ],
+      "stdout": {
+        "sha256": "5cef243dc5623658f65c3005472e5d7ab364f2da5d0270b0dd6ba8f6b699aad0",
+        "size_bytes": 13624
+      }
+    },
+    {
+      "base": "57248e73dfce4ae2d21d2cbdb82c3953eef2e3db",
+      "class": "R2",
+      "contracts": [],
+      "diff_base": "57248e73dfce4ae2d21d2cbdb82c3953eef2e3db",
+      "event": "push",
+      "evidence": [],
+      "file_class_counts": {
+        "R0": 39,
+        "R1": 28,
+        "R2": 2
+      },
+      "file_count": 69,
+      "head": "5d2b2df53a619e9cde11ae9a4c3337a019a40434",
+      "indeterminate": false,
+      "policy_version": 3,
+      "reasons": [
+        "path:ci-enforcement"
+      ],
+      "stdout": {
+        "sha256": "0e18d19836d365a47bdad6c54fbca592df45a531b8359d47d9f3dff88309b093",
+        "size_bytes": 13616
+      }
+    }
+  ],
+  "review_findings": [],
+  "reviewed_ci_files_unchanged_from_w04_a05": [
+    {
+      "path": ".github/workflows/p06-managed-preflight-replay.yml",
+      "sha256": "d46972c689c1b1551eba082a4d7bf1914b2ca82d56c28ed434b0e0702f3d31ae",
+      "size_bytes": 11611
+    },
+    {
+      "path": ".github/workflows/project-governance.yml",
+      "sha256": "f35c0f1b4e8ef7fca44eab7f67ee3141358008699dce5ecc4d6592cc898117db",
+      "size_bytes": 5648
+    },
+    {
+      "path": "ci/project/test_p06_managed_preflight_replay_ci.py",
+      "sha256": "495458210d4a23382c421a7680f8e56e6b5ea1d10dc85fddc905b76f67832876",
+      "size_bytes": 22155
+    },
+    {
+      "path": "ci/project/test_repository_contract.py",
+      "sha256": "b9892e3fe02bc6ad9fb6c27972fd136eaef78676acb1b0f60af31c70706df90d",
+      "size_bytes": 13551
+    },
+    {
+      "path": "ci/project/test_baseline_packet_ci.py",
+      "sha256": "12023d27ab7991050d55570dbde40d8ba57ed20558c71903d456ac26adfde374",
+      "size_bytes": 17780
+    },
+    {
+      "path": "ci/project/test_p05_governance_integration.py",
+      "sha256": "6d30ee4a6415591f1673aaf1276f5ac49ccfb8a1e39dfb282fb4688c70392645",
+      "size_bytes": 5150
+    },
+    {
+      "path": "ci/project/test_p06_ci_contract.py",
+      "sha256": "1b780597f287cafbd7b6542fe88274a96960b746ba63195f2543b603607012f5",
+      "size_bytes": 19389
+    },
+    {
+      "path": "ci/project/test_p06_warm_ci.py",
+      "sha256": "d775c8963a00aba580f889b44d96a8e7878fd19946f403cbe9a2ab093d182911",
+      "size_bytes": 23466
+    }
+  ],
+  "reviewer": "/root/w06_a03_ci_classification",
+  "schema_version": 1,
+  "scope": "independent-base-copy-committed-diff-classification",
+  "waiver_granted": false
+}

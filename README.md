@@ -33,8 +33,32 @@ archives, build provenance, independent audits and replay instructions. The
 earlier [P04-A01 fixture acceptance](docs/project/evidence/p04-fixture/acceptance.json)
 and [hashed manifest](ci/project/p04_model_manifest.json) remain unchanged.
 
-**Current work: P06-T01 — bind the completed counter diagnostics to a separately
-versioned measurement qualification path (`in_progress`), with [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
+**Current work: P06-T01 — close the managed caller's lifetime and dependency
+provenance gaps (`in_progress`), with [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
+The [complete inert managed-preflight reader](docs/designs/managed_counter_preflight_replay_v1.md)
+now verifies the retained original from source
+`57248e73dfce4ae2d21d2cbdb82c3953eef2e3db`,
+[run 45085300171, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45085300171):
+FP16/BF16 × both allocation policies, **four processes, 132 launches and 4,224
+exact output words**. It binds independently selected source inventories and
+derivations to complete build-command graphs, generated configuration, process
+observations and all archive members. The
+[evidence packet](docs/project/evidence/p06-managed-preflight-replay/README.md)
+also preserves the original failed build at `8756f400`, run `45084009157`,
+which the reader must reject. This verification executes no retained code and
+does not repeat the native run or grant counter qualification.
+
+Host verification passed **3,725 project tests** before the final standalone
+source-export repair, then **203 dedicated replay tests** including that repair.
+The [completion summary](docs/project/evidence/p06-managed-preflight-replay/completion-summary.md)
+retains both exact source revisions, raw logs and independent reviews.
+
+The [next native handoff](docs/project/p06-managed-preflight-handoff.md) targets
+a read-only pending-read observation and versioned witness at all 33 run/reset
+boundary pairs, through terminal cleanup and destruction. Fresh dependency
+compile/link/product receipts bound to the actual selected libraries are a
+separate prerequisite. The existing cold acceptance remains scoped as follows.
+
 Independent review qualifies the original
 [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
 at source `84b6ca0ca75fba248ba330642bbf8764db3d459c`. The frozen
@@ -145,7 +169,7 @@ snapshots. Its separate [host governance receipt](docs/project/evidence/p06-coun
 passes **3,158 tests in 1,305.183 seconds**; that receipt excludes the later
 offline replay and explicit source-inventory additions at `4268d2d5`.
 
-The latest native [run 45034575685](https://github.com/baabi-boo/AI-GPU/actions/runs/45034575685)
+The latest audited diagnostic [run 45034575685](https://github.com/baabi-boo/AI-GPU/actions/runs/45034575685)
 at `4268d2d5d811063bb886cde7bd0e27e61a79c9b4` separately passes all **13 diagnostic
 process cases**. Its [independent original-packet audit](docs/project/evidence/p06-counter-diagnostics/native/w10-native-checkpoint-audit.md)
 matches all 270 model and 683 public source bodies to that immutable tree.
@@ -162,21 +186,32 @@ is independently reviewed and published at `142b2d6`, closing both F2 findings;
 at `142b2d6` passes **all 3,318 tests in 1,918.414 seconds on CPython 3.12.14**.
 Independent review confirms four commands with exit 0, a clean detached checkout
 before/after and 365 unchanged source records matching immutable Git. The
-separate [hosted retry](docs/project/evidence/p06-counter-diagnostics/host/checkpoint-142b2d6/pending-receipt-20261122T165509Z.json)
-`45040805357` and native retry `45040805341` remain queued with no executed
-result. The latest audited native cases remain at `4268d2d5`, whose original
-hosted failure is preserved.
+separate [retained retry receipt](docs/project/evidence/p06-counter-diagnostics/host/checkpoint-142b2d6/pending-receipt-20261122T165509Z.json)
+lists hosted `45040805357` and native `45040805341` as queued at that checkpoint,
+without executed results. The latest audited native diagnostic cases remain at
+`4268d2d5`, whose original hosted failure is preserved.
 
 The [conditional lifetime argument](docs/designs/simx_counter_lifetime_v1.md)
-still requires the actual seed-free measurement binaries, full managed caller's
-terminal premises and loaded dependency provenance. The
-[next qualification plan](docs/project/p06-mpm-qualification-plan.md) specifies
-a separately versioned admission record and pure validator, independent
-rejection review, and a seed-free managed-caller preflight before the unchanged
-fresh warm matrix: **24 processes, 792 launches and 25,344 exact output words**.
-Diagnostic/replay qualification, readiness, warm execution and acceptance remain
-false. **P06 and P06-T01 remain `in_progress`; P06-A02/A03 remain open.** Warm v1
-stays unconditionally blocked; these diagnostics establish no warm speedup.
+still needs the actual seed-free caller's complete boundary and terminal
+premises. The new reader verifies the four-process original, but that packet
+lacks the pending-read balance and exact per-run reset witnesses needed to
+apply the source-bound argument from 33 selectors to 40 checked components.
+The [native handoff](docs/project/p06-managed-preflight-handoff.md) and
+[qualification plan](docs/project/p06-mpm-qualification-plan.md) retain three
+unresolved obligations: complete lifetime/pending balance, dependency
+source-to-loaded-binary provenance, and independent complete counter
+qualification. Cached product hashes alone do not prove compilation origin.
+
+After the new witness, provenance capture and admission/validation rules are
+independently reviewed, a fresh preflight must supply the missing qualification
+evidence before the unchanged
+warm matrix: **24 processes, 792 launches and 25,344 exact output words**.
+All seven claims remain false: `qualified`, `ready_for_warm`, `warm_execution`,
+`full_warm_coverage`, `acceptance_claimed`, `phase_acceptance` and
+`performance_acceptance`. **P06 and P06-T01 remain `in_progress`; P06-A02/A03
+remain open.** Warm v1 stays unconditionally blocked by
+`P06-WARM-RV64-MPM-HIGH-HALF`; the original preflight and current replay establish
+no warm speedup.
 
 **Parallel work: P05-T01 — the Python/custom-op bridge (`in_progress`).**
 [P05-A01 now accepts the copying Python binding](docs/project/evidence/p05-python/acceptance-binding.json)

@@ -7,11 +7,16 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Start here: P06-T01 exact counter qualification
+## Start here: P06-T01 native lifetime observations
 
 **Current bounded task: P06-T01 — implement and independently review a separately
-versioned qualification path for actual seed-free measurement binaries and the
-complete managed warm caller.**
+versioned pending-balance and per-run/reset witness for the actual seed-free
+managed caller.** The [complete inert preflight reader](../designs/managed_counter_preflight_replay_v1.md)
+is implemented. Its [evidence packet](evidence/p06-managed-preflight-replay/README.md)
+rechecks the successful four-process original at `57248e73` and preserves the
+failed `8756f400` original as an exact negative control. Follow the
+[native handoff](p06-managed-preflight-handoff.md) for the missing observations;
+fresh dependency compilation provenance remains a separate prerequisite.
 [P06-A01 is accepted](evidence/p06-baseline/acceptance.json) for the original
 [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
 at `84b6ca0ca75fba248ba330642bbf8764db3d459c`. The
@@ -115,30 +120,55 @@ The subsequent [clean local governance receipt](evidence/p06-counter-diagnostics
 records **all 3,318 tests passing in 1,918.414 seconds on CPython 3.12.14**, with
 four successful commands and independent review of the clean source/log record.
 The separate [hosted retry](evidence/p06-counter-diagnostics/host/checkpoint-142b2d6/pending-receipt-20261122T165509Z.json)
-`45040805357` and native retry `45040805341` remain queued with no executed
-result. The original failed attempt remains retained, and the latest audited
-native scope stays at `4268d2d5`.
+`45040805357` and native retry `45040805341` were queued at that retained
+receipt's checkpoint, with no executed result in the receipt. The original
+failed attempt remains retained, and the latest audited native diagnostic
+scope stays at `4268d2d5`.
 
-The next work follows the [versioned qualification plan](p06-mpm-qualification-plan.md)
-and [diagnostic handoff](p06-counter-diagnostics-handoff.md): bind a new admission
-record to actual seed-free measurement binaries, the full managed caller's
-terminal premises and actual loaded dependency/source-to-binary provenance.
-The [conditional lifetime proof](../designs/simx_counter_lifetime_v1.md) requires
-zero origins, admitted updates/resets, exclusive ownership, complete worker and
-queue cleanup, successful terminal sums and no later component update. Directed
-scalar diagnostics and release success alone do not establish the full caller's
-premises. Independently review the pure validator and rejection of missing,
-partial, historical, seeded or mismatched evidence, then run the four-process
-managed-caller preflight. Preserve the diagnostic readers' retained-data-only
-scope, explicit pinned source inventories and inert retained code.
+The completed [replay continuation](evidence/p06-managed-preflight-replay/development-audit.md)
+verifies the original [run 45085300171](https://github.com/baabi-boo/AI-GPU/actions/runs/45085300171)
+at `57248e73dfce4ae2d21d2cbdb82c3953eef2e3db`: FP16/BF16 × both ownership
+policies, four processes, **132 launches and 4,224 exact output words**. It
+binds 999 retained source bodies and 17 payload bodies to externally selected
+source inventory/derivation expectations and checks complete application,
+backend, generated-input, process and hosted-envelope relationships. The
+failed [run 45084009157](https://github.com/baabi-boo/AI-GPU/actions/runs/45084009157)
+at `8756f40029e59c87546fa22f4da33acd4e5d8e02` must still reject exactly with
+`report.outcome: value differs`; it completed no managed launch. Replay is
+retained-data verification, not another native run or qualification.
+
+The next implementation follows the [native handoff](p06-managed-preflight-handoff.md):
+observe the real pending-read balance without modifying it and retain all 33
+run/reset boundary pairs, exact reset increments, required flushes, terminal
+readout and actual destruction. Zero balance must be witnessed before reset can
+clear it. The [conditional lifetime proof](../designs/simx_counter_lifetime_v1.md)
+then needs its full source-bound 33-selector/40-component premises: zero origins,
+audited nonnegative checked updates, admitted resets, exclusive ownership,
+worker/queue cleanup, successful terminal sums and no later update. It does not
+require a new 40-field inspector merely to repeat that theorem. Pending balance
+is a separate transient property.
+
+Fresh source/configure/compile/link/product receipts must separately bind the
+actual dependency libraries and SoftFloat static link to reviewed sources.
+Cached hashes do not prove compilation origin. Extend inert validation under a
+new witness version, independently review missing/partial/seeded/mismatched
+and invalid-lifetime rejection controls, and obtain a fresh original with those
+observations. Keep the existing four-process numerical population unchanged.
+The [broader qualification plan](p06-mpm-qualification-plan.md) still requires
+an independently reviewed admission/final-validation path for the eventual
+measurement binaries. The current preflight/replay retain all three unresolved
+obligations: `all_40_component_lifetime_and_pending_balance`,
+`dependency_source_to_loaded_binary_provenance`, and
+`independent_complete_counter_qualification`.
 
 Follow only a qualified route with the unchanged fresh matched warm attempt:
 24 processes, 792 launches and 25,344 exact output words under the
 [implemented sampling/rejection contract](../designs/warm_workspace_benchmark_v1.md).
 Keep the unconditional v1 `P06-WARM-RV64-MPM-HIGH-HALF` block, `qualified=false`
 and unestablished absolute no-wrap bound; source repair cannot recover historical
-high bits. Diagnostic/replay readiness, warm execution and acceptance also remain
-false. Preserve the cold baseline separately. P04 supplies the prerequisite;
+high bits. Current preflight/replay fields `qualified`, `ready_for_warm`,
+`warm_execution`, `full_warm_coverage`, `acceptance_claimed`, `phase_acceptance`,
+and `performance_acceptance` remain false. Preserve the cold baseline separately. P04 supplies the prerequisite;
 P05 is independent. P06 and P06-T01 remain `in_progress`, with A02/A03 open.
 Keep the two-job, 4 GiB memory and 15 GiB disk prerequisites unchanged, together
 with the inherited 267 → 283 DSP finding and vendor `hw_emu` blocker.
@@ -424,9 +454,11 @@ independently reviewed host and fresh native evidence for the repaired CP-error
 boundary at `4781ca9`. The [checked-counter prerequisite](../designs/simx_checked_counters_v1.md)
 is implemented, and the [diagnostic packet](evidence/p06-counter-diagnostics/README.md)
 now covers all 33 available selectors plus native public failure/coherence cases.
-Bind the conditional lifetime proof to actual seed-free measurement binaries,
-the full managed warm caller and loaded dependencies through a separately
-versioned qualification path before its preflight and fresh complete warm attempt.
+The [managed preflight and complete replay](evidence/p06-managed-preflight-replay/README.md)
+now retain a four-process original without claiming full qualification. Add the
+[versioned pending-balance/run witness](p06-managed-preflight-handoff.md) and
+fresh dependency source-to-product provenance, then independently review the
+complete qualification path before a fresh matched warm attempt.
 Detailed work packages remain in the
 phase guides, the [development audit](p05-binding-audit.md) and the
 [Python binding handoff](p05-entry-handoff.md).
@@ -440,7 +472,7 @@ phase guides, the [development audit](p05-binding-audit.md) and the
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
 | **P04-T02 — Native model execution — complete** | Four clean SimX/native processor RTL × FP16/BF16 variants pass exact intermediate/final comparisons, live-input lineage, native placement and separate host/transfer accounting after independent review. | T01; model runtime lead | [P04-A02](evidence/p04-executor/acceptance-numerics.json), [P04-A03](evidence/p04-executor/acceptance-dispatch.json) |
 | **P05-T01 — Python/custom-op bridge — in progress** | Preserve the accepted copying binding; independently review the existing custom-op implementation's installed dispatch, compatibility and explicit failure evidence before an acceptance decision. | P04; framework integration lead; [handoff](p05-entry-handoff.md) | [P05-A01 accepted](evidence/p05-python/acceptance-binding.json); P05-A02/P05-A03 unearned |
-| **P06-T01 — Measured optimization — in progress** | Bind completed all-33/public diagnostics and the conditional lifetime proof to actual seed-free binaries, the full managed warm caller and loaded dependencies; independently review the new qualification validator and rejections before preflight and the unchanged fresh warm matrix. | P04; performance and memory lead; [diagnostic handoff](p06-counter-diagnostics-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
+| **P06-T01 — Measured optimization — in progress** | Preserve the completed four-process preflight/replay; add a versioned pending-balance witness at all 33 run/reset pairs and terminal disposal, with exact resets. Separately establish fresh dependency source-to-product/loader provenance, then independently review complete qualification before the unchanged warm matrix. | P04; performance and memory lead; [native handoff](p06-managed-preflight-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),
 [P04](phases/p04-inference.md), [P05](phases/p05-framework.md) and

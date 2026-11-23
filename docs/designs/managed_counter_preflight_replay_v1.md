@@ -51,6 +51,21 @@ caller-selected objects do not authenticate remote repositories or mutable tags.
 See the [independent export/derivation review](../project/evidence/p06-managed-preflight-replay/agents/w04_a04.md)
 for exact dependency commits, both reproduced manifests/receipts, and limits.
 
+The exporter also reconstructs the complete canonical root tree identity from
+the bounded recursive leaf inventory and requires it to match the selected
+commit's root tree. This binds nested membership, names, modes, and object IDs;
+hashing a selected blob alone does not establish its membership in that tree.
+Directory ordering follows Git's representation, and file/directory prefix
+collisions reject. Supported SHA-1 repositories have at most 50,000 leaf and
+implicit-directory entries together, paths of at most 64 components, and an
+8 MiB recursive listing. Committed empty directories omitted by that listing
+are unsupported and fail closed. This check adds no Git command or receipt
+field. Both original exports retain their exact inventory and derivation bytes;
+the [repair report](../project/evidence/p06-managed-preflight-replay/agents/w07_a04.md)
+and [independent review](../project/evidence/p06-managed-preflight-replay/agents/w07_a05.md)
+record the regression and unchanged four digests. The exporter's source tree
+check does not make the separate archive reader a Git-object verifier.
+
 ## Complete verification relationships
 
 | Area | Required relationship |
@@ -238,8 +253,18 @@ before and after replay. Earlier isolation evidence lists 45 because it predates
 the backend module; its count must not be presented as the current closure.
 The [isolation controls](../project/evidence/p06-managed-preflight-replay/agents/w03_a06.md)
 separate trusted current initialization from prohibited archive execution and
-producer-path reads. Python, its standard library, and the current trusted reader
-process remain trusted; the contract does not sandbox a hostile interpreter.
+producer-path reads. The [managed archive-loader review](../project/evidence/p06-managed-preflight-replay/agents/w05_a03.md)
+independently verifies direct compilation of pinned current parser bytes and
+rejection of changed source before compilation. That repair applies to the new
+managed loader; it does not alter the inherited reader's other callers.
+
+The source-identity rows record current repository paths, file bytes, and their
+stability. They do not attest every instruction loaded into memory or the
+interpreter and standard library. Direct verified-source loading specifically
+protects the pinned archive parser and configuration renderer from unchecked
+cached bytecode. Python, ordinary current module initialization, and the current
+reader process remain trusted; this contract does not sandbox a hostile
+interpreter or defend against arbitrary host modification.
 
 The outer `host-dependencies.log` is retained and hashed, but its installation
 semantics are not verified. Recorded tool identities omit parts of the tool,

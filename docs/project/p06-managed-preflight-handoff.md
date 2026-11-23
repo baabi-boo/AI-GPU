@@ -81,8 +81,23 @@ error path, and the [SimObject ownership rule](../designs/simobject.md#the-cardi
 At the existing wrapped `run_checked` boundary, record a contiguous ordinal,
 processor generation, state before the real call, outcome and state after the
 real call. Require exactly 33 successful pairs per admitted process: the prime
-and all 32 serial operations. Any exception, nonzero execution result, trace
-overflow, missing pair or ownership change invalidates the lifetime.
+and all 32 serial operations. Any exception, failed upstream completion/API
+status, trace overflow, missing pair or ownership change invalidates the lifetime.
+
+The [declared checked entry](../../sim/simx/processor.h) returns `void`, and its
+[implementation](../../sim/simx/processor.cpp) discards the integer returned by
+`ProcessorImpl::run()`. The wrapper therefore has no returned status to copy.
+Capture the explicit post-run `ModelState.exitcode` through
+[`model_locked`](../../tests/regression/ai_counter_preflight/hooks.cpp), alongside
+the exception outcome and upstream completion/error observations. That model
+field reads legacy x3 (`gp`) through
+[`Operands::get_exit_code`](../../sim/simx/operands.cpp); a nonzero value,
+including `-1`, is not an execution failure by itself. Preserve the
+[existing completion semantics](../designs/simulator_completion_v1.md) and
+[`AsyncRun` error propagation](../../sw/runtime/common/async_run.h). The new
+contract must distinguish these observations and bind them to each run; neither
+a fabricated integer return nor the aggregate `run_completed` count supplies
+the missing per-run evidence.
 
 For each pair, require zero pending reads and a quiescent owned processor before
 the reset-bearing run, then successful completion, idle state, no running core
@@ -158,6 +173,7 @@ These are proposed controls; this handoff has not executed them.
 | Nonzero balance before a reset | Reject before reset can erase it; retain the actual failure and forbid a later fresh context from rehabilitating that lifetime |
 | Missing, duplicate or reordered run pair; skipped/extra reset | Reject even if all outer digests, derived bindings and favorable numerical/statistical records are coherently repaired |
 | Nonzero balance after run, flush, terminal readout or at destructor entry | Reject at the specific boundary, independently of aggregate run counts and successful API statuses |
+| Successful run with nonzero legacy `gp`; actual asynchronous failure | Preserve the valid legacy register observation while rejecting real exceptions or failed upstream completion/API status; do not infer an integer status from the void checked call |
 | Failure, trace overflow, extra owner or unfinished queue | Preserve the original error and incomplete lifetime; no successful witness may be emitted |
 | Post-terminal launch, tick, reset or flush | Reject a changed suffix rather than accepting a favorable earlier vector |
 | Frozen current v1 original | Existing replay retains its current result; the new lifetime validator rejects the absent versioned observations for the intended reason |

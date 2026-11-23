@@ -2,10 +2,27 @@
 
 ## Decision and current boundary
 
-**Next bounded development: specify, implement and independently review a
-separately versioned qualification path for the actual seed-free measurement
-binaries and complete managed warm caller.** The all-33 native model transport
-and directed public-runtime diagnostics have a latest independently audited
+**Next bounded development: add a read-only pending-read observation and a
+separately versioned lifetime witness for all 33 managed run/reset pairs.**
+Follow the [native handoff](p06-managed-preflight-handoff.md) for exact reset
+accounting, flush and terminal balance, ownership and actual destruction
+boundaries. This is the next implementation increment within the broader
+qualification path below; fresh dependency compilation-to-loader provenance
+and independent complete qualification remain separate requirements.
+
+The [completed managed-preflight original](evidence/p06-managed-preflight-replay/README.md)
+at `57248e73dfce4ae2d21d2cbdb82c3953eef2e3db`,
+[run 45085300171, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45085300171),
+records four seed-free processes, 132 launches and 4,224 exact output words.
+The [complete inert reader](../designs/managed_counter_preflight_replay_v1.md)
+now verifies that original against independent archive/source expectations.
+It cannot supply the absent per-run pending-balance observations or prove that
+the selected sources produced the cached dependency binaries. Preserve that
+original version and scope; a fresh preflight must carry the new witness and
+provenance evidence before it can satisfy the remaining qualification boundary.
+
+The all-33 native model transport and directed public-runtime diagnostics have
+a latest independently audited diagnostic
 original pass at `4268d2d5d811063bb886cde7bd0e27e61a79c9b4`, separately repeating
 the earlier corrected `e5f152464dda5e488d6d1a030c1fcdc49b5a9701` execution. The
 [terminal lifetime argument](../designs/simx_counter_lifetime_v1.md) supplies a
@@ -22,8 +39,15 @@ the [explicit source-inventory helper](../../ci/project/p06_counter_source_inven
 are published at
 [`4268d2d5d811063bb886cde7bd0e27e61a79c9b4`](https://github.com/baabi-boo/AI-GPU/commit/4268d2d5d811063bb886cde7bd0e27e61a79c9b4).
 They check retained-data consistency and preserve diagnostic nonacceptance.
-This is a bounded diagnostic advance; neither the qualification record/reader
-nor a fresh complete matched warm attempt has been completed.
+Those diagnostic readers and the complete managed-preflight consistency reader
+retain their bounded scopes. Neither a complete counter-qualification route
+nor a fresh complete matched warm attempt has been completed. The managed
+preflight and its replay keep `qualified`, `ready_for_warm`, `warm_execution`,
+`full_warm_coverage`, `acceptance_claimed`, `phase_acceptance` and
+`performance_acceptance` false. Their three unresolved obligations remain
+`all_40_component_lifetime_and_pending_balance`,
+`dependency_source_to_loaded_binary_provenance` and
+`independent_complete_counter_qualification`.
 
 The [transport audit](p06-mpm-transport-audit.md) identifies the original RV64
 high-half defect and paired SimX/RTL repair. The
@@ -123,9 +147,10 @@ unchanged. Both formerly failed guards and all six new methods actually pass.
 This is the completed local full-suite verification, separate from the focused
 counts above. The [hosted retry](evidence/p06-counter-diagnostics/host/checkpoint-142b2d6/pending-receipt-20261122T165509Z.json)
 `45040805357`, job `137264592244`, and native retry `45040805341`, job
-`137264592580`, remain queued with no executed results. The latest audited
-native scope stays at `4268d2d5`. None of
-these results changes production timing, runtime/RTL semantics, public ABI,
+`137264592580`, were queued at that retained receipt's checkpoint, with no
+executed results in the receipt. The latest audited native diagnostic scope
+stays at `4268d2d5`. None of these results changes production timing,
+runtime/RTL semantics, public ABI,
 goldens or tolerances.
 
 ## Implemented checked-counter prerequisite
@@ -270,6 +295,11 @@ the high-half selector is internal, not a second public CSR argument.
 
 ## Qualification work to implement and review
 
+The sequence below describes the remaining qualification route. Its next
+bounded implementation is the versioned boundary witness in the
+[native handoff](p06-managed-preflight-handoff.md); the completed inert reader
+does not promote the original preflight into that future qualification scope.
+
 1. **Freeze a new qualification contract.** Specify its record, reader and
    explicit admission path separately from warm-v1 and the diagnostic replay
    contracts. Preserve the measurement-contract digest and every workload,
@@ -303,7 +333,9 @@ the high-half selector is internal, not a second public CSR argument.
    with no future event delivery, launch reset, flush, storage replacement or
    finalizer adjustment. The proof must cover the whole storage lifetime;
    observed monotonicity, small values and process timeouts are insufficient.
-4. **Implement pure qualification validation.** Bind pre-execution expectations
+4. **Implement pure qualification validation.** Extend the reviewed complete
+   managed-preflight consistency relationships with the separately versioned
+   lifetime and provenance requirements. Bind pre-execution expectations
    separately from final archive identities, then join each process's original
    commands, raw observations, resource records and terminal result. Use the
    reviewed diagnostic readers as scoped inputs while retaining their
@@ -323,11 +355,14 @@ the high-half selector is internal, not a second public CSR argument.
    author the enforcement change under the
    [review policy](../review/code-review-policy.md), before fresh performance
    results are inspected.
-6. **Run the bounded seed-free warm-caller preflight.** Once the new reader and
-   provenance requirements are ready, use the four-process FP16/BF16 × policy
-   matrix below to establish the actual managed caller's complete lifecycle
-   and snapshot obligations. Keep its outputs separate from performance
-   samples. Reassess diagnostic coverage against the exact new artifacts and
+6. **Run a fresh preflight carrying the new witness and provenance.** The
+   original four-process preflight and its consistency replay are complete;
+   they do not contain the missing observations. Once the new contract,
+   validation and provenance requirements are independently reviewed, repeat
+   the four-process FP16/BF16 × policy matrix below with the new versioned
+   evidence to establish the complete lifecycle and snapshot obligations.
+   Keep its outputs separate from performance samples. Reassess diagnostic
+   coverage against the exact new artifacts and
    repeat only the controls needed for changed source/configuration/build
    boundaries; a historical scalar control cannot qualify a new warm binary.
 7. **Collect the fresh complete matched attempt.** Only after the prerequisites
@@ -474,12 +509,16 @@ reject unsupported topology, worker count, features or guard configuration.
 
 ## Remaining native warm-caller qualification preflight
 
-The seven model cells and five public modes now close their declared diagnostic
-gaps at `4268d2d5`, repeating the earlier corrected `e5f1524` scope. They do not
-execute managed FP16/BF16 matmul, workspace
-reuse or the complete warm caller. The next native obligation is the seed-free
-managed-caller preflight below, after its new contract, provenance and reader
-are independently reviewed. Freeze it before collecting performance results.
+The seven model cells and five public modes close their declared diagnostic
+gaps at `4268d2d5`, repeating the earlier corrected `e5f1524` scope. Their scalar
+controls do not execute managed FP16/BF16 matmul or workspace reuse. The later
+`57248e73` original does execute the four-process managed policy matrix, and
+its complete inert replay now verifies the retained observations. It lacks the
+per-run pending-balance witness and dependency compilation provenance required
+for complete qualification. The remaining native obligation is therefore a
+fresh preflight carrying those versioned observations and provenance, after
+their contract and validation are independently reviewed. Freeze that route
+before collecting performance results.
 
 | Obligation | Minimum scope | Pass/fail boundary |
 |---|---|---|
@@ -510,10 +549,12 @@ must not be silently included. If a required source can advance between halves,
 require a separately reviewed coherent-read algorithm and adversarial rollover
 tests. Repeated equality alone does not prove coherence.
 
-These four preflight processes are future work and are not measured samples
-or substitutes for the full 24-process attempt. Their terminal observations
-cannot be copied into a later process's record. Controlled host faults, seeded
-selector checks, unseeded scalar controls, full managed-caller execution and
+The fresh qualification preflight carrying the new evidence remains future
+work. The completed original and any future four-process preflight are not
+measured samples or substitutes for the full 24-process attempt. Their terminal
+observations cannot be copied into a later process's record, and missing
+versioned fields cannot be inferred from the historical archive. Controlled
+host faults, seeded selector checks, unseeded scalar controls, full managed-caller execution and
 source lifetime proofs retain distinct scopes. General internal-worker
 exception transport, fatal-abort recovery, simultaneous contexts and forced
 cancellation remain outside this qualification route.
