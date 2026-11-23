@@ -9,9 +9,21 @@ remain unassigned until an actual owner is identified.
 
 ## Start here: P06-T01 dependency provenance
 
-**Current bounded task: P06-T01 — establish fresh dependency compilation and
-loaded-product provenance under the
+**Current bounded task: P06-T01 — collect and independently review the complete
+fresh dependency/native original under the
 [dependency handoff](p06-dependency-provenance-handoff.md).**
+The provenance foundation is published at
+`5527cb062e10dfff3266022d138dd7cdf63f5e5c`; source locks, recorded-build receipts,
+exact product staging and full 30-command application admission are implemented.
+The subsequent candidate adds complete inert native/control readers and scoped
+review corrections. The [packet](evidence/p06-dependency-provenance/README.md)
+keeps their publication and validation identities distinct. Follow the
+[intake/replay guide](evidence/p06-dependency-provenance/replay-guide.md) for the
+still-required original and its external pins. The fresh workflow was queued
+with no steps, logs or conclusion at the
+[last retained observation](evidence/p06-dependency-provenance/agents/w07_a04.md);
+no queue cause or fresh native result is inferred.
+
 The [native lifetime witness](evidence/p06-native-lifetime/README.md) is
 implemented at `b4127b19a004b5aebb8d52eab9ceda0da3ff4561`.
 [Run 45130300651, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300651)
@@ -157,16 +169,18 @@ origins, audited nonnegative checked updates, admitted resets, exclusive
 ownership, worker/queue cleanup, successful terminal sums and no later update.
 A separate transient pending observation does not close that complete theorem.
 
-The next implementation follows the
-[dependency handoff](p06-dependency-provenance-handoff.md): build from immutable
-source and transitive inputs, retain actual configure/compile/archive/link
-receipts, and connect produced bytes to the loaded libraries and SoftFloat
-static link. Cached hashes do not prove compilation origin. Reuse the existing
-complete application-build validator in live admission and bind its result to
-actual build/process identities. Independently review the versioned provenance
-and complete qualification rules, then join the implemented lifetime witness
-with the new dependency products in a fresh four-process preflight. Keep its
-132-launch, 4,224-word numerical population unchanged.
+The [dependency provenance route](p06-dependency-provenance-handoff.md) now has
+immutable source locks, recorded configure/compile/archive/link operations,
+product/loader admission and the existing complete application-build validator
+bound into live execution. The later candidate provides complete inert native
+and combined-control readers. The next action is to collect a successful fresh
+original at a named published revision, retain all earlier failures, and review
+the exact archive with independent external pins and provider identities. The
+source plan's 406 compilations/413 selected operations and host controls do not
+establish a completed original. Keep the four-process, 132-launch, 4,224-word
+managed population unchanged, with pending-read, always-zero and alternate-library
+controls counted separately. Independently reconcile the complete original
+before advancing the broader qualification work.
 The [broader qualification plan](p06-mpm-qualification-plan.md) still requires
 an independently reviewed admission/final-validation path for the eventual
 measurement binaries. The current preflight/replay retain all three unresolved
@@ -471,9 +485,11 @@ The [historical managed preflight and replay](evidence/p06-managed-preflight-rep
 retain the preceding four-process original. The later
 [native lifetime witness](evidence/p06-native-lifetime/README.md) adds executed
 pending-balance, run/reset and disposal observations without claiming full
-qualification. Follow the
-[dependency handoff](p06-dependency-provenance-handoff.md) for fresh dependency
-source-to-product/loader provenance, then independently review the complete
+qualification. The [provenance packet](evidence/p06-dependency-provenance/README.md)
+now records implemented producers, full application admission and complete inert
+readers. Follow the [dependency handoff](p06-dependency-provenance-handoff.md) to
+collect and independently replay/review the fresh dependency/native original,
+then independently review the complete
 qualification path before a fresh matched warm attempt.
 Detailed work packages remain in the
 phase guides, the [development audit](p05-binding-audit.md) and the
@@ -488,7 +504,7 @@ phase guides, the [development audit](p05-binding-audit.md) and the
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
 | **P04-T02 — Native model execution — complete** | Four clean SimX/native processor RTL × FP16/BF16 variants pass exact intermediate/final comparisons, live-input lineage, native placement and separate host/transfer accounting after independent review. | T01; model runtime lead | [P04-A02](evidence/p04-executor/acceptance-numerics.json), [P04-A03](evidence/p04-executor/acceptance-dispatch.json) |
 | **P05-T01 — Python/custom-op bridge — in progress** | Preserve the accepted copying binding; independently review the existing custom-op implementation's installed dispatch, compatibility and explicit failure evidence before an acceptance decision. | P04; framework integration lead; [handoff](p05-entry-handoff.md) | [P05-A01 accepted](evidence/p05-python/acceptance-binding.json); P05-A02/P05-A03 unearned |
-| **P06-T01 — Measured optimization — in progress** | Preserve the independently reviewed native lifetime original; establish fresh dependency source-to-product/loader provenance and bind the existing full application validator into live admission. Independently review complete qualification before the unchanged warm matrix. | P04; performance and memory lead; [dependency handoff](p06-dependency-provenance-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
+| **P06-T01 — Measured optimization — in progress** | Collect a complete fresh dependency/native original through the implemented provenance and full application-admission route; retain separate controls and independently verify the exact original with the complete inert readers. Preserve historical lifetime evidence and finish separate complete qualification before the unchanged warm matrix. | P04; performance and memory lead; [dependency handoff](p06-dependency-provenance-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),
 [P04](phases/p04-inference.md), [P05](phases/p05-framework.md) and

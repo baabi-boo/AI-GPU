@@ -61,7 +61,8 @@ class LiveInputs:
         helper_path = source / helper
         helper_path.parent.mkdir(parents=True, exist_ok=True)
         helper_path.write_bytes((ROOT / helper).read_bytes())
-        self.document = {"paths": {"source": str(source)}, "products": products,
+        self.document = {"paths": {"source": str(source),
+                                  "workspace": str(source.parent / "dependency-build")}, "products": products,
             "source_manifest": manifest, "staged_files": sorted(staged, key=lambda row: row["path"]),
             "helper_sources": HASH(source, [helper]), "tools": tools,
             "external_archives": [], "fresh_dependency_build_passed": True,
@@ -282,6 +283,22 @@ class AdmissionLiveChecks(unittest.TestCase):
             path.write_bytes(path.read_bytes() + b"\n")
             with self.assertRaisesRegex(ValueError, "recipe changed after the source freeze"):
                 checked.validate_application("", "", **options)
+
+    def test_model_map_rejects_extra_source_or_work_loads(self):
+        checked = self.inputs.admit()
+        work = self.source.parent / "work"
+        build = work / "simx-fp16"
+        build.mkdir(parents=True)
+        records = self.inputs.model(build)
+        checked.validate_model(build, records)
+        path = build / admission.MODEL_MAP
+        original = path.read_text()
+        for extra in (build / "sw/runtime/unplanned.so", build / "sw/runtime/unplanned.a",
+                      work / "simx-bf16/unplanned.o", self.source / "unplanned.so"):
+            path.write_text(original + "\nLOAD " + str(extra) + "\n")
+            with self.subTest(extra=extra), self.assertRaisesRegex(
+                    ValueError, "unplanned source/work input"):
+                checked.validate_model(build, records)
 
 
 class DependencyManagedRunnerTests(unittest.TestCase):

@@ -132,7 +132,7 @@ def verify_observation(text, *, contract, case, binding_id, original_libraries, 
             "expected_libraries": selected, "rejection": rejection}
 
 
-def verify_records(output, config, config_sha256, *, source, work, admission, tools):
+def verify_records(output, config, config_sha256, *, source, work, managed_work, admission, tools):
     """Reconcile the two actual recorder operations with this reviewed control."""
     reader = receipts.PacketReader(output)
     require(config["tools"] == {name: tools[name] for name in recorder.TOOLS},
@@ -159,9 +159,11 @@ def verify_records(output, config, config_sha256, *, source, work, admission, to
             "control retained original differs from the pinned dependency input")
     derived_path = str(work / CONTROL_SOURCE)
     derived_seen = False
+    project_roots = (source, work, managed_work, Path(admission.document["paths"]["workspace"]))
     for row in compiled["inputs_before"]:
         if row["path"] == derived_path:
-            require(receipts.payload(row, reader) == derived_source(original),
+            require(row["resolved_path"] == derived_path
+                    and receipts.payload(row, reader) == derived_source(original),
                     "control source is not the exact pinned source plus emitted declaration")
             derived_seen = True
         elif Path(row["path"]).is_relative_to(source / "third_party"):
@@ -169,8 +171,9 @@ def verify_records(output, config, config_sha256, *, source, work, admission, to
                     and all(row[key] == known[row["path"]][key] for key in ("sha256", "size_bytes")),
                     "control source/header differs from the pinned dependency input")
         else:
-            require(not Path(row["path"]).is_relative_to(work),
-                    "control compiler input has an unreviewed generated file")
+            require(not any(Path(row[key]).is_relative_to(root)
+                            for root in project_roots for key in ("path", "resolved_path")),
+                    "control compiler input has an unreviewed project file")
     require(derived_seen, "actual compiler closure omits the derived control source")
     product = admission.products["ramulator"]
     require(len(linked["inputs_before"]) == 2, "control link input population differs")
@@ -187,6 +190,10 @@ def verify_records(output, config, config_sha256, *, source, work, admission, to
     archives = {row["original_path"]: row["members"] for row in admission.document["external_archives"]}
     mapping = binary.validate_link_map(receipts.payload(linked["link_map"], reader).decode("utf-8"),
         cwd=str(work), archives=archives, required_loads=[product["staged_path"], compiled["output_path"]])
+    owned_loads = [name for name in mapping["loads"] if name not in archives
+                   and any(Path(name).is_relative_to(root) for root in project_roots)]
+    require(sorted(owned_loads) == sorted((product["staged_path"], compiled["output_path"])),
+            "control map contains an unplanned source/work input")
     require(base._file_identity(alternate["path"]) == {key: alternate[key] for key in receipts.IDENTITY_FIELDS},
             "control extension changed after its successful link")
     return {"records": [hash_artifacts(output, [path.relative_to(output).as_posix()])[0] for path in paths],
@@ -246,7 +253,9 @@ class Control:
 
     def fail(self, error, stage):
         reason = str(error) or "interrupted"
-        self.report["failures"].append({"stage": stage, "reason": reason})
+        failure = {"stage": stage, "reason": reason}
+        if not self.report["failures"] or self.report["failures"][-1] != failure:
+            self.report["failures"].append(failure)
         if self.report["reason"] is None:
             self.report["reason"] = reason
         self.report["outcome"] = "fail" if any(row.get("process_started") for row in self.report["commands"]) else "blocked"
@@ -288,6 +297,7 @@ class Control:
                     self.managed_path.parent, self.dependency_path.parent), **BUDGET))
         except (OSError, ValueError, RuntimeError, TypeError, KeyboardInterrupt) as error:
             row.update(outcome="fail", reason=str(error) or "interrupted")
+            self.fail(error, "execution")
             try:
                 if (self.output / row["log"]).is_file():
                     identity = builder.identity(self.output / row["log"])
@@ -387,7 +397,7 @@ class Control:
                 self.command(role + "-alternate-extension", [*builder.launcher(config_path,
                     config_descriptor["sha256"], tools, "g++", role), *commands[role]])
             verified = verify_records(self.output, config, config_descriptor["sha256"], source=self.source,
-                work=self.work, admission=self.admission, tools=tools)
+                work=self.work, managed_work=self.build.parent, admission=self.admission, tools=tools)
             require(verified["source_derivation"] == source_derivation,
                     "control source derivation changed during compilation")
             self.report.update(alternate_dependency_built=True, dependency_control=verified)

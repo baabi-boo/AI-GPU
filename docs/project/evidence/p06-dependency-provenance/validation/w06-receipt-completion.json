@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "scope": "Root completion of strict dependency receipt review, host evidence only",
+  "author": "/root/w06_a04",
+  "completion_owner": "/root",
+  "interruption": "The author turn was stopped by an automatic possible-cybersecurity content filter; its administrative handoff claims no unseen test completion.",
+  "changes": [
+    "Require exact project-owned direct LOAD population, retaining only independently admitted compiler-support archive exceptions.",
+    "Require canonical pinned source inputs and reject other project-root compiler input paths or resolved paths."
+  ],
+  "initial_validation": {
+    "tests": 50,
+    "seconds": 11.088,
+    "failures": 1,
+    "reason": "A positive equivalent-relative-map test compared raw byte hashes even though its path spellings changed the bytes."
+  },
+  "test_correction": "Verify the changed raw SHA256 and size explicitly, then compare every remaining semantic result field.",
+  "final_validation": {
+    "tests": 50,
+    "seconds": 5.292,
+    "failures": 0,
+    "skips": 0,
+    "result": "pass",
+    "command": "PATH=/workspace/p06-build-tools/cmake/data/bin:$PATH PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=ci/project python3 -m unittest test_p06_dependency_receipt test_p06_dependency_option_controls -v"
+  },
+  "identities": [
+    {
+      "path": "ci/project/p06_dependency_receipt.py",
+      "sha256": "437a9148f6a5db3d7a6ad477e2390f38df80c9222b6c971db82a2745b02ea3c6",
+      "size_bytes": 61150
+    },
+    {
+      "path": "ci/project/test_p06_dependency_receipt.py",
+      "sha256": "4f5230d3560eafae3f19040182019a40377f21a77de085a2aa7c1f7513930129",
+      "size_bytes": 27754
+    },
+    {
+      "path": "ci/project/test_p06_dependency_option_controls.py",
+      "sha256": "15eeec600f7227e03b537a3b9e6324760e7fef726a55ee2c392c0ac795c8f57d",
+      "size_bytes": 17473
+    }
+  ],
+  "root_review": "New input/link helper semantics and placement were inspected; source/workspace limits and external system/compiler limitations were preserved.",
+  "independent_review": "agents/w06_a06.md",
+  "native_execution": "not_run",
+  "qualified": false,
+  "ready_for_warm": false,
+  "warm_execution": false,
+  "full_warm_coverage": false,
+  "acceptance_claimed": false,
+  "phase_acceptance": false,
+  "performance_acceptance": false
+}

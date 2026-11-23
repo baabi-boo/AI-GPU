@@ -148,15 +148,35 @@ diagnostics and directed scalar controls do not bind the entire argument to
 measurement binaries. The [diagnostic handoff](../p06-counter-diagnostics-handoff.md)
 retains the earlier diagnostic scope.
 
-**Next development action:** establish fresh dependency compilation and
-loaded-product provenance under the
-[dependency handoff](../p06-dependency-provenance-handoff.md). Build from immutable
-source and transitive inputs, retain actual configure/compile/archive/link
-receipts, and connect their products to the selected static links and dynamic
-loader observations. Reuse the existing complete application-graph validator in
-live admission and bind its result to build/process identities. Cached product
-hashes do not prove compilation origin. The full 33-selector/40-component
-lifetime argument still needs complete reviewed source and monotonicity
+The [fresh dependency implementation packet](../evidence/p06-dependency-provenance/README.md)
+records the separately versioned source/build/product route. The foundation is
+published at `5527cb062e10dfff3266022d138dd7cdf63f5e5c`; subsequent native/control
+readers and review corrections have separately recorded validation scopes.
+The producer verifies immutable source and transitive inputs, records selected
+configure/compile/archive/index/link execution, and binds products through
+staging, static links and dynamic loader admission. Live admission now invokes
+and binds the existing complete **30-command application graph**, including the
+**14-source runtime stub**, to build/process identities. The dependency, native
+and combined-control readers are implemented for bounded inert review with
+external pins. Source inventories, host controls and reader fixtures do not
+establish a completed fresh original.
+
+**Next development action:** collect and retain a complete fresh dependency and
+managed-lifetime original, then perform caller-pinned inert replay and
+independent review under the
+[dependency handoff](../p06-dependency-provenance-handoff.md) and
+[intake guide](../evidence/p06-dependency-provenance/replay-guide.md). Reconcile all
+406 planned compilations and 413 selected tool operations with actual records,
+both format builds and the unchanged four-process/132-launch/4,224-word native
+population. Keep the pending-read/always-zero and alternate-library controls
+separate. The last attributed observation of the foundation's
+[fresh workflow](https://github.com/baabi-boo/AI-GPU/actions/runs/45146777986)
+was queued; recheck and retain the actual provider identities before intake.
+No new complete build or native original is established by this phase update.
+The [host diagnostic](../evidence/p06-dependency-provenance/host-diagnostic/README.md)
+was prepared but unexecuted at this update and retains a separate, lower scope.
+The full 33-selector/40-component lifetime argument still needs complete reviewed
+source and monotonicity
 premises; the new pending/reset observations do not themselves qualify it.
 The historical `57248e73` original retains its earlier four-snapshot scope.
 
@@ -230,9 +250,11 @@ After the P06 gates are accepted, hand P07 the selected configuration,
 constraints, bounded workloads, memory-map assumptions and reproducible reports.
 P07 also requires P01's vendor integration gate. Update [status](../status.md)
 and [backlog](../backlog.md) as each gate earns evidence. The current next action
-is the [dependency provenance handoff](../p06-dependency-provenance-handoff.md).
-Complete reviewed qualification rules must precede a fresh preflight joining
-the implemented lifetime witness to the new dependency provenance, followed
-only then by the unchanged matched warm attempt.
+is to collect and independently review the complete fresh original defined by
+the [dependency provenance handoff](../p06-dependency-provenance-handoff.md).
+After that bounded provenance result, complete reviewed qualification rules
+must precede the separate qualification preflight joining the implemented
+lifetime witness to the new dependency provenance, followed only then by the
+unchanged matched warm attempt.
 A documented board-readiness decision and physical
 implementation plan follow later.

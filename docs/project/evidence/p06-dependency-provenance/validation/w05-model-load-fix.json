@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "scope": "Independent finding and live correction, host fixtures only",
+  "finding": "An extra LOAD under the source or either format work tree could pass despite absent selection in the exact compiler link recipe.",
+  "correction": "The complete source/work-root LOAD multiset must equal43 model objects and3 selected dependency products, preserving existing per-object and archive-member checks.",
+  "root_validation": {
+    "command": "python3 -B -m unittest discover -s ci/project -p test_p06_dependency_admission.py -v",
+    "tests": 21,
+    "seconds": 28.875,
+    "result": "pass",
+    "skips": 0
+  },
+  "independent_reviewer": "/root/w05_a01",
+  "reader_validation": "See agents/w05_a01.md",
+  "identities": [
+    {
+      "path": "ci/project/p06_dependency_admission.py",
+      "sha256": "6131b1b36c032d0e96a14c36770d13c4a4168071797de5f102d4de97c8050a94",
+      "size_bytes": 12892
+    },
+    {
+      "path": "ci/project/test_p06_dependency_admission.py",
+      "sha256": "7e9d3fddf8c519c9941af66f5c7698f21ba7858ee155e32016d56682b5dd68c9",
+      "size_bytes": 27031
+    },
+    {
+      "path": "ci/project/p06_dependency_native_replay.py",
+      "sha256": "fbbbf968a01bdb07cd23c9b007fb1aa4e07922fe5a33008e9b0fc9436c85b474",
+      "size_bytes": 58122
+    },
+    {
+      "path": "ci/project/test_p06_dependency_native_replay.py",
+      "sha256": "fb8e40116221cfceab909fcad1d8c911ca1df585e9469b09a61e1ec6fb25e566",
+      "size_bytes": 40538
+    }
+  ],
+  "native_execution": "not_run",
+  "qualified": false,
+  "ready_for_warm": false,
+  "warm_execution": false,
+  "full_warm_coverage": false,
+  "acceptance_claimed": false,
+  "phase_acceptance": false,
+  "performance_acceptance": false
+}

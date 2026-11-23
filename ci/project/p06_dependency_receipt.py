@@ -319,6 +319,39 @@ class PacketReader:
             os.close(directory)
 
 
+def _verify_compile_inputs(document, record, source_files):
+    source_root = PurePosixPath(document["paths"]["sources"])
+    project_roots = [PurePosixPath(document["paths"][name]) for name in ("source", "workspace")]
+    for item in record["inputs_before"]:
+        path, resolved = (PurePosixPath(item[name]) for name in ("path", "resolved_path"))
+        if path.is_relative_to(source_root):
+            name = path.relative_to(source_root).as_posix()
+            require(name in source_files and item["resolved_path"] == item["path"]
+                    and item["sha256"] == source_files[name]["sha256"]
+                    and item["size_bytes"] == source_files[name]["size_bytes"],
+                    "included dependency source differs from the source lock")
+        else:
+            require(not any(candidate.is_relative_to(root)
+                            for candidate in (path, resolved) for root in project_roots),
+                    "compiler input contains an unreviewed project file")
+
+
+def _verify_link_map(document, link, expected_inputs, archives, required_archives, required_loads, read_bytes):
+    checked = binary.validate_link_map(payload(link["link_map"], read_bytes).decode("utf-8"),
+        cwd=link["cwd"], archives=archives, required_archives=required_archives, required_loads=required_loads)
+    loaded = Counter(checked["loads"])
+    require(all(loaded[item["path"]] == 1 for item in expected_inputs),
+            "link map omits or repeats an observed direct input")
+    external = {row["original_path"] for row in document["external_archives"]}
+    require(external <= set(archives), "compiler support archive lacks its admitted member inventory")
+    project_roots = [PurePosixPath(document["paths"][name]) for name in ("source", "workspace")]
+    owned_loads = [name for name in checked["loads"] if name not in external
+                   and any(PurePosixPath(name).is_relative_to(root) for root in project_roots)]
+    require(sorted(owned_loads) == sorted(item["path"] for item in expected_inputs),
+            "link map contains an unplanned source/workspace input")
+    return checked
+
+
 def _verify_compile_graph(document, records, config, read_bytes):
     manifest = validate_manifest(document["source_manifest"])
     source_files = {}
@@ -368,14 +401,7 @@ def _verify_compile_graph(document, records, config, read_bytes):
         require(observed_source is not None and observed_source["sha256"] == expected_source["sha256"]
                 and observed_source["size_bytes"] == expected_source["size_bytes"],
                 "compiler source does not match its locked input")
-        for item in record["inputs_before"]:
-            path = PurePosixPath(item["path"])
-            if path.is_relative_to(PurePosixPath(roots["sources"])):
-                name = path.relative_to(PurePosixPath(roots["sources"])).as_posix()
-                require(name in source_files and item["resolved_path"] == item["path"]
-                        and item["sha256"] == source_files[name]["sha256"]
-                        and item["size_bytes"] == source_files[name]["size_bytes"],
-                        "included dependency source differs from the source lock")
+        _verify_compile_inputs(document, record, source_files)
         normalized = _normal_compile(requested, cwd)
         if row["component"] == "softfloat":
             directory = str(PurePosixPath(roots["sources"]) / "softfloat/build/Linux-x86_64-GCC")
@@ -846,11 +872,7 @@ def verify_document(document, read_bytes, *, expected_revision):
                 "dependency link precedes a completed prerequisite")
         require(link["link_map"]["path"] == config["roots"]["build"] + "/" + name + ".map",
                 "dependency link map location differs")
-        map_result = binary.validate_link_map(payload(link["link_map"], read_bytes).decode("utf-8"), cwd=link["cwd"],
-            archives=archive_by_path, required_archives=required, required_loads=loads)
-        loaded = Counter(map_result["loads"])
-        require(all(loaded[item["path"]] == 1 for item in expected_inputs),
-                "link map omits or repeats an observed direct input")
+        map_result = _verify_link_map(document, link, expected_inputs, archive_by_path, required, loads, read_bytes)
         maps = [row for row in document["maps"] if row.get("name") == name]
         require(len(maps) == 1 and set(maps[0]) == {"name", "cwd", "descriptor", "verification"}
                 and maps[0]["cwd"] == link["cwd"] and maps[0]["verification"] == map_result

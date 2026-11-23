@@ -10,6 +10,17 @@ launches. The [qualification audit](p06-qualification-audit.md),
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
 scope and new validation. P06-A02/A03 remain open.
 
+**Current bounded step: collect and independently review a complete fresh
+dependency/native original.** The provenance foundation is published at
+`5527cb062e10dfff3266022d138dd7cdf63f5e5c`; the subsequent candidate adds complete
+inert native/control readers and corrections from review to input admission and
+failure reports. The [provenance packet](evidence/p06-dependency-provenance/README.md)
+and [replay guide](evidence/p06-dependency-provenance/replay-guide.md) distinguish
+implemented tooling, scoped host validation and the still-required original.
+The [last retained hosted observation](evidence/p06-dependency-provenance/agents/w07_a04.md)
+shows the fresh-build job queued, without steps, logs or a conclusion. No fresh
+native result or completed-original replay is established by that observation.
+
 The [native lifetime witness](evidence/p06-native-lifetime/README.md) and its
 [separate versioned contract](../designs/managed_counter_lifetime_v1.md) are
 implemented at `b4127b19a004b5aebb8d52eab9ceda0da3ff4561`.
@@ -21,13 +32,13 @@ reconciles every run/reset pair, required flush, terminal state and actual
 destruction. The [separate accessor probe](evidence/p06-native-lifetime/reviews/w07_a05.md)
 observed positive pending balances in both gp contexts and rejected its
 always-zero control for the exact missing-observation assertion; its operations
-are outside the four-process population. The next task is the
-[dependency provenance handoff](p06-dependency-provenance-handoff.md).
+are outside the four-process population. This historical original supplies the
+lifetime prerequisite for the [dependency provenance handoff](p06-dependency-provenance-handoff.md).
 Full governance [45130300117](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300117)
 passes **3,813 tests in 2,498.078 seconds** at `b4127b19`; the
 [original log](evidence/p06-native-lifetime/ci/b4127b19-full-governance-original.log)
 is retained. Generic CI [45130300144](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300144)
-remains in progress at this documentation checkpoint. All qualification and
+was in progress at that historical documentation checkpoint. All qualification and
 phase-acceptance flags remain false.
 
 The preceding continuation implements the [complete inert managed-preflight
@@ -117,12 +128,17 @@ source/log review. Hosted and native retries were queued at the
 which contains no executed result for either retry. This is local governance
 verification; the latest audited native diagnostic scope stays at `4268d2d5`.
 
-**Current bounded development:** establish fresh source-to-loaded-product
-provenance under the [dependency handoff](p06-dependency-provenance-handoff.md).
-Retain immutable dependency inputs and actual configure/compile/archive/link
-records, join their outputs to the selected static and dynamic products, and
-bind the complete application build into live admission using the existing
-full-graph validator. The implemented
+**Current bounded development:** execute and independently review the fresh
+source-to-loaded-product route under the
+[dependency handoff](p06-dependency-provenance-handoff.md). The producer now binds
+immutable source trees to recorded compile/archive/link operations, selected
+product bytes and managed admission; live admission uses the existing complete
+30-command application validator. The subsequent candidate supplies complete
+inert native/control readers. A successful complete fresh original, separate
+behavioral controls and caller-pinned original replay/review remain outstanding;
+host fixtures, source plans and configure-only observations cannot supply them.
+The [packet](evidence/p06-dependency-provenance/README.md) records the foundation
+publication and the later candidate's distinct evidence. The implemented
 [native lifetime witness](evidence/p06-native-lifetime/README.md) provides bounded
 pending-read and run/reset observations. Applying the
 [conditional lifetime argument](../designs/simx_counter_lifetime_v1.md) to all
@@ -204,7 +220,7 @@ the linked reports define the exact accepted scope.
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
 | P04 — tiny-model inference | `complete` | A01 fixed fixture preserved; A02/A03 accept the full four-variant composed-model matrix at native processor RTL scope |
 | P05 — Python/framework bridge | `in_progress` | A01 accepts the bounded copying Python binding on SimX; the custom-op implementation and prior CI still need independent artifact review for A02/A03 |
-| P06 — Memory and performance scaling | `in_progress` | A01 and prior prerequisites remain preserved; all-33 diagnostics and the four-process native lifetime witness pass in their declared scopes, while fresh loaded-dependency provenance, complete counter qualification, the matched warm attempt and A02/A03 remain open |
+| P06 — Memory and performance scaling | `in_progress` | A01 and prior prerequisites remain preserved; provenance producers/full application admission and complete inert readers are implemented, while the fresh complete dependency/native original and independent review, complete counter qualification, the matched warm attempt and A02/A03 remain open |
 | P07–P11 | `not_started` | Later hardware, reliability, research and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -213,7 +229,45 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — native counter lifetime observations
+## Latest continuation — fresh dependency provenance tooling
+
+The [development audit](evidence/p06-dependency-provenance/development-audit.md)
+selected the missing connection between immutable dependency inputs, actual
+build operations and the products linked or loaded by the lifetime population.
+The [published foundation](evidence/p06-dependency-provenance/validation/foundation-publication.json)
+at `5527cb062e10dfff3266022d138dd7cdf63f5e5c` implements the separately versioned
+[provenance contract](../designs/dependency_provenance_v1.md), full source locks,
+build recorder/receipt validation, exact product staging, complete application
+admission and the separate substitution control. The source-derived plan has
+406 compilations and 413 selected tool operations; those counts describe the
+required graph, not a completed fresh build.
+
+The later candidate implements complete inert native and combined-control
+readers. They reconstruct dependency/build/native joins and verify the separate
+pending-read, always-zero and alternate-library controls with caller-supplied
+identities. Review corrections cover complete project input populations,
+trusted current-helper inventories and preservation of original execution
+failures. The [replay guide](evidence/p06-dependency-provenance/replay-guide.md)
+defines exact intake pins and distinguishes retained-data review from execution.
+Foundation results and subsequent candidate tests retain separate source
+identities; no full-suite result at one revision is attributed to another.
+
+The fresh dependency workflow
+[45146777986](https://github.com/baabi-boo/AI-GPU/actions/runs/45146777986), job
+`137597902301`, was queued with no steps, logs or conclusion at the
+[last retained observation](evidence/p06-dependency-provenance/agents/w07_a04.md).
+No cause for the queue is established. A completed fresh original, original
+archive replay and independent original review are still required. The
+[separate host diagnostic](evidence/p06-dependency-provenance/host-diagnostic/README.md)
+has its own frozen inputs and narrower scope; its preparation or eventual result
+cannot substitute for managed native execution or loader joins.
+
+All seven fields remain false: `qualified`, `ready_for_warm`, `warm_execution`,
+`full_warm_coverage`, `acceptance_claimed`, `phase_acceptance`, and
+`performance_acceptance`. P06/P06-T01 remain `in_progress`; complete all-40
+qualification, the no-wrap premise, warm execution and A02/A03 remain separate.
+
+## Previous continuation — native counter lifetime observations
 
 The [native packet](evidence/p06-native-lifetime/README.md) retains the original
 from `b4127b19a004b5aebb8d52eab9ceda0da3ff4561`, run `45130300651`, attempt 1,
@@ -1327,9 +1381,11 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**P06-T01 — establish fresh dependency compilation and loaded-product
-provenance.** Follow the
+**P06-T01 — collect and independently review the complete fresh dependency/native
+original using the implemented provenance route.** Follow the
 [dependency handoff](p06-dependency-provenance-handoff.md),
+[provenance packet](evidence/p06-dependency-provenance/README.md),
+[original intake/replay guide](evidence/p06-dependency-provenance/replay-guide.md),
 [native lifetime packet](evidence/p06-native-lifetime/README.md) and
 [broader qualification plan](p06-mpm-qualification-plan.md).
 
@@ -1341,20 +1397,30 @@ actual destruction. The separate probe establishes positive observations and
 the exact always-zero rejection outside that matrix. Preserve the historical
 `57248e73` original and its complete inert replay in their earlier v1 scope.
 
-Build the selected dependencies from immutable source and transitive inputs;
-retain actual configure/compile/archive/link receipts and connect the products
-to the bytes statically linked or dynamically loaded by the native processes.
-Cached hashes and source inventories do not establish compilation origin.
-Reuse the existing complete application-graph validator in the new live
-admission and identity bindings. Preserve the exact RV64 `p02-tfr`, timing
+Obtain a successful complete original at a named published source revision:
+actual dependency configure/compile/archive/link receipts, the selected products,
+both format builds, all four managed processes and the separately counted
+pending-read/always-zero and alternate-library controls. Retain original failed
+attempts, raw logs, archive bytes and provider run/attempt/job/artifact identities.
+The foundation's hosted fresh-build job was still queued at the linked retained
+observation; recheck its actual state before intake and do not infer a cause or
+execution from that queue state. Cached hashes, source inventories and a lower-scope
+host diagnostic cannot establish the complete original.
+
+Run the implemented combined reader with externally established exact archive,
+revision, dependency-receipt, native-report/source-before and control-report pins,
+then independently reconcile the original with its hosted identity. This reader
+includes the dependency and native checks; retain its result as inert review,
+separate from the original execution. Live admission already binds the complete
+30-command application graph. Preserve the exact RV64 `p02-tfr`, timing
 SimX, `PERF=1` route, 33 available selectors, 40 backing components, twelve
 unqueried unavailable rows and four-process numerical population. Keep two
 build jobs, one simulator worker, a 15 GiB disk reserve and the 4 GiB RSS ceiling.
 
-The source-bound all-40 lifetime argument, dependency provenance and independent
-complete qualification remain open. Review the new versioned provenance and
-admission/final-validation rules before a fresh preflight joins the implemented
-lifetime witness to the newly built products. All seven qualification/readiness/
+The source-bound all-40 lifetime argument, complete dependency provenance evidence
+and independent complete qualification remain open. After original provenance
+review, finish the separately reviewed qualification admission/final-validation
+path before any qualified warm attempt. All seven qualification/readiness/
 execution/coverage/acceptance fields remain false; the three unresolved
 obligations listed above remain open. Preserve warm v1's unconditional
 `P06-WARM-RV64-MPM-HIGH-HALF` block and

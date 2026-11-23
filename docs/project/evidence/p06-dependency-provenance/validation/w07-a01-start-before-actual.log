@@ -1,0 +1,28 @@
+test_failed_process_creation_remains_a_known_nonstart (test_p06_dependency_start_review.ProcessStartReviewTests.test_failed_process_creation_remains_a_known_nonstart) ... ok
+test_group_observation_failure_retains_started_child_and_reaps_it (test_p06_dependency_start_review.ProcessStartReviewTests.test_group_observation_failure_retains_started_child_and_reaps_it) ... FAIL
+test_wait_observation_failure_retains_started_child_and_reaps_it (test_p06_dependency_start_review.ProcessStartReviewTests.test_wait_observation_failure_retains_started_child_and_reaps_it) ... FAIL
+
+======================================================================
+FAIL: test_group_observation_failure_retains_started_child_and_reaps_it (test_p06_dependency_start_review.ProcessStartReviewTests.test_group_observation_failure_retains_started_child_and_reaps_it)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_start_review.py", line 90, in test_group_observation_failure_retains_started_child_and_reaps_it
+    self.assert_failed_observed_child(result, reason, group_known=False)
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_start_review.py", line 70, in assert_failed_observed_child
+    self.assertIs(result["process_started"], True, observed)
+AssertionError: False is not True : {'record_started': False, 'child_started': False, 'recorded_pid': None, 'actual_pid': 5, 'group': None, 'finished_ns': None, 'actual_exit': None}
+
+======================================================================
+FAIL: test_wait_observation_failure_retains_started_child_and_reaps_it (test_p06_dependency_start_review.ProcessStartReviewTests.test_wait_observation_failure_retains_started_child_and_reaps_it)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_start_review.py", line 112, in test_wait_observation_failure_retains_started_child_and_reaps_it
+    self.assert_failed_observed_child(result, reason, group_known=True)
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_start_review.py", line 78, in assert_failed_observed_child
+    self.assertIsNotNone(process.poll(), "recorder returned with a live selected child")
+AssertionError: unexpectedly None : recorder returned with a live selected child
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.097s
+
+FAILED (failures=2)

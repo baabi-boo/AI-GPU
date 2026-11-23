@@ -417,18 +417,31 @@ def run(config_path, expected_sha256, tool, role, arguments, *, compiler_launche
                "finished_ns": None, "pid": None, "process_group": None,
                "process_started": False, "exit_code": None}
         record["children"].append(row)
-        _write_record(record_path, record)
-        process = subprocess.Popen(argv, cwd=cwd, stdin=subprocess.DEVNULL)
-        row.update(pid=process.pid, process_group=os.getpgid(process.pid), process_started=True)
-        require(row["process_group"] == os.getpgrp(), "tool child escaped its supervisor process group")
-        if stage == "tool":
-            record["process_started"] = True
-        _write_record(record_path, record)
+        process = None
         try:
+            _write_record(record_path, record)
+            process = subprocess.Popen(argv, cwd=cwd, stdin=subprocess.DEVNULL)
+            row.update(pid=process.pid, process_started=True)
+            if stage == "tool":
+                record["process_started"] = True
+            _write_record(record_path, record)
+            row["process_group"] = os.getpgid(process.pid)
+            require(row["process_group"] == os.getpgrp(), "tool child escaped its supervisor process group")
+            _write_record(record_path, record)
             row["exit_code"] = process.wait()
-        except KeyboardInterrupt:
-            process.terminate()
-            row["exit_code"] = process.wait(timeout=2)
+        except (OSError, ValueError, RuntimeError, subprocess.SubprocessError, KeyboardInterrupt) as error:
+            fail(error, stage + ("-interruption" if isinstance(error, KeyboardInterrupt) else "-supervision"))
+            if process is not None:
+                for label, signal in (("terminate", process.terminate), ("kill", process.kill)):
+                    try:
+                        signal()
+                    except (OSError, RuntimeError, subprocess.SubprocessError, KeyboardInterrupt) as cleanup_error:
+                        fail(cleanup_error, stage + "-" + label)
+                    try:
+                        row["exit_code"] = process.wait(timeout=2)
+                        break
+                    except (OSError, RuntimeError, subprocess.SubprocessError, KeyboardInterrupt) as cleanup_error:
+                        fail(cleanup_error, stage + "-" + label + "-wait")
             raise
         finally:
             row["finished_ns"] = time.monotonic_ns()

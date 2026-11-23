@@ -1,12 +1,59 @@
-# P06 dependency provenance: next bounded handoff
+# P06 dependency provenance: current execution handoff
 
 ## Current result and next action
 
-**Build the selected SimX dependencies from immutable source inputs, then bind
-their actual compilation, archive/link steps and produced bytes to the libraries
-linked and loaded by the managed lifetime processes.** This is the next bounded
-P06-T01 task. It needs a separately versioned receipt and independent review;
-this document plans that work and does not implement or qualify it.
+**Collect and retain one fresh complete dependency and managed-lifetime original
+at a named published revision, then replay and independently review its source,
+build, product and loader joins.** Keep the pending-read probe, always-zero
+control and alternate-library control separately counted. The implementation
+exists; the bounded P06-T01 provenance result still requires that actual original
+and independent review.
+
+The [implementation packet](evidence/p06-dependency-provenance/README.md) and
+[v1 contract](../designs/dependency_provenance_v1.md) define the selected route.
+Its [foundation publication](evidence/p06-dependency-provenance/validation/foundation-publication.json)
+is `5527cb062e10dfff3266022d138dd7cdf63f5e5c`, tree
+`06beb70d004cf444488eee6e02512894c11bafef`. The packet records subsequent reader
+implementation, failure-retention corrections and independent review separately.
+Use its [validation index](evidence/p06-dependency-provenance/validation-index.md)
+for exact tested files and evidence scopes; a foundation result does not certify
+later candidate bytes.
+
+The new producer verifies five immutable source trees, records actual selected
+tool invocations, and joins source/header inputs to objects, archive members,
+link maps and final products. It stages byte-verified inputs for both format
+builds. The live admission route invokes and binds the existing complete
+**30-command application validator**, including its **14-source runtime stub**,
+alongside the 43-unit model/backend checks and dependency receipt identity.
+The [source-input audit](evidence/p06-dependency-provenance/source-inputs/README.md)
+retains 1,294 files and the 406-translation-unit plan. These input observations
+do not establish the required 413 actual compile/archive/index/link operations.
+
+The [dependency reader](../../ci/project/p06_dependency_replay.py),
+[complete native reader](../../ci/project/p06_dependency_native_replay.py) and
+[combined native/control reader](../../ci/project/p06_dependency_control_replay.py)
+are implemented with distinct caller-pinned expectations and bounded inert
+archive handling. The combined reader includes dependency/native validation and
+both separate control reports. Follow the
+[intake and replay guide](evidence/p06-dependency-provenance/replay-guide.md);
+retained source, commands and binaries remain data. A replay result reports
+`native_execution="not_run"` and `retained_code_executed=false`. It establishes
+consistency of selected retained evidence, not a new execution or qualification.
+
+At the last attributed provider observation in the
+[workflow review](evidence/p06-dependency-provenance/agents/w07_a04.md),
+[fresh run 45146777986](https://github.com/baabi-boo/AI-GPU/actions/runs/45146777986)
+at the foundation revision was queued, with no executed steps or conclusion.
+No queue cause is established. Recheck the provider and retain its actual run,
+attempt, job and artifact identities before original intake. This continuation
+has not yet observed the complete 406-compilation/413-operation build and new
+four-process native original. The
+[separate host diagnostic](evidence/p06-dependency-provenance/host-diagnostic/README.md)
+was prepared but unexecuted at this update; any later result retains its own
+frozen revision and lower scope. It cannot replace the formal dependency
+producer, native loader joins or independent original review.
+
+## Preserved preceding native lifetime result
 
 The preceding observation increment is implemented at
 `b4127b19a004b5aebb8d52eab9ceda0da3ff4561`, tree
@@ -34,24 +81,24 @@ and full governance have separate scopes; use the packet's named governance
 receipt for a completed full-suite outcome. This handoff supplies no new
 governance execution or acceptance result.
 
-## The remaining provenance edge
+## Historical gap and current contract
 
-The current producer freezes dependency product hashes, builds fresh guarded
-models, records compiler and linker commands, and observes exact loaded-library
-paths. Its original report explicitly leaves
+The preceding cached-dependency producer froze product hashes, built fresh
+guarded models, recorded compiler and linker commands, and observed exact
+loaded-library paths. Its original report explicitly leaves
 `dependency_compilation_provenance_verified=false`: those observations do not
 establish which dependency source, headers, tools and options produced the three
-reused inputs. The [current dependency inventory](../../ci/project/p02_matrix.py)
-and [preparation route](../../ci/project/p04_ci_prepare.py) define that boundary.
+reused inputs. The [historical dependency inventory](../../ci/project/p02_matrix.py)
+and [preparation route](../../ci/project/p04_ci_prepare.py) retain that boundary.
 
-The next receipt must connect each selected immutable input to successful
-observed build execution, each output to the command that produced it, the
+The separately versioned dependency receipt must connect each selected immutable
+input to successful observed build execution, each output to the command that produced it, the
 actual static-link inputs to the resulting model, and the resulting dynamic
 products to the native loader observations. A compile database describes planned
 commands; cached bytes and favorable numerical output do not establish this
 complete chain.
 
-### Reuse the existing application validator
+### Complete application admission is implemented
 
 The trusted
 [`validate_application_build()` reader](../../ci/project/p06_managed_preflight_application_build.py)
@@ -59,18 +106,20 @@ already checks the complete **30-command application graph**, including the
 exact **14-source runtime-stub compile/link command**. Both format builds in the
 native original passed that inert validator in the
 [independent build review](evidence/p06-native-lifetime/reviews/w07_a06.md).
-The present live producer's
+At that historical checkpoint, the live producer's
 [`validate_host_build()`](../../ci/project/p06_managed_preflight_execute.py)
-checks and binds the final host invocation; it does not yet invoke and bind the
-full application graph.
+checked and bound the final host invocation without binding the full application
+graph.
 
-Integrate the existing full-graph validator into the new live admission route.
-Import it and its local helpers before the trusted-helper/source freeze, supply
-the live validated source, compiler records and tool identities, and bind its
-complete result into the new build and process identities. Keep its exact recipe
+The [new live admission route](../../ci/project/p06_dependency_admission.py)
+now invokes the existing full-graph validator with the live validated source,
+compiler records and tool identities. Its result is bound into the new build
+and process identities; the selected reader and local helpers are imported
+before trusted-helper/source freezing. Preserve the validator's exact recipe
 grammar and prerequisite ordering. Any changed recipe needs an explicit reviewed
-grammar update. This closes a live admission join without inventing a second
-stub validator or changing the interpretation of the existing originals.
+grammar update. This implementation closes the live admission gap while keeping
+the interpretation of existing originals unchanged; an actual fresh original
+must still demonstrate the complete join.
 
 ## Selected source and product graph
 
@@ -86,9 +135,12 @@ upstream build definitions it inspected at these revisions.
 | `third_party/ramulator_ext/libramulator-vortex.so` | Superproject [extension recipe](../../third_party/Makefile), Ramulator's committed `src/dram/impl/GDDR6.cpp`, included headers and `gddr6.o`; linked against the freshly built Ramulator product |
 
 Ramulator's pinned build definition selects yaml-cpp `yaml-cpp-0.7.0`, spdlog
-`v1.11.0` and argparse `v2.9` by tag. **Resolve and review immutable commit/tree
-identities for the next source lock before execution.** Those declared tags do
-not authenticate the source used by a historical cache. The selected default
+`v1.11.0` and argparse `v2.9` by tag. The
+[implemented source lock](../../ci/project/p06_dependency_contract.py) and
+[source-input audit](evidence/p06-dependency-provenance/source-inputs/README.md)
+now retain the resolved immutable commit/tree identities. Recheck those exact
+objects before a new execution. Declared tags do not authenticate the source
+used by a historical cache. The selected default
 Ramulator library incorporates yaml-cpp and spdlog, including bundled fmt;
 argparse is a header-only input for the separate executable, although the parent
 configure step fetches/configures it. Record that distinction in the selected
@@ -100,7 +152,12 @@ and the model explicitly retains the GDDR6 extension at link time. Include that
 source graph. The broad `third_party all` target also selects unrelated products;
 use dedicated targets for this three-product dependency task.
 
-## Implementation sequence
+## Original implementation sequence and retained requirements
+
+The sequence below preserves the requirements used to implement the new route.
+It is a checklist for reviewing a complete fresh original, not evidence that
+the planned commands or native population have executed. Current implementation
+and validation are indexed in the packet above.
 
 ### 1. Freeze the receipt, inputs and execution contract
 
@@ -151,7 +208,7 @@ Preserve the reviewed C++20, `-O3 -DNDEBUG -fPIC` recipe and exact Ramulator,
 spdlog and yaml-cpp include roots. Bind `GDDR6.cpp`, its included headers,
 `gddr6.o`, the actual link command and the just-built Ramulator library to the
 extension output. Add a reviewed dependency-file or equivalent included-input
-receipt; the present extension recipe alone does not supply that closure.
+receipt; the inherited extension recipe alone does not supply that closure.
 
 ### 5. Stage verified inputs and freeze the managed build
 
@@ -168,7 +225,7 @@ counters, the exact runtime/model/kernel/host compiler roles and the existing
 43-unit model/backend admission. Join the new dependency receipt digest to
 each format's build binding and every process binding. Retain object bytes
 where the new receipt requires independent object-level reconstruction; the
-current original records all 43 object identities but does not retain their
+historical original records all 43 object identities but does not retain their
 individual payloads.
 
 ### 6. Admit the complete application graph and actual links
@@ -236,9 +293,10 @@ Keep the existing **two build jobs, one simulation worker, 15 GiB disk reserve,
 1,800-second build limit, 180-second native-process limit, 16 MiB command-log
 bound and 90-minute hosted-job ceiling**. The
 [existing dependency recipe](../../third_party/Makefile) contains an explicit
-nested `make -j4`; outer `MAKEFLAGS=-j2` does not cap it. The new dedicated route
-must enforce two jobs inside every nested build. Use the existing bounded
-process-group supervision and preserve its polling/containment limitations.
+nested `make -j4`; outer `MAKEFLAGS=-j2` does not cap it. Preserve the dedicated
+route's explicit two-job limit inside every selected nested build. Use the
+existing bounded process-group supervision and preserve its polling/containment
+limitations.
 If the reviewed fresh-build or retention design cannot fit the fixed budget,
 record that resource block and review a bounded alternative before execution.
 Use the identified pinned prebuilt toolchain; rebuilding the compiler is outside
@@ -270,6 +328,6 @@ P06 and P06-T01 remain `in_progress`; P06-A02/A03 remain open under the
 [canonical roadmap](roadmap.json) and [acceptance policy](acceptance.md).
 Preserve the warm gate, historical failed originals, the RV64 area finding,
 P01-A03 vendor `hw_emu` blocker and the scopes of earlier acceptances. Neither
-this plan nor a future dependency receipt establishes an absolute no-wrap bound,
-a complete trusted toolchain/system-input closure, warm speedup, native RTL,
+this handoff nor a passing dependency receipt establishes an absolute no-wrap
+bound, a complete trusted toolchain/system-input closure, warm speedup, native RTL,
 physical FPGA or silicon performance.

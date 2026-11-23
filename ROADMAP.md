@@ -244,16 +244,29 @@ The separate [hosted retry](docs/project/evidence/p06-counter-diagnostics/host/c
 result; the latest audited native scope stays at `4268d2d5`. Every original
 failure remains retained.
 
-The next bounded action is to implement and independently review the separately
-versioned [qualification binding](docs/project/p06-mpm-qualification-plan.md)
-for actual seed-free measurement binaries and the full managed warm caller.
-Apply the [conditional lifetime argument](docs/designs/simx_counter_lifetime_v1.md)
-with actual terminal ownership and loaded dependency/source-to-binary provenance;
-review the pure validator and rejection controls before the managed-caller
-preflight and unchanged 24-process, 792-launch, 25,344-word warm attempt. The
-[diagnostic handoff](docs/project/p06-counter-diagnostics-handoff.md) records the
-remaining boundary. Diagnostic/replay qualification, readiness, warm execution
-and acceptance remain false.
+The subsequent [native lifetime original](docs/project/evidence/p06-native-lifetime/README.md)
+retains four managed processes, 132 launches and 4,224 exact FP32 words, with
+separate pending-read and always-zero controls. The current
+[dependency provenance implementation](docs/project/evidence/p06-dependency-provenance/README.md)
+adds immutable source locks, observed compile/archive/link receipts, exact
+product and loader joins, complete 30-command application admission, and inert
+dependency/native/control readers. Its host controls and source audit do not
+establish execution of the complete fresh dependency graph or a new native
+original.
+
+**The next bounded action is to collect one complete fresh dependency and
+managed-lifetime original at a named published revision, retain the separately
+counted pending/always-zero and substituted-library controls, then replay and
+independently review the untouched original.** Follow the
+[dependency handoff](docs/project/p06-dependency-provenance-handoff.md) and
+[intake/replay guide](docs/project/evidence/p06-dependency-provenance/replay-guide.md).
+The complete 413-operation graph and original-based semantic mutations still
+need observed evidence. After that edge is established, the separately versioned
+[qualification binding](docs/project/p06-mpm-qualification-plan.md) must satisfy
+the complete 40-component lifetime/pending premise and no-wrap bounds under the
+[conditional lifetime argument](docs/designs/simx_counter_lifetime_v1.md), before
+the unchanged 24-process, 792-launch, 25,344-word warm attempt. All seven
+qualification, readiness, warm and acceptance claims remain false.
 P06-A02/A03 remain open; the source repair cannot recover historical high bits
 or establish a warm speedup. P07–P11 remain `not_started`. The
 [executor audit](docs/project/p04-executor-audit.md) preserves the unresolved

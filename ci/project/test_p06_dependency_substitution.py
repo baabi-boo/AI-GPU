@@ -100,6 +100,8 @@ class ActualSubstitutionBuildTests(unittest.TestCase):
         self.source = self.root / "source"
         self.output = self.root / "control"
         self.work = self.output / "work"
+        self.managed_work = self.root / "managed-work"
+        self.managed_work.mkdir()
         self.ramulator = self.source / "third_party/ramulator"
         for path in (self.ramulator / "src/dram/impl", self.ramulator / "ext/spdlog/include",
                      self.ramulator / "ext/yaml-cpp/include", self.work / "home", self.work / "tmp",
@@ -131,7 +133,8 @@ class ActualSubstitutionBuildTests(unittest.TestCase):
             identity = builder.identity(path)
             products[name] = dict(identity, staged_path=identity["path"])
         self.admission = SimpleNamespace(source_inputs=[builder.identity(self.gddr6)],
-            products=products, document={"external_archives": []})
+            products=products, document={"external_archives": [],
+                                        "paths": {"workspace": str(self.root / "dependency-workspace")}})
         self.derivation = control.prepare_source(self.source, self.output, self.work, self.admission)
 
     def call(self, words, *, environment=None):
@@ -154,7 +157,53 @@ class ActualSubstitutionBuildTests(unittest.TestCase):
 
         with mock.patch.object(control.base, "_file_identity", side_effect=identity):
             return control.verify_records(self.output, self.config, self.pin, source=self.source,
-                work=self.work, admission=self.admission, tools=self.tools)
+                work=self.work, managed_work=self.managed_work, admission=self.admission, tools=self.tools)
+
+    def test_rehashed_extra_project_loads_cannot_pass_the_control(self):
+        self.build_control()
+        verified = self.verify()
+        linked = copy.deepcopy(verified["link"])
+        path = self.output / "records" / (linked["id"] + ".json")
+        mapping = linked["link_map"]
+        original = (self.output / "payloads" / mapping["payload"]).read_bytes()
+        for extra in (self.source / "extra.so", self.work / "extra.a",
+                      self.managed_work / "simx-fp16/extra.o",
+                      self.managed_work / "simx-bf16/extra.so"):
+            body = original + ("\nLOAD " + str(extra) + "\n").encode()
+            digest = hashlib.sha256(body).hexdigest()
+            (self.output / "payloads" / (digest + ".bin")).write_bytes(body)
+            linked["link_map"] = dict(mapping, sha256=digest, size_bytes=len(body), payload=digest + ".bin")
+            path.write_text(json.dumps(linked, sort_keys=True) + "\n")
+            with self.subTest(extra=extra), self.assertRaisesRegex(ValueError, "unplanned source/work input"):
+                self.verify()
+
+    def test_rehashed_unreviewed_project_headers_cannot_pass_the_control(self):
+        self.build_control()
+        verified = self.verify()
+        original = verified["compile"]
+        record_path = self.output / "records" / (original["id"] + ".json")
+        for name, resolved in ((self.source / "extra.h", self.source / "extra.h"),
+                (self.managed_work / "simx-bf16/extra.h", self.managed_work / "simx-bf16/extra.h"),
+                (Path("/usr/include/p06-review-extra.h"), self.source / "extra.h"),
+                (Path("/usr/include/p06-review-extra.h"), self.work / "extra.h")):
+            compiled = copy.deepcopy(original)
+            body = b"unreviewed project header\n"
+            digest = hashlib.sha256(body).hexdigest()
+            (self.output / "payloads" / (digest + ".bin")).write_bytes(body)
+            inputs = sorted([*compiled["inputs_before"], {
+                "path": str(name), "resolved_path": str(resolved), "sha256": digest,
+                "size_bytes": len(body), "payload": digest + ".bin"}], key=lambda row: row["path"])
+            compiled["inputs_before"] = inputs
+            compiled["inputs_after"] = copy.deepcopy(inputs)
+            body = (compiled["output_path"] + ": " + " ".join(row["path"] for row in inputs) + "\n").encode()
+            digest = hashlib.sha256(body).hexdigest()
+            (self.output / "payloads" / (digest + ".bin")).write_bytes(body)
+            for key in ("dependency_file", "dependency_prepass_file"):
+                compiled[key] = dict(compiled[key], sha256=digest, size_bytes=len(body), payload=digest + ".bin")
+            record_path.write_text(json.dumps(compiled, sort_keys=True) + "\n")
+            with self.subTest(name=name, resolved=resolved), self.assertRaisesRegex(
+                    ValueError, "unreviewed project file"):
+                self.verify()
 
     def test_actual_fresh_marker_library_preserves_tiny_numerics_and_is_byte_different(self):
         before = builder.identity(self.original)

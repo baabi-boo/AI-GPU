@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "scope": "Root narrow fixes from independently reproduced W06 findings; host tests only",
+  "recorder_interruption": {
+    "finding": "Termination errors or timeout replaced the first KeyboardInterrupt and could leave a direct child unreaped.",
+    "correction": "Save interruption first, append bounded TERM/KILL cleanup errors, preserve inherited supervisor process group and record reaped exit.",
+    "regression_tests": 1,
+    "actual_child_cases": 2,
+    "seconds": 4.081,
+    "result": "pass",
+    "independent_normal_tests": 22,
+    "independent_normal_seconds": 0.623,
+    "reviewer": "/root/w06_a01"
+  },
+  "substitution_closure": {
+    "finding": "Extra project/native-work LOADs and unreviewed project headers could pass despite a fixed selected link/compile recipe.",
+    "correction": "Require exact source/control-work/native-work LOAD multiset; reject unreviewed compiler inputs whose literal or resolved path enters those roots.",
+    "tests": 15,
+    "seconds": 3.496,
+    "result": "pass",
+    "skips": 0,
+    "map_negative_cases": 4,
+    "header_negative_cases": 4,
+    "reviewer": "/root/w06_a02"
+  },
+  "identities": [
+    {
+      "path": "ci/project/p06_dependency_record.py",
+      "sha256": "44766623aa3f41961919e4467b025675e90a0c4baf532e229fcbd9b3d444a0e5",
+      "size_bytes": 26164
+    },
+    {
+      "path": "ci/project/test_p06_dependency_execution_review.py",
+      "sha256": "f78b89f778e79118d1e11ff83403af21998040587afb1a79b7423937ef432e23",
+      "size_bytes": 4284
+    },
+    {
+      "path": "ci/project/p06_dependency_substitution.py",
+      "sha256": "7dab7a1cc21f172028b43d74bfb6eebe041c05165dd78b6d88dfec7f463a6342",
+      "size_bytes": 30453
+    },
+    {
+      "path": "ci/project/test_p06_dependency_substitution.py",
+      "sha256": "d1a033a64963bd8588ba5799743030462738c71d3a20e08e279702884809e05a",
+      "size_bytes": 23980
+    }
+  ],
+  "native_execution": "not_run",
+  "qualified": false,
+  "ready_for_warm": false,
+  "warm_execution": false,
+  "full_warm_coverage": false,
+  "acceptance_claimed": false,
+  "phase_acceptance": false,
+  "performance_acceptance": false
+}

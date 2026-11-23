@@ -1,0 +1,119 @@
+test_control_compiler_first_reason_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_control_compiler_first_reason_survives_error_checkpoint_failure) ... FAIL
+test_control_native_first_reason_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_control_native_first_reason_survives_error_checkpoint_failure) ... 
+  test_control_native_first_reason_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_control_native_first_reason_survives_error_checkpoint_failure) (supervisor_error='RuntimeError') ... FAIL
+  test_control_native_first_reason_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_control_native_first_reason_survives_error_checkpoint_failure) (supervisor_error='KeyboardInterrupt') ... FAIL
+test_probe_compiler_first_reason_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_probe_compiler_first_reason_survives_error_checkpoint_failure) ... FAIL
+test_probe_known_prior_execution_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_probe_known_prior_execution_survives_error_checkpoint_failure) ... FAIL
+test_probe_native_first_reason_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_probe_native_first_reason_survives_error_checkpoint_failure) ... 
+  test_probe_native_first_reason_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_probe_native_first_reason_survives_error_checkpoint_failure) (supervisor_error='RuntimeError') ... FAIL
+  test_probe_native_first_reason_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_probe_native_first_reason_survives_error_checkpoint_failure) (supervisor_error='KeyboardInterrupt') ... FAIL
+
+======================================================================
+FAIL: test_control_compiler_first_reason_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_control_compiler_first_reason_survives_error_checkpoint_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 121, in test_control_compiler_first_reason_survives_error_checkpoint_failure
+    self.run_control("compile-alternate-extension", "not_run", "blocked")
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 102, in run_control
+    self.assert_retained(harness, report, observed, target, native_state, outcome)
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 79, in assert_retained
+    self.assertEqual(report["reason"], PRIMARY, "retained failures: " + repr(failures))
+AssertionError: 'synthetic one-time error-checkpoint write failure' != 'synthetic original supervisor failure'
+- synthetic one-time error-checkpoint write failure
++ synthetic original supervisor failure
+ : retained failures: ['synthetic one-time error-checkpoint write failure']
+
+======================================================================
+FAIL: test_control_native_first_reason_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_control_native_first_reason_survives_error_checkpoint_failure) (supervisor_error='RuntimeError')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 118, in test_control_native_first_reason_survives_error_checkpoint_failure
+    self.run_control("run-alternate-extension", "unknown", "fail", error_type)
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 102, in run_control
+    self.assert_retained(harness, report, observed, target, native_state, outcome)
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 79, in assert_retained
+    self.assertEqual(report["reason"], PRIMARY, "retained failures: " + repr(failures))
+AssertionError: 'synthetic one-time error-checkpoint write failure' != 'synthetic original supervisor failure'
+- synthetic one-time error-checkpoint write failure
++ synthetic original supervisor failure
+ : retained failures: ['synthetic one-time error-checkpoint write failure']
+
+======================================================================
+FAIL: test_control_native_first_reason_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_control_native_first_reason_survives_error_checkpoint_failure) (supervisor_error='KeyboardInterrupt')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 118, in test_control_native_first_reason_survives_error_checkpoint_failure
+    self.run_control("run-alternate-extension", "unknown", "fail", error_type)
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 102, in run_control
+    self.assert_retained(harness, report, observed, target, native_state, outcome)
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 79, in assert_retained
+    self.assertEqual(report["reason"], PRIMARY, "retained failures: " + repr(failures))
+AssertionError: 'synthetic one-time error-checkpoint write failure' != 'synthetic original supervisor failure'
+- synthetic one-time error-checkpoint write failure
++ synthetic original supervisor failure
+ : retained failures: ['synthetic one-time error-checkpoint write failure']
+
+======================================================================
+FAIL: test_probe_compiler_first_reason_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_probe_compiler_first_reason_survives_error_checkpoint_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 110, in test_probe_compiler_first_reason_survives_error_checkpoint_failure
+    self.run_probe("compiler-version", "not_run")
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 90, in run_probe
+    self.assert_retained(harness, report, observed, target, native_state, "fail")
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 79, in assert_retained
+    self.assertEqual(report["reason"], PRIMARY, "retained failures: " + repr(failures))
+AssertionError: 'synthetic one-time error-checkpoint write failure' != 'synthetic original supervisor failure'
+- synthetic one-time error-checkpoint write failure
++ synthetic original supervisor failure
+ : retained failures: ['synthetic one-time error-checkpoint write failure']
+
+======================================================================
+FAIL: test_probe_known_prior_execution_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_probe_known_prior_execution_survives_error_checkpoint_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 113, in test_probe_known_prior_execution_survives_error_checkpoint_failure
+    self.run_probe("run-always-zero", "run")
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 90, in run_probe
+    self.assert_retained(harness, report, observed, target, native_state, "fail")
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 79, in assert_retained
+    self.assertEqual(report["reason"], PRIMARY, "retained failures: " + repr(failures))
+AssertionError: 'synthetic one-time error-checkpoint write failure' != 'synthetic original supervisor failure'
+- synthetic one-time error-checkpoint write failure
++ synthetic original supervisor failure
+ : retained failures: ['synthetic one-time error-checkpoint write failure']
+
+======================================================================
+FAIL: test_probe_native_first_reason_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_probe_native_first_reason_survives_error_checkpoint_failure) (supervisor_error='RuntimeError')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 107, in test_probe_native_first_reason_survives_error_checkpoint_failure
+    self.run_probe("run-native", "unknown", error_type)
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 90, in run_probe
+    self.assert_retained(harness, report, observed, target, native_state, "fail")
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 79, in assert_retained
+    self.assertEqual(report["reason"], PRIMARY, "retained failures: " + repr(failures))
+AssertionError: 'synthetic one-time error-checkpoint write failure' != 'synthetic original supervisor failure'
+- synthetic one-time error-checkpoint write failure
++ synthetic original supervisor failure
+ : retained failures: ['synthetic one-time error-checkpoint write failure']
+
+======================================================================
+FAIL: test_probe_native_first_reason_survives_error_checkpoint_failure (test_p06_dependency_checkpoint_review.DependencyCheckpointReviewTests.test_probe_native_first_reason_survives_error_checkpoint_failure) (supervisor_error='KeyboardInterrupt')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 107, in test_probe_native_first_reason_survives_error_checkpoint_failure
+    self.run_probe("run-native", "unknown", error_type)
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 90, in run_probe
+    self.assert_retained(harness, report, observed, target, native_state, "fail")
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_checkpoint_review.py", line 79, in assert_retained
+    self.assertEqual(report["reason"], PRIMARY, "retained failures: " + repr(failures))
+AssertionError: 'synthetic one-time error-checkpoint write failure' != 'synthetic original supervisor failure'
+- synthetic one-time error-checkpoint write failure
++ synthetic original supervisor failure
+ : retained failures: ['synthetic one-time error-checkpoint write failure']
+
+----------------------------------------------------------------------
+Ran 5 tests in 11.377s
+
+FAILED (failures=7)

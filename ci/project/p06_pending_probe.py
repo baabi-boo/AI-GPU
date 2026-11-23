@@ -9,6 +9,7 @@ validated compiler flags are reused; recorded commands are never executed.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -201,20 +202,43 @@ def execute(args):
 
     def command(name, argv, *, native=False, negative=False):
         require(snapshot() == initial, "probe inputs changed before command")
-        receipt = run_bounded(list(map(str, argv)), output, environment, output / "logs" / (name + ".log"),
-            timeout_seconds=180 if native else 120, resource_paths=(source, build, managed_path.parent), **BUDGET)
-        receipt.update(id=name, argv=list(map(str, argv)), cwd=str(output), log="logs/" + name + ".log")
+        receipt = {"id": name, "argv": list(map(str, argv)), "cwd": str(output),
+                   "log": "logs/" + name + ".log", "process_started": None}
         report["commands"].append(receipt)
-        if native and receipt["process_started"] is True:
-            report["native_execution"] = "run"
+        previous_native_execution = report["native_execution"]
+        if native:
+            report["native_execution"] = preflight.native_execution_state(previous_native_execution, None)
         checkpoint()
-        require(receipt["cleanup_complete"] and receipt["process_started"] is True,
+        try:
+            receipt.update(run_bounded(receipt["argv"], output, environment, output / receipt["log"],
+                timeout_seconds=180 if native else 120,
+                resource_paths=(source, build, managed_path.parent), **BUDGET))
+        except (OSError, ValueError, RuntimeError, TypeError, KeyboardInterrupt) as error:
+            receipt.update(outcome="fail", reason=str(error) or "interrupted")
+            report["reason"] = report["reason"] or receipt["reason"]
+            report["failures"].append(receipt["reason"])
+            try:
+                log = output / receipt["log"]
+                if log.is_file():
+                    with log.open("rb") as stream:
+                        body = stream.read(BUDGET["max_log_bytes"] + 1)
+                    require(len(body) <= BUDGET["max_log_bytes"], "partial probe log exceeds its byte bound")
+                    receipt.update(log_sha256=hashlib.sha256(body).hexdigest(), log_size_bytes=len(body))
+            except (OSError, ValueError, RuntimeError) as log_error:
+                receipt["log_identity_error"] = str(log_error)
+            checkpoint()
+            raise
+        if native:
+            report["native_execution"] = preflight.native_execution_state(
+                previous_native_execution, receipt.get("process_started"))
+        checkpoint()
+        require(receipt.get("cleanup_complete") is True and receipt.get("process_started") is True,
                 name + ": command did not start or cleanup failed")
         if negative:
             require(receipt["outcome"] == "fail" and receipt["exit_code"] == 1
                     and receipt["reason"] == "nonzero_exit", name + ": expected failure outcome differs")
         else:
-            require(receipt["outcome"] == "pass" and receipt["exit_code"] == 0,
+            require(receipt["outcome"] == "pass" and receipt["exit_code"] == 0 and receipt["reason"] is None,
                     name + ": command failed: " + str(receipt["reason"]))
         log = output / receipt["log"]
         require(_digest(log) == (receipt["log_sha256"], receipt["log_size_bytes"]),
@@ -329,10 +353,12 @@ def execute(args):
             report["native_probe_passed" if mode == "native" else "zero_mutation_rejected"] = True
             checkpoint()
         report["outcome"] = "pass"
-    except (OSError, ValueError, RuntimeError, KeyError, TypeError) as error:
+    except (OSError, ValueError, RuntimeError, KeyError, TypeError, KeyboardInterrupt) as error:
         report["outcome"] = "fail" if report["commands"] else "blocked"
-        report["reason"] = str(error)
-        report["failures"].append(str(error))
+        reason = str(error) or "interrupted"
+        report["reason"] = report["reason"] or reason
+        if not report["failures"] or report["failures"][-1] != reason:
+            report["failures"].append(reason)
     finally:
         if initial is not None:
             try:

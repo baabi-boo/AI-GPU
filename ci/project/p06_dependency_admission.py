@@ -210,6 +210,14 @@ class Admission:
         loads = Counter(checked["loads"])
         require(all(loads[name] == 1 for name in objects),
                 "model link map lacks an exact production object load")
+        project_roots = (self.source, build.parent, Path(self.document["paths"]["workspace"]))
+        external = {row["original_path"] for row in self.document.get("external_archives", [])}
+        project_loads = [name for name in checked["loads"] if name not in external
+                         and any(Path(name).is_relative_to(root) for root in project_roots)]
+        expected_loads = objects + [self.products[name]["staged_path"]
+                                    for name in dependency_contract.PRODUCTS]
+        require(sorted(project_loads) == sorted(expected_loads),
+                "model map contains an unplanned source/work input")
         return {"dependency_receipt_sha256": self.receipt_identity["sha256"],
                 "map": identity, "verification": checked,
                 "model": _live_identity(build / "sw/runtime/libsimx.so"),

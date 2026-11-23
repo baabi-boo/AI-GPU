@@ -102,6 +102,32 @@ class ActualRecordReviewTests(unittest.TestCase):
         return receipt._validate_record(value, self.config, self.config_sha256,
             (payloads or self.payloads).__getitem__, self.recorder)
 
+    def compile_inputs(self, value):
+        roots = self.config["roots"]
+        document = {"paths": {"source": str(builder.ROOT), "workspace": str(self.root),
+                               "sources": roots["sources"]}}
+        locked = {Path(row["path"]).relative_to(roots["sources"]).as_posix(): row
+                  for row in self.records["compile"]["inputs_before"]
+                  if Path(row["path"]).is_relative_to(roots["sources"])}
+        return receipt._verify_compile_inputs(document, value, locked)
+
+    def with_header(self, path, resolved):
+        value, payloads = deepcopy(self.records["compile"]), dict(self.payloads)
+        body = b"unreviewed input fixture\n"
+        digest = hashlib.sha256(body).hexdigest()
+        extra = {"path": str(path), "resolved_path": str(resolved), "sha256": digest,
+                 "size_bytes": len(body), "payload": digest + ".bin"}
+        payloads["payloads/" + extra["payload"]] = body
+        value["inputs_before"] = sorted([*value["inputs_before"], extra], key=lambda row: row["path"])
+        value["inputs_after"] = deepcopy(value["inputs_before"])
+        dependency = (value["output_path"] + ": " + " ".join(row["path"]
+                      for row in value["inputs_before"]) + "\n").encode()
+        digest = hashlib.sha256(dependency).hexdigest()
+        payloads["payloads/" + digest + ".bin"] = dependency
+        for field in ("dependency_file", "dependency_prepass_file"):
+            value[field].update(sha256=digest, size_bytes=len(dependency), payload=digest + ".bin")
+        return value, payloads
+
     def test_actual_compile_archive_index_and_link_pass_as_inert_data(self):
         with mock.patch("subprocess.Popen", side_effect=AssertionError("retained execution forbidden")), \
                 mock.patch.object(Path, "open", side_effect=AssertionError("producer file access forbidden")), \
@@ -167,6 +193,37 @@ class ActualRecordReviewTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "retained bytes"):
             self.verify(self.records["compile"], payloads)
 
+    def test_actual_compiler_inputs_match_the_selected_source_lock(self):
+        self.compile_inputs(self.records["compile"])
+
+    def test_rehashed_project_headers_and_resolved_aliases_are_rejected(self):
+        self.compile_inputs(self.records["compile"])
+        roots = (builder.ROOT, self.root / "build", self.root / "receipts")
+        cases = [(root / "unplanned.h", root / "unplanned.h") for root in roots]
+        cases += [(Path("/unrelated/headers/alias.h"), root / "unplanned.h")
+                  for root in (*roots, Path(self.config["roots"]["sources"]))]
+        for path, resolved in cases:
+            value, payloads = self.with_header(path, resolved)
+            self.verify(value, payloads)
+            with self.subTest(path=path, resolved=resolved), self.assertRaisesRegex(
+                    ValueError, "unreviewed project file"):
+                self.compile_inputs(value)
+
+    def test_pinned_source_path_cannot_resolve_to_a_different_input(self):
+        value = deepcopy(self.records["compile"])
+        original = next(row for row in value["inputs_before"]
+                        if Path(row["path"]).is_relative_to(self.config["roots"]["sources"]))
+        original["resolved_path"] = str(self.root / "other-source.c")
+        value["inputs_after"] = deepcopy(value["inputs_before"])
+        self.verify(value)
+        with self.assertRaisesRegex(ValueError, "source lock"):
+            self.compile_inputs(value)
+
+    def test_external_header_scope_is_not_promoted_to_project_provenance(self):
+        value, payloads = self.with_header("/unrelated/headers/alias.h", "/unrelated/headers/original.h")
+        self.verify(value, payloads)
+        self.compile_inputs(value)
+
 
 class ActualCMakeReviewTests(unittest.TestCase):
     @classmethod
@@ -178,10 +235,11 @@ class ActualCMakeReviewTests(unittest.TestCase):
         cls.addClassCleanup(cls.fixture.doCleanups)
         cls.fixture.test_actual_cmake_records_static_archive_index_and_shared_link_only()
         fixture = cls.fixture
-        cls.document = {"paths": {"source": str(builder.ROOT), "sources": str(fixture.sources),
+        cls.document = {"paths": {"source": str(builder.ROOT), "workspace": str(fixture.root),
+                                  "sources": str(fixture.sources),
                                   "build": str(fixture.build), "output": str(fixture.packet)},
                         "tools": fixture.tools, "tool_config": {"sha256": fixture.config_sha256},
-                        "generated_inputs": [], "compile_database": None}
+                        "generated_inputs": [], "compile_database": None, "external_archives": []}
         _, cls.document["cmake_configuration"] = builder.cmake_command(fixture.sources, fixture.build,
             fixture.tools, fixture.config_path, fixture.config_sha256,
             fixture.packet / "launchers/ar.sh", fixture.packet / "launchers/ranlib.sh")
@@ -197,6 +255,11 @@ class ActualCMakeReviewTests(unittest.TestCase):
                 if path.name == "compile_commands.json":
                     cls.document["compile_database"] = row
         cls.records = fixture.records()
+        cls.record_payloads = {"payloads/" + path.name: path.read_bytes()
+                               for path in (fixture.packet / "payloads").glob("*.bin")}
+        cls.archives = {row["output_path"]: receipt.binary.parse_archive(receipt.payload(
+            row["output"], cls.record_payloads.__getitem__))["members"]
+            for row in cls.records if row["role"] == "index"}
 
     def verify(self, document=None, records=None, payloads=None):
         return receipt._verify_generated_build(document or self.document, records or self.records,
@@ -209,8 +272,81 @@ class ActualCMakeReviewTests(unittest.TestCase):
         row.update(sha256=hashlib.sha256(payloads[name]).hexdigest(), size_bytes=len(payloads[name]))
         return document, payloads
 
+    def verify_link(self, row, *, document=None, payloads=None, archives=None):
+        document = self.document if document is None else document
+        payloads = self.record_payloads if payloads is None else payloads
+        archives = self.archives if archives is None else archives
+        receipt._validate_record(row, self.fixture.config, self.fixture.config_sha256,
+            payloads.__getitem__, recorder.file_identity(recorder.__file__))
+        inputs = row["inputs_before"]
+        return receipt._verify_link_map(document, row, inputs, archives,
+            [item["path"] for item in inputs if item["path"].endswith(".a")],
+            [item["path"] for item in inputs if item["path"].endswith(".so")], payloads.__getitem__)
+
+    def with_map(self, original, body):
+        row, payloads = deepcopy(original), dict(self.record_payloads)
+        digest = hashlib.sha256(body).hexdigest()
+        row["link_map"].update(sha256=digest, size_bytes=len(body), payload=digest + ".bin")
+        payloads["payloads/" + digest + ".bin"] = body
+        return row, payloads
+
     def test_actual_generated_cache_flags_archives_and_links_pass(self):
         self.verify()
+
+    def test_actual_shared_maps_and_equivalent_relative_loads_pass(self):
+        for row in (item for item in self.records if item["role"] == "link"):
+            with self.subTest(product=row["output_path"]):
+                checked = self.verify_link(row)
+                body = receipt.payload(row["link_map"], self.record_payloads.__getitem__)
+                for item in row["inputs_before"]:
+                    body = body.replace(("LOAD " + item["path"] + "\n").encode(),
+                        ("LOAD " + os.path.relpath(item["path"], row["cwd"]) + "\n").encode())
+                changed, payloads = self.with_map(row, body)
+                result = self.verify_link(changed, payloads=payloads)
+                self.assertEqual(result["sha256"], hashlib.sha256(body).hexdigest())
+                self.assertEqual(result["size_bytes"], len(body))
+                self.assertEqual({key: value for key, value in result.items()
+                                  if key not in ("sha256", "size_bytes")},
+                                 {key: value for key, value in checked.items()
+                                  if key not in ("sha256", "size_bytes")})
+
+    def test_rehashed_unplanned_source_workspace_and_alias_loads_reject(self):
+        roots = (builder.ROOT, self.fixture.sources, self.fixture.build, self.fixture.packet)
+        for original in (item for item in self.records if item["role"] == "link"):
+            self.verify_link(original)
+            body = receipt.payload(original["link_map"], self.record_payloads.__getitem__)
+            for root in roots:
+                extra = root / "unplanned.so"
+                for spelling in (str(extra), "./" + os.path.relpath(extra, original["cwd"])):
+                    changed, payloads = self.with_map(original, body + ("\nLOAD " + spelling + "\n").encode())
+                    with self.subTest(product=original["output_path"], spelling=spelling), self.assertRaisesRegex(
+                            ValueError, "unplanned source/workspace input"):
+                        self.verify_link(changed, payloads=payloads)
+
+    def test_relative_duplicate_direct_load_rejects(self):
+        for original in (item for item in self.records if item["role"] == "link"):
+            body = receipt.payload(original["link_map"], self.record_payloads.__getitem__)
+            relative = os.path.relpath(original["inputs_before"][0]["path"], original["cwd"])
+            changed, payloads = self.with_map(original, body + ("\nLOAD " + relative + "\n").encode())
+            with self.subTest(product=original["output_path"]), self.assertRaisesRegex(ValueError, "omits or repeats"):
+                self.verify_link(changed, payloads=payloads)
+
+    def test_only_already_admitted_compiler_archives_are_exempt_inside_owned_roots(self):
+        original = next(row for row in self.records if row["role"] == "link")
+        self.verify_link(original)
+        support = str(self.fixture.root / "tools/libgcc.a")
+        body = receipt.payload(original["link_map"], self.record_payloads.__getitem__)
+        changed, payloads = self.with_map(original, body + ("\nLOAD " + support + "\nLOAD " + support + "\n").encode())
+        with self.assertRaisesRegex(ValueError, "unplanned source/workspace input"):
+            self.verify_link(changed, payloads=payloads)
+        # The full receipt validates resolver commands and archive bytes first;
+        # this focused boundary fixture supplies that admitted input explicitly.
+        document = deepcopy(self.document)
+        document["external_archives"] = [{"original_path": support}]
+        with self.assertRaisesRegex(ValueError, "admitted member inventory"):
+            self.verify_link(changed, document=document, payloads=payloads)
+        archives = dict(self.archives, **{support: next(iter(self.archives.values()))})
+        self.verify_link(changed, document=document, payloads=payloads, archives=archives)
 
     def test_changed_cmake_cache_configuration_is_rejected_after_rehash(self):
         document, payloads = self.mutate_retained("build-inputs/CMakeCache.txt",
