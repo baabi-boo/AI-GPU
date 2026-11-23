@@ -168,6 +168,14 @@ def _backend_graph(model_text, backend_text, *, compiler, make, source, build, s
 
 
 class _NativeReplay(managed._Replay):
+    route_module = admission
+    report_fields = REPORT_FIELDS
+    variant_fields = VARIANT_FIELDS
+    runner_helpers = RUNNER_HELPERS
+    result_contract_id = CONTRACT_ID
+    result_scope = "complete-dependency-lifetime-retained-consistency"
+    result_limitations = LIMITATIONS
+
     def __init__(self, view, api, revision, *, dependency_document, dependency_verification,
                  dependency_body, dependency_receipt_sha256, source_manifest_sha256):
         super().__init__(view, api, revision, None, None)
@@ -179,6 +187,28 @@ class _NativeReplay(managed._Replay):
         self.admission_summary, self.admission_stability = _admission_values(
             dependency_document, dependency_verification, dependency_receipt_sha256)
         self.model_links = {}
+
+    def validate_route_provenance(self):
+        pass
+
+    def build_binding_extra(self):
+        return {}
+
+    def process_binding_extra(self, planned):
+        return {}
+
+    def stability_extra(self):
+        return {}
+
+    def result_extra(self):
+        return {}
+
+    @staticmethod
+    def extend_fields(original, extra, label):
+        require(type(extra) is dict and all(type(key) is str for key in extra)
+                and not set(original).intersection(extra),
+                label + " extension replaces an existing field or is malformed")
+        return {**original, **extra}
 
     def provenance(self):
         self.source = self.document("source_before", "source-before")
@@ -222,7 +252,7 @@ class _NativeReplay(managed._Replay):
         common._check_declared_submodules(self.source_body(".gitmodules"), submodules, self.api)
         for row in self.inventory(checkout["inputs"], "checkout inputs", expected=archive_helpers.SOURCE_INPUTS).values():
             _same(row, self.sources[row["path"]], "checkout input identity")
-        helpers = self.inventory(self.report["loaded_helpers"], "executing helpers", expected=RUNNER_HELPERS)
+        helpers = self.inventory(self.report["loaded_helpers"], "executing helpers", expected=self.runner_helpers)
         for row in helpers.values():
             _same(row, self.sources[row["path"]], "executing helper identity")
         version = {}
@@ -236,8 +266,8 @@ class _NativeReplay(managed._Replay):
         _same(checkout["pins"], version, "checkout pins")
         _same(self.report["preflight_contract_sha256"], qualification_id(self.contract), "parent contract identity")
         _same(self.document("preflight_contract_snapshot", "preflight-contract"), self.contract, "parent contract snapshot")
-        _same(self.report["contract_sha256"], admission.contract_hash(), "dependency lifetime contract identity")
-        _same(self.document("contract_snapshot", "contract"), admission.contract(), "dependency lifetime contract snapshot")
+        _same(self.report["contract_sha256"], self.route_module.contract_hash(), "dependency lifetime contract identity")
+        _same(self.document("contract_snapshot", "contract"), self.route_module.contract(), "dependency lifetime contract snapshot")
         _same(self.document("fixture_snapshot", "selected-fixtures"), self.cases, "selected independent fixtures")
         corpus = self.inventory(self.report["corpus"], "fixture corpus", expected=common.CORPUS)
         for name, row in corpus.items():
@@ -257,7 +287,9 @@ class _NativeReplay(managed._Replay):
         _same(self.report["retained_dependency_payloads"], payloads, "retained dependency payloads")
         for row in payloads:
             self.payload(row)
-        required = set(source_inventory.REQUIRED_SOURCE_NAMES) | set(producer.SOURCE_FILES) | set(lifetime.SOURCE_FILES) | set(admission.SOURCE_FILES) | set(RUNNER_HELPERS)
+        required = (set(source_inventory.REQUIRED_SOURCE_NAMES) | set(producer.SOURCE_FILES)
+            | set(lifetime.SOURCE_FILES) | set(admission.SOURCE_FILES)
+            | set(self.route_module.SOURCE_FILES) | set(self.runner_helpers))
         require(required <= set(self.sources), "native source inventory omits required production inputs")
         input_hashes = {}
         for component in self.dependency_document["source_manifest"]["sources"]:
@@ -290,6 +322,7 @@ class _NativeReplay(managed._Replay):
         retained_receipt = self.report["retained_dependency_receipt"]
         _same(self.verified(retained_receipt, "artifacts/dependency-receipt/report.json"),
               self.dependency_body, "native retained dependency original")
+        self.validate_route_provenance()
 
     def model_link(self):
         """Join retained model objects, archive members, map and staged products."""
@@ -484,7 +517,7 @@ class _NativeReplay(managed._Replay):
         _same(self.variant["effective_headers"], self.effective, "effective compiler configuration")
 
     def build_binding(self):
-        binding = {"contract_id": admission.CONTRACT_ID, "contract_sha256": self.report["contract_sha256"],
+        binding = {"contract_id": self.route_module.CONTRACT_ID, "contract_sha256": self.report["contract_sha256"],
             "source": self.source, "loaded_helpers": self.report["loaded_helpers"],
             "format": self.fmt, "backend": "simx", "case": self.case, "corpus": self.report["corpus"],
             "profile_sha256": PROFILE_SHA256, "kernel_source_sha256": producer.KERNEL_SHA256,
@@ -502,6 +535,7 @@ class _NativeReplay(managed._Replay):
             dependency_admission=self.admission_summary,
             application_build_records=self.application_build,
             dependency_model_link=self.model_links[self.variant_id])
+        binding = self.extend_fields(binding, self.build_binding_extra(), "build binding")
         original = self.api.strict_json(self.verified(self.variant["binding"],
             "snapshots/" + self.variant_id + "-build-binding.json"))
         _same(original, binding, "reconstructed common build binding")
@@ -519,11 +553,12 @@ class _NativeReplay(managed._Replay):
                 _same(row[key], expected, "process." + key)
             _same(row["outcome"], "pass", "process outcome")
             process_id = planned["id"]
-            binding = {"contract_id": admission.CONTRACT_ID, "contract_sha256": self.report["contract_sha256"],
+            binding = {"contract_id": self.route_module.CONTRACT_ID, "contract_sha256": self.report["contract_sha256"],
                 "build_binding_sha256": self.build_id, "build": self.bindings[self.variant_id], "process": planned}
             binding.update(lifetime_contract=lifetime.contract(),
                 preflight_contract_sha256=qualification_id(self.contract),
                 dependency_receipt_sha256=self.dependency_receipt_sha256)
+            binding = self.extend_fields(binding, self.process_binding_extra(planned), "process binding")
             actual = self.api.strict_json(self.verified(row["binding"], "snapshots/" + process_id + "-binding.json"))
             _same(actual, binding, "reconstructed process binding")
             binding_id = qualification_id(binding)
@@ -562,9 +597,12 @@ class _NativeReplay(managed._Replay):
     def stability(self):
         checks = self.report["stability_checks"]
         require(type(checks) is list and len(checks) == len(self.stability_labels), "missing stability observations")
+        extra = self.stability_extra()
+        fields = self.extend_fields(dict.fromkeys(("at", "label", "source_sha256", "tools_sha256",
+            "dependencies_sha256", "dependency_admission")), extra, "stability observation")
         previous = self.started
         for check, label in zip(checks, self.stability_labels):
-            _fields(check, ("at", "label", "source_sha256", "tools_sha256", "dependencies_sha256", "dependency_admission"), "stability observation")
+            _fields(check, fields, "stability observation")
             _same(check["label"], label, "stability order")
             at = _timestamp(check["at"])
             require(previous <= at <= self.finished, "stability timestamps are outside chronology")
@@ -572,17 +610,19 @@ class _NativeReplay(managed._Replay):
             for name, value in (("source", self.source), ("tools", self.tools), ("dependencies", self.dependencies)):
                 _same(check[name + "_sha256"], qualification_id(value), "stability identity " + name)
             _same(check["dependency_admission"], self.admission_stability, "dependency stability observation")
+            for name, expected in extra.items():
+                _same(check[name], expected, "route stability observation " + name)
 
     def run(self):
-        _fields(self.report, REPORT_FIELDS, "managed preflight report")
-        for key, expected in (("schema_version", 1), ("contract_id", admission.CONTRACT_ID),
-            ("scope", admission.SCOPE), ("state", "finished"), ("outcome", "pass"),
+        _fields(self.report, self.report_fields, "managed preflight report")
+        for key, expected in (("schema_version", 1), ("contract_id", self.route_module.CONTRACT_ID),
+            ("scope", self.route_module.SCOPE), ("state", "finished"), ("outcome", "pass"),
             ("reason", None), ("failures", []), ("native_execution", "run"), ("native_preflight_passed", True),
             ("native_lifetime_passed", True), ("dependency_source_to_loaded_binary_verified", True),
             ("dependency_receipt_sha256", self.dependency_receipt_sha256),
             ("expected_revision", self.revision), ("expected_counts", COUNTS), ("completed_counts", COUNTS),
             ("expected_processes", self.plan), ("unresolved_obligations", list(manifest.UNRESOLVED_OBLIGATIONS)),
-            ("retained_files_stable", True), ("limitations", [*admission.LIMITATIONS, *producer.base.PROCESS_LIMITATIONS])):
+            ("retained_files_stable", True), ("limitations", [*self.route_module.LIMITATIONS, *producer.base.PROCESS_LIMITATIONS])):
             _same(self.report[key], expected, "report." + key)
         for name in manifest.FALSE_CLAIMS:
             _same(self.report[name], False, "report." + name)
@@ -608,7 +648,7 @@ class _NativeReplay(managed._Replay):
             self.variant_id = "simx-" + self.fmt
             self.build = self.paths["work"] / self.variant_id
             self.case = next(case for case in self.cases if case["format"] == self.fmt)
-            _fields(self.variant, VARIANT_FIELDS, "variant")
+            _fields(self.variant, self.variant_fields, "variant")
             for key, expected in (("id", self.variant_id), ("backend", "simx"), ("format", self.fmt),
                 ("outcome", "pass"), ("build_dir", str(self.build)),
                 ("process_ids", [row["id"] for row in self.plan if row["format"] == self.fmt])):
@@ -632,8 +672,8 @@ class _NativeReplay(managed._Replay):
         expected_retained = {name: row for name, row in self.descriptors.items() if name not in logs}
         _same(retained, expected_retained, "complete semantically bound retained inventory")
         _same(set(self.view.files()), self.used_members, "complete managed packet member inventory")
-        return {"schema_version": 1, "contract_id": CONTRACT_ID,
-            "scope": "complete-dependency-lifetime-retained-consistency", "outcome": "pass",
+        result = {"schema_version": 1, "contract_id": self.result_contract_id,
+            "scope": self.result_scope, "outcome": "pass",
             "native_execution": "not_run", "retained_code_executed": False,
             "retained_consistency": True, "dependency_source_to_loaded_binary_consistent": True,
             **dict.fromkeys(manifest.FALSE_CLAIMS, False),
@@ -648,7 +688,8 @@ class _NativeReplay(managed._Replay):
             "build_binding_ids": {name: qualification_id(value) for name, value in self.bindings.items()},
             "application_builds": self.application_builds, "generated_builds": self.generated_builds,
             "backend_builds": self.backend_builds, "dependency_model_links": self.model_links,
-            "limitations": list(LIMITATIONS)}
+            "limitations": list(self.result_limitations)}
+        return self.extend_fields(result, self.result_extra(), "replay result")
 
 
 def _hosted_identity(replay, outer, dependency_view):

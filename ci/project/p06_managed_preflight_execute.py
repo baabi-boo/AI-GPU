@@ -210,12 +210,16 @@ def validate_host_build(text, stamp, *, source, build, compiler):
             "arguments": selected[0], "output": APP + "/" + target}
 
 
-def execute(args, paths, *, lifetime=False, dependency=False):
+def execute(args, paths, *, lifetime=False, dependency=False, counter_qualification=False):
     require(type(lifetime) is bool, "lifetime mode must be explicitly boolean")
     require(type(dependency) is bool and (not dependency or lifetime),
             "dependency admission requires explicitly selected lifetime mode")
+    require(type(counter_qualification) is bool
+            and (not counter_qualification or (lifetime and dependency)),
+            "counter qualification requires explicitly selected lifetime and dependency modes")
     selected_contract = None
     dependency_module = None
+    qualification_module = None
     contract_id = CONTRACT_ID
     scope = "seed-free-managed-counter-preflight"
     limitations = LIMITATIONS
@@ -236,6 +240,15 @@ def execute(args, paths, *, lifetime=False, dependency=False):
         scope = dependency_module.SCOPE
         limitations = [*dependency_module.LIMITATIONS, *base.PROCESS_LIMITATIONS]
         extra_source_files = (*extra_source_files, *dependency_module.SOURCE_FILES)
+    if counter_qualification:
+        qualification_module = importlib.import_module("p06_counter_qualification_admission")
+        require(Path(qualification_module.__file__).resolve()
+                == ROOT / "ci/project/p06_counter_qualification_admission.py",
+                "counter qualification admission loaded from an unexpected location")
+        contract_id = qualification_module.CONTRACT_ID
+        scope = qualification_module.SCOPE
+        limitations = [*qualification_module.LIMITATIONS, *base.PROCESS_LIMITATIONS]
+        extra_source_files = (*extra_source_files, *qualification_module.SOURCE_FILES)
     source, work, output = (paths[name] for name in ("source", "work", "output"))
     output.mkdir(mode=0o700)
     for name in ("logs", "snapshots", "artifacts"):
@@ -261,8 +274,12 @@ def execute(args, paths, *, lifetime=False, dependency=False):
     if dependency:
         report.update(dependency_receipt_sha256=getattr(args, "dependency_receipt_sha256", None),
                       dependency_admission=None, dependency_source_to_loaded_binary_verified=False)
+    if counter_qualification:
+        report.update(counter_qualification_sha256=getattr(args, "counter_qualification_sha256", None),
+                      counter_qualification_admission=None, counter_qualification_passed=False)
     initial = tools = dependencies = helpers = None
     admission = None
+    qualification_admission = None
     active_variant = active_process = None
     retained = []
     payload_bytes = 0
@@ -348,6 +365,8 @@ def execute(args, paths, *, lifetime=False, dependency=False):
             for variant in report["variants"]:
                 if "dependency_model_link" in variant:
                     admission.verify_model_stable(variant["dependency_model_link"])
+        if counter_qualification:
+            check["counter_qualification_admission"] = qualification_admission.verify_stable()
         report["stability_checks"].append(check)
 
     def command(name, argv, cwd, env, timeout, *, native_process=False):
@@ -424,6 +443,31 @@ def execute(args, paths, *, lifetime=False, dependency=False):
             report["dependency_admission"] = admission.summary
             report["retained_dependency_receipt"] = retain_files(admission.path.parent,
                 hash_artifacts(admission.path.parent, [admission.path.name]), "dependency-receipt")[0]
+        if counter_qualification:
+            qualification_admission = qualification_module.Admission(
+                getattr(args, "counter_qualification", None),
+                getattr(args, "counter_qualification_sha256", None), source=source,
+                expected_revision=args.expected_revision, dependency_admission=admission,
+                diagnostic_archive=getattr(args, "diagnostic_archive", None),
+                diagnostic_sha256=getattr(args, "diagnostic_archive_sha256", None),
+                control_archive=getattr(args, "control_archive", None),
+                control_sha256=getattr(args, "control_archive_sha256", None))
+            report["counter_qualification_admission"] = qualification_admission.summary
+            extra_source_files = (*extra_source_files,
+                *(row["path"] for row in qualification_admission.helper_sources),
+                *(row["path"] for row in qualification_admission.prerequisite_inputs))
+            identity = qualification_admission.identity
+            relative = "artifacts/counter-qualification/proof.json"
+            target = output / relative
+            target.parent.mkdir()
+            with Path(identity["path"]).open("rb") as original, target.open("xb") as destination:
+                shutil.copyfileobj(original, destination, length=1024 * 1024)
+            retained_proof = hash_artifacts(output, [relative])[0]
+            require((retained_proof["sha256"], retained_proof["size_bytes"])
+                    == (identity["sha256"], identity["size_bytes"]),
+                    "counter qualification proof changed while its original bytes were retained")
+            retained.append(retained_proof)
+            report["retained_counter_qualification"] = retained_proof
         helpers = loaded_helpers()
         report["loaded_helpers"] = helpers
         initial = snapshot_source()
@@ -453,6 +497,11 @@ def execute(args, paths, *, lifetime=False, dependency=False):
             active_contract, active_contract_sha256 = dependency_module.contract(), dependency_module.contract_hash()
             require(qualification_id(active_contract) == active_contract_sha256,
                     "dependency admission contract descriptor and digest differ")
+        if counter_qualification:
+            active_contract = qualification_module.contract()
+            active_contract_sha256 = qualification_module.contract_hash()
+            require(qualification_id(active_contract) == active_contract_sha256,
+                    "counter qualification contract descriptor and digest differ")
         report.update(contract_snapshot=save_json("contract", active_contract), contract_sha256=active_contract_sha256,
             fixture_snapshot=save_json("selected-fixtures", cases), expected_processes=plan,
             profile_sha256=PROFILE_SHA256, kernel_source_sha256=KERNEL_SHA256,
@@ -461,6 +510,8 @@ def execute(args, paths, *, lifetime=False, dependency=False):
         tools = tool_inventory(paths, environment)
         if dependency:
             report["dependency_admission_before"] = admission.verify_stable(tools)
+        if counter_qualification:
+            report["counter_qualification_admission_before"] = qualification_admission.verify_stable()
         report["interpreter"] = interpreter_identity(tools)
         report["tools_before"] = save_json("tools-before", tools)
         dependencies = hash_artifacts(source, base.DEPENDENCIES)
@@ -605,6 +656,9 @@ def execute(args, paths, *, lifetime=False, dependency=False):
                     dependency_admission=admission.summary,
                     application_build_records=variant["application_build_records"],
                     dependency_model_link=variant["dependency_model_link"])
+            if counter_qualification:
+                binding.update(counter_qualification_sha256=report["counter_qualification_sha256"],
+                    counter_qualification_admission=qualification_admission.summary)
             build_id = qualification_id(binding)
             variant.update(build_binding_sha256=build_id, binding=save_json(variant_id + "-build-binding", binding))
             launch_env = dict(environment, VORTEX_DRIVER="simx", LD_LIBRARY_PATH=str(runtime))
@@ -620,6 +674,8 @@ def execute(args, paths, *, lifetime=False, dependency=False):
                                            preflight_contract_sha256=report["preflight_contract_sha256"])
                 if dependency:
                     process_binding["dependency_receipt_sha256"] = report["dependency_receipt_sha256"]
+                if counter_qualification:
+                    process_binding["counter_qualification_sha256"] = report["counter_qualification_sha256"]
                 binding_id = qualification_id(process_binding)
                 process.update(execution_binding_sha256=binding_id, build_binding_sha256=build_id,
                                binding=save_json(process["id"] + "-binding", process_binding))
@@ -692,6 +748,14 @@ def execute(args, paths, *, lifetime=False, dependency=False):
                         "dependency admission changed before finalization")
             except (OSError, ValueError, RuntimeError, KeyError, TypeError) as error:
                 failure(error, "final-dependency-admission")
+        if qualification_admission is not None:
+            try:
+                report["counter_qualification_admission_after"] = qualification_admission.verify_stable()
+                require(report["counter_qualification_admission_after"]
+                        == report.get("counter_qualification_admission_before"),
+                        "counter qualification admission changed before finalization")
+            except (OSError, ValueError, RuntimeError, KeyError, TypeError) as error:
+                failure(error, "final-counter-qualification-admission")
         report["raw_logs"] = []
         for row in report["commands"]:
             try:
@@ -724,6 +788,12 @@ def execute(args, paths, *, lifetime=False, dependency=False):
                         and row.get("dependency_model_link", {}).get("source_to_model_link_verified") is True
                         and row.get("dependency_receipt_sha256") == report["dependency_receipt_sha256"]
                         for row in report["variants"]))
+        if counter_qualification:
+            report["counter_qualification_passed"] = (
+                report["dependency_source_to_loaded_binary_verified"]
+                and qualification_admission is not None
+                and report.get("counter_qualification_admission_before")
+                    == report.get("counter_qualification_admission_after"))
         report["retained_files"] = retained
         report["retained_payload_bytes"] = payload_bytes
         report.update(state="finished", finished_at=base._now())
