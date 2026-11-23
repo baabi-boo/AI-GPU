@@ -1,0 +1,102 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "/workspace/p06-governance-host-01/bin/python3",
+        "-B",
+        "ci/project/preflight.py",
+        "--tier",
+        "governance",
+        "--json"
+      ],
+      "cwd": "/workspace/p06-counter-governance-source-02",
+      "duration_seconds": 0.2153612299989618,
+      "exit_code": 0,
+      "finished_at": "2026-11-23T16:08:54Z",
+      "id": "preflight",
+      "log": "preflight.log",
+      "log_sha256": "74dd3935f409bd1095fe8813c5c3278461ac83753ec9e9ce7d437dfaeeed54f0",
+      "log_size_bytes": 4990,
+      "started_at": "2026-11-23T16:08:54Z"
+    },
+    {
+      "argv": [
+        "/workspace/p06-governance-host-01/bin/python3",
+        "-B",
+        "ci/project/check_project.py"
+      ],
+      "cwd": "/workspace/p06-counter-governance-source-02",
+      "duration_seconds": 2.92781110299984,
+      "exit_code": 0,
+      "finished_at": "2026-11-23T16:08:57Z",
+      "id": "structure",
+      "log": "structure.log",
+      "log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+      "log_size_bytes": 96,
+      "started_at": "2026-11-23T16:08:54Z"
+    },
+    {
+      "argv": [
+        "/workspace/p06-governance-host-01/bin/python3",
+        "-B",
+        "ci/project/check_baseline_packets.py"
+      ],
+      "cwd": "/workspace/p06-counter-governance-source-02",
+      "duration_seconds": 0.3152063409979746,
+      "exit_code": 0,
+      "finished_at": "2026-11-23T16:08:57Z",
+      "id": "baseline-packets",
+      "log": "baseline-packets.log",
+      "log_sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be",
+      "log_size_bytes": 657,
+      "started_at": "2026-11-23T16:08:57Z"
+    },
+    {
+      "argv": [
+        "/workspace/p06-governance-host-01/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/project",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "cwd": "/workspace/p06-counter-governance-source-02",
+      "id": "unittest-discovery",
+      "log": "unittest-discovery.log",
+      "started_at": "2026-11-23T16:08:57Z"
+    }
+  ],
+  "created_at": "2026-11-23T16:08:53Z",
+  "gpu_execution_certified": false,
+  "native_attempt_outcome": "pass",
+  "native_handoff": {
+    "allowed": true,
+    "limitations": [
+      "This is a scheduling guard, not producer authentication or hard descendant containment.",
+      "A failed attempt or unconfirmed cleanup requires explicit coordinator review before another heavy job.",
+      "Successful stage and cleanup observations retain the native supervisors sampled-process limitations."
+    ],
+    "observed_at": "2026-11-23T16:08:53Z",
+    "reason": null,
+    "supervision_sha256": "c16af01670eaf44e0ff38eb52a8ef7d9fc8b15cbca1c1cbb26e4c626271d752f"
+  },
+  "native_revision_for_completed_handoff": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+  "schema_version": 1,
+  "scope": "source-root-governance-and-tooling-only",
+  "source": "/workspace/p06-counter-governance-source-02",
+  "source_revision": "0093cf60d881a177634ce1a2247e053fc9d2b94e",
+  "started_at": "2026-11-23T16:08:53Z",
+  "state": "running",
+  "supervisor_sha256": "9bb2c6639d8d5f235b62e76d363e386839ed917aa13da6152efac86201312320",
+  "test_environment": {
+    "PATH": "/workspace/p06-governance-host-01/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/workspace/p06-counter-governance-tmp-02"
+  },
+  "test_interpreter": "/workspace/p06-governance-host-01/bin/python3",
+  "tree": "037a667b7a3238061ff1d4894503bd26c741c7c3"
+}

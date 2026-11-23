@@ -1,0 +1,1344 @@
+{
+  "actual_packet_negative_controls": [
+    {
+      "id": "pending_read_nonzero",
+      "rejection": "native lifetime MPM reads[0].pending_before",
+      "reviewer": "validation/w08_a01-native-adversarial.json",
+      "scope": "modified copy; no new native process"
+    },
+    {
+      "id": "prime_output_one_bit",
+      "rejection": "warm operation 0.actual_bits[0]",
+      "reviewer": "validation/w08_a01-native-adversarial.json",
+      "scope": "modified copy; no new native process"
+    },
+    {
+      "id": "interior-stability-drift",
+      "rejection": "route stability observation counter_qualification_admission.control_archive_sha256: value differs",
+      "reviewer": "validation/w08_a02-binding-adversarial.json",
+      "scope": "modified copy; no new native process"
+    },
+    {
+      "id": "wrong-process-proof-binding",
+      "rejection": "reconstructed process binding.counter_qualification_sha256: value differs",
+      "reviewer": "validation/w08_a02-binding-adversarial.json",
+      "scope": "modified copy; no new native process"
+    }
+  ],
+  "admission_checks_include_80_interior_rows": true,
+  "admission_inputs": 79,
+  "admission_inventory_sha256": "c58bf32e53d55b74a14e548ecaddd553a1c0490aac9daa3f95d07776f87f1ae3",
+  "agent": "w10_a04",
+  "compact_shared_keys_checked": [
+    "acceptance_claimed",
+    "commands_checked",
+    "contract_id",
+    "counter_population",
+    "counter_qualification_passed",
+    "counter_qualification_scope",
+    "counter_qualification_sha256",
+    "counts",
+    "dependency_receipt_sha256",
+    "dependency_source_to_loaded_binary_consistent",
+    "execution_origin",
+    "full_warm_coverage",
+    "lifetime_premises",
+    "limitations",
+    "native_execution",
+    "native_report_sha256",
+    "origin_authenticated",
+    "outcome",
+    "performance_acceptance",
+    "phase_acceptance",
+    "qualified",
+    "ready_for_warm",
+    "retained_code_executed",
+    "retained_consistency",
+    "retained_files_checked",
+    "retained_payload_bytes_checked",
+    "retained_payload_files_checked",
+    "retained_source_files_checked",
+    "schema_version",
+    "scope",
+    "source_manifest_sha256",
+    "source_revision",
+    "source_tree",
+    "warm_execution"
+  ],
+  "corrected_replay_sha256": "c42dbcd166cbcb284cfa1e59da3767d59255bdd29fd6edb431733c7fa0ce7fc6",
+  "counter_population": {
+    "components": 40,
+    "selectors": 33,
+    "unavailable_selectors": 12
+  },
+  "differing_replay_keys": [
+    "trusted_reader_sources"
+  ],
+  "duration_seconds": 9.686436259999027,
+  "findings": [],
+  "finished_at": "2026-11-23T16:38:57Z",
+  "future_warm": {
+    "complete_matrix": {
+      "checked_words": 25344,
+      "launches": 792,
+      "measured_checked_words": 20480,
+      "measured_operations": 640,
+      "measured_processes": 20,
+      "measured_useful_flops": 327680,
+      "processes": 24,
+      "warmup_processes": 4
+    },
+    "executed_by_this_task": false,
+    "implemented_in_qualified_executor": false,
+    "sampling": {
+      "context_policy": "one_fresh_process_and_context_per_policy_batch",
+      "failed_sample_policy": "retain_and_fail_entire_attempt_no_replacements",
+      "measured_pairs": 5,
+      "operations_per_process": 33,
+      "optional_stopping": false,
+      "order": "fp16_then_bf16_pairs_ascending_alternating_reference_first_at_zero",
+      "outlier_policy": "none",
+      "pair_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "poison_order": "alternate_by_operation_index_prime_is_zero",
+      "poisons": [
+        3735928559,
+        2143346349
+      ],
+      "prime_operations": 1,
+      "timed_operations": 32,
+      "warm_context": "prime_closed_then_32_serial_operations_each_explicitly_closed",
+      "warmup_pairs": 1
+    }
+  },
+  "governance_snapshot": [
+    {
+      "complete_pass_inferred": false,
+      "outcome_observed": "fail",
+      "path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/execution.json",
+      "source_revision": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+      "state_observed": "finished"
+    },
+    {
+      "complete_pass_inferred": false,
+      "outcome_observed": null,
+      "path": "/workspace/scratch/e96519576778/full-governance-0093cf60/execution.json",
+      "source_revision": "0093cf60d881a177634ce1a2247e053fc9d2b94e",
+      "state_observed": "running"
+    },
+    {
+      "complete_pass_inferred": false,
+      "outcome_observed": null,
+      "path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/execution.json",
+      "source_revision": "220399748ecab84d48ba5a5f123457c44a0c8699",
+      "state_observed": "running"
+    }
+  ],
+  "independently_compared_output_words": 4224,
+  "independently_found_word_mismatches": 0,
+  "legacy_false_field_occurrences": 115,
+  "lifetime_premises": [
+    "P01",
+    "P02",
+    "P03",
+    "P04",
+    "P05",
+    "P06",
+    "P07",
+    "P08",
+    "P09",
+    "P10"
+  ],
+  "limitations": [
+    "This is data/object reconciliation; it does not rerun the public reader, native workload or tests.",
+    "Actual bits were compared with the unchanged frozen fixture, not a newly regenerated arithmetic oracle.",
+    "The guarded replay observations and adversarial executions are independently retained earlier runs, not additional executions by this reviewer.",
+    "Consistent artifacts and Git object membership do not authenticate an arbitrary producer.",
+    "Trusted Python helper execution is distinct from executing retained archive code; no blanket no-code-exec claim is made.",
+    "Source identities and private-value scanning are point-in-time checks; final publication and completed governance belong to their assigned reviewers."
+  ],
+  "native_execution": "not_run",
+  "native_member_identities": [
+    {
+      "path": "native-qualification/report.json",
+      "sha256": "576b77872d6b918e3dbe30cef4107481f39ee73c346a813562e7e916b2afd7c4",
+      "size_bytes": 3770129
+    },
+    {
+      "path": "dependency-build/report.json",
+      "sha256": "5b754be521277cd133ea28a8c1cac3e71105639a2e3cd314bf1ca9db6c8a4dbc",
+      "size_bytes": 1790916
+    },
+    {
+      "path": "native-qualification/snapshots/source-before.json",
+      "sha256": "ad48858ab29a605747c19679bdbee82fd1a260cd36b9f3df8f27b297657b5fc1",
+      "size_bytes": 188038
+    },
+    {
+      "path": "native-qualification/artifacts/counter-qualification/proof.json",
+      "sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e",
+      "size_bytes": 123781
+    }
+  ],
+  "native_populations": {
+    "available_queries": 528,
+    "cache_flush_reads": 132,
+    "checked_words": 4224,
+    "dcr_reads": 1188,
+    "half_replies": 1056,
+    "launches": 132,
+    "processes": 4,
+    "snapshots": 16,
+    "unavailable_rows": 192
+  },
+  "original_archives_after": [
+    {
+      "path": "/workspace/scratch/e96519576778/AI-GPU_P06_counter_qualification_17e02844_2026-11-23.zip",
+      "sha256": "9a0f1088f7a6d70a2ec17c705a61bdbbb2ea59cb815a3327aec817d0120d05a0",
+      "size_bytes": 41577668
+    },
+    {
+      "path": "/workspace/p06-counter-governance-source-01/docs/project/evidence/p06-counter-diagnostics/native/run-45034575685-attempt1.zip",
+      "sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb",
+      "size_bytes": 4290949
+    },
+    {
+      "path": "/workspace/scratch/279b6658611e/AI-GPU_P06_local_attempt_04_passed_2026-11-23.zip",
+      "sha256": "d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f",
+      "size_bytes": 47632218
+    }
+  ],
+  "original_archives_before": [
+    {
+      "path": "/workspace/scratch/e96519576778/AI-GPU_P06_counter_qualification_17e02844_2026-11-23.zip",
+      "sha256": "9a0f1088f7a6d70a2ec17c705a61bdbbb2ea59cb815a3327aec817d0120d05a0",
+      "size_bytes": 41577668
+    },
+    {
+      "path": "/workspace/p06-counter-governance-source-01/docs/project/evidence/p06-counter-diagnostics/native/run-45034575685-attempt1.zip",
+      "sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb",
+      "size_bytes": 4290949
+    },
+    {
+      "path": "/workspace/scratch/279b6658611e/AI-GPU_P06_local_attempt_04_passed_2026-11-23.zip",
+      "sha256": "d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f",
+      "size_bytes": 47632218
+    }
+  ],
+  "original_replay_sha256": "7675edaaee1c7baedb9016382cdbdc6250f670f3a534194436701be12c2dddbd",
+  "originals_unchanged": true,
+  "outcome": "pass",
+  "private_value_scan": {
+    "files": 199,
+    "inventory_canonical_sha256": "305b23197ccb45eb25c4ffd3c452d01b0e7a0d55f7716f7efd8dc7eefc419c20",
+    "limit": "This is the current packet snapshot; later delivery artifacts need final coordinator review.",
+    "matches": [],
+    "patterns": [
+      "private_library_identity",
+      "private_connector_identity",
+      "github_token_value",
+      "api_key_value",
+      "bearer_value",
+      "signed_url_parameter"
+    ]
+  },
+  "process_reconciliation": [
+    {
+      "all_actual_bits_equal_frozen_fixture": true,
+      "all_raw_observations_equal_report": true,
+      "counts": {
+        "available_queries": 132,
+        "cache_flush_reads": 33,
+        "checked_words": 1056,
+        "dcr_reads": 297,
+        "half_replies": 264,
+        "launches": 33,
+        "processes": 1,
+        "snapshots": 4,
+        "unavailable_rows": 48
+      },
+      "format": "fp16",
+      "id": "preflight-simx-fp16-per_operation",
+      "pair_index": 0,
+      "phase": "warmup",
+      "policy": "per_operation",
+      "raw_log_sha256": "7cf4b8a29ec9607bae00282dd30c9cbcbb7a19a17bf9cc0d8d5abba9aef06a86"
+    },
+    {
+      "all_actual_bits_equal_frozen_fixture": true,
+      "all_raw_observations_equal_report": true,
+      "counts": {
+        "available_queries": 132,
+        "cache_flush_reads": 33,
+        "checked_words": 1056,
+        "dcr_reads": 297,
+        "half_replies": 264,
+        "launches": 33,
+        "processes": 1,
+        "snapshots": 4,
+        "unavailable_rows": 48
+      },
+      "format": "fp16",
+      "id": "preflight-simx-fp16-reusable_single_tile",
+      "pair_index": 0,
+      "phase": "warmup",
+      "policy": "reusable_single_tile",
+      "raw_log_sha256": "5af240e5670917baa31292db53cb2e50fec275b00f5efaa51c4e054c6e6078f1"
+    },
+    {
+      "all_actual_bits_equal_frozen_fixture": true,
+      "all_raw_observations_equal_report": true,
+      "counts": {
+        "available_queries": 132,
+        "cache_flush_reads": 33,
+        "checked_words": 1056,
+        "dcr_reads": 297,
+        "half_replies": 264,
+        "launches": 33,
+        "processes": 1,
+        "snapshots": 4,
+        "unavailable_rows": 48
+      },
+      "format": "bf16",
+      "id": "preflight-simx-bf16-per_operation",
+      "pair_index": 0,
+      "phase": "warmup",
+      "policy": "per_operation",
+      "raw_log_sha256": "f7eb7e745076908c1a193272895e1def1c65d1270e22127e21ebda2ee5acaa7f"
+    },
+    {
+      "all_actual_bits_equal_frozen_fixture": true,
+      "all_raw_observations_equal_report": true,
+      "counts": {
+        "available_queries": 132,
+        "cache_flush_reads": 33,
+        "checked_words": 1056,
+        "dcr_reads": 297,
+        "half_replies": 264,
+        "launches": 33,
+        "processes": 1,
+        "snapshots": 4,
+        "unavailable_rows": 48
+      },
+      "format": "bf16",
+      "id": "preflight-simx-bf16-reusable_single_tile",
+      "pair_index": 0,
+      "phase": "warmup",
+      "policy": "reusable_single_tile",
+      "raw_log_sha256": "7693c9817d302bd5de52137e56107ea45742dfcd8a44574631bfaa0a1221923e"
+    }
+  ],
+  "producer_helpers": 77,
+  "protected_inputs_checked": 76,
+  "public_replay": "not_run",
+  "publication_objects": [
+    {
+      "common_parent": "5e88e2ecffe5ab748f9d08b22820d7f6664a0d82",
+      "independent_local_git_object_equivalence": true,
+      "published": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+      "remote_readback_scope": "Recorded by coordinator; this reviewer did not repeat the remote API request.",
+      "reviewed": "faf836eb860b0992486803caea9d5ef31f4fe3af",
+      "tree": "5063f4c8bfec76d2e49d136d84d6ff5d27f5f521"
+    },
+    {
+      "common_parent": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+      "independent_local_git_object_equivalence": true,
+      "published": "220399748ecab84d48ba5a5f123457c44a0c8699",
+      "remote_readback_scope": "Recorded by coordinator; this reviewer did not repeat the remote API request.",
+      "reviewed": "0093cf60d881a177634ce1a2247e053fc9d2b94e",
+      "tree": "037a667b7a3238061ff1d4894503bd26c741c7c3"
+    }
+  ],
+  "published_changed_paths": [
+    ".github/workflows/project-governance.yml",
+    "ci/project/p06_counter_qualification_admission.py",
+    "ci/project/p06_counter_qualification_contract.py",
+    "ci/project/p06_counter_qualification_execute.py",
+    "ci/project/p06_counter_qualification_prerequisites.py",
+    "ci/project/p06_counter_qualification_proof.json",
+    "ci/project/p06_counter_qualification_replay.py",
+    "ci/project/p06_counter_qualification_test_fixture.py",
+    "ci/project/p06_dependency_native_replay.py",
+    "ci/project/p06_managed_preflight_execute.py",
+    "ci/project/test_p06_counter_qualification_admission.py",
+    "ci/project/test_p06_counter_qualification_admission_adversarial.py",
+    "ci/project/test_p06_counter_qualification_binding_adversarial.py",
+    "ci/project/test_p06_counter_qualification_cli.py",
+    "ci/project/test_p06_counter_qualification_compatibility.py",
+    "ci/project/test_p06_counter_qualification_contract.py",
+    "ci/project/test_p06_counter_qualification_prerequisites.py",
+    "ci/project/test_p06_counter_qualification_proof_adversarial.py",
+    "ci/project/test_p06_counter_qualification_replay.py",
+    "ci/project/test_p06_counter_qualification_runner.py",
+    "ci/project/test_p06_dependency_build.py",
+    "ci/project/test_p06_dependency_replay_extension.py",
+    "docs/designs/complete_counter_qualification_v1.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w01_a01.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w01_a02.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w01_a03.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w01_a04.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w01_a05.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w01_a06.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w02_a01.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w02_a02.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w02_a03.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w02_a04.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w02_a05.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w02_a06.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w03_a01.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w03_a02-tests.log",
+    "docs/project/evidence/p06-counter-qualification/agents/w03_a02.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w03_a03.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w03_a04-tests.log",
+    "docs/project/evidence/p06-counter-qualification/agents/w03_a04.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w03_a05.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w03_a06.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w04_a01.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w04_a02.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w04_a03.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w04_a04.md",
+    "docs/project/evidence/p06-counter-qualification/agents/w04_a05.md",
+    "docs/project/evidence/p06-counter-qualification/validation/root-foundation-integration.json",
+    "docs/project/evidence/p06-counter-qualification/validation/root-foundation-integration.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w01_a03-dependency-admission-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w01_a04-diagnostic-audit.json",
+    "docs/project/evidence/p06-counter-qualification/validation/w01_a04-model-replay.json",
+    "docs/project/evidence/p06-counter-qualification/validation/w01_a04-public-replay.json",
+    "docs/project/evidence/p06-counter-qualification/validation/w01_a05-existing-boundary-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a01-contract-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a01-files.json",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a02-control-prerequisite.json",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a02-diagnostic-prerequisites.json",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a02-prerequisite-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a02-reader-sources.json",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a03-attempt04-replay-full.json.gz",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a03-attempt04-replay.json",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a03-existing-native-replay-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a03-replay-extension-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a04-admission-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a05-legacy-dependency-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a05-legacy-lifetime-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a05-qualified-import-closure.json",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a05-runner-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a05-tested-source-identities.json",
+    "docs/project/evidence/p06-counter-qualification/validation/w02_a06-replay-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w03_a03-enforcement-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w03_a05-input-security-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w03_a06-closure.json",
+    "docs/project/evidence/p06-counter-qualification/validation/w04_a01-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w04_a02-admission-adversarial-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w04_a03-compatibility-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w04_a03-corrected-selection.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w04_a04-cli-tests.log",
+    "docs/project/evidence/p06-counter-qualification/validation/w04_a05-binding-adversarial-tests.log",
+    "docs/project/p06-counter-qualification-audit.md"
+  ],
+  "reader_inputs": 94,
+  "reviewer_program": "#!/usr/bin/env python3\n\"\"\"Independent data/object reconciliation; no native or replay entry point.\"\"\"\nimport collections\nimport gzip\nimport hashlib\nimport json\nimport re\nimport subprocess\nimport time\nimport zipfile\nfrom pathlib import Path\n\nROOT = Path('/workspace/AI-GPU')\nPACKET = ROOT / 'docs/project/evidence/p06-counter-qualification'\nOUT = Path('/workspace/scratch/e96519576778/w10_a04-final-evidence-review')\nBASE = '5e88e2ecffe5ab748f9d08b22820d7f6664a0d82'\nNATIVE = '17e0284496bab10c7632a48e4f91efb6fb4fec0b'\nCORRECTED = '220399748ecab84d48ba5a5f123457c44a0c8699'\nFALSE = ('qualified', 'ready_for_warm', 'warm_execution', 'full_warm_coverage',\n         'acceptance_claimed', 'performance_acceptance', 'phase_acceptance')\nEXPECTED = {'available_queries': 528, 'cache_flush_reads': 132, 'checked_words': 4224,\n    'dcr_reads': 1188, 'half_replies': 1056, 'launches': 132, 'processes': 4,\n    'snapshots': 16, 'unavailable_rows': 192}\nwatched = {}\n\ndef sha(body):\n    return hashlib.sha256(body).hexdigest()\n\ndef canonical(value):\n    return json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=True,\n                      allow_nan=False).encode()\n\ndef identity(path):\n    path = Path(path)\n    return {'path': str(path), 'sha256': sha(path.read_bytes()), 'size_bytes': path.stat().st_size}\n\ndef read(path):\n    path = Path(path)\n    body = path.read_bytes()\n    watched[str(path)] = {'path': str(path), 'sha256': sha(body), 'size_bytes': len(body)}\n    return body\n\ndef load(relative):\n    body = read(PACKET / relative)\n    return json.loads(gzip.decompress(body) if relative.endswith('.gz') else body)\n\ndef git(*args):\n    return subprocess.check_output(['git', *args], cwd=ROOT)\n\nstarted = time.monotonic()\nreceipt = {'schema_version': 1, 'agent': 'w10_a04',\n    'scope': 'independent-final-evidence-and-claim-reconciliation',\n    'started_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),\n    'native_execution': 'not_run', 'public_replay': 'not_run', 'test_execution': 'not_run'}\nexecution = load('native/attempt-01-execution-summary.json')\narchive_summary = load('native/attempt-01-archive-summary.json')\ncli = load('native/attempt-01-replay-execution.json')\ncompact = load('native/attempt-01-replay-summary.json')\nold = load('native/attempt-01-replay-full.json.gz')\nnew = load('validation/w08_a03-updated-reader-replay-full.json.gz')\nold_body = gzip.decompress(read(PACKET / 'native/attempt-01-replay-full.json.gz'))\nnew_body = gzip.decompress(read(PACKET / 'validation/w08_a03-updated-reader-replay-full.json.gz'))\nassert sha(old_body) == compact['complete_result_sha256'] == '7675edaaee1c7baedb9016382cdbdc6250f670f3a534194436701be12c2dddbd'\nassert sha(new_body) == 'c42dbcd166cbcb284cfa1e59da3767d59255bdd29fd6edb431733c7fa0ce7fc6'\nassert sorted(key for key in old.keys() | new.keys() if old.get(key) != new.get(key)) == ['trusted_reader_sources']\nshared_keys = set(compact) & set(old)\nassert all(compact[key] == old[key] for key in shared_keys)\nassert compact['trusted_reader_source_count'] == len(old['trusted_reader_sources']) == 82\nassert len(new['trusted_reader_sources']) == 94\nassert all(value['counts'] == EXPECTED for value in (old, new, compact))\nassert execution['completed_counts'] == EXPECTED\nfor result in (old, new, compact):\n    assert result['outcome'] == 'pass' and result['counter_qualification_passed'] is True\n    assert result['counter_qualification_scope'] == 'recorded-four-process-preflight-only'\n    assert result['native_execution'] == 'not_run'\n    assert result['retained_code_executed'] is False and result['origin_authenticated'] is False\n    assert all(result[key] is False for key in FALSE)\nassert old['source_revision'] == new['source_revision'] == execution['source_revision'] == NATIVE\nassert old['counter_population'] == {'selectors': 33, 'components': 40, 'unavailable_selectors': 12}\nassert old['lifetime_premises'] == ['P%02d' % i for i in range(1, 11)]\nassert compact['archive_read_summary']['read_files_summary']['count'] == len(old['archive_read']['read_files']) == 5045\nassert compact['archive_read_summary']['read_files_summary']['canonical_json_sha256'] == sha(canonical(old['archive_read']['read_files']))\nfor key, value in compact['archive_read_summary'].items():\n    if key != 'read_files_summary':\n        assert old['archive_read'][key] == value\n\noptions = dict(zip(cli['argv'][3::2], cli['argv'][4::2]))\narchives = [Path(options[key]) for key in ('--archive', '--diagnostic-archive', '--control-archive')]\narchive_pins = [options[key] for key in ('--sha256', '--diagnostic-archive-sha256', '--control-archive-sha256')]\narchives_before = [identity(path) for path in archives]\nassert [row['sha256'] for row in archives_before] == archive_pins\nassert archives_before[0]['sha256'] == archive_summary['sha256']\nassert archives_before[0]['size_bytes'] == archive_summary['size_bytes'] == 41577668\nfixture = json.loads(read(ROOT / 'ci/project/fixtures/p02_layout_v1.json'))\ncases = {case['id']: case for case in fixture['cases']}\nproof_body = read(ROOT / 'ci/project/p06_counter_qualification_proof.json')\nproof = json.loads(proof_body)\nassert sha(proof_body) == options['--counter-qualification-sha256'] == old['counter_qualification_sha256']\nassert [len(proof[key]) for key in ('selectors', 'components', 'unavailable_selectors', 'premises', 'measurement_sources', 'dependency_sources')] == [33, 40, 12, 10, 69, 21]\n\nwith zipfile.ZipFile(archives[0]) as archive:\n    names = archive.namelist()\n    assert len(names) == len(set(names)) == 5045\n    assert sum(info.file_size for info in archive.infolist()) == 201249945\n    assert sorted({name.split('/')[0] + '/' for name in names}) == archive_summary['roots']\n    selected_members = {\n        'native-qualification/report.json': options['--native-report-sha256'],\n        'dependency-build/report.json': options['--dependency-receipt-sha256'],\n        'native-qualification/snapshots/source-before.json': options['--source-manifest-sha256'],\n        'native-qualification/artifacts/counter-qualification/proof.json': options['--counter-qualification-sha256'],\n    }\n    member_identities = []\n    for member, expected in selected_members.items():\n        body = archive.read(member)\n        assert sha(body) == expected\n        member_identities.append({'path': member, 'sha256': expected, 'size_bytes': len(body)})\n    native = json.loads(archive.read('native-qualification/report.json'))\n    assert native['native_execution'] == 'run' and native['state'] == 'finished'\n    assert native['outcome'] == 'pass' and native['counter_qualification_passed'] is True\n    assert native['expected_revision'] == NATIVE\n    assert native['completed_counts'] == native['expected_counts'] == EXPECTED\n    assert len(native['commands']) == 37 and len(native['processes']) == 4\n    assert native['counter_qualification_admission_before'] == native['counter_qualification_admission_after']\n    assert not native['failures']\n    found_false = []\n    def false_fields(value, path='native'):\n        if isinstance(value, dict):\n            for key, item in value.items():\n                if key in FALSE:\n                    assert item is False, (path, key)\n                    found_false.append(path + '.' + key)\n                false_fields(item, path + '.' + key)\n        elif isinstance(value, list):\n            for i, item in enumerate(value):\n                false_fields(item, path + '[' + str(i) + ']')\n    false_fields(native)\n    assert len(found_false) == 115\n    totals = dict.fromkeys(EXPECTED, 0)\n    process_rows = []\n    mismatch_words = 0\n    for process in native['processes']:\n        observation = process['observation']\n        warm = observation['warm']\n        witness = observation['witness']\n        lifetime = observation['lifetime']\n        assert process['phase'] == 'warmup' and process['pair_index'] == 0\n        raw = archive.read('native-qualification/' + process['log'])\n        records = collections.defaultdict(list)\n        for line in raw.decode().splitlines():\n            if line.startswith('P06_'):\n                prefix, payload = line.split(' ', 1)\n                records[prefix].append(json.loads(payload))\n        assert records['P06_WARM_OPERATION'] == warm['operations']\n        assert records['P06_WARM_SUMMARY'] == [warm['summary']]\n        assert records['P06_MANAGED_COUNTER_WITNESS'] == [witness]\n        assert records['P06_MANAGED_COUNTER_LIFETIME'] == [lifetime]\n        assert len(warm['operations']) == 33\n        assert [op['operation_index'] for op in warm['operations']] == list(range(33))\n        assert warm['operations'][0]['role'] == 'prime'\n        assert warm['summary']['mismatches'] == 0 and warm['summary']['passed'] is True\n        for op in warm['operations']:\n            assert op['actual_bits'] == cases[op['case_id']]['expected']\n            assert len(op['actual_bits']) == op['checked'] == 32\n            assert op['mismatches'] == 0 and op['passed'] is True\n            assert op['dispatch']['launches'] == 1\n            mismatch_words += sum(a != b for a, b in zip(op['actual_bits'], cases[op['case_id']]['expected']))\n        snapshots = warm['summary']['snapshots']\n        assert len(snapshots) == len(witness['snapshots']) == len(lifetime['snapshots']) == 4\n        available = unavailable = 0\n        for snap in snapshots.values():\n            assert len(snap['counters']) == 45\n            live = [counter for counter in snap['counters'] if counter['enabled']]\n            absent = [counter for counter in snap['counters'] if not counter['enabled']]\n            assert len(live) == 33 and len(absent) == 12\n            assert all(counter['status'] == 0 for counter in live)\n            assert all(counter['status'] is None and counter['value'] is None for counter in absent)\n            available += len(live)\n            unavailable += len(absent)\n        counts = {'processes': 1, 'launches': sum(op['dispatch']['launches'] for op in warm['operations']),\n            'checked_words': sum(op['checked'] for op in warm['operations']), 'snapshots': len(snapshots),\n            'available_queries': available, 'unavailable_rows': unavailable,\n            'half_replies': len(witness['reads']), 'cache_flush_reads': len(witness['cache_flush_reads']),\n            'dcr_reads': witness['observation']['dcr_read_completed']}\n        assert counts['half_replies'] == 2 * available == 264\n        assert len(lifetime['runs']) == 33\n        for key, value in counts.items():\n            totals[key] += value\n        process_rows.append({'id': process['id'], 'format': process['format'], 'policy': process['policy'],\n            'phase': process['phase'], 'pair_index': process['pair_index'], 'counts': counts,\n            'raw_log_sha256': sha(raw), 'all_raw_observations_equal_report': True,\n            'all_actual_bits_equal_frozen_fixture': True})\n    assert totals == EXPECTED and mismatch_words == 0\n    assert {(p['format'], p['policy']) for p in process_rows} == {\n        (fmt, policy) for fmt in ('fp16', 'bf16') for policy in ('per_operation', 'reusable_single_tile')}\n    for source in proof['measurement_sources']:\n        body = archive.read('native-qualification/artifacts/source/' + source['path'])\n        assert sha(body) == source['sha256'] and len(body) == source['size_bytes']\n    loaded = native['loaded_helpers']\n    assert len(loaded) == 77\n    admission_names = sorted(({row['path'] for row in loaded} - {\n        'ci/project/p06_dependency_lifetime_execute.py', 'ci/project/p06_counter_qualification_execute.py'}) | {\n        'ci/gen_config.py', 'ci/project/p01_toolchain.lock.json', old['trusted_archive_reader']['path'],\n        'tests/unittest/pending_reads/main.cpp'})\n    assert len(admission_names) == 79\n    admission_rows = []\n    for name in admission_names:\n        body = git('show', NATIVE + ':' + name)\n        admission_rows.append({'path': name, 'sha256': sha(body), 'size_bytes': len(body)})\n    helper_digest = sha(canonical(admission_rows))\n    assert helper_digest == native['counter_qualification_admission_before']['helper_sources_sha256']\n    assert all(row['counter_qualification_admission']['helper_sources_sha256'] == helper_digest\n               for row in native['stability_checks'])\n    for row in loaded:\n        body = git('show', NATIVE + ':' + row['path'])\n        assert sha(body) == row['sha256'] and len(body) == row['size_bytes']\n\nreader_rows = new['trusted_reader_sources']\nfor row in reader_rows:\n    body = read(ROOT / row['path'])\n    assert sha(body) == row['sha256'] and len(body) == row['size_bytes']\n    assert body == git('show', CORRECTED + ':' + row['path'])\nold_map = {row['path']: row for row in old['trusted_reader_sources']}\nnew_map = {row['path']: row for row in reader_rows}\nassert not (old_map.keys() - new_map.keys())\nassert len(new_map.keys() - old_map.keys()) == 12\nassert [name for name in old_map if old_map[name] != new_map[name]] == ['ci/project/p06_counter_qualification_replay.py']\n\npublication_rows = []\nfor file, local_key, published_key, tree_key, parent in (\n    ('validation/implementation-checkpoint-publication.json', 'local_checkpoint', 'published_checkpoint', 'tree', BASE),\n    ('validation/corrected-checkpoint-publication.json', 'reviewed_local_revision', 'published_revision', 'reviewed_and_published_tree', NATIVE),\n):\n    pub = load(file)\n    local, published, expected_tree = pub[local_key], pub[published_key], pub[tree_key]\n    for revision in (local, published):\n        assert git('rev-parse', revision + '^{tree}').decode().strip() == expected_tree\n        assert git('rev-parse', revision + '^').decode().strip() == parent\n    assert not git('diff', '--name-only', local, published)\n    publication_rows.append({'reviewed': local, 'published': published, 'tree': expected_tree,\n        'common_parent': parent, 'independent_local_git_object_equivalence': True,\n        'remote_readback_scope': 'Recorded by coordinator; this reviewer did not repeat the remote API request.'})\n\nprotected = json.loads(Path('/workspace/scratch/e96519576778/protected-inputs-before.json').read_text())\nfor name, expected in protected.items():\n    body = read(ROOT / name)\n    assert sha(body) == expected\n    assert body == git('show', BASE + ':' + name) == git('show', CORRECTED + ':' + name)\nchanged = git('diff', '--name-only', BASE, CORRECTED).decode().splitlines()\nforbidden = ('sim/', 'hw/', 'sw/', 'tests/', 'profiles/', 'ci/baselines/', 'ci/testcases/')\nassert not any(name.startswith(forbidden) for name in changed)\nassert not ({'VERSION', 'VX_config.toml', 'VX_types.toml', '.gitmodules',\n             'docs/project/roadmap.json', 'docs/project/acceptance.md'} & set(changed))\n\nguard = load('validation/w07_a05-archive-replay.json')\nassert guard['complete_result_matches_root_public_cli'] is True\nassert guard['complete_result']['uncompressed_sha256'] == sha(old_body)\nassert guard['audit_guard']['prohibited_events'] == []\nassert guard['audit_guard']['trusted_archive_helper_compiles'] == guard['audit_guard']['trusted_archive_helper_execs'] == 4\nassert guard['audit_guard']['trusted_renderer_ast_only_parse_count'] == 6808\nassert guard['audit_guard']['trusted_renderer_exact_site_expression_compile_count'] == 532\nassert guard['audit_guard']['trusted_renderer_exact_site_expression_exec_count'] == 532\nassert old['counter_qualification_admission']['controls']['managed_population_included'] is False\nfor key in ('controls', 'diagnostics'):\n    prerequisite = old['counter_qualification_admission'][key]\n    assert prerequisite['native_execution'] == 'not_run' and prerequisite['retained_code_executed'] is False\n    assert all(prerequisite[name] is False for name in FALSE)\n    assert prerequisite['source_revision'] != NATIVE\n\nmutations = []\nfor file, key in (('validation/w08_a01-native-adversarial.json', 'adversarial_controls'),\n                  ('validation/w08_a02-binding-adversarial.json', 'cases')):\n    document = load(file)\n    assert document['outcome'] == 'pass' and document['reader_revision'] == NATIVE\n    for case in document[key]:\n        mutations.append({'id': case['id'], 'reviewer': file, 'scope': 'modified copy; no new native process',\n            'rejection': case.get('semantic_rejection', case.get('expected_rejection_substring'))})\nassert len(mutations) == 4\n\nwarm = json.loads(read(ROOT / 'ci/project/p06_warm_contract.json'))\nassert sha(canonical(warm)) != sha(read(ROOT / 'ci/project/p06_warm_contract.json'))\nassert warm['complete_matrix']['processes'] == 24\nassert warm['complete_matrix']['launches'] == 792 and warm['complete_matrix']['checked_words'] == 25344\nassert warm['sampling']['warmup_pairs'] == 1 and warm['sampling']['measured_pairs'] == 5\nassert warm['sampling']['prime_operations'] == 1 and warm['sampling']['timed_operations'] == 32\nassert 'four-process' in read(ROOT / 'ci/project/p06_counter_qualification_execute.py').decode()\nassert 'counter_qualification=True' in read(ROOT / 'ci/project/p06_counter_qualification_execute.py').decode()\n\npatterns = {\n    'private_library_identity': re.compile(r'''libfile_[A-Za-z0-9_-]{12,}|oai-library://[^\\s'\"<>\\\\]{12,}|chatgpt\\.com/library\\?file_id=[A-Za-z0-9_-]{12,}'''),\n    'private_connector_identity': re.compile(r'\\blink_[0-9a-f]{16,}\\b'),\n    'github_token_value': re.compile(r'\\b(?:gh[opsu]_|github_pat_)[A-Za-z0-9_]{20,}\\b'),\n    'api_key_value': re.compile(r'\\bsk-[A-Za-z0-9_-]{24,}\\b'),\n    'bearer_value': re.compile(r'(?i)Bearer\\s+[A-Za-z0-9._-]{24,}'),\n    'signed_url_parameter': re.compile(r'(?i)https?://[^\\s\"<>]*[?&](?:sig|x-amz-signature|access_token)=[^\\s\"<>]{12,}'),\n}\nscan = []\nmatches = []\nfor path in sorted(PACKET.rglob('*')):\n    if not path.is_file() or path.name.startswith('w10_a04-') or path.name == 'w10_a04.md':\n        continue\n    body = path.read_bytes()\n    if path.suffix == '.gz':\n        body = gzip.decompress(body)\n    text = body.decode('utf-8')\n    found = [name for name, pattern in patterns.items() if pattern.search(text)]\n    if found:\n        matches.append({'path': str(path.relative_to(ROOT)), 'categories': found})\n    scan.append({'path': str(path.relative_to(ROOT)), 'sha256': sha(body), 'decompressed': path.suffix == '.gz'})\nassert not matches, matches\n\ngovernance = []\nfor name in ('full-governance-17e02844/reviewed-scheduler-02', 'full-governance-0093cf60',\n             'full-governance-22039974-partitioned'):\n    path = Path('/workspace/scratch/e96519576778') / name / 'execution.json'\n    observed = json.loads(path.read_bytes())\n    governance.append({'path': str(path), 'source_revision': observed['source_revision'],\n        'state_observed': observed['state'], 'outcome_observed': observed.get('outcome'),\n        'complete_pass_inferred': False})\n\narchives_after = [identity(path) for path in archives]\nassert archives_before == archives_after\nafter = [identity(Path(name)) for name in watched]\nassert list(watched.values()) == after\nreceipt.update(outcome='pass', findings=[],\n    reviewer_setup_correction={'scope': 'scanner pattern only; no product failure',\n        'retained': 'validation/w10_a04-reviewer-setup.json.gz',\n        'reason': 'The initial URI-prefix-only pattern matched another reviewer program search literal; the corrected pattern requires an actual private value.'},\n    original_archives_before=archives_before, original_archives_after=archives_after,\n    originals_unchanged=True, native_member_identities=member_identities,\n    native_populations=totals, independently_compared_output_words=totals['checked_words'],\n    independently_found_word_mismatches=mismatch_words, process_reconciliation=process_rows,\n    legacy_false_field_occurrences=len(found_false),\n    counter_population=old['counter_population'], lifetime_premises=old['lifetime_premises'],\n    producer_helpers=77, admission_inputs=79, admission_inventory_sha256=helper_digest,\n    admission_checks_include_80_interior_rows=True, reader_inputs=94,\n    original_replay_sha256=sha(old_body), corrected_replay_sha256=sha(new_body),\n    differing_replay_keys=['trusted_reader_sources'], compact_shared_keys_checked=sorted(shared_keys),\n    publication_objects=publication_rows, protected_inputs_checked=len(protected),\n    published_changed_paths=changed, actual_packet_negative_controls=mutations,\n    trusted_execution_exceptions={key: guard['audit_guard'][key] for key in (\n        'trusted_archive_helper_compiles', 'trusted_archive_helper_execs',\n        'trusted_renderer_ast_only_parse_count', 'trusted_renderer_exact_site_expression_compile_count',\n        'trusted_renderer_exact_site_expression_exec_count', 'prohibited_events')},\n    private_value_scan={'files': len(scan), 'matches': matches, 'patterns': list(patterns),\n        'inventory_canonical_sha256': sha(canonical(scan)),\n        'limit': 'This is the current packet snapshot; later delivery artifacts need final coordinator review.'},\n    governance_snapshot=governance,\n    future_warm={'implemented_in_qualified_executor': False, 'executed_by_this_task': False,\n        'complete_matrix': warm['complete_matrix'], 'sampling': warm['sampling']},\n    watched_input_identities=list(watched.values()), watched_inputs_stable=True,\n    limitations=[\n        'This is data/object reconciliation; it does not rerun the public reader, native workload or tests.',\n        'Actual bits were compared with the unchanged frozen fixture, not a newly regenerated arithmetic oracle.',\n        'The guarded replay observations and adversarial executions are independently retained earlier runs, not additional executions by this reviewer.',\n        'Consistent artifacts and Git object membership do not authenticate an arbitrary producer.',\n        'Trusted Python helper execution is distinct from executing retained archive code; no blanket no-code-exec claim is made.',\n        'Source identities and private-value scanning are point-in-time checks; final publication and completed governance belong to their assigned reviewers.',\n    ], reviewer_program=Path(__file__).read_text(),\n    duration_seconds=time.monotonic() - started,\n    finished_at=time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))\ntarget = PACKET / 'validation/w10_a04-final-evidence-review.json'\nassert not target.exists()\ntarget.write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\\n')\nprint(json.dumps({'outcome': receipt['outcome'], 'native_counts': totals,\n    'actual_words_compared': totals['checked_words'], 'mismatches': mismatch_words,\n    'legacy_false_fields': len(found_false), 'protected_inputs': len(protected),\n    'scanned_files': len(scan), 'private_value_matches': len(matches),\n    'watched_inputs': len(watched), 'receipt': str(target)}))\n",
+  "reviewer_setup_correction": {
+    "reason": "The initial URI-prefix-only pattern matched another reviewer program search literal; the corrected pattern requires an actual private value.",
+    "retained": "validation/w10_a04-reviewer-setup.json.gz",
+    "scope": "scanner pattern only; no product failure"
+  },
+  "schema_version": 1,
+  "scope": "independent-final-evidence-and-claim-reconciliation",
+  "started_at": "2026-11-23T16:38:48Z",
+  "test_execution": "not_run",
+  "trusted_execution_exceptions": {
+    "prohibited_events": [],
+    "trusted_archive_helper_compiles": 4,
+    "trusted_archive_helper_execs": 4,
+    "trusted_renderer_ast_only_parse_count": 6808,
+    "trusted_renderer_exact_site_expression_compile_count": 532,
+    "trusted_renderer_exact_site_expression_exec_count": 532
+  },
+  "watched_input_identities": [
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/native/attempt-01-execution-summary.json",
+      "sha256": "1dbed870120b678eab8e0f6006b613dd55d39d5255ae199fcc7e708df7627ec7",
+      "size_bytes": 1621
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/native/attempt-01-archive-summary.json",
+      "sha256": "d9e10c8b74f973188fc5eb5fe23cf21e0f0b27b4f86b69501f6a9119b731bfa7",
+      "size_bytes": 583
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/native/attempt-01-replay-execution.json",
+      "sha256": "01c74fe0569fb8a01b5a0549dda9466c1497a2a30bb2a3178da5fa1bc0b0ca94",
+      "size_bytes": 2019
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/native/attempt-01-replay-summary.json",
+      "sha256": "139527753e93d7e005b3423fa6dc612d0ee16d1a19248d1699cbb85f73f4b4ea",
+      "size_bytes": 4506
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/native/attempt-01-replay-full.json.gz",
+      "sha256": "59063455e199c40dfcbfa6b8f0e2b3ac4ba8660082fc75de73e0f5638e817cfd",
+      "size_bytes": 304793
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/validation/w08_a03-updated-reader-replay-full.json.gz",
+      "sha256": "a96d16f9bfd2397b9cab82f01c0474ee7d50e82855efc46b3cb69e20875fdc08",
+      "size_bytes": 305355
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/fixtures/p02_layout_v1.json",
+      "sha256": "0543f9f4208de3ff4743fe1894d97ccf3b8cca4707e9a26acd1f3dde884725b2",
+      "size_bytes": 83960
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_counter_qualification_proof.json",
+      "sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e",
+      "size_bytes": 123781
+    },
+    {
+      "path": "/workspace/AI-GPU/VX_config.toml",
+      "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+      "size_bytes": 30127
+    },
+    {
+      "path": "/workspace/AI-GPU/VX_types.toml",
+      "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+      "size_bytes": 36543
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/gen_config.py",
+      "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+      "size_bytes": 60839
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/baseline_inventory.py",
+      "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+      "size_bytes": 20466
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/baseline_matrix.py",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "size_bytes": 8890
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/baseline_packet_contract.py",
+      "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+      "size_bytes": 53680
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/baseline_packet_io.py",
+      "sha256": "469583bc558ccb010af82259de38248d7a9a8283cd873a96726aa3c3e2aaa94c",
+      "size_bytes": 14506
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/baseline_process.py",
+      "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+      "size_bytes": 12627
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/compiler_records.py",
+      "sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+      "size_bytes": 7143
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/fixtures/p02_tfr_v1.json",
+      "sha256": "0d8b173af178875274a7bf29886a51838be8cdb54224d55353959a639a5ea6c3",
+      "size_bytes": 60925
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/fixtures/p02_wmma_numerical_v1.json",
+      "sha256": "4102d74024e92e9887d7324b9326c0d6ad1fff206b5fad33f45c530d5bd03a73",
+      "size_bytes": 260308
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p01_toolchain.lock.json",
+      "sha256": "63771ba8d9ff691b3867ed96be7b058ed5eae1368789575f4964e38f8718a405",
+      "size_bytes": 5008
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p02_fixture_oracle.py",
+      "sha256": "12e546864a4fef5b05e10c7a04b1006bcd59376e5921ea1221c4d42668490145",
+      "size_bytes": 23351
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p02_layout_fixture_oracle.py",
+      "sha256": "34e78c0313e2b032930615f02a790729d1c49293349728b55f7d04a29a2568a7",
+      "size_bytes": 10910
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p02_matrix.py",
+      "sha256": "e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17",
+      "size_bytes": 30055
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p02_matrix_records.py",
+      "sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+      "size_bytes": 12332
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p02_wmma_fixtures.py",
+      "sha256": "4a672a5d3357f220120f43e5f5d7e880f7d0ba36df380d69cd1873ea4879835e",
+      "size_bytes": 16440
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p02_wmma_numerical_fixture_oracle.py",
+      "sha256": "083450dc11712e5fc6dce7d19fb854bd9ef25b738347efd56bd07e81b079570b",
+      "size_bytes": 15556
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p03_execute.py",
+      "sha256": "bee5c380eb0d328e72586e2c51e4162b8ca5314ef68d2987a7d744fc1c05aa82",
+      "size_bytes": 17105
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p03_execution_records.py",
+      "sha256": "b26449105f17f9487cc4fbaab36884ceea42be9f502a26aa58331ed4cf1140de",
+      "size_bytes": 6961
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p04_execution_records.py",
+      "sha256": "abddfb06fb48bbd064c09d61879b278bca22778f5a8289f4c1ac93fb882b33e0",
+      "size_bytes": 16283
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p04_fixture_adapter.py",
+      "sha256": "37a50f6f0f80fd79b926b7ed5d13a233de6bf518590da7fa7d40800dcc91094a",
+      "size_bytes": 5364
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p04_model_contract.py",
+      "sha256": "c184d980d57aec54567d79025845c5fb34887741697ac78a66692a65da02e4b3",
+      "size_bytes": 15901
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p04_reference.py",
+      "sha256": "115a7db51948d69fc6267d5fe658d1a8e68c22e9f200d5ddc3f0a5181d7140a9",
+      "size_bytes": 11855
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_checked_execute.py",
+      "sha256": "86ba0b3fd2bbfa97ebb2346e69fed85968fd3da8bf267d4dc1a13aaacf8b358e",
+      "size_bytes": 38609
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_compiler_records.py",
+      "sha256": "f441c12f4c9e4b9ef10eca13f8b5291fc41ffb86f1f42e42dfd320056dedd6da",
+      "size_bytes": 13614
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_contract.py",
+      "sha256": "780086070739b6d3586f9b3695ad4dc31d209a7817cf1af3651160a9fe6e1376",
+      "size_bytes": 31500
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_counter_diagnostics_replay.py",
+      "sha256": "4d959363229859bd1ac5f4ede4f09937b8418e50f85a1c2eab3f131956532f0b",
+      "size_bytes": 36762
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_counter_public_build.py",
+      "sha256": "22982ed2264626fb1be2b86785fddb89655c9e0f82a2257ce0e9ab7c89eab758",
+      "size_bytes": 15413
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_counter_public_records.py",
+      "sha256": "d947be071b670edcbc0b7d613860c288ee1b013f16e256679747afe0353a7e78",
+      "size_bytes": 20774
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_counter_public_replay.py",
+      "sha256": "6489dff8b39bda3d18df97fb72092fd2014d86d8c0129bcd56a13f08acd942a0",
+      "size_bytes": 22122
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_counter_qualification_admission.py",
+      "sha256": "33053b52145167ced22a4793295f1cbfd07c78eb8072e65ed94090040e8eae43",
+      "size_bytes": 12578
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_counter_qualification_contract.py",
+      "sha256": "d445b9447aefb4f2917f827105df9b5722c461f10f68629176f2dc2d2321fd0d",
+      "size_bytes": 10828
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_counter_qualification_prerequisites.py",
+      "sha256": "b94d293f8dc4846e4b2de3344169362899d3da9503efcbac0a2e63ebad68d586",
+      "size_bytes": 18956
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_counter_qualification_replay.py",
+      "sha256": "4aece4442e31426b7ef60378499f338e3ec6909263ddca7db64d90442aa60798",
+      "size_bytes": 17454
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_counter_source_inventory.py",
+      "sha256": "8961331993ceb112f80a83314ee7a6a3020163a89ca1b8781139c103e98f6862",
+      "size_bytes": 33730
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_admission.py",
+      "sha256": "8d9d65960d7f2336911823c29ee1c9eb14cba76ca0c097e9d42ad02b5744a1e7",
+      "size_bytes": 15128
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_binary.py",
+      "sha256": "81397956f856e5658864ee59f198c760699160f5d7a78d73d80db41f361814e1",
+      "size_bytes": 16793
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_build.py",
+      "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+      "size_bytes": 32820
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_contract.py",
+      "sha256": "d6151024fbe7e8a651075fd76b9bdc006bb18c0f61c538a2928842f865ddd364",
+      "size_bytes": 4438
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_control_replay.py",
+      "sha256": "1c418b3f0fa58423c94eedd28e9fbda02a6ce8a5423b042abc1574281a67faa2",
+      "size_bytes": 39549
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_graph.py",
+      "sha256": "eb278cbd37d5191468d151339a88a665d792e0f31d7f1d41da30285b240e9f08",
+      "size_bytes": 5861
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_local_execute.py",
+      "sha256": "b6651948b2ee4ce4fe99c94fac8ac7e86bfec8a8658f258b3ef76081104b3c79",
+      "size_bytes": 22361
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_local_prepare.py",
+      "sha256": "c810f31cf6106a5bbcd6eddcf8d818560cb94222da057fe9491a8e1dbc99316f",
+      "size_bytes": 20427
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_local_replay.py",
+      "sha256": "a16983cf6c4083b9d2eb8f5a8d4e72660d8d10a92ef7d8dd9f8ba1a994ce298b",
+      "size_bytes": 22449
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_native_replay.py",
+      "sha256": "66ac675a904b69a7393596cf96857608143c46aafee019d453a582108cf976a1",
+      "size_bytes": 60002
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_receipt.py",
+      "sha256": "6a45f224b57cbc2e4d7edfd540712eb468b1aa92407e2b65bc5a2de7c3581c70",
+      "size_bytes": 63377
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_record.py",
+      "sha256": "5364a5036fb03bebed3aba6267d302cf36c379b30e7085ded1b59db077c33205",
+      "size_bytes": 26464
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_replay.py",
+      "sha256": "1c5dc29aa92a18ac4b89bdd3bbd53c4bc5ed0fad37d9cc4d907ed92f3f862218",
+      "size_bytes": 11752
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_sources.py",
+      "sha256": "4e09b8f8357538591a843f465ca6a20465baf363e5a190b9edf8d01c807174a1",
+      "size_bytes": 17141
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_substitution.py",
+      "sha256": "e37c31fb769d7c1d5374bf40216c5099eb9a24d0017ceef876b36cbbec6a9f87",
+      "size_bytes": 30789
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_local_toolchain.py",
+      "sha256": "0bd80e40b6a22bf78a665e8f1b18818a21178bcc32248a20bfd3133d3c3d5aa8",
+      "size_bytes": 23542
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_managed_preflight_application_build.py",
+      "sha256": "b0dbadf26a1189ea0f5b7f7aa88f54fd0ce26d875f197e4f3c062a0a00fcd298",
+      "size_bytes": 12618
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_managed_preflight_backend_build.py",
+      "sha256": "f37fd2f53713a25bd23df989b2469bb6327a9d8769983177b349b6d8f653f700",
+      "size_bytes": 4016
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_managed_preflight_build.py",
+      "sha256": "0c6a5c2c6415071566f66363289e245c4e8b486e987615ffab74f15fb39ee559",
+      "size_bytes": 16639
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_managed_preflight_contract.py",
+      "sha256": "5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb",
+      "size_bytes": 14917
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_managed_preflight_derivation.py",
+      "sha256": "8ba5e019cd4f2cc1b74b3a8839c93e6d7baf4766da1a2169e757e22d3e45a3d6",
+      "size_bytes": 14070
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_managed_preflight_execute.py",
+      "sha256": "d9d726ce61cdaa12010bb7c00fac48b6ed31f82b82997e39bb9d9a7911163677",
+      "size_bytes": 52516
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_managed_preflight_generated.py",
+      "sha256": "6b777ca99c82d2e2c3f7bddf2a15d70df1cd2303a56b53cacb89114c8b2bb5cc",
+      "size_bytes": 8498
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_managed_preflight_records.py",
+      "sha256": "3d6358c98544f4252be262125b70c87a72caaca7f35fbe3bc3e2512655654d10",
+      "size_bytes": 16223
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_managed_preflight_replay.py",
+      "sha256": "9ab96bfb7a8940c61d37a13cd3d39f148c4b0c623ed085615e53d92c7eea4ade",
+      "size_bytes": 36937
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_managed_preflight_replay_build.py",
+      "sha256": "0034e67683dc8291d2aec980602b55dca56af57f5a1a94d3a9cae576a51fb7db",
+      "size_bytes": 14324
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_managed_preflight_replay_hosted.py",
+      "sha256": "918027091c40eda7eaccd5c9c634a41de65647bd55c070e853d39767c58ff031",
+      "size_bytes": 10598
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_managed_preflight_source_export.py",
+      "sha256": "1bec4cc1a296ae93bc9c29029ed5a28a02f6edd71adbdbfdbcea156eebf28b46",
+      "size_bytes": 21171
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_managed_preflight_sources.py",
+      "sha256": "dc0374a1c3a059c36d47697ff2c8275bf0901b76468f72a15425ea2cfe687f2a",
+      "size_bytes": 32794
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_mpm_execute.py",
+      "sha256": "c9524652c24121401f7d2cb044cae72c4f6dece7f8d8357d886d7b1ef63fcea0",
+      "size_bytes": 23153
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_native_lifetime_contract.py",
+      "sha256": "266a50e5b4c0d07b432accf2aa13ff8d3db7fc175a24a4263e3cdb0acafb5b74",
+      "size_bytes": 4545
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_native_lifetime_records.py",
+      "sha256": "5bf33d35e489397d96e0e0932c8d42e687f18deda646bb9725e05b326be50e3a",
+      "size_bytes": 8506
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_pending_probe.py",
+      "sha256": "89300a063bf26e20312fe6026377db300cdf40b6a91bc3d6327340e66b51d42d",
+      "size_bytes": 24886
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_records.py",
+      "sha256": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7",
+      "size_bytes": 28046
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_replay.py",
+      "sha256": "9a5e68de45ec923c56e39a05697d9f93b3d0fdd91c81d38d6637c12ba153d991",
+      "size_bytes": 44626
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_warm_analyze.py",
+      "sha256": "ac273f587f759900d16ad41c7c63c2d2b10ca0864d5018f8403572f75e5a3e88",
+      "size_bytes": 19568
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_warm_compiler_records.py",
+      "sha256": "fe32aa772439e98975cdcb4807b269022d461c5e99c0021c4689c9712d7988f9",
+      "size_bytes": 3261
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_warm_contract.json",
+      "sha256": "893d85401b1d5f7757d82cb7c743a89b36264fe19c7d08c239b7f216b7a8cbbd",
+      "size_bytes": 25793
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_warm_contract.py",
+      "sha256": "d311c5fb77e651a93fde368f0e41d517f40199a3bd43e27c302d4d00888cc31e",
+      "size_bytes": 19379
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_warm_execute.py",
+      "sha256": "61c6caa04e8bb2a28d7f2e7b73cf41baa43abaeb8330882d7ab219bfe33d2f6a",
+      "size_bytes": 32598
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_warm_records.py",
+      "sha256": "28d7e2c1553fc0929a106bc24a62fa2d612e415449ee0e9ac84ad582289381e7",
+      "size_bytes": 11637
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_warm_replay.py",
+      "sha256": "8982c9ec5b1599080c8df09dd685ecf7aae7488af4708463dda819c4bcb62890",
+      "size_bytes": 42783
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_workspace_compiler_records.py",
+      "sha256": "d89496a4e08737c6bb5c72b5b05a94994bb70a63e17b88c11547f38d47c06375",
+      "size_bytes": 20838
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_workspace_execute.py",
+      "sha256": "83f97cf2a8584dcd6b9099f37415dd3b28c75982900b8adb02d15834c8d9fff7",
+      "size_bytes": 33854
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_workspace_records.py",
+      "sha256": "9e3f9af15f2981d19a05fcd83ddd369bae43f6530fd4383831c9d2942d8fee21",
+      "size_bytes": 25060
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_workspace_replay.py",
+      "sha256": "aa039e92123ceed8b83eddb8362457c2214f96cbd2dc058739bf14c47ef938e6",
+      "size_bytes": 45921
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/preflight.py",
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+      "size_bytes": 15124
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p05-torch/reviews/archive_reader.py",
+      "sha256": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3",
+      "size_bytes": 16065
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-counter-diagnostics/native/public-source-inventory-4268d2d5.json",
+      "sha256": "bd81faa7590e053685dfa78d8baa41478969c3b4ec750646cddb5796b949ba0c",
+      "size_bytes": 116997
+    },
+    {
+      "path": "/workspace/AI-GPU/profiles/p02-tfr.json",
+      "sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+      "size_bytes": 4081
+    },
+    {
+      "path": "/workspace/AI-GPU/sw/common/ai_matmul_args.h",
+      "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+      "size_bytes": 4342
+    },
+    {
+      "path": "/workspace/AI-GPU/sw/common/ai_matmul_profile.h",
+      "sha256": "8b2eb9a819506227808537612672c08a574230736f13f840a9d83bbd35675680",
+      "size_bytes": 2675
+    },
+    {
+      "path": "/workspace/AI-GPU/sw/kernel/ai/matmul.cpp",
+      "sha256": "ad3b6107f0eef91ec676412bc795ab70cd1c9f31647b2cea854de6234fe71d3e",
+      "size_bytes": 1565
+    },
+    {
+      "path": "/workspace/AI-GPU/tests/regression/ai_bench_common/counters.h",
+      "sha256": "ef71a80f2624159cac03e42a60c8b3671489ee1ae89e4e9bd27941a143047acf",
+      "size_bytes": 6002
+    },
+    {
+      "path": "/workspace/AI-GPU/tests/regression/sgemm_tcu/p02_fixtures.h",
+      "sha256": "1e692ad5d14e895286e57e45bf9d1730cf2380a33ccbaa486c601db838daa64e",
+      "size_bytes": 145505
+    },
+    {
+      "path": "/workspace/AI-GPU/tests/unittest/pending_reads/main.cpp",
+      "sha256": "bca8962a873af0e3315e13cdd908f3ba1a1b8e89ab4fa9f41a74b1d65404b6f3",
+      "size_bytes": 7302
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/validation/implementation-checkpoint-publication.json",
+      "sha256": "8015a1c15dfff9fd1658ee51d1a5ff69bf72c829b978e73944bb5dc7bd43d4e7",
+      "size_bytes": 405
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/validation/corrected-checkpoint-publication.json",
+      "sha256": "7208f4d620ce2f0cb7c263ab6caa3d1d8ae7adb6c46957c376c1adebcde910db",
+      "size_bytes": 732
+    },
+    {
+      "path": "/workspace/AI-GPU/VERSION",
+      "sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+      "size_bytes": 112
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/perf/core.json",
+      "sha256": "2e0b69c0f92401bee05c2cda7ec79f2ec49e6dc17f711da546efdbd34382e182",
+      "size_bytes": 4110
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/perf/dxa.json",
+      "sha256": "648909a52e523874fe1008c76b6bb93d9b84583a28f2fba42782423c977280b7",
+      "size_bytes": 3851
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/perf/graphics.json",
+      "sha256": "752b2e428f01f4d1393ae91a10f561b1bfe9a2ed2b08f4116b9059cb2019397d",
+      "size_bytes": 3119
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/perf/raytracing.json",
+      "sha256": "e7190d40dd242e3947cc4f5e568573cd0f52a6e71f21b2bc412eadd75b68d260",
+      "size_bytes": 906
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/perf/tensor.json",
+      "sha256": "74bfbe74c0165a4e1263ab58355700c03466f7ca2e982dc2bb25dfe084d17246",
+      "size_bytes": 1995
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/perf/tensor_mx.json",
+      "sha256": "005c317cdcb33245e7c73cfa8a4ae15b8092bd93520700fa9d67e95488852326",
+      "size_bytes": 396
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/perf/tensor_sp.json",
+      "sha256": "10fa4e21a4e411cb6105708ee76c9cc56a67edcd422e6d3a7fd521a9ffe21c88",
+      "size_bytes": 337
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/perf/tensor_wg.json",
+      "sha256": "c6c3fd75ed3befed6eaad836dff8ba85192b38eec8350939e441ae8d0978f073",
+      "size_bytes": 1536
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/beacon/core.json",
+      "sha256": "9d44a8cb4df9968fcba2f06068891ca64619b56b15263feb3369487bd6585788",
+      "size_bytes": 28970
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/beacon/dxa.json",
+      "sha256": "b704ffb416f1e117104b970e89a75d4e256c95ab1b5895451370bdaef99734b8",
+      "size_bytes": 2328
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/beacon/graphics.json",
+      "sha256": "99b4e2ffdc4c5ef52f01d3eecd5414d1a00d4100bb0ffd45d3a9bdf66e2994b3",
+      "size_bytes": 30678
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/beacon/tensor.json",
+      "sha256": "7c20e2fdeab2bc597641354c138d79a4e054c1b42a9e4856d88ff157a65ef969",
+      "size_bytes": 12461
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/beacon/vm.json",
+      "sha256": "74e984dd4e3f1aeb406046ba9ef58efecebc84d856e4bce2abd0a056c04dff00",
+      "size_bytes": 8367
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/xilinx/core.json",
+      "sha256": "35c440089e5b5ea68ffb36c9d063237f2fbb2da7f8026519c969accafc452c0b",
+      "size_bytes": 31559
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/xilinx/dxa.json",
+      "sha256": "7a6a523cbaf3f4dc1e8ba423262d6d26a6b1b2ff58e711e748b3167f4043ee7a",
+      "size_bytes": 5735
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/xilinx/graphics.json",
+      "sha256": "bfb045d843d0d08e29ea0a507584d9a21e1afd50cc54f472781615a5c2a8aec7",
+      "size_bytes": 31793
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/xilinx/mufu.json",
+      "sha256": "1f7a375f75ec05aa8885d19b2684aa74586dfa6fabbff9a34039c4796b56f567",
+      "size_bytes": 5693
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/xilinx/tensor.json",
+      "sha256": "81b645180b72327c9bf44777f2914bc9b2378c9dabd87ab32f05d78e0d8f6f18",
+      "size_bytes": 15655
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/xilinx/vm.json",
+      "sha256": "aecb3717cec9d0b58e184718fdfcf2894d562f72f55b7bdb96b915e303d7600f",
+      "size_bytes": 6057
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/yosys/core.json",
+      "sha256": "3d73cbaee0c1b903340c9752b0079bc3073a4c3edfdffe579cdcbf99e5006bf3",
+      "size_bytes": 2373
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/yosys/dxa.json",
+      "sha256": "aa249a7f621768ac02f1d0f85ef4a5eea9d95d32fb6a566ca4adc599a43729aa",
+      "size_bytes": 549
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/yosys/graphics.json",
+      "sha256": "1f43cf0ea627b32525f77fbdd0e2dc70eac6fc93a525d1d60200eb95be995370",
+      "size_bytes": 2841
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/yosys/mufu.json",
+      "sha256": "2b84aa5d1a201b1239755fd3ec4e147f7b3bc6f64041034ba4f413a61f16ffa9",
+      "size_bytes": 548
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/yosys/tensor.json",
+      "sha256": "01cf957355f05b63dc98b19ca4a69899b0c26383ef86025a24513c1a07d4eadd",
+      "size_bytes": 1154
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/baselines/synthesis/yosys/vm.json",
+      "sha256": "9ce940cfcdef1bc0f8554de0da13231eda3125bc5a014e7596c83bf0a46372bc",
+      "size_bytes": 599
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/asic_gate.yaml",
+      "sha256": "642eb1360737c1594c01ec86991e3fee84cd664da31942e73a4db41c3fa29cce",
+      "size_bytes": 9625
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/cache.yaml",
+      "sha256": "4dbf91e06161f0d8c15c0271c513335cf2f8ffaabfe7e22f1030c7050e1887ec",
+      "size_bytes": 10710
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/config1.yaml",
+      "sha256": "c86fe991747cb7a07f514bc96fb6863fe97409fb010cc630407cdaa9ec5d4263",
+      "size_bytes": 8090
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/config2.yaml",
+      "sha256": "4ae631e5c0fb30f630de7b6f07b8daa54e0f59609062f55b7aa8985b3cd04841",
+      "size_bytes": 3119
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/core.yaml",
+      "sha256": "82c00040e8c16a90b730dafe87e221ba3136904a83c137545f16e5287ee93021",
+      "size_bytes": 15632
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/debug.yaml",
+      "sha256": "9928446e0493b1fbd7ed0470f7381a7cf64f791d3790e80a4b6ab12a71ae2f37",
+      "size_bytes": 2096
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/dxa.yaml",
+      "sha256": "f6986782f041a4f9dcf4b4c3381efc30d35c0cb92beb67184468af6dbfad385c",
+      "size_bytes": 20316
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/foldsim.yaml",
+      "sha256": "737d51b83a819387de69592656b3f00f351bfb01d1b177478fb6a3db3bd614cb",
+      "size_bytes": 1919
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/fpga_gate.yaml",
+      "sha256": "615aa45abe9979906639b227a04304e23527da4f50631bd5a33439c69b9e4c06",
+      "size_bytes": 9047
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/graphics.yaml",
+      "sha256": "770ac002c4d9eef3c272fc8bcf3d7111edb6fd2fa83e7edc160867f51248a95d",
+      "size_bytes": 23420
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/graphics_parity.yaml",
+      "sha256": "b856f845af72def9cff6451f4b3e1cfbe3c53055ba96938e3d218555d91a7837",
+      "size_bytes": 3376
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/integration/cupbop.yaml",
+      "sha256": "1808b83598b0f9df9b3ad15e4cfb10e3b39d39fcfa01789a970adfda08f784c6",
+      "size_bytes": 301
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/integration/dtm.yaml",
+      "sha256": "8dbbc664216b69e5d51386ccf036215ce0ef2896db4e9dbb9bde2450726287b1",
+      "size_bytes": 313
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/integration/gem5.yaml",
+      "sha256": "de745b87d04d1e7e831766c965fefef289e3b394708aef668bf8d6783d3f5780",
+      "size_bytes": 317
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/integration/mpi.yaml",
+      "sha256": "9fb487e32c884d54289dc8d43ef580ce677d25f959a257998d848e77e52249a0",
+      "size_bytes": 1251
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/integration/sst.yaml",
+      "sha256": "2711e2eeb83c71767e93562e73c484ac3e8847dc6cca7490f89e15bcffdb42f9",
+      "size_bytes": 313
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/isa/amo.yaml",
+      "sha256": "b3a65f48f5938c1c891d7e74514413aafd09ba51ed3e86c5f007739195b19431",
+      "size_bytes": 2340
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/isa/mufu.yaml",
+      "sha256": "6a117e916672a80041e2075508130a401fe06629855e4e3ec19f937980155f10",
+      "size_bytes": 2019
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/isa/riscv.yaml",
+      "sha256": "5cb62972f2e2735fd3d3030f0dc08596c83053717414518623adbcd0c4ede4fb",
+      "size_bytes": 3140
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/isa/rvc.yaml",
+      "sha256": "e088f9617cc4b3b6b6a1b48f33484de81db3b5b6384097370b3cebf3eca368cf",
+      "size_bytes": 1965
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/isa/zfhmin.yaml",
+      "sha256": "062743ecd454b78d4aaa34dbad1f75ba6eb4ef7d6e35fb256837781e0f8ea828",
+      "size_bytes": 1833
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/logic_gate.yaml",
+      "sha256": "f6191eba423394b3480c97cc5e48ba282314d5e6904549c3e65813eb563899fb",
+      "size_bytes": 11977
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/p02_wgmma.yaml",
+      "sha256": "48b7c375c3e907fc539229fe8e2b4f1e2001b7b31eba8befc3119a19d0a9c234",
+      "size_bytes": 3177
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/p04_mlp.yaml",
+      "sha256": "9afbf381c5185fa37977e45b87a692be334d4d6eb4eb062e1ad7c20fbffe11e6",
+      "size_bytes": 2113
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/perf.yaml",
+      "sha256": "b7c78af4b96587cad0c7ed2d6cddf585e8bd9d8d067fe66ec04e1beccb076b2a",
+      "size_bytes": 872
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/raytracing.yaml",
+      "sha256": "72dba83890ce8ca89812b04d75f6031d8bd5253827028642b68c57dcc06d2730",
+      "size_bytes": 3698
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/regression.yaml",
+      "sha256": "c747bc258b8ed36a992bc90d2bdab79cb1856e96fc43562b9ae0e727dfd3562b",
+      "size_bytes": 17648
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/scope.yaml",
+      "sha256": "a7fe645bf5701807d7e08cdd98c62fadddd487e70d038af107233645c5ac186a",
+      "size_bytes": 341
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/stress.yaml",
+      "sha256": "faa01057a00307fa832f5e46bb9a5ae90f5751294f1fc61056318fff51f4e62e",
+      "size_bytes": 943
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/sw/hip.yaml",
+      "sha256": "dfc975846c5f7a2f2be7fdb56348fbba9396eaec59c6e0d174956ef7eef58221",
+      "size_bytes": 314
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/sw/kernel.yaml",
+      "sha256": "63f919d562b24a74406263801b864e7178b75821472dbaaa697add635f7d1ebe",
+      "size_bytes": 332
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/sw/opencl.yaml",
+      "sha256": "e7e6a7b5e355551ca617550a7478434a59cdfd9391b414caf19cc5de4545fe5b",
+      "size_bytes": 3038
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/sw/runtime.yaml",
+      "sha256": "926cb515e94f68b4f8b2a8567e633d109f41b95c3bc5883d13cb7a45077d7731",
+      "size_bytes": 891
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/synthesis.yaml",
+      "sha256": "c155ef07cc49da2bdc3c790a5fe53276fb04b56fa6e8145e5e321943dd4f330a",
+      "size_bytes": 302
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/tensor.yaml",
+      "sha256": "5ae8567109b68e7852be5ab66cb92af117983b80693fa5ea7762c82eb19dde61",
+      "size_bytes": 14935
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/tensor_mx.yaml",
+      "sha256": "7769e7c9eabdb86a05acd29899b598eab458a513cc432cb79414cc05129c9ef9",
+      "size_bytes": 12431
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/tensor_sp/tensor_sp.yaml",
+      "sha256": "0a1323fc3e2b41776ea8690bf291982a982703c591e6de29f16ffc8e7b8c38bd",
+      "size_bytes": 12689
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/tensor_sp/tensor_sp_mx.yaml",
+      "sha256": "e6ca643cf39104767081fb02fdeddcd1c5780d3720bbdff3cb3b466b6f4041f7",
+      "size_bytes": 1412
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/tensor_wg.yaml",
+      "sha256": "477d313b40f1fe5c54488098a7f3ad482ccf5d149919b88c834d04bd994155cd",
+      "size_bytes": 19605
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/unittest.yaml",
+      "sha256": "c774b8ea85abd91c93aec8bd7b98566c74b098df4b8e206325ad4ed7f0584b41",
+      "size_bytes": 8802
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/vm.yaml",
+      "sha256": "9c3d4db9ef2325ca9c9d063ff1453690ddebe3b7473b9b65c95ed5373ab1c0a2",
+      "size_bytes": 8978
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/testcases/vulkan.yaml",
+      "sha256": "72cd5b2dbbc46d9910d34aa524c2db5da3f86c92f36a92e306448298f7f914b0",
+      "size_bytes": 3236
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/assets/img/vortex_framework_stack.svg",
+      "sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+      "size_bytes": 48225
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/roadmap.json",
+      "sha256": "c3409db37618927f585a590031e0fd50205d650d79b7750ea09ffb53475e5b18",
+      "size_bytes": 21091
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/validation/w07_a05-archive-replay.json",
+      "sha256": "0eea727b48f302632c38d473500b507dde8c395c7158bc0bfc84ba90f56db89d",
+      "size_bytes": 15434
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/validation/w08_a01-native-adversarial.json",
+      "sha256": "dafdf2f3047c8eed492686e5782f65a00df8d0ae136d170cc0e2ae5c06a6e8a3",
+      "size_bytes": 219011
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/validation/w08_a02-binding-adversarial.json",
+      "sha256": "ff7801162c0a9bfe8244575f152756309de0001b79b8fc3c9dd564f8bfd97c60",
+      "size_bytes": 108219
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_counter_qualification_execute.py",
+      "sha256": "c9ffe924d504317e1dfe19ce5a853876f4385cdf5edb5074716df7e68becc55c",
+      "size_bytes": 2436
+    }
+  ],
+  "watched_inputs_stable": true
+}

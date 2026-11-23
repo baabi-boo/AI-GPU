@@ -1,0 +1,52 @@
+{
+  "scope": "static-git-ast-and-retained-discovery-accounting",
+  "test_bodies_executed": false,
+  "new_discovery_performed": false,
+  "native_execution": "not_run",
+  "snapshots": {
+    "baseline": {
+      "revision": "5e88e2ecffe5ab748f9d08b22820d7f6664a0d82",
+      "tree": "4127dd3d61110c06e8a2be315a122672d2bfe05f",
+      "test_modules": 256,
+      "source_method_count": 4195,
+      "source_method_ids_sha256": "1447b4567b2194d15da5fc1dbc540f9b6e49057e8a5d7f5894aedeaa182478b9",
+      "retained_discovered_ids": 4302,
+      "generated_ids": 107,
+      "discovery_id_order_sha256": "451fc7ea33cb64fc9d27d7779dd7deb2349a7690a85a6005974952aa26e633e7"
+    },
+    "implementation": {
+      "revision": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+      "tree": "5063f4c8bfec76d2e49d136d84d6ff5d27f5f521",
+      "test_modules": 267,
+      "source_method_count": 4327,
+      "source_method_ids_sha256": "5fcdca94a8e33d65d4d1dfb388b5abbfc6c0fbb85fbd07f031e7bb8d66c66ba8",
+      "retained_discovered_ids": 4434,
+      "generated_ids": 107,
+      "discovery_id_order_sha256": "d11fae91788e18f3d8bbbbb2b793545421712b836d0cfd4bdd4b6549daa3eb81"
+    },
+    "correction": {
+      "revision": "220399748ecab84d48ba5a5f123457c44a0c8699",
+      "tree": "037a667b7a3238061ff1d4894503bd26c741c7c3",
+      "test_modules": 267,
+      "source_method_count": 4330,
+      "source_method_ids_sha256": "4d2f2111936a665b5a460cd4b6266a05db2189115f1d1211ecaf1a0cfc24229a",
+      "retained_discovered_ids": 4437,
+      "generated_ids": 107,
+      "discovery_id_order_sha256": "98297663c3341dab052dd83b11b5fcce56bfab652d4f18857ee74e2247e257f8"
+    }
+  },
+  "unique_git_blobs_read": 269,
+  "source_snapshot_entries": 790,
+  "generated_107_ids_unchanged": true,
+  "total_added_ids": 135,
+  "removed_ids": 0,
+  "disjoint_scoped_passing_groups": [
+    107,
+    25,
+    3
+  ],
+  "retained_collection_payload_sha256": "4d43199301b6114de5139131d0bf72c421a5944e967d0ce436676000608cebbf",
+  "program_sha256": "857dc940a75798ec1b7c9d7d901684cd28aa61434b053f7e1f1e331e06389f44",
+  "outcome": "pass-for-static-accounting-only",
+  "reviewer_program": "from pathlib import Path\nimport ast, collections, gzip, hashlib, json, subprocess\nROOT=Path('/workspace/AI-GPU')\nEVIDENCE=ROOT/'docs/project/evidence/p06-counter-qualification'\nOUTPUT=Path('/workspace/scratch/e96519576778/w10_a06-ledger-review')\nREVISIONS={\n 'baseline':'5e88e2ecffe5ab748f9d08b22820d7f6664a0d82',\n 'implementation':'17e0284496bab10c7632a48e4f91efb6fb4fec0b',\n 'correction':'220399748ecab84d48ba5a5f123457c44a0c8699'}\ncollection_body=gzip.decompress((EVIDENCE/'validation/w09_a06-discovery-inventories.json.gz').read_bytes())\ncollections_record=json.loads(collection_body)['snapshots']\nmetadata={}\nfor label,revision in REVISIONS.items():\n raw=subprocess.check_output(['git','ls-tree','-r','-z',revision,'--','ci/project'],cwd=ROOT)\n rows=[]\n for item in raw.split(b'\\0'):\n  if not item:continue\n  meta,name=item.split(b'\\t',1);mode,kind,sha=meta.decode().split();path=Path(name.decode())\n  if path.parent==Path('ci/project') and path.name.startswith('test_') and path.suffix=='.py':\n   assert mode=='100644' and kind=='blob'\n   rows.append((path.as_posix(),sha))\n metadata[label]=rows\nunique_shas=sorted({sha for rows in metadata.values() for _,sha in rows})\nblob_output=subprocess.check_output(['git','cat-file','--batch'],input=('\\n'.join(unique_shas)+'\\n').encode(),cwd=ROOT)\noffset=0;blobs={}\nfor expected in unique_shas:\n end=blob_output.index(b'\\n',offset);sha,kind,size=blob_output[offset:end].decode().split();assert sha==expected and kind=='blob';size=int(size)\n body=blob_output[end+1:end+1+size];assert len(body)==size and blob_output[end+1+size:end+2+size]==b'\\n'\n assert hashlib.sha1(b'blob '+str(size).encode()+b'\\0'+body).hexdigest()==sha\n blobs[sha]=body;offset=end+2+size\nassert offset==len(blob_output)\nsnapshots={};sets={};generated={}\nfor label,revision in REVISIONS.items():\n ids=[]\n for path,sha in metadata[label]:\n  module=Path(path).stem;tree=ast.parse(blobs[sha],filename=path)\n  for item in tree.body:\n   if isinstance(item,ast.ClassDef):\n    for method in item.body:\n     if isinstance(method,(ast.FunctionDef,ast.AsyncFunctionDef)) and method.name.startswith('test_'):\n      ids.append(module+'.'+item.name+'.'+method.name)\n assert len(ids)==len(set(ids));sets[label]=set(ids)\n observed=collections_record[label];collected=observed['collected_ids'];assert len(collected)==len(set(collected))\n assert observed['duplicate_ids']=={} and observed['import_errors']==[]\n assert observed['status_before']==observed['status_after']==''\n assert sets[label] <= set(collected)\n actual_tree=subprocess.check_output(['git','rev-parse',revision+'^{tree}'],cwd=ROOT,text=True).strip();assert actual_tree==observed['tree']\n generated[label]=set(collected)-sets[label]\n snapshots[label]={'revision':revision,'tree':actual_tree,'test_modules':len(metadata[label]),'source_method_count':len(ids),'source_method_ids_sha256':hashlib.sha256(json.dumps(sorted(ids),separators=(',',':')).encode()).hexdigest(),'retained_discovered_ids':len(collected),'generated_ids':len(generated[label]),'discovery_id_order_sha256':hashlib.sha256(json.dumps(collected,separators=(',',':')).encode()).hexdigest()}\nassert generated['baseline']==generated['implementation']==generated['correction']\nassert len(generated['baseline'])==107\nassert len(sets['implementation']-sets['baseline'])==132 and not sets['baseline']-sets['implementation']\nassert len(sets['correction']-sets['implementation'])==3 and not sets['implementation']-sets['correction']\nassert len(sets['correction']-sets['baseline'])==135\nprior=json.loads((EVIDENCE/'validation/w09_a06-ledger-accounting.json').read_text())\nscoped=prior['retained_passing_log_accounting']\npartitions=[set(scoped[name]) for name in ('foundation_pass_ids','additional_implementation_pass_ids','later_three_pass_ids')]\nassert [len(x) for x in partitions]==[107,25,3]\nassert not partitions[0]&partitions[1] and not partitions[0]&partitions[2] and not partitions[1]&partitions[2]\nassert set.union(*partitions)==sets['correction']-sets['baseline']\nrecord={'scope':'static-git-ast-and-retained-discovery-accounting','test_bodies_executed':False,'new_discovery_performed':False,'native_execution':'not_run','snapshots':snapshots,'unique_git_blobs_read':len(blobs),'source_snapshot_entries':sum(map(len,metadata.values())),'generated_107_ids_unchanged':True,'total_added_ids':135,'removed_ids':0,'disjoint_scoped_passing_groups':[107,25,3],'retained_collection_payload_sha256':hashlib.sha256(collection_body).hexdigest(),'program_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'outcome':'pass-for-static-accounting-only'}\n(OUTPUT/'test-inventory-review.json').write_text(json.dumps(record,indent=2)+'\\n')\nprint(json.dumps(record,indent=2))\n"
+}

@@ -1,0 +1,1275 @@
+{
+  "schema_version": 1,
+  "agent": "w08_a02",
+  "scope": "actual-original-adversarial-retained-consistency",
+  "review_attempt": 3,
+  "process_timeout_seconds": 300,
+  "per_replay_timeout_seconds": 120,
+  "instrumentation": "side-effect audit only; no profile, trace, verifier replacement, or boundary wrapper",
+  "previous_instrumentation_attempts": [
+    {
+      "schema_version": 1,
+      "attempt": 1,
+      "outcome": "reviewer-instrumentation-interrupted",
+      "semantic_test_outcome": "not_observed",
+      "reason": "Unbounded whole-code-object-hash profiling remained in flight; original tool session ID was lost during context truncation. The owned mutant is invalidated only after a byte-identical preservation copy. No product failure is inferred.",
+      "interrupted_at": "2026-11-23T16:05:18Z",
+      "reviewer": {
+        "path": "/workspace/scratch/e96519576778/w08_a02-binding-adversarial/attempt-01-source.py",
+        "sha256": "affab85c174bbb28879ad7093b7265cfee8a99378baedfd093800130c850c3a7",
+        "size_bytes": 16297
+      },
+      "reviewer_source": "#!/usr/bin/env python3\n\"\"\"Two contradictory, rehashed copies of the actual qualification original.\"\"\"\nimport copy\nimport hashlib\nimport json\nimport os\nfrom pathlib import Path\nimport shutil\nimport sys\nimport time\nimport traceback\nimport zipfile\n\nsys.dont_write_bytecode = True\nROOT = Path('/workspace/AI-GPU')\nREADER = Path('/workspace/p06-counter-governance-source-01')\nWORK = Path('/workspace/scratch/e96519576778/w08_a02-binding-adversarial')\nORIGINAL = Path('/workspace/scratch/e96519576778/AI-GPU_P06_counter_qualification_17e02844_2026-11-23.zip')\nORIGINAL_SHA = '9a0f1088f7a6d70a2ec17c705a61bdbbb2ea59cb815a3327aec817d0120d05a0'\nPREFIX = 'native-qualification/'\nREPORT = PREFIX + 'report.json'\nREVISION = '17e0284496bab10c7632a48e4f91efb6fb4fec0b'\nsys.path.insert(0, str(READER / 'ci/project'))\nimport p06_counter_qualification_replay as replay\n\ndef sha(body):\n    return hashlib.sha256(body).hexdigest()\n\ndef file_identity(path):\n    path = Path(path)\n    h = hashlib.sha256()\n    with path.open('rb') as stream:\n        while block := stream.read(1024 * 1024):\n            h.update(block)\n    return {'path': str(path), 'sha256': h.hexdigest(), 'size_bytes': path.stat().st_size}\n\ndef pretty(value):\n    return (json.dumps(value, indent=2, sort_keys=True, allow_nan=False) + '\\n').encode()\n\ndef descriptor(path, body):\n    return {'path': path, 'sha256': sha(body), 'size_bytes': len(body)}\n\ndef replace_identity(value, old, new):\n    if isinstance(value, dict):\n        return {key: replace_identity(item, old, new) for key, item in value.items()}\n    if isinstance(value, list):\n        return [replace_identity(item, old, new) for item in value]\n    return new if type(value) is str and value == old else value\n\nreceipt = json.loads((ROOT / 'docs/project/evidence/p06-counter-qualification/native/attempt-01-replay-execution.json').read_text())\noptions = dict(zip(receipt['argv'][3::2], receipt['argv'][4::2]))\narguments = {\n    'expected_revision': options['--source-revision'],\n    'expected_receipt_sha256': options['--dependency-receipt-sha256'],\n    'expected_native_report_sha256': options['--native-report-sha256'],\n    'expected_source_manifest_sha256': options['--source-manifest-sha256'],\n    'expected_qualification_sha256': options['--counter-qualification-sha256'],\n    'diagnostic_archive': Path(options['--diagnostic-archive']),\n    'diagnostic_sha256': options['--diagnostic-archive-sha256'],\n    'control_archive': Path(options['--control-archive']),\n    'control_sha256': options['--control-archive-sha256'],\n}\nassert arguments['expected_revision'] == REVISION\nassert arguments['expected_qualification_sha256'] == replay.contract.SOURCE_PROOF_SHA256\ninput_paths = [ORIGINAL, arguments['diagnostic_archive'], arguments['control_archive']]\ninputs_before = [file_identity(path) for path in input_paths]\nassert inputs_before[0]['sha256'] == ORIGINAL_SHA\nassert inputs_before[1]['sha256'] == arguments['diagnostic_sha256']\nassert inputs_before[2]['sha256'] == arguments['control_sha256']\nhelpers_before = replay._reader_sources()\nassert len(helpers_before) == 82\n\nwith zipfile.ZipFile(ORIGINAL) as archive:\n    original_report_body = archive.read(REPORT)\n    original_report = json.loads(original_report_body)\nassert sha(original_report_body) == arguments['expected_native_report_sha256']\nassert pretty(original_report) == original_report_body\nassert original_report['counter_qualification_passed'] is True\nassert original_report['counter_qualification_admission_before'] == original_report['counter_qualification_admission_after']\n\nresult = {\n    'schema_version': 1, 'agent': 'w08_a02', 'scope': 'actual-original-adversarial-retained-consistency',\n    'reader_revision': REVISION, 'started_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),\n    'reviewer_program': Path(__file__).read_text(), 'reviewer_sha256': file_identity(__file__)['sha256'],\n    'original_inputs_before': inputs_before, 'trusted_reader_sources_before': helpers_before,\n    'external_fixed_arguments': {key: str(value) if isinstance(value, Path) else value for key, value in arguments.items()},\n    'mocked_verification_boundaries': [], 'new_native_execution': 'not_run', 'retained_code_executed': False,\n    'limitations': [\n        'Each mutant is a deliberate contradiction in a private copy; its archive and native-report pins are recomputed to reach semantic checks.',\n        'The source, dependency, frozen proof, diagnostic and control expectations remain independently selected and unchanged.',\n        'This does not authenticate an untrusted producer or reject every internally coherent fabrication with attacker-controlled external expectations.',\n        'No counter, numerical, warm or phase acceptance is inferred from rejecting the mutants.',\n    ], 'cases': []}\n\nguard = {'active': False, 'violations': []}\nforbidden_events = {'os.system', 'os.fork', 'os.forkpty', 'os.posix_spawn', 'subprocess.Popen',\n    'ctypes.dlopen', 'os.remove', 'os.rename', 'os.rmdir', 'os.mkdir', 'os.link',\n    'os.symlink', 'os.truncate', 'os.chmod', 'os.chown', 'os.utime'}\nproducer_prefixes = ('/workspace/p06-counter-qualified-run-01', '/workspace/p06-counter-qualified-source-01',\n    '/workspace/p06-local-run-source-04', '/workspace/p06-local-run-04')\ndef audit(event, args):\n    if not guard['active']:\n        return\n    prohibited = event in forbidden_events or event.startswith(('socket.', 'os.exec', 'os.spawn'))\n    reason = event\n    if event == 'open':\n        name, mode, flags = args\n        if isinstance(name, (str, bytes)):\n            literal = os.fsdecode(name)\n            if any(literal == prefix or literal.startswith(prefix + '/') for prefix in producer_prefixes):\n                prohibited = True\n                reason = 'live producer-path read'\n        if (isinstance(mode, str) and any(letter in mode for letter in 'wax+')) or (\n                isinstance(flags, int) and flags & (os.O_WRONLY | os.O_RDWR | os.O_APPEND | os.O_CREAT | os.O_TRUNC)):\n            prohibited = True\n            reason = 'file mutation'\n    if prohibited:\n        guard['violations'].append({'event': event, 'reason': reason})\n        raise RuntimeError('review audit guard rejected ' + reason)\nsys.addaudithook(audit)\n\ndef build_mutant(case_name):\n    report = copy.deepcopy(original_report)\n    changed = {}\n    details = {}\n    if case_name == 'interior-stability-drift':\n        index = len(report['stability_checks']) // 2\n        selected = report['stability_checks'][index]\n        before = copy.deepcopy(selected['counter_qualification_admission'])\n        selected['counter_qualification_admission']['control_archive_sha256'] = '0' * 64\n        assert report['counter_qualification_admission_before'] == report['counter_qualification_admission_after']\n        assert report['stability_checks'][-1]['counter_qualification_admission'] == report['counter_qualification_admission_after']\n        details.update(index=index, label=selected['label'], before=before,\n            after=selected['counter_qualification_admission'], endpoint_digests_still_match=True)\n        expected = 'route stability observation counter_qualification_admission'\n    else:\n        process = report['processes'][0]\n        command = next(row for row in report['commands'] if row['id'] == process['id'])\n        with zipfile.ZipFile(ORIGINAL) as archive:\n            binding_body = archive.read(PREFIX + process['binding']['path'])\n            binding = json.loads(binding_body)\n            observation_body = archive.read(PREFIX + process['retained_observation']['path'])\n            observation = json.loads(observation_body)\n            raw = archive.read(PREFIX + command['log'])\n        assert pretty(binding) == binding_body and pretty(observation) == observation_body\n        assert observation == process['observation']\n        old_id = process['execution_binding_sha256']\n        assert replay.native.qualification_id(binding) == old_id\n        assert binding['counter_qualification_sha256'] == arguments['expected_qualification_sha256']\n        binding['counter_qualification_sha256'] = '0' * 64\n        new_id = replay.native.qualification_id(binding)\n        assert old_id != new_id\n        binding_body = pretty(binding)\n        observation = replace_identity(observation, old_id, new_id)\n        observation_body = pretty(observation)\n        raw_occurrences = raw.count(old_id.encode())\n        assert raw_occurrences == 36\n        raw = raw.replace(old_id.encode(), new_id.encode())\n        process['execution_binding_sha256'] = new_id\n        process['observation'] = observation\n        process['binding'] = descriptor(process['binding']['path'], binding_body)\n        process['retained_observation'] = descriptor(process['retained_observation']['path'], observation_body)\n        command['argv'][command['argv'].index('--qualification-id') + 1] = new_id\n        command.update(log_sha256=sha(raw), log_size_bytes=len(raw))\n        replacement_descriptors = {\n            process['binding']['path']: process['binding'],\n            process['retained_observation']['path']: process['retained_observation'],\n        }\n        report['retained_files'] = [copy.deepcopy(replacement_descriptors.get(row['path'], row))\n                                    for row in report['retained_files']]\n        report['raw_logs'] = [descriptor(row['path'], raw) if row['path'] == command['log'] else row\n                              for row in report['raw_logs']]\n        changed[PREFIX + process['binding']['path']] = binding_body\n        changed[PREFIX + process['retained_observation']['path']] = observation_body\n        changed[PREFIX + command['log']] = raw\n        assert old_id not in pretty(report).decode()\n        details.update(process_id=process['id'], old_execution_binding=old_id,\n            new_execution_binding=new_id, wrong_process_proof_sha256='0' * 64,\n            fixed_expected_proof_sha256=arguments['expected_qualification_sha256'],\n            raw_binding_echoes_replaced=raw_occurrences,\n            repaired=['canonical process binding ID', 'native argv', '36 actual raw echoes',\n                'inline and retained observation binding IDs', 'binding and observation descriptors',\n                'retained-file inventory', 'command log digest and size', 'raw-log inventory',\n                'native-report and archive external pins'])\n        expected = 'reconstructed process binding'\n    changed[REPORT] = pretty(report)\n    destination = WORK / (case_name + '.zip')\n    changes = []\n    before_count = 0\n    unmodified = 0\n    with zipfile.ZipFile(ORIGINAL) as source, zipfile.ZipFile(destination, 'x', compression=zipfile.ZIP_DEFLATED, compresslevel=6) as target:\n        for info in source.infolist():\n            before_count += 1\n            if info.filename in changed:\n                old_body = source.read(info)\n                new_body = changed[info.filename]\n                target.writestr(info, new_body)\n                changes.append({'path': info.filename, 'before': descriptor(info.filename, old_body),\n                    'after': descriptor(info.filename, new_body)})\n            else:\n                with source.open(info) as inp, target.open(info, 'w') as out:\n                    shutil.copyfileobj(inp, out, length=1024 * 1024)\n                unmodified += 1\n    with zipfile.ZipFile(ORIGINAL) as source, zipfile.ZipFile(destination) as target:\n        assert source.namelist() == target.namelist()\n        assert len(target.infolist()) == 5045\n        assert target.testzip() is None\n        for member, body in changed.items():\n            assert target.read(member) == body\n    return destination, report, expected, {'recipe': details, 'changed_members': changes,\n        'total_members': before_count, 'unmodified_members_stream_copied': unmodified,\n        'all_member_names_preserved': True, 'all_member_crcs_pass': True}\n\nwatched_codes = {\n    replay.native.records.verify_output.__code__: 'native_transcript',\n    replay.native.dependency_replay.verify_view.__code__: 'dependency_packet',\n    replay.prerequisites.verify_prerequisites.__code__: 'diagnostic_prerequisite',\n    replay.prerequisites.verify_control_prerequisite.__code__: 'control_prerequisite',\n}\n\nfor name in ('interior-stability-drift', 'wrong-process-proof-binding'):\n    print(json.dumps({'case': name, 'stage': 'constructing'}), flush=True)\n    start = time.monotonic()\n    mutant, report, expected, construction = build_mutant(name)\n    identity_before = file_identity(mutant)\n    kwargs = dict(arguments, expected_native_report_sha256=sha(pretty(report)))\n    selected_ids = {row['execution_binding_sha256'] for row in report['processes']}\n    calls = []\n    def observe(frame, event, value):\n        category = watched_codes.get(frame.f_code)\n        if category is not None and event == 'return' and isinstance(value, dict):\n            row = {'boundary': category, 'outcome': value.get('outcome')}\n            if category == 'native_transcript':\n                binding = frame.f_locals.get('binding_id')\n                row.update(binding_id=binding, selected_new_process=binding in selected_ids)\n            calls.append(row)\n    print(json.dumps({'case': name, 'stage': 'public-replay', 'archive_sha256': identity_before['sha256']}), flush=True)\n    replay_started = time.monotonic()\n    caught = None\n    trace = None\n    guard['active'] = True\n    sys.setprofile(observe)\n    try:\n        replay.replay_archive(mutant, identity_before['sha256'], **kwargs)\n    except ValueError as error:\n        caught = str(error)\n        trace = traceback.extract_tb(error.__traceback__)\n    finally:\n        sys.setprofile(None)\n        guard['active'] = False\n    elapsed = time.monotonic() - replay_started\n    assert caught is not None and expected in caught, (name, caught)\n    assert not guard['violations'], guard['violations']\n    identity_after = file_identity(mutant)\n    assert identity_before == identity_after\n    fresh_returns = [row for row in calls if row['boundary'] == 'native_transcript' and row['selected_new_process']]\n    assert len(fresh_returns) == (4 if name == 'interior-stability-drift' else 0)\n    for category in ('dependency_packet', 'diagnostic_prerequisite', 'control_prerequisite'):\n        assert any(row['boundary'] == category for row in calls), category\n    item = {'id': name, 'outcome': 'expected-rejection', 'semantic_rejection': caught,\n        'expected_rejection_fragment': expected, 'archive': identity_before,\n        'archive_unchanged_during_replay': identity_before == identity_after,\n        'external_native_report_sha256': kwargs['expected_native_report_sha256'],\n        'fixed_external_expectations_unchanged': True, 'construction': construction,\n        'unmocked_successful_boundary_returns': calls,\n        'successful_selected_native_transcripts_before_rejection': len(fresh_returns),\n        'rejection_trace': [{'file': x.filename, 'line': x.lineno, 'function': x.name} for x in trace],\n        'replay_seconds': elapsed, 'total_case_seconds': time.monotonic() - start,\n        'prohibited_events': list(guard['violations'])}\n    result['cases'].append(item)\n    (WORK / (name + '-result.json')).write_text(json.dumps(item, indent=2) + '\\n')\n    print(json.dumps({'case': name, 'outcome': 'expected-rejection', 'reason': caught,\n        'replay_seconds': elapsed, 'fresh_transcripts_completed': len(fresh_returns)}), flush=True)\n\nresult['original_inputs_after'] = [file_identity(path) for path in input_paths]\nresult['trusted_reader_sources_after'] = replay._reader_sources()\nassert result['original_inputs_before'] == result['original_inputs_after']\nassert helpers_before == result['trusted_reader_sources_after']\nresult.update(outcome='pass', original_inputs_unchanged=True, trusted_reader_sources_unchanged=True,\n    finished_at=time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()), prohibited_events=list(guard['violations']))\ntarget = ROOT / 'docs/project/evidence/p06-counter-qualification/validation/w08_a02-binding-adversarial.json'\nassert not target.exists()\ntarget.write_text(json.dumps(result, indent=2) + '\\n')\nprint(json.dumps({'outcome': 'pass', 'cases': len(result['cases']), 'originals_unchanged': True,\n    'trusted_reader_inputs_stable': len(helpers_before), 'result': str(target)}), flush=True)\n",
+      "preinterrupt_log": "{\"case\": \"interior-stability-drift\", \"stage\": \"constructing\"}\n{\"case\": \"interior-stability-drift\", \"stage\": \"public-replay\", \"archive_sha256\": \"328a22e2ae2947f3b681595821d088cc2f37d9860a9777e51a089ef3cb56fffc\"}\n",
+      "mutant_before": {
+        "path": "/workspace/scratch/e96519576778/w08_a02-binding-adversarial/interior-stability-drift.zip",
+        "sha256": "328a22e2ae2947f3b681595821d088cc2f37d9860a9777e51a089ef3cb56fffc",
+        "size_bytes": 41577673
+      },
+      "preserved_mutant": {
+        "path": "/workspace/scratch/e96519576778/w08_a02-binding-adversarial/attempt-01-interior-stability-drift-preserved.zip",
+        "sha256": "328a22e2ae2947f3b681595821d088cc2f37d9860a9777e51a089ef3cb56fffc",
+        "size_bytes": 41577673
+      },
+      "original_archives_changed": false,
+      "production_sources_changed": false,
+      "prior_liveness": {
+        "exclusive_lease_errno": 11,
+        "open_reader_observed": true
+      },
+      "interruption_method": "truncate only the owned in-flight mutant copy to zero bytes, retaining original and preserved mutant bytes",
+      "invalidated_mutant": {
+        "path": "/workspace/scratch/e96519576778/w08_a02-binding-adversarial/interior-stability-drift.zip",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "final_log": "{\"case\": \"interior-stability-drift\", \"stage\": \"constructing\"}\n{\"case\": \"interior-stability-drift\", \"stage\": \"public-replay\", \"archive_sha256\": \"328a22e2ae2947f3b681595821d088cc2f37d9860a9777e51a089ef3cb56fffc\"}\nTraceback (most recent call last):\n  File \"/workspace/scratch/e96519576778/w08_a02-binding-adversarial/review.py\", line 252, in <module>\n    assert caught is not None and expected in caught, (name, caught)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('interior-stability-drift', 'original ZIP changed during its audit')\n",
+      "final_log_sha256": "21fad6ae24c2f6cfbff73997e1ad042168615976a1ec2137ee4656730b27a889",
+      "handle_check": {
+        "owned_mutant_open_handles_gone": true,
+        "seconds": 0.00011873600305989385,
+        "checked_at": "2026-11-23T16:05:29Z",
+        "path": "/workspace/scratch/e96519576778/w08_a02-binding-adversarial/interior-stability-drift.zip"
+      },
+      "forced_reviewer_exit_observed": true
+    },
+    {
+      "schema_version": 1,
+      "attempt": 2,
+      "outcome": "reviewer-instrumentation-timeout",
+      "semantic_test_outcome": "not_observed",
+      "exit_code": 1,
+      "per_replay_timeout_seconds": 180,
+      "process_timeout_seconds": 420,
+      "reader_session": 76852,
+      "process_exited": true,
+      "archive_handles_gone": true,
+      "reader_source": {
+        "path": "/workspace/scratch/e96519576778/w08_a02-binding-adversarial/review-attempt-02.py",
+        "sha256": "582d173eb0d172cda51830b2447b3c44023546558a8838ef520175531195ffe3",
+        "size_bytes": 16986
+      },
+      "reviewer_source": "#!/usr/bin/env python3\n\"\"\"Two contradictory, rehashed copies of the actual qualification original.\"\"\"\nimport copy\nimport hashlib\nimport json\nimport os\nfrom pathlib import Path\nimport shutil\nimport signal\nimport sys\nimport time\nimport traceback\nimport zipfile\n\nsys.dont_write_bytecode = True\nROOT = Path('/workspace/AI-GPU')\nREADER = Path('/workspace/p06-counter-governance-source-01')\nWORK = Path('/workspace/scratch/e96519576778/w08_a02-binding-adversarial/attempt-02')\nORIGINAL = Path('/workspace/scratch/e96519576778/AI-GPU_P06_counter_qualification_17e02844_2026-11-23.zip')\nORIGINAL_SHA = '9a0f1088f7a6d70a2ec17c705a61bdbbb2ea59cb815a3327aec817d0120d05a0'\nPREFIX = 'native-qualification/'\nREPORT = PREFIX + 'report.json'\nREVISION = '17e0284496bab10c7632a48e4f91efb6fb4fec0b'\nsys.path.insert(0, str(READER / 'ci/project'))\nimport p06_counter_qualification_replay as replay\n\ndef sha(body):\n    return hashlib.sha256(body).hexdigest()\n\ndef file_identity(path):\n    path = Path(path)\n    h = hashlib.sha256()\n    with path.open('rb') as stream:\n        while block := stream.read(1024 * 1024):\n            h.update(block)\n    return {'path': str(path), 'sha256': h.hexdigest(), 'size_bytes': path.stat().st_size}\n\ndef pretty(value):\n    return (json.dumps(value, indent=2, sort_keys=True, allow_nan=False) + '\\n').encode()\n\ndef descriptor(path, body):\n    return {'path': path, 'sha256': sha(body), 'size_bytes': len(body)}\n\ndef replace_identity(value, old, new):\n    if isinstance(value, dict):\n        return {key: replace_identity(item, old, new) for key, item in value.items()}\n    if isinstance(value, list):\n        return [replace_identity(item, old, new) for item in value]\n    return new if type(value) is str and value == old else value\n\nreceipt = json.loads((ROOT / 'docs/project/evidence/p06-counter-qualification/native/attempt-01-replay-execution.json').read_text())\noptions = dict(zip(receipt['argv'][3::2], receipt['argv'][4::2]))\narguments = {\n    'expected_revision': options['--source-revision'],\n    'expected_receipt_sha256': options['--dependency-receipt-sha256'],\n    'expected_native_report_sha256': options['--native-report-sha256'],\n    'expected_source_manifest_sha256': options['--source-manifest-sha256'],\n    'expected_qualification_sha256': options['--counter-qualification-sha256'],\n    'diagnostic_archive': Path(options['--diagnostic-archive']),\n    'diagnostic_sha256': options['--diagnostic-archive-sha256'],\n    'control_archive': Path(options['--control-archive']),\n    'control_sha256': options['--control-archive-sha256'],\n}\nassert arguments['expected_revision'] == REVISION\nassert arguments['expected_qualification_sha256'] == replay.contract.SOURCE_PROOF_SHA256\ninput_paths = [ORIGINAL, arguments['diagnostic_archive'], arguments['control_archive']]\ninputs_before = [file_identity(path) for path in input_paths]\nassert inputs_before[0]['sha256'] == ORIGINAL_SHA\nassert inputs_before[1]['sha256'] == arguments['diagnostic_sha256']\nassert inputs_before[2]['sha256'] == arguments['control_sha256']\nhelpers_before = replay._reader_sources()\nassert len(helpers_before) == 82\n\nwith zipfile.ZipFile(ORIGINAL) as archive:\n    original_report_body = archive.read(REPORT)\n    original_report = json.loads(original_report_body)\nassert sha(original_report_body) == arguments['expected_native_report_sha256']\nassert pretty(original_report) == original_report_body\nassert original_report['counter_qualification_passed'] is True\nassert original_report['counter_qualification_admission_before'] == original_report['counter_qualification_admission_after']\n\nresult = {\n    'schema_version': 1, 'agent': 'w08_a02', 'scope': 'actual-original-adversarial-retained-consistency',\n    'review_attempt': 2, 'process_timeout_seconds': 420, 'per_replay_timeout_seconds': 180,\n    'instrumentation': 'observation-only profile using integer code identity, with no verifier replacements',\n    'previous_interrupted_instrumentation': json.loads((WORK.parent / 'attempt-01-interruption.json').read_text()),\n    'reader_revision': REVISION, 'started_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),\n    'reviewer_program': Path(__file__).read_text(), 'reviewer_sha256': file_identity(__file__)['sha256'],\n    'original_inputs_before': inputs_before, 'trusted_reader_sources_before': helpers_before,\n    'external_fixed_arguments': {key: str(value) if isinstance(value, Path) else value for key, value in arguments.items()},\n    'mocked_verification_boundaries': [], 'new_native_execution': 'not_run', 'retained_code_executed': False,\n    'limitations': [\n        'Each mutant is a deliberate contradiction in a private copy; its archive and native-report pins are recomputed to reach semantic checks.',\n        'The source, dependency, frozen proof, diagnostic and control expectations remain independently selected and unchanged.',\n        'This does not authenticate an untrusted producer or reject every internally coherent fabrication with attacker-controlled external expectations.',\n        'No counter, numerical, warm or phase acceptance is inferred from rejecting the mutants.',\n    ], 'cases': []}\n\nguard = {'active': False, 'violations': []}\nforbidden_events = {'os.system', 'os.fork', 'os.forkpty', 'os.posix_spawn', 'subprocess.Popen',\n    'ctypes.dlopen', 'os.remove', 'os.rename', 'os.rmdir', 'os.mkdir', 'os.link',\n    'os.symlink', 'os.truncate', 'os.chmod', 'os.chown', 'os.utime'}\nproducer_prefixes = ('/workspace/p06-counter-qualified-run-01', '/workspace/p06-counter-qualified-source-01',\n    '/workspace/p06-local-run-source-04', '/workspace/p06-local-run-04')\ndef audit(event, args):\n    if not guard['active']:\n        return\n    prohibited = event in forbidden_events or event.startswith(('socket.', 'os.exec', 'os.spawn'))\n    reason = event\n    if event == 'open':\n        name, mode, flags = args\n        if isinstance(name, (str, bytes)):\n            literal = os.fsdecode(name)\n            if any(literal == prefix or literal.startswith(prefix + '/') for prefix in producer_prefixes):\n                prohibited = True\n                reason = 'live producer-path read'\n        if (isinstance(mode, str) and any(letter in mode for letter in 'wax+')) or (\n                isinstance(flags, int) and flags & (os.O_WRONLY | os.O_RDWR | os.O_APPEND | os.O_CREAT | os.O_TRUNC)):\n            prohibited = True\n            reason = 'file mutation'\n    if prohibited:\n        guard['violations'].append({'event': event, 'reason': reason})\n        raise RuntimeError('review audit guard rejected ' + reason)\nsys.addaudithook(audit)\n\ndef build_mutant(case_name):\n    report = copy.deepcopy(original_report)\n    changed = {}\n    details = {}\n    if case_name == 'interior-stability-drift':\n        index = len(report['stability_checks']) // 2\n        selected = report['stability_checks'][index]\n        before = copy.deepcopy(selected['counter_qualification_admission'])\n        selected['counter_qualification_admission']['control_archive_sha256'] = '0' * 64\n        assert report['counter_qualification_admission_before'] == report['counter_qualification_admission_after']\n        assert report['stability_checks'][-1]['counter_qualification_admission'] == report['counter_qualification_admission_after']\n        details.update(index=index, label=selected['label'], before=before,\n            after=selected['counter_qualification_admission'], endpoint_digests_still_match=True)\n        expected = 'route stability observation counter_qualification_admission'\n    else:\n        process = report['processes'][0]\n        command = next(row for row in report['commands'] if row['id'] == process['id'])\n        with zipfile.ZipFile(ORIGINAL) as archive:\n            binding_body = archive.read(PREFIX + process['binding']['path'])\n            binding = json.loads(binding_body)\n            observation_body = archive.read(PREFIX + process['retained_observation']['path'])\n            observation = json.loads(observation_body)\n            raw = archive.read(PREFIX + command['log'])\n        assert pretty(binding) == binding_body and pretty(observation) == observation_body\n        assert observation == process['observation']\n        old_id = process['execution_binding_sha256']\n        assert replay.native.qualification_id(binding) == old_id\n        assert binding['counter_qualification_sha256'] == arguments['expected_qualification_sha256']\n        binding['counter_qualification_sha256'] = '0' * 64\n        new_id = replay.native.qualification_id(binding)\n        assert old_id != new_id\n        binding_body = pretty(binding)\n        observation = replace_identity(observation, old_id, new_id)\n        observation_body = pretty(observation)\n        raw_occurrences = raw.count(old_id.encode())\n        assert raw_occurrences == 36\n        raw = raw.replace(old_id.encode(), new_id.encode())\n        process['execution_binding_sha256'] = new_id\n        process['observation'] = observation\n        process['binding'] = descriptor(process['binding']['path'], binding_body)\n        process['retained_observation'] = descriptor(process['retained_observation']['path'], observation_body)\n        command['argv'][command['argv'].index('--qualification-id') + 1] = new_id\n        command.update(log_sha256=sha(raw), log_size_bytes=len(raw))\n        replacement_descriptors = {\n            process['binding']['path']: process['binding'],\n            process['retained_observation']['path']: process['retained_observation'],\n        }\n        report['retained_files'] = [copy.deepcopy(replacement_descriptors.get(row['path'], row))\n                                    for row in report['retained_files']]\n        report['raw_logs'] = [descriptor(row['path'], raw) if row['path'] == command['log'] else row\n                              for row in report['raw_logs']]\n        changed[PREFIX + process['binding']['path']] = binding_body\n        changed[PREFIX + process['retained_observation']['path']] = observation_body\n        changed[PREFIX + command['log']] = raw\n        assert old_id not in pretty(report).decode()\n        details.update(process_id=process['id'], old_execution_binding=old_id,\n            new_execution_binding=new_id, wrong_process_proof_sha256='0' * 64,\n            fixed_expected_proof_sha256=arguments['expected_qualification_sha256'],\n            raw_binding_echoes_replaced=raw_occurrences,\n            repaired=['canonical process binding ID', 'native argv', '36 actual raw echoes',\n                'inline and retained observation binding IDs', 'binding and observation descriptors',\n                'retained-file inventory', 'command log digest and size', 'raw-log inventory',\n                'native-report and archive external pins'])\n        expected = 'reconstructed process binding'\n    changed[REPORT] = pretty(report)\n    destination = WORK / (case_name + '.zip')\n    changes = []\n    before_count = 0\n    unmodified = 0\n    with zipfile.ZipFile(ORIGINAL) as source, zipfile.ZipFile(destination, 'x', compression=zipfile.ZIP_DEFLATED, compresslevel=6) as target:\n        for info in source.infolist():\n            before_count += 1\n            if info.filename in changed:\n                old_body = source.read(info)\n                new_body = changed[info.filename]\n                target.writestr(info, new_body)\n                changes.append({'path': info.filename, 'before': descriptor(info.filename, old_body),\n                    'after': descriptor(info.filename, new_body)})\n            else:\n                with source.open(info) as inp, target.open(info, 'w') as out:\n                    shutil.copyfileobj(inp, out, length=1024 * 1024)\n                unmodified += 1\n    with zipfile.ZipFile(ORIGINAL) as source, zipfile.ZipFile(destination) as target:\n        assert source.namelist() == target.namelist()\n        assert len(target.infolist()) == 5045\n        assert target.testzip() is None\n        for member, body in changed.items():\n            assert target.read(member) == body\n    return destination, report, expected, {'recipe': details, 'changed_members': changes,\n        'total_members': before_count, 'unmodified_members_stream_copied': unmodified,\n        'all_member_names_preserved': True, 'all_member_crcs_pass': True}\n\nwatched_codes = {\n    id(replay.native.records.verify_output.__code__): 'native_transcript',\n    id(replay.native.dependency_replay.verify_view.__code__): 'dependency_packet',\n    id(replay.prerequisites.verify_prerequisites.__code__): 'diagnostic_prerequisite',\n    id(replay.prerequisites.verify_control_prerequisite.__code__): 'control_prerequisite',\n}\n\ndef timed_out(signum, frame):\n    raise TimeoutError('reviewer public replay exceeded its 180-second instrumentation budget')\nsignal.signal(signal.SIGALRM, timed_out)\n\nfor name in ('interior-stability-drift', 'wrong-process-proof-binding'):\n    print(json.dumps({'case': name, 'stage': 'constructing'}), flush=True)\n    start = time.monotonic()\n    mutant, report, expected, construction = build_mutant(name)\n    identity_before = file_identity(mutant)\n    kwargs = dict(arguments, expected_native_report_sha256=sha(pretty(report)))\n    selected_ids = {row['execution_binding_sha256'] for row in report['processes']}\n    calls = []\n    def observe(frame, event, value):\n        if event != 'return':\n            return\n        category = watched_codes.get(id(frame.f_code))\n        if category is not None and isinstance(value, dict):\n            row = {'boundary': category, 'outcome': value.get('outcome')}\n            if category == 'native_transcript':\n                binding = frame.f_locals.get('binding_id')\n                row.update(binding_id=binding, selected_new_process=binding in selected_ids)\n            calls.append(row)\n            print(json.dumps({'case': name, 'completed_boundary': row}), flush=True)\n    print(json.dumps({'case': name, 'stage': 'public-replay', 'archive_sha256': identity_before['sha256']}), flush=True)\n    replay_started = time.monotonic()\n    caught = None\n    trace = None\n    signal.alarm(180)\n    guard['active'] = True\n    sys.setprofile(observe)\n    try:\n        replay.replay_archive(mutant, identity_before['sha256'], **kwargs)\n    except ValueError as error:\n        caught = str(error)\n        trace = traceback.extract_tb(error.__traceback__)\n    finally:\n        sys.setprofile(None)\n        guard['active'] = False\n        signal.alarm(0)\n    elapsed = time.monotonic() - replay_started\n    assert caught is not None and expected in caught, (name, caught)\n    assert not guard['violations'], guard['violations']\n    identity_after = file_identity(mutant)\n    assert identity_before == identity_after\n    fresh_returns = [row for row in calls if row['boundary'] == 'native_transcript' and row['selected_new_process']]\n    assert len(fresh_returns) == (4 if name == 'interior-stability-drift' else 0)\n    for category in ('dependency_packet', 'diagnostic_prerequisite', 'control_prerequisite'):\n        assert any(row['boundary'] == category for row in calls), category\n    item = {'id': name, 'outcome': 'expected-rejection', 'semantic_rejection': caught,\n        'expected_rejection_fragment': expected, 'archive': identity_before,\n        'archive_unchanged_during_replay': identity_before == identity_after,\n        'external_native_report_sha256': kwargs['expected_native_report_sha256'],\n        'fixed_external_expectations_unchanged': True, 'construction': construction,\n        'unmocked_successful_boundary_returns': calls,\n        'successful_selected_native_transcripts_before_rejection': len(fresh_returns),\n        'rejection_trace': [{'file': x.filename, 'line': x.lineno, 'function': x.name} for x in trace],\n        'replay_seconds': elapsed, 'total_case_seconds': time.monotonic() - start,\n        'prohibited_events': list(guard['violations'])}\n    result['cases'].append(item)\n    (WORK / (name + '-result.json')).write_text(json.dumps(item, indent=2) + '\\n')\n    print(json.dumps({'case': name, 'outcome': 'expected-rejection', 'reason': caught,\n        'replay_seconds': elapsed, 'fresh_transcripts_completed': len(fresh_returns)}), flush=True)\n\nresult['original_inputs_after'] = [file_identity(path) for path in input_paths]\nresult['trusted_reader_sources_after'] = replay._reader_sources()\nassert result['original_inputs_before'] == result['original_inputs_after']\nassert helpers_before == result['trusted_reader_sources_after']\nresult.update(outcome='pass', original_inputs_unchanged=True, trusted_reader_sources_unchanged=True,\n    finished_at=time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()), prohibited_events=list(guard['violations']))\ntarget = ROOT / 'docs/project/evidence/p06-counter-qualification/validation/w08_a02-binding-adversarial.json'\nassert not target.exists()\ntarget.write_text(json.dumps(result, indent=2) + '\\n')\nprint(json.dumps({'outcome': 'pass', 'cases': len(result['cases']), 'originals_unchanged': True,\n    'trusted_reader_inputs_stable': len(helpers_before), 'result': str(target)}), flush=True)\n",
+      "final_log": "{\"case\": \"interior-stability-drift\", \"stage\": \"constructing\"}\n{\"case\": \"interior-stability-drift\", \"stage\": \"public-replay\", \"archive_sha256\": \"328a22e2ae2947f3b681595821d088cc2f37d9860a9777e51a089ef3cb56fffc\"}\n{\"case\": \"interior-stability-drift\", \"completed_boundary\": {\"boundary\": \"dependency_packet\", \"outcome\": null}}\n{\"case\": \"interior-stability-drift\", \"completed_boundary\": {\"boundary\": \"diagnostic_prerequisite\", \"outcome\": \"pass\"}}\nTraceback (most recent call last):\n  File \"/workspace/scratch/e96519576778/w08_a02-binding-adversarial/review-attempt-02.py\", line 256, in <module>\n    replay.replay_archive(mutant, identity_before['sha256'], **kwargs)\n  File \"/workspace/p06-counter-governance-source-01/ci/project/p06_counter_qualification_replay.py\", line 210, in replay_archive\n    result, _ = verify_view(native_view, dependency_view, api,\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/p06-counter-governance-source-01/ci/project/p06_counter_qualification_replay.py\", line 185, in verify_view\n    result = replay.run()\n             ^^^^^^^^^^^^\n  File \"/workspace/p06-counter-governance-source-01/ci/project/p06_dependency_native_replay.py\", line 637, in run\n    self.provenance()\n  File \"/workspace/p06-counter-governance-source-01/ci/project/p06_dependency_native_replay.py\", line 325, in provenance\n    self.validate_route_provenance()\n  File \"/workspace/p06-counter-governance-source-01/ci/project/p06_counter_qualification_replay.py\", line 119, in validate_route_provenance\n    controls = prerequisites.verify_control_prerequisite(self.proof,\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/p06-counter-governance-source-01/ci/project/p06_counter_qualification_prerequisites.py\", line 233, in verify_control_prerequisite\n    result = control_reader.replay_archive(archive, sha256,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/p06-counter-governance-source-01/ci/project/p06_dependency_local_replay.py\", line 282, in replay_archive\n    native_result, native = native_replay.verify_view(outer.subview(\"native-lifetime\"), dependency_view, api,\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/p06-counter-governance-source-01/ci/project/p06_dependency_native_replay.py\", line 781, in verify_view\n    checked = dependency_replay.verify_view(dependency_view, expected_revision=expected_revision,\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/p06-counter-governance-source-01/ci/project/p06_dependency_replay.py\", line 144, in verify_view\n    verified = receipt.verify_document(document, read, expected_revision=expected_revision)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/p06-counter-governance-source-01/ci/project/p06_dependency_receipt.py\", line 799, in verify_document\n    plan, compiles, outputs = _verify_compile_graph(document, records, config, read_bytes)\n                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/p06-counter-governance-source-01/ci/project/p06_dependency_receipt.py\", line 405, in _verify_compile_graph\n    _verify_compile_inputs(document, record, source_files)\n  File \"/workspace/p06-counter-governance-source-01/ci/project/p06_dependency_receipt.py\", line 335, in _verify_compile_inputs\n    require(not any(candidate.is_relative_to(root)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/p06-counter-governance-source-01/ci/project/p06_dependency_receipt.py\", line 335, in <genexpr>\n    require(not any(candidate.is_relative_to(root)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py\", line 700, in is_relative_to\n    return other == self or other in self.parents\n                            ^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen _collections_abc>\", line 1033, in __contains__\n  File \"<frozen _collections_abc>\", line 1026, in __iter__\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py\", line 285, in __getitem__\n    return self._path._from_parsed_parts(self._drv, self._root,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py\", line 422, in _from_parsed_parts\n    path = self.with_segments(path_str)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py\", line 385, in with_segments\n    return type(self)(*pathsegments)\n  File \"/workspace/scratch/e96519576778/w08_a02-binding-adversarial/review-attempt-02.py\", line 240, in observe\n    category = watched_codes.get(id(frame.f_code))\n                                    ^^^^^^^^^^^^\n  File \"/workspace/scratch/e96519576778/w08_a02-binding-adversarial/review-attempt-02.py\", line 105, in audit\n    def audit(event, args):\n    \n  File \"/workspace/scratch/e96519576778/w08_a02-binding-adversarial/review-attempt-02.py\", line 226, in timed_out\n    raise TimeoutError('reviewer public replay exceeded its 180-second instrumentation budget')\nTimeoutError: reviewer public replay exceeded its 180-second instrumentation budget\n",
+      "final_log_sha256": "2e0b197c86bf57cb6c27df8844b2e5ee70b0fa59921b1a8014a6532c1c87be1f",
+      "execution_receipt": {
+        "command": "timeout --signal=TERM --kill-after=10s 420s python3 -I -B /workspace/scratch/e96519576778/w08_a02-binding-adversarial/review-attempt-02.py > /workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/validation/w08_a02-binding-adversarial.log 2>&1",
+        "initial_execution_result": {
+          "chunk_id": "792154",
+          "wall_time_seconds": 1.00114559,
+          "session_id": 76852,
+          "original_token_count": 0,
+          "output": ""
+        },
+        "final_exit_code": 1
+      },
+      "mutant": {
+        "path": "/workspace/scratch/e96519576778/w08_a02-binding-adversarial/attempt-02/interior-stability-drift.zip",
+        "sha256": "328a22e2ae2947f3b681595821d088cc2f37d9860a9777e51a089ef3cb56fffc",
+        "size_bytes": 41577673
+      },
+      "mutant_unchanged": true,
+      "reason": "Global profile callbacks caused unacceptable review overhead even with cheap integer code identity; the timeout occurred during the real historical control dependency verifier. No semantic test failure or product failure is inferred.",
+      "completed_boundary_messages": [
+        {
+          "case": "interior-stability-drift",
+          "completed_boundary": {
+            "boundary": "dependency_packet",
+            "outcome": null
+          }
+        },
+        {
+          "case": "interior-stability-drift",
+          "completed_boundary": {
+            "boundary": "diagnostic_prerequisite",
+            "outcome": "pass"
+          }
+        }
+      ],
+      "preserved_at": "2026-11-23T16:10:59Z"
+    }
+  ],
+  "reader_revision": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+  "started_at": "2026-11-23T16:11:04Z",
+  "reviewer_program": "#!/usr/bin/env python3\n\"\"\"Two contradictory, rehashed copies of the actual qualification original.\"\"\"\nimport copy\nimport hashlib\nimport json\nimport os\nfrom pathlib import Path\nimport shutil\nimport signal\nimport sys\nimport time\nimport traceback\nimport zipfile\n\nsys.dont_write_bytecode = True\nROOT = Path('/workspace/AI-GPU')\nREADER = Path('/workspace/p06-counter-governance-source-01')\nWORK = Path('/workspace/scratch/e96519576778/w08_a02-binding-adversarial/attempt-03')\nORIGINAL = Path('/workspace/scratch/e96519576778/AI-GPU_P06_counter_qualification_17e02844_2026-11-23.zip')\nORIGINAL_SHA = '9a0f1088f7a6d70a2ec17c705a61bdbbb2ea59cb815a3327aec817d0120d05a0'\nPREFIX = 'native-qualification/'\nREPORT = PREFIX + 'report.json'\nREVISION = '17e0284496bab10c7632a48e4f91efb6fb4fec0b'\nsys.path.insert(0, str(READER / 'ci/project'))\nimport p06_counter_qualification_replay as replay\n\ndef sha(body):\n    return hashlib.sha256(body).hexdigest()\n\ndef file_identity(path):\n    path = Path(path)\n    h = hashlib.sha256()\n    with path.open('rb') as stream:\n        while block := stream.read(1024 * 1024):\n            h.update(block)\n    return {'path': str(path), 'sha256': h.hexdigest(), 'size_bytes': path.stat().st_size}\n\ndef pretty(value):\n    return (json.dumps(value, indent=2, sort_keys=True, allow_nan=False) + '\\n').encode()\n\ndef descriptor(path, body):\n    return {'path': path, 'sha256': sha(body), 'size_bytes': len(body)}\n\ndef replace_identity(value, old, new):\n    if isinstance(value, dict):\n        return {key: replace_identity(item, old, new) for key, item in value.items()}\n    if isinstance(value, list):\n        return [replace_identity(item, old, new) for item in value]\n    return new if type(value) is str and value == old else value\n\nreceipt = json.loads((ROOT / 'docs/project/evidence/p06-counter-qualification/native/attempt-01-replay-execution.json').read_text())\noptions = dict(zip(receipt['argv'][3::2], receipt['argv'][4::2]))\narguments = {\n    'expected_revision': options['--source-revision'],\n    'expected_receipt_sha256': options['--dependency-receipt-sha256'],\n    'expected_native_report_sha256': options['--native-report-sha256'],\n    'expected_source_manifest_sha256': options['--source-manifest-sha256'],\n    'expected_qualification_sha256': options['--counter-qualification-sha256'],\n    'diagnostic_archive': Path(options['--diagnostic-archive']),\n    'diagnostic_sha256': options['--diagnostic-archive-sha256'],\n    'control_archive': Path(options['--control-archive']),\n    'control_sha256': options['--control-archive-sha256'],\n}\nassert arguments['expected_revision'] == REVISION\nassert arguments['expected_qualification_sha256'] == replay.contract.SOURCE_PROOF_SHA256\ninput_paths = [ORIGINAL, arguments['diagnostic_archive'], arguments['control_archive']]\ninputs_before = [file_identity(path) for path in input_paths]\nassert inputs_before[0]['sha256'] == ORIGINAL_SHA\nassert inputs_before[1]['sha256'] == arguments['diagnostic_sha256']\nassert inputs_before[2]['sha256'] == arguments['control_sha256']\nhelpers_before = replay._reader_sources()\nassert len(helpers_before) == 82\n\nwith zipfile.ZipFile(ORIGINAL) as archive:\n    original_report_body = archive.read(REPORT)\n    original_report = json.loads(original_report_body)\nassert sha(original_report_body) == arguments['expected_native_report_sha256']\nassert pretty(original_report) == original_report_body\nassert original_report['counter_qualification_passed'] is True\nassert original_report['counter_qualification_admission_before'] == original_report['counter_qualification_admission_after']\n\nresult = {\n    'schema_version': 1, 'agent': 'w08_a02', 'scope': 'actual-original-adversarial-retained-consistency',\n    'review_attempt': 3, 'process_timeout_seconds': 300, 'per_replay_timeout_seconds': 120,\n    'instrumentation': 'side-effect audit only; no profile, trace, verifier replacement, or boundary wrapper',\n    'previous_instrumentation_attempts': [json.loads((WORK.parent / name).read_text()) for name in ('attempt-01-interruption.json', 'attempt-02-timeout.json')],\n    'reader_revision': REVISION, 'started_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),\n    'reviewer_program': Path(__file__).read_text(), 'reviewer_sha256': file_identity(__file__)['sha256'],\n    'original_inputs_before': inputs_before, 'trusted_reader_sources_before': helpers_before,\n    'external_fixed_arguments': {key: str(value) if isinstance(value, Path) else value for key, value in arguments.items()},\n    'mocked_verification_boundaries': [], 'new_native_execution': 'not_run', 'retained_code_executed': False,\n    'limitations': [\n        'Each mutant is a deliberate contradiction in a private copy; its archive and native-report pins are recomputed to reach semantic checks.',\n        'The source, dependency, frozen proof, diagnostic and control expectations remain independently selected and unchanged.',\n        'This does not authenticate an untrusted producer or reject every internally coherent fabrication with attacker-controlled external expectations.',\n        'No counter, numerical, warm or phase acceptance is inferred from rejecting the mutants.',\n    ], 'cases': []}\n\nguard = {'active': False, 'violations': []}\nforbidden_events = {'os.system', 'os.fork', 'os.forkpty', 'os.posix_spawn', 'subprocess.Popen',\n    'ctypes.dlopen', 'os.remove', 'os.rename', 'os.rmdir', 'os.mkdir', 'os.link',\n    'os.symlink', 'os.truncate', 'os.chmod', 'os.chown', 'os.utime'}\nproducer_prefixes = ('/workspace/p06-counter-qualified-run-01', '/workspace/p06-counter-qualified-source-01',\n    '/workspace/p06-local-run-source-04', '/workspace/p06-local-run-04')\ndef audit(event, args):\n    if not guard['active']:\n        return\n    prohibited = event in forbidden_events or event.startswith(('socket.', 'os.exec', 'os.spawn'))\n    reason = event\n    if event == 'open':\n        name, mode, flags = args\n        if isinstance(name, (str, bytes)):\n            literal = os.fsdecode(name)\n            if any(literal == prefix or literal.startswith(prefix + '/') for prefix in producer_prefixes):\n                prohibited = True\n                reason = 'live producer-path read'\n        if (isinstance(mode, str) and any(letter in mode for letter in 'wax+')) or (\n                isinstance(flags, int) and flags & (os.O_WRONLY | os.O_RDWR | os.O_APPEND | os.O_CREAT | os.O_TRUNC)):\n            prohibited = True\n            reason = 'file mutation'\n    if prohibited:\n        guard['violations'].append({'event': event, 'reason': reason})\n        raise RuntimeError('review audit guard rejected ' + reason)\nsys.addaudithook(audit)\n\ndef build_mutant(case_name):\n    report = copy.deepcopy(original_report)\n    changed = {}\n    details = {}\n    if case_name == 'interior-stability-drift':\n        index = len(report['stability_checks']) // 2\n        selected = report['stability_checks'][index]\n        before = copy.deepcopy(selected['counter_qualification_admission'])\n        selected['counter_qualification_admission']['control_archive_sha256'] = '0' * 64\n        assert report['counter_qualification_admission_before'] == report['counter_qualification_admission_after']\n        assert report['stability_checks'][-1]['counter_qualification_admission'] == report['counter_qualification_admission_after']\n        details.update(index=index, label=selected['label'], before=before,\n            after=selected['counter_qualification_admission'], endpoint_digests_still_match=True)\n        expected = 'route stability observation counter_qualification_admission'\n    else:\n        process = report['processes'][0]\n        command = next(row for row in report['commands'] if row['id'] == process['id'])\n        with zipfile.ZipFile(ORIGINAL) as archive:\n            binding_body = archive.read(PREFIX + process['binding']['path'])\n            binding = json.loads(binding_body)\n            observation_body = archive.read(PREFIX + process['retained_observation']['path'])\n            observation = json.loads(observation_body)\n            raw = archive.read(PREFIX + command['log'])\n        assert pretty(binding) == binding_body and pretty(observation) == observation_body\n        assert observation == process['observation']\n        old_id = process['execution_binding_sha256']\n        assert replay.native.qualification_id(binding) == old_id\n        assert binding['counter_qualification_sha256'] == arguments['expected_qualification_sha256']\n        binding['counter_qualification_sha256'] = '0' * 64\n        new_id = replay.native.qualification_id(binding)\n        assert old_id != new_id\n        binding_body = pretty(binding)\n        observation = replace_identity(observation, old_id, new_id)\n        observation_body = pretty(observation)\n        raw_occurrences = raw.count(old_id.encode())\n        assert raw_occurrences == 36\n        raw = raw.replace(old_id.encode(), new_id.encode())\n        process['execution_binding_sha256'] = new_id\n        process['observation'] = observation\n        process['binding'] = descriptor(process['binding']['path'], binding_body)\n        process['retained_observation'] = descriptor(process['retained_observation']['path'], observation_body)\n        command['argv'][command['argv'].index('--qualification-id') + 1] = new_id\n        command.update(log_sha256=sha(raw), log_size_bytes=len(raw))\n        replacement_descriptors = {\n            process['binding']['path']: process['binding'],\n            process['retained_observation']['path']: process['retained_observation'],\n        }\n        report['retained_files'] = [copy.deepcopy(replacement_descriptors.get(row['path'], row))\n                                    for row in report['retained_files']]\n        report['raw_logs'] = [descriptor(row['path'], raw) if row['path'] == command['log'] else row\n                              for row in report['raw_logs']]\n        changed[PREFIX + process['binding']['path']] = binding_body\n        changed[PREFIX + process['retained_observation']['path']] = observation_body\n        changed[PREFIX + command['log']] = raw\n        assert old_id not in pretty(report).decode()\n        details.update(process_id=process['id'], old_execution_binding=old_id,\n            new_execution_binding=new_id, wrong_process_proof_sha256='0' * 64,\n            fixed_expected_proof_sha256=arguments['expected_qualification_sha256'],\n            raw_binding_echoes_replaced=raw_occurrences,\n            repaired=['canonical process binding ID', 'native argv', '36 actual raw echoes',\n                'inline and retained observation binding IDs', 'binding and observation descriptors',\n                'retained-file inventory', 'command log digest and size', 'raw-log inventory',\n                'native-report and archive external pins'])\n        expected = 'reconstructed process binding'\n    changed[REPORT] = pretty(report)\n    destination = WORK / (case_name + '.zip')\n    changes = []\n    before_count = 0\n    unmodified = 0\n    with zipfile.ZipFile(ORIGINAL) as source, zipfile.ZipFile(destination, 'x', compression=zipfile.ZIP_DEFLATED, compresslevel=6) as target:\n        for info in source.infolist():\n            before_count += 1\n            if info.filename in changed:\n                old_body = source.read(info)\n                new_body = changed[info.filename]\n                target.writestr(info, new_body)\n                changes.append({'path': info.filename, 'before': descriptor(info.filename, old_body),\n                    'after': descriptor(info.filename, new_body)})\n            else:\n                with source.open(info) as inp, target.open(info, 'w') as out:\n                    shutil.copyfileobj(inp, out, length=1024 * 1024)\n                unmodified += 1\n    with zipfile.ZipFile(ORIGINAL) as source, zipfile.ZipFile(destination) as target:\n        assert source.namelist() == target.namelist()\n        assert len(target.infolist()) == 5045\n        assert target.testzip() is None\n        for member, body in changed.items():\n            assert target.read(member) == body\n    return destination, report, expected, {'recipe': details, 'changed_members': changes,\n        'total_members': before_count, 'unmodified_members_stream_copied': unmodified,\n        'all_member_names_preserved': True, 'all_member_crcs_pass': True}\n\ndef timed_out(signum, frame):\n    raise TimeoutError('reviewer public replay exceeded its 120-second execution budget')\nsignal.signal(signal.SIGALRM, timed_out)\nassert sys.getprofile() is None and sys.gettrace() is None\n\nfor name in ('interior-stability-drift', 'wrong-process-proof-binding'):\n    print(json.dumps({'case': name, 'stage': 'constructing'}), flush=True)\n    start = time.monotonic()\n    mutant, report, expected, construction = build_mutant(name)\n    identity_before = file_identity(mutant)\n    kwargs = dict(arguments, expected_native_report_sha256=sha(pretty(report)))\n    print(json.dumps({'case': name, 'stage': 'public-replay', 'archive_sha256': identity_before['sha256']}), flush=True)\n    replay_started = time.monotonic()\n    caught = None\n    trace = None\n    signal.alarm(120)\n    guard['active'] = True\n    try:\n        replay.replay_archive(mutant, identity_before['sha256'], **kwargs)\n    except ValueError as error:\n        caught = str(error)\n        trace = traceback.extract_tb(error.__traceback__)\n    finally:\n        guard['active'] = False\n        signal.alarm(0)\n    elapsed = time.monotonic() - replay_started\n    assert caught is not None and expected in caught, (name, caught)\n    assert not guard['violations'], guard['violations']\n    identity_after = file_identity(mutant)\n    assert identity_before == identity_after\n    expected_target = 'stability' if name == 'interior-stability-drift' else 'processes'\n    assert any(frame.name == expected_target and frame.filename == str(READER / 'ci/project/p06_dependency_native_replay.py') for frame in trace)\n    required_transcripts = 4 if name == 'interior-stability-drift' else 0\n    item = {'id': name, 'outcome': 'expected-rejection', 'semantic_rejection': caught,\n        'expected_rejection_fragment': expected, 'archive': identity_before,\n        'archive_unchanged_during_replay': identity_before == identity_after,\n        'external_native_report_sha256': kwargs['expected_native_report_sha256'],\n        'fixed_external_expectations_unchanged': True, 'construction': construction,\n        'public_replay_called': True, 'verification_functions_replaced': [],\n        'profile_or_trace_callbacks_installed': False,\n        'selected_native_transcripts_required_by_reached_callsite': required_transcripts,\n        'callsite_inference': 'The unchanged base run calls qualified provenance and both prerequisite verifiers before variant/process traversal. The stability callsite follows all four processes; the first process-binding comparison precedes that process transcript parsing.',\n        'prerequisite_success_basis': 'inferred from the reached exception location in the unchanged public replay call graph, not from mocked or profiled boundary returns',\n        'rejection_trace': [{'file': x.filename, 'line': x.lineno, 'function': x.name} for x in trace],\n        'replay_seconds': elapsed, 'total_case_seconds': time.monotonic() - start,\n        'prohibited_events': list(guard['violations'])}\n    result['cases'].append(item)\n    (WORK / (name + '-result.json')).write_text(json.dumps(item, indent=2) + '\\n')\n    print(json.dumps({'case': name, 'outcome': 'expected-rejection', 'reason': caught,\n        'replay_seconds': elapsed, 'transcripts_required_by_reached_callsite': required_transcripts}), flush=True)\n\nresult['original_inputs_after'] = [file_identity(path) for path in input_paths]\nresult['trusted_reader_sources_after'] = replay._reader_sources()\nassert result['original_inputs_before'] == result['original_inputs_after']\nassert helpers_before == result['trusted_reader_sources_after']\nresult.update(outcome='pass', original_inputs_unchanged=True, trusted_reader_sources_unchanged=True,\n    finished_at=time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()), prohibited_events=list(guard['violations']))\ntarget = ROOT / 'docs/project/evidence/p06-counter-qualification/validation/w08_a02-binding-adversarial.json'\nassert not target.exists()\ntarget.write_text(json.dumps(result, indent=2) + '\\n')\nprint(json.dumps({'outcome': 'pass', 'cases': len(result['cases']), 'originals_unchanged': True,\n    'trusted_reader_inputs_stable': len(helpers_before), 'result': str(target)}), flush=True)\n",
+  "reviewer_sha256": "bee5ff2eaa40d7d6f7a1645a41699898a074f5e6209c4501d0ff95b8978301de",
+  "original_inputs_before": [
+    {
+      "path": "/workspace/scratch/e96519576778/AI-GPU_P06_counter_qualification_17e02844_2026-11-23.zip",
+      "sha256": "9a0f1088f7a6d70a2ec17c705a61bdbbb2ea59cb815a3327aec817d0120d05a0",
+      "size_bytes": 41577668
+    },
+    {
+      "path": "/workspace/p06-counter-governance-source-01/docs/project/evidence/p06-counter-diagnostics/native/run-45034575685-attempt1.zip",
+      "sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb",
+      "size_bytes": 4290949
+    },
+    {
+      "path": "/workspace/scratch/279b6658611e/AI-GPU_P06_local_attempt_04_passed_2026-11-23.zip",
+      "sha256": "d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f",
+      "size_bytes": 47632218
+    }
+  ],
+  "trusted_reader_sources_before": [
+    {
+      "path": "ci/gen_config.py",
+      "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+      "size_bytes": 60839
+    },
+    {
+      "path": "ci/project/baseline_inventory.py",
+      "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+      "size_bytes": 20466
+    },
+    {
+      "path": "ci/project/baseline_matrix.py",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "size_bytes": 8890
+    },
+    {
+      "path": "ci/project/baseline_packet_contract.py",
+      "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+      "size_bytes": 53680
+    },
+    {
+      "path": "ci/project/baseline_packet_io.py",
+      "sha256": "469583bc558ccb010af82259de38248d7a9a8283cd873a96726aa3c3e2aaa94c",
+      "size_bytes": 14506
+    },
+    {
+      "path": "ci/project/baseline_process.py",
+      "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+      "size_bytes": 12627
+    },
+    {
+      "path": "ci/project/compiler_records.py",
+      "sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+      "size_bytes": 7143
+    },
+    {
+      "path": "ci/project/p01_toolchain.lock.json",
+      "sha256": "63771ba8d9ff691b3867ed96be7b058ed5eae1368789575f4964e38f8718a405",
+      "size_bytes": 5008
+    },
+    {
+      "path": "ci/project/p02_fixture_oracle.py",
+      "sha256": "12e546864a4fef5b05e10c7a04b1006bcd59376e5921ea1221c4d42668490145",
+      "size_bytes": 23351
+    },
+    {
+      "path": "ci/project/p02_layout_fixture_oracle.py",
+      "sha256": "34e78c0313e2b032930615f02a790729d1c49293349728b55f7d04a29a2568a7",
+      "size_bytes": 10910
+    },
+    {
+      "path": "ci/project/p02_matrix.py",
+      "sha256": "e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17",
+      "size_bytes": 30055
+    },
+    {
+      "path": "ci/project/p02_matrix_records.py",
+      "sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+      "size_bytes": 12332
+    },
+    {
+      "path": "ci/project/p02_wmma_fixtures.py",
+      "sha256": "4a672a5d3357f220120f43e5f5d7e880f7d0ba36df380d69cd1873ea4879835e",
+      "size_bytes": 16440
+    },
+    {
+      "path": "ci/project/p02_wmma_numerical_fixture_oracle.py",
+      "sha256": "083450dc11712e5fc6dce7d19fb854bd9ef25b738347efd56bd07e81b079570b",
+      "size_bytes": 15556
+    },
+    {
+      "path": "ci/project/p03_execute.py",
+      "sha256": "bee5c380eb0d328e72586e2c51e4162b8ca5314ef68d2987a7d744fc1c05aa82",
+      "size_bytes": 17105
+    },
+    {
+      "path": "ci/project/p03_execution_records.py",
+      "sha256": "b26449105f17f9487cc4fbaab36884ceea42be9f502a26aa58331ed4cf1140de",
+      "size_bytes": 6961
+    },
+    {
+      "path": "ci/project/p04_execution_records.py",
+      "sha256": "abddfb06fb48bbd064c09d61879b278bca22778f5a8289f4c1ac93fb882b33e0",
+      "size_bytes": 16283
+    },
+    {
+      "path": "ci/project/p04_fixture_adapter.py",
+      "sha256": "37a50f6f0f80fd79b926b7ed5d13a233de6bf518590da7fa7d40800dcc91094a",
+      "size_bytes": 5364
+    },
+    {
+      "path": "ci/project/p04_model_contract.py",
+      "sha256": "c184d980d57aec54567d79025845c5fb34887741697ac78a66692a65da02e4b3",
+      "size_bytes": 15901
+    },
+    {
+      "path": "ci/project/p04_reference.py",
+      "sha256": "115a7db51948d69fc6267d5fe658d1a8e68c22e9f200d5ddc3f0a5181d7140a9",
+      "size_bytes": 11855
+    },
+    {
+      "path": "ci/project/p06_checked_execute.py",
+      "sha256": "86ba0b3fd2bbfa97ebb2346e69fed85968fd3da8bf267d4dc1a13aaacf8b358e",
+      "size_bytes": 38609
+    },
+    {
+      "path": "ci/project/p06_compiler_records.py",
+      "sha256": "f441c12f4c9e4b9ef10eca13f8b5291fc41ffb86f1f42e42dfd320056dedd6da",
+      "size_bytes": 13614
+    },
+    {
+      "path": "ci/project/p06_contract.py",
+      "sha256": "780086070739b6d3586f9b3695ad4dc31d209a7817cf1af3651160a9fe6e1376",
+      "size_bytes": 31500
+    },
+    {
+      "path": "ci/project/p06_counter_diagnostics_replay.py",
+      "sha256": "4d959363229859bd1ac5f4ede4f09937b8418e50f85a1c2eab3f131956532f0b",
+      "size_bytes": 36762
+    },
+    {
+      "path": "ci/project/p06_counter_public_build.py",
+      "sha256": "22982ed2264626fb1be2b86785fddb89655c9e0f82a2257ce0e9ab7c89eab758",
+      "size_bytes": 15413
+    },
+    {
+      "path": "ci/project/p06_counter_public_records.py",
+      "sha256": "d947be071b670edcbc0b7d613860c288ee1b013f16e256679747afe0353a7e78",
+      "size_bytes": 20774
+    },
+    {
+      "path": "ci/project/p06_counter_public_replay.py",
+      "sha256": "6489dff8b39bda3d18df97fb72092fd2014d86d8c0129bcd56a13f08acd942a0",
+      "size_bytes": 22122
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_admission.py",
+      "sha256": "33053b52145167ced22a4793295f1cbfd07c78eb8072e65ed94090040e8eae43",
+      "size_bytes": 12578
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_contract.py",
+      "sha256": "d445b9447aefb4f2917f827105df9b5722c461f10f68629176f2dc2d2321fd0d",
+      "size_bytes": 10828
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_prerequisites.py",
+      "sha256": "b94d293f8dc4846e4b2de3344169362899d3da9503efcbac0a2e63ebad68d586",
+      "size_bytes": 18956
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_proof.json",
+      "sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e",
+      "size_bytes": 123781
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_replay.py",
+      "sha256": "25b07aa69abcf39de000ab3002e26f7b205406a23f12eb8337344e3b93cfc78c",
+      "size_bytes": 16870
+    },
+    {
+      "path": "ci/project/p06_counter_source_inventory.py",
+      "sha256": "8961331993ceb112f80a83314ee7a6a3020163a89ca1b8781139c103e98f6862",
+      "size_bytes": 33730
+    },
+    {
+      "path": "ci/project/p06_dependency_admission.py",
+      "sha256": "8d9d65960d7f2336911823c29ee1c9eb14cba76ca0c097e9d42ad02b5744a1e7",
+      "size_bytes": 15128
+    },
+    {
+      "path": "ci/project/p06_dependency_binary.py",
+      "sha256": "81397956f856e5658864ee59f198c760699160f5d7a78d73d80db41f361814e1",
+      "size_bytes": 16793
+    },
+    {
+      "path": "ci/project/p06_dependency_build.py",
+      "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+      "size_bytes": 32820
+    },
+    {
+      "path": "ci/project/p06_dependency_contract.py",
+      "sha256": "d6151024fbe7e8a651075fd76b9bdc006bb18c0f61c538a2928842f865ddd364",
+      "size_bytes": 4438
+    },
+    {
+      "path": "ci/project/p06_dependency_control_replay.py",
+      "sha256": "1c418b3f0fa58423c94eedd28e9fbda02a6ce8a5423b042abc1574281a67faa2",
+      "size_bytes": 39549
+    },
+    {
+      "path": "ci/project/p06_dependency_graph.py",
+      "sha256": "eb278cbd37d5191468d151339a88a665d792e0f31d7f1d41da30285b240e9f08",
+      "size_bytes": 5861
+    },
+    {
+      "path": "ci/project/p06_dependency_local_execute.py",
+      "sha256": "b6651948b2ee4ce4fe99c94fac8ac7e86bfec8a8658f258b3ef76081104b3c79",
+      "size_bytes": 22361
+    },
+    {
+      "path": "ci/project/p06_dependency_local_prepare.py",
+      "sha256": "c810f31cf6106a5bbcd6eddcf8d818560cb94222da057fe9491a8e1dbc99316f",
+      "size_bytes": 20427
+    },
+    {
+      "path": "ci/project/p06_dependency_local_replay.py",
+      "sha256": "a16983cf6c4083b9d2eb8f5a8d4e72660d8d10a92ef7d8dd9f8ba1a994ce298b",
+      "size_bytes": 22449
+    },
+    {
+      "path": "ci/project/p06_dependency_native_replay.py",
+      "sha256": "66ac675a904b69a7393596cf96857608143c46aafee019d453a582108cf976a1",
+      "size_bytes": 60002
+    },
+    {
+      "path": "ci/project/p06_dependency_receipt.py",
+      "sha256": "6a45f224b57cbc2e4d7edfd540712eb468b1aa92407e2b65bc5a2de7c3581c70",
+      "size_bytes": 63377
+    },
+    {
+      "path": "ci/project/p06_dependency_record.py",
+      "sha256": "5364a5036fb03bebed3aba6267d302cf36c379b30e7085ded1b59db077c33205",
+      "size_bytes": 26464
+    },
+    {
+      "path": "ci/project/p06_dependency_replay.py",
+      "sha256": "1c5dc29aa92a18ac4b89bdd3bbd53c4bc5ed0fad37d9cc4d907ed92f3f862218",
+      "size_bytes": 11752
+    },
+    {
+      "path": "ci/project/p06_dependency_sources.py",
+      "sha256": "4e09b8f8357538591a843f465ca6a20465baf363e5a190b9edf8d01c807174a1",
+      "size_bytes": 17141
+    },
+    {
+      "path": "ci/project/p06_dependency_substitution.py",
+      "sha256": "e37c31fb769d7c1d5374bf40216c5099eb9a24d0017ceef876b36cbbec6a9f87",
+      "size_bytes": 30789
+    },
+    {
+      "path": "ci/project/p06_local_toolchain.py",
+      "sha256": "0bd80e40b6a22bf78a665e8f1b18818a21178bcc32248a20bfd3133d3c3d5aa8",
+      "size_bytes": 23542
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_application_build.py",
+      "sha256": "b0dbadf26a1189ea0f5b7f7aa88f54fd0ce26d875f197e4f3c062a0a00fcd298",
+      "size_bytes": 12618
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_backend_build.py",
+      "sha256": "f37fd2f53713a25bd23df989b2469bb6327a9d8769983177b349b6d8f653f700",
+      "size_bytes": 4016
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_build.py",
+      "sha256": "0c6a5c2c6415071566f66363289e245c4e8b486e987615ffab74f15fb39ee559",
+      "size_bytes": 16639
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_contract.py",
+      "sha256": "5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb",
+      "size_bytes": 14917
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_derivation.py",
+      "sha256": "8ba5e019cd4f2cc1b74b3a8839c93e6d7baf4766da1a2169e757e22d3e45a3d6",
+      "size_bytes": 14070
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_execute.py",
+      "sha256": "d9d726ce61cdaa12010bb7c00fac48b6ed31f82b82997e39bb9d9a7911163677",
+      "size_bytes": 52516
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_generated.py",
+      "sha256": "6b777ca99c82d2e2c3f7bddf2a15d70df1cd2303a56b53cacb89114c8b2bb5cc",
+      "size_bytes": 8498
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_records.py",
+      "sha256": "3d6358c98544f4252be262125b70c87a72caaca7f35fbe3bc3e2512655654d10",
+      "size_bytes": 16223
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_replay.py",
+      "sha256": "9ab96bfb7a8940c61d37a13cd3d39f148c4b0c623ed085615e53d92c7eea4ade",
+      "size_bytes": 36937
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_replay_build.py",
+      "sha256": "0034e67683dc8291d2aec980602b55dca56af57f5a1a94d3a9cae576a51fb7db",
+      "size_bytes": 14324
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_replay_hosted.py",
+      "sha256": "918027091c40eda7eaccd5c9c634a41de65647bd55c070e853d39767c58ff031",
+      "size_bytes": 10598
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_source_export.py",
+      "sha256": "1bec4cc1a296ae93bc9c29029ed5a28a02f6edd71adbdbfdbcea156eebf28b46",
+      "size_bytes": 21171
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_sources.py",
+      "sha256": "dc0374a1c3a059c36d47697ff2c8275bf0901b76468f72a15425ea2cfe687f2a",
+      "size_bytes": 32794
+    },
+    {
+      "path": "ci/project/p06_mpm_execute.py",
+      "sha256": "c9524652c24121401f7d2cb044cae72c4f6dece7f8d8357d886d7b1ef63fcea0",
+      "size_bytes": 23153
+    },
+    {
+      "path": "ci/project/p06_native_lifetime_contract.py",
+      "sha256": "266a50e5b4c0d07b432accf2aa13ff8d3db7fc175a24a4263e3cdb0acafb5b74",
+      "size_bytes": 4545
+    },
+    {
+      "path": "ci/project/p06_native_lifetime_records.py",
+      "sha256": "5bf33d35e489397d96e0e0932c8d42e687f18deda646bb9725e05b326be50e3a",
+      "size_bytes": 8506
+    },
+    {
+      "path": "ci/project/p06_pending_probe.py",
+      "sha256": "89300a063bf26e20312fe6026377db300cdf40b6a91bc3d6327340e66b51d42d",
+      "size_bytes": 24886
+    },
+    {
+      "path": "ci/project/p06_records.py",
+      "sha256": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7",
+      "size_bytes": 28046
+    },
+    {
+      "path": "ci/project/p06_replay.py",
+      "sha256": "9a5e68de45ec923c56e39a05697d9f93b3d0fdd91c81d38d6637c12ba153d991",
+      "size_bytes": 44626
+    },
+    {
+      "path": "ci/project/p06_warm_analyze.py",
+      "sha256": "ac273f587f759900d16ad41c7c63c2d2b10ca0864d5018f8403572f75e5a3e88",
+      "size_bytes": 19568
+    },
+    {
+      "path": "ci/project/p06_warm_compiler_records.py",
+      "sha256": "fe32aa772439e98975cdcb4807b269022d461c5e99c0021c4689c9712d7988f9",
+      "size_bytes": 3261
+    },
+    {
+      "path": "ci/project/p06_warm_contract.py",
+      "sha256": "d311c5fb77e651a93fde368f0e41d517f40199a3bd43e27c302d4d00888cc31e",
+      "size_bytes": 19379
+    },
+    {
+      "path": "ci/project/p06_warm_execute.py",
+      "sha256": "61c6caa04e8bb2a28d7f2e7b73cf41baa43abaeb8330882d7ab219bfe33d2f6a",
+      "size_bytes": 32598
+    },
+    {
+      "path": "ci/project/p06_warm_records.py",
+      "sha256": "28d7e2c1553fc0929a106bc24a62fa2d612e415449ee0e9ac84ad582289381e7",
+      "size_bytes": 11637
+    },
+    {
+      "path": "ci/project/p06_warm_replay.py",
+      "sha256": "8982c9ec5b1599080c8df09dd685ecf7aae7488af4708463dda819c4bcb62890",
+      "size_bytes": 42783
+    },
+    {
+      "path": "ci/project/p06_workspace_compiler_records.py",
+      "sha256": "d89496a4e08737c6bb5c72b5b05a94994bb70a63e17b88c11547f38d47c06375",
+      "size_bytes": 20838
+    },
+    {
+      "path": "ci/project/p06_workspace_execute.py",
+      "sha256": "83f97cf2a8584dcd6b9099f37415dd3b28c75982900b8adb02d15834c8d9fff7",
+      "size_bytes": 33854
+    },
+    {
+      "path": "ci/project/p06_workspace_records.py",
+      "sha256": "9e3f9af15f2981d19a05fcd83ddd369bae43f6530fd4383831c9d2942d8fee21",
+      "size_bytes": 25060
+    },
+    {
+      "path": "ci/project/p06_workspace_replay.py",
+      "sha256": "aa039e92123ceed8b83eddb8362457c2214f96cbd2dc058739bf14c47ef938e6",
+      "size_bytes": 45921
+    },
+    {
+      "path": "ci/project/preflight.py",
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+      "size_bytes": 15124
+    },
+    {
+      "path": "docs/project/evidence/p05-torch/reviews/archive_reader.py",
+      "sha256": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3",
+      "size_bytes": 16065
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/native/public-source-inventory-4268d2d5.json",
+      "sha256": "bd81faa7590e053685dfa78d8baa41478969c3b4ec750646cddb5796b949ba0c",
+      "size_bytes": 116997
+    },
+    {
+      "path": "tests/unittest/pending_reads/main.cpp",
+      "sha256": "bca8962a873af0e3315e13cdd908f3ba1a1b8e89ab4fa9f41a74b1d65404b6f3",
+      "size_bytes": 7302
+    }
+  ],
+  "external_fixed_arguments": {
+    "expected_revision": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+    "expected_receipt_sha256": "5b754be521277cd133ea28a8c1cac3e71105639a2e3cd314bf1ca9db6c8a4dbc",
+    "expected_native_report_sha256": "576b77872d6b918e3dbe30cef4107481f39ee73c346a813562e7e916b2afd7c4",
+    "expected_source_manifest_sha256": "ad48858ab29a605747c19679bdbee82fd1a260cd36b9f3df8f27b297657b5fc1",
+    "expected_qualification_sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e",
+    "diagnostic_archive": "/workspace/p06-counter-governance-source-01/docs/project/evidence/p06-counter-diagnostics/native/run-45034575685-attempt1.zip",
+    "diagnostic_sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb",
+    "control_archive": "/workspace/scratch/279b6658611e/AI-GPU_P06_local_attempt_04_passed_2026-11-23.zip",
+    "control_sha256": "d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f"
+  },
+  "mocked_verification_boundaries": [],
+  "new_native_execution": "not_run",
+  "retained_code_executed": false,
+  "limitations": [
+    "Each mutant is a deliberate contradiction in a private copy; its archive and native-report pins are recomputed to reach semantic checks.",
+    "The source, dependency, frozen proof, diagnostic and control expectations remain independently selected and unchanged.",
+    "This does not authenticate an untrusted producer or reject every internally coherent fabrication with attacker-controlled external expectations.",
+    "No counter, numerical, warm or phase acceptance is inferred from rejecting the mutants."
+  ],
+  "cases": [
+    {
+      "id": "interior-stability-drift",
+      "outcome": "expected-rejection",
+      "semantic_rejection": "route stability observation counter_qualification_admission.control_archive_sha256: value differs",
+      "expected_rejection_fragment": "route stability observation counter_qualification_admission",
+      "archive": {
+        "path": "/workspace/scratch/e96519576778/w08_a02-binding-adversarial/attempt-03/interior-stability-drift.zip",
+        "sha256": "328a22e2ae2947f3b681595821d088cc2f37d9860a9777e51a089ef3cb56fffc",
+        "size_bytes": 41577673
+      },
+      "archive_unchanged_during_replay": true,
+      "external_native_report_sha256": "1a3e992cd9c9b8891e4f143ffdab788f54149e815f7c3dff6ae1ecb93fa0071c",
+      "fixed_external_expectations_unchanged": true,
+      "construction": {
+        "recipe": {
+          "index": 40,
+          "label": "before-command-preflight-simx-fp16-per_operation",
+          "before": {
+            "control_archive_sha256": "d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f",
+            "diagnostic_archive_sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb",
+            "helper_sources_sha256": "c58bf32e53d55b74a14e548ecaddd553a1c0490aac9daa3f95d07776f87f1ae3",
+            "measurement_sources_sha256": "c84eaaf00eb37c638134eb774b7456273a1688b94f42b7c575f478a086310701",
+            "prerequisite_inputs_sha256": "0b6bb7d63a44ceb8089046fd19df5bb77a4117c4798396e14aa98c768c804d24",
+            "proof_sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e"
+          },
+          "after": {
+            "control_archive_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "diagnostic_archive_sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb",
+            "helper_sources_sha256": "c58bf32e53d55b74a14e548ecaddd553a1c0490aac9daa3f95d07776f87f1ae3",
+            "measurement_sources_sha256": "c84eaaf00eb37c638134eb774b7456273a1688b94f42b7c575f478a086310701",
+            "prerequisite_inputs_sha256": "0b6bb7d63a44ceb8089046fd19df5bb77a4117c4798396e14aa98c768c804d24",
+            "proof_sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e"
+          },
+          "endpoint_digests_still_match": true
+        },
+        "changed_members": [
+          {
+            "path": "native-qualification/report.json",
+            "before": {
+              "path": "native-qualification/report.json",
+              "sha256": "576b77872d6b918e3dbe30cef4107481f39ee73c346a813562e7e916b2afd7c4",
+              "size_bytes": 3770129
+            },
+            "after": {
+              "path": "native-qualification/report.json",
+              "sha256": "1a3e992cd9c9b8891e4f143ffdab788f54149e815f7c3dff6ae1ecb93fa0071c",
+              "size_bytes": 3770129
+            }
+          }
+        ],
+        "total_members": 5045,
+        "unmodified_members_stream_copied": 5044,
+        "all_member_names_preserved": true,
+        "all_member_crcs_pass": true
+      },
+      "public_replay_called": true,
+      "verification_functions_replaced": [],
+      "profile_or_trace_callbacks_installed": false,
+      "selected_native_transcripts_required_by_reached_callsite": 4,
+      "callsite_inference": "The unchanged base run calls qualified provenance and both prerequisite verifiers before variant/process traversal. The stability callsite follows all four processes; the first process-binding comparison precedes that process transcript parsing.",
+      "prerequisite_success_basis": "inferred from the reached exception location in the unchanged public replay call graph, not from mocked or profiled boundary returns",
+      "rejection_trace": [
+        {
+          "file": "/workspace/scratch/e96519576778/w08_a02-binding-adversarial/review-attempt-03.py",
+          "line": 236,
+          "function": "<module>"
+        },
+        {
+          "file": "/workspace/p06-counter-governance-source-01/ci/project/p06_counter_qualification_replay.py",
+          "line": 210,
+          "function": "replay_archive"
+        },
+        {
+          "file": "/workspace/p06-counter-governance-source-01/ci/project/p06_counter_qualification_replay.py",
+          "line": 185,
+          "function": "verify_view"
+        },
+        {
+          "file": "/workspace/p06-counter-governance-source-01/ci/project/p06_dependency_native_replay.py",
+          "line": 669,
+          "function": "run"
+        },
+        {
+          "file": "/workspace/p06-counter-governance-source-01/ci/project/p06_dependency_native_replay.py",
+          "line": 614,
+          "function": "stability"
+        },
+        {
+          "file": "/workspace/p06-counter-governance-source-01/ci/project/p06_replay.py",
+          "line": 111,
+          "function": "_same"
+        },
+        {
+          "file": "/workspace/p06-counter-governance-source-01/ci/project/p06_replay.py",
+          "line": 117,
+          "function": "_same"
+        },
+        {
+          "file": "/workspace/p06-counter-governance-source-01/ci/project/p06_replay.py",
+          "line": 103,
+          "function": "require"
+        }
+      ],
+      "replay_seconds": 32.96858309500021,
+      "total_case_seconds": 38.87485177800045,
+      "prohibited_events": []
+    },
+    {
+      "id": "wrong-process-proof-binding",
+      "outcome": "expected-rejection",
+      "semantic_rejection": "reconstructed process binding.counter_qualification_sha256: value differs",
+      "expected_rejection_fragment": "reconstructed process binding",
+      "archive": {
+        "path": "/workspace/scratch/e96519576778/w08_a02-binding-adversarial/attempt-03/wrong-process-proof-binding.zip",
+        "sha256": "e58d97e55e2cbdd0e813335e781612af7dd116cb80131f5b0d4c8f4dac0fe4ed",
+        "size_bytes": 41577649
+      },
+      "archive_unchanged_during_replay": true,
+      "external_native_report_sha256": "7a3e68daa0447c4d36243be7103d3ff3de6b0192d124e626ec12fb7fb04f3e02",
+      "fixed_external_expectations_unchanged": true,
+      "construction": {
+        "recipe": {
+          "process_id": "preflight-simx-fp16-per_operation",
+          "old_execution_binding": "47da3e87ac11b3d6291b4b6d0c61806119a5654984b55d1be96e1643323af131",
+          "new_execution_binding": "2afffeaa020df0e8b9f6a7ba56baf4349e5039f1ab9e3153c0ce6351f9372cd2",
+          "wrong_process_proof_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "fixed_expected_proof_sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e",
+          "raw_binding_echoes_replaced": 36,
+          "repaired": [
+            "canonical process binding ID",
+            "native argv",
+            "36 actual raw echoes",
+            "inline and retained observation binding IDs",
+            "binding and observation descriptors",
+            "retained-file inventory",
+            "command log digest and size",
+            "raw-log inventory",
+            "native-report and archive external pins"
+          ]
+        },
+        "changed_members": [
+          {
+            "path": "native-qualification/logs/preflight-simx-fp16-per_operation.log",
+            "before": {
+              "path": "native-qualification/logs/preflight-simx-fp16-per_operation.log",
+              "sha256": "7cf4b8a29ec9607bae00282dd30c9cbcbb7a19a17bf9cc0d8d5abba9aef06a86",
+              "size_bytes": 233514
+            },
+            "after": {
+              "path": "native-qualification/logs/preflight-simx-fp16-per_operation.log",
+              "sha256": "3e54aab0bf45645e0523597965f1e1b3cab02ad6058374a68c06822cc10a5a44",
+              "size_bytes": 233514
+            }
+          },
+          {
+            "path": "native-qualification/report.json",
+            "before": {
+              "path": "native-qualification/report.json",
+              "sha256": "576b77872d6b918e3dbe30cef4107481f39ee73c346a813562e7e916b2afd7c4",
+              "size_bytes": 3770129
+            },
+            "after": {
+              "path": "native-qualification/report.json",
+              "sha256": "7a3e68daa0447c4d36243be7103d3ff3de6b0192d124e626ec12fb7fb04f3e02",
+              "size_bytes": 3770129
+            }
+          },
+          {
+            "path": "native-qualification/snapshots/preflight-simx-fp16-per_operation-binding.json",
+            "before": {
+              "path": "native-qualification/snapshots/preflight-simx-fp16-per_operation-binding.json",
+              "sha256": "4716a5711a41e1d0f21f3429bd364486adeeed375b12a89cc69eb1e52593d677",
+              "size_bytes": 657929
+            },
+            "after": {
+              "path": "native-qualification/snapshots/preflight-simx-fp16-per_operation-binding.json",
+              "sha256": "4bcedbd93920787d4992ed874cd6b2737f793ca30643eb89eba62f0e5ed192d2",
+              "size_bytes": 657929
+            }
+          },
+          {
+            "path": "native-qualification/snapshots/preflight-simx-fp16-per_operation-observation.json",
+            "before": {
+              "path": "native-qualification/snapshots/preflight-simx-fp16-per_operation-observation.json",
+              "sha256": "954e9e31dce90c6b020547dcad06843a2d85ebc4ddd10b3a36b9c9c13935399e",
+              "size_bytes": 420773
+            },
+            "after": {
+              "path": "native-qualification/snapshots/preflight-simx-fp16-per_operation-observation.json",
+              "sha256": "b08a6f32f792e93cabdab53d1a45ab2c3b95f3a65d52ea026ed217d0ed289945",
+              "size_bytes": 420773
+            }
+          }
+        ],
+        "total_members": 5045,
+        "unmodified_members_stream_copied": 5041,
+        "all_member_names_preserved": true,
+        "all_member_crcs_pass": true
+      },
+      "public_replay_called": true,
+      "verification_functions_replaced": [],
+      "profile_or_trace_callbacks_installed": false,
+      "selected_native_transcripts_required_by_reached_callsite": 0,
+      "callsite_inference": "The unchanged base run calls qualified provenance and both prerequisite verifiers before variant/process traversal. The stability callsite follows all four processes; the first process-binding comparison precedes that process transcript parsing.",
+      "prerequisite_success_basis": "inferred from the reached exception location in the unchanged public replay call graph, not from mocked or profiled boundary returns",
+      "rejection_trace": [
+        {
+          "file": "/workspace/scratch/e96519576778/w08_a02-binding-adversarial/review-attempt-03.py",
+          "line": 236,
+          "function": "<module>"
+        },
+        {
+          "file": "/workspace/p06-counter-governance-source-01/ci/project/p06_counter_qualification_replay.py",
+          "line": 210,
+          "function": "replay_archive"
+        },
+        {
+          "file": "/workspace/p06-counter-governance-source-01/ci/project/p06_counter_qualification_replay.py",
+          "line": 185,
+          "function": "verify_view"
+        },
+        {
+          "file": "/workspace/p06-counter-governance-source-01/ci/project/p06_dependency_native_replay.py",
+          "line": 662,
+          "function": "run"
+        },
+        {
+          "file": "/workspace/p06-counter-governance-source-01/ci/project/p06_dependency_native_replay.py",
+          "line": 563,
+          "function": "processes"
+        },
+        {
+          "file": "/workspace/p06-counter-governance-source-01/ci/project/p06_replay.py",
+          "line": 111,
+          "function": "_same"
+        },
+        {
+          "file": "/workspace/p06-counter-governance-source-01/ci/project/p06_replay.py",
+          "line": 117,
+          "function": "_same"
+        },
+        {
+          "file": "/workspace/p06-counter-governance-source-01/ci/project/p06_replay.py",
+          "line": 103,
+          "function": "require"
+        }
+      ],
+      "replay_seconds": 30.102026598997327,
+      "total_case_seconds": 36.02038108800116,
+      "prohibited_events": []
+    }
+  ],
+  "original_inputs_after": [
+    {
+      "path": "/workspace/scratch/e96519576778/AI-GPU_P06_counter_qualification_17e02844_2026-11-23.zip",
+      "sha256": "9a0f1088f7a6d70a2ec17c705a61bdbbb2ea59cb815a3327aec817d0120d05a0",
+      "size_bytes": 41577668
+    },
+    {
+      "path": "/workspace/p06-counter-governance-source-01/docs/project/evidence/p06-counter-diagnostics/native/run-45034575685-attempt1.zip",
+      "sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb",
+      "size_bytes": 4290949
+    },
+    {
+      "path": "/workspace/scratch/279b6658611e/AI-GPU_P06_local_attempt_04_passed_2026-11-23.zip",
+      "sha256": "d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f",
+      "size_bytes": 47632218
+    }
+  ],
+  "trusted_reader_sources_after": [
+    {
+      "path": "ci/gen_config.py",
+      "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+      "size_bytes": 60839
+    },
+    {
+      "path": "ci/project/baseline_inventory.py",
+      "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+      "size_bytes": 20466
+    },
+    {
+      "path": "ci/project/baseline_matrix.py",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "size_bytes": 8890
+    },
+    {
+      "path": "ci/project/baseline_packet_contract.py",
+      "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+      "size_bytes": 53680
+    },
+    {
+      "path": "ci/project/baseline_packet_io.py",
+      "sha256": "469583bc558ccb010af82259de38248d7a9a8283cd873a96726aa3c3e2aaa94c",
+      "size_bytes": 14506
+    },
+    {
+      "path": "ci/project/baseline_process.py",
+      "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+      "size_bytes": 12627
+    },
+    {
+      "path": "ci/project/compiler_records.py",
+      "sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+      "size_bytes": 7143
+    },
+    {
+      "path": "ci/project/p01_toolchain.lock.json",
+      "sha256": "63771ba8d9ff691b3867ed96be7b058ed5eae1368789575f4964e38f8718a405",
+      "size_bytes": 5008
+    },
+    {
+      "path": "ci/project/p02_fixture_oracle.py",
+      "sha256": "12e546864a4fef5b05e10c7a04b1006bcd59376e5921ea1221c4d42668490145",
+      "size_bytes": 23351
+    },
+    {
+      "path": "ci/project/p02_layout_fixture_oracle.py",
+      "sha256": "34e78c0313e2b032930615f02a790729d1c49293349728b55f7d04a29a2568a7",
+      "size_bytes": 10910
+    },
+    {
+      "path": "ci/project/p02_matrix.py",
+      "sha256": "e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17",
+      "size_bytes": 30055
+    },
+    {
+      "path": "ci/project/p02_matrix_records.py",
+      "sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+      "size_bytes": 12332
+    },
+    {
+      "path": "ci/project/p02_wmma_fixtures.py",
+      "sha256": "4a672a5d3357f220120f43e5f5d7e880f7d0ba36df380d69cd1873ea4879835e",
+      "size_bytes": 16440
+    },
+    {
+      "path": "ci/project/p02_wmma_numerical_fixture_oracle.py",
+      "sha256": "083450dc11712e5fc6dce7d19fb854bd9ef25b738347efd56bd07e81b079570b",
+      "size_bytes": 15556
+    },
+    {
+      "path": "ci/project/p03_execute.py",
+      "sha256": "bee5c380eb0d328e72586e2c51e4162b8ca5314ef68d2987a7d744fc1c05aa82",
+      "size_bytes": 17105
+    },
+    {
+      "path": "ci/project/p03_execution_records.py",
+      "sha256": "b26449105f17f9487cc4fbaab36884ceea42be9f502a26aa58331ed4cf1140de",
+      "size_bytes": 6961
+    },
+    {
+      "path": "ci/project/p04_execution_records.py",
+      "sha256": "abddfb06fb48bbd064c09d61879b278bca22778f5a8289f4c1ac93fb882b33e0",
+      "size_bytes": 16283
+    },
+    {
+      "path": "ci/project/p04_fixture_adapter.py",
+      "sha256": "37a50f6f0f80fd79b926b7ed5d13a233de6bf518590da7fa7d40800dcc91094a",
+      "size_bytes": 5364
+    },
+    {
+      "path": "ci/project/p04_model_contract.py",
+      "sha256": "c184d980d57aec54567d79025845c5fb34887741697ac78a66692a65da02e4b3",
+      "size_bytes": 15901
+    },
+    {
+      "path": "ci/project/p04_reference.py",
+      "sha256": "115a7db51948d69fc6267d5fe658d1a8e68c22e9f200d5ddc3f0a5181d7140a9",
+      "size_bytes": 11855
+    },
+    {
+      "path": "ci/project/p06_checked_execute.py",
+      "sha256": "86ba0b3fd2bbfa97ebb2346e69fed85968fd3da8bf267d4dc1a13aaacf8b358e",
+      "size_bytes": 38609
+    },
+    {
+      "path": "ci/project/p06_compiler_records.py",
+      "sha256": "f441c12f4c9e4b9ef10eca13f8b5291fc41ffb86f1f42e42dfd320056dedd6da",
+      "size_bytes": 13614
+    },
+    {
+      "path": "ci/project/p06_contract.py",
+      "sha256": "780086070739b6d3586f9b3695ad4dc31d209a7817cf1af3651160a9fe6e1376",
+      "size_bytes": 31500
+    },
+    {
+      "path": "ci/project/p06_counter_diagnostics_replay.py",
+      "sha256": "4d959363229859bd1ac5f4ede4f09937b8418e50f85a1c2eab3f131956532f0b",
+      "size_bytes": 36762
+    },
+    {
+      "path": "ci/project/p06_counter_public_build.py",
+      "sha256": "22982ed2264626fb1be2b86785fddb89655c9e0f82a2257ce0e9ab7c89eab758",
+      "size_bytes": 15413
+    },
+    {
+      "path": "ci/project/p06_counter_public_records.py",
+      "sha256": "d947be071b670edcbc0b7d613860c288ee1b013f16e256679747afe0353a7e78",
+      "size_bytes": 20774
+    },
+    {
+      "path": "ci/project/p06_counter_public_replay.py",
+      "sha256": "6489dff8b39bda3d18df97fb72092fd2014d86d8c0129bcd56a13f08acd942a0",
+      "size_bytes": 22122
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_admission.py",
+      "sha256": "33053b52145167ced22a4793295f1cbfd07c78eb8072e65ed94090040e8eae43",
+      "size_bytes": 12578
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_contract.py",
+      "sha256": "d445b9447aefb4f2917f827105df9b5722c461f10f68629176f2dc2d2321fd0d",
+      "size_bytes": 10828
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_prerequisites.py",
+      "sha256": "b94d293f8dc4846e4b2de3344169362899d3da9503efcbac0a2e63ebad68d586",
+      "size_bytes": 18956
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_proof.json",
+      "sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e",
+      "size_bytes": 123781
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_replay.py",
+      "sha256": "25b07aa69abcf39de000ab3002e26f7b205406a23f12eb8337344e3b93cfc78c",
+      "size_bytes": 16870
+    },
+    {
+      "path": "ci/project/p06_counter_source_inventory.py",
+      "sha256": "8961331993ceb112f80a83314ee7a6a3020163a89ca1b8781139c103e98f6862",
+      "size_bytes": 33730
+    },
+    {
+      "path": "ci/project/p06_dependency_admission.py",
+      "sha256": "8d9d65960d7f2336911823c29ee1c9eb14cba76ca0c097e9d42ad02b5744a1e7",
+      "size_bytes": 15128
+    },
+    {
+      "path": "ci/project/p06_dependency_binary.py",
+      "sha256": "81397956f856e5658864ee59f198c760699160f5d7a78d73d80db41f361814e1",
+      "size_bytes": 16793
+    },
+    {
+      "path": "ci/project/p06_dependency_build.py",
+      "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+      "size_bytes": 32820
+    },
+    {
+      "path": "ci/project/p06_dependency_contract.py",
+      "sha256": "d6151024fbe7e8a651075fd76b9bdc006bb18c0f61c538a2928842f865ddd364",
+      "size_bytes": 4438
+    },
+    {
+      "path": "ci/project/p06_dependency_control_replay.py",
+      "sha256": "1c418b3f0fa58423c94eedd28e9fbda02a6ce8a5423b042abc1574281a67faa2",
+      "size_bytes": 39549
+    },
+    {
+      "path": "ci/project/p06_dependency_graph.py",
+      "sha256": "eb278cbd37d5191468d151339a88a665d792e0f31d7f1d41da30285b240e9f08",
+      "size_bytes": 5861
+    },
+    {
+      "path": "ci/project/p06_dependency_local_execute.py",
+      "sha256": "b6651948b2ee4ce4fe99c94fac8ac7e86bfec8a8658f258b3ef76081104b3c79",
+      "size_bytes": 22361
+    },
+    {
+      "path": "ci/project/p06_dependency_local_prepare.py",
+      "sha256": "c810f31cf6106a5bbcd6eddcf8d818560cb94222da057fe9491a8e1dbc99316f",
+      "size_bytes": 20427
+    },
+    {
+      "path": "ci/project/p06_dependency_local_replay.py",
+      "sha256": "a16983cf6c4083b9d2eb8f5a8d4e72660d8d10a92ef7d8dd9f8ba1a994ce298b",
+      "size_bytes": 22449
+    },
+    {
+      "path": "ci/project/p06_dependency_native_replay.py",
+      "sha256": "66ac675a904b69a7393596cf96857608143c46aafee019d453a582108cf976a1",
+      "size_bytes": 60002
+    },
+    {
+      "path": "ci/project/p06_dependency_receipt.py",
+      "sha256": "6a45f224b57cbc2e4d7edfd540712eb468b1aa92407e2b65bc5a2de7c3581c70",
+      "size_bytes": 63377
+    },
+    {
+      "path": "ci/project/p06_dependency_record.py",
+      "sha256": "5364a5036fb03bebed3aba6267d302cf36c379b30e7085ded1b59db077c33205",
+      "size_bytes": 26464
+    },
+    {
+      "path": "ci/project/p06_dependency_replay.py",
+      "sha256": "1c5dc29aa92a18ac4b89bdd3bbd53c4bc5ed0fad37d9cc4d907ed92f3f862218",
+      "size_bytes": 11752
+    },
+    {
+      "path": "ci/project/p06_dependency_sources.py",
+      "sha256": "4e09b8f8357538591a843f465ca6a20465baf363e5a190b9edf8d01c807174a1",
+      "size_bytes": 17141
+    },
+    {
+      "path": "ci/project/p06_dependency_substitution.py",
+      "sha256": "e37c31fb769d7c1d5374bf40216c5099eb9a24d0017ceef876b36cbbec6a9f87",
+      "size_bytes": 30789
+    },
+    {
+      "path": "ci/project/p06_local_toolchain.py",
+      "sha256": "0bd80e40b6a22bf78a665e8f1b18818a21178bcc32248a20bfd3133d3c3d5aa8",
+      "size_bytes": 23542
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_application_build.py",
+      "sha256": "b0dbadf26a1189ea0f5b7f7aa88f54fd0ce26d875f197e4f3c062a0a00fcd298",
+      "size_bytes": 12618
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_backend_build.py",
+      "sha256": "f37fd2f53713a25bd23df989b2469bb6327a9d8769983177b349b6d8f653f700",
+      "size_bytes": 4016
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_build.py",
+      "sha256": "0c6a5c2c6415071566f66363289e245c4e8b486e987615ffab74f15fb39ee559",
+      "size_bytes": 16639
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_contract.py",
+      "sha256": "5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb",
+      "size_bytes": 14917
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_derivation.py",
+      "sha256": "8ba5e019cd4f2cc1b74b3a8839c93e6d7baf4766da1a2169e757e22d3e45a3d6",
+      "size_bytes": 14070
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_execute.py",
+      "sha256": "d9d726ce61cdaa12010bb7c00fac48b6ed31f82b82997e39bb9d9a7911163677",
+      "size_bytes": 52516
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_generated.py",
+      "sha256": "6b777ca99c82d2e2c3f7bddf2a15d70df1cd2303a56b53cacb89114c8b2bb5cc",
+      "size_bytes": 8498
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_records.py",
+      "sha256": "3d6358c98544f4252be262125b70c87a72caaca7f35fbe3bc3e2512655654d10",
+      "size_bytes": 16223
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_replay.py",
+      "sha256": "9ab96bfb7a8940c61d37a13cd3d39f148c4b0c623ed085615e53d92c7eea4ade",
+      "size_bytes": 36937
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_replay_build.py",
+      "sha256": "0034e67683dc8291d2aec980602b55dca56af57f5a1a94d3a9cae576a51fb7db",
+      "size_bytes": 14324
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_replay_hosted.py",
+      "sha256": "918027091c40eda7eaccd5c9c634a41de65647bd55c070e853d39767c58ff031",
+      "size_bytes": 10598
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_source_export.py",
+      "sha256": "1bec4cc1a296ae93bc9c29029ed5a28a02f6edd71adbdbfdbcea156eebf28b46",
+      "size_bytes": 21171
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_sources.py",
+      "sha256": "dc0374a1c3a059c36d47697ff2c8275bf0901b76468f72a15425ea2cfe687f2a",
+      "size_bytes": 32794
+    },
+    {
+      "path": "ci/project/p06_mpm_execute.py",
+      "sha256": "c9524652c24121401f7d2cb044cae72c4f6dece7f8d8357d886d7b1ef63fcea0",
+      "size_bytes": 23153
+    },
+    {
+      "path": "ci/project/p06_native_lifetime_contract.py",
+      "sha256": "266a50e5b4c0d07b432accf2aa13ff8d3db7fc175a24a4263e3cdb0acafb5b74",
+      "size_bytes": 4545
+    },
+    {
+      "path": "ci/project/p06_native_lifetime_records.py",
+      "sha256": "5bf33d35e489397d96e0e0932c8d42e687f18deda646bb9725e05b326be50e3a",
+      "size_bytes": 8506
+    },
+    {
+      "path": "ci/project/p06_pending_probe.py",
+      "sha256": "89300a063bf26e20312fe6026377db300cdf40b6a91bc3d6327340e66b51d42d",
+      "size_bytes": 24886
+    },
+    {
+      "path": "ci/project/p06_records.py",
+      "sha256": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7",
+      "size_bytes": 28046
+    },
+    {
+      "path": "ci/project/p06_replay.py",
+      "sha256": "9a5e68de45ec923c56e39a05697d9f93b3d0fdd91c81d38d6637c12ba153d991",
+      "size_bytes": 44626
+    },
+    {
+      "path": "ci/project/p06_warm_analyze.py",
+      "sha256": "ac273f587f759900d16ad41c7c63c2d2b10ca0864d5018f8403572f75e5a3e88",
+      "size_bytes": 19568
+    },
+    {
+      "path": "ci/project/p06_warm_compiler_records.py",
+      "sha256": "fe32aa772439e98975cdcb4807b269022d461c5e99c0021c4689c9712d7988f9",
+      "size_bytes": 3261
+    },
+    {
+      "path": "ci/project/p06_warm_contract.py",
+      "sha256": "d311c5fb77e651a93fde368f0e41d517f40199a3bd43e27c302d4d00888cc31e",
+      "size_bytes": 19379
+    },
+    {
+      "path": "ci/project/p06_warm_execute.py",
+      "sha256": "61c6caa04e8bb2a28d7f2e7b73cf41baa43abaeb8330882d7ab219bfe33d2f6a",
+      "size_bytes": 32598
+    },
+    {
+      "path": "ci/project/p06_warm_records.py",
+      "sha256": "28d7e2c1553fc0929a106bc24a62fa2d612e415449ee0e9ac84ad582289381e7",
+      "size_bytes": 11637
+    },
+    {
+      "path": "ci/project/p06_warm_replay.py",
+      "sha256": "8982c9ec5b1599080c8df09dd685ecf7aae7488af4708463dda819c4bcb62890",
+      "size_bytes": 42783
+    },
+    {
+      "path": "ci/project/p06_workspace_compiler_records.py",
+      "sha256": "d89496a4e08737c6bb5c72b5b05a94994bb70a63e17b88c11547f38d47c06375",
+      "size_bytes": 20838
+    },
+    {
+      "path": "ci/project/p06_workspace_execute.py",
+      "sha256": "83f97cf2a8584dcd6b9099f37415dd3b28c75982900b8adb02d15834c8d9fff7",
+      "size_bytes": 33854
+    },
+    {
+      "path": "ci/project/p06_workspace_records.py",
+      "sha256": "9e3f9af15f2981d19a05fcd83ddd369bae43f6530fd4383831c9d2942d8fee21",
+      "size_bytes": 25060
+    },
+    {
+      "path": "ci/project/p06_workspace_replay.py",
+      "sha256": "aa039e92123ceed8b83eddb8362457c2214f96cbd2dc058739bf14c47ef938e6",
+      "size_bytes": 45921
+    },
+    {
+      "path": "ci/project/preflight.py",
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+      "size_bytes": 15124
+    },
+    {
+      "path": "docs/project/evidence/p05-torch/reviews/archive_reader.py",
+      "sha256": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3",
+      "size_bytes": 16065
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-diagnostics/native/public-source-inventory-4268d2d5.json",
+      "sha256": "bd81faa7590e053685dfa78d8baa41478969c3b4ec750646cddb5796b949ba0c",
+      "size_bytes": 116997
+    },
+    {
+      "path": "tests/unittest/pending_reads/main.cpp",
+      "sha256": "bca8962a873af0e3315e13cdd908f3ba1a1b8e89ab4fa9f41a74b1d65404b6f3",
+      "size_bytes": 7302
+    }
+  ],
+  "outcome": "pass",
+  "original_inputs_unchanged": true,
+  "trusted_reader_sources_unchanged": true,
+  "finished_at": "2026-11-23T16:12:19Z",
+  "prohibited_events": [],
+  "reviewer_execution_receipt": {
+    "command": "timeout --signal=TERM --kill-after=10s 300s python3 -I -B /workspace/scratch/e96519576778/w08_a02-binding-adversarial/review-attempt-03.py > /workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/validation/w08_a02-binding-adversarial.log 2>&1",
+    "initial_execution_result": {
+      "chunk_id": "2513ab",
+      "wall_time_seconds": 1.001600004,
+      "session_id": 47989,
+      "original_token_count": 0,
+      "output": ""
+    },
+    "final_exit_code": 0
+  },
+  "reviewer_process_exit_code": 0,
+  "reviewer_log": {
+    "path": "validation/w08_a02-binding-adversarial.log",
+    "sha256": "2b2ffb8afd859e1450e61866580e1e304b5e90aa1120362ba2cedffc9a9495da",
+    "size_bytes": 1158
+  },
+  "reader_checkout_verification": {
+    "path": "/workspace/p06-counter-governance-source-01",
+    "head": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+    "tracked_ci_project_diff_from_head_empty": true
+  },
+  "inventory_scope": "This attempt snapshots the unchanged 82-member inventory reported by the 17e reader. It does not claim that 82 is the complete trusted input closure; the separate W07 A05 review identifies 12 additional frozen reference inputs."
+}

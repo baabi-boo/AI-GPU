@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+"""Execute one complete-module partition of the standard discovered suite."""
+import hashlib
+import json
+import sys
+import time
+import unittest
+from pathlib import Path
+
+output = Path(__file__).resolve().parent
+manifest_body = (output / 'partition-manifest.json').read_bytes()
+assert hashlib.sha256(manifest_body).hexdigest() == sys.argv[2]
+manifest = json.loads(manifest_body)
+index = int(sys.argv[1])
+assert index in (0, 1, 2)
+assert Path.cwd() == Path(manifest['source'])
+selected = manifest['partitions'][index]
+loader = unittest.TestLoader()
+discovered = loader.discover('ci/project', pattern='test_*.py')
+
+def flatten(suite):
+    for case in suite:
+        if isinstance(case, unittest.TestSuite):
+            yield from flatten(case)
+        else:
+            yield case
+
+all_cases = list(flatten(discovered))
+all_ids = [case.id() for case in all_cases]
+assert not loader.errors, loader.errors
+assert all_ids == manifest['all_ids']
+assert len(all_ids) == len(set(all_ids)) == 4437
+modules = set(selected['modules'])
+cases = [case for case in all_cases if case.__class__.__module__ in modules]
+assert [case.id() for case in cases] == selected['ids']
+started_ids = []
+completed_ids = []
+
+class RecordedResult(unittest.TextTestResult):
+    def startTest(self, test):
+        started_ids.append(test.id())
+        super().startTest(test)
+
+    def stopTest(self, test):
+        completed_ids.append(test.id())
+        super().stopTest(test)
+
+started = time.monotonic()
+result = unittest.TextTestRunner(stream=sys.stdout, verbosity=2,
+    resultclass=RecordedResult).run(unittest.TestSuite(cases))
+receipt = {
+    'schema_version': 1,
+    'partition': index,
+    'source_revision': manifest['source_revision'],
+    'source_tree': manifest['source_tree'],
+    'manifest_sha256': hashlib.sha256(manifest_body).hexdigest(),
+    'program_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+    'interpreter': sys.executable,
+    'selected_ids': selected['ids'],
+    'started_ids': started_ids,
+    'completed_ids': completed_ids,
+    'tests_run': result.testsRun,
+    'failures': [{'id': case.id(), 'trace': trace} for case, trace in result.failures],
+    'errors': [{'id': case.id(), 'trace': trace} for case, trace in result.errors],
+    'skipped': [{'id': case.id(), 'reason': reason} for case, reason in result.skipped],
+    'expected_failures': [{'id': case.id(), 'trace': trace} for case, trace in result.expectedFailures],
+    'unexpected_successes': [case.id() for case in result.unexpectedSuccesses],
+    'duration_seconds': time.monotonic() - started,
+}
+receipt['outcome'] = 'pass' if (
+    result.wasSuccessful() and not result.skipped and not result.expectedFailures
+    and started_ids == completed_ids == selected['ids']
+    and result.testsRun == len(selected['ids'])) else 'fail'
+(output / ('partition-' + str(index) + '-result.json')).write_text(
+    json.dumps(receipt, indent=2, sort_keys=True) + '\n')
+print(json.dumps({key: receipt[key] for key in ('partition', 'outcome', 'tests_run', 'duration_seconds')}), flush=True)
+sys.exit(0 if receipt['outcome'] == 'pass' else 1)

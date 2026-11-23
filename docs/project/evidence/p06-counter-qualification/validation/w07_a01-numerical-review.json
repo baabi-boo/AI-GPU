@@ -1,0 +1,810 @@
+{
+  "corpus": [
+    {
+      "path": "ci/project/fixtures/p02_layout_v1.json",
+      "sha256": "0543f9f4208de3ff4743fe1894d97ccf3b8cca4707e9a26acd1f3dde884725b2",
+      "size_bytes": 83960
+    },
+    {
+      "path": "ci/project/fixtures/p02_tfr_v1.json",
+      "sha256": "0d8b173af178875274a7bf29886a51838be8cdb54224d55353959a639a5ea6c3",
+      "size_bytes": 60925
+    },
+    {
+      "path": "ci/project/fixtures/p02_wmma_numerical_v1.json",
+      "sha256": "4102d74024e92e9887d7324b9326c0d6ad1fff206b5fad33f45c530d5bd03a73",
+      "size_bytes": 260308
+    },
+    {
+      "path": "tests/regression/sgemm_tcu/p02_fixtures.h",
+      "sha256": "1e692ad5d14e895286e57e45bf9d1730cf2380a33ccbaa486c601db838daa64e",
+      "size_bytes": 145505
+    }
+  ],
+  "derived_totals": {
+    "checked_words": 4224,
+    "launches": 132,
+    "mismatches": 0,
+    "post_prime_operations": 128,
+    "post_prime_words": 4096,
+    "prime_operations": 4,
+    "prime_words": 128,
+    "processes": 4
+  },
+  "elapsed_seconds": 1.0824463899989496,
+  "findings": [],
+  "finished_at": "2026-11-23T15:35:14Z",
+  "fixture_population_reproduced": 88,
+  "initial_development_invocation": {
+    "checks_reached": "immutable source andcorpus comparisons; no record validation yet",
+    "originals_changed": false,
+    "outcome": "failed",
+    "program_path": "/workspace/scratch/e96519576778/w07_a01-numerical-review-attempt01.py",
+    "program_sha256": "a1acb851e7ce1cfc4f8271168319f358ec401d96b9a58c2f55ee1a9ec3577cd2",
+    "reason": "KeyError:a_layout; layout metadata belongs toapplication,notgeometry",
+    "scope": "reviewer-program setup only"
+  },
+  "integer_reconstructions": [
+    {
+      "a_layout": "row_major",
+      "b_layout": "column_major",
+      "case_id": "fp16-single-dense_boundaries",
+      "dimensions": [
+        8,
+        4,
+        8
+      ],
+      "expected_bits_match_frozen_fixture": true,
+      "expected_words": [
+        "40400000",
+        "40e00000",
+        "41300000",
+        "41700000",
+        "41600000",
+        "41d00000",
+        "42180000",
+        "42480000",
+        "41c80000",
+        "42340000",
+        "42820000",
+        "42aa0000",
+        "42100000",
+        "42800000",
+        "42b80000",
+        "42f00000",
+        "423c0000",
+        "42a60000",
+        "42ee0000",
+        "431b0000",
+        "42680000",
+        "42cc0000",
+        "43120000",
+        "433e0000",
+        "428a0000",
+        "42f20000",
+        "432d0000",
+        "43610000",
+        "42a00000",
+        "430c0000",
+        "43480000",
+        "43820000"
+      ],
+      "format": "fp16",
+      "input_values_are_exact_integers": true,
+      "integer_results": [
+        3,
+        7,
+        11,
+        15,
+        14,
+        26,
+        38,
+        50,
+        25,
+        45,
+        65,
+        85,
+        36,
+        64,
+        92,
+        120,
+        47,
+        83,
+        119,
+        155,
+        58,
+        102,
+        146,
+        190,
+        69,
+        121,
+        173,
+        225,
+        80,
+        140,
+        200,
+        260
+      ],
+      "max_abs_product_or_partial_sum": 260,
+      "output_layout": "row_major"
+    },
+    {
+      "a_layout": "row_major",
+      "b_layout": "column_major",
+      "case_id": "bf16-single-dense_boundaries",
+      "dimensions": [
+        8,
+        4,
+        8
+      ],
+      "expected_bits_match_frozen_fixture": true,
+      "expected_words": [
+        "40400000",
+        "40e00000",
+        "41300000",
+        "41700000",
+        "41600000",
+        "41d00000",
+        "42180000",
+        "42480000",
+        "41c80000",
+        "42340000",
+        "42820000",
+        "42aa0000",
+        "42100000",
+        "42800000",
+        "42b80000",
+        "42f00000",
+        "423c0000",
+        "42a60000",
+        "42ee0000",
+        "431b0000",
+        "42680000",
+        "42cc0000",
+        "43120000",
+        "433e0000",
+        "428a0000",
+        "42f20000",
+        "432d0000",
+        "43610000",
+        "42a00000",
+        "430c0000",
+        "43480000",
+        "43820000"
+      ],
+      "format": "bf16",
+      "input_values_are_exact_integers": true,
+      "integer_results": [
+        3,
+        7,
+        11,
+        15,
+        14,
+        26,
+        38,
+        50,
+        25,
+        45,
+        65,
+        85,
+        36,
+        64,
+        92,
+        120,
+        47,
+        83,
+        119,
+        155,
+        58,
+        102,
+        146,
+        190,
+        69,
+        121,
+        173,
+        225,
+        80,
+        140,
+        200,
+        260
+      ],
+      "max_abs_product_or_partial_sum": 260,
+      "output_layout": "row_major"
+    }
+  ],
+  "limitations": [
+    "This is a numerical review of the original directory packet, not the complete dependency/qualification archive replay.",
+    "The record validators are trusted current immutable-source code; no retained code or GPU process is executed by this review.",
+    "Exact arithmetic reconstruction applies only to these two selected dense-boundary integer-input fixtures, not all FP16/BF16 values.",
+    "All four original processes are pair-index0 preflight warmup observations, not the24-process warm sampling experiment.",
+    "Historical diagnostic/pending/substitution controls are excluded from all derived native matrix counts.",
+    "No speedup, warm readiness, performance acceptance or phase acceptance is established."
+  ],
+  "original_native_report": {
+    "path": "report.json",
+    "sha256": "576b77872d6b918e3dbe30cef4107481f39ee73c346a813562e7e916b2afd7c4",
+    "size_bytes": 3770129
+  },
+  "originals_after": [
+    {
+      "path": "report.json",
+      "sha256": "576b77872d6b918e3dbe30cef4107481f39ee73c346a813562e7e916b2afd7c4",
+      "size_bytes": 3770129
+    },
+    {
+      "path": "snapshots/selected-fixtures.json",
+      "sha256": "ed7d2be5fcd85abff28c265c6b1ae16b158a549d91d3953884e7fc9b6d4f4313",
+      "size_bytes": 3817
+    },
+    {
+      "path": "snapshots/preflight-contract.json",
+      "sha256": "b27c3e2c4385bd6ce7bdf7ddf82c69ddc82c7a8c3d485412a5238c3259ae7ea6",
+      "size_bytes": 7329
+    },
+    {
+      "path": "snapshots/preflight-simx-fp16-per_operation-binding.json",
+      "sha256": "4716a5711a41e1d0f21f3429bd364486adeeed375b12a89cc69eb1e52593d677",
+      "size_bytes": 657929
+    },
+    {
+      "path": "logs/preflight-simx-fp16-per_operation.log",
+      "sha256": "7cf4b8a29ec9607bae00282dd30c9cbcbb7a19a17bf9cc0d8d5abba9aef06a86",
+      "size_bytes": 233514
+    },
+    {
+      "path": "snapshots/preflight-simx-fp16-per_operation-observation.json",
+      "sha256": "954e9e31dce90c6b020547dcad06843a2d85ebc4ddd10b3a36b9c9c13935399e",
+      "size_bytes": 420773
+    },
+    {
+      "path": "snapshots/preflight-simx-fp16-reusable_single_tile-binding.json",
+      "sha256": "d35019484d259e091cd95895e520f30ed37cd2283e3f9f8d81b0451aec9057ff",
+      "size_bytes": 657950
+    },
+    {
+      "path": "logs/preflight-simx-fp16-reusable_single_tile.log",
+      "sha256": "5af240e5670917baa31292db53cb2e50fec275b00f5efaa51c4e054c6e6078f1",
+      "size_bytes": 234081
+    },
+    {
+      "path": "snapshots/preflight-simx-fp16-reusable_single_tile-observation.json",
+      "sha256": "0be7aa5cc3126a76bac32eef5e8b6acdbed5fd9fde4b9feb09d49855fad5aa38",
+      "size_bytes": 421338
+    },
+    {
+      "path": "snapshots/preflight-simx-bf16-per_operation-binding.json",
+      "sha256": "f2fb7d3cee2b8a6cb480a709e173345073021f677798e00ca844c5fe620fc168",
+      "size_bytes": 657929
+    },
+    {
+      "path": "logs/preflight-simx-bf16-per_operation.log",
+      "sha256": "f7eb7e745076908c1a193272895e1def1c65d1270e22127e21ebda2ee5acaa7f",
+      "size_bytes": 233514
+    },
+    {
+      "path": "snapshots/preflight-simx-bf16-per_operation-observation.json",
+      "sha256": "f7f8e020fb7668177aa6db0ac02cd4243de88723607c259032a36f792500d9ab",
+      "size_bytes": 420763
+    },
+    {
+      "path": "snapshots/preflight-simx-bf16-reusable_single_tile-binding.json",
+      "sha256": "f7daf2ddcbf0dfd81249ef63de05881c820ee4fbecd287506c18cbe5c5e0aacf",
+      "size_bytes": 657950
+    },
+    {
+      "path": "logs/preflight-simx-bf16-reusable_single_tile.log",
+      "sha256": "7693c9817d302bd5de52137e56107ea45742dfcd8a44574631bfaa0a1221923e",
+      "size_bytes": 234081
+    },
+    {
+      "path": "snapshots/preflight-simx-bf16-reusable_single_tile-observation.json",
+      "sha256": "b08be7038e8f36640c4215f19b951503d95ec868ca1fa62a16d021968c512f88",
+      "size_bytes": 421341
+    }
+  ],
+  "originals_before": [
+    {
+      "path": "report.json",
+      "sha256": "576b77872d6b918e3dbe30cef4107481f39ee73c346a813562e7e916b2afd7c4",
+      "size_bytes": 3770129
+    },
+    {
+      "path": "snapshots/selected-fixtures.json",
+      "sha256": "ed7d2be5fcd85abff28c265c6b1ae16b158a549d91d3953884e7fc9b6d4f4313",
+      "size_bytes": 3817
+    },
+    {
+      "path": "snapshots/preflight-contract.json",
+      "sha256": "b27c3e2c4385bd6ce7bdf7ddf82c69ddc82c7a8c3d485412a5238c3259ae7ea6",
+      "size_bytes": 7329
+    },
+    {
+      "path": "snapshots/preflight-simx-fp16-per_operation-binding.json",
+      "sha256": "4716a5711a41e1d0f21f3429bd364486adeeed375b12a89cc69eb1e52593d677",
+      "size_bytes": 657929
+    },
+    {
+      "path": "logs/preflight-simx-fp16-per_operation.log",
+      "sha256": "7cf4b8a29ec9607bae00282dd30c9cbcbb7a19a17bf9cc0d8d5abba9aef06a86",
+      "size_bytes": 233514
+    },
+    {
+      "path": "snapshots/preflight-simx-fp16-per_operation-observation.json",
+      "sha256": "954e9e31dce90c6b020547dcad06843a2d85ebc4ddd10b3a36b9c9c13935399e",
+      "size_bytes": 420773
+    },
+    {
+      "path": "snapshots/preflight-simx-fp16-reusable_single_tile-binding.json",
+      "sha256": "d35019484d259e091cd95895e520f30ed37cd2283e3f9f8d81b0451aec9057ff",
+      "size_bytes": 657950
+    },
+    {
+      "path": "logs/preflight-simx-fp16-reusable_single_tile.log",
+      "sha256": "5af240e5670917baa31292db53cb2e50fec275b00f5efaa51c4e054c6e6078f1",
+      "size_bytes": 234081
+    },
+    {
+      "path": "snapshots/preflight-simx-fp16-reusable_single_tile-observation.json",
+      "sha256": "0be7aa5cc3126a76bac32eef5e8b6acdbed5fd9fde4b9feb09d49855fad5aa38",
+      "size_bytes": 421338
+    },
+    {
+      "path": "snapshots/preflight-simx-bf16-per_operation-binding.json",
+      "sha256": "f2fb7d3cee2b8a6cb480a709e173345073021f677798e00ca844c5fe620fc168",
+      "size_bytes": 657929
+    },
+    {
+      "path": "logs/preflight-simx-bf16-per_operation.log",
+      "sha256": "f7eb7e745076908c1a193272895e1def1c65d1270e22127e21ebda2ee5acaa7f",
+      "size_bytes": 233514
+    },
+    {
+      "path": "snapshots/preflight-simx-bf16-per_operation-observation.json",
+      "sha256": "f7f8e020fb7668177aa6db0ac02cd4243de88723607c259032a36f792500d9ab",
+      "size_bytes": 420763
+    },
+    {
+      "path": "snapshots/preflight-simx-bf16-reusable_single_tile-binding.json",
+      "sha256": "f7daf2ddcbf0dfd81249ef63de05881c820ee4fbecd287506c18cbe5c5e0aacf",
+      "size_bytes": 657950
+    },
+    {
+      "path": "logs/preflight-simx-bf16-reusable_single_tile.log",
+      "sha256": "7693c9817d302bd5de52137e56107ea45742dfcd8a44574631bfaa0a1221923e",
+      "size_bytes": 234081
+    },
+    {
+      "path": "snapshots/preflight-simx-bf16-reusable_single_tile-observation.json",
+      "sha256": "b08be7038e8f36640c4215f19b951503d95ec868ca1fa62a16d021968c512f88",
+      "size_bytes": 421341
+    }
+  ],
+  "originals_stable": true,
+  "outcome": "pass",
+  "prime_corruption_controls": [
+    {
+      "format": "fp16",
+      "mutation": "flip one bit of prime output word0; keep zero mismatches and successful summary",
+      "policy": "per_operation",
+      "reason": "warm operation 0.actual_bits[0]: differs from the frozen contract",
+      "rejected": true,
+      "scope": "in-memory altered original only"
+    },
+    {
+      "format": "bf16",
+      "mutation": "flip one bit of prime output word0; keep zero mismatches and successful summary",
+      "policy": "per_operation",
+      "reason": "warm operation 0.actual_bits[0]: differs from the frozen contract",
+      "rejected": true,
+      "scope": "in-memory altered original only"
+    }
+  ],
+  "processes": [
+    {
+      "build_binding_sha256": "482235be5b61464449c1a4b5a76ad6adafd16b8f0fa9e33180cedb63a72be66f",
+      "case_id": "fp16-single-dense_boundaries",
+      "checked_words": 1056,
+      "command_exit_code": 0,
+      "format": "fp16",
+      "id": "preflight-simx-fp16-per_operation",
+      "launches": 33,
+      "log": {
+        "path": "logs/preflight-simx-fp16-per_operation.log",
+        "sha256": "7cf4b8a29ec9607bae00282dd30c9cbcbb7a19a17bf9cc0d8d5abba9aef06a86",
+        "size_bytes": 233514
+      },
+      "mismatches": 0,
+      "operations": 33,
+      "original_observation_matches_recomputation": true,
+      "pair_index": 0,
+      "phase": "warmup",
+      "policy": "per_operation",
+      "policy_final_counts": {
+        "buffer_create_calls": 99,
+        "buffer_release_calls": 99,
+        "device_open_calls": 1,
+        "device_release_calls": 1,
+        "errors": 0,
+        "live_buffers": 0,
+        "live_requested_bytes": 0,
+        "peak_requested_payload_bytes": 320,
+        "premature_releases": 0
+      },
+      "post_prime_operations": 32,
+      "prime_words": 32,
+      "process_binding_sha256": "47da3e87ac11b3d6291b4b6d0c61806119a5654984b55d1be96e1643323af131",
+      "raw_word_count": 1056
+    },
+    {
+      "build_binding_sha256": "482235be5b61464449c1a4b5a76ad6adafd16b8f0fa9e33180cedb63a72be66f",
+      "case_id": "fp16-single-dense_boundaries",
+      "checked_words": 1056,
+      "command_exit_code": 0,
+      "format": "fp16",
+      "id": "preflight-simx-fp16-reusable_single_tile",
+      "launches": 33,
+      "log": {
+        "path": "logs/preflight-simx-fp16-reusable_single_tile.log",
+        "sha256": "5af240e5670917baa31292db53cb2e50fec275b00f5efaa51c4e054c6e6078f1",
+        "size_bytes": 234081
+      },
+      "mismatches": 0,
+      "operations": 33,
+      "original_observation_matches_recomputation": true,
+      "pair_index": 0,
+      "phase": "warmup",
+      "policy": "reusable_single_tile",
+      "policy_final_counts": {
+        "buffer_create_calls": 3,
+        "buffer_release_calls": 3,
+        "device_open_calls": 1,
+        "device_release_calls": 1,
+        "errors": 0,
+        "live_buffers": 0,
+        "live_requested_bytes": 0,
+        "peak_requested_payload_bytes": 320,
+        "premature_releases": 0
+      },
+      "post_prime_operations": 32,
+      "prime_words": 32,
+      "process_binding_sha256": "5d1a57a836a10c199fb07a6b5a28e2b5fdea2a993e75ec44f33a44b49ed2d153",
+      "raw_word_count": 1056
+    },
+    {
+      "build_binding_sha256": "f5ea184e6298e0c80d949f6a35798d4981f648a474ce0a1dbcdb392f6dc7038a",
+      "case_id": "bf16-single-dense_boundaries",
+      "checked_words": 1056,
+      "command_exit_code": 0,
+      "format": "bf16",
+      "id": "preflight-simx-bf16-per_operation",
+      "launches": 33,
+      "log": {
+        "path": "logs/preflight-simx-bf16-per_operation.log",
+        "sha256": "f7eb7e745076908c1a193272895e1def1c65d1270e22127e21ebda2ee5acaa7f",
+        "size_bytes": 233514
+      },
+      "mismatches": 0,
+      "operations": 33,
+      "original_observation_matches_recomputation": true,
+      "pair_index": 0,
+      "phase": "warmup",
+      "policy": "per_operation",
+      "policy_final_counts": {
+        "buffer_create_calls": 99,
+        "buffer_release_calls": 99,
+        "device_open_calls": 1,
+        "device_release_calls": 1,
+        "errors": 0,
+        "live_buffers": 0,
+        "live_requested_bytes": 0,
+        "peak_requested_payload_bytes": 320,
+        "premature_releases": 0
+      },
+      "post_prime_operations": 32,
+      "prime_words": 32,
+      "process_binding_sha256": "e2eac3394d8b190c1d66046117a3fa969996e02691093812c94ec701b82b7b70",
+      "raw_word_count": 1056
+    },
+    {
+      "build_binding_sha256": "f5ea184e6298e0c80d949f6a35798d4981f648a474ce0a1dbcdb392f6dc7038a",
+      "case_id": "bf16-single-dense_boundaries",
+      "checked_words": 1056,
+      "command_exit_code": 0,
+      "format": "bf16",
+      "id": "preflight-simx-bf16-reusable_single_tile",
+      "launches": 33,
+      "log": {
+        "path": "logs/preflight-simx-bf16-reusable_single_tile.log",
+        "sha256": "7693c9817d302bd5de52137e56107ea45742dfcd8a44574631bfaa0a1221923e",
+        "size_bytes": 234081
+      },
+      "mismatches": 0,
+      "operations": 33,
+      "original_observation_matches_recomputation": true,
+      "pair_index": 0,
+      "phase": "warmup",
+      "policy": "reusable_single_tile",
+      "policy_final_counts": {
+        "buffer_create_calls": 3,
+        "buffer_release_calls": 3,
+        "device_open_calls": 1,
+        "device_release_calls": 1,
+        "errors": 0,
+        "live_buffers": 0,
+        "live_requested_bytes": 0,
+        "peak_requested_payload_bytes": 320,
+        "premature_releases": 0
+      },
+      "post_prime_operations": 32,
+      "prime_words": 32,
+      "process_binding_sha256": "780f4231237360318ec4e0c5172bca86f368d46ea48733dd5545727bc5c24f92",
+      "raw_word_count": 1056
+    }
+  ],
+  "producer_counter_qualification_passed": true,
+  "producer_native_execution": "run",
+  "prohibited_events": [],
+  "reader_sources_after": [
+    {
+      "path": "ci/project/baseline_matrix.py",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "size_bytes": 8890
+    },
+    {
+      "path": "ci/project/baseline_packet_contract.py",
+      "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+      "size_bytes": 53680
+    },
+    {
+      "path": "ci/project/baseline_packet_io.py",
+      "sha256": "469583bc558ccb010af82259de38248d7a9a8283cd873a96726aa3c3e2aaa94c",
+      "size_bytes": 14506
+    },
+    {
+      "path": "ci/project/compiler_records.py",
+      "sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+      "size_bytes": 7143
+    },
+    {
+      "path": "ci/project/p02_fixture_oracle.py",
+      "sha256": "12e546864a4fef5b05e10c7a04b1006bcd59376e5921ea1221c4d42668490145",
+      "size_bytes": 23351
+    },
+    {
+      "path": "ci/project/p02_layout_fixture_oracle.py",
+      "sha256": "34e78c0313e2b032930615f02a790729d1c49293349728b55f7d04a29a2568a7",
+      "size_bytes": 10910
+    },
+    {
+      "path": "ci/project/p02_matrix_records.py",
+      "sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+      "size_bytes": 12332
+    },
+    {
+      "path": "ci/project/p02_wmma_fixtures.py",
+      "sha256": "4a672a5d3357f220120f43e5f5d7e880f7d0ba36df380d69cd1873ea4879835e",
+      "size_bytes": 16440
+    },
+    {
+      "path": "ci/project/p02_wmma_numerical_fixture_oracle.py",
+      "sha256": "083450dc11712e5fc6dce7d19fb854bd9ef25b738347efd56bd07e81b079570b",
+      "size_bytes": 15556
+    },
+    {
+      "path": "ci/project/p03_execution_records.py",
+      "sha256": "b26449105f17f9487cc4fbaab36884ceea42be9f502a26aa58331ed4cf1140de",
+      "size_bytes": 6961
+    },
+    {
+      "path": "ci/project/p04_execution_records.py",
+      "sha256": "abddfb06fb48bbd064c09d61879b278bca22778f5a8289f4c1ac93fb882b33e0",
+      "size_bytes": 16283
+    },
+    {
+      "path": "ci/project/p04_fixture_adapter.py",
+      "sha256": "37a50f6f0f80fd79b926b7ed5d13a233de6bf518590da7fa7d40800dcc91094a",
+      "size_bytes": 5364
+    },
+    {
+      "path": "ci/project/p04_model_contract.py",
+      "sha256": "c184d980d57aec54567d79025845c5fb34887741697ac78a66692a65da02e4b3",
+      "size_bytes": 15901
+    },
+    {
+      "path": "ci/project/p04_reference.py",
+      "sha256": "115a7db51948d69fc6267d5fe658d1a8e68c22e9f200d5ddc3f0a5181d7140a9",
+      "size_bytes": 11855
+    },
+    {
+      "path": "ci/project/p06_compiler_records.py",
+      "sha256": "f441c12f4c9e4b9ef10eca13f8b5291fc41ffb86f1f42e42dfd320056dedd6da",
+      "size_bytes": 13614
+    },
+    {
+      "path": "ci/project/p06_contract.py",
+      "sha256": "780086070739b6d3586f9b3695ad4dc31d209a7817cf1af3651160a9fe6e1376",
+      "size_bytes": 31500
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_contract.py",
+      "sha256": "5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb",
+      "size_bytes": 14917
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_records.py",
+      "sha256": "3d6358c98544f4252be262125b70c87a72caaca7f35fbe3bc3e2512655654d10",
+      "size_bytes": 16223
+    },
+    {
+      "path": "ci/project/p06_native_lifetime_contract.py",
+      "sha256": "266a50e5b4c0d07b432accf2aa13ff8d3db7fc175a24a4263e3cdb0acafb5b74",
+      "size_bytes": 4545
+    },
+    {
+      "path": "ci/project/p06_native_lifetime_records.py",
+      "sha256": "5bf33d35e489397d96e0e0932c8d42e687f18deda646bb9725e05b326be50e3a",
+      "size_bytes": 8506
+    },
+    {
+      "path": "ci/project/p06_records.py",
+      "sha256": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7",
+      "size_bytes": 28046
+    },
+    {
+      "path": "ci/project/p06_warm_contract.py",
+      "sha256": "d311c5fb77e651a93fde368f0e41d517f40199a3bd43e27c302d4d00888cc31e",
+      "size_bytes": 19379
+    },
+    {
+      "path": "ci/project/p06_warm_records.py",
+      "sha256": "28d7e2c1553fc0929a106bc24a62fa2d612e415449ee0e9ac84ad582289381e7",
+      "size_bytes": 11637
+    },
+    {
+      "path": "ci/project/p06_workspace_compiler_records.py",
+      "sha256": "d89496a4e08737c6bb5c72b5b05a94994bb70a63e17b88c11547f38d47c06375",
+      "size_bytes": 20838
+    },
+    {
+      "path": "ci/project/p06_workspace_records.py",
+      "sha256": "9e3f9af15f2981d19a05fcd83ddd369bae43f6530fd4383831c9d2942d8fee21",
+      "size_bytes": 25060
+    }
+  ],
+  "reader_sources_before": [
+    {
+      "path": "ci/project/baseline_matrix.py",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "size_bytes": 8890
+    },
+    {
+      "path": "ci/project/baseline_packet_contract.py",
+      "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+      "size_bytes": 53680
+    },
+    {
+      "path": "ci/project/baseline_packet_io.py",
+      "sha256": "469583bc558ccb010af82259de38248d7a9a8283cd873a96726aa3c3e2aaa94c",
+      "size_bytes": 14506
+    },
+    {
+      "path": "ci/project/compiler_records.py",
+      "sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+      "size_bytes": 7143
+    },
+    {
+      "path": "ci/project/p02_fixture_oracle.py",
+      "sha256": "12e546864a4fef5b05e10c7a04b1006bcd59376e5921ea1221c4d42668490145",
+      "size_bytes": 23351
+    },
+    {
+      "path": "ci/project/p02_layout_fixture_oracle.py",
+      "sha256": "34e78c0313e2b032930615f02a790729d1c49293349728b55f7d04a29a2568a7",
+      "size_bytes": 10910
+    },
+    {
+      "path": "ci/project/p02_matrix_records.py",
+      "sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+      "size_bytes": 12332
+    },
+    {
+      "path": "ci/project/p02_wmma_fixtures.py",
+      "sha256": "4a672a5d3357f220120f43e5f5d7e880f7d0ba36df380d69cd1873ea4879835e",
+      "size_bytes": 16440
+    },
+    {
+      "path": "ci/project/p02_wmma_numerical_fixture_oracle.py",
+      "sha256": "083450dc11712e5fc6dce7d19fb854bd9ef25b738347efd56bd07e81b079570b",
+      "size_bytes": 15556
+    },
+    {
+      "path": "ci/project/p03_execution_records.py",
+      "sha256": "b26449105f17f9487cc4fbaab36884ceea42be9f502a26aa58331ed4cf1140de",
+      "size_bytes": 6961
+    },
+    {
+      "path": "ci/project/p04_execution_records.py",
+      "sha256": "abddfb06fb48bbd064c09d61879b278bca22778f5a8289f4c1ac93fb882b33e0",
+      "size_bytes": 16283
+    },
+    {
+      "path": "ci/project/p04_fixture_adapter.py",
+      "sha256": "37a50f6f0f80fd79b926b7ed5d13a233de6bf518590da7fa7d40800dcc91094a",
+      "size_bytes": 5364
+    },
+    {
+      "path": "ci/project/p04_model_contract.py",
+      "sha256": "c184d980d57aec54567d79025845c5fb34887741697ac78a66692a65da02e4b3",
+      "size_bytes": 15901
+    },
+    {
+      "path": "ci/project/p04_reference.py",
+      "sha256": "115a7db51948d69fc6267d5fe658d1a8e68c22e9f200d5ddc3f0a5181d7140a9",
+      "size_bytes": 11855
+    },
+    {
+      "path": "ci/project/p06_compiler_records.py",
+      "sha256": "f441c12f4c9e4b9ef10eca13f8b5291fc41ffb86f1f42e42dfd320056dedd6da",
+      "size_bytes": 13614
+    },
+    {
+      "path": "ci/project/p06_contract.py",
+      "sha256": "780086070739b6d3586f9b3695ad4dc31d209a7817cf1af3651160a9fe6e1376",
+      "size_bytes": 31500
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_contract.py",
+      "sha256": "5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb",
+      "size_bytes": 14917
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_records.py",
+      "sha256": "3d6358c98544f4252be262125b70c87a72caaca7f35fbe3bc3e2512655654d10",
+      "size_bytes": 16223
+    },
+    {
+      "path": "ci/project/p06_native_lifetime_contract.py",
+      "sha256": "266a50e5b4c0d07b432accf2aa13ff8d3db7fc175a24a4263e3cdb0acafb5b74",
+      "size_bytes": 4545
+    },
+    {
+      "path": "ci/project/p06_native_lifetime_records.py",
+      "sha256": "5bf33d35e489397d96e0e0932c8d42e687f18deda646bb9725e05b326be50e3a",
+      "size_bytes": 8506
+    },
+    {
+      "path": "ci/project/p06_records.py",
+      "sha256": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7",
+      "size_bytes": 28046
+    },
+    {
+      "path": "ci/project/p06_warm_contract.py",
+      "sha256": "d311c5fb77e651a93fde368f0e41d517f40199a3bd43e27c302d4d00888cc31e",
+      "size_bytes": 19379
+    },
+    {
+      "path": "ci/project/p06_warm_records.py",
+      "sha256": "28d7e2c1553fc0929a106bc24a62fa2d612e415449ee0e9ac84ad582289381e7",
+      "size_bytes": 11637
+    },
+    {
+      "path": "ci/project/p06_workspace_compiler_records.py",
+      "sha256": "d89496a4e08737c6bb5c72b5b05a94994bb70a63e17b88c11547f38d47c06375",
+      "size_bytes": 20838
+    },
+    {
+      "path": "ci/project/p06_workspace_records.py",
+      "sha256": "9e3f9af15f2981d19a05fcd83ddd369bae43f6530fd4383831c9d2942d8fee21",
+      "size_bytes": 25060
+    }
+  ],
+  "reader_sources_stable": true,
+  "retained_code_executed": false,
+  "review_native_execution": "not_run",
+  "review_program": "#!/usr/bin/env python3\nfrom pathlib import Path, PurePosixPath\nfrom fractions import Fraction\nimport hashlib, json, os, re, subprocess, sys, time, traceback\n\nsys.dont_write_bytecode = True\nROOT = Path('/workspace/AI-GPU')\nPACKET = Path('/workspace/p06-counter-qualified-run-01/evidence/native-qualification')\nPRODUCER = Path('/workspace/p06-counter-qualified-source-01')\nWORKSPACE = Path('/workspace/p06-counter-qualified-run-01')\nREVISION = '17e0284496bab10c7632a48e4f91efb6fb4fec0b'\nOUTPUT = ROOT/'docs/project/evidence/p06-counter-qualification/validation/w07_a01-numerical-review.json'\nsys.path.insert(0, str(ROOT/'ci/project'))\nimport p06_managed_preflight_contract as manifest\nimport p06_native_lifetime_records as records\nimport p06_warm_contract as warm_contract\nimport p02_wmma_fixtures as fixtures\nfrom p03_execution_records import qualification_id\n\n\ndef sha(body):\n    return hashlib.sha256(body).hexdigest()\n\n\ndef identity(path, name=None):\n    body = path.read_bytes()\n    return {'path': name if name is not None else str(path), 'sha256': sha(body), 'size_bytes': len(body)}\n\n\ndef unique(pairs):\n    result = {}\n    for key, value in pairs:\n        assert key not in result, 'duplicate JSON key'\n        result[key] = value\n    return result\n\n\ndef document(body):\n    return json.loads(body, object_pairs_hook=unique)\n\n\nreport_body = (PACKET/'report.json').read_bytes()\nreport = document(report_body)\nassert report['state'] == 'finished' and report['outcome'] == 'pass'\nassert report['reason'] is None and report['failures'] == []\nassert report['expected_revision'] == REVISION\nassert report['native_execution'] == 'run'\nassert report['counter_qualification_passed'] is True\nassert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() == REVISION\n\nreader_paths = sorted({Path(module.__file__).resolve() for module in tuple(sys.modules.values())\n                       if getattr(module, '__file__', None)\n                       and Path(module.__file__).suffix == '.py'\n                       and Path(module.__file__).resolve().is_relative_to(ROOT/'ci/project')})\nreader_before = []\nfor path in reader_paths:\n    name = path.relative_to(ROOT).as_posix()\n    original = subprocess.check_output(['git', 'show', REVISION + ':' + name], cwd=ROOT)\n    row = identity(path, name)\n    assert row['sha256'] == sha(original), 'trusted reader differs from immutable source: ' + name\n    reader_before.append(row)\n\ncorpus_before = []\nfor row in report['corpus']:\n    path = ROOT/row['path']\n    original = subprocess.check_output(['git', 'show', REVISION + ':' + row['path']], cwd=ROOT)\n    assert identity(path, row['path']) == row\n    retained = PACKET/'artifacts/source'/row['path']\n    assert retained.read_bytes() == original == path.read_bytes()\n    corpus_before.append(dict(row))\n\nsource_layout = document((ROOT/'ci/project/fixtures/p02_layout_v1.json').read_bytes())\nassert source_layout['application']['a_layout'] == 'row_major'\nassert source_layout['application']['b_layout'] == 'col_major'\nassert source_layout['application']['output_layout'] == 'row_major'\n\noriginals = {'report.json': identity(PACKET/'report.json', 'report.json')}\n\n\ndef retained(row):\n    name = row['path']\n    posix = PurePosixPath(name)\n    assert str(posix) == name and not posix.is_absolute() and not {'.','..'} & set(posix.parts)\n    path = PACKET/name\n    assert path.resolve(strict=True) == path and path.is_file()\n    data = path.read_bytes()\n    observed = {'path': name, 'sha256': sha(data), 'size_bytes': len(data)}\n    assert observed == row, 'retained descriptor mismatch: ' + name\n    originals[name] = observed\n    return data\n\n\nfixture_body = retained(report['fixture_snapshot'])\nselected = document(fixture_body)\ncontract = document(retained(report['preflight_contract_snapshot']))\nrecord = {'schema_version': 1, 'scope': 'independent-original-native-numerical-record-review',\n    'source_revision': REVISION, 'original_native_report': originals['report.json'],\n    'initial_development_invocation': {'scope': 'reviewer-program setup only', 'outcome': 'failed', 'reason': 'KeyError:a_layout; layout metadata belongs toapplication,notgeometry', 'originals_changed': False, 'checks_reached': 'immutable source andcorpus comparisons; no record validation yet', 'program_sha256': 'a1acb851e7ce1cfc4f8271168319f358ec401d96b9a58c2f55ee1a9ec3577cd2', 'program_path': '/workspace/scratch/e96519576778/w07_a01-numerical-review-attempt01.py'},\n    'review_native_execution': 'not_run', 'retained_code_executed': False,\n    'producer_native_execution': report['native_execution'],\n    'producer_counter_qualification_passed': report['counter_qualification_passed'],\n    'started_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),\n    'reader_sources_before': reader_before, 'corpus': corpus_before,\n    'review_program': Path(__file__).read_text(), 'findings': [], 'processes': [],\n    'prime_corruption_controls': [], 'prohibited_events': []}\nassert not OUTPUT.exists()\noutput_stream = OUTPUT.open('x')\nprohibited = record['prohibited_events']\n\n\ndef audit(event, args):\n    if event in {'subprocess.Popen','os.system','os.exec','os.posix_spawn','ctypes.dlopen','exec','compile'} or event.startswith('socket.'):\n        prohibited.append({'event':event,'reason':'execution/network/dynamic loading prohibited'})\n        raise RuntimeError('prohibited review event: ' + event)\n    if event in {'os.remove','os.rename','os.rmdir','os.mkdir','os.link','os.symlink'}:\n        prohibited.append({'event':event,'reason':'filesystem mutation prohibited'})\n        raise RuntimeError('prohibited filesystem mutation: ' + event)\n    if event == 'open' and args:\n        path, mode, flags = (list(args) + [None]*3)[:3]\n        if ((type(mode) is str and any(ch in mode for ch in 'wax+'))\n                or (type(flags) is int and flags & (os.O_WRONLY|os.O_RDWR|os.O_CREAT|os.O_TRUNC|os.O_APPEND))):\n            prohibited.append({'event':event,'reason':'new writable open prohibited'})\n            raise RuntimeError('prohibited writable open')\n        if isinstance(path, (str,bytes,os.PathLike)):\n            p = Path(os.fsdecode(path)).absolute()\n            if p.is_relative_to(PRODUCER) or any(p.is_relative_to(WORKSPACE/name) for name in ('work','tools','dependency-build','dependency-sources')):\n                prohibited.append({'event':event,'path':str(p),'reason':'live producer-path read prohibited'})\n                raise RuntimeError('prohibited producer-path read')\n\n\nsys.addaudithook(audit)\nstarted = time.monotonic()\ntry:\n    independent_cases = fixtures.load_cases(ROOT)\n    assert fixtures.render_header(independent_cases) == (ROOT/'tests/regression/sgemm_tcu/p02_fixtures.h').read_bytes()\n    expected_cases = [next(x for x in independent_cases if x['id'] == fmt+'-single-dense_boundaries') for fmt in ('fp16','bf16')]\n    assert selected == expected_cases == manifest.select_cases(contract,ROOT)\n    expected_plan = [dict(backend='simx',format=fmt,id='preflight-simx-'+fmt+'-'+policy,\n                         pair_index=0,phase='warmup',policy=policy,\n                         sample_id='warm-simx-'+fmt+'-pair0-'+policy)\n                     for fmt in ('fp16','bf16') for policy in ('per_operation','reusable_single_tile')]\n    assert report['expected_processes'] == expected_plan\n    assert len(report['processes']) == 4 and len({x['id'] for x in report['processes']}) == 4\n    assert all(report[name] is False for name in manifest.FALSE_CLAIMS)\n    record['fixture_population_reproduced'] = len(independent_cases)\n    record['selected_fixture_sha256'] = sha(fixture_body)\n    record['integer_reconstructions'] = []\n\n    def decode_half(bits, fmt):\n        fraction_bits, exponent_bits, bias = (10,5,15) if fmt == 'fp16' else (7,8,127)\n        sign = -1 if bits >> 15 else 1\n        exponent = (bits >> fraction_bits) & ((1 << exponent_bits)-1)\n        fraction = bits & ((1 << fraction_bits)-1)\n        assert exponent != (1 << exponent_bits)-1\n        significand = fraction if exponent == 0 else (1 << fraction_bits) + fraction\n        power = (1-bias-fraction_bits) if exponent == 0 else exponent-bias-fraction_bits\n        return sign * Fraction(significand) * (Fraction(2)**power)\n\n    def unpack(words,fmt):\n        values=[]\n        for word in words:\n            raw=int(word,16)\n            values += [decode_half(raw & 65535,fmt),decode_half(raw >> 16,fmt)]\n        assert all(value.denominator == 1 for value in values)\n        return [int(x) for x in values]\n\n    def exact_fp32_integer_bits(value):\n        if value == 0:\n            return '00000000'\n        sign = int(value < 0) << 31\n        magnitude=abs(value)\n        assert magnitude < 1 << 24\n        exponent=magnitude.bit_length()-1\n        fraction=(magnitude-(1<<exponent)) << (23-exponent)\n        return f'{sign|((127+exponent)<<23)|fraction:08x}'\n\n    for case in expected_cases:\n        a,b=unpack(case['a_words'],case['format']),unpack(case['b_words'],case['format'])\n        assert len(a)==64 and len(b)==32\n        values=[]; intermediates=[]\n        for m in range(8):\n            for n in range(4):\n                accumulator=0\n                for k in range(8):\n                    product=a[m*8+k]*b[n*8+k]\n                    accumulator+=product\n                    intermediates.extend((product,accumulator))\n                values.append(accumulator)\n        bits=[exact_fp32_integer_bits(value) for value in values]\n        assert max(map(abs,intermediates)) < (1<<24)\n        assert bits == case['expected']\n        record['integer_reconstructions'].append({'format':case['format'],'case_id':case['id'],\n            'input_values_are_exact_integers':True,'a_layout':'row_major','b_layout':'column_major',\n            'output_layout':'row_major','dimensions':[8,4,8],'expected_words':bits,\n            'integer_results':values,'max_abs_product_or_partial_sum':max(map(abs,intermediates)),\n            'expected_bits_match_frozen_fixture':True})\n\n    totals={'processes':0,'launches':0,'checked_words':0,'prime_operations':0,'prime_words':0,\n            'post_prime_operations':0,'post_prime_words':0,'mismatches':0}\n    operation_identifiers=set()\n    for planned, process in zip(expected_plan,report['processes']):\n        assert all(process[key] == value for key,value in planned.items())\n        assert process['outcome']=='pass'\n        case=next(case for case in expected_cases if case['format']==process['format'])\n        binding=document(retained(process['binding']))\n        assert qualification_id(binding)==process['execution_binding_sha256']\n        assert qualification_id(binding['build'])==process['build_binding_sha256']\n        assert binding['process']==planned and binding['build']['case']==case\n        assert binding['build']['source']['checkout']['revision']==REVISION\n        build=WORKSPACE/'work'/('simx-'+process['format'])\n        libraries={name:str(build/'sw/runtime'/name) for name in ('libvortex.so','libvortex-simx.so','libsimx.so')}\n        libraries.update({'libramulator.so':str(PRODUCER/'third_party/ramulator/libramulator.so'),\n                          'libramulator-vortex.so':str(PRODUCER/'third_party/ramulator_ext/libramulator-vortex.so')})\n        assert binding['build']['expected_loaded_libraries']==libraries\n        command=next(x for x in report['commands'] if x['id']==process['command_id'])\n        assert command['native_process'] is True and command['process_started'] is True\n        assert command['outcome']=='pass' and command['exit_code']==0 and command['cleanup_complete'] is True\n        assert command['argv'][command['argv'].index('--qualification-id')+1]==process['execution_binding_sha256']\n        assert command['argv'][command['argv'].index('--policy')+1]==process['policy']\n        assert command['log']==process['log']\n        log=retained({'path':process['log'],'sha256':command['log_sha256'],'size_bytes':command['log_size_bytes']})\n        text=log.decode('utf-8')\n        arguments=dict(contract=contract,case=case,fmt=process['format'],policy=process['policy'],\n            binding_id=process['execution_binding_sha256'],sample_id=process['sample_id'],\n            process_id=process['id'],expected_libraries=libraries)\n        observed=records.verify_output(text,**arguments)\n        assert observed==process['observation']==document(retained(process['retained_observation']))\n        operations=[document(line[len('P06_WARM_OPERATION '):]) for line in text.splitlines() if line.startswith('P06_WARM_OPERATION ')]\n        assert len(operations)==33 and [x['operation_index'] for x in operations]==list(range(33))\n        assert observed['warm']['operations']==operations\n        assert observed['warm']['timed_operation_durations_ns']==observed['warm']['operation_durations_ns'][1:]\n        assert len(observed['warm']['timed_operation_durations_ns'])==32\n        for index, operation in enumerate(operations):\n            identity_key=(process['id'],operation['operation_index'])\n            assert identity_key not in operation_identifiers\n            operation_identifiers.add(identity_key)\n            assert operation['actual_bits']==case['expected'] and len(operation['actual_bits'])==32\n            assert operation['checked']==32 and operation['mismatches']==0 and operation['passed'] is True\n            assert operation['role']==('prime' if index==0 else 'sample')\n            assert operation['dispatch']['launches']==1 and operation['dispatch']['reads']==1\n            assert operation['dispatch']['waits']==1 and operation['dispatch']['timed_out_waits']==0\n            assert operation['poison']==warm_contract.poison_for(index)\n            assert operation['format']==process['format'] and operation['policy']==process['policy']\n            totals['launches']+=operation['dispatch']['launches']\n            totals['checked_words']+=len(operation['actual_bits'])\n            totals['mismatches']+=operation['mismatches']\n            prefix='prime' if index==0 else 'post_prime'\n            totals[prefix+'_operations']+=1\n            totals[prefix+'_words']+=len(operation['actual_bits'])\n        totals['processes']+=1\n        assert observed['warm']['summary']['operations']==33\n        assert observed['warm']['summary']['checked']==1056\n        assert observed['warm']['summary']['mismatches']==0\n        assert observed['warm']['performance_acceptance'] is False and observed['warm']['phase_acceptance'] is False\n        for witness in (observed['witness'],observed['lifetime']):\n            assert all(witness[name] is False for name in manifest.FALSE_CLAIMS)\n        row={'id':process['id'],'format':process['format'],'policy':process['policy'],'case_id':case['id'],\n            'operations':len(operations),'launches':sum(x['dispatch']['launches'] for x in operations),\n            'checked_words':sum(x['checked'] for x in operations),'raw_word_count':sum(len(x['actual_bits']) for x in operations),\n            'prime_words':len(operations[0]['actual_bits']),'post_prime_operations':len(operations)-1,\n            'mismatches':sum(x['mismatches'] for x in operations),'phase':process['phase'],'pair_index':process['pair_index'],\n            'process_binding_sha256':process['execution_binding_sha256'],'build_binding_sha256':process['build_binding_sha256'],\n            'log':originals[process['log']],'original_observation_matches_recomputation':True,\n            'command_exit_code':command['exit_code'],'policy_final_counts':observed['warm']['summary']['counts']}\n        record['processes'].append(row)\n        if process['policy']=='per_operation':\n            lines=text.splitlines(keepends=True)\n            first=document(lines[0][len('P06_WARM_OPERATION '):])\n            first['actual_bits'][0]=f'{int(first[\"actual_bits\"][0],16)^1:08x}'\n            assert first['mismatches']==0 and first['passed'] is True and first['role']=='prime'\n            lines[0]='P06_WARM_OPERATION '+json.dumps(first,separators=(',',':'))+'\\n'\n            try:\n                records.verify_output(''.join(lines),**arguments)\n            except ValueError as error:\n                reason=str(error)\n                assert 'warm operation 0.actual_bits' in reason, reason\n                record['prime_corruption_controls'].append({'format':process['format'],\n                    'policy':process['policy'],'scope':'in-memory altered original only',\n                    'mutation':'flip one bit of prime output word0; keep zero mismatches and successful summary',\n                    'rejected':True,'reason':reason})\n            else:\n                raise AssertionError('altered prime output was accepted')\n    assert totals=={'processes':4,'launches':132,'checked_words':4224,'prime_operations':4,'prime_words':128,\n        'post_prime_operations':128,'post_prime_words':4096,'mismatches':0}\n    assert len(operation_identifiers)==132\n    assert {key:report['completed_counts'][key] for key in ('processes','launches','checked_words')} == {key:totals[key] for key in ('processes','launches','checked_words')}\n    assert len(record['prime_corruption_controls'])==2\n    for fmt in ('fp16','bf16'):\n        ids={p['build_binding_sha256'] for p in record['processes'] if p['format']==fmt}\n        assert len(ids)==1\n    record['derived_totals']=totals\n    record['outcome']='pass'\nexcept BaseException as error:\n    record['outcome']='fail'\n    record['error_type']=type(error).__name__\n    record['reason']=str(error)\n    record['traceback']=traceback.format_exc()\nfinally:\n    record['elapsed_seconds']=time.monotonic()-started\n    record['finished_at']=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())\n    record['originals_before']=list(originals.values())\n    record['originals_after']=[identity(PACKET/name,name) for name in originals]\n    record['originals_stable']=record['originals_before']==record['originals_after']\n    record['reader_sources_after']=[identity(path,path.relative_to(ROOT).as_posix()) for path in reader_paths]\n    record['reader_sources_stable']=record['reader_sources_before']==record['reader_sources_after']\n    record['limitations']=[\n        'This is a numerical review of the original directory packet, not the complete dependency/qualification archive replay.',\n        'The record validators are trusted current immutable-source code; no retained code or GPU process is executed by this review.',\n        'Exact arithmetic reconstruction applies only to these two selected dense-boundary integer-input fixtures, not all FP16/BF16 values.',\n        'All four original processes are pair-index0 preflight warmup observations, not the24-process warm sampling experiment.',\n        'Historical diagnostic/pending/substitution controls are excluded from all derived native matrix counts.',\n        'No speedup, warm readiness, performance acceptance or phase acceptance is established.'\n    ]\n    if not record['originals_stable'] or not record['reader_sources_stable'] or prohibited:\n        record['outcome']='fail'\n    json.dump(record,output_stream,indent=2,sort_keys=True)\n    output_stream.write('\\n');output_stream.close()\nprint(json.dumps({key:record.get(key) for key in ('outcome','reason','elapsed_seconds','derived_totals','originals_stable','reader_sources_stable','prohibited_events')}))\nraise SystemExit(0 if record['outcome']=='pass' else 1)\n",
+  "schema_version": 1,
+  "scope": "independent-original-native-numerical-record-review",
+  "selected_fixture_sha256": "ed7d2be5fcd85abff28c265c6b1ae16b158a549d91d3953884e7fc9b6d4f4313",
+  "source_revision": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+  "started_at": "2026-11-23T15:35:13Z"
+}

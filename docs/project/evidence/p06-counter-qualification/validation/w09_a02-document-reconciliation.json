@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "agent": "w09_a02",
+  "scope": "current-document-reconciliation-only",
+  "reviewed_head": "220399748ecab84d48ba5a5f123457c44a0c8699",
+  "outcome": "pass",
+  "before": {
+    "docs/project/p06-mpm-qualification-plan.md": {
+      "sha256": "41d48c360ddb4254ea4795ae9b4b6b258f1146edf0b0dfc12881024999af6c2c",
+      "size_bytes": 48294
+    },
+    "docs/project/phases/p06-performance.md": {
+      "sha256": "40b5d7dc512d2c695c1fd548b6a590925e6186d1f214cf06b8bf2e2bc02ec002",
+      "size_bytes": 18932
+    },
+    "ROADMAP.md": {
+      "sha256": "3bb8fe83b0fed21c0c1fbddec5ad5e41981a0d9173de8f1c456e1e16216bf07f",
+      "size_bytes": 21851
+    },
+    "ci/project/p06_warm_contract.json": {
+      "sha256": "893d85401b1d5f7757d82cb7c743a89b36264fe19c7d08c239b7f216b7a8cbbd",
+      "size_bytes": 25793
+    },
+    "docs/project/roadmap.json": {
+      "sha256": "c3409db37618927f585a590031e0fd50205d650d79b7750ea09ffb53475e5b18",
+      "size_bytes": 21091
+    },
+    "docs/project/acceptance.md": {
+      "sha256": "065251c27555d2c588693a85546b2d18701352d939bd81ccf9daec984cc55bc0",
+      "size_bytes": 9059
+    }
+  },
+  "after": {
+    "docs/project/p06-mpm-qualification-plan.md": {
+      "sha256": "d53ff5372ea4b9cf08d6691414ff1db828d2c7ca61bf0559b39c2d12bc208189",
+      "size_bytes": 50385
+    },
+    "docs/project/phases/p06-performance.md": {
+      "sha256": "55f3f4336054d3caf6e62c195bc60c0f0b57bba1d61ba848453e34bcd9a3e576",
+      "size_bytes": 19862
+    },
+    "ROADMAP.md": {
+      "sha256": "378ea63057237e506de4a28e536d49476bafc626090f423af0f96b6ea9eb7b3b",
+      "size_bytes": 22750
+    },
+    "ci/project/p06_warm_contract.json": {
+      "sha256": "893d85401b1d5f7757d82cb7c743a89b36264fe19c7d08c239b7f216b7a8cbbd",
+      "size_bytes": 25793
+    },
+    "docs/project/roadmap.json": {
+      "sha256": "c3409db37618927f585a590031e0fd50205d650d79b7750ea09ffb53475e5b18",
+      "size_bytes": 21091
+    },
+    "docs/project/acceptance.md": {
+      "sha256": "065251c27555d2c588693a85546b2d18701352d939bd81ccf9daec984cc55bc0",
+      "size_bytes": 9059
+    }
+  },
+  "protected_inputs_unchanged": [
+    "ci/project/p06_warm_contract.json",
+    "docs/project/roadmap.json",
+    "docs/project/acceptance.md"
+  ],
+  "frozen_warm_contract_sha256": "893d85401b1d5f7757d82cb7c743a89b36264fe19c7d08c239b7f216b7a8cbbd",
+  "verified_sampling": {
+    "warmup_pairs": 1,
+    "measured_pairs": 5,
+    "prime_operations": 1,
+    "timed_operations": 32,
+    "operations_per_process": 33,
+    "pair_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "order": "fp16_then_bf16_pairs_ascending_alternating_reference_first_at_zero",
+    "context_policy": "one_fresh_process_and_context_per_policy_batch",
+    "warm_context": "prime_closed_then_32_serial_operations_each_explicitly_closed",
+    "poisons": [
+      3735928559,
+      2143346349
+    ],
+    "poison_order": "alternate_by_operation_index_prime_is_zero",
+    "failed_sample_policy": "retain_and_fail_entire_attempt_no_replacements",
+    "outlier_policy": "none",
+    "optional_stopping": false
+  },
+  "verified_complete_matrix": {
+    "processes": 24,
+    "warmup_processes": 4,
+    "measured_processes": 20,
+    "launches": 792,
+    "checked_words": 25344,
+    "measured_operations": 640,
+    "measured_checked_words": 20480,
+    "measured_useful_flops": 327680
+  },
+  "derived_complete_population": {
+    "processes": 24,
+    "launches": 792,
+    "checked_words": 25344
+  },
+  "performance_predicates": {
+    "candidate_median_percent_of_reference_max": 95,
+    "each_measured_candidate_pair_must_not_be_slower": true,
+    "each_measured_candidate_pair_cycles_must_not_increase": true
+  },
+  "native_source_revision": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+  "native_counts": {
+    "available_queries": 528,
+    "cache_flush_reads": 132,
+    "checked_words": 4224,
+    "dcr_reads": 1188,
+    "half_replies": 1056,
+    "launches": 132,
+    "processes": 4,
+    "snapshots": 16,
+    "unavailable_rows": 192
+  },
+  "new_qualification_scope": "recorded-four-process-preflight-only",
+  "legacy_flags": {
+    "qualified": false,
+    "ready_for_warm": false,
+    "warm_execution": false,
+    "full_warm_coverage": false,
+    "acceptance_claimed": false,
+    "phase_acceptance": false,
+    "performance_acceptance": false
+  },
+  "link_checks": {
+    "local_link_occurrences": 229,
+    "existing": 220,
+    "planned_parallel_targets_pending": [
+      {
+        "source": "docs/project/p06-mpm-qualification-plan.md",
+        "target": "p06-counter-qualification-handoff.md",
+        "exists": false,
+        "planned_parallel_deliverable": true
+      },
+      {
+        "source": "docs/project/p06-mpm-qualification-plan.md",
+        "target": "evidence/p06-counter-qualification/README.md",
+        "exists": false,
+        "planned_parallel_deliverable": true
+      },
+      {
+        "source": "docs/project/p06-mpm-qualification-plan.md",
+        "target": "evidence/p06-counter-qualification/README.md",
+        "exists": false,
+        "planned_parallel_deliverable": true
+      },
+      {
+        "source": "docs/project/p06-mpm-qualification-plan.md",
+        "target": "evidence/p06-counter-qualification/README.md",
+        "exists": false,
+        "planned_parallel_deliverable": true
+      },
+      {
+        "source": "docs/project/phases/p06-performance.md",
+        "target": "../evidence/p06-counter-qualification/README.md",
+        "exists": false,
+        "planned_parallel_deliverable": true
+      },
+      {
+        "source": "docs/project/phases/p06-performance.md",
+        "target": "../p06-counter-qualification-handoff.md",
+        "exists": false,
+        "planned_parallel_deliverable": true
+      },
+      {
+        "source": "docs/project/phases/p06-performance.md",
+        "target": "../p06-counter-qualification-handoff.md",
+        "exists": false,
+        "planned_parallel_deliverable": true
+      },
+      {
+        "source": "ROADMAP.md",
+        "target": "docs/project/evidence/p06-counter-qualification/README.md",
+        "exists": false,
+        "planned_parallel_deliverable": true
+      },
+      {
+        "source": "ROADMAP.md",
+        "target": "docs/project/p06-counter-qualification-handoff.md",
+        "exists": false,
+        "planned_parallel_deliverable": true
+      }
+    ]
+  },
+  "preserved_inbound_anchors": [
+    "qualification-work-to-implement-and-review",
+    "fresh-matched-attempt"
+  ],
+  "stale_current_instructions_absent": true,
+  "diff_check": "pass",
+  "native_execution_by_reviewer": "not_run",
+  "public_replay_by_reviewer": "not_run",
+  "governance_by_reviewer": "not_run",
+  "limitations": [
+    "Read current retained receipts; did not independently execute or authenticate native originals.",
+    "Full governance and final publication are coordinator work; no full-suite success claimed here.",
+    "Final delivery must resolve the two concurrently authored handoff/evidence-index targets if they are still pending in this receipt."
+  ]
+}

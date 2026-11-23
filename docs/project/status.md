@@ -10,9 +10,25 @@ launches. The [qualification audit](p06-qualification-audit.md),
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
 scope and new validation. P06-A02/A03 remain open.
 
-**Fresh dependency compilation-to-loader provenance is established for the
-complete local attempt 04. The next bounded step is the separately versioned
-complete counter-qualification contract and explicit admission path.** The
+**Complete counter qualification now passes for a fresh four-process preflight.
+The next bounded step is to implement and independently review an explicit
+qualified route for the unchanged 24-process warm sampling contract.** The
+[new contract](../designs/complete_counter_qualification_v1.md),
+[audit](p06-counter-qualification-audit.md) and
+[evidence packet](evidence/p06-counter-qualification/README.md) bind all
+33 selectors, 40 cumulative components and ten lifetime premises to the fresh
+original at `17e0284496bab10c7632a48e4f91efb6fb4fec0b`. Its
+[execution summary](evidence/p06-counter-qualification/native/attempt-01-execution-summary.json)
+records **four processes, 132 launches and 4,224 exact checked FP32 words**, with
+zero mismatches. The [complete public replay](evidence/p06-counter-qualification/native/attempt-01-replay-summary.json)
+derives `counter_qualification_passed=true` only for
+`recorded-four-process-preflight-only`. All seven historical qualification,
+readiness, warm and acceptance fields remain false. No 24-process warm result
+or P06-A02/A03 acceptance is established. Resume from the
+[qualification handoff](p06-counter-qualification-handoff.md).
+
+**The preceding complete local attempt 04 establishes its separate fresh
+dependency compilation-to-loader provenance prerequisite.** The
 [execution summary](evidence/p06-dependency-provenance/local-execution/validation/local-attempt-04-execution-summary.json)
 records all five stages passing at
 `0f9aaa36d46364c297254164f5dab0d4f0e88349` in 894.591061 seconds. The original
@@ -42,7 +58,7 @@ exact external pins and limitations. The successful original ZIP has **5,597
 members**, **47,632,218 bytes** and SHA-256
 `d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f`.
 This is explicitly local SimX provenance, not an authenticated hosted run,
-complete counter qualification or warm/phase acceptance. All seven current
+complete counter qualification or warm/phase acceptance. All seven historical
 qualification, readiness, warm and acceptance fields remain false.
 
 [Local attempt 03](evidence/p06-dependency-provenance/local-execution/attempt-03.md)
@@ -208,23 +224,20 @@ source/log review. Hosted and native retries were queued at the
 which contains no executed result for either retry. This is local governance
 verification; the latest audited native diagnostic scope stays at `4268d2d5`.
 
-**Next bounded development:** implement a
-separately versioned counter-qualification contract, inert validator and explicit
-admission/final-validation path for the existing managed caller. The
-[independent next-step audit](evidence/p06-dependency-provenance/local-execution/agents/w07_a03.md)
-maps all **33 selectors, 40 backing components and ten lifetime premises** to the
-existing source and terminal-ownership arguments. Bind those premises to exact
-source/configuration, compile/link inputs, loaded products, pre-reset pending
-balance, complete terminal sums and a teardown suffix with no later update.
-The transient pending-read balance is not a forty-first cumulative component.
+**Next bounded development:** implement and independently review the explicit
+qualified warm route described in the
+[qualification handoff](p06-counter-qualification-handoff.md) and
+[qualification plan](p06-mpm-qualification-plan.md), then execute its fresh
+**24-process, 792-launch, 25,344-word** experiment. The completed qualification
+runner is fixed to four processes. Its success does not qualify future processes
+or expand that runner's population. The new warm route must bind the reviewed
+proof before every launch and reconstruct every process's exact source/build/
+dependency, numerical, lifetime and final-stability relationships under the
+unchanged sampling and performance predicates. Pending reads remain a transient
+balance outside the 40 cumulative components.
 
-The [dependency handoff](p06-dependency-provenance-handoff.md) and
-[qualification plan](p06-mpm-qualification-plan.md) require meaningful rejection
-controls and independent review before a fresh preflight is accepted under the
-new contract. The existing four-process originals can supply scoped premises
-and regression inputs; they are not silently promoted to execution under future
-qualification rules. The unchanged 24-process warm experiment follows only an
-explicitly qualified route. Warm v1 remains unconditionally blocked by
+Historical diagnostics, controls and preflight originals retain their own
+identities and populations. Warm v1 remains unconditionally blocked by
 `P06-WARM-RV64-MPM-HIGH-HALF`, with `qualified=false` and
 `absolute_no_wrap_bound="not_established"`. All seven qualification, readiness,
 warm and acceptance fields in the current provenance/lifetime records remain
@@ -297,7 +310,7 @@ the linked reports define the exact accepted scope.
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
 | P04 — tiny-model inference | `complete` | A01 fixed fixture preserved; A02/A03 accept the full four-variant composed-model matrix at native processor RTL scope |
 | P05 — Python/framework bridge | `in_progress` | A01 accepts the bounded copying Python binding on SimX; the custom-op implementation and prior CI still need independent artifact review for A02/A03 |
-| P06 — Memory and performance scaling | `in_progress` | A01 is preserved; complete fresh local dependency/native/control original and inert replay pass independent review; separately versioned 33-selector/40-component qualification, qualified warm execution and A02/A03 remain open |
+| P06 — Memory and performance scaling | `in_progress` | A01 is preserved; complete 33-selector/40-component qualification and inert replay pass for the fresh four-process original; an explicit qualified 24-process warm route, its execution and A02/A03 remain open |
 | P07–P11 | `not_started` | Later hardware, reliability, research and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -306,7 +319,46 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — explicit local dependency/native execution
+## Latest continuation — complete counter qualification preflight
+
+The [implemented contract](../designs/complete_counter_qualification_v1.md)
+adds a separately selected source proof, prerequisite replay, prelaunch admission,
+fresh runner and inert reader. The exact qualification digest enters both build
+and process bindings before launch. The
+[original execution](evidence/p06-counter-qualification/native/attempt-01-execution-summary.json)
+at `17e02844` completed preparation, fresh dependency compilation and all four
+FP16/BF16 × allocation-policy processes. It joins 413 dependency tool operations
+and 819 child observations to the actual managed builds and loaded products.
+The complete original ZIP has 5,045 members, 41,577,668 bytes and SHA-256
+`9a0f1088f7a6d70a2ec17c705a61bdbbb2ea59cb815a3327aec817d0120d05a0`.
+
+Independent [numerical](evidence/p06-counter-qualification/agents/w07_a01.md),
+[lifetime](evidence/p06-counter-qualification/agents/w07_a02.md),
+[build/load](evidence/p06-counter-qualification/agents/w07_a03.md) and
+[guarded complete-replay](evidence/p06-counter-qualification/agents/w07_a05.md)
+reviews preserve their distinct scopes. Replay checks retained evidence; it
+reports `native_execution="not_run"`, `retained_code_executed=false` and
+`origin_authenticated=false`. The new outer qualification applies only to the
+four recorded processes. The seven inner historical claims remain false.
+
+Reader checkpoint `220399748ecab84d48ba5a5f123457c44a0c8699` has the same tree as
+reviewed local `0093cf60`, as recorded in the
+[publication receipt](evidence/p06-counter-qualification/validation/corrected-checkpoint-publication.json).
+It explicitly inventories all 94 trusted inputs before and after replay. The
+[corrected-reader validation](evidence/p06-counter-qualification/agents/w08_a03.md)
+passes 23 focused tests and complete replay of the unchanged original; only
+`trusted_reader_sources` differs from the original reader result. A separately
+reviewed [CMake test-fixture correction](evidence/p06-counter-qualification/agents/w08_a04.md)
+preserves the original environment-selection failure and records all 24 affected
+tests passing without skips. These focused checks do not imply a complete-suite
+result; the [audit](p06-counter-qualification-audit.md) records full governance
+separately. None of these reader or fixture corrections reexecutes native work.
+
+The [handoff](p06-counter-qualification-handoff.md) records the remaining explicit
+qualified warm route. Keep the existing 24-process workload, statistical
+predicates, cold baseline, resource bounds and phase gates unchanged.
+
+## Previous continuation — explicit local dependency/native execution
 
 The [local contract](../designs/local_dependency_execution_v1.md) and
 [runbook](evidence/p06-dependency-provenance/local-execution/runbook.md) supply
@@ -1527,36 +1579,26 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**P06-T01 — freeze and implement the separately versioned complete
-counter-qualification contract, inert validator and explicit admission path.**
-The complete fresh attempt-04 original, both separate controls, public local
-replay and independent original reviews now pass in the
-[local evidence packet](evidence/p06-dependency-provenance/local-execution/README.md).
-Follow the [dependency handoff](p06-dependency-provenance-handoff.md),
-[independent next-step audit](evidence/p06-dependency-provenance/local-execution/agents/w07_a03.md)
-and [qualification plan](p06-mpm-qualification-plan.md).
+**P06-T01 — implement and independently review an explicit qualified route for
+the unchanged 24-process warm sampling contract, then execute its fresh attempt.**
+The [complete counter-qualification packet](evidence/p06-counter-qualification/README.md)
+now supplies the reviewed four-process original at `17e02844`; its separate
+outer qualification does not change the fixed preflight population or qualify
+a later process. Follow the [qualification handoff](p06-counter-qualification-handoff.md),
+[audit](p06-counter-qualification-audit.md) and
+[qualification plan](p06-mpm-qualification-plan.md).
 
-The next implementation slice is a pure fail-closed validator and explicit
-admission route that joins all ten lifetime premises to the exact 33-selector /
-40-component source, configuration, build and loaded-binary scope.
-Preserve zero origins, audited nonnegative checked updates, reset-preserved
-storage, zero pending before reset can clear it, exclusive ownership/drain,
-complete checked terminal sums, stable full-width readout, no update before
-actual destruction, dependency finalizer behavior and terminal failure semantics.
-Pending reads remain a transient balance outside the 40 cumulative components.
+The new warm route must bind the reviewed 33-selector / 40-component /
+ten-premise proof into its build and every process identity before launch. Its
+inert validator must reconstruct the complete 24-process population, exact
+source/configuration and compile/link/load provenance, raw numerical and lifetime
+observations, pending/reset/drain/terminal ordering, actual destruction and final
+input stability. Meaningful rejection controls and independent enforcement
+review are required before executing under that route. Preserve the historical
+origins and scopes of every prerequisite; no earlier original becomes a new run.
 
-Require rejection controls for missing/duplicated components, unsupported source
-projection, changed topology or products, seed/diagnostic objects, incomplete
-links, unavailable-row queries, nonzero pre-reset pending, missing reset or
-disposal, retained ownership, failed high halves and favorable endpoints after
-a guard failure. Freeze the contract and obtain independent enforcement review
-before executing the required fresh four-process qualification preflight. A
-previous successful provenance original can be retained as an input and regression
-case; it is not retroactively an execution under that new qualification contract.
-
-Only an explicitly qualified route may execute the unchanged matched warm
-attempt: **24 processes, 792 launches and 25,344 exact output words**, including
-excluded primes and warm-ups. Preserve all
+The fresh matched warm attempt retains **24 processes, 792 launches and 25,344
+exact output words**, including excluded primes and warm-ups. Preserve all
 [sampling/rejection rules](../designs/warm_workspace_benchmark_v1.md), the
 [accepted cold baseline](evidence/p06-baseline/README.md), two build jobs, one
 simulator worker, 15 GiB disk reserve and 4 GiB memory/RSS prerequisites.

@@ -1,0 +1,352 @@
+{
+  "agent": "w06_a05",
+  "completed_preparation": {
+    "execution": {
+      "cleanup_complete": true,
+      "duration_seconds": 86.50559,
+      "exit_code": 0,
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ],
+      "log_sha256": "4be538389e1ada39048bd99e9a3a0689d3a8be90a5c79be5d4acb87d28b82915",
+      "log_size_bytes": 150,
+      "outcome": "pass",
+      "peak_rss_bytes": 50601984,
+      "process_started": true,
+      "reason": null
+    },
+    "report_sha256": "07fe197232ab0aef2c6416d0cca1ee48e624b1b29b68979d147dbe0fe988bd1c",
+    "report_size_bytes": 1885869,
+    "resources_after": {
+      "available_memory_bytes": 5840076800,
+      "free_disk_bytes": {
+        "source": 34865119232,
+        "workspace": 34865119232
+      }
+    },
+    "resources_before": {
+      "available_memory_bytes": 5778595840,
+      "free_disk_bytes": {
+        "source": 37273415680,
+        "workspace": 37273415680
+      }
+    }
+  },
+  "current_resources": {
+    "available_memory_bytes": 4824637440,
+    "free_disk_bytes": {
+      "/workspace/p06-counter-qualified-run-01": 34507603968,
+      "/workspace/p06-counter-qualified-source-01": 34507603968,
+      "/workspace/p06-native-prebuilt": 34507603968,
+      "/workspace/p06-pinned-inputs": 34507603968,
+      "/workspace/scratch/e96519576778/native-qualification-attempt-01": 34507603968
+    },
+    "observed_at": "2026-11-23T15:26:03Z"
+  },
+  "declared_outer_limitations": [
+    "This supervisor is execution bookkeeping, not the historical local-v1 envelope.",
+    "Each child producer enforces its own unchanged source, resource and evidence contract.",
+    "The outer monitor does not aggregate child-created process groups.",
+    "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+    "Process-group RSS can count shared pages more than once and excludes page cache.",
+    "Reported peak RSS is the highest sample and may miss peaks between polls.",
+    "No container/cgroup memory limit is inferred by this process monitor.",
+    "Descendants that deliberately leave the process group are outside its containment."
+  ],
+  "finding_followup": {
+    "author_agent": "w06_a06",
+    "controls_passed": 8,
+    "full_suite_execution_by_review": false,
+    "guard_controls": [
+      {
+        "allowed": true,
+        "expected": true,
+        "id": "synthetic-complete-success",
+        "reason": null
+      },
+      {
+        "allowed": false,
+        "expected": false,
+        "id": "failed-attempt",
+        "reason": "native attempt did not pass; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "expected": false,
+        "id": "unconfirmed-dependency-cleanup",
+        "reason": "dependency-build cleanup is not confirmed; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "expected": false,
+        "id": "missing-native-stage",
+        "reason": "native stage population differs"
+      },
+      {
+        "allowed": false,
+        "expected": false,
+        "id": "boolean-exit-code-impostor",
+        "reason": "preparation execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "expected": false,
+        "id": "wrong-revision",
+        "reason": "native attempt revision differs from the selected checkpoint"
+      },
+      {
+        "allowed": false,
+        "expected": false,
+        "id": "failed-native-report",
+        "reason": "native-qualification original report did not pass"
+      },
+      {
+        "allowed": false,
+        "expected": false,
+        "id": "actual-unfinished-attempt",
+        "reason": "native attempt is not finished"
+      }
+    ],
+    "live_observation_sha256": "9403c8acb92435a7b96af9499a3d5877b30b77bfb86182e98cbe577074d8c765",
+    "native_execution_by_review": false,
+    "replacement_launched_by_review": false,
+    "replacement_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/run_governance_v2.py",
+    "replacement_sha256": "155e3e8efa7d25bbd9b7be1de0c7033432e5b26dfc8a335ea8266d618f28cf5f",
+    "replacement_size_bytes": 7009,
+    "resolution": "Reviewed correction removes automatic handoff after failed/incomplete attempts; root may launch the independently reviewed replacement.",
+    "reviewed_at": "2026-11-23T15:30:20Z",
+    "reviewer_agent": "w06_a05",
+    "static_review": [
+      "Exactly three ordered stages are required.",
+      "Each execution requires pass, strict integer exit0, process_started true, no reason and cleanup_complete true.",
+      "Each original report must pass without a failure reason.",
+      "Overall state, outcome and selected revision are required.",
+      "A rejected finished attempt writes blocked scheduling evidence and exits before Git checks, temporary-directory creation or test commands.",
+      "Exact observed supervision bytes are hashed in the handoff receipt.",
+      "The guard expressly retains sampled process-group limits; it adds no producer authentication or hard containment claim."
+    ]
+  },
+  "findings": [
+    {
+      "confidence": "high",
+      "description": "The scheduler releases governance on native state=finished regardless of outcome or stage cleanup_complete. If an outer timeout/resource failure ends a producer before its separately grouped child has cleaned up, governance may start while that build is still active.",
+      "evidence_type": "static-proof",
+      "id": "W06-A05-F1",
+      "native_attempt_blocker": false,
+      "required_followup": "Require successful native completion and cleanup for automatic release, or explicit coordinator process/resource review after a failed attempt.",
+      "severity": "F1",
+      "surface": "separate governance scheduler, not native producer"
+    }
+  ],
+  "freshness_nonoverlap": {
+    "canonical_disjoint": true,
+    "external_review_directory": "/workspace/scratch/e96519576778/native-qualification-attempt-01",
+    "preparation_source_before_equals_after": true,
+    "producer_root_set": [
+      "/workspace/p06-counter-qualified-source-01",
+      "/workspace/p06-counter-qualified-run-01",
+      "/workspace/p06-native-prebuilt",
+      "/workspace/p06-pinned-inputs"
+    ]
+  },
+  "governance_commands_started": 0,
+  "governance_observed_state": "waiting-for-native-attempt",
+  "immutable_producer_files_matched": [
+    "ci/project/baseline_process.py",
+    "ci/project/p06_dependency_contract.py",
+    "ci/project/p06_dependency_local_prepare.py",
+    "ci/project/p06_dependency_build.py",
+    "ci/project/p06_managed_preflight_contract.py",
+    "ci/project/p06_managed_preflight_execute.py",
+    "ci/project/p06_counter_qualification_execute.py"
+  ],
+  "outer_budget": {
+    "free_disk_reserve_bytes": 16106127360,
+    "per_log_bytes": 16777216,
+    "sampled_process_group_rss_bytes": 4294967296,
+    "whole_attempt_seconds": 5400
+  },
+  "preparation_bytes_stable": true,
+  "read_failure_notes": [
+    "One initial rg named nonexistent p06_managed_preflight_manifest.py; the actual import is p06_managed_preflight_contract.py and was inspected afterward. No test or product failure is inferred."
+  ],
+  "reviewed_inputs_after": [
+    {
+      "path": "/workspace/AI-GPU/AGENTS.md",
+      "sha256": "fdd82f39a11d5b9bc96fe2c15f5779e2c08d359e89dc666595adbf30a01d1e0b",
+      "size_bytes": 25764
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/developer-guide.md",
+      "sha256": "b8b5a737ecff8ed5be41e2a85b5600bd93ff0b81fa638e90a761d104a5293341",
+      "size_bytes": 10617
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/runbook.md",
+      "sha256": "ff4e2bc8b3586b837f470674a1c317b1fe7cd0a760bb417b938405cb59480fd3",
+      "size_bytes": 23161
+    },
+    {
+      "path": "/workspace/p06-counter-qualified-source-01/ci/project/baseline_process.py",
+      "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+      "size_bytes": 12627
+    },
+    {
+      "path": "/workspace/p06-counter-qualified-source-01/ci/project/p06_dependency_contract.py",
+      "sha256": "d6151024fbe7e8a651075fd76b9bdc006bb18c0f61c538a2928842f865ddd364",
+      "size_bytes": 4438
+    },
+    {
+      "path": "/workspace/p06-counter-qualified-source-01/ci/project/p06_dependency_local_prepare.py",
+      "sha256": "c810f31cf6106a5bbcd6eddcf8d818560cb94222da057fe9491a8e1dbc99316f",
+      "size_bytes": 20427
+    },
+    {
+      "path": "/workspace/p06-counter-qualified-source-01/ci/project/p06_dependency_build.py",
+      "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+      "size_bytes": 32820
+    },
+    {
+      "path": "/workspace/p06-counter-qualified-source-01/ci/project/p06_managed_preflight_contract.py",
+      "sha256": "5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb",
+      "size_bytes": 14917
+    },
+    {
+      "path": "/workspace/p06-counter-qualified-source-01/ci/project/p06_managed_preflight_execute.py",
+      "sha256": "d9d726ce61cdaa12010bb7c00fac48b6ed31f82b82997e39bb9d9a7911163677",
+      "size_bytes": 52516
+    },
+    {
+      "path": "/workspace/p06-counter-qualified-source-01/ci/project/p06_counter_qualification_execute.py",
+      "sha256": "c9ffe924d504317e1dfe19ce5a853876f4385cdf5edb5074716df7e68becc55c",
+      "size_bytes": 2436
+    },
+    {
+      "path": "/workspace/scratch/e96519576778/native-qualification-attempt-01/invoke_three_stages.py",
+      "sha256": "074676bddd69b415eaffe7105fa07dd5df1a8f698ca37ff524e17ac9aeec65e2",
+      "size_bytes": 7471
+    },
+    {
+      "path": "/workspace/scratch/e96519576778/full-governance-17e02844/run_governance.py",
+      "sha256": "418a8282f3a5d4c4b330ee5d7430d1329cc5047a2a9adfd1b37c14c8c247fdce",
+      "size_bytes": 4016
+    }
+  ],
+  "reviewed_inputs_before": [
+    {
+      "path": "/workspace/AI-GPU/AGENTS.md",
+      "sha256": "fdd82f39a11d5b9bc96fe2c15f5779e2c08d359e89dc666595adbf30a01d1e0b",
+      "size_bytes": 25764
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/developer-guide.md",
+      "sha256": "b8b5a737ecff8ed5be41e2a85b5600bd93ff0b81fa638e90a761d104a5293341",
+      "size_bytes": 10617
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-counter-qualification/runbook.md",
+      "sha256": "ff4e2bc8b3586b837f470674a1c317b1fe7cd0a760bb417b938405cb59480fd3",
+      "size_bytes": 23161
+    },
+    {
+      "path": "/workspace/p06-counter-qualified-source-01/ci/project/baseline_process.py",
+      "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+      "size_bytes": 12627
+    },
+    {
+      "path": "/workspace/p06-counter-qualified-source-01/ci/project/p06_dependency_contract.py",
+      "sha256": "d6151024fbe7e8a651075fd76b9bdc006bb18c0f61c538a2928842f865ddd364",
+      "size_bytes": 4438
+    },
+    {
+      "path": "/workspace/p06-counter-qualified-source-01/ci/project/p06_dependency_local_prepare.py",
+      "sha256": "c810f31cf6106a5bbcd6eddcf8d818560cb94222da057fe9491a8e1dbc99316f",
+      "size_bytes": 20427
+    },
+    {
+      "path": "/workspace/p06-counter-qualified-source-01/ci/project/p06_dependency_build.py",
+      "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+      "size_bytes": 32820
+    },
+    {
+      "path": "/workspace/p06-counter-qualified-source-01/ci/project/p06_managed_preflight_contract.py",
+      "sha256": "5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb",
+      "size_bytes": 14917
+    },
+    {
+      "path": "/workspace/p06-counter-qualified-source-01/ci/project/p06_managed_preflight_execute.py",
+      "sha256": "d9d726ce61cdaa12010bb7c00fac48b6ed31f82b82997e39bb9d9a7911163677",
+      "size_bytes": 52516
+    },
+    {
+      "path": "/workspace/p06-counter-qualified-source-01/ci/project/p06_counter_qualification_execute.py",
+      "sha256": "c9ffe924d504317e1dfe19ce5a853876f4385cdf5edb5074716df7e68becc55c",
+      "size_bytes": 2436
+    },
+    {
+      "path": "/workspace/scratch/e96519576778/native-qualification-attempt-01/invoke_three_stages.py",
+      "sha256": "074676bddd69b415eaffe7105fa07dd5df1a8f698ca37ff524e17ac9aeec65e2",
+      "size_bytes": 7471
+    },
+    {
+      "path": "/workspace/scratch/e96519576778/full-governance-17e02844/run_governance.py",
+      "sha256": "418a8282f3a5d4c4b330ee5d7430d1329cc5047a2a9adfd1b37c14c8c247fdce",
+      "size_bytes": 4016
+    }
+  ],
+  "reviewed_inputs_stable": true,
+  "schema_version": 1,
+  "scope": "independent-supervision-resource-static-and-completed-preparation-review",
+  "scope_limits": [
+    "This review ran no producer, extraction, compiler, GPU process or test suite.",
+    "Available-memory checks are stage admission observations; sampled RSS and free-disk polling are not hard global limits.",
+    "The outer stage budget starts after initial supervisor input checks; cleanup, report hashing and receipt writing can finish later.",
+    "No whole-descendant containment or aggregate RSS bound is established across child-created process groups.",
+    "The second stage was observed running; its eventual result and subsequent native/replay results require separate review."
+  ],
+  "selected_environment": {
+    "CCACHE_DISABLE": "1",
+    "CMAKE_BUILD_PARALLEL_LEVEL": "2",
+    "HOME": "/workspace/p06-counter-qualified-run-01/local-home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "MAKEFLAGS": "-j2",
+    "OBJCACHE": "",
+    "PATH": "/workspace/p06-local-host-02/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/bin:/bin",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONUTF8": "1",
+    "THREADS": "1",
+    "TMPDIR": "/workspace/p06-counter-qualified-run-01/local-tmp",
+    "TZ": "UTC"
+  },
+  "source_revision": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+  "source_tree": "5063f4c8bfec76d2e49d136d84d6ff5d27f5f521",
+  "supervision_observation": {
+    "observed_at": "2026-11-23T15:26:03Z",
+    "outcome": "running",
+    "scope": "local-three-stage-supervision-only",
+    "sha256": "40050576b0e64016c34fb4973529041b8af299a41e12760430ac30cce9e29a2a",
+    "size_bytes": 5038,
+    "stage_states": [
+      {
+        "execution_outcome": "pass",
+        "finished_at": "2026-11-23T15:17:43Z",
+        "id": "preparation",
+        "report_outcome": "pass",
+        "started_at": "2026-11-23T15:16:17Z"
+      },
+      {
+        "execution_outcome": null,
+        "finished_at": null,
+        "id": "dependency-build",
+        "report_outcome": null,
+        "started_at": "2026-11-23T15:17:43Z"
+      }
+    ],
+    "state": "running"
+  }
+}

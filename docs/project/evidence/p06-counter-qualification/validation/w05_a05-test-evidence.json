@@ -1,0 +1,699 @@
+{
+  "schema_version": 1,
+  "scope": "host-test-evidence-audit-only",
+  "reviewer": "/root/w05_a05",
+  "source_revision": "faf836eb860b0992486803caea9d5ef31f4fe3af",
+  "source_tree": "5063f4c8bfec76d2e49d136d84d6ff5d27f5f521",
+  "baseline_revision": "5e88e2ecffe5ab748f9d08b22820d7f6664a0d82",
+  "reviewed_at": "2026-11-23T15:20:14Z",
+  "finding": "F0: no actionable test-evidence defect in reviewed scope",
+  "native_execution": "not_run",
+  "fresh_original_replay": "not_run_by_this_review",
+  "test_methods_executed_by_this_review": 0,
+  "collection_only": {
+    "command_description": "Fresh python3 -I -B interpreter; import 11 modules and unittest.TestLoader.loadTestsFromModule; flatten IDs without executing suites or setup methods.",
+    "exit_code": 0,
+    "elapsed_seconds": 0.464656167,
+    "modules": 11,
+    "collected_methods": 132,
+    "unique_ids": 132,
+    "duplicate_ids": {},
+    "loader_errors": []
+  },
+  "declared_population": {
+    "new_modules": 11,
+    "new_methods": 132,
+    "foundation_methods": 107,
+    "wave4_added_methods": 25,
+    "all_new_methods_have_retained_success_entries": true,
+    "missing_success_entries": [],
+    "subcases_counted_as_methods": false,
+    "repeated_runs_added_to_unique_total": false
+  },
+  "modules": [
+    {
+      "path": "ci/project/test_p06_counter_qualification_admission.py",
+      "sha256": "24dd89b2bceda96288982df4e7a12d7bfd719e4395354f92a63668855f1421c1",
+      "size_bytes": 15488,
+      "working_matches_checkpoint": true,
+      "method_count": 22,
+      "declared_method_ids": [
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_valid_admission_is_bound_but_does_not_qualify_execution",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_wrong_external_proof_pin_rejects_before_prerequisite_replay",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_revision_requires_exact_lowercase_git_identity",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_dictionary_cannot_substitute_for_complete_dependency_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_dependency_source_revision_and_build_must_match",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_changed_measurement_source_rejects_before_replay",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_changed_helper_source_rejects_before_replay",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_proof_symlink_and_hardlink_are_rejected",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_archive_pin_and_before_admission_mutation_are_rejected",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_proof_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_measurement_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_helper_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_public_inventory_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_archive_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_failed_late_dependency_stability_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_changed_dependency_component_cannot_be_admitted",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_prerequisite_replay_failure_is_not_a_fallback",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_control_claim_cannot_upgrade_prerequisite_scope",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_summary_copies_inputs_and_rejects_wrong_source_projection",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_stability_rejects_wrong_prerequisite_descriptor",
+        "test_p06_counter_qualification_admission.CounterQualificationPathTests.test_identity_rejects_empty_and_symlinked_inputs",
+        "test_p06_counter_qualification_admission.CounterQualificationPathTests.test_identity_reads_real_regular_bytes"
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_admission_adversarial.py",
+      "sha256": "99920d9e923667ed89c6863087d1a2496353da4b26acb8a92eb02efb245f469d",
+      "size_bytes": 6384,
+      "working_matches_checkpoint": true,
+      "method_count": 8,
+      "declared_method_ids": [
+        "test_p06_counter_qualification_admission_adversarial.QualificationAdmissionIdentityTests.test_dependency_subclass_cannot_bypass_complete_admission_gate",
+        "test_p06_counter_qualification_admission_adversarial.QualificationAdmissionIdentityTests.test_both_dependency_success_flags_require_actual_true",
+        "test_p06_counter_qualification_admission_adversarial.QualificationAdmissionIdentityTests.test_swapping_prerequisite_paths_rejects_before_either_replay",
+        "test_p06_counter_qualification_admission_adversarial.QualificationAdmissionIdentityTests.test_late_archive_alias_invalidates_unchanged_original_bytes",
+        "test_p06_counter_qualification_admission_adversarial.QualificationAdmissionIdentityTests.test_late_measurement_parent_symlink_invalidates_same_bytes",
+        "test_p06_counter_qualification_admission_adversarial.QualificationInputReadStabilityTests.test_same_byte_replacement_before_open_is_rejected",
+        "test_p06_counter_qualification_admission_adversarial.QualificationInputReadStabilityTests.test_same_byte_replacement_during_read_is_rejected",
+        "test_p06_counter_qualification_admission_adversarial.QualificationInputReadStabilityTests.test_content_identity_survives_completed_same_byte_replacement"
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_binding_adversarial.py",
+      "sha256": "2c68f465949fe530763b33f2b9aa57540106ee8310efc2d58041d21f6d5f27d8",
+      "size_bytes": 8695,
+      "working_matches_checkpoint": true,
+      "method_count": 4,
+      "declared_method_ids": [
+        "test_p06_counter_qualification_binding_adversarial.QualificationBindingAdversarialTests.test_cross_policy_process_binding_transplant_rejects_after_all_echoes_repaired",
+        "test_p06_counter_qualification_binding_adversarial.QualificationBindingAdversarialTests.test_control_summary_transplant_rejects_after_all_build_and_process_rebindings",
+        "test_p06_counter_qualification_binding_adversarial.QualificationBindingAdversarialTests.test_interior_stability_drift_rejects_even_when_endpoints_and_final_row_match",
+        "test_p06_counter_qualification_binding_adversarial.QualificationBindingAdversarialTests.test_equal_count_loaded_helper_substitution_rejects_after_transitive_rebinding"
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_cli.py",
+      "sha256": "8650d761450e923a7311cf8c31fe390f511e535858eda4bc1a3bee5c8eb5207a",
+      "size_bytes": 6692,
+      "working_matches_checkpoint": true,
+      "method_count": 4,
+      "declared_method_ids": [
+        "test_p06_counter_qualification_cli.QualificationCliTests.test_real_help_exposes_explicit_inputs_without_creating_outputs",
+        "test_p06_counter_qualification_cli.QualificationCliTests.test_real_invalid_mode_and_budget_exit_before_path_intake",
+        "test_p06_counter_qualification_cli.QualificationCliTests.test_real_path_rejection_preserves_existing_outputs_and_aliases",
+        "test_p06_counter_qualification_cli.QualificationCliTests.test_real_invalid_revision_retains_a_zero_command_blocked_report"
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_compatibility.py",
+      "sha256": "f62071564141d2e9943adfd1fd45fd43cccf89ec796c98d1bf7c3d0cbd180b75",
+      "size_bytes": 3167,
+      "working_matches_checkpoint": true,
+      "method_count": 1,
+      "declared_method_ids": [
+        "test_p06_counter_qualification_compatibility.HistoricalTranscriptCompatibilityTests.test_old_raw_transcript_rejects_after_new_envelope_and_digest_repair"
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_contract.py",
+      "sha256": "ecd52b7d966597e14c9fc4e506b9b01086200ec954d852ac0bedf04d3a81cd5f",
+      "size_bytes": 10874,
+      "working_matches_checkpoint": true,
+      "method_count": 20,
+      "declared_method_ids": [
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_reviewed_proof_has_complete_disjoint_counter_populations",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_actual_measurement_bytes_match_reviewed_projection",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_only_the_reviewed_accessor_sources_differ_from_old_proof",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_proof_cannot_be_changed_by_rehashing_an_internally_consistent_document",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_wrong_version_types_unknown_fields_and_premise_booleans_reject",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_non_json_containers_cannot_mimic_the_canonical_document",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_returned_proof_is_not_mutable_shared_trust",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_duplicate_fields_and_unbounded_json_fail_closed",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_source_or_control_claims_are_not_qualification",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_incomplete_projection_rejects_every_missing_component_source",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_changed_source_hash_and_size_reject_even_with_same_inventory",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_reverting_new_accessor_to_old_hash_is_not_equivalent",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_complete_inventory_may_include_other_bound_build_sources",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_unknown_unsafe_or_duplicate_descriptor_fields_reject",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_wrong_identity_types_and_descriptor_order_reject",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_exact_external_pin_and_regular_original_load",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_missing_wrong_or_self_selected_new_digest_rejects",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_direct_symlink_and_symlink_parent_reject",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_hardlinked_proof_rejects",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_missing_changed_empty_or_oversized_proof_rejects"
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_prerequisites.py",
+      "sha256": "ed84845f77c238d38dfdfa6aa2f8496ecd16e545f52c1c5aa582e05db613cf6b",
+      "size_bytes": 15945,
+      "working_matches_checkpoint": true,
+      "method_count": 23,
+      "declared_method_ids": [
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_actual_original_is_replayed_without_execution_or_extraction",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_wrong_external_digest_rejects_before_either_reader",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_changed_trusted_archive_helper_rejects_before_either_reader",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_changed_original_bytes_reject_even_with_same_filename",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_changed_proof_is_not_authority_for_new_sources",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_wrong_reader_scope_or_claim_cannot_be_promoted",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_public_manifest_selection_is_required",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_omitted_or_repeated_model_control_fails",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_same_component_count_does_not_excuse_duplicate_selector",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_missing_public_suppression_or_terminal_vector_fails",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_rehashed_source_projection_does_not_match_original",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_source_join_independently_rejects_a_false_reviewed_delta",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_missing_source_is_not_filled_from_live_checkout",
+        "test_p06_counter_qualification_prerequisites.ControlPrerequisiteTests.test_join_keeps_control_population_separate",
+        "test_p06_counter_qualification_prerequisites.ControlPrerequisiteTests.test_wrong_control_pin_fails_before_replay",
+        "test_p06_counter_qualification_prerequisites.ControlPrerequisiteTests.test_zero_accessor_substitution_fails",
+        "test_p06_counter_qualification_prerequisites.ControlPrerequisiteTests.test_unrelated_negative_failure_is_not_the_control",
+        "test_p06_counter_qualification_prerequisites.ControlPrerequisiteTests.test_changed_native_accessor_bytes_fail_projection",
+        "test_p06_counter_qualification_prerequisites.ControlPrerequisiteTests.test_changed_actual_probe_source_fails",
+        "test_p06_counter_qualification_prerequisites.ControlPrerequisiteTests.test_substitution_without_expected_rejection_fails",
+        "test_p06_counter_qualification_prerequisites.DependencyProjectionTests.test_all_twenty_one_sources_join",
+        "test_p06_counter_qualification_prerequisites.DependencyProjectionTests.test_missing_repeated_or_changed_finalizer_source_fails",
+        "test_p06_counter_qualification_prerequisites.DependencyProjectionTests.test_wrong_revision_or_tree_fails"
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_proof_adversarial.py",
+      "sha256": "46929100a154ffa7c2ea35bd5d9e165758cda2dd898a7298cce1d79370e9adc7",
+      "size_bytes": 7308,
+      "working_matches_checkpoint": true,
+      "method_count": 8,
+      "declared_method_ids": [
+        "test_p06_counter_qualification_proof_adversarial.ProofIdentityAdversarialTests.test_count_preserving_counter_reassignment_is_rejected",
+        "test_p06_counter_qualification_proof_adversarial.ProofIdentityAdversarialTests.test_same_premise_population_cannot_exchange_evidence_obligations",
+        "test_p06_counter_qualification_proof_adversarial.ProofIdentityAdversarialTests.test_nested_boolean_integer_equality_does_not_change_semantic_identity",
+        "test_p06_counter_qualification_proof_adversarial.ProofIdentityAdversarialTests.test_duplicate_nested_keys_cannot_enter_through_the_bytes_boundary",
+        "test_p06_counter_qualification_proof_adversarial.ProofIdentityAdversarialTests.test_document_key_order_is_semantic_but_file_serialization_is_pinned",
+        "test_p06_counter_qualification_proof_adversarial.ExtendedSourceProjectionAdversarialTests.test_nonmeasurement_sources_still_need_safe_unambiguous_paths",
+        "test_p06_counter_qualification_proof_adversarial.ExtendedSourceProjectionAdversarialTests.test_nonmeasurement_sources_still_need_strict_identity_types",
+        "test_p06_counter_qualification_proof_adversarial.ExtendedSourceProjectionAdversarialTests.test_nonmeasurement_duplicate_identity_is_not_ignored"
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_replay.py",
+      "sha256": "42c01a52a76205d698b7b402e89bb611ab8b2bda118cc507d86ac8281fc5ff5e",
+      "size_bytes": 16906,
+      "working_matches_checkpoint": true,
+      "method_count": 21,
+      "declared_method_ids": [
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_complete_positive_reconstructs_raw_records_without_execution",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_fixed_helper_inventory_covers_executing_entry_and_all_prerequisites",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_external_proof_report_and_source_pins_are_independent",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_independent_prerequisite_archive_pins_are_required",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_rehashed_proof_and_alternate_retained_path_reject",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_original_false_or_omitted_pass_flag_cannot_qualify",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_rehashed_build_or_process_proof_binding_rejects",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_rehashed_report_admission_summary_is_reconstructed",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_actual_retained_measurement_sources_are_checked",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_fresh_dependency_projection_checks_git_blob_identity",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_missing_admission_helper_is_not_hidden_by_loaded_helper_inventory",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_summary_is_not_accepted_when_either_independent_replay_fails",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_all_six_final_stability_digests_are_required",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_last_stability_row_fails_after_all_four_transcripts",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_trusted_reader_change_at_end_rejects_public_result",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_old_reader_cannot_autodetect_or_upgrade_the_new_route",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_unaccounted_retained_member_rejects_after_transcripts",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_local_archive_has_exact_two_roots_and_no_hosted_envelope",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_foreign_members_outside_and_inside_prefix_reject",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_wrong_local_archive_pin_and_wrong_prefix_reject",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_invalid_prefix_and_missing_external_selection_fail_closed"
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_runner.py",
+      "sha256": "2460aca9c70411125cbb7250d489646c98e5b4e0f823853311d157448ff0a31d",
+      "size_bytes": 14941,
+      "working_matches_checkpoint": true,
+      "method_count": 11,
+      "declared_method_ids": [
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_complete_route_binds_before_launch_and_keeps_inner_claims_false",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_bad_proof_pin_prevents_every_command",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_semantically_changed_proof_prevents_every_command",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_qualification_drift_before_first_native_launch_stops_execution",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_between_policy_drift_stops_remaining_native_processes",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_final_only_qualification_drift_invalidates_complete_population",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_original_failure_stays_primary_with_final_admission_failure",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_legacy_dependency_route_has_no_qualification_fields",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_mode_requires_exact_boolean_and_both_older_modes",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_old_cli_imports_do_not_load_qualification_helpers",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_cli_requires_each_explicit_qualification_input"
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_dependency_replay_extension.py",
+      "sha256": "916d0fa5e90e7213304ddf7338cace7e587994fde49f434d439e0c81054f0ed1",
+      "size_bytes": 10516,
+      "working_matches_checkpoint": true,
+      "method_count": 10,
+      "declared_method_ids": [
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_default_route_remains_complete_and_unqualified",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_explicit_route_reconstructs_new_bindings_without_execution",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_default_reader_does_not_autodetect_extended_report",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_explicit_reader_does_not_upgrade_old_report",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_rehashed_unexpected_proof_and_binding_values_reject",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_late_missing_or_changed_extension_stability_rejects",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_result_extension_cannot_change_old_claims",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_binding_extension_cannot_replace_core_provenance",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_unaccounted_member_still_rejects_with_an_explicit_route",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_new_report_cannot_select_a_subclass_through_shared_view_api"
+      ]
+    }
+  ],
+  "fixture": {
+    "path": "ci/project/p06_counter_qualification_test_fixture.py",
+    "sha256": "de88047ccb5aecfe42bb1f53d8d61b229e554e39f3b75fe8e7fcc6fd6d2b529d",
+    "size_bytes": 11189,
+    "working_matches_checkpoint": true
+  },
+  "foundation_receipt": {
+    "path": "docs/project/evidence/p06-counter-qualification/validation/root-foundation-integration.json",
+    "sha256": "0c601c91df90972bcd1b9d230d7c8a3c5e34c7dd1711144235962eafd52f0aff",
+    "size_bytes": 6532,
+    "working_matches_checkpoint": true
+  },
+  "foundation_source_continuity": [
+    {
+      "path": "ci/project/p06_counter_qualification_admission.py",
+      "matches_checkpoint": true
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_contract.py",
+      "matches_checkpoint": true
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_execute.py",
+      "matches_checkpoint": true
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_prerequisites.py",
+      "matches_checkpoint": true
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_proof.json",
+      "matches_checkpoint": true
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_replay.py",
+      "matches_checkpoint": true
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_test_fixture.py",
+      "matches_checkpoint": true
+    },
+    {
+      "path": "ci/project/p06_dependency_native_replay.py",
+      "matches_checkpoint": true
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_execute.py",
+      "matches_checkpoint": true
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_admission.py",
+      "matches_checkpoint": true
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_contract.py",
+      "matches_checkpoint": true
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_prerequisites.py",
+      "matches_checkpoint": true
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_replay.py",
+      "matches_checkpoint": true
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_runner.py",
+      "matches_checkpoint": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_replay_extension.py",
+      "matches_checkpoint": true
+    }
+  ],
+  "recordings": [
+    {
+      "path": "docs/project/evidence/p06-counter-qualification/validation/root-foundation-integration.log",
+      "sha256": "f587c4fbbdc4ac8bb265042fb6b5c3fd5363eb90c2e4a15f57d20858bb0bcf6b",
+      "size_bytes": 19864,
+      "working_matches_checkpoint": true,
+      "unittest_summaries": [
+        "Ran 107 tests in 71.195s"
+      ],
+      "terminal_statuses": [
+        "OK"
+      ],
+      "successful_new_method_ids": [
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_actual_measurement_bytes_match_reviewed_projection",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_duplicate_fields_and_unbounded_json_fail_closed",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_non_json_containers_cannot_mimic_the_canonical_document",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_only_the_reviewed_accessor_sources_differ_from_old_proof",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_proof_cannot_be_changed_by_rehashing_an_internally_consistent_document",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_returned_proof_is_not_mutable_shared_trust",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_reviewed_proof_has_complete_disjoint_counter_populations",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_source_or_control_claims_are_not_qualification",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_wrong_version_types_unknown_fields_and_premise_booleans_reject",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_direct_symlink_and_symlink_parent_reject",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_exact_external_pin_and_regular_original_load",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_hardlinked_proof_rejects",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_missing_changed_empty_or_oversized_proof_rejects",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_missing_wrong_or_self_selected_new_digest_rejects",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_changed_source_hash_and_size_reject_even_with_same_inventory",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_complete_inventory_may_include_other_bound_build_sources",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_incomplete_projection_rejects_every_missing_component_source",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_reverting_new_accessor_to_old_hash_is_not_equivalent",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_unknown_unsafe_or_duplicate_descriptor_fields_reject",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_wrong_identity_types_and_descriptor_order_reject",
+        "test_p06_counter_qualification_prerequisites.ControlPrerequisiteTests.test_changed_actual_probe_source_fails",
+        "test_p06_counter_qualification_prerequisites.ControlPrerequisiteTests.test_changed_native_accessor_bytes_fail_projection",
+        "test_p06_counter_qualification_prerequisites.ControlPrerequisiteTests.test_join_keeps_control_population_separate",
+        "test_p06_counter_qualification_prerequisites.ControlPrerequisiteTests.test_substitution_without_expected_rejection_fails",
+        "test_p06_counter_qualification_prerequisites.ControlPrerequisiteTests.test_unrelated_negative_failure_is_not_the_control",
+        "test_p06_counter_qualification_prerequisites.ControlPrerequisiteTests.test_wrong_control_pin_fails_before_replay",
+        "test_p06_counter_qualification_prerequisites.ControlPrerequisiteTests.test_zero_accessor_substitution_fails",
+        "test_p06_counter_qualification_prerequisites.DependencyProjectionTests.test_all_twenty_one_sources_join",
+        "test_p06_counter_qualification_prerequisites.DependencyProjectionTests.test_missing_repeated_or_changed_finalizer_source_fails",
+        "test_p06_counter_qualification_prerequisites.DependencyProjectionTests.test_wrong_revision_or_tree_fails",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_actual_original_is_replayed_without_execution_or_extraction",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_changed_original_bytes_reject_even_with_same_filename",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_changed_proof_is_not_authority_for_new_sources",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_changed_trusted_archive_helper_rejects_before_either_reader",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_missing_public_suppression_or_terminal_vector_fails",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_missing_source_is_not_filled_from_live_checkout",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_omitted_or_repeated_model_control_fails",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_public_manifest_selection_is_required",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_rehashed_source_projection_does_not_match_original",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_same_component_count_does_not_excuse_duplicate_selector",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_source_join_independently_rejects_a_false_reviewed_delta",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_wrong_external_digest_rejects_before_either_reader",
+        "test_p06_counter_qualification_prerequisites.DiagnosticPrerequisiteTests.test_wrong_reader_scope_or_claim_cannot_be_promoted",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_archive_pin_and_before_admission_mutation_are_rejected",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_changed_dependency_component_cannot_be_admitted",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_changed_helper_source_rejects_before_replay",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_changed_measurement_source_rejects_before_replay",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_control_claim_cannot_upgrade_prerequisite_scope",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_dependency_source_revision_and_build_must_match",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_dictionary_cannot_substitute_for_complete_dependency_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_failed_late_dependency_stability_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_archive_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_helper_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_measurement_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_proof_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_public_inventory_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_prerequisite_replay_failure_is_not_a_fallback",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_proof_symlink_and_hardlink_are_rejected",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_revision_requires_exact_lowercase_git_identity",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_stability_rejects_wrong_prerequisite_descriptor",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_summary_copies_inputs_and_rejects_wrong_source_projection",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_valid_admission_is_bound_but_does_not_qualify_execution",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_wrong_external_proof_pin_rejects_before_prerequisite_replay",
+        "test_p06_counter_qualification_admission.CounterQualificationPathTests.test_identity_reads_real_regular_bytes",
+        "test_p06_counter_qualification_admission.CounterQualificationPathTests.test_identity_rejects_empty_and_symlinked_inputs",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_bad_proof_pin_prevents_every_command",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_between_policy_drift_stops_remaining_native_processes",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_cli_requires_each_explicit_qualification_input",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_complete_route_binds_before_launch_and_keeps_inner_claims_false",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_final_only_qualification_drift_invalidates_complete_population",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_legacy_dependency_route_has_no_qualification_fields",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_mode_requires_exact_boolean_and_both_older_modes",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_old_cli_imports_do_not_load_qualification_helpers",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_original_failure_stays_primary_with_final_admission_failure",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_qualification_drift_before_first_native_launch_stops_execution",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_semantically_changed_proof_prevents_every_command",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_actual_retained_measurement_sources_are_checked",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_all_six_final_stability_digests_are_required",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_complete_positive_reconstructs_raw_records_without_execution",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_external_proof_report_and_source_pins_are_independent",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_fixed_helper_inventory_covers_executing_entry_and_all_prerequisites",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_foreign_members_outside_and_inside_prefix_reject",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_fresh_dependency_projection_checks_git_blob_identity",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_independent_prerequisite_archive_pins_are_required",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_invalid_prefix_and_missing_external_selection_fail_closed",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_last_stability_row_fails_after_all_four_transcripts",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_local_archive_has_exact_two_roots_and_no_hosted_envelope",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_missing_admission_helper_is_not_hidden_by_loaded_helper_inventory",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_old_reader_cannot_autodetect_or_upgrade_the_new_route",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_original_false_or_omitted_pass_flag_cannot_qualify",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_rehashed_build_or_process_proof_binding_rejects",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_rehashed_proof_and_alternate_retained_path_reject",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_rehashed_report_admission_summary_is_reconstructed",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_summary_is_not_accepted_when_either_independent_replay_fails",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_trusted_reader_change_at_end_rejects_public_result",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_unaccounted_retained_member_rejects_after_transcripts",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_wrong_local_archive_pin_and_wrong_prefix_reject",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_binding_extension_cannot_replace_core_provenance",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_default_reader_does_not_autodetect_extended_report",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_default_route_remains_complete_and_unqualified",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_explicit_reader_does_not_upgrade_old_report",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_explicit_route_reconstructs_new_bindings_without_execution",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_late_missing_or_changed_extension_stability_rejects",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_new_report_cannot_select_a_subclass_through_shared_view_api",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_rehashed_unexpected_proof_and_binding_values_reject",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_result_extension_cannot_change_old_claims",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_unaccounted_member_still_rejects_with_an_explicit_route"
+      ],
+      "successful_recorded_real_methods": 107
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-qualification/validation/w04_a01-tests.log",
+      "sha256": "3d63af4700f383f5a4313435071b0e399e42afd7215a6676f033e93875425abd",
+      "size_bytes": 6904,
+      "working_matches_checkpoint": true,
+      "unittest_summaries": [
+        "Ran 28 tests in 0.508s"
+      ],
+      "terminal_statuses": [
+        "OK"
+      ],
+      "successful_new_method_ids": [
+        "test_p06_counter_qualification_proof_adversarial.ExtendedSourceProjectionAdversarialTests.test_nonmeasurement_duplicate_identity_is_not_ignored",
+        "test_p06_counter_qualification_proof_adversarial.ExtendedSourceProjectionAdversarialTests.test_nonmeasurement_sources_still_need_safe_unambiguous_paths",
+        "test_p06_counter_qualification_proof_adversarial.ExtendedSourceProjectionAdversarialTests.test_nonmeasurement_sources_still_need_strict_identity_types",
+        "test_p06_counter_qualification_proof_adversarial.ProofIdentityAdversarialTests.test_count_preserving_counter_reassignment_is_rejected",
+        "test_p06_counter_qualification_proof_adversarial.ProofIdentityAdversarialTests.test_document_key_order_is_semantic_but_file_serialization_is_pinned",
+        "test_p06_counter_qualification_proof_adversarial.ProofIdentityAdversarialTests.test_duplicate_nested_keys_cannot_enter_through_the_bytes_boundary",
+        "test_p06_counter_qualification_proof_adversarial.ProofIdentityAdversarialTests.test_nested_boolean_integer_equality_does_not_change_semantic_identity",
+        "test_p06_counter_qualification_proof_adversarial.ProofIdentityAdversarialTests.test_same_premise_population_cannot_exchange_evidence_obligations",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_actual_measurement_bytes_match_reviewed_projection",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_duplicate_fields_and_unbounded_json_fail_closed",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_non_json_containers_cannot_mimic_the_canonical_document",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_only_the_reviewed_accessor_sources_differ_from_old_proof",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_proof_cannot_be_changed_by_rehashing_an_internally_consistent_document",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_returned_proof_is_not_mutable_shared_trust",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_reviewed_proof_has_complete_disjoint_counter_populations",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_source_or_control_claims_are_not_qualification",
+        "test_p06_counter_qualification_contract.FrozenProofTests.test_wrong_version_types_unknown_fields_and_premise_booleans_reject",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_direct_symlink_and_symlink_parent_reject",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_exact_external_pin_and_regular_original_load",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_hardlinked_proof_rejects",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_missing_changed_empty_or_oversized_proof_rejects",
+        "test_p06_counter_qualification_contract.ProofFileTests.test_missing_wrong_or_self_selected_new_digest_rejects",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_changed_source_hash_and_size_reject_even_with_same_inventory",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_complete_inventory_may_include_other_bound_build_sources",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_incomplete_projection_rejects_every_missing_component_source",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_reverting_new_accessor_to_old_hash_is_not_equivalent",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_unknown_unsafe_or_duplicate_descriptor_fields_reject",
+        "test_p06_counter_qualification_contract.SourceProjectionTests.test_wrong_identity_types_and_descriptor_order_reject"
+      ],
+      "successful_recorded_real_methods": 28
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-qualification/validation/w04_a02-admission-adversarial-tests.log",
+      "sha256": "89ac5fbac1d3b0620d41abe062eb29a0a5c899f70a14a9c0c4eefad4de0288c3",
+      "size_bytes": 7748,
+      "working_matches_checkpoint": true,
+      "unittest_summaries": [
+        "Ran 30 tests in 1.648s"
+      ],
+      "terminal_statuses": [
+        "OK"
+      ],
+      "successful_new_method_ids": [
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_archive_pin_and_before_admission_mutation_are_rejected",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_changed_dependency_component_cannot_be_admitted",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_changed_helper_source_rejects_before_replay",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_changed_measurement_source_rejects_before_replay",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_control_claim_cannot_upgrade_prerequisite_scope",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_dependency_source_revision_and_build_must_match",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_dictionary_cannot_substitute_for_complete_dependency_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_failed_late_dependency_stability_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_archive_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_helper_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_measurement_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_proof_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_late_public_inventory_change_invalidates_admission",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_prerequisite_replay_failure_is_not_a_fallback",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_proof_symlink_and_hardlink_are_rejected",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_revision_requires_exact_lowercase_git_identity",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_stability_rejects_wrong_prerequisite_descriptor",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_summary_copies_inputs_and_rejects_wrong_source_projection",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_valid_admission_is_bound_but_does_not_qualify_execution",
+        "test_p06_counter_qualification_admission.CounterQualificationAdmissionTests.test_wrong_external_proof_pin_rejects_before_prerequisite_replay",
+        "test_p06_counter_qualification_admission.CounterQualificationPathTests.test_identity_reads_real_regular_bytes",
+        "test_p06_counter_qualification_admission.CounterQualificationPathTests.test_identity_rejects_empty_and_symlinked_inputs",
+        "test_p06_counter_qualification_admission_adversarial.QualificationAdmissionIdentityTests.test_both_dependency_success_flags_require_actual_true",
+        "test_p06_counter_qualification_admission_adversarial.QualificationAdmissionIdentityTests.test_dependency_subclass_cannot_bypass_complete_admission_gate",
+        "test_p06_counter_qualification_admission_adversarial.QualificationAdmissionIdentityTests.test_late_archive_alias_invalidates_unchanged_original_bytes",
+        "test_p06_counter_qualification_admission_adversarial.QualificationAdmissionIdentityTests.test_late_measurement_parent_symlink_invalidates_same_bytes",
+        "test_p06_counter_qualification_admission_adversarial.QualificationAdmissionIdentityTests.test_swapping_prerequisite_paths_rejects_before_either_replay",
+        "test_p06_counter_qualification_admission_adversarial.QualificationInputReadStabilityTests.test_content_identity_survives_completed_same_byte_replacement",
+        "test_p06_counter_qualification_admission_adversarial.QualificationInputReadStabilityTests.test_same_byte_replacement_before_open_is_rejected",
+        "test_p06_counter_qualification_admission_adversarial.QualificationInputReadStabilityTests.test_same_byte_replacement_during_read_is_rejected"
+      ],
+      "successful_recorded_real_methods": 30
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-qualification/validation/w04_a03-compatibility-tests.log",
+      "sha256": "6ddec2db841126aa870f6239a6a5255e1fd29206ca12e0d3b9f127f322d7ee44",
+      "size_bytes": 15439,
+      "working_matches_checkpoint": true,
+      "unittest_summaries": [
+        "Ran 19 tests in 97.744s"
+      ],
+      "terminal_statuses": [
+        "ERROR: WarmContractTests (unittest.loader._FailedTest.WarmContractTests)",
+        "AttributeError: module 'test_p06_warm_contract' has no attribute 'WarmContractTests'",
+        "FAILED (errors=1)"
+      ],
+      "successful_new_method_ids": [
+        "test_p06_counter_qualification_compatibility.HistoricalTranscriptCompatibilityTests.test_old_raw_transcript_rejects_after_new_envelope_and_digest_repair",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_binding_extension_cannot_replace_core_provenance",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_default_reader_does_not_autodetect_extended_report",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_default_route_remains_complete_and_unqualified",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_explicit_reader_does_not_upgrade_old_report",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_explicit_route_reconstructs_new_bindings_without_execution",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_late_missing_or_changed_extension_stability_rejects",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_new_report_cannot_select_a_subclass_through_shared_view_api",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_rehashed_unexpected_proof_and_binding_values_reject",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_result_extension_cannot_change_old_claims",
+        "test_p06_dependency_replay_extension.ExplicitRouteTests.test_unaccounted_member_still_rejects_with_an_explicit_route",
+        "test_p06_counter_qualification_replay.QualifiedReplayTests.test_old_reader_cannot_autodetect_or_upgrade_the_new_route"
+      ],
+      "successful_recorded_real_methods": 18
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-qualification/validation/w04_a03-corrected-selection.log",
+      "sha256": "bdbd86a1d961e8a4d27b0dc994a49449ad839b6527452ceb3c2a382044f7d821",
+      "size_bytes": 574,
+      "working_matches_checkpoint": true,
+      "unittest_summaries": [
+        "Ran 1 test in 0.060s"
+      ],
+      "terminal_statuses": [
+        "OK"
+      ],
+      "successful_new_method_ids": [],
+      "successful_recorded_real_methods": 1
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-qualification/validation/w04_a04-cli-tests.log",
+      "sha256": "f87ce1924b3393bb61d4c83e6c6cbbcaa60f0a86cccf288cfe25a1f9bbbc78ff",
+      "size_bytes": 24019,
+      "working_matches_checkpoint": true,
+      "unittest_summaries": [
+        "Ran 4 tests in 1.889s",
+        "Ran 1 test in 0.000s"
+      ],
+      "terminal_statuses": [
+        "OK",
+        "OK"
+      ],
+      "successful_new_method_ids": [
+        "test_p06_counter_qualification_cli.QualificationCliTests.test_real_help_exposes_explicit_inputs_without_creating_outputs",
+        "test_p06_counter_qualification_cli.QualificationCliTests.test_real_invalid_mode_and_budget_exit_before_path_intake",
+        "test_p06_counter_qualification_cli.QualificationCliTests.test_real_invalid_revision_retains_a_zero_command_blocked_report",
+        "test_p06_counter_qualification_cli.QualificationCliTests.test_real_path_rejection_preserves_existing_outputs_and_aliases",
+        "test_p06_counter_qualification_runner.QualificationRunnerTests.test_mode_requires_exact_boolean_and_both_older_modes"
+      ],
+      "successful_recorded_real_methods": 5
+    },
+    {
+      "path": "docs/project/evidence/p06-counter-qualification/validation/w04_a05-binding-adversarial-tests.log",
+      "sha256": "68bedc3c49994cd0adcd243b90a352dfaa2a45c3619c6ced6e0e33792916627d",
+      "size_bytes": 3378,
+      "working_matches_checkpoint": true,
+      "unittest_summaries": [
+        "Ran 4 tests in 9.758s"
+      ],
+      "terminal_statuses": [
+        "OK"
+      ],
+      "successful_new_method_ids": [
+        "test_p06_counter_qualification_binding_adversarial.QualificationBindingAdversarialTests.test_control_summary_transplant_rejects_after_all_build_and_process_rebindings",
+        "test_p06_counter_qualification_binding_adversarial.QualificationBindingAdversarialTests.test_cross_policy_process_binding_transplant_rejects_after_all_echoes_repaired",
+        "test_p06_counter_qualification_binding_adversarial.QualificationBindingAdversarialTests.test_equal_count_loaded_helper_substitution_rejects_after_transitive_rebinding",
+        "test_p06_counter_qualification_binding_adversarial.QualificationBindingAdversarialTests.test_interior_stability_drift_rejects_even_when_endpoints_and_final_row_match"
+      ],
+      "successful_recorded_real_methods": 4
+    }
+  ],
+  "mock_boundaries": {
+    "proof": "Real frozen byte/semantic identities; no trusted proof-digest patching. Source-premise truth remains an independent static review obligation.",
+    "prerequisites": "Real diagnostic original in class setup and actual-original positive; mutation joins mock copies of real reader results. Separate-control result and dependency projection manifests are synthetic.",
+    "admission": "Dependency Admission allocated without its constructor; dependency stability and both prerequisite APIs mocked. Synthetic archive descriptors mapped only after actual unchanged-body hashing. Source/proof/helper hashing, aliases, atomic replacement and in-read checks remain real.",
+    "runner": "Process execution, source/tool/resource snapshots and selected compiler/build validators are mocked by the inherited harness. Qualification admission is synthetic but loads frozen proof bytes and performs actual proof-file stability. Prelaunch ordering/bindings/failures are exercised.",
+    "qualified_reader": "Synthetic complete packet; dependency verify_view and both historical prerequisite API seams mocked. Proof/source projection, reconstructed bindings, raw lifetime/numerical grammar, exact inventory, archive selection and stability are real.",
+    "cli": "Nine real fresh-interpreter invocations in four methods, with audit hooks rejecting process/network attempts. No production function or trusted identity mock.",
+    "shared_extension": "Synthetic explicitly selected trusted subclass and native packet exercise extension/collision/default-route behavior; no real dependency original."
+  },
+  "negative_control_evidence": [
+    {
+      "control": "cross-policy transplant",
+      "expected_boundary": "reconstructed process binding",
+      "downstream_hashes_repaired": true
+    },
+    {
+      "control": "historical-control summary transplant",
+      "expected_boundary": "reconstructed counter qualification admission",
+      "both_prerequisite_apis_asserted_called": true
+    },
+    {
+      "control": "interior stability drift",
+      "expected_boundary": "route stability observation counter_qualification_admission",
+      "raw_transcript_validator_calls_asserted": 4
+    },
+    {
+      "control": "same-count helper substitution",
+      "expected_boundary": "executing helpers paths",
+      "prerequisite_apis_asserted_not_called": true
+    },
+    {
+      "control": "unchanged old transcript in qualified envelope",
+      "expected_boundary": "managed witness.execution_binding_sha256",
+      "subcases": 4,
+      "subcases_are_one_method": true
+    }
+  ],
+  "recorded_invocation_corrections": [
+    {
+      "case": "w04_a03 compatibility",
+      "original": "18 real passes plus one _FailedTest from nonexistent WarmContractTests selector.",
+      "correction": "One corrected existing test passed separately. Both logs retained;19 real selected tests total, only1 new method."
+    },
+    {
+      "case": "w04_a04 malformed dependency pin",
+      "original": "Default temporary mount probe stopped at actual disk reserve below15GiB.",
+      "correction": "Fresh workspace probe reached caller-pinned receipt digest rejection with zero commands/processes. One-off assertion expected SHA-256 wording; separate retained evaluation checked actual text. No source/budget/original rewrite."
+    }
+  ],
+  "audit_parser_correction": "The first one-line success-entry parser missed the compatibility method because unittest prints its docstring on a second line. The corrected parser accepts that one description line; raw logs were unchanged and no tests were rerun.",
+  "integration_review": {
+    "duplicate_collection": "None among11 new modules; AST and loaded per-module counts agree.",
+    "patch_cleanup": "Context managers or cleanup-registered ExitStack; inherited harness closes its stack.",
+    "temporary_outputs": "Temporary paths cleaned; actual CLI runs isolated -I -B children.",
+    "import_inventory": "Synthetic runner overrides dynamic loaded_helpers; actual producer closure is separate and reviewed by w03_a06.",
+    "full_suite": "Collection-only check and107-method integrated subset do not prove interaction with all existing governance tests."
+  },
+  "remaining_requirements": [
+    "Fresh exact-source dependency preparation/build and four-process qualification execution.",
+    "Complete unmocked independent replay of the new original with separately pinned prerequisite originals.",
+    "Full governance discovery from a stable recorded checkpoint and final source continuity.",
+    "No inference of warm coverage/performance/phase acceptance from host tests."
+  ]
+}

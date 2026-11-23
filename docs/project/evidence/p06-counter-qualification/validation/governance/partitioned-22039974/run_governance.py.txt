@@ -1,0 +1,229 @@
+#!/usr/bin/env python3
+"""Run full discovery in three exhaustive whole-module partitions."""
+import collections
+import hashlib
+import json
+import os
+import signal
+import subprocess
+import sys
+import time
+import unittest
+from pathlib import Path
+
+SOURCE = Path('/workspace/p06-counter-governance-source-03')
+OUTPUT = Path(__file__).resolve().parent
+REVISION = '220399748ecab84d48ba5a5f123457c44a0c8699'
+TREE = '037a667b7a3238061ff1d4894503bd26c741c7c3'
+SUPERVISION = Path('/workspace/scratch/e96519576778/native-qualification-attempt-01/supervision.json')
+SUPERVISION_SHA = 'c16af01670eaf44e0ff38eb52a8ef7d9fc8b15cbca1c1cbb26e4c626271d752f'
+HOST = Path('/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv')
+assert Path(sys.executable) == HOST / 'bin/python3'
+assert Path.cwd() == SOURCE
+
+def now():
+    return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=SOURCE, text=True).strip()
+
+def identity(path):
+    body = path.read_bytes()
+    return {'path': str(path), 'resolved': str(path.resolve()),
+            'size_bytes': len(body), 'sha256': hashlib.sha256(body).hexdigest()}
+
+def snapshot():
+    names = subprocess.check_output(['git', 'ls-files', '-z'], cwd=SOURCE).decode().split('\0')[:-1]
+    return [{'path': name, 'sha256': hashlib.sha256((SOURCE / name).read_bytes()).hexdigest()}
+            for name in names if (SOURCE / name).is_file()]
+
+native_body = SUPERVISION.read_bytes()
+assert hashlib.sha256(native_body).hexdigest() == SUPERVISION_SHA
+native = json.loads(native_body)
+assert native['state'] == 'finished' and native['outcome'] == 'pass'
+assert native['source_revision'] == '17e0284496bab10c7632a48e4f91efb6fb4fec0b'
+assert [stage['id'] for stage in native['stages']] == ['preparation', 'dependency-build', 'native-qualification']
+assert all(stage['execution']['cleanup_complete'] is True and stage['execution']['outcome'] == 'pass'
+    and type(stage['execution']['exit_code']) is int and stage['execution']['exit_code'] == 0
+    and stage['report_outcome'] == 'pass' for stage in native['stages'])
+assert git('rev-parse', 'HEAD') == REVISION and git('rev-parse', 'HEAD^{tree}') == TREE
+assert git('status', '--porcelain=v1', '--untracked-files=all') == ''
+before = snapshot()
+submodules_before = git('submodule', 'status', '--recursive')
+tools_before = [identity(HOST / name) for name in ('bin/python3', 'bin/cmake', 'pyvenv.cfg')]
+(OUTPUT / 'source-before.json').write_text(json.dumps(before, indent=2) + '\n')
+record = {
+    'schema_version': 1, 'state': 'running', 'started_at': now(),
+    'source_revision': REVISION, 'source_tree': TREE, 'source': str(SOURCE),
+    'scope': 'source-root-governance-and-tooling-only', 'gpu_execution_certified': False,
+    'native_handoff_supervision_sha256': SUPERVISION_SHA,
+    'native_revision': native['source_revision'], 'interpreter': sys.executable,
+    'tool_inputs_before': tools_before, 'submodules_before': submodules_before,
+    'supervisor_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+    'partition_program_sha256': hashlib.sha256((OUTPUT / 'run_partition.py').read_bytes()).hexdigest(),
+    'limitations': [
+        'The complete discovered suite is partitioned by whole module; cross-module execution order differs from one monolithic invocation.',
+        'Each module and class preserves its discovered test order and fixtures.',
+        'Discovery alone is not execution; every selected ID must start and complete exactly once.',
+        'Process-group cleanup cannot contain descendants that deliberately escape their process group.',
+        'This source-root test suite does not perform or certify the native qualification experiment.',
+    ], 'commands': [], 'partitions': [],
+}
+target = OUTPUT / 'execution.json'
+assert not target.exists()
+
+def save():
+    target.write_text(json.dumps(record, indent=2, sort_keys=True) + '\n')
+
+save()
+environment = dict(os.environ, PYTHONDONTWRITEBYTECODE='1')
+environment['PATH'] = str(HOST / 'bin') + ':' + environment['PATH']
+for name, arguments in (
+    ('preflight', [sys.executable, '-B', 'ci/project/preflight.py', '--tier', 'governance', '--json']),
+    ('structure', [sys.executable, '-B', 'ci/project/check_project.py']),
+    ('baseline-packets', [sys.executable, '-B', 'ci/project/check_baseline_packets.py']),
+):
+    row = {'id': name, 'argv': arguments, 'started_at': now(), 'log': name + '.log'}
+    record['commands'].append(row)
+    save()
+    started = time.monotonic()
+    with (OUTPUT / row['log']).open('xb') as stream:
+        result = subprocess.run(arguments, cwd=SOURCE, env=environment, stdout=stream,
+            stderr=subprocess.STDOUT, timeout=120)
+    row.update(exit_code=result.returncode, duration_seconds=time.monotonic() - started,
+        finished_at=now(), log_sha256=identity(OUTPUT / row['log'])['sha256'])
+    save()
+    if result.returncode:
+        record.update(state='finished', outcome='fail', reason=name + ' failed', finished_at=now())
+        save()
+        sys.exit(1)
+
+loader = unittest.TestLoader()
+discovered = loader.discover('ci/project', pattern='test_*.py')
+
+def flatten(suite):
+    for case in suite:
+        if isinstance(case, unittest.TestSuite):
+            yield from flatten(case)
+        else:
+            yield case
+
+cases = list(flatten(discovered))
+all_ids = [case.id() for case in cases]
+assert not loader.errors
+assert len(all_ids) == len(set(all_ids)) == 4437
+assert hashlib.sha256(json.dumps(all_ids, separators=(',', ':')).encode()).hexdigest() == '98297663c3341dab052dd83b11b5fcce56bfab652d4f18857ee74e2247e257f8'
+counts = collections.Counter(case.__class__.__module__ for case in cases)
+groups = [[], [], []]
+weights = [0, 0, 0]
+for module, count in sorted(counts.items(), key=lambda item: (-item[1], item[0])):
+    index = min(range(3), key=lambda number: (weights[number], number))
+    groups[index].append(module)
+    weights[index] += count
+partitions = [{'index': index, 'modules': sorted(group),
+    'ids': [case.id() for case in cases if case.__class__.__module__ in group]}
+    for index, group in enumerate(groups)]
+selected_ids = [identifier for part in partitions for identifier in part['ids']]
+assert collections.Counter(selected_ids) == collections.Counter(all_ids)
+manifest = {'source': str(SOURCE), 'source_revision': REVISION, 'source_tree': TREE,
+    'all_ids': all_ids, 'partitions': partitions}
+manifest_body = (json.dumps(manifest, indent=2, sort_keys=True) + '\n').encode()
+(OUTPUT / 'partition-manifest.json').write_bytes(manifest_body)
+manifest_sha = hashlib.sha256(manifest_body).hexdigest()
+record.update(discovered_count=len(all_ids), discovery_import_errors=loader.errors,
+    manifest_sha256=manifest_sha, partition_counts=weights)
+save()
+processes = []
+streams = []
+deadline = time.monotonic() + 90 * 60
+try:
+    for index in range(3):
+        temporary = OUTPUT / ('tmp-' + str(index))
+        temporary.mkdir(mode=0o700)
+        env = dict(environment, TMPDIR=str(temporary))
+        argv = [sys.executable, '-B', str(OUTPUT / 'run_partition.py'), str(index), manifest_sha]
+        log = OUTPUT / ('partition-' + str(index) + '.log')
+        stream = log.open('xb')
+        streams.append(stream)
+        process = subprocess.Popen(argv, cwd=SOURCE, env=env, stdout=stream,
+            stderr=subprocess.STDOUT, start_new_session=True)
+        processes.append(process)
+        record['partitions'].append({'index': index, 'argv': argv, 'started_at': now(),
+            'log': log.name, 'tmpdir': str(temporary), 'pid': process.pid})
+        save()
+    while any(process.poll() is None for process in processes):
+        if time.monotonic() > deadline:
+            raise TimeoutError('partitioned suite exceeded its 90-minute bound')
+        for row, process in zip(record['partitions'], processes):
+            if process.poll() is not None and 'exit_code' not in row:
+                row.update(exit_code=process.returncode, finished_at=now())
+                save()
+        time.sleep(1)
+except BaseException as error:
+    record.update(state='interrupted', outcome='fail', reason=repr(error), finished_at=now())
+    for process in processes:
+        if process.poll() is None:
+            try:
+                os.killpg(process.pid, signal.SIGTERM)
+            except ProcessLookupError:
+                pass
+    for process in processes:
+        try:
+            process.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            try:
+                os.killpg(process.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+            process.wait(timeout=10)
+    save()
+    raise
+finally:
+    for stream in streams:
+        stream.close()
+
+actual_ids = []
+parts_passed = True
+for row, process in zip(record['partitions'], processes):
+    row.update(exit_code=process.returncode, finished_at=row.get('finished_at', now()),
+        log_sha256=identity(OUTPUT / row['log'])['sha256'])
+    result_path = OUTPUT / ('partition-' + str(row['index']) + '-result.json')
+    if not result_path.is_file():
+        parts_passed = False
+        row['result_missing'] = True
+        continue
+    result = json.loads(result_path.read_text())
+    row.update(result_sha256=identity(result_path)['sha256'], outcome=result['outcome'],
+        tests_run=result['tests_run'], failures=len(result['failures']), errors=len(result['errors']),
+        skipped=len(result['skipped']), duration_seconds=result['duration_seconds'])
+    actual_ids.extend(result['completed_ids'])
+    parts_passed &= (result['outcome'] == 'pass' and process.returncode == 0
+        and result['manifest_sha256'] == manifest_sha
+        and result['source_revision'] == REVISION and result['source_tree'] == TREE
+        and result['partition'] == row['index'] and result['interpreter'] == sys.executable
+        and result['program_sha256'] == record['partition_program_sha256']
+        and type(result['tests_run']) is int and result['tests_run'] == len(partitions[row['index']]['ids'])
+        and result['selected_ids'] == partitions[row['index']]['ids']
+        and all(type(result[name]) is list and not result[name] for name in (
+            'failures', 'errors', 'skipped', 'expected_failures', 'unexpected_successes'))
+        and result['started_ids'] == result['completed_ids'] == partitions[row['index']]['ids'])
+after = snapshot()
+(OUTPUT / 'source-after.json').write_text(json.dumps(after, indent=2) + '\n')
+tools_after = [identity(HOST / name) for name in ('bin/python3', 'bin/cmake', 'pyvenv.cfg')]
+diff = subprocess.run(['git', 'diff', '--check'], cwd=SOURCE, capture_output=True, text=True)
+record.update(state='finished', finished_at=now(), source_files_stable=before == after,
+    source_revision_after=git('rev-parse', 'HEAD'), status_after=git('status', '--porcelain=v1', '--untracked-files=all'),
+    submodules_after=git('submodule', 'status', '--recursive'), tool_inputs_after=tools_after,
+    tools_stable=tools_before == tools_after, completed_ids_count=len(actual_ids),
+    exact_once_complete_population=collections.Counter(actual_ids) == collections.Counter(all_ids),
+    diff_check_exit_code=diff.returncode, diff_check_output=diff.stdout + diff.stderr)
+record['outcome'] = 'pass' if (parts_passed and before == after and tools_before == tools_after
+    and record['exact_once_complete_population'] and not record['status_after']
+    and record['source_revision_after'] == REVISION and record['submodules_after'] == submodules_before
+    and identity(Path(__file__))['sha256'] == record['supervisor_sha256']
+    and identity(OUTPUT / 'run_partition.py')['sha256'] == record['partition_program_sha256']
+    and diff.returncode == 0) else 'fail'
+save()
+print(json.dumps({key: record[key] for key in ('outcome', 'source_revision', 'source_files_stable',
+    'tools_stable', 'completed_ids_count', 'exact_once_complete_population')}), flush=True)
+sys.exit(0 if record['outcome'] == 'pass' else 1)

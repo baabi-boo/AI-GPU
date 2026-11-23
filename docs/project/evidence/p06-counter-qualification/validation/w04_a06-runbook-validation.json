@@ -1,0 +1,218 @@
+{
+  "scope": "documentation-syntax-and-interface-verification-only",
+  "native_execution": "not_run",
+  "retained_code_executed": false,
+  "started_at": "2026-11-23T15:12:51Z",
+  "inputs_before": [
+    {
+      "path": "docs/project/evidence/p06-counter-qualification/runbook.md",
+      "sha256": "ff4e2bc8b3586b837f470674a1c317b1fe7cd0a760bb417b938405cb59480fd3",
+      "size_bytes": 23161
+    },
+    {
+      "path": "ci/project/p06_dependency_local_prepare.py",
+      "sha256": "c810f31cf6106a5bbcd6eddcf8d818560cb94222da057fe9491a8e1dbc99316f",
+      "size_bytes": 20427
+    },
+    {
+      "path": "ci/project/p06_dependency_build.py",
+      "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+      "size_bytes": 32820
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_execute.py",
+      "sha256": "c9ffe924d504317e1dfe19ce5a853876f4385cdf5edb5074716df7e68becc55c",
+      "size_bytes": 2436
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_replay.py",
+      "sha256": "25b07aa69abcf39de000ab3002e26f7b205406a23f12eb8337344e3b93cfc78c",
+      "size_bytes": 16870
+    },
+    {
+      "path": "ci/project/p06_dependency_lifetime_execute.py",
+      "sha256": "ccf1d7c47f1bd045391360498b1b7b8ea389a244801c905557bf6a8904fc5217",
+      "size_bytes": 1917
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_execute.py",
+      "sha256": "d9d726ce61cdaa12010bb7c00fac48b6ed31f82b82997e39bb9d9a7911163677",
+      "size_bytes": 52516
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_proof.json",
+      "sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e",
+      "size_bytes": 123781
+    }
+  ],
+  "bash_blocks": 9,
+  "commands": [
+    {
+      "name": "bash_syntax",
+      "argv": [
+        "bash",
+        "-n"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "p06_dependency_local_prepare-help",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/workspace/AI-GPU/ci/project/p06_dependency_local_prepare.py",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "usage: p06_dependency_local_prepare.py [-h] [--source-dir SOURCE_DIR]\n                                       --workspace-dir WORKSPACE_DIR\n                                       --expected-revision EXPECTED_REVISION\n                                       --archive-root ARCHIVE_ROOT\n                                       --dependency-repositories\n                                       DEPENDENCY_REPOSITORIES\n                                       [--host-bin HOST_BIN]\n\nPrepare fresh dependencies from explicit local Git objects and locked\narchives.\n\noptions:\n  -h, --help            show this help message and exit\n  --source-dir SOURCE_DIR\n  --workspace-dir WORKSPACE_DIR\n  --expected-revision EXPECTED_REVISION\n  --archive-root ARCHIVE_ROOT\n  --dependency-repositories DEPENDENCY_REPOSITORIES\n  --host-bin HOST_BIN\n",
+      "stderr": ""
+    },
+    {
+      "name": "p06_dependency_build-help",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/workspace/AI-GPU/ci/project/p06_dependency_build.py",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "usage: p06_dependency_build.py [-h] [--source-dir SOURCE_DIR] --workspace-dir\n                               WORKSPACE_DIR --preparation PREPARATION\n                               --output-dir OUTPUT_DIR --expected-revision\n                               EXPECTED_REVISION [--host-bin HOST_BIN]\n\nBuild and stage the three selected SimX dependencies from fresh locked\nsources.\n\noptions:\n  -h, --help            show this help message and exit\n  --source-dir SOURCE_DIR\n  --workspace-dir WORKSPACE_DIR\n  --preparation PREPARATION\n  --output-dir OUTPUT_DIR\n  --expected-revision EXPECTED_REVISION\n  --host-bin HOST_BIN   host-tool directory recorded by the selected local\n                        preparation\n",
+      "stderr": ""
+    },
+    {
+      "name": "p06_counter_qualification_execute-help",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/workspace/AI-GPU/ci/project/p06_counter_qualification_execute.py",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "usage: p06_counter_qualification_execute.py [-h] [--source-dir SOURCE_DIR]\n                                            --tools-dir TOOLS_DIR --work-dir\n                                            WORK_DIR --output-dir OUTPUT\n                                            [--host-bin HOST_BIN]\n                                            --expected-revision\n                                            EXPECTED_REVISION [--jobs {1,2}]\n                                            [--timeout-seconds TIMEOUT_SECONDS]\n                                            [--run-timeout-seconds RUN_TIMEOUT_SECONDS]\n                                            --dependency-receipt\n                                            DEPENDENCY_RECEIPT\n                                            --dependency-receipt-sha256\n                                            DEPENDENCY_RECEIPT_SHA256\n                                            --counter-qualification\n                                            COUNTER_QUALIFICATION\n                                            --counter-qualification-sha256\n                                            COUNTER_QUALIFICATION_SHA256\n                                            --diagnostic-archive\n                                            DIAGNOSTIC_ARCHIVE\n                                            --diagnostic-archive-sha256\n                                            DIAGNOSTIC_ARCHIVE_SHA256\n                                            --control-archive CONTROL_ARCHIVE\n                                            --control-archive-sha256\n                                            CONTROL_ARCHIVE_SHA256\n                                            {run}\n\nExecute the explicit fresh four-process counter qualification preflight.\n\npositional arguments:\n  {run}\n\noptions:\n  -h, --help            show this help message and exit\n  --source-dir SOURCE_DIR\n  --tools-dir TOOLS_DIR\n  --work-dir WORK_DIR\n  --output-dir OUTPUT, --output OUTPUT\n  --host-bin HOST_BIN\n  --expected-revision EXPECTED_REVISION\n  --jobs {1,2}\n  --timeout-seconds TIMEOUT_SECONDS\n  --run-timeout-seconds RUN_TIMEOUT_SECONDS\n  --dependency-receipt DEPENDENCY_RECEIPT\n  --dependency-receipt-sha256 DEPENDENCY_RECEIPT_SHA256\n  --counter-qualification COUNTER_QUALIFICATION\n  --counter-qualification-sha256 COUNTER_QUALIFICATION_SHA256\n  --diagnostic-archive DIAGNOSTIC_ARCHIVE\n  --diagnostic-archive-sha256 DIAGNOSTIC_ARCHIVE_SHA256\n  --control-archive CONTROL_ARCHIVE\n  --control-archive-sha256 CONTROL_ARCHIVE_SHA256\n",
+      "stderr": ""
+    },
+    {
+      "name": "p06_counter_qualification_replay-help",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/workspace/AI-GPU/ci/project/p06_counter_qualification_replay.py",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "usage: p06_counter_qualification_replay.py [-h] --archive ARCHIVE --sha256\n                                           SHA256 --source-revision\n                                           SOURCE_REVISION\n                                           --dependency-receipt-sha256\n                                           DEPENDENCY_RECEIPT_SHA256\n                                           --native-report-sha256\n                                           NATIVE_REPORT_SHA256\n                                           --source-manifest-sha256\n                                           SOURCE_MANIFEST_SHA256\n                                           --counter-qualification-sha256\n                                           COUNTER_QUALIFICATION_SHA256\n                                           --diagnostic-archive\n                                           DIAGNOSTIC_ARCHIVE\n                                           --diagnostic-archive-sha256\n                                           DIAGNOSTIC_ARCHIVE_SHA256\n                                           --control-archive CONTROL_ARCHIVE\n                                           --control-archive-sha256\n                                           CONTROL_ARCHIVE_SHA256\n                                           [--prefix PREFIX] [--output OUTPUT]\n\nReconstruct an explicitly selected local counter-qualification original.\n\noptions:\n  -h, --help            show this help message and exit\n  --archive ARCHIVE\n  --sha256 SHA256\n  --source-revision SOURCE_REVISION\n  --dependency-receipt-sha256 DEPENDENCY_RECEIPT_SHA256\n  --native-report-sha256 NATIVE_REPORT_SHA256\n  --source-manifest-sha256 SOURCE_MANIFEST_SHA256\n  --counter-qualification-sha256 COUNTER_QUALIFICATION_SHA256\n  --diagnostic-archive DIAGNOSTIC_ARCHIVE\n  --diagnostic-archive-sha256 DIAGNOSTIC_ARCHIVE_SHA256\n  --control-archive CONTROL_ARCHIVE\n  --control-archive-sha256 CONTROL_ARCHIVE_SHA256\n  --prefix PREFIX\n  --output OUTPUT\n",
+      "stderr": ""
+    }
+  ],
+  "options_checked": {
+    "p06_dependency_local_prepare": [
+      "--source-dir",
+      "--workspace-dir",
+      "--expected-revision",
+      "--archive-root",
+      "--dependency-repositories",
+      "--host-bin"
+    ],
+    "p06_dependency_build": [
+      "--source-dir",
+      "--workspace-dir",
+      "--expected-revision",
+      "--preparation",
+      "--output-dir",
+      "--host-bin"
+    ],
+    "p06_counter_qualification_execute": [
+      "--source-dir",
+      "--expected-revision",
+      "--tools-dir",
+      "--work-dir",
+      "--output-dir",
+      "--host-bin",
+      "--dependency-receipt",
+      "--dependency-receipt-sha256",
+      "--counter-qualification",
+      "--counter-qualification-sha256",
+      "--diagnostic-archive",
+      "--diagnostic-archive-sha256",
+      "--control-archive",
+      "--control-archive-sha256",
+      "--jobs",
+      "--timeout-seconds",
+      "--run-timeout-seconds"
+    ],
+    "p06_counter_qualification_replay": [
+      "--archive",
+      "--sha256",
+      "--source-revision",
+      "--dependency-receipt-sha256",
+      "--native-report-sha256",
+      "--source-manifest-sha256",
+      "--counter-qualification-sha256",
+      "--diagnostic-archive",
+      "--diagnostic-archive-sha256",
+      "--control-archive",
+      "--control-archive-sha256",
+      "--output",
+      "--prefix"
+    ]
+  },
+  "embedded_python_blocks_compiled": 2,
+  "relative_links": [
+    {
+      "target": "../../../designs/complete_counter_qualification_v1.md",
+      "exists": true
+    },
+    {
+      "target": "../p06-dependency-provenance/local-execution/runbook.md#1-prepare-exact-separate-inputs",
+      "exists": true
+    }
+  ],
+  "frozen_pins_match": true,
+  "inputs_after": [
+    {
+      "path": "docs/project/evidence/p06-counter-qualification/runbook.md",
+      "sha256": "ff4e2bc8b3586b837f470674a1c317b1fe7cd0a760bb417b938405cb59480fd3",
+      "size_bytes": 23161
+    },
+    {
+      "path": "ci/project/p06_dependency_local_prepare.py",
+      "sha256": "c810f31cf6106a5bbcd6eddcf8d818560cb94222da057fe9491a8e1dbc99316f",
+      "size_bytes": 20427
+    },
+    {
+      "path": "ci/project/p06_dependency_build.py",
+      "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+      "size_bytes": 32820
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_execute.py",
+      "sha256": "c9ffe924d504317e1dfe19ce5a853876f4385cdf5edb5074716df7e68becc55c",
+      "size_bytes": 2436
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_replay.py",
+      "sha256": "25b07aa69abcf39de000ab3002e26f7b205406a23f12eb8337344e3b93cfc78c",
+      "size_bytes": 16870
+    },
+    {
+      "path": "ci/project/p06_dependency_lifetime_execute.py",
+      "sha256": "ccf1d7c47f1bd045391360498b1b7b8ea389a244801c905557bf6a8904fc5217",
+      "size_bytes": 1917
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_execute.py",
+      "sha256": "d9d726ce61cdaa12010bb7c00fac48b6ed31f82b82997e39bb9d9a7911163677",
+      "size_bytes": 52516
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_proof.json",
+      "sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e",
+      "size_bytes": 123781
+    }
+  ],
+  "inputs_stable": true,
+  "outcome": "pass",
+  "finished_at": "2026-11-23T15:12:52Z"
+}

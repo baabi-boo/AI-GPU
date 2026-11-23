@@ -1,0 +1,851 @@
+{
+  "final_exhaustive_suite_outcome": "pass",
+  "gpu_execution_certified": false,
+  "gzip_mtime": 0,
+  "limitations": [
+    "Earlier serial failures are preserved and never relabelled as passing.",
+    "Discovered IDs do not establish execution; complete partition receipts and verbose logs are reconciled independently.",
+    "Partitioned execution changes cross-module process state/order relative to a monolithic invocation.",
+    "Governance validates source/tooling and does not establish GPU, hardware, warm-performance or phase acceptance.",
+    "No complete result is inferred for an unfinished or missing worker."
+  ],
+  "native_execution_by_reviewer": "not_run",
+  "observed_at": "2026-11-23T17:03:35Z",
+  "original_archives_verified": [
+    {
+      "path": "/workspace/scratch/e96519576778/AI-GPU_P06_counter_qualification_17e02844_2026-11-23.zip",
+      "sha256": "9a0f1088f7a6d70a2ec17c705a61bdbbb2ea59cb815a3327aec817d0120d05a0",
+      "size_bytes": 41577668
+    },
+    {
+      "path": "/workspace/p06-counter-governance-source-01/docs/project/evidence/p06-counter-diagnostics/native/run-45034575685-attempt1.zip",
+      "sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb",
+      "size_bytes": 4290949
+    },
+    {
+      "path": "/workspace/scratch/279b6658611e/AI-GPU_P06_local_attempt_04_passed_2026-11-23.zip",
+      "sha256": "d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f",
+      "size_bytes": 47632218
+    }
+  ],
+  "retained_original_files": 40,
+  "retention_is_byte_exact": true,
+  "review_program_sha256": "e0a2d6e53df55c33b2f3d7a70d9580ae1c48a8cd713bb8f415dec6b38ed3ea53",
+  "reviewer": "w10_a03",
+  "runs": [
+    {
+      "commands": [
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "-B",
+            "ci/project/preflight.py",
+            "--tier",
+            "governance",
+            "--json"
+          ],
+          "cwd": "/workspace/p06-counter-governance-source-01",
+          "duration_seconds": 0.2649833330033289,
+          "exit_code": 0,
+          "finished_at": "2026-11-23T15:32:12Z",
+          "id": "preflight",
+          "log": "preflight.log",
+          "log_sha256": "682a8c867b7c28d53d3399bac7c8270b317e42ba518780865de2ef9b85fdcce4",
+          "log_size_bytes": 4990,
+          "started_at": "2026-11-23T15:32:12Z"
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "-B",
+            "ci/project/check_project.py"
+          ],
+          "cwd": "/workspace/p06-counter-governance-source-01",
+          "duration_seconds": 3.1243012080012704,
+          "exit_code": 0,
+          "finished_at": "2026-11-23T15:32:15Z",
+          "id": "structure",
+          "log": "structure.log",
+          "log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+          "log_size_bytes": 96,
+          "started_at": "2026-11-23T15:32:12Z"
+        },
+        {
+          "argv": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "ci/project",
+            "-p",
+            "test_*.py",
+            "-v"
+          ],
+          "cwd": "/workspace/p06-counter-governance-source-01",
+          "duration_seconds": 3510.888699911,
+          "exit_code": 1,
+          "finished_at": "2026-11-23T16:30:46Z",
+          "id": "unittest-discovery",
+          "log": "unittest-discovery.log",
+          "log_sha256": "03faca06f21cd4d207e7cb37738988cf0791d989b5d708414cfb00704d3b539e",
+          "log_size_bytes": 790494,
+          "started_at": "2026-11-23T15:32:15Z"
+        },
+        {
+          "argv": [
+            "git",
+            "diff",
+            "--check"
+          ],
+          "cwd": "/workspace/p06-counter-governance-source-01",
+          "duration_seconds": 0.11509008900247863,
+          "exit_code": 0,
+          "finished_at": "2026-11-23T16:30:46Z",
+          "id": "diff-check",
+          "log": "diff-check.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "log_size_bytes": 0,
+          "started_at": "2026-11-23T16:30:46Z"
+        }
+      ],
+      "diagnosis": "The selected ambient CMake Python launcher cannot import its package under sanitized HOME; fixture tool selection is corrected in220399.",
+      "finished_at": "2026-11-23T16:30:48Z",
+      "gpu_execution_certified": false,
+      "id": "serial-17e02844",
+      "original_execution_sha256": "22097032f1008a4e1f351a07da869a499c9628c633fef9114ea8c04fbc72653b",
+      "outcome": "fail",
+      "retained_files": [
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/diff-check.log",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_size_bytes": 0,
+          "retained_path": "serial-17e02844/diff-check.log.gz",
+          "retained_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+          "retained_size_bytes": 20
+        },
+        {
+          "encoding": "identity",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/execution.json",
+          "original_sha256": "22097032f1008a4e1f351a07da869a499c9628c633fef9114ea8c04fbc72653b",
+          "original_size_bytes": 3609,
+          "retained_path": "serial-17e02844/execution.json",
+          "retained_sha256": "22097032f1008a4e1f351a07da869a499c9628c633fef9114ea8c04fbc72653b",
+          "retained_size_bytes": 3609
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/predicate-validation.json",
+          "original_sha256": "00c18898d157c2fe93e4261db6a8e05c5117e703e6a833f16d1b59da9649db86",
+          "original_size_bytes": 8038,
+          "retained_path": "serial-17e02844/predicate-validation.json.gz",
+          "retained_sha256": "e39b0fd17bf314a1fa979f76bb5440c05b01766a0df4b0dfeebef96afda82e36",
+          "retained_size_bytes": 933
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/preflight.log",
+          "original_sha256": "682a8c867b7c28d53d3399bac7c8270b317e42ba518780865de2ef9b85fdcce4",
+          "original_size_bytes": 4990,
+          "retained_path": "serial-17e02844/preflight.log.gz",
+          "retained_sha256": "a2a0a125d64447dc82252b810ec836b356b4347c1c1a604cdbf1231668dbc5b4",
+          "retained_size_bytes": 1659
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/preservation.json",
+          "original_sha256": "9f62ce13557de17e248739abff83ce2cafe21014a92d49e91b24b0fc6ca991ca",
+          "original_size_bytes": 1980,
+          "retained_path": "serial-17e02844/preservation.json.gz",
+          "retained_sha256": "2d5366dc685bd69db77024073f40ce1c5a8036e78040181ec24429a1ab363955",
+          "retained_size_bytes": 667
+        },
+        {
+          "encoding": "identity",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/run_governance_v2.py",
+          "original_sha256": "155e3e8efa7d25bbd9b7be1de0c7033432e5b26dfc8a335ea8266d618f28cf5f",
+          "original_size_bytes": 7009,
+          "retained_path": "serial-17e02844/run_governance_v2.py.txt",
+          "retained_sha256": "155e3e8efa7d25bbd9b7be1de0c7033432e5b26dfc8a335ea8266d618f28cf5f",
+          "retained_size_bytes": 7009
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/source-after.json",
+          "original_sha256": "75f277ec40a69b616c938cde2ff5fd49454a5bd6f9afcf775b93159ec50cbb2c",
+          "original_size_bytes": 1082970,
+          "retained_path": "serial-17e02844/source-after.json.gz",
+          "retained_sha256": "0d9834ac6707e4f975e466a30ef718e739c4e93c377e85e6343bd4ca8ed76ce4",
+          "retained_size_bytes": 309936
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/source-before.json",
+          "original_sha256": "75f277ec40a69b616c938cde2ff5fd49454a5bd6f9afcf775b93159ec50cbb2c",
+          "original_size_bytes": 1082970,
+          "retained_path": "serial-17e02844/source-before.json.gz",
+          "retained_sha256": "0d9834ac6707e4f975e466a30ef718e739c4e93c377e85e6343bd4ca8ed76ce4",
+          "retained_size_bytes": 309936
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/structure.log",
+          "original_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+          "original_size_bytes": 96,
+          "retained_path": "serial-17e02844/structure.log.gz",
+          "retained_sha256": "873c99f37a35edaf08cdb3558c343fd8fa4146213a823875730c2ed29b4e81e2",
+          "retained_size_bytes": 106
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/supervisor.stdout.log",
+          "original_sha256": "67a81855a3bba2ad8d2aec016321125440703df4930cc2bd6c70b6d7250ce917",
+          "original_size_bytes": 488,
+          "retained_path": "serial-17e02844/supervisor.stdout.log.gz",
+          "retained_sha256": "05dc5b4679c16370019ff324d32dd327496ee1e0935959d7b97f312742b92032",
+          "retained_size_bytes": 288
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/unittest-discovery.log",
+          "original_sha256": "03faca06f21cd4d207e7cb37738988cf0791d989b5d708414cfb00704d3b539e",
+          "original_size_bytes": 790494,
+          "retained_path": "serial-17e02844/unittest-discovery.log.gz",
+          "retained_sha256": "8faad57bf90bff261620f324a5521f6652fa4818c46f0cb704485b30395d4229",
+          "retained_size_bytes": 111920
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/preserved-v1/execution.json",
+          "original_sha256": "259a18551bc9d3cec7c16f6f442d5ac42eb67e25b3417f0314c0be8d8e88278d",
+          "original_size_bytes": 430,
+          "retained_path": "serial-17e02844/preserved-v1/execution.json.gz",
+          "retained_sha256": "60065b90ac06edadebe48b4e70e4469c605ce293bd015dd2123745473eacb766",
+          "retained_size_bytes": 303
+        },
+        {
+          "encoding": "identity",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/preserved-v1/run_governance.py",
+          "original_sha256": "418a8282f3a5d4c4b330ee5d7430d1329cc5047a2a9adfd1b37c14c8c247fdce",
+          "original_size_bytes": 4016,
+          "retained_path": "serial-17e02844/preserved-v1/run_governance.py.txt",
+          "retained_sha256": "418a8282f3a5d4c4b330ee5d7430d1329cc5047a2a9adfd1b37c14c8c247fdce",
+          "retained_size_bytes": 4016
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/preserved-v1/supervisor-stopped.stdout.log",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_size_bytes": 0,
+          "retained_path": "serial-17e02844/preserved-v1/supervisor-stopped.stdout.log.gz",
+          "retained_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+          "retained_size_bytes": 20
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/preserved-v1/supervisor.stdout.log",
+          "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "original_size_bytes": 0,
+          "retained_path": "serial-17e02844/preserved-v1/supervisor.stdout.log.gz",
+          "retained_sha256": "f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec",
+          "retained_size_bytes": 20
+        }
+      ],
+      "source_review": {
+        "clean_status": true,
+        "git_blob_inventory_sha256": "000f7928e6dcf441d37c5ba1a79568715fd4548043ce65a532467eb02fe49a41",
+        "git_blobs_verified": 6734,
+        "initialized_top_level_submodules": [
+          {
+            "path": "third_party/cocogfx",
+            "revision": "b1befdb36df8af7ac9e2c96acaf81957aab5d107"
+          },
+          {
+            "path": "third_party/cvfpu",
+            "revision": "79e453139072df42c9ec8f697132ba485d74e23d"
+          },
+          {
+            "path": "third_party/hardfloat",
+            "revision": "aaf5736dffa521603b681fd5853760c671446c85"
+          },
+          {
+            "path": "third_party/ramulator",
+            "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5"
+          },
+          {
+            "path": "third_party/softfloat",
+            "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4"
+          }
+        ],
+        "recursive_submodule_status": "b1befdb36df8af7ac9e2c96acaf81957aab5d107 third_party/cocogfx (b1befdb)\n 79e453139072df42c9ec8f697132ba485d74e23d third_party/cvfpu (v0.6.6-34-g79e4531)\n-6aeee85d0a34fedc06c14f04fd6363c9f7b4eeea third_party/cvfpu/src/common_cells\n-86e1f558b3c95e91577c41b2fc452c86b04e85ac third_party/cvfpu/src/fpu_div_sqrt_mvp\n-28be2d4fbf41b38fc37763bb6e90a1c88f6aaa61 third_party/cvfpu/tb/flexfloat\n aaf5736dffa521603b681fd5853760c671446c85 third_party/hardfloat (heads/master)\n e62c84a6f0e06566ba6e182d308434b4532068a5 third_party/ramulator (e62c84a)\n b51ef8f3201669b2288104c28546fc72532a1ea4 third_party/softfloat (b51ef8f)",
+        "revision": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+        "snapshot_rows_verified": 6733,
+        "tree": "5063f4c8bfec76d2e49d136d84d6ff5d27f5f521"
+      },
+      "source_revision": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+      "source_tree": "5063f4c8bfec76d2e49d136d84d6ff5d27f5f521",
+      "started_at": "2026-11-23T15:32:09Z",
+      "state": "finished",
+      "unittest": {
+        "discovered_count": 4434,
+        "error_headers": [
+          "setUpClass (test_p06_dependency_option_controls.ActualGeneratedOptionControls)",
+          "setUpClass (test_p06_dependency_receipt.ActualCMakeReviewTests)"
+        ],
+        "expected_order_preserved": true,
+        "failure_headers": [
+          "test_actual_cmake_records_static_archive_index_and_shared_link_only (test_p06_dependency_build.DependencyBuildTests.test_actual_cmake_records_static_archive_index_and_shared_link_only)"
+        ],
+        "final_line": "FAILED (failures=1, errors=2)",
+        "full_discovered_population_executed": false,
+        "missing_ids": [
+          "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_actual_tiny_records_and_generated_recipes_pass_without_semantic_patches",
+          "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_generated_archive_and_index_commands_cannot_bypass_wrappers_after_rehash",
+          "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_generated_release_and_linker_flags_reject_after_descriptor_rehash",
+          "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_self_consistent_archive_argv_change_reaches_generated_recipe_join",
+          "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_self_consistent_executable_substitution_reaches_selected_tool_identity",
+          "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_self_consistent_map_argv_changes_reach_retained_link_map_join",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_actual_generated_cache_flags_archives_and_links_pass",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_actual_shared_maps_and_equivalent_relative_loads_pass",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_changed_cmake_cache_configuration_is_rejected_after_rehash",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_changed_cmake_link_recipe_is_rejected_after_rehash",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_changed_cmake_target_flags_are_rejected_after_rehash",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_omitted_or_duplicate_generated_target_is_rejected",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_only_already_admitted_compiler_archives_are_exempt_inside_owned_roots",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_rehashed_unplanned_source_workspace_and_alias_loads_reject",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_relative_duplicate_direct_load_rejects"
+        ],
+        "ran_count": 4419,
+        "reported_seconds": 3508.26,
+        "verbose_started_id_count": 4419,
+        "verbose_started_ids_sha256": "f620065eb25a8beee2c379e5da9c8621888407af1043c9c5342a9ece97fd1e8d"
+      }
+    },
+    {
+      "commands": [
+        {
+          "argv": [
+            "/workspace/p06-governance-host-01/bin/python3",
+            "-B",
+            "ci/project/preflight.py",
+            "--tier",
+            "governance",
+            "--json"
+          ],
+          "cwd": "/workspace/p06-counter-governance-source-02",
+          "duration_seconds": 0.2153612299989618,
+          "exit_code": 0,
+          "finished_at": "2026-11-23T16:08:54Z",
+          "id": "preflight",
+          "log": "preflight.log",
+          "log_sha256": "74dd3935f409bd1095fe8813c5c3278461ac83753ec9e9ce7d437dfaeeed54f0",
+          "log_size_bytes": 4990,
+          "started_at": "2026-11-23T16:08:54Z"
+        },
+        {
+          "argv": [
+            "/workspace/p06-governance-host-01/bin/python3",
+            "-B",
+            "ci/project/check_project.py"
+          ],
+          "cwd": "/workspace/p06-counter-governance-source-02",
+          "duration_seconds": 2.92781110299984,
+          "exit_code": 0,
+          "finished_at": "2026-11-23T16:08:57Z",
+          "id": "structure",
+          "log": "structure.log",
+          "log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+          "log_size_bytes": 96,
+          "started_at": "2026-11-23T16:08:54Z"
+        },
+        {
+          "argv": [
+            "/workspace/p06-governance-host-01/bin/python3",
+            "-B",
+            "ci/project/check_baseline_packets.py"
+          ],
+          "cwd": "/workspace/p06-counter-governance-source-02",
+          "duration_seconds": 0.3152063409979746,
+          "exit_code": 0,
+          "finished_at": "2026-11-23T16:08:57Z",
+          "id": "baseline-packets",
+          "log": "baseline-packets.log",
+          "log_sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be",
+          "log_size_bytes": 657,
+          "started_at": "2026-11-23T16:08:57Z"
+        },
+        {
+          "argv": [
+            "/workspace/p06-governance-host-01/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "ci/project",
+            "-p",
+            "test_*.py",
+            "-v"
+          ],
+          "cwd": "/workspace/p06-counter-governance-source-02",
+          "id": "unittest-discovery",
+          "log": "unittest-discovery.log",
+          "started_at": "2026-11-23T16:08:57Z"
+        }
+      ],
+      "coordinator_interruption_receipt_sha256": "206ecd979caaa20b170108de5598031394e9533c73da6438aca1a392b2834f2c",
+      "diagnosis": "The diagnosed bare-alias P05 failure occurred before coordinator-approved termination; this partial run supplies no complete-suite pass.",
+      "finished_at": "2026-11-23T17:02:12.852744+00:00",
+      "gpu_execution_certified": false,
+      "id": "serial-0093cf60",
+      "interruption_limitations": [
+        "The original supervisor receipt is retained unchanged and did not reach its normal finalization.",
+        "Session closure and absence of an open log handle do not independently prove termination of deliberately detached descendants.",
+        "This interrupted serial run supplies no complete-suite pass; the separate completed proper-environment run supplies that result."
+      ],
+      "normal_supervisor_finalization_reached": false,
+      "observed_session_exit_code": 130,
+      "original_execution_sha256": "ec176143352c5724e9d3426dfd3e7455c6ab5c7303e6ede11c5a0ac7f9d87920",
+      "original_execution_state_retained": "running",
+      "outcome": "interrupted-after-observed-failure",
+      "retained_files": [
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-0093cf60/baseline-packets.log",
+          "original_sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be",
+          "original_size_bytes": 657,
+          "retained_path": "serial-0093cf60/baseline-packets.log.gz",
+          "retained_sha256": "418367bc801700d0993bc1d0f889aff95947eb9deec5a7ab79262b4b48ca46a4",
+          "retained_size_bytes": 278
+        },
+        {
+          "encoding": "identity",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-0093cf60/execution.json",
+          "original_sha256": "ec176143352c5724e9d3426dfd3e7455c6ab5c7303e6ede11c5a0ac7f9d87920",
+          "original_size_bytes": 3953,
+          "retained_path": "serial-0093cf60/execution.json",
+          "retained_sha256": "ec176143352c5724e9d3426dfd3e7455c6ab5c7303e6ede11c5a0ac7f9d87920",
+          "retained_size_bytes": 3953
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-0093cf60/preflight.log",
+          "original_sha256": "74dd3935f409bd1095fe8813c5c3278461ac83753ec9e9ce7d437dfaeeed54f0",
+          "original_size_bytes": 4990,
+          "retained_path": "serial-0093cf60/preflight.log.gz",
+          "retained_sha256": "933acde57a12cd2b28f436f09e8468a357b24b070de6d365865aa4c098968a72",
+          "retained_size_bytes": 1658
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-0093cf60/root-interruption-receipt.json",
+          "original_sha256": "206ecd979caaa20b170108de5598031394e9533c73da6438aca1a392b2834f2c",
+          "original_size_bytes": 1570,
+          "retained_path": "serial-0093cf60/root-interruption-receipt.json.gz",
+          "retained_sha256": "98fb8dd40332103d4e58a81104fd0812c7a559b0122429db0c2c77a0d9aca41d",
+          "retained_size_bytes": 846
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-0093cf60/root-stop-request.json",
+          "original_sha256": "28630f6a3268ec87948b62b5fe21a92d6ca2298954d7d711c20af7f3a7ed2a68",
+          "original_size_bytes": 6174,
+          "retained_path": "serial-0093cf60/root-stop-request.json.gz",
+          "retained_sha256": "e0cddce90255d7f91cac910a2ad8ca1d1af1b50ce7b713a05e3a8b15ff7715ef",
+          "retained_size_bytes": 2051
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-0093cf60/root-stop-result.json",
+          "original_sha256": "dd11d01d947293589057eb14c0d5703b6295d110965c5f1083aa20ba34034bff",
+          "original_size_bytes": 128,
+          "retained_path": "serial-0093cf60/root-stop-result.json.gz",
+          "retained_sha256": "477853cbf6c90d85f32d79e82378a2d4cf8c8f1a08174687848307811afb97ba",
+          "retained_size_bytes": 125
+        },
+        {
+          "encoding": "identity",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-0093cf60/run_governance_v3.py",
+          "original_sha256": "9bb2c6639d8d5f235b62e76d363e386839ed917aa13da6152efac86201312320",
+          "original_size_bytes": 7444,
+          "retained_path": "serial-0093cf60/run_governance_v3.py.txt",
+          "retained_sha256": "9bb2c6639d8d5f235b62e76d363e386839ed917aa13da6152efac86201312320",
+          "retained_size_bytes": 7444
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-0093cf60/source-before.json",
+          "original_sha256": "784b56b61776bfeb9a6a54f3b9487181fe00c9103f656bc92b965e6873b3b64b",
+          "original_size_bytes": 1082970,
+          "retained_path": "serial-0093cf60/source-before.json.gz",
+          "retained_sha256": "b7160dd3478adefd588f407bbecbe37dc36862c8fd2b7f463b506717f8486c04",
+          "retained_size_bytes": 309933
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-0093cf60/structure.log",
+          "original_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+          "original_size_bytes": 96,
+          "retained_path": "serial-0093cf60/structure.log.gz",
+          "retained_sha256": "873c99f37a35edaf08cdb3558c343fd8fa4146213a823875730c2ed29b4e81e2",
+          "retained_size_bytes": 106
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-0093cf60/unittest-discovery.log",
+          "original_sha256": "c9b23a892f306df2f44c413462319fde2e7948fbf14f2e5702c212f687123c08",
+          "original_size_bytes": 681455,
+          "retained_path": "serial-0093cf60/unittest-discovery.log.gz",
+          "retained_sha256": "a6fcf8329d5c3941ea1959863aa3537395b896bb957401e62294ee8aec5620ff",
+          "retained_size_bytes": 96484
+        }
+      ],
+      "source_review": {
+        "clean_status": true,
+        "git_blob_inventory_sha256": "451794ceba0d4dd94a3cf7e2d9dfc834525db8df9dfceee3426df39b92e11fce",
+        "git_blobs_verified": 6734,
+        "initialized_top_level_submodules": [
+          {
+            "path": "third_party/cocogfx",
+            "revision": "b1befdb36df8af7ac9e2c96acaf81957aab5d107"
+          },
+          {
+            "path": "third_party/cvfpu",
+            "revision": "79e453139072df42c9ec8f697132ba485d74e23d"
+          },
+          {
+            "path": "third_party/hardfloat",
+            "revision": "aaf5736dffa521603b681fd5853760c671446c85"
+          },
+          {
+            "path": "third_party/ramulator",
+            "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5"
+          },
+          {
+            "path": "third_party/softfloat",
+            "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4"
+          }
+        ],
+        "recursive_submodule_status": "b1befdb36df8af7ac9e2c96acaf81957aab5d107 third_party/cocogfx (b1befdb)\n 79e453139072df42c9ec8f697132ba485d74e23d third_party/cvfpu (v0.6.6-34-g79e4531)\n-6aeee85d0a34fedc06c14f04fd6363c9f7b4eeea third_party/cvfpu/src/common_cells\n-86e1f558b3c95e91577c41b2fc452c86b04e85ac third_party/cvfpu/src/fpu_div_sqrt_mvp\n-28be2d4fbf41b38fc37763bb6e90a1c88f6aaa61 third_party/cvfpu/tb/flexfloat\n aaf5736dffa521603b681fd5853760c671446c85 third_party/hardfloat (heads/master)\n e62c84a6f0e06566ba6e182d308434b4532068a5 third_party/ramulator (e62c84a)\n b51ef8f3201669b2288104c28546fc72532a1ea4 third_party/softfloat (b51ef8f)",
+        "revision": "0093cf60d881a177634ce1a2247e053fc9d2b94e",
+        "snapshot_rows_verified": 6733,
+        "tree": "037a667b7a3238061ff1d4894503bd26c741c7c3"
+      },
+      "source_revision": "0093cf60d881a177634ce1a2247e053fc9d2b94e",
+      "source_snapshot_verification": "Current source independently matches the original before snapshot; no original after snapshot was invented.",
+      "source_tree": "037a667b7a3238061ff1d4894503bd26c741c7c3",
+      "started_at": "2026-11-23T16:08:53Z",
+      "state": "interrupted",
+      "unittest": {
+        "complete_run_count": null,
+        "discovered_count": 4437,
+        "full_discovered_population_executed": false,
+        "last_started_id_may_be_incomplete": "test_p06_warm_replay.WarmReplayTests.test_common_build_binding_and_per_process_binding_are_reconstructed",
+        "normal_unittest_trailer_present": false,
+        "observed_failure_markers": [
+          "test_copied_checker_cannot_import_source_in_clean_venv (test_p05_installed_check.InstalledCheckerTests.test_copied_checker_cannot_import_source_in_clean_venv) ... FAIL"
+        ],
+        "ordered_prefix_verified": true,
+        "verbose_started_id_count": 3817,
+        "verbose_started_ids_sha256": "d51623df1abbcc8c6c2bb784ebb382a38652dd0f8fcbcc577823951036941c7d"
+      }
+    },
+    {
+      "commands": [
+        {
+          "argv": [
+            "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/bin/python3",
+            "-B",
+            "ci/project/preflight.py",
+            "--tier",
+            "governance",
+            "--json"
+          ],
+          "duration_seconds": 0.26750891100164154,
+          "exit_code": 0,
+          "finished_at": "2026-11-23T16:29:05Z",
+          "id": "preflight",
+          "log": "preflight.log",
+          "log_sha256": "6971056605edc53c4beb69413ca0f4751ad543f2d3b11c142f5b3865300b616f",
+          "started_at": "2026-11-23T16:29:05Z"
+        },
+        {
+          "argv": [
+            "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/bin/python3",
+            "-B",
+            "ci/project/check_project.py"
+          ],
+          "duration_seconds": 3.0226671990021714,
+          "exit_code": 0,
+          "finished_at": "2026-11-23T16:29:08Z",
+          "id": "structure",
+          "log": "structure.log",
+          "log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+          "started_at": "2026-11-23T16:29:05Z"
+        },
+        {
+          "argv": [
+            "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/bin/python3",
+            "-B",
+            "ci/project/check_baseline_packets.py"
+          ],
+          "duration_seconds": 0.21480269400126417,
+          "exit_code": 0,
+          "finished_at": "2026-11-23T16:29:08Z",
+          "id": "baseline-packets",
+          "log": "baseline-packets.log",
+          "log_sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be",
+          "started_at": "2026-11-23T16:29:08Z"
+        }
+      ],
+      "complete_population_executed_exactly_once": true,
+      "cross_module_order_differs_from_monolithic": true,
+      "discovered_unique_ids": 4437,
+      "executed_unique_ids": 4437,
+      "finished_at": "2026-11-23T17:00:51Z",
+      "gpu_execution_certified": false,
+      "id": "partitioned-22039974",
+      "module_class_order_preserved": true,
+      "modules": 267,
+      "native_execution_by_this_validation": "not_run",
+      "no_failures_errors_skips_expected_failures_or_unexpected_successes": true,
+      "original_execution_sha256": "f82a19f7448881a82f9d6d16c8f29acc0117b03b360668a4e38733f274b66ce6",
+      "outcome": "pass",
+      "partitions": [
+        {
+          "duration_seconds": 925.5549984819991,
+          "index": 0,
+          "log_sha256": "05c77acd28a4952b82c7324f71b2491197fb2dbd28724ad8af83fc8db2ec913e",
+          "module_count": 88,
+          "outcome": "pass",
+          "result_sha256": "9f4519c2c663ef226ff587f72aea39ec41362f9e5f817b2119a6000ef49fcf0e",
+          "selected_ids_sha256": "93beb36bd621002cdef3808f418b4437f58367c1882874e027ae314b177ee313",
+          "started_equals_completed_equals_selected": true,
+          "tests_run": 1479,
+          "verbose_log_matches_ids": true
+        },
+        {
+          "duration_seconds": 1891.9609557009971,
+          "index": 1,
+          "log_sha256": "5aeaa5919193dbc33de346effecb90370054d3b7daf5f12f464a039bc5d56249",
+          "module_count": 89,
+          "outcome": "pass",
+          "result_sha256": "8d4b283f3c58c7d57f26c9a6e8fd5236181eb99cbff915d55f330aacfc06910c",
+          "selected_ids_sha256": "bd6532589308afc07fbc79d6cde4b14e2a1ec972b27a319142eb3d80a2458842",
+          "started_equals_completed_equals_selected": true,
+          "tests_run": 1479,
+          "verbose_log_matches_ids": true
+        },
+        {
+          "duration_seconds": 1643.7992054850001,
+          "index": 2,
+          "log_sha256": "f1b0c4f0a623b956aabaf6d6c9cd0345172122fc48f9ed8e5a7987c7e8422949",
+          "module_count": 90,
+          "outcome": "pass",
+          "result_sha256": "35d05003963ff7fe417013cf7d945b99f96cb8c2138587e84083de1ec3b52558",
+          "selected_ids_sha256": "2c94257a958be9194edc60aef0c1ed06f4320a1fa10e1ceff7eb0311c56df0a4",
+          "started_equals_completed_equals_selected": true,
+          "tests_run": 1479,
+          "verbose_log_matches_ids": true
+        }
+      ],
+      "retained_files": [
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/baseline-packets.log",
+          "original_sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be",
+          "original_size_bytes": 657,
+          "retained_path": "partitioned-22039974/baseline-packets.log.gz",
+          "retained_sha256": "418367bc801700d0993bc1d0f889aff95947eb9deec5a7ab79262b4b48ca46a4",
+          "retained_size_bytes": 278
+        },
+        {
+          "encoding": "identity",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/execution.json",
+          "original_sha256": "f82a19f7448881a82f9d6d16c8f29acc0117b03b360668a4e38733f274b66ce6",
+          "original_size_bytes": 9461,
+          "retained_path": "partitioned-22039974/execution.json",
+          "retained_sha256": "f82a19f7448881a82f9d6d16c8f29acc0117b03b360668a4e38733f274b66ce6",
+          "retained_size_bytes": 9461
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/partition-0-result.json",
+          "original_sha256": "9f4519c2c663ef226ff587f72aea39ec41362f9e5f817b2119a6000ef49fcf0e",
+          "original_size_bytes": 508084,
+          "retained_path": "partitioned-22039974/partition-0-result.json.gz",
+          "retained_sha256": "314df0e8b86fc8be8b08eb021ddc2af9894b0801c95317096458bcf9fba87fd2",
+          "retained_size_bytes": 89765
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/partition-0.log",
+          "original_sha256": "05c77acd28a4952b82c7324f71b2491197fb2dbd28724ad8af83fc8db2ec913e",
+          "original_size_bytes": 259188,
+          "retained_path": "partitioned-22039974/partition-0.log.gz",
+          "retained_sha256": "ce9e4a3c73d6787b49d6e69fba8b8892a06d05bc8ef162e3dd263a347cb8238f",
+          "retained_size_bytes": 37621
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/partition-1-result.json",
+          "original_sha256": "8d4b283f3c58c7d57f26c9a6e8fd5236181eb99cbff915d55f330aacfc06910c",
+          "original_size_bytes": 516452,
+          "retained_path": "partitioned-22039974/partition-1-result.json.gz",
+          "retained_sha256": "1ed071a48c39148085b5040d02baa3c2119e0964f43694498bdb4aee50dc502e",
+          "retained_size_bytes": 92763
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/partition-1.log",
+          "original_sha256": "5aeaa5919193dbc33de346effecb90370054d3b7daf5f12f464a039bc5d56249",
+          "original_size_bytes": 263005,
+          "retained_path": "partitioned-22039974/partition-1.log.gz",
+          "retained_sha256": "370c7c795a2bf3c5dfff8761a5aaec6205fec8b735d2a17ba5d7435ae95668d9",
+          "retained_size_bytes": 38832
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/partition-2-result.json",
+          "original_sha256": "35d05003963ff7fe417013cf7d945b99f96cb8c2138587e84083de1ec3b52558",
+          "original_size_bytes": 525413,
+          "retained_path": "partitioned-22039974/partition-2-result.json.gz",
+          "retained_sha256": "47d670c4c55d4d99b86b5bcd8cb5c99ca86f5a60c71b06554892381e034546a0",
+          "retained_size_bytes": 92705
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/partition-2.log",
+          "original_sha256": "f1b0c4f0a623b956aabaf6d6c9cd0345172122fc48f9ed8e5a7987c7e8422949",
+          "original_size_bytes": 268432,
+          "retained_path": "partitioned-22039974/partition-2.log.gz",
+          "retained_sha256": "eafd12335ad3a33bca55e335c98be6079d1ea7b2fcb8767c3f695303ef2c4c6e",
+          "retained_size_bytes": 38841
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/partition-manifest.json",
+          "original_sha256": "05bcdcb2d88cdc954c24617654e8454fd3133c104a83bce75ed62c88377a8a2b",
+          "original_size_bytes": 1060494,
+          "retained_path": "partitioned-22039974/partition-manifest.json.gz",
+          "retained_sha256": "8587a2c3c02e8389e2bd4de769c0ae82c2254f9b5e21798682d6572a79d44088",
+          "retained_size_bytes": 182155
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/preflight.log",
+          "original_sha256": "6971056605edc53c4beb69413ca0f4751ad543f2d3b11c142f5b3865300b616f",
+          "original_size_bytes": 4990,
+          "retained_path": "partitioned-22039974/preflight.log.gz",
+          "retained_sha256": "0c54472b58c2a7e1a7c856154d2f1b29eab74022b2fab61a3259c5845f4ce5a0",
+          "retained_size_bytes": 1656
+        },
+        {
+          "encoding": "identity",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/run_governance.py",
+          "original_sha256": "194a26ae2398b7d267731490506f31eccfac9eb6afcd977db5fe4a2e68094fe8",
+          "original_size_bytes": 11960,
+          "retained_path": "partitioned-22039974/run_governance.py.txt",
+          "retained_sha256": "194a26ae2398b7d267731490506f31eccfac9eb6afcd977db5fe4a2e68094fe8",
+          "retained_size_bytes": 11960
+        },
+        {
+          "encoding": "identity",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/run_partition.py",
+          "original_sha256": "82e1bd3596ccaf7531ddce9edcbc1dd7c82c5c3a38995352487f971de07ba9d8",
+          "original_size_bytes": 3127,
+          "retained_path": "partitioned-22039974/run_partition.py.txt",
+          "retained_sha256": "82e1bd3596ccaf7531ddce9edcbc1dd7c82c5c3a38995352487f971de07ba9d8",
+          "retained_size_bytes": 3127
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/source-after.json",
+          "original_sha256": "784b56b61776bfeb9a6a54f3b9487181fe00c9103f656bc92b965e6873b3b64b",
+          "original_size_bytes": 1082970,
+          "retained_path": "partitioned-22039974/source-after.json.gz",
+          "retained_sha256": "b7160dd3478adefd588f407bbecbe37dc36862c8fd2b7f463b506717f8486c04",
+          "retained_size_bytes": 309933
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/source-before.json",
+          "original_sha256": "784b56b61776bfeb9a6a54f3b9487181fe00c9103f656bc92b965e6873b3b64b",
+          "original_size_bytes": 1082970,
+          "retained_path": "partitioned-22039974/source-before.json.gz",
+          "retained_sha256": "b7160dd3478adefd588f407bbecbe37dc36862c8fd2b7f463b506717f8486c04",
+          "retained_size_bytes": 309933
+        },
+        {
+          "encoding": "gzip",
+          "original_path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/structure.log",
+          "original_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+          "original_size_bytes": 96,
+          "retained_path": "partitioned-22039974/structure.log.gz",
+          "retained_sha256": "873c99f37a35edaf08cdb3558c343fd8fa4146213a823875730c2ed29b4e81e2",
+          "retained_size_bytes": 106
+        }
+      ],
+      "source_review": {
+        "clean_status": true,
+        "git_blob_inventory_sha256": "451794ceba0d4dd94a3cf7e2d9dfc834525db8df9dfceee3426df39b92e11fce",
+        "git_blobs_verified": 6734,
+        "initialized_top_level_submodules": [
+          {
+            "path": "third_party/cocogfx",
+            "revision": "b1befdb36df8af7ac9e2c96acaf81957aab5d107"
+          },
+          {
+            "path": "third_party/cvfpu",
+            "revision": "79e453139072df42c9ec8f697132ba485d74e23d"
+          },
+          {
+            "path": "third_party/hardfloat",
+            "revision": "aaf5736dffa521603b681fd5853760c671446c85"
+          },
+          {
+            "path": "third_party/ramulator",
+            "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5"
+          },
+          {
+            "path": "third_party/softfloat",
+            "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4"
+          }
+        ],
+        "recursive_submodule_status": "b1befdb36df8af7ac9e2c96acaf81957aab5d107 third_party/cocogfx (b1befdb)\n 79e453139072df42c9ec8f697132ba485d74e23d third_party/cvfpu (v0.6.6-34-g79e4531)\n-6aeee85d0a34fedc06c14f04fd6363c9f7b4eeea third_party/cvfpu/src/common_cells\n-86e1f558b3c95e91577c41b2fc452c86b04e85ac third_party/cvfpu/src/fpu_div_sqrt_mvp\n-28be2d4fbf41b38fc37763bb6e90a1c88f6aaa61 third_party/cvfpu/tb/flexfloat\n aaf5736dffa521603b681fd5853760c671446c85 third_party/hardfloat (heads/master)\n e62c84a6f0e06566ba6e182d308434b4532068a5 third_party/ramulator (e62c84a)\n b51ef8f3201669b2288104c28546fc72532a1ea4 third_party/softfloat (b51ef8f)",
+        "revision": "220399748ecab84d48ba5a5f123457c44a0c8699",
+        "snapshot_rows_verified": 6733,
+        "tree": "037a667b7a3238061ff1d4894503bd26c741c7c3"
+      },
+      "source_revision": "220399748ecab84d48ba5a5f123457c44a0c8699",
+      "source_tree": "037a667b7a3238061ff1d4894503bd26c741c7c3",
+      "started_at": "2026-11-23T16:29:05Z",
+      "state": "finished",
+      "tool_inputs_verified": [
+        {
+          "path": "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/bin/python3",
+          "resolved": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+          "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+          "size_bytes": 30894944
+        },
+        {
+          "path": "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/bin/cmake",
+          "resolved": "/workspace/p06-build-tools/cmake/data/bin/cmake",
+          "sha256": "a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83",
+          "size_bytes": 14672584
+        },
+        {
+          "path": "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/pyvenv.cfg",
+          "resolved": "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/pyvenv.cfg",
+          "sha256": "284d39aaef3431bfe81e674f6b29a96d18794ff86c2ff37c756fa33827d24eb4",
+          "size_bytes": 391
+        }
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "scope": "source-root-governance-retention-and-independent-execution-accounting",
+  "state": "finished"
+}

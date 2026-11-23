@@ -1,0 +1,372 @@
+{
+  "affected_validation": {
+    "argv": [
+      "/workspace/scratch/e96519576778/w08-a04-cmake-fixture/host-bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "test_p06_dependency_build.DependencyBuildTests",
+      "test_p06_dependency_option_controls.ActualGeneratedOptionControls",
+      "test_p06_dependency_receipt.ActualCMakeReviewTests"
+    ],
+    "cwd": "/workspace/AI-GPU",
+    "distinct_test_count": 24,
+    "duration_seconds": 4.8072093589980796,
+    "errors": 0,
+    "exit_code": 0,
+    "failures": 0,
+    "log": "/workspace/scratch/e96519576778/w08-a04-cmake-fixture/after-affected.log",
+    "skips": 0,
+    "source_sha256": "2f6a9017eec0d7ff5104ab6e7c7813c40c545c5abc616c3ef1971f8ab15eece9",
+    "test_count": 24,
+    "test_ids": [
+      "test_actual_cmake_records_static_archive_index_and_shared_link_only (test_p06_dependency_build.DependencyBuildTests.test_actual_cmake_records_static_archive_index_and_shared_link_only)",
+      "test_actual_make_override_preserves_automatic_outputs_and_archive_order (test_p06_dependency_build.DependencyBuildTests.test_actual_make_override_preserves_automatic_outputs_and_archive_order)",
+      "test_clean_environment_removes_caller_compiler_selection (test_p06_dependency_build.DependencyBuildTests.test_clean_environment_removes_caller_compiler_selection)",
+      "test_first_failure_remains_primary_and_no_pass_flag_survives (test_p06_dependency_build.DependencyBuildTests.test_first_failure_remains_primary_and_no_pass_flag_survives)",
+      "test_fixture_ignores_ambient_tool_directory (test_p06_dependency_build.DependencyBuildTests.test_fixture_ignores_ambient_tool_directory)",
+      "test_pinned_literal_parentheses_do_not_relax_root_or_shell_rules (test_p06_dependency_build.DependencyBuildTests.test_pinned_literal_parentheses_do_not_relax_root_or_shell_rules)",
+      "test_receipt_lock_is_only_permitted_nondocument_and_must_be_empty (test_p06_dependency_build.DependencyBuildTests.test_receipt_lock_is_only_permitted_nondocument_and_must_be_empty)",
+      "test_resource_block_retains_original_preparation_and_failure (test_p06_dependency_build.DependencyBuildTests.test_resource_block_retains_original_preparation_and_failure)",
+      "test_stage_is_exclusive_and_rejects_aliases (test_p06_dependency_build.DependencyBuildTests.test_stage_is_exclusive_and_rejects_aliases)",
+      "test_actual_tiny_records_and_generated_recipes_pass_without_semantic_patches (test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_actual_tiny_records_and_generated_recipes_pass_without_semantic_patches)",
+      "test_generated_archive_and_index_commands_cannot_bypass_wrappers_after_rehash (test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_generated_archive_and_index_commands_cannot_bypass_wrappers_after_rehash)",
+      "test_generated_release_and_linker_flags_reject_after_descriptor_rehash (test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_generated_release_and_linker_flags_reject_after_descriptor_rehash)",
+      "test_self_consistent_archive_argv_change_reaches_generated_recipe_join (test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_self_consistent_archive_argv_change_reaches_generated_recipe_join)",
+      "test_self_consistent_executable_substitution_reaches_selected_tool_identity (test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_self_consistent_executable_substitution_reaches_selected_tool_identity)",
+      "test_self_consistent_map_argv_changes_reach_retained_link_map_join (test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_self_consistent_map_argv_changes_reach_retained_link_map_join)",
+      "test_actual_generated_cache_flags_archives_and_links_pass (test_p06_dependency_receipt.ActualCMakeReviewTests.test_actual_generated_cache_flags_archives_and_links_pass)",
+      "test_actual_shared_maps_and_equivalent_relative_loads_pass (test_p06_dependency_receipt.ActualCMakeReviewTests.test_actual_shared_maps_and_equivalent_relative_loads_pass)",
+      "test_changed_cmake_cache_configuration_is_rejected_after_rehash (test_p06_dependency_receipt.ActualCMakeReviewTests.test_changed_cmake_cache_configuration_is_rejected_after_rehash)",
+      "test_changed_cmake_link_recipe_is_rejected_after_rehash (test_p06_dependency_receipt.ActualCMakeReviewTests.test_changed_cmake_link_recipe_is_rejected_after_rehash)",
+      "test_changed_cmake_target_flags_are_rejected_after_rehash (test_p06_dependency_receipt.ActualCMakeReviewTests.test_changed_cmake_target_flags_are_rejected_after_rehash)",
+      "test_omitted_or_duplicate_generated_target_is_rejected (test_p06_dependency_receipt.ActualCMakeReviewTests.test_omitted_or_duplicate_generated_target_is_rejected)",
+      "test_only_already_admitted_compiler_archives_are_exempt_inside_owned_roots (test_p06_dependency_receipt.ActualCMakeReviewTests.test_only_already_admitted_compiler_archives_are_exempt_inside_owned_roots)",
+      "test_rehashed_unplanned_source_workspace_and_alias_loads_reject (test_p06_dependency_receipt.ActualCMakeReviewTests.test_rehashed_unplanned_source_workspace_and_alias_loads_reject)",
+      "test_relative_duplicate_direct_load_rejects (test_p06_dependency_receipt.ActualCMakeReviewTests.test_relative_duplicate_direct_load_rejects)"
+    ],
+    "unittest_seconds": 4.544
+  },
+  "agent": "w08_a04",
+  "baseline_revision": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+  "change": {
+    "after_sha256": "2f6a9017eec0d7ff5104ab6e7c7813c40c545c5abc616c3ef1971f8ab15eece9",
+    "before_sha256": "3ed60fa05525684aa9d4e4a1d22aa802fb1715445b4246f786cb84dc1a5e3357",
+    "behavior": "Build the sanitized environment before discovery and use its PATH for every host-tool lookup, matching the existing production tool_inventory. Add an actual Make/archive regression under a poisoned ambient tool directory.",
+    "existing_skip_branch_changed": false,
+    "path": "ci/project/test_p06_dependency_build.py",
+    "production_code_changed": false,
+    "skip_count": 0
+  },
+  "finding": {
+    "confidence": "high",
+    "description": "Shared test fixture chose ambient-PATH tools before creating a sanitized invocation environment. A user-package CMake launcher worked with ambient HOME and failed with sanitized HOME, breaking one test and two dependent class setups.",
+    "evidence_type": "static-proof",
+    "severity": "F2",
+    "status": "fixed"
+  },
+  "limitations": [
+    "The full original governance run remains owned by the coordinator and is not relabeled passing by these focused results.",
+    "GCC/G++14.2.0 here are host-fixture tools; the successful GPU native qualification used its separately retained GCC12 toolchain.",
+    "The existing functional CMake3.22.6 installation and Python3.12.14 executable were exposed through new scratch-only symlinks; no package installation or shared toolchain mutation occurred.",
+    "The historical missing-CMake skip remains unchanged; no skip was taken by this validation.",
+    "No original native report, archive, frozen qualification proof, golden input, acceptance status, production source, commit or push was changed by this agent."
+  ],
+  "logs": {
+    "w08_a04-cmake-affected-pass.log": {
+      "sha256": "112f4c020b031b51b19904386edf4fc5bdfe4ce8d9da61e5181f22880e6e2bbd",
+      "size_bytes": 4615
+    },
+    "w08_a04-cmake-original-failure.log": {
+      "sha256": "0cc0dbc3f2ed042b7962e6786ff534948c65db4a76859f53d2c9b73a25c2b99b",
+      "size_bytes": 1203
+    },
+    "w08_a04-cmake-regression-before.log": {
+      "sha256": "9af65a87e1d7b2a6a972620f5f818b5e83c874e60207d8c6ddae9f3f9ea61a37",
+      "size_bytes": 995
+    }
+  },
+  "new_regression_on_old_fixture": {
+    "argv": [
+      "/workspace/scratch/e96519576778/w08-a04-cmake-fixture/host-bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "test_p06_dependency_build.DependencyBuildTests.test_fixture_ignores_ambient_tool_directory"
+    ],
+    "duration_seconds": 0.4161669579989393,
+    "exit_code": 1,
+    "source_sha256": "37ae3593657d8cb7e34b9fbb435b03760398b04f5ad0e7c2657ef26fc00b6cfc"
+  },
+  "original_failure": {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "test_p06_dependency_build.DependencyBuildTests.test_actual_cmake_records_static_archive_index_and_shared_link_only"
+    ],
+    "cwd": "/workspace/AI-GPU",
+    "duration_seconds": 1.3741095579971443,
+    "exit_code": 1,
+    "log": "/workspace/scratch/e96519576778/w08-a04-cmake-fixture/before.log"
+  },
+  "outcome": "pass",
+  "schema_version": 1,
+  "scope": "Host fixture correction and 24 affected governance tests; no GPU/native execution or full-suite claim",
+  "source_inventory": {
+    "files": [
+      {
+        "matches_base": true,
+        "path": "ci/project/baseline_inventory.py",
+        "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+        "size_bytes": 20466
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/baseline_matrix.py",
+        "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+        "size_bytes": 8890
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/baseline_packet_contract.py",
+        "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+        "size_bytes": 53680
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/baseline_packet_io.py",
+        "sha256": "469583bc558ccb010af82259de38248d7a9a8283cd873a96726aa3c3e2aaa94c",
+        "size_bytes": 14506
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/baseline_process.py",
+        "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+        "size_bytes": 12627
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/compiler_records.py",
+        "sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+        "size_bytes": 7143
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/p02_matrix.py",
+        "sha256": "e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17",
+        "size_bytes": 30055
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/p02_matrix_records.py",
+        "sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+        "size_bytes": 12332
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/p06_dependency_binary.py",
+        "sha256": "81397956f856e5658864ee59f198c760699160f5d7a78d73d80db41f361814e1",
+        "size_bytes": 16793
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/p06_dependency_build.py",
+        "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+        "size_bytes": 32820
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/p06_dependency_contract.py",
+        "sha256": "d6151024fbe7e8a651075fd76b9bdc006bb18c0f61c538a2928842f865ddd364",
+        "size_bytes": 4438
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/p06_dependency_graph.py",
+        "sha256": "eb278cbd37d5191468d151339a88a665d792e0f31d7f1d41da30285b240e9f08",
+        "size_bytes": 5861
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/p06_dependency_local_prepare.py",
+        "sha256": "c810f31cf6106a5bbcd6eddcf8d818560cb94222da057fe9491a8e1dbc99316f",
+        "size_bytes": 20427
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/p06_dependency_receipt.py",
+        "sha256": "6a45f224b57cbc2e4d7edfd540712eb468b1aa92407e2b65bc5a2de7c3581c70",
+        "size_bytes": 63377
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/p06_dependency_record.py",
+        "sha256": "5364a5036fb03bebed3aba6267d302cf36c379b30e7085ded1b59db077c33205",
+        "size_bytes": 26464
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/p06_dependency_sources.py",
+        "sha256": "4e09b8f8357538591a843f465ca6a20465baf363e5a190b9edf8d01c807174a1",
+        "size_bytes": 17141
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/p06_local_toolchain.py",
+        "sha256": "0bd80e40b6a22bf78a665e8f1b18818a21178bcc32248a20bfd3133d3c3d5aa8",
+        "size_bytes": 23542
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/p06_managed_preflight_source_export.py",
+        "sha256": "1bec4cc1a296ae93bc9c29029ed5a28a02f6edd71adbdbfdbcea156eebf28b46",
+        "size_bytes": 21171
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/p06_managed_preflight_sources.py",
+        "sha256": "dc0374a1c3a059c36d47697ff2c8275bf0901b76468f72a15425ea2cfe687f2a",
+        "size_bytes": 32794
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/preflight.py",
+        "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+        "size_bytes": 15124
+      },
+      {
+        "matches_base": false,
+        "path": "ci/project/test_p06_dependency_build.py",
+        "sha256": "2f6a9017eec0d7ff5104ab6e7c7813c40c545c5abc616c3ef1971f8ab15eece9",
+        "size_bytes": 14758
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/test_p06_dependency_option_controls.py",
+        "sha256": "15eeec600f7227e03b537a3b9e6324760e7fef726a55ee2c392c0ac795c8f57d",
+        "size_bytes": 17473
+      },
+      {
+        "matches_base": true,
+        "path": "ci/project/test_p06_dependency_receipt.py",
+        "sha256": "4f5230d3560eafae3f19040182019a40377f21a77de085a2aa7c1f7513930129",
+        "size_bytes": 27754
+      }
+    ],
+    "timing": "Collected after successful validation by importing the same three test modules; all unchanged helper bytes compared with the exact baseline Git revision. The changed fixture SHA was recorded before test execution and matched afterward."
+  },
+  "task": "Correct shared test-fixture tool discovery to use its actual sanitized invocation environment",
+  "tools": {
+    "ambient_cmake_comparison": {
+      "ambient": {
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "cmake version 4.4.5\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n"
+      },
+      "sanitized": {
+        "exit_code": 1,
+        "stderr": "Traceback (most recent call last):\n  File \"/home/agent/.local/bin/cmake\", line 3, in <module>\n    from cmake import cmake\nModuleNotFoundError: No module named 'cmake'\n",
+        "stdout": ""
+      }
+    },
+    "ambient_cmake_identity": {
+      "path": "/home/agent/.local/bin/cmake",
+      "resolved_path": "/home/agent/.local/bin/cmake",
+      "sha256": "c9de08d14f52ab6ac7078273d5a44ea5af13322d203a73fa8785643218f841d4",
+      "size_bytes": 211
+    },
+    "invocation_environment": {
+      "CCACHE_DISABLE": "1",
+      "CMAKE_BUILD_PARALLEL_LEVEL": "2",
+      "HOME": "/workspace/scratch/e96519576778/w08-a04-cmake-fixture/tmp/tmpeap5xv9n/home",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "MAKEFLAGS": "-j2",
+      "OBJCACHE": "",
+      "PATH": "/workspace/scratch/e96519576778/w08-a04-cmake-fixture/host-bin:/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONUTF8": "1",
+      "THREADS": "1",
+      "TMPDIR": "/workspace/scratch/e96519576778/w08-a04-cmake-fixture/tmp/tmpeap5xv9n/tmp",
+      "TZ": "UTC"
+    },
+    "selected_tools": {
+      "ar": {
+        "path": "/usr/bin/ar",
+        "resolved_path": "/usr/bin/x86_64-linux-gnu-ar",
+        "sha256": "f8fe09d485b40b1d47c534c96f5cbaaa9148e247aa0494c087104421f48ac5eb",
+        "size_bytes": 52480
+      },
+      "cmake": {
+        "path": "/workspace/scratch/e96519576778/w08-a04-cmake-fixture/host-bin/cmake",
+        "resolved_path": "/workspace/p06-build-tools/cmake/data/bin/cmake",
+        "sha256": "a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83",
+        "size_bytes": 14672584
+      },
+      "g++": {
+        "path": "/usr/bin/g++",
+        "resolved_path": "/usr/bin/x86_64-linux-gnu-g++-14",
+        "sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+        "size_bytes": 1166360
+      },
+      "gcc": {
+        "path": "/usr/bin/gcc",
+        "resolved_path": "/usr/bin/x86_64-linux-gnu-gcc-14",
+        "sha256": "a23ecab8ff08f09ad8c80602c2c5df7f49e09c25905cb8975902e101bf72635f",
+        "size_bytes": 1162264
+      },
+      "make": {
+        "path": "/usr/bin/make",
+        "resolved_path": "/usr/bin/make",
+        "sha256": "8a229baf64671988cfb5af43ba3070c6ce7214cf32bcf96155115559d1466fa7",
+        "size_bytes": 278448
+      },
+      "python3": {
+        "path": "/workspace/scratch/e96519576778/w08-a04-cmake-fixture/host-bin/python3",
+        "resolved_path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+        "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+        "size_bytes": 30894944
+      },
+      "ranlib": {
+        "path": "/usr/bin/ranlib",
+        "resolved_path": "/usr/bin/x86_64-linux-gnu-ranlib",
+        "sha256": "4610e832470b987c8c9d82d78c1c16e5e2bc9b8c64db455fad0cf63d420ec86e",
+        "size_bytes": 52480
+      }
+    },
+    "sys_executable": "/workspace/scratch/e96519576778/w08-a04-cmake-fixture/host-bin/python3",
+    "sys_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "versions": {
+      "cmake": {
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "cmake version 3.22.6\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n"
+      },
+      "g++": {
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "g++ (Debian 14.2.0-19) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+      },
+      "gcc": {
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "gcc (Debian 14.2.0-19) 14.2.0\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+      },
+      "make": {
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "GNU Make 4.4.1\nBuilt for x86_64-pc-linux-gnu\nCopyright (C) 1988-2023 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n"
+      },
+      "python3": {
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "Python 3.12.14\n"
+      }
+    }
+  }
+}

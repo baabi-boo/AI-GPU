@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+"""Run the full source-root governance gate after the bounded native attempt."""
+import hashlib
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+SOURCE = Path('/workspace/p06-counter-governance-source-01')
+OUTPUT = Path('/workspace/scratch/e96519576778/full-governance-17e02844')
+SUPERVISION = Path('/workspace/scratch/e96519576778/native-qualification-attempt-01/supervision.json')
+REVISION = '17e0284496bab10c7632a48e4f91efb6fb4fec0b'
+TEMP = Path('/workspace/p06-counter-governance-tmp-01')
+def now():
+    return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=SOURCE, text=True).strip()
+def snapshot():
+    names = subprocess.check_output(['git', 'ls-files', '-z'], cwd=SOURCE).decode().split('\0')[:-1]
+    return [{'path':name, 'sha256':hashlib.sha256((SOURCE/name).read_bytes()).hexdigest()}
+            for name in names if (SOURCE/name).is_file()]
+record = {'schema_version':1, 'scope':'source-root-governance-and-tooling-only',
+    'gpu_execution_certified':False, 'source_revision':REVISION,
+    'source':str(SOURCE), 'state':'waiting-for-native-attempt', 'created_at':now(),
+    'supervisor_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), 'commands':[]}
+target = OUTPUT/'execution.json'
+assert not target.exists()
+def save():
+    target.write_text(json.dumps(record, indent=2, sort_keys=True)+'\n')
+save()
+deadline = time.monotonic() + 90*60
+while True:
+    try:
+        observed = json.loads(SUPERVISION.read_text())
+    except json.JSONDecodeError:
+        observed = {}
+    if observed.get('state') == 'finished':
+        record['native_attempt_outcome'] = observed.get('outcome')
+        break
+    if time.monotonic() > deadline:
+        raise RuntimeError('native attempt did not finish before governance scheduling bound')
+    time.sleep(2)
+assert git('rev-parse','HEAD') == REVISION
+assert git('status','--porcelain=v1','--untracked-files=all') == ''
+TEMP.mkdir(mode=0o700)
+record.update(state='running', started_at=now(), tree=git('rev-parse','HEAD^{tree}'))
+before=snapshot()
+(OUTPUT/'source-before.json').write_text(json.dumps(before,indent=2)+'\n')
+environment=dict(os.environ, PYTHONDONTWRITEBYTECODE='1', TMPDIR=str(TEMP))
+save()
+commands=[
+    ('preflight',[sys.executable,'-B','ci/project/preflight.py','--tier','governance','--json']),
+    ('structure',[sys.executable,'-B','ci/project/check_project.py']),
+    ('unittest-discovery',[sys.executable,'-B','-m','unittest','discover','-s','ci/project','-p','test_*.py','-v']),
+    ('diff-check',['git','diff','--check']),
+]
+for name,argv in commands:
+    row={'id':name,'argv':argv,'cwd':str(SOURCE),'started_at':now(),'log':name+'.log'}
+    record['commands'].append(row)
+    save()
+    started=time.monotonic()
+    with (OUTPUT/row['log']).open('xb') as stream:
+        result=subprocess.run(argv,cwd=SOURCE,env=environment,stdout=stream,stderr=subprocess.STDOUT,timeout=90*60)
+    row.update(exit_code=result.returncode,finished_at=now(),duration_seconds=time.monotonic()-started)
+    body=(OUTPUT/row['log']).read_bytes()
+    row.update(log_sha256=hashlib.sha256(body).hexdigest(),log_size_bytes=len(body))
+    save()
+after=snapshot()
+(OUTPUT/'source-after.json').write_text(json.dumps(after,indent=2)+'\n')
+record.update(state='finished',finished_at=now(),source_files_stable=before==after,
+    status_after=git('status','--porcelain=v1','--untracked-files=all'),revision_after=git('rev-parse','HEAD'))
+record['outcome']='pass' if all(row['exit_code']==0 for row in record['commands']) and before==after and not record['status_after'] and record['revision_after']==REVISION else 'fail'
+save()
+print(json.dumps({'outcome':record['outcome'],'source_files_stable':record['source_files_stable'],
+    'execution':str(target),'commands':[{k:row[k] for k in ('id','exit_code','duration_seconds')} for row in record['commands']]}),flush=True)
+sys.exit(0 if record['outcome']=='pass' else 1)

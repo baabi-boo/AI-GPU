@@ -151,7 +151,7 @@ retains the earlier diagnostic scope.
 The [fresh dependency implementation packet](../evidence/p06-dependency-provenance/README.md)
 records the separately versioned source/build/product route. The foundation is
 published at `5527cb062e10dfff3266022d138dd7cdf63f5e5c`, the complete native/control
-readers at `8b71ee07392c1ed86f654b2d683d9a8d2d1f50ea`, and the current reviewed
+readers at `8b71ee07392c1ed86f654b2d683d9a8d2d1f50ea`, and the earlier reviewed
 production code at `19333193192ba5a2d3667c0111235ec9e21a5898`.
 The producer verifies immutable source and transitive inputs, records selected
 configure/compile/archive/index/link execution, and binds products through
@@ -168,20 +168,17 @@ and [final-code review](../evidence/p06-dependency-provenance/agents/w09_a01-fin
 binding all 380 Python files to `19333193`. The earlier full suite is not a run
 of those later changes. These host checks establish no formal native original.
 
-**Next development action:** collect and retain a complete fresh dependency and
-managed-lifetime original, then perform caller-pinned inert replay and
-independent review under the
-[dependency handoff](../p06-dependency-provenance-handoff.md) and
-[intake guide](../evidence/p06-dependency-provenance/replay-guide.md). Reconcile all
-406 planned compilations and 413 selected tool operations with actual records,
-both format builds and the unchanged four-process/132-launch/4,224-word native
-population. Keep the pending-read/always-zero and alternate-library controls
-separate. At the
+The dependency handoff's later local attempt 04 established the complete
+dependency/native/control original in its declared scope. Its originals and
+separately counted pending-read/always-zero and alternate-library controls
+remain retained in the
+[dependency packet](../evidence/p06-dependency-provenance/README.md).
+At the earlier
 [retained provider observation](../evidence/p06-dependency-provenance/validation/provider-observation-19333193.json)
 for `19333193`, fresh run `45162083701` was pending with no jobs, and governance
 run `45162084006` had one queued job and no steps. No queue cause or native
 result is inferred; recheck and retain the actual provider identities before
-intake. No formal dependency/native original is established by this phase update.
+intake. That historical provider observation does not establish a native result.
 The [host diagnostic](../evidence/p06-dependency-provenance/host-diagnostic/README.md)
 retains its actual attempts and separate host-build scope.
 [Attempt `05` at `19333193`](../evidence/p06-dependency-provenance/host-diagnostic/execution-05-summary.json)
@@ -190,20 +187,39 @@ all 413 selected records, complete diagnostic graph validation and
 [independent host-original consistency review](../evidence/p06-dependency-provenance/host-diagnostic/review-05.json) pass. The earlier
 failed attempts remain retained. This result cannot replace formal
 preparation/cache/staging, the managed population or loader joins.
-The full 33-selector/40-component lifetime argument still needs complete reviewed
-source and monotonicity
-premises; the new pending/reset observations do not themselves qualify it.
-The historical `57248e73` original retains its earlier four-snapshot scope.
-
-The three unresolved obligations remain
+The historical `57248e73` original retains its earlier four-snapshot scope and
+its three unresolved obligations:
 `all_40_component_lifetime_and_pending_balance`,
 `dependency_source_to_loaded_binary_provenance` and
-`independent_complete_counter_qualification`. Independently review the new
-[qualification binding](../p06-mpm-qualification-plan.md), pure validator and
-rejection controls, then require a fresh preflight joining the implemented
-lifetime witness with the new dependency products and provenance.
-Only after those prerequisites pass, run the unchanged fresh matched warm attempt:
-**24 processes, 792 launches and 25,344 exact output words**.
+`independent_complete_counter_qualification`. Those fields are preserved in
+the historical records.
+
+The subsequent [complete counter qualification](../../designs/complete_counter_qualification_v1.md)
+supplies a separately versioned 33-selector/40-component/ten-premise proof,
+prelaunch admission and complete inert reader. Its
+[fresh original](../evidence/p06-counter-qualification/README.md) at
+`17e0284496bab10c7632a48e4f91efb6fb4fec0b` passed preparation, all 413 selected
+dependency operations and the FP16/BF16 × policy matrix: **four processes,
+132 launches and 4,224 exact FP32 words**. Independent original reviews and
+public replay derive `counter_qualification_passed=true` only for
+`recorded-four-process-preflight-only`. The revised reader published at
+`220399748ecab84d48ba5a5f123457c44a0c8699` explicitly inventories 94 trusted
+inputs; replay of the same original changes only that inventory. Native
+execution remains tied to `17e02844`. The
+[audit](../p06-counter-qualification-audit.md) separates source/tooling
+validation, original execution, replay and acceptance.
+
+**Next development action:** implement and independently review an explicit
+qualified route for the unchanged warm sampling contract, then execute its
+fresh complete attempt. Follow the
+[qualification handoff](../p06-counter-qualification-handoff.md) and
+[qualification plan](../p06-mpm-qualification-plan.md). The existing qualified
+runner and reader admit four processes; they cannot select the warm matrix
+without a reviewed extension. Each format needs one warm-up policy pair and
+five measured pairs, with one prime plus 32 serial operations per process:
+**24 processes, 792 launches and 25,344 exact output words**. Bind every new
+process before launch and verify it through destruction. Retain excluded
+primes and warm-ups and all original performance predicates and negative results.
 Preserve the v1 block and original cold baseline; source repair cannot recover
 missing historical high bits. Keep the two-job, 4 GiB memory and 15 GiB disk
 prerequisites unchanged. Correctness and transport tests establish no speedup
@@ -265,11 +281,10 @@ After the P06 gates are accepted, hand P07 the selected configuration,
 constraints, bounded workloads, memory-map assumptions and reproducible reports.
 P07 also requires P01's vendor integration gate. Update [status](../status.md)
 and [backlog](../backlog.md) as each gate earns evidence. The current next action
-is to collect and independently review the complete fresh original defined by
-the [dependency provenance handoff](../p06-dependency-provenance-handoff.md).
-After that bounded provenance result, complete reviewed qualification rules
-must precede the separate qualification preflight joining the implemented
-lifetime witness to the new dependency provenance, followed only then by the
-unchanged matched warm attempt.
+is the explicit qualified 24-process warm-route implementation and independent
+review in the [qualification handoff](../p06-counter-qualification-handoff.md),
+followed by the fresh unchanged matched warm attempt. The completed four-process
+qualification cannot be copied into those new process records, and historical
+warm-v1 remains blocked.
 A documented board-readiness decision and physical
 implementation plan follow later.

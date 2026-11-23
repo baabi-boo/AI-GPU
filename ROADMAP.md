@@ -246,11 +246,11 @@ failure remains retained.
 
 The subsequent [native lifetime original](docs/project/evidence/p06-native-lifetime/README.md)
 retains four managed processes, 132 launches and 4,224 exact FP32 words, with
-separate pending-read and always-zero controls. The current
+separate pending-read and always-zero controls. The
 [dependency provenance implementation](docs/project/evidence/p06-dependency-provenance/README.md)
 adds immutable source locks, observed compile/archive/link receipts, exact
 product and loader joins, complete 30-command application admission, and inert
-dependency/native/control readers. The current production implementation is
+dependency/native/control readers. That reviewed implementation was
 published at `19333193192ba5a2d3667c0111235ec9e21a5898`, including independently
 reviewed corrections exposed by actual host builds. The
 [validation record](docs/project/evidence/p06-dependency-provenance/validation-index.md)
@@ -261,23 +261,37 @@ at `19333193` passes all **413 actual selected operations: 406 compilations,
 three archives, two indexes and two shared links**, with complete diagnostic
 graph validation and
 [independent host-original consistency review](docs/project/evidence/p06-dependency-provenance/host-diagnostic/review-05.json).
-It does not execute formal preparation/cache/staging or the
-managed native population, so the formal dependency/native original remains open.
+It does not execute formal preparation/cache/staging or the managed native
+population. The later local attempt 04 in the
+[dependency handoff](docs/project/p06-dependency-provenance-handoff.md)
+established that complete original in its declared scope; historical host
+diagnostics and separately counted controls retain their original identities.
 
-**The next bounded action is to collect one complete fresh dependency and
-managed-lifetime original at a named published revision, retain the separately
-counted pending/always-zero and substituted-library controls, then replay and
-independently review the untouched original.** Follow the
-[dependency handoff](docs/project/p06-dependency-provenance-handoff.md) and
-[intake/replay guide](docs/project/evidence/p06-dependency-provenance/replay-guide.md).
-The formal original must reconcile all 413 selected dependency operations with
-the actual managed builds and loaded products; original-based semantic
-mutations remain required. After that edge is established, the separately versioned
-[qualification binding](docs/project/p06-mpm-qualification-plan.md) must satisfy
-the complete 40-component lifetime/pending premise and no-wrap bounds under the
-[conditional lifetime argument](docs/designs/simx_counter_lifetime_v1.md), before
-the unchanged 24-process, 792-launch, 25,344-word warm attempt. All seven
-qualification, readiness, warm and acceptance claims remain false.
+The subsequent [counter qualification contract](docs/designs/complete_counter_qualification_v1.md)
+binds all 33 selectors, 40 cumulative components and ten lifetime premises to
+reviewed sources, actual dependency products and fresh managed processes.
+The [new original](docs/project/evidence/p06-counter-qualification/README.md)
+at `17e0284496bab10c7632a48e4f91efb6fb4fec0b` passed all three execution stages
+and complete inert replay: **four processes, 132 launches and 4,224 exact
+output words**. Its new `counter_qualification_passed=true` is restricted to
+`recorded-four-process-preflight-only`. The corrected reader at `22039974`
+inventories 94 trusted inputs and replays the unchanged original with the same
+substantive result. The [audit](docs/project/p06-counter-qualification-audit.md)
+records exact source, execution, validation and publication identities.
+
+**The next bounded action is to implement and independently review an explicit
+qualified route for the unchanged 24-process warm sampling contract, then
+execute the fresh complete attempt.** Follow the
+[qualification handoff](docs/project/p06-counter-qualification-handoff.md) and
+[plan](docs/project/p06-mpm-qualification-plan.md). The current qualified
+entry and reader admit four processes; the warm extension needs its own
+prelaunch bindings and complete replay of every new process. The fixed matrix
+has one warm-up pair and five measured pairs per format, both allocation
+policies and one prime plus 32 serial operations per process: **24 processes,
+792 launches and 25,344 exact output words**. Keep the original performance
+predicates, excluded observations and negative results. Historical warm-v1
+remains blocked, and all seven historical qualification, readiness, warm and
+acceptance flags remain false.
 P06-A02/A03 remain open; the source repair cannot recover historical high bits
 or establish a warm speedup. P07–P11 remain `not_started`. The
 [executor audit](docs/project/p04-executor-audit.md) preserves the unresolved

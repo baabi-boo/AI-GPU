@@ -1,0 +1,940 @@
+{
+  "agent": "w06_a01",
+  "claims": {
+    "acceptance_claimed": false,
+    "dependency_cache_used": false,
+    "execution_origin": "local",
+    "full_warm_coverage": false,
+    "native_execution": "not_run",
+    "network_acquisition": false,
+    "performance_acceptance": false,
+    "phase_acceptance": false,
+    "qualified": false,
+    "ready_for_warm": false,
+    "toolchain_cache_used": false,
+    "warm_execution": false
+  },
+  "elapsed_seconds": 2.4143981609995535,
+  "finding_severity": "F0",
+  "inert_metadata_validation": {
+    "archive_bytes_rehashed": false,
+    "audit": {
+      "network_events": [],
+      "process_events": [],
+      "producer_path_reads": [],
+      "trusted_reads": [
+        "/workspace/AI-GPU/ci/project/p01_toolchain.lock.json",
+        "/workspace/AI-GPU/ci/project/p01_toolchain.lock.json",
+        "/workspace/AI-GPU/ci/project/p01_toolchain.lock.json",
+        "/workspace/AI-GPU/ci/project/p01_toolchain.lock.json"
+      ]
+    },
+    "installed_bytes_rehashed": false,
+    "native_execution": "not_run",
+    "passed": true,
+    "retained_code_executed": false
+  },
+  "limitations": [
+    "Preparation metadata validation and the separately described filesystem/Git rehashes are different checks.",
+    "No producer path was read by the inert validator; independent selected-byte checks intentionally read those paths afterward.",
+    "No archive extraction, source materialization, compile, native GPU launch, retained code execution or network operation was performed by this review.",
+    "The live checkout may contain legitimate later dependency staging; this report verifies the recorded clean preparation observations and immutable commit objects, not later working-tree cleanliness.",
+    "Local consistent records and rehashed local Git bytes do not authenticate historical acquisition, remote provenance or the producer.",
+    "The 11 selected installed native identities do not establish provenance of all host compiler support files or system runtime libraries.",
+    "Later dependency-build, native qualification, complete original replay and phase/performance acceptance require their separate evidence."
+  ],
+  "limits": {
+    "build_timeout_seconds": 1800,
+    "configure_timeout_seconds": 120,
+    "jobs": 2,
+    "max_log_bytes": 16777216,
+    "max_rss_bytes": 4294967296,
+    "min_free_bytes": 16106127360,
+    "process_timeout_seconds": 180,
+    "simulation_workers": 1
+  },
+  "original_after": {
+    "path": "/workspace/p06-counter-qualified-run-01/evidence/dependency-preparation.json",
+    "sha256": "07fe197232ab0aef2c6416d0cca1ee48e624b1b29b68979d147dbe0fe988bd1c",
+    "size_bytes": 1885869
+  },
+  "original_before": {
+    "path": "/workspace/p06-counter-qualified-run-01/evidence/dependency-preparation.json",
+    "sha256": "07fe197232ab0aef2c6416d0cca1ee48e624b1b29b68979d147dbe0fe988bd1c",
+    "size_bytes": 1885869
+  },
+  "original_unchanged": true,
+  "outcome": "pass",
+  "preparation_stage": {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-B",
+      "/workspace/p06-counter-qualified-source-01/ci/project/p06_dependency_local_prepare.py",
+      "--source-dir",
+      "/workspace/p06-counter-qualified-source-01",
+      "--expected-revision",
+      "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+      "--workspace-dir",
+      "/workspace/p06-counter-qualified-run-01",
+      "--archive-root",
+      "/workspace/p06-native-prebuilt",
+      "--dependency-repositories",
+      "/workspace/p06-pinned-inputs",
+      "--host-bin",
+      "/workspace/p06-local-host-02/bin"
+    ],
+    "cwd": "/workspace/p06-counter-qualified-source-01",
+    "execution": {
+      "cleanup_complete": true,
+      "duration_seconds": 86.50559,
+      "exit_code": 0,
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ],
+      "log_sha256": "4be538389e1ada39048bd99e9a3a0689d3a8be90a5c79be5d4acb87d28b82915",
+      "log_size_bytes": 150,
+      "outcome": "pass",
+      "peak_rss_bytes": 50601984,
+      "process_started": true,
+      "reason": null
+    },
+    "finished_at": "2026-11-23T15:17:43Z",
+    "id": "preparation",
+    "log": "preparation.stdout.log",
+    "report_outcome": "pass",
+    "report_path": "/workspace/p06-counter-qualified-run-01/evidence/dependency-preparation.json",
+    "report_reason": null,
+    "report_sha256": "07fe197232ab0aef2c6416d0cca1ee48e624b1b29b68979d147dbe0fe988bd1c",
+    "report_size_bytes": 1885869,
+    "started_at": "2026-11-23T15:16:17Z",
+    "timeout_seconds": 1800
+  },
+  "resources": {
+    "resources_after": {
+      "available_memory_bytes": 5840076800,
+      "free_disk_bytes": {
+        "source": 34865119232,
+        "workspace": 34865119232
+      }
+    },
+    "resources_before": {
+      "available_memory_bytes": 5778595840,
+      "free_disk_bytes": {
+        "source": 37273415680,
+        "workspace": 37273415680
+      }
+    }
+  },
+  "schema_version": 1,
+  "scope": "completed-local-preparation-original-review",
+  "separate_independent_read_only_checks": {
+    "archive_parts": [
+      {
+        "git_blob_sha": "dcc666d6656e43b93310d4d872ca662af61a1e4c",
+        "path": "libc64/libc64.tar.bz2",
+        "rehash_passed": true,
+        "sha256": "8945c302b88779c5d2888e8a70f511d3fa3eafb9a82a04e118d2e81fdec31575",
+        "size_bytes": 799142
+      },
+      {
+        "git_blob_sha": "6b7bddd72edcd5b822319345fae4be545d95f5d1",
+        "path": "libcrt64/libcrt64.tar.bz2",
+        "rehash_passed": true,
+        "sha256": "2a3aaa6d1c0d4bd312249933783d88914444b9c0b51b8912c3a34525347d6ed9",
+        "size_bytes": 50923
+      },
+      {
+        "git_blob_sha": "0908060db6b56c1166e4c7bb5eb0d2ee7a65bd0a",
+        "path": "llvm-vortex/ubuntu/focal/llvm-vortex.tar.bz2.partaa",
+        "rehash_passed": true,
+        "sha256": "86ccab079ac36eb49930e567a48ecf09948794dbcd399ddac799de3cfcca6c16",
+        "size_bytes": 52428800
+      },
+      {
+        "git_blob_sha": "79aa94687a1410b505d989e8c7a8fc0f610330a4",
+        "path": "llvm-vortex/ubuntu/focal/llvm-vortex.tar.bz2.partab",
+        "rehash_passed": true,
+        "sha256": "8a85add28eab14b308bafdd56a2d91c42d9ea6d95b09b493cb3855aebecd9ef8",
+        "size_bytes": 52428800
+      },
+      {
+        "git_blob_sha": "dfae5174d27f9b1098ae0cbde3f0550d83571c8d",
+        "path": "llvm-vortex/ubuntu/focal/llvm-vortex.tar.bz2.partac",
+        "rehash_passed": true,
+        "sha256": "a1b7b9f1850beda9d63d0e73cc52cda3077e75800094d65e86d650fb46f120e0",
+        "size_bytes": 3995814
+      },
+      {
+        "git_blob_sha": "bbb700890895a9b6f4146e81592e4f6e6c7d193c",
+        "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partaa",
+        "rehash_passed": true,
+        "sha256": "ab28ceb0ae80c6bfbdac9b076dbe3759c9c5db95021b3e48d34378e84d4752df",
+        "size_bytes": 52428800
+      },
+      {
+        "git_blob_sha": "78ba76bcf7d1a70216025836b1f463706728d7c0",
+        "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partab",
+        "rehash_passed": true,
+        "sha256": "10b8dae14cb80c4b8d6596b2782bdefef74654876b7b274a879d2c7384493257",
+        "size_bytes": 52428800
+      },
+      {
+        "git_blob_sha": "30d1fe5b0c5aae5e12b600a2e88bbe68720f6e61",
+        "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partac",
+        "rehash_passed": true,
+        "sha256": "313a00282ed986fbcbb61c337565e61a777b5731ece961c38b87b5fe8063743b",
+        "size_bytes": 52428800
+      },
+      {
+        "git_blob_sha": "569317e074d217166a332d7191d633410bfa0630",
+        "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partad",
+        "rehash_passed": true,
+        "sha256": "a34dea811924209fdfdc8ffe1416f879ede25a12033a84903a01b0c6b48db4af",
+        "size_bytes": 52428800
+      },
+      {
+        "git_blob_sha": "f8b39c4fb1c8c262bb5342646d5753861abfb08e",
+        "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partae",
+        "rehash_passed": true,
+        "sha256": "b42f48dabf7dff376ae9139c8c3a7c2540c16a0005b874a8bd788451a107b68c",
+        "size_bytes": 52428800
+      },
+      {
+        "git_blob_sha": "5e711209ed941ce451bd6af821c20e9a2def04e9",
+        "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partaf",
+        "rehash_passed": true,
+        "sha256": "9721e46ead97abbc6df4f8d401dd5173ecfc30568a51d8eec932bcd006345634",
+        "size_bytes": 52428800
+      },
+      {
+        "git_blob_sha": "70dc901836ae6f675450b378329bfd47cdc3b242",
+        "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partag",
+        "rehash_passed": true,
+        "sha256": "d27f0a280598e321589f61d1494a656407930d6fbe16d0605fe3599db802fb0e",
+        "size_bytes": 52428800
+      },
+      {
+        "git_blob_sha": "a30c7e4ea3ece265f83b9c706ca72e69b146a055",
+        "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partah",
+        "rehash_passed": true,
+        "sha256": "850d7172ef0e1375afcbe2dc50ba1c75ee63bf0c1dc0ef79b9d8ac05328ac888",
+        "size_bytes": 52428800
+      },
+      {
+        "git_blob_sha": "0a337c825511c30d542a699c616169e9557c76a8",
+        "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partai",
+        "rehash_passed": true,
+        "sha256": "11a127da65c44fa7291768afd37576c358e56fccf76a5056c3f7b18f769507bf",
+        "size_bytes": 52428800
+      },
+      {
+        "git_blob_sha": "74bbe40cd944651d176dcb1a7b6800d6acd806e2",
+        "path": "riscv64-gnu-toolchain/ubuntu/focal/riscv64-gnu-toolchain.tar.bz2.partaj",
+        "rehash_passed": true,
+        "sha256": "00bb22c0e299f37fd9414cd01a35a9069d5645201b224864f896d7fadfaadb61",
+        "size_bytes": 25429755
+      }
+    ],
+    "dependency_sources": [
+      {
+        "complete_tree_and_blobs_verified": true,
+        "name": "argparse",
+        "revision": "997da9255618311d1fcb0135ce86022729d1f1cb",
+        "tree": "da4b4bb886f2521f326dc3aacf8304aede1044c1",
+        "url": "https://github.com/p-ranav/argparse.git",
+        "verified_bytes": 521214,
+        "verified_files": 62
+      },
+      {
+        "complete_tree_and_blobs_verified": true,
+        "name": "ramulator",
+        "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+        "tree": "01dce703c539f6bf5ca1ac73e759067f0dd2717b",
+        "url": "https://github.com/CMU-SAFARI/ramulator2.git",
+        "verified_bytes": 1600467,
+        "verified_files": 180
+      },
+      {
+        "complete_tree_and_blobs_verified": true,
+        "name": "softfloat",
+        "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4",
+        "tree": "8d9d47a6d74670d25bbbcc956a04de4c2605253b",
+        "url": "https://github.com/ucb-bar/berkeley-softfloat-3.git",
+        "verified_bytes": 1927812,
+        "verified_files": 489
+      },
+      {
+        "complete_tree_and_blobs_verified": true,
+        "name": "spdlog",
+        "revision": "ad0e89cbfb4d0c1ce4d097e134eb7be67baebb36",
+        "tree": "64a823f2b9c61b35897fb89f2a32844a24e87cb6",
+        "url": "https://github.com/gabime/spdlog.git",
+        "verified_bytes": 1734888,
+        "verified_files": 164
+      },
+      {
+        "complete_tree_and_blobs_verified": true,
+        "name": "yaml-cpp",
+        "revision": "0579ae3d976091d7d664aa9d2527e0d0cff25763",
+        "tree": "3b4adf4e0b979fd6fb9213034acaf4864327d1aa",
+        "url": "https://github.com/jbeder/yaml-cpp.git",
+        "verified_bytes": 5153747,
+        "verified_files": 399
+      }
+    ],
+    "git_commands": [
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "rev-parse",
+        "HEAD"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "rev-parse",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b^{tree}"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "ls-tree",
+        "-z",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+        "--",
+        "third_party/cocogfx"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/cocogfx",
+        "rev-parse",
+        "HEAD"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "ls-tree",
+        "-z",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+        "--",
+        "third_party/cvfpu"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/cvfpu",
+        "rev-parse",
+        "HEAD"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/cvfpu",
+        "ls-tree",
+        "-z",
+        "79e453139072df42c9ec8f697132ba485d74e23d",
+        "--",
+        "src/common_cells"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/cvfpu/src/common_cells",
+        "rev-parse",
+        "HEAD"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/cvfpu",
+        "ls-tree",
+        "-z",
+        "79e453139072df42c9ec8f697132ba485d74e23d",
+        "--",
+        "src/fpu_div_sqrt_mvp"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/cvfpu/src/fpu_div_sqrt_mvp",
+        "rev-parse",
+        "HEAD"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/cvfpu",
+        "ls-tree",
+        "-z",
+        "79e453139072df42c9ec8f697132ba485d74e23d",
+        "--",
+        "tb/flexfloat"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/cvfpu/tb/flexfloat",
+        "rev-parse",
+        "HEAD"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "ls-tree",
+        "-z",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+        "--",
+        "third_party/hardfloat"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/hardfloat",
+        "rev-parse",
+        "HEAD"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "ls-tree",
+        "-z",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+        "--",
+        "third_party/ramulator"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/ramulator",
+        "rev-parse",
+        "HEAD"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "ls-tree",
+        "-z",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+        "--",
+        "third_party/softfloat"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/softfloat",
+        "rev-parse",
+        "HEAD"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "show",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b:VERSION"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "show",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b:.gitmodules"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "show",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b:configure"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "show",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b:config.mk.in"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "show",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b:VX_config.toml"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "show",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b:VX_types.toml"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "show",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b:ci/gen_config.py"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "show",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b:ci/blackbox.sh"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-pinned-inputs/argparse",
+        "rev-parse",
+        "997da9255618311d1fcb0135ce86022729d1f1cb^{tree}"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-pinned-inputs/argparse",
+        "ls-tree",
+        "-r",
+        "-z",
+        "997da9255618311d1fcb0135ce86022729d1f1cb"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-pinned-inputs/argparse",
+        "cat-file",
+        "--batch"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/ramulator",
+        "rev-parse",
+        "e62c84a6f0e06566ba6e182d308434b4532068a5^{tree}"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/ramulator",
+        "ls-tree",
+        "-r",
+        "-z",
+        "e62c84a6f0e06566ba6e182d308434b4532068a5"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/ramulator",
+        "cat-file",
+        "--batch"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/softfloat",
+        "rev-parse",
+        "b51ef8f3201669b2288104c28546fc72532a1ea4^{tree}"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/softfloat",
+        "ls-tree",
+        "-r",
+        "-z",
+        "b51ef8f3201669b2288104c28546fc72532a1ea4"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01/third_party/softfloat",
+        "cat-file",
+        "--batch"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-pinned-inputs/spdlog",
+        "rev-parse",
+        "ad0e89cbfb4d0c1ce4d097e134eb7be67baebb36^{tree}"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-pinned-inputs/spdlog",
+        "ls-tree",
+        "-r",
+        "-z",
+        "ad0e89cbfb4d0c1ce4d097e134eb7be67baebb36"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-pinned-inputs/spdlog",
+        "cat-file",
+        "--batch"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-pinned-inputs/yaml-cpp",
+        "rev-parse",
+        "0579ae3d976091d7d664aa9d2527e0d0cff25763^{tree}"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-pinned-inputs/yaml-cpp",
+        "ls-tree",
+        "-r",
+        "-z",
+        "0579ae3d976091d7d664aa9d2527e0d0cff25763"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-pinned-inputs/yaml-cpp",
+        "cat-file",
+        "--batch"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "show",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b:ci/project/p06_dependency_local_prepare.py"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "show",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b:ci/project/p06_local_toolchain.py"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "show",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b:ci/project/p06_dependency_sources.py"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "show",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b:ci/project/p06_dependency_contract.py"
+      ],
+      [
+        "git",
+        "-C",
+        "/workspace/p06-counter-qualified-source-01",
+        "show",
+        "17e0284496bab10c7632a48e4f91efb6fb4fec0b:ci/project/p01_toolchain.lock.json"
+      ]
+    ],
+    "selected_tools": {
+      "host": {
+        "ar": {
+          "path": "/usr/bin/ar",
+          "resolved_path": "/usr/bin/x86_64-linux-gnu-ar",
+          "selected_bytes_rehashed": true,
+          "sha256": "f8fe09d485b40b1d47c534c96f5cbaaa9148e247aa0494c087104421f48ac5eb",
+          "size_bytes": 52480
+        },
+        "cmake": {
+          "path": "/workspace/p06-local-host-02/bin/cmake",
+          "resolved_path": "/workspace/p06-build-tools/cmake/data/bin/cmake",
+          "selected_bytes_rehashed": true,
+          "sha256": "a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83",
+          "size_bytes": 14672584
+        },
+        "g++": {
+          "path": "/workspace/p06-local-host-02/bin/g++",
+          "resolved_path": "/workspace/p06-local-host-02/extracted/usr/bin/x86_64-linux-gnu-g++-12",
+          "selected_bytes_rehashed": true,
+          "sha256": "dd91977c184e327710578363ad93ebb175c3a457b6236b874fd3911b7c055c65",
+          "size_bytes": 1305592
+        },
+        "gcc": {
+          "path": "/workspace/p06-local-host-02/bin/gcc",
+          "resolved_path": "/workspace/p06-local-host-02/extracted/usr/bin/x86_64-linux-gnu-gcc-12",
+          "selected_bytes_rehashed": true,
+          "sha256": "75e997ec62297a6484f491bae28ab0ccb489daba23e398fd10fe68e9e6f0def8",
+          "size_bytes": 1301496
+        },
+        "make": {
+          "path": "/usr/bin/make",
+          "resolved_path": "/usr/bin/make",
+          "selected_bytes_rehashed": true,
+          "sha256": "8a229baf64671988cfb5af43ba3070c6ce7214cf32bcf96155115559d1466fa7",
+          "size_bytes": 278448
+        },
+        "python3": {
+          "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "resolved_path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+          "selected_bytes_rehashed": true,
+          "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+          "size_bytes": 30894944
+        },
+        "ranlib": {
+          "path": "/usr/bin/ranlib",
+          "resolved_path": "/usr/bin/x86_64-linux-gnu-ranlib",
+          "selected_bytes_rehashed": true,
+          "sha256": "4610e832470b987c8c9d82d78c1c16e5e2bc9b8c64db455fad0cf63d420ec86e",
+          "size_bytes": 52480
+        }
+      },
+      "native": {
+        "clang": {
+          "path": "/workspace/p06-counter-qualified-run-01/tools/llvm-vortex/bin/clang",
+          "resolved_path": "/workspace/p06-counter-qualified-run-01/tools/llvm-vortex/bin/clang-20",
+          "selected_bytes_rehashed": true,
+          "sha256": "92f2fbf93bb013f414871b9dde08174f42832b169389f59cd373451d373cf3cf",
+          "size_bytes": 189776
+        },
+        "clang++": {
+          "path": "/workspace/p06-counter-qualified-run-01/tools/llvm-vortex/bin/clang++",
+          "resolved_path": "/workspace/p06-counter-qualified-run-01/tools/llvm-vortex/bin/clang-20",
+          "selected_bytes_rehashed": true,
+          "sha256": "92f2fbf93bb013f414871b9dde08174f42832b169389f59cd373451d373cf3cf",
+          "size_bytes": 189776
+        },
+        "libc64/lib/libc.a": {
+          "path": "/workspace/p06-counter-qualified-run-01/tools/libc64/lib/libc.a",
+          "resolved_path": "/workspace/p06-counter-qualified-run-01/tools/libc64/lib/libc.a",
+          "selected_bytes_rehashed": true,
+          "sha256": "7eb0e3b5bdc7397b6fa4d93637b29379d01107111148e8f0372a5c999e359a94",
+          "size_bytes": 4040594
+        },
+        "libc64/lib/libm.a": {
+          "path": "/workspace/p06-counter-qualified-run-01/tools/libc64/lib/libm.a",
+          "resolved_path": "/workspace/p06-counter-qualified-run-01/tools/libc64/lib/libm.a",
+          "selected_bytes_rehashed": true,
+          "sha256": "f0a17a43c74d2fe5474fa2fd29c8f14799e777d7d75a2cc4d11c20a6e7b161c5",
+          "size_bytes": 8
+        },
+        "libcrt64/lib/baremetal/libclang_rt.builtins-riscv64.a": {
+          "path": "/workspace/p06-counter-qualified-run-01/tools/libcrt64/lib/baremetal/libclang_rt.builtins-riscv64.a",
+          "resolved_path": "/workspace/p06-counter-qualified-run-01/tools/libcrt64/lib/baremetal/libclang_rt.builtins-riscv64.a",
+          "selected_bytes_rehashed": true,
+          "sha256": "3879b774af20a252d708fb4486eb8ef7acd567ddc900d54ef866858cad436f16",
+          "size_bytes": 335280
+        },
+        "llvm-objcopy": {
+          "path": "/workspace/p06-counter-qualified-run-01/tools/llvm-vortex/bin/llvm-objcopy",
+          "resolved_path": "/workspace/p06-counter-qualified-run-01/tools/llvm-vortex/bin/llvm-objcopy",
+          "selected_bytes_rehashed": true,
+          "sha256": "31fab24ae51dc48a17e6a899001fc3238e2736831f0f87c6b833411df36e73ac",
+          "size_bytes": 250184
+        },
+        "llvm-objdump": {
+          "path": "/workspace/p06-counter-qualified-run-01/tools/llvm-vortex/bin/llvm-objdump",
+          "resolved_path": "/workspace/p06-counter-qualified-run-01/tools/llvm-vortex/bin/llvm-objdump",
+          "selected_bytes_rehashed": true,
+          "sha256": "b7fd1a8c8d365ffb4fa28316e9cdd9d635b0a5ac1934a04f4ea0da80f03de449",
+          "size_bytes": 1015552
+        },
+        "riscv-gcc": {
+          "path": "/workspace/p06-counter-qualified-run-01/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-gcc",
+          "resolved_path": "/workspace/p06-counter-qualified-run-01/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-gcc",
+          "selected_bytes_rehashed": true,
+          "sha256": "1d45ae00898529ef4781942ffa2ac403abc2fe2dc559b4eb01014d170d52e408",
+          "size_bytes": 7775360
+        },
+        "riscv-gcc-ar": {
+          "path": "/workspace/p06-counter-qualified-run-01/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-gcc-ar",
+          "resolved_path": "/workspace/p06-counter-qualified-run-01/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-gcc-ar",
+          "selected_bytes_rehashed": true,
+          "sha256": "afc1c8f4f9255aacf3b644d227f1a76b5712f1ad34f785fe33957f22a59f9f54",
+          "size_bytes": 173336
+        },
+        "riscv-objcopy": {
+          "path": "/workspace/p06-counter-qualified-run-01/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-objcopy",
+          "resolved_path": "/workspace/p06-counter-qualified-run-01/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-objcopy",
+          "selected_bytes_rehashed": true,
+          "sha256": "723ad896894f5ab6718eb00f83fc3a1436f89a29022cff8d54dd74ea1c1b66ca",
+          "size_bytes": 7517840
+        },
+        "riscv-objdump": {
+          "path": "/workspace/p06-counter-qualified-run-01/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-objdump",
+          "resolved_path": "/workspace/p06-counter-qualified-run-01/tools/riscv64-gnu-toolchain/bin/riscv64-unknown-elf-objdump",
+          "selected_bytes_rehashed": true,
+          "sha256": "9287eaec3b3dc0393f793e62834c897b6d08f2b9a032260397dc0c8f42dccf5e",
+          "size_bytes": 10824144
+        }
+      }
+    },
+    "source_inputs": [
+      {
+        "immutable_commit_blob_verified": true,
+        "path": "VERSION",
+        "sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+        "size_bytes": 112
+      },
+      {
+        "immutable_commit_blob_verified": true,
+        "path": ".gitmodules",
+        "sha256": "632677b727feb911c5d2fa9d2991d9f87434fc83d99fc4ae15ee8e4556ecbabb",
+        "size_bytes": 575
+      },
+      {
+        "immutable_commit_blob_verified": true,
+        "path": "configure",
+        "sha256": "645cdad95c31a959a36c795c37b2b7e4c0202f19c53093aa9067cda3ef23a0be",
+        "size_bytes": 11438
+      },
+      {
+        "immutable_commit_blob_verified": true,
+        "path": "config.mk.in",
+        "sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+        "size_bytes": 3264
+      },
+      {
+        "immutable_commit_blob_verified": true,
+        "path": "VX_config.toml",
+        "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+        "size_bytes": 30127
+      },
+      {
+        "immutable_commit_blob_verified": true,
+        "path": "VX_types.toml",
+        "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+        "size_bytes": 36543
+      },
+      {
+        "immutable_commit_blob_verified": true,
+        "path": "ci/gen_config.py",
+        "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+        "size_bytes": 60839
+      },
+      {
+        "immutable_commit_blob_verified": true,
+        "path": "ci/blackbox.sh",
+        "sha256": "c9c204b3f54a7865c3a41218d5541ea8c3c00a704ec038acd35e460e541cf621",
+        "size_bytes": 9153
+      }
+    ],
+    "submodules": [
+      {
+        "gitlink_and_checked_out_revision_verified": true,
+        "path": "third_party/cocogfx",
+        "revision": "b1befdb36df8af7ac9e2c96acaf81957aab5d107",
+        "status": "initialized"
+      },
+      {
+        "gitlink_and_checked_out_revision_verified": true,
+        "path": "third_party/cvfpu",
+        "revision": "79e453139072df42c9ec8f697132ba485d74e23d",
+        "status": "initialized"
+      },
+      {
+        "gitlink_and_checked_out_revision_verified": true,
+        "path": "third_party/cvfpu/src/common_cells",
+        "revision": "6aeee85d0a34fedc06c14f04fd6363c9f7b4eeea",
+        "status": "initialized"
+      },
+      {
+        "gitlink_and_checked_out_revision_verified": true,
+        "path": "third_party/cvfpu/src/fpu_div_sqrt_mvp",
+        "revision": "86e1f558b3c95e91577c41b2fc452c86b04e85ac",
+        "status": "initialized"
+      },
+      {
+        "gitlink_and_checked_out_revision_verified": true,
+        "path": "third_party/cvfpu/tb/flexfloat",
+        "revision": "28be2d4fbf41b38fc37763bb6e90a1c88f6aaa61",
+        "status": "initialized"
+      },
+      {
+        "gitlink_and_checked_out_revision_verified": true,
+        "path": "third_party/hardfloat",
+        "revision": "aaf5736dffa521603b681fd5853760c671446c85",
+        "status": "initialized"
+      },
+      {
+        "gitlink_and_checked_out_revision_verified": true,
+        "path": "third_party/ramulator",
+        "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+        "status": "initialized"
+      },
+      {
+        "gitlink_and_checked_out_revision_verified": true,
+        "path": "third_party/softfloat",
+        "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4",
+        "status": "initialized"
+      }
+    ]
+  },
+  "source_revision": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+  "source_tree": "5063f4c8bfec76d2e49d136d84d6ff5d27f5f521",
+  "supervisor_environment": {
+    "CCACHE_DISABLE": "1",
+    "CMAKE_BUILD_PARALLEL_LEVEL": "2",
+    "HOME": "/workspace/p06-counter-qualified-run-01/local-home",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "MAKEFLAGS": "-j2",
+    "OBJCACHE": "",
+    "PATH": "/workspace/p06-local-host-02/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/bin:/bin",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONUTF8": "1",
+    "THREADS": "1",
+    "TMPDIR": "/workspace/p06-counter-qualified-run-01/local-tmp",
+    "TZ": "UTC"
+  },
+  "supervisor_read_during_active_later_stage": true,
+  "toolchain_summary": {
+    "compressed_bytes": 606992434,
+    "extracted_regular_bytes": 1866936911,
+    "member_count": 6122,
+    "os_bundle": "ubuntu/focal",
+    "repository": "vortexgpgpu/vortex-toolchain-prebuilt",
+    "revision": "e3db4bcdf819a17f618ad9fc2472f8f7dea3192b",
+    "selected_components": [
+      "riscv64-gnu-toolchain",
+      "llvm-vortex",
+      "libc64",
+      "libcrt64"
+    ],
+    "tag": "v3.0.2"
+  },
+  "trusted_source_inputs": [
+    {
+      "path": "ci/project/p06_dependency_local_prepare.py",
+      "sha256": "c810f31cf6106a5bbcd6eddcf8d818560cb94222da057fe9491a8e1dbc99316f",
+      "size_bytes": 20427
+    },
+    {
+      "path": "ci/project/p06_local_toolchain.py",
+      "sha256": "0bd80e40b6a22bf78a665e8f1b18818a21178bcc32248a20bfd3133d3c3d5aa8",
+      "size_bytes": 23542
+    },
+    {
+      "path": "ci/project/p06_dependency_sources.py",
+      "sha256": "4e09b8f8357538591a843f465ca6a20465baf363e5a190b9edf8d01c807174a1",
+      "size_bytes": 17141
+    },
+    {
+      "path": "ci/project/p06_dependency_contract.py",
+      "sha256": "d6151024fbe7e8a651075fd76b9bdc006bb18c0f61c538a2928842f865ddd364",
+      "size_bytes": 4438
+    },
+    {
+      "path": "ci/project/p01_toolchain.lock.json",
+      "sha256": "63771ba8d9ff691b3867ed96be7b058ed5eae1368789575f4964e38f8718a405",
+      "size_bytes": 5008
+    }
+  ]
+}

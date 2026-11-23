@@ -2,12 +2,29 @@
 
 ## Decision and current boundary
 
-**Next bounded development: establish fresh dependency compilation-to-loader
-provenance.** Follow the
-[dependency handoff](p06-dependency-provenance-handoff.md) for immutable source
-inputs, actual compile/archive/link records, produced bytes and the live
-admission bindings. The existing complete application-graph validator must be
-reused in that live route. Independent complete qualification remains separate.
+**Next bounded development: implement and independently review an explicit
+qualified route for the unchanged 24-process warm sampling contract, then
+execute its fresh complete attempt.** Follow the
+[qualification handoff](p06-counter-qualification-handoff.md) and
+[development audit](p06-counter-qualification-audit.md). The implemented
+qualification entry and reader admit four processes; extending them to the
+warm population requires new reviewed admission and replay rules before launch.
+Historical warm-v1 remains blocked.
+
+The [complete qualification contract](../designs/complete_counter_qualification_v1.md)
+and [fresh original](evidence/p06-counter-qualification/README.md) now join the
+33-selector, 40-component and ten-premise source proof to actual dependency
+compilation, loaded products and managed lifetimes. At published execution
+revision `17e0284496bab10c7632a48e4f91efb6fb4fec0b`, preparation, dependency
+building and the four-process FP16/BF16 × policy matrix passed: **132 launches
+and 4,224 exact FP32 output words**. Complete public replay also passed and
+derives `counter_qualification_passed=true` only for
+`recorded-four-process-preflight-only`. The revised reader published at
+`220399748ecab84d48ba5a5f123457c44a0c8699` inventories all 94 trusted inputs;
+replay of the unchanged original differs only in that inventory. Its seven
+historical qualification, readiness, warm and acceptance flags remain false.
+The [audit](p06-counter-qualification-audit.md) keeps source/tooling validation
+separate from native execution and phase acceptance.
 
 The [native lifetime witness](evidence/p06-native-lifetime/README.md) is implemented
 at `b4127b19a004b5aebb8d52eab9ceda0da3ff4561`.
@@ -27,9 +44,9 @@ now verifies that original against independent archive/source expectations.
 That historical version cannot supply the per-run pending-balance observations
 added by the later lifetime witness, or prove that the selected sources produced
 the cached dependency binaries. Preserve both originals in their declared
-scopes. After new provenance and admission rules are independently reviewed,
-a fresh preflight must join that provenance to the implemented lifetime witness
-before it can satisfy the remaining qualification boundary.
+scopes. The later `17e02844` qualification original supplies the independently
+reviewed provenance/admission/lifetime join for its own four processes; it does
+not add observations or qualification fields to either historical original.
 
 The all-33 native model transport and directed public-runtime diagnostics have
 a latest independently audited diagnostic
@@ -51,9 +68,10 @@ are published at
 [`4268d2d5d811063bb886cde7bd0e27e61a79c9b4`](https://github.com/baabi-boo/AI-GPU/commit/4268d2d5d811063bb886cde7bd0e27e61a79c9b4).
 They check retained-data consistency and preserve diagnostic nonacceptance.
 Those diagnostic readers and the complete managed-preflight consistency reader
-retain their bounded scopes. Neither a complete counter-qualification route
-nor a fresh complete matched warm attempt has been completed. The managed
-preflight and its replay keep `qualified`, `ready_for_warm`, `warm_execution`,
+retain their bounded scopes. Complete qualification is now established only
+for the new four-process original; a fresh complete matched warm attempt has
+not been executed. The historical managed preflight and its replay keep
+`qualified`, `ready_for_warm`, `warm_execution`,
 `full_warm_coverage`, `acceptance_claimed`, `phase_acceptance` and
 `performance_acceptance` false. Their three unresolved obligations remain
 `all_40_component_lifetime_and_pending_balance`,
@@ -297,7 +315,7 @@ workload qualification or coverage of a later FP16/BF16 measurement artifact.
 
 `memory_bank_st` at class 7, CSR `0xB06`, has a
 [SimX backing source](../../sim/simx/csr_unit.cpp) but no case in the
-[RTL MEM decoder](../../hw/rtl/core/VX_csr_mpm.sv). A future all-33 SimX
+[RTL MEM decoder](../../hw/rtl/core/VX_csr_mpm.sv). An all-33 SimX
 qualification therefore cannot be called all-33 RTL parity. An RTL extension
 requires its own separate implementation and evidence. Preserve the existing
 [host MPM wire contract](../designs/host_mpm_transport_v1.md) and public ABI:
@@ -306,11 +324,14 @@ the high-half selector is internal, not a second public CSR argument.
 
 ## Qualification work to implement and review
 
-The sequence below describes the remaining qualification route. Its next
-bounded implementation is the fresh provenance and live admission join in the
-[dependency handoff](p06-dependency-provenance-handoff.md). The native lifetime
-increment has executed and has independent original review; neither that
-bounded witness nor the historical v1 reader establishes complete qualification.
+The sequence below records the qualification obligations. Steps 1–6 are now
+implemented and independently reviewed for the four-process contract, with a
+fresh original at `17e02844` and successful complete replay. The
+[evidence index](evidence/p06-counter-qualification/README.md) preserves the
+actual source, proof and original identities. Those completed processes cannot
+qualify later process records. Step 7 therefore begins by extending explicit
+admission and complete replay to the frozen 24-process population; its rules
+and rejection tests must be reviewed before collecting performance results.
 
 1. **Freeze a new qualification contract.** Specify its record, reader and
    explicit admission path separately from warm-v1 and the diagnostic replay
@@ -367,19 +388,22 @@ bounded witness nor the historical v1 reader establishes complete qualification.
    author the enforcement change under the
    [review policy](../review/code-review-policy.md), before fresh performance
    results are inspected.
-6. **Run a fresh preflight joining the implemented lifetime witness and
-   dependency provenance.** The historical `57248e73` four-process original
+6. **Completed four-process qualification preflight.** The historical
+   `57248e73` four-process original
    and its consistency replay lack the later pending/reset observations; the
-   `b4127b19` original supplies that bounded witness. Once the new provenance,
-   admission and complete validation requirements are independently reviewed,
-   repeat the four-process FP16/BF16 × policy matrix below with the newly bound
-   products and versioned evidence to establish the complete lifecycle and
-   snapshot obligations. Keep its outputs separate from performance samples.
+   `b4127b19` original supplies that bounded witness. The separately admitted
+   `17e02844` original joins fresh dependency products and provenance to the
+   full four-process lifecycle and snapshot obligations below. Its outputs
+   remain separate from performance samples.
    Reassess diagnostic coverage against the exact new artifacts and repeat only
    the controls needed for changed source/configuration/build boundaries; a
    historical scalar control cannot qualify a new warm binary.
-7. **Collect the fresh complete matched attempt.** Only after the prerequisites
-   and independent review pass, run all 24 processes under the frozen sampling
+7. **Implement the qualified warm route, then collect the fresh complete
+   matched attempt.** Extend the explicit producer, prelaunch qualification
+   bindings and inert reader to all 24 processes while preserving the frozen
+   sampling contract and historical warm-v1 rejection. Independently review
+   that extension and its rejection controls before execution. Only after
+   those prerequisites pass, run all 24 processes under the frozen sampling
    and resource rules. Validate every process, including excluded primes and
    warm-ups, through its terminal destruction boundary before analyzing the
    measured populations. Retain valid negative performance results and all
@@ -461,7 +485,8 @@ not yet enforce the complete exact 33/12 inventory or demonstrate every final
 reference/CP premise; the separately versioned integration must do so for the
 actual complete warm caller.
 
-The proof and future reader must bind all of the following; none may be inferred
+The proof and the qualified warm-route reader must bind all of the following;
+none may be inferred
 from a successful release return alone:
 
 | Boundary | Required source proof and native observation |
@@ -520,7 +545,7 @@ Keep test-only seeds or tiny guard limits out of the measurement binary. Require
 actual updater/aggregate boundaries, pending underflow and flush/close coverage;
 reject unsupported topology, worker count, features or guard configuration.
 
-## Remaining native warm-caller qualification preflight
+## Completed preflight and remaining warm-caller obligations
 
 The seven model cells and five public modes close their declared diagnostic
 gaps at `4268d2d5`, repeating the earlier corrected `e5f1524` scope. Their scalar
@@ -528,12 +553,13 @@ controls do not execute managed FP16/BF16 matmul or workspace reuse. The later
 `57248e73` original executes the four-process managed policy matrix, and its
 complete inert replay verifies the retained v1 observations. The `b4127b19`
 lifetime original adds all per-run pending/reset pairs, terminal ownership and
-actual disposal in the same four-process numerical population. Dependency
-compilation provenance and all-40-component qualification remain open. The
-remaining native obligation is a fresh preflight joining the implemented
-witness with new dependency products and provenance, after their complete
-admission and validation rules are independently reviewed. Freeze that route
-before collecting performance results.
+actual disposal in the same four-process numerical population. The subsequent
+`17e02844` original joins fresh dependency compilation and loaded products to
+all 40 component premises in the explicitly admitted four-process route. Its
+[native and replay receipts](evidence/p06-counter-qualification/README.md)
+establish the following preflight obligations. The future 24-process route
+must bind and verify each new process independently; the preflight is neither
+a warm sample nor a reusable terminal observation for another process.
 
 | Obligation | Minimum scope | Pass/fail boundary |
 |---|---|---|
@@ -565,8 +591,8 @@ require a separately reviewed coherent-read algorithm and adversarial rollover
 tests. Repeated equality alone does not prove coherence.
 
 The fresh qualification preflight joining the implemented lifetime witness
-with dependency provenance remains future work. Both completed originals and
-any future four-process preflight are not measured samples or substitutes for
+with dependency provenance is complete for `17e02844`. Historical originals
+and that four-process preflight are not measured samples or substitutes for
 the full 24-process attempt. Their terminal observations cannot be copied into
 a later process's record, and missing
 versioned fields cannot be inferred from the historical archive. Controlled
@@ -576,6 +602,11 @@ exception transport, fatal-abort recovery, simultaneous contexts and forced
 cancellation remain outside this qualification route.
 
 ## New qualification binding and replay
+
+The [implemented four-process contract](../designs/complete_counter_qualification_v1.md)
+provides this explicit binding and pure validation. The requirements below
+also govern the next warm-route extension; the existing entry and reader do
+not already admit its 24-process population.
 
 Use a separately named versioned record, reader and execution binding,
 retaining the unchanged measurement-contract digest. Select this new route
@@ -648,9 +679,11 @@ code to execute. Independent enforcement review precedes fresh performance.
 
 ## Fresh matched attempt
 
-After the qualification prerequisites pass, use the unchanged warm workload,
+After the explicit 24-process route and its rejection tests are implemented
+and independently reviewed, use the unchanged warm workload,
 timing interval, allocation observer, poison schedule, policy order and sample
-populations. Run FP16 then BF16, six ordered policy pairs per format, one prime
+populations. Run FP16 then BF16, one warm-up pair and five measured pairs per
+format in the frozen order, one prime
 plus 32 serial operations per process: **24 processes, 792 launches and 25,344
 exact FP32 output words**, including excluded primes and warm-ups. Both policies
 use the same clean source and guarded executable per format. Retain all data:

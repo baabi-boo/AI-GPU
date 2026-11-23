@@ -1,0 +1,339 @@
+#!/usr/bin/env python3
+"""Independently retain and reconcile completed source-root governance runs."""
+import collections
+import gzip
+import hashlib
+import json
+import os
+import re
+import stat
+import subprocess
+import time
+from pathlib import Path
+
+ROOT = Path('/workspace/AI-GPU')
+SCRATCH = Path('/workspace/scratch/e96519576778')
+OUT = ROOT / 'docs/project/evidence/p06-counter-qualification/validation/governance'
+OUT.mkdir(parents=True, exist_ok=True)
+REVISION = '220399748ecab84d48ba5a5f123457c44a0c8699'
+TREE = '037a667b7a3238061ff1d4894503bd26c741c7c3'
+RUNS = (
+    ('serial-17e02844', SCRATCH / 'full-governance-17e02844/reviewed-scheduler-02',
+     '17e0284496bab10c7632a48e4f91efb6fb4fec0b', '5063f4c8bfec76d2e49d136d84d6ff5d27f5f521', 'run_governance_v2.py'),
+    ('serial-0093cf60', SCRATCH / 'full-governance-0093cf60',
+     '0093cf60d881a177634ce1a2247e053fc9d2b94e', TREE, 'run_governance_v3.py'),
+    ('partitioned-22039974', SCRATCH / 'full-governance-22039974-partitioned',
+     REVISION, TREE, 'run_governance.py'),
+)
+
+def sha(body):
+    return hashlib.sha256(body).hexdigest()
+
+def identity(path):
+    body = path.read_bytes()
+    return {'path': str(path), 'sha256': sha(body), 'size_bytes': len(body)}
+
+def git(source, *args):
+    return subprocess.check_output(['git', *args], cwd=source, text=True).strip()
+
+def exact_source(source, revision, tree, expected_rows):
+    assert git(source, 'rev-parse', 'HEAD') == revision
+    assert git(source, 'rev-parse', 'HEAD^{tree}') == tree
+    assert git(source, 'status', '--porcelain=v1', '--untracked-files=all') == ''
+    for row in expected_rows:
+        assert sha((source / row['path']).read_bytes()) == row['sha256'], row['path']
+    entries = subprocess.check_output(['git', 'ls-tree', '-r', '-z', revision], cwd=source).split(b'\0')[:-1]
+    blobs = []
+    modules = []
+    for entry in entries:
+        fields, name = entry.split(b'\t', 1)
+        mode, kind, oid = fields.decode().split()
+        name = name.decode()
+        path = source / name
+        if mode == '160000':
+            assert git(path, 'rev-parse', 'HEAD') == oid
+            assert git(path, 'status', '--porcelain=v1', '--untracked-files=all') == ''
+            modules.append({'path': name, 'revision': oid})
+            continue
+        assert kind == 'blob'
+        if mode == '120000':
+            assert path.is_symlink()
+            body = os.readlink(path).encode()
+        else:
+            assert stat.S_ISREG(path.stat().st_mode) and not path.is_symlink()
+            body = path.read_bytes()
+            assert bool(path.stat().st_mode & 0o111) == (mode == '100755'), name
+        actual_oid = hashlib.sha1(b'blob ' + str(len(body)).encode() + b'\0' + body).hexdigest()
+        assert actual_oid == oid, name
+        blobs.append({'path': name, 'mode': mode, 'git_oid': oid, 'sha256': sha(body)})
+    return {'revision': revision, 'tree': tree, 'clean_status': True,
+        'snapshot_rows_verified': len(expected_rows), 'git_blobs_verified': len(blobs),
+        'git_blob_inventory_sha256': sha(json.dumps(blobs, sort_keys=True, separators=(',', ':')).encode()),
+        'initialized_top_level_submodules': modules,
+        'recursive_submodule_status': git(source, 'submodule', 'status', '--recursive')}
+
+def store_run_files(name, directory):
+    files = sorted(path for path in directory.iterdir() if path.is_file()
+                   and path.suffix in ('.json', '.log', '.py'))
+    preserved = directory / 'preserved-v1'
+    if preserved.is_dir():
+        files += sorted(path for path in preserved.iterdir() if path.is_file()
+                        and path.suffix in ('.json', '.log', '.py'))
+    target = OUT / name
+    target.mkdir(exist_ok=True)
+    rows = []
+    for path in files:
+        body = path.read_bytes()
+        relative = path.relative_to(directory)
+        if path.suffix == '.py':
+            stored_name, stored, encoding = str(relative) + '.txt', body, 'identity'
+        elif relative == Path('execution.json'):
+            stored_name, stored, encoding = str(relative), body, 'identity'
+        else:
+            stored_name, stored, encoding = str(relative) + '.gz', gzip.compress(body, mtime=0), 'gzip'
+        destination = target / stored_name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        if destination.exists():
+            assert destination.read_bytes() == stored, 'retained original cannot change: ' + str(destination)
+        else:
+            destination.write_bytes(stored)
+        assert (gzip.decompress(stored) if encoding == 'gzip' else stored) == body
+        assert path.read_bytes() == body, 'input changed during retention: ' + str(path)
+        rows.append({'original_path': str(path), 'original_sha256': sha(body),
+            'original_size_bytes': len(body), 'retained_path': str(destination.relative_to(OUT)),
+            'retained_sha256': sha(stored), 'retained_size_bytes': len(stored), 'encoding': encoding})
+    return rows
+
+discovery_file = ROOT / 'docs/project/evidence/p06-counter-qualification/validation/w09_a04-test-discovery.json.gz'
+discovery = json.loads(gzip.decompress(discovery_file.read_bytes()))
+serial_populations = {4434: discovery['records'][0]['ids'], 4437: discovery['records'][1]['ids']}
+assert all(len(ids) == len(set(ids)) == count for count, ids in serial_populations.items())
+results = []
+retention_rows = []
+for name, directory, revision, tree, program in RUNS:
+    receipt_body = (directory / 'execution.json').read_bytes()
+    receipt = json.loads(receipt_body)
+    interruption_path = directory / 'root-interruption-receipt.json'
+    interrupted = name == 'serial-0093cf60' and interruption_path.is_file()
+    interruption = None
+    if interrupted:
+        interruption = json.loads(interruption_path.read_bytes())
+        request = json.loads((directory / 'root-stop-request.json').read_bytes())
+        stopped = json.loads((directory / 'root-stop-result.json').read_bytes())
+        assert interruption['scope'] == request['scope'] == 'coordinator-stop-of-owned-redundant-known-failed-serial-run'
+        assert interruption['state'] == 'interrupted' and interruption['outcome'] == 'interrupted-after-observed-failure'
+        assert interruption['owned_exec_session'] == request['owned_exec_session'] == 93259
+        assert type(stopped['exit_code']) is int and stopped['exit_code'] == interruption['observed_exit_code'] == 130
+        assert 'session_id' not in stopped and interruption['exec_session_closed'] is True
+        assert interruption['log_exclusive_lease_acquired_and_released'] is True
+        assert interruption['original_execution_bytes_unchanged'] is True
+        assert interruption['original_execution_still_reports_running'] is True and receipt['state'] == 'running'
+        assert request['original_execution_before'] == receipt
+        assert request['original_execution_sha256'] == sha(receipt_body)
+        assert interruption['source_revision'] == revision
+        assert interruption['source_files_stable'] is True and interruption['git_status_after'] == ''
+        assert interruption['replacement_source_revision'] == REVISION
+        assert interruption['replacement_tests_completed'] == request['replacement_completed_ids'] == 4437
+        replacement = json.loads((RUNS[-1][1] / 'execution.json').read_bytes())
+        assert replacement['state'] == 'finished' and replacement['outcome'] == request['replacement_outcome'] == 'pass'
+        assert replacement['finished_at'] == request['replacement_finished_at']
+        interrupted_log = (directory / 'unittest-discovery.log').read_bytes()
+        assert sha(interrupted_log) == interruption['log_sha256']
+        assert len(interrupted_log) == interruption['log_size_bytes']
+    if receipt['state'] != 'finished' and not interrupted:
+        results.append({'id': name, 'state': receipt['state'], 'outcome': 'pending',
+            'source_revision': revision, 'completed_result_claimed': False})
+        continue
+    assert receipt['source_revision'] == revision
+    assert receipt.get('source_tree', receipt.get('tree')) == tree
+    assert receipt['scope'] == 'source-root-governance-and-tooling-only'
+    assert receipt['gpu_execution_certified'] is False
+    assert sha((directory / program).read_bytes()) == receipt['supervisor_sha256']
+    source = Path(receipt['source'])
+    before = json.loads((directory / 'source-before.json').read_bytes())
+    if interrupted:
+        assert not (directory / 'source-after.json').exists()
+        assert interruption['source_snapshot_rows_verified'] == len(before)
+    else:
+        after = json.loads((directory / 'source-after.json').read_bytes())
+        assert before == after and receipt['source_files_stable'] is True
+        assert receipt['status_after'] == ''
+    source_review = exact_source(source, revision, tree, before)
+    for command in receipt['commands']:
+        log = (directory / command['log']).read_bytes()
+        if interrupted and command['id'] == 'unittest-discovery':
+            assert 'exit_code' not in command and 'log_sha256' not in command
+            continue
+        assert command['log_sha256'] == sha(log)
+        if 'log_size_bytes' in command:
+            assert command['log_size_bytes'] == len(log)
+    item = {'id': name, 'state': 'interrupted' if interrupted else 'finished',
+        'outcome': interruption['outcome'] if interrupted else receipt['outcome'],
+        'started_at': receipt['started_at'],
+        'finished_at': interruption['observed_at'] if interrupted else receipt['finished_at'],
+        'source_revision': revision, 'source_tree': tree, 'original_execution_sha256': sha(receipt_body),
+        'source_review': source_review, 'gpu_execution_certified': False,
+        'commands': receipt['commands']}
+    if interrupted:
+        log = interrupted_log.decode()
+        ids = re.findall(r'^test_\S+ \((test_[\w.]+)\)(?: \.\.\.|$)', log, re.M)
+        expected = serial_populations[4437]
+        assert len(ids) == len(set(ids)) < len(expected)
+        assert ids == expected[:len(ids)]
+        assert not re.findall(r'^Ran \d+ tests in [0-9.]+s$', log, re.M)
+        observed_failures = [line for line in log.splitlines() if ' ... FAIL' in line or ' ... ERROR' in line]
+        assert len(observed_failures) == 1 and 'test_copied_checker_cannot_import_source_in_clean_venv' in observed_failures[0]
+        item.update(original_execution_state_retained='running',
+            normal_supervisor_finalization_reached=False,
+            coordinator_interruption_receipt_sha256=sha(interruption_path.read_bytes()),
+            observed_session_exit_code=130,
+            interruption_limitations=interruption['limitations'],
+            source_snapshot_verification='Current source independently matches the original before snapshot; no original after snapshot was invented.',
+            unittest={'discovered_count': 4437, 'verbose_started_id_count': len(ids),
+                'verbose_started_ids_sha256': sha(json.dumps(ids, separators=(',', ':')).encode()),
+                'ordered_prefix_verified': True, 'last_started_id_may_be_incomplete': ids[-1],
+                'complete_run_count': None, 'normal_unittest_trailer_present': False,
+                'observed_failure_markers': observed_failures,
+                'full_discovered_population_executed': False},
+            diagnosis='The diagnosed bare-alias P05 failure occurred before coordinator-approved termination; this partial run supplies no complete-suite pass.')
+    elif name.startswith('serial-'):
+        log = (directory / 'unittest-discovery.log').read_text()
+        counts = re.findall(r'^Ran (\d+) tests in ([0-9.]+)s$', log, re.M)
+        assert len(counts) == 1
+        count, elapsed = int(counts[0][0]), float(counts[0][1])
+        ids = re.findall(r'^test_\S+ \((test_[\w.]+)\)(?: \.\.\.|$)', log, re.M)
+        expected = serial_populations[4434 if name == 'serial-17e02844' else 4437]
+        assert len(ids) == len(set(ids)) == count
+        assert ids == [identifier for identifier in expected if identifier in set(ids)]
+        missing = [identifier for identifier in expected if identifier not in set(ids)]
+        failures = re.findall(r'^FAIL: (.+)$', log, re.M)
+        errors = re.findall(r'^ERROR: (.+)$', log, re.M)
+        final = re.findall(r'^(?:FAILED \(.+\)|OK(?: \(.+\))?)$', log, re.M)
+        assert len(final) == 1
+        assert receipt['outcome'] == 'fail' and final[0].startswith('FAILED')
+        assert next(row for row in receipt['commands'] if row['id'] == 'unittest-discovery')['exit_code'] == 1
+        item['unittest'] = {'discovered_count': len(expected), 'ran_count': count,
+            'reported_seconds': elapsed, 'verbose_started_id_count': len(ids),
+            'verbose_started_ids_sha256': sha(json.dumps(ids, separators=(',', ':')).encode()),
+            'expected_order_preserved': True, 'missing_ids': missing,
+            'failure_headers': failures, 'error_headers': errors, 'final_line': final[0],
+            'full_discovered_population_executed': not missing}
+        if name == 'serial-17e02844':
+            assert len(failures) == 1 and len(errors) == 2 and len(missing) == 15
+            assert all(identifier.startswith(('test_p06_dependency_option_controls.ActualGeneratedOptionControls.',
+                'test_p06_dependency_receipt.ActualCMakeReviewTests.')) for identifier in missing)
+            assert "ModuleNotFoundError: No module named 'cmake'" in log
+            item['diagnosis'] = 'The selected ambient CMake Python launcher cannot import its package under sanitized HOME; fixture tool selection is corrected in220399.'
+        else:
+            assert len(failures) == 1 and not errors and not missing
+            assert 'test_copied_checker_cannot_import_source_in_clean_venv' in failures[0]
+            item['diagnosis'] = 'Bare Python alias yields an invalid nested copied-venv home; a proper canonical-based venv corrects the local invocation without source changes.'
+    else:
+        assert receipt['outcome'] == 'pass'
+        manifest_body = (directory / 'partition-manifest.json').read_bytes()
+        assert sha(manifest_body) == receipt['manifest_sha256']
+        manifest = json.loads(manifest_body)
+        all_ids = manifest['all_ids']
+        assert all_ids == serial_populations[4437]
+        assert len(all_ids) == len(set(all_ids)) == 4437
+        assert sha(json.dumps(all_ids, separators=(',', ':')).encode()) == '98297663c3341dab052dd83b11b5fcce56bfab652d4f18857ee74e2247e257f8'
+        assert manifest['source_revision'] == revision and manifest['source_tree'] == tree
+        actual = []
+        modules = []
+        partition_rows = []
+        for index in range(3):
+            selected = manifest['partitions'][index]
+            assert selected['index'] == index and len(selected['ids']) == 1479
+            assert selected['ids'] == [identifier for identifier in all_ids if identifier.split('.')[0] in selected['modules']]
+            modules += selected['modules']
+            result_body = (directory / f'partition-{index}-result.json').read_bytes()
+            result = json.loads(result_body)
+            parent = receipt['partitions'][index]
+            assert result['partition'] == parent['index'] == index
+            assert result['manifest_sha256'] == sha(manifest_body)
+            assert result['source_revision'] == revision and result['source_tree'] == tree
+            assert result['program_sha256'] == receipt['partition_program_sha256']
+            assert result['interpreter'] == receipt['interpreter']
+            assert result['selected_ids'] == result['started_ids'] == result['completed_ids'] == selected['ids']
+            assert type(result['tests_run']) is int and result['tests_run'] == parent['tests_run'] == 1479
+            assert result['outcome'] == parent['outcome'] == 'pass' and parent['exit_code'] == 0
+            assert all(type(result[key]) is list and not result[key] for key in
+                ('failures', 'errors', 'skipped', 'expected_failures', 'unexpected_successes'))
+            log_body = (directory / parent['log']).read_bytes()
+            assert sha(log_body) == parent['log_sha256'] and sha(result_body) == parent['result_sha256']
+            log = log_body.decode()
+            verbose = re.findall(r'^test_\S+ \((test_[\w.]+)\)(?: \.\.\.|$)', log, re.M)
+            assert verbose == selected['ids']
+            assert len(re.findall(r'^Ran 1479 tests in [0-9.]+s$', log, re.M)) == 1
+            assert len(re.findall(r'^OK$', log, re.M)) == 1
+            actual += result['completed_ids']
+            partition_rows.append({'index': index, 'tests_run': 1479, 'outcome': 'pass',
+                'duration_seconds': result['duration_seconds'], 'module_count': len(selected['modules']),
+                'selected_ids_sha256': sha(json.dumps(selected['ids'], separators=(',', ':')).encode()),
+                'started_equals_completed_equals_selected': True, 'verbose_log_matches_ids': True,
+                'result_sha256': sha(result_body), 'log_sha256': sha(log_body)})
+        assert len(modules) == len(set(modules)) == len({identifier.split('.')[0] for identifier in all_ids}) == 267
+        assert len(actual) == len(set(actual)) == 4437 and collections.Counter(actual) == collections.Counter(all_ids)
+        assert receipt['exact_once_complete_population'] is True and receipt['completed_ids_count'] == 4437
+        assert receipt['tools_stable'] is True and receipt['tool_inputs_before'] == receipt['tool_inputs_after']
+        for tool in receipt['tool_inputs_after']:
+            path = Path(tool['path'])
+            assert str(path.resolve()) == tool['resolved']
+            assert identity(path)['sha256'] == tool['sha256'] and path.stat().st_size == tool['size_bytes']
+        assert receipt['submodules_before'] == receipt['submodules_after'] == source_review['recursive_submodule_status']
+        assert receipt['source_revision_after'] == revision and receipt['diff_check_exit_code'] == 0
+        assert all(command['exit_code'] == 0 for command in receipt['commands'])
+        assert sha((directory / 'run_partition.py').read_bytes()) == receipt['partition_program_sha256']
+        item.update(discovered_unique_ids=4437, executed_unique_ids=4437,
+            complete_population_executed_exactly_once=True, modules=267,
+            partitions=partition_rows, tool_inputs_verified=receipt['tool_inputs_after'],
+            module_class_order_preserved=True,
+            cross_module_order_differs_from_monolithic=True,
+            no_failures_errors_skips_expected_failures_or_unexpected_successes=True,
+            native_execution_by_this_validation='not_run')
+    assert (directory / 'execution.json').read_bytes() == receipt_body
+    item['retained_files'] = store_run_files(name, directory)
+    retention_rows += item['retained_files']
+    results.append(item)
+
+argv = json.loads((ROOT / 'docs/project/evidence/p06-counter-qualification/native/attempt-01-replay-execution.json').read_text())['argv']
+options = dict(zip(argv[3::2], argv[4::2]))
+originals = [
+    (SCRATCH / 'AI-GPU_P06_counter_qualification_17e02844_2026-11-23.zip', '9a0f1088f7a6d70a2ec17c705a61bdbbb2ea59cb815a3327aec817d0120d05a0'),
+    (Path(options['--diagnostic-archive']), options['--diagnostic-archive-sha256']),
+    (Path(options['--control-archive']), options['--control-archive-sha256']),
+]
+original_rows = []
+for path, expected in originals:
+    row = identity(path)
+    assert row['sha256'] == expected
+    original_rows.append(row)
+summary = {'schema_version': 1, 'reviewer': 'w10_a03',
+    'scope': 'source-root-governance-retention-and-independent-execution-accounting',
+    'observed_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+    'state': 'finished' if all(row['state'] in ('finished', 'interrupted') for row in results) else 'in_progress',
+    'final_exhaustive_suite_outcome': results[-1]['outcome'],
+    'runs': results, 'original_archives_verified': original_rows,
+    'review_program_sha256': sha(Path(__file__).read_bytes()),
+    'retained_original_files': len(retention_rows),
+    'retention_is_byte_exact': True,
+    'gzip_mtime': 0,
+    'native_execution_by_reviewer': 'not_run', 'gpu_execution_certified': False,
+    'limitations': [
+        'Earlier serial failures are preserved and never relabelled as passing.',
+        'Discovered IDs do not establish execution; complete partition receipts and verbose logs are reconciled independently.',
+        'Partitioned execution changes cross-module process state/order relative to a monolithic invocation.',
+        'Governance validates source/tooling and does not establish GPU, hardware, warm-performance or phase acceptance.',
+        'No complete result is inferred for an unfinished or missing worker.',
+    ]}
+summary_path = OUT / 'summary.json'
+if summary_path.exists():
+    previous = json.loads(summary_path.read_bytes())
+    if previous['state'] == 'finished':
+        summary['observed_at'] = previous['observed_at']
+        assert summary == previous, 'a completed retained summary cannot be rewritten'
+summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True) + '\n')
+(OUT / 'review-program.py.txt').write_bytes(Path(__file__).read_bytes())
+print(json.dumps({'state': summary['state'], 'final_exhaustive_suite_outcome': summary['final_exhaustive_suite_outcome'],
+    'runs': [{'id': row['id'], 'state': row['state'], 'outcome': row['outcome']} for row in results],
+    'retained_original_files': len(retention_rows)}, indent=2))

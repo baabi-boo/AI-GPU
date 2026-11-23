@@ -1,0 +1,135 @@
+#!/usr/bin/env python3
+"""Bounded local supervision; this is not an accepted evidence-envelope contract."""
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+sys.dont_write_bytecode = True
+SOURCE = Path('/workspace/p06-counter-qualified-source-01')
+WORKSPACE = Path('/workspace/p06-counter-qualified-run-01')
+REVIEW = Path('/workspace/scratch/e96519576778/native-qualification-attempt-01')
+PYTHON = '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3'
+REVISION = '17e0284496bab10c7632a48e4f91efb6fb4fec0b'
+HOST = '/workspace/p06-local-host-02/bin'
+DIAGNOSTIC = SOURCE / 'docs/project/evidence/p06-counter-diagnostics/native/run-45034575685-attempt1.zip'
+CONTROL = Path('/workspace/scratch/279b6658611e/AI-GPU_P06_local_attempt_04_passed_2026-11-23.zip')
+PROOF_SHA = 'd12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e'
+DIAGNOSTIC_SHA = '6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb'
+CONTROL_SHA = 'd3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f'
+sys.path.insert(0, str(SOURCE / 'ci/project'))
+from baseline_process import run_bounded, LIMITATIONS
+
+def now():
+    return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+
+def digest(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=SOURCE, text=True).strip() == REVISION
+assert not subprocess.check_output(['git', 'status', '--porcelain=v1', '--untracked-files=all'], cwd=SOURCE)
+assert not WORKSPACE.exists() and not WORKSPACE.is_symlink()
+for original, pin in ((DIAGNOSTIC, DIAGNOSTIC_SHA), (CONTROL, CONTROL_SHA),
+                      (SOURCE / 'ci/project/p06_counter_qualification_proof.json', PROOF_SHA)):
+    assert original.stat().st_nlink == 1 and digest(original) == pin
+WORKSPACE.mkdir(mode=0o700)
+for name in ('local-home', 'local-tmp'):
+    (WORKSPACE / name).mkdir(mode=0o700)
+environment = {'PATH': HOST + ':' + str(Path(PYTHON).parent) + ':/usr/bin:/bin',
+    'HOME': str(WORKSPACE / 'local-home'), 'TMPDIR': str(WORKSPACE / 'local-tmp'),
+    'LANG': 'C', 'LC_ALL': 'C', 'TZ': 'UTC', 'PYTHONUTF8': '1',
+    'PYTHONDONTWRITEBYTECODE': '1', 'CCACHE_DISABLE': '1', 'OBJCACHE': '',
+    'MAKEFLAGS': '-j2', 'CMAKE_BUILD_PARALLEL_LEVEL': '2', 'THREADS': '1'}
+record = {'schema_version': 1, 'scope': 'local-three-stage-supervision-only',
+    'source_revision': REVISION, 'source': str(SOURCE), 'workspace': str(WORKSPACE),
+    'supervisor_sha256': digest(__file__),
+    'monitor_sha256': digest(SOURCE / 'ci/project/baseline_process.py'),
+    'started_at': now(), 'state': 'running', 'outcome': 'running', 'environment': environment,
+    'supervisor_limits': {'whole_attempt_seconds': 5400, 'per_log_bytes': 16 * 1024**2,
+        'sampled_process_group_rss_bytes': 4 * 1024**3, 'free_disk_reserve_bytes': 15 * 1024**3},
+    'limitations': ['This supervisor is execution bookkeeping, not the historical local-v1 envelope.',
+        'Each child producer enforces its own unchanged source, resource and evidence contract.',
+        'The outer monitor does not aggregate child-created process groups.', *LIMITATIONS],
+    'stages': []}
+target = REVIEW / 'supervision.json'
+assert not target.exists()
+start = time.monotonic()
+
+def save():
+    target.write_text(json.dumps(record, indent=2, sort_keys=True) + '\n')
+
+def stage(name, module, arguments, report_path, maximum):
+    row = {'id': name, 'argv': [PYTHON, '-B', str(SOURCE / 'ci/project' / (module + '.py')), *arguments],
+        'cwd': str(SOURCE), 'started_at': now(), 'report_path': str(report_path),
+        'log': name + '.stdout.log'}
+    record['stages'].append(row)
+    save()
+    remaining = 5400 - (time.monotonic() - start)
+    assert remaining > 0
+    row['timeout_seconds'] = min(maximum, remaining)
+    print(json.dumps({'stage': name, 'state': 'started', 'at': row['started_at']}), flush=True)
+    row['execution'] = run_bounded(row['argv'], SOURCE, environment, REVIEW / row['log'],
+        timeout_seconds=row['timeout_seconds'], min_free_bytes=15 * 1024**3,
+        max_log_bytes=16 * 1024**2, max_rss_bytes=4 * 1024**3,
+        resource_paths=(SOURCE, WORKSPACE, REVIEW))
+    row['finished_at'] = now()
+    if report_path.exists():
+        body = report_path.read_bytes()
+        report = json.loads(body)
+        row['report_sha256'] = hashlib.sha256(body).hexdigest()
+        row['report_size_bytes'] = len(body)
+        row['report_outcome'] = report.get('outcome')
+        row['report_reason'] = report.get('reason')
+    else:
+        report = None
+    save()
+    print(json.dumps({'stage': name, 'state': 'finished', 'execution': row['execution'],
+        'report_outcome': row.get('report_outcome'), 'report_reason': row.get('report_reason')}), flush=True)
+    assert row['execution']['outcome'] == 'pass' and row['execution']['exit_code'] == 0, name + ' execution failed'
+    assert report is not None and report['outcome'] == 'pass' and report.get('reason') is None, name + ' report failed'
+    assert report['expected_revision'] == REVISION
+    return report
+
+common = ['--source-dir', str(SOURCE), '--expected-revision', REVISION]
+host = ['--host-bin', HOST]
+evidence = WORKSPACE / 'evidence'
+try:
+    stage('preparation', 'p06_dependency_local_prepare', [*common,
+        '--workspace-dir', str(WORKSPACE), '--archive-root', '/workspace/p06-native-prebuilt',
+        '--dependency-repositories', '/workspace/p06-pinned-inputs', *host],
+        evidence / 'dependency-preparation.json', 1800)
+    dependency = stage('dependency-build', 'p06_dependency_build', [*common,
+        '--workspace-dir', str(WORKSPACE), '--preparation', str(evidence / 'dependency-preparation.json'),
+        '--output-dir', str(evidence / 'dependency-build'), *host],
+        evidence / 'dependency-build/report.json', 5400)
+    assert dependency['fresh_dependency_build_passed'] is True
+    dependency_sha = digest(evidence / 'dependency-build/report.json')
+    record['dependency_receipt_sha256'] = dependency_sha
+    save()
+    result = stage('native-qualification', 'p06_counter_qualification_execute', ['run', *common,
+        '--tools-dir', str(WORKSPACE / 'tools'), '--work-dir', str(WORKSPACE / 'work'),
+        '--output-dir', str(evidence / 'native-qualification'),
+        '--dependency-receipt', str(evidence / 'dependency-build/report.json'),
+        '--dependency-receipt-sha256', dependency_sha, *host,
+        '--counter-qualification', str(SOURCE / 'ci/project/p06_counter_qualification_proof.json'),
+        '--counter-qualification-sha256', PROOF_SHA,
+        '--diagnostic-archive', str(DIAGNOSTIC), '--diagnostic-archive-sha256', DIAGNOSTIC_SHA,
+        '--control-archive', str(CONTROL), '--control-archive-sha256', CONTROL_SHA,
+        '--jobs', '2', '--timeout-seconds', '1800', '--run-timeout-seconds', '180'],
+        evidence / 'native-qualification/report.json', 5400)
+    assert result['counter_qualification_passed'] is True
+    record['outcome'] = 'pass'
+    record['completed_counts'] = result['completed_counts']
+except BaseException as error:
+    record['outcome'] = 'fail'
+    record['reason'] = str(error)
+    raise
+finally:
+    record['state'] = 'finished'
+    record['finished_at'] = now()
+    record['duration_seconds'] = time.monotonic() - start
+    save()
+    print(json.dumps({'outcome': record['outcome'], 'duration_seconds': record['duration_seconds'],
+        'supervision': str(target)}), flush=True)

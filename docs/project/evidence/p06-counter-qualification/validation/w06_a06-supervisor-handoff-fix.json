@@ -1,0 +1,373 @@
+{
+  "agent": "w06_a06",
+  "boundaries": {
+    "full_governance_launched_by_this_agent": false,
+    "native_execution": "not_run",
+    "native_supervisor_or_workspace_modified": false,
+    "new_source_root_or_test_selection": false,
+    "no_hard_descendant_containment_claim": true,
+    "production_source_or_workflow_modified": false
+  },
+  "completed_at": "2026-11-23T15:31:23Z",
+  "correction": {
+    "launch_owner": "root",
+    "launched_by_this_agent": false,
+    "new_execution_record": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/execution.json",
+    "new_output_directory": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02",
+    "original_script_utf8": "#!/usr/bin/env python3\n\"\"\"Run the full source-root governance gate after the bounded native attempt.\"\"\"\nimport hashlib\nimport json\nimport os\nfrom pathlib import Path\nimport subprocess\nimport sys\nimport time\n\nSOURCE = Path('/workspace/p06-counter-governance-source-01')\nOUTPUT = Path('/workspace/scratch/e96519576778/full-governance-17e02844')\nSUPERVISION = Path('/workspace/scratch/e96519576778/native-qualification-attempt-01/supervision.json')\nREVISION = '17e0284496bab10c7632a48e4f91efb6fb4fec0b'\nTEMP = Path('/workspace/p06-counter-governance-tmp-01')\ndef now():\n    return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())\ndef git(*args):\n    return subprocess.check_output(['git', *args], cwd=SOURCE, text=True).strip()\ndef snapshot():\n    names = subprocess.check_output(['git', 'ls-files', '-z'], cwd=SOURCE).decode().split('\\0')[:-1]\n    return [{'path':name, 'sha256':hashlib.sha256((SOURCE/name).read_bytes()).hexdigest()}\n            for name in names if (SOURCE/name).is_file()]\nrecord = {'schema_version':1, 'scope':'source-root-governance-and-tooling-only',\n    'gpu_execution_certified':False, 'source_revision':REVISION,\n    'source':str(SOURCE), 'state':'waiting-for-native-attempt', 'created_at':now(),\n    'supervisor_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), 'commands':[]}\ntarget = OUTPUT/'execution.json'\nassert not target.exists()\ndef save():\n    target.write_text(json.dumps(record, indent=2, sort_keys=True)+'\\n')\nsave()\ndeadline = time.monotonic() + 90*60\nwhile True:\n    try:\n        observed = json.loads(SUPERVISION.read_text())\n    except json.JSONDecodeError:\n        observed = {}\n    if observed.get('state') == 'finished':\n        record['native_attempt_outcome'] = observed.get('outcome')\n        break\n    if time.monotonic() > deadline:\n        raise RuntimeError('native attempt did not finish before governance scheduling bound')\n    time.sleep(2)\nassert git('rev-parse','HEAD') == REVISION\nassert git('status','--porcelain=v1','--untracked-files=all') == ''\nTEMP.mkdir(mode=0o700)\nrecord.update(state='running', started_at=now(), tree=git('rev-parse','HEAD^{tree}'))\nbefore=snapshot()\n(OUTPUT/'source-before.json').write_text(json.dumps(before,indent=2)+'\\n')\nenvironment=dict(os.environ, PYTHONDONTWRITEBYTECODE='1', TMPDIR=str(TEMP))\nsave()\ncommands=[\n    ('preflight',[sys.executable,'-B','ci/project/preflight.py','--tier','governance','--json']),\n    ('structure',[sys.executable,'-B','ci/project/check_project.py']),\n    ('unittest-discovery',[sys.executable,'-B','-m','unittest','discover','-s','ci/project','-p','test_*.py','-v']),\n    ('diff-check',['git','diff','--check']),\n]\nfor name,argv in commands:\n    row={'id':name,'argv':argv,'cwd':str(SOURCE),'started_at':now(),'log':name+'.log'}\n    record['commands'].append(row)\n    save()\n    started=time.monotonic()\n    with (OUTPUT/row['log']).open('xb') as stream:\n        result=subprocess.run(argv,cwd=SOURCE,env=environment,stdout=stream,stderr=subprocess.STDOUT,timeout=90*60)\n    row.update(exit_code=result.returncode,finished_at=now(),duration_seconds=time.monotonic()-started)\n    body=(OUTPUT/row['log']).read_bytes()\n    row.update(log_sha256=hashlib.sha256(body).hexdigest(),log_size_bytes=len(body))\n    save()\nafter=snapshot()\n(OUTPUT/'source-after.json').write_text(json.dumps(after,indent=2)+'\\n')\nrecord.update(state='finished',finished_at=now(),source_files_stable=before==after,\n    status_after=git('status','--porcelain=v1','--untracked-files=all'),revision_after=git('rev-parse','HEAD'))\nrecord['outcome']='pass' if all(row['exit_code']==0 for row in record['commands']) and before==after and not record['status_after'] and record['revision_after']==REVISION else 'fail'\nsave()\nprint(json.dumps({'outcome':record['outcome'],'source_files_stable':record['source_files_stable'],\n    'execution':str(target),'commands':[{k:row[k] for k in ('id','exit_code','duration_seconds')} for row in record['commands']]}),flush=True)\nsys.exit(0 if record['outcome']=='pass' else 1)\n",
+    "script_path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/run_governance_v2.py",
+    "script_sha256": "155e3e8efa7d25bbd9b7be1de0c7033432e5b26dfc8a335ea8266d618f28cf5f",
+    "script_size_bytes": 7009,
+    "script_utf8": "#!/usr/bin/env python3\n\"\"\"Run the full source-root governance gate after the bounded native attempt.\"\"\"\nimport hashlib\nimport json\nimport os\nfrom pathlib import Path\nimport subprocess\nimport sys\nimport time\n\nSOURCE = Path('/workspace/p06-counter-governance-source-01')\nOUTPUT = Path('/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02')\nSUPERVISION = Path('/workspace/scratch/e96519576778/native-qualification-attempt-01/supervision.json')\nREVISION = '17e0284496bab10c7632a48e4f91efb6fb4fec0b'\nTEMP = Path('/workspace/p06-counter-governance-tmp-01')\ndef now():\n    return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())\ndef git(*args):\n    return subprocess.check_output(['git', *args], cwd=SOURCE, text=True).strip()\nEXPECTED_STAGES = ('preparation', 'dependency-build', 'native-qualification')\n\ndef handoff_check(observed):\n    \"\"\"Approve only the completed successful attempt and every observed cleanup.\"\"\"\n    if type(observed) is not dict or observed.get('state') != 'finished':\n        return False, 'native attempt is not finished'\n    if observed.get('outcome') != 'pass':\n        return False, 'native attempt did not pass; explicit coordinator review required'\n    if observed.get('source_revision') != REVISION:\n        return False, 'native attempt revision differs from the selected checkpoint'\n    stages = observed.get('stages')\n    if type(stages) is not list or len(stages) != len(EXPECTED_STAGES):\n        return False, 'native stage population differs'\n    for row, name in zip(stages, EXPECTED_STAGES):\n        if type(row) is not dict or row.get('id') != name:\n            return False, 'native stage order differs'\n        execution = row.get('execution')\n        if type(execution) is not dict:\n            return False, name + ' execution observation is missing'\n        if (execution.get('outcome') != 'pass'\n                or type(execution.get('exit_code')) is not int\n                or execution['exit_code'] != 0\n                or execution.get('reason') is not None\n                or execution.get('process_started') is not True):\n            return False, name + ' execution did not complete successfully'\n        if execution.get('cleanup_complete') is not True:\n            return False, name + ' cleanup is not confirmed; explicit coordinator review required'\n        if row.get('report_outcome') != 'pass' or row.get('report_reason') is not None:\n            return False, name + ' original report did not pass'\n    return True, None\n\ndef snapshot():\n    names = subprocess.check_output(['git', 'ls-files', '-z'], cwd=SOURCE).decode().split('\\0')[:-1]\n    return [{'path':name, 'sha256':hashlib.sha256((SOURCE/name).read_bytes()).hexdigest()}\n            for name in names if (SOURCE/name).is_file()]\nrecord = {'schema_version':1, 'scope':'source-root-governance-and-tooling-only',\n    'gpu_execution_certified':False, 'source_revision':REVISION,\n    'source':str(SOURCE), 'state':'waiting-for-native-attempt', 'created_at':now(),\n    'supervisor_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), 'commands':[]}\ntarget = OUTPUT/'execution.json'\nassert not target.exists()\ndef save():\n    target.write_text(json.dumps(record, indent=2, sort_keys=True)+'\\n')\nsave()\ndeadline = time.monotonic() + 90*60\nwhile True:\n    try:\n        observed_body = SUPERVISION.read_bytes()\n        observed = json.loads(observed_body)\n    except json.JSONDecodeError:\n        observed = {}\n    if type(observed) is dict and observed.get('state') == 'finished':\n        allowed, reason = handoff_check(observed)\n        record['native_attempt_outcome'] = observed.get('outcome')\n        record['native_handoff'] = {\n            'allowed': allowed, 'reason': reason, 'observed_at': now(),\n            'supervision_sha256': hashlib.sha256(observed_body).hexdigest(),\n            'limitations': [\n                'This is a scheduling guard, not producer authentication or hard descendant containment.',\n                'A failed attempt or unconfirmed cleanup requires explicit coordinator review before another heavy job.',\n                'Successful stage and cleanup observations retain the native supervisors sampled-process limitations.',\n            ],\n        }\n        if not allowed:\n            record.update(state='blocked', outcome='blocked', reason=reason, finished_at=now())\n            save()\n            print(json.dumps({'outcome': 'blocked', 'reason': reason, 'execution': str(target)}), flush=True)\n            sys.exit(2)\n        save()\n        break\n    if time.monotonic() > deadline:\n        reason = 'native attempt did not finish before governance scheduling bound'\n        record.update(state='blocked', outcome='blocked', reason=reason, finished_at=now())\n        save()\n        print(json.dumps({'outcome': 'blocked', 'reason': reason, 'execution': str(target)}), flush=True)\n        sys.exit(2)\n    time.sleep(2)\nassert git('rev-parse','HEAD') == REVISION\nassert git('status','--porcelain=v1','--untracked-files=all') == ''\nTEMP.mkdir(mode=0o700)\nrecord.update(state='running', started_at=now(), tree=git('rev-parse','HEAD^{tree}'))\nbefore=snapshot()\n(OUTPUT/'source-before.json').write_text(json.dumps(before,indent=2)+'\\n')\nenvironment=dict(os.environ, PYTHONDONTWRITEBYTECODE='1', TMPDIR=str(TEMP))\nsave()\ncommands=[\n    ('preflight',[sys.executable,'-B','ci/project/preflight.py','--tier','governance','--json']),\n    ('structure',[sys.executable,'-B','ci/project/check_project.py']),\n    ('unittest-discovery',[sys.executable,'-B','-m','unittest','discover','-s','ci/project','-p','test_*.py','-v']),\n    ('diff-check',['git','diff','--check']),\n]\nfor name,argv in commands:\n    row={'id':name,'argv':argv,'cwd':str(SOURCE),'started_at':now(),'log':name+'.log'}\n    record['commands'].append(row)\n    save()\n    started=time.monotonic()\n    with (OUTPUT/row['log']).open('xb') as stream:\n        result=subprocess.run(argv,cwd=SOURCE,env=environment,stdout=stream,stderr=subprocess.STDOUT,timeout=90*60)\n    row.update(exit_code=result.returncode,finished_at=now(),duration_seconds=time.monotonic()-started)\n    body=(OUTPUT/row['log']).read_bytes()\n    row.update(log_sha256=hashlib.sha256(body).hexdigest(),log_size_bytes=len(body))\n    save()\nafter=snapshot()\n(OUTPUT/'source-after.json').write_text(json.dumps(after,indent=2)+'\\n')\nrecord.update(state='finished',finished_at=now(),source_files_stable=before==after,\n    status_after=git('status','--porcelain=v1','--untracked-files=all'),revision_after=git('rev-parse','HEAD'))\nrecord['outcome']='pass' if all(row['exit_code']==0 for row in record['commands']) and before==after and not record['status_after'] and record['revision_after']==REVISION else 'fail'\nsave()\nprint(json.dumps({'outcome':record['outcome'],'source_files_stable':record['source_files_stable'],\n    'execution':str(target),'commands':[{k:row[k] for k in ('id','exit_code','duration_seconds')} for row in record['commands']]}),flush=True)\nsys.exit(0 if record['outcome']=='pass' else 1)\n"
+  },
+  "independent_review": {
+    "report": "docs/project/evidence/p06-counter-qualification/agents/w06_a05.md",
+    "reported_guard_controls": 8,
+    "result": "pass",
+    "reviewed_script_sha256": "155e3e8efa7d25bbd9b7be1de0c7033432e5b26dfc8a335ea8266d618f28cf5f",
+    "reviewer": "w06_a05",
+    "static_rejection_before_git_temporary_directory_and_tests": true
+  },
+  "original_finding": {
+    "confidence": "high",
+    "evidence_type": "static-proof",
+    "reviewer": "w06_a05",
+    "scenario": "A failed native supervisor can report finished while a child-created process group remains alive; the original scheduler would then launch heavy governance discovery.",
+    "severity": "F1"
+  },
+  "preservation": {
+    "captured_at": "2026-11-23T15:27:42Z",
+    "native_supervisor_modified": false,
+    "old_commands_observed": [],
+    "old_state_observed": "waiting-for-native-attempt",
+    "originals": [
+      {
+        "path": "/workspace/scratch/e96519576778/full-governance-17e02844/run_governance.py",
+        "preserved_copy": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/preserved-v1/run_governance.py",
+        "sha256": "418a8282f3a5d4c4b330ee5d7430d1329cc5047a2a9adfd1b37c14c8c247fdce",
+        "size_bytes": 4016
+      },
+      {
+        "path": "/workspace/scratch/e96519576778/full-governance-17e02844/execution.json",
+        "preserved_copy": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/preserved-v1/execution.json",
+        "sha256": "259a18551bc9d3cec7c16f6f442d5ac42eb67e25b3417f0314c0be8d8e88278d",
+        "size_bytes": 430
+      },
+      {
+        "path": "/workspace/scratch/e96519576778/full-governance-17e02844/supervisor.stdout.log",
+        "preserved_copy": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/preserved-v1/supervisor.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    ],
+    "process_stop_owner": "root",
+    "process_stop_status": "confirmed-by-root-message",
+    "replacement_script": {
+      "path": "/workspace/scratch/e96519576778/full-governance-17e02844/reviewed-scheduler-02/run_governance_v2.py",
+      "sha256": "155e3e8efa7d25bbd9b7be1de0c7033432e5b26dfc8a335ea8266d618f28cf5f",
+      "size_bytes": 7009
+    },
+    "root_observed_exit_code": 130,
+    "root_reported_commands_after_stop": [],
+    "root_reported_state_after_stop": "waiting-for-native-attempt",
+    "stopped_log": {
+      "path": "/workspace/scratch/e96519576778/full-governance-17e02844/supervisor.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "updated_at": "2026-11-23T15:28:49Z"
+  },
+  "root_stop_receipt": {
+    "document": {
+      "at": "2026-11-23T15:28:34Z",
+      "commands_executed": [],
+      "earlier_proc_scan": "No matching process visible; assertion failed before signalling; no process targeted",
+      "native_attempt_untouched": true,
+      "observed_exit_code": 130,
+      "originals": [
+        {
+          "path": "/workspace/scratch/e96519576778/full-governance-17e02844/run_governance.py",
+          "sha256": "418a8282f3a5d4c4b330ee5d7430d1329cc5047a2a9adfd1b37c14c8c247fdce",
+          "size_bytes": 4016
+        },
+        {
+          "path": "/workspace/scratch/e96519576778/full-governance-17e02844/execution.json",
+          "sha256": "259a18551bc9d3cec7c16f6f442d5ac42eb67e25b3417f0314c0be8d8e88278d",
+          "size_bytes": 430
+        },
+        {
+          "path": "/workspace/scratch/e96519576778/full-governance-17e02844/supervisor.stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        }
+      ],
+      "reason": "Require successful native terminal and successful cleanup before automatic resource handoff",
+      "scope": "queued-governance-controller-replacement-only",
+      "session_id": 55570,
+      "state_before_tests": "waiting-for-native-attempt",
+      "termination": "explicit session Ctrl-C"
+    },
+    "path": "/workspace/scratch/e96519576778/full-governance-17e02844/root-controller-stop.json",
+    "sha256": "aef7442406876e84aa44c2c2d1bae456e21a7ab5d5b61ada9f268b23e4797b37",
+    "size_bytes": 1186
+  },
+  "schema_version": 1,
+  "scope": "local-governance-scheduling-handoff-only",
+  "source_revision": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+  "validation": {
+    "all_passed": true,
+    "case_count": 48,
+    "cases": [
+      {
+        "allowed": true,
+        "name": "complete_success",
+        "reason": null
+      },
+      {
+        "allowed": false,
+        "name": "wrong_top_level_type",
+        "reason": "native attempt is not finished"
+      },
+      {
+        "allowed": false,
+        "name": "changed_state",
+        "reason": "native attempt is not finished"
+      },
+      {
+        "allowed": false,
+        "name": "changed_outcome",
+        "reason": "native attempt did not pass; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "name": "changed_source_revision",
+        "reason": "native attempt revision differs from the selected checkpoint"
+      },
+      {
+        "allowed": false,
+        "name": "missing_stage",
+        "reason": "native stage population differs"
+      },
+      {
+        "allowed": false,
+        "name": "extra_stage",
+        "reason": "native stage population differs"
+      },
+      {
+        "allowed": false,
+        "name": "reordered_stages",
+        "reason": "native stage order differs"
+      },
+      {
+        "allowed": false,
+        "name": "stage_container_wrong_type",
+        "reason": "native stage population differs"
+      },
+      {
+        "allowed": false,
+        "name": "preparation_outcome_'fail'",
+        "reason": "preparation execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "preparation_exit_code_1",
+        "reason": "preparation execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "preparation_exit_code_False",
+        "reason": "preparation execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "preparation_reason_'timeout'",
+        "reason": "preparation execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "preparation_process_started_False",
+        "reason": "preparation execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "preparation_cleanup_complete_False",
+        "reason": "preparation cleanup is not confirmed; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "name": "preparation_cleanup_complete_None",
+        "reason": "preparation cleanup is not confirmed; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "name": "preparation_cleanup_complete_1",
+        "reason": "preparation cleanup is not confirmed; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "name": "preparation_missing_execution",
+        "reason": "preparation execution observation is missing"
+      },
+      {
+        "allowed": false,
+        "name": "preparation_missing_id",
+        "reason": "native stage order differs"
+      },
+      {
+        "allowed": false,
+        "name": "preparation_missing_cleanup",
+        "reason": "preparation cleanup is not confirmed; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "name": "preparation_report_failed",
+        "reason": "preparation original report did not pass"
+      },
+      {
+        "allowed": false,
+        "name": "preparation_report_reason",
+        "reason": "preparation original report did not pass"
+      },
+      {
+        "allowed": false,
+        "name": "dependency-build_outcome_'fail'",
+        "reason": "dependency-build execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "dependency-build_exit_code_1",
+        "reason": "dependency-build execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "dependency-build_exit_code_False",
+        "reason": "dependency-build execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "dependency-build_reason_'timeout'",
+        "reason": "dependency-build execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "dependency-build_process_started_False",
+        "reason": "dependency-build execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "dependency-build_cleanup_complete_False",
+        "reason": "dependency-build cleanup is not confirmed; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "name": "dependency-build_cleanup_complete_None",
+        "reason": "dependency-build cleanup is not confirmed; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "name": "dependency-build_cleanup_complete_1",
+        "reason": "dependency-build cleanup is not confirmed; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "name": "dependency-build_missing_execution",
+        "reason": "dependency-build execution observation is missing"
+      },
+      {
+        "allowed": false,
+        "name": "dependency-build_missing_id",
+        "reason": "native stage order differs"
+      },
+      {
+        "allowed": false,
+        "name": "dependency-build_missing_cleanup",
+        "reason": "dependency-build cleanup is not confirmed; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "name": "dependency-build_report_failed",
+        "reason": "dependency-build original report did not pass"
+      },
+      {
+        "allowed": false,
+        "name": "dependency-build_report_reason",
+        "reason": "dependency-build original report did not pass"
+      },
+      {
+        "allowed": false,
+        "name": "native-qualification_outcome_'fail'",
+        "reason": "native-qualification execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "native-qualification_exit_code_1",
+        "reason": "native-qualification execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "native-qualification_exit_code_False",
+        "reason": "native-qualification execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "native-qualification_reason_'timeout'",
+        "reason": "native-qualification execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "native-qualification_process_started_False",
+        "reason": "native-qualification execution did not complete successfully"
+      },
+      {
+        "allowed": false,
+        "name": "native-qualification_cleanup_complete_False",
+        "reason": "native-qualification cleanup is not confirmed; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "name": "native-qualification_cleanup_complete_None",
+        "reason": "native-qualification cleanup is not confirmed; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "name": "native-qualification_cleanup_complete_1",
+        "reason": "native-qualification cleanup is not confirmed; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "name": "native-qualification_missing_execution",
+        "reason": "native-qualification execution observation is missing"
+      },
+      {
+        "allowed": false,
+        "name": "native-qualification_missing_id",
+        "reason": "native stage order differs"
+      },
+      {
+        "allowed": false,
+        "name": "native-qualification_missing_cleanup",
+        "reason": "native-qualification cleanup is not confirmed; explicit coordinator review required"
+      },
+      {
+        "allowed": false,
+        "name": "native-qualification_report_failed",
+        "reason": "native-qualification original report did not pass"
+      },
+      {
+        "allowed": false,
+        "name": "native-qualification_report_reason",
+        "reason": "native-qualification original report did not pass"
+      }
+    ],
+    "governance_tail_byte_identical": true,
+    "governance_tests_started": false,
+    "native_execution": "not_run",
+    "replacement_not_launched": true,
+    "scope": "synthetic-scheduling-predicate-only",
+    "script_sha256": "155e3e8efa7d25bbd9b7be1de0c7033432e5b26dfc8a335ea8266d618f28cf5f",
+    "script_stable": true,
+    "source_selection_unchanged": true,
+    "temporary_destination_absent": true,
+    "tested_at": "2026-11-23T15:29:41Z"
+  }
+}

@@ -1,0 +1,145 @@
+test_trusted_reader_inventory_covers_exact_frozen_reference_set (test_p06_counter_qualification_replay.QualifiedReplayTests.test_trusted_reader_inventory_covers_exact_frozen_reference_set) ... FAIL
+test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) ... 
+  test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='VX_config.toml') ... FAIL
+  test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='VX_types.toml') ... FAIL
+  test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='profiles/p02-tfr.json') ... FAIL
+  test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='ci/project/fixtures/p02_layout_v1.json') ... FAIL
+  test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='ci/project/fixtures/p02_tfr_v1.json') ... FAIL
+  test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='ci/project/fixtures/p02_wmma_numerical_v1.json') ... FAIL
+  test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='ci/project/p06_warm_contract.json') ... FAIL
+  test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='sw/common/ai_matmul_args.h') ... FAIL
+  test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='sw/common/ai_matmul_profile.h') ... FAIL
+  test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='sw/kernel/ai/matmul.cpp') ... FAIL
+  test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='tests/regression/ai_bench_common/counters.h') ... FAIL
+  test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='tests/regression/sgemm_tcu/p02_fixtures.h') ... FAIL
+
+======================================================================
+FAIL: test_trusted_reader_inventory_covers_exact_frozen_reference_set (test_p06_counter_qualification_replay.QualifiedReplayTests.test_trusted_reader_inventory_covers_exact_frozen_reference_set)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 120, in test_trusted_reader_inventory_covers_exact_frozen_reference_set
+    self.assertEqual([row["path"] for row in replay.TRUSTED_READER_SOURCES], sorted(expected))
+AssertionError: Lists differ: ['ci/gen_config.py', 'ci/project/baseline_i[3387 chars]cpp'] != ['VX_config.toml', 'VX_types.toml', 'ci/gen[3797 chars]cpp']
+
+First differing element 0:
+'ci/gen_config.py'
+'VX_config.toml'
+
+Second list contains 12 additional elements.
+First extra element 82:
+'ci/project/p06_workspace_records.py'
+
+Diff is 4160 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='VX_config.toml')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='VX_types.toml')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='profiles/p02-tfr.json')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='ci/project/fixtures/p02_layout_v1.json')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='ci/project/fixtures/p02_tfr_v1.json')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='ci/project/fixtures/p02_wmma_numerical_v1.json')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='ci/project/p06_warm_contract.json')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='sw/common/ai_matmul_args.h')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='sw/common/ai_matmul_profile.h')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='sw/kernel/ai/matmul.cpp')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='tests/regression/ai_bench_common/counters.h')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='tests/regression/sgemm_tcu/p02_fixtures.h')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 2 tests in 29.464s
+
+FAILED (failures=13)

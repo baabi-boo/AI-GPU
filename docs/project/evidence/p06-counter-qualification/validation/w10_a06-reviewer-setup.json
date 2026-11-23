@@ -1,0 +1,118 @@
+{
+  "corrected_ledger_header_pattern": "\\bW(?:ave)?\\s*0*(\\d+)\\s*(?:[/,]\\s*)?A(?:gent)?\\s*0*(\\d+)\\b",
+  "corrected_ledger_review_observation": {
+    "all_report_headings_match_ledger_identity": true,
+    "completed_reports_checked": 58,
+    "descriptor_count": 163,
+    "immutable_prior_snapshot_unchanged": true,
+    "local_markdown_links": 63,
+    "markdown_rows_equal_json_rows": true
+  },
+  "corrected_partial_review": {
+    "all_ids_ordered_sha256": "98297663c3341dab052dd83b11b5fcce56bfab652d4f18857ee74e2247e257f8",
+    "all_partition_records_complete": false,
+    "completed_partition_count": 1,
+    "completed_unique_ids": 1479,
+    "expected_unique_ids": 4437,
+    "full_governance_outcome_not_inferred_from_partial_results": true,
+    "manifest": {
+      "path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/partition-manifest.json",
+      "sha256": "05bcdcb2d88cdc954c24617654e8454fd3133c104a83bce75ed62c88377a8a2b",
+      "size_bytes": 1060494
+    },
+    "parent_outcome_at_read": null,
+    "parent_state_at_read": "running",
+    "partition_count": 3,
+    "partitions": [
+      {
+        "duration_seconds": 925.5549984819991,
+        "empty_result_fields": [
+          "errors",
+          "expected_failures",
+          "failures",
+          "skipped",
+          "unexpected_successes"
+        ],
+        "inline_ok_suffix_count": 1478,
+        "log": {
+          "path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/partition-0.log",
+          "sha256": "05c77acd28a4952b82c7324f71b2491197fb2dbd28724ad8af83fc8db2ec913e",
+          "size_bytes": 259188
+        },
+        "log_trailer": "Ran 1479 tests in 925.552s",
+        "ordered_ids_sha256": "93beb36bd621002cdef3808f418b4437f58367c1882874e027ae314b177ee313",
+        "outcome": "pass",
+        "partition": 0,
+        "result": {
+          "path": "/workspace/scratch/e96519576778/full-governance-22039974-partitioned/partition-0-result.json",
+          "sha256": "9f4519c2c663ef226ff587f72aea39ec41362f9e5f817b2119a6000ef49fcf0e",
+          "size_bytes": 508084
+        },
+        "selected_started_completed_verbose_ids_equal_in_order": true,
+        "standalone_ok_contexts": [
+          {
+            "line": "ok",
+            "one_based_line": 1316,
+            "preceding_lines": [
+              "test_hostless_dispatch_passes_plugin_path_to_both_kernels (test_sst_setup.SstSetupTests.test_hostless_dispatch_passes_plugin_path_to_both_kernels) ... begin sst tests...",
+              "=== sst: hello ===",
+              "=== sst: fibonacci ===",
+              "sst tests done!"
+            ]
+          }
+        ],
+        "standalone_ok_count": 1,
+        "tests_run": 1479,
+        "unique_ids": 1479
+      }
+    ],
+    "pending_partitions": [
+      1,
+      2
+    ],
+    "reviewer_executes_test_bodies_discovery_native_or_replay": false,
+    "reviewer_program": {
+      "path": "/workspace/scratch/e96519576778/w10_a06-ledger-review/review_completed_partitions.py",
+      "sha256": "09d63dfc4c7aa17e589acd0f4ffe2720792c4a7e4c8e59544f3a6db8dc0e5d32",
+      "size_bytes": 6166
+    },
+    "schema_version": 1,
+    "scope": "independent-static-review-of-already-completed-governance-partition-records",
+    "source_revision": "220399748ecab84d48ba5a5f123457c44a0c8699",
+    "source_tree": "037a667b7a3238061ff1d4894503bd26c741c7c3"
+  },
+  "corrected_program_sha256": "09d63dfc4c7aa17e589acd0f4ffe2720792c4a7e4c8e59544f3a6db8dc0e5d32",
+  "corrected_program_text": "import hashlib\nimport json\nimport re\nfrom collections import Counter\nfrom pathlib import Path\n\n\nROOT = Path('/workspace/scratch/e96519576778/full-governance-22039974-partitioned')\nOUTPUT = Path('/workspace/scratch/e96519576778/w10_a06-ledger-review/completed-partitions-review.json')\nREVISION = '220399748ecab84d48ba5a5f123457c44a0c8699'\nTREE = '037a667b7a3238061ff1d4894503bd26c741c7c3'\nEMPTY_RESULT_FIELDS = ('errors', 'expected_failures', 'failures', 'skipped', 'unexpected_successes')\nVERBOSE_HEADER = re.compile(r'^(test\\S+) \\(([^)]+)\\)(?: \\.\\.\\..*)?$')\n\n\ndef sha(raw):\n    return hashlib.sha256(raw).hexdigest()\n\n\ndef descriptor(path):\n    raw = path.read_bytes()\n    return {'path': str(path), 'sha256': sha(raw), 'size_bytes': len(raw)}\n\n\nmanifest_raw = (ROOT / 'partition-manifest.json').read_bytes()\nmanifest = json.loads(manifest_raw)\nassert manifest['source_revision'] == REVISION\nassert manifest['source_tree'] == TREE\nall_ids = manifest['all_ids']\nassert len(all_ids) == len(set(all_ids)) == 4437\nassert len(manifest['partitions']) == 3\npartition_ids = [part['ids'] for part in manifest['partitions']]\nassert [len(ids) for ids in partition_ids] == [1479] * 3\nassert Counter(x for ids in partition_ids for x in ids) == Counter(all_ids)\nparent_raw = (ROOT / 'execution.json').read_bytes()\nparent = json.loads(parent_raw)\nassert parent['source_revision'] == REVISION\nassert parent['source_tree'] == TREE\nassert parent['manifest_sha256'] == sha(manifest_raw)\nworker_program_sha256 = sha((ROOT / 'run_partition.py').read_bytes())\nassert parent['partition_program_sha256'] == worker_program_sha256\nassert parent['supervisor_sha256'] == sha((ROOT / 'run_governance.py').read_bytes())\n\nreviews = []\ncompleted_ids = []\npending = []\nfor index, expected in enumerate(partition_ids):\n    result_path = ROOT / f'partition-{index}-result.json'\n    if not result_path.exists():\n        pending.append(index)\n        continue\n    result_raw = result_path.read_bytes()\n    result = json.loads(result_raw)\n    assert result['partition'] == index and type(result['partition']) is int\n    assert result['source_revision'] == REVISION\n    assert result['source_tree'] == TREE\n    assert result['interpreter'] == parent['interpreter']\n    assert result['manifest_sha256'] == sha(manifest_raw)\n    assert result['program_sha256'] == worker_program_sha256\n    assert result['selected_ids'] == result['started_ids'] == result['completed_ids'] == expected\n    assert result['outcome'] == 'pass'\n    assert type(result['tests_run']) is int and result['tests_run'] == len(expected)\n    assert all(type(result[name]) is list and result[name] == [] for name in EMPTY_RESULT_FIELDS)\n    log_path = ROOT / f'partition-{index}.log'\n    log_raw = log_path.read_bytes()\n    lines = log_raw.decode().splitlines()\n    verbose_ids = []\n    for line in lines:\n        match = VERBOSE_HEADER.fullmatch(line)\n        if match:\n            assert match.group(1) == match.group(2).split('.')[-1]\n            verbose_ids.append(match.group(2))\n    assert verbose_ids == expected\n    assert len(verbose_ids) == len(set(verbose_ids))\n    trailers = [line for line in lines if re.fullmatch(r'Ran \\d+ tests? in [0-9.]+s', line)]\n    assert len(trailers) == 1 and trailers[0].startswith(f'Ran {len(expected)} tests in ')\n    trailer_index = lines.index(trailers[0])\n    after_trailer = [line for line in lines[trailer_index + 1:] if line.strip()]\n    assert after_trailer[0] == 'OK'\n    assert json.loads(after_trailer[-1]) == {name: result[name] for name in ('partition', 'outcome', 'tests_run', 'duration_seconds')}\n    suffix_count = sum(bool(re.search(r'\\.\\.\\. ok$', line)) for line in lines)\n    standalone_count = sum(line == 'ok' for line in lines)\n    standalone_contexts = []\n    for lineno, line in enumerate(lines):\n        if line == 'ok':\n            standalone_contexts.append({'one_based_line': lineno + 1, 'preceding_lines': lines[max(0, lineno - 4):lineno], 'line': line})\n    reviews.append({\n        'partition': index,\n        'outcome': result['outcome'],\n        'tests_run': result['tests_run'],\n        'selected_started_completed_verbose_ids_equal_in_order': True,\n        'unique_ids': len(set(verbose_ids)),\n        'ordered_ids_sha256': sha(json.dumps(expected, separators=(',', ':')).encode()),\n        'empty_result_fields': list(EMPTY_RESULT_FIELDS),\n        'duration_seconds': result['duration_seconds'],\n        'log_trailer': trailers[0],\n        'inline_ok_suffix_count': suffix_count,\n        'standalone_ok_count': standalone_count,\n        'standalone_ok_contexts': standalone_contexts,\n        'result': {'path': str(result_path), 'sha256': sha(result_raw), 'size_bytes': len(result_raw)},\n        'log': {'path': str(log_path), 'sha256': sha(log_raw), 'size_bytes': len(log_raw)},\n    })\n    completed_ids.extend(expected)\n\nassert len(completed_ids) == len(set(completed_ids))\nif not pending:\n    assert Counter(completed_ids) == Counter(all_ids)\n\nout = {\n    'schema_version': 1,\n    'scope': 'independent-static-review-of-already-completed-governance-partition-records',\n    'reviewer_executes_test_bodies_discovery_native_or_replay': False,\n    'source_revision': REVISION,\n    'source_tree': TREE,\n    'manifest': {'path': str(ROOT / 'partition-manifest.json'), 'sha256': sha(manifest_raw), 'size_bytes': len(manifest_raw)},\n    'parent_state_at_read': parent['state'],\n    'parent_outcome_at_read': parent.get('outcome'),\n    'partition_count': 3,\n    'completed_partition_count': len(reviews),\n    'pending_partitions': pending,\n    'completed_unique_ids': len(set(completed_ids)),\n    'expected_unique_ids': len(all_ids),\n    'all_ids_ordered_sha256': sha(json.dumps(all_ids, separators=(',', ':')).encode()),\n    'all_partition_records_complete': not pending,\n    'full_governance_outcome_not_inferred_from_partial_results': True,\n    'partitions': reviews,\n    'reviewer_program': descriptor(Path(__file__)),\n}\nOUTPUT.write_text(json.dumps(out, indent=2, sort_keys=True) + '\\n')\nprint(json.dumps({key: out[key] for key in ('parent_state_at_read', 'parent_outcome_at_read', 'completed_partition_count', 'pending_partitions', 'completed_unique_ids')}))\n",
+  "initial_issues": [
+    {
+      "cause": "One SST test printed subprocess output before its standalone final ok line.",
+      "corrective_review": "Parse each actual verbose test-ID header, join those IDs in order to selected_ids/started_ids/completed_ids, and read the explicit unittest verdict and worker result. Suffix counts are diagnostic only.",
+      "failed_predicate": "inline_ok_suffix_count == tests_run",
+      "failed_predicate_capture": "Predicate and values reconstructed from the actual failed review observation; the original transient inline program was not retained.",
+      "observation": "A suffix-only counter found 1,478 lines ending with ... ok, while the completed result and unittest trailer both recorded 1,479 tests."
+    },
+    {
+      "cause": "The worker writes a JSON result summary after unittest's OK line.",
+      "corrective_review": "Require OK immediately after the Ran N tests trailer and independently require the following JSON summary to match the recorded worker fields.",
+      "failed_predicate": "[line for line in lines if line.strip()][-1] == 'OK'",
+      "initial_program_sha256": "f0cce102ec39418b109410e94a023e27d4d8c48cceb74f06fb34049b8e89d9f5",
+      "initial_program_text": "import hashlib\nimport json\nimport re\nfrom collections import Counter\nfrom pathlib import Path\n\n\nROOT = Path('/workspace/scratch/e96519576778/full-governance-22039974-partitioned')\nOUTPUT = Path('/workspace/scratch/e96519576778/w10_a06-ledger-review/completed-partitions-review.json')\nREVISION = '220399748ecab84d48ba5a5f123457c44a0c8699'\nTREE = '037a667b7a3238061ff1d4894503bd26c741c7c3'\nEMPTY_RESULT_FIELDS = ('errors', 'expected_failures', 'failures', 'skipped', 'unexpected_successes')\nVERBOSE_HEADER = re.compile(r'^(test\\S+) \\(([^)]+)\\)(?: \\.\\.\\..*)?$')\n\n\ndef sha(raw):\n    return hashlib.sha256(raw).hexdigest()\n\n\ndef descriptor(path):\n    raw = path.read_bytes()\n    return {'path': str(path), 'sha256': sha(raw), 'size_bytes': len(raw)}\n\n\nmanifest_raw = (ROOT / 'partition-manifest.json').read_bytes()\nmanifest = json.loads(manifest_raw)\nassert manifest['source_revision'] == REVISION\nassert manifest['source_tree'] == TREE\nall_ids = manifest['all_ids']\nassert len(all_ids) == len(set(all_ids)) == 4437\nassert len(manifest['partitions']) == 3\npartition_ids = [part['ids'] for part in manifest['partitions']]\nassert [len(ids) for ids in partition_ids] == [1479] * 3\nassert Counter(x for ids in partition_ids for x in ids) == Counter(all_ids)\nparent_raw = (ROOT / 'execution.json').read_bytes()\nparent = json.loads(parent_raw)\nassert parent['source_revision'] == REVISION\nassert parent['source_tree'] == TREE\nassert parent['manifest_sha256'] == sha(manifest_raw)\nworker_program_sha256 = sha((ROOT / 'run_partition.py').read_bytes())\nassert parent['partition_program_sha256'] == worker_program_sha256\nassert parent['supervisor_sha256'] == sha((ROOT / 'run_governance.py').read_bytes())\n\nreviews = []\ncompleted_ids = []\npending = []\nfor index, expected in enumerate(partition_ids):\n    result_path = ROOT / f'partition-{index}-result.json'\n    if not result_path.exists():\n        pending.append(index)\n        continue\n    result_raw = result_path.read_bytes()\n    result = json.loads(result_raw)\n    assert result['partition'] == index and type(result['partition']) is int\n    assert result['source_revision'] == REVISION\n    assert result['source_tree'] == TREE\n    assert result['interpreter'] == parent['interpreter']\n    assert result['manifest_sha256'] == sha(manifest_raw)\n    assert result['program_sha256'] == worker_program_sha256\n    assert result['selected_ids'] == result['started_ids'] == result['completed_ids'] == expected\n    assert result['outcome'] == 'pass'\n    assert type(result['tests_run']) is int and result['tests_run'] == len(expected)\n    assert all(type(result[name]) is list and result[name] == [] for name in EMPTY_RESULT_FIELDS)\n    log_path = ROOT / f'partition-{index}.log'\n    log_raw = log_path.read_bytes()\n    lines = log_raw.decode().splitlines()\n    verbose_ids = []\n    for line in lines:\n        match = VERBOSE_HEADER.fullmatch(line)\n        if match:\n            assert match.group(1) == match.group(2).split('.')[-1]\n            verbose_ids.append(match.group(2))\n    assert verbose_ids == expected\n    assert len(verbose_ids) == len(set(verbose_ids))\n    trailers = [line for line in lines if re.fullmatch(r'Ran \\d+ tests? in [0-9.]+s', line)]\n    assert len(trailers) == 1 and trailers[0].startswith(f'Ran {len(expected)} tests in ')\n    assert [line for line in lines if line.strip()][-1] == 'OK'\n    suffix_count = sum(bool(re.search(r'\\.\\.\\. ok$', line)) for line in lines)\n    standalone_count = sum(line == 'ok' for line in lines)\n    assert suffix_count + standalone_count == len(expected)\n    standalone_contexts = []\n    for lineno, line in enumerate(lines):\n        if line == 'ok':\n            standalone_contexts.append({'one_based_line': lineno + 1, 'preceding_lines': lines[max(0, lineno - 4):lineno], 'line': line})\n    reviews.append({\n        'partition': index,\n        'outcome': result['outcome'],\n        'tests_run': result['tests_run'],\n        'selected_started_completed_verbose_ids_equal_in_order': True,\n        'unique_ids': len(set(verbose_ids)),\n        'ordered_ids_sha256': sha(json.dumps(expected, separators=(',', ':')).encode()),\n        'empty_result_fields': list(EMPTY_RESULT_FIELDS),\n        'duration_seconds': result['duration_seconds'],\n        'log_trailer': trailers[0],\n        'inline_ok_suffix_count': suffix_count,\n        'standalone_ok_count': standalone_count,\n        'standalone_ok_contexts': standalone_contexts,\n        'result': {'path': str(result_path), 'sha256': sha(result_raw), 'size_bytes': len(result_raw)},\n        'log': {'path': str(log_path), 'sha256': sha(log_raw), 'size_bytes': len(log_raw)},\n    })\n    completed_ids.extend(expected)\n\nassert len(completed_ids) == len(set(completed_ids))\nif not pending:\n    assert Counter(completed_ids) == Counter(all_ids)\n\nout = {\n    'schema_version': 1,\n    'scope': 'independent-static-review-of-already-completed-governance-partition-records',\n    'reviewer_executes_test_bodies_discovery_native_or_replay': False,\n    'source_revision': REVISION,\n    'source_tree': TREE,\n    'manifest': {'path': str(ROOT / 'partition-manifest.json'), 'sha256': sha(manifest_raw), 'size_bytes': len(manifest_raw)},\n    'parent_state_at_read': parent['state'],\n    'parent_outcome_at_read': parent.get('outcome'),\n    'partition_count': 3,\n    'completed_partition_count': len(reviews),\n    'pending_partitions': pending,\n    'completed_unique_ids': len(set(completed_ids)),\n    'expected_unique_ids': len(all_ids),\n    'all_ids_ordered_sha256': sha(json.dumps(all_ids, separators=(',', ':')).encode()),\n    'all_partition_records_complete': not pending,\n    'full_governance_outcome_not_inferred_from_partial_results': True,\n    'partitions': reviews,\n    'reviewer_program': descriptor(Path(__file__)),\n}\nOUTPUT.write_text(json.dumps(out, indent=2, sort_keys=True) + '\\n')\nprint(json.dumps({key: out[key] for key in ('parent_state_at_read', 'parent_outcome_at_read', 'completed_partition_count', 'pending_partitions', 'completed_unique_ids')}))\n",
+      "observation": "The first saved reviewer program required the last nonempty log line to equal OK and failed that assertion."
+    },
+    {
+      "cause": "Reviewer assumed one heading spelling instead of reading the existing forms.",
+      "corrective_review": "The saved static-ledger reviewer accepts both observed long and abbreviated forms, parses the numeric wave and assignment, and compares them exactly to each structured ledger row.",
+      "failed_predicate_capture": "The transient inline regex required W followed immediately by the wave number; it omitted the long-form Wave/agent spellings already present in reports.",
+      "observation": "An initial live-ledger header assertion accepted only abbreviated Wxx Axx headings and stopped at the first valid long-form Wave 01 / agent 01 heading.",
+      "product_or_agent_identity_mismatch": false
+    }
+  ],
+  "observed_worker_0_standalone_ok_count": 1,
+  "observed_worker_0_suffix_count": 1478,
+  "original_evidence_changed": false,
+  "product_outcome_changed": false,
+  "reviewer_executes_test_bodies_discovery_native_or_replay": false,
+  "schema_version": 1,
+  "scope": "reviewer-only-verbose-log-parsing-corrections",
+  "scope_boundary": "Only partition 0 had a completed result at this observation. This receipt establishes no complete governance outcome and attributes neither reviewer assertion to a product test failure."
+}
