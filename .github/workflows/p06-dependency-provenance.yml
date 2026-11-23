@@ -1,0 +1,307 @@
+name: P06 Fresh Dependency Provenance
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/p06-dependency-provenance.yml'
+      - '.github/workflows/p06-native-lifetime.yml'
+      - '.github/workflows/p06-managed-preflight.yml'
+      - '.github/workflows/p04-model.yml'
+      - '.github/workflows/p06-warm-workspace.yml'
+      - 'ci/project/**'
+      - 'ci/toolchain_rev.sh'
+      - 'ci/install_dependencies.sh'
+      - 'ci/blackbox.sh'
+      - 'ci/gen_config.py'
+      - 'configure'
+      - 'Makefile.in'
+      - 'config.mk.in'
+      - 'sim/**'
+      - 'sw/**'
+      - 'hw/**'
+      - 'tests/regression/ai_counter_preflight/**'
+      - 'tests/unittest/pending_reads/**'
+      - 'tests/regression/ai_warm_workspace/**'
+      - 'tests/regression/ai_workspace/**'
+      - 'tests/regression/ai_bench_common/**'
+      - 'tests/regression/ai_matmul/**'
+      - 'tests/regression/sgemm_tcu/**'
+      - 'tests/regression/common.mk'
+      - 'tests/runtime/**'
+      - 'third_party/**'
+      - 'profiles/p02-tfr.json'
+      - 'docs/designs/managed_counter_preflight_v1.md'
+      - 'docs/designs/managed_counter_lifetime_v1.md'
+      - 'docs/designs/dependency_provenance_v1.md'
+      - 'docs/designs/warm_workspace_benchmark_v1.md'
+      - 'docs/designs/serial_matmul_workspace_v1.md'
+      - 'docs/designs/ai_operator_contract_v1.md'
+      - 'docs/designs/tensor_numerics_v1.md'
+      - 'docs/designs/simx_checked_counters_v1.md'
+      - 'docs/designs/simx_counter_lifetime_v1.md'
+      - 'docs/designs/simx_counter_public_diagnostics_v1.md'
+      - 'docs/designs/simx_counter_diagnostics_v2.md'
+      - 'docs/designs/simulator_completion_v1.md'
+      - 'docs/designs/host_mpm_transport_v1.md'
+      - 'VERSION'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - 'vortex_opae.toml'
+      - '.gitmodules'
+  pull_request:
+    paths:
+      - '.github/workflows/p06-dependency-provenance.yml'
+      - '.github/workflows/p06-native-lifetime.yml'
+      - '.github/workflows/p06-managed-preflight.yml'
+      - '.github/workflows/p04-model.yml'
+      - '.github/workflows/p06-warm-workspace.yml'
+      - 'ci/project/**'
+      - 'ci/toolchain_rev.sh'
+      - 'ci/install_dependencies.sh'
+      - 'ci/blackbox.sh'
+      - 'ci/gen_config.py'
+      - 'configure'
+      - 'Makefile.in'
+      - 'config.mk.in'
+      - 'sim/**'
+      - 'sw/**'
+      - 'hw/**'
+      - 'tests/regression/ai_counter_preflight/**'
+      - 'tests/unittest/pending_reads/**'
+      - 'tests/regression/ai_warm_workspace/**'
+      - 'tests/regression/ai_workspace/**'
+      - 'tests/regression/ai_bench_common/**'
+      - 'tests/regression/ai_matmul/**'
+      - 'tests/regression/sgemm_tcu/**'
+      - 'tests/regression/common.mk'
+      - 'tests/runtime/**'
+      - 'third_party/**'
+      - 'profiles/p02-tfr.json'
+      - 'docs/designs/managed_counter_preflight_v1.md'
+      - 'docs/designs/managed_counter_lifetime_v1.md'
+      - 'docs/designs/dependency_provenance_v1.md'
+      - 'docs/designs/warm_workspace_benchmark_v1.md'
+      - 'docs/designs/serial_matmul_workspace_v1.md'
+      - 'docs/designs/ai_operator_contract_v1.md'
+      - 'docs/designs/tensor_numerics_v1.md'
+      - 'docs/designs/simx_checked_counters_v1.md'
+      - 'docs/designs/simx_counter_lifetime_v1.md'
+      - 'docs/designs/simx_counter_public_diagnostics_v1.md'
+      - 'docs/designs/simx_counter_diagnostics_v2.md'
+      - 'docs/designs/simulator_completion_v1.md'
+      - 'docs/designs/host_mpm_transport_v1.md'
+      - 'VERSION'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - 'vortex_opae.toml'
+      - '.gitmodules'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p06-dependency-provenance-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  dependency-provenance:
+    name: Fresh dependency build and native lifetime
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      MAKEFLAGS: '-j2'
+      THREADS: '1'
+      CMAKE_BUILD_PARALLEL_LEVEL: '2'
+      CCACHE_DISABLE: '1'
+      OBJCACHE: ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          submodules: recursive
+          persist-credentials: false
+      - name: Initialize retained job identity and resource observations
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, os, shutil, sys
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'p06-dependency-provenance'
+          root.mkdir(mode=0o700)
+          (root / 'evidence').mkdir(mode=0o700)
+          with open(os.environ['GITHUB_ENV'], 'a') as environment:
+              environment.write('P06_DEPENDENCY_ROOT=' + str(root) + '\n')
+          workflow = Path('.github/workflows/p06-dependency-provenance.yml').read_bytes()
+          (root / 'evidence' / 'workflow.yml').write_bytes(workflow)
+          data = {key: os.environ[key] for key in (
+              'GITHUB_SHA', 'GITHUB_EVENT_NAME', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT',
+              'GITHUB_JOB', 'GITHUB_REPOSITORY', 'GITHUB_REF')}
+          data.update(schema_version=1, contract_id='p06-managed-dependency-lifetime-v1',
+                      scope='fresh-selected-dependency-lifetime', record_stage='job-initialization',
+                      requested_xlen=64, requested_profile='p02-tfr', requested_perf='on',
+                      requested_formats=['fp16', 'bf16'],
+                      requested_policies=['per_operation', 'reusable_single_tile'],
+                      requested_processes=4, requested_launches=132, requested_checked_words=4224,
+                      requested_build_jobs=2, requested_simulation_workers=1,
+                      native_execution='not_run', native_preflight_passed=False,
+                      native_lifetime_passed=False,
+                      qualified=False, ready_for_warm=False, warm_execution=False,
+                      full_warm_coverage=False, acceptance_claimed=False,
+                      phase_acceptance=False, performance_acceptance=False,
+                      fresh_dependency_build_passed=False,
+                      dependency_source_to_loaded_binary_verified=False,
+                      workflow_sha256=hashlib.sha256(workflow).hexdigest())
+          sys.path.insert(0, str(Path('ci/project').resolve()))
+          from preflight import available_memory_bytes
+          data['free_disk_bytes_before_cache'] = shutil.disk_usage(root).free
+          data['available_memory_bytes_before_cache'] = available_memory_bytes()
+          (root / 'evidence' / 'job.json').write_text(json.dumps(data, indent=2) + '\n')
+          if (data['free_disk_bytes_before_cache'] < 15 * 2**30
+                  or (data['available_memory_bytes_before_cache'] or 0) < 4 * 2**30):
+              raise SystemExit('15 GiB disk reserve and 4 GiB available memory are required')
+          PY
+      - name: Provision pinned CPython
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+          architecture: x64
+          check-latest: false
+      - name: Retain and verify Python interpreter identity
+        run: |
+          set -euo pipefail
+          python3 -I - <<'PY'
+          import json, os, platform, shutil, sys
+          from pathlib import Path
+          data = {'python_version': list(sys.version_info[:3]),
+                  'implementation': platform.python_implementation(),
+                  'platform': sys.platform, 'executable': sys.executable,
+                  'python3_on_path': shutil.which('python3')}
+          target = Path(os.environ['P06_DEPENDENCY_ROOT']) / 'evidence' / 'python-provision.json'
+          target.write_text(json.dumps(data, indent=2) + '\n')
+          if (data['python_version'] != [3, 12, 14] or data['implementation'] != 'CPython'
+                  or data['platform'] != 'linux' or data['python3_on_path'] is None
+                  or Path(data['python3_on_path']).resolve() != Path(sys.executable).resolve()):
+              raise SystemExit('Python interpreter identity differs from the pinned inputs')
+          PY
+      - name: Resolve pinned toolchain cache identity
+        id: pins
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          P06_DEPENDENCY_TOOLCHAIN_ID=$(bash ci/toolchain_rev.sh)
+          [[ "$P06_DEPENDENCY_TOOLCHAIN_ID" =~ ^[A-Za-z0-9._-]+-[0-9a-f]{40}$ ]]
+          echo "toolchain=$P06_DEPENDENCY_TOOLCHAIN_ID" >> "$GITHUB_OUTPUT"
+      - name: Restore pinned toolchain without writing cache
+        id: toolchain
+        uses: actions/cache/restore@v4
+        with:
+          path: tools
+          key: ${{ runner.os }}-toolchain-${{ steps.pins.outputs.toolchain }}-lite
+          restore-keys: ${{ runner.os }}-toolchain-${{ steps.pins.outputs.toolchain }}-
+      - name: Install baseline host dependencies
+        if: steps.toolchain.outputs.cache-matched-key != ''
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          sudo bash ci/install_dependencies.sh \
+            2>&1 | tee "$P06_DEPENDENCY_ROOT/evidence/host-dependencies.log"
+      - name: Verify clean source and acquire pinned dependency objects
+        env:
+          P06_DEPENDENCY_TOOLCHAIN_ID: ${{ steps.pins.outputs.toolchain }}
+          P06_DEPENDENCY_TOOLCHAIN_CACHE: ${{ steps.toolchain.outputs.cache-matched-key }}
+        run: |
+          set -euo pipefail
+          python3 ci/project/p06_dependency_prepare.py \
+            --source-dir "$PWD" --workspace-dir "$P06_DEPENDENCY_ROOT" \
+            --expected-revision "$GITHUB_SHA" --toolchain-id "$P06_DEPENDENCY_TOOLCHAIN_ID" \
+            --toolchain-cache-key "$P06_DEPENDENCY_TOOLCHAIN_CACHE" \
+            2>&1 | tee "$P06_DEPENDENCY_ROOT/evidence/preparation.log"
+      - name: Build and retain fresh selected dependency products
+        run: |
+          set -euo pipefail
+          python3 ci/project/p06_dependency_build.py \
+            --source-dir "$PWD" --workspace-dir "$P06_DEPENDENCY_ROOT" \
+            --preparation "$P06_DEPENDENCY_ROOT/evidence/dependency-preparation.json" \
+            --output-dir "$P06_DEPENDENCY_ROOT/evidence/dependency-build" \
+            --expected-revision "$GITHUB_SHA" \
+            2>&1 | tee "$P06_DEPENDENCY_ROOT/evidence/dependency-build.log"
+      - name: Pin the original dependency receipt
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, os, sys
+          from pathlib import Path
+          sys.path.insert(0, str(Path('ci/project').resolve()))
+          from baseline_packet_io import load_json_bytes
+          from p06_dependency_contract import CONTRACT_ID, FALSE_CLAIMS, MAX_RECEIPT_BYTES
+          root = Path(os.environ['P06_DEPENDENCY_ROOT'])
+          path = root / 'evidence/dependency-build/report.json'
+          with path.open('rb') as stream:
+              payload = stream.read(MAX_RECEIPT_BYTES + 1)
+          if not 0 < len(payload) <= MAX_RECEIPT_BYTES:
+              raise SystemExit('Dependency receipt is absent or exceeds its byte bound')
+          document = load_json_bytes(payload, 'original dependency receipt')
+          if (type(document) is not dict or type(document.get('schema_version')) is not int
+                  or document.get('schema_version') != 1
+                  or document.get('contract_id') != CONTRACT_ID
+                  or document.get('expected_revision') != os.environ['GITHUB_SHA']
+                  or document.get('state') != 'finished' or document.get('outcome') != 'pass'
+                  or document.get('fresh_dependency_build_passed') is not True
+                  or any(document.get(name) is not False for name in FALSE_CLAIMS)):
+              raise SystemExit('Dependency receipt is not a completed fresh build for this revision')
+          digest = hashlib.sha256(payload).hexdigest()
+          identity = {'path': 'dependency-build/report.json', 'sha256': digest,
+                      'size_bytes': len(payload), 'expected_revision': os.environ['GITHUB_SHA']}
+          (root / 'evidence/dependency-receipt.json').write_text(json.dumps(identity, indent=2) + '\n')
+          with open(os.environ['GITHUB_ENV'], 'a') as environment:
+              environment.write('P06_DEPENDENCY_RECEIPT_SHA256=' + digest + '\n')
+          PY
+      - name: Execute all managed lifetime processes serially
+        run: |
+          set -euo pipefail
+          python3 ci/project/p06_dependency_lifetime_execute.py run \
+            --source-dir "$PWD" --tools-dir "$P06_DEPENDENCY_ROOT/tools" \
+            --work-dir "$P06_DEPENDENCY_ROOT/work" \
+            --output-dir "$P06_DEPENDENCY_ROOT/evidence/native-lifetime" \
+            --expected-revision "$GITHUB_SHA" \
+            --dependency-receipt "$P06_DEPENDENCY_ROOT/evidence/dependency-build/report.json" \
+            --dependency-receipt-sha256 "$P06_DEPENDENCY_RECEIPT_SHA256" \
+            --jobs 2 --timeout-seconds 1800 --run-timeout-seconds 180 \
+            2>&1 | tee "$P06_DEPENDENCY_ROOT/evidence/execution.log"
+      - name: Observe native pending reads and reject the always-zero control
+        run: |
+          set -euo pipefail
+          python3 ci/project/p06_pending_probe.py \
+            --source-dir "$PWD" --build-dir "$P06_DEPENDENCY_ROOT/work/simx-fp16" \
+            --managed-report "$P06_DEPENDENCY_ROOT/evidence/native-lifetime/report.json" \
+            --output-dir "$P06_DEPENDENCY_ROOT/evidence/pending-probe" \
+            --expected-revision "$GITHUB_SHA" \
+            --dependency-receipt-sha256 "$P06_DEPENDENCY_RECEIPT_SHA256" \
+            2>&1 | tee "$P06_DEPENDENCY_ROOT/evidence/pending-probe.log"
+      - name: Reject a fresh alternate dependency after correct numerical output
+        run: |
+          set -euo pipefail
+          python3 ci/project/p06_dependency_substitution.py \
+            --source-dir "$PWD" --build-dir "$P06_DEPENDENCY_ROOT/work/simx-fp16" \
+            --managed-report "$P06_DEPENDENCY_ROOT/evidence/native-lifetime/report.json" \
+            --dependency-receipt "$P06_DEPENDENCY_ROOT/evidence/dependency-build/report.json" \
+            --dependency-receipt-sha256 "$P06_DEPENDENCY_RECEIPT_SHA256" \
+            --expected-revision "$GITHUB_SHA" \
+            --output-dir "$P06_DEPENDENCY_ROOT/evidence/dependency-substitution" \
+            2>&1 | tee "$P06_DEPENDENCY_ROOT/evidence/dependency-substitution.log"
+      - name: Retain original dependency and native execution evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p06-dependency-provenance-${{ github.sha }}-run${{ github.run_id }}-attempt${{ github.run_attempt }}
+          path: ${{ runner.temp }}/p06-dependency-provenance/evidence
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 6
+          include-hidden-files: true

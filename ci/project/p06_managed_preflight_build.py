@@ -205,9 +205,13 @@ def _model_libraries(source):
 
 
 def validate_build_commands(text, runtime, backend, backend_linker, *, source, build,
-                            compiler, make, fmt, source_files):
+                            compiler, make, fmt, source_files, dependency_map=None):
     """Bind a fresh 43-TU model and wrapped backend without reading producer paths."""
     source, build = _roots(source, build)
+    if dependency_map is not None:
+        require(type(dependency_map) is str
+                and dependency_map == str(build / "sw/runtime/dependency-model.map"),
+                "dependency model map must use its exact reviewed build path")
     compiler, make = str(_path(compiler, "compiler path")), str(_path(make, "make path"))
     require(type(fmt) is str and fmt in ("fp16", "bf16"), "unsupported build format")
     require(type(source_files) in (list, tuple, set, frozenset)
@@ -258,6 +262,8 @@ def validate_build_commands(text, runtime, backend, backend_linker, *, source, b
             prefix = list(model_words)
             prefix[prefix.index("-MF") + 1] = str(model_binary)
             tail = ["-shared", *_model_libraries(source)]
+            if dependency_map is not None:
+                tail.append("-Wl,-Map," + dependency_map)
             require(body[:len(prefix)] == prefix and body[-len(tail):] == tail
                     and Counter(body[len(prefix):-len(tail)]) == Counter(map(str, expected_inputs.values())),
                     "model link changes production objects or exact dependencies")
@@ -273,10 +279,13 @@ def validate_build_commands(text, runtime, backend, backend_linker, *, source, b
             raise ValueError("managed build contains an unexpected compile/link target")
     require(set(compiled) == set(expected_inputs.values()) and set(links) == {model_binary, backend_binary},
             "managed build lacks the exact fresh model and backend compile/link inventory")
-    return {"contract_id": CONTRACT_ID, "compiler": compiler, "model_translation_units": 43,
+    result = {"contract_id": CONTRACT_ID, "compiler": compiler, "model_translation_units": 43,
         "backend_translation_units": len(BACKEND_SOURCES), "link_count": 2,
         "compiled_sources": sorted(compiled.values()), "object_paths": sorted(map(str, compiled)),
         "backend_sources": [str(source / name) for name in BACKEND_SOURCES],
         "links": [{"target": str(path), "arguments": links[path]} for path in (model_binary, backend_binary)],
         "backend_linker": link_record, "diagnostic_object_substitutions": False,
         "dependency_compilation_provenance_verified": False, "qualified": False}
+    if dependency_map is not None:
+        result["dependency_link_map"] = dependency_map
+    return result

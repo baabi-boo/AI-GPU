@@ -127,10 +127,12 @@ def interpreter_identity(tools):
     return observed
 
 
-def artifacts(build):
+def artifacts(build, *, dependency=False):
+    require(type(dependency) is bool, "dependency artifact mode must be explicitly boolean")
     objects = tuple(build_records.expected_object(name, build).relative_to(build).as_posix()
                     for name in build_records.MODEL_SOURCES)
-    return tuple(sorted(set(base.GENERATED + base.COPIED + BINARY_FILES + objects + (
+    additional = (APP + "/dependency_model.mk", "sw/runtime/dependency-model.map") if dependency else ()
+    return tuple(sorted(set(base.GENERATED + base.COPIED + BINARY_FILES + objects + additional + (
         APP + "/Makefile", APP + "/backend.mk", APP + "/config.stamp", HEADER_PROBE,
         "sw/runtime/simx_rt_config.stamp", "sw/runtime/simx_config.stamp",
         build_records.BACKEND_LINK_STAMP))))
@@ -208,9 +210,12 @@ def validate_host_build(text, stamp, *, source, build, compiler):
             "arguments": selected[0], "output": APP + "/" + target}
 
 
-def execute(args, paths, *, lifetime=False):
+def execute(args, paths, *, lifetime=False, dependency=False):
     require(type(lifetime) is bool, "lifetime mode must be explicitly boolean")
+    require(type(dependency) is bool and (not dependency or lifetime),
+            "dependency admission requires explicitly selected lifetime mode")
     selected_contract = None
+    dependency_module = None
     contract_id = CONTRACT_ID
     scope = "seed-free-managed-counter-preflight"
     limitations = LIMITATIONS
@@ -223,6 +228,14 @@ def execute(args, paths, *, lifetime=False):
         scope = selected_contract.SCOPE
         limitations = [*LIMITATIONS, *selected_contract.LIMITATIONS]
         extra_source_files = selected_contract.SOURCE_FILES
+    if dependency:
+        dependency_module = importlib.import_module("p06_dependency_admission")
+        require(Path(dependency_module.__file__).resolve() == ROOT / "ci/project/p06_dependency_admission.py",
+                "dependency admission loaded from an unexpected location")
+        contract_id = dependency_module.CONTRACT_ID
+        scope = dependency_module.SCOPE
+        limitations = [*dependency_module.LIMITATIONS, *base.PROCESS_LIMITATIONS]
+        extra_source_files = (*extra_source_files, *dependency_module.SOURCE_FILES)
     source, work, output = (paths[name] for name in ("source", "work", "output"))
     output.mkdir(mode=0o700)
     for name in ("logs", "snapshots", "artifacts"):
@@ -245,10 +258,17 @@ def execute(args, paths, *, lifetime=False):
         "environment": environment, "limitations": limitations}
     if lifetime:
         report["native_lifetime_passed"] = False
+    if dependency:
+        report.update(dependency_receipt_sha256=getattr(args, "dependency_receipt_sha256", None),
+                      dependency_admission=None, dependency_source_to_loaded_binary_verified=False)
     initial = tools = dependencies = helpers = None
+    admission = None
     active_variant = active_process = None
     retained = []
     payload_bytes = 0
+
+    def build_artifacts(build):
+        return artifacts(build, dependency=True) if dependency else artifacts(build)
 
     def snapshot_source():
         if lifetime:
@@ -320,9 +340,15 @@ def execute(args, paths, *, lifetime=False):
         require(observed_source == initial, "source changed during execution")
         require(observed_tools == tools, "tool or executing-interpreter identity changed")
         require(observed_dependencies == dependencies, "dependency payload changed")
-        report["stability_checks"].append({"label": label, "at": base._now(),
+        check = {"label": label, "at": base._now(),
             "source_sha256": qualification_id(observed_source), "tools_sha256": qualification_id(observed_tools),
-            "dependencies_sha256": qualification_id(observed_dependencies)})
+            "dependencies_sha256": qualification_id(observed_dependencies)}
+        if dependency:
+            check["dependency_admission"] = admission.verify_stable(observed_tools)
+            for variant in report["variants"]:
+                if "dependency_model_link" in variant:
+                    admission.verify_model_stable(variant["dependency_model_link"])
+        report["stability_checks"].append(check)
 
     def command(name, argv, cwd, env, timeout, *, native_process=False):
         require(not any(row["id"] == name for row in report["commands"]), "duplicate command identity")
@@ -361,7 +387,7 @@ def execute(args, paths, *, lifetime=False):
         return (output / row["log"]).read_text(encoding="utf-8", errors="strict"), row
 
     def retain_build(variant, build, stage):
-        names = [name for name in artifacts(build)
+        names = [name for name in build_artifacts(build)
                  if (Path(name).suffix in (".stamp", ".mk", ".h", ".vh", ".vlt", ".py")
                      or Path(name).name == "Makefile" or name == HEADER_PROBE)
                  and (build / name).is_file()]
@@ -391,6 +417,13 @@ def execute(args, paths, *, lifetime=False):
         records = importlib.import_module(records_name)
         require(Path(records.__file__).resolve() == ROOT / "ci/project" / (records_name + ".py"),
                 "managed record validator loaded from an unexpected location")
+        if dependency:
+            admission = dependency_module.Admission(getattr(args, "dependency_receipt", None),
+                getattr(args, "dependency_receipt_sha256", None), source=source,
+                expected_revision=args.expected_revision)
+            report["dependency_admission"] = admission.summary
+            report["retained_dependency_receipt"] = retain_files(admission.path.parent,
+                hash_artifacts(admission.path.parent, [admission.path.name]), "dependency-receipt")[0]
         helpers = loaded_helpers()
         report["loaded_helpers"] = helpers
         initial = snapshot_source()
@@ -408,6 +441,7 @@ def execute(args, paths, *, lifetime=False):
                 "frozen fixture header differs from its independent producer")
         if lifetime:
             active_contract = selected_contract.contract()
+            lifetime_contract = active_contract
             active_contract_sha256 = selected_contract.contract_hash()
             require(qualification_id(active_contract) == active_contract_sha256,
                     "lifetime contract descriptor and digest differ")
@@ -415,12 +449,18 @@ def execute(args, paths, *, lifetime=False):
                           preflight_contract_sha256=qualification_id(contract))
         else:
             active_contract, active_contract_sha256 = contract, qualification_id(contract)
+        if dependency:
+            active_contract, active_contract_sha256 = dependency_module.contract(), dependency_module.contract_hash()
+            require(qualification_id(active_contract) == active_contract_sha256,
+                    "dependency admission contract descriptor and digest differ")
         report.update(contract_snapshot=save_json("contract", active_contract), contract_sha256=active_contract_sha256,
             fixture_snapshot=save_json("selected-fixtures", cases), expected_processes=plan,
             profile_sha256=PROFILE_SHA256, kernel_source_sha256=KERNEL_SHA256,
             warm_contract_sha256=manifest.WARM_CONTRACT_SHA256, corpus=hash_artifacts(source, base.CORPUS))
         report["retained_sources"] = retain_files(source, initial["files"], "source")
         tools = tool_inventory(paths, environment)
+        if dependency:
+            report["dependency_admission_before"] = admission.verify_stable(tools)
         report["interpreter"] = interpreter_identity(tools)
         report["tools_before"] = save_json("tools-before", tools)
         dependencies = hash_artifacts(source, base.DEPENDENCIES)
@@ -440,7 +480,10 @@ def execute(args, paths, *, lifetime=False):
                 "--osversion=ubuntu/focal", "--tooldir=" + str(paths["tools"])], build, environment,
                 min(120, args.timeout_seconds))
             variant["generated_identity"] = base._generated_identity(build, source, paths["tools"])
-            for name in (APP + "/Makefile", APP + "/backend.mk"):
+            copied_build_files = (APP + "/Makefile", APP + "/backend.mk")
+            if dependency:
+                copied_build_files += (dependency_module.MODEL_MAKEFILE,)
+            for name in copied_build_files:
                 require((build / name).read_bytes() == (source / name).read_bytes(), "copied preflight build file differs: " + name)
             require(not (build / "sw/runtime/obj").exists()
                     and not any((build / name).exists() for name in BINARY_FILES), "preflight build is not fresh")
@@ -477,6 +520,13 @@ def execute(args, paths, *, lifetime=False):
                     "CXX=" + tools["g++"]["path"]]
             current = dict(environment, CONFIGS=config_flags, PERF="1")
             runtime = build / "sw/runtime"
+            if dependency:
+                model_text, model_command = command(variant_id + "-dependency-model",
+                    [*make, "CC=" + tools["gcc"]["path"], "DESTDIR=" + str(runtime),
+                     "-f", build / dependency_module.MODEL_MAKEFILE, runtime / "libsimx.so"],
+                    build / "sim/simx", current, args.timeout_seconds)
+                variant["dependency_model_build_command"] = model_command["id"]
+                model_outputs = hash_artifacts(build, ["sw/runtime/libsimx.so", dependency_module.MODEL_MAP])
             backend_text, backend_command = command(variant_id + "-backend", [*make, "CC=" + tools["gcc"]["path"],
                 "DESTDIR=" + str(runtime), "-f", build / APP / "backend.mk", runtime / "libvortex-simx.so"],
                 build / "sw/runtime/simx", current, args.timeout_seconds)
@@ -484,10 +534,19 @@ def execute(args, paths, *, lifetime=False):
             runtime_stamp = (runtime / "simx_rt_config.stamp").read_text(encoding="utf-8")
             model_stamp = (runtime / "simx_config.stamp").read_text(encoding="utf-8")
             link_stamp = (build / build_records.BACKEND_LINK_STAMP).read_text(encoding="utf-8")
+            build_options = {}
+            if dependency:
+                require(hash_artifacts(build, ["sw/runtime/libsimx.so", dependency_module.MODEL_MAP]) == model_outputs,
+                        "backend build changed the separately admitted model or link map")
+                backend_text = model_text + "\n" + backend_text
+                build_options["dependency_map"] = str(build / dependency_module.MODEL_MAP)
             variant["model_build_records"] = build_records.validate_build_commands(backend_text,
                 runtime_stamp, model_stamp, link_stamp, source=source, build=build,
                 compiler=tools["g++"]["path"], make=tools["make"]["path"], fmt=fmt,
-                source_files=[item["path"] for item in initial["files"]])
+                source_files=[item["path"] for item in initial["files"]], **build_options)
+            if dependency:
+                variant["dependency_receipt_sha256"] = report["dependency_receipt_sha256"]
+                variant["dependency_model_link"] = admission.validate_model(build, variant["model_build_records"])
             variant["backend_build_command"] = backend_command["id"]
             app = build / APP
             # The kernel-library sub-make selects its pinned RISC-V C compiler.
@@ -501,6 +560,10 @@ def execute(args, paths, *, lifetime=False):
             variant["application_build_command"] = app_command["id"]
             variant["compiler_records"] = build_records.validate_records(runtime_stamp, model_stamp, app_stamp,
                 fmt=fmt, source=source, build=build, jobs=args.jobs)
+            if dependency:
+                variant["application_build_records"] = admission.validate_application(application_text, app_stamp,
+                    build=build, tools_root=paths["tools"], tools=tools, fmt=fmt,
+                    compiler_records=variant["compiler_records"], source_files=initial["files"])
             for record in variant["compiler_records"]:
                 role = record["role"]
                 argv, directory = effective_header_command(tools["g++"]["path"], build, record)
@@ -509,11 +572,17 @@ def execute(args, paths, *, lifetime=False):
                 variant["effective_headers"][role] = {"command_id": variant_id + "-" + role + "-header",
                     "macros": build_records.validate_effective_header(text, expected, role=role)}
             require(os.access(app / "ai_counter_preflight", os.X_OK), "preflight application is not executable")
-            frozen = hash_artifacts(build, artifacts(build))
+            frozen = hash_artifacts(build, build_artifacts(build))
             variant["artifacts_before"] = frozen
             retain_build(variant, build, "frozen")
             variant["retained_binary_payloads"] = retain_files(build, hash_artifacts(build, BINARY_FILES),
                 variant_id + "/binaries", payload=True)
+            if dependency:
+                model_payloads = [build_records.expected_object(name, build).relative_to(build).as_posix()
+                                  for name in build_records.MODEL_SOURCES]
+                model_payloads.append(dependency_module.MODEL_MAP)
+                variant["retained_dependency_model_payloads"] = retain_files(build,
+                    hash_artifacts(build, model_payloads), variant_id + "/dependency-model", payload=True)
             libraries = expected_libraries(source, build)
             variant["expected_loaded_libraries"] = libraries
             case = next(row for row in cases if row["format"] == fmt)
@@ -529,8 +598,13 @@ def execute(args, paths, *, lifetime=False):
                 "unresolved_obligations": list(manifest.UNRESOLVED_OBLIGATIONS),
                 **dict.fromkeys(manifest.FALSE_CLAIMS, False)}
             if lifetime:
-                binding.update(lifetime_contract=active_contract,
+                binding.update(lifetime_contract=lifetime_contract,
                                preflight_contract_sha256=report["preflight_contract_sha256"])
+            if dependency:
+                binding.update(dependency_receipt_sha256=report["dependency_receipt_sha256"],
+                    dependency_admission=admission.summary,
+                    application_build_records=variant["application_build_records"],
+                    dependency_model_link=variant["dependency_model_link"])
             build_id = qualification_id(binding)
             variant.update(build_binding_sha256=build_id, binding=save_json(variant_id + "-build-binding", binding))
             launch_env = dict(environment, VORTEX_DRIVER="simx", LD_LIBRARY_PATH=str(runtime))
@@ -542,12 +616,14 @@ def execute(args, paths, *, lifetime=False):
                 process_binding = {"contract_id": contract_id, "contract_sha256": report["contract_sha256"],
                     "build_binding_sha256": build_id, "build": binding, "process": planned}
                 if lifetime:
-                    process_binding.update(lifetime_contract=active_contract,
+                    process_binding.update(lifetime_contract=lifetime_contract,
                                            preflight_contract_sha256=report["preflight_contract_sha256"])
+                if dependency:
+                    process_binding["dependency_receipt_sha256"] = report["dependency_receipt_sha256"]
                 binding_id = qualification_id(process_binding)
                 process.update(execution_binding_sha256=binding_id, build_binding_sha256=build_id,
                                binding=save_json(process["id"] + "-binding", process_binding))
-                require(hash_artifacts(build, artifacts(build)) == frozen, "artifacts changed before process")
+                require(hash_artifacts(build, build_artifacts(build)) == frozen, "artifacts changed before process")
                 mode_arguments = [selected_contract.APP_FLAG] if lifetime else []
                 text, receipt = command(process["id"], [app / "ai_counter_preflight", *mode_arguments, "--policy", planned["policy"],
                     "--module", app / "kernel.vxbin", "--qualification-id", binding_id,
@@ -555,7 +631,7 @@ def execute(args, paths, *, lifetime=False):
                     app, launch_env, args.run_timeout_seconds, native_process=True)
                 process["log"] = receipt["log"]
                 process["process_duration_seconds"] = receipt["duration_seconds"]
-                require(hash_artifacts(build, artifacts(build)) == frozen, "artifacts changed during process")
+                require(hash_artifacts(build, build_artifacts(build)) == frozen, "artifacts changed during process")
                 observed = records.verify_output(text, contract=contract, case=case, fmt=fmt,
                     policy=planned["policy"], binding_id=binding_id, sample_id=planned["sample_id"],
                     process_id=planned["id"], expected_libraries=libraries)
@@ -566,7 +642,7 @@ def execute(args, paths, *, lifetime=False):
                 process["outcome"] = "pass"
                 active_process = None
                 checkpoint()
-            variant["artifacts_after"] = hash_artifacts(build, artifacts(build))
+            variant["artifacts_after"] = hash_artifacts(build, build_artifacts(build))
             require(variant["artifacts_after"] == frozen, "variant artifacts changed after both policies")
             stable("after-variant-" + variant_id)
             variant["outcome"] = "pass"
@@ -602,10 +678,20 @@ def execute(args, paths, *, lifetime=False):
         for variant in report["variants"]:
             if "artifacts_before" in variant:
                 try:
-                    variant["artifacts_after"] = hash_artifacts(work / variant["id"], artifacts(work / variant["id"]))
+                    variant["artifacts_after"] = hash_artifacts(work / variant["id"], build_artifacts(work / variant["id"]))
                     require(variant["artifacts_after"] == variant["artifacts_before"], "frozen build changed before finalization")
                 except (OSError, ValueError, RuntimeError) as error:
                     failure(error, "final-artifacts-" + variant["id"])
+        if admission is not None:
+            try:
+                report["dependency_admission_after"] = admission.verify_stable(tools)
+                for variant in report["variants"]:
+                    if "dependency_model_link" in variant:
+                        admission.verify_model_stable(variant["dependency_model_link"])
+                require(report["dependency_admission_after"] == report.get("dependency_admission_before"),
+                        "dependency admission changed before finalization")
+            except (OSError, ValueError, RuntimeError, KeyError, TypeError) as error:
+                failure(error, "final-dependency-admission")
         report["raw_logs"] = []
         for row in report["commands"]:
             try:
@@ -630,6 +716,14 @@ def execute(args, paths, *, lifetime=False):
         report["native_preflight_passed"] = report["outcome"] == "pass" and report["completed_counts"] == COMPLETE_COUNTS
         if lifetime:
             report["native_lifetime_passed"] = report["native_preflight_passed"]
+        if dependency:
+            report["dependency_source_to_loaded_binary_verified"] = (
+                report["native_lifetime_passed"] and admission is not None
+                and len(report["variants"]) == len(FORMATS)
+                and all(row["outcome"] == "pass" and "application_build_records" in row
+                        and row.get("dependency_model_link", {}).get("source_to_model_link_verified") is True
+                        and row.get("dependency_receipt_sha256") == report["dependency_receipt_sha256"]
+                        for row in report["variants"]))
         report["retained_files"] = retained
         report["retained_payload_bytes"] = payload_bytes
         report.update(state="finished", finished_at=base._now())
