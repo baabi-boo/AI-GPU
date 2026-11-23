@@ -7,6 +7,7 @@
 namespace p06_preflight {
 
 constexpr size_t kMaxReads = 512;
+constexpr size_t kMaxRuns = 33;
 
 struct ModelState {
   bool live = false;
@@ -18,6 +19,20 @@ struct ModelState {
   uint64_t core_cycles = 0;
   uint64_t core_instructions = 0;
   int exitcode = 0;
+  uint64_t pending_reads = 0;
+};
+
+struct RunObservation {
+  uint64_t ordinal = 0;
+  ModelState before;
+  ModelState after;
+  bool real_call_entered = false;
+  bool completed = false;
+  bool exception = false;
+  uint64_t dcr_reads_before = 0;
+  uint64_t dcr_reads_after = 0;
+  uint64_t cache_flushes_before = 0;
+  uint64_t cache_flushes_after = 0;
 };
 
 struct DcrRead {
@@ -41,6 +56,8 @@ struct DcrRead {
   bool idle_after = false;
   bool any_running_before = false;
   bool any_running_after = false;
+  uint64_t pending_before = 0;
+  uint64_t pending_after = 0;
 };
 
 struct Destruction {
@@ -74,6 +91,9 @@ struct Observation {
   // MPM replies and cache-flush replies have separate bounded traces.
   uint64_t read_count = 0;
   uint64_t cache_flush_count = 0;
+  uint64_t run_count = 0;
+  bool lifetime_enabled = false;
+  bool trace_overflow = false;
   bool live = false;
   ModelState constructed_state;
   Destruction destruction;
@@ -82,6 +102,8 @@ struct Observation {
 } // namespace p06_preflight
 
 extern "C" int p06_preflight_get_observation(p06_preflight::Observation*) noexcept;
+extern "C" int p06_preflight_enable_lifetime() noexcept;
 extern "C" int p06_preflight_get_model_state(p06_preflight::ModelState*) noexcept;
+extern "C" int p06_preflight_get_run(size_t, p06_preflight::RunObservation*) noexcept;
 extern "C" int p06_preflight_get_read(size_t, p06_preflight::DcrRead*) noexcept;
 extern "C" int p06_preflight_get_cache_flush_read(size_t, p06_preflight::DcrRead*) noexcept;

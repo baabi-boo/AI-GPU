@@ -9,9 +9,11 @@ remain unassigned until an actual owner is identified.
 
 ## Start here: P06-T01 native lifetime observations
 
-**Current bounded task: P06-T01 — implement and independently review a separately
-versioned pending-balance and per-run/reset witness for the actual seed-free
-managed caller.** The [complete inert preflight reader](../designs/managed_counter_preflight_replay_v1.md)
+**Current bounded task: P06-T01 — independently verify the implemented
+[pending-balance and per-run/reset witness](evidence/p06-native-lifetime/README.md)
+through fresh native execution of the actual seed-free managed caller.**
+Host controls do not replace the pending native result or complete qualification.
+The [complete inert preflight reader](../designs/managed_counter_preflight_replay_v1.md)
 is implemented. Its [evidence packet](evidence/p06-managed-preflight-replay/README.md)
 rechecks the successful four-process original at `57248e73` and preserves the
 failed `8756f400` original as an exact negative control. Follow the

@@ -50,6 +50,8 @@ public:
 
   bool any_running() const;
 
+  uint64_t pending_mem_reads() const;
+
   class Core* get_first_core() const;
 
   // Install a hook that mirrors every accepted memory request to an

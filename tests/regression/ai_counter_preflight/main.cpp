@@ -85,6 +85,7 @@ struct State {
   vx_device_h device = nullptr;
   size_t queries = 0;
   bool failed = false;
+  bool lifetime = false;
 };
 
 State state;
@@ -102,7 +103,7 @@ bool same_model(const hooks::ModelState& left, const hooks::ModelState& right) n
       && left.any_running == right.any_running && left.generation == right.generation
       && left.ticks == right.ticks && left.reset_generation == right.reset_generation
       && left.core_cycles == right.core_cycles && left.core_instructions == right.core_instructions
-      && left.exitcode == right.exitcode;
+      && left.exitcode == right.exitcode && left.pending_reads == right.pending_reads;
 }
 
 hooks::ModelState model() {
@@ -110,6 +111,8 @@ hooks::ModelState model() {
   require(p06_preflight_get_model_state(&result) == 0, "model observation failed");
   require(result.live && result.generation == 1 && result.idle && !result.any_running,
           "counter snapshot requires one idle native processor");
+  require(!state.lifetime || result.pending_reads == 0,
+          "counter snapshot has pending memory reads");
   return result;
 }
 
@@ -319,12 +322,16 @@ vx_result_t query(vx_device_h handle, uint32_t clss, uint32_t csr, uint32_t core
   return result;
 }
 
-void print_model(const hooks::ModelState& value) {
+void print_model(const hooks::ModelState& value, bool lifetime = false) {
   std::printf("{\"live\":%s,\"idle\":%s,\"any_running\":%s,\"generation\":%" PRIu64
       ",\"ticks\":%" PRIu64 ",\"reset_generation\":%" PRIu64 ",\"core_cycles\":%" PRIu64
-      ",\"core_instructions\":%" PRIu64 ",\"exitcode\":%d}", boolean(value.live),
+      ",\"core_instructions\":%" PRIu64 ",\"exitcode\":%d", boolean(value.live),
       boolean(value.idle), boolean(value.any_running), value.generation, value.ticks,
       value.reset_generation, value.core_cycles, value.core_instructions, value.exitcode);
+  if (lifetime) {
+    std::printf(",\"pending_reads\":%" PRIu64, value.pending_reads);
+  }
+  std::fputc('}', stdout);
 }
 
 void print_cp(const CpState& value) {
@@ -432,7 +439,84 @@ void print_witness(const Options& opts, const char* format, const hooks::Observa
       "\"performance_acceptance\":false}\n", stdout);
 }
 
+void print_pending_read(const hooks::DcrRead& read) {
+  std::printf("{\"sequence\":%" PRIu64 ",\"pending_before\":%" PRIu64
+      ",\"pending_after\":%" PRIu64 "}", read.sequence, read.pending_before, read.pending_after);
+}
+
+void print_lifetime(const Options& opts, const char* format, const hooks::Observation& observed) {
+  std::printf("P06_MANAGED_COUNTER_LIFETIME {\"schema_version\":1,"
+      "\"contract_id\":\"p06-managed-counter-lifetime-v1\","
+      "\"process_id\":\"preflight-simx-%s-%s\",\"sample_id\":\"%s\","
+      "\"execution_binding_sha256\":\"%s\",\"format\":\"%s\",\"policy\":\"%s\","
+      "\"backend\":\"simx\",\"xlen\":64,\"checked_counter_bits\":64,"
+      "\"simulation_workers\":1,\"seeded\":false,\"constructed_state\":",
+      format, opts.policy.c_str(), opts.sample_id.c_str(), opts.qualification_id.c_str(),
+      format, opts.policy.c_str());
+  print_model(observed.constructed_state, true);
+  std::fputs(",\"runs\":[", stdout);
+  for (size_t i = 0; i != hooks::kMaxRuns; ++i) {
+    hooks::RunObservation run;
+    require(p06_preflight_get_run(i, &run) == 0, "retained run boundary disappeared");
+    std::printf("%s{\"ordinal\":%" PRIu64 ",\"before\":", i ? "," : "", run.ordinal);
+    print_model(run.before, true);
+    std::fputs(",\"after\":", stdout);
+    print_model(run.after, true);
+    std::printf(",\"real_call_entered\":%s,\"completed\":%s,\"exception\":%s,"
+        "\"dcr_reads_before\":%" PRIu64 ",\"dcr_reads_after\":%" PRIu64
+        ",\"cache_flushes_before\":%" PRIu64 ",\"cache_flushes_after\":%" PRIu64 "}",
+        boolean(run.real_call_entered), boolean(run.completed), boolean(run.exception),
+        run.dcr_reads_before, run.dcr_reads_after, run.cache_flushes_before, run.cache_flushes_after);
+  }
+  std::fputs("],\"snapshots\":[", stdout);
+  for (size_t i = 0; i != kSnapshots; ++i) {
+    std::printf("%s{\"name\":\"%s\",\"before\":", i ? "," : "", kNames[i]);
+    print_model(state.snapshots[i].before, true);
+    std::fputs(",\"after\":", stdout);
+    print_model(state.snapshots[i].after, true);
+    std::fputc('}', stdout);
+  }
+  std::fputs("],\"reads\":[", stdout);
+  for (size_t i = 0; i != kHalfReads; ++i) {
+    hooks::DcrRead read;
+    require(p06_preflight_get_read(i, &read) == 0, "retained raw read disappeared");
+    if (i) {
+      std::fputc(',', stdout);
+    }
+    print_pending_read(read);
+  }
+  std::fputs("],\"cache_flush_reads\":[", stdout);
+  for (size_t i = 0; i != kCacheFlushReads; ++i) {
+    hooks::DcrRead read;
+    require(p06_preflight_get_cache_flush_read(i, &read) == 0, "retained cache-flush read disappeared");
+    if (i) {
+      std::fputc(',', stdout);
+    }
+    print_pending_read(read);
+  }
+  std::fputs("],\"destruction\":{\"before\":", stdout);
+  print_model(observed.destruction.before, true);
+  std::printf(",\"completed\":%s,\"ticks_after\":%" PRIu64 ",\"reset_after\":%" PRIu64
+      ",\"idle_after\":%s},\"trace_overflow\":%s,",
+      boolean(observed.destruction.completed), observed.destruction.ticks_after,
+      observed.destruction.reset_after, boolean(observed.destruction.idle_after),
+      boolean(observed.trace_overflow));
+  std::fputs("\"unresolved_obligations\":[\"all_40_component_lifetime_and_pending_balance\","
+      "\"dependency_source_to_loaded_binary_provenance\",\"independent_complete_counter_qualification\"],"
+      "\"qualified\":false,\"ready_for_warm\":false,\"warm_execution\":false,"
+      "\"full_warm_coverage\":false,\"acceptance_claimed\":false,\"phase_acceptance\":false,"
+      "\"performance_acceptance\":false}\n", stdout);
+}
+
 int run_preflight(int argc, char** argv) {
+  if (argc > 1 && std::strcmp(argv[1], "--lifetime") == 0) {
+    state.lifetime = true;
+    require(p06_preflight_enable_lifetime() == 0, "lifetime observation could not be enabled");
+    for (int i = 1; i < argc; ++i) {
+      argv[i] = argv[i + 1];
+    }
+    --argc;
+  }
   const char* format = ai::kMatmulInputDType == 1 ? "fp16" : "bf16";
   Options opts;
   require(options(argc, argv, format, &opts) && opts.pair_index == 0 && opts.phase == "warmup",
@@ -460,7 +544,13 @@ int run_preflight(int argc, char** argv) {
       && observed.destruction.reset_after == observed.destruction.before.reset_generation,
           "native construction or complete disposal differs from the snapshot lifetime");
   require(loaded_libraries().paths == state.libraries.paths, "loaded native libraries changed");
+  require(!state.lifetime || (observed.lifetime_enabled && observed.run_count == hooks::kMaxRuns
+      && !observed.trace_overflow && observed.destruction.before.pending_reads == 0),
+          "native lifetime observations are incomplete");
   print_witness(opts, format, observed);
+  if (state.lifetime) {
+    print_lifetime(opts, format, observed);
+  }
   require(std::fflush(stdout) == 0 && !std::ferror(stdout), "preflight witness output failed");
   return 0;
 }

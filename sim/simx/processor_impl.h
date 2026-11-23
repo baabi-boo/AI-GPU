@@ -56,6 +56,10 @@ public:
 
   PerfStats perf_stats() const;
 
+  uint64_t pending_mem_reads() const {
+    return perf_mem_pending_reads_;
+  }
+
   Kmu& kmu()       { return *kmu_; }
 
   void set_mem_telemetry_hook(Memory::PreSendHook hook) {

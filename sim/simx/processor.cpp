@@ -598,6 +598,10 @@ bool Processor::any_running() const {
   return impl_->any_running();
 }
 
+uint64_t Processor::pending_mem_reads() const {
+  return impl_->pending_mem_reads();
+}
+
 Core* Processor::get_first_core() const {
   return impl_->get_first_core();
 }

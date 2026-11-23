@@ -10,7 +10,15 @@ launches. The [qualification audit](p06-qualification-audit.md),
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
 scope and new validation. P06-A02/A03 remain open.
 
-The current continuation implements the [complete inert managed-preflight
+The current continuation implements the [native lifetime witness](evidence/p06-native-lifetime/README.md)
+and its [separate versioned contract](../designs/managed_counter_lifetime_v1.md):
+the actual pending-read balance is observed before every reset-bearing run,
+through all flush/read boundaries and immediately before actual destruction.
+Compiled host controls and historical compatibility checks have executed;
+fresh native execution and full governance remain pending at this implementation
+checkpoint. All qualification and phase-acceptance flags remain false.
+
+The preceding continuation implements the [complete inert managed-preflight
 reader](../designs/managed_counter_preflight_replay_v1.md). It rechecks the
 successful original at `57248e73dfce4ae2d21d2cbdb82c3953eef2e3db`,
 [run 45085300171](https://github.com/baabi-boo/AI-GPU/actions/runs/45085300171):
@@ -96,8 +104,8 @@ source/log review. Hosted and native retries were queued at the
 which contains no executed result for either retry. This is local governance
 verification; the latest audited native diagnostic scope stays at `4268d2d5`.
 
-**Next bounded development:** implement and independently review the
-[versioned native lifetime witness](p06-managed-preflight-handoff.md): read-only
+**Current bounded verification:** independently review and execute the
+[versioned native lifetime witness](evidence/p06-native-lifetime/README.md): read-only
 pending-read observations at all 33 run/reset boundary pairs, each required
 flush, terminal readout and actual destruction, with exact reset increments.
 Apply the [conditional lifetime argument](../designs/simx_counter_lifetime_v1.md)

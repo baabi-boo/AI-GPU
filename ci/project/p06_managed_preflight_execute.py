@@ -95,9 +95,9 @@ def loaded_helpers():
 LOADED_HELPERS = loaded_helpers()
 
 
-def source_snapshot(source, helpers=None):
+def source_snapshot(source, helpers=None, *, extra_source_files=()):
     snapshot = operator_run.source_snapshot(source)
-    names = {item["path"] for item in snapshot["files"]} | set(SOURCE_FILES)
+    names = {item["path"] for item in snapshot["files"]} | set(SOURCE_FILES) | set(extra_source_files)
     names.update(item["path"] for item in snapshot["checkout"].get("inputs", []))
     names.update(item["path"] for item in (helpers if helpers is not None else LOADED_HELPERS))
     snapshot["files"] = hash_artifacts(source, sorted(names))
@@ -208,14 +208,28 @@ def validate_host_build(text, stamp, *, source, build, compiler):
             "arguments": selected[0], "output": APP + "/" + target}
 
 
-def execute(args, paths):
+def execute(args, paths, *, lifetime=False):
+    require(type(lifetime) is bool, "lifetime mode must be explicitly boolean")
+    selected_contract = None
+    contract_id = CONTRACT_ID
+    scope = "seed-free-managed-counter-preflight"
+    limitations = LIMITATIONS
+    extra_source_files = ()
+    if lifetime:
+        selected_contract = importlib.import_module("p06_native_lifetime_contract")
+        require(Path(selected_contract.__file__).resolve() == ROOT / "ci/project/p06_native_lifetime_contract.py",
+                "lifetime contract loaded from an unexpected location")
+        contract_id = selected_contract.CONTRACT_ID
+        scope = selected_contract.SCOPE
+        limitations = [*LIMITATIONS, *selected_contract.LIMITATIONS]
+        extra_source_files = selected_contract.SOURCE_FILES
     source, work, output = (paths[name] for name in ("source", "work", "output"))
     output.mkdir(mode=0o700)
     for name in ("logs", "snapshots", "artifacts"):
         (output / name).mkdir()
     environment = clean_environment(paths, args.jobs)
-    report = {"schema_version": 1, "contract_id": CONTRACT_ID,
-        "scope": "seed-free-managed-counter-preflight", "started_at": base._now(),
+    report = {"schema_version": 1, "contract_id": contract_id,
+        "scope": scope, "started_at": base._now(),
         "state": "running", "outcome": "blocked", "reason": None,
         **dict.fromkeys(manifest.FALSE_CLAIMS, False),
         "native_preflight_passed": False, "native_execution": "not_run",
@@ -228,11 +242,18 @@ def execute(args, paths):
                                          "build": args.timeout_seconds, "run": args.run_timeout_seconds}),
         "payload_limits": {"per_file_bytes": MAX_PAYLOAD_FILE_BYTES, "total_bytes": MAX_PAYLOAD_BYTES},
         "paths": {name: str(value) if value is not None else None for name, value in paths.items()},
-        "environment": environment, "limitations": LIMITATIONS}
+        "environment": environment, "limitations": limitations}
+    if lifetime:
+        report["native_lifetime_passed"] = False
     initial = tools = dependencies = helpers = None
     active_variant = active_process = None
     retained = []
     payload_bytes = 0
+
+    def snapshot_source():
+        if lifetime:
+            return source_snapshot(source, helpers, extra_source_files=extra_source_files)
+        return source_snapshot(source, helpers)
 
     def checkpoint():
         base._write_json(output / "report.json", report)
@@ -294,7 +315,7 @@ def execute(args, paths):
     def stable(label):
         require(hash_artifacts(source, [row["path"] for row in helpers]) == helpers,
                 "loaded helper bytes changed after import")
-        observed_source, observed_tools = source_snapshot(source, helpers), tool_inventory(paths, environment)
+        observed_source, observed_tools = snapshot_source(), tool_inventory(paths, environment)
         observed_dependencies = hash_artifacts(source, base.DEPENDENCIES)
         require(observed_source == initial, "source changed during execution")
         require(observed_tools == tools, "tool or executing-interpreter identity changed")
@@ -366,12 +387,13 @@ def execute(args, paths):
         require(memory is not None and memory >= BUDGET["max_rss_bytes"], "need 4 GiB available RAM")
         require(hash_artifacts(source, [row["path"] for row in LOADED_HELPERS]) == LOADED_HELPERS,
                 "runner/helper bytes changed after initial import")
-        records = importlib.import_module("p06_managed_preflight_records")
-        require(Path(records.__file__).resolve() == ROOT / "ci/project/p06_managed_preflight_records.py",
+        records_name = "p06_native_lifetime_records" if lifetime else "p06_managed_preflight_records"
+        records = importlib.import_module(records_name)
+        require(Path(records.__file__).resolve() == ROOT / "ci/project" / (records_name + ".py"),
                 "managed record validator loaded from an unexpected location")
         helpers = loaded_helpers()
         report["loaded_helpers"] = helpers
-        initial = source_snapshot(source, helpers)
+        initial = snapshot_source()
         report["source_before"] = save_json("source-before", initial)
         base._source_ok(initial, False)
         require(initial["checkout"]["revision"] == args.expected_revision, "source differs from the expected revision")
@@ -384,7 +406,16 @@ def execute(args, paths):
         require(_digest(source / "sw/kernel/ai/matmul.cpp")[0] == KERNEL_SHA256, "frozen numerical kernel changed")
         require((source / "tests/regression/sgemm_tcu/p02_fixtures.h").read_bytes() == render_header(load_cases(source)),
                 "frozen fixture header differs from its independent producer")
-        report.update(contract_snapshot=save_json("contract", contract), contract_sha256=qualification_id(contract),
+        if lifetime:
+            active_contract = selected_contract.contract()
+            active_contract_sha256 = selected_contract.contract_hash()
+            require(qualification_id(active_contract) == active_contract_sha256,
+                    "lifetime contract descriptor and digest differ")
+            report.update(preflight_contract_snapshot=save_json("preflight-contract", contract),
+                          preflight_contract_sha256=qualification_id(contract))
+        else:
+            active_contract, active_contract_sha256 = contract, qualification_id(contract)
+        report.update(contract_snapshot=save_json("contract", active_contract), contract_sha256=active_contract_sha256,
             fixture_snapshot=save_json("selected-fixtures", cases), expected_processes=plan,
             profile_sha256=PROFILE_SHA256, kernel_source_sha256=KERNEL_SHA256,
             warm_contract_sha256=manifest.WARM_CONTRACT_SHA256, corpus=hash_artifacts(source, base.CORPUS))
@@ -486,7 +517,7 @@ def execute(args, paths):
             libraries = expected_libraries(source, build)
             variant["expected_loaded_libraries"] = libraries
             case = next(row for row in cases if row["format"] == fmt)
-            binding = {"contract_id": CONTRACT_ID, "contract_sha256": report["contract_sha256"],
+            binding = {"contract_id": contract_id, "contract_sha256": report["contract_sha256"],
                 "source": initial, "loaded_helpers": helpers, "format": fmt, "backend": "simx", "case": case,
                 "corpus": report["corpus"], "profile_sha256": PROFILE_SHA256, "kernel_source_sha256": KERNEL_SHA256,
                 "warm_contract_sha256": manifest.WARM_CONTRACT_SHA256,
@@ -497,6 +528,9 @@ def execute(args, paths):
                 "simulation_workers": 1, "performance_environment": {"PERF": "1"},
                 "unresolved_obligations": list(manifest.UNRESOLVED_OBLIGATIONS),
                 **dict.fromkeys(manifest.FALSE_CLAIMS, False)}
+            if lifetime:
+                binding.update(lifetime_contract=active_contract,
+                               preflight_contract_sha256=report["preflight_contract_sha256"])
             build_id = qualification_id(binding)
             variant.update(build_binding_sha256=build_id, binding=save_json(variant_id + "-build-binding", binding))
             launch_env = dict(environment, VORTEX_DRIVER="simx", LD_LIBRARY_PATH=str(runtime))
@@ -505,13 +539,17 @@ def execute(args, paths):
                 active_process = process
                 report["processes"].append(process)
                 variant["process_ids"].append(process["id"])
-                process_binding = {"contract_id": CONTRACT_ID, "contract_sha256": report["contract_sha256"],
+                process_binding = {"contract_id": contract_id, "contract_sha256": report["contract_sha256"],
                     "build_binding_sha256": build_id, "build": binding, "process": planned}
+                if lifetime:
+                    process_binding.update(lifetime_contract=active_contract,
+                                           preflight_contract_sha256=report["preflight_contract_sha256"])
                 binding_id = qualification_id(process_binding)
                 process.update(execution_binding_sha256=binding_id, build_binding_sha256=build_id,
                                binding=save_json(process["id"] + "-binding", process_binding))
                 require(hash_artifacts(build, artifacts(build)) == frozen, "artifacts changed before process")
-                text, receipt = command(process["id"], [app / "ai_counter_preflight", "--policy", planned["policy"],
+                mode_arguments = [selected_contract.APP_FLAG] if lifetime else []
+                text, receipt = command(process["id"], [app / "ai_counter_preflight", *mode_arguments, "--policy", planned["policy"],
                     "--module", app / "kernel.vxbin", "--qualification-id", binding_id,
                     "--sample-id", planned["sample_id"], "--pair-index", "0", "--phase", "warmup"],
                     app, launch_env, args.run_timeout_seconds, native_process=True)
@@ -549,7 +587,7 @@ def execute(args, paths):
             except (OSError, ValueError, RuntimeError) as error:
                 failure(error, "final-build-snapshot")
         for label, previous, observe in (
-            ("source", initial, lambda: source_snapshot(source, helpers)),
+            ("source", initial, snapshot_source),
             ("tools", tools, lambda: tool_inventory(paths, environment)),
             ("dependencies", dependencies, lambda: hash_artifacts(source, base.DEPENDENCIES)),
         ):
@@ -590,6 +628,8 @@ def execute(args, paths):
             failure(error, "final-resources")
         report["completed_counts"] = completion_counts(report["processes"])
         report["native_preflight_passed"] = report["outcome"] == "pass" and report["completed_counts"] == COMPLETE_COUNTS
+        if lifetime:
+            report["native_lifetime_passed"] = report["native_preflight_passed"]
         report["retained_files"] = retained
         report["retained_payload_bytes"] = payload_bytes
         report.update(state="finished", finished_at=base._now())
