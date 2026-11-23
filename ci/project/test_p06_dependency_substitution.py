@@ -103,7 +103,7 @@ class ActualSubstitutionBuildTests(unittest.TestCase):
         self.ramulator = self.source / "third_party/ramulator"
         for path in (self.ramulator / "src/dram/impl", self.ramulator / "ext/spdlog/include",
                      self.ramulator / "ext/yaml-cpp/include", self.work / "home", self.work / "tmp",
-                     self.output / "records", self.output / "payloads"):
+                     self.output / "records", self.output / "payloads", self.output / "inputs"):
             path.mkdir(parents=True)
         self.tools = {name: recorder.file_identity(shutil.which(name))
                       for name in (*recorder.TOOLS, "python3")}
@@ -119,7 +119,6 @@ class ActualSubstitutionBuildTests(unittest.TestCase):
         self.original.parent.mkdir()
         self.call([self.tools["g++"]["path"], "-shared", "-fPIC", "-std=c++20", "-O3", "-DNDEBUG",
                    str(self.gddr6), "-L" + str(self.ramulator), "-lramulator", "-o", str(self.original)])
-        (self.work / "control-marker.h").write_bytes(control.MARKER_HEADER)
         self.config = {"schema_version": 1, "contract_id": recorder.CONTRACT_ID,
             "contract_sha256": dependency.contract_hash(), "roots": {
                 "sources": str(self.source / "third_party"), "build": str(self.work),
@@ -133,6 +132,7 @@ class ActualSubstitutionBuildTests(unittest.TestCase):
             products[name] = dict(identity, staged_path=identity["path"])
         self.admission = SimpleNamespace(source_inputs=[builder.identity(self.gddr6)],
             products=products, document={"external_archives": []})
+        self.derivation = control.prepare_source(self.source, self.output, self.work, self.admission)
 
     def call(self, words, *, environment=None):
         result = subprocess.run(words, cwd=self.work, env=environment or self.environment,
@@ -169,6 +169,14 @@ class ActualSubstitutionBuildTests(unittest.TestCase):
                 environment=dict(self.environment, LD_LIBRARY_PATH=str(self.ramulator))).strip(), "42")
         self.assertEqual([row["stage"] for row in result["compile"]["children"]], ["dependencies", "tool"])
         self.assertEqual(len(result["records"]), 2)
+        self.assertEqual(result["source_derivation"], self.derivation)
+
+    def test_fresh_compilation_of_an_unreviewed_derived_source_is_rejected(self):
+        path = self.work / control.CONTROL_SOURCE
+        path.write_bytes(b"// unexpected extra source bytes\n" + path.read_bytes())
+        self.build_control()
+        with self.assertRaisesRegex(ValueError, "exact pinned source plus emitted declaration"):
+            self.verify()
 
     def test_changed_source_marker_or_original_product_cannot_pass_the_join(self):
         self.build_control()
@@ -212,7 +220,11 @@ class SyntheticControlHarness:
         self.failure = None
         self.drift = False
         self.tools = {name: {"path": "/tools/" + name} for name in (*recorder.TOOLS, "python3")}
-        self.control.admission = SimpleNamespace(document={"tools": self.tools})
+        original = self.source / control.ORIGINAL_SOURCE
+        original.parent.mkdir(parents=True)
+        original.write_bytes(b"// synthetic admitted GDDR6 source\n")
+        self.control.admission = SimpleNamespace(document={"tools": self.tools},
+            source_inputs=[builder.identity(original)])
         self.control.original_libraries = dict(fixture.EXPECTED_LIBRARIES)
         self.control.initial = dict(self.state)
         self.control.report["managed_build_binding_sha256"] = "c" * 64
@@ -232,6 +244,7 @@ class SyntheticControlHarness:
     def verified(self, *args, **kwargs):
         return {"records": [{"path": "records/compile.json"}, {"path": "records/link.json"}],
             "alternate_product": builder.identity(self.control.work / control.LIBRARY),
+            "source_derivation": copy.deepcopy(self.control.report["source_derivation"]),
             "original_product": {"path": "/original/" + control.LIBRARY, "sha256": "0" * 64}}
 
     def command(self, argv, cwd, environment, log_path, **limits):
@@ -316,6 +329,28 @@ class SubstitutionRunnerTests(unittest.TestCase):
             self.assertEqual(result["outcome"], "fail")
             self.assertIs(result["control_passed"], False)
             self.assertIs(result["original_provenance_rejected"], False)
+
+    def test_unreturned_native_start_receipt_remains_unknown_and_retains_partial_log(self):
+        with SyntheticControlHarness() as harness:
+            def interrupted(argv, cwd, environment, log_path, **limits):
+                result = harness.command(argv, cwd, environment, log_path, **limits)
+                if Path(log_path).stem == "run-alternate-extension":
+                    raise RuntimeError("synthetic native monitor interruption")
+                return result
+
+            harness.executor.side_effect = interrupted
+            result = harness.run()
+            self.assertEqual(result["outcome"], "fail")
+            self.assertEqual(result["native_execution"], "unknown")
+            self.assertIs(result["control_passed"], False)
+            self.assertEqual(result["reason"], "synthetic native monitor interruption")
+            native = result["commands"][-1]
+            self.assertIsNone(native["process_started"])
+            self.assertEqual(native["outcome"], "fail")
+            body = (harness.control.output / native["log"]).read_bytes()
+            self.assertEqual(native["log_sha256"], hashlib.sha256(body).hexdigest())
+            self.assertEqual(native["log_size_bytes"], len(body))
+            self.assertIn(native["log"], [row["path"] for row in result["retained_files"]])
 
     def test_resource_block_precedes_admission_and_any_execution(self):
         with SyntheticControlHarness() as harness:

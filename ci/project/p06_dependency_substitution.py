@@ -45,14 +45,16 @@ FORMAT = "fp16"
 POLICY = "reusable_single_tile"
 LIBRARY = "libramulator-vortex.so"
 MARKER = b"p06-known-different-dependency-v1"
-MARKER_HEADER = (b'extern "C" {\n'
+MARKER_DECLARATION = (b'extern "C" {\n'
     b'__attribute__((used, visibility("default")))\n'
     b'extern const char p06_dependency_substitution_marker[] = "' + MARKER + b'";\n}\n')
+ORIGINAL_SOURCE = "third_party/ramulator/src/dram/impl/GDDR6.cpp"
+CONTROL_SOURCE = "gddr6-control.cpp"
 REJECTION = "loaded library libramulator-vortex.so: differs from the fixed contract"
 BUDGET = dict(preflight.BUDGET)
 LIMITATIONS = [
     "One extra FP16 reusable-policy process belongs only to this negative control, outside the four managed processes and their 132 launches.",
-    "The alternate extension adds an emitted constant through a separately retained include header; no admitted source or measurement product is modified.",
+    "The alternate extension compiles an isolated copy of the admitted GDDR6 source with a fixed emitted declaration appended; no admitted source or measurement product is modified.",
     "Numerical success and complete lifetime observations can coexist with rejection of the actual alternate dependency path and bytes.",
     "This executing control does not authenticate an untrusted producer or defeat malicious concurrent filesystem writers.",
     "All qualification, warm-readiness, warm-execution, performance and phase acceptance claims remain false.",
@@ -72,11 +74,38 @@ def recipes(source, work):
     for directory in (ramulator / "src", ramulator / "ext/spdlog/include",
                       ramulator / "ext/yaml-cpp/include"):
         compile_args.extend(("-isystem", str(directory)))
-    compile_args.extend(("-include", str(work / "control-marker.h"), "-c",
-        str(ramulator / "src/dram/impl/GDDR6.cpp"), "-o", str(work / "gddr6-control.o")))
+    compile_args.extend(("-c", str(work / CONTROL_SOURCE), "-o", str(work / "gddr6-control.o")))
     link_args = ["-shared", str(work / "gddr6-control.o"), "-L" + str(ramulator),
         "-lramulator", "-Wl,-Map," + str(work / "control.map"), "-o", str(work / LIBRARY)]
     return {"compile": compile_args, "link": link_args}
+
+
+def derived_source(original):
+    require(type(original) is bytes and 0 < len(original)
+            <= dependency.MAX_FILE_BYTES - len(MARKER_DECLARATION) - 1,
+            "control original source is empty or exceeds its bound")
+    return original + b"\n" + MARKER_DECLARATION
+
+
+def prepare_source(source, output, work, admission):
+    """Copy the exact admitted source and append one fixed, reviewed declaration."""
+    original_path = source / ORIGINAL_SOURCE
+    known = {row["path"]: row for row in admission.source_inputs}
+    require(str(original_path) in known
+            and builder.identity(original_path) == known[str(original_path)],
+            "control original source differs from the pinned dependency input")
+    retained = output / "inputs/gddr6-original.cpp"
+    builder.stage_file(original_path, retained)
+    body = receipts.PacketReader(output)("inputs/gddr6-original.cpp")
+    generated = work / CONTROL_SOURCE
+    with generated.open("xb") as stream:
+        stream.write(derived_source(body))
+    require(builder.identity(original_path) == known[str(original_path)],
+            "control original source changed during derivation")
+    return {"original_source": known[str(original_path)],
+            "retained_original": builder.identity(retained, relative_to=output),
+            "derived_source": builder.identity(generated, relative_to=output),
+            "appended_declaration_sha256": hashlib.sha256(MARKER_DECLARATION).hexdigest()}
 
 
 def verify_observation(text, *, contract, case, binding_id, original_libraries, alternate_path):
@@ -122,17 +151,27 @@ def verify_records(output, config, config_sha256, *, source, work, admission, to
     compiled, linked = selected["compile"], selected["link"]
     require(compiled["finished_ns"] <= linked["started_ns"], "control link preceded completed compilation")
     known = {row["path"]: row for row in admission.source_inputs}
-    marker_path = str(work / "control-marker.h")
-    marker_seen = False
+    original_path = str(source / ORIGINAL_SOURCE)
+    require(original_path in known, "control original source is not a pinned dependency input")
+    original = reader("inputs/gddr6-original.cpp")
+    require(hashlib.sha256(original).hexdigest() == known[original_path]["sha256"]
+            and len(original) == known[original_path]["size_bytes"],
+            "control retained original differs from the pinned dependency input")
+    derived_path = str(work / CONTROL_SOURCE)
+    derived_seen = False
     for row in compiled["inputs_before"]:
-        if row["path"] == marker_path:
-            require(receipts.payload(row, reader) == MARKER_HEADER, "control marker bytes differ")
-            marker_seen = True
+        if row["path"] == derived_path:
+            require(receipts.payload(row, reader) == derived_source(original),
+                    "control source is not the exact pinned source plus emitted declaration")
+            derived_seen = True
         elif Path(row["path"]).is_relative_to(source / "third_party"):
             require(row["path"] in known and row["resolved_path"] == row["path"]
                     and all(row[key] == known[row["path"]][key] for key in ("sha256", "size_bytes")),
                     "control source/header differs from the pinned dependency input")
-    require(marker_seen, "actual compiler closure omits the emitted control marker")
+        else:
+            require(not Path(row["path"]).is_relative_to(work),
+                    "control compiler input has an unreviewed generated file")
+    require(derived_seen, "actual compiler closure omits the derived control source")
     product = admission.products["ramulator"]
     require(len(linked["inputs_before"]) == 2, "control link input population differs")
     by_path = {row["path"]: row for row in linked["inputs_before"]}
@@ -153,6 +192,11 @@ def verify_records(output, config, config_sha256, *, source, work, admission, to
     return {"records": [hash_artifacts(output, [path.relative_to(output).as_posix()])[0] for path in paths],
             "compile": compiled, "link": linked, "map_verification": mapping,
             "alternate_product": {key: alternate[key] for key in receipts.IDENTITY_FIELDS},
+            "source_derivation": {
+                "original_source": known[original_path],
+                "retained_original": builder.identity(output / "inputs/gddr6-original.cpp", relative_to=output),
+                "derived_source": builder.identity(work / CONTROL_SOURCE, relative_to=output),
+                "appended_declaration_sha256": hashlib.sha256(MARKER_DECLARATION).hexdigest()},
             "original_product": admission.products["extension"]}
 
 
@@ -234,13 +278,27 @@ class Control:
             "timeout_seconds": 180 if native else 1800, "log": "logs/" + name + ".log",
             "process_started": None}
         self.report["commands"].append(row)
+        previous_native_execution = self.report["native_execution"]
+        if native:
+            self.report["native_execution"] = preflight.native_execution_state(previous_native_execution, None)
         self.save()
-        row.update(run_bounded(row["argv"], self.work, environment, self.output / row["log"],
-            timeout_seconds=row["timeout_seconds"], resource_paths=(self.source, self.build, self.output,
-                self.managed_path.parent, self.dependency_path.parent), **BUDGET))
+        try:
+            row.update(run_bounded(row["argv"], self.work, environment, self.output / row["log"],
+                timeout_seconds=row["timeout_seconds"], resource_paths=(self.source, self.build, self.output,
+                    self.managed_path.parent, self.dependency_path.parent), **BUDGET))
+        except (OSError, ValueError, RuntimeError, TypeError, KeyboardInterrupt) as error:
+            row.update(outcome="fail", reason=str(error) or "interrupted")
+            try:
+                if (self.output / row["log"]).is_file():
+                    identity = builder.identity(self.output / row["log"])
+                    row.update(log_sha256=identity["sha256"], log_size_bytes=identity["size_bytes"])
+            except (OSError, ValueError, RuntimeError) as log_error:
+                row["log_identity_error"] = str(log_error)
+            self.save()
+            raise
         if native:
             self.report["native_execution"] = preflight.native_execution_state(
-                self.report["native_execution"], row.get("process_started"))
+                previous_native_execution, row.get("process_started"))
         self.save()
         require(row.get("process_started") is True and row.get("cleanup_complete") is True
                 and row.get("outcome") == "pass" and type(row.get("exit_code")) is int
@@ -313,7 +371,8 @@ class Control:
     def execute(self):
         try:
             self.admit()
-            (self.work / "control-marker.h").write_bytes(MARKER_HEADER)
+            source_derivation = prepare_source(self.source, self.output, self.work, self.admission)
+            self.report["source_derivation"] = source_derivation
             tools = self.admission.document["tools"]
             config = {"schema_version": 1, "contract_id": recorder.CONTRACT_ID,
                 "contract_sha256": dependency.contract_hash(), "roots": {
@@ -329,8 +388,10 @@ class Control:
                     config_descriptor["sha256"], tools, "g++", role), *commands[role]])
             verified = verify_records(self.output, config, config_descriptor["sha256"], source=self.source,
                 work=self.work, admission=self.admission, tools=tools)
+            require(verified["source_derivation"] == source_derivation,
+                    "control source derivation changed during compilation")
             self.report.update(alternate_dependency_built=True, dependency_control=verified)
-            frozen_names = ["tool-config.json", "work/control-marker.h", "work/gddr6-control.o",
+            frozen_names = ["tool-config.json", "work/" + CONTROL_SOURCE, "work/gddr6-control.o",
                 "work/gddr6-control.o.d", "work/gddr6-control.o.p06-before.d", "work/" + LIBRARY,
                 "work/control.map"]
             frozen_names.extend(path.relative_to(self.output).as_posix()
@@ -342,7 +403,8 @@ class Control:
             control_binding = {"contract_id": CONTRACT_ID, "expected_revision": self.args.expected_revision,
                 "dependency_receipt_sha256": self.args.dependency_receipt_sha256,
                 "managed_build_binding_sha256": self.report["managed_build_binding_sha256"],
-                "inputs_sha256": dependency.digest(self.initial), "marker_sha256": hashlib.sha256(MARKER_HEADER).hexdigest(),
+                "inputs_sha256": dependency.digest(self.initial),
+                "source_derivation_sha256": dependency.digest(source_derivation),
                 "alternate_product": verified["alternate_product"], "original_product": verified["original_product"],
                 "format": FORMAT, "policy": POLICY, "managed_population_included": False,
                 **dict.fromkeys(dependency.FALSE_CLAIMS, False)}

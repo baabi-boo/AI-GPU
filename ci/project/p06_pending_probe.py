@@ -71,6 +71,45 @@ def retained_json(directory, descriptor, expected, *, container=dict):
     return bounded_json(directory / expected, expected=container)
 
 
+def managed_mode(managed, *, expected_revision, dependency_receipt_sha256=None):
+    """Keep historical admission separate from the explicit dependency route."""
+    dependency = dependency_receipt_sha256 is not None
+    contract_id = MANAGED_CONTRACT_ID
+    if dependency:
+        # Import only for this opt-in route so the default helper inventory stays
+        # independent of the fresh-dependency reader and its contract.
+        from p06_dependency_contract import MANAGED_CONTRACT_ID as dependency_contract_id
+        require(type(dependency_receipt_sha256) is str
+                and re.fullmatch(r"[0-9a-f]{64}", dependency_receipt_sha256) is not None,
+                "dependency receipt pin is not an exact SHA256 identity")
+        contract_id = dependency_contract_id
+    require(managed.get("contract_id") == contract_id
+            and managed.get("state") == "finished" and managed.get("outcome") == "pass"
+            and managed.get("native_lifetime_passed") is True
+            and managed.get("native_preflight_passed") is True
+            and managed.get("expected_revision") == expected_revision,
+            "probe requires a completed managed lifetime build at the selected revision")
+    preflight_contract.false_claims(managed)
+    if dependency:
+        require(managed.get("dependency_source_to_loaded_binary_verified") is True
+                and managed.get("dependency_receipt_sha256") == dependency_receipt_sha256,
+                "managed dependency provenance or caller receipt identity differs")
+        counts = managed.get("completed_counts")
+        require(type(counts) is dict and counts == preflight.COMPLETE_COUNTS
+                and all(type(value) is int for value in counts.values()),
+                "managed dependency population counts are incomplete")
+        processes = managed.get("processes")
+        expected = [(fmt, policy) for fmt in ("fp16", "bf16")
+                    for policy in ("per_operation", "reusable_single_tile")]
+        require(type(processes) is list and len(processes) == len(expected)
+                and all(type(row) is dict and row.get("outcome") == "pass"
+                        and row.get("backend") == "simx"
+                        and (row.get("format"), row.get("policy")) == selection
+                        for row, selection in zip(processes, expected)),
+                "managed dependency population is absent, reordered or incomplete")
+    return dependency
+
+
 def probe_flags(runtime, model, application, *, source, build, fmt):
     records = build_records.validate_records(runtime, model, application,
         fmt=fmt, source=source, build=build, jobs=2)
@@ -189,18 +228,38 @@ def execute(args):
                     for path in (source, build, output, managed_path.parent)), "probe needs 15 GiB disk reserve")
         require((available_memory_bytes() or 0) >= BUDGET["max_rss_bytes"], "probe needs 4 GiB available memory")
         managed = bounded_json(managed_path)
-        require(managed.get("contract_id") == MANAGED_CONTRACT_ID
-                and managed.get("state") == "finished" and managed.get("outcome") == "pass"
-                and managed.get("native_lifetime_passed") is True
-                and managed.get("native_preflight_passed") is True
-                and managed.get("expected_revision") == args.expected_revision,
-                "probe requires a completed managed lifetime build at the selected revision")
-        preflight_contract.false_claims(managed)
+        dependency_pin = getattr(args, "dependency_receipt_sha256", None)
+        dependency = managed_mode(managed, expected_revision=args.expected_revision,
+                                  dependency_receipt_sha256=dependency_pin)
         matches = [row for row in managed["variants"] if row["build_dir"] == str(build)]
         require(len(matches) == 1 and matches[0]["outcome"] == "pass", "selected managed build is absent or incomplete")
         variant = matches[0]
         require(variant["format"] in ("fp16", "bf16") and variant["backend"] == "simx",
                 "selected managed build route differs")
+        managed_snapshots = ["snapshots/source-before.json", "snapshots/tools-before.json",
+                             "snapshots/dependencies-before.json"]
+        if dependency:
+            binding_path = "snapshots/simx-" + variant["format"] + "-build-binding.json"
+            binding = retained_json(managed_path.parent, variant["binding"], binding_path)
+            require(preflight.qualification_id(binding) == variant["build_binding_sha256"],
+                    "managed dependency build binding identity differs")
+            require(binding.get("contract_id") == managed["contract_id"]
+                    and binding.get("dependency_receipt_sha256") == dependency_pin
+                    and variant.get("dependency_receipt_sha256") == dependency_pin
+                    and binding.get("format") == variant["format"]
+                    and binding.get("backend") == variant["backend"],
+                    "selected build is not bound to the caller dependency receipt")
+            preflight_contract.false_claims(binding)
+            require(all(name in binding and name in variant and binding[name] == variant[name]
+                        for name in ("application_build_records", "dependency_model_link"))
+                    and binding.get("artifacts") == variant["artifacts_before"],
+                    "selected dependency application or model binding differs")
+            managed_snapshots.append(binding_path)
+            limitations = list(LIMITATIONS)
+            limitations[2] = ("The selected model and dependencies match the completed managed build "
+                "and its caller-pinned fresh dependency receipt; this probe does not replay compilation.")
+            report.update(dependency_receipt_sha256=dependency_pin,
+                          managed_contract_id=managed["contract_id"], limitations=limitations)
         tools = retained_json(managed_path.parent, managed["tools_before"], "snapshots/tools-before.json")
         selected_source = retained_json(managed_path.parent, managed["source_before"], "snapshots/source-before.json")
         dependencies = retained_json(managed_path.parent, managed["dependencies_before"],
@@ -218,7 +277,7 @@ def execute(args):
         base._source_ok(selected_source, False)
         require(hash_artifacts(source, [row["path"] for row in selected_source["files"]]) == selected_source["files"],
                 "current source bytes differ from the managed build")
-        build_names = preflight.artifacts(build)
+        build_names = preflight.artifacts(build, dependency=True) if dependency else preflight.artifacts(build)
         require(hash_artifacts(build, build_names) == variant["artifacts_after"] == variant["artifacts_before"],
                 "model products or generated inputs differ from the managed build")
         require(hash_artifacts(source, base.DEPENDENCIES) == dependencies,
@@ -244,8 +303,7 @@ def execute(args):
             return {"checkout": collect_source(source), "sources": hash_artifacts(source, source_names),
                 "build": hash_artifacts(build, build_names), "dependencies": hash_artifacts(source, base.DEPENDENCIES),
                 "compiler": base._file_identity(compiler), "managed_report": base._file_identity(managed_path),
-                "managed_snapshots": hash_artifacts(managed_path.parent,
-                    ("snapshots/source-before.json", "snapshots/tools-before.json", "snapshots/dependencies-before.json"))}
+                "managed_snapshots": hash_artifacts(managed_path.parent, managed_snapshots)}
 
         initial = snapshot()
         report.update(inputs_before=initial, format=variant["format"], compiler_records=records,
@@ -297,6 +355,8 @@ def argument_parser():
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--expected-revision", required=True)
     parser.add_argument("--host-bin", type=Path)
+    parser.add_argument("--dependency-receipt-sha256",
+                        help="explicitly admit only the completed fresh-dependency managed contract bound to this SHA256")
     return parser
 
 
