@@ -7,6 +7,7 @@ from pathlib import Path
 
 import p06_counter_qualification_replay as replay
 import p06_native_lifetime_test_fixture as lifetime_fixture
+from p06_counter_qualification_historical_fixture import source_body
 from test_p06_dependency_native_replay import (
     MemoryView, SyntheticNativePacket, descriptor, digest, json_bytes,
 )
@@ -48,7 +49,7 @@ class SyntheticQualificationPacket(SyntheticNativePacket):
             | {row["path"] for row in self.proof["measurement_sources"]})
         names = set(self.sources) | required
         for name in required:
-            self.put("artifacts/source/" + name, (replay.ROOT / name).read_bytes())
+            self.put("artifacts/source/" + name, source_body(name))
         self.source["files"] = [descriptor(name, self.files["artifacts/source/" + name])
                                 for name in sorted(names)]
         self.sources = {row["path"]: row for row in self.source["files"]}

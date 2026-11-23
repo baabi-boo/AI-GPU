@@ -10,6 +10,7 @@ import tempfile
 import unittest
 
 import p06_counter_qualification_contract as contract
+from p06_counter_qualification_historical_fixture import source_body
 
 
 class FrozenProofTests(unittest.TestCase):
@@ -29,14 +30,24 @@ class FrozenProofTests(unittest.TestCase):
                          {row["id"] for row in proof["components"]})
 
     def test_actual_measurement_bytes_match_reviewed_projection(self):
+        """The historical proof binds its original caller, not the warm extension."""
         rows = []
         for expected in self.proof["measurement_sources"]:
-            body = (contract.ROOT / expected["path"]).read_bytes()
+            body = source_body(expected["path"])
             rows.append({"path": expected["path"], "sha256": hashlib.sha256(body).hexdigest(),
                          "size_bytes": len(body)})
         summary = contract.verify_source_projection(self.proof, rows)
         self.assertEqual(summary["measurement_sources_checked"], 69)
         self.assertEqual(summary["premises"], list(contract.PREMISE_IDS))
+
+    def test_current_warm_caller_is_not_admitted_by_historical_proof(self):
+        rows = []
+        for expected in self.proof["measurement_sources"]:
+            body = (contract.ROOT / expected["path"]).read_bytes()
+            rows.append({"path": expected["path"], "sha256": hashlib.sha256(body).hexdigest(),
+                         "size_bytes": len(body)})
+        with self.assertRaisesRegex(ValueError, "ai_counter_preflight/main.cpp"):
+            contract.verify_source_projection(self.proof, rows)
 
     def test_only_the_reviewed_accessor_sources_differ_from_old_proof(self):
         rows = self.proof["source_projection_changes"]

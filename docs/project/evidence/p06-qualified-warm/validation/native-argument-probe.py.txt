@@ -1,0 +1,31 @@
+import json, pathlib, subprocess, time, hashlib, os
+root=pathlib.Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+out=pathlib.Path(__file__).parent
+old=json.load(open('/workspace/p06-counter-qualified-run-01/evidence/native-qualification/report.json'))
+results=[]
+for v in old['variants']:
+ fmt=v['format']; a=v['host_build_records']['arguments']; exe=out/('qualified-warm-argument-probe-'+fmt)
+ cmd=[x.replace('/workspace/p06-counter-qualified-source-01',str(root)) if (x.startswith('-I') or x.endswith('.cpp')) else x for x in a]
+ cmd[-1]=str(exe)
+ t=time.monotonic();p=subprocess.run(cmd,cwd=out,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=90)
+ (out/('caller-link-'+fmt+'.log')).write_bytes(p.stdout)
+ row={'format':fmt,'compile_argv':cmd,'compile_exit_code':p.returncode,'compile_seconds':time.monotonic()-t,'cases':[]}
+ results.append(row)
+ if p.returncode:
+  print(fmt,'build failed',p.stdout.decode()[:1000],flush=True);break
+ base=['--policy','per_operation','--module','/no-input-for-argument-rejections/kernel.vxbin','--qualification-id','a'*64,'--sample-id',f'warm-simx-{fmt}-pair1-per_operation','--pair-index','1','--phase','measured']
+ cases=[('historical-measured',base),('lifetime-measured',['--lifetime',*base]),('warm-without-lifetime',['--qualified-warm',*base]),('flags-reordered',['--qualified-warm','--lifetime',*base]),('duplicate-mode',['--lifetime','--qualified-warm','--qualified-warm',*base])]
+ for name,index,value in [('pair-six',9,'6'),('wrong-phase',11,'warmup'),('cross-pair-sample',7,f'warm-simx-{fmt}-pair2-per_operation'),('invalid-digest',5,'A'*64)]:
+  changed=base.copy();changed[index]=value;cases.append((name,['--lifetime','--qualified-warm',*changed]))
+ cases.append(('unknown-option',['--lifetime','--qualified-warm',*base,'--unknown']))
+ env={'PATH':'/usr/bin:/bin','LANG':'C','LC_ALL':'C','LD_LIBRARY_PATH':str(pathlib.Path(v['build_dir'])/'sw/runtime'),'VORTEX_DRIVER':'simx'}
+ for name,args in cases:
+  q=subprocess.run([str(exe),*args],cwd=out,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=10)
+  text=q.stdout.decode()
+  assert q.returncode==1 and text.startswith('P06_MANAGED_PREFLIGHT_FAILURE:') and 'P06_WARM_OPERATION' not in text,(name,q.returncode,text)
+  row['cases'].append({'name':name,'argv':[str(exe),*args],'exit_code':q.returncode,'output':text})
+ print(fmt,'10 native argument rejections passed',flush=True)
+p=root/'tests/regression/ai_counter_preflight/main.cpp'
+receipt={'scope':'native argument rejection probes using current caller and previously identified dependency binaries; zero intended kernel launches; not a fresh qualified experiment','caller_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'results':results}
+(out/'native-argument-probe.json').write_text(json.dumps(receipt,indent=2)+'\n')
+assert len(results)==2 and all(r['compile_exit_code']==0 and len(r['cases'])==10 for r in results)

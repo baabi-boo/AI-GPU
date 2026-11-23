@@ -9,9 +9,13 @@ remain unassigned until an actual owner is identified.
 
 ## Start here: P06-T01 explicit qualified warm route
 
-**Current bounded task: implement and independently review an explicit qualified
-route for the unchanged 24-process warm sampling contract, then execute its
-fresh attempt.** The separately versioned
+**Current bounded task: freeze the implemented and independently reviewed
+qualified warm route, execute one fresh complete attempt, and independently
+replay its unchanged original.** The [qualified warm contract](../designs/qualified_warm_workspace_v1.md)
+and [new evidence index](evidence/p06-qualified-warm/README.md) record the caller
+projection extension, explicit producer/reader and 89 focused tooling passes.
+Native execution and full governance remain pending at this implementation
+checkpoint. The separately versioned
 [33-selector / 40-component / ten-premise contract](../designs/complete_counter_qualification_v1.md),
 explicit admission and complete inert validator are implemented. The
 [fresh original](evidence/p06-counter-qualification/native/attempt-01-execution-summary.json)
@@ -22,10 +26,10 @@ derives `counter_qualification_passed=true` only for
 `recorded-four-process-preflight-only`; all seven historical qualification,
 readiness, warm and acceptance fields remain false.
 
-The existing qualification runner is fixed to four processes. Extend through an
-explicitly reviewed warm route with fresh prelaunch bindings and complete inert
-reconstruction; do not relabel those four processes or run the blocked historical
-warm-v1 route. The [audit](p06-counter-qualification-audit.md),
+The historical qualification runner remains fixed to four processes. The new
+explicit warm route adds fresh prelaunch bindings and complete inert
+reconstruction; it does not relabel those four processes or use the blocked
+historical warm-v1 route. The [preceding audit](p06-counter-qualification-audit.md),
 [evidence packet](evidence/p06-counter-qualification/README.md),
 [qualification handoff](p06-counter-qualification-handoff.md) and
 [qualification plan](p06-mpm-qualification-plan.md) retain exact inputs and the

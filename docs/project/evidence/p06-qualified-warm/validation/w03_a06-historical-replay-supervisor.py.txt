@@ -1,0 +1,44 @@
+from pathlib import Path
+import datetime, gzip, hashlib, json, subprocess, sys, time
+root=Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+out=root/'docs/project/evidence/p06-qualified-warm/validation'
+base=root/'docs/project/evidence/p06-counter-qualification/native'
+old=json.loads((base/'attempt-01-replay-execution.json').read_text())
+argv=list(old['argv'])
+argv[2]=str(root/'ci/project/p06_counter_qualification_replay.py')
+argv[argv.index('--diagnostic-archive')+1]=str(root/'docs/project/evidence/p06-counter-diagnostics/native/run-45034575685-attempt1.zip')
+full=Path('/workspace/scratch/dc8be1693f91/validation/w03_a06-historical-replay-full.json')
+full.parent.mkdir(exist_ok=True)
+argv[argv.index('--output')+1]=str(full)
+assert not full.exists()
+archive=Path(argv[argv.index('--archive')+1])
+def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+reader=root/'ci/project/p06_counter_qualification_replay.py'
+inputs=[archive,reader,root/'ci/project/p06_dependency_native_replay.py',root/'ci/project/p06_warm_analyze.py']
+before={str(p):sha(p) for p in inputs}
+start=time.monotonic()
+receipt={'reviewer':'w03_a06','scope':'historical-four-process-original-public-CLI-compatibility','argv':argv,'cwd':str(root),'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'inputs_before':before,'reader_checkout_base_revision':'f80b58b06e7bcf734f3190f6db478fd11f0bab01','reader_worktree_includes_uncommitted_qualified_warm_changes':True}
+proc=subprocess.run(argv,cwd=root,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=180)
+receipt.update(exit_code=proc.returncode,duration_seconds=time.monotonic()-start,finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),stdout=proc.stdout,inputs_after={str(p):sha(p) for p in inputs})
+receipt['inputs_unchanged']=receipt['inputs_before']==receipt['inputs_after']
+if full.exists():
+    body=full.read_bytes()
+    result=json.loads(body)
+    target=out/'w03_a06-historical-replay-full.json.gz'
+    assert not target.exists()
+    target.write_bytes(gzip.compress(body,mtime=0))
+    fields=('schema_version','contract_id','scope','outcome','source_revision','source_tree','source_manifest_sha256','native_report_sha256','dependency_receipt_sha256','counter_qualification_sha256','counter_qualification_passed','counter_qualification_scope','counts','commands_checked','retained_consistency','dependency_source_to_loaded_binary_consistent','execution_origin','origin_authenticated','native_execution','retained_code_executed','qualified','ready_for_warm','warm_execution','full_warm_coverage','acceptance_claimed','performance_acceptance','phase_acceptance')
+    receipt['result_summary']={k:result[k] for k in fields if k in result}
+    receipt['complete_result']={'path':str(target.relative_to(root)),'uncompressed_sha256':hashlib.sha256(body).hexdigest(),'uncompressed_bytes':len(body),'gzip_sha256':sha(target),'gzip_bytes':target.stat().st_size}
+    oldsummary=json.loads((base/'attempt-01-replay-summary.json').read_text())
+    receipt['compared_historical_summary_fields']=list(receipt['result_summary'])
+    receipt['historical_summary_differences']={k:{'previous':oldsummary.get(k),'current':v} for k,v in receipt['result_summary'].items() if oldsummary.get(k)!=v}
+    receipt['expected_historical_summary_preserved']=not receipt['historical_summary_differences']
+    assert receipt['inputs_unchanged']
+    assert result['counter_qualification_scope']=='recorded-four-process-preflight-only'
+    assert result['counts']['processes']==4 and result['counts']['launches']==132 and result['counts']['checked_words']==4224
+    assert all(result[k] is False for k in ('qualified','ready_for_warm','warm_execution','full_warm_coverage','acceptance_claimed','performance_acceptance','phase_acceptance'))
+    assert receipt['expected_historical_summary_preserved']
+with (out/'w03_a06-historical-replay-execution.json').open('x') as f: json.dump(receipt,f,indent=2,sort_keys=True); f.write('\n')
+print(json.dumps({k:v for k,v in receipt.items() if k not in ('argv','inputs_before','inputs_after')},indent=2))
+sys.exit(proc.returncode)

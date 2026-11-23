@@ -210,16 +210,22 @@ def validate_host_build(text, stamp, *, source, build, compiler):
             "arguments": selected[0], "output": APP + "/" + target}
 
 
-def execute(args, paths, *, lifetime=False, dependency=False, counter_qualification=False):
+def execute(args, paths, *, lifetime=False, dependency=False, counter_qualification=False,
+            qualified_warm=False):
     require(type(lifetime) is bool, "lifetime mode must be explicitly boolean")
     require(type(dependency) is bool and (not dependency or lifetime),
             "dependency admission requires explicitly selected lifetime mode")
     require(type(counter_qualification) is bool
             and (not counter_qualification or (lifetime and dependency)),
             "counter qualification requires explicitly selected lifetime and dependency modes")
+    require(type(qualified_warm) is bool
+            and (not qualified_warm or (lifetime and dependency and counter_qualification)),
+            "qualified warm execution requires explicitly selected lifetime, dependency and qualification modes")
     selected_contract = None
     dependency_module = None
     qualification_module = None
+    warm_module = None
+    complete_counts = COMPLETE_COUNTS
     contract_id = CONTRACT_ID
     scope = "seed-free-managed-counter-preflight"
     limitations = LIMITATIONS
@@ -241,14 +247,22 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
         limitations = [*dependency_module.LIMITATIONS, *base.PROCESS_LIMITATIONS]
         extra_source_files = (*extra_source_files, *dependency_module.SOURCE_FILES)
     if counter_qualification:
-        qualification_module = importlib.import_module("p06_counter_qualification_admission")
+        qualification_name = ("p06_qualified_warm_admission" if qualified_warm
+                              else "p06_counter_qualification_admission")
+        qualification_module = importlib.import_module(qualification_name)
         require(Path(qualification_module.__file__).resolve()
-                == ROOT / "ci/project/p06_counter_qualification_admission.py",
+                == ROOT / "ci/project" / (qualification_name + ".py"),
                 "counter qualification admission loaded from an unexpected location")
         contract_id = qualification_module.CONTRACT_ID
         scope = qualification_module.SCOPE
         limitations = [*qualification_module.LIMITATIONS, *base.PROCESS_LIMITATIONS]
         extra_source_files = (*extra_source_files, *qualification_module.SOURCE_FILES)
+    if qualified_warm:
+        warm_module = importlib.import_module("p06_qualified_warm_contract")
+        require(Path(warm_module.__file__).resolve()
+                == ROOT / "ci/project/p06_qualified_warm_contract.py",
+                "qualified warm contract loaded from an unexpected location")
+        complete_counts = warm_module.COMPLETE_COUNTS
     source, work, output = (paths[name] for name in ("source", "work", "output"))
     output.mkdir(mode=0o700)
     for name in ("logs", "snapshots", "artifacts"):
@@ -260,8 +274,8 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
         **dict.fromkeys(manifest.FALSE_CLAIMS, False),
         "native_preflight_passed": False, "native_execution": "not_run",
         "unresolved_obligations": list(manifest.UNRESOLVED_OBLIGATIONS),
-        "expected_revision": args.expected_revision, "expected_counts": COMPLETE_COUNTS,
-        "completed_counts": dict.fromkeys(COMPLETE_COUNTS, 0),
+        "expected_revision": args.expected_revision, "expected_counts": complete_counts,
+        "completed_counts": dict.fromkeys(complete_counts, 0),
         "commands": [], "variants": [], "processes": [], "failures": [], "stability_checks": [],
         "budget": dict(manifest.BUDGET, jobs=args.jobs,
                        timeouts_seconds={"configure": min(120, args.timeout_seconds),
@@ -277,6 +291,8 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
     if counter_qualification:
         report.update(counter_qualification_sha256=getattr(args, "counter_qualification_sha256", None),
                       counter_qualification_admission=None, counter_qualification_passed=False)
+    if qualified_warm:
+        report["qualified_warm_passed"] = False
     initial = tools = dependencies = helpers = None
     admission = None
     qualification_admission = None
@@ -432,7 +448,8 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
         require(memory is not None and memory >= BUDGET["max_rss_bytes"], "need 4 GiB available RAM")
         require(hash_artifacts(source, [row["path"] for row in LOADED_HELPERS]) == LOADED_HELPERS,
                 "runner/helper bytes changed after initial import")
-        records_name = "p06_native_lifetime_records" if lifetime else "p06_managed_preflight_records"
+        records_name = ("p06_qualified_warm_records" if qualified_warm else
+                        "p06_native_lifetime_records" if lifetime else "p06_managed_preflight_records")
         records = importlib.import_module(records_name)
         require(Path(records.__file__).resolve() == ROOT / "ci/project" / (records_name + ".py"),
                 "managed record validator loaded from an unexpected location")
@@ -477,7 +494,11 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
         contract = manifest.load_contract(source)
         old_contract = warm_contract.load_contract(source)
         cases = manifest.select_cases(contract, source)
-        plan = manifest.process_plan(contract, source)
+        plan = (warm_module.process_plan(source=source) if qualified_warm
+                else manifest.process_plan(contract, source))
+        if qualified_warm:
+            warm_sampling = {"contract_sha256": manifest.WARM_CONTRACT_SHA256,
+                             "sampling": old_contract["sampling"], "processes": plan}
         require([case["format"] for case in cases] == list(FORMATS), "both ordered formats are required")
         require(_digest(source / "profiles/p02-tfr.json")[0] == PROFILE_SHA256, "frozen profile changed")
         require(_digest(source / "sw/kernel/ai/matmul.cpp")[0] == KERNEL_SHA256, "frozen numerical kernel changed")
@@ -659,6 +680,8 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
             if counter_qualification:
                 binding.update(counter_qualification_sha256=report["counter_qualification_sha256"],
                     counter_qualification_admission=qualification_admission.summary)
+            if qualified_warm:
+                binding["warm_sampling"] = warm_sampling
             build_id = qualification_id(binding)
             variant.update(build_binding_sha256=build_id, binding=save_json(variant_id + "-build-binding", binding))
             launch_env = dict(environment, VORTEX_DRIVER="simx", LD_LIBRARY_PATH=str(runtime))
@@ -676,21 +699,27 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
                     process_binding["dependency_receipt_sha256"] = report["dependency_receipt_sha256"]
                 if counter_qualification:
                     process_binding["counter_qualification_sha256"] = report["counter_qualification_sha256"]
+                if qualified_warm:
+                    process_binding["warm_sampling"] = warm_sampling
                 binding_id = qualification_id(process_binding)
                 process.update(execution_binding_sha256=binding_id, build_binding_sha256=build_id,
                                binding=save_json(process["id"] + "-binding", process_binding))
                 require(hash_artifacts(build, build_artifacts(build)) == frozen, "artifacts changed before process")
                 mode_arguments = [selected_contract.APP_FLAG] if lifetime else []
+                if qualified_warm:
+                    mode_arguments.append("--qualified-warm")
                 text, receipt = command(process["id"], [app / "ai_counter_preflight", *mode_arguments, "--policy", planned["policy"],
                     "--module", app / "kernel.vxbin", "--qualification-id", binding_id,
-                    "--sample-id", planned["sample_id"], "--pair-index", "0", "--phase", "warmup"],
+                    "--sample-id", planned["sample_id"], "--pair-index", str(planned["pair_index"]),
+                    "--phase", planned["phase"]],
                     app, launch_env, args.run_timeout_seconds, native_process=True)
                 process["log"] = receipt["log"]
                 process["process_duration_seconds"] = receipt["duration_seconds"]
                 require(hash_artifacts(build, build_artifacts(build)) == frozen, "artifacts changed during process")
                 observed = records.verify_output(text, contract=contract, case=case, fmt=fmt,
                     policy=planned["policy"], binding_id=binding_id, sample_id=planned["sample_id"],
-                    process_id=planned["id"], expected_libraries=libraries)
+                    process_id=planned["id"], expected_libraries=libraries,
+                    **({"pair_index": planned["pair_index"], "phase": planned["phase"]} if qualified_warm else {}))
                 validate_process_duration(observed["warm"], receipt["duration_seconds"], old_contract)
                 process["observation"] = observed
                 process["retained_observation"] = save_json(process["id"] + "-observation", observed)
@@ -706,7 +735,7 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
             checkpoint()
         require([row["id"] for row in report["processes"]] == [row["id"] for row in plan],
                 "preflight process inventory is incomplete or reordered")
-        require(completion_counts(report["processes"]) == COMPLETE_COUNTS, "managed preflight counts are incomplete")
+        require(completion_counts(report["processes"]) == complete_counts, "managed preflight counts are incomplete")
         report["outcome"] = "pass"
     except (OSError, ValueError, RuntimeError, KeyError, ImportError, TypeError) as error:
         failure(error)
@@ -777,7 +806,7 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
         except (OSError, ValueError, RuntimeError) as error:
             failure(error, "final-resources")
         report["completed_counts"] = completion_counts(report["processes"])
-        report["native_preflight_passed"] = report["outcome"] == "pass" and report["completed_counts"] == COMPLETE_COUNTS
+        report["native_preflight_passed"] = report["outcome"] == "pass" and report["completed_counts"] == complete_counts
         if lifetime:
             report["native_lifetime_passed"] = report["native_preflight_passed"]
         if dependency:
@@ -794,6 +823,8 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
                 and qualification_admission is not None
                 and report.get("counter_qualification_admission_before")
                     == report.get("counter_qualification_admission_after"))
+        if qualified_warm:
+            report["qualified_warm_passed"] = report["counter_qualification_passed"]
         report["retained_files"] = retained
         report["retained_payload_bytes"] = payload_bytes
         report.update(state="finished", finished_at=base._now())

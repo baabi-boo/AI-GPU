@@ -10,9 +10,17 @@ launches. The [qualification audit](p06-qualification-audit.md),
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
 scope and new validation. P06-A02/A03 remain open.
 
-**Complete counter qualification now passes for a fresh four-process preflight.
-The next bounded step is to implement and independently review an explicit
-qualified route for the unchanged 24-process warm sampling contract.** The
+**The explicit qualified route for the unchanged 24-process warm experiment is
+implemented and independently reviewed; its fresh native attempt is next.**
+The [new route contract](../designs/qualified_warm_workspace_v1.md),
+[development audit](p06-qualified-warm-audit.md) and
+[evidence index](evidence/p06-qualified-warm/README.md) record the separately
+pinned caller extension, prelaunch sampling bindings, complete inert reader and
+unchanged statistical predicates. Its 89 focused tooling tests pass; this is
+not yet a fresh 24-process result or full governance result.
+
+**Complete counter qualification already passes for the preceding fresh
+four-process preflight.** The
 [new contract](../designs/complete_counter_qualification_v1.md),
 [audit](p06-counter-qualification-audit.md) and
 [evidence packet](evidence/p06-counter-qualification/README.md) bind all

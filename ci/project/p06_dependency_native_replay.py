@@ -175,6 +175,9 @@ class _NativeReplay(managed._Replay):
     result_contract_id = CONTRACT_ID
     result_scope = "complete-dependency-lifetime-retained-consistency"
     result_limitations = LIMITATIONS
+    complete_counts = COUNTS
+    command_count = 37
+    process_population_label = "expected exactly four managed processes"
 
     def __init__(self, view, api, revision, *, dependency_document, dependency_verification,
                  dependency_body, dependency_receipt_sha256, source_manifest_sha256):
@@ -201,6 +204,20 @@ class _NativeReplay(managed._Replay):
         return {}
 
     def result_extra(self):
+        return {}
+
+    def process_arguments(self, planned, binding_id):
+        app = self.build / APP
+        return [app / "ai_counter_preflight", lifetime.APP_FLAG, "--policy", planned["policy"],
+            "--module", app / "kernel.vxbin", "--qualification-id", binding_id,
+            "--sample-id", planned["sample_id"], "--pair-index", "0", "--phase", "warmup"]
+
+    def verify_process_output(self, text, planned, binding_id):
+        return records.verify_output(text, contract=self.contract, case=self.case, fmt=self.fmt,
+            policy=planned["policy"], binding_id=binding_id, sample_id=planned["sample_id"],
+            process_id=planned["id"], expected_libraries=self.libraries)
+
+    def process_result_extra(self, planned, observed):
         return {}
 
     @staticmethod
@@ -566,15 +583,11 @@ class _NativeReplay(managed._Replay):
                 ("command_id", process_id), ("log", "logs/" + process_id + ".log")):
                 _same(row[key], expected, "process " + key)
             app = self.build / APP
-            text, receipt = self.command(process_id, [app / "ai_counter_preflight", lifetime.APP_FLAG, "--policy", planned["policy"],
-                "--module", app / "kernel.vxbin", "--qualification-id", binding_id,
-                "--sample-id", planned["sample_id"], "--pair-index", "0", "--phase", "warmup"], app,
+            text, receipt = self.command(process_id, self.process_arguments(planned, binding_id), app,
                 dict(self.env, VORTEX_DRIVER="simx", LD_LIBRARY_PATH=str(self.build / "sw/runtime")),
                 self.limits["run_timeout_seconds"], read=True, native_process=True)
             _same(row["process_duration_seconds"], receipt["duration_seconds"], "supervisor duration")
-            observed = records.verify_output(text, contract=self.contract, case=self.case, fmt=self.fmt,
-                policy=planned["policy"], binding_id=binding_id, sample_id=planned["sample_id"],
-                process_id=process_id, expected_libraries=self.libraries)
+            observed = self.verify_process_output(text, planned, binding_id)
             _same(row["observation"], observed, "recomputed original output")
             retained = self.api.strict_json(self.verified(row["retained_observation"],
                 "snapshots/" + process_id + "-observation.json"))
@@ -582,7 +595,7 @@ class _NativeReplay(managed._Replay):
             validate_process_duration(observed["warm"], receipt["duration_seconds"], warm_contract.load_contract(ROOT))
             self.recomputed_processes.append({"outcome": "pass", "observation": observed})
             witness = observed["witness"]
-            self.process_results.append({"id": process_id, "format": self.fmt, "policy": planned["policy"],
+            result = {"id": process_id, "format": self.fmt, "policy": planned["policy"],
                 "execution_binding_sha256": binding_id, "build_binding_sha256": self.build_id,
                 "launches": sum(item["dispatch"]["launches"] for item in observed["warm"]["operations"]),
                 "checked_words": sum(item["checked"] for item in observed["warm"]["operations"]),
@@ -591,7 +604,9 @@ class _NativeReplay(managed._Replay):
                 "dcr_reads": witness["observation"]["dcr_read_completed"],
                 "loaded_libraries": witness["loaded_libraries"],
                 "lifetime_runs": len(observed["lifetime"]["runs"]),
-                "terminal_pending_reads": observed["lifetime"]["destruction"]["before"]["pending_reads"]})
+                "terminal_pending_reads": observed["lifetime"]["destruction"]["before"]["pending_reads"]}
+            self.process_results.append(self.extend_fields(result,
+                self.process_result_extra(planned, observed), "process result"))
             self.stability_labels.append("after-process-" + process_id)
 
     def stability(self):
@@ -620,7 +635,7 @@ class _NativeReplay(managed._Replay):
             ("reason", None), ("failures", []), ("native_execution", "run"), ("native_preflight_passed", True),
             ("native_lifetime_passed", True), ("dependency_source_to_loaded_binary_verified", True),
             ("dependency_receipt_sha256", self.dependency_receipt_sha256),
-            ("expected_revision", self.revision), ("expected_counts", COUNTS), ("completed_counts", COUNTS),
+            ("expected_revision", self.revision), ("expected_counts", self.complete_counts), ("completed_counts", self.complete_counts),
             ("expected_processes", self.plan), ("unresolved_obligations", list(manifest.UNRESOLVED_OBLIGATIONS)),
             ("retained_files_stable", True), ("limitations", [*self.route_module.LIMITATIONS, *producer.base.PROCESS_LIMITATIONS])):
             _same(self.report[key], expected, "report." + key)
@@ -628,11 +643,12 @@ class _NativeReplay(managed._Replay):
             _same(self.report[name], False, "report." + name)
         self.started, self.finished = (_timestamp(self.report[key]) for key in ("started_at", "finished_at"))
         require(self.started <= self.finished, "execution timestamps are reversed")
-        require(type(self.report["commands"]) is list and len(self.report["commands"]) == 37,
+        require(type(self.report["commands"]) is list and len(self.report["commands"]) == self.command_count,
                 "unexpected command inventory")
         require(type(self.report["variants"]) is list and len(self.report["variants"]) == 2, "expected two format builds")
-        require(type(self.report["processes"]) is list and len(self.report["processes"]) == 4,
-                "expected exactly four managed processes")
+        require(type(self.report["processes"]) is list
+                and len(self.report["processes"]) == self.complete_counts["processes"],
+                self.process_population_label)
         self.budget()
         self.provenance()
         self.paths_and_tools()
@@ -664,7 +680,7 @@ class _NativeReplay(managed._Replay):
         _same(self.command_index, len(self.report["commands"]), "unexpected trailing command")
         _same(self.report["raw_logs"], self.log_rows, "original raw-log inventory")
         counts = producer.completion_counts(self.recomputed_processes)
-        _same(counts, COUNTS, "recomputed complete counts")
+        _same(counts, self.complete_counts, "recomputed complete counts")
         _same(self.report["retained_payload_bytes"], self.payload_bytes, "total retained payload bytes")
         self.stability()
         retained = self.inventory(self.report["retained_files"], "complete retained inventory")

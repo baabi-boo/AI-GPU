@@ -1,0 +1,140 @@
+======================================================================
+ERROR: test_local_archive_has_exact_two_roots_and_no_hosted_envelope (test_p06_counter_qualification_replay.QualifiedReplayTests.test_local_archive_has_exact_two_roots_and_no_hosted_envelope) (prefix='')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 298, in test_local_archive_has_exact_two_roots_and_no_hosted_envelope
+    result = self.zip_replay(prefix=prefix)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 69, in zip_replay
+    return replay.replay_archive(path, pin, **self.packet.arguments(),
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/p06_counter_qualification_replay.py", line 206, in replay_archive
+    require(_reader_sources() == TRUSTED_READER_SOURCES, "trusted qualification reader changed after import")
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/p06_replay.py", line 103, in require
+    raise ReplayError(message)
+p06_replay.ReplayError: trusted qualification reader changed after import
+
+======================================================================
+ERROR: test_local_archive_has_exact_two_roots_and_no_hosted_envelope (test_p06_counter_qualification_replay.QualifiedReplayTests.test_local_archive_has_exact_two_roots_and_no_hosted_envelope) (prefix='selected-local')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 298, in test_local_archive_has_exact_two_roots_and_no_hosted_envelope
+    result = self.zip_replay(prefix=prefix)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 69, in zip_replay
+    return replay.replay_archive(path, pin, **self.packet.arguments(),
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/p06_counter_qualification_replay.py", line 206, in replay_archive
+    require(_reader_sources() == TRUSTED_READER_SOURCES, "trusted qualification reader changed after import")
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/p06_replay.py", line 103, in require
+    raise ReplayError(message)
+p06_replay.ReplayError: trusted qualification reader changed after import
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='ci/project/fixtures/p02_wmma_numerical_v1.json')
+----------------------------------------------------------------------
+p06_replay.ReplayError: trusted qualification reader changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "trusted qualification reference changed" does not match "trusted qualification reader changed after import"
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='ci/project/p06_warm_contract.json')
+----------------------------------------------------------------------
+p06_replay.ReplayError: trusted qualification reader changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "trusted qualification reference changed" does not match "trusted qualification reader changed after import"
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='sw/common/ai_matmul_args.h')
+----------------------------------------------------------------------
+p06_replay.ReplayError: trusted qualification reader changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "trusted qualification reference changed" does not match "trusted qualification reader changed after import"
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='sw/common/ai_matmul_profile.h')
+----------------------------------------------------------------------
+p06_replay.ReplayError: trusted qualification reader changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "trusted qualification reference changed" does not match "trusted qualification reader changed after import"
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='sw/kernel/ai/matmul.cpp')
+----------------------------------------------------------------------
+p06_replay.ReplayError: trusted qualification reader changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "trusted qualification reference changed" does not match "trusted qualification reader changed after import"
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='tests/regression/ai_bench_common/counters.h')
+----------------------------------------------------------------------
+p06_replay.ReplayError: trusted qualification reader changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "trusted qualification reference changed" does not match "trusted qualification reader changed after import"
+
+======================================================================
+FAIL: test_frozen_reference_change_after_all_processes_rejects_public_result (test_p06_counter_qualification_replay.QualifiedReplayTests.test_frozen_reference_change_after_all_processes_rejects_public_result) (reference='tests/regression/sgemm_tcu/p02_fixtures.h')
+----------------------------------------------------------------------
+p06_replay.ReplayError: trusted qualification reader changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 266, in test_frozen_reference_change_after_all_processes_rejects_public_result
+    self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "trusted qualification reference changed" does not match "trusted qualification reader changed after import"
+
+======================================================================
+FAIL: test_old_reader_cannot_autodetect_or_upgrade_the_new_route (test_p06_counter_qualification_replay.QualifiedReplayTests.test_old_reader_cannot_autodetect_or_upgrade_the_new_route)
+----------------------------------------------------------------------
+p06_replay.ReplayError: trusted native replay source changed after import
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/dc8be1693f91/AI-GPU/ci/project/test_p06_counter_qualification_replay.py", line 281, in test_old_reader_cannot_autodetect_or_upgrade_the_new_route
+    self.assertRaisesRegex(ValueError, "missing or unknown fields"):
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "missing or unknown fields" does not match "trusted native replay source changed after import"
+
+----------------------------------------------------------------------
+Ran 125 tests in 154.678s
+
+FAILED (failures=8, errors=2)

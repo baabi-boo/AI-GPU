@@ -14,6 +14,7 @@ import p06_counter_qualification_admission as admission
 import p06_counter_qualification_contract as contract
 import p06_dependency_admission as dependency
 import p06_dependency_contract as dependency_contract
+from p06_counter_qualification_historical_fixture import source_body
 
 
 ROOT = admission.ROOT
@@ -36,7 +37,7 @@ class AdmissionInputs:
         for name in names:
             destination = self.source / name
             destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(ROOT / name, destination)
+            destination.write_bytes(source_body(name))
         self.proof_path = self.source / contract.SOURCE_PROOF_PATH
         self.archives = {}
         for name in ("diagnostics", "controls"):

@@ -86,6 +86,7 @@ struct State {
   size_t queries = 0;
   bool failed = false;
   bool lifetime = false;
+  bool qualified_warm = false;
 };
 
 State state;
@@ -388,12 +389,15 @@ void print_read(const hooks::DcrRead& read) {
 
 void print_witness(const Options& opts, const char* format, const hooks::Observation& observed) {
   std::printf("P06_MANAGED_COUNTER_WITNESS {\"schema_version\":1,"
-      "\"contract_id\":\"p06-managed-counter-preflight-v1\","
-      "\"process_id\":\"preflight-simx-%s-%s\",\"sample_id\":\"%s\","
+      "\"contract_id\":\"%s\","
+      "\"process_id\":\"%s\",\"sample_id\":\"%s\","
       "\"execution_binding_sha256\":\"%s\",\"format\":\"%s\",\"policy\":\"%s\","
       "\"backend\":\"simx\",\"xlen\":64,\"checked_counter_bits\":64,"
       "\"simulation_workers\":1,\"seeded\":false,\"observation\":",
-      format, opts.policy.c_str(), opts.sample_id.c_str(), opts.qualification_id.c_str(),
+      state.qualified_warm ? "p06-qualified-warm-counter-witness-v1" : "p06-managed-counter-preflight-v1",
+      (state.qualified_warm ? opts.sample_id
+          : std::string("preflight-simx-") + format + "-" + opts.policy).c_str(),
+      opts.sample_id.c_str(), opts.qualification_id.c_str(),
       format, opts.policy.c_str());
   print_observation(observed);
   std::fputs(",\"snapshots\":[", stdout);
@@ -446,12 +450,15 @@ void print_pending_read(const hooks::DcrRead& read) {
 
 void print_lifetime(const Options& opts, const char* format, const hooks::Observation& observed) {
   std::printf("P06_MANAGED_COUNTER_LIFETIME {\"schema_version\":1,"
-      "\"contract_id\":\"p06-managed-counter-lifetime-v1\","
-      "\"process_id\":\"preflight-simx-%s-%s\",\"sample_id\":\"%s\","
+      "\"contract_id\":\"%s\","
+      "\"process_id\":\"%s\",\"sample_id\":\"%s\","
       "\"execution_binding_sha256\":\"%s\",\"format\":\"%s\",\"policy\":\"%s\","
       "\"backend\":\"simx\",\"xlen\":64,\"checked_counter_bits\":64,"
       "\"simulation_workers\":1,\"seeded\":false,\"constructed_state\":",
-      format, opts.policy.c_str(), opts.sample_id.c_str(), opts.qualification_id.c_str(),
+      state.qualified_warm ? "p06-qualified-warm-lifetime-witness-v1" : "p06-managed-counter-lifetime-v1",
+      (state.qualified_warm ? opts.sample_id
+          : std::string("preflight-simx-") + format + "-" + opts.policy).c_str(),
+      opts.sample_id.c_str(), opts.qualification_id.c_str(),
       format, opts.policy.c_str());
   print_model(observed.constructed_state, true);
   std::fputs(",\"runs\":[", stdout);
@@ -517,10 +524,19 @@ int run_preflight(int argc, char** argv) {
     }
     --argc;
   }
+  if (argc > 1 && std::strcmp(argv[1], "--qualified-warm") == 0) {
+    require(state.lifetime, "qualified warm execution requires lifetime observation");
+    state.qualified_warm = true;
+    for (int i = 1; i < argc; ++i) {
+      argv[i] = argv[i + 1];
+    }
+    --argc;
+  }
   const char* format = ai::kMatmulInputDType == 1 ? "fp16" : "bf16";
   Options opts;
-  require(options(argc, argv, format, &opts) && opts.pair_index == 0 && opts.phase == "warmup",
-          "preflight requires the unchanged pair-zero warm-up arguments");
+  require(options(argc, argv, format, &opts)
+      && (state.qualified_warm || (opts.pair_index == 0 && opts.phase == "warmup")),
+          "preflight requires pair-zero warm-up or explicitly selected qualified warm arguments");
   const int status = p06_unchanged_warm_main(argc, argv);
   if (status != 0) { return status; }
   const auto observed = observation();
