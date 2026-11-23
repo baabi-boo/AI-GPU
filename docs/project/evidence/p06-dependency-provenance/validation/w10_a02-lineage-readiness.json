@@ -1,0 +1,346 @@
+{
+  "schema_version": 1,
+  "assignment": "/root/w10_a02",
+  "scope": "Independent immutable parser-fix publication and diagnostic 03-to-04 lineage/readiness review; no tests, build, native execution or complete graph validation performed by this assignment.",
+  "baseline_review": {
+    "checked_at_utc": "2026-11-23T10:38:41.224343+00:00",
+    "local_fix_revision": "78ff07888fd5a27f951333424ed2b9504a9932a7",
+    "local_fix_tree": "0407e9c5250b410d399af8cb3ea32f06dc3dea17",
+    "parent": "8b71ee07392c1ed86f654b2d683d9a8d2d1f50ea",
+    "core_files": [
+      "ci/project/p06_dependency_record.py",
+      "ci/project/test_p06_dependency_record.py",
+      "ci/project/test_p06_dependency_repeated_inputs.py",
+      "docs/designs/dependency_provenance_v1.md"
+    ],
+    "matches_independent_review": {
+      "ci/project/p06_dependency_record.py": {
+        "sha256": "79194816f9c35ef8032e18050aa7e1f4eb9168a28724cc461802bf8e327818f5",
+        "size_bytes": 26467
+      },
+      "ci/project/p06_dependency_receipt.py": {
+        "sha256": "437a9148f6a5db3d7a6ad477e2390f38df80c9222b6c971db82a2745b02ea3c6",
+        "size_bytes": 61150
+      },
+      "ci/project/test_p06_dependency_record.py": {
+        "sha256": "016798aad3a3060cb503b8d8ca916bfcac0d4ff54ed1abd0df68af7eebf00b56",
+        "size_bytes": 17389
+      },
+      "ci/project/test_p06_dependency_repeated_inputs.py": {
+        "sha256": "d3a8d908d74b131c61089ca09cdae1c675c7321a7ea456c820514394935b753a",
+        "size_bytes": 9613
+      },
+      "docs/designs/dependency_provenance_v1.md": {
+        "sha256": "4655633580e3932df8427e3abde507e6700bbfd62e56eda683ac76731aa3c26a",
+        "size_bytes": 6928
+      }
+    },
+    "retained_test_result": {
+      "tests": 101,
+      "duration_seconds": 3.249,
+      "outcome": "pass",
+      "exit_code": 0,
+      "skips": 0,
+      "new_test_methods": 6
+    },
+    "log_identities_verified": true,
+    "new_test_methods": [
+      "test_retained_gcc_prerequisites_replay_without_recorded_files",
+      "test_raw_prerequisite_count_remains_bounded_before_deduplication",
+      "test_real_compiler_retains_repeated_raw_headers_and_unique_stable_inputs",
+      "test_rehashed_added_removed_and_reordered_depfile_inputs_reject",
+      "test_duplicate_receipt_input_rows_still_reject",
+      "test_actual_compile_input_changes_after_prepass_remain_failures"
+    ],
+    "attempt03_preservation": {
+      "driver": {
+        "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/driver.py",
+        "sha256": "743439b558db9ec39b12bb0bac5b838fd33aac72f9f996f3f8569090db33b91b",
+        "size_bytes": 23759
+      },
+      "prepared": {
+        "path": "/workspace/p06-host-diagnostic-5527-03/prepared.json",
+        "sha256": "0083c760fc36ad58018c27d3ec0355fe91422d20ce4bfc58b07df52079b7e54c",
+        "size_bytes": 312958
+      },
+      "config": {
+        "path": "/workspace/p06-host-diagnostic-5527-03/evidence/tool-config.json",
+        "sha256": "cd4a53e560eae3df282472c04e110ed7c529d6cdd18b9e8330fdc74e1d90a756",
+        "size_bytes": 1157
+      },
+      "finished_report": {
+        "path": "/workspace/p06-host-diagnostic-5527-03/evidence/host-diagnostic.json",
+        "sha256": "2d275a08f0a8547e720fa97bac99c23343fbcddfbfbd351d6d90bd2a437e2570",
+        "size_bytes": 751895
+      },
+      "raw_depfile": {
+        "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/execution-failed-prepass.d",
+        "sha256": "db6caaf93bafa268d5c32322b87e005f8094957f10033bcb69ecdd5060bae7e8",
+        "size_bytes": 1130
+      }
+    },
+    "attempt03_state": {
+      "state": "finished",
+      "outcome": "fail",
+      "reason": "host diagnostic command failed: softfloat",
+      "native_execution": "not_run",
+      "false_claims": {
+        "qualified": false,
+        "ready_for_warm": false,
+        "warm_execution": false,
+        "full_warm_coverage": false,
+        "acceptance_claimed": false,
+        "phase_acceptance": false,
+        "performance_acceptance": false
+      }
+    },
+    "new_driver_exists": false
+  },
+  "provider_commit_observation": {
+    "observed_at_utc": "2026-11-23 10:39:02 UTC",
+    "url": "https://api.github.com/repos/baabi-boo/AI-GPU/git/commits/146253db8407e21aaef70e05f3f0dd3c7f5f6d33",
+    "sha": "146253db8407e21aaef70e05f3f0dd3c7f5f6d33",
+    "tree": "0407e9c5250b410d399af8cb3ea32f06dc3dea17",
+    "parents": [
+      "8b71ee07392c1ed86f654b2d683d9a8d2d1f50ea"
+    ],
+    "message": "fix(p06): accept repeated compiler prerequisite names\n\nThe first actual SoftFloat build exposed a valid GCC dependency file that repeats primitiveTypes.h. Preserve its raw bytes and token-count bound, then fingerprint each normalized input once in first-seen order. Require the same ordered closure and input bytes in prepass, compilation and inert replay.\n\nRetain the original failed build and real compiler records. Independent validation passed 101 recorder, receipt, graph, archive and repeated-input tests, including actual GCC children and inert replay after producer deletion. Duplicate build operations, receipt rows and archive members remain rejecting. No complete fresh dependency/native original or qualification is claimed.",
+    "scope": "One independent read of the published commit object; not a fresh master-ref or workflow-status poll."
+  },
+  "helper_delta": {
+    "helper_head": "146253db8407e21aaef70e05f3f0dd3c7f5f6d33",
+    "helper_status": "",
+    "selected_helper_count": 18,
+    "changed_helpers_from_03": [
+      {
+        "path": "ci/project/p06_dependency_receipt.py",
+        "old_sha256": "fd2c618e3222d09f3786059efdd885bc4768be5cb5b07a308d630f382c98c2d8",
+        "new_sha256": "437a9148f6a5db3d7a6ad477e2390f38df80c9222b6c971db82a2745b02ea3c6"
+      },
+      {
+        "path": "ci/project/p06_dependency_record.py",
+        "old_sha256": "8e13066c74744d68424f404a57b653a5f05c1395888d8c42b3e123dd68d283ac",
+        "new_sha256": "79194816f9c35ef8032e18050aa7e1f4eb9168a28724cc461802bf8e327818f5"
+      }
+    ],
+    "unchanged_helper_count": 16,
+    "original_budget": {
+      "build_timeout_seconds": 1800,
+      "configure_timeout_seconds": 120,
+      "jobs": 2,
+      "max_log_bytes": 16777216,
+      "max_rss_bytes": 4294967296,
+      "min_free_bytes": 16106127360,
+      "process_timeout_seconds": 180,
+      "simulation_workers": 1
+    },
+    "original_source_manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+    "original_source_plan_sha256": "f479cc6ed3ee4d4dd7fd305bc45943af33a3a2ba9069da48eebe627c5f817570"
+  },
+  "attempt04_readiness": {
+    "checked_at_utc": "2026-11-23T10:40:22.352369+00:00",
+    "helper_revision": "146253db8407e21aaef70e05f3f0dd3c7f5f6d33",
+    "helper_tree": "0407e9c5250b410d399af8cb3ea32f06dc3dea17",
+    "helper_checkout_clean": true,
+    "driver": {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/driver-04.py",
+      "sha256": "c2aeaf524fd134b4c7eca6544b9d03c51bbe374dabde5239fa0c4c4372c3ddd0",
+      "size_bytes": 23759
+    },
+    "only_driver_revision_literal_changed": true,
+    "prepared": {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/prepared.json",
+      "sha256": "8a5d86be8362bcd1cdb3083f403d0ffb9600d1b2d34410aefb1894b434646a82",
+      "size_bytes": 312959
+    },
+    "tool_config": {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/evidence/tool-config.json",
+      "sha256": "9e2b57d643128c9a91f16e3afd5edb926b3220bcf1796ffbd0b004f03500b9d0",
+      "size_bytes": 1161
+    },
+    "selected_helpers_verified_against_git_and_retained_bytes": [
+      {
+        "path": "ci/project/baseline_inventory.py",
+        "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+        "size_bytes": 20466
+      },
+      {
+        "path": "ci/project/baseline_matrix.py",
+        "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+        "size_bytes": 8890
+      },
+      {
+        "path": "ci/project/baseline_packet_contract.py",
+        "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+        "size_bytes": 53680
+      },
+      {
+        "path": "ci/project/baseline_packet_io.py",
+        "sha256": "53ac39e541628a68b3d405201734195e8ed606b26eab5ee72746e96b3148515d",
+        "size_bytes": 14315
+      },
+      {
+        "path": "ci/project/baseline_process.py",
+        "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+        "size_bytes": 12627
+      },
+      {
+        "path": "ci/project/compiler_records.py",
+        "sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+        "size_bytes": 7143
+      },
+      {
+        "path": "ci/project/p02_matrix.py",
+        "sha256": "e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17",
+        "size_bytes": 30055
+      },
+      {
+        "path": "ci/project/p02_matrix_records.py",
+        "sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+        "size_bytes": 12332
+      },
+      {
+        "path": "ci/project/p06_dependency_binary.py",
+        "sha256": "23ac89c7ca579958cd272e651a60210cf7316092b805faf31bb46d27af9b341e",
+        "size_bytes": 16802
+      },
+      {
+        "path": "ci/project/p06_dependency_build.py",
+        "sha256": "295ecacd837ad943f4d18641c106e553289f7e8e91eb07b8801bec5a4932a477",
+        "size_bytes": 31882
+      },
+      {
+        "path": "ci/project/p06_dependency_contract.py",
+        "sha256": "deb76bca18567ce10e24156591ffbb00dd539e57c556727fbc073aa0d0d1b988",
+        "size_bytes": 4398
+      },
+      {
+        "path": "ci/project/p06_dependency_graph.py",
+        "sha256": "eb278cbd37d5191468d151339a88a665d792e0f31d7f1d41da30285b240e9f08",
+        "size_bytes": 5861
+      },
+      {
+        "path": "ci/project/p06_dependency_receipt.py",
+        "sha256": "437a9148f6a5db3d7a6ad477e2390f38df80c9222b6c971db82a2745b02ea3c6",
+        "size_bytes": 61150
+      },
+      {
+        "path": "ci/project/p06_dependency_record.py",
+        "sha256": "79194816f9c35ef8032e18050aa7e1f4eb9168a28724cc461802bf8e327818f5",
+        "size_bytes": 26467
+      },
+      {
+        "path": "ci/project/p06_dependency_sources.py",
+        "sha256": "4e09b8f8357538591a843f465ca6a20465baf363e5a190b9edf8d01c807174a1",
+        "size_bytes": 17141
+      },
+      {
+        "path": "ci/project/p06_managed_preflight_source_export.py",
+        "sha256": "1bec4cc1a296ae93bc9c29029ed5a28a02f6edd71adbdbfdbcea156eebf28b46",
+        "size_bytes": 21171
+      },
+      {
+        "path": "ci/project/p06_managed_preflight_sources.py",
+        "sha256": "dc0374a1c3a059c36d47697ff2c8275bf0901b76468f72a15425ea2cfe687f2a",
+        "size_bytes": 32794
+      },
+      {
+        "path": "ci/project/preflight.py",
+        "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+        "size_bytes": 15124
+      }
+    ],
+    "selected_tools_identical_to_attempt03": true,
+    "selected_tools_verified": 7,
+    "source_pins": [
+      {
+        "name": "argparse",
+        "revision": "997da9255618311d1fcb0135ce86022729d1f1cb",
+        "tree": "da4b4bb886f2521f326dc3aacf8304aede1044c1",
+        "url": "https://github.com/p-ranav/argparse.git"
+      },
+      {
+        "name": "ramulator",
+        "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+        "tree": "01dce703c539f6bf5ca1ac73e759067f0dd2717b",
+        "url": "https://github.com/CMU-SAFARI/ramulator2.git"
+      },
+      {
+        "name": "softfloat",
+        "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4",
+        "tree": "8d9d47a6d74670d25bbbcc956a04de4c2605253b",
+        "url": "https://github.com/ucb-bar/berkeley-softfloat-3.git"
+      },
+      {
+        "name": "spdlog",
+        "revision": "ad0e89cbfb4d0c1ce4d097e134eb7be67baebb36",
+        "tree": "64a823f2b9c61b35897fb89f2a32844a24e87cb6",
+        "url": "https://github.com/gabime/spdlog.git"
+      },
+      {
+        "name": "yaml-cpp",
+        "revision": "0579ae3d976091d7d664aa9d2527e0d0cff25763",
+        "tree": "3b4adf4e0b979fd6fb9213034acaf4864327d1aa",
+        "url": "https://github.com/jbeder/yaml-cpp.git"
+      }
+    ],
+    "source_manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+    "source_plan_sha256": "f479cc6ed3ee4d4dd7fd305bc45943af33a3a2ba9069da48eebe627c5f817570",
+    "retained_source_files": 1294,
+    "retained_source_bytes": 10938128,
+    "budgets": {
+      "build_timeout_seconds": 1800,
+      "configure_timeout_seconds": 120,
+      "jobs": 2,
+      "max_log_bytes": 16777216,
+      "max_rss_bytes": 4294967296,
+      "min_free_bytes": 16106127360,
+      "process_timeout_seconds": 180,
+      "simulation_workers": 1
+    },
+    "resources_before_prepare": {
+      "available_memory_bytes": 7766286336,
+      "free_disk_bytes": 59680489472
+    },
+    "point_in_time_report_observation": {
+      "state": "prepared",
+      "outcome": "not_run",
+      "native_execution": "not_run",
+      "commands": 0,
+      "false_flags": {
+        "qualified": false,
+        "ready_for_warm": false,
+        "warm_execution": false,
+        "full_warm_coverage": false,
+        "acceptance_claimed": false,
+        "phase_acceptance": false,
+        "performance_acceptance": false,
+        "fresh_dependency_build_passed": false,
+        "dependency_source_to_loaded_binary_verified": false,
+        "formal_preparation_executed": false,
+        "measurement_staging_executed": false,
+        "cache_restoration_claimed": false
+      }
+    },
+    "scope": "Read-only frozen preparation/readiness verification, not execution completion or complete graph validation.",
+    "source_plan_counts": {
+      "translation_units": 406,
+      "components": {
+        "softfloat": 309,
+        "ramulator": 60,
+        "yaml-cpp": 29,
+        "spdlog": 7,
+        "extension": 1
+      }
+    }
+  },
+  "review_findings": [],
+  "qualification_or_acceptance_claimed": false,
+  "limitations": [
+    "The provider request inspected one exact commit object; master-ref publication readback and current workflow states are outside this request.",
+    "The 101-test result is independently retained W09-A06 evidence whose bytes and source identities were checked here, not a new test execution.",
+    "The report snapshot at 10:40:22 UTC observed prepared/not_run and zero commands. Later execution is owned by W10-A01 and is not inferred from this readiness record.",
+    "The separately launched full-governance run targets the earlier ba4deccd/8b71ee07 tree and does not establish full-suite coverage of this later parser correction.",
+    "Resource ceilings are polled process-group budgets with their existing containment limitations; no hard memory or filesystem quota is inferred."
+  ]
+}

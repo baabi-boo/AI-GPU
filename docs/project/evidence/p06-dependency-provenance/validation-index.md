@@ -201,3 +201,32 @@ remain rejecting. Those tests overlap other runs and supply no complete fresh
 build or native result. The separately running full replay-checkpoint suite
 remains pinned to the earlier `ba4deccd`/`8b71ee07` tree and does not cover this
 later parser correction.
+
+## Actual second diagnostic and map category correction
+
+The [attempt 04 execution](host-diagnostic/execution-04-summary.json) used
+published `146253db8407e21aaef70e05f3f0dd3c7f5f6d33`, whose
+[publication receipt](validation/depfile-fix-publication.json) joins its tree to
+the local reviewed parser correction. Actual execution passed **405 compiles,
+three archives and two indexes**. Its first shared-link child exited zero, but
+the record failed when an 18,084,083-byte linker map met the recorder's incorrect
+16 MiB JSON-receipt cap. The parser separately used the 16 MiB command-log cap.
+The existing 64 MiB per-artifact limit applies to these file payloads; no numeric
+budget is increased by assigning maps to that existing category.
+
+The [independent original review](agents/w10_a03.md) validated all 410 passing
+records, source trees, partial unit population and archive/index joins while
+preserving the one failed link record. The unchanged incomplete evidence still
+fails complete-graph validation, with no extension compilation/link, generated
+CMake capture, complete original, formal preparation or native execution. The
+corrected parser's [supplemental result](host-diagnostic/execution-04-map-supplement.json)
+is a separate observation, not a successful replacement for the original.
+
+The [independent map-category review](agents/w10_a04.md) passed **91 tests in
+5.220 seconds**, with no skips and 379 Python files unchanged during the run.
+Its [receipt](validation/w10_a04-map-limit-tests-01.json) binds the actual
+source hashes. Seven new methods exercise the size categories, independent
+line/packet/symlink restrictions, separate JSON bound and a real recorded link.
+The two decisive checks fail against unchanged published `146253...` helpers
+for the expected old-limit reasons. This scope does not resolve the separately
+observed zero-member spdlog admission boundary or establish a complete original.

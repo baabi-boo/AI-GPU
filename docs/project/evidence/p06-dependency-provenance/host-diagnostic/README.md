@@ -1,5 +1,27 @@
 # Separate host dependency diagnostic
 
+## Executed attempts and current correction
+
+Attempts `03` and `04` are finished failed originals. Attempt `04` used
+published helper revision `146253db8407e21aaef70e05f3f0dd3c7f5f6d33` and its
+exact [new driver](driver-04.py). It completed **405 compiles, three archives
+and two archive indexes**. The first shared-link child exited zero and retained
+its library payload, but its recorder then rejected the 18,084,083-byte linker
+map under the 16 MiB JSON-receipt limit. No extension or native process ran.
+The [execution summary](execution-04-summary.json) and
+[independent partial-original review](../agents/w10_a03.md) preserve this failure
+and the separate secondary final-stability error. Missing generated CMake and
+compile-database evidence remain missing; this is not a complete graph pass.
+
+The correction applies the existing 64 MiB artifact-file limit to map retention
+and parsing; numeric limits and separate JSON/log bounds remain unchanged. The
+[supplemental parse](execution-04-map-supplement.json) reads the unchanged map
+with that correction. It does not repair the failed original, reconstruct its
+missing post-link inputs, or establish complete map admission. A fresh execution
+needs a new sealed attempt and an exact published helper revision.
+
+## Diagnostic boundary
+
 This driver exercises the published dependency recipe functions and actual tool
 recorder without requiring a RISC-V toolchain or claiming a restored cache. It
 is an evidence-development diagnostic, not the formal dependency producer or a

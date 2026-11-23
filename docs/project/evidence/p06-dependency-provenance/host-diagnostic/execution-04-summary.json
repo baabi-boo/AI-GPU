@@ -1,0 +1,436 @@
+{
+  "schema_version": 1,
+  "scope": "Actual partial host dependency attempt04 after repeated-input correction; no complete graph or native/formal qualification",
+  "recorded_at_utc": "2026-11-23T10:51:43.847702+00:00",
+  "helper_revision": "146253db8407e21aaef70e05f3f0dd3c7f5f6d33",
+  "helper_tree": "0407e9c5250b410d399af8cb3ea32f06dc3dea17",
+  "helper_checkout": "/workspace/p06-depfile-fixed",
+  "driver": {
+    "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/driver-04.py",
+    "sha256": "c2aeaf524fd134b4c7eca6544b9d03c51bbe374dabde5239fa0c4c4372c3ddd0",
+    "size_bytes": 23759
+  },
+  "prepared": {
+    "path": "/workspace/p06-host-diagnostic-fixed-04/prepared.json",
+    "sha256": "8a5d86be8362bcd1cdb3083f403d0ffb9600d1b2d34410aefb1894b434646a82",
+    "size_bytes": 312959
+  },
+  "tool_config": {
+    "path": "tool-config.json",
+    "sha256": "9e2b57d643128c9a91f16e3afd5edb926b3220bcf1796ffbd0b004f03500b9d0",
+    "size_bytes": 1161
+  },
+  "original_workspace": "/workspace/p06-host-diagnostic-fixed-04",
+  "original_report": {
+    "path": "/workspace/p06-host-diagnostic-fixed-04/evidence/host-diagnostic.json",
+    "sha256": "8f1afcb69d5bd17dc9fa727411d0dd2bb67b5ae655fa484236cb9bed9bc36798",
+    "size_bytes": 1537077
+  },
+  "driver_result": "execution-04-driver-result.json",
+  "state": "finished",
+  "outcome": "fail",
+  "reason": "host diagnostic command failed: ramulator-build",
+  "failures": [
+    {
+      "reason": "host diagnostic command failed: ramulator-build",
+      "stage": "execution-or-inert-check"
+    },
+    {
+      "reason": "dependency source filesystem inventory is incomplete",
+      "stage": "final-stability"
+    }
+  ],
+  "driver_exit_code": 1,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/make",
+        "--no-print-directory",
+        "-j2",
+        "--output-sync=target",
+        "SPECIALIZE_TYPE=RISCV",
+        "SOFTFLOAT_OPTS=-fPIC -DSOFTFLOAT_ROUND_ODD -DINLINE_LEVEL=5 -DSOFTFLOAT_FAST_DIV32TO16 -DSOFTFLOAT_FAST_DIV64TO32 -DTHREAD_LOCAL=_Thread_local",
+        "COMPILE_C=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /workspace/p06-depfile-fixed/ci/project/p06_dependency_record.py --config /workspace/p06-host-diagnostic-fixed-04/evidence/tool-config.json --config-sha256 9e2b57d643128c9a91f16e3afd5edb926b3220bcf1796ffbd0b004f03500b9d0 --tool gcc --role compile -- -c -Werror-implicit-function-declaration -DSOFTFLOAT_FAST_INT64 -fPIC -DSOFTFLOAT_ROUND_ODD -DINLINE_LEVEL=5 -DSOFTFLOAT_FAST_DIV32TO16 -DSOFTFLOAT_FAST_DIV64TO32 -DTHREAD_LOCAL=_Thread_local -I. -I../../source/RISCV -I../../source/include -O2 -o $@",
+        "MAKELIB=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 /workspace/p06-depfile-fixed/ci/project/p06_dependency_record.py --config /workspace/p06-host-diagnostic-fixed-04/evidence/tool-config.json --config-sha256 9e2b57d643128c9a91f16e3afd5edb926b3220bcf1796ffbd0b004f03500b9d0 --tool ar --role archive -- crs $@",
+        "softfloat.a"
+      ],
+      "cleanup_complete": true,
+      "cwd": "/workspace/p06-host-diagnostic-fixed-04/dependency-sources/softfloat/build/Linux-x86_64-GCC",
+      "duration_seconds": 19.957551,
+      "environment": {
+        "CCACHE_DISABLE": "1",
+        "CMAKE_BUILD_PARALLEL_LEVEL": "2",
+        "HOME": "/workspace/p06-host-diagnostic-fixed-04/dependency-build/home",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "MAKEFLAGS": "-j2",
+        "OBJCACHE": "",
+        "PATH": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONUTF8": "1",
+        "THREADS": "1",
+        "TMPDIR": "/workspace/p06-host-diagnostic-fixed-04/dependency-build/tmp",
+        "TZ": "UTC"
+      },
+      "exit_code": 0,
+      "id": "softfloat",
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ],
+      "log": "logs/softfloat.log",
+      "log_sha256": "c1cbc11fb99716bb8db0bcaad7b00c0f98a0ecacde817cb478abc64242d3dbaa",
+      "log_size_bytes": 196578,
+      "outcome": "pass",
+      "peak_rss_bytes": 63938560,
+      "process_started": true,
+      "reason": null,
+      "timeout_seconds": 1800
+    },
+    {
+      "argv": [
+        "/workspace/p06-build-tools/cmake/data/bin/cmake",
+        "-S",
+        "/workspace/p06-host-diagnostic-fixed-04/dependency-sources/ramulator",
+        "-B",
+        "/workspace/p06-host-diagnostic-fixed-04/dependency-build/ramulator",
+        "-G",
+        "Unix Makefiles",
+        "-DARGPARSE_BUILD_SAMPLES=OFF",
+        "-DARGPARSE_BUILD_TESTS=OFF",
+        "-DARGPARSE_LONG_VERSION_ARG_ONLY=OFF",
+        "-DBUILD_SHARED_LIBS=OFF",
+        "-DBUILD_TESTING=OFF",
+        "-DCMAKE_AR=/workspace/p06-host-diagnostic-fixed-04/evidence/launchers/ar.sh",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_CXX_COMPILER=/usr/bin/g++",
+        "-DCMAKE_CXX_COMPILER_LAUNCHER=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3;/workspace/p06-depfile-fixed/ci/project/p06_dependency_record.py;--config;/workspace/p06-host-diagnostic-fixed-04/evidence/tool-config.json;--config-sha256;9e2b57d643128c9a91f16e3afd5edb926b3220bcf1796ffbd0b004f03500b9d0;--tool;g++;--role;compile;--compiler-launcher;--",
+        "-DCMAKE_CXX_EXTENSIONS=OFF",
+        "-DCMAKE_CXX_LINKER_LAUNCHER=/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3;/workspace/p06-depfile-fixed/ci/project/p06_dependency_record.py;--config;/workspace/p06-host-diagnostic-fixed-04/evidence/tool-config.json;--config-sha256;9e2b57d643128c9a91f16e3afd5edb926b3220bcf1796ffbd0b004f03500b9d0;--tool;g++;--role;link;--compiler-launcher;--",
+        "-DCMAKE_CXX_STANDARD=20",
+        "-DCMAKE_CXX_STANDARD_REQUIRED=ON",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "-DCMAKE_MAKE_PROGRAM=/usr/bin/make",
+        "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
+        "-DCMAKE_RANLIB=/workspace/p06-host-diagnostic-fixed-04/evidence/launchers/ranlib.sh",
+        "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,-Map,/workspace/p06-host-diagnostic-fixed-04/dependency-build/ramulator.map",
+        "-DFETCHCONTENT_FULLY_DISCONNECTED=ON",
+        "-DFETCHCONTENT_SOURCE_DIR_ARGPARSE=/workspace/p06-host-diagnostic-fixed-04/dependency-sources/argparse",
+        "-DFETCHCONTENT_SOURCE_DIR_SPDLOG=/workspace/p06-host-diagnostic-fixed-04/dependency-sources/spdlog",
+        "-DFETCHCONTENT_SOURCE_DIR_YAML-CPP=/workspace/p06-host-diagnostic-fixed-04/dependency-sources/yaml-cpp",
+        "-DFETCHCONTENT_UPDATES_DISCONNECTED=ON",
+        "-DSPDLOG_BUILD_ALL=OFF",
+        "-DSPDLOG_BUILD_BENCH=OFF",
+        "-DSPDLOG_BUILD_EXAMPLE=OFF",
+        "-DSPDLOG_BUILD_EXAMPLE_HO=OFF",
+        "-DSPDLOG_BUILD_PIC=ON",
+        "-DSPDLOG_BUILD_SHARED=OFF",
+        "-DSPDLOG_BUILD_TESTS=OFF",
+        "-DSPDLOG_BUILD_TESTS_HO=OFF",
+        "-DSPDLOG_ENABLE_PCH=OFF",
+        "-DSPDLOG_FMT_EXTERNAL=OFF",
+        "-DSPDLOG_FMT_EXTERNAL_HO=OFF",
+        "-DSPDLOG_INSTALL=OFF",
+        "-DSPDLOG_NO_EXCEPTIONS=OFF",
+        "-DSPDLOG_NO_TLS=OFF",
+        "-DSPDLOG_USE_STD_FORMAT=OFF",
+        "-DYAML_BUILD_SHARED_LIBS=OFF",
+        "-DYAML_CPP_BUILD_CONTRIB=OFF",
+        "-DYAML_CPP_BUILD_TESTS=OFF",
+        "-DYAML_CPP_BUILD_TOOLS=OFF",
+        "-DYAML_CPP_INSTALL=OFF"
+      ],
+      "cleanup_complete": true,
+      "cwd": "/workspace/p06-host-diagnostic-fixed-04/dependency-build",
+      "duration_seconds": 0.46937,
+      "environment": {
+        "CCACHE_DISABLE": "1",
+        "CMAKE_BUILD_PARALLEL_LEVEL": "2",
+        "HOME": "/workspace/p06-host-diagnostic-fixed-04/dependency-build/home",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "MAKEFLAGS": "-j2",
+        "OBJCACHE": "",
+        "PATH": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONUTF8": "1",
+        "THREADS": "1",
+        "TMPDIR": "/workspace/p06-host-diagnostic-fixed-04/dependency-build/tmp",
+        "TZ": "UTC"
+      },
+      "exit_code": 0,
+      "id": "ramulator-configure",
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ],
+      "log": "logs/ramulator-configure.log",
+      "log_sha256": "c1949063d7d53bf1f655e6143397ed60e038adc1fd2123324cc958fb3e6f34a6",
+      "log_size_bytes": 850,
+      "outcome": "pass",
+      "peak_rss_bytes": 28590080,
+      "process_started": true,
+      "reason": null,
+      "timeout_seconds": 120
+    },
+    {
+      "argv": [
+        "/workspace/p06-build-tools/cmake/data/bin/cmake",
+        "--build",
+        "/workspace/p06-host-diagnostic-fixed-04/dependency-build/ramulator",
+        "--target",
+        "ramulator",
+        "--parallel",
+        "2",
+        "--verbose"
+      ],
+      "cleanup_complete": true,
+      "cwd": "/workspace/p06-host-diagnostic-fixed-04/dependency-build",
+      "duration_seconds": 433.239169,
+      "environment": {
+        "CCACHE_DISABLE": "1",
+        "CMAKE_BUILD_PARALLEL_LEVEL": "2",
+        "HOME": "/workspace/p06-host-diagnostic-fixed-04/dependency-build/home",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "MAKEFLAGS": "-j2",
+        "OBJCACHE": "",
+        "PATH": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONUTF8": "1",
+        "THREADS": "1",
+        "TMPDIR": "/workspace/p06-host-diagnostic-fixed-04/dependency-build/tmp",
+        "TZ": "UTC"
+      },
+      "exit_code": 2,
+      "id": "ramulator-build",
+      "limitations": [
+        "Resource limits are polled budgets, not hard filesystem or memory quotas.",
+        "Process-group RSS can count shared pages more than once and excludes page cache.",
+        "Reported peak RSS is the highest sample and may miss peaks between polls.",
+        "No container/cgroup memory limit is inferred by this process monitor.",
+        "Descendants that deliberately leave the process group are outside its containment."
+      ],
+      "log": "logs/ramulator-build.log",
+      "log_sha256": "8bae992b32fbb2eb61001ffeb6d5cbff5621ad6ebc9573e476a0336ab2bb7dff",
+      "log_size_bytes": 135164,
+      "outcome": "fail",
+      "peak_rss_bytes": 1389559808,
+      "process_started": true,
+      "reason": "nonzero_exit",
+      "timeout_seconds": 1800
+    }
+  ],
+  "source_manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+  "source_plan_sha256": "f479cc6ed3ee4d4dd7fd305bc45943af33a3a2ba9069da48eebe627c5f817570",
+  "source_files": 1294,
+  "source_bytes": 10938128,
+  "planned_translation_units": 406,
+  "actual_record_roles": {
+    "archive": 3,
+    "compile": 405,
+    "index": 2,
+    "link": 1
+  },
+  "passing_record_roles": {
+    "archive": 3,
+    "compile": 405,
+    "index": 2
+  },
+  "all_records_finished": true,
+  "selected_tools_started": 411,
+  "selected_tool_children_exit_zero": 411,
+  "dependency_prepass_children_exit_zero": 405,
+  "record_manifest": {
+    "path": "execution-04-record-manifest.json",
+    "sha256": "c3885959dcc68e049e10544e1057d3173640ddcaf555879c121cbecdab354e7e",
+    "size_bytes": 260118
+  },
+  "recorded_generated_inputs": 0,
+  "compile_database_retained": false,
+  "retained_original_files": 3528,
+  "retained_original_bytes_excluding_report": 113613340,
+  "recorded_stability_checks": [
+    {
+      "label": "sources-frozen",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 0,
+        "generated_files": 0,
+        "generated_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      }
+    },
+    {
+      "label": "before-softfloat",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 0,
+        "generated_files": 0,
+        "generated_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      }
+    },
+    {
+      "label": "after-softfloat",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 1741704,
+        "generated_files": 928,
+        "generated_sha256": "e0cbe98f3473d916841edb347e5277fea567ef07888280b35e9a6a935f1d01c3",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      }
+    },
+    {
+      "label": "before-ramulator-configure",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 1741704,
+        "generated_files": 928,
+        "generated_sha256": "e0cbe98f3473d916841edb347e5277fea567ef07888280b35e9a6a935f1d01c3",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      }
+    },
+    {
+      "label": "after-ramulator-configure",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 1741704,
+        "generated_files": 928,
+        "generated_sha256": "e0cbe98f3473d916841edb347e5277fea567ef07888280b35e9a6a935f1d01c3",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      }
+    },
+    {
+      "label": "before-ramulator-build",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 1741704,
+        "generated_files": 928,
+        "generated_sha256": "e0cbe98f3473d916841edb347e5277fea567ef07888280b35e9a6a935f1d01c3",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      }
+    }
+  ],
+  "failed_link_record_id": "fcade85c9804e0979b1bf88223cf6499ab94d1eb8c97265010f442f8c1712d5e",
+  "failed_link_child_exit_code": 0,
+  "failed_link_output": {
+    "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-sources/ramulator/libramulator.so",
+    "payload": "4c774218ea94d799e76f4457fda366f4ac5899054a33f4ff42a639e479a09216.bin",
+    "resolved_path": "/workspace/p06-host-diagnostic-fixed-04/dependency-sources/ramulator/libramulator.so",
+    "sha256": "4c774218ea94d799e76f4457fda366f4ac5899054a33f4ff42a639e479a09216",
+    "size_bytes": 5903224
+  },
+  "source_root_library_exists_after_make_failure": false,
+  "failed_map": {
+    "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-build/ramulator.map",
+    "sha256": "9d6fa3c32d3e5f821d830ebd23373d4f8e626d89f801e8ba00af3fe643d16ec4",
+    "size_bytes": 18084083,
+    "regular_file": true,
+    "symlink": false,
+    "lines": 164487,
+    "applied_recorder_limit_kind": "contract.MAX_RECEIPT_BYTES",
+    "applied_recorder_limit_bytes": 16777216,
+    "parser_limit_kind": "contract.BUDGET.max_log_bytes",
+    "parser_limit_bytes": 16777216,
+    "general_artifact_file_limit_bytes": 67108864,
+    "map_payload_retained_by_original_recorder": false,
+    "map_retained_in_original_workspace": true
+  },
+  "duplicate_header_regression": {
+    "source": "s_shortShiftLeft128.c",
+    "record_id": "6914b3cdddbf58aabbed6637b62024a4db89e2045f7b10c832507ae87bd9fc65",
+    "record_outcome": "pass",
+    "prepass_token_count": 24,
+    "distinct_recorded_inputs": 23,
+    "primitiveTypes_header_occurrences": 2,
+    "prepass_sha256": "a6d21614049fc1d3a0fd4697ca2645a2742769a8648c1536930d6e604a9c1d3c",
+    "output": {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-sources/softfloat/build/Linux-x86_64-GCC/s_shortShiftLeft128.o",
+      "payload": "0b89f492cfe8bf697efbcb866e6b311dc9e9f1e35d8a391670348bf6fa78e196.bin",
+      "resolved_path": "/workspace/p06-host-diagnostic-fixed-04/dependency-sources/softfloat/build/Linux-x86_64-GCC/s_shortShiftLeft128.o",
+      "sha256": "0b89f492cfe8bf697efbcb866e6b311dc9e9f1e35d8a391670348bf6fa78e196",
+      "size_bytes": 1152
+    },
+    "all_child_exits_zero": true
+  },
+  "retained_small_originals": [
+    {
+      "path": "execution-04-softfloat.log",
+      "sha256": "c1cbc11fb99716bb8db0bcaad7b00c0f98a0ecacde817cb478abc64242d3dbaa",
+      "size_bytes": 196578
+    },
+    {
+      "path": "execution-04-ramulator-configure.log",
+      "sha256": "c1949063d7d53bf1f655e6143397ed60e038adc1fd2123324cc958fb3e6f34a6",
+      "size_bytes": 850
+    },
+    {
+      "path": "execution-04-ramulator-build.log",
+      "sha256": "8bae992b32fbb2eb61001ffeb6d5cbff5621ad6ebc9573e476a0336ab2bb7dff",
+      "size_bytes": 135164
+    },
+    {
+      "path": "execution-04-record-failed-link.json",
+      "sha256": "76a136a151e3e4cb2168a002939b8514941fb602009325e3084fcedf541a3c79",
+      "size_bytes": 47854
+    },
+    {
+      "path": "execution-04-record-duplicate-header.json",
+      "sha256": "d391c68690b865e577d3cd1306f2f5eb3db7031dd06cdb9398d13d9138b0e94e",
+      "size_bytes": 19589
+    },
+    {
+      "path": "execution-04-duplicate-header-prepass.d",
+      "sha256": "a6d21614049fc1d3a0fd4697ca2645a2742769a8648c1536930d6e604a9c1d3c",
+      "size_bytes": 1131
+    },
+    {
+      "path": "execution-04-duplicate-header-compile.d",
+      "sha256": "a6d21614049fc1d3a0fd4697ca2645a2742769a8648c1536930d6e604a9c1d3c",
+      "size_bytes": 1131
+    }
+  ],
+  "previous_attempt03_preserved": true,
+  "prepared04_and_driver04_preserved": true,
+  "host_diagnostic_passed": false,
+  "fresh_dependency_build_passed": false,
+  "dependency_source_to_loaded_binary_verified": false,
+  "native_execution": "not_run",
+  "formal_preparation_executed": false,
+  "measurement_staging_executed": false,
+  "cache_restoration_claimed": false,
+  "qualified": false,
+  "ready_for_warm": false,
+  "warm_execution": false,
+  "full_warm_coverage": false,
+  "acceptance_claimed": false,
+  "phase_acceptance": false,
+  "performance_acceptance": false,
+  "limitations": [
+    "411 selected tool invocations exited0, but only410 records pass; the link fails its map-retention contract and is not an admitted successful link.",
+    "The extension compile/link, complete413-operation verification, generated-CMake verification, staged products and native execution did not run.",
+    "The raw18,084,083-byte map remains outside the recorder payload inventory in the preserved original workspace.",
+    "Make deleted its failed shared-library target after the recorder error; final source/generated-output stability validation also fails without replacing the first failure.",
+    "The complete original workspace remains outsideGit; this packet retains small raw logs, the failed link record, the corrected repeated-header record/depfiles and all record identities.",
+    "Independent inert review is the separate W10-A03 assignment; this execution report does not claim its result."
+  ]
+}

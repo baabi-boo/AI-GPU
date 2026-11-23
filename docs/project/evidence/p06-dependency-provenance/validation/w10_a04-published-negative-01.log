@@ -1,0 +1,31 @@
+test_map_above_json_and_log_limits_retains_and_parses (test_p06_dependency_map_limits.DependencyMapLimitTests.test_map_above_json_and_log_limits_retains_and_parses) ... ERROR
+test_real_link_record_uses_file_limit_instead_of_json_limit (test_p06_dependency_map_limits.DependencyMapLimitTests.test_real_link_record_uses_file_limit_instead_of_json_limit) ... FAIL
+
+======================================================================
+ERROR: test_map_above_json_and_log_limits_retains_and_parses (test_p06_dependency_map_limits.DependencyMapLimitTests.test_map_above_json_and_log_limits_retains_and_parses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_map_limits.py", line 47, in test_map_above_json_and_log_limits_retains_and_parses
+    parsed = binary.parse_link_map(observed.decode("ascii"), cwd="/build")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p06-depfile-fixed/ci/project/p06_dependency_binary.py", line 240, in parse_link_map
+    _require(type(text) is str and 0 < len(text) <= contract.BUDGET["max_log_bytes"],
+  File "/workspace/p06-depfile-fixed/ci/project/p06_dependency_binary.py", line 38, in _require
+    raise ValueError(reason)
+ValueError: link map must be bounded text
+
+======================================================================
+FAIL: test_real_link_record_uses_file_limit_instead_of_json_limit (test_p06_dependency_map_limits.DependencyMapLimitTests.test_real_link_record_uses_file_limit_instead_of_json_limit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/AI-GPU/ci/project/test_p06_dependency_map_limits.py", line 146, in test_real_link_record_uses_file_limit_instead_of_json_limit
+    self.assertEqual(result["outcome"], "pass", result["reason"])
+AssertionError: 'fail' != 'pass'
+- fail
++ pass
+ : file is not regular or exceeds its byte bound: /tmp/p06-map-limits-m229f6pi/build/sample.map
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.264s
+
+FAILED (failures=1, errors=1)

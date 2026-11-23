@@ -485,7 +485,7 @@ def run(config_path, expected_sha256, tool, role, arguments, *, compiler_launche
                                            target=output, cwd=cwd)
             require(after_paths == inputs, "included-input set changed during compilation")
         if role == "link":
-            record["link_map"] = _retain(plan["link_map"], roots, maximum=contract.MAX_RECEIPT_BYTES)
+            record["link_map"] = _retain(plan["link_map"], roots, maximum=contract.MAX_FILE_BYTES)
         record["inputs_after"] = observe(inputs)
         if role != "index":
             require(record["inputs_after"] == record["inputs_before"], "tool input changed during invocation")

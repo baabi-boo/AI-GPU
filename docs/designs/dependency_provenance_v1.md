@@ -51,6 +51,11 @@ not an arbitrary total ordering, determine graph consistency.
 
 ## Objects, archives and links
 
+Link maps are retained file payloads and use the existing 64 MiB per-file
+limit. The separate 16 MiB JSON-receipt and command-log limits apply to those
+data categories. Map line-count, line-length and semantic checks remain
+independent bounds within the artifact limit.
+
 Retain selected object bytes and complete ordinary GNU archives. Resolve GNU
 long member names before enforcing exact ordered membership; reject thin
 archives, duplicates, malformed bounds, absent and additional members. Each

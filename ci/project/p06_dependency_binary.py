@@ -237,7 +237,7 @@ def _reference(text, cwd):
 def parse_link_map(text, *, cwd):
     """Parse selected-member and LOAD records; all paths remain lexical data."""
     cwd = _absolute(cwd, "link working directory")
-    _require(type(text) is str and 0 < len(text) <= contract.BUDGET["max_log_bytes"],
+    _require(type(text) is str and 0 < len(text) <= contract.MAX_FILE_BYTES,
              "link map must be bounded text")
     try:
         data = text.encode("ascii")
