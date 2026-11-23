@@ -2,12 +2,89 @@
 
 ## Current result and next action
 
-**Collect and retain one fresh complete dependency and managed-lifetime original
-at a named published revision, then replay and independently review its source,
-build, product and loader joins.** Keep the pending-read probe, always-zero
-control and alternate-library control separately counted. The implementation
-exists; the bounded P06-T01 provenance result still requires that actual original
-and independent review.
+**The complete fresh local dependency/native/control original and full inert
+replay pass independent review. The next bounded development is the separately
+versioned complete counter-qualification contract and explicit admission path.**
+The [local execution summary](evidence/p06-dependency-provenance/local-execution/validation/local-attempt-04-execution-summary.json)
+records all five stages passing at frozen
+`0f9aaa36d46364c297254164f5dab0d4f0e88349` in 894.591061 seconds. Fresh dependency
+receipts bind **413 tool operations and 819 child observations** to the exact
+products, both managed builds and actual loader records. The unchanged
+FP16/BF16 × allocation-policy matrix passed **four processes, 132 launches and
+4,224 checked FP32 words**, with zero mismatches.
+
+The separate positive-pending process observed both scalar contexts; the
+always-zero process failed for the required missing-observation assertion.
+The separate alternate-library process passed **33 launches and 1,056 exact
+words** while its loader witness rejected the original provenance expectation.
+These controls are outside the managed population. The
+[public local CLI replay](evidence/p06-dependency-provenance/local-execution/validation/local-attempt-04-replay-summary.json)
+passed from clean reader `ba2d649d4150e046c2ba610de02725d9d062b1be` in
+18.657440 seconds. It checked the exact caller-pinned envelope and all subpackets
+in one bounded archive, completed closing stability checks and observed zero
+prohibited events, with `native_execution="not_run"` and
+`retained_code_executed=false`.
+
+The [dependency/source projection](evidence/p06-dependency-provenance/local-execution/agents/w09_a06.md),
+[complete native matrix review](evidence/p06-dependency-provenance/local-execution/agents/w10_a01.md)
+and [both-control review](evidence/p06-dependency-provenance/local-execution/agents/w10_a03.md)
+retain independent scoped findings. The complete original has **5,597 members**,
+**47,632,218 compressed bytes** and SHA-256
+`d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f`.
+Use the [local packet](evidence/p06-dependency-provenance/local-execution/README.md)
+for all external pins and the [runbook](evidence/p06-dependency-provenance/local-execution/runbook.md)
+for reproduction. The explicit [local contract](../designs/local_dependency_execution_v1.md)
+does not invent GitHub job/cache identity or authenticate the producer. This
+bounded provenance result leaves all seven qualification, readiness, warm and
+acceptance claims false.
+
+[Local attempt 03](evidence/p06-dependency-provenance/local-execution/attempt-03.md)
+at `7251f078972c1d524de06d069e91b014b55896f5` passed the full fresh dependency
+receipt and complete native subpacket: **413 operations, 819 child observations,
+four processes, 132 launches and 4,224 checked FP32 words**. Independent
+FP16/BF16 and full unmocked dependency/native semantic reviews passed. The outer
+attempt remains failed at the generic report parser, with its controls unrun.
+Attempts [01](evidence/p06-dependency-provenance/local-execution/attempt-01.md) and
+[02](evidence/p06-dependency-provenance/local-execution/attempt-02.md) preserve
+the missing shared-runtime and inventory-ordering failures. Never promote
+successful subpackets or prospective diagnostics into a complete original pass.
+
+The later `8d735eba0016cdc64592d9c40a98e6b52574e64b` code checkpoint fixes
+hosted-only preparation order and synthetic path guards; those regressions are
+separate from frozen attempt-04 execution at `0f9aaa36`. Reader checkpoint
+`ba2d649d` accounts for the exact `ramulator.stats.log` side outputs omitted by
+the initial reader and synthetic fixtures. Its correction binds the destructor,
+requires both exact bounded nonempty files at their actual runtime paths, treats
+them only as opaque diagnostics and preserves strict complete inventories.
+Neither the original nor any numerical, timing or provenance premise was changed.
+The initial full-replay failure remains preserved; the corrected public CLI pass
+is a new reader result over the same successful execution original.
+
+The [independent test audit](evidence/p06-dependency-provenance/local-execution/validation/w07_a05-test-evidence-review.json)
+records 4,256 full-suite tests at `ac2f2ae7` and 136 affected tests at `7251f078`.
+The parser correction has 118 affected passing tests and independent review.
+The hosted preparation/path corrections have 40 preparation/workflow and seven
+actual hosted-layout guard/bridge passes, plus
+[independent review](evidence/p06-dependency-provenance/local-execution/agents/w09_a02.md).
+The final control-reader correction has 22 distinct passing tests (14 existing
+plus eight new), with independent eight-test reruns overlapping that population
+and [actual-control review](evidence/p06-dependency-provenance/local-execution/agents/w10_a03.md).
+These overlapping runs do not establish a later full-suite pass or native
+qualification. Keep all results attached to their actual source identities.
+
+The [later provider observation](evidence/p06-dependency-provenance/local-execution/validation/provider-observation-current.json)
+retains fresh hosted run `45162083701` at `19333193` failing preparation before
+all dependency/native/control stages. It also retains governance run
+`45165109737` at `849469e1`: 4,141 tests executed with two synthetic guard failures.
+The restored cache contaminated the source-inventory boundary, and the tests
+confused trusted reader files under `/home/runner/` with retained producer paths.
+Both reachable defects have independently reviewed corrections backed by
+reproductions;
+no successful hosted retry follows from local regression passes. Exact historical
+Git-status overflow remains an inference because the original omitted raw status
+stdout/stderr.
+
+## Preserved preceding implementation and host diagnostics
 
 The [implementation packet](evidence/p06-dependency-provenance/README.md) and
 [v1 contract](../designs/dependency_provenance_v1.md) define the selected route.
@@ -15,7 +92,7 @@ Its [foundation publication](evidence/p06-dependency-provenance/validation/found
 is `5527cb062e10dfff3266022d138dd7cdf63f5e5c`, tree
 `06beb70d004cf444488eee6e02512894c11bafef`. Complete native/control readers were
 published at `8b71ee07392c1ed86f654b2d683d9a8d2d1f50ea`. The
-[current production checkpoint](evidence/p06-dependency-provenance/validation/member-selection-publication.json)
+[preceding production checkpoint](evidence/p06-dependency-provenance/validation/member-selection-publication.json)
 is `19333193192ba5a2d3667c0111235ec9e21a5898`, tree
 `baeeb7bc7078e9301c68e94b1207032329be343d`, including independently reviewed
 corrections exposed by actual host builds. Earlier failed attempts remain
@@ -61,9 +138,10 @@ for `19333193`,
 [fresh run 45162083701](https://github.com/baabi-boo/AI-GPU/actions/runs/45162083701)
 was pending with no jobs. Governance run `45162084006` had queued job
 `137649753222`, zero steps and runner ID zero. Neither a queue cause nor a native
-result is established. Recheck the provider and retain its actual run, attempt,
-job and artifact identities before original intake. The formal fresh dependency
-and four-process native original remain unobserved. The
+result was established by that snapshot. The later provider observation and
+explicit local observations above supersede this historical pending state.
+Retain actual run, attempt, job and artifact identities for hosted intake;
+local originals use their distinct reviewed local envelope. The
 [separate host diagnostic](evidence/p06-dependency-provenance/host-diagnostic/README.md)
 retains the actual failed attempts `03` and `04` and each attempt's frozen
 revision.
@@ -123,7 +201,7 @@ and full governance have separate scopes; use the packet's named governance
 receipt for a completed full-suite outcome. This handoff supplies no new
 governance execution or acceptance result.
 
-## Historical gap and current contract
+## Historical gap and retained provenance contract
 
 The preceding cached-dependency producer froze product hashes, built fresh
 guarded models, recorded compiler and linker commands, and observed exact
@@ -312,7 +390,10 @@ bindings and failure evidence. The reusable reader must consume caller-pinned
 expectations, validate bounded exact schemas and inventories, and keep all
 retained paths, commands, source files and binaries inert. Its result establishes
 consistency of a named original; actual execution is supplied by that original's
-identified hosted run. Independent review must reconcile both layers.
+identified hosted run or explicitly local execution envelope. The
+[local reader](../../ci/project/p06_dependency_local_replay.py) checks its own
+strict local envelope and separate control packets rather than fabricating a
+hosted identity. Independent review must reconcile both layers.
 
 ## Controls that demonstrate the new provenance edge
 
@@ -339,7 +420,10 @@ measurement build.
 Keep the existing **two build jobs, one simulation worker, 15 GiB disk reserve,
 4 GiB minimum available memory, 4 GiB RSS limit, 120-second configure limit,
 1,800-second build limit, 180-second native-process limit, 16 MiB command-log
-bound and 90-minute hosted-job ceiling**. JSON receipts retain their 16 MiB cap;
+bound and 90-minute hosted-job/local-execution ceiling**. JSON receipts retain
+their 16 MiB cap; dependency-managed report intake explicitly allows 500,000
+structural tokens, while generic inputs keep the 250,000-token default and
+unchanged depth/number/duplicate checks;
 linker maps use the existing 64 MiB retained-file category, with their separate
 line-count/line-length limits and the 1 GiB packet cap. The
 [existing dependency recipe](../../third_party/Makefile) contains an explicit
@@ -358,8 +442,57 @@ negative controls, a fresh complete native original and independent review.
 Report exactly that bounded provenance result. Do not rewrite old false fields
 or silently upgrade an old reader's acceptance meaning.
 
-The broader qualification boundary stays explicit. The existing reports and
-contracts retain these three obligations in order:
+## Next implementation slice: complete counter qualification
+
+The complete fresh original/control replay and independent review now establish
+the bounded provenance prerequisite described above. Implement one separately
+versioned qualification record, inert reader and explicit admission/final-validation
+route as the next development slice. The
+[independent next-step audit](evidence/p06-dependency-provenance/local-execution/agents/w07_a03.md)
+provides the concrete source map; the
+[qualification plan](p06-mpm-qualification-plan.md) remains normative.
+
+| Contract input | Required binding to the exact guarded process |
+| --- | --- |
+| Exact route and inventory | RV64 timing `p02-tfr`, one core/worker, 33 available core-zero selectors, twelve unavailable rows with no queries, all 40 exact backing components |
+| Zero origins, monotone updates and preserved storage | Every selected component starts at zero, uses audited nonnegative checked updates, survives admitted launch resets and has no diagnostic seeding or replacement storage |
+| Pending balance before reset | Successful prior work is drained; the actual transient read balance is observed zero before reset can erase it; request/response/reset paths match the binary |
+| Terminal aggregation and ownership | Every selected full-width checked sum succeeds; operation/queue ownership, worker join, empty buffers and collected asynchronous completion reconcile |
+| Stable readout and finalization | CP retirement precedes disable; no tick/reset/concurrent submit corrupts readout; no later launch, transfer, event or finalizer updates the components before actual destruction |
+| Failure and source/product closure | Any guard/query/run/cleanup failure invalidates the lifetime; exact reviewed source/configuration, build/link inputs, loaded dependencies and finalizer behavior match the original |
+
+These rows organize the existing ten P01–P10 lifetime premises; they do not
+reduce them. Pending reads are a transient balance, **not component 41**. The
+all-selector diagnostic and successful provenance population provide scoped
+prerequisites, not a complete source-bound qualification theorem.
+
+Reject missing/duplicated components, unsupported source projections, changed
+topology or loaded products, seed/diagnostic objects, incomplete link inputs,
+queries of unavailable rows, nonzero pre-reset pending, missing resets,
+retained queue/references, premature CP disable, failed high halves, terminal
+mutation, omitted disposal and favorable endpoints after an earlier guard
+failure. Include coherent rehashing and copied-success controls so rejection
+does not rely only on broken digests. Preserve inert retained paths, commands,
+helpers and binaries, with no fallback to a historical contract.
+
+Freeze the new contract and obtain independent enforcement review before its
+required fresh four-process preflight. A previously successful provenance
+original may be an input or regression case, but is not execution under rules
+frozen later. For an accepted completed lifetime, the conditional absolute bound
+requires zero-origin monotone components, complete checked terminal sums and
+no subsequent update before destruction. It does not qualify unseen future
+runs, ordinary unguarded binaries or historical missing high bits.
+
+Only then may the explicit qualified route execute the unchanged matched warm
+attempt: **24 processes / 792 launches / 25,344 exact words**, including primes
+and warm-ups. Preserve the fixed ordering, instrumentation, resource limits,
+correctness/cleanup requirements and statistics. Warm v1's unconditional
+`P06-WARM-RV64-MPM-HIGH-HALF` blocker has no qualification override and remains
+unchanged; a new version must state its own reviewed meaning.
+
+The broader qualification boundary stays explicit. Historical reports and
+contracts retain these three named unresolved obligations in order; a new
+scoped provenance result does not rewrite them:
 
 1. `all_40_component_lifetime_and_pending_balance`
 2. `dependency_source_to_loaded_binary_provenance`

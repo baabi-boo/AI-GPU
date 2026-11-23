@@ -1,0 +1,56 @@
+test_inert_reader_rejects_the_same_symbolic_prefix_escape (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_inert_reader_rejects_the_same_symbolic_prefix_escape) ... FAIL
+test_internal_parent_segments_follow_the_symbolic_prefix_first (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_internal_parent_segments_follow_the_symbolic_prefix_first) ... ERROR
+test_parent_segments_after_a_symbolic_prefix_cannot_escape_output (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_parent_segments_after_a_symbolic_prefix_cannot_escape_output) ... FAIL
+test_parent_segments_cannot_hide_a_symbolic_cycle (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_parent_segments_cannot_hide_a_symbolic_cycle) ... FAIL
+test_stream_rechecks_bytes_changed_after_the_initial_part_check (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_stream_rechecks_bytes_changed_after_the_initial_part_check) ... ok
+
+======================================================================
+ERROR: test_internal_parent_segments_follow_the_symbolic_prefix_first (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_internal_parent_segments_follow_the_symbolic_prefix_first)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/ai-gpu-next/ci/project/test_p06_local_toolchain_review.py", line 62, in test_internal_parent_segments_follow_the_symbolic_prefix_first
+    receipt = f.provision()
+              ^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/test_p06_local_toolchain.py", line 88, in provision
+    return local.provision(self.archives, self.tools)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_local_toolchain.py", line 279, in provision
+    resolved = _resolved_member(row["path"], members)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_local_toolchain.py", line 190, in _resolved_member
+    require(name in members, "archive link or selected tool has no member")
+  File "/workspace/ai-gpu-next/ci/project/p06_local_toolchain.py", line 48, in require
+    raise ValueError(message)
+ValueError: archive link or selected tool has no member
+
+======================================================================
+FAIL: test_inert_reader_rejects_the_same_symbolic_prefix_escape (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_inert_reader_rejects_the_same_symbolic_prefix_escape)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/ai-gpu-next/ci/project/test_p06_local_toolchain_review.py", line 51, in test_inert_reader_rejects_the_same_symbolic_prefix_escape
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_parent_segments_after_a_symbolic_prefix_cannot_escape_output (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_parent_segments_after_a_symbolic_prefix_cannot_escape_output)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/ai-gpu-next/ci/project/test_p06_local_toolchain_review.py", line 31, in test_parent_segments_after_a_symbolic_prefix_cannot_escape_output
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_parent_segments_cannot_hide_a_symbolic_cycle (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_parent_segments_cannot_hide_a_symbolic_cycle)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/ai-gpu-next/ci/project/test_p06_local_toolchain_review.py", line 76, in test_parent_segments_cannot_hide_a_symbolic_cycle
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.047s
+
+FAILED (failures=3, errors=1)

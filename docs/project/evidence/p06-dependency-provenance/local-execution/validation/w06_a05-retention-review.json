@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "scope": "Read-only hypothetical inventory-order diagnostic; not an original pass or re-execution",
+  "source_revision": "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+  "reader_root": "/workspace/p06-local-run-source-02",
+  "reader_sha256": "6a45f224b57cbc2e4d7edfd540712eb468b1aa92407e2b65bc5a2de7c3581c70",
+  "report_before": {
+    "sha256": "344c43fe145a76f11938c45abcdb940ddda5a47da52c9ced6249713b9d62123b",
+    "size_bytes": 1784914
+  },
+  "original_outcome": "fail",
+  "original_reason": "retained inventory ordering differs",
+  "original_fresh_dependency_build_passed": false,
+  "native_execution": "not_run",
+  "retained_code_executed": false,
+  "descending_pairs": [
+    [
+      "sources/ramulator/src/dram/lambdas/rowopen.h",
+      "sources/ramulator/src/dram/lambdas.h"
+    ],
+    [
+      "sources/softfloat/source/8086/specialize.h",
+      "sources/softfloat/source/8086-SSE/extF80M_isSignalingNaN.c"
+    ],
+    [
+      "sources/softfloat/source/ARM-VFPv2/specialize.h",
+      "sources/softfloat/source/ARM-VFPv2-defaultNaN/extF80M_isSignalingNaN.c"
+    ]
+  ],
+  "original_file_count": 3680,
+  "original_bytes": 140173896,
+  "hypothetical_mutations": [
+    "outcome=pass",
+    "reason=None",
+    "failures=[]",
+    "fresh_dependency_build_passed=True",
+    "retained_files sorted by relative POSIX path string"
+  ],
+  "all_seven_claims_remain_false": true,
+  "hypothetical_document_written": false,
+  "checks": [
+    {
+      "case": "unchanged failed original",
+      "result": "rejected",
+      "reason": "dependency receipt is not a complete successful build",
+      "error_type": "ValueError",
+      "duration_seconds": 0.000249
+    },
+    {
+      "case": "hypothetical status only, original inventory order",
+      "result": "rejected",
+      "reason": "retained inventory ordering differs",
+      "error_type": "ValueError",
+      "duration_seconds": 0.002718
+    },
+    {
+      "case": "hypothetical status plus prospective lexical inventory order",
+      "result": "accepted",
+      "semantic_result": {
+        "tool_execution_records": 413,
+        "translation_units": {
+          "softfloat": 309,
+          "ramulator": 60,
+          "yaml-cpp": 29,
+          "spdlog": 7,
+          "extension": 1
+        },
+        "archive_names": [
+          "softfloat",
+          "spdlog",
+          "yaml-cpp"
+        ],
+        "link_names": [
+          "extension",
+          "ramulator"
+        ],
+        "product_names": [
+          "extension",
+          "ramulator",
+          "softfloat"
+        ],
+        "source_manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "all_seven_claims_false": true
+      },
+      "duration_seconds": 13.11384
+    }
+  ],
+  "original_unchanged": true,
+  "report_after": {
+    "sha256": "344c43fe145a76f11938c45abcdb940ddda5a47da52c9ced6249713b9d62123b",
+    "size_bytes": 1784914
+  },
+  "original_file_inventory_sha256": "71053af512ee08e4d6388d4e7585561d0e22e672fa8c7ea735549c7a8d2177dc",
+  "duration_seconds": 13.889434,
+  "finished_at": "2026-11-23T12:47:05.634844+00:00",
+  "prospective_reader_result": "accepted",
+  "original_reclassified": false,
+  "producer_fix": {
+    "finding_severity": "F2",
+    "confidence": "high",
+    "evidence_type": "static-proof with actual failed original and independent regression",
+    "one_line_return_sort_only": true,
+    "hash_type_budget_checks_unchanged": true,
+    "source_files": {
+      "frozen_producer": {
+        "path": "/workspace/p06-local-run-source-02/ci/project/p06_dependency_build.py",
+        "sha256": "b9b0f8a07396cd4d146ef03e6ec0dc65aff827b646fa5bf3a584c011f8971c35",
+        "size_bytes": 32783
+      },
+      "fixed_producer": {
+        "path": "/workspace/ai-gpu-next/ci/project/p06_dependency_build.py",
+        "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+        "size_bytes": 32820
+      },
+      "new_regression": {
+        "path": "/workspace/ai-gpu-next/ci/project/test_p06_dependency_retention_order_review.py",
+        "sha256": "7f3bf7e3b8aab1383e30f3cae364f15ba289bcd6f8dc183a42d66e8a09b4b290",
+        "size_bytes": 2774
+      }
+    }
+  },
+  "focused_tests": {
+    "before_fix": {
+      "tests": 3,
+      "passed": 2,
+      "failed": 1,
+      "log": "w06_a05-retention-before-fix.log"
+    },
+    "after_fix": {
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "log": "w06_a05-retention-after-fix.log"
+    }
+  },
+  "exact_original_file_inventory_matches": true,
+  "review_finalized_at": "2026-11-23T12:48:28.066528+00:00"
+}

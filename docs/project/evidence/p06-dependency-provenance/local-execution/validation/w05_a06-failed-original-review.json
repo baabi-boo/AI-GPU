@@ -1,0 +1,284 @@
+{
+  "schema_version": 1,
+  "scope": "actual failed-original and explicitly synthetic negative replay controls",
+  "outcome": "pass",
+  "source_revision": "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+  "original_archive": {
+    "sha256": "8021368d5efe755ae282ff2a89675979d8a1377582f84fbbea57e35b5ddad502",
+    "size_bytes": 29286833
+  },
+  "original_report_sha256": "97fe819aacd6d308e0c799701344efe5bd7229ac4d737f0c04ff1e69956151b1",
+  "original_operation_roles": {
+    "compile": 406,
+    "index": 2,
+    "link": 2,
+    "archive": 3
+  },
+  "all_original_operation_records_passed": true,
+  "original_overall_outcome": "fail",
+  "original_native_execution": "not_run",
+  "original_products": {},
+  "tests": [
+    {
+      "case": "actual_failed_original",
+      "argv": [
+        "python3",
+        "-B",
+        "/workspace/p06-local-run-source/ci/project/p06_dependency_replay.py",
+        "--archive",
+        "/workspace/scratch/279b6658611e/AI-GPU_P06_local_attempt_01_failed_2026-11-23.zip",
+        "--sha256",
+        "8021368d5efe755ae282ff2a89675979d8a1377582f84fbbea57e35b5ddad502",
+        "--source-revision",
+        "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+        "--dependency-receipt-sha256",
+        "97fe819aacd6d308e0c799701344efe5bd7229ac4d737f0c04ff1e69956151b1",
+        "--prefix",
+        "dependency-build"
+      ],
+      "exit_code": 1,
+      "duration_seconds": 1.8042534030009847,
+      "result": {
+        "acceptance_claimed": false,
+        "full_warm_coverage": false,
+        "native_execution": "not_run",
+        "outcome": "fail",
+        "performance_acceptance": false,
+        "phase_acceptance": false,
+        "qualified": false,
+        "ready_for_warm": false,
+        "reason": "dependency receipt is not a complete successful build",
+        "retained_code_executed": false,
+        "retained_consistency": false,
+        "warm_execution": false
+      }
+    },
+    {
+      "case": "malformed_archive_pin",
+      "argv": [
+        "python3",
+        "-B",
+        "/workspace/p06-local-run-source/ci/project/p06_dependency_replay.py",
+        "--archive",
+        "/workspace/scratch/279b6658611e/AI-GPU_P06_local_attempt_01_failed_2026-11-23.zip",
+        "--sha256",
+        "not-a-sha256",
+        "--source-revision",
+        "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+        "--dependency-receipt-sha256",
+        "97fe819aacd6d308e0c799701344efe5bd7229ac4d737f0c04ff1e69956151b1",
+        "--prefix",
+        "dependency-build"
+      ],
+      "exit_code": 1,
+      "duration_seconds": 0.42298366999966674,
+      "result": {
+        "acceptance_claimed": false,
+        "full_warm_coverage": false,
+        "native_execution": "not_run",
+        "outcome": "fail",
+        "performance_acceptance": false,
+        "phase_acceptance": false,
+        "qualified": false,
+        "ready_for_warm": false,
+        "reason": "external original ZIP SHA-256 is required",
+        "retained_code_executed": false,
+        "retained_consistency": false,
+        "warm_execution": false
+      }
+    },
+    {
+      "case": "malformed_revision_pin",
+      "argv": [
+        "python3",
+        "-B",
+        "/workspace/p06-local-run-source/ci/project/p06_dependency_replay.py",
+        "--archive",
+        "/workspace/scratch/279b6658611e/AI-GPU_P06_local_attempt_01_failed_2026-11-23.zip",
+        "--sha256",
+        "8021368d5efe755ae282ff2a89675979d8a1377582f84fbbea57e35b5ddad502",
+        "--source-revision",
+        "master",
+        "--dependency-receipt-sha256",
+        "97fe819aacd6d308e0c799701344efe5bd7229ac4d737f0c04ff1e69956151b1",
+        "--prefix",
+        "dependency-build"
+      ],
+      "exit_code": 1,
+      "duration_seconds": 0.347043689000202,
+      "result": {
+        "acceptance_claimed": false,
+        "full_warm_coverage": false,
+        "native_execution": "not_run",
+        "outcome": "fail",
+        "performance_acceptance": false,
+        "phase_acceptance": false,
+        "qualified": false,
+        "ready_for_warm": false,
+        "reason": "exact external source revision is required",
+        "retained_code_executed": false,
+        "retained_consistency": false,
+        "warm_execution": false
+      }
+    },
+    {
+      "case": "malformed_dependency_pin",
+      "argv": [
+        "python3",
+        "-B",
+        "/workspace/p06-local-run-source/ci/project/p06_dependency_replay.py",
+        "--archive",
+        "/workspace/scratch/279b6658611e/AI-GPU_P06_local_attempt_01_failed_2026-11-23.zip",
+        "--sha256",
+        "8021368d5efe755ae282ff2a89675979d8a1377582f84fbbea57e35b5ddad502",
+        "--source-revision",
+        "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+        "--dependency-receipt-sha256",
+        "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+        "--prefix",
+        "dependency-build"
+      ],
+      "exit_code": 1,
+      "duration_seconds": 0.364752485000281,
+      "result": {
+        "acceptance_claimed": false,
+        "full_warm_coverage": false,
+        "native_execution": "not_run",
+        "outcome": "fail",
+        "performance_acceptance": false,
+        "phase_acceptance": false,
+        "qualified": false,
+        "ready_for_warm": false,
+        "reason": "external dependency receipt SHA-256 is required",
+        "retained_code_executed": false,
+        "retained_consistency": false,
+        "warm_execution": false
+      }
+    },
+    {
+      "case": "wrong_well_formed_archive_pin",
+      "argv": [
+        "python3",
+        "-B",
+        "/workspace/p06-local-run-source/ci/project/p06_dependency_replay.py",
+        "--archive",
+        "/workspace/scratch/279b6658611e/AI-GPU_P06_local_attempt_01_failed_2026-11-23.zip",
+        "--sha256",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "--source-revision",
+        "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+        "--dependency-receipt-sha256",
+        "97fe819aacd6d308e0c799701344efe5bd7229ac4d737f0c04ff1e69956151b1",
+        "--prefix",
+        "dependency-build"
+      ],
+      "exit_code": 1,
+      "duration_seconds": 0.45108648799941875,
+      "result": {
+        "acceptance_claimed": false,
+        "full_warm_coverage": false,
+        "native_execution": "not_run",
+        "outcome": "fail",
+        "performance_acceptance": false,
+        "phase_acceptance": false,
+        "qualified": false,
+        "ready_for_warm": false,
+        "reason": "original ZIP SHA-256 differs from the external intake identity",
+        "retained_code_executed": false,
+        "retained_consistency": false,
+        "warm_execution": false
+      }
+    },
+    {
+      "case": "wrong_well_formed_dependency_pin",
+      "argv": [
+        "python3",
+        "-B",
+        "/workspace/p06-local-run-source/ci/project/p06_dependency_replay.py",
+        "--archive",
+        "/workspace/scratch/279b6658611e/AI-GPU_P06_local_attempt_01_failed_2026-11-23.zip",
+        "--sha256",
+        "8021368d5efe755ae282ff2a89675979d8a1377582f84fbbea57e35b5ddad502",
+        "--source-revision",
+        "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+        "--dependency-receipt-sha256",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "--prefix",
+        "dependency-build"
+      ],
+      "exit_code": 1,
+      "duration_seconds": 0.720237558000008,
+      "result": {
+        "acceptance_claimed": false,
+        "full_warm_coverage": false,
+        "native_execution": "not_run",
+        "outcome": "fail",
+        "performance_acceptance": false,
+        "phase_acceptance": false,
+        "qualified": false,
+        "ready_for_warm": false,
+        "reason": "dependency receipt SHA-256 differs from the external intake identity",
+        "retained_code_executed": false,
+        "retained_consistency": false,
+        "warm_execution": false
+      }
+    },
+    {
+      "case": "synthetic_rebound_pass_flags_cannot_supply_missing_evidence",
+      "argv": [
+        "python3",
+        "-B",
+        "/workspace/p06-local-run-source/ci/project/p06_dependency_replay.py",
+        "--archive",
+        "/workspace/scratch/279b6658611e/validation/w05_a06_SYNTHETIC_forged_pass_not_original.zip",
+        "--sha256",
+        "92a97faa0e05e915ec438d16c986e5ce68ce31b4731f00a1224e177d9ab770ac",
+        "--source-revision",
+        "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+        "--dependency-receipt-sha256",
+        "36b1c1e7bad2df4d8d7551fd75bc00793cddd0640e4de8b1bc37c76e4d2d781b",
+        "--prefix",
+        "dependency-build"
+      ],
+      "exit_code": 1,
+      "duration_seconds": 1.6502772130006633,
+      "result": {
+        "acceptance_claimed": false,
+        "full_warm_coverage": false,
+        "native_execution": "not_run",
+        "outcome": "fail",
+        "performance_acceptance": false,
+        "phase_acceptance": false,
+        "qualified": false,
+        "ready_for_warm": false,
+        "reason": "retained inventory ordering differs",
+        "retained_code_executed": false,
+        "retained_consistency": false,
+        "warm_execution": false
+      }
+    }
+  ],
+  "tests_passed": 7,
+  "synthetic_control": {
+    "filename": "w05_a06_SYNTHETIC_forged_pass_not_original.zip",
+    "sha256": "92a97faa0e05e915ec438d16c986e5ce68ce31b4731f00a1224e177d9ab770ac",
+    "size_bytes": 29286754,
+    "report_sha256": "36b1c1e7bad2df4d8d7551fd75bc00793cddd0640e4de8b1bc37c76e4d2d781b",
+    "changed_fields": [
+      "outcome",
+      "reason",
+      "failures",
+      "fresh_dependency_build_passed"
+    ],
+    "original_evidence": false
+  },
+  "original_archive_and_report_unchanged": true,
+  "retained_code_executed": false,
+  "production_source_edited": false,
+  "duration_seconds": 7.257130636000511,
+  "finished_at": "2026-11-23T12:35:24.453283+00:00",
+  "limitations": [
+    "Negative controls do not establish a successful complete dependency or native original.",
+    "The synthetic archive changes only success-related fields and external pins; it is never original execution evidence."
+  ]
+}

@@ -7,35 +7,53 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Start here: P06-T01 dependency provenance
+## Start here: P06-T01 provenance and complete counter qualification
 
-**Current bounded task: P06-T01 — collect and independently review the complete
-fresh dependency/native original under the
-[dependency handoff](p06-dependency-provenance-handoff.md).**
-The current production implementation is published at
-`19333193192ba5a2d3667c0111235ec9e21a5898`: immutable source locks, recorded-build
-receipts, exact product staging, full 30-command application admission and
-complete inert native/control readers. Actual host builds exposed three
-corrected issues: repeated compiler prerequisite names, a map assigned to the
-wrong payload-size category, and an unused spdlog archive incorrectly required
-to contribute a member. The [packet](evidence/p06-dependency-provenance/README.md)
-preserves the failed attempts, independent reviews and distinct validation
-checkpoints. Follow the
-[intake/replay guide](evidence/p06-dependency-provenance/replay-guide.md) for the
-still-required formal original and its external pins. At the
-[2026-11-23 11:11:01 UTC provider observation](evidence/p06-dependency-provenance/validation/provider-observation-19333193.json),
-fresh run `45162083701` was pending with no jobs, while governance run
-`45162084006` had one queued job and no steps. No cause or fresh native result
-is established by that observation. The separate host diagnostic cannot supply
-formal preparation/cache/staging or native loader evidence.
+**Current bounded task: implement the separately versioned 33-selector /
+40-component / ten-premise qualification contract, inert validator and explicit
+admission path for the existing managed caller.** The complete fresh local
+attempt-04 original, both separate controls and full public replay now pass
+independent review in the
+[local evidence packet](evidence/p06-dependency-provenance/local-execution/README.md).
+The [current status](status.md),
+[dependency handoff](p06-dependency-provenance-handoff.md) and
+[qualification plan](p06-mpm-qualification-plan.md) define the remaining sequence:
+freeze and independently review the new qualification rules, execute their fresh
+four-process preflight, and only then run the unchanged 24-process warm experiment.
 
-The [completed host diagnostic `05`](evidence/p06-dependency-provenance/host-diagnostic/execution-05-summary.json)
-at `19333193` passes all 413 actual selected operations: 406 compilations, three
-archives, two indexes and two shared links, with complete diagnostic graph
-validation and [independent host-original consistency review](evidence/p06-dependency-provenance/host-diagnostic/review-05.json).
-This establishes the host dependency-build scope; the next task
-still needs the formal producer, both managed format builds, four native
-processes and the separate controls in one identified original.
+The explicit local route builds on the earlier hosted provenance implementation,
+with verified immutable toolchain inputs, fresh source/build/product staging,
+full application admission and combined inert dependency/native/control replay.
+[Attempt 03](evidence/p06-dependency-provenance/local-execution/attempt-03.md) at
+`7251f078` passed 413 dependency operations and the four-process, 132-launch,
+4,224-word native subpacket, but its wrapper failed at the generic JSON-token
+bound and neither control ran. Preserve that failed envelope and the earlier
+[host-runtime](evidence/p06-dependency-provenance/local-execution/attempt-01.md)
+and [inventory-ordering](evidence/p06-dependency-provenance/local-execution/attempt-02.md)
+failed originals. [Fresh attempt 04](evidence/p06-dependency-provenance/local-execution/validation/local-attempt-04-execution-summary.json)
+passed all five stages at `0f9aaa36d46364c297254164f5dab0d4f0e88349` in
+894.591061 seconds, including 413 dependency operations, four managed processes,
+132 launches and 4,224 exact words. The pending/always-zero controls and the
+numerically correct but provenance-rejected alternate process remain separate;
+the latter executed 33 launches and 1,056 words. The
+[full public local replay](evidence/p06-dependency-provenance/local-execution/validation/local-attempt-04-replay-summary.json)
+passed from clean reader `ba2d649d4150e046c2ba610de02725d9d062b1be` in
+18.657440 seconds without executing retained content or changing the original.
+
+The [test-evidence audit](evidence/p06-dependency-provenance/local-execution/validation/w07_a05-test-evidence-review.json)
+separates the 4,256-test full pass at `ac2f2ae7` from 136 affected tests at
+`7251f078`. The parser correction has 118 affected passing tests; the later
+`8d735eba` hosted preparation/path-guard corrections have separately scoped
+40-test preparation/workflow and seven-test real-hosted-layout passes. The later
+`ba2d649d` reader correction has 22 distinct control/inventory regression passes
+and independent actual-control review. It accounts for two exact opaque runtime
+diagnostic files omitted by the earlier reader; the first public replay failure
+and original bytes remain preserved. Do not sum overlapping tests or attribute
+a full-suite pass to a later source.
+The [later provider record](evidence/p06-dependency-provenance/local-execution/validation/provider-observation-current.json)
+retains hosted preparation failure at `19333193` and the 4,141-test governance
+run at `849469e1` with two path-guard failures. The local fixes do not establish
+a successful hosted retry.
 
 The [native lifetime witness](evidence/p06-native-lifetime/README.md) is
 implemented at `b4127b19a004b5aebb8d52eab9ceda0da3ff4561`.
@@ -182,25 +200,38 @@ origins, audited nonnegative checked updates, admitted resets, exclusive
 ownership, worker/queue cleanup, successful terminal sums and no later update.
 A separate transient pending observation does not close that complete theorem.
 
-The [dependency provenance route](p06-dependency-provenance-handoff.md) now has
-immutable source locks, recorded configure/compile/archive/link operations,
-product/loader admission and the existing complete application-build validator
-bound into live execution. Complete inert native and combined-control readers
-are published. The next action is to collect a successful formal fresh original
-at a named published revision, retain all earlier failures, and review the exact
-archive with independent external pins and provider identities. Reconcile its
-406 compilations/413 selected operations with managed builds and actual loaded
-products; separate host diagnostics cannot establish that complete join.
-Keep the four-process, 132-launch, 4,224-word
-managed population unchanged, with pending-read, always-zero and alternate-library
-controls counted separately. Independently reconcile the complete original
-before advancing the broader qualification work.
-The [broader qualification plan](p06-mpm-qualification-plan.md) still requires
-an independently reviewed admission/final-validation path for the eventual
-measurement binaries. The current preflight/replay retain all three unresolved
-obligations: `all_40_component_lifetime_and_pending_balance`,
-`dependency_source_to_loaded_binary_provenance`, and
-`independent_complete_counter_qualification`.
+The [dependency provenance route](p06-dependency-provenance-handoff.md) binds
+five immutable source trees and 406 compilations/413 tool operations to actual
+products, managed builds and loaded libraries. The complete attempt-04 original,
+separate pending/always-zero and alternate-library controls, full externally
+pinned local replay and independent review establish this bounded provenance
+result. Preserve its four-process, 132-launch, 4,224-word managed population,
+separate control counts and all failed originals. Local execution remains
+explicitly local; historical host diagnostics and GitHub cache/job metadata
+retain their separate meanings.
+
+With that scoped prerequisite recorded, the
+[independent next-step audit](evidence/p06-dependency-provenance/local-execution/agents/w07_a03.md)
+selects a concrete implementation slice: freeze a new qualification identity,
+source/binary premise projection, pure fail-closed validator and explicit
+admission/final-validation path. Cover all 33 selectors, 40 cumulative backing
+components and ten existing lifetime premises. Bind exact guarded configuration,
+source/build/product identities, zero origins and monotone checked updates,
+reset preservation and pre-reset pending, terminal ownership/drain, checked sums,
+full-width readout, no-update teardown and dependency finalizers. Pending reads
+are a transient balance, not a forty-first cumulative component.
+
+Required review must address coherent rehashing/substitution, missing or duplicate
+components, unsupported routes, diagnostic/seed objects, missing build inputs,
+nonzero pre-reset pending, unavailable queries, missing resets or disposal,
+retained ownership, failed high halves and favorable endpoints after an earlier
+failure. Then execute the fresh unchanged four-process preflight under the new
+reviewed admission contract. The earlier provenance original can supply scoped
+premises and regression data; it cannot be relabelled as execution under future
+qualification rules. The [broader plan](p06-mpm-qualification-plan.md) remains
+normative. Historical v1 reports keep their three named unresolved obligations
+and existing false fields unchanged; new scoped results require an explicit new
+contract rather than an override in those reports.
 
 Follow only a qualified route with the unchanged fresh matched warm attempt:
 24 processes, 792 launches and 25,344 exact output words under the
@@ -500,11 +531,13 @@ retain the preceding four-process original. The later
 [native lifetime witness](evidence/p06-native-lifetime/README.md) adds executed
 pending-balance, run/reset and disposal observations without claiming full
 qualification. The [provenance packet](evidence/p06-dependency-provenance/README.md)
-now records implemented producers, full application admission and complete inert
-readers. Follow the [dependency handoff](p06-dependency-provenance-handoff.md) to
-collect and independently replay/review the fresh dependency/native original,
-then independently review the complete
-qualification path before a fresh matched warm attempt.
+records the implemented provenance route and its distinct historical scopes.
+The [local continuation](evidence/p06-dependency-provenance/local-execution/runbook.md)
+establishes the complete fresh dependency/native/control original and inert
+replay within its declared scope. The next step is the separately versioned
+complete qualification contract and required fresh preflight. Follow the
+[dependency handoff](p06-dependency-provenance-handoff.md); the warm experiment
+remains behind reviewed qualification.
 Detailed work packages remain in the
 phase guides, the [development audit](p05-binding-audit.md) and the
 [Python binding handoff](p05-entry-handoff.md).
@@ -518,7 +551,7 @@ phase guides, the [development audit](p05-binding-audit.md) and the
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
 | **P04-T02 — Native model execution — complete** | Four clean SimX/native processor RTL × FP16/BF16 variants pass exact intermediate/final comparisons, live-input lineage, native placement and separate host/transfer accounting after independent review. | T01; model runtime lead | [P04-A02](evidence/p04-executor/acceptance-numerics.json), [P04-A03](evidence/p04-executor/acceptance-dispatch.json) |
 | **P05-T01 — Python/custom-op bridge — in progress** | Preserve the accepted copying binding; independently review the existing custom-op implementation's installed dispatch, compatibility and explicit failure evidence before an acceptance decision. | P04; framework integration lead; [handoff](p05-entry-handoff.md) | [P05-A01 accepted](evidence/p05-python/acceptance-binding.json); P05-A02/P05-A03 unearned |
-| **P06-T01 — Measured optimization — in progress** | Collect a complete fresh dependency/native original through the implemented provenance and full application-admission route; retain separate controls and independently verify the exact original with the complete inert readers. Preserve historical lifetime evidence and finish separate complete qualification before the unchanged warm matrix. | P04; performance and memory lead; [dependency handoff](p06-dependency-provenance-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
+| **P06-T01 — Measured optimization — in progress** | Freeze and independently review a separately versioned 33-selector/40-component qualification contract, exact source/binary premise projection and fail-closed admission/final validator, using the scoped completed provenance original as a prerequisite. Execute its required fresh four-process preflight before the unchanged 24-process warm experiment. Preserve historical originals and seven false fields. | P04; performance and memory lead; [dependency handoff](p06-dependency-provenance-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),
 [P04](phases/p04-inference.md), [P05](phases/p05-framework.md) and

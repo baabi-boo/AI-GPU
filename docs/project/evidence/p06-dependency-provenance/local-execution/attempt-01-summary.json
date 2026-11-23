@@ -1,0 +1,271 @@
+{
+  "schema_version": 1,
+  "summary_scope": "Preserved failed local execution attempt and independently reviewed failure cause; not a successful dependency or native original",
+  "attempt": "01",
+  "execution_origin": "local",
+  "source_revision": "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+  "source_tree": "5e7caa2b008fe8b1924811aeda5a079845a37343",
+  "original_workspace": "/workspace/p06-local-native-run-01",
+  "source_directory": "/workspace/p06-local-run-source",
+  "host_bin": "/workspace/p06-local-host/bin",
+  "started_at": "2026-11-23T12:13:17+00:00",
+  "finished_at": "2026-11-23T12:23:13+00:00",
+  "duration_seconds": 595.561508,
+  "outcome": "fail",
+  "reason": "dependency-build child failed: nonzero_exit",
+  "dependency_outcome": "fail",
+  "dependency_reason": "link selected an unreviewed external archive",
+  "native_execution": "not_run",
+  "fresh_dependency_build_passed": false,
+  "dependency_source_to_loaded_binary_verified": false,
+  "separate_controls_passed": false,
+  "qualified": false,
+  "ready_for_warm": false,
+  "warm_execution": false,
+  "full_warm_coverage": false,
+  "acceptance_claimed": false,
+  "phase_acceptance": false,
+  "performance_acceptance": false,
+  "original_reports": {
+    "local-execution.json": {
+      "path": "local-execution.json",
+      "sha256": "1e1c336d2d1c078aa041ccbe698d917370190f4f420f9d4481552514095d9f2a",
+      "size_bytes": 12163
+    },
+    "dependency-preparation.json": {
+      "path": "dependency-preparation.json",
+      "sha256": "463538673387219cfcbeee4bdb47d47b357130fb858cc4d9c6f6fcc45ceda3de",
+      "size_bytes": 1885693
+    },
+    "dependency-build/report.json": {
+      "path": "dependency-build/report.json",
+      "sha256": "97fe819aacd6d308e0c799701344efe5bd7229ac4d737f0c04ff1e69956151b1",
+      "size_bytes": 1536377
+    }
+  },
+  "stages": [
+    {
+      "id": "preparation",
+      "outcome": "pass",
+      "exit_code": 0,
+      "duration_seconds": 85.618661
+    },
+    {
+      "id": "dependency-build",
+      "outcome": "fail",
+      "exit_code": 1,
+      "duration_seconds": 509.516277
+    }
+  ],
+  "outer_build_commands": [
+    {
+      "duration_seconds": 25.878725,
+      "exit_code": 0,
+      "id": "softfloat",
+      "outcome": "pass"
+    },
+    {
+      "duration_seconds": 0.948926,
+      "exit_code": 0,
+      "id": "ramulator-configure",
+      "outcome": "pass"
+    },
+    {
+      "duration_seconds": 431.834454,
+      "exit_code": 0,
+      "id": "ramulator-build",
+      "outcome": "pass"
+    },
+    {
+      "duration_seconds": 16.379024,
+      "exit_code": 0,
+      "id": "extension-compile",
+      "outcome": "pass"
+    },
+    {
+      "duration_seconds": 0.180442,
+      "exit_code": 0,
+      "id": "extension-link",
+      "outcome": "pass"
+    }
+  ],
+  "passing_actual_operation_counts": {
+    "archive": 3,
+    "compile": 406,
+    "index": 2,
+    "link": 2
+  },
+  "passing_actual_operations": 413,
+  "passing_actual_child_observations": 819,
+  "child_stage_counts": {
+    "dependencies": 406,
+    "tool": 413
+  },
+  "source_plan_counts": {
+    "extension": 1,
+    "ramulator": 60,
+    "softfloat": 309,
+    "spdlog": 7,
+    "yaml-cpp": 29
+  },
+  "failure_finding": {
+    "confidence": "high",
+    "evidence_type": "static-proof",
+    "finding": "The extracted host C++ development runtime link is dangling, so GNU ld falls back to unadmitted static libstdc++ members.",
+    "next_action": "Preserve this host and failed original. Provision the pinned shared C++ runtime in a new host root, prove shared selection, then execute a fresh attempt.",
+    "repository_validator_status": "Correctly rejects the incomplete original; no validator relaxation is warranted.",
+    "scope": "execution environment",
+    "severity": "F2"
+  },
+  "missing_runtime": {
+    "path": "/workspace/p06-local-host/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libstdc++.so",
+    "resolved_path": "/workspace/p06-local-host/extracted/usr/lib/x86_64-linux-gnu/libstdc++.so.6",
+    "symlink_target": "../../../x86_64-linux-gnu/libstdc++.so.6",
+    "target_exists": false
+  },
+  "link_maps": {
+    "extension": {
+      "record_id": "b6376a44654b35b1ba29a75346f065cd51051a42bb875a63fd6fdd7c44ac752e",
+      "recorded_path": "/workspace/p06-local-native-run-01/dependency-build/extension.map",
+      "retained_payload": "payloads/96ba637f1f068a65eb9b106dbd0ba2c1dc04575fa1205d0b76d9e36f94691c1e.bin",
+      "selected_archive_member_counts": {},
+      "sha256": "96ba637f1f068a65eb9b106dbd0ba2c1dc04575fa1205d0b76d9e36f94691c1e",
+      "size_bytes": 607269,
+      "support_loads": [
+        "/workspace/p06-local-host/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libstdc++.a",
+        "/workspace/p06-local-host/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc_s.so",
+        "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "/workspace/p06-local-host/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc.a",
+        "/usr/lib/x86_64-linux-gnu/libc_nonshared.a",
+        "/workspace/p06-local-host/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc_s.so",
+        "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "/workspace/p06-local-host/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc.a"
+      ],
+      "unadmitted_selected_archives": []
+    },
+    "ramulator": {
+      "record_id": "9e3bac86622c4bf8c25c60bb42dbd310a530957c24a7b1f9f9cfd302692fb49b",
+      "recorded_path": "/workspace/p06-local-native-run-01/dependency-build/ramulator.map",
+      "retained_payload": "payloads/07bb530ff3eb43fa386fcbd56d2cd53e2822ef0dfbdd2d4eecdb5b56ef8a15f2.bin",
+      "selected_archive_member_counts": {
+        "/usr/lib/x86_64-linux-gnu/libc_nonshared.a": 1,
+        "/workspace/p06-local-host/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libstdc++.a": 108,
+        "/workspace/p06-local-native-run-01/dependency-build/ramulator/_deps/yaml-cpp-build/libyaml-cpp.a": 25
+      },
+      "sha256": "07bb530ff3eb43fa386fcbd56d2cd53e2822ef0dfbdd2d4eecdb5b56ef8a15f2",
+      "size_bytes": 21184256,
+      "support_loads": [
+        "/workspace/p06-local-host/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libstdc++.a",
+        "/workspace/p06-local-host/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc_s.so",
+        "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "/workspace/p06-local-host/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc.a",
+        "/usr/lib/x86_64-linux-gnu/libc_nonshared.a",
+        "/workspace/p06-local-host/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc_s.so",
+        "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "/workspace/p06-local-host/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc.a"
+      ],
+      "unadmitted_selected_archives": [
+        "/usr/lib/x86_64-linux-gnu/libc_nonshared.a",
+        "/workspace/p06-local-host/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libstdc++.a"
+      ]
+    }
+  },
+  "omitted_after_failure": {
+    "admitted_maps": 0,
+    "compile_database": null,
+    "external_archives": 0,
+    "generated_inputs": 0,
+    "products": 0,
+    "staged_files": 0
+  },
+  "independent_failure_review": {
+    "scope": "Failure diagnosis and completed per-record observations only",
+    "result": "pass",
+    "duration_seconds": 7.933183,
+    "retained_files": 3534,
+    "retained_bytes_excluding_report": 142475350,
+    "retained_files_rehashed_before_and_after": true,
+    "report_unchanged_after_review": true,
+    "retained_code_executed_by_reviewer": false,
+    "full_receipt_reader_result": {
+      "accepted": false,
+      "reason": "dependency receipt is not a complete successful build"
+    },
+    "review_identity": {
+      "sha256": "10aa1838d6c8f459203b37042af5861cca9172ecc24ad1d98324992d8544fc64",
+      "size_bytes": 7680,
+      "filename": "w05_a01-failure-review.json"
+    }
+  },
+  "independent_softfloat_review": {
+    "scope": "Actual completed SoftFloat compilation/archive subgraph; separate from full dependency/native acceptance",
+    "outcome": "pass",
+    "compile_records": 309,
+    "archive_records": 1,
+    "successful_children": 619,
+    "archive": {
+      "member_bytes_match_compile_outputs": true,
+      "member_order_matches_pinned_recipe": true,
+      "members": 309,
+      "sha256": "fed323d6760249f17eeedf51890702509d7404b95e6518b4872ecdf93c9b0634",
+      "size_bytes": 492714,
+      "symbol_index_matches_elf_definitions": true
+    },
+    "archive_index_symbols": 297,
+    "pinned_input_files": 317,
+    "pinned_input_bytes": 1241300,
+    "selected_system_header_files": 35,
+    "staging_observed": false,
+    "review_identity": {
+      "sha256": "4ac5456f397fe98418812a21771eba5d8f580919bd52c375ced3094dcefde660",
+      "size_bytes": 3369,
+      "filename": "w05_a02-softfloat-review.json"
+    }
+  },
+  "evidence_archive": {
+    "schema_version": 1,
+    "filename": "AI-GPU_P06_local_attempt_01_failed_2026-11-23.zip",
+    "sha256": "8021368d5efe755ae282ff2a89675979d8a1377582f84fbbea57e35b5ddad502",
+    "size_bytes": 29286833,
+    "original_revision": "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+    "original_outcome": "fail",
+    "original_native_execution": "not_run",
+    "original_evidence_root": "/workspace/p06-local-native-run-01/evidence",
+    "member_count": 3540,
+    "uncompressed_bytes": 145932041,
+    "subpacket_file_counts": {
+      "dependency-build": 3535,
+      "dependency-preparation.json": 1,
+      "local-execution.json": 1,
+      "local-logs": 2,
+      "local-sources": 1
+    },
+    "all_members_rehashed_against_original": true,
+    "original_rehashed_after_packaging": true,
+    "zip_crc_verified": true,
+    "retained_code_executed": false,
+    "packaged_at": "2026-11-23T12:27:46.196236+00:00",
+    "external_report_pins": {
+      "dependency-build/report.json": {
+        "sha256": "97fe819aacd6d308e0c799701344efe5bd7229ac4d737f0c04ff1e69956151b1",
+        "size_bytes": 1536377
+      },
+      "dependency-preparation.json": {
+        "sha256": "463538673387219cfcbeee4bdb47d47b357130fb858cc4d9c6f6fcc45ceda3de",
+        "size_bytes": 1885693
+      },
+      "local-execution.json": {
+        "sha256": "1e1c336d2d1c078aa041ccbe698d917370190f4f420f9d4481552514095d9f2a",
+        "size_bytes": 12163
+      }
+    }
+  },
+  "next_action": "Preserve this failed original and host root. Provision the exact matching shared C++ runtime in a new complete host root, verify shared selection, and execute a fresh source/workspace attempt at the same frozen code revision without relaxing archive validation.",
+  "limitations": [
+    "This review establishes the failure cause and the completed observed operation population, not a complete fresh dependency receipt.",
+    "Generated CMake retention, final product staging, complete source/stability checks and native loaded-library joins remain unestablished by this attempt.",
+    "No retained commands or binaries were executed and no original evidence was changed.",
+    "The archive preserves the producer evidence directory; it is not a snapshot of the entire host installation or workspace.",
+    "This historical failed-attempt record makes no claim about the outcome of any later retry."
+  ]
+}

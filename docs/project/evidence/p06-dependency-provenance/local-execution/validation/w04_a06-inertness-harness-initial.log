@@ -1,0 +1,47 @@
+test_actual_preparation_is_metadata_only (__main__.IndependentInertnessTests.test_actual_preparation_is_metadata_only) ... ok
+test_complete_local_synthetic_path_has_only_trusted_live_inputs (__main__.IndependentInertnessTests.test_complete_local_synthetic_path_has_only_trusted_live_inputs) ... ERROR
+
+======================================================================
+ERROR: test_complete_local_synthetic_path_has_only_trusted_live_inputs (__main__.IndependentInertnessTests.test_complete_local_synthetic_path_has_only_trusted_live_inputs)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/279b6658611e/validation/w04_a06_inertness_review.py", line 125, in test_complete_local_synthetic_path_has_only_trusted_live_inputs
+    result = replay.replay_archive(fixture.path, pin, **fixture.arguments())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_dependency_local_replay.py", line 265, in replay_archive
+    require(_reader_sources() == TRUSTED_READER_SOURCES, "trusted local replay source changed after import")
+            ^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_dependency_local_replay.py", line 69, in _reader_sources
+    rows = {row["path"]: row for row in controls._reader_sources()}
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_dependency_control_replay.py", line 93, in _reader_sources
+    rows = {row["path"]: row for row in native_replay._reader_sources()}
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_dependency_native_replay.py", line 91, in _reader_sources
+    rows = dependency_replay._reader_sources()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_dependency_replay.py", line 55, in _reader_sources
+    rows = managed_archive._reader_sources()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_managed_preflight_replay.py", line 121, in _reader_sources
+    rows.append(generated_inputs.trusted_generator_identity())
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_managed_preflight_generated.py", line 88, in trusted_generator_identity
+    bodies = _trusted_inputs()
+             ^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_managed_preflight_generated.py", line 36, in _trusted_inputs
+    with PacketReader(ROOT, max_total_bytes=256 * 1024, max_files=len(INPUT_SHA256)) as reader:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/baseline_packet_io.py", line 225, in __init__
+    self._root = _DirectoryChain(root)
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/baseline_packet_io.py", line 178, in __init__
+    _require_nofollow()
+  File "/workspace/ai-gpu-next/ci/project/baseline_packet_io.py", line 137, in _require_nofollow
+    raise PacketError("this platform cannot enforce no-follow packet access")
+baseline_packet_io.PacketError: this platform cannot enforce no-follow packet access
+
+----------------------------------------------------------------------
+Ran 2 tests in 6.433s
+
+FAILED (errors=1)

@@ -1,0 +1,22 @@
+test_prefix_collisions_follow_the_reader_posix_string_order (test_p06_dependency_retention_order_review.DependencyRetentionOrderingReviewTests.test_prefix_collisions_follow_the_reader_posix_string_order) ... FAIL
+test_retained_inventory_still_enforces_its_total_byte_bound (test_p06_dependency_retention_order_review.DependencyRetentionOrderingReviewTests.test_retained_inventory_still_enforces_its_total_byte_bound) ... ok
+test_retained_inventory_still_rejects_symlinks (test_p06_dependency_retention_order_review.DependencyRetentionOrderingReviewTests.test_retained_inventory_still_rejects_symlinks) ... ok
+
+======================================================================
+FAIL: test_prefix_collisions_follow_the_reader_posix_string_order (test_p06_dependency_retention_order_review.DependencyRetentionOrderingReviewTests.test_prefix_collisions_follow_the_reader_posix_string_order)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/ai-gpu-next/ci/project/test_p06_dependency_retention_order_review.py", line 47, in test_prefix_collisions_follow_the_reader_posix_string_order
+    self.assertEqual([row["path"] for row in rows], names)
+AssertionError: Lists differ: ['sou[26 chars]mbdas/action.h', 'sources/ramulator/src/dram/l[262 chars]e.h'] != ['sou[26 chars]mbdas.h', 'sources/ramulator/src/dram/lambdas/[262 chars]e.h']
+
+First differing element 0:
+'sources/ramulator/src/dram/lambdas/action.h'
+'sources/ramulator/src/dram/lambdas.h'
+
+Diff is 772 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.004s
+
+FAILED (failures=1)

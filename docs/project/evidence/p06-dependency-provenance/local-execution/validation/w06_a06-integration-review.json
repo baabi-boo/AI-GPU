@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "review_agent": "w06_a06",
+  "scope": "Independent source and real retained-inventory integration review; no build or native execution",
+  "base_revision": "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+  "outcome": "pass",
+  "findings": [],
+  "reviewed_sources": {
+    "ci/project/p06_dependency_build.py": {
+      "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+      "size_bytes": 32820
+    },
+    "ci/project/p06_dependency_control_replay.py": {
+      "sha256": "20f239d3cc2cd110ca4ae80fe6580b2db878978c0b67b877fdfe57212d459678",
+      "size_bytes": 37820
+    },
+    "ci/project/test_p06_dependency_control_replay.py": {
+      "sha256": "8052e75464413080a57f7a3cd253ccad651d55eed7dcb52e82f258a8a3c60530",
+      "size_bytes": 45993
+    },
+    "ci/project/p06_dependency_receipt.py": {
+      "sha256": "6a45f224b57cbc2e4d7edfd540712eb468b1aa92407e2b65bc5a2de7c3581c70",
+      "size_bytes": 63377
+    },
+    "ci/project/p06_dependency_record.py": {
+      "sha256": "5364a5036fb03bebed3aba6267d302cf36c379b30e7085ded1b59db077c33205",
+      "size_bytes": 26464
+    },
+    "ci/project/p06_dependency_substitution.py": {
+      "sha256": "258f9cf9331f798b9e9a3f5ecfdf61a9b8f5208ef5074f3591d98d031c8c1164",
+      "size_bytes": 30690
+    },
+    "ci/project/p06_pending_probe.py": {
+      "sha256": "5ddf67d4b5b9027b4a761329e40833fa0e7f3d47e289280c276dd02f7132dc91",
+      "size_bytes": 24288
+    },
+    "ci/project/p06_dependency_local_execute.py": {
+      "sha256": "e2a4329fd41f888a01c8000cc60b5bf76bc958f98ba3347557c6a370235aae71",
+      "size_bytes": 22190
+    },
+    "ci/project/p06_dependency_local_replay.py": {
+      "sha256": "a16983cf6c4083b9d2eb8f5a8d4e72660d8d10a92ef7d8dd9f8ba1a994ce298b",
+      "size_bytes": 22449
+    },
+    "ci/project/p06_dependency_native_replay.py": {
+      "sha256": "ad2f57a1264c4d2a7fbf2dcd27f19f1094c9fb053dde65bc45342adef97a9d21",
+      "size_bytes": 58403
+    },
+    "ci/project/p06_managed_preflight_replay.py": {
+      "sha256": "9ab96bfb7a8940c61d37a13cd3d39f148c4b0c623ed085615e53d92c7eea4ade",
+      "size_bytes": 36937
+    },
+    "ci/project/p06_dependency_contract.py": {
+      "sha256": "deb76bca18567ce10e24156591ffbb00dd539e57c556727fbc073aa0d0d1b988",
+      "size_bytes": 4398
+    },
+    "ci/project/p06_dependency_admission.py": {
+      "sha256": "8d9d65960d7f2336911823c29ee1c9eb14cba76ca0c097e9d42ad02b5744a1e7",
+      "size_bytes": 15128
+    }
+  },
+  "changed_top_level_definitions": {
+    "ci/project/p06_dependency_build.py": [
+      "Builder"
+    ],
+    "ci/project/p06_dependency_control_replay.py": [
+      "_substitution_records",
+      "verify_probe_view"
+    ],
+    "ci/project/test_p06_dependency_control_replay.py": [
+      "SyntheticControls"
+    ]
+  },
+  "unchanged_reference_sources": {
+    "ci/project/p06_dependency_receipt.py": true,
+    "ci/project/p06_dependency_record.py": true,
+    "ci/project/p06_dependency_substitution.py": true,
+    "ci/project/p06_pending_probe.py": true,
+    "ci/project/p06_dependency_local_execute.py": true,
+    "ci/project/p06_dependency_local_replay.py": true,
+    "ci/project/p06_dependency_native_replay.py": true,
+    "ci/project/p06_managed_preflight_replay.py": true,
+    "ci/project/p06_dependency_contract.py": true,
+    "ci/project/p06_dependency_admission.py": true
+  },
+  "actual_failed_original": {
+    "report_sha256": "344c43fe145a76f11938c45abcdb940ddda5a47da52c9ced6249713b9d62123b",
+    "original_outcome": "fail",
+    "original_reason": "retained inventory ordering differs",
+    "original_fresh_dependency_build_passed": false,
+    "report_unchanged": true,
+    "retained_files_checked": 3679,
+    "retained_bytes_checked": 138388982,
+    "fixed_inventory_equals_exact_sorted_original_descriptors": true,
+    "original_descending_pairs": [
+      [
+        "sources/ramulator/src/dram/lambdas/rowopen.h",
+        "sources/ramulator/src/dram/lambdas.h"
+      ],
+      [
+        "sources/softfloat/source/8086/specialize.h",
+        "sources/softfloat/source/8086-SSE/extF80M_isSignalingNaN.c"
+      ],
+      [
+        "sources/softfloat/source/ARM-VFPv2/specialize.h",
+        "sources/softfloat/source/ARM-VFPv2-defaultNaN/extF80M_isSignalingNaN.c"
+      ]
+    ],
+    "no_altered_report_written": true
+  },
+  "preservation": {
+    "substitution_view_function_unchanged": true,
+    "substitution_producer_unchanged": true,
+    "recorder_unchanged": true,
+    "dependency_reader_unchanged": true,
+    "contracts_and_claims_unchanged": true,
+    "source_bytes_stable_during_check": true,
+    "import_declarations_unchanged": true
+  },
+  "native_execution": "not_run",
+  "retained_code_executed": false,
+  "duration_seconds": 1.1461980260010023,
+  "substitution_fixed_layout": {
+    "all_helper_files_flat_below_inputs_ci_project": true,
+    "helper_count": 49,
+    "known_fixed_paths_plus_flat_hash_representatives": 72,
+    "path_component_sort_equals_posix_string_sort": true,
+    "hash_payload_and_record_families_are_flat": true,
+    "empty_lock_paths": [
+      "records/.records.lock",
+      "payloads/.retention.lock"
+    ],
+    "unknown_extra_members_still_rejected": true
+  }
+}

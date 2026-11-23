@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/w05_a04",
+  "wave": 5,
+  "source_revision": "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+  "outcome": "pass",
+  "blocking_findings": [],
+  "scope": "Independent host-runtime repair review, including a small generated host shared-library probe; no GPU workload execution",
+  "host_root": "/workspace/p06-local-host-02",
+  "host_receipt_sha256": "1a205a1d080753490669664c61236a2102176aff1457529415809740ad70f4ce",
+  "runtime_package": {
+    "path": "/workspace/p06-local-host-02/packages/libstdc++6_12.2.0-14+deb12u1_amd64.deb",
+    "sha256": "5cd3171216d4ab0fc911cfe9c35509bf2dd8f47761c43b7f6a4296701551a24d",
+    "size_bytes": 612604,
+    "version": "12.2.0-14+deb12u1",
+    "architecture": "amd64"
+  },
+  "signature_count": 3,
+  "package_count": 7,
+  "installed_unique_entries": 1125,
+  "regular_member_occurrences": 1015,
+  "regular_bytes": 177838018,
+  "old_root_entries": 1124,
+  "old_root_unchanged": true,
+  "tracked_source_unchanged": true,
+  "link_time_runtime": {
+    "path": "/workspace/p06-local-host-02/extracted/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30",
+    "sha256": "e7848e32af4932840ba775169041759a2a8dd5a008af360e5c55bce506eebcf4",
+    "size_bytes": 2190440
+  },
+  "loader_runtime": {
+    "path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+    "sha256": "972bb2a18b71140dab0240f8a1f68ab3fb1d56bcd4c4f824a91b70888faf5a00",
+    "size_bytes": 2497768
+  },
+  "same_runtime_bytes": false,
+  "shared_probe_passed": true,
+  "no_static_libstdcxx_members": true,
+  "original_evidence_modified": false,
+  "native_gpu_execution": "not_run_by_reviewer",
+  "qualification_or_acceptance_claimed": false,
+  "artifacts": [
+    {
+      "path": "/workspace/scratch/279b6658611e/validation/w05_a04-before.json",
+      "sha256": "b3dd92ae29f49f8372c8b92235f39031d7e06004c86555a5586c84c50cb11268",
+      "size_bytes": 1947
+    },
+    {
+      "path": "/workspace/scratch/279b6658611e/validation/w05_a04-package-review.json",
+      "sha256": "bf1523138b25070f42135c69141239d8ced3c1ddbc4dd685441d1771fb309ad5",
+      "size_bytes": 4076
+    },
+    {
+      "path": "/workspace/scratch/279b6658611e/validation/w05_a04-signed-package-review.json",
+      "sha256": "bd0f000286ec7b7be8be4fb2aa5ed6edb207e006301d89a3b60d347297ff997b",
+      "size_bytes": 1639
+    },
+    {
+      "path": "/workspace/scratch/279b6658611e/validation/w05_a04-independent-probe.json",
+      "sha256": "4da7b604f4d5ebd5f30c3e504d15ccbaf3095932c643a35f871958d9f00173f8",
+      "size_bytes": 4838
+    },
+    {
+      "path": "/workspace/scratch/279b6658611e/validation/w05_a04-stability-review.json",
+      "sha256": "0d02eea4a786a724edcb078648fe2aa68b98d6abc405e3cb1aedf81fe74e7c86",
+      "size_bytes": 2022
+    },
+    {
+      "path": "/workspace/scratch/279b6658611e/validation/w05_a04_review_host.py",
+      "sha256": "667ba891b9dfdab6075968a77b55ff50a7d7c42523d7d490fe1339105f4b50e0",
+      "size_bytes": 4943
+    },
+    {
+      "path": "/workspace/scratch/279b6658611e/validation/w05_a04-signature.log",
+      "sha256": "042f4581eccdc4de2ff20254ce2c5041f270062640419424e8adccdf8ca15592",
+      "size_bytes": 3033
+    },
+    {
+      "path": "/workspace/scratch/279b6658611e/validation/w05_a04-package-review-final.log",
+      "sha256": "bd01b237443632e4e1021e49c1322e03a9a27afab8944628f7245d3746883adb",
+      "size_bytes": 108
+    }
+  ],
+  "harness_corrections": [
+    "The first independent tar-member inventory counted the conventional root marker as a child; it was normalized and the complete check rerun. No installed data changed.",
+    "A final whole-working-tree clean assertion encountered the parent's new untracked evidence directory; the review instead verifies unchanged HEAD and no tracked source changes, and retains the exact working-tree observation."
+  ],
+  "limitations": [
+    "Signed package identity is verified relative to the existing exact Debian archive keyring; its package-manager registration is unavailable and not asserted.",
+    "The GCC12 shared runtime is selected at link time; runtime loading selects system libraries. This does not establish complete host-toolchain or operating-system provenance.",
+    "This small host probe does not substitute for the fresh complete dependency/native execution."
+  ]
+}

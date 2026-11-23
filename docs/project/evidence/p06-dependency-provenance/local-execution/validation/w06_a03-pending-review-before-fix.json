@@ -1,0 +1,25 @@
+{
+  "scope": "synthetic fixture plus static producer/reader review; no native execution",
+  "source": "/workspace/p06-local-run-source-02",
+  "expected_revision": "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+  "source_sha256": {
+    "ci/project/p06_pending_probe.py": "5ddf67d4b5b9027b4a761329e40833fa0e7f3d47e289280c276dd02f7132dc91",
+    "ci/project/p06_dependency_control_replay.py": "28fb88029d28e3adaad61d55ad14b040ac2a718a6031e8f22bdae6dc05086329",
+    "ci/project/p06_dependency_local_execute.py": "e2a4329fd41f888a01c8000cc60b5bf76bc958f98ba3347557c6a370235aae71",
+    "tests/unittest/pending_reads/main.cpp": "bca8962a873af0e3315e13cdd908f3ba1a1b8e89ab4fa9f41a74b1d65404b6f3"
+  },
+  "baseline_synthetic_probe_passed": true,
+  "declared_host_bin": "/workspace/p06-local-host-02/bin",
+  "producer_path": "/workspace/p06-local-host-02/bin:/opt/hostedtoolcache/Python/3.12.14/x64/bin:/usr/bin:/bin",
+  "frozen_reader_path": "/opt/hostedtoolcache/Python/3.12.14/x64/bin:/usr/bin:/bin",
+  "rejection": "pending environment.PATH: value differs",
+  "finding_severity": "F2",
+  "confidence": "high",
+  "evidence_type": "static-proof plus targeted executable reproduction",
+  "fixture_limitation": "The dependency semantic boundary is mocked; after the valid synthetic native check, host_bin and the probe PATH are changed to reproduce this isolated join. This is not a forged or actual native original.",
+  "native_execution": "not_run",
+  "retained_code_executed": false,
+  "output_tests": 9,
+  "output_tests_passed": true,
+  "duration_seconds": 4.103697268999895
+}

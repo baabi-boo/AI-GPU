@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "agent": "w06_a04",
+  "checkpoint": "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+  "recorded_at": "2026-11-23T12:54:25.712937+00:00",
+  "scope": "Independent substitution-control source/replay audit and pending-PATH correction review; real tiny host recorder and synthetic native context tests",
+  "outcome": "pass",
+  "native_gpu_execution": "not_run",
+  "complete_original_replay": "not_run",
+  "production_files_changed_by_reviewer": false,
+  "new_test_file": "ci/project/test_p06_dependency_substitution_retention_review.py",
+  "findings": [
+    {
+      "id": "w06_a04-F2-01",
+      "severity": "F2",
+      "confidence": "high",
+      "evidence_type": "static-proof plus reproduced failure",
+      "status": "fixed and independently verified",
+      "summary": "The actual recorder retains an empty payloads/.retention.lock, but the control reader omitted it from its semantic cache and the synthetic complete fixture omitted it entirely. A producer-correct packet was rejected at the frozen-product inventory comparison.",
+      "original_rejection": "substitution control_products_before: inventory length differs",
+      "original_reproduction_seconds": 4.4146472760003235,
+      "repair": "Require and consume exactly empty payloads/.retention.lock, and include it in the complete fixture before freezing. Preserve complete inventory equality."
+    }
+  ],
+  "pending_path_fix_review": {
+    "changed_function": "verify_probe_view",
+    "source_of_prefix": "validated native.paths.host_bin when non-null",
+    "substitution_environment_function_changed": false,
+    "substitution_default_path_preserved": true
+  },
+  "substitution_contract": {
+    "format": "fp16",
+    "allocation_policy": "reusable_single_tile",
+    "native_processes": 1,
+    "launches": 33,
+    "checked_fp32_words": 1056,
+    "tool_records": 2,
+    "outer_commands": 3,
+    "managed_population_included": false,
+    "original_managed_launches": 132,
+    "source_derivation": "Exact admitted GDDR6.cpp bytes plus one newline and the fixed emitted marker declaration",
+    "compiler_selection": "Exact absolute g++ identity in admitted dependency tool config; no PATH-based compiler substitution",
+    "base_path": "Executing Python parent, /usr/bin, /bin, deduplicated in that order; no native host-bin prefix",
+    "native_loader_paths": "Control work directory followed by admitted model sw/runtime directory",
+    "numerical_and_provenance_checks": "The same complete favorable transcript must pass against the alternate extension and reject the original extension with the exact designated library-provenance reason",
+    "all_seven_qualification_and_acceptance_claims_false": true
+  },
+  "tests": [
+    {
+      "scope": "Eight existing narrow substitution observation, runner, real tiny-library and map/header controls",
+      "tests": 8,
+      "outcome": "pass",
+      "duration_seconds": 2.365,
+      "log": "w06_a04-substitution-review.log"
+    },
+    {
+      "scope": "Four new retention checks and independent-host/default-substitution PATH check",
+      "tests": 5,
+      "outcome": "pass",
+      "duration_seconds": 10.57,
+      "log": "w06_a04-substitution-retention-review.log"
+    }
+  ],
+  "test_harness_history": [
+    "Initial failure reproduction expected generic value-difference wording; actual error was inventory length differs. The original log and JSON are preserved, and the corrected reproduction passed.",
+    "The first regression run discovered five imported legacy TestCase methods in addition to the intended tests. Importing their module by alias removed duplicate discovery; the final intended five-test run passed."
+  ],
+  "source_identities": {
+    "ci/project/p06_dependency_control_replay.py": {
+      "sha256": "20f239d3cc2cd110ca4ae80fe6580b2db878978c0b67b877fdfe57212d459678",
+      "size_bytes": 37820,
+      "checkpoint_sha256": "28fb88029d28e3adaad61d55ad14b040ac2a718a6031e8f22bdae6dc05086329",
+      "changed_top_level_definitions": [
+        "_substitution_records",
+        "verify_probe_view"
+      ]
+    },
+    "ci/project/p06_dependency_build.py": {
+      "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+      "size_bytes": 32820,
+      "checkpoint_sha256": "b9b0f8a07396cd4d146ef03e6ec0dc65aff827b646fa5bf3a584c011f8971c35",
+      "changed_top_level_definitions": [
+        "Builder"
+      ]
+    },
+    "ci/project/p06_dependency_substitution.py": {
+      "sha256": "258f9cf9331f798b9e9a3f5ecfdf61a9b8f5208ef5074f3591d98d031c8c1164",
+      "size_bytes": 30690,
+      "checkpoint_sha256": "258f9cf9331f798b9e9a3f5ecfdf61a9b8f5208ef5074f3591d98d031c8c1164",
+      "changed_top_level_definitions": []
+    },
+    "ci/project/test_p06_dependency_control_replay.py": {
+      "sha256": "8052e75464413080a57f7a3cd253ccad651d55eed7dcb52e82f258a8a3c60530",
+      "size_bytes": 45993,
+      "checkpoint_sha256": "f5ca376907a68b96b07222e4530f1560ba10c16d97cb396fd47d63b2ea6e475d",
+      "changed_top_level_definitions": [
+        "SyntheticControls"
+      ]
+    },
+    "ci/project/test_p06_dependency_substitution_retention_review.py": {
+      "sha256": "824bce2fe6750ea489329a97810b74d4e6332d6f1e019e14c21f4235ad38f337",
+      "size_bytes": 4161
+    }
+  },
+  "limitations": [
+    "No complete actual substitution GPU process or finished native original was executed or replayed by this reviewer.",
+    "The complete control fixture uses synthetic dependency/native observations and its dependency semantic boundary is mocked.",
+    "The tiny host libraries establish actual recorder file behavior only.",
+    "System library and host support-file coverage, before/after observation and malicious concurrent-writer limits remain unchanged."
+  ],
+  "historical_reproduction_script": "w06_a04_retention_lock_reproduction_executed.py",
+  "guarded_reproduction_script": "w06_a04_retention_lock_reproduction.py"
+}

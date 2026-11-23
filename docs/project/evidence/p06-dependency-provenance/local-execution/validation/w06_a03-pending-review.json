@@ -1,0 +1,149 @@
+{
+  "scope": "synthetic fixture plus static producer/reader review; no native execution",
+  "source": "/workspace/p06-local-run-source-02",
+  "expected_revision": "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+  "source_sha256": {
+    "ci/project/p06_pending_probe.py": "5ddf67d4b5b9027b4a761329e40833fa0e7f3d47e289280c276dd02f7132dc91",
+    "ci/project/p06_dependency_control_replay.py": "28fb88029d28e3adaad61d55ad14b040ac2a718a6031e8f22bdae6dc05086329",
+    "ci/project/p06_dependency_local_execute.py": "e2a4329fd41f888a01c8000cc60b5bf76bc958f98ba3347557c6a370235aae71",
+    "tests/unittest/pending_reads/main.cpp": "bca8962a873af0e3315e13cdd908f3ba1a1b8e89ab4fa9f41a74b1d65404b6f3"
+  },
+  "baseline_synthetic_probe_passed": true,
+  "declared_host_bin": "/workspace/p06-local-host-02/bin",
+  "producer_path": "/workspace/p06-local-host-02/bin:/opt/hostedtoolcache/Python/3.12.14/x64/bin:/usr/bin:/bin",
+  "frozen_reader_path": "/opt/hostedtoolcache/Python/3.12.14/x64/bin:/usr/bin:/bin",
+  "rejection": "pending environment.PATH: value differs",
+  "finding_severity": "F2",
+  "confidence": "high",
+  "evidence_type": "static-proof plus targeted executable reproduction",
+  "fixture_limitation": "The dependency semantic boundary is mocked; after the valid synthetic native check, host_bin and the probe PATH are changed to reproduce this isolated join. This is not a forged or actual native original.",
+  "native_execution": "not_run",
+  "retained_code_executed": false,
+  "output_tests": 9,
+  "output_tests_passed": true,
+  "duration_seconds": 4.103697268999895,
+  "frozen_source_identities": {
+    "sim/simx/processor.cpp": {
+      "sha256": "ecc3e0e51ecbbdb6b97b04eccd7fc5427fb25f87e5162ef33484262ab8da869f",
+      "size_bytes": 21493
+    },
+    "sim/simx/processor.h": {
+      "sha256": "af83a0fdb8d81ccf903dacc5957edb4933974229c28443c6fee7af1114c6083e",
+      "size_bytes": 2588
+    },
+    "sim/simx/processor_impl.h": {
+      "sha256": "99f91bd1a19c32849f68c72311bbd271aa1f85543bff07184eeb2ecbd200f6e6",
+      "size_bytes": 4473
+    },
+    "sim/simx/mem/memory.cpp": {
+      "sha256": "4d73809cd63a0c768115c5de0205989f6f941446895de1831587002fc94ed474",
+      "size_bytes": 5976
+    },
+    "sim/common/perf_counter.h": {
+      "sha256": "8635c832c9fc4ad60cf3bf21665a5bc22a6d3500b1f5c012dd056fb4c6907417",
+      "size_bytes": 3979
+    },
+    "tests/unittest/pending_reads/main.cpp": {
+      "sha256": "bca8962a873af0e3315e13cdd908f3ba1a1b8e89ab4fa9f41a74b1d65404b6f3",
+      "size_bytes": 7302
+    },
+    "ci/project/p06_pending_probe.py": {
+      "sha256": "5ddf67d4b5b9027b4a761329e40833fa0e7f3d47e289280c276dd02f7132dc91",
+      "size_bytes": 24288
+    },
+    "ci/project/p06_dependency_control_replay.py": {
+      "sha256": "28fb88029d28e3adaad61d55ad14b040ac2a718a6031e8f22bdae6dc05086329",
+      "size_bytes": 37638
+    },
+    "ci/project/p06_dependency_local_execute.py": {
+      "sha256": "e2a4329fd41f888a01c8000cc60b5bf76bc958f98ba3347557c6a370235aae71",
+      "size_bytes": 22190
+    },
+    "docs/designs/managed_counter_lifetime_v1.md": {
+      "sha256": "73ca91df9a2fadff0041710bb237da191511731c977fd33037d0e90b679faa89",
+      "size_bytes": 12589
+    }
+  },
+  "finding": {
+    "severity": "F2",
+    "confidence": "high",
+    "evidence_type": "static-proof plus targeted executable reproduction",
+    "status": "fixed and independently verified in current working tree",
+    "scope": "pending control exact PATH join for explicit host-bin",
+    "cause": "Producer prepends --host-bin; frozen reader reconstructed only Python parent,/usr/bin,/bin.",
+    "concrete_rejection": "pending environment.PATH: value differs",
+    "repair": "Derive pending PATH from validated native.paths.host_bin when non-null, then Python parent,/usr/bin,/bin with producer-order deduplication.",
+    "separate_substitution_environment": "unchanged; its producer selects its own default clean_environment(work)"
+  },
+  "fixed_reader": {
+    "path": "ci/project/p06_dependency_control_replay.py",
+    "sha256": "f31a0719f0c994dacee907292d9fb155430d3f019bd9ff180029781afb172e8b",
+    "size_bytes": 37733
+  },
+  "permanent_regression": {
+    "path": "ci/project/test_p06_dependency_control_host_bin_review.py",
+    "sha256": "1ae3aecb1c3979eec8aa580c1458cdfb073e72c1bececd73c562bfb3188d1fe2",
+    "tests": 5,
+    "before_fix": {
+      "passes": 2,
+      "failures": 1,
+      "errors": 2
+    },
+    "after_fix": {
+      "outcome": "pass",
+      "duration_seconds": 6.346
+    },
+    "log": "w06_a03-host-bin-after-fix.log"
+  },
+  "accessor_trace": {
+    "initialization_and_reset": "owned PerfCounter initialized/reset to0",
+    "increment": "read-only memory request TX callback adds1; writes add0",
+    "decrement": "memory response TX callback subtracts1; Memory sends responses only for reads",
+    "checked_arithmetic": "checked64-bit increment/decrement throws before overflow/underflow; does not establish an absolute no-wrap theorem",
+    "public_getter": "const Processor method delegates to const ProcessorImpl getter, returning owned pending balance without state updates"
+  },
+  "probe_scope": {
+    "positive_processes": 1,
+    "positive_contexts": 2,
+    "gp_values": [
+      7,
+      -1
+    ],
+    "stepped_runs_per_context": 1,
+    "checked_runs_per_context": 1,
+    "max_steps_per_context": 200000,
+    "pending_observation": "at least one positive sample/max_pending in each context, final0",
+    "read_only": "two getter reads compare equal and leave snapshot fields unchanged; steps+2 observe calls percontext",
+    "negative_processes": 1,
+    "negative_control": "only separate probe wrapper is compiled with P06_PENDING_FORCE_ZERO=1",
+    "negative_expected": "exit1 with exactly the missing outstanding-read assertion, no context or pass line",
+    "managed_population_included": false,
+    "managed_processes": 4,
+    "managed_launches": 132,
+    "all_40_component_qualification": false,
+    "absolute_no_wrap_bound": false,
+    "warm_or_performance_acceptance": false,
+    "actual_probe_original_reviewed": false
+  },
+  "logs": {
+    "w06_a03-pending-review.log": {
+      "sha256": "1f7629cee3078e84bcf25935d9daf37921e7c82e5cc69ef55ee27a89f5080f3e",
+      "size_bytes": 3129
+    },
+    "w06_a03-host-bin-before-fix.log": {
+      "sha256": "f2419e6dfbe7f161967f8d1974a31776c510c9f1564b9816031435ff810390fb",
+      "size_bytes": 5275
+    },
+    "w06_a03-host-bin-after-fix.log": {
+      "sha256": "728297041efb7320753bc84b6120f63441b42f36804b034d8e2ac0df59082ec3",
+      "size_bytes": 1040
+    },
+    "w06_a03-pending-review-initial-harness.log": {
+      "sha256": "87a64bd5da23099b22086a84b657c94a928128b9ddadebd6fea09d3031853b3a",
+      "size_bytes": 1566
+    }
+  },
+  "production_edited_by_reviewer": false,
+  "original_evidence_edited": false,
+  "frozen_source_status": ""
+}

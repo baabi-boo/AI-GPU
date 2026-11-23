@@ -1,0 +1,56 @@
+test_actual_preparation_is_metadata_only (__main__.IndependentInertnessTests.test_actual_preparation_is_metadata_only) ... ok
+test_complete_local_synthetic_path_has_only_trusted_live_inputs (__main__.IndependentInertnessTests.test_complete_local_synthetic_path_has_only_trusted_live_inputs) ... FAIL
+
+======================================================================
+FAIL: test_complete_local_synthetic_path_has_only_trusted_live_inputs (__main__.IndependentInertnessTests.test_complete_local_synthetic_path_has_only_trusted_live_inputs)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/279b6658611e/validation/w04_a06_inertness_review.py", line 136, in test_complete_local_synthetic_path_has_only_trusted_live_inputs
+    result = replay.replay_archive(fixture.path, pin, **fixture.arguments())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_dependency_local_replay.py", line 282, in replay_archive
+    native_result, native = native_replay.verify_view(outer.subview("native-lifetime"), dependency_view, api,
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_dependency_native_replay.py", line 750, in verify_view
+    result = replay.run()
+             ^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_dependency_native_replay.py", line 616, in run
+    self.generated()
+  File "/workspace/ai-gpu-next/ci/project/p06_dependency_native_replay.py", line 377, in generated
+    self._configuration_text()
+  File "/workspace/ai-gpu-next/ci/project/p06_managed_preflight_replay_build.py", line 108, in _configuration_text
+    self.generated_headers = validate_generated_headers(source_body=self.source_body, build_body=self.build_body)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_managed_preflight_generated.py", line 160, in validate_generated_headers
+    headers = _render_headers()
+              ^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_managed_preflight_generated.py", line 143, in _render_headers
+    base, layout, enums, builtins, params, externs, hexadecimal, profile = _configuration(name)
+                                                                           ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_managed_preflight_generated.py", line 103, in _configuration
+    document = renderer._load_toml(path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/gen_config.py", line 121, in _load_toml
+    return TinyTOML().parse(f.read())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/gen_config.py", line 105, in parse
+    cursor[key] = self._parse_value(val)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/gen_config.py", line 115, in _parse_value
+    return ast.literal_eval(val)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/ast.py", line 66, in literal_eval
+    node_or_string = parse(node_or_string.lstrip(" \t"), mode='eval')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/ast.py", line 52, in parse
+    return compile(source, filename, mode, flags,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/279b6658611e/validation/w04_a06_inertness_review.py", line 83, in compile_guard
+    assert str(filename) == str(trusted_helper), 'untrusted code compilation: ' + str(filename)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: untrusted code compilation: <unknown>
+
+----------------------------------------------------------------------
+Ran 2 tests in 9.666s
+
+FAILED (failures=1)

@@ -1,0 +1,47 @@
+test_absolute_link_rejects (test_p06_local_toolchain.LocalToolchainTests.test_absolute_link_rejects) ... ok
+test_archive_blob_mismatch_is_rejected (test_p06_local_toolchain.LocalToolchainTests.test_archive_blob_mismatch_is_rejected) ... ok
+test_archive_path_traversal_rejects_without_outside_write (test_p06_local_toolchain.LocalToolchainTests.test_archive_path_traversal_rejects_without_outside_write) ... ok
+test_archive_symlink_is_rejected (test_p06_local_toolchain.LocalToolchainTests.test_archive_symlink_is_rejected) ... ok
+test_changed_archive_is_rejected_before_output_creation (test_p06_local_toolchain.LocalToolchainTests.test_changed_archive_is_rejected_before_output_creation) ... ok
+test_cross_component_link_rejects (test_p06_local_toolchain.LocalToolchainTests.test_cross_component_link_rejects) ... ok
+test_device_and_fifo_entries_reject (test_p06_local_toolchain.LocalToolchainTests.test_device_and_fifo_entries_reject) ... ok
+test_duplicate_member_rejects (test_p06_local_toolchain.LocalToolchainTests.test_duplicate_member_rejects) ... ok
+test_existing_output_rejects_before_archive_work (test_p06_local_toolchain.LocalToolchainTests.test_existing_output_rejects_before_archive_work) ... ok
+test_insufficient_disk_or_memory_never_creates_outputs (test_p06_local_toolchain.LocalToolchainTests.test_insufficient_disk_or_memory_never_creates_outputs) ... ok
+test_link_cycle_rejects_before_links_are_created (test_p06_local_toolchain.LocalToolchainTests.test_link_cycle_rejects_before_links_are_created) ... ok
+test_member_and_expanded_byte_limits_reject (test_p06_local_toolchain.LocalToolchainTests.test_member_and_expanded_byte_limits_reject) ... ok
+test_metadata_reader_never_opens_producer_paths (test_p06_local_toolchain.LocalToolchainTests.test_metadata_reader_never_opens_producer_paths) ... ok
+test_missing_selected_tool_rejects (test_p06_local_toolchain.LocalToolchainTests.test_missing_selected_tool_rejects) ... ok
+test_non_executable_selected_tool_rejects (test_p06_local_toolchain.LocalToolchainTests.test_non_executable_selected_tool_rejects) ... ok
+test_provision_joins_actual_bytes_and_keeps_local_scope (test_p06_local_toolchain.LocalToolchainTests.test_provision_joins_actual_bytes_and_keeps_local_scope) ... ok
+test_receipt_cannot_invent_children_below_an_archive_file (test_p06_local_toolchain.LocalToolchainTests.test_receipt_cannot_invent_children_below_an_archive_file) ... ok
+test_receipt_scope_inventory_and_tool_mutations_reject (test_p06_local_toolchain.LocalToolchainTests.test_receipt_scope_inventory_and_tool_mutations_reject) ... ok
+test_truncated_archive_is_rejected_before_output_creation (test_p06_local_toolchain.LocalToolchainTests.test_truncated_archive_is_rejected_before_output_creation) ... ok
+test_reviewed_native_archive_selection_is_exact (test_p06_local_toolchain.RealToolchainLockTests.test_reviewed_native_archive_selection_is_exact) ... ok
+test_inert_reader_rejects_a_missing_directory_before_parent_segments (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_inert_reader_rejects_a_missing_directory_before_parent_segments) ... ok
+test_inert_reader_rejects_the_same_symbolic_prefix_escape (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_inert_reader_rejects_the_same_symbolic_prefix_escape) ... ok
+test_internal_parent_segments_follow_the_symbolic_prefix_first (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_internal_parent_segments_follow_the_symbolic_prefix_first) ... ERROR
+test_parent_segments_after_a_symbolic_prefix_cannot_escape_output (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_parent_segments_after_a_symbolic_prefix_cannot_escape_output) ... ok
+test_parent_segments_cannot_hide_a_symbolic_cycle (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_parent_segments_cannot_hide_a_symbolic_cycle) ... ok
+test_stream_rechecks_bytes_changed_after_the_initial_part_check (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_stream_rechecks_bytes_changed_after_the_initial_part_check) ... ok
+
+======================================================================
+ERROR: test_internal_parent_segments_follow_the_symbolic_prefix_first (test_p06_local_toolchain_review.LocalToolchainReviewTests.test_internal_parent_segments_follow_the_symbolic_prefix_first)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/ai-gpu-next/ci/project/test_p06_local_toolchain_review.py", line 74, in test_internal_parent_segments_follow_the_symbolic_prefix_first
+    self.assertTrue(local.validate_receipt(implicit)["metadata_consistent"])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_local_toolchain.py", line 420, in validate_receipt
+    target = _resolved_member(row["path"], members, directories=directories)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/ai-gpu-next/ci/project/p06_local_toolchain.py", line 213, in _resolved_member
+    require((row is not None and row["kind"] == "directory")
+  File "/workspace/ai-gpu-next/ci/project/p06_local_toolchain.py", line 49, in require
+    raise ValueError(message)
+ValueError: archive link traverses a non-directory member
+
+----------------------------------------------------------------------
+Ran 26 tests in 0.583s
+
+FAILED (errors=1)

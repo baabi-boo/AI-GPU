@@ -26,6 +26,11 @@ origin. It requires a clean, exact source revision and initialized recursive
 gitlinks. It verifies the five immutable dependency trees through their actual
 Git objects, rejects existing staged products or fetched-source directories,
 and records the same host-tool aliases that the build and native runner use.
+SoftFloat and Ramulator are read from the selected checkout's initialized
+gitlinks; yaml-cpp, spdlog and argparse are read from the correspondingly named
+repositories beneath `--dependency-repositories`. The currently reviewed
+checkout has five top-level gitlinks and eight recursive entries. Preparation
+does not fetch missing inputs or restore a dependency cache.
 
 [`p06_local_toolchain.py`](../../ci/project/p06_local_toolchain.py) selects the
 four SimX components from the reviewed
@@ -78,7 +83,29 @@ workspace; the runner does not overwrite a previous attempt.
 The caller selects the same explicit `--host-bin` for preparation, dependencies
 and the managed runner. Changing only the native compiler after dependency
 compilation is rejected. The route requires Linux CPython 3.12.14 and does not
-suppress compiler warnings to admit a host compiler.
+introduce warning suppressions to admit a host compiler. A compatible host
+installation includes compiler support and link-time runtime files as well as
+the executable aliases. In the reviewed local environment, GCC 12.2.0 and
+CMake 3.22.6 were selected; the matching shared `libstdc++6` package is necessary
+to avoid the incomplete host installation's static-library fallback. These
+host observations do not extend the receipt to complete host/OS provenance.
+
+### Managed-report JSON intake
+
+The complete dependency-managed report has an explicit maximum of 500,000
+structural tokens. The outer executor selects that bound only for the
+`native-lifetime` child report. The pending and substitution producers select
+it only for managed input on the dependency route, after requiring an exact
+dependency-receipt SHA-256 argument. They then enforce the existing matching
+contract, revision, provenance pin, completed population and false claims.
+
+The shared baseline parser's default remains 250,000 tokens. Its optional token
+budget must be an exact integer no greater than 500,000; the 64-level depth
+limit, 1,024-character number limit, unique fields, strict UTF-8 and finite
+number checks remain unchanged. Managed report intake remains bounded at
+16 MiB. Historical managed intake, source/tool snapshots and terminal log
+records retain the generic limit. This parsing allowance changes no execution,
+numerical, resource or qualification criterion.
 
 ## Budgets
 
@@ -112,7 +139,26 @@ The local origin, exact packet inventory, tools, stage records and terminal
 outputs must all agree. A prefix changes only the packet's location inside the
 archive; it does not expand the allowed inventory or grant filesystem access.
 
+The native Ramulator destructor also writes a diagnostic file in each control's
+working directory. Replay requires exactly `pending-probe/ramulator.stats.log`
+and `dependency-substitution/work/ramulator.stats.log`, bound to the retained
+destructor source and accounted as nonempty, at most 16 MiB opaque bytes. Their
+hashes and sizes are returned with `interpreted`, `numerical_evidence`,
+`performance_evidence` and `qualification_evidence` explicitly false.
+Values such as `.nan` for an idle channel remain uninterpreted diagnostics.
+The substitution file is produced after its frozen compilation products; it
+belongs only to the final retained inventory. Missing diagnostics, unrelated
+extra files, changed final identities and diagnostics inserted into the frozen
+product snapshots remain rejected. These files contribute no managed processes,
+launches, checked words or qualification observations.
+
 A replay pass reports `native_execution="not_run"` and
 `retained_code_executed=false`. The independently identified original supplies
 execution evidence. A consistently fabricated record remains fabricated after
 consistency checks; local evidence is never relabelled as a hosted run.
+
+The [local execution and replay runbook](../project/evidence/p06-dependency-provenance/local-execution/runbook.md)
+describes fresh input layout, compatible host prerequisites, packet preservation
+and the exact command-line pin mapping. Instructions in that guide are not
+execution evidence; completed results belong to their separately identified
+originals and independent reviews.

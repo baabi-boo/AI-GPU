@@ -1,0 +1,101 @@
+{
+  "base_revision": "0f9aaa36d46364c297254164f5dab0d4f0e88349",
+  "correction": {
+    "acquisition_starts_only_after_clean_exact_source": true,
+    "cache_preserved_at_recorded_workspace_path_on_source_rejection": true,
+    "collector_modified": false,
+    "existing_source_admission_block_moved": "after validated cache relocation and receipt save, before acquisition",
+    "gitignore_modified": false,
+    "invalid_source_still_blocked": true,
+    "new_success_receipt_fields": false,
+    "probe_limit_changed": false,
+    "workflow_modified": false
+  },
+  "false_claims": {
+    "acceptance_claimed": false,
+    "full_warm_coverage": false,
+    "performance_acceptance": false,
+    "phase_acceptance": false,
+    "qualified": false,
+    "ready_for_warm": false,
+    "warm_execution": false
+  },
+  "historical_failed_original": {
+    "acquisition_commands": 0,
+    "filename": "p06-hosted-failed-19333193-run45162083701.zip",
+    "native_execution": "not_run",
+    "outcome": "blocked",
+    "preparation_report_bytes": 1348,
+    "preparation_report_sha256": "d8a86f88b6f7e451ff4216adf5cb9c143f31ecfb2ea8ef880d53f955ad8edd1a",
+    "reason": "source provenance blocked: source identity could not be completely verified",
+    "sha256": "6c130c17cc944f633f04835dbad6fd512880e6d987f477b01c48d32d4dd68472",
+    "size_bytes": 9225,
+    "source_dirty": null,
+    "source_revision": "19333193192ba5a2d3667c0111235ec9e21a5898",
+    "source_status_output_retained": false,
+    "source_tree": "baeeb7bc7078e9301c68e94b1207032329be343d"
+  },
+  "historical_source": {
+    "matches_pre_fix_0f9aaa36": true,
+    "path": "ci/project/p06_dependency_prepare.py",
+    "revision": "19333193192ba5a2d3667c0111235ec9e21a5898",
+    "sha256": "6afc831848fafc492b844c126e1707b2d502439f097d1b07a6ec0266a6537be2"
+  },
+  "implemented_scope": "Hosted preparation only; source inventory and its 65536-byte Git probe limit unchanged",
+  "limits": [
+    "This is local producer regression evidence, not a successful hosted retry.",
+    "The tests use miniature real Git repositories and explicit fixture dependency pins, not the selected production dependency bodies.",
+    "The independent existing-status reproduction is retained separately in w08_a05-hosted-cache-status-reproduction.json."
+  ],
+  "outcome": "pass",
+  "reviewer": "w09_a01",
+  "root_cause": {
+    "actual_status_overflow_attribution": "high-confidence inference; complete status stdout/stderr was not retained by the hosted original",
+    "confidence": "high",
+    "evidence_type": [
+      "static-proof",
+      "actual-hosted-failed-receipt",
+      "real-Git-reproduction"
+    ],
+    "finding": "Restored untracked tools remained inside the checkout when strict inventory ran, producing dirty source or exceeding the bounded Git status observation",
+    "severity": "F2"
+  },
+  "schema_version": 1,
+  "task": "Fix hosted cache relocation before strict source inventory",
+  "tests": {
+    "actual_native_execution": false,
+    "actual_remote_acquisition": false,
+    "existing_preparation_tests": 19,
+    "exit_code": 0,
+    "first_development_run": "31 tests, one new expected-error-text mismatch; assertion corrected to exact actual collector blocker, no producer behavior changed",
+    "log": {
+      "filename": "w09_a01-hosted-prepare-tests.log",
+      "sha256": "d6beb8cea3189a2349cb1d27ca4364075330676637dc91c3680221f0644fa5dd",
+      "size_bytes": 7383
+    },
+    "mocked_boundaries": [
+      "resource availability",
+      "six remote-acquisition commands"
+    ],
+    "new_real_git_tests": 12,
+    "real_git_fixture_submodules": 2,
+    "source_files": {
+      "ci/project/p06_dependency_prepare.py": {
+        "sha256": "f7f6166c4f99697a2d96a67def40fafe6e445c9c27e09412d3bdd7cc91199403",
+        "size_bytes": 9846
+      },
+      "ci/project/test_p06_dependency_prepare.py": {
+        "sha256": "3551500751e7722e5c18e82bfdcd38d399f6a341cb5fd74c8e53d46d837af5bb",
+        "size_bytes": 11752
+      },
+      "ci/project/test_p06_dependency_prepare_cache_review.py": {
+        "sha256": "19db3951c33890b60ebbf99488a6ebdf9aad4a140dd326d08511e5827a9f68fc",
+        "size_bytes": 11631
+      }
+    },
+    "source_files_unchanged": true,
+    "unique_tests": 40,
+    "unit_test_duration_seconds": 4.517,
+    "workflow_contract_tests": 9
+  }
+}

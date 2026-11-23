@@ -1,6 +1,45 @@
 # P06 fresh dependency provenance evidence
 
-## Scope and current state
+## Latest local continuation
+
+The [local execution evidence](local-execution/README.md) adds explicit local
+preparation, five-stage execution and complete inert replay for the fresh
+dependency-to-loaded-library original. Its [runbook](local-execution/runbook.md)
+uses exact immutable inputs and external original pins. Its
+[validation summary](local-execution/validation-summary.md) distinguishes the
+4,256-test initial full suite, later affected regressions, preserved failed
+originals and separately reviewed actual native subpackets.
+
+**The fourth fresh local attempt passed all five stages at `0f9aaa36`.** Its
+413-operation / 819-child dependency graph joins the complete native matrix:
+four processes, 132 launches and 4,224 exact FP32 words. The separate positive /
+always-zero pending controls and numerically correct alternate-library process
+also passed their required behavior and provenance checks. The complete,
+unchanged 5,597-member original passed the public local reader at `ba2d649d`
+and independent native, control and guarded public-CLI review. All seven
+qualification, warm and acceptance fields remain false.
+
+The [attempt-04 summary](local-execution/attempt-04-summary.json) retains exact
+original/report/source pins, separate execution and reader revisions and
+review identities. The [full replay result](local-execution/validation/local-attempt-04-replay.json.gz)
+is inert: `native_execution="not_run"`, `retained_code_executed=false`.
+The original reader's inventory failure is preserved separately; the corrected
+reader accounts for the two actual, bounded Ramulator destructor diagnostics
+without interpreting them as numerical or performance evidence. Attempts 01,
+02 and 03 also retain their original failures and successful subpacket scopes.
+
+The next bounded action is the separately versioned complete 33-selector /
+40-component counter-qualification and admission path, binding all ten lifetime
+premises to exact guarded binaries and dependencies. A fresh qualification
+preflight precedes the planned 24-process warm experiment. P06-A02/A03 and
+vendor XRT `hw_emu` remain open.
+
+The sections below preserve the preceding `19333193` hosted/diagnostic
+checkpoint and its separate work ledger. Read its pending and unobserved
+statements with that checkpoint's dates and source scope; the new local index
+records the later observations and hosted-failure diagnoses.
+
+## Historical hosted and diagnostic checkpoint
 
 This packet records the next bounded P06-T01 step selected by the
 [development audit](development-audit.md): build the three selected SimX

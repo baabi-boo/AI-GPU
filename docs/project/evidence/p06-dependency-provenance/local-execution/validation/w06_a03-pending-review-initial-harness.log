@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/279b6658611e/validation/w06_a03_pending_environment_review.py", line 33, in <module>
+    packet.probe_check()
+  File "/workspace/p06-local-run-source-02/ci/project/test_p06_dependency_control_replay.py", line 317, in probe_check
+    return replay.verify_probe_view(MemoryView(self.probe_files, self.native.api), native=self.native,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p06-local-run-source-02/ci/project/p06_dependency_control_replay.py", line 243, in verify_probe_view
+    _same(report["environment"], environment, "pending environment")
+  File "/workspace/p06-local-run-source-02/ci/project/p06_replay.py", line 111, in _same
+    _same(actual[name], value, label + "." + name)
+  File "/workspace/p06-local-run-source-02/ci/project/p06_replay.py", line 117, in _same
+    require(actual == expected, label + ": value differs")
+  File "/workspace/p06-local-run-source-02/ci/project/p06_replay.py", line 103, in require
+    raise ReplayError(message)
+p06_replay.ReplayError: pending environment.PATH: value differs
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/279b6658611e/validation/w06_a03_pending_environment_review.py", line 36, in <module>
+    assert rejection == "pending environment: value differs", rejection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: pending environment.PATH: value differs

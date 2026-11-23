@@ -1,0 +1,171 @@
+{
+  "actual_maximum_depth": 10,
+  "actual_structural_tokens": 265793,
+  "byte_limit_unchanged": 16777216,
+  "checks": [
+    {
+      "name": "generic_actual_report",
+      "outcome": "rejected",
+      "reason": "JSON: JSON structure exceeds the limit"
+    },
+    {
+      "name": "historical_control_actual_report",
+      "outcome": "rejected",
+      "reason": "report.json: JSON structure exceeds the limit"
+    },
+    {
+      "name": "explicit_actual_native_and_control_intake",
+      "outcome": "pass"
+    },
+    {
+      "name": "wrong_revision",
+      "outcome": "rejected",
+      "reason": "probe requires a completed managed lifetime build at the selected revision"
+    },
+    {
+      "name": "wrong_receipt",
+      "outcome": "rejected",
+      "reason": "managed dependency provenance or caller receipt identity differs"
+    },
+    {
+      "name": "wrong_contract",
+      "outcome": "rejected",
+      "reason": "probe requires a completed managed lifetime build at the selected revision"
+    },
+    {
+      "name": "missing_process",
+      "outcome": "rejected",
+      "reason": "managed dependency population is absent, reordered or incomplete"
+    },
+    {
+      "name": "reordered_processes",
+      "outcome": "rejected",
+      "reason": "managed dependency population is absent, reordered or incomplete"
+    },
+    {
+      "name": "wrong_count",
+      "outcome": "rejected",
+      "reason": "managed dependency population counts are incomplete"
+    },
+    {
+      "name": "bool_count",
+      "outcome": "rejected",
+      "reason": "managed dependency population counts are incomplete"
+    },
+    {
+      "name": "qualified",
+      "outcome": "rejected",
+      "reason": "preflight claims.qualified: differs from the fixed contract"
+    },
+    {
+      "name": "ready_for_warm",
+      "outcome": "rejected",
+      "reason": "preflight claims.ready_for_warm: differs from the fixed contract"
+    },
+    {
+      "name": "warm_execution",
+      "outcome": "rejected",
+      "reason": "preflight claims.warm_execution: differs from the fixed contract"
+    },
+    {
+      "name": "full_warm_coverage",
+      "outcome": "rejected",
+      "reason": "preflight claims.full_warm_coverage: differs from the fixed contract"
+    },
+    {
+      "name": "acceptance_claimed",
+      "outcome": "rejected",
+      "reason": "preflight claims.acceptance_claimed: differs from the fixed contract"
+    },
+    {
+      "name": "phase_acceptance",
+      "outcome": "rejected",
+      "reason": "preflight claims.phase_acceptance: differs from the fixed contract"
+    },
+    {
+      "name": "performance_acceptance",
+      "outcome": "rejected",
+      "reason": "preflight claims.performance_acceptance: differs from the fixed contract"
+    }
+  ],
+  "completed_at": "2026-11-23T13:18:46.167851+00:00",
+  "depth_limit_unchanged": 64,
+  "duration_seconds": 3.18319,
+  "explicit_managed_token_budget": 500000,
+  "finding_count_f2_f3": 0,
+  "generic_token_budget": 250000,
+  "helper_closures": {
+    "pending": {
+      "count": 33,
+      "matches_reader_inventory": true,
+      "prohibited_events": []
+    },
+    "substitution": {
+      "count": 49,
+      "matches_reader_inventory": true,
+      "prohibited_events": []
+    }
+  },
+  "native_execution": "not_run",
+  "number_char_limit_unchanged": 1024,
+  "original": {
+    "path": "/workspace/p06-local-native-run-03/evidence/native-lifetime/report.json",
+    "sha256": "bba2af32da50326b43c0225f63478a3003865a6fc34eaef2e79b9228697a56d0",
+    "size_bytes": 3679258,
+    "unchanged": true
+  },
+  "outcome": "pass",
+  "prohibited_events": [],
+  "qualification_claims": {
+    "acceptance_claimed": false,
+    "full_warm_coverage": false,
+    "performance_acceptance": false,
+    "phase_acceptance": false,
+    "qualified": false,
+    "ready_for_warm": false,
+    "warm_execution": false
+  },
+  "retained_code_executed": false,
+  "reviewer": "w08_a04",
+  "schema_version": 1,
+  "source_base_revision": "7251f078972c1d524de06d069e91b014b55896f5",
+  "source_files_before_and_after": {
+    "baseline_packet_io.py": {
+      "sha256": "469583bc558ccb010af82259de38248d7a9a8283cd873a96726aa3c3e2aaa94c",
+      "size_bytes": 14506
+    },
+    "p06_dependency_contract.py": {
+      "sha256": "d6151024fbe7e8a651075fd76b9bdc006bb18c0f61c538a2928842f865ddd364",
+      "size_bytes": 4438
+    },
+    "p06_dependency_local_execute.py": {
+      "sha256": "b6651948b2ee4ce4fe99c94fac8ac7e86bfec8a8658f258b3ef76081104b3c79",
+      "size_bytes": 22361
+    },
+    "p06_dependency_substitution.py": {
+      "sha256": "e37c31fb769d7c1d5374bf40216c5099eb9a24d0017ceef876b36cbbec6a9f87",
+      "size_bytes": 30789
+    },
+    "p06_pending_probe.py": {
+      "sha256": "89300a063bf26e20312fe6026377db300cdf40b6a91bc3d6327340e66b51d42d",
+      "size_bytes": 24886
+    },
+    "test_p06_managed_report_json_review.py": {
+      "sha256": "14bf84cd40bb34b827957303c3802b1668b787f7cc7de559574dc73ef0eff7e6",
+      "size_bytes": 6042
+    }
+  },
+  "source_files_unchanged": true,
+  "source_scope": "Exact six file identities in an uncommitted correction over source_base_revision",
+  "test_run": {
+    "command": "PYTHONPATH=ci/project python3 -B -m unittest test_baseline_packet_io test_p06_managed_report_json_review -v",
+    "duration_seconds": 0.746,
+    "existing_baseline_tests": 42,
+    "exit_code": 0,
+    "log": "w08_a04-parser-tests.log",
+    "new_regressions": 10,
+    "sha256": "7a949bb57aab781259cb0949da66178cc01f2daf62deab73478dff4bc91bc182",
+    "size_bytes": 8572,
+    "tests": 52
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "outcome": "pass",
+  "scope": "independent small host shared-library execution, not GPU workload",
+  "environment": {
+    "PATH": "/workspace/p06-local-host-02/bin:/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "commands": [
+    {
+      "id": "selected-runtime",
+      "argv": [
+        "/workspace/p06-local-host-02/bin/g++",
+        "-print-file-name=libstdc++.so"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.0035359169996809214,
+      "stdout": "/workspace/p06-local-host-02/extracted/usr/bin/../lib/gcc/x86_64-linux-gnu/12/libstdc++.so\n",
+      "stderr": ""
+    },
+    {
+      "id": "compile-shared",
+      "argv": [
+        "/workspace/p06-local-host-02/bin/g++",
+        "-std=c++17",
+        "-O3",
+        "-DNDEBUG",
+        "-fPIC",
+        "-shared",
+        "-pthread",
+        "-Wall",
+        "-Wextra",
+        "-Wfatal-errors",
+        "-Werror",
+        "probe.cpp",
+        "-Wl,-Map=/workspace/scratch/279b6658611e/validation/w05_a04-probe/probe.map",
+        "-o",
+        "/workspace/scratch/279b6658611e/validation/w05_a04-probe/libprobe.so"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.9464444349996484,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "id": "compile-loader",
+      "argv": [
+        "/workspace/p06-local-host-02/bin/gcc",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wfatal-errors",
+        "-Werror",
+        "loader.c",
+        "-ldl",
+        "-o",
+        "/workspace/scratch/279b6658611e/validation/w05_a04-probe/loader"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.050797212999896146,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "id": "dynamic",
+      "argv": [
+        "/usr/bin/readelf",
+        "-d",
+        "/workspace/scratch/279b6658611e/validation/w05_a04-probe/libprobe.so"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.0027602520003711106,
+      "stdout": "\nDynamic section at offset 0x6d28 contains 27 entries:\n  Tag        Type                         Name/Value\n 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]\n 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]\n 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]\n 0x0000000000000001 (NEEDED)             Shared library: [ld-linux-x86-64.so.2]\n 0x000000000000000c (INIT)               0x3000\n 0x000000000000000d (FINI)               0x4bd4\n 0x0000000000000019 (INIT_ARRAY)         0x6af8\n 0x000000000000001b (INIT_ARRAYSZ)       8 (bytes)\n 0x000000000000001a (FINI_ARRAY)         0x6b00\n 0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)\n 0x000000006ffffef5 (GNU_HASH)           0x260\n 0x0000000000000005 (STRTAB)             0xd20\n 0x0000000000000006 (SYMTAB)             0x3c0\n 0x000000000000000a (STRSZ)              4315 (bytes)\n 0x000000000000000b (SYMENT)             24 (bytes)\n 0x0000000000000003 (PLTGOT)             0x6fe8\n 0x0000000000000002 (PLTRELSZ)           1080 (bytes)\n 0x0000000000000014 (PLTREL)             RELA\n 0x0000000000000017 (JMPREL)             0x28f8\n 0x0000000000000007 (RELA)               0x2028\n 0x0000000000000008 (RELASZ)             2256 (bytes)\n 0x0000000000000009 (RELAENT)            24 (bytes)\n 0x000000006ffffffe (VERNEED)            0x1ec8\n 0x000000006fffffff (VERNEEDNUM)         4\n 0x000000006ffffff0 (VERSYM)             0x1dfc\n 0x000000006ffffff9 (RELACOUNT)          26\n 0x0000000000000000 (NULL)               0x0\n",
+      "stderr": ""
+    },
+    {
+      "id": "load-run",
+      "argv": [
+        "/workspace/scratch/279b6658611e/validation/w05_a04-probe/loader",
+        "/workspace/scratch/279b6658611e/validation/w05_a04-probe/libprobe.so"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.004401808999318746,
+      "stdout": "value=42\nruntime=/lib/x86_64-linux-gnu/libstdc++.so.6\n",
+      "stderr": ""
+    }
+  ],
+  "link_time_runtime": {
+    "path": "/workspace/p06-local-host-02/extracted/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30",
+    "sha256": "e7848e32af4932840ba775169041759a2a8dd5a008af360e5c55bce506eebcf4",
+    "size_bytes": 2190440
+  },
+  "loader_runtime": {
+    "path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+    "sha256": "972bb2a18b71140dab0240f8a1f68ab3fb1d56bcd4c4f824a91b70888faf5a00",
+    "size_bytes": 2497768
+  },
+  "same_runtime_bytes": false,
+  "needed_shared_libstdcxx": true,
+  "static_libstdcxx_members": false,
+  "map": {
+    "path": "/workspace/scratch/279b6658611e/validation/w05_a04-probe/probe.map",
+    "sha256": "000484e070bd4d9f5e648dab1a669af092d25c18e8e8cbcbdb50824fc61b6ca1",
+    "size_bytes": 34091
+  },
+  "root_modified": false,
+  "note": "Packaged GCC12 shared library is selected at link time; system loader chooses its own libstdc++.so.6, outside full host-toolchain provenance scope."
+}

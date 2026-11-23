@@ -1,0 +1,89 @@
+test_hosted_zip_bridge_replays_native_semantics_with_synthetic_dependency_boundary (test_p06_dependency_native_replay.CompleteSyntheticNativeTests.test_hosted_zip_bridge_replays_native_semantics_with_synthetic_dependency_boundary) ... FAIL
+test_zip_bridge_runs_all_native_and_control_semantics_without_execution (test_p06_dependency_control_replay.SeparateControlReplayTests.test_zip_bridge_runs_all_native_and_control_semantics_without_execution) ... FAIL
+test_complete_local_archive_reuses_native_and_both_control_semantics_inertly (test_p06_dependency_local_replay.LocalDependencyReplayTests.test_complete_local_archive_reuses_native_and_both_control_semantics_inertly) ... FAIL
+
+======================================================================
+FAIL: test_hosted_zip_bridge_replays_native_semantics_with_synthetic_dependency_boundary (test_p06_dependency_native_replay.CompleteSyntheticNativeTests.test_hosted_zip_bridge_replays_native_semantics_with_synthetic_dependency_boundary)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/test_p06_dependency_native_replay.py", line 577, in test_hosted_zip_bridge_replays_native_semantics_with_synthetic_dependency_boundary
+    result = replay.replay_archive(path, digest(path.read_bytes()), **args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_dependency_native_replay.py", line 766, in replay_archive
+    require(_reader_sources() == TRUSTED_READER_SOURCES, "trusted native replay source changed after import")
+            ^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_dependency_native_replay.py", line 91, in _reader_sources
+    rows = dependency_replay._reader_sources()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_dependency_replay.py", line 55, in _reader_sources
+    rows = managed_archive._reader_sources()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_managed_preflight_replay.py", line 116, in _reader_sources
+    actual = Path(module.__file__).resolve()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/test_p06_dependency_native_replay.py", line 558, in inert_resolve
+    raise AssertionError("a producer path was resolved")
+AssertionError: a producer path was resolved
+
+======================================================================
+FAIL: test_zip_bridge_runs_all_native_and_control_semantics_without_execution (test_p06_dependency_control_replay.SeparateControlReplayTests.test_zip_bridge_runs_all_native_and_control_semantics_without_execution)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/test_p06_dependency_control_replay.py", line 569, in test_zip_bridge_runs_all_native_and_control_semantics_without_execution
+    result = replay.replay_archive(path, pin, **arguments)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_dependency_control_replay.py", line 463, in replay_archive
+    require(_reader_sources() == TRUSTED_READER_SOURCES, "trusted control replay source changed after import")
+            ^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_dependency_control_replay.py", line 93, in _reader_sources
+    rows = {row["path"]: row for row in native_replay._reader_sources()}
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_dependency_native_replay.py", line 91, in _reader_sources
+    rows = dependency_replay._reader_sources()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_dependency_replay.py", line 55, in _reader_sources
+    rows = managed_archive._reader_sources()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_managed_preflight_replay.py", line 116, in _reader_sources
+    actual = Path(module.__file__).resolve()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/test_p06_dependency_control_replay.py", line 553, in inert_resolve
+    raise AssertionError("producer path resolved")
+AssertionError: producer path resolved
+
+======================================================================
+FAIL: test_complete_local_archive_reuses_native_and_both_control_semantics_inertly (test_p06_dependency_local_replay.LocalDependencyReplayTests.test_complete_local_archive_reuses_native_and_both_control_semantics_inertly)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/test_p06_dependency_local_replay.py", line 170, in test_complete_local_archive_reuses_native_and_both_control_semantics_inertly
+    result = self.check()
+             ^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/test_p06_dependency_local_replay.py", line 150, in check
+    return replay.replay_archive(self.path, pin, prefix=prefix, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_dependency_local_replay.py", line 265, in replay_archive
+    require(_reader_sources() == TRUSTED_READER_SOURCES, "trusted local replay source changed after import")
+            ^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_dependency_local_replay.py", line 69, in _reader_sources
+    rows = {row["path"]: row for row in controls._reader_sources()}
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_dependency_control_replay.py", line 93, in _reader_sources
+    rows = {row["path"]: row for row in native_replay._reader_sources()}
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_dependency_native_replay.py", line 91, in _reader_sources
+    rows = dependency_replay._reader_sources()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_dependency_replay.py", line 55, in _reader_sources
+    rows = managed_archive._reader_sources()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/p06_managed_preflight_replay.py", line 116, in _reader_sources
+    actual = Path(module.__file__).resolve()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/AI-GPU/AI-GPU/ci/project/test_p06_dependency_local_replay.py", line 162, in inert_resolve
+    raise AssertionError("producer path resolved")
+AssertionError: producer path resolved
+
+----------------------------------------------------------------------
+Ran 3 tests in 13.070s
+
+FAILED (failures=3)

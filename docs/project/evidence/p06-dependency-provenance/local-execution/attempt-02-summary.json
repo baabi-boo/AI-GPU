@@ -1,0 +1,374 @@
+{
+  "schema_version": 1,
+  "summary_scope": "Preserved failed local execution attempt; producer ordering defect and separately scoped in-memory prospective-fix diagnostic",
+  "attempt": "02",
+  "execution_origin": "local",
+  "source_revision": "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+  "source_tree": "5e7caa2b008fe8b1924811aeda5a079845a37343",
+  "original_workspace": "/workspace/p06-local-native-run-02",
+  "source_directory": "/workspace/p06-local-run-source-02",
+  "host_bin": "/workspace/p06-local-host-02/bin",
+  "started_at": "2026-11-23T12:30:56+00:00",
+  "finished_at": "2026-11-23T12:41:06+00:00",
+  "duration_seconds": 610.12689,
+  "outcome": "fail",
+  "reason": "dependency-build child failed: nonzero_exit",
+  "dependency_outcome": "fail",
+  "dependency_reason": "retained inventory ordering differs",
+  "dependency_failure_stage": "inert-verification",
+  "native_execution": "not_run",
+  "fresh_dependency_build_passed": false,
+  "dependency_source_to_loaded_binary_verified": false,
+  "separate_controls_passed": false,
+  "qualified": false,
+  "ready_for_warm": false,
+  "warm_execution": false,
+  "full_warm_coverage": false,
+  "acceptance_claimed": false,
+  "phase_acceptance": false,
+  "performance_acceptance": false,
+  "original_reports": {
+    "local-execution.json": {
+      "path": "local-execution.json",
+      "sha256": "567f5e34826ddc9d510cf242361f3afb112a7e8fbcdccfc556cbe2df236285ed",
+      "size_bytes": 12201
+    },
+    "dependency-preparation.json": {
+      "path": "dependency-preparation.json",
+      "sha256": "d35a65fa1c216ee68b0a64f9e01e7bdc7203045b95b57e0042735458c29bfbbd",
+      "size_bytes": 1885720
+    },
+    "dependency-build/report.json": {
+      "path": "dependency-build/report.json",
+      "sha256": "344c43fe145a76f11938c45abcdb940ddda5a47da52c9ced6249713b9d62123b",
+      "size_bytes": 1784914
+    }
+  },
+  "stages": [
+    {
+      "id": "preparation",
+      "outcome": "pass",
+      "exit_code": 0,
+      "duration_seconds": 87.924567
+    },
+    {
+      "id": "dependency-build",
+      "outcome": "fail",
+      "exit_code": 1,
+      "duration_seconds": 521.702241
+    }
+  ],
+  "outer_build_commands": [
+    {
+      "id": "softfloat",
+      "outcome": "pass",
+      "exit_code": 0,
+      "duration_seconds": 22.461186
+    },
+    {
+      "id": "ramulator-configure",
+      "outcome": "pass",
+      "exit_code": 0,
+      "duration_seconds": 0.740015
+    },
+    {
+      "id": "ramulator-build",
+      "outcome": "pass",
+      "exit_code": 0,
+      "duration_seconds": 441.181983
+    },
+    {
+      "id": "extension-compile",
+      "outcome": "pass",
+      "exit_code": 0,
+      "duration_seconds": 19.164574
+    },
+    {
+      "id": "extension-link",
+      "outcome": "pass",
+      "exit_code": 0,
+      "duration_seconds": 0.205139
+    }
+  ],
+  "passing_actual_operation_counts": {
+    "archive": 3,
+    "compile": 406,
+    "index": 2,
+    "link": 2
+  },
+  "passing_actual_operations": 413,
+  "passing_actual_child_observations": 819,
+  "child_stage_counts": {
+    "dependencies": 406,
+    "tool": 413
+  },
+  "source_plan_counts": {
+    "extension": 1,
+    "ramulator": 60,
+    "softfloat": 309,
+    "spdlog": 7,
+    "yaml-cpp": 29
+  },
+  "source_manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+  "completed_before_failure": {
+    "archives": 3,
+    "admitted_maps": 2,
+    "products": 3,
+    "generated_inputs": 144,
+    "generated_source_observations": 929,
+    "staged_files": 628,
+    "staged_files_rehashed_by_documentation_reviewer": true,
+    "staged_bytes": 14176459,
+    "retained_files_excluding_report": 3679,
+    "recorded_stability_checks": 13,
+    "external_archives": 0,
+    "source_checkout_before_equals_after": true,
+    "source_checkout_clean": true
+  },
+  "products": {
+    "extension": {
+      "original_path": "/workspace/p06-local-native-run-02/dependency-build/extension/libramulator-vortex.so",
+      "payload": "payloads/cea576f254af5c5b1f0b11691177bf59df47ab47117cb4d516c0f664580f0fc0.bin",
+      "sha256": "cea576f254af5c5b1f0b11691177bf59df47ab47117cb4d516c0f664580f0fc0",
+      "size_bytes": 678848,
+      "staged_path": "/workspace/p06-local-run-source-02/third_party/ramulator_ext/libramulator-vortex.so"
+    },
+    "ramulator": {
+      "original_path": "/workspace/p06-local-native-run-02/dependency-sources/ramulator/libramulator.so",
+      "payload": "payloads/121f6f90a85589fb064775e6ef8e74528e274d8e8c494225ee919993535f9aef.bin",
+      "sha256": "121f6f90a85589fb064775e6ef8e74528e274d8e8c494225ee919993535f9aef",
+      "size_bytes": 5595048,
+      "staged_path": "/workspace/p06-local-run-source-02/third_party/ramulator/libramulator.so"
+    },
+    "softfloat": {
+      "original_path": "/workspace/p06-local-native-run-02/dependency-sources/softfloat/build/Linux-x86_64-GCC/softfloat.a",
+      "payload": "payloads/fed323d6760249f17eeedf51890702509d7404b95e6518b4872ecdf93c9b0634.bin",
+      "sha256": "fed323d6760249f17eeedf51890702509d7404b95e6518b4872ecdf93c9b0634",
+      "size_bytes": 492714,
+      "staged_path": "/workspace/p06-local-run-source-02/third_party/softfloat/build/Linux-x86_64-GCC/softfloat.a"
+    }
+  },
+  "link_maps": {
+    "ramulator": {
+      "descriptor": {
+        "path": "payloads/63380e4a848e10a7caf97a2123028654f8972437ed1c933c13db3a08e0255382.bin",
+        "sha256": "63380e4a848e10a7caf97a2123028654f8972437ed1c933c13db3a08e0255382",
+        "size_bytes": 18041699
+      },
+      "selected_archive_member_counts": {
+        "/workspace/p06-local-native-run-02/dependency-build/ramulator/_deps/yaml-cpp-build/libyaml-cpp.a": 25
+      }
+    },
+    "extension": {
+      "descriptor": {
+        "path": "payloads/edc1a23d403c32b62279e27f05862f06e97942d5546368260bc46726fa5bb678.bin",
+        "sha256": "edc1a23d403c32b62279e27f05862f06e97942d5546368260bc46726fa5bb678",
+        "size_bytes": 607597
+      },
+      "selected_archive_member_counts": {}
+    }
+  },
+  "host_repair": {
+    "receipt": {
+      "filename": "receipt.json",
+      "sha256": "1a205a1d080753490669664c61236a2102176aff1457529415809740ad70f4ce",
+      "size_bytes": 30615
+    },
+    "independent_review": {
+      "filename": "w05_a04-host-repair-review.json",
+      "sha256": "e55450faba7f8ed996eeb6d31e3a301f136b3f8ded51f11e40c6a0f20fffd9fa",
+      "size_bytes": 4266
+    },
+    "package_count": 7,
+    "valid_signature_count": 3,
+    "selected_shared_runtime": {
+      "path": "/workspace/p06-local-host-02/extracted/usr/bin/../lib/gcc/x86_64-linux-gnu/12/libstdc++.so",
+      "resolved_path": "/workspace/p06-local-host-02/extracted/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30",
+      "sha256": "e7848e32af4932840ba775169041759a2a8dd5a008af360e5c55bce506eebcf4",
+      "size_bytes": 2190440
+    },
+    "scope": "Matching packaged shared C++ runtime replaces the prior missing input in a new host root; system runtime libraries remain outside complete host provenance",
+    "old_root_unchanged": true
+  },
+  "failure_finding": {
+    "severity": "F2",
+    "confidence": "high",
+    "evidence_type": "Actual failed original, source proof and independent regression",
+    "scope": "dependency producer retained-inventory ordering",
+    "finding": "Componentwise pathlib.Path ordering differs from required lexical relative POSIX path-string order",
+    "descending_pairs": [
+      [
+        "sources/ramulator/src/dram/lambdas/rowopen.h",
+        "sources/ramulator/src/dram/lambdas.h"
+      ],
+      [
+        "sources/softfloat/source/8086/specialize.h",
+        "sources/softfloat/source/8086-SSE/extF80M_isSignalingNaN.c"
+      ],
+      [
+        "sources/softfloat/source/ARM-VFPv2/specialize.h",
+        "sources/softfloat/source/ARM-VFPv2-defaultNaN/extF80M_isSignalingNaN.c"
+      ]
+    ],
+    "correction": "Return sorted(rows, key=lambda row: row[\"path\"]) from Builder.retained_inventory",
+    "reader_ordering_requirement_changed": false,
+    "hash_type_and_byte_budget_checks_changed": false,
+    "next_action": "Preserve this failed original and execute the corrected producer in a fresh source checkout and workspace"
+  },
+  "independent_prospective_fix_diagnostic": {
+    "review_identity": {
+      "filename": "w06_a05-retention-review.json",
+      "sha256": "426e351da82a370f5fee7ac7901296228648de42c2b897ff32a31a9aec68c7c8",
+      "size_bytes": 4566
+    },
+    "scope": "Read-only hypothetical inventory-order diagnostic; not an original pass or re-execution",
+    "reader_source_revision": "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+    "reader_sha256": "6a45f224b57cbc2e4d7edfd540712eb468b1aa92407e2b65bc5a2de7c3581c70",
+    "original_file_count": 3680,
+    "original_bytes": 140173896,
+    "checks": [
+      {
+        "case": "unchanged failed original",
+        "result": "rejected",
+        "reason": "dependency receipt is not a complete successful build",
+        "error_type": "ValueError",
+        "duration_seconds": 0.000249
+      },
+      {
+        "case": "hypothetical status only, original inventory order",
+        "result": "rejected",
+        "reason": "retained inventory ordering differs",
+        "error_type": "ValueError",
+        "duration_seconds": 0.002718
+      },
+      {
+        "case": "hypothetical status plus prospective lexical inventory order",
+        "result": "accepted",
+        "semantic_result": {
+          "tool_execution_records": 413,
+          "translation_units": {
+            "softfloat": 309,
+            "ramulator": 60,
+            "yaml-cpp": 29,
+            "spdlog": 7,
+            "extension": 1
+          },
+          "archive_names": [
+            "softfloat",
+            "spdlog",
+            "yaml-cpp"
+          ],
+          "link_names": [
+            "extension",
+            "ramulator"
+          ],
+          "product_names": [
+            "extension",
+            "ramulator",
+            "softfloat"
+          ],
+          "source_manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+          "all_seven_claims_false": true
+        },
+        "duration_seconds": 13.11384
+      }
+    ],
+    "hypothetical_mutations": [
+      "outcome=pass",
+      "reason=None",
+      "failures=[]",
+      "fresh_dependency_build_passed=True",
+      "retained_files sorted by relative POSIX path string"
+    ],
+    "hypothetical_document_written": false,
+    "original_reclassified": false,
+    "original_unchanged": true,
+    "retained_code_executed": false,
+    "native_execution": "not_run",
+    "all_seven_claims_remain_false": true,
+    "diagnostic_result_is_original_pass": false,
+    "focused_tests": {
+      "before_fix": {
+        "tests": 3,
+        "passed": 2,
+        "failed": 1,
+        "log": "w06_a05-retention-before-fix.log"
+      },
+      "after_fix": {
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "log": "w06_a05-retention-after-fix.log"
+      }
+    },
+    "producer_fix": {
+      "finding_severity": "F2",
+      "confidence": "high",
+      "evidence_type": "static-proof with actual failed original and independent regression",
+      "one_line_return_sort_only": true,
+      "hash_type_budget_checks_unchanged": true,
+      "source_files": {
+        "frozen_producer": {
+          "path": "/workspace/p06-local-run-source-02/ci/project/p06_dependency_build.py",
+          "sha256": "b9b0f8a07396cd4d146ef03e6ec0dc65aff827b646fa5bf3a584c011f8971c35",
+          "size_bytes": 32783
+        },
+        "fixed_producer": {
+          "path": "/workspace/ai-gpu-next/ci/project/p06_dependency_build.py",
+          "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+          "size_bytes": 32820
+        },
+        "new_regression": {
+          "path": "/workspace/ai-gpu-next/ci/project/test_p06_dependency_retention_order_review.py",
+          "sha256": "7f3bf7e3b8aab1383e30f3cae364f15ba289bcd6f8dc183a42d66e8a09b4b290",
+          "size_bytes": 2774
+        }
+      }
+    }
+  },
+  "raw_archive": {
+    "schema_version": 1,
+    "filename": "AI-GPU_P06_local_attempt_02_failed_2026-11-23.zip",
+    "sha256": "8d407e6b5355aec7e9736957de613ce8ac0b69b45284617bcc5dcc10305a5b32",
+    "size_bytes": 28674439,
+    "original_revision": "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+    "original_outcome": "fail",
+    "original_native_execution": "not_run",
+    "original_evidence_root": "/workspace/p06-local-native-run-02/evidence",
+    "member_count": 3685,
+    "uncompressed_bytes": 142094266,
+    "subpacket_file_counts": {
+      "dependency-build": 3680,
+      "dependency-preparation.json": 1,
+      "local-execution.json": 1,
+      "local-logs": 2,
+      "local-sources": 1
+    },
+    "all_members_rehashed_against_original": true,
+    "original_rehashed_after_packaging": true,
+    "zip_crc_verified": true,
+    "retained_code_executed": false,
+    "packaged_at": "2026-11-23T12:45:04.432587+00:00",
+    "external_report_pins": {
+      "dependency-build/report.json": {
+        "sha256": "344c43fe145a76f11938c45abcdb940ddda5a47da52c9ced6249713b9d62123b",
+        "size_bytes": 1784914
+      },
+      "dependency-preparation.json": {
+        "sha256": "d35a65fa1c216ee68b0a64f9e01e7bdc7203045b95b57e0042735458c29bfbbd",
+        "size_bytes": 1885720
+      },
+      "local-execution.json": {
+        "sha256": "567f5e34826ddc9d510cf242361f3afb112a7e8fbcdccfc556cbe2df236285ed",
+        "size_bytes": 12201
+      }
+    }
+  },
+  "limitations": [
+    "Completed compilation, linking and staging do not override the original failed outcome.",
+    "The prospective diagnostic checks an in-memory hypothetical document; it does not create an execution original, alter original bytes or rerun compilation/native workloads.",
+    "No managed native lifetime process or separate native control ran in this attempt.",
+    "The archive contains the producer evidence directory, not a complete host-disk snapshot.",
+    "This historical record asserts no later retry result or phase/performance acceptance."
+  ]
+}

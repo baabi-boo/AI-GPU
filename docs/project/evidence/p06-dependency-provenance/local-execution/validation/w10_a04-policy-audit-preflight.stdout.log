@@ -1,0 +1,189 @@
+{
+  "asset": {
+    "actual_sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+    "expected_sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+    "matches": true,
+    "path": "docs/assets/img/vortex_framework_stack.svg"
+  },
+  "blockers": [],
+  "limitations": [
+    "Read-only offline prerequisite screen; no installer, download, build, test workload or cleanup ran.",
+    "Tool availability means executable names are on PATH, not verified versions or Vortex target support.",
+    "Configured tools outside PATH are not searched; activate the intended environment before this screen.",
+    "Toolchain tags are source pins, not verification of installed binaries, libraries or bundle hashes.",
+    "Working-tree status covers tracked files only; inventory untracked inputs before recording evidence.",
+    "Resource values are a snapshot, not a build budget; nested builds may exceed an outer job limit.",
+    "Linux MemAvailable may describe host RAM rather than a container/cgroup limit; verify the effective allocation separately.",
+    "No board, license, platform, PDK, IP, physical measurement, funding or manufacturing approval is certified."
+  ],
+  "outcome": "pass",
+  "pins": {
+    "FIRESIM_REV": "57bb93f1e23daf46198659ddd93608f70121fee0",
+    "GEM5_REV": "v25.0.0.1",
+    "TOOLCHAIN_REV": "v3.0.2",
+    "VORTEX_VERSION": "3.0"
+  },
+  "resources": {
+    "available_ram_bytes": 5981052928,
+    "free_disk_bytes": 39208357888,
+    "minimum_free_gib": null
+  },
+  "schema_version": 1,
+  "source": {
+    "python_version": "3.12.14",
+    "revision": "8d735eba0016cdc64592d9c40a98e6b52574e64b",
+    "tracked_changes": true
+  },
+  "submodules": {
+    "declared_count": 5,
+    "entries": [
+      {
+        "path": "third_party/cocogfx",
+        "revision": "b1befdb36df8af7ac9e2c96acaf81957aab5d107",
+        "status": "initialized"
+      },
+      {
+        "path": "third_party/cvfpu",
+        "revision": "79e453139072df42c9ec8f697132ba485d74e23d",
+        "status": "initialized"
+      },
+      {
+        "path": "third_party/cvfpu/src/common_cells",
+        "revision": "6aeee85d0a34fedc06c14f04fd6363c9f7b4eeea",
+        "status": "initialized"
+      },
+      {
+        "path": "third_party/cvfpu/src/fpu_div_sqrt_mvp",
+        "revision": "86e1f558b3c95e91577c41b2fc452c86b04e85ac",
+        "status": "initialized"
+      },
+      {
+        "path": "third_party/cvfpu/tb/flexfloat",
+        "revision": "28be2d4fbf41b38fc37763bb6e90a1c88f6aaa61",
+        "status": "initialized"
+      },
+      {
+        "path": "third_party/hardfloat",
+        "revision": "aaf5736dffa521603b681fd5853760c671446c85",
+        "status": "initialized"
+      },
+      {
+        "path": "third_party/ramulator",
+        "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+        "status": "initialized"
+      },
+      {
+        "path": "third_party/softfloat",
+        "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4",
+        "status": "initialized"
+      }
+    ],
+    "errors": []
+  },
+  "tier": "governance",
+  "tools": {
+    "circt_opt": {
+      "available": false,
+      "candidates": [
+        "circt-opt"
+      ],
+      "required": false
+    },
+    "circt_verilog": {
+      "available": false,
+      "candidates": [
+        "circt-verilog"
+      ],
+      "required": false
+    },
+    "cmake": {
+      "available": true,
+      "candidates": [
+        "cmake"
+      ],
+      "required": false
+    },
+    "firtool": {
+      "available": false,
+      "candidates": [
+        "firtool"
+      ],
+      "required": false
+    },
+    "git": {
+      "available": true,
+      "candidates": [
+        "git"
+      ],
+      "required": true
+    },
+    "host_cxx": {
+      "available": true,
+      "candidates": [
+        "g++",
+        "clang++"
+      ],
+      "required": false
+    },
+    "llvm_clang": {
+      "available": false,
+      "candidates": [
+        "clang"
+      ],
+      "required": false
+    },
+    "make": {
+      "available": true,
+      "candidates": [
+        "make"
+      ],
+      "required": false
+    },
+    "riscv_compiler": {
+      "available": false,
+      "candidates": [
+        "riscv64-unknown-elf-gcc",
+        "riscv32-unknown-elf-gcc"
+      ],
+      "required": false
+    },
+    "verilator": {
+      "available": false,
+      "candidates": [
+        "verilator"
+      ],
+      "required": false
+    },
+    "vitis_linker": {
+      "available": false,
+      "candidates": [
+        "v++"
+      ],
+      "required": false
+    },
+    "vivado": {
+      "available": false,
+      "candidates": [
+        "vivado"
+      ],
+      "required": false
+    },
+    "xrt_inventory": {
+      "available": false,
+      "candidates": [
+        "xbutil"
+      ],
+      "required": false
+    },
+    "yosys": {
+      "available": false,
+      "candidates": [
+        "yosys"
+      ],
+      "required": false
+    }
+  },
+  "warnings": [
+    "tracked working-tree changes exist; HEAD alone does not identify the tested tree"
+  ]
+}

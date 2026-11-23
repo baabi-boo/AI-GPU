@@ -1,0 +1,471 @@
+{
+  "schema_version": 1,
+  "review_id": "w06_a01",
+  "outcome": "pass",
+  "scope": "independent fixed-workload/source/fixture/count audit; no native execution or original transcript replay",
+  "source_revision": "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+  "source_tree": "5e7caa2b008fe8b1924811aeda5a079845a37343",
+  "reviewed_at": "2026-11-23T12:37:01.166660+00:00",
+  "formats": [
+    "fp16",
+    "bf16"
+  ],
+  "policies": [
+    "per_operation",
+    "reusable_single_tile"
+  ],
+  "per_process": {
+    "operations": 33,
+    "launches": 33,
+    "checked_words": 1056,
+    "snapshots": 4,
+    "available_queries": 132,
+    "half_replies": 264,
+    "cache_flush_reads": 33,
+    "dcr_reads": 297,
+    "unavailable_rows": 48
+  },
+  "complete_counts": {
+    "processes": 4,
+    "launches": 132,
+    "checked_words": 4224,
+    "snapshots": 16,
+    "available_queries": 528,
+    "half_replies": 1056,
+    "cache_flush_reads": 132,
+    "dcr_reads": 1188,
+    "unavailable_rows": 192
+  },
+  "available_selectors": [
+    {
+      "name": "cycles",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "instructions",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "core_sched_idle",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "core_active_warps",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "core_stalled_warps",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "core_issued_warps",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "core_issued_threads",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "core_stall_scrb",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "core_stall_lsu",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "core_stall_tcu",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "core_instr_tcu",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "core_loads",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "core_stores",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "icache_reads",
+      "required_isa": "VX_ISA_EXT_ICACHE"
+    },
+    {
+      "name": "icache_miss_r",
+      "required_isa": "VX_ISA_EXT_ICACHE"
+    },
+    {
+      "name": "icache_mshr_st",
+      "required_isa": "VX_ISA_EXT_ICACHE"
+    },
+    {
+      "name": "dcache_reads",
+      "required_isa": "VX_ISA_EXT_DCACHE"
+    },
+    {
+      "name": "dcache_writes",
+      "required_isa": "VX_ISA_EXT_DCACHE"
+    },
+    {
+      "name": "dcache_miss_r",
+      "required_isa": "VX_ISA_EXT_DCACHE"
+    },
+    {
+      "name": "dcache_miss_w",
+      "required_isa": "VX_ISA_EXT_DCACHE"
+    },
+    {
+      "name": "dcache_evicts",
+      "required_isa": "VX_ISA_EXT_DCACHE"
+    },
+    {
+      "name": "dcache_mshr_st",
+      "required_isa": "VX_ISA_EXT_DCACHE"
+    },
+    {
+      "name": "lmem_reads",
+      "required_isa": "VX_ISA_EXT_LMEM"
+    },
+    {
+      "name": "lmem_writes",
+      "required_isa": "VX_ISA_EXT_LMEM"
+    },
+    {
+      "name": "lmem_bank_st",
+      "required_isa": "VX_ISA_EXT_LMEM"
+    },
+    {
+      "name": "coalescer_miss",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "memory_reads",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "memory_writes",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "memory_lt",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "memory_bank_st",
+      "required_isa": "0ull"
+    },
+    {
+      "name": "tcu_tbuf_stalls",
+      "required_isa": "VX_ISA_EXT_TCU"
+    },
+    {
+      "name": "tcu_tbuf_cache_hits",
+      "required_isa": "VX_ISA_EXT_TCU"
+    },
+    {
+      "name": "tcu_lmem_reads",
+      "required_isa": "VX_ISA_EXT_TCU"
+    }
+  ],
+  "unavailable_selectors": [
+    {
+      "name": "l2cache_reads",
+      "required_isa": "VX_ISA_EXT_L2CACHE"
+    },
+    {
+      "name": "l2cache_writes",
+      "required_isa": "VX_ISA_EXT_L2CACHE"
+    },
+    {
+      "name": "l2cache_miss_r",
+      "required_isa": "VX_ISA_EXT_L2CACHE"
+    },
+    {
+      "name": "l2cache_miss_w",
+      "required_isa": "VX_ISA_EXT_L2CACHE"
+    },
+    {
+      "name": "l2cache_evicts",
+      "required_isa": "VX_ISA_EXT_L2CACHE"
+    },
+    {
+      "name": "l2cache_mshr_st",
+      "required_isa": "VX_ISA_EXT_L2CACHE"
+    },
+    {
+      "name": "l3cache_reads",
+      "required_isa": "VX_ISA_EXT_L3CACHE"
+    },
+    {
+      "name": "l3cache_writes",
+      "required_isa": "VX_ISA_EXT_L3CACHE"
+    },
+    {
+      "name": "l3cache_miss_r",
+      "required_isa": "VX_ISA_EXT_L3CACHE"
+    },
+    {
+      "name": "l3cache_miss_w",
+      "required_isa": "VX_ISA_EXT_L3CACHE"
+    },
+    {
+      "name": "l3cache_evicts",
+      "required_isa": "VX_ISA_EXT_L3CACHE"
+    },
+    {
+      "name": "l3cache_mshr_st",
+      "required_isa": "VX_ISA_EXT_L3CACHE"
+    }
+  ],
+  "fixture_checks": [
+    {
+      "case_id": "fp16-single-dense_boundaries",
+      "shape": [
+        8,
+        4,
+        8
+      ],
+      "packed_a_words": 32,
+      "packed_b_words": 16,
+      "checked_output_words": 32,
+      "exact_integer_outputs": [
+        3,
+        7,
+        11,
+        15,
+        14,
+        26,
+        38,
+        50,
+        25,
+        45,
+        65,
+        85,
+        36,
+        64,
+        92,
+        120,
+        47,
+        83,
+        119,
+        155,
+        58,
+        102,
+        146,
+        190,
+        69,
+        121,
+        173,
+        225,
+        80,
+        140,
+        200,
+        260
+      ],
+      "expected_fp32_sha256": "4c97d303658b7b9757db971d27d6800377393420012db33fbcac29e1a52e543b",
+      "independent_integer_recomputation_and_cpp_header_match": true,
+      "production_arithmetic_model_used": false
+    },
+    {
+      "case_id": "bf16-single-dense_boundaries",
+      "shape": [
+        8,
+        4,
+        8
+      ],
+      "packed_a_words": 32,
+      "packed_b_words": 16,
+      "checked_output_words": 32,
+      "exact_integer_outputs": [
+        3,
+        7,
+        11,
+        15,
+        14,
+        26,
+        38,
+        50,
+        25,
+        45,
+        65,
+        85,
+        36,
+        64,
+        92,
+        120,
+        47,
+        83,
+        119,
+        155,
+        58,
+        102,
+        146,
+        190,
+        69,
+        121,
+        173,
+        225,
+        80,
+        140,
+        200,
+        260
+      ],
+      "expected_fp32_sha256": "4c97d303658b7b9757db971d27d6800377393420012db33fbcac29e1a52e543b",
+      "independent_integer_recomputation_and_cpp_header_match": true,
+      "production_arithmetic_model_used": false
+    }
+  ],
+  "snapshot_reset_offsets": [
+    0,
+    1,
+    33,
+    33
+  ],
+  "checked_lifetime_run_pairs_per_process": 33,
+  "runtime_allocations_per_process": {
+    "per_operation": 99,
+    "reusable_single_tile": 3
+  },
+  "selected_user_payload_bytes": 320,
+  "native_execution_by_reviewer": "not_run",
+  "retained_native_code_executed": false,
+  "fixture_checks_used_only_data_and_independent_integer_arithmetic": true,
+  "source_hashes": {
+    "tests/regression/ai_counter_preflight/main.cpp": {
+      "sha256": "05738177b2930852eb5cf5e6d61de93f3cb465b2f221f0d9d95a8780adce99e1",
+      "size_bytes": 26844
+    },
+    "tests/regression/ai_counter_preflight/hooks.cpp": {
+      "sha256": "7744cfbb48b6dda21acda4db582fcf4f4b7a519670525d0df887b7296739c7e4",
+      "size_bytes": 15094
+    },
+    "tests/regression/ai_counter_preflight/hooks.h": {
+      "sha256": "1fba0275808ec30e42dced1c69fb8b47d1d78dd0ecfc13391f9e0d93bbaf0ccc",
+      "size_bytes": 3046
+    },
+    "tests/regression/ai_counter_preflight/Makefile": {
+      "sha256": "1fefa29e176fff3ce05f1a606aebabc434f83fbaba6704afc14b9728c50f4bd2",
+      "size_bytes": 1330
+    },
+    "tests/regression/ai_warm_workspace/main.cpp": {
+      "sha256": "0bec5ac729b3aa6c5ffcf7ff95084d84e4d47d54e470d21e234d00aa16556ce0",
+      "size_bytes": 20984
+    },
+    "tests/regression/ai_warm_workspace/observer.cpp": {
+      "sha256": "ac12eddcbfb2cf04981a8b8a945134ce763b93cd881fe5da549d28b7ed02021c",
+      "size_bytes": 9647
+    },
+    "tests/regression/ai_bench_common/counters.h": {
+      "sha256": "ef71a80f2624159cac03e42a60c8b3671489ee1ae89e4e9bd27941a143047acf",
+      "size_bytes": 6002
+    },
+    "tests/regression/sgemm_tcu/p02_fixtures.h": {
+      "sha256": "1e692ad5d14e895286e57e45bf9d1730cf2380a33ccbaa486c601db838daa64e",
+      "size_bytes": 145505
+    },
+    "sw/kernel/ai/matmul.cpp": {
+      "sha256": "ad3b6107f0eef91ec676412bc795ab70cd1c9f31647b2cea854de6234fe71d3e",
+      "size_bytes": 1565
+    },
+    "sw/common/ai_matmul_args.h": {
+      "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+      "size_bytes": 4342
+    },
+    "sw/common/ai_matmul_profile.h": {
+      "sha256": "8b2eb9a819506227808537612672c08a574230736f13f840a9d83bbd35675680",
+      "size_bytes": 2675
+    },
+    "ci/project/fixtures/p02_layout_v1.json": {
+      "sha256": "0543f9f4208de3ff4743fe1894d97ccf3b8cca4707e9a26acd1f3dde884725b2",
+      "size_bytes": 83960
+    },
+    "ci/project/p06_warm_contract.py": {
+      "sha256": "d311c5fb77e651a93fde368f0e41d517f40199a3bd43e27c302d4d00888cc31e",
+      "size_bytes": 19379
+    },
+    "ci/project/p06_warm_contract.json": {
+      "sha256": "893d85401b1d5f7757d82cb7c743a89b36264fe19c7d08c239b7f216b7a8cbbd",
+      "size_bytes": 25793
+    },
+    "ci/project/p06_warm_records.py": {
+      "sha256": "28d7e2c1553fc0929a106bc24a62fa2d612e415449ee0e9ac84ad582289381e7",
+      "size_bytes": 11637
+    },
+    "ci/project/p06_managed_preflight_contract.py": {
+      "sha256": "5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb",
+      "size_bytes": 14917
+    },
+    "ci/project/p06_managed_preflight_records.py": {
+      "sha256": "3d6358c98544f4252be262125b70c87a72caaca7f35fbe3bc3e2512655654d10",
+      "size_bytes": 16223
+    },
+    "ci/project/p06_managed_preflight_execute.py": {
+      "sha256": "a364f3d48b90b8babcc5ab4759bf9f23dcdb1af92504240df67051d033d515e7",
+      "size_bytes": 47682
+    },
+    "ci/project/p06_native_lifetime_contract.py": {
+      "sha256": "266a50e5b4c0d07b432accf2aa13ff8d3db7fc175a24a4263e3cdb0acafb5b74",
+      "size_bytes": 4545
+    },
+    "ci/project/p06_native_lifetime_records.py": {
+      "sha256": "5bf33d35e489397d96e0e0932c8d42e687f18deda646bb9725e05b326be50e3a",
+      "size_bytes": 8506
+    },
+    "ci/project/p06_dependency_lifetime_execute.py": {
+      "sha256": "ccf1d7c47f1bd045391360498b1b7b8ea389a244801c905557bf6a8904fc5217",
+      "size_bytes": 1917
+    },
+    "ci/project/p06_dependency_native_replay.py": {
+      "sha256": "ad2f57a1264c4d2a7fbf2dcd27f19f1094c9fb053dde65bc45342adef97a9d21",
+      "size_bytes": 58403
+    },
+    "ci/project/p06_dependency_local_execute.py": {
+      "sha256": "e2a4329fd41f888a01c8000cc60b5bf76bc958f98ba3347557c6a370235aae71",
+      "size_bytes": 22190
+    }
+  },
+  "source_files_stable": true,
+  "unchanged_since_audit_base": [
+    "tests/regression/ai_counter_preflight/main.cpp",
+    "tests/regression/ai_counter_preflight/hooks.cpp",
+    "tests/regression/ai_counter_preflight/hooks.h",
+    "tests/regression/ai_counter_preflight/Makefile",
+    "tests/regression/ai_warm_workspace/main.cpp",
+    "tests/regression/ai_warm_workspace/observer.cpp",
+    "tests/regression/ai_bench_common/counters.h",
+    "tests/regression/sgemm_tcu/p02_fixtures.h",
+    "sw/kernel/ai/matmul.cpp",
+    "sw/common/ai_matmul_args.h",
+    "sw/common/ai_matmul_profile.h",
+    "ci/project/fixtures/p02_layout_v1.json",
+    "ci/project/p06_warm_contract.py",
+    "ci/project/p06_warm_contract.json",
+    "ci/project/p06_warm_records.py",
+    "ci/project/p06_managed_preflight_contract.py",
+    "ci/project/p06_managed_preflight_records.py",
+    "ci/project/p06_managed_preflight_execute.py",
+    "ci/project/p06_native_lifetime_contract.py",
+    "ci/project/p06_native_lifetime_records.py",
+    "ci/project/p06_dependency_lifetime_execute.py"
+  ],
+  "changed_reviewed_files": [
+    "ci/project/p06_dependency_local_execute.py",
+    "ci/project/p06_dependency_native_replay.py"
+  ],
+  "findings": [],
+  "remaining": [
+    "Read actual complete original logs and independently replay them without mocks.",
+    "Verify exact native source/build/artifact/loader joins and every run/reset/read boundary.",
+    "The four-process boundary observations do not close all 40 component lifetimes, an absolute no-wrap proof, complete counter qualification, or performance acceptance."
+  ],
+  "qualified": false,
+  "ready_for_warm": false,
+  "warm_execution": false,
+  "full_warm_coverage": false,
+  "acceptance_claimed": false,
+  "phase_acceptance": false,
+  "performance_acceptance": false
+}

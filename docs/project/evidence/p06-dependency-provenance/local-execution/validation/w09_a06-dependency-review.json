@@ -1,0 +1,715 @@
+{
+  "acceptance_claimed": false,
+  "actual_operation_counts": {
+    "archive": 3,
+    "compile": 406,
+    "index": 2,
+    "link": 2
+  },
+  "archive_joins": {
+    "softfloat": {
+      "creator_record": "249b5f2e55dee7ab5b7fba5d753e77c9f3aba47ab9cb7e0e05e9d9b9a99e7b95",
+      "descriptor": {
+        "path": "payloads/fed323d6760249f17eeedf51890702509d7404b95e6518b4872ecdf93c9b0634.bin",
+        "sha256": "fed323d6760249f17eeedf51890702509d7404b95e6518b4872ecdf93c9b0634",
+        "size_bytes": 492714
+      },
+      "index_record": null,
+      "members": 309,
+      "path": "/workspace/p06-local-native-run-04/dependency-sources/softfloat/build/Linux-x86_64-GCC/softfloat.a"
+    },
+    "spdlog": {
+      "creator_record": "7d682d71df37407b807d3261a900260e9eedcfc8b5b93d0e018aa93d054114d2",
+      "descriptor": {
+        "path": "payloads/16760184a6c57fe1ef2015648c8e6c4b0baff29fea1d079e545d4ad46647eae6.bin",
+        "sha256": "16760184a6c57fe1ef2015648c8e6c4b0baff29fea1d079e545d4ad46647eae6",
+        "size_bytes": 1439698
+      },
+      "index_record": "f9764e18a6f7658bcb3bfd05ffd098e1a8100ce1c198f04655d05c70ccd35ab8",
+      "members": 7,
+      "path": "/workspace/p06-local-native-run-04/dependency-build/ramulator/_deps/spdlog-build/libspdlog.a"
+    },
+    "yaml-cpp": {
+      "creator_record": "99fcc6d07b3270e468371ae769052e5578585913469428e4f0b4513489c67a2b",
+      "descriptor": {
+        "path": "payloads/685cecf3a136755be84e8afa93f0f58b9970d6f53bde7311f53fffd34ff11bd5.bin",
+        "sha256": "685cecf3a136755be84e8afa93f0f58b9970d6f53bde7311f53fffd34ff11bd5",
+        "size_bytes": 1080782
+      },
+      "index_record": "86410f32a38658e9b14d5f48e47ceb5dbd8dd992318fd4da8a2c9661f3cdf541",
+      "members": 29,
+      "path": "/workspace/p06-local-native-run-04/dependency-build/ramulator/_deps/yaml-cpp-build/libyaml-cpp.a"
+    }
+  },
+  "audit_script_adapted_from": "w07_a06_dependency_review.py with explicit new pins and additional current-source checks",
+  "budget": {
+    "build_timeout_seconds": 1800,
+    "configure_timeout_seconds": 120,
+    "jobs": 2,
+    "max_log_bytes": 16777216,
+    "max_rss_bytes": 4294967296,
+    "min_free_bytes": 16106127360,
+    "process_timeout_seconds": 180,
+    "simulation_workers": 1
+  },
+  "child_observations": 819,
+  "child_stage_counts": {
+    "dependencies": 406,
+    "tool": 413
+  },
+  "cmake_configuration": {
+    "ARGPARSE_BUILD_SAMPLES": "OFF",
+    "ARGPARSE_BUILD_TESTS": "OFF",
+    "ARGPARSE_LONG_VERSION_ARG_ONLY": "OFF",
+    "BUILD_SHARED_LIBS": "OFF",
+    "BUILD_TESTING": "OFF",
+    "CMAKE_AR": "/workspace/p06-local-native-run-04/evidence/dependency-build/launchers/ar.sh",
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_CXX_COMPILER": "/workspace/p06-local-host-02/bin/g++",
+    "CMAKE_CXX_COMPILER_LAUNCHER": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3;/workspace/p06-local-run-source-04/ci/project/p06_dependency_record.py;--config;/workspace/p06-local-native-run-04/evidence/dependency-build/tool-config.json;--config-sha256;4ec67e73d04ba4e7e0bf0629d3ea60cac4b62b2ccf18c80fff1d55aa1f3d01cb;--tool;g++;--role;compile;--compiler-launcher;--",
+    "CMAKE_CXX_EXTENSIONS": "OFF",
+    "CMAKE_CXX_LINKER_LAUNCHER": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3;/workspace/p06-local-run-source-04/ci/project/p06_dependency_record.py;--config;/workspace/p06-local-native-run-04/evidence/dependency-build/tool-config.json;--config-sha256;4ec67e73d04ba4e7e0bf0629d3ea60cac4b62b2ccf18c80fff1d55aa1f3d01cb;--tool;g++;--role;link;--compiler-launcher;--",
+    "CMAKE_CXX_STANDARD": "20",
+    "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+    "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+    "CMAKE_MAKE_PROGRAM": "/usr/bin/make",
+    "CMAKE_POSITION_INDEPENDENT_CODE": "ON",
+    "CMAKE_RANLIB": "/workspace/p06-local-native-run-04/evidence/dependency-build/launchers/ranlib.sh",
+    "CMAKE_SHARED_LINKER_FLAGS": "-Wl,-Map,/workspace/p06-local-native-run-04/dependency-build/ramulator.map",
+    "FETCHCONTENT_FULLY_DISCONNECTED": "ON",
+    "FETCHCONTENT_SOURCE_DIR_ARGPARSE": "/workspace/p06-local-native-run-04/dependency-sources/argparse",
+    "FETCHCONTENT_SOURCE_DIR_SPDLOG": "/workspace/p06-local-native-run-04/dependency-sources/spdlog",
+    "FETCHCONTENT_SOURCE_DIR_YAML-CPP": "/workspace/p06-local-native-run-04/dependency-sources/yaml-cpp",
+    "FETCHCONTENT_UPDATES_DISCONNECTED": "ON",
+    "SPDLOG_BUILD_ALL": "OFF",
+    "SPDLOG_BUILD_BENCH": "OFF",
+    "SPDLOG_BUILD_EXAMPLE": "OFF",
+    "SPDLOG_BUILD_EXAMPLE_HO": "OFF",
+    "SPDLOG_BUILD_PIC": "ON",
+    "SPDLOG_BUILD_SHARED": "OFF",
+    "SPDLOG_BUILD_TESTS": "OFF",
+    "SPDLOG_BUILD_TESTS_HO": "OFF",
+    "SPDLOG_ENABLE_PCH": "OFF",
+    "SPDLOG_FMT_EXTERNAL": "OFF",
+    "SPDLOG_FMT_EXTERNAL_HO": "OFF",
+    "SPDLOG_INSTALL": "OFF",
+    "SPDLOG_NO_EXCEPTIONS": "OFF",
+    "SPDLOG_NO_TLS": "OFF",
+    "SPDLOG_USE_STD_FORMAT": "OFF",
+    "YAML_BUILD_SHARED_LIBS": "OFF",
+    "YAML_CPP_BUILD_CONTRIB": "OFF",
+    "YAML_CPP_BUILD_TESTS": "OFF",
+    "YAML_CPP_BUILD_TOOLS": "OFF",
+    "YAML_CPP_INSTALL": "OFF"
+  },
+  "compile_database": {
+    "built_cmake_sources": 96,
+    "configured_but_unbuilt_main_source": "/workspace/p06-local-native-run-04/dependency-sources/ramulator/src/main.cpp",
+    "path": "build-inputs/compile_commands.json",
+    "rows": 97,
+    "sha256": "129f5d9be607cdf9a81b5ae61047bde56bd5a35d4e21cd0d96803820ffc4cba1",
+    "size_bytes": 69075
+  },
+  "current_materialized_source_files_rehashed_before_after": 1294,
+  "current_selected_staged_helpers_tools_products_unchanged": true,
+  "exact_directory_membership": true,
+  "external_archives": [],
+  "fresh_dependency_build_passed": true,
+  "full_unmocked_receipt_reader": {
+    "accepted": true,
+    "execution_guard_enabled": true,
+    "prohibited_process_network_events": [],
+    "seconds": 13.117362
+  },
+  "full_warm_coverage": false,
+  "generated_cmake_inputs": 144,
+  "generated_source_bytes": 7379556,
+  "generated_source_outputs": 929,
+  "helper_sources": 20,
+  "independent_dependency_chronology_edges": 411,
+  "independently_rederived_source_plan": {
+    "extension": 1,
+    "ramulator": 60,
+    "softfloat": 309,
+    "spdlog": 7,
+    "yaml-cpp": 29
+  },
+  "lexical_posix_inventory_order_passed": true,
+  "limitations": [
+    "This reviews a sealed actual dependency original; it does not execute retained commands, rebuild products, or provide a new native outcome.",
+    "An inert consistency and hash review does not independently attest every operating-system behavior or establish a cryptographically attested process history.",
+    "Selected tools and project inputs are pinned; the host OS, dynamic runtime loader, and every system library are outside complete host provenance.",
+    "Fresh dependency provenance is not counter qualification, admission, warm execution, phase acceptance, or performance acceptance."
+  ],
+  "maps": {
+    "extension": {
+      "record_id": "6251e9f35f0abb8de791d0f40c63ecb5085a08f9bba4a901c246a7d19e98d403",
+      "required_loads": {
+        "/workspace/p06-local-native-run-04/dependency-sources/ramulator/libramulator.so": 1
+      },
+      "selected_archive_members": {},
+      "sha256": "c9a929334258b56f6fd569cac1954ebd05bab567a49795284ca75ecf154ffcde",
+      "size_bytes": 607597,
+      "support_loads": [
+        "/workspace/p06-local-host-02/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libstdc++.so",
+        "/workspace/p06-local-host-02/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc_s.so",
+        "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "/workspace/p06-local-host-02/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc.a",
+        "/usr/lib/x86_64-linux-gnu/libc_nonshared.a",
+        "/workspace/p06-local-host-02/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc_s.so",
+        "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "/workspace/p06-local-host-02/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc.a"
+      ]
+    },
+    "ramulator": {
+      "record_id": "e25f0525aec0a9bf5d67ccc6ec36a92bdc7e461a6fec35e7e5129ec034eadd80",
+      "required_loads": {
+        "/workspace/p06-local-native-run-04/dependency-build/ramulator/_deps/spdlog-build/libspdlog.a": 1,
+        "/workspace/p06-local-native-run-04/dependency-build/ramulator/_deps/yaml-cpp-build/libyaml-cpp.a": 1
+      },
+      "selected_archive_members": {
+        "/workspace/p06-local-native-run-04/dependency-build/ramulator/_deps/yaml-cpp-build/libyaml-cpp.a": 25
+      },
+      "sha256": "4764061e0f438c51648aa421541ecb29392f19689481f0641bfd180a562c1cda",
+      "size_bytes": 18041699,
+      "support_loads": [
+        "/workspace/p06-local-host-02/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libstdc++.so",
+        "/workspace/p06-local-host-02/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc_s.so",
+        "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "/workspace/p06-local-host-02/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc.a",
+        "/usr/lib/x86_64-linux-gnu/libc_nonshared.a",
+        "/workspace/p06-local-host-02/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc_s.so",
+        "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "/workspace/p06-local-host-02/extracted/usr/lib/gcc/x86_64-linux-gnu/12/libgcc.a"
+      ]
+    }
+  },
+  "observed_at": "2026-11-23T13:39:09.616097+00:00",
+  "original_outcome": "pass",
+  "original_report": {
+    "path": "/workspace/p06-local-native-run-04/evidence/dependency-build/report.json",
+    "sha256": "f22f564ddd8d8a3d20636410f6d2f04b328018676803fdc5ea483c28ded10e8a",
+    "size_bytes": 1784774
+  },
+  "outer_commands": [
+    {
+      "duration_seconds": 20.375343,
+      "exit_code": 0,
+      "id": "softfloat",
+      "outcome": "pass",
+      "peak_rss_bytes": 91500544
+    },
+    {
+      "duration_seconds": 0.408219,
+      "exit_code": 0,
+      "id": "ramulator-configure",
+      "outcome": "pass",
+      "peak_rss_bytes": 13672448
+    },
+    {
+      "duration_seconds": 422.727197,
+      "exit_code": 0,
+      "id": "ramulator-build",
+      "outcome": "pass",
+      "peak_rss_bytes": 1433579520
+    },
+    {
+      "duration_seconds": 14.772172,
+      "exit_code": 0,
+      "id": "extension-compile",
+      "outcome": "pass",
+      "peak_rss_bytes": 706834432
+    },
+    {
+      "duration_seconds": 0.182903,
+      "exit_code": 0,
+      "id": "extension-link",
+      "outcome": "pass",
+      "peak_rss_bytes": 35950592
+    }
+  ],
+  "packet_symlinks_or_hardlinks": 0,
+  "performance_acceptance": false,
+  "phase_acceptance": false,
+  "preparation": {
+    "path": "preparation.json",
+    "sha256": "ec263ca9a15ef4d23c59e0722c84d32e5de68177c42f9e5cbc4aa8f71759d5b8",
+    "size_bytes": 1885720
+  },
+  "products": {
+    "extension": {
+      "original_path": "/workspace/p06-local-native-run-04/dependency-build/extension/libramulator-vortex.so",
+      "payload": "payloads/cea576f254af5c5b1f0b11691177bf59df47ab47117cb4d516c0f664580f0fc0.bin",
+      "sha256": "cea576f254af5c5b1f0b11691177bf59df47ab47117cb4d516c0f664580f0fc0",
+      "size_bytes": 678848,
+      "staged_path": "/workspace/p06-local-run-source-04/third_party/ramulator_ext/libramulator-vortex.so"
+    },
+    "ramulator": {
+      "original_path": "/workspace/p06-local-native-run-04/dependency-sources/ramulator/libramulator.so",
+      "payload": "payloads/121f6f90a85589fb064775e6ef8e74528e274d8e8c494225ee919993535f9aef.bin",
+      "sha256": "121f6f90a85589fb064775e6ef8e74528e274d8e8c494225ee919993535f9aef",
+      "size_bytes": 5595048,
+      "staged_path": "/workspace/p06-local-run-source-04/third_party/ramulator/libramulator.so"
+    },
+    "softfloat": {
+      "original_path": "/workspace/p06-local-native-run-04/dependency-sources/softfloat/build/Linux-x86_64-GCC/softfloat.a",
+      "payload": "payloads/fed323d6760249f17eeedf51890702509d7404b95e6518b4872ecdf93c9b0634.bin",
+      "sha256": "fed323d6760249f17eeedf51890702509d7404b95e6518b4872ecdf93c9b0634",
+      "size_bytes": 492714,
+      "staged_path": "/workspace/p06-local-run-source-04/third_party/softfloat/build/Linux-x86_64-GCC/softfloat.a"
+    }
+  },
+  "qualified": false,
+  "ready_for_warm": false,
+  "record_children_ordered_and_successful": true,
+  "retained_bytes_excluding_report": 138389276,
+  "retained_files_excluding_report": 3679,
+  "review": "wave-09-agent-06-actual-dependency-original-04",
+  "review_outcome": "pass",
+  "review_scripts": [
+    {
+      "path": "w09_a06_dependency_review.py",
+      "sha256": "9b13ec53107670c7ab1ee3489a6a27de3fff67e01daf901fc8e53fe051e7c02b",
+      "size_bytes": 19844
+    },
+    {
+      "path": "w09_a06_source_projection.py",
+      "sha256": "5f76b13206aa18890af47206c28b03f6ab6ee235f90d10ab400e12c28af8b46f",
+      "size_bytes": 8124
+    }
+  ],
+  "review_seconds": 16.369056,
+  "reviewer_native_execution": "not_run",
+  "schema_version": 1,
+  "selected_external_files_hashed_before_and_after": 1952,
+  "selected_host_tools": {
+    "ar": {
+      "path": "/usr/bin/ar",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-ar",
+      "sha256": "f8fe09d485b40b1d47c534c96f5cbaaa9148e247aa0494c087104421f48ac5eb",
+      "size_bytes": 52480
+    },
+    "cmake": {
+      "path": "/workspace/p06-local-host-02/bin/cmake",
+      "resolved_path": "/workspace/p06-build-tools/cmake/data/bin/cmake",
+      "sha256": "a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83",
+      "size_bytes": 14672584
+    },
+    "g++": {
+      "path": "/workspace/p06-local-host-02/bin/g++",
+      "resolved_path": "/workspace/p06-local-host-02/extracted/usr/bin/x86_64-linux-gnu-g++-12",
+      "sha256": "dd91977c184e327710578363ad93ebb175c3a457b6236b874fd3911b7c055c65",
+      "size_bytes": 1305592
+    },
+    "gcc": {
+      "path": "/workspace/p06-local-host-02/bin/gcc",
+      "resolved_path": "/workspace/p06-local-host-02/extracted/usr/bin/x86_64-linux-gnu-gcc-12",
+      "sha256": "75e997ec62297a6484f491bae28ab0ccb489daba23e398fd10fe68e9e6f0def8",
+      "size_bytes": 1301496
+    },
+    "make": {
+      "path": "/usr/bin/make",
+      "resolved_path": "/usr/bin/make",
+      "sha256": "8a229baf64671988cfb5af43ba3070c6ce7214cf32bcf96155115559d1466fa7",
+      "size_bytes": 278448
+    },
+    "python3": {
+      "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "resolved_path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+      "size_bytes": 30894944
+    },
+    "ranlib": {
+      "path": "/usr/bin/ranlib",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-ranlib",
+      "sha256": "4610e832470b987c8c9d82d78c1c16e5e2bc9b8c64db455fad0cf63d420ec86e",
+      "size_bytes": 52480
+    }
+  },
+  "source_bytes": 10938128,
+  "source_checkout_after": {
+    "path": "source-checkout-after.json",
+    "sha256": "70dcc169d50dd943aa8a7ebe4125bf9165aac3585aca901e907b29c3f7e295f7",
+    "size_bytes": 2256
+  },
+  "source_checkout_before": {
+    "path": "source-checkout-before.json",
+    "sha256": "70dcc169d50dd943aa8a7ebe4125bf9165aac3585aca901e907b29c3f7e295f7",
+    "size_bytes": 2256
+  },
+  "source_files": 1294,
+  "source_git_blobs_rehashed": true,
+  "source_git_unchanged_clean": true,
+  "source_manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+  "source_projection": {
+    "all_gitlink_objects_unchanged": true,
+    "changed_files": [
+      {
+        "after": {
+          "mode": "100644",
+          "oid": "83972182a8407aeaa7334cee78e3f86c829a989a",
+          "sha256": "f7f6166c4f99697a2d96a67def40fafe6e445c9c27e09412d3bdd7cc91199403",
+          "size_bytes": 9846,
+          "type": "blob"
+        },
+        "before": {
+          "mode": "100644",
+          "oid": "65c411c5ecac69bbfa110769cde44e573d8d2e82",
+          "sha256": "6afc831848fafc492b844c126e1707b2d502439f097d1b07a6ec0266a6537be2",
+          "size_bytes": 9457,
+          "type": "blob"
+        },
+        "path": "ci/project/p06_dependency_prepare.py",
+        "scope": "hosted preparation only; no local execution entry point"
+      },
+      {
+        "after": {
+          "mode": "100644",
+          "oid": "bca948009d660a760aa4d5d9ce03f29a0f7ff026",
+          "sha256": "cc993ee9defce4dd126996068a7f1d4308d62b5b1eb0b6d9e21facb4dfb65f9b",
+          "size_bytes": 45798,
+          "type": "blob"
+        },
+        "before": {
+          "mode": "100644",
+          "oid": "b5acc806dad03b2b57be820ac7483ad136ef6149",
+          "sha256": "8052e75464413080a57f7a3cd253ccad651d55eed7dcb52e82f258a8a3c60530",
+          "size_bytes": 45993,
+          "type": "blob"
+        },
+        "path": "ci/project/test_p06_dependency_control_replay.py",
+        "scope": "test only"
+      },
+      {
+        "after": {
+          "mode": "100644",
+          "oid": "b6b7d4298470a6cfd2ac1b9acc9447da828e5c44",
+          "sha256": "f10e90fa6864a46ff444680d2cfa93c55427378a73a64b8facee12e78dab3e7e",
+          "size_bytes": 19163,
+          "type": "blob"
+        },
+        "before": {
+          "mode": "100644",
+          "oid": "76b8dc1dfb7a0b2146ece176d05412d4fb14f0a0",
+          "sha256": "1f70ee8396ec774bc0cc356a344bf1a1b8b5574547ba881dc572b80a3d93cf63",
+          "size_bytes": 19446,
+          "type": "blob"
+        },
+        "path": "ci/project/test_p06_dependency_local_replay.py",
+        "scope": "test only"
+      },
+      {
+        "after": {
+          "mode": "100644",
+          "oid": "b5b184ccf1c24e2c1ab1df55826bef2bab90123c",
+          "sha256": "fee5e6296e9ce61c2708610ef06f7b2836c036a4605d80be4bfede856f6b7e09",
+          "size_bytes": 45113,
+          "type": "blob"
+        },
+        "before": {
+          "mode": "100644",
+          "oid": "fdec195c5356defa53726015d1886fed81503b43",
+          "sha256": "7fffdf3d90226a53618e746e75a27dadc8116fd0e3b40764690837c79f3ed0e3",
+          "size_bytes": 40628,
+          "type": "blob"
+        },
+        "path": "ci/project/test_p06_dependency_native_replay.py",
+        "scope": "test only"
+      },
+      {
+        "after": {
+          "mode": "100644",
+          "oid": "f1d9bd5610a4dfb653557872e6dc27b95a33482b",
+          "sha256": "3551500751e7722e5c18e82bfdcd38d399f6a341cb5fd74c8e53d46d837af5bb",
+          "size_bytes": 11752,
+          "type": "blob"
+        },
+        "before": {
+          "mode": "100644",
+          "oid": "b8dd3eb2785baf12faf9d2dfe4f8d83bd6c6c98a",
+          "sha256": "678732309d38eb36dcead2c1bc2d859b88c65f492e03db9931a344650eec4af5",
+          "size_bytes": 11260,
+          "type": "blob"
+        },
+        "path": "ci/project/test_p06_dependency_prepare.py",
+        "scope": "test only"
+      },
+      {
+        "after": {
+          "mode": "100644",
+          "oid": "0cf2bb76e6af5de825bcdeb47493b34b4a5ab7c4",
+          "sha256": "19db3951c33890b60ebbf99488a6ebdf9aad4a140dd326d08511e5827a9f68fc",
+          "size_bytes": 11631,
+          "type": "blob"
+        },
+        "before": null,
+        "path": "ci/project/test_p06_dependency_prepare_cache_review.py",
+        "scope": "test only"
+      }
+    ],
+    "current_native_source_deltas": [
+      "ci/project/p06_dependency_prepare.py"
+    ],
+    "execution_revision": "0f9aaa36d46364c297254164f5dab0d4f0e88349",
+    "execution_tree": "fb8e90f38498ca138acf978d4a11d6a087e5a778",
+    "hosted_preparer_executed_by_defined_local_stages": false,
+    "hosted_preparer_imported": false,
+    "hosted_preparer_in_native_loaded_helpers": false,
+    "hosted_preparer_retained_in_native_snapshot": {
+      "path": "ci/project/p06_dependency_prepare.py",
+      "sha256": "6afc831848fafc492b844c126e1707b2d502439f097d1b07a6ec0266a6537be2",
+      "size_bytes": 9457
+    },
+    "later_revision": "8d735eba0016cdc64592d9c40a98e6b52574e64b",
+    "later_tree": "6ce09e1bc82e3707a10a74bc77f7e1467260e1fd",
+    "limitations": [
+      "Native04 is executed at0f9aaa36, not8d735eba; this projection never changes the original revision or packet.",
+      "The hosted-only preparation correction has separate tests/review, not a new hosted success.",
+      "This projection reads trusted local source and Git objects; it does not execute retained packet content or qualify the native result."
+    ],
+    "local_module_closure_count": 66,
+    "local_operational_entry_points_unchanged": [
+      "ci/project/p06_dependency_local_execute.py",
+      "ci/project/p06_dependency_local_prepare.py",
+      "ci/project/p06_dependency_build.py",
+      "ci/project/p06_dependency_lifetime_execute.py",
+      "ci/project/p06_pending_probe.py",
+      "ci/project/p06_dependency_substitution.py"
+    ],
+    "native_loaded_helper_count": 47,
+    "only_production_delta": "ci/project/p06_dependency_prepare.py",
+    "outcome": "pass",
+    "projected_main_source_count": 830,
+    "record": {
+      "path": "w09_a06-source-projection.json",
+      "sha256": "21eee4b1bce8035fa0e8f27af31b33633aa612b0c75dc2da058345e69048b7ca",
+      "size_bytes": 52188
+    },
+    "recorded_native_source_file_count": 1023,
+    "revision_projection_does_not_change_original_revision": true,
+    "trusted_reader_source_count": 68
+  },
+  "source_revision": "0f9aaa36d46364c297254164f5dab0d4f0e88349",
+  "source_tree": "fb8e90f38498ca138acf978d4a11d6a087e5a778",
+  "source_trees": [
+    {
+      "files": 62,
+      "name": "argparse",
+      "revision": "997da9255618311d1fcb0135ce86022729d1f1cb",
+      "size_bytes": 521214,
+      "tree": "da4b4bb886f2521f326dc3aacf8304aede1044c1",
+      "url": "https://github.com/p-ranav/argparse.git"
+    },
+    {
+      "files": 180,
+      "name": "ramulator",
+      "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+      "size_bytes": 1600467,
+      "tree": "01dce703c539f6bf5ca1ac73e759067f0dd2717b",
+      "url": "https://github.com/CMU-SAFARI/ramulator2.git"
+    },
+    {
+      "files": 489,
+      "name": "softfloat",
+      "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4",
+      "size_bytes": 1927812,
+      "tree": "8d9d47a6d74670d25bbbcc956a04de4c2605253b",
+      "url": "https://github.com/ucb-bar/berkeley-softfloat-3.git"
+    },
+    {
+      "files": 164,
+      "name": "spdlog",
+      "revision": "ad0e89cbfb4d0c1ce4d097e134eb7be67baebb36",
+      "size_bytes": 1734888,
+      "tree": "64a823f2b9c61b35897fb89f2a32844a24e87cb6",
+      "url": "https://github.com/gabime/spdlog.git"
+    },
+    {
+      "files": 399,
+      "name": "yaml-cpp",
+      "revision": "0579ae3d976091d7d664aa9d2527e0d0cff25763",
+      "size_bytes": 5153747,
+      "tree": "3b4adf4e0b979fd6fb9213034acaf4864327d1aa",
+      "url": "https://github.com/jbeder/yaml-cpp.git"
+    }
+  ],
+  "stability_boundaries": [
+    {
+      "label": "sources-frozen",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 0,
+        "generated_files": 0,
+        "generated_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      },
+      "staged_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "before-softfloat",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 0,
+        "generated_files": 0,
+        "generated_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      },
+      "staged_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "after-softfloat",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 1784508,
+        "generated_files": 928,
+        "generated_sha256": "7e40624ed283fa8a3c0161a28ea3b58a329f5db01e05a58caa1100ace3242527",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      },
+      "staged_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "before-ramulator-configure",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 1784508,
+        "generated_files": 928,
+        "generated_sha256": "7e40624ed283fa8a3c0161a28ea3b58a329f5db01e05a58caa1100ace3242527",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      },
+      "staged_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "after-ramulator-configure",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 1784508,
+        "generated_files": 928,
+        "generated_sha256": "7e40624ed283fa8a3c0161a28ea3b58a329f5db01e05a58caa1100ace3242527",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      },
+      "staged_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "before-ramulator-build",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 1784508,
+        "generated_files": 928,
+        "generated_sha256": "7e40624ed283fa8a3c0161a28ea3b58a329f5db01e05a58caa1100ace3242527",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      },
+      "staged_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "after-ramulator-build",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 7379556,
+        "generated_files": 929,
+        "generated_sha256": "18f4b157f0e9d7ca5898d0f1cd8dfb86c1a47ec7e1f95324beb8c35038b39256",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      },
+      "staged_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "before-extension-compile",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 7379556,
+        "generated_files": 929,
+        "generated_sha256": "18f4b157f0e9d7ca5898d0f1cd8dfb86c1a47ec7e1f95324beb8c35038b39256",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      },
+      "staged_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "after-extension-compile",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 7379556,
+        "generated_files": 929,
+        "generated_sha256": "18f4b157f0e9d7ca5898d0f1cd8dfb86c1a47ec7e1f95324beb8c35038b39256",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      },
+      "staged_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "before-extension-link",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 7379556,
+        "generated_files": 929,
+        "generated_sha256": "18f4b157f0e9d7ca5898d0f1cd8dfb86c1a47ec7e1f95324beb8c35038b39256",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      },
+      "staged_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "after-extension-link",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 7379556,
+        "generated_files": 929,
+        "generated_sha256": "18f4b157f0e9d7ca5898d0f1cd8dfb86c1a47ec7e1f95324beb8c35038b39256",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      },
+      "staged_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "staged-and-verified",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 7379556,
+        "generated_files": 929,
+        "generated_sha256": "18f4b157f0e9d7ca5898d0f1cd8dfb86c1a47ec7e1f95324beb8c35038b39256",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      },
+      "staged_sha256": "d30270c1251bd6569b95091248d81cf75a97982781257023987c36d72cf412a1"
+    },
+    {
+      "label": "final",
+      "sources": {
+        "contract_id": "p06-dependency-source-inventory-v1",
+        "generated_bytes": 7379556,
+        "generated_files": 929,
+        "generated_sha256": "18f4b157f0e9d7ca5898d0f1cd8dfb86c1a47ec7e1f95324beb8c35038b39256",
+        "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+        "source_bytes": 10938128,
+        "source_files": 1294
+      },
+      "staged_sha256": "d30270c1251bd6569b95091248d81cf75a97982781257023987c36d72cf412a1"
+    }
+  ],
+  "staged_bytes": 14176459,
+  "staged_files": 628,
+  "static_libstdcxx_or_libc_nonshared_members": 0,
+  "warm_execution": false,
+  "whole_packet_bytes": 140174050,
+  "whole_packet_files": 3680,
+  "whole_packet_hashed_before_and_after_unchanged": true,
+  "whole_packet_identity_sha256": "4ae8464fb9985f5b282e327323b1f783a7335d9fe284ac6bc038ee5d7dea3cd8"
+}

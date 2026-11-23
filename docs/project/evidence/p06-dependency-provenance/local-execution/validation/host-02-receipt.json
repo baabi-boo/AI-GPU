@@ -1,0 +1,734 @@
+{
+  "schema_version": 1,
+  "scope": "separate host installation repair; not GPU execution",
+  "started_at": "2026-11-23T12:29:51.570492+00:00",
+  "old_root": "/workspace/p06-local-host",
+  "new_root": "/workspace/p06-local-host-02",
+  "commands": [
+    {
+      "id": "keyring-version",
+      "argv": [
+        "dpkg-query",
+        "-W",
+        "debian-archive-keyring"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 1,
+      "duration_seconds": 0.005381175000366056,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/keyring-version.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/keyring-version.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/keyring-version.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/keyring-version.stderr.log",
+        "sha256": "cb32704c89608d74d8ae2a859abf434d408db1542233b24bb20e1510f49b7f15",
+        "size_bytes": 62
+      }
+    },
+    {
+      "id": "inrelease",
+      "argv": [
+        "curl",
+        "--proto",
+        "=https",
+        "--location",
+        "--fail",
+        "--silent",
+        "--show-error",
+        "--connect-timeout",
+        "20",
+        "--max-time",
+        "60",
+        "--max-filesize",
+        "1048576",
+        "--output",
+        "/workspace/p06-local-host-02/metadata/setup02/InRelease",
+        "https://deb.debian.org/debian/dists/bookworm/InRelease"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 5.9910153780001565,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/inrelease.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/inrelease.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/inrelease.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/inrelease.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "verify-inrelease",
+      "argv": [
+        "gpg",
+        "--batch",
+        "--no-tty",
+        "--no-options",
+        "--no-auto-key-retrieve",
+        "--homedir",
+        "/workspace/p06-local-host-02/gnupg",
+        "--no-default-keyring",
+        "--keyring",
+        "/usr/share/keyrings/debian-archive-keyring.pgp",
+        "--status-fd",
+        "2",
+        "--output",
+        "/workspace/p06-local-host-02/metadata/setup02/Release",
+        "--decrypt",
+        "/workspace/p06-local-host-02/metadata/setup02/InRelease"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.04142782499911846,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/verify-inrelease.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/verify-inrelease.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/verify-inrelease.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/verify-inrelease.stderr.log",
+        "sha256": "ebee2308b0eaab339d8b61796322fe326981215c1d8b8080279bf02be83794ca",
+        "size_bytes": 3013
+      }
+    },
+    {
+      "id": "package-index",
+      "argv": [
+        "curl",
+        "--proto",
+        "=https",
+        "--location",
+        "--fail",
+        "--silent",
+        "--show-error",
+        "--connect-timeout",
+        "20",
+        "--max-time",
+        "60",
+        "--max-filesize",
+        "8790396",
+        "--output",
+        "/workspace/p06-local-host-02/metadata/setup02/Packages.xz",
+        "https://deb.debian.org/debian/dists/bookworm/main/binary-amd64/Packages.xz"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 3.5686789809988113,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/package-index.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/package-index.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/package-index.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/package-index.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "runtime-package",
+      "argv": [
+        "curl",
+        "--proto",
+        "=https",
+        "--location",
+        "--fail",
+        "--silent",
+        "--show-error",
+        "--connect-timeout",
+        "20",
+        "--max-time",
+        "60",
+        "--max-filesize",
+        "612604",
+        "--output",
+        "/workspace/p06-local-host-02/packages/libstdc++6_12.2.0-14+deb12u1_amd64.deb",
+        "https://deb.debian.org/debian/pool/main/g/gcc-12/libstdc++6_12.2.0-14+deb12u1_amd64.deb"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 3.0786479449998296,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/runtime-package.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/runtime-package.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/runtime-package.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/runtime-package.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "extract-0",
+      "argv": [
+        "dpkg-deb",
+        "-x",
+        "/workspace/p06-local-host-02/packages/cpp-12_12.2.0-14+deb12u1_amd64.deb",
+        "/workspace/p06-local-host-02/extracted"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.3629829920009797,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/extract-0.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/extract-0.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/extract-0.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/extract-0.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "extract-1",
+      "argv": [
+        "dpkg-deb",
+        "-x",
+        "/workspace/p06-local-host-02/packages/g++-12_12.2.0-14+deb12u1_amd64.deb",
+        "/workspace/p06-local-host-02/extracted"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.44243502499921306,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/extract-1.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/extract-1.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/extract-1.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/extract-1.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "extract-2",
+      "argv": [
+        "dpkg-deb",
+        "-x",
+        "/workspace/p06-local-host-02/packages/gcc-12-base_12.2.0-14+deb12u1_amd64.deb",
+        "/workspace/p06-local-host-02/extracted"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.006312878000244382,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/extract-2.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/extract-2.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/extract-2.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/extract-2.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "extract-3",
+      "argv": [
+        "dpkg-deb",
+        "-x",
+        "/workspace/p06-local-host-02/packages/gcc-12_12.2.0-14+deb12u1_amd64.deb",
+        "/workspace/p06-local-host-02/extracted"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.6308154430007562,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/extract-3.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/extract-3.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/extract-3.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/extract-3.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "extract-4",
+      "argv": [
+        "dpkg-deb",
+        "-x",
+        "/workspace/p06-local-host-02/packages/libgcc-12-dev_12.2.0-14+deb12u1_amd64.deb",
+        "/workspace/p06-local-host-02/extracted"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.12688429299851123,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/extract-4.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/extract-4.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/extract-4.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/extract-4.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "extract-5",
+      "argv": [
+        "dpkg-deb",
+        "-x",
+        "/workspace/p06-local-host-02/packages/libstdc++-12-dev_12.2.0-14+deb12u1_amd64.deb",
+        "/workspace/p06-local-host-02/extracted"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.11109289299929515,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/extract-5.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/extract-5.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/extract-5.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/extract-5.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "extract-6",
+      "argv": [
+        "dpkg-deb",
+        "-x",
+        "/workspace/p06-local-host-02/packages/libstdc++6_12.2.0-14+deb12u1_amd64.deb",
+        "/workspace/p06-local-host-02/extracted"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.042881269999270444,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/extract-6.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/extract-6.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/extract-6.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/extract-6.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "gcc-version",
+      "argv": [
+        "/workspace/p06-local-host-02/bin/gcc",
+        "--version"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.0016804690003482392,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/gcc-version.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/gcc-version.stdout.log",
+        "sha256": "8c59c3b7b9051484db9a6b6576edf12a3aca7381a06a174a2d4dbfd6ce08681f",
+        "size_bytes": 240
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/gcc-version.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/gcc-version.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "gpp-version",
+      "argv": [
+        "/workspace/p06-local-host-02/bin/g++",
+        "--version"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.003596729000491905,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/gpp-version.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/gpp-version.stdout.log",
+        "sha256": "8854612eaf6fea7cbba6da95264f0cc26bf09d0a9b8bbc09e20e16cde2ef31eb",
+        "size_bytes": 240
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/gpp-version.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/gpp-version.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "cmake-version",
+      "argv": [
+        "/workspace/p06-local-host-02/bin/cmake",
+        "--version"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.006252520000998629,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/cmake-version.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/cmake-version.stdout.log",
+        "sha256": "c92c6a40698565890aa908230fc47cea979d33de2cba038cc0947f4d998cc7fa",
+        "size_bytes": 91
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/cmake-version.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/cmake-version.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "stdcxx-selection",
+      "argv": [
+        "/workspace/p06-local-host-02/bin/g++",
+        "-print-file-name=libstdc++.so"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.0017197469987877412,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/stdcxx-selection.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/stdcxx-selection.stdout.log",
+        "sha256": "1c96374b890dbfbeb716f41c87d8cb2cb870791042ac6440e5cc03c066d5991f",
+        "size_bytes": 91
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/stdcxx-selection.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/stdcxx-selection.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "shared-compile-link",
+      "argv": [
+        "/workspace/p06-local-host-02/bin/g++",
+        "-std=c++17",
+        "-O2",
+        "-fPIC",
+        "-Wall",
+        "-Wextra",
+        "-Wfatal-errors",
+        "-Werror",
+        "-shared",
+        "-pthread",
+        "/workspace/p06-local-host-02/probe/probe.cpp",
+        "-Wl,-Map,/workspace/p06-local-host-02/probe/probe.map",
+        "-o",
+        "/workspace/p06-local-host-02/probe/libprobe.so"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.7092997899999318,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/shared-compile-link.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/shared-compile-link.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/shared-compile-link.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/shared-compile-link.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "driver-compile-link",
+      "argv": [
+        "/workspace/p06-local-host-02/bin/g++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Wfatal-errors",
+        "-Werror",
+        "/workspace/p06-local-host-02/probe/main.cpp",
+        "-L/workspace/p06-local-host-02/probe",
+        "-lprobe",
+        "-Wl,-rpath,/workspace/p06-local-host-02/probe",
+        "-o",
+        "/workspace/p06-local-host-02/probe/probe"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.15616279899950314,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/driver-compile-link.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/driver-compile-link.stdout.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/driver-compile-link.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/driver-compile-link.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "shared-dynamic",
+      "argv": [
+        "readelf",
+        "-d",
+        "/workspace/p06-local-host-02/probe/libprobe.so"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.0027386700003262376,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/shared-dynamic.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/shared-dynamic.stdout.log",
+        "sha256": "0a80a75a6f22bc44f67e5af62019b7f49e3789b0c8e45091b819577c10c496ce",
+        "size_bytes": 1522
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/shared-dynamic.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/shared-dynamic.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "loader-inspection",
+      "argv": [
+        "ldd",
+        "/workspace/p06-local-host-02/probe/probe"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.0108868130009796,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/loader-inspection.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/loader-inspection.stdout.log",
+        "sha256": "645537cbfeb162e65c6fc71f2368bbe444cec85c77cdae1e933b47ab549f08d9",
+        "size_bytes": 458
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/loader-inspection.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/loader-inspection.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    {
+      "id": "probe-run",
+      "argv": [
+        "/workspace/p06-local-host-02/probe/probe"
+      ],
+      "cwd": "/workspace/p06-local-host-02",
+      "exit_code": 0,
+      "duration_seconds": 0.0035643890005303547,
+      "stdout": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/probe-run.stdout.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/probe-run.stdout.log",
+        "sha256": "084c799cd551dd1d8d5c5f9a5d593b2e931f5e36122ee5c793c1d08a19839cc0",
+        "size_bytes": 3
+      },
+      "stderr": {
+        "path": "/workspace/p06-local-host-02/logs/setup02/probe-run.stderr.log",
+        "resolved_path": "/workspace/p06-local-host-02/logs/setup02/probe-run.stderr.log",
+        "sha256": "7629d7476f1fde45da70af4ba19f022e727e095e9db1fef99d5ae97644a0d2aa",
+        "size_bytes": 2918
+      }
+    }
+  ],
+  "packages": [
+    {
+      "path": "/workspace/p06-local-host-02/packages/cpp-12_12.2.0-14+deb12u1_amd64.deb",
+      "resolved_path": "/workspace/p06-local-host-02/packages/cpp-12_12.2.0-14+deb12u1_amd64.deb",
+      "sha256": "fedbb98e877adde83c983c6071537ea25ac52b277ac6e4637d85025949ca1454",
+      "size_bytes": 9767788,
+      "name": "cpp-12_12.2.0-14+deb12u1_amd64.deb",
+      "source": "verified predecessor package",
+      "expected_sha256": "fedbb98e877adde83c983c6071537ea25ac52b277ac6e4637d85025949ca1454",
+      "expected_size_bytes": 9767788
+    },
+    {
+      "path": "/workspace/p06-local-host-02/packages/g++-12_12.2.0-14+deb12u1_amd64.deb",
+      "resolved_path": "/workspace/p06-local-host-02/packages/g++-12_12.2.0-14+deb12u1_amd64.deb",
+      "sha256": "68b182badae4ace7d472f1393c559d3532a95a2d70817498b10bb481d2627251",
+      "size_bytes": 10694076,
+      "name": "g++-12_12.2.0-14+deb12u1_amd64.deb",
+      "source": "verified predecessor package",
+      "expected_sha256": "68b182badae4ace7d472f1393c559d3532a95a2d70817498b10bb481d2627251",
+      "expected_size_bytes": 10694076
+    },
+    {
+      "path": "/workspace/p06-local-host-02/packages/gcc-12-base_12.2.0-14+deb12u1_amd64.deb",
+      "resolved_path": "/workspace/p06-local-host-02/packages/gcc-12-base_12.2.0-14+deb12u1_amd64.deb",
+      "sha256": "1896a2aacf4ad681ff5eacc24a5b0ca4d5d9c9b9c9e4b6de5197bc1e116ea619",
+      "size_bytes": 37596,
+      "name": "gcc-12-base_12.2.0-14+deb12u1_amd64.deb",
+      "source": "verified predecessor package",
+      "expected_sha256": "1896a2aacf4ad681ff5eacc24a5b0ca4d5d9c9b9c9e4b6de5197bc1e116ea619",
+      "expected_size_bytes": 37596
+    },
+    {
+      "path": "/workspace/p06-local-host-02/packages/gcc-12_12.2.0-14+deb12u1_amd64.deb",
+      "resolved_path": "/workspace/p06-local-host-02/packages/gcc-12_12.2.0-14+deb12u1_amd64.deb",
+      "sha256": "b46f33cc2ec245e435e043807038cecf4b201ef004800e9dfc1455240360e49d",
+      "size_bytes": 19268852,
+      "name": "gcc-12_12.2.0-14+deb12u1_amd64.deb",
+      "source": "verified predecessor package",
+      "expected_sha256": "b46f33cc2ec245e435e043807038cecf4b201ef004800e9dfc1455240360e49d",
+      "expected_size_bytes": 19268852
+    },
+    {
+      "path": "/workspace/p06-local-host-02/packages/libgcc-12-dev_12.2.0-14+deb12u1_amd64.deb",
+      "resolved_path": "/workspace/p06-local-host-02/packages/libgcc-12-dev_12.2.0-14+deb12u1_amd64.deb",
+      "sha256": "d720259380a84f2ffc6fe516eff5cbe9c8a005138e8d6a5748747ba4b3404a82",
+      "size_bytes": 2437204,
+      "name": "libgcc-12-dev_12.2.0-14+deb12u1_amd64.deb",
+      "source": "verified predecessor package",
+      "expected_sha256": "d720259380a84f2ffc6fe516eff5cbe9c8a005138e8d6a5748747ba4b3404a82",
+      "expected_size_bytes": 2437204
+    },
+    {
+      "path": "/workspace/p06-local-host-02/packages/libstdc++-12-dev_12.2.0-14+deb12u1_amd64.deb",
+      "resolved_path": "/workspace/p06-local-host-02/packages/libstdc++-12-dev_12.2.0-14+deb12u1_amd64.deb",
+      "sha256": "d28def6c23630432b57cb38a4c2fd67a79d4e0484027386ca6e8d6005c3d7a73",
+      "size_bytes": 2047292,
+      "name": "libstdc++-12-dev_12.2.0-14+deb12u1_amd64.deb",
+      "source": "verified predecessor package",
+      "expected_sha256": "d28def6c23630432b57cb38a4c2fd67a79d4e0484027386ca6e8d6005c3d7a73",
+      "expected_size_bytes": 2047292
+    },
+    {
+      "path": "/workspace/p06-local-host-02/packages/libstdc++6_12.2.0-14+deb12u1_amd64.deb",
+      "resolved_path": "/workspace/p06-local-host-02/packages/libstdc++6_12.2.0-14+deb12u1_amd64.deb",
+      "sha256": "5cd3171216d4ab0fc911cfe9c35509bf2dd8f47761c43b7f6a4296701551a24d",
+      "size_bytes": 612604,
+      "url": "https://deb.debian.org/debian/pool/main/g/gcc-12/libstdc++6_12.2.0-14+deb12u1_amd64.deb",
+      "name": "libstdc++6_12.2.0-14+deb12u1_amd64.deb",
+      "source": "signed Debian package index",
+      "expected_sha256": "5cd3171216d4ab0fc911cfe9c35509bf2dd8f47761c43b7f6a4296701551a24d",
+      "expected_size_bytes": 612604
+    }
+  ],
+  "outcome": "pass",
+  "failures": [],
+  "old_inventory_before": {
+    "path": "/workspace/p06-local-host-02/metadata/setup02/old-host-before.json",
+    "resolved_path": "/workspace/p06-local-host-02/metadata/setup02/old-host-before.json",
+    "sha256": "c9ee537f5cb33ed35ee65de42fd8f6118f598fa560815018465ca7807da0bdf9",
+    "size_bytes": 241943
+  },
+  "keyring": {
+    "path": "/usr/share/keyrings/debian-archive-keyring.pgp",
+    "resolved_path": "/usr/share/keyrings/debian-archive-keyring.pgp",
+    "sha256": "506b815cbb32d9b6066b4a2aa524071e071761e7e7f68c3ac74f3061ba852017",
+    "size_bytes": 55918
+  },
+  "keyring_package": "",
+  "inrelease": {
+    "path": "/workspace/p06-local-host-02/metadata/setup02/InRelease",
+    "resolved_path": "/workspace/p06-local-host-02/metadata/setup02/InRelease",
+    "sha256": "77737fa4b34f2693e982cc9ee35736816c35a7778fc2d326cc1bbf5b301fe1aa",
+    "size_bytes": 151075,
+    "url": "https://deb.debian.org/debian/dists/bookworm/InRelease"
+  },
+  "valid_signatures": [
+    "[GNUPG:] VALIDSIG 4CB50190207B4758A3F73A796ED0E7B82643E131 2026-07-11 1783765031 0 4 0 1 8 01 B8B80B5B623EAB6AD8775C45B7C5D7D6350947F8",
+    "[GNUPG:] VALIDSIG B8E5F13176D2A7A75220028078DBA3BC47EF2265 2026-07-11 1783765032 0 4 0 1 8 01 04B54C3CDCA79751B16BC6B5225629DF75B188BD",
+    "[GNUPG:] VALIDSIG 4D64FEC119C2029067D6E791F8D2585B8783D481 2026-07-11 1783765141 0 4 0 22 8 01 4D64FEC119C2029067D6E791F8D2585B8783D481"
+  ],
+  "release_fields": {
+    "Origin": "Debian",
+    "Label": "Debian",
+    "Suite": "oldstable",
+    "Version": "12.15",
+    "Codename": "bookworm",
+    "Date": "Sat, 11 Jul 2026 10:16:37 UTC",
+    "Valid-Until": null
+  },
+  "package_index": {
+    "path": "/workspace/p06-local-host-02/metadata/setup02/Packages.xz",
+    "resolved_path": "/workspace/p06-local-host-02/metadata/setup02/Packages.xz",
+    "sha256": "9e0b5aabb2465b3d2e7a7fe27f9913846277833f7a2826e7767acccff5b588c5",
+    "size_bytes": 8790396,
+    "url": "https://deb.debian.org/debian/dists/bookworm/main/binary-amd64/Packages.xz",
+    "signed_sha256": "9e0b5aabb2465b3d2e7a7fe27f9913846277833f7a2826e7767acccff5b588c5",
+    "signed_size_bytes": 8790396,
+    "verified": true
+  },
+  "probe_environment": {
+    "PATH": "/workspace/p06-local-host-02/bin:/usr/bin:/bin",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "TZ": "UTC"
+  },
+  "aliases": {
+    "gcc": {
+      "path": "/workspace/p06-local-host-02/bin/gcc",
+      "resolved_path": "/workspace/p06-local-host-02/extracted/usr/bin/x86_64-linux-gnu-gcc-12",
+      "sha256": "75e997ec62297a6484f491bae28ab0ccb489daba23e398fd10fe68e9e6f0def8",
+      "size_bytes": 1301496,
+      "version": "gcc (Debian 12.2.0-14+deb12u1) 12.2.0"
+    },
+    "g++": {
+      "path": "/workspace/p06-local-host-02/bin/g++",
+      "resolved_path": "/workspace/p06-local-host-02/extracted/usr/bin/x86_64-linux-gnu-g++-12",
+      "sha256": "dd91977c184e327710578363ad93ebb175c3a457b6236b874fd3911b7c055c65",
+      "size_bytes": 1305592,
+      "version": "g++ (Debian 12.2.0-14+deb12u1) 12.2.0"
+    },
+    "cmake": {
+      "path": "/workspace/p06-local-host-02/bin/cmake",
+      "resolved_path": "/workspace/p06-build-tools/cmake/data/bin/cmake",
+      "sha256": "a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83",
+      "size_bytes": 14672584,
+      "version": "cmake version 3.22.6"
+    }
+  },
+  "selected_shared_runtime": {
+    "path": "/workspace/p06-local-host-02/extracted/usr/bin/../lib/gcc/x86_64-linux-gnu/12/libstdc++.so",
+    "resolved_path": "/workspace/p06-local-host-02/extracted/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30",
+    "sha256": "e7848e32af4932840ba775169041759a2a8dd5a008af360e5c55bce506eebcf4",
+    "size_bytes": 2190440
+  },
+  "shared_probe": {
+    "stdout": "42\n",
+    "needed_libstdcxx_so6": true,
+    "no_static_libstdcxx_members": true,
+    "link_map": {
+      "path": "/workspace/p06-local-host-02/probe/probe.map",
+      "resolved_path": "/workspace/p06-local-host-02/probe/probe.map",
+      "sha256": "d634f9c7590e2d6f3334c380f4839a2cb07632b552daf0a0226ba744d1797533",
+      "size_bytes": 33973
+    },
+    "loader_output": "\tlinux-vdso.so.1 (0x00007fec44903000)\n\tlibprobe.so => /workspace/p06-local-host-02/probe/libprobe.so (0x00007fec448ee000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fec446d7000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fec44471000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fec44444000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fec44905000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fec44352000)\n",
+    "runtime_note": "Link-time libstdc++ is the extracted matching GCC12 package; default runtime loader still selects system libraries, outside complete host-toolchain provenance scope."
+  },
+  "old_root_unchanged": true,
+  "finished_at": "2026-11-23T12:30:09.278660+00:00"
+}

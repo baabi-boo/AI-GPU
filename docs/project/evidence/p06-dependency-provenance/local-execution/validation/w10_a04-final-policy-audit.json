@@ -1,0 +1,344 @@
+{
+  "all_reader_correction_files_match_commit": true,
+  "base_revision": "849469e1111870fbcfe0346afd33b284a5a1edd8",
+  "classifier_summary": [
+    "R1  849469e11..ba2d649d4  (37 files)",
+    "  reasons: path:default, path:normative-docs"
+  ],
+  "commands": {
+    "base_classifier": {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "/workspace/scratch/279b6658611e/validation/w10_a04-base-classifier/change_impact.py",
+        "--repo",
+        "/workspace/ai-gpu-next",
+        "--policy",
+        "/workspace/scratch/279b6658611e/validation/w10_a04-base-classifier/change-impact.yaml",
+        "explain",
+        "--base",
+        "849469e1111870fbcfe0346afd33b284a5a1edd8",
+        "--head",
+        "ba2d649d4150e046c2ba610de02725d9d062b1be"
+      ],
+      "cwd": "/workspace/ai-gpu-next",
+      "exit_code": 0,
+      "stderr": {
+        "path": "/workspace/scratch/279b6658611e/validation/w10_a04-final-classifier.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stdout": {
+        "path": "/workspace/scratch/279b6658611e/validation/w10_a04-final-classifier.stdout.log",
+        "sha256": "f13017aec5803258cccb295413b46d2126466946758f07a72ac8f84f2591c53b",
+        "size_bytes": 2487
+      }
+    },
+    "check_project": {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "ci/project/check_project.py"
+      ],
+      "cwd": "/workspace/ai-gpu-next",
+      "exit_code": 0,
+      "stderr": {
+        "path": "/workspace/scratch/279b6658611e/validation/w10_a04-final-check-project.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stdout": {
+        "path": "/workspace/scratch/279b6658611e/validation/w10_a04-final-check-project.stdout.log",
+        "sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+        "size_bytes": 96
+      }
+    },
+    "governance_preflight": {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "ci/project/preflight.py",
+        "--root",
+        "/workspace/ai-gpu-next",
+        "--tier",
+        "governance",
+        "--json"
+      ],
+      "cwd": "/workspace/ai-gpu-next",
+      "exit_code": 0,
+      "stderr": {
+        "path": "/workspace/scratch/279b6658611e/validation/w10_a04-final-preflight.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stdout": {
+        "path": "/workspace/scratch/279b6658611e/validation/w10_a04-final-preflight.stdout.log",
+        "sha256": "6c22ab2c4648bd6d06687e40693b63ff0bf80855b9e6c26db0fcc3828c80f340",
+        "size_bytes": 4983
+      }
+    }
+  },
+  "finished_at": "2026-11-23T13:55:54.703067+00:00",
+  "handoff_scope": {
+    "path": "/workspace/scratch/279b6658611e/validation/w10_a04-handoff-scope.json",
+    "sha256": "71b0f7ca878bd6f785bb18961c5043e060a3063745cfb9f5725bbb9fa80c5afb",
+    "size_bytes": 7135
+  },
+  "only_intervening_paths": [
+    "ci/project/p06_dependency_control_replay.py",
+    "ci/project/test_p06_dependency_control_replay.py",
+    "ci/project/test_p06_dependency_runtime_diagnostic_review.py"
+  ],
+  "original_native_source_revision": "0f9aaa36d46364c297254164f5dab0d4f0e88349",
+  "preceding_revision": "8d735eba0016cdc64592d9c40a98e6b52574e64b",
+  "preflight_summary": {
+    "blockers": [],
+    "outcome": "pass",
+    "warnings": [
+      "tracked working-tree changes exist; HEAD alone does not identify the tested tree"
+    ]
+  },
+  "prior_full_protected_audit": {
+    "path": "/workspace/scratch/279b6658611e/validation/w10_a04-policy-audit.json",
+    "sha256": "ee7e08ac929ae6a408f7ee83a250352d1e685ddfccff8d6cfbacecac47fb51d0",
+    "size_bytes": 37942
+  },
+  "prior_protected_manifest": {
+    "path": "/workspace/scratch/279b6658611e/validation/w10_a04-policy-audit-protected.json",
+    "sha256": "5cec28649df5cbd2ebcb4037c132d666140b44c29b921619b8c88e92895df6f3",
+    "size_bytes": 2499510
+  },
+  "project_summary": "Project governance validation passed (structure and metadata only; no GPU execution certified).",
+  "protected_commit_or_worktree_differences": [],
+  "protected_entries_preserved": 5769,
+  "protected_followup_method": "Original base/blob/index/worktree-byte comparison retained; final three-file commit and current tracked diff are disjoint from all protected paths. No native or broad governance suite rerun.",
+  "qualification_and_acceptance_advanced": false,
+  "remaining_worktree_scope": "Documentation and appended evidence; final documentation/published-tree verification is owned by root.",
+  "reviewer": "/root/w10_a04",
+  "revision": "ba2d649d4150e046c2ba610de02725d9d062b1be",
+  "schema_version": 1,
+  "source_profile_files": [
+    {
+      "path": "ci/project/baseline_packet_io.py",
+      "sha256": "469583bc558ccb010af82259de38248d7a9a8283cd873a96726aa3c3e2aaa94c",
+      "size_bytes": 14506,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/p06_dependency_admission.py",
+      "sha256": "8d9d65960d7f2336911823c29ee1c9eb14cba76ca0c097e9d42ad02b5744a1e7",
+      "size_bytes": 15128,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/p06_dependency_build.py",
+      "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+      "size_bytes": 32820,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/p06_dependency_contract.py",
+      "sha256": "d6151024fbe7e8a651075fd76b9bdc006bb18c0f61c538a2928842f865ddd364",
+      "size_bytes": 4438,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/p06_dependency_control_replay.py",
+      "sha256": "1c418b3f0fa58423c94eedd28e9fbda02a6ce8a5423b042abc1574281a67faa2",
+      "size_bytes": 39549,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/p06_dependency_local_execute.py",
+      "sha256": "b6651948b2ee4ce4fe99c94fac8ac7e86bfec8a8658f258b3ef76081104b3c79",
+      "size_bytes": 22361,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/p06_dependency_local_prepare.py",
+      "sha256": "c810f31cf6106a5bbcd6eddcf8d818560cb94222da057fe9491a8e1dbc99316f",
+      "size_bytes": 20427,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/p06_dependency_local_replay.py",
+      "sha256": "a16983cf6c4083b9d2eb8f5a8d4e72660d8d10a92ef7d8dd9f8ba1a994ce298b",
+      "size_bytes": 22449,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/p06_dependency_native_replay.py",
+      "sha256": "ad2f57a1264c4d2a7fbf2dcd27f19f1094c9fb053dde65bc45342adef97a9d21",
+      "size_bytes": 58403,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/p06_dependency_prepare.py",
+      "sha256": "f7f6166c4f99697a2d96a67def40fafe6e445c9c27e09412d3bdd7cc91199403",
+      "size_bytes": 9846,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/p06_dependency_receipt.py",
+      "sha256": "6a45f224b57cbc2e4d7edfd540712eb468b1aa92407e2b65bc5a2de7c3581c70",
+      "size_bytes": 63377,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/p06_dependency_replay.py",
+      "sha256": "1c5dc29aa92a18ac4b89bdd3bbd53c4bc5ed0fad37d9cc4d907ed92f3f862218",
+      "size_bytes": 11752,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/p06_dependency_substitution.py",
+      "sha256": "e37c31fb769d7c1d5374bf40216c5099eb9a24d0017ceef876b36cbbec6a9f87",
+      "size_bytes": 30789,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/p06_local_toolchain.py",
+      "sha256": "0bd80e40b6a22bf78a665e8f1b18818a21178bcc32248a20bfd3133d3c3d5aa8",
+      "size_bytes": 23542,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/p06_pending_probe.py",
+      "sha256": "89300a063bf26e20312fe6026377db300cdf40b6a91bc3d6327340e66b51d42d",
+      "size_bytes": 24886,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_admission.py",
+      "sha256": "f3971286c4253cf3529c910ab3268a4e2efff7689dff91066dddd8c043272e68",
+      "size_bytes": 27715,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_build.py",
+      "sha256": "3ed60fa05525684aa9d4e4a1d22aa802fb1715445b4246f786cb84dc1a5e3357",
+      "size_bytes": 13964,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_control_host_bin_review.py",
+      "sha256": "1ae3aecb1c3979eec8aa580c1458cdfb073e72c1bececd73c562bfb3188d1fe2",
+      "size_bytes": 3458,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_control_replay.py",
+      "sha256": "e4af6c2dd595b3db04ebcaa17222faea287a2c7a075dffe9e5befccb2788bc33",
+      "size_bytes": 46250,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_hosted_compatibility_review.py",
+      "sha256": "e159c2b227687945f9f60da3d97fee79fd99309367a8d0065c2111d22875f928",
+      "size_bytes": 2311,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_local_admission.py",
+      "sha256": "e02b2d9480b5979e1b804bfb7200c8c0fc9f604393eb3d373ba9058517a1e48f",
+      "size_bytes": 9569,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_local_boundary_review.py",
+      "sha256": "a78c9c817acc66831e3e8e751825cb272ebfb6a8d9c280814d2dcd9db7a520d9",
+      "size_bytes": 3503,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_local_execute.py",
+      "sha256": "19ca409195b633bceae7c55532732337e383187197cb3b316b6c996313a65d89",
+      "size_bytes": 14373,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_local_execute_review.py",
+      "sha256": "b14dcd65fc10afd961686826d9c6209cf35090696de642b47d00d1f68383331e",
+      "size_bytes": 4725,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_local_prepare.py",
+      "sha256": "5bf9069ecae3db965fe123a8aa266e5d37e317eb55403ce063cd7b9405de6a28",
+      "size_bytes": 19199,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_local_replay.py",
+      "sha256": "f10e90fa6864a46ff444680d2cfa93c55427378a73a64b8facee12e78dab3e7e",
+      "size_bytes": 19163,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_local_tools.py",
+      "sha256": "65af3b9778d991de289e1f03b0cb49c86fa3b2aa4c7def6450ad5f16b7efeaa9",
+      "size_bytes": 9114,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_native_replay.py",
+      "sha256": "fee5e6296e9ce61c2708610ef06f7b2836c036a4605d80be4bfede856f6b7e09",
+      "size_bytes": 45113,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_prepare.py",
+      "sha256": "3551500751e7722e5c18e82bfdcd38d399f6a341cb5fd74c8e53d46d837af5bb",
+      "size_bytes": 11752,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_prepare_cache_review.py",
+      "sha256": "19db3951c33890b60ebbf99488a6ebdf9aad4a140dd326d08511e5827a9f68fc",
+      "size_bytes": 11631,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_retention_order_review.py",
+      "sha256": "7f3bf7e3b8aab1383e30f3cae364f15ba289bcd6f8dc183a42d66e8a09b4b290",
+      "size_bytes": 2774,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_runtime_diagnostic_review.py",
+      "sha256": "b595ad3838279f7224f0009700b34dc0a22528f8adabfd519806374dd2fc62ad",
+      "size_bytes": 7149,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_dependency_substitution_retention_review.py",
+      "sha256": "824bce2fe6750ea489329a97810b74d4e6332d6f1e019e14c21f4235ad38f337",
+      "size_bytes": 4161,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_local_toolchain.py",
+      "sha256": "006aaf07d9ac344cbd67857db71ddcae4703775dbbc0a2d38bee7407c86b6da3",
+      "size_bytes": 13947,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_local_toolchain_review.py",
+      "sha256": "483db7d0b9f324cac16e8b14a0d4672181c07e91b69ea4ee5f0d84a1d980d879",
+      "size_bytes": 5561,
+      "tracked": true
+    },
+    {
+      "path": "ci/project/test_p06_managed_report_json_review.py",
+      "sha256": "14bf84cd40bb34b827957303c3802b1668b787f7cc7de559574dc73ef0eff7e6",
+      "size_bytes": 6042,
+      "tracked": true
+    }
+  ],
+  "source_profile_matches_prior_reviewed_worktree_bytes": true,
+  "source_profile_sha256": "6ce7f26fb1012b1b507e4b282cead4e70e8f2fc4b2d6a3d5982c9c9d1c9b7e78",
+  "source_profile_stable_during_narrow_check": true,
+  "status_after": " M docs/designs/local_dependency_execution_v1.md\n M docs/project/backlog.md\n M docs/project/evidence/p06-dependency-provenance/README.md\n M docs/project/p06-dependency-provenance-handoff.md\n M docs/project/status.md\n?? docs/project/evidence/p06-dependency-provenance/local-execution/\n",
+  "status_before": " M docs/designs/local_dependency_execution_v1.md\n M docs/project/backlog.md\n M docs/project/evidence/p06-dependency-provenance/README.md\n M docs/project/p06-dependency-provenance-handoff.md\n M docs/project/status.md\n?? docs/project/evidence/p06-dependency-provenance/local-execution/\n",
+  "tree": "a9db358818a66f2a241ed2d8a7453edf938ccb2c"
+}

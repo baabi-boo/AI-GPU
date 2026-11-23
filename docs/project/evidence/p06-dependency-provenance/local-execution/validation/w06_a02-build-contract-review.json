@@ -1,0 +1,631 @@
+{
+  "schema_version": 1,
+  "scope": "independent frozen native model/application contract and targeted source/recipe audit; actual original remains separate",
+  "source_revision": "ac2f2ae761c3644103278f7a41cc6ae7db734a86",
+  "source_tree": "5e7caa2b008fe8b1924811aeda5a079845a37343",
+  "base_revision": "849469e1111870fbcfe0346afd33b284a5a1edd8",
+  "recorded_at": "2026-11-23T12:41:04.403818+00:00",
+  "outcome": "pass",
+  "established_findings": [],
+  "source_clean_before_and_after": true,
+  "reviewed_modules": {
+    "ci/project/p06_managed_preflight_build.py": {
+      "sha256": "0c6a5c2c6415071566f66363289e245c4e8b486e987615ffab74f15fb39ee559",
+      "size_bytes": 16639
+    },
+    "ci/project/p06_managed_preflight_application_build.py": {
+      "sha256": "b0dbadf26a1189ea0f5b7f7aa88f54fd0ce26d875f197e4f3c062a0a00fcd298",
+      "size_bytes": 12618
+    },
+    "ci/project/p06_managed_preflight_execute.py": {
+      "sha256": "a364f3d48b90b8babcc5ab4759bf9f23dcdb1af92504240df67051d033d515e7",
+      "size_bytes": 47682
+    },
+    "ci/project/p06_managed_preflight_contract.py": {
+      "sha256": "5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb",
+      "size_bytes": 14917
+    },
+    "ci/project/p06_warm_compiler_records.py": {
+      "sha256": "fe32aa772439e98975cdcb4807b269022d461c5e99c0021c4689c9712d7988f9",
+      "size_bytes": 3261
+    },
+    "ci/project/p06_compiler_records.py": {
+      "sha256": "f441c12f4c9e4b9ef10eca13f8b5291fc41ffb86f1f42e42dfd320056dedd6da",
+      "size_bytes": 13614
+    },
+    "ci/project/p06_dependency_admission.py": {
+      "sha256": "8d9d65960d7f2336911823c29ee1c9eb14cba76ca0c097e9d42ad02b5744a1e7",
+      "size_bytes": 15128
+    },
+    "ci/project/p06_dependency_native_replay.py": {
+      "sha256": "ad2f57a1264c4d2a7fbf2dcd27f19f1094c9fb053dde65bc45342adef97a9d21",
+      "size_bytes": 58403
+    },
+    "ci/project/p06_dependency_lifetime_execute.py": {
+      "sha256": "ccf1d7c47f1bd045391360498b1b7b8ea389a244801c905557bf6a8904fc5217",
+      "size_bytes": 1917
+    },
+    "ci/project/p06_dependency_local_execute.py": {
+      "sha256": "e2a4329fd41f888a01c8000cc60b5bf76bc958f98ba3347557c6a370235aae71",
+      "size_bytes": 22190
+    },
+    "ci/project/p06_local_toolchain.py": {
+      "sha256": "0bd80e40b6a22bf78a665e8f1b18818a21178bcc32248a20bfd3133d3c3d5aa8",
+      "size_bytes": 23542
+    }
+  },
+  "protected_inputs": [
+    {
+      "path": "VERSION",
+      "sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+      "size_bytes": 112,
+      "base_identical": true
+    },
+    {
+      "path": "VX_config.toml",
+      "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+      "size_bytes": 30127,
+      "base_identical": true
+    },
+    {
+      "path": "ci/project/fixtures/p02_layout_v1.json",
+      "sha256": "0543f9f4208de3ff4743fe1894d97ccf3b8cca4707e9a26acd1f3dde884725b2",
+      "size_bytes": 83960,
+      "base_identical": true
+    },
+    {
+      "path": "ci/project/fixtures/p02_tfr_v1.json",
+      "sha256": "0d8b173af178875274a7bf29886a51838be8cdb54224d55353959a639a5ea6c3",
+      "size_bytes": 60925,
+      "base_identical": true
+    },
+    {
+      "path": "ci/project/fixtures/p02_wmma_numerical_v1.json",
+      "sha256": "4102d74024e92e9887d7324b9326c0d6ad1fff206b5fad33f45c530d5bd03a73",
+      "size_bytes": 260308,
+      "base_identical": true
+    },
+    {
+      "path": "config.mk.in",
+      "sha256": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+      "size_bytes": 3264,
+      "base_identical": true
+    },
+    {
+      "path": "profiles/p02-tfr.json",
+      "sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+      "size_bytes": 4081,
+      "base_identical": true
+    },
+    {
+      "path": "sim/common/cmd_processor.cpp",
+      "sha256": "c7090583f8dd1774d71755dc96f11845ff4d96340e51451643ec1ab16b14dd42",
+      "size_bytes": 27823,
+      "base_identical": true
+    },
+    {
+      "path": "sim/common/cout_drainer.cpp",
+      "sha256": "0bbe0589587e1818158d9f1b6558ef255a4d4dd0821cacac2d0f9727cea322c5",
+      "size_bytes": 2699,
+      "base_identical": true
+    },
+    {
+      "path": "sim/common/dram_sim.cpp",
+      "sha256": "aaf02d73ca7801d93c0fa010c4682e8e0476e7a55fa0104d4e48587f55dc40f1",
+      "size_bytes": 14483,
+      "base_identical": true
+    },
+    {
+      "path": "sim/common/elf_loader.cpp",
+      "sha256": "929f771d125fc3edd29403f5b2bb90cb99e5dd5926354f743e9cce12b3006a0c",
+      "size_bytes": 5681,
+      "base_identical": true
+    },
+    {
+      "path": "sim/common/host_monitor.cpp",
+      "sha256": "92ef9cf0c858e0f4101f66bea3d16c41c0435dd4864861568deeb4b211055489",
+      "size_bytes": 1305,
+      "base_identical": true
+    },
+    {
+      "path": "sim/common/mem.cpp",
+      "sha256": "2dc21e7ccb04e773b091f209652107bac673edbc6d6640cfca0418ad89a73cba",
+      "size_bytes": 23576,
+      "base_identical": true
+    },
+    {
+      "path": "sim/common/perf_counter.h",
+      "sha256": "8635c832c9fc4ad60cf3bf21665a5bc22a6d3500b1f5c012dd056fb4c6907417",
+      "size_bytes": 3979,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/Makefile",
+      "sha256": "c719966647f32fef5421dd798a89d3eeddccd692e7c61046e5744b7a8e722403",
+      "size_bytes": 10608,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/alu_unit.cpp",
+      "sha256": "cba33e56225494408a54204263bf37b4cdffc38f52b3f4a837343f68b07f4628",
+      "size_bytes": 22691,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/barrier_unit.cpp",
+      "sha256": "f7b7abe78716bebfb741ed11fd733528bfd1bd19ac5997c3ca7471bd3ff0140e",
+      "size_bytes": 7145,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/cluster.cpp",
+      "sha256": "caf8ed6865e91d7f6b1cc7392ef1e5c2c410f13535a31236cbf7da7f80a39a6c",
+      "size_bytes": 31886,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/core.cpp",
+      "sha256": "f95003971a6052962b761b1ee8e815ead42f6a60fccf8157fa94c3ded3e44f31",
+      "size_bytes": 65344,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/csr_unit.cpp",
+      "sha256": "c35bd6a80120f76c9cf65076c736aaf577329285a74aac8c11c03f0ce829fc3d",
+      "size_bytes": 19085,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/cta_dispatcher.cpp",
+      "sha256": "7ab0772317c2ae7c2221d77811e517f17f9dcad48deddf580118d654912c82ee",
+      "size_bytes": 12186,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/decode.cpp",
+      "sha256": "1ef0b3c2bd461a579ad4f1f23464721d1b4686ec0ff73d5a5569167335bfc884",
+      "size_bytes": 52328,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/decompressor.cpp",
+      "sha256": "5b6af147efcc0226e9178dcae26df5113cc171d0e003b75207d16b10864fd6e3",
+      "size_bytes": 21066,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/dispatcher.cpp",
+      "sha256": "1a0e5acaee5fb3139a0f47aee9a1511bab05bc31b56c0f6f8ba42c5fd5544f1d",
+      "size_bytes": 6602,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/dtm/debug_module.cpp",
+      "sha256": "972e0e8421158aedc50e76080067cf763caf18f6888f910fed734d8648bcfbaa",
+      "size_bytes": 42700,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/dtm/jtag_dtm.cpp",
+      "sha256": "052c8e3157e1ee4846235a592293427ca23143011d66ff23e18eb79b8ca59839",
+      "size_bytes": 5159,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/dtm/remote_bitbang.cpp",
+      "sha256": "4236eda187ce343f90fa6dd7eb21c90d303499c3db51b5b11a8ac2f31197c379",
+      "size_bytes": 5730,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/fpu_unit.cpp",
+      "sha256": "59ebdd79a06faca4c7acede17f82c0e6ce7ec604d62dcb0447563bde4842af5a",
+      "size_bytes": 19442,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/gbar_unit.cpp",
+      "sha256": "f274bee178ecc7f1bcb763271b58e0a25bff8891949c55998447fbd24d3bded0",
+      "size_bytes": 1692,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/kmu/kmu.cpp",
+      "sha256": "b01fc64bd4e2ea59224872aabce3b1233315ad07f8f7341fe617b40fe3fc4421",
+      "size_bytes": 9205,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/lsu_unit.cpp",
+      "sha256": "d1105256786bc7f2227d4c963a0b4368d84d480aba93fdf3188019ae466b30fb",
+      "size_bytes": 32227,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/mem/cache.cpp",
+      "sha256": "c8eacd73616bb9f82533bbe45ba8a317524717948de08d73ecdb78dfb0c4a53d",
+      "size_bytes": 137410,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/mem/cache_cluster.cpp",
+      "sha256": "ad5e592d87234764df3186c8fdd9dbfc18b2a7dbdfdb207ba2cc6071d4e3fa44",
+      "size_bytes": 3697,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/mem/local_mem.cpp",
+      "sha256": "07aa27331d6ef604a432b99e70df12b7853787d4151cc1517092d76406cd4d33",
+      "size_bytes": 21068,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/mem/local_mem_switch.cpp",
+      "sha256": "271b0fcea829fc704131f248037c112519df7f8412d66d1300b8e7eece036f18",
+      "size_bytes": 4415,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/mem/lsu_mem_adapter.cpp",
+      "sha256": "cea9ea9000b6979ee19cb2812500b3e2a03be56ed253549e33f616217066fef0",
+      "size_bytes": 5007,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/mem/mem_coalescer.cpp",
+      "sha256": "9fcf09145f6fee29c5f5494fff155f2c0fa90e5f984893cb756c31d75b155a88",
+      "size_bytes": 10432,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/mem/memory.cpp",
+      "sha256": "4d73809cd63a0c768115c5de0205989f6f941446895de1831587002fc94ed474",
+      "size_bytes": 5976,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/opc_unit.cpp",
+      "sha256": "4c246320cf7ad18339a26cdd331f05d9a7667c74abbe87a4d54777575374495a",
+      "size_bytes": 6179,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/operands.cpp",
+      "sha256": "f1de7870bf82f35427537017d6fe1fcb74fb0d1a909dde6a3af113bc56e63944",
+      "size_bytes": 7217,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/processor.cpp",
+      "sha256": "ecc3e0e51ecbbdb6b97b04eccd7fc5427fb25f87e5162ef33484262ab8da869f",
+      "size_bytes": 21493,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/scheduler.cpp",
+      "sha256": "d62b9fab40133011a7293e994e0d57514212ed5f636e836ffb9fd468fbfa2056",
+      "size_bytes": 17758,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/scoreboard.cpp",
+      "sha256": "9452fd21dbe613aca9d6a50d57458037e2bcf554fdf7eecc8138a86b9aca74a8",
+      "size_bytes": 4966,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/sequencer.cpp",
+      "sha256": "6ec2242d7f8c4b0cefb3224323726745cebf00da310216f89888a621e07f65f7",
+      "size_bytes": 4448,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/sfu_unit.cpp",
+      "sha256": "88c0a3e2e4da307cc25eae52e087a0a629e94826c2f365b39f5a5a25a7e88c8a",
+      "size_bytes": 23656,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/socket.cpp",
+      "sha256": "e30e63d3523411bad58eb49c8526aabe032bed584c8d044b677c18906cf844d4",
+      "size_bytes": 26124,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/tcu/tcu_tbuf.cpp",
+      "sha256": "eb20f6c16dd0915bebf39a0f85f7c11ee28a0ed681418385205b898f4b557463",
+      "size_bytes": 7231,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/tcu/tcu_unit.cpp",
+      "sha256": "b48d0e7fe5145292ad354168d3fe73b0bcdbbb508335656ce6fe07608af8fb5b",
+      "size_bytes": 75472,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/types.h",
+      "sha256": "c09d02ca868b9b7fd28142c4c5aa922b9500975feddaf92695d220a5be6bd546",
+      "size_bytes": 54373,
+      "base_identical": true
+    },
+    {
+      "path": "sim/simx/wctl_unit.cpp",
+      "sha256": "450f2e683dd4e6c182264b948dfdae27e4493d6b86e577ee5c29dff236263206",
+      "size_bytes": 7375,
+      "base_identical": true
+    },
+    {
+      "path": "sw/common/rvfloats.cpp",
+      "sha256": "35bcaab34aabd2782cca520c5877a21b2f2aa07a3ea4d11e7c613364e5cea44c",
+      "size_bytes": 21347,
+      "base_identical": true
+    },
+    {
+      "path": "sw/common/softfloat_ext.cpp",
+      "sha256": "4bc6beb8a4bd39407a440021d20bfd044ea32211fae1eea3504ab1c68daeb2f0",
+      "size_bytes": 31846,
+      "base_identical": true
+    },
+    {
+      "path": "sw/common/util.cpp",
+      "sha256": "9033fed4f1c88b0c3d4c225b10fa68e191dcc86608a29bf531e6d144a36eaea3",
+      "size_bytes": 2090,
+      "base_identical": true
+    },
+    {
+      "path": "sw/kernel/Makefile",
+      "sha256": "b1c359421ca2b1b8c31b9dc98893fac772daa239e236e9d1c9225a1eb431238c",
+      "size_bytes": 2432,
+      "base_identical": true
+    },
+    {
+      "path": "sw/kernel/ai/matmul.cpp",
+      "sha256": "ad3b6107f0eef91ec676412bc795ab70cd1c9f31647b2cea854de6234fe71d3e",
+      "size_bytes": 1565,
+      "base_identical": true
+    },
+    {
+      "path": "sw/kernel/scripts/kernel_startup.sh",
+      "sha256": "8e408e07bf5e177da7e466cb14f1d386c487a2e390f7fcebd20b5d157e683221",
+      "size_bytes": 676,
+      "base_identical": true
+    },
+    {
+      "path": "sw/kernel/scripts/vxbin.py",
+      "sha256": "6c76ef0c505c68e02a68a3660021d20f6c8b8cc18b9a4c0b1a544611673875ed",
+      "size_bytes": 5803,
+      "base_identical": true
+    },
+    {
+      "path": "sw/runtime/ai/contract.cpp",
+      "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+      "size_bytes": 10833,
+      "base_identical": true
+    },
+    {
+      "path": "sw/runtime/ai/contract.h",
+      "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+      "size_bytes": 3285,
+      "base_identical": true
+    },
+    {
+      "path": "sw/runtime/ai/runtime.cpp",
+      "sha256": "f55365110aed41cfaa290b69da8d91d9fa0ae04063dda591b94ae6ca626cf675",
+      "size_bytes": 22983,
+      "base_identical": true
+    },
+    {
+      "path": "sw/runtime/ai/runtime.h",
+      "sha256": "aa76760f2e25c1969b86e08dacf7823c9b441dc82ef2c65f803bdc80ee9f657e",
+      "size_bytes": 3719,
+      "base_identical": true
+    },
+    {
+      "path": "sw/runtime/common.mk",
+      "sha256": "2af4343c0738db4a665c96e24f90f78912302b20597dda74d9592afb6676736e",
+      "size_bytes": 618,
+      "base_identical": true
+    },
+    {
+      "path": "sw/runtime/common/utils.cpp",
+      "sha256": "a5a268ef8c4a84964a71adfb310832278204f74e7222cb35b333a0bda47cc433",
+      "size_bytes": 1532,
+      "base_identical": true
+    },
+    {
+      "path": "sw/runtime/simx/Makefile",
+      "sha256": "a904a327b54481567d5efd205da7cba3fed0f7ecb6410ab641753d789c8ee975",
+      "size_bytes": 1741,
+      "base_identical": true
+    },
+    {
+      "path": "sw/runtime/simx/vortex.cpp",
+      "sha256": "0d890c95fecb67da26d23ea4a0af10ac328dddf110cd2575baff3aa5d4c905cb",
+      "size_bytes": 7552,
+      "base_identical": true
+    },
+    {
+      "path": "sw/runtime/stub/Makefile",
+      "sha256": "e6aae339e07e2a3086cc0334c9353001521f774afdc9e921acf1e126b115b941",
+      "size_bytes": 2931,
+      "base_identical": true
+    },
+    {
+      "path": "tests/regression/ai_bench_common/counters.h",
+      "sha256": "ef71a80f2624159cac03e42a60c8b3671489ee1ae89e4e9bd27941a143047acf",
+      "size_bytes": 6002,
+      "base_identical": true
+    },
+    {
+      "path": "tests/regression/ai_counter_preflight/Makefile",
+      "sha256": "1fefa29e176fff3ce05f1a606aebabc434f83fbaba6704afc14b9728c50f4bd2",
+      "size_bytes": 1330,
+      "base_identical": true
+    },
+    {
+      "path": "tests/regression/ai_counter_preflight/backend.mk",
+      "sha256": "d71ba6fe3f653a19e42aea6d52c605e9d41d92f99fc1aa8ef1448fc03e72a326",
+      "size_bytes": 858,
+      "base_identical": true
+    },
+    {
+      "path": "tests/regression/ai_counter_preflight/hooks.cpp",
+      "sha256": "7744cfbb48b6dda21acda4db582fcf4f4b7a519670525d0df887b7296739c7e4",
+      "size_bytes": 15094,
+      "base_identical": true
+    },
+    {
+      "path": "tests/regression/ai_counter_preflight/hooks.h",
+      "sha256": "1fba0275808ec30e42dced1c69fb8b47d1d78dd0ecfc13391f9e0d93bbaf0ccc",
+      "size_bytes": 3046,
+      "base_identical": true
+    },
+    {
+      "path": "tests/regression/ai_counter_preflight/main.cpp",
+      "sha256": "05738177b2930852eb5cf5e6d61de93f3cb465b2f221f0d9d95a8780adce99e1",
+      "size_bytes": 26844,
+      "base_identical": true
+    },
+    {
+      "path": "tests/regression/ai_warm_workspace/main.cpp",
+      "sha256": "0bec5ac729b3aa6c5ffcf7ff95084d84e4d47d54e470d21e234d00aa16556ce0",
+      "size_bytes": 20984,
+      "base_identical": true
+    },
+    {
+      "path": "tests/regression/ai_warm_workspace/observer.cpp",
+      "sha256": "ac12eddcbfb2cf04981a8b8a945134ce763b93cd881fe5da549d28b7ed02021c",
+      "size_bytes": 9647,
+      "base_identical": true
+    },
+    {
+      "path": "tests/regression/ai_warm_workspace/observer.h",
+      "sha256": "7c5236827536b9faf286f6cbfb3e13459b7f43aa895207213125cc67299d488e",
+      "size_bytes": 1777,
+      "base_identical": true
+    },
+    {
+      "path": "tests/regression/common.mk",
+      "sha256": "4164a783137b2f6e594ff3795f5911233227c3e4bfcb0319095cd6e78acf9b56",
+      "size_bytes": 14342,
+      "base_identical": true
+    },
+    {
+      "path": "tests/regression/sgemm_tcu/p02_fixtures.h",
+      "sha256": "1e692ad5d14e895286e57e45bf9d1730cf2380a33ccbaa486c601db838daa64e",
+      "size_bytes": 145505,
+      "base_identical": true
+    }
+  ],
+  "protected_input_count": 77,
+  "all_protected_inputs_base_identical": true,
+  "recipe_sha256": {
+    "config.mk.in": "28fa1d7ad7076018ebb22a720df7cf3c792a5989a71834418f0ccb86a67551d1",
+    "tests/regression/common.mk": "4164a783137b2f6e594ff3795f5911233227c3e4bfcb0319095cd6e78acf9b56",
+    "tests/regression/ai_counter_preflight/Makefile": "1fefa29e176fff3ce05f1a606aebabc434f83fbaba6704afc14b9728c50f4bd2",
+    "sw/kernel/Makefile": "b1c359421ca2b1b8c31b9dc98893fac772daa239e236e9d1c9225a1eb431238c",
+    "sw/runtime/common.mk": "2af4343c0738db4a665c96e24f90f78912302b20597dda74d9592afb6676736e",
+    "sw/runtime/stub/Makefile": "e6aae339e07e2a3086cc0334c9353001521f774afdc9e921acf1e126b115b941",
+    "sw/kernel/scripts/kernel_startup.sh": "8e408e07bf5e177da7e466cb14f1d386c487a2e390f7fcebd20b5d157e683221",
+    "sw/kernel/scripts/vxbin.py": "6c76ef0c505c68e02a68a3660021d20f6c8b8cc18b9a4c0b1a544611673875ed"
+  },
+  "recipe_hashes_match_current": true,
+  "formats": [
+    "fp16",
+    "bf16"
+  ],
+  "backend": "simx",
+  "native_build_per_format": {
+    "model_translation_units": 43,
+    "backend_translation_units": 4,
+    "model_backend_links": 2,
+    "host_application_sources": 4,
+    "application_commands": 30,
+    "application_command_counts": {
+      "host_dependency": 1,
+      "recursive_make": 2,
+      "riscv_compile": 14,
+      "kernel_archive": 2,
+      "archive_dump": 2,
+      "kernel_clang": 5,
+      "kernel_conversion": 1,
+      "kernel_dump": 1,
+      "stub_compile_link": 1,
+      "host_compile_link": 1
+    },
+    "kernel_library_source_count": 7,
+    "kernel_library_variants": 2,
+    "stub_source_count": 14
+  },
+  "required_selectors": {
+    "profile": "p02-tfr",
+    "xlen": 64,
+    "input_format": [
+      "fp16",
+      "bf16"
+    ],
+    "output_format": "fp32",
+    "KUNROLL": 1,
+    "SIMX_CHECKED_COUNTERS": 1,
+    "PERF": 1,
+    "THREADS": 1
+  },
+  "budget": {
+    "max_rss_bytes": 4294967296,
+    "min_free_bytes": 16106127360,
+    "max_log_bytes": 16777216,
+    "jobs": 2,
+    "threads": 1,
+    "timeouts_seconds": {
+      "configure": 120,
+      "build": 1800,
+      "run": 180
+    },
+    "hosted_job_minutes": 90
+  },
+  "actual_attempt02_observed": {
+    "state": "running",
+    "outcome": "blocked",
+    "native_execution": "not_run",
+    "stages": [
+      {
+        "id": "preparation",
+        "outcome": "pass"
+      },
+      {
+        "id": "dependency-build",
+        "outcome": null
+      }
+    ]
+  },
+  "native_execution_performed_by_review": false,
+  "retained_code_executed": false,
+  "production_files_modified": false,
+  "limitations": [
+    "This review does not accept a still-running or future native original.",
+    "The selected compiler/tool/library identity graph does not inventory every system header, host runtime or compiler-support input.",
+    "Raw compiler logs and consistent metadata do not authenticate a malicious producer.",
+    "Timing SimX execution is distinct from processor RTL, vendor hw_emu, FPGA and silicon."
+  ],
+  "targeted_validation": {
+    "outcome": "pass",
+    "tests": 7,
+    "duration_seconds": 17.223,
+    "log": "/workspace/scratch/279b6658611e/validation/w06_a02-build-contract-tests.log",
+    "log_sha256": "03eab3c2225d78be78c99dca220b9a422f9019895768bf5f2b0db42c81ac72d8",
+    "scope": "Current generated compiler records/effective headers/Make dry-run graph for both formats, and historical original application logs plus exact compiler/ABI/configuration/completeness controls. No fresh native workload."
+  },
+  "original_review_checklist": [
+    "Exact finished successful dependency receipt pin; source revision ac2f2ae761c3644103278f7a41cc6ae7db734a86 and clean checkout; retain source/tool/dependency before+after observations.",
+    "Exactly simx-fp16 and simx-bf16, each newly configured under an absent build directory; check configured/before-stage artifacts show no old objects/binaries.",
+    "Generated .config.stamp/config.mk/headers match source/tool roots and p02-tfr RV64; reproduce both C++ and Verilog headers and all four effective compiler-role headers.",
+    "Each model log has exactly43selected production-object compiles and model+backend links, with four exact backend sources and five exact Processor observer wrappers; no seeded or diagnostic objects.",
+    "Each application log reconstructs exactly30commands from eight hashed recipes; verify14RISC-V library compiles,2archives,2archive dumps,5Clang steps,conversion,dump,stub/host links and all prerequisites.",
+    "Each runtime/backend/kernel/host stamp has exact checked-counter guard and FP16orBF16 input,FP32 output,KUNROLL1,profile/config/ABI/optimization; no hostCCoverride propagated into kernel library.",
+    "Join model map every one of43object loads plus exact stagedSoftFloat/Ramulator/extension bytes; reject any unplanned project/work input or unsupported archive member.",
+    "Join all11native tool/library identities to fresh preparation; rehash all7dependency host tools and compare shared selected host-tool identities; exact executing CPython3.12.14.",
+    "Retain binary payloads,43objects and model map per format; require stable artifacts before/after both policies, every command/process boundary,finalization and inert replay.",
+    "Only after full observed process matrix and loader joins pass may dependency_source_to_loaded_binary_verified be true; all7qualification/warm/acceptanceclaims stay false."
+  ]
+}

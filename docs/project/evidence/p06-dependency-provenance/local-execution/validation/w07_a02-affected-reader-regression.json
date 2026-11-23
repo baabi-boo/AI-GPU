@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "scope": "Affected reader regression at the corrected source checkpoint",
+  "started_at": "2026-11-23T12:57:28.053040+00:00",
+  "finished_at": "2026-11-23T13:02:35.876283+00:00",
+  "state": "finished",
+  "argv": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "-v",
+    "test_p06_dependency_build",
+    "test_p06_dependency_receipt",
+    "test_p06_dependency_admission",
+    "test_p06_dependency_replay",
+    "test_p06_dependency_native_replay",
+    "test_p06_dependency_control_replay",
+    "test_p06_dependency_local_replay",
+    "test_p06_dependency_control_host_bin_review",
+    "test_p06_dependency_retention_order_review",
+    "test_p06_dependency_substitution_retention_review"
+  ],
+  "cwd": "/workspace/p06-reader-regression-source",
+  "modules": [
+    "test_p06_dependency_build",
+    "test_p06_dependency_receipt",
+    "test_p06_dependency_admission",
+    "test_p06_dependency_replay",
+    "test_p06_dependency_native_replay",
+    "test_p06_dependency_control_replay",
+    "test_p06_dependency_local_replay",
+    "test_p06_dependency_control_host_bin_review",
+    "test_p06_dependency_retention_order_review",
+    "test_p06_dependency_substitution_retention_review"
+  ],
+  "expected_revision": "7251f078972c1d524de06d069e91b014b55896f5",
+  "expected_tree": "c44b5a93ab3aabaf2438e9e7d102339c9dc80542",
+  "environment_overrides": {
+    "PYTHONPATH": "ci/project",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "path_prefix": "/workspace/p06-build-tools/cmake/data/bin",
+  "python": {
+    "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+    "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+    "size_bytes": 30894944
+  },
+  "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "cmake": {
+    "path": "/workspace/p06-build-tools/cmake/data/bin/cmake",
+    "sha256": "a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83",
+    "size_bytes": 14672584
+  },
+  "status_before": "",
+  "source_identity_file": "w07_a02-source-identities.json",
+  "native_gpu_execution_established": false,
+  "qualification_or_acceptance_claimed": false,
+  "log": "w07_a02-affected-reader-regression.log",
+  "duration_seconds": 307.38436599600027,
+  "exit_code": 0,
+  "source_unchanged": true,
+  "status_after": "",
+  "log_identity": {
+    "path": "/workspace/scratch/279b6658611e/validation/w07_a02-affected-reader-regression.log",
+    "sha256": "4bb719843591f26c3463dc4b2631a87d610f77ee072b16db747139b9890d59f7",
+    "size_bytes": 26033
+  },
+  "source_identity": {
+    "path": "/workspace/scratch/279b6658611e/validation/w07_a02-source-identities.json",
+    "sha256": "68108e5b60e6e90b4f20e84ea2450094f9ffb2e9565555572d40b570f966e225",
+    "size_bytes": 157578
+  },
+  "tests_run": 136,
+  "unittest_duration_seconds": 306.635,
+  "failure_lines": [],
+  "terminal_summary": [
+    "test_empty_retention_lock_is_part_of_complete_frozen_control (test_p06_dependency_substitution_retention_review.SubstitutionRetentionReviewTests.test_empty_retention_lock_is_part_of_complete_frozen_control) ... ok",
+    "test_missing_retention_lock_is_rejected_even_with_rebound_inventories (test_p06_dependency_substitution_retention_review.SubstitutionRetentionReviewTests.test_missing_retention_lock_is_rejected_even_with_rebound_inventories) ... ok",
+    "test_nonempty_retention_lock_is_rejected_even_with_rebound_inventories (test_p06_dependency_substitution_retention_review.SubstitutionRetentionReviewTests.test_nonempty_retention_lock_is_rejected_even_with_rebound_inventories) ... ok",
+    "",
+    "----------------------------------------------------------------------",
+    "Ran 136 tests in 306.635s",
+    "",
+    "OK"
+  ],
+  "outcome": "pass"
+}
