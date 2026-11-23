@@ -16,7 +16,7 @@ import zipfile
 
 import p06_dependency_local_replay as replay
 from test_p06_dependency_control_replay import SyntheticNativeWithControlTools, SyntheticControls
-from test_p06_dependency_native_replay import descriptor, digest, json_bytes
+from test_p06_dependency_native_replay import descriptor, digest, inert_path_guards, json_bytes
 
 
 class SyntheticLocalNative(SyntheticNativeWithControlTools):
@@ -150,17 +150,9 @@ class LocalDependencyReplayTests(unittest.TestCase):
             return replay.replay_archive(self.path, pin, prefix=prefix, **kwargs)
 
     def test_complete_local_archive_reuses_native_and_both_control_semantics_inertly(self):
-        original_open, original_resolve = Path.open, Path.resolve
-
-        def inert_open(path, *args, **kwargs):
-            if str(path).startswith(("/home/runner/", "/synthetic-")):
-                raise AssertionError("producer path opened")
-            return original_open(path, *args, **kwargs)
-
-        def inert_resolve(path, *args, **kwargs):
-            if str(path).startswith(("/home/runner/", "/synthetic-")):
-                raise AssertionError("producer path resolved")
-            return original_resolve(path, *args, **kwargs)
+        inert_open, inert_resolve = inert_path_guards(replay.ROOT, replay.TRUSTED_READER_SOURCES,
+            (*replay.native_replay.common.CORPUS, replay.native_replay.archive_helpers.ARCHIVE_READER_PATH),
+            input_archive=self.path)
 
         with mock.patch("subprocess.Popen", side_effect=AssertionError("retained process executed")), \
              mock.patch.object(replay.receipts, "PacketReader", side_effect=AssertionError("live receipt reader used")), \

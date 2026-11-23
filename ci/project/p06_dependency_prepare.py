@@ -54,10 +54,6 @@ def prepare(args):
     try:
         require(type(args.expected_revision) is str
                 and re.fullmatch(r"[0-9a-f]{40}", args.expected_revision), "exact source revision required")
-        report["source_before"] = collect_source(source)
-        base._source_ok({"checkout": report["source_before"]}, False)
-        require(report["source_before"]["revision"] == args.expected_revision,
-                "preparation source differs from the expected revision")
         pins, errors = read_pins(source)
         require(not errors, "invalid toolchain version inputs")
         require(re.fullmatch(re.escape(pins["TOOLCHAIN_REV"]) + r"-[0-9a-f]{40}", args.toolchain_id),
@@ -101,6 +97,15 @@ def prepare(args):
         cached_tools.rename(relocated)
         report["tools_dir"] = str(relocated)
         save()
+        # The restored, untracked toolchain is a preparation input, not source.
+        # Relocate it before the unchanged strict checkout inventory: a real
+        # cache otherwise dirties the checkout or exceeds its bounded status
+        # observation. A later source rejection preserves this owned cache at
+        # its recorded workspace location and starts no acquisition command.
+        report["source_before"] = collect_source(source)
+        base._source_ok({"checkout": report["source_before"]}, False)
+        require(report["source_before"]["revision"] == args.expected_revision,
+                "preparation source differs from the expected revision")
         acquisition.mkdir(mode=0o700)
         logs.mkdir(mode=0o700)
         git = shutil.which("git", path=os.defpath)

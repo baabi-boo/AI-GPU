@@ -103,12 +103,14 @@ class DependencyPreparationTests(unittest.TestCase):
         self.args.toolchain_cache_key = self.args.toolchain_cache_key.removesuffix("lite") + "full"
         self.assertEqual(self.run_prepare()["outcome"], "pass")
 
-    def test_wrong_source_revision_is_retained_before_any_move_or_command(self):
+    def test_wrong_source_revision_retains_relocated_cache_without_acquisition(self):
         self.args.expected_revision = "c" * 40
         report = self.run_prepare()
         self.assertEqual(report["outcome"], "blocked")
         self.assertIn("expected revision", report["reason"])
-        self.assertTrue(self.tools.exists())
+        self.assertFalse(self.tools.exists())
+        self.assertEqual(report["tools_dir"], str(self.workspace / "tools"))
+        self.assertEqual((self.workspace / "tools/selected-tool").read_bytes(), b"prebuilt identity\n")
         self.assertEqual(self.observed, [])
 
     def test_invalid_revision_is_retained_before_source_observation(self):
@@ -118,8 +120,13 @@ class DependencyPreparationTests(unittest.TestCase):
 
     def test_dirty_source_is_never_prepared(self):
         self.checkout["dirty"] = True
-        self.assertIn("clean source", self.run_prepare()["reason"])
-        self.assertTrue(self.tools.exists())
+        report = self.run_prepare()
+        self.assertIn("clean source", report["reason"])
+        self.assertEqual(report["outcome"], "blocked")
+        self.assertFalse(self.tools.exists())
+        self.assertEqual(report["tools_dir"], str(self.workspace / "tools"))
+        self.assertEqual((self.workspace / "tools/selected-tool").read_bytes(), b"prebuilt identity\n")
+        self.assertEqual(self.observed, [])
 
     def test_missing_cache_is_retained_and_does_not_rebuild_toolchain(self):
         self.args.toolchain_cache_key = ""

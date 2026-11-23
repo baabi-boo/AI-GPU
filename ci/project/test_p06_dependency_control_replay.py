@@ -19,7 +19,8 @@ import zipfile
 
 import p06_dependency_control_replay as replay
 from test_p06_dependency_binary import map_text
-from test_p06_dependency_native_replay import SyntheticNativePacket, MemoryView, descriptor, digest, json_bytes
+from test_p06_dependency_native_replay import (SyntheticNativePacket, MemoryView, descriptor, digest,
+                                              inert_path_guards, json_bytes)
 import test_p06_dependency_substitution as substitution_tests
 from test_p06_pending_probe import output_lines, render
 import p06_native_lifetime_test_fixture as lifetime_fixture
@@ -541,24 +542,15 @@ class SeparateControlReplayTests(unittest.TestCase):
             return {"retained_dependency_verification": self.original.dependency_verification,
                     "synthetic_dependency_boundary": True}
 
-        original_open, original_resolve = Path.open, Path.resolve
-
-        def inert_open(path, *args, **kwargs):
-            if str(path).startswith("/home/runner/"):
-                raise AssertionError("producer path opened")
-            return original_open(path, *args, **kwargs)
-
-        def inert_resolve(path, *args, **kwargs):
-            if str(path).startswith("/home/runner/"):
-                raise AssertionError("producer path resolved")
-            return original_resolve(path, *args, **kwargs)
-
         with tempfile.TemporaryDirectory(prefix="p06-control-synthetic-zip-") as directory:
             path = Path(directory) / "synthetic.zip"
             with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
                 for name, body in files.items():
                     archive.writestr(name, body)
             pin = digest(path.read_bytes())
+            inert_open, inert_resolve = inert_path_guards(replay.ROOT, replay.TRUSTED_READER_SOURCES,
+                (*replay.native_replay.common.CORPUS, replay.native_replay.archive_helpers.ARCHIVE_READER_PATH),
+                input_archive=path)
             with mock.patch.object(replay.native_replay.dependency_replay, "verify_view", side_effect=dependency_boundary) as boundary, \
                  mock.patch("subprocess.Popen", side_effect=AssertionError("retained process started")), \
                  mock.patch.object(replay.substitution, "verify_records", side_effect=AssertionError("live record verifier used")), \

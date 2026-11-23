@@ -39,6 +39,94 @@ def json_bytes(value):
     return (json.dumps(value, indent=2, sort_keys=True, allow_nan=False) + "\n").encode()
 
 
+def inert_path_guards(reader_root, reader_sources, extra_sources=(), *, input_archive=None):
+    """Allow exact trusted inputs even when the checkout uses a producer prefix.
+
+    These names come from the current reader inventory and fixed reader inputs,
+    never the packet. Historical producer source names can coincide with those
+    trusted files on GitHub; this path guard alone cannot distinguish their
+    origin. The full reader's pinned-source checks and the independent process,
+    extraction and live-reader guards remain necessary.
+    """
+    names = {row["path"] for row in reader_sources} | set(extra_sources)
+    trusted = {str(reader_root / name) for name in names}
+    if input_archive is not None:
+        # The caller-selected ZIP is data, not a producer path from the packet.
+        trusted.add(str(input_archive))
+    original_open, original_resolve = Path.open, Path.resolve
+
+    def check(path):
+        if str(path).startswith(("/home/runner/", "/synthetic-")) and str(path) not in trusted:
+            raise AssertionError("producer path accessed")
+
+    def inert_open(path, *args, **kwargs):
+        check(path)
+        mode = args[0] if args else kwargs.get("mode", "r")
+        if mode not in ("r", "rb", "rt"):
+            raise AssertionError("replay write attempted")
+        return original_open(path, *args, **kwargs)
+
+    def inert_resolve(path, *args, **kwargs):
+        check(path)
+        return original_resolve(path, *args, **kwargs)
+
+    return inert_open, inert_resolve
+
+
+class InertSourceGuardTests(unittest.TestCase):
+    def setUp(self):
+        self.root = Path("/home/runner/work/AI-GPU/AI-GPU")
+        self.name = "ci/project/trusted_reader.py"
+        self.rows = [{"path": self.name}]
+
+    def test_exact_trusted_reader_is_readable_in_the_hosted_checkout(self):
+        with mock.patch.object(Path, "open", return_value="opened") as opened, \
+             mock.patch.object(Path, "resolve", return_value="resolved") as resolved:
+            inert_open, inert_resolve = inert_path_guards(self.root, self.rows)
+            self.assertEqual(inert_open(self.root / self.name, "rb"), "opened")
+            self.assertEqual(inert_resolve(self.root / self.name, strict=True), "resolved")
+        opened.assert_called_once_with(self.root / self.name, "rb")
+        resolved.assert_called_once_with(self.root / self.name, strict=True)
+
+    def test_nonallowlisted_producer_paths_stay_forbidden(self):
+        paths = (self.root, self.root / "sim/simx/core.cpp", self.root / (self.name + ".other"),
+            self.root / "tools/bin/clang", Path("/home/runner/work/_temp/work/simx-fp16/model.o"),
+            Path("/home/runner/unknown/input.json"), Path("/synthetic-tools/g++"))
+        with mock.patch.object(Path, "open") as opened, mock.patch.object(Path, "resolve") as resolved:
+            inert_open, inert_resolve = inert_path_guards(self.root, self.rows)
+            for path in paths:
+                with self.subTest(path=str(path)), self.assertRaisesRegex(AssertionError, "producer path"):
+                    inert_open(path, "rb")
+                with self.subTest(path=str(path)), self.assertRaisesRegex(AssertionError, "producer path"):
+                    inert_resolve(path)
+        opened.assert_not_called()
+        resolved.assert_not_called()
+
+    def test_exact_input_archive_is_readable_under_a_hosted_temporary_directory(self):
+        archive = Path("/home/runner/work/_temp/replay/original.zip")
+        with mock.patch.object(Path, "open", return_value="opened") as opened, \
+             mock.patch.object(Path, "resolve", return_value="resolved") as resolved:
+            inert_open, inert_resolve = inert_path_guards(self.root, self.rows, input_archive=archive)
+            self.assertEqual(inert_open(archive, "rb"), "opened")
+            self.assertEqual(inert_resolve(archive, strict=True), "resolved")
+            with self.assertRaisesRegex(AssertionError, "producer path"):
+                inert_open(archive.with_name("other.zip"), "rb")
+            with self.assertRaisesRegex(AssertionError, "replay write"):
+                inert_open(archive, "wb")
+        opened.assert_called_once_with(archive, "rb")
+        resolved.assert_called_once_with(archive, strict=True)
+
+    def test_trusted_files_and_archive_paths_cannot_be_opened_for_writing(self):
+        with mock.patch.object(Path, "open") as opened:
+            inert_open, _ = inert_path_guards(self.root, self.rows)
+            for path in (self.root / self.name, Path("/tmp/current-original.zip")):
+                for mode in ("w", "wb", "a", "x", "r+", "w+"):
+                    with self.subTest(path=str(path), mode=mode), \
+                         self.assertRaisesRegex(AssertionError, "replay write"):
+                        inert_open(path, mode=mode)
+        opened.assert_not_called()
+
+
 class MemoryView:
     """A bounded inert byte store with the real archive descriptor grammar."""
 
@@ -546,17 +634,8 @@ class CompleteSyntheticNativeTests(unittest.TestCase):
                     "retained_dependency_verification": self.packet.dependency_verification,
                     "packet_files_checked": 2, "packet_bytes_checked": sum(len(view.read(name)) for name in view.files())}
 
-            original_open, original_resolve = Path.open, Path.resolve
-
-            def inert_open(path, *args, **kwargs):
-                if str(path).startswith("/home/runner/"):
-                    raise AssertionError("a producer path was opened")
-                return original_open(path, *args, **kwargs)
-
-            def inert_resolve(path, *args, **kwargs):
-                if str(path).startswith("/home/runner/"):
-                    raise AssertionError("a producer path was resolved")
-                return original_resolve(path, *args, **kwargs)
+            inert_open, inert_resolve = inert_path_guards(ROOT, replay.TRUSTED_READER_SOURCES,
+                (*replay.common.CORPUS, replay.archive_helpers.ARCHIVE_READER_PATH), input_archive=path)
 
             args = {"expected_revision": self.packet.revision, "expected_receipt_sha256": self.packet.receipt_pin,
                 "expected_native_report_sha256": digest(self.packet.files["report.json"]),
