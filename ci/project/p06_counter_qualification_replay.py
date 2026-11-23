@@ -75,6 +75,14 @@ def _reader_sources():
         rows[name] = {"path": name, "sha256": hashlib.sha256(body).hexdigest(), "size_bytes": len(body)}
     require(rows[contract.SOURCE_PROOF_PATH]["sha256"] == contract.SOURCE_PROOF_SHA256,
             "trusted qualification proof differs from its frozen identity")
+    warm = native.warm_contract
+    reference_pins = {**warm._SOURCE_HASHES, warm.MANIFEST_PATH: native.manifest.WARM_CONTRACT_SHA256}
+    for name, expected_sha256 in reference_pins.items():
+        maximum = warm.MAX_MANIFEST_BYTES if name == warm.MANIFEST_PATH else warm.MAX_SOURCE_BYTES
+        body = warm._read_file(ROOT / name, maximum)
+        identity = {"path": name, "sha256": hashlib.sha256(body).hexdigest(), "size_bytes": len(body)}
+        require(identity["sha256"] == expected_sha256, "trusted qualification reference changed: " + name)
+        rows[name] = identity
     return [rows[name] for name in sorted(rows)]
 
 

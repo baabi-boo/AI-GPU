@@ -19,6 +19,15 @@ from test_p06_dependency_native_replay import (
 )
 
 
+FROZEN_REFERENCE_INPUTS = (
+    "VX_config.toml", "VX_types.toml", "profiles/p02-tfr.json",
+    "ci/project/fixtures/p02_layout_v1.json", "ci/project/fixtures/p02_tfr_v1.json",
+    "ci/project/fixtures/p02_wmma_numerical_v1.json", "ci/project/p06_warm_contract.json",
+    "sw/common/ai_matmul_args.h", "sw/common/ai_matmul_profile.h", "sw/kernel/ai/matmul.cpp",
+    "tests/regression/ai_bench_common/counters.h", "tests/regression/sgemm_tcu/p02_fixtures.h",
+)
+
+
 class QualifiedReplayTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -101,6 +110,14 @@ class QualifiedReplayTests(unittest.TestCase):
         trusted = {row["path"] for row in replay.TRUSTED_READER_SOURCES}
         self.assertTrue({replay.PUBLIC_INVENTORY, replay.contract.SOURCE_PROOF_PATH,
             "ci/project/p06_counter_qualification_replay.py"} <= trusted)
+
+    def test_trusted_reader_inventory_covers_exact_frozen_reference_set(self):
+        helpers = {row["path"] for row in replay.native._reader_sources()} | set(replay.ADMISSION_HELPERS)
+        expected = helpers | set(FROZEN_REFERENCE_INPUTS) | {
+            replay.PUBLIC_INVENTORY, replay.contract.SOURCE_PROOF_PATH,
+            "ci/project/p06_counter_qualification_replay.py"}
+        self.assertEqual(len(expected), 94)
+        self.assertEqual([row["path"] for row in replay.TRUSTED_READER_SOURCES], sorted(expected))
 
     def test_external_proof_report_and_source_pins_are_independent(self):
         for name in ("expected_qualification_sha256", "expected_native_report_sha256",
@@ -222,6 +239,34 @@ class QualifiedReplayTests(unittest.TestCase):
         with mock.patch.object(replay, "_reader_sources", side_effect=[replay.TRUSTED_READER_SOURCES, changed]), \
              self.assertRaisesRegex(ValueError, "trusted qualification reader changed during review"):
             self.view_replay()
+
+    def test_frozen_reference_change_after_all_processes_rejects_public_result(self):
+        read_file = replay.native.warm_contract._read_file
+        run = replay._QualifiedReplay.run
+        for name in FROZEN_REFERENCE_INPUTS:
+            with self.subTest(reference=name), tempfile.TemporaryDirectory(prefix="p06-reference-change-") as directory:
+                changed = Path(directory) / "reference"
+                changed.write_bytes((replay.ROOT / name).read_bytes() + b"\n")
+                completed = []
+                changed_reads = []
+
+                def read_reference(path, maximum):
+                    if completed and Path(path) == replay.ROOT / name:
+                        changed_reads.append(name)
+                        return read_file(changed, maximum)
+                    return read_file(path, maximum)
+
+                def finish(context):
+                    result = run(context)
+                    completed.append(len(context.process_results))
+                    return result
+
+                with mock.patch.object(replay.native.warm_contract, "_read_file", side_effect=read_reference), \
+                     mock.patch.object(replay._QualifiedReplay, "run", finish), \
+                     self.assertRaisesRegex(ValueError, "trusted qualification reference changed"):
+                    self.view_replay()
+                self.assertEqual(completed, [4])
+                self.assertEqual(changed_reads, [name])
 
     def test_old_reader_cannot_autodetect_or_upgrade_the_new_route(self):
         with self.assertRaisesRegex(ValueError, "missing or unknown fields"):

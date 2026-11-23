@@ -34,9 +34,10 @@ class DependencyBuildTests(unittest.TestCase):
             (self.build / name).mkdir()
         for name in ("records", "payloads", "launchers"):
             (self.packet / name).mkdir()
+        self.environment = build.clean_environment(self.build)
         self.tools = {}
         for name in build.HOST_TOOLS:
-            path = shutil.which(name)
+            path = shutil.which(name, path=self.environment["PATH"])
             if path is not None:
                 self.tools[name] = recorder.file_identity(path)
         self.config = {"schema_version": 1, "contract_id": recorder.CONTRACT_ID,
@@ -46,7 +47,6 @@ class DependencyBuildTests(unittest.TestCase):
             "tools": {name: self.tools[name] for name in recorder.TOOLS}}
         self.config_path = self.packet / "tool-config.json"
         self.config_sha256 = build.write_json(self.config_path, self.config)["sha256"]
-        self.environment = build.clean_environment(self.build)
 
     def execute(self, command, cwd):
         result = subprocess.run(command, cwd=cwd, env=self.environment, timeout=120,
@@ -202,6 +202,21 @@ class DependencyBuildTests(unittest.TestCase):
         self.assertNotIn("CXX", environment)
         self.assertEqual(environment["MAKEFLAGS"], "-j2")
         self.assertEqual(environment["CMAKE_BUILD_PARALLEL_LEVEL"], "2")
+
+    def test_fixture_ignores_ambient_tool_directory(self):
+        caller_tools = self.root / "caller-tools"
+        caller_tools.mkdir()
+        for name in build.HOST_TOOLS:
+            path = caller_tools / name
+            path.write_text("#!/bin/sh\necho unexpected-caller-tool >&2\nexit 97\n")
+            path.chmod(0o755)
+        with mock.patch.dict(os.environ, {"PATH": str(caller_tools)}):
+            fixture = DependencyBuildTests(
+                "test_actual_make_override_preserves_automatic_outputs_and_archive_order")
+            self.addCleanup(fixture.doCleanups)
+            fixture.setUp()
+            self.assertEqual(fixture.tools, self.tools)
+            fixture.test_actual_make_override_preserves_automatic_outputs_and_archive_order()
 
     def test_first_failure_remains_primary_and_no_pass_flag_survives(self):
         producer = object.__new__(build.Builder)
