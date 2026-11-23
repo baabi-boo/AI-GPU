@@ -1,0 +1,39 @@
+{
+  "scope": "synthetic full-reader reset arithmetic controls",
+  "native_execution": "not_run",
+  "source_revision": "b4127b19a004b5aebb8d52eab9ceda0da3ff4561",
+  "argv": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-B",
+    "/tmp/ai-gpu-native-lifetime-dfd857-work/w05_a06-reset-boundary.py"
+  ],
+  "source_sha256": {
+    "ci/project/p06_native_lifetime_records.py": "5bf33d35e489397d96e0e0932c8d42e687f18deda646bb9725e05b326be50e3a",
+    "ci/project/p06_native_lifetime_contract.py": "266a50e5b4c0d07b432accf2aa13ff8d3db7fc175a24a4263e3cdb0acafb5b74",
+    "ci/project/p06_native_lifetime_test_fixture.py": "d6ff97dfde6561be7e8ab6306a0df4852da72a21f98f3a0884b70947be965a92",
+    "ci/project/p06_managed_preflight_contract.py": "5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb",
+    "ci/project/p06_managed_preflight_records.py": "3d6358c98544f4252be262125b70c87a72caaca7f35fbe3bc3e2512655654d10",
+    "ci/project/p06_managed_preflight_test_fixture.py": "75664a38f43a9cf69aaa557348644410598bcaafc899dcaac975f4bd2e69e7dc"
+  },
+  "script_sha256": "004c1fc5f5e78f22a31bd5cd78d75c07d87887b231531ae77525bcc0321f25bf",
+  "seconds": 1.6309373339900048,
+  "checks": [
+    {
+      "case": "last_representable_33_reset_window",
+      "starting_reset": 18446744073709551582,
+      "parent_admitted": true,
+      "lifetime_admitted": true,
+      "expected_lifetime_admission": true,
+      "error": null
+    },
+    {
+      "case": "one_past_window_with_repaired_clamped_endpoints",
+      "starting_reset": 18446744073709551583,
+      "parent_admitted": true,
+      "lifetime_admitted": false,
+      "expected_lifetime_admission": false,
+      "error": "native lifetime reset generation would overflow"
+    }
+  ],
+  "passed": true
+}

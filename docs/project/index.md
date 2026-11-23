@@ -14,6 +14,7 @@ that a GPU workload or physical device has passed its checks.
 | How can P02 progress without vendor FPGA tools? | [P02 staged-entry handoff](p02-entry-handoff.md), [numerical phase guide](phases/p02-tensor.md) | [Staging decision ADR-004](decisions.md#adr-004--staged-native-development-entry-with-vendor-integration-retained), [roadmap gates](roadmap.json) |
 | What arithmetic is the next AI configuration built on? | [TFR numerical contract v1](../designs/tensor_numerics_v1.md), [numerical handoff](p02-numerics-handoff.md) | [P02 evidence](evidence/p02-numerics/README.md), [frozen contract manifest](../../ci/project/p02_tensor_contract.json), [independent fixtures](../../ci/project/fixtures/p02_tfr_v1.json) |
 | Which tiny model has native qualification? | [Tiny-MLP fixture contract](../designs/tiny_mlp_fixture_v1.md), [model manifest](../../ci/project/p04_model_manifest.json), [accepted native packet](evidence/p04-executor/README.md) | [P04 phase guide](phases/p04-inference.md), [P06 qualification handoff](p06-qualification-handoff.md), [Python binding handoff](p05-entry-handoff.md) |
+| How do I continue counter qualification? | [Native lifetime packet](evidence/p06-native-lifetime/README.md), [dependency provenance handoff](p06-dependency-provenance-handoff.md) | [Qualification plan](p06-mpm-qualification-plan.md), [P06 phase guide](phases/p06-performance.md) |
 | What would prove this works? | [Acceptance policy](acceptance.md), [verification strategy](verification.md) | [Evidence format](evidence/README.md), [benchmark protocol](benchmarks.md), [review policy](../review/code-review-policy.md) |
 | How do I prepare the remaining P01 vendor integration? | [hw_emu runbook](p01-hwemu-runbook.md), [manifest contract](p01-hwemu-manifest.md) | [Preparation handoff](p01-hwemu-handoff.md), [current status](status.md) |
 | How do I run the prepared integer integration smoke? | [Vendor XRT integration guide](p01-xrt-integration.md), with its separate manifest/receipt contract | [Vendor integration handoff](p01-xrt-handoff.md), [current status](status.md) |
@@ -54,6 +55,16 @@ unexecuted template as a completion record.
   separate host/transfer accounting.
 - [P04 development audit](p04-audit.md): historical task selection, inherited
   capability limits and the unresolved CI area-gate failure.
+- [P06 native lifetime packet](evidence/p06-native-lifetime/README.md) and
+  [implemented witness contract](../designs/managed_counter_lifetime_v1.md):
+  independently reviewed four-process pending/reset observations at `b4127b19`,
+  with all qualification/readiness/acceptance claims still false.
+- [P06 dependency provenance handoff](p06-dependency-provenance-handoff.md):
+  current bounded work connecting immutable dependency inputs and fresh builds
+  to the actual linked and loaded products.
+- [Historical managed-preflight handoff](p06-managed-preflight-handoff.md) and
+  [complete v1 replay packet](evidence/p06-managed-preflight-replay/README.md):
+  the preceding planning and inert-verification scopes.
 - [P06 workspace handoff](p06-workspace-handoff.md),
   [runtime/correctness contract](../designs/serial_matmul_workspace_v1.md) and
   [evidence packet](evidence/p06-serial-workspace/README.md): the implemented

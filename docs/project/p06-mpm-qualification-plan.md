@@ -2,13 +2,21 @@
 
 ## Decision and current boundary
 
-**Next bounded development: add a read-only pending-read observation and a
-separately versioned lifetime witness for all 33 managed run/reset pairs.**
-Follow the [native handoff](p06-managed-preflight-handoff.md) for exact reset
-accounting, flush and terminal balance, ownership and actual destruction
-boundaries. This is the next implementation increment within the broader
-qualification path below; fresh dependency compilation-to-loader provenance
-and independent complete qualification remain separate requirements.
+**Next bounded development: establish fresh dependency compilation-to-loader
+provenance.** Follow the
+[dependency handoff](p06-dependency-provenance-handoff.md) for immutable source
+inputs, actual compile/archive/link records, produced bytes and the live
+admission bindings. The existing complete application-graph validator must be
+reused in that live route. Independent complete qualification remains separate.
+
+The [native lifetime witness](evidence/p06-native-lifetime/README.md) is implemented
+at `b4127b19a004b5aebb8d52eab9ceda0da3ff4561`.
+[Run 45130300651, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300651)
+passed the four-process FP16/BF16 × policy matrix: **132 launches and 4,224
+exact FP32 result words**, with independent original review of run/reset,
+pending-balance, terminal ownership and disposal observations. The separate
+accessor probe observed positive pending balances and its always-zero control
+failed the exact required assertion; those operations are outside the matrix.
 
 The [completed managed-preflight original](evidence/p06-managed-preflight-replay/README.md)
 at `57248e73dfce4ae2d21d2cbdb82c3953eef2e3db`,
@@ -16,10 +24,12 @@ at `57248e73dfce4ae2d21d2cbdb82c3953eef2e3db`,
 records four seed-free processes, 132 launches and 4,224 exact output words.
 The [complete inert reader](../designs/managed_counter_preflight_replay_v1.md)
 now verifies that original against independent archive/source expectations.
-It cannot supply the absent per-run pending-balance observations or prove that
-the selected sources produced the cached dependency binaries. Preserve that
-original version and scope; a fresh preflight must carry the new witness and
-provenance evidence before it can satisfy the remaining qualification boundary.
+That historical version cannot supply the per-run pending-balance observations
+added by the later lifetime witness, or prove that the selected sources produced
+the cached dependency binaries. Preserve both originals in their declared
+scopes. After new provenance and admission rules are independently reviewed,
+a fresh preflight must join that provenance to the implemented lifetime witness
+before it can satisfy the remaining qualification boundary.
 
 The all-33 native model transport and directed public-runtime diagnostics have
 a latest independently audited diagnostic
@@ -28,8 +38,9 @@ the earlier corrected `e5f152464dda5e488d6d1a030c1fcdc49b5a9701` execution. The
 [terminal lifetime argument](../designs/simx_counter_lifetime_v1.md) supplies a
 conditional source proof for the exact 33-selector/40-component RV64
 `p02-tfr`, timing SimX, `PERF=1` route. Applying it to measurement still requires
-the full caller's ownership, reset and terminal observations, and provenance
-from the actual loaded dependencies and binaries to the reviewed sources.
+reconciling the implemented witness's ownership, reset and terminal observations
+with complete reviewed source/binary premises, including provenance from the
+actual loaded dependencies and binaries to the reviewed sources.
 
 The [checked-counter prerequisite](../designs/simx_checked_counters_v1.md)
 guards stored updates and formed aggregates. The
@@ -296,9 +307,10 @@ the high-half selector is internal, not a second public CSR argument.
 ## Qualification work to implement and review
 
 The sequence below describes the remaining qualification route. Its next
-bounded implementation is the versioned boundary witness in the
-[native handoff](p06-managed-preflight-handoff.md); the completed inert reader
-does not promote the original preflight into that future qualification scope.
+bounded implementation is the fresh provenance and live admission join in the
+[dependency handoff](p06-dependency-provenance-handoff.md). The native lifetime
+increment has executed and has independent original review; neither that
+bounded witness nor the historical v1 reader establishes complete qualification.
 
 1. **Freeze a new qualification contract.** Specify its record, reader and
    explicit admission path separately from warm-v1 and the diagnostic replay
@@ -355,16 +367,17 @@ does not promote the original preflight into that future qualification scope.
    author the enforcement change under the
    [review policy](../review/code-review-policy.md), before fresh performance
    results are inspected.
-6. **Run a fresh preflight carrying the new witness and provenance.** The
-   original four-process preflight and its consistency replay are complete;
-   they do not contain the missing observations. Once the new contract,
-   validation and provenance requirements are independently reviewed, repeat
-   the four-process FP16/BF16 × policy matrix below with the new versioned
-   evidence to establish the complete lifecycle and snapshot obligations.
-   Keep its outputs separate from performance samples. Reassess diagnostic
-   coverage against the exact new artifacts and
-   repeat only the controls needed for changed source/configuration/build
-   boundaries; a historical scalar control cannot qualify a new warm binary.
+6. **Run a fresh preflight joining the implemented lifetime witness and
+   dependency provenance.** The historical `57248e73` four-process original
+   and its consistency replay lack the later pending/reset observations; the
+   `b4127b19` original supplies that bounded witness. Once the new provenance,
+   admission and complete validation requirements are independently reviewed,
+   repeat the four-process FP16/BF16 × policy matrix below with the newly bound
+   products and versioned evidence to establish the complete lifecycle and
+   snapshot obligations. Keep its outputs separate from performance samples.
+   Reassess diagnostic coverage against the exact new artifacts and repeat only
+   the controls needed for changed source/configuration/build boundaries; a
+   historical scalar control cannot qualify a new warm binary.
 7. **Collect the fresh complete matched attempt.** Only after the prerequisites
    and independent review pass, run all 24 processes under the frozen sampling
    and resource rules. Validate every process, including excluded primes and
@@ -512,12 +525,14 @@ reject unsupported topology, worker count, features or guard configuration.
 The seven model cells and five public modes close their declared diagnostic
 gaps at `4268d2d5`, repeating the earlier corrected `e5f1524` scope. Their scalar
 controls do not execute managed FP16/BF16 matmul or workspace reuse. The later
-`57248e73` original does execute the four-process managed policy matrix, and
-its complete inert replay now verifies the retained observations. It lacks the
-per-run pending-balance witness and dependency compilation provenance required
-for complete qualification. The remaining native obligation is therefore a
-fresh preflight carrying those versioned observations and provenance, after
-their contract and validation are independently reviewed. Freeze that route
+`57248e73` original executes the four-process managed policy matrix, and its
+complete inert replay verifies the retained v1 observations. The `b4127b19`
+lifetime original adds all per-run pending/reset pairs, terminal ownership and
+actual disposal in the same four-process numerical population. Dependency
+compilation provenance and all-40-component qualification remain open. The
+remaining native obligation is a fresh preflight joining the implemented
+witness with new dependency products and provenance, after their complete
+admission and validation rules are independently reviewed. Freeze that route
 before collecting performance results.
 
 | Obligation | Minimum scope | Pass/fail boundary |
@@ -549,10 +564,11 @@ must not be silently included. If a required source can advance between halves,
 require a separately reviewed coherent-read algorithm and adversarial rollover
 tests. Repeated equality alone does not prove coherence.
 
-The fresh qualification preflight carrying the new evidence remains future
-work. The completed original and any future four-process preflight are not
-measured samples or substitutes for the full 24-process attempt. Their terminal
-observations cannot be copied into a later process's record, and missing
+The fresh qualification preflight joining the implemented lifetime witness
+with dependency provenance remains future work. Both completed originals and
+any future four-process preflight are not measured samples or substitutes for
+the full 24-process attempt. Their terminal observations cannot be copied into
+a later process's record, and missing
 versioned fields cannot be inferred from the historical archive. Controlled
 host faults, seeded selector checks, unseeded scalar controls, full managed-caller execution and
 source lifetime proofs retain distinct scopes. General internal-worker

@@ -33,10 +33,21 @@ archives, build provenance, independent audits and replay instructions. The
 earlier [P04-A01 fixture acceptance](docs/project/evidence/p04-fixture/acceptance.json)
 and [hashed manifest](ci/project/p04_model_manifest.json) remain unchanged.
 
-**Current work: P06-T01 — close the managed caller's lifetime and dependency
-provenance gaps (`in_progress`), with [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
-The [complete inert managed-preflight reader](docs/designs/managed_counter_preflight_replay_v1.md)
-now verifies the retained original from source
+**Current work: P06-T01 — establish fresh dependency compilation and loaded-product
+provenance (`in_progress`), with [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
+The [native lifetime witness](docs/designs/managed_counter_lifetime_v1.md) is
+implemented at `b4127b19a004b5aebb8d52eab9ceda0da3ff4561`.
+[Run 45130300651, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300651)
+passed the FP16/BF16 × allocation-policy matrix: **four processes, 132 launches
+and 4,224 exact FP32 result words**. Independent
+[original reviews](docs/project/evidence/p06-native-lifetime/README.md) reconcile
+all 33 run/reset pairs per process, pending balance, terminal ownership and actual
+destruction. A separate accessor probe observed outstanding reads, preserved
+`gp` 7 and −1, and rejected its always-zero control for the exact assertion;
+its operations are outside the managed matrix counts.
+
+The preceding [complete inert managed-preflight reader](docs/designs/managed_counter_preflight_replay_v1.md)
+verifies the retained original from source
 `57248e73dfce4ae2d21d2cbdb82c3953eef2e3db`,
 [run 45085300171, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45085300171):
 FP16/BF16 × both allocation policies, **four processes, 132 launches and 4,224
@@ -48,16 +59,20 @@ also preserves the original failed build at `8756f400`, run `45084009157`,
 which the reader must reject. This verification executes no retained code and
 does not repeat the native run or grant counter qualification.
 
-Host verification passed **3,725 project tests** before the final standalone
-source-export repair, then **203 dedicated replay tests** including that repair.
+That replay continuation's host verification passed **3,725 project tests**
+before the final standalone source-export repair, then **203 dedicated replay
+tests** including that repair.
 The [completion summary](docs/project/evidence/p06-managed-preflight-replay/completion-summary.md)
 retains both exact source revisions, raw logs and independent reviews.
 
-The [next native handoff](docs/project/p06-managed-preflight-handoff.md) targets
-a read-only pending-read observation and versioned witness at all 33 run/reset
-boundary pairs, through terminal cleanup and destruction. Fresh dependency
-compile/link/product receipts bound to the actual selected libraries are a
-separate prerequisite. The existing cold acceptance remains scoped as follows.
+The [current dependency handoff](docs/project/p06-dependency-provenance-handoff.md)
+specifies fresh source, compile, archive and link receipts joined to the products
+actually linked and loaded. Complete qualification of all 40 backing components
+remains open. [Full governance](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300117)
+passes **3,813 tests in 2,498.078 seconds** at the implementation revision.
+[Generic CI](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300144) remains
+in progress at this documentation checkpoint. The existing cold acceptance
+remains scoped as follows.
 
 Independent review qualifies the original
 [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
@@ -192,25 +207,25 @@ without executed results. The latest audited native diagnostic cases remain at
 `4268d2d5`, whose original hosted failure is preserved.
 
 The [conditional lifetime argument](docs/designs/simx_counter_lifetime_v1.md)
-still needs the actual seed-free caller's complete boundary and terminal
-premises. The new reader verifies the four-process original, but that packet
-lacks the pending-read balance and exact per-run reset witnesses needed to
-apply the source-bound argument from 33 selectors to 40 checked components.
-The [native handoff](docs/project/p06-managed-preflight-handoff.md) and
+requires the managed caller's complete source/binary-bound lifetime premises.
+The historical `57248e73` v1 original lacks per-run pending/reset observations;
+the [new lifetime original](docs/project/evidence/p06-native-lifetime/README.md)
+supplies those bounded observations without qualifying all 40 components.
+The [dependency handoff](docs/project/p06-dependency-provenance-handoff.md) and
 [qualification plan](docs/project/p06-mpm-qualification-plan.md) retain three
 unresolved obligations: complete lifetime/pending balance, dependency
 source-to-loaded-binary provenance, and independent complete counter
 qualification. Cached product hashes alone do not prove compilation origin.
 
-After the new witness, provenance capture and admission/validation rules are
-independently reviewed, a fresh preflight must supply the missing qualification
-evidence before the unchanged
+After fresh dependency provenance and complete admission/validation rules are
+independently reviewed, a fresh preflight must join that evidence to the
+implemented lifetime witness before the unchanged
 warm matrix: **24 processes, 792 launches and 25,344 exact output words**.
 All seven claims remain false: `qualified`, `ready_for_warm`, `warm_execution`,
 `full_warm_coverage`, `acceptance_claimed`, `phase_acceptance` and
 `performance_acceptance`. **P06 and P06-T01 remain `in_progress`; P06-A02/A03
 remain open.** Warm v1 stays unconditionally blocked by
-`P06-WARM-RV64-MPM-HIGH-HALF`; the original preflight and current replay establish
+`P06-WARM-RV64-MPM-HIGH-HALF`; the lifetime original and historical replay establish
 no warm speedup.
 
 **Parallel work: P05-T01 — the Python/custom-op bridge (`in_progress`).**
@@ -289,8 +304,10 @@ and P07–P11 are not started.
   and [P02 WMMA evidence](docs/project/evidence/p02-wmma/README.md).
 - Read the earlier contract checkpoint: [P02 numerical handoff](docs/project/p02-numerics-handoff.md)
   and [A01 evidence](docs/project/evidence/p02-numerics/README.md).
-- Continue the [counter qualification plan](docs/project/p06-mpm-qualification-plan.md)
-  from the completed [diagnostic audit](docs/project/p06-counter-diagnostics-audit.md),
+- Continue with the [dependency provenance handoff](docs/project/p06-dependency-provenance-handoff.md)
+  and [native lifetime packet](docs/project/evidence/p06-native-lifetime/README.md),
+  within the [counter qualification plan](docs/project/p06-mpm-qualification-plan.md).
+  Earlier prerequisites remain in the [diagnostic audit](docs/project/p06-counter-diagnostics-audit.md),
   [evidence packet](docs/project/evidence/p06-counter-diagnostics/README.md) and
   [handoff](docs/project/p06-counter-diagnostics-handoff.md). The
   [checked-counter contract](docs/designs/simx_checked_counters_v1.md) retains

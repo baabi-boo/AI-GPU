@@ -10,13 +10,25 @@ launches. The [qualification audit](p06-qualification-audit.md),
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
 scope and new validation. P06-A02/A03 remain open.
 
-The current continuation implements the [native lifetime witness](evidence/p06-native-lifetime/README.md)
-and its [separate versioned contract](../designs/managed_counter_lifetime_v1.md):
-the actual pending-read balance is observed before every reset-bearing run,
-through all flush/read boundaries and immediately before actual destruction.
-Compiled host controls and historical compatibility checks have executed;
-fresh native execution and full governance remain pending at this implementation
-checkpoint. All qualification and phase-acceptance flags remain false.
+The [native lifetime witness](evidence/p06-native-lifetime/README.md) and its
+[separate versioned contract](../designs/managed_counter_lifetime_v1.md) are
+implemented at `b4127b19a004b5aebb8d52eab9ceda0da3ff4561`.
+[Run 45130300651, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300651)
+passed the unchanged FP16/BF16 × allocation-policy matrix: **four processes,
+132 launches and 4,224 exact FP32 result words, with zero mismatches**.
+The [independent aggregate review](evidence/p06-native-lifetime/reviews/w08_a01.md)
+reconciles every run/reset pair, required flush, terminal state and actual
+destruction. The [separate accessor probe](evidence/p06-native-lifetime/reviews/w07_a05.md)
+observed positive pending balances in both gp contexts and rejected its
+always-zero control for the exact missing-observation assertion; its operations
+are outside the four-process population. The next task is the
+[dependency provenance handoff](p06-dependency-provenance-handoff.md).
+Full governance [45130300117](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300117)
+passes **3,813 tests in 2,498.078 seconds** at `b4127b19`; the
+[original log](evidence/p06-native-lifetime/ci/b4127b19-full-governance-original.log)
+is retained. Generic CI [45130300144](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300144)
+remains in progress at this documentation checkpoint. All qualification and
+phase-acceptance flags remain false.
 
 The preceding continuation implements the [complete inert managed-preflight
 reader](../designs/managed_counter_preflight_replay_v1.md). It rechecks the
@@ -24,9 +36,10 @@ successful original at `57248e73dfce4ae2d21d2cbdb82c3953eef2e3db`,
 [run 45085300171](https://github.com/baabi-boo/AI-GPU/actions/runs/45085300171):
 four FP16/BF16 × policy processes, **132 launches and 4,224 exact output words**.
 The [evidence packet](evidence/p06-managed-preflight-replay/README.md) separates
-that historical native execution from current replay. The next native task is
-the missing pending-read and per-run/reset witness described in the
-[handoff](p06-managed-preflight-handoff.md); complete qualification remains open.
+that historical native execution from replay. The later lifetime original
+supplies the bounded pending-read and per-run/reset observations planned by the
+[historical handoff](p06-managed-preflight-handoff.md). Fresh dependency provenance
+and complete qualification remain open.
 
 The [clean governance packet](evidence/p06-managed-preflight-replay/local-governance/5d2b2df/files.json)
 records **3,725 tests passed in 2,528.577 seconds**, with all four commands
@@ -104,17 +117,21 @@ source/log review. Hosted and native retries were queued at the
 which contains no executed result for either retry. This is local governance
 verification; the latest audited native diagnostic scope stays at `4268d2d5`.
 
-**Current bounded verification:** independently review and execute the
-[versioned native lifetime witness](evidence/p06-native-lifetime/README.md): read-only
-pending-read observations at all 33 run/reset boundary pairs, each required
-flush, terminal readout and actual destruction, with exact reset increments.
-Apply the [conditional lifetime argument](../designs/simx_counter_lifetime_v1.md)
-to the bound 33 selectors and 40 checked components. Fresh dependency
-source/compile/link/product receipts connected to the actual loaded libraries
-remain a separate prerequisite. The current four-process original and its
-replay do not contain those missing observations. The broader
+**Current bounded development:** establish fresh source-to-loaded-product
+provenance under the [dependency handoff](p06-dependency-provenance-handoff.md).
+Retain immutable dependency inputs and actual configure/compile/archive/link
+records, join their outputs to the selected static and dynamic products, and
+bind the complete application build into live admission using the existing
+full-graph validator. The implemented
+[native lifetime witness](evidence/p06-native-lifetime/README.md) provides bounded
+pending-read and run/reset observations. Applying the
+[conditional lifetime argument](../designs/simx_counter_lifetime_v1.md) to all
+33 selectors and 40 checked components still requires complete reviewed
+source/binary premises and dependency provenance. The historical `57248e73`
+original and its replay retain their earlier observation scope. The broader
 [qualification plan](p06-mpm-qualification-plan.md) still requires a separately
-reviewed admission/final-validation path before the unchanged fresh warm matrix.
+reviewed admission/final-validation path and a fresh preflight joining the
+implemented witness with that provenance before the unchanged warm matrix.
 The [implemented warm v1 contract](../designs/warm_workspace_benchmark_v1.md)
 remains unconditionally blocked by `P06-WARM-RV64-MPM-HIGH-HALF`, with
 `qualified=false` and `absolute_no_wrap_bound="not_established"`. No warm
@@ -187,7 +204,7 @@ the linked reports define the exact accepted scope.
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
 | P04 — tiny-model inference | `complete` | A01 fixed fixture preserved; A02/A03 accept the full four-variant composed-model matrix at native processor RTL scope |
 | P05 — Python/framework bridge | `in_progress` | A01 accepts the bounded copying Python binding on SimX; the custom-op implementation and prior CI still need independent artifact review for A02/A03 |
-| P06 — Memory and performance scaling | `in_progress` | A01 and prior prerequisites remain preserved; all-33 native/public diagnostics pass in their declared scope, while actual seed-free measurement/full-caller qualification, loaded dependency provenance and A02/A03 remain open |
+| P06 — Memory and performance scaling | `in_progress` | A01 and prior prerequisites remain preserved; all-33 diagnostics and the four-process native lifetime witness pass in their declared scopes, while fresh loaded-dependency provenance, complete counter qualification, the matched warm attempt and A02/A03 remain open |
 | P07–P11 | `not_started` | Later hardware, reliability, research and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -196,7 +213,30 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — complete managed-preflight archive replay
+## Latest continuation — native counter lifetime observations
+
+The [native packet](evidence/p06-native-lifetime/README.md) retains the original
+from `b4127b19a004b5aebb8d52eab9ceda0da3ff4561`, run `45130300651`, attempt 1,
+job `137544022426`, artifact `14798140556`. Independent process, build, probe and
+[aggregate reviews](evidence/p06-native-lifetime/reviews/w08_a01.md) pass within
+their declared original-artifact scopes. Each of the four processes completes
+33 run/reset pairs, 670 zero-pending fields, 264 MPM half reads and 33 flushes,
+with reset count 1 → 34. Its terminal state is reproduced at actual destructor
+entry, followed by an idle platform with zero ticks and reset count 34.
+
+The separate gp `7` and `-1` probe contexts each retain 135 steps, 23 positive
+pending samples, maximum balance 1, 137 read-only groups and final balance 0.
+The native probe compiles and exits 0; the separate always-zero translation unit
+compiles and exits 1 with the required exact assertion. These probe operations
+are excluded from the **four-process, 132-launch, 4,224-word** managed matrix.
+
+Fresh dependency source/build/product/loader provenance is the
+[next bounded task](p06-dependency-provenance-handoff.md). The three qualification
+obligations and all seven false claims remain unchanged. This result establishes
+no warm execution, speedup or P06-A02/A03 acceptance. Full governance passes
+3,813 tests; generic CI remains pending at the documentation checkpoint above.
+
+## Previous continuation — complete managed-preflight archive replay
 
 The [development audit](evidence/p06-managed-preflight-replay/development-audit.md)
 identified the missing complete reader after the managed producer had already
@@ -242,8 +282,11 @@ All seven fields remain false: `qualified`, `ready_for_warm`, `warm_execution`,
 `dependency_source_to_loaded_binary_provenance`, and
 `independent_complete_counter_qualification`. Replay reports
 `native_execution="not_run"` and `retained_code_executed=false`. The
-[next native handoff](p06-managed-preflight-handoff.md) specifies the missing
-witness and separate dependency evidence without promoting any acceptance.
+[historical native handoff](p06-managed-preflight-handoff.md) records the witness
+and dependency gaps at that checkpoint. The later lifetime original supplies
+its bounded observations; the current
+[dependency handoff](p06-dependency-provenance-handoff.md) leaves complete
+qualification open.
 
 ## Previous continuation — native counter diagnostics and inert replay
 
@@ -341,10 +384,11 @@ hosted failure is attributed to concurrent edits.
 
 At that diagnostic checkpoint, the [handoff](p06-counter-diagnostics-handoff.md)
 and [qualification plan](p06-mpm-qualification-plan.md) still proposed the
-four-process managed-caller preflight. The current continuation above now
-records its original execution and complete inert replay; the missing lifetime
-and dependency premises remain explicit in the
-[new native handoff](p06-managed-preflight-handoff.md). The unchanged
+four-process managed-caller preflight. The continuations above record its
+original execution, complete inert replay and the later native lifetime witness.
+The remaining dependency and complete lifetime-qualification premises are
+explicit in the [current handoff](p06-dependency-provenance-handoff.md).
+The unchanged
 **24-process, 792-launch, 25,344-word** warm attempt still requires separately
 reviewed complete qualification. Diagnostic/replay qualification, readiness,
 warm execution and acceptance remain false; P06/P06-T01 stay `in_progress`,
@@ -1283,47 +1327,38 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**P06-T01 — implement and independently review a separately versioned native
-pending-balance and run/reset witness.** Start with the
-[managed-preflight handoff](p06-managed-preflight-handoff.md),
-[completed replay audit](evidence/p06-managed-preflight-replay/development-audit.md),
-[conditional lifetime argument](../designs/simx_counter_lifetime_v1.md), and
-[broader qualification plan](p06-mpm-qualification-plan.md). The successful
-`57248e73` original already contains four managed processes, 132 launches and
-4,224 exact output words. Its complete inert replay is implemented; neither
-the original nor replay supplies the missing per-run pending observations.
+**P06-T01 — establish fresh dependency compilation and loaded-product
+provenance.** Follow the
+[dependency handoff](p06-dependency-provenance-handoff.md),
+[native lifetime packet](evidence/p06-native-lifetime/README.md) and
+[broader qualification plan](p06-mpm-qualification-plan.md).
 
-Expose the live processor's pending-read balance read-only. Bind all 33 run
-boundary pairs to the owned processor, zero balance before reset and after
-successful completion, exactly one launch reset per run, each output flush,
-the terminal vector and actual destruction. Retain zero origins, checked
-updates, exclusive ownership, worker joins and absence of later updates. Apply
-the source-bound 33-selector-to-40-component theorem; a new 40-field inspector
-is not required merely to restate its monotone-storage premises. The transient
-pending balance is separate because responses decrease it and reset clears it.
-Exclude diagnostic seeds, mutation accessors and tiny guard limits from the
-actual measurement binaries.
+The independently reviewed lifetime original at `b4127b19`, run `45130300651`,
+executes four managed processes, 132 launches and 4,224 exact output words. It
+records all 33 run/reset pairs per process, pending balance before reset and
+after successful runs/flushes, exact reset increments, terminal ownership and
+actual destruction. The separate probe establishes positive observations and
+the exact always-zero rejection outside that matrix. Preserve the historical
+`57248e73` original and its complete inert replay in their earlier v1 scope.
 
-Fresh dependency receipts must separately connect reviewed source and complete
-build inputs to configure/compile/link products and the bytes actually loaded
-or statically linked. Cached product hashes and source inventories do not
-establish that origin. Preserve the exact RV64 `p02-tfr`, timing SimX, `PERF=1`
-route, 33 available selectors, 40 backing components and twelve unqueried
-unavailable rows.
+Build the selected dependencies from immutable source and transitive inputs;
+retain actual configure/compile/archive/link receipts and connect the products
+to the bytes statically linked or dynamically loaded by the native processes.
+Cached hashes and source inventories do not establish compilation origin.
+Reuse the existing complete application-graph validator in the new live
+admission and identity bindings. Preserve the exact RV64 `p02-tfr`, timing
+SimX, `PERF=1` route, 33 available selectors, 40 backing components, twelve
+unqueried unavailable rows and four-process numerical population. Keep two
+build jobs, one simulator worker, a 15 GiB disk reserve and the 4 GiB RSS ceiling.
 
-Extend the inert validation through a distinct reviewed witness version;
-retain the original v1 packet and reject it as incomplete evidence for the new
-lifetime requirement. Review controls for missing, duplicate or reordered
-boundaries, nonzero balance erased by reset, invalid terminal ownership,
-incomplete cleanup and source/product substitution. Then obtain a fresh
-four-process FP16/BF16 × policy original with the unchanged 132-launch,
-4,224-word population and the additional actual observations. Complete
-qualification still requires both lifetime and dependency obligations plus a
-separately reviewed pre-execution admission/final-validation path. All seven
-qualification/readiness/execution/coverage/acceptance fields remain false in
-the current preflight and replay; the three unresolved obligations listed above
-remain open. Preserve warm v1's unconditional `P06-WARM-RV64-MPM-HIGH-HALF`
-block and `absolute_no_wrap_bound="not_established"`.
+The source-bound all-40 lifetime argument, dependency provenance and independent
+complete qualification remain open. Review the new versioned provenance and
+admission/final-validation rules before a fresh preflight joins the implemented
+lifetime witness to the newly built products. All seven qualification/readiness/
+execution/coverage/acceptance fields remain false; the three unresolved
+obligations listed above remain open. Preserve warm v1's unconditional
+`P06-WARM-RV64-MPM-HIGH-HALF` block and
+`absolute_no_wrap_bound="not_established"`.
 
 Run a fresh complete matched warm attempt only under the reviewed qualification
 route and unchanged [sampling/rejection rules](../designs/warm_workspace_benchmark_v1.md):

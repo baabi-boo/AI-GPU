@@ -7,18 +7,26 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Start here: P06-T01 native lifetime observations
+## Start here: P06-T01 dependency provenance
 
-**Current bounded task: P06-T01 — independently verify the implemented
-[pending-balance and per-run/reset witness](evidence/p06-native-lifetime/README.md)
-through fresh native execution of the actual seed-free managed caller.**
-Host controls do not replace the pending native result or complete qualification.
+**Current bounded task: P06-T01 — establish fresh dependency compilation and
+loaded-product provenance under the
+[dependency handoff](p06-dependency-provenance-handoff.md).**
+The [native lifetime witness](evidence/p06-native-lifetime/README.md) is
+implemented at `b4127b19a004b5aebb8d52eab9ceda0da3ff4561`.
+[Run 45130300651, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300651)
+passed four FP16/BF16 × allocation-policy processes, **132 launches and 4,224
+exact FP32 result words**, with independent original review. Its separate
+positive-pending probe and exact always-zero rejection are outside that matrix.
+Complete counter qualification remains open.
+
 The [complete inert preflight reader](../designs/managed_counter_preflight_replay_v1.md)
-is implemented. Its [evidence packet](evidence/p06-managed-preflight-replay/README.md)
-rechecks the successful four-process original at `57248e73` and preserves the
-failed `8756f400` original as an exact negative control. Follow the
-[native handoff](p06-managed-preflight-handoff.md) for the missing observations;
-fresh dependency compilation provenance remains a separate prerequisite.
+and [historical evidence packet](evidence/p06-managed-preflight-replay/README.md)
+retain the successful original at `57248e73` and preserve the failed `8756f400`
+original as an exact negative control. Their v1 observation scope remains
+unchanged; the [historical handoff](p06-managed-preflight-handoff.md) records the
+pending/reset gaps that the later witness increment addressed.
+
 [P06-A01 is accepted](evidence/p06-baseline/acceptance.json) for the original
 [run 44901052221, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/44901052221)
 at `84b6ca0ca75fba248ba330642bbf8764db3d459c`. The
@@ -139,23 +147,26 @@ at `8756f40029e59c87546fa22f4da33acd4e5d8e02` must still reject exactly with
 `report.outcome: value differs`; it completed no managed launch. Replay is
 retained-data verification, not another native run or qualification.
 
-The next implementation follows the [native handoff](p06-managed-preflight-handoff.md):
-observe the real pending-read balance without modifying it and retain all 33
-run/reset boundary pairs, exact reset increments, required flushes, terminal
-readout and actual destruction. Zero balance must be witnessed before reset can
+The implemented [native lifetime witness](evidence/p06-native-lifetime/README.md)
+at `b4127b19`, run `45130300651`, records all 33 run/reset boundary pairs,
+exact reset increments, required flushes, terminal readout and actual destruction
+for each managed process. Zero pending balance is observed before reset can
 clear it. The [conditional lifetime proof](../designs/simx_counter_lifetime_v1.md)
-then needs its full source-bound 33-selector/40-component premises: zero origins,
-audited nonnegative checked updates, admitted resets, exclusive ownership,
-worker/queue cleanup, successful terminal sums and no later update. It does not
-require a new 40-field inspector merely to repeat that theorem. Pending balance
-is a separate transient property.
+still needs its full source-bound 33-selector/40-component premises: zero
+origins, audited nonnegative checked updates, admitted resets, exclusive
+ownership, worker/queue cleanup, successful terminal sums and no later update.
+A separate transient pending observation does not close that complete theorem.
 
-Fresh source/configure/compile/link/product receipts must separately bind the
-actual dependency libraries and SoftFloat static link to reviewed sources.
-Cached hashes do not prove compilation origin. Extend inert validation under a
-new witness version, independently review missing/partial/seeded/mismatched
-and invalid-lifetime rejection controls, and obtain a fresh original with those
-observations. Keep the existing four-process numerical population unchanged.
+The next implementation follows the
+[dependency handoff](p06-dependency-provenance-handoff.md): build from immutable
+source and transitive inputs, retain actual configure/compile/archive/link
+receipts, and connect produced bytes to the loaded libraries and SoftFloat
+static link. Cached hashes do not prove compilation origin. Reuse the existing
+complete application-build validator in live admission and bind its result to
+actual build/process identities. Independently review the versioned provenance
+and complete qualification rules, then join the implemented lifetime witness
+with the new dependency products in a fresh four-process preflight. Keep its
+132-launch, 4,224-word numerical population unchanged.
 The [broader qualification plan](p06-mpm-qualification-plan.md) still requires
 an independently reviewed admission/final-validation path for the eventual
 measurement binaries. The current preflight/replay retain all three unresolved
@@ -456,11 +467,14 @@ independently reviewed host and fresh native evidence for the repaired CP-error
 boundary at `4781ca9`. The [checked-counter prerequisite](../designs/simx_checked_counters_v1.md)
 is implemented, and the [diagnostic packet](evidence/p06-counter-diagnostics/README.md)
 now covers all 33 available selectors plus native public failure/coherence cases.
-The [managed preflight and complete replay](evidence/p06-managed-preflight-replay/README.md)
-now retain a four-process original without claiming full qualification. Add the
-[versioned pending-balance/run witness](p06-managed-preflight-handoff.md) and
-fresh dependency source-to-product provenance, then independently review the
-complete qualification path before a fresh matched warm attempt.
+The [historical managed preflight and replay](evidence/p06-managed-preflight-replay/README.md)
+retain the preceding four-process original. The later
+[native lifetime witness](evidence/p06-native-lifetime/README.md) adds executed
+pending-balance, run/reset and disposal observations without claiming full
+qualification. Follow the
+[dependency handoff](p06-dependency-provenance-handoff.md) for fresh dependency
+source-to-product/loader provenance, then independently review the complete
+qualification path before a fresh matched warm attempt.
 Detailed work packages remain in the
 phase guides, the [development audit](p05-binding-audit.md) and the
 [Python binding handoff](p05-entry-handoff.md).
@@ -474,7 +488,7 @@ phase guides, the [development audit](p05-binding-audit.md) and the
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
 | **P04-T02 — Native model execution — complete** | Four clean SimX/native processor RTL × FP16/BF16 variants pass exact intermediate/final comparisons, live-input lineage, native placement and separate host/transfer accounting after independent review. | T01; model runtime lead | [P04-A02](evidence/p04-executor/acceptance-numerics.json), [P04-A03](evidence/p04-executor/acceptance-dispatch.json) |
 | **P05-T01 — Python/custom-op bridge — in progress** | Preserve the accepted copying binding; independently review the existing custom-op implementation's installed dispatch, compatibility and explicit failure evidence before an acceptance decision. | P04; framework integration lead; [handoff](p05-entry-handoff.md) | [P05-A01 accepted](evidence/p05-python/acceptance-binding.json); P05-A02/P05-A03 unearned |
-| **P06-T01 — Measured optimization — in progress** | Preserve the completed four-process preflight/replay; add a versioned pending-balance witness at all 33 run/reset pairs and terminal disposal, with exact resets. Separately establish fresh dependency source-to-product/loader provenance, then independently review complete qualification before the unchanged warm matrix. | P04; performance and memory lead; [native handoff](p06-managed-preflight-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
+| **P06-T01 — Measured optimization — in progress** | Preserve the independently reviewed native lifetime original; establish fresh dependency source-to-product/loader provenance and bind the existing full application validator into live admission. Independently review complete qualification before the unchanged warm matrix. | P04; performance and memory lead; [dependency handoff](p06-dependency-provenance-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),
 [P04](phases/p04-inference.md), [P05](phases/p05-framework.md) and

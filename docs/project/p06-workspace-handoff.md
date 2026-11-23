@@ -1,5 +1,11 @@
 # P06 serial workspace handoff
 
+**Current continuation:** the [native lifetime packet](evidence/p06-native-lifetime/README.md)
+records the later pending-read/run-reset milestone at `b4127b19`; the
+[dependency provenance handoff](p06-dependency-provenance-handoff.md) selects the
+next bounded task. The implementation history and prospective measurement work
+below retain their original scopes, including the unqualified tick-budget proposal.
+
 ## Current implementation and evidence
 
 The [development audit](p06-workspace-audit.md) selected a correctness

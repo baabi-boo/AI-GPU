@@ -1,0 +1,147 @@
+{
+  "native_execution": "not_run",
+  "parent_revision": "6130a2f7424932a6f3b7377ef8ae4816da2b304f",
+  "passed": true,
+  "qualification_claimed": false,
+  "scope": "compiled-controlled-hooks-parent-sensitivity",
+  "variants": [
+    {
+      "compile": {
+        "argv": [
+          "/usr/bin/g++",
+          "-std=c++17",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "-pthread",
+          "-DSIMX_CHECKED_COUNTERS=1",
+          "-DVX_CFG_XLEN=64",
+          "-I/tmp/ai-gpu-native-lifetime-dfd857-work/w03_a01-parent-control/parent/source",
+          "-I/tmp/ai-gpu-native-lifetime-dfd857/ci/project/fixtures/p06_native_lifetime_hooks",
+          "-I/tmp/ai-gpu-native-lifetime-dfd857/sim/common",
+          "-DP06_PARENT_CONTROL=1",
+          "/tmp/ai-gpu-native-lifetime-dfd857-work/w03_a01-parent-control/parent/source/hooks.cpp",
+          "/tmp/ai-gpu-native-lifetime-dfd857/ci/project/fixtures/p06_native_lifetime_hooks/harness.cpp",
+          "-o",
+          "/tmp/ai-gpu-native-lifetime-dfd857-work/w03_a01-parent-control/parent/hooks-control"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": ""
+      },
+      "run": {
+        "argv": [
+          "/tmp/ai-gpu-native-lifetime-dfd857-work/w03_a01-parent-control/parent/hooks-control"
+        ],
+        "returncode": 1,
+        "stderr": "FAILED pending-before-reset: reset-bearing real run was entered\n",
+        "stdout": ""
+      },
+      "source_files": [
+        {
+          "path": "/tmp/ai-gpu-native-lifetime-dfd857-work/w03_a01-parent-control/parent/source/hooks.h",
+          "sha256": "5c391cdc6e399a9930a3a113b6ce4f5f1ef3bb2d178e9e8dcf5478df3dd842d8",
+          "size_bytes": 2372
+        },
+        {
+          "path": "/tmp/ai-gpu-native-lifetime-dfd857-work/w03_a01-parent-control/parent/source/hooks.cpp",
+          "sha256": "89bd08be238dd2dd2556f9b95beb115f784db244902c538ce804ff377a14c69b",
+          "size_bytes": 10319
+        },
+        {
+          "path": "/tmp/ai-gpu-native-lifetime-dfd857/ci/project/fixtures/p06_native_lifetime_hooks/core.h",
+          "sha256": "81b359755bdc1a96f79fc9183bedd05304d279120d42595d0707c2d8726a3de2",
+          "size_bytes": 2009
+        },
+        {
+          "path": "/tmp/ai-gpu-native-lifetime-dfd857/ci/project/fixtures/p06_native_lifetime_hooks/processor.h",
+          "sha256": "aa5b69ae58b2708f1293e8fa1a5e44c18d297c5be1ae7caf8cfafbf67c8b3eb3",
+          "size_bytes": 554
+        },
+        {
+          "path": "/tmp/ai-gpu-native-lifetime-dfd857/ci/project/fixtures/p06_native_lifetime_hooks/harness.cpp",
+          "sha256": "315825d5539e20c35dfef9935c0b8211ac7f12512b8eb7ba831b3a5f3248ccc8",
+          "size_bytes": 18325
+        },
+        {
+          "path": "/tmp/ai-gpu-native-lifetime-dfd857/sim/common/perf_counter.h",
+          "sha256": "8635c832c9fc4ad60cf3bf21665a5bc22a6d3500b1f5c012dd056fb4c6907417",
+          "size_bytes": 3979
+        }
+      ],
+      "variant": "parent"
+    },
+    {
+      "compile": {
+        "argv": [
+          "/usr/bin/g++",
+          "-std=c++17",
+          "-O1",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fsanitize=undefined",
+          "-fno-sanitize-recover=undefined",
+          "-pthread",
+          "-DSIMX_CHECKED_COUNTERS=1",
+          "-DVX_CFG_XLEN=64",
+          "-I/tmp/ai-gpu-native-lifetime-dfd857/tests/regression/ai_counter_preflight",
+          "-I/tmp/ai-gpu-native-lifetime-dfd857/ci/project/fixtures/p06_native_lifetime_hooks",
+          "-I/tmp/ai-gpu-native-lifetime-dfd857/sim/common",
+          "-DP06_PARENT_CONTROL=1",
+          "/tmp/ai-gpu-native-lifetime-dfd857/tests/regression/ai_counter_preflight/hooks.cpp",
+          "/tmp/ai-gpu-native-lifetime-dfd857/ci/project/fixtures/p06_native_lifetime_hooks/harness.cpp",
+          "-o",
+          "/tmp/ai-gpu-native-lifetime-dfd857-work/w03_a01-parent-control/candidate/hooks-control"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": ""
+      },
+      "run": {
+        "argv": [
+          "/tmp/ai-gpu-native-lifetime-dfd857-work/w03_a01-parent-control/candidate/hooks-control"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "PASS pending-before-reset\n"
+      },
+      "source_files": [
+        {
+          "path": "/tmp/ai-gpu-native-lifetime-dfd857/tests/regression/ai_counter_preflight/hooks.h",
+          "sha256": "1fba0275808ec30e42dced1c69fb8b47d1d78dd0ecfc13391f9e0d93bbaf0ccc",
+          "size_bytes": 3046
+        },
+        {
+          "path": "/tmp/ai-gpu-native-lifetime-dfd857/tests/regression/ai_counter_preflight/hooks.cpp",
+          "sha256": "7744cfbb48b6dda21acda4db582fcf4f4b7a519670525d0df887b7296739c7e4",
+          "size_bytes": 15094
+        },
+        {
+          "path": "/tmp/ai-gpu-native-lifetime-dfd857/ci/project/fixtures/p06_native_lifetime_hooks/core.h",
+          "sha256": "81b359755bdc1a96f79fc9183bedd05304d279120d42595d0707c2d8726a3de2",
+          "size_bytes": 2009
+        },
+        {
+          "path": "/tmp/ai-gpu-native-lifetime-dfd857/ci/project/fixtures/p06_native_lifetime_hooks/processor.h",
+          "sha256": "aa5b69ae58b2708f1293e8fa1a5e44c18d297c5be1ae7caf8cfafbf67c8b3eb3",
+          "size_bytes": 554
+        },
+        {
+          "path": "/tmp/ai-gpu-native-lifetime-dfd857/ci/project/fixtures/p06_native_lifetime_hooks/harness.cpp",
+          "sha256": "315825d5539e20c35dfef9935c0b8211ac7f12512b8eb7ba831b3a5f3248ccc8",
+          "size_bytes": 18325
+        },
+        {
+          "path": "/tmp/ai-gpu-native-lifetime-dfd857/sim/common/perf_counter.h",
+          "sha256": "8635c832c9fc4ad60cf3bf21665a5bc22a6d3500b1f5c012dd056fb4c6907417",
+          "size_bytes": 3979
+        }
+      ],
+      "variant": "candidate"
+    }
+  ]
+}

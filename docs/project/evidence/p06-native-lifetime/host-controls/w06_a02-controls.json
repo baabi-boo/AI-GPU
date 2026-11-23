@@ -1,0 +1,170 @@
+{
+  "scope": "inert synthetic parser boundary checks; no native/build/test-suite execution",
+  "revision": "b4127b19a004b5aebb8d52eab9ceda0da3ff4561",
+  "seconds": 3.845771007996518,
+  "checks": [
+    {
+      "name": "valid_complete_synthetic_transcript",
+      "outcome": "pass"
+    },
+    {
+      "name": "escaped_equivalent_field_name_remains_unambiguous",
+      "outcome": "pass"
+    },
+    {
+      "name": "escaped_duplicate_top_level_key",
+      "outcome": "expected_rejection",
+      "reason": "invalid preflight JSON: duplicate preflight JSON field: schema_version"
+    },
+    {
+      "name": "escaped_duplicate_nested_key",
+      "outcome": "expected_rejection",
+      "reason": "invalid preflight JSON: duplicate preflight JSON field: pending_reads"
+    },
+    {
+      "name": "object_suffix_cannot_escape_record_root",
+      "outcome": "expected_rejection",
+      "reason": "invalid preflight JSON: Extra data: line 1 column 36949 (char 36948)"
+    },
+    {
+      "name": "second_concatenated_object",
+      "outcome": "expected_rejection",
+      "reason": "invalid preflight JSON: Extra data: line 1 column 36949 (char 36948)"
+    },
+    {
+      "name": "unpaired_escaped_surrogate",
+      "outcome": "expected_rejection",
+      "reason": "invalid preflight JSON: 'utf-8' codec can't encode character '\\ud800' in position 0: surrogates not allowed"
+    },
+    {
+      "name": "unpaired_raw_surrogate",
+      "outcome": "expected_rejection",
+      "reason": "native lifetime output is not valid UTF-8"
+    },
+    {
+      "name": "numeric_token_0e0",
+      "outcome": "expected_rejection",
+      "reason": "invalid preflight JSON: floating-point and nonfinite preflight numbers are forbidden"
+    },
+    {
+      "name": "numeric_token_-0.0",
+      "outcome": "expected_rejection",
+      "reason": "invalid preflight JSON: floating-point and nonfinite preflight numbers are forbidden"
+    },
+    {
+      "name": "numeric_token_Infinity",
+      "outcome": "expected_rejection",
+      "reason": "invalid preflight JSON: floating-point and nonfinite preflight numbers are forbidden"
+    },
+    {
+      "name": "numeric_token_-Infinity",
+      "outcome": "expected_rejection",
+      "reason": "invalid preflight JSON: floating-point and nonfinite preflight numbers are forbidden"
+    },
+    {
+      "name": "numeric_token_18446744073709551616",
+      "outcome": "expected_rejection",
+      "reason": "invalid preflight JSON: preflight integer exceeds its storage bound"
+    },
+    {
+      "name": "numeric_token_-9223372036854775809",
+      "outcome": "expected_rejection",
+      "reason": "invalid preflight JSON: preflight integer exceeds its storage bound"
+    },
+    {
+      "name": "numeric_token_100000000000000000000",
+      "outcome": "expected_rejection",
+      "reason": "invalid preflight JSON: preflight integer exceeds its digit bound"
+    },
+    {
+      "name": "exact_record_byte_limit",
+      "outcome": "pass"
+    },
+    {
+      "name": "record_byte_limit_plus_one",
+      "outcome": "expected_rejection",
+      "reason": "preflight record must be bounded UTF-8 bytes"
+    },
+    {
+      "name": "decoder_exact_depth16",
+      "outcome": "pass"
+    },
+    {
+      "name": "decoder_depth17",
+      "outcome": "expected_rejection",
+      "reason": "invalid preflight JSON: preflight record exceeds its nesting bound"
+    },
+    {
+      "name": "decoder_invalid_utf8",
+      "outcome": "expected_rejection",
+      "reason": "invalid preflight JSON: 'utf-8' codec can't decode byte 0xff in position 6: invalid start byte"
+    },
+    {
+      "name": "decoder_u64_maximum",
+      "outcome": "pass"
+    },
+    {
+      "name": "decoder_signed_storage_minimum",
+      "outcome": "pass"
+    },
+    {
+      "name": "old_reader_rejects_reordered_new_marker",
+      "outcome": "expected_rejection",
+      "reason": "warm summary must immediately precede success"
+    },
+    {
+      "name": "new_reader_rejects_reordered_marker",
+      "outcome": "expected_rejection",
+      "reason": "native lifetime requires a final lifetime witness line"
+    },
+    {
+      "name": "old_reader_rejects_new_marker_before_warm_operations",
+      "outcome": "expected_rejection",
+      "reason": "unknown, malformed or wrong-route warm record marker"
+    },
+    {
+      "name": "new_reader_rejects_new_marker_before_warm_operations",
+      "outcome": "expected_rejection",
+      "reason": "native lifetime requires a final lifetime witness line"
+    },
+    {
+      "name": "exact_complete_output_byte_limit",
+      "outcome": "pass"
+    },
+    {
+      "name": "complete_output_byte_limit_plus_one",
+      "outcome": "expected_rejection",
+      "reason": "native lifetime output exceeds its byte bound"
+    }
+  ],
+  "passed": 28,
+  "source_before": {
+    "ci/project/p06_native_lifetime_records.py": "5bf33d35e489397d96e0e0932c8d42e687f18deda646bb9725e05b326be50e3a",
+    "ci/project/p06_native_lifetime_contract.py": "266a50e5b4c0d07b432accf2aa13ff8d3db7fc175a24a4263e3cdb0acafb5b74",
+    "ci/project/p06_native_lifetime_test_fixture.py": "d6ff97dfde6561be7e8ab6306a0df4852da72a21f98f3a0884b70947be965a92",
+    "ci/project/p06_managed_preflight_contract.py": "5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb",
+    "ci/project/p06_managed_preflight_records.py": "3d6358c98544f4252be262125b70c87a72caaca7f35fbe3bc3e2512655654d10",
+    "ci/project/p06_warm_records.py": "28d7e2c1553fc0929a106bc24a62fa2d612e415449ee0e9ac84ad582289381e7",
+    "ci/project/test_p06_native_lifetime_records.py": "cb303a2021c40cccf6c327761b48839e298c264b01fc9e21d0925f97989b4e57"
+  },
+  "source_after": {
+    "ci/project/p06_native_lifetime_records.py": "5bf33d35e489397d96e0e0932c8d42e687f18deda646bb9725e05b326be50e3a",
+    "ci/project/p06_native_lifetime_contract.py": "266a50e5b4c0d07b432accf2aa13ff8d3db7fc175a24a4263e3cdb0acafb5b74",
+    "ci/project/p06_native_lifetime_test_fixture.py": "d6ff97dfde6561be7e8ab6306a0df4852da72a21f98f3a0884b70947be965a92",
+    "ci/project/p06_managed_preflight_contract.py": "5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb",
+    "ci/project/p06_managed_preflight_records.py": "3d6358c98544f4252be262125b70c87a72caaca7f35fbe3bc3e2512655654d10",
+    "ci/project/p06_warm_records.py": "28d7e2c1553fc0929a106bc24a62fa2d612e415449ee0e9ac84ad582289381e7",
+    "ci/project/test_p06_native_lifetime_records.py": "cb303a2021c40cccf6c327761b48839e298c264b01fc9e21d0925f97989b4e57"
+  },
+  "source_stable": true,
+  "matches_published_commit": {
+    "ci/project/p06_native_lifetime_records.py": true,
+    "ci/project/p06_native_lifetime_contract.py": true,
+    "ci/project/p06_native_lifetime_test_fixture.py": true,
+    "ci/project/p06_managed_preflight_contract.py": true,
+    "ci/project/p06_managed_preflight_records.py": true,
+    "ci/project/p06_warm_records.py": true,
+    "ci/project/test_p06_native_lifetime_records.py": true
+  },
+  "native_execution": "not_run"
+}

@@ -130,32 +130,43 @@ at `8756f400`, run `45084009157`, remains a required negative control with exact
 `report.outcome: value differs` rejection. Replay executes no retained code and
 supplies no new native run or qualification decision.
 
-The [lifetime argument](../../designs/simx_counter_lifetime_v1.md) remains
-conditional on the complete managed caller's ownership, resets and terminal
-observations, plus actual loaded dependency/source-to-binary provenance.
-Seeded diagnostics and directed scalar controls do not bind those premises to
-measurement binaries. The [diagnostic handoff](../p06-counter-diagnostics-handoff.md)
-separates the completed diagnostics from this remaining qualification work.
+The later [native lifetime packet](../evidence/p06-native-lifetime/README.md)
+records `b4127b19a004b5aebb8d52eab9ceda0da3ff4561`,
+[run 45130300651, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300651):
+**four processes, 132 launches and 4,224 exact FP32 result words**, with zero
+mismatches. Independent original reviews reconcile all 33 run/reset pairs per
+process, zero-pending observations, required flushes, terminal ownership and
+actual destruction. The separate accessor probe observes positive pending
+balances in both gp contexts and its always-zero control fails the exact
+required assertion; its operations are excluded from the managed matrix.
 
-**Next development action:** implement and independently review the read-only
-pending-read observation and separately versioned run/reset witness in the
-[managed-preflight handoff](../p06-managed-preflight-handoff.md). Cover all
-33 boundary pairs, exact reset increments, required flushes, terminal reads,
-final ownership and completed destruction. Require zero pending balance before
-reset, after runs and flushes, and at terminal observation and destruction.
-Bind the lifetime argument's
-33 selectors to 40 checked components through its source and monotonicity
-premises; the current four-snapshot original cannot supply the missing boundary
-observations. Fresh dependency configure/compile/link/product receipts bound
-to the actual selected libraries remain a separate prerequisite; cached hashes
-do not prove their source-to-binary origin.
+The [lifetime argument](../../designs/simx_counter_lifetime_v1.md) remains
+conditional on complete source/binary premises, including the managed caller's
+ownership, resets and terminal observations plus actual loaded dependency
+provenance. The implemented witness supplies bounded observations; seeded
+diagnostics and directed scalar controls do not bind the entire argument to
+measurement binaries. The [diagnostic handoff](../p06-counter-diagnostics-handoff.md)
+retains the earlier diagnostic scope.
+
+**Next development action:** establish fresh dependency compilation and
+loaded-product provenance under the
+[dependency handoff](../p06-dependency-provenance-handoff.md). Build from immutable
+source and transitive inputs, retain actual configure/compile/archive/link
+receipts, and connect their products to the selected static links and dynamic
+loader observations. Reuse the existing complete application-graph validator in
+live admission and bind its result to build/process identities. Cached product
+hashes do not prove compilation origin. The full 33-selector/40-component
+lifetime argument still needs complete reviewed source and monotonicity
+premises; the new pending/reset observations do not themselves qualify it.
+The historical `57248e73` original retains its earlier four-snapshot scope.
 
 The three unresolved obligations remain
 `all_40_component_lifetime_and_pending_balance`,
 `dependency_source_to_loaded_binary_provenance` and
 `independent_complete_counter_qualification`. Independently review the new
 [qualification binding](../p06-mpm-qualification-plan.md), pure validator and
-rejection controls, then require a fresh preflight carrying the added evidence.
+rejection controls, then require a fresh preflight joining the implemented
+lifetime witness with the new dependency products and provenance.
 Only after those prerequisites pass, run the unchanged fresh matched warm attempt:
 **24 processes, 792 launches and 25,344 exact output words**.
 Preserve the v1 block and original cold baseline; source repair cannot recover
@@ -219,8 +230,9 @@ After the P06 gates are accepted, hand P07 the selected configuration,
 constraints, bounded workloads, memory-map assumptions and reproducible reports.
 P07 also requires P01's vendor integration gate. Update [status](../status.md)
 and [backlog](../backlog.md) as each gate earns evidence. The current next action
-is the versioned pending-read/run-reset witness for the complete managed caller,
-with dependency provenance and independent qualification still required before
-a fresh preflight carrying those observations and the matched warm attempt.
+is the [dependency provenance handoff](../p06-dependency-provenance-handoff.md).
+Complete reviewed qualification rules must precede a fresh preflight joining
+the implemented lifetime witness to the new dependency provenance, followed
+only then by the unchanged matched warm attempt.
 A documented board-readiness decision and physical
 implementation plan follow later.

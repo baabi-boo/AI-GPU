@@ -1,4 +1,13 @@
-# P06 managed preflight: next native handoff
+# P06 managed preflight: historical native handoff
+
+> **Historical plan at `6130a2f7424932a6f3b7377ef8ae4816da2b304f`.** The bounded
+> pending-read/run-reset increment described below was implemented at
+> `b4127b19a004b5aebb8d52eab9ceda0da3ff4561` and independently reviewed in the
+> [native lifetime packet](evidence/p06-native-lifetime/README.md), following
+> [run 45130300651](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300651).
+> Continue with the [dependency provenance handoff](p06-dependency-provenance-handoff.md).
+> The remaining sections preserve the earlier plan and describe source and
+> missing observations at that planning checkpoint; full qualification stays open.
 
 ## Next bounded action and present scope
 

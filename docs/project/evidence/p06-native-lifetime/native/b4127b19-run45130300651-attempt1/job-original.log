@@ -1,0 +1,951 @@
+﻿2026-11-23T07:19:59.7535394Z Current runner version: '2.338.2'
+2026-11-23T07:19:59.7549620Z ##[group]Runner Image Provisioner
+2026-11-23T07:19:59.7550206Z Hosted Compute Agent
+2026-11-23T07:19:59.7550546Z Version: 20261111.635
+2026-11-23T07:19:59.7550908Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+2026-11-23T07:19:59.7551508Z Build Date: 2026-11-11T01:49:01Z
+2026-11-23T07:19:59.7551883Z Worker ID: {8048c981-8fe3-4b61-a12c-153366d16114}
+2026-11-23T07:19:59.7552289Z Region: southcentralus
+2026-11-23T07:19:59.7552612Z Cloud: Azure
+2026-11-23T07:19:59.7552910Z ##[endgroup]
+2026-11-23T07:19:59.7553670Z ##[group]Operating System
+2026-11-23T07:19:59.7554000Z Ubuntu
+2026-11-23T07:19:59.7554303Z 22.04.5
+2026-11-23T07:19:59.7554605Z LTS
+2026-11-23T07:19:59.7554883Z ##[endgroup]
+2026-11-23T07:19:59.7555204Z ##[group]Runner Image
+2026-11-23T07:19:59.7555538Z Image: ubuntu-22.04
+2026-11-23T07:19:59.7555852Z Version: 20261116.365.1
+2026-11-23T07:19:59.7556558Z Included Software: https://github.com/actions/runner-images/blob/ubuntu22/20261116.365/images/ubuntu/Ubuntu2204-Readme.md
+2026-11-23T07:19:59.7557400Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu22%2F20261116.365
+2026-11-23T07:19:59.7557936Z ##[endgroup]
+2026-11-23T07:19:59.7558559Z ##[group]GITHUB_TOKEN Permissions
+2026-11-23T07:19:59.7559849Z Contents: read
+2026-11-23T07:19:59.7560187Z Metadata: read
+2026-11-23T07:19:59.7560509Z ##[endgroup]
+2026-11-23T07:19:59.7561909Z Secret source: Actions
+2026-11-23T07:19:59.7562467Z Cache mode: write
+2026-11-23T07:19:59.7562838Z Prepare workflow directory
+2026-11-23T07:19:59.8474317Z Prepare all required actions
+2026-11-23T07:19:59.8518581Z Getting action download info
+2026-11-23T07:20:00.1188385Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-23T07:20:00.2500720Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-11-23T07:20:00.3747828Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+2026-11-23T07:20:00.5435690Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-23T07:20:00.8632648Z Complete job name: Seed-free native counter lifetime
+2026-11-23T07:20:01.0005208Z ##[group]Run actions/checkout@v4
+2026-11-23T07:20:01.0005909Z with:
+2026-11-23T07:20:01.0006360Z   fetch-depth: 1
+2026-11-23T07:20:01.0006846Z   submodules: recursive
+2026-11-23T07:20:01.0007388Z   persist-credentials: false
+2026-11-23T07:20:01.0007965Z   repository: baabi-boo/AI-GPU
+2026-11-23T07:20:01.0013019Z   token: ***
+2026-11-23T07:20:01.0013480Z   ssh-strict: true
+2026-11-23T07:20:01.0013968Z   ssh-user: git
+2026-11-23T07:20:01.0014433Z   clean: true
+2026-11-23T07:20:01.0014935Z   sparse-checkout-cone-mode: true
+2026-11-23T07:20:01.0015506Z   fetch-tags: false
+2026-11-23T07:20:01.0015999Z   show-progress: true
+2026-11-23T07:20:01.0016493Z   lfs: false
+2026-11-23T07:20:01.0016958Z   set-safe-directory: true
+2026-11-23T07:20:01.0017526Z   allow-unsafe-pr-checkout: false
+2026-11-23T07:20:01.0018189Z env:
+2026-11-23T07:20:01.0018645Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-23T07:20:01.0019223Z   MAKEFLAGS: -j2
+2026-11-23T07:20:01.0019694Z   THREADS: 1
+2026-11-23T07:20:01.0020199Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-11-23T07:20:01.0020751Z   CCACHE_DISABLE: 1
+2026-11-23T07:20:01.0021323Z   OBJCACHE: 
+2026-11-23T07:20:01.0021772Z ##[endgroup]
+2026-11-23T07:20:01.1103406Z Syncing repository: baabi-boo/AI-GPU
+2026-11-23T07:20:01.1105737Z ##[group]Getting Git version info
+2026-11-23T07:20:01.1106877Z Working directory is '/home/runner/work/AI-GPU/AI-GPU'
+2026-11-23T07:20:01.1108636Z [command]/usr/bin/git version
+2026-11-23T07:20:01.1109521Z git version 2.56.1
+2026-11-23T07:20:01.1112410Z ##[endgroup]
+2026-11-23T07:20:01.1117245Z Temporarily overriding HOME='/home/runner/work/_temp/34b811b1-ba6a-4583-b363-1486985fb70c' before making global git config changes
+2026-11-23T07:20:01.1119639Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-23T07:20:01.1121874Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/AI-GPU/AI-GPU
+2026-11-23T07:20:01.1136371Z Deleting the contents of '/home/runner/work/AI-GPU/AI-GPU'
+2026-11-23T07:20:01.1138809Z ##[group]Initializing the repository
+2026-11-23T07:20:01.1141014Z [command]/usr/bin/git init /home/runner/work/AI-GPU/AI-GPU
+2026-11-23T07:20:01.1202106Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-23T07:20:01.1204086Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-23T07:20:01.1205914Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-23T07:20:01.1207387Z hint: call:
+2026-11-23T07:20:01.1208238Z hint:
+2026-11-23T07:20:01.1209314Z hint: 	git config --global init.defaultBranch <name>
+2026-11-23T07:20:01.1210530Z hint:
+2026-11-23T07:20:01.1211751Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-23T07:20:01.1213417Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-23T07:20:01.1214919Z hint:
+2026-11-23T07:20:01.1215782Z hint: 	git branch -m <name>
+2026-11-23T07:20:01.1216735Z hint:
+2026-11-23T07:20:01.1218029Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-23T07:20:01.1220018Z Initialized empty Git repository in /home/runner/work/AI-GPU/AI-GPU/.git/
+2026-11-23T07:20:01.1223351Z [command]/usr/bin/git remote add origin https://github.com/baabi-boo/AI-GPU
+2026-11-23T07:20:01.1229463Z ##[endgroup]
+2026-11-23T07:20:01.1230824Z ##[group]Disabling automatic garbage collection
+2026-11-23T07:20:01.1232269Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-23T07:20:01.1250981Z ##[endgroup]
+2026-11-23T07:20:01.1252517Z ##[group]Setting up auth
+2026-11-23T07:20:01.1256118Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-23T07:20:01.1272801Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-23T07:20:01.1436138Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-23T07:20:01.1456229Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-23T07:20:01.1565110Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:20:01.1582195Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-23T07:20:01.1688800Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-23T07:20:01.1711365Z ##[endgroup]
+2026-11-23T07:20:01.1712237Z ##[group]Fetching the repository
+2026-11-23T07:20:01.1717332Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +b4127b19a004b5aebb8d52eab9ceda0da3ff4561:refs/remotes/origin/master
+2026-11-23T07:20:07.7579181Z From https://github.com/baabi-boo/AI-GPU
+2026-11-23T07:20:07.7579797Z  * [new ref]         b4127b19a004b5aebb8d52eab9ceda0da3ff4561 -> origin/master
+2026-11-23T07:20:07.7582836Z ##[endgroup]
+2026-11-23T07:20:07.7583265Z ##[group]Determining the checkout info
+2026-11-23T07:20:07.7585114Z ##[endgroup]
+2026-11-23T07:20:07.7589128Z [command]/usr/bin/git sparse-checkout disable
+2026-11-23T07:20:07.7615300Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-23T07:20:07.7631688Z ##[group]Checking out the ref
+2026-11-23T07:20:07.7634146Z [command]/usr/bin/git checkout --progress --force -B master refs/remotes/origin/master
+2026-11-23T07:20:08.6535559Z Reset branch 'master'
+2026-11-23T07:20:08.6535969Z branch 'master' set up to track 'origin/master'.
+2026-11-23T07:20:08.6580255Z ##[endgroup]
+2026-11-23T07:20:08.6581086Z ##[group]Setting up auth for fetching submodules
+2026-11-23T07:20:08.6585387Z [command]/usr/bin/git config --global http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-23T07:20:08.6612284Z [command]/usr/bin/git config --global --unset-all url.https://github.com/.insteadOf
+2026-11-23T07:20:08.6628135Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf git@github.com:
+2026-11-23T07:20:08.6645261Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf org-350668407@github.com:
+2026-11-23T07:20:08.6659748Z ##[endgroup]
+2026-11-23T07:20:08.6659995Z ##[group]Fetching submodules
+2026-11-23T07:20:08.6662087Z [command]/usr/bin/git submodule sync --recursive
+2026-11-23T07:20:08.6766613Z [command]/usr/bin/git -c protocol.version=2 submodule update --init --force --depth=1 --recursive
+2026-11-23T07:20:08.6867243Z Submodule 'third_party/cocogfx' (https://github.com/gtcasl/cocogfx.git) registered for path 'third_party/cocogfx'
+2026-11-23T07:20:08.6870532Z Submodule 'third_party/cvfpu' (https://github.com/openhwgroup/cvfpu.git) registered for path 'third_party/cvfpu'
+2026-11-23T07:20:08.6874795Z Submodule 'third_party/hardfloat' (https://github.com/bsg-external/HardFloat.git) registered for path 'third_party/hardfloat'
+2026-11-23T07:20:08.6878845Z Submodule 'third_party/ramulator' (https://github.com/CMU-SAFARI/ramulator2.git) registered for path 'third_party/ramulator'
+2026-11-23T07:20:08.6882546Z Submodule 'third_party/softfloat' (https://github.com/ucb-bar/berkeley-softfloat-3.git) registered for path 'third_party/softfloat'
+2026-11-23T07:20:08.6896252Z Cloning into '/home/runner/work/AI-GPU/AI-GPU/third_party/cocogfx'...
+2026-11-23T07:20:09.1071650Z Cloning into '/home/runner/work/AI-GPU/AI-GPU/third_party/cvfpu'...
+2026-11-23T07:20:09.6657967Z Cloning into '/home/runner/work/AI-GPU/AI-GPU/third_party/hardfloat'...
+2026-11-23T07:20:10.1484343Z Cloning into '/home/runner/work/AI-GPU/AI-GPU/third_party/ramulator'...
+2026-11-23T07:20:10.7166308Z Cloning into '/home/runner/work/AI-GPU/AI-GPU/third_party/softfloat'...
+2026-11-23T07:20:11.9229754Z From https://github.com/gtcasl/cocogfx
+2026-11-23T07:20:11.9230692Z  * branch            b1befdb36df8af7ac9e2c96acaf81957aab5d107 -> FETCH_HEAD
+2026-11-23T07:20:11.9260720Z Submodule path 'third_party/cocogfx': checked out 'b1befdb36df8af7ac9e2c96acaf81957aab5d107'
+2026-11-23T07:20:12.7208474Z From https://github.com/openhwgroup/cvfpu
+2026-11-23T07:20:12.7208911Z  * branch            79e453139072df42c9ec8f697132ba485d74e23d -> FETCH_HEAD
+2026-11-23T07:20:12.7262368Z Submodule path 'third_party/cvfpu': checked out '79e453139072df42c9ec8f697132ba485d74e23d'
+2026-11-23T07:20:12.7273503Z Submodule 'src-sv/common_cells' (https://github.com/pulp-platform/common_cells.git) registered for path 'third_party/cvfpu/src/common_cells'
+2026-11-23T07:20:12.7277082Z Submodule 'src-sv/fpu_div_sqrt_mvp' (https://github.com/pulp-platform/fpu_div_sqrt_mvp.git) registered for path 'third_party/cvfpu/src/fpu_div_sqrt_mvp'
+2026-11-23T07:20:12.7281838Z Submodule 'tb/flexfloat' (https://github.com/oprecomp/flexfloat.git) registered for path 'third_party/cvfpu/tb/flexfloat'
+2026-11-23T07:20:12.7296461Z Cloning into '/home/runner/work/AI-GPU/AI-GPU/third_party/cvfpu/src/common_cells'...
+2026-11-23T07:20:13.1965234Z Cloning into '/home/runner/work/AI-GPU/AI-GPU/third_party/cvfpu/src/fpu_div_sqrt_mvp'...
+2026-11-23T07:20:13.6899972Z Cloning into '/home/runner/work/AI-GPU/AI-GPU/third_party/cvfpu/tb/flexfloat'...
+2026-11-23T07:20:14.9192449Z From https://github.com/pulp-platform/common_cells
+2026-11-23T07:20:14.9192764Z  * branch            6aeee85d0a34fedc06c14f04fd6363c9f7b4eeea -> FETCH_HEAD
+2026-11-23T07:20:14.9248812Z Submodule path 'third_party/cvfpu/src/common_cells': checked out '6aeee85d0a34fedc06c14f04fd6363c9f7b4eeea'
+2026-11-23T07:20:15.6267111Z From https://github.com/pulp-platform/fpu_div_sqrt_mvp
+2026-11-23T07:20:15.6276098Z  * branch            86e1f558b3c95e91577c41b2fc452c86b04e85ac -> FETCH_HEAD
+2026-11-23T07:20:15.6317304Z Submodule path 'third_party/cvfpu/src/fpu_div_sqrt_mvp': checked out '86e1f558b3c95e91577c41b2fc452c86b04e85ac'
+2026-11-23T07:20:16.3712207Z From https://github.com/oprecomp/flexfloat
+2026-11-23T07:20:16.3712751Z  * branch            28be2d4fbf41b38fc37763bb6e90a1c88f6aaa61 -> FETCH_HEAD
+2026-11-23T07:20:16.3744777Z Submodule path 'third_party/cvfpu/tb/flexfloat': checked out '28be2d4fbf41b38fc37763bb6e90a1c88f6aaa61'
+2026-11-23T07:20:16.3819539Z Submodule path 'third_party/hardfloat': checked out 'aaf5736dffa521603b681fd5853760c671446c85'
+2026-11-23T07:20:17.2853839Z From https://github.com/CMU-SAFARI/ramulator2
+2026-11-23T07:20:17.2854235Z  * branch            e62c84a6f0e06566ba6e182d308434b4532068a5 -> FETCH_HEAD
+2026-11-23T07:20:17.2940876Z Submodule path 'third_party/ramulator': checked out 'e62c84a6f0e06566ba6e182d308434b4532068a5'
+2026-11-23T07:20:18.0298743Z From https://github.com/ucb-bar/berkeley-softfloat-3
+2026-11-23T07:20:18.0299143Z  * branch            b51ef8f3201669b2288104c28546fc72532a1ea4 -> FETCH_HEAD
+2026-11-23T07:20:18.0399870Z Submodule path 'third_party/softfloat': checked out 'b51ef8f3201669b2288104c28546fc72532a1ea4'
+2026-11-23T07:20:18.0417039Z [command]/usr/bin/git submodule foreach --recursive git config --local gc.auto 0
+2026-11-23T07:20:18.0518569Z Entering 'third_party/cocogfx'
+2026-11-23T07:20:18.0536401Z Entering 'third_party/cvfpu'
+2026-11-23T07:20:18.0557478Z Entering 'third_party/cvfpu/src/common_cells'
+2026-11-23T07:20:18.0576731Z Entering 'third_party/cvfpu/src/fpu_div_sqrt_mvp'
+2026-11-23T07:20:18.0594966Z Entering 'third_party/cvfpu/tb/flexfloat'
+2026-11-23T07:20:18.0613692Z Entering 'third_party/hardfloat'
+2026-11-23T07:20:18.0631998Z Entering 'third_party/ramulator'
+2026-11-23T07:20:18.0650070Z Entering 'third_party/softfloat'
+2026-11-23T07:20:18.0672090Z ##[endgroup]
+2026-11-23T07:20:18.0726034Z [command]/usr/bin/git log -1 --format=%H
+2026-11-23T07:20:18.0742800Z b4127b19a004b5aebb8d52eab9ceda0da3ff4561
+2026-11-23T07:20:18.0743504Z ##[group]Removing auth
+2026-11-23T07:20:18.0743878Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-23T07:20:18.0763540Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-23T07:20:18.0858431Z Entering 'third_party/cocogfx'
+2026-11-23T07:20:18.0877823Z Entering 'third_party/cvfpu'
+2026-11-23T07:20:18.0897376Z Entering 'third_party/cvfpu/src/common_cells'
+2026-11-23T07:20:18.0916089Z Entering 'third_party/cvfpu/src/fpu_div_sqrt_mvp'
+2026-11-23T07:20:18.0935049Z Entering 'third_party/cvfpu/tb/flexfloat'
+2026-11-23T07:20:18.0954355Z Entering 'third_party/hardfloat'
+2026-11-23T07:20:18.0973487Z Entering 'third_party/ramulator'
+2026-11-23T07:20:18.0992228Z Entering 'third_party/softfloat'
+2026-11-23T07:20:18.1017386Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-23T07:20:18.1028438Z http.https://github.com/.extraheader
+2026-11-23T07:20:18.1034572Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-23T07:20:18.1052731Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-23T07:20:18.1145643Z Entering 'third_party/cocogfx'
+2026-11-23T07:20:18.1164986Z Entering 'third_party/cvfpu'
+2026-11-23T07:20:18.1183419Z Entering 'third_party/cvfpu/src/common_cells'
+2026-11-23T07:20:18.1202536Z Entering 'third_party/cvfpu/src/fpu_div_sqrt_mvp'
+2026-11-23T07:20:18.1221373Z Entering 'third_party/cvfpu/tb/flexfloat'
+2026-11-23T07:20:18.1240260Z Entering 'third_party/hardfloat'
+2026-11-23T07:20:18.1259082Z Entering 'third_party/ramulator'
+2026-11-23T07:20:18.1278180Z Entering 'third_party/softfloat'
+2026-11-23T07:20:18.1302540Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:20:18.1316890Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-23T07:20:18.1408706Z Entering 'third_party/cocogfx'
+2026-11-23T07:20:18.1417827Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cocogfx/config	remote.origin.url
+2026-11-23T07:20:18.1425730Z Entering 'third_party/cvfpu'
+2026-11-23T07:20:18.1434704Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/config	remote.origin.url
+2026-11-23T07:20:18.1441734Z Entering 'third_party/cvfpu/src/common_cells'
+2026-11-23T07:20:18.1450576Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/modules/src-sv/common_cells/config	remote.origin.url
+2026-11-23T07:20:18.1458289Z Entering 'third_party/cvfpu/src/fpu_div_sqrt_mvp'
+2026-11-23T07:20:18.1467026Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/modules/src-sv/fpu_div_sqrt_mvp/config	remote.origin.url
+2026-11-23T07:20:18.1474630Z Entering 'third_party/cvfpu/tb/flexfloat'
+2026-11-23T07:20:18.1483669Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/modules/tb/flexfloat/config	remote.origin.url
+2026-11-23T07:20:18.1492883Z Entering 'third_party/hardfloat'
+2026-11-23T07:20:18.1501534Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/hardfloat/config	remote.origin.url
+2026-11-23T07:20:18.1509277Z Entering 'third_party/ramulator'
+2026-11-23T07:20:18.1517938Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/ramulator/config	remote.origin.url
+2026-11-23T07:20:18.1525807Z Entering 'third_party/softfloat'
+2026-11-23T07:20:18.1534321Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/softfloat/config	remote.origin.url
+2026-11-23T07:20:18.1547805Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cocogfx/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:20:18.1563208Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:20:18.1583016Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/modules/src-sv/common_cells/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:20:18.1595206Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/modules/src-sv/fpu_div_sqrt_mvp/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:20:18.1608274Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/modules/tb/flexfloat/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:20:18.1620716Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/hardfloat/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:20:18.1633924Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/ramulator/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:20:18.1649293Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/softfloat/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:20:18.1660761Z ##[endgroup]
+2026-11-23T07:20:18.1975048Z ##[group]Run set -euo pipefail
+2026-11-23T07:20:18.1975316Z [36;1mset -euo pipefail[0m
+2026-11-23T07:20:18.1975466Z [36;1mpython3 - <<'PY'[0m
+2026-11-23T07:20:18.1975629Z [36;1mimport hashlib, json, os, shutil, sys[0m
+2026-11-23T07:20:18.1975810Z [36;1mfrom pathlib import Path[0m
+2026-11-23T07:20:18.1976020Z [36;1mroot = Path(os.environ['RUNNER_TEMP']) / 'p06-native-lifetime'[0m
+2026-11-23T07:20:18.1976234Z [36;1mroot.mkdir(mode=0o700)[0m
+2026-11-23T07:20:18.1976396Z [36;1m(root / 'evidence').mkdir(mode=0o700)[0m
+2026-11-23T07:20:18.1976602Z [36;1mwith open(os.environ['GITHUB_ENV'], 'a') as environment:[0m
+2026-11-23T07:20:18.1976844Z [36;1m    environment.write('P06_LIFETIME_ROOT=' + str(root) + '\n')[0m
+2026-11-23T07:20:18.1977232Z [36;1mworkflow = Path('.github/workflows/p06-native-lifetime.yml').read_bytes()[0m
+2026-11-23T07:20:18.1977499Z [36;1m(root / 'evidence' / 'workflow.yml').write_bytes(workflow)[0m
+2026-11-23T07:20:18.1977749Z [36;1mdata = {key: os.environ[key] for key in ([0m
+2026-11-23T07:20:18.1977981Z [36;1m    'GITHUB_SHA', 'GITHUB_EVENT_NAME', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT',[0m
+2026-11-23T07:20:18.1978234Z [36;1m    'GITHUB_JOB', 'GITHUB_REPOSITORY', 'GITHUB_REF')}[0m
+2026-11-23T07:20:18.1978502Z [36;1mdata.update(schema_version=1, contract_id='p06-managed-counter-lifetime-v1',[0m
+2026-11-23T07:20:18.1978834Z [36;1m            scope='seed-free-managed-counter-lifetime', record_stage='job-initialization',[0m
+2026-11-23T07:20:18.1979158Z [36;1m            requested_xlen=64, requested_profile='p02-tfr', requested_perf='on',[0m
+2026-11-23T07:20:18.1979398Z [36;1m            requested_formats=['fp16', 'bf16'],[0m
+2026-11-23T07:20:18.1979620Z [36;1m            requested_policies=['per_operation', 'reusable_single_tile'],[0m
+2026-11-23T07:20:18.1979911Z [36;1m            requested_processes=4, requested_launches=132, requested_checked_words=4224,[0m
+2026-11-23T07:20:18.1980194Z [36;1m            requested_build_jobs=2, requested_simulation_workers=1,[0m
+2026-11-23T07:20:18.1980447Z [36;1m            native_execution='not_run', native_preflight_passed=False,[0m
+2026-11-23T07:20:18.1980666Z [36;1m            native_lifetime_passed=False,[0m
+2026-11-23T07:20:18.1980884Z [36;1m            qualified=False, ready_for_warm=False, warm_execution=False,[0m
+2026-11-23T07:20:18.1981303Z [36;1m            full_warm_coverage=False, acceptance_claimed=False,[0m
+2026-11-23T07:20:18.1981551Z [36;1m            phase_acceptance=False, performance_acceptance=False,[0m
+2026-11-23T07:20:18.1981787Z [36;1m            dependency_compilation_provenance_verified=False,[0m
+2026-11-23T07:20:18.1982014Z [36;1m            workflow_sha256=hashlib.sha256(workflow).hexdigest())[0m
+2026-11-23T07:20:18.1982247Z [36;1msys.path.insert(0, str(Path('ci/project').resolve()))[0m
+2026-11-23T07:20:18.1982464Z [36;1mfrom preflight import available_memory_bytes[0m
+2026-11-23T07:20:18.1982699Z [36;1mdata['free_disk_bytes_before_cache'] = shutil.disk_usage(root).free[0m
+2026-11-23T07:20:18.1982972Z [36;1mdata['available_memory_bytes_before_cache'] = available_memory_bytes()[0m
+2026-11-23T07:20:18.1983253Z [36;1m(root / 'evidence' / 'job.json').write_text(json.dumps(data, indent=2) + '\n')[0m
+2026-11-23T07:20:18.1983531Z [36;1mif (data['free_disk_bytes_before_cache'] < 15 * 2**30[0m
+2026-11-23T07:20:18.1983765Z [36;1m        or (data['available_memory_bytes_before_cache'] or 0) < 4 * 2**30):[0m
+2026-11-23T07:20:18.1984051Z [36;1m    raise SystemExit('15 GiB disk reserve and 4 GiB available memory are required')[0m
+2026-11-23T07:20:18.1984274Z [36;1mPY[0m
+2026-11-23T07:20:18.2019936Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-23T07:20:18.2020129Z env:
+2026-11-23T07:20:18.2020274Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-23T07:20:18.2020420Z   MAKEFLAGS: -j2
+2026-11-23T07:20:18.2020537Z   THREADS: 1
+2026-11-23T07:20:18.2020659Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-11-23T07:20:18.2020799Z   CCACHE_DISABLE: 1
+2026-11-23T07:20:18.2021016Z   OBJCACHE: 
+2026-11-23T07:20:18.2021339Z ##[endgroup]
+2026-11-23T07:20:18.2844587Z ##[group]Run actions/setup-python@v5
+2026-11-23T07:20:18.2844754Z with:
+2026-11-23T07:20:18.2844875Z   python-version: 3.12.14
+2026-11-23T07:20:18.2845010Z   architecture: x64
+2026-11-23T07:20:18.2845134Z   check-latest: false
+2026-11-23T07:20:18.2846603Z   token: ***
+2026-11-23T07:20:18.2846726Z   update-environment: true
+2026-11-23T07:20:18.2846872Z   allow-prereleases: false
+2026-11-23T07:20:18.2847005Z   freethreaded: false
+2026-11-23T07:20:18.2847126Z env:
+2026-11-23T07:20:18.2847245Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-23T07:20:18.2847386Z   MAKEFLAGS: -j2
+2026-11-23T07:20:18.2847499Z   THREADS: 1
+2026-11-23T07:20:18.2847617Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-11-23T07:20:18.2847859Z   CCACHE_DISABLE: 1
+2026-11-23T07:20:18.2847975Z   OBJCACHE: 
+2026-11-23T07:20:18.2848134Z   P06_LIFETIME_ROOT: /home/runner/work/_temp/p06-native-lifetime
+2026-11-23T07:20:18.2848324Z ##[endgroup]
+2026-11-23T07:20:18.3610682Z ##[group]Installed versions
+2026-11-23T07:20:18.3708804Z Version 3.12.14 was not found in the local cache
+2026-11-23T07:20:18.3777016Z (node:2425) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-23T07:20:18.3777410Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-23T07:20:19.2392599Z Version 3.12.14 is available for downloading
+2026-11-23T07:20:19.2393611Z Download from "https://github.com/actions/python-versions/releases/download/3.12.14-31661455385/python-3.12.14-linux-22.04-x64.tar.gz"
+2026-11-23T07:20:19.9122792Z Extract downloaded archive
+2026-11-23T07:20:19.9192736Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/f31580b0-ce4e-4d0c-9c61-8ac2eaca5fb4 -f /home/runner/work/_temp/98462bdb-d353-478f-8562-af9c4592ccfd
+2026-11-23T07:20:21.3923342Z Execute installation script
+2026-11-23T07:20:21.3973868Z Check if Python hostedtoolcache folder exist...
+2026-11-23T07:20:21.3974322Z Create Python 3.12.14 folder
+2026-11-23T07:20:21.3981994Z Copy Python binaries to hostedtoolcache folder
+2026-11-23T07:20:21.5590709Z Create additional symlinks (Required for the UsePythonVersion Azure Pipelines task and the setup-python GitHub Action)
+2026-11-23T07:20:21.5607932Z Upgrading pip...
+2026-11-23T07:20:23.2021391Z Collecting pip
+2026-11-23T07:20:23.2493328Z Downloading pip-26.3-py3-none-any.whl.metadata (4.6 kB)
+2026-11-23T07:20:23.2622317Z Downloading pip-26.3-py3-none-any.whl (2.0 MB)
+2026-11-23T07:20:23.3147579Z ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 57.7 MB/s eta 0:00:00
+2026-11-23T07:20:23.3147837Z 
+2026-11-23T07:20:23.7144471Z Installing collected packages: pip
+2026-11-23T07:20:23.7144778Z Attempting uninstall: pip
+2026-11-23T07:20:23.7159439Z Found existing installation: pip 25.0.1
+2026-11-23T07:20:23.7352928Z Uninstalling pip-25.0.1:
+2026-11-23T07:20:23.7386683Z Successfully uninstalled pip-25.0.1
+2026-11-23T07:20:24.3542588Z Successfully installed pip-26.3
+2026-11-23T07:20:24.3913794Z Create complete file
+2026-11-23T07:20:24.3939266Z Successfully set up CPython (3.12.14)
+2026-11-23T07:20:24.3940313Z ##[endgroup]
+2026-11-23T07:20:24.4073922Z ##[group]Run set -euo pipefail
+2026-11-23T07:20:24.4074138Z [36;1mset -euo pipefail[0m
+2026-11-23T07:20:24.4074291Z [36;1mpython3 -I - <<'PY'[0m
+2026-11-23T07:20:24.4074463Z [36;1mimport json, os, platform, shutil, sys[0m
+2026-11-23T07:20:24.4074652Z [36;1mfrom pathlib import Path[0m
+2026-11-23T07:20:24.4074846Z [36;1mdata = {'python_version': list(sys.version_info[:3]),[0m
+2026-11-23T07:20:24.4075086Z [36;1m        'implementation': platform.python_implementation(),[0m
+2026-11-23T07:20:24.4075330Z [36;1m        'platform': sys.platform, 'executable': sys.executable,[0m
+2026-11-23T07:20:24.4075574Z [36;1m        'python3_on_path': shutil.which('python3')}[0m
+2026-11-23T07:20:24.4075853Z [36;1mtarget = Path(os.environ['P06_LIFETIME_ROOT']) / 'evidence' / 'python-provision.json'[0m
+2026-11-23T07:20:24.4076145Z [36;1mtarget.write_text(json.dumps(data, indent=2) + '\n')[0m
+2026-11-23T07:20:24.4076434Z [36;1mif (data['python_version'] != [3, 12, 14] or data['implementation'] != 'CPython'[0m
+2026-11-23T07:20:24.4076726Z [36;1m        or data['platform'] != 'linux' or data['python3_on_path'] is None[0m
+2026-11-23T07:20:24.4077017Z [36;1m        or Path(data['python3_on_path']).resolve() != Path(sys.executable).resolve()):[0m
+2026-11-23T07:20:24.4077344Z [36;1m    raise SystemExit('Python interpreter identity differs from the pinned inputs')[0m
+2026-11-23T07:20:24.4077583Z [36;1mPY[0m
+2026-11-23T07:20:24.4106711Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-23T07:20:24.4106910Z env:
+2026-11-23T07:20:24.4107043Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-23T07:20:24.4107294Z   MAKEFLAGS: -j2
+2026-11-23T07:20:24.4107418Z   THREADS: 1
+2026-11-23T07:20:24.4107545Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-11-23T07:20:24.4107693Z   CCACHE_DISABLE: 1
+2026-11-23T07:20:24.4107816Z   OBJCACHE: 
+2026-11-23T07:20:24.4107989Z   P06_LIFETIME_ROOT: /home/runner/work/_temp/p06-native-lifetime
+2026-11-23T07:20:24.4108234Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:24.4108480Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-11-23T07:20:24.4108719Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:24.4108940Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:24.4109162Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:24.4109388Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-11-23T07:20:24.4109576Z ##[endgroup]
+2026-11-23T07:20:24.6718660Z ##[group]Run set -euo pipefail
+2026-11-23T07:20:24.6718875Z [36;1mset -euo pipefail[0m
+2026-11-23T07:20:24.6719056Z [36;1mP06_LIFETIME_TOOLCHAIN_ID=$(bash ci/toolchain_rev.sh)[0m
+2026-11-23T07:20:24.6719310Z [36;1m[[ "$P06_LIFETIME_TOOLCHAIN_ID" =~ ^[A-Za-z0-9._-]+-[0-9a-f]{40}$ ]][0m
+2026-11-23T07:20:24.6719574Z [36;1mecho "toolchain=$P06_LIFETIME_TOOLCHAIN_ID" >> "$GITHUB_OUTPUT"[0m
+2026-11-23T07:20:24.6745531Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-23T07:20:24.6745718Z env:
+2026-11-23T07:20:24.6745844Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-23T07:20:24.6745988Z   MAKEFLAGS: -j2
+2026-11-23T07:20:24.6746106Z   THREADS: 1
+2026-11-23T07:20:24.6746227Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-11-23T07:20:24.6746367Z   CCACHE_DISABLE: 1
+2026-11-23T07:20:24.6746487Z   OBJCACHE: 
+2026-11-23T07:20:24.6746648Z   P06_LIFETIME_ROOT: /home/runner/work/_temp/p06-native-lifetime
+2026-11-23T07:20:24.6746910Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:24.6747146Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-11-23T07:20:24.6747384Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:24.6747597Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:24.6747809Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:24.6748024Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-11-23T07:20:24.6748211Z ##[endgroup]
+2026-11-23T07:20:24.9252494Z ##[group]Run actions/cache/restore@v4
+2026-11-23T07:20:24.9252665Z with:
+2026-11-23T07:20:24.9252784Z   path: tools
+2026-11-23T07:20:24.9252993Z   key: Linux-toolchain-v3.0.2-6cff3efdc1b721e4fec9165801ecd405be34dd11-lite
+2026-11-23T07:20:24.9253323Z   restore-keys: Linux-toolchain-v3.0.2-6cff3efdc1b721e4fec9165801ecd405be34dd11-
+2026-11-23T07:20:24.9253573Z   enableCrossOsArchive: false
+2026-11-23T07:20:24.9253728Z   fail-on-cache-miss: false
+2026-11-23T07:20:24.9253872Z   lookup-only: false
+2026-11-23T07:20:24.9254000Z env:
+2026-11-23T07:20:24.9254126Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-23T07:20:24.9254281Z   MAKEFLAGS: -j2
+2026-11-23T07:20:24.9254402Z   THREADS: 1
+2026-11-23T07:20:24.9254525Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-11-23T07:20:24.9254666Z   CCACHE_DISABLE: 1
+2026-11-23T07:20:24.9254786Z   OBJCACHE: 
+2026-11-23T07:20:24.9254949Z   P06_LIFETIME_ROOT: /home/runner/work/_temp/p06-native-lifetime
+2026-11-23T07:20:24.9255235Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:24.9255478Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-11-23T07:20:24.9255719Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:24.9255938Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:24.9256154Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:24.9256377Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-11-23T07:20:24.9256567Z ##[endgroup]
+2026-11-23T07:20:24.9918158Z (node:2479) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-23T07:20:24.9918780Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-23T07:20:25.1396418Z Cache hit for: Linux-toolchain-v3.0.2-6cff3efdc1b721e4fec9165801ecd405be34dd11-lite
+2026-11-23T07:20:25.1462532Z (node:2479) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-23T07:20:26.3094478Z Received 130023424 of 1329572912 (9.8%), 123.9 MBs/sec
+2026-11-23T07:20:27.3096340Z Received 310378496 of 1329572912 (23.3%), 147.9 MBs/sec
+2026-11-23T07:20:28.3097188Z Received 511705088 of 1329572912 (38.5%), 162.6 MBs/sec
+2026-11-23T07:20:29.3096406Z Received 612368384 of 1329572912 (46.1%), 146.0 MBs/sec
+2026-11-23T07:20:30.3094869Z Received 729808896 of 1329572912 (54.9%), 139.2 MBs/sec
+2026-11-23T07:20:31.3102120Z Received 864026624 of 1329572912 (65.0%), 137.3 MBs/sec
+2026-11-23T07:20:32.3100489Z Received 1002438656 of 1329572912 (75.4%), 136.6 MBs/sec
+2026-11-23T07:20:33.3098678Z Received 1153433600 of 1329572912 (86.8%), 137.5 MBs/sec
+2026-11-23T07:20:34.3102670Z Received 1325378608 of 1329572912 (99.7%), 140.4 MBs/sec
+2026-11-23T07:20:34.5165443Z Received 1329572912 of 1329572912 (100.0%), 137.7 MBs/sec
+2026-11-23T07:20:34.5167014Z Cache Size: ~1268 MB (1329572912 B)
+2026-11-23T07:20:34.5190200Z [command]/usr/bin/tar -xf /home/runner/work/_temp/5fe9b0b5-5e94-4056-9593-bec5af2a4118/cache.tzst -P -C /home/runner/work/AI-GPU/AI-GPU --use-compress-program unzstd
+2026-11-23T07:20:48.6811591Z Cache restored successfully
+2026-11-23T07:20:48.7775248Z Cache restored from key: Linux-toolchain-v3.0.2-6cff3efdc1b721e4fec9165801ecd405be34dd11-lite
+2026-11-23T07:20:49.0047260Z ##[group]Run actions/cache/restore@v4
+2026-11-23T07:20:49.0047430Z with:
+2026-11-23T07:20:49.0047555Z   path: third_party
+2026-11-23T07:20:49.0047792Z   key: Linux-thirdparty-cbe0d7fc3a5ec7c6d1b71c86a227694d83e413fccc1d512acfa661fdbe86c7ac
+2026-11-23T07:20:49.0048072Z   enableCrossOsArchive: false
+2026-11-23T07:20:49.0048222Z   fail-on-cache-miss: false
+2026-11-23T07:20:49.0048367Z   lookup-only: false
+2026-11-23T07:20:49.0048490Z env:
+2026-11-23T07:20:49.0048610Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-23T07:20:49.0048753Z   MAKEFLAGS: -j2
+2026-11-23T07:20:49.0048870Z   THREADS: 1
+2026-11-23T07:20:49.0048996Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-11-23T07:20:49.0049136Z   CCACHE_DISABLE: 1
+2026-11-23T07:20:49.0049254Z   OBJCACHE: 
+2026-11-23T07:20:49.0049413Z   P06_LIFETIME_ROOT: /home/runner/work/_temp/p06-native-lifetime
+2026-11-23T07:20:49.0049644Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:49.0049925Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-11-23T07:20:49.0050160Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:49.0050373Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:49.0050597Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:49.0050817Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-11-23T07:20:49.0050998Z ##[endgroup]
+2026-11-23T07:20:49.0643983Z (node:2525) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-23T07:20:49.0644389Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-23T07:20:49.2076240Z Cache hit for: Linux-thirdparty-cbe0d7fc3a5ec7c6d1b71c86a227694d83e413fccc1d512acfa661fdbe86c7ac
+2026-11-23T07:20:49.2152489Z (node:2525) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-23T07:20:50.0287235Z Received 63174860 of 63174860 (100.0%), 87.8 MBs/sec
+2026-11-23T07:20:50.0287898Z Cache Size: ~60 MB (63174860 B)
+2026-11-23T07:20:50.0309368Z [command]/usr/bin/tar -xf /home/runner/work/_temp/f3ca8cff-4f32-4918-a75a-9b05c0888b04/cache.tzst -P -C /home/runner/work/AI-GPU/AI-GPU --use-compress-program unzstd
+2026-11-23T07:20:50.2752033Z Cache restored successfully
+2026-11-23T07:20:50.2853486Z Cache restored from key: Linux-thirdparty-cbe0d7fc3a5ec7c6d1b71c86a227694d83e413fccc1d512acfa661fdbe86c7ac
+2026-11-23T07:20:50.3069432Z ##[group]Run set -euo pipefail
+2026-11-23T07:20:50.3069634Z [36;1mset -euo pipefail[0m
+2026-11-23T07:20:50.3069809Z [36;1msudo bash ci/install_dependencies.sh \[0m
+2026-11-23T07:20:50.3070046Z [36;1m  2>&1 | tee "$P06_LIFETIME_ROOT/evidence/host-dependencies.log"[0m
+2026-11-23T07:20:50.3096532Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-23T07:20:50.3096731Z env:
+2026-11-23T07:20:50.3096868Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-23T07:20:50.3097022Z   MAKEFLAGS: -j2
+2026-11-23T07:20:50.3097150Z   THREADS: 1
+2026-11-23T07:20:50.3097281Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-11-23T07:20:50.3097430Z   CCACHE_DISABLE: 1
+2026-11-23T07:20:50.3097576Z   OBJCACHE: 
+2026-11-23T07:20:50.3097748Z   P06_LIFETIME_ROOT: /home/runner/work/_temp/p06-native-lifetime
+2026-11-23T07:20:50.3097988Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:50.3098235Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-11-23T07:20:50.3098508Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:50.3098732Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:50.3098963Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:20:50.3099188Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-11-23T07:20:50.3099380Z ##[endgroup]
+2026-11-23T07:20:50.4803081Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-23T07:20:50.5098566Z Hit:2 http://azure.archive.ubuntu.com/ubuntu jammy InRelease
+2026-11-23T07:20:50.5121723Z Get:3 http://azure.archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
+2026-11-23T07:20:50.5169844Z Get:6 https://packages.microsoft.com/ubuntu/22.04/prod jammy InRelease [3632 B]
+2026-11-23T07:20:50.5467944Z Get:4 http://azure.archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]
+2026-11-23T07:20:50.5835314Z Get:7 https://packages.microsoft.com/ubuntu/22.04/prod jammy/main amd64 Packages [1129 kB]
+2026-11-23T07:20:50.6121444Z Get:5 http://azure.archive.ubuntu.com/ubuntu jammy-security InRelease [129 kB]
+2026-11-23T07:20:50.6156954Z Get:8 https://packages.microsoft.com/ubuntu/22.04/prod jammy/main arm64 Packages [848 kB]
+2026-11-23T07:20:50.6202369Z Get:9 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [4012 kB]
+2026-11-23T07:20:50.6679849Z Get:10 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main Translation-en [587 kB]
+2026-11-23T07:20:50.7255637Z Get:11 http://azure.archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [6888 kB]
+2026-11-23T07:20:50.8453608Z Get:12 http://azure.archive.ubuntu.com/ubuntu jammy-updates/restricted Translation-en [1326 kB]
+2026-11-23T07:20:50.9648323Z Get:13 http://azure.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1291 kB]
+2026-11-23T07:20:51.0851696Z Get:14 http://azure.archive.ubuntu.com/ubuntu jammy-updates/universe Translation-en [327 kB]
+2026-11-23T07:20:51.0882125Z Get:15 http://azure.archive.ubuntu.com/ubuntu jammy-security/main amd64 Packages [3740 kB]
+2026-11-23T07:20:51.2053329Z Get:16 http://azure.archive.ubuntu.com/ubuntu jammy-security/main Translation-en [520 kB]
+2026-11-23T07:20:51.2083038Z Get:17 http://azure.archive.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [6635 kB]
+2026-11-23T07:20:51.3259103Z Get:18 http://azure.archive.ubuntu.com/ubuntu jammy-security/restricted Translation-en [1277 kB]
+2026-11-23T07:20:51.4379237Z Get:19 http://azure.archive.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1058 kB]
+2026-11-23T07:20:56.8695074Z Fetched 30.0 MB in 2s (12.8 MB/s)
+2026-11-23T07:20:57.8549806Z Reading package lists...
+2026-11-23T07:20:57.8926931Z Reading package lists...
+2026-11-23T07:20:58.1273427Z Building dependency tree...
+2026-11-23T07:20:58.1281833Z Reading state information...
+2026-11-23T07:20:58.2621376Z build-essential is already the newest version (12.9ubuntu3).
+2026-11-23T07:20:58.2621814Z build-essential set to manually installed.
+2026-11-23T07:20:58.2622471Z libffi8 is already the newest version (3.4.2-4).
+2026-11-23T07:20:58.2622777Z libffi8 set to manually installed.
+2026-11-23T07:20:58.2623089Z binutils is already the newest version (2.38-4ubuntu2.12).
+2026-11-23T07:20:58.2623466Z libpng-dev is already the newest version (1.6.37-3ubuntu0.7).
+2026-11-23T07:20:58.2623798Z libpng-dev set to manually installed.
+2026-11-23T07:20:58.2624137Z libstdc++6 is already the newest version (12.3.0-1ubuntu1~22.04.3).
+2026-11-23T07:20:58.2624529Z python3 is already the newest version (3.10.6-1~22.04.1).
+2026-11-23T07:20:58.2624888Z uuid-dev is already the newest version (2.37.2-4ubuntu3.6).
+2026-11-23T07:20:58.2625192Z uuid-dev set to manually installed.
+2026-11-23T07:20:58.2625401Z The following additional packages will be installed:
+2026-11-23T07:20:58.2625661Z   cmake-data dh-elpa-helper gdb libbabeltrace1 libboost-regex1.74.0
+2026-11-23T07:20:58.2625973Z   libboost-serialization1.74-dev libboost-serialization1.74.0 libboost1.74-dev
+2026-11-23T07:20:58.2626295Z   libc6-dbg libdebuginfod-common libdebuginfod1 libegl-dev libegl-mesa0
+2026-11-23T07:20:58.2626757Z   libegl1 libgl-dev libgl1-mesa-dev libgles-dev libgles1 libgles2
+2026-11-23T07:20:58.2627118Z   libglvnd-core-dev libglvnd-dev libglx-dev libhiredis0.14 libipt2
+2026-11-23T07:20:58.2627410Z   libjsoncpp25 libopengl-dev libopengl0 librhash0 libsource-highlight-common
+2026-11-23T07:20:58.2627704Z   libsource-highlight4v5 ocl-icd-libopencl1 opencl-c-headers
+2026-11-23T07:20:58.2631555Z   opencl-clhpp-headers
+2026-11-23T07:20:58.2633927Z Suggested packages:
+2026-11-23T07:20:58.2634269Z   distcc | icecc cmake-doc ninja-build cmake-format gdb-doc gdbserver
+2026-11-23T07:20:58.2634626Z   libboost1.74-doc libboost-atomic1.74-dev libboost-chrono1.74-dev
+2026-11-23T07:20:58.2634900Z   libboost-container1.74-dev libboost-context1.74-dev
+2026-11-23T07:20:58.2635129Z   libboost-contract1.74-dev libboost-coroutine1.74-dev
+2026-11-23T07:20:58.2635404Z   libboost-date-time1.74-dev libboost-exception1.74-dev libboost-fiber1.74-dev
+2026-11-23T07:20:58.2635688Z   libboost-filesystem1.74-dev libboost-graph1.74-dev
+2026-11-23T07:20:58.2635932Z   libboost-graph-parallel1.74-dev libboost-iostreams1.74-dev
+2026-11-23T07:20:58.2636202Z   libboost-locale1.74-dev libboost-log1.74-dev libboost-math1.74-dev
+2026-11-23T07:20:58.2636526Z   libboost-mpi1.74-dev libboost-mpi-python1.74-dev libboost-numpy1.74-dev
+2026-11-23T07:20:58.2636916Z   libboost-program-options1.74-dev libboost-python1.74-dev
+2026-11-23T07:20:58.2637202Z   libboost-random1.74-dev libboost-regex1.74-dev libboost-stacktrace1.74-dev
+2026-11-23T07:20:58.2637497Z   libboost-system1.74-dev libboost-test1.74-dev libboost-thread1.74-dev
+2026-11-23T07:20:58.2637793Z   libboost-timer1.74-dev libboost-type-erasure1.74-dev libboost-wave1.74-dev
+2026-11-23T07:20:58.2638096Z   libboost1.74-tools-dev libmpfrc++-dev libntl-dev libboost-nowide1.74-dev
+2026-11-23T07:20:58.2638396Z   opencl-icd opencl-clhpp-headers-doc valgrind-dbg valgrind-mpi kcachegrind
+2026-11-23T07:20:58.2638658Z   alleyoop valkyrie
+2026-11-23T07:20:58.2796125Z The following NEW packages will be installed:
+2026-11-23T07:20:58.2796675Z   ccache cmake cmake-data dh-elpa-helper gdb libbabeltrace1
+2026-11-23T07:20:58.2797172Z   libboost-regex1.74.0 libboost-serialization-dev
+2026-11-23T07:20:58.2797742Z   libboost-serialization1.74-dev libboost-serialization1.74.0 libboost1.74-dev
+2026-11-23T07:20:58.2798421Z   libc6-dbg libdebuginfod-common libdebuginfod1 libegl-dev libegl-mesa0
+2026-11-23T07:20:58.2799009Z   libegl1 libgl-dev libgl1-mesa-dev libgles-dev libgles1 libgles2
+2026-11-23T07:20:58.2799581Z   libglvnd-core-dev libglvnd-dev libglx-dev libhiredis0.14 libipt2
+2026-11-23T07:20:58.2800206Z   libjsoncpp25 libopengl-dev libopengl0 librhash0 libsource-highlight-common
+2026-11-23T07:20:58.2801018Z   libsource-highlight4v5 ocl-icd-libopencl1 ocl-icd-opencl-dev
+2026-11-23T07:20:58.2801659Z   opencl-c-headers opencl-clhpp-headers opencl-headers valgrind
+2026-11-23T07:20:58.2900559Z 0 upgraded, 39 newly installed, 0 to remove and 62 not upgraded.
+2026-11-23T07:20:58.2900939Z Need to get 51.3 MB of archives.
+2026-11-23T07:20:58.2902135Z After this operation, 300 MB of additional disk space will be used.
+2026-11-23T07:20:58.2902538Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-23T07:20:58.3445657Z Get:2 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libdebuginfod-common all 0.186-1ubuntu0.1 [7996 B]
+2026-11-23T07:20:58.3831595Z Get:3 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 libhiredis0.14 amd64 0.14.1-2 [32.8 kB]
+2026-11-23T07:20:58.4221773Z Get:4 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 ccache amd64 4.5.1-1 [495 kB]
+2026-11-23T07:20:58.5024275Z Get:5 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libjsoncpp25 amd64 1.9.5-3 [80.0 kB]
+2026-11-23T07:20:58.5622423Z Get:6 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 librhash0 amd64 1.4.2-1ubuntu1 [125 kB]
+2026-11-23T07:20:58.6220985Z Get:7 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 dh-elpa-helper all 2.0.9ubuntu1 [7610 B]
+2026-11-23T07:20:58.7425318Z Get:8 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 cmake-data all 3.22.1-1ubuntu1.22.04.2 [1913 kB]
+2026-11-23T07:20:58.7970118Z Get:9 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 cmake amd64 3.22.1-1ubuntu1.22.04.2 [5010 kB]
+2026-11-23T07:20:58.8876338Z Get:10 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libbabeltrace1 amd64 1.5.8-2build1 [160 kB]
+2026-11-23T07:20:58.9229004Z Get:11 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libdebuginfod1 amd64 0.186-1ubuntu0.1 [12.8 kB]
+2026-11-23T07:20:58.9523367Z Get:12 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libipt2 amd64 2.0.5-1 [46.4 kB]
+2026-11-23T07:20:59.0828148Z Get:13 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libsource-highlight-common all 3.1.9-4.1build2 [64.5 kB]
+2026-11-23T07:20:59.1421946Z Get:14 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libboost-regex1.74.0 amd64 1.74.0-14ubuntu3 [511 kB]
+2026-11-23T07:20:59.1828484Z Get:15 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libsource-highlight4v5 amd64 3.1.9-4.1build2 [207 kB]
+2026-11-23T07:20:59.2145926Z Get:16 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 gdb amd64 12.1-0ubuntu1~22.04.2 [3920 kB]
+2026-11-23T07:20:59.3354729Z Get:17 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libboost1.74-dev amd64 1.74.0-14ubuntu3 [9609 kB]
+2026-11-23T07:20:59.5826339Z Get:18 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libboost-serialization1.74.0 amd64 1.74.0-14ubuntu3 [327 kB]
+2026-11-23T07:20:59.6424977Z Get:19 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libboost-serialization1.74-dev amd64 1.74.0-14ubuntu3 [375 kB]
+2026-11-23T07:20:59.7962392Z Get:20 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 libboost-serialization-dev amd64 1.74.0.3ubuntu7 [3468 B]
+2026-11-23T07:20:59.8640471Z Get:21 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libegl-mesa0 amd64 23.2.1-1ubuntu3.1~22.04.4 [118 kB]
+2026-11-23T07:20:59.9824246Z Get:22 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libegl1 amd64 1.4.0-1 [28.6 kB]
+2026-11-23T07:21:00.1023645Z Get:23 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libglx-dev amd64 1.4.0-1 [14.1 kB]
+2026-11-23T07:21:00.2241920Z Get:24 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libgl-dev amd64 1.4.0-1 [101 kB]
+2026-11-23T07:21:00.3427600Z Get:25 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libegl-dev amd64 1.4.0-1 [18.0 kB]
+2026-11-23T07:21:00.4631488Z Get:26 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libgles1 amd64 1.4.0-1 [11.5 kB]
+2026-11-23T07:21:00.5830281Z Get:27 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libgles2 amd64 1.4.0-1 [18.0 kB]
+2026-11-23T07:21:00.7029786Z Get:28 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libgles-dev amd64 1.4.0-1 [49.4 kB]
+2026-11-23T07:21:00.8233611Z Get:29 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libopengl0 amd64 1.4.0-1 [36.5 kB]
+2026-11-23T07:21:00.9428820Z Get:30 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libopengl-dev amd64 1.4.0-1 [3400 B]
+2026-11-23T07:21:01.0622314Z Get:31 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libc6-dbg amd64 2.35-0ubuntu3.18 [13.8 MB]
+2026-11-23T07:21:01.4229703Z Get:32 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 valgrind amd64 1:3.18.1-1ubuntu2 [14.1 MB]
+2026-11-23T07:21:01.6637292Z Get:33 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libglvnd-core-dev amd64 1.4.0-1 [12.7 kB]
+2026-11-23T07:21:01.7828378Z Get:34 http://azure.archive.ubuntu.com/ubuntu jammy/main amd64 libglvnd-dev amd64 1.4.0-1 [3162 B]
+2026-11-23T07:21:01.9025437Z Get:35 http://azure.archive.ubuntu.com/ubuntu jammy-updates/main amd64 libgl1-mesa-dev amd64 23.2.1-1ubuntu3.1~22.04.4 [7012 B]
+2026-11-23T07:21:01.9305161Z Get:36 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 ocl-icd-libopencl1 amd64 2.2.14-3 [39.1 kB]
+2026-11-23T07:21:01.9586669Z Get:37 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 opencl-c-headers all 3.0~2022.01.04-1 [44.5 kB]
+2026-11-23T07:21:01.9867134Z Get:38 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 opencl-clhpp-headers all 3.0~2.0.15-1ubuntu1 [42.6 kB]
+2026-11-23T07:21:02.0597839Z Get:39 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 opencl-headers all 3.0~2022.01.04-1 [1754 B]
+2026-11-23T07:21:02.0876335Z Get:40 http://azure.archive.ubuntu.com/ubuntu jammy/universe amd64 ocl-icd-opencl-dev amd64 2.2.14-3 [2426 B]
+2026-11-23T07:21:02.2977027Z Preconfiguring packages ...
+2026-11-23T07:21:02.3532808Z Fetched 51.3 MB in 4s (13.5 MB/s)
+2026-11-23T07:21:02.3675690Z Selecting previously unselected package libdebuginfod-common.
+2026-11-23T07:21:02.3838186Z (Reading database ... 
+2026-11-23T07:21:02.3838403Z (Reading database ... 5%
+2026-11-23T07:21:02.3838556Z (Reading database ... 10%
+2026-11-23T07:21:02.3838708Z (Reading database ... 15%
+2026-11-23T07:21:02.3838855Z (Reading database ... 20%
+2026-11-23T07:21:02.3839011Z (Reading database ... 25%
+2026-11-23T07:21:02.3839154Z (Reading database ... 30%
+2026-11-23T07:21:02.3839294Z (Reading database ... 35%
+2026-11-23T07:21:02.3839472Z (Reading database ... 40%
+2026-11-23T07:21:02.3839701Z (Reading database ... 45%
+2026-11-23T07:21:02.3839849Z (Reading database ... 50%
+2026-11-23T07:21:02.4561674Z (Reading database ... 55%
+2026-11-23T07:21:02.7036599Z (Reading database ... 60%
+2026-11-23T07:21:02.9547559Z (Reading database ... 65%
+2026-11-23T07:21:03.0539600Z (Reading database ... 70%
+2026-11-23T07:21:03.3218788Z (Reading database ... 75%
+2026-11-23T07:21:03.5575303Z (Reading database ... 80%
+2026-11-23T07:21:03.8066663Z (Reading database ... 85%
+2026-11-23T07:21:04.0628227Z (Reading database ... 90%
+2026-11-23T07:21:04.3093962Z (Reading database ... 95%
+2026-11-23T07:21:04.3094218Z (Reading database ... 100%
+2026-11-23T07:21:04.3094445Z (Reading database ... 265161 files and directories currently installed.)
+2026-11-23T07:21:04.3138971Z Preparing to unpack .../00-libdebuginfod-common_0.186-1ubuntu0.1_all.deb ...
+2026-11-23T07:21:04.3243568Z Unpacking libdebuginfod-common (0.186-1ubuntu0.1) ...
+2026-11-23T07:21:04.3373471Z Selecting previously unselected package libhiredis0.14:amd64.
+2026-11-23T07:21:04.3465195Z Preparing to unpack .../01-libhiredis0.14_0.14.1-2_amd64.deb ...
+2026-11-23T07:21:04.3479521Z Unpacking libhiredis0.14:amd64 (0.14.1-2) ...
+2026-11-23T07:21:04.3589989Z Selecting previously unselected package ccache.
+2026-11-23T07:21:04.3679798Z Preparing to unpack .../02-ccache_4.5.1-1_amd64.deb ...
+2026-11-23T07:21:04.3685677Z Unpacking ccache (4.5.1-1) ...
+2026-11-23T07:21:04.3858714Z Selecting previously unselected package libjsoncpp25:amd64.
+2026-11-23T07:21:04.3946233Z Preparing to unpack .../03-libjsoncpp25_1.9.5-3_amd64.deb ...
+2026-11-23T07:21:04.3952128Z Unpacking libjsoncpp25:amd64 (1.9.5-3) ...
+2026-11-23T07:21:04.4068419Z Selecting previously unselected package librhash0:amd64.
+2026-11-23T07:21:04.4155216Z Preparing to unpack .../04-librhash0_1.4.2-1ubuntu1_amd64.deb ...
+2026-11-23T07:21:04.4161870Z Unpacking librhash0:amd64 (1.4.2-1ubuntu1) ...
+2026-11-23T07:21:04.4262602Z Selecting previously unselected package dh-elpa-helper.
+2026-11-23T07:21:04.4348773Z Preparing to unpack .../05-dh-elpa-helper_2.0.9ubuntu1_all.deb ...
+2026-11-23T07:21:04.4354379Z Unpacking dh-elpa-helper (2.0.9ubuntu1) ...
+2026-11-23T07:21:04.4469258Z Selecting previously unselected package cmake-data.
+2026-11-23T07:21:04.4556016Z Preparing to unpack .../06-cmake-data_3.22.1-1ubuntu1.22.04.2_all.deb ...
+2026-11-23T07:21:04.4595413Z Unpacking cmake-data (3.22.1-1ubuntu1.22.04.2) ...
+2026-11-23T07:21:04.7509431Z Selecting previously unselected package cmake.
+2026-11-23T07:21:04.7618564Z Preparing to unpack .../07-cmake_3.22.1-1ubuntu1.22.04.2_amd64.deb ...
+2026-11-23T07:21:04.7624049Z Unpacking cmake (3.22.1-1ubuntu1.22.04.2) ...
+2026-11-23T07:21:04.8868534Z Selecting previously unselected package libbabeltrace1:amd64.
+2026-11-23T07:21:04.8967905Z Preparing to unpack .../08-libbabeltrace1_1.5.8-2build1_amd64.deb ...
+2026-11-23T07:21:04.8973916Z Unpacking libbabeltrace1:amd64 (1.5.8-2build1) ...
+2026-11-23T07:21:04.9100037Z Selecting previously unselected package libdebuginfod1:amd64.
+2026-11-23T07:21:04.9196705Z Preparing to unpack .../09-libdebuginfod1_0.186-1ubuntu0.1_amd64.deb ...
+2026-11-23T07:21:04.9203006Z Unpacking libdebuginfod1:amd64 (0.186-1ubuntu0.1) ...
+2026-11-23T07:21:04.9305998Z Selecting previously unselected package libipt2.
+2026-11-23T07:21:04.9398098Z Preparing to unpack .../10-libipt2_2.0.5-1_amd64.deb ...
+2026-11-23T07:21:04.9403225Z Unpacking libipt2 (2.0.5-1) ...
+2026-11-23T07:21:04.9498447Z Selecting previously unselected package libsource-highlight-common.
+2026-11-23T07:21:04.9588406Z Preparing to unpack .../11-libsource-highlight-common_3.1.9-4.1build2_all.deb ...
+2026-11-23T07:21:04.9593558Z Unpacking libsource-highlight-common (3.1.9-4.1build2) ...
+2026-11-23T07:21:04.9777328Z Selecting previously unselected package libboost-regex1.74.0:amd64.
+2026-11-23T07:21:04.9869316Z Preparing to unpack .../12-libboost-regex1.74.0_1.74.0-14ubuntu3_amd64.deb ...
+2026-11-23T07:21:04.9874064Z Unpacking libboost-regex1.74.0:amd64 (1.74.0-14ubuntu3) ...
+2026-11-23T07:21:05.0093974Z Selecting previously unselected package libsource-highlight4v5.
+2026-11-23T07:21:05.0185408Z Preparing to unpack .../13-libsource-highlight4v5_3.1.9-4.1build2_amd64.deb ...
+2026-11-23T07:21:05.0192228Z Unpacking libsource-highlight4v5 (3.1.9-4.1build2) ...
+2026-11-23T07:21:05.0299745Z Selecting previously unselected package gdb.
+2026-11-23T07:21:05.0389465Z Preparing to unpack .../14-gdb_12.1-0ubuntu1~22.04.2_amd64.deb ...
+2026-11-23T07:21:05.0393816Z Unpacking gdb (12.1-0ubuntu1~22.04.2) ...
+2026-11-23T07:21:05.1326479Z Selecting previously unselected package libboost1.74-dev:amd64.
+2026-11-23T07:21:05.1424931Z Preparing to unpack .../15-libboost1.74-dev_1.74.0-14ubuntu3_amd64.deb ...
+2026-11-23T07:21:05.1429981Z Unpacking libboost1.74-dev:amd64 (1.74.0-14ubuntu3) ...
+2026-11-23T07:21:07.0616155Z Selecting previously unselected package libboost-serialization1.74.0:amd64.
+2026-11-23T07:21:07.0779079Z Preparing to unpack .../16-libboost-serialization1.74.0_1.74.0-14ubuntu3_amd64.deb ...
+2026-11-23T07:21:07.0784196Z Unpacking libboost-serialization1.74.0:amd64 (1.74.0-14ubuntu3) ...
+2026-11-23T07:21:07.0987948Z Selecting previously unselected package libboost-serialization1.74-dev:amd64.
+2026-11-23T07:21:07.1090618Z Preparing to unpack .../17-libboost-serialization1.74-dev_1.74.0-14ubuntu3_amd64.deb ...
+2026-11-23T07:21:07.1094923Z Unpacking libboost-serialization1.74-dev:amd64 (1.74.0-14ubuntu3) ...
+2026-11-23T07:21:07.1289013Z Selecting previously unselected package libboost-serialization-dev:amd64.
+2026-11-23T07:21:07.1391691Z Preparing to unpack .../18-libboost-serialization-dev_1.74.0.3ubuntu7_amd64.deb ...
+2026-11-23T07:21:07.1396572Z Unpacking libboost-serialization-dev:amd64 (1.74.0.3ubuntu7) ...
+2026-11-23T07:21:07.1503968Z Selecting previously unselected package libegl-mesa0:amd64.
+2026-11-23T07:21:07.1603511Z Preparing to unpack .../19-libegl-mesa0_23.2.1-1ubuntu3.1~22.04.4_amd64.deb ...
+2026-11-23T07:21:07.1608817Z Unpacking libegl-mesa0:amd64 (23.2.1-1ubuntu3.1~22.04.4) ...
+2026-11-23T07:21:07.1724148Z Selecting previously unselected package libegl1:amd64.
+2026-11-23T07:21:07.1823309Z Preparing to unpack .../20-libegl1_1.4.0-1_amd64.deb ...
+2026-11-23T07:21:07.1828833Z Unpacking libegl1:amd64 (1.4.0-1) ...
+2026-11-23T07:21:07.1925747Z Selecting previously unselected package libglx-dev:amd64.
+2026-11-23T07:21:07.2023447Z Preparing to unpack .../21-libglx-dev_1.4.0-1_amd64.deb ...
+2026-11-23T07:21:07.2027891Z Unpacking libglx-dev:amd64 (1.4.0-1) ...
+2026-11-23T07:21:07.2172293Z Selecting previously unselected package libgl-dev:amd64.
+2026-11-23T07:21:07.2270642Z Preparing to unpack .../22-libgl-dev_1.4.0-1_amd64.deb ...
+2026-11-23T07:21:07.2274660Z Unpacking libgl-dev:amd64 (1.4.0-1) ...
+2026-11-23T07:21:07.2391215Z Selecting previously unselected package libegl-dev:amd64.
+2026-11-23T07:21:07.2487618Z Preparing to unpack .../23-libegl-dev_1.4.0-1_amd64.deb ...
+2026-11-23T07:21:07.2491950Z Unpacking libegl-dev:amd64 (1.4.0-1) ...
+2026-11-23T07:21:07.2595085Z Selecting previously unselected package libgles1:amd64.
+2026-11-23T07:21:07.2691936Z Preparing to unpack .../24-libgles1_1.4.0-1_amd64.deb ...
+2026-11-23T07:21:07.2696680Z Unpacking libgles1:amd64 (1.4.0-1) ...
+2026-11-23T07:21:07.2798215Z Selecting previously unselected package libgles2:amd64.
+2026-11-23T07:21:07.2894058Z Preparing to unpack .../25-libgles2_1.4.0-1_amd64.deb ...
+2026-11-23T07:21:07.2899609Z Unpacking libgles2:amd64 (1.4.0-1) ...
+2026-11-23T07:21:07.2998373Z Selecting previously unselected package libgles-dev:amd64.
+2026-11-23T07:21:07.3093219Z Preparing to unpack .../26-libgles-dev_1.4.0-1_amd64.deb ...
+2026-11-23T07:21:07.3098032Z Unpacking libgles-dev:amd64 (1.4.0-1) ...
+2026-11-23T07:21:07.3215741Z Selecting previously unselected package libopengl0:amd64.
+2026-11-23T07:21:07.3310082Z Preparing to unpack .../27-libopengl0_1.4.0-1_amd64.deb ...
+2026-11-23T07:21:07.3314852Z Unpacking libopengl0:amd64 (1.4.0-1) ...
+2026-11-23T07:21:07.3426707Z Selecting previously unselected package libopengl-dev:amd64.
+2026-11-23T07:21:07.3521792Z Preparing to unpack .../28-libopengl-dev_1.4.0-1_amd64.deb ...
+2026-11-23T07:21:07.3526766Z Unpacking libopengl-dev:amd64 (1.4.0-1) ...
+2026-11-23T07:21:07.3620606Z Selecting previously unselected package libc6-dbg:amd64.
+2026-11-23T07:21:07.3717457Z Preparing to unpack .../29-libc6-dbg_2.35-0ubuntu3.18_amd64.deb ...
+2026-11-23T07:21:07.3722373Z Unpacking libc6-dbg:amd64 (2.35-0ubuntu3.18) ...
+2026-11-23T07:21:07.6111708Z Selecting previously unselected package valgrind.
+2026-11-23T07:21:07.6219550Z Preparing to unpack .../30-valgrind_1%3a3.18.1-1ubuntu2_amd64.deb ...
+2026-11-23T07:21:07.6245481Z Unpacking valgrind (1:3.18.1-1ubuntu2) ...
+2026-11-23T07:21:08.0503199Z Selecting previously unselected package libglvnd-core-dev:amd64.
+2026-11-23T07:21:08.0609735Z Preparing to unpack .../31-libglvnd-core-dev_1.4.0-1_amd64.deb ...
+2026-11-23T07:21:08.0615026Z Unpacking libglvnd-core-dev:amd64 (1.4.0-1) ...
+2026-11-23T07:21:08.0719510Z Selecting previously unselected package libglvnd-dev:amd64.
+2026-11-23T07:21:08.0823152Z Preparing to unpack .../32-libglvnd-dev_1.4.0-1_amd64.deb ...
+2026-11-23T07:21:08.0828473Z Unpacking libglvnd-dev:amd64 (1.4.0-1) ...
+2026-11-23T07:21:08.0928686Z Selecting previously unselected package libgl1-mesa-dev:amd64.
+2026-11-23T07:21:08.1030706Z Preparing to unpack .../33-libgl1-mesa-dev_23.2.1-1ubuntu3.1~22.04.4_amd64.deb ...
+2026-11-23T07:21:08.1035348Z Unpacking libgl1-mesa-dev:amd64 (23.2.1-1ubuntu3.1~22.04.4) ...
+2026-11-23T07:21:08.1136627Z Selecting previously unselected package ocl-icd-libopencl1:amd64.
+2026-11-23T07:21:08.1234310Z Preparing to unpack .../34-ocl-icd-libopencl1_2.2.14-3_amd64.deb ...
+2026-11-23T07:21:08.1241763Z Unpacking ocl-icd-libopencl1:amd64 (2.2.14-3) ...
+2026-11-23T07:21:08.1342297Z Selecting previously unselected package opencl-c-headers.
+2026-11-23T07:21:08.1439077Z Preparing to unpack .../35-opencl-c-headers_3.0~2022.01.04-1_all.deb ...
+2026-11-23T07:21:08.1444155Z Unpacking opencl-c-headers (3.0~2022.01.04-1) ...
+2026-11-23T07:21:08.1550130Z Selecting previously unselected package opencl-clhpp-headers.
+2026-11-23T07:21:08.1646373Z Preparing to unpack .../36-opencl-clhpp-headers_3.0~2.0.15-1ubuntu1_all.deb ...
+2026-11-23T07:21:08.1651021Z Unpacking opencl-clhpp-headers (3.0~2.0.15-1ubuntu1) ...
+2026-11-23T07:21:08.1751309Z Selecting previously unselected package opencl-headers.
+2026-11-23T07:21:08.1847616Z Preparing to unpack .../37-opencl-headers_3.0~2022.01.04-1_all.deb ...
+2026-11-23T07:21:08.1852688Z Unpacking opencl-headers (3.0~2022.01.04-1) ...
+2026-11-23T07:21:08.1945821Z Selecting previously unselected package ocl-icd-opencl-dev:amd64.
+2026-11-23T07:21:08.2041921Z Preparing to unpack .../38-ocl-icd-opencl-dev_2.2.14-3_amd64.deb ...
+2026-11-23T07:21:08.2047020Z Unpacking ocl-icd-opencl-dev:amd64 (2.2.14-3) ...
+2026-11-23T07:21:08.2546707Z Setting up libboost1.74-dev:amd64 (1.74.0-14ubuntu3) ...
+2026-11-23T07:21:08.2559905Z Setting up libglvnd-core-dev:amd64 (1.4.0-1) ...
+2026-11-23T07:21:08.2570573Z Setting up libdebuginfod-common (0.186-1ubuntu0.1) ...
+2026-11-23T07:21:08.3549975Z 
+2026-11-23T07:21:08.3550445Z Creating config file /etc/profile.d/debuginfod.sh with new version
+2026-11-23T07:21:08.4300346Z 
+2026-11-23T07:21:08.4300623Z Creating config file /etc/profile.d/debuginfod.csh with new version
+2026-11-23T07:21:08.5535658Z Setting up libdebuginfod1:amd64 (0.186-1ubuntu0.1) ...
+2026-11-23T07:21:08.5546771Z Setting up libsource-highlight-common (3.1.9-4.1build2) ...
+2026-11-23T07:21:08.5557804Z Setting up libopengl0:amd64 (1.4.0-1) ...
+2026-11-23T07:21:08.5569167Z Setting up libc6-dbg:amd64 (2.35-0ubuntu3.18) ...
+2026-11-23T07:21:08.5580051Z Setting up libegl-mesa0:amd64 (23.2.1-1ubuntu3.1~22.04.4) ...
+2026-11-23T07:21:08.5591069Z Setting up libgles2:amd64 (1.4.0-1) ...
+2026-11-23T07:21:08.5602528Z Setting up dh-elpa-helper (2.0.9ubuntu1) ...
+2026-11-23T07:21:08.5613137Z Setting up libgles1:amd64 (1.4.0-1) ...
+2026-11-23T07:21:08.5623991Z Setting up libboost-regex1.74.0:amd64 (1.74.0-14ubuntu3) ...
+2026-11-23T07:21:08.5634642Z Setting up libjsoncpp25:amd64 (1.9.5-3) ...
+2026-11-23T07:21:08.5645219Z Setting up libipt2 (2.0.5-1) ...
+2026-11-23T07:21:08.5656016Z Setting up opencl-c-headers (3.0~2022.01.04-1) ...
+2026-11-23T07:21:08.5666752Z Setting up libbabeltrace1:amd64 (1.5.8-2build1) ...
+2026-11-23T07:21:08.5677760Z Setting up libboost-serialization1.74.0:amd64 (1.74.0-14ubuntu3) ...
+2026-11-23T07:21:08.5688361Z Setting up ocl-icd-libopencl1:amd64 (2.2.14-3) ...
+2026-11-23T07:21:08.5698992Z Setting up librhash0:amd64 (1.4.2-1ubuntu1) ...
+2026-11-23T07:21:08.5709477Z Setting up libegl1:amd64 (1.4.0-1) ...
+2026-11-23T07:21:08.5720269Z Setting up libglx-dev:amd64 (1.4.0-1) ...
+2026-11-23T07:21:08.5731201Z Setting up cmake-data (3.22.1-1ubuntu1.22.04.2) ...
+2026-11-23T07:21:08.6333975Z Setting up libopengl-dev:amd64 (1.4.0-1) ...
+2026-11-23T07:21:08.6345428Z Setting up valgrind (1:3.18.1-1ubuntu2) ...
+2026-11-23T07:21:08.6372031Z Setting up libgl-dev:amd64 (1.4.0-1) ...
+2026-11-23T07:21:08.6383967Z Setting up libsource-highlight4v5 (3.1.9-4.1build2) ...
+2026-11-23T07:21:08.6396041Z Setting up libhiredis0.14:amd64 (0.14.1-2) ...
+2026-11-23T07:21:08.6408324Z Setting up libegl-dev:amd64 (1.4.0-1) ...
+2026-11-23T07:21:08.6419918Z Setting up ccache (4.5.1-1) ...
+2026-11-23T07:21:08.6433672Z Updating symlinks in /usr/lib/ccache ...
+2026-11-23T07:21:08.6527386Z Setting up gdb (12.1-0ubuntu1~22.04.2) ...
+2026-11-23T07:21:08.6543253Z Setting up opencl-clhpp-headers (3.0~2.0.15-1ubuntu1) ...
+2026-11-23T07:21:08.6559103Z Setting up ocl-icd-opencl-dev:amd64 (2.2.14-3) ...
+2026-11-23T07:21:08.6572408Z Setting up libboost-serialization1.74-dev:amd64 (1.74.0-14ubuntu3) ...
+2026-11-23T07:21:08.6584680Z Setting up cmake (3.22.1-1ubuntu1.22.04.2) ...
+2026-11-23T07:21:08.6595759Z Setting up libgles-dev:amd64 (1.4.0-1) ...
+2026-11-23T07:21:08.6606435Z Setting up libglvnd-dev:amd64 (1.4.0-1) ...
+2026-11-23T07:21:08.6616938Z Setting up opencl-headers (3.0~2022.01.04-1) ...
+2026-11-23T07:21:08.6631935Z Setting up libboost-serialization-dev:amd64 (1.74.0.3ubuntu7) ...
+2026-11-23T07:21:08.6642969Z Setting up libgl1-mesa-dev:amd64 (23.2.1-1ubuntu3.1~22.04.4) ...
+2026-11-23T07:21:08.6658597Z Processing triggers for man-db (2.10.2-1) ...
+2026-11-23T07:21:08.6670288Z Not building database; man-db/auto-update is not 'true'.
+2026-11-23T07:21:08.6676904Z Processing triggers for libc-bin (2.35-0ubuntu3.18) ...
+2026-11-23T07:21:11.2826554Z 
+2026-11-23T07:21:11.2827049Z Running kernel seems to be up-to-date.
+2026-11-23T07:21:11.2827232Z 
+2026-11-23T07:21:11.2827300Z No services need to be restarted.
+2026-11-23T07:21:11.2827445Z 
+2026-11-23T07:21:11.2843106Z No containers need to be restarted.
+2026-11-23T07:21:11.2843275Z 
+2026-11-23T07:21:11.2843391Z No user sessions are running outdated binaries.
+2026-11-23T07:21:11.2843580Z 
+2026-11-23T07:21:11.2843700Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-11-23T07:21:12.2349948Z GCC version is 11 or greater. No need to install GCC 11.
+2026-11-23T07:21:12.3128186Z ##[group]Run set -euo pipefail
+2026-11-23T07:21:12.3128403Z [36;1mset -euo pipefail[0m
+2026-11-23T07:21:12.3128578Z [36;1mpython3 ci/project/p04_ci_prepare.py \[0m
+2026-11-23T07:21:12.3128816Z [36;1m  --source-dir "$PWD" --workspace-dir "$P06_LIFETIME_ROOT" \[0m
+2026-11-23T07:21:12.3129119Z [36;1m  --expected-revision "$GITHUB_SHA" --toolchain-id "$P06_LIFETIME_TOOLCHAIN_ID" \[0m
+2026-11-23T07:21:12.3129411Z [36;1m  --toolchain-cache-key "$P06_LIFETIME_TOOLCHAIN_CACHE" \[0m
+2026-11-23T07:21:12.3129667Z [36;1m  --third-party-cache-key "$P06_LIFETIME_DEPENDENCY_CACHE" \[0m
+2026-11-23T07:21:12.3129934Z [36;1m  --expected-third-party-key "$P06_LIFETIME_DEPENDENCY_KEY" \[0m
+2026-11-23T07:21:12.3130155Z [36;1m  --backend simx --format both \[0m
+2026-11-23T07:21:12.3130362Z [36;1m  2>&1 | tee "$P06_LIFETIME_ROOT/evidence/preparation.log"[0m
+2026-11-23T07:21:12.3158267Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-23T07:21:12.3158466Z env:
+2026-11-23T07:21:12.3158648Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-23T07:21:12.3158800Z   MAKEFLAGS: -j2
+2026-11-23T07:21:12.3158926Z   THREADS: 1
+2026-11-23T07:21:12.3159057Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-11-23T07:21:12.3159206Z   CCACHE_DISABLE: 1
+2026-11-23T07:21:12.3159335Z   OBJCACHE: 
+2026-11-23T07:21:12.3159506Z   P06_LIFETIME_ROOT: /home/runner/work/_temp/p06-native-lifetime
+2026-11-23T07:21:12.3159744Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:21:12.3159987Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-11-23T07:21:12.3160233Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:21:12.3160457Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:21:12.3160679Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:21:12.3160903Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-11-23T07:21:12.3161352Z   P06_LIFETIME_TOOLCHAIN_ID: v3.0.2-6cff3efdc1b721e4fec9165801ecd405be34dd11
+2026-11-23T07:21:12.3161693Z   P06_LIFETIME_TOOLCHAIN_CACHE: Linux-toolchain-v3.0.2-6cff3efdc1b721e4fec9165801ecd405be34dd11-lite
+2026-11-23T07:21:12.3162120Z   P06_LIFETIME_DEPENDENCY_CACHE: Linux-thirdparty-cbe0d7fc3a5ec7c6d1b71c86a227694d83e413fccc1d512acfa661fdbe86c7ac
+2026-11-23T07:21:12.3162569Z   P06_LIFETIME_DEPENDENCY_KEY: Linux-thirdparty-cbe0d7fc3a5ec7c6d1b71c86a227694d83e413fccc1d512acfa661fdbe86c7ac
+2026-11-23T07:21:12.3162874Z ##[endgroup]
+2026-11-23T07:21:13.1348305Z {"outcome": "pass", "reason": null, "native_execution": "not_run"}
+2026-11-23T07:21:13.1468907Z ##[group]Run set -euo pipefail
+2026-11-23T07:21:13.1469133Z [36;1mset -euo pipefail[0m
+2026-11-23T07:21:13.1469341Z [36;1mpython3 ci/project/p06_native_lifetime_execute.py run \[0m
+2026-11-23T07:21:13.1469614Z [36;1m  --source-dir "$PWD" --tools-dir "$P06_LIFETIME_ROOT/tools" \[0m
+2026-11-23T07:21:13.1469851Z [36;1m  --work-dir "$P06_LIFETIME_ROOT/work" \[0m
+2026-11-23T07:21:13.1470086Z [36;1m  --output-dir "$P06_LIFETIME_ROOT/evidence/native-lifetime" \[0m
+2026-11-23T07:21:13.1470315Z [36;1m  --expected-revision "$GITHUB_SHA" \[0m
+2026-11-23T07:21:13.1470546Z [36;1m  --jobs 2 --timeout-seconds 1800 --run-timeout-seconds 180 \[0m
+2026-11-23T07:21:13.1470798Z [36;1m  2>&1 | tee "$P06_LIFETIME_ROOT/evidence/execution.log"[0m
+2026-11-23T07:21:13.1497892Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-23T07:21:13.1498096Z env:
+2026-11-23T07:21:13.1498237Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-23T07:21:13.1498396Z   MAKEFLAGS: -j2
+2026-11-23T07:21:13.1498559Z   THREADS: 1
+2026-11-23T07:21:13.1498699Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-11-23T07:21:13.1498850Z   CCACHE_DISABLE: 1
+2026-11-23T07:21:13.1498983Z   OBJCACHE: 
+2026-11-23T07:21:13.1499158Z   P06_LIFETIME_ROOT: /home/runner/work/_temp/p06-native-lifetime
+2026-11-23T07:21:13.1499406Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:21:13.1499657Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-11-23T07:21:13.1499904Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:21:13.1500134Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:21:13.1500362Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:21:13.1500607Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-11-23T07:21:13.1500803Z ##[endgroup]
+2026-11-23T07:23:50.0083727Z {"acceptance_claimed": false, "completed_counts": {"available_queries": 528, "cache_flush_reads": 132, "checked_words": 4224, "dcr_reads": 1188, "half_replies": 1056, "launches": 132, "processes": 4, "snapshots": 16, "unavailable_rows": 192}, "full_warm_coverage": false, "native_lifetime_passed": true, "native_preflight_passed": true, "outcome": "pass", "performance_acceptance": false, "phase_acceptance": false, "qualified": false, "ready_for_warm": false, "reason": null, "report": "/home/runner/work/_temp/p06-native-lifetime/evidence/native-lifetime/report.json", "warm_execution": false}
+2026-11-23T07:23:50.0258233Z ##[group]Run set -euo pipefail
+2026-11-23T07:23:50.0258447Z [36;1mset -euo pipefail[0m
+2026-11-23T07:23:50.0258624Z [36;1mpython3 ci/project/p06_pending_probe.py \[0m
+2026-11-23T07:23:50.0258881Z [36;1m  --source-dir "$PWD" --build-dir "$P06_LIFETIME_ROOT/work/simx-fp16" \[0m
+2026-11-23T07:23:50.0259190Z [36;1m  --managed-report "$P06_LIFETIME_ROOT/evidence/native-lifetime/report.json" \[0m
+2026-11-23T07:23:50.0259480Z [36;1m  --output-dir "$P06_LIFETIME_ROOT/evidence/pending-probe" \[0m
+2026-11-23T07:23:50.0259708Z [36;1m  --expected-revision "$GITHUB_SHA" \[0m
+2026-11-23T07:23:50.0259939Z [36;1m  2>&1 | tee "$P06_LIFETIME_ROOT/evidence/pending-probe.log"[0m
+2026-11-23T07:23:50.0286379Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-23T07:23:50.0286575Z env:
+2026-11-23T07:23:50.0286712Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-23T07:23:50.0286863Z   MAKEFLAGS: -j2
+2026-11-23T07:23:50.0286990Z   THREADS: 1
+2026-11-23T07:23:50.0287148Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-11-23T07:23:50.0287297Z   CCACHE_DISABLE: 1
+2026-11-23T07:23:50.0287425Z   OBJCACHE: 
+2026-11-23T07:23:50.0287598Z   P06_LIFETIME_ROOT: /home/runner/work/_temp/p06-native-lifetime
+2026-11-23T07:23:50.0287834Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:23:50.0288081Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-11-23T07:23:50.0288324Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:23:50.0288547Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:23:50.0288877Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:23:50.0289102Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-11-23T07:23:50.0289296Z ##[endgroup]
+2026-11-23T07:24:01.6263075Z {"native_execution": "run", "native_probe_passed": true, "outcome": "pass", "reason": null, "zero_mutation_rejected": true}
+2026-11-23T07:24:01.6485580Z ##[group]Run actions/upload-artifact@v4
+2026-11-23T07:24:01.6485762Z with:
+2026-11-23T07:24:01.6486011Z   name: p06-native-lifetime-b4127b19a004b5aebb8d52eab9ceda0da3ff4561-run45130300651-attempt1
+2026-11-23T07:24:01.6486333Z   path: /home/runner/work/_temp/p06-native-lifetime/evidence
+2026-11-23T07:24:01.6486538Z   if-no-files-found: error
+2026-11-23T07:24:01.6486685Z   retention-days: 30
+2026-11-23T07:24:01.6486822Z   compression-level: 6
+2026-11-23T07:24:01.6486969Z   include-hidden-files: true
+2026-11-23T07:24:01.6487114Z   overwrite: false
+2026-11-23T07:24:01.6487243Z env:
+2026-11-23T07:24:01.6487370Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-23T07:24:01.6487532Z   MAKEFLAGS: -j2
+2026-11-23T07:24:01.6487658Z   THREADS: 1
+2026-11-23T07:24:01.6487787Z   CMAKE_BUILD_PARALLEL_LEVEL: 2
+2026-11-23T07:24:01.6487934Z   CCACHE_DISABLE: 1
+2026-11-23T07:24:01.6488062Z   OBJCACHE: 
+2026-11-23T07:24:01.6488231Z   P06_LIFETIME_ROOT: /home/runner/work/_temp/p06-native-lifetime
+2026-11-23T07:24:01.6488495Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:24:01.6488744Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-11-23T07:24:01.6488989Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:24:01.6489212Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:24:01.6489436Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-11-23T07:24:01.6489662Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-11-23T07:24:01.6489853Z ##[endgroup]
+2026-11-23T07:24:01.7517998Z (node:15979) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-23T07:24:01.7518444Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-23T07:24:01.8462059Z With the provided path, there will be 1264 files uploaded
+2026-11-23T07:24:01.8465743Z Artifact name is valid!
+2026-11-23T07:24:01.8466063Z Root directory input is valid!
+2026-11-23T07:24:02.1661601Z Beginning upload of artifact content to blob storage
+2026-11-23T07:24:02.8725159Z (node:15979) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-23T07:24:03.3860485Z Uploaded bytes 8388608
+2026-11-23T07:24:03.4374454Z Uploaded bytes 9086055
+2026-11-23T07:24:03.4744733Z Finished uploading artifact content to blob storage!
+2026-11-23T07:24:03.4745391Z SHA256 digest of uploaded artifact zip is 3d4879f73c197352689d65feb56e73f537701fc1411e55bf53c92b1b41e13db3
+2026-11-23T07:24:03.4746731Z Finalizing artifact upload
+2026-11-23T07:24:03.8431984Z Artifact p06-native-lifetime-b4127b19a004b5aebb8d52eab9ceda0da3ff4561-run45130300651-attempt1.zip successfully finalized. Artifact ID 14798140556
+2026-11-23T07:24:03.8433144Z Artifact p06-native-lifetime-b4127b19a004b5aebb8d52eab9ceda0da3ff4561-run45130300651-attempt1 has been successfully uploaded! Final size is 9086055 bytes. Artifact ID is 14798140556
+2026-11-23T07:24:03.8433746Z Artifact download URL: https://github.com/baabi-boo/AI-GPU/actions/runs/45130300651/artifacts/14798140556
+2026-11-23T07:24:03.8750541Z Post job cleanup.
+2026-11-23T07:24:03.9446185Z (node:15991) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-23T07:24:03.9446832Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-23T07:24:03.9774152Z Post job cleanup.
+2026-11-23T07:24:04.0251926Z [command]/usr/bin/git version
+2026-11-23T07:24:04.0276038Z git version 2.56.1
+2026-11-23T07:24:04.0297346Z Temporarily overriding HOME='/home/runner/work/_temp/2bc73477-17b5-400a-bff5-c08541ad0fac' before making global git config changes
+2026-11-23T07:24:04.0298077Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-23T07:24:04.0300191Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/AI-GPU/AI-GPU
+2026-11-23T07:24:04.0323164Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-23T07:24:04.0341983Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-23T07:24:04.0468340Z Entering 'third_party/cocogfx'
+2026-11-23T07:24:04.0492020Z Entering 'third_party/cvfpu'
+2026-11-23T07:24:04.0516024Z Entering 'third_party/cvfpu/src/common_cells'
+2026-11-23T07:24:04.0538501Z Entering 'third_party/cvfpu/src/fpu_div_sqrt_mvp'
+2026-11-23T07:24:04.0565791Z Entering 'third_party/cvfpu/tb/flexfloat'
+2026-11-23T07:24:04.0601544Z Entering 'third_party/hardfloat'
+2026-11-23T07:24:04.0630990Z Entering 'third_party/ramulator'
+2026-11-23T07:24:04.0683261Z Entering 'third_party/softfloat'
+2026-11-23T07:24:04.0732718Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-23T07:24:04.0769191Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-23T07:24:04.0894767Z Entering 'third_party/cocogfx'
+2026-11-23T07:24:04.0915013Z Entering 'third_party/cvfpu'
+2026-11-23T07:24:04.0934974Z Entering 'third_party/cvfpu/src/common_cells'
+2026-11-23T07:24:04.0955216Z Entering 'third_party/cvfpu/src/fpu_div_sqrt_mvp'
+2026-11-23T07:24:04.0976282Z Entering 'third_party/cvfpu/tb/flexfloat'
+2026-11-23T07:24:04.0997150Z Entering 'third_party/hardfloat'
+2026-11-23T07:24:04.1017898Z Entering 'third_party/ramulator'
+2026-11-23T07:24:04.1037853Z Entering 'third_party/softfloat'
+2026-11-23T07:24:04.1069485Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:24:04.1095073Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-23T07:24:04.1192906Z Entering 'third_party/cocogfx'
+2026-11-23T07:24:04.1202152Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cocogfx/config	remote.origin.url
+2026-11-23T07:24:04.1210066Z Entering 'third_party/cvfpu'
+2026-11-23T07:24:04.1219437Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/config	remote.origin.url
+2026-11-23T07:24:04.1227269Z Entering 'third_party/cvfpu/src/common_cells'
+2026-11-23T07:24:04.1236944Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/modules/src-sv/common_cells/config	remote.origin.url
+2026-11-23T07:24:04.1244932Z Entering 'third_party/cvfpu/src/fpu_div_sqrt_mvp'
+2026-11-23T07:24:04.1254256Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/modules/src-sv/fpu_div_sqrt_mvp/config	remote.origin.url
+2026-11-23T07:24:04.1262236Z Entering 'third_party/cvfpu/tb/flexfloat'
+2026-11-23T07:24:04.1271591Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/modules/tb/flexfloat/config	remote.origin.url
+2026-11-23T07:24:04.1280006Z Entering 'third_party/hardfloat'
+2026-11-23T07:24:04.1289143Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/hardfloat/config	remote.origin.url
+2026-11-23T07:24:04.1297751Z Entering 'third_party/ramulator'
+2026-11-23T07:24:04.1307257Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/ramulator/config	remote.origin.url
+2026-11-23T07:24:04.1316418Z Entering 'third_party/softfloat'
+2026-11-23T07:24:04.1326293Z file:/home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/softfloat/config	remote.origin.url
+2026-11-23T07:24:04.1343182Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cocogfx/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:24:04.1362558Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:24:04.1378322Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/modules/src-sv/common_cells/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:24:04.1392763Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/modules/src-sv/fpu_div_sqrt_mvp/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:24:04.1406555Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/cvfpu/modules/tb/flexfloat/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:24:04.1419914Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/hardfloat/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:24:04.1436339Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/ramulator/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:24:04.1484189Z [command]/usr/bin/git config --file /home/runner/work/AI-GPU/AI-GPU/.git/modules/third_party/softfloat/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-23T07:24:04.1591673Z Cleaning up orphan processes
+2026-11-23T07:24:04.1782495Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache/restore@v4, actions/checkout@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
