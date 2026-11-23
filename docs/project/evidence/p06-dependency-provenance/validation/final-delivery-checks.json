@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-11-23T11:24:45.099234+00:00",
+  "scope": "Final staged documentation/evidence and unchanged tested production source",
+  "parent_revision": "19333193192ba5a2d3667c0111235ec9e21a5898",
+  "checks": [
+    {
+      "name": "project-metadata",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "ci/project/check_project.py"
+      ],
+      "exit_code": 0,
+      "execution_note": "Retained output from the preceding final-stage check; no rerun",
+      "log": "validation/final-delivery-project-metadata.log",
+      "log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+      "log_bytes": 96
+    },
+    {
+      "name": "baseline-consistency",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "ci/project/check_baseline_packets.py"
+      ],
+      "exit_code": 0,
+      "execution_note": "Retained output from the preceding final-stage check; no rerun",
+      "log": "validation/final-delivery-baseline-consistency.log",
+      "log_sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be",
+      "log_bytes": 657
+    },
+    {
+      "name": "initial-unfiltered-staged-whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "exit_code": 2,
+      "log": "validation/final-delivery-staged-whitespace.log",
+      "log_sha256": "3c89b19d8a8dcbbc250afdffd8409bc30fa28e1e1a4a49e9c4b78072c1346b67",
+      "log_bytes": 5511,
+      "finding_paths": [
+        "docs/project/evidence/p06-dependency-provenance/host-diagnostic/execution-05-ramulator-build.log",
+        "docs/project/evidence/p06-dependency-provenance/host-diagnostic/execution-05-ramulator-configure.log"
+      ],
+      "observation": "Two raw original CMake output lines contain trailing whitespace. Raw evidence bytes are preserved; this unfiltered check is not reported as a pass."
+    },
+    {
+      "name": "non-log-staged-whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check",
+        "--",
+        ".",
+        ":(exclude)*.log"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.014641748000940424,
+      "log": "validation/final-delivery-non-log-staged-whitespace.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    },
+    {
+      "name": "production-delta",
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--name-only",
+        "19333193192ba5a2d3667c0111235ec9e21a5898",
+        "--",
+        "ci/project",
+        ".github",
+        "tests/regression/ai_counter_preflight"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.009265734001019155,
+      "log": "validation/final-delivery-production-delta.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    }
+  ],
+  "final_python_files_match_125_test_profile": 380,
+  "new_production_changes_after_reviewed_19333193": false,
+  "distinct_agents": 60,
+  "completed_assignments": 59,
+  "root_completed_recorded_handoffs": 1,
+  "waves": 10,
+  "assignments_per_wave": 6,
+  "native_execution": "not_run",
+  "qualification_or_acceptance_claimed": false
+}

@@ -11,15 +11,35 @@ launches. The [qualification audit](p06-qualification-audit.md),
 scope and new validation. P06-A02/A03 remain open.
 
 **Current bounded step: collect and independently review a complete fresh
-dependency/native original.** The provenance foundation is published at
-`5527cb062e10dfff3266022d138dd7cdf63f5e5c`; the subsequent candidate adds complete
-inert native/control readers and corrections from review to input admission and
-failure reports. The [provenance packet](evidence/p06-dependency-provenance/README.md)
+dependency/native original.** The current production implementation is published
+at `19333193192ba5a2d3667c0111235ec9e21a5898`, including complete inert
+native/control readers and independently reviewed corrections exposed by actual
+host builds. The [provenance packet](evidence/p06-dependency-provenance/README.md)
 and [replay guide](evidence/p06-dependency-provenance/replay-guide.md) distinguish
-implemented tooling, scoped host validation and the still-required original.
-The [last retained hosted observation](evidence/p06-dependency-provenance/agents/w07_a04.md)
-shows the fresh-build job queued, without steps, logs or a conclusion. No fresh
-native result or completed-original replay is established by that observation.
+the implemented tooling, separate host diagnostics and the required formal
+dependency/native original.
+
+The [completed full governance run](evidence/p06-dependency-provenance/validation/candidate-full-governance-verification.json)
+passes **4,118 tests in 2,683.750 seconds, without skips**, at local `ba4deccd`,
+whose tree equals published `8b71ee07`. The later corrections have a separate
+[125-test pass in 6.283 seconds](evidence/p06-dependency-provenance/validation/w10_a06-spdlog-tests-01.json),
+with the complete 380-file Python profile matched to `19333193` by
+[final-code review](evidence/p06-dependency-provenance/agents/w09_a01-final-code.md).
+The earlier full-suite result does not cover the later code changes.
+
+The [2026-11-23 11:11:01 UTC provider observation](evidence/p06-dependency-provenance/validation/provider-observation-19333193.json)
+shows fresh run `45162083701` pending with no jobs; governance run `45162084006`
+has one queued job and no steps. No queue cause, fresh native result or completed
+formal-original replay is established by that observation.
+
+The separate [host diagnostic `05`](evidence/p06-dependency-provenance/host-diagnostic/execution-05-summary.json)
+at `19333193` passes all **413 actual selected operations: 406 compilations,
+three archives, two indexes and two shared links**, with complete diagnostic
+graph validation and
+[independent host-original consistency review](evidence/p06-dependency-provenance/host-diagnostic/review-05.json).
+This host result leaves formal preparation/cache/staging,
+managed native execution, original replay/review and all seven qualification,
+warm and acceptance claims unearned.
 
 The [native lifetime witness](evidence/p06-native-lifetime/README.md) and its
 [separate versioned contract](../designs/managed_counter_lifetime_v1.md) are
@@ -133,12 +153,12 @@ source-to-loaded-product route under the
 [dependency handoff](p06-dependency-provenance-handoff.md). The producer now binds
 immutable source trees to recorded compile/archive/link operations, selected
 product bytes and managed admission; live admission uses the existing complete
-30-command application validator. The subsequent candidate supplies complete
-inert native/control readers. A successful complete fresh original, separate
+30-command application validator. The published implementation supplies complete
+inert native/control readers. A successful complete formal fresh original, separate
 behavioral controls and caller-pinned original replay/review remain outstanding;
-host fixtures, source plans and configure-only observations cannot supply them.
-The [packet](evidence/p06-dependency-provenance/README.md) records the foundation
-publication and the later candidate's distinct evidence. The implemented
+host fixtures, source plans and separate host diagnostics cannot supply them.
+The [packet](evidence/p06-dependency-provenance/README.md) records the foundation,
+reader and final-code publication checkpoints with their distinct evidence. The implemented
 [native lifetime witness](evidence/p06-native-lifetime/README.md) provides bounded
 pending-read and run/reset observations. Applying the
 [conditional lifetime argument](../designs/simx_counter_lifetime_v1.md) to all
@@ -229,7 +249,7 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — fresh dependency provenance tooling
+## Latest continuation — fresh dependency provenance implementation
 
 The [development audit](evidence/p06-dependency-provenance/development-audit.md)
 selected the missing connection between immutable dependency inputs, actual
@@ -239,28 +259,64 @@ at `5527cb062e10dfff3266022d138dd7cdf63f5e5c` implements the separately versione
 [provenance contract](../designs/dependency_provenance_v1.md), full source locks,
 build recorder/receipt validation, exact product staging, complete application
 admission and the separate substitution control. The source-derived plan has
-406 compilations and 413 selected tool operations; those counts describe the
-required graph, not a completed fresh build.
+406 compilations and 413 selected tool operations, which the formal original
+must reconcile with actual products, both managed builds and loaded libraries.
 
-The later candidate implements complete inert native and combined-control
-readers. They reconstruct dependency/build/native joins and verify the separate
+Complete inert native and combined-control readers were published at
+`8b71ee07392c1ed86f654b2d683d9a8d2d1f50ea`. They reconstruct dependency/build/native
+joins and verify the separate
 pending-read, always-zero and alternate-library controls with caller-supplied
 identities. Review corrections cover complete project input populations,
 trusted current-helper inventories and preservation of original execution
 failures. The [replay guide](evidence/p06-dependency-provenance/replay-guide.md)
 defines exact intake pins and distinguishes retained-data review from execution.
-Foundation results and subsequent candidate tests retain separate source
-identities; no full-suite result at one revision is attributed to another.
 
-The fresh dependency workflow
-[45146777986](https://github.com/baabi-boo/AI-GPU/actions/runs/45146777986), job
-`137597902301`, was queued with no steps, logs or conclusion at the
-[last retained observation](evidence/p06-dependency-provenance/agents/w07_a04.md).
-No cause for the queue is established. A completed fresh original, original
-archive replay and independent original review are still required. The
+The [current production checkpoint](evidence/p06-dependency-provenance/validation/member-selection-publication.json)
+is `19333193192ba5a2d3667c0111235ec9e21a5898`, tree
+`baeeb7bc7078e9301c68e94b1207032329be343d`. Actual host builds exposed repeated
+GCC prerequisite names, an 18,084,083-byte linker map incorrectly checked against a
+16 MiB JSON/log category, and an unused spdlog archive incorrectly required to
+contribute a member. The reviewed corrections preserve bounded raw depfiles,
+use the existing 64 MiB file cap for maps and require both archive inputs while
+validating only actually selected members. The original failed attempts remain
+retained. Source pins, recipes, warning policy, resource constants and acceptance
+gates were not relaxed.
+
+The [full governance receipt and independent verification](evidence/p06-dependency-provenance/validation/candidate-full-governance-verification.json)
+record 4,118 passing tests in 2,683.750 seconds, without skips, at actual local
+`ba4deccd25b8f2cd08581af6785348e5ee0781bd`, tree
+`80146459e865581508315a18ffd1e11dd1a0773c`, identical to published `8b71ee07`.
+That run predates the three later corrections. Their
+[125-test focused run](evidence/p06-dependency-provenance/validation/w10_a06-spdlog-tests-01.json)
+passes in 6.283 seconds. The
+[final-code review](evidence/p06-dependency-provenance/agents/w09_a01-final-code.md)
+matches all 380 Python files to `19333193`: 372 unchanged, five modified and
+three added relative to the full-suite profile, with every changed module
+covered by focused validation. These overlapping populations are not added
+into a unique-test total.
+
+At the [retained provider observation](evidence/p06-dependency-provenance/validation/provider-observation-19333193.json)
+for `19333193`, fresh workflow
+[45162083701](https://github.com/baabi-boo/AI-GPU/actions/runs/45162083701)
+was pending with no jobs. Governance run `45162084006` had queued job
+`137649753222`, no steps and runner ID zero. No cause or native result is
+established. A complete formal original, its externally pinned archive replay
+and independent review remain required. The
 [separate host diagnostic](evidence/p06-dependency-provenance/host-diagnostic/README.md)
-has its own frozen inputs and narrower scope; its preparation or eventual result
-cannot substitute for managed native execution or loader joins.
+retains actual attempts with their own frozen inputs and host-build scope.
+[Attempt `05`](evidence/p06-dependency-provenance/host-diagnostic/execution-05-summary.json)
+finished successfully at 2026-11-23 11:15:38 UTC against `19333193`: all 413
+selected records passed, comprising 406 compilations, three archives, two
+indexes and two shared links, and complete diagnostic graph validation passed.
+The [independent host-original review](evidence/p06-dependency-provenance/host-diagnostic/review-05.json)
+also passes, including all 819 actual child observations and unchanged original
+bytes.
+Its 12 stability checks, 144 generated inputs and 3,682 retained files remain
+separately identified; the original failed attempts `03` and `04` are preserved.
+Formal preparation, cache restoration, measurement staging and native execution
+did not run. The diagnostic cannot establish the formal producer/managed-loader
+join; `fresh_dependency_build_passed` and
+`dependency_source_to_loaded_binary_verified` remain false.
 
 All seven fields remain false: `qualified`, `ready_for_warm`, `warm_execution`,
 `full_warm_coverage`, `acceptance_claimed`, `phase_acceptance`, and
@@ -1402,10 +1458,11 @@ actual dependency configure/compile/archive/link receipts, the selected products
 both format builds, all four managed processes and the separately counted
 pending-read/always-zero and alternate-library controls. Retain original failed
 attempts, raw logs, archive bytes and provider run/attempt/job/artifact identities.
-The foundation's hosted fresh-build job was still queued at the linked retained
-observation; recheck its actual state before intake and do not infer a cause or
-execution from that queue state. Cached hashes, source inventories and a lower-scope
-host diagnostic cannot establish the complete original.
+At the [retained observation for `19333193`](evidence/p06-dependency-provenance/validation/provider-observation-19333193.json),
+the fresh run was pending with no jobs and governance was queued without steps.
+Recheck the actual provider state before intake; no cause or execution follows
+from that state. Cached hashes, source inventories and the separate host
+diagnostic cannot establish the complete formal original.
 
 Run the implemented combined reader with externally established exact archive,
 revision, dependency-receipt, native-report/source-before and control-report pins,

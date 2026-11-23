@@ -1,6 +1,60 @@
 # Separate host dependency diagnostic
 
-## Executed attempts and current correction
+## Passed attempt 05 and independent original review
+
+Fresh attempt `05` passed against published helpers
+`19333193192ba5a2d3667c0111235ec9e21a5898`, tree
+`baeeb7bc7078e9301c68e94b1207032329be343d`. The
+[execution summary](execution-05-summary.json) records **413 passing actual
+operations: 406 compiles, three archives, two indexes and two shared links**.
+Its five outer commands and complete diagnostic graph validation passed.
+
+The [independent review](review-05.json) passed in **12.306428 seconds** and
+reconstructed all records from the original retained data. It checked 819 actual
+children, 1,294 source files, the 97-row compilation database, 144 generated CMake
+inputs, all archive/index and map joins, prerequisite chronology and 12 source
+stability boundaries. All 3,682 retained files (135,214,393 bytes, excluding the
+report) were rehashed before and after; report, preparation and driver bytes
+remained unchanged. The original report SHA-256 is
+`3f961336605864771b803887c5c562d2bfdeccd8568168f53b473a69d2f2d47a`.
+The [review report](../agents/w10_a03-attempt05.md) states the exact scope.
+
+The actual 18,084,083-byte Ramulator map selects 25 yaml-cpp members and zero
+spdlog members, while loading both exact archives once. The extension's
+614,675-byte map consumes the actual Ramulator product. No compiler-support
+archive resolver command was needed. The repeated-header unit passed with raw
+duplicate names preserved and its unique stable input inventory checked.
+
+The [driver](driver-05.py) differs from the historical driver in exactly its
+published revision and the two reviewed archive-selection requirements.
+[Preparation](preparation-05.json), the [independent lineage check](review-05-driver-lineage.json)
+and [launch](execution-05-launch.json) retain those identities and unchanged
+resource bounds. The initial derived summary miscounted dependency children by
+using an incorrect stage label; its [correction record](execution-05-summary-correction.json)
+preserves both derived versions. The successful original report and all actual
+records were never changed.
+
+**This is a completed host dependency diagnostic, with independent original
+consistency review.** Formal dependency preparation, cache restoration,
+measurement staging, managed builds and native lifetime execution remain
+unexecuted here. `fresh_dependency_build_passed` and
+`dependency_source_to_loaded_binary_verified` remain false, native execution is
+`not_run`, and all seven qualification/warm/acceptance claims remain false.
+
+### Complete raw archive
+
+The separately delivered `AI-GPU_P06_dependency_diagnostics_2026-11-23.zip`
+retains the original evidence for attempts 03, 04 and 05, their exact drivers
+and preparations, scoped review records, and an explicit post-failure addendum
+for attempt 04's unretained map/generated CMake files. No failed original is
+repaired. The [archive identity](archive-identity.json) records **61,112,122
+bytes**, **8,804 members**, successful CRC verification and SHA-256
+`13f6bfadaebaefa6f51767ab49c6be1e502e076b9911c33debc34c24e426a56c`.
+The archive manifest inventories every other member; all copied source files
+were rehashed after packaging. Treat retained code and binaries as inert data.
+The complete generated payloads remain outside Git.
+
+## Earlier failed attempts and reviewed corrections
 
 Attempts `03` and `04` are finished failed originals. Attempt `04` used
 published helper revision `146253db8407e21aaef70e05f3f0dd3c7f5f6d33` and its

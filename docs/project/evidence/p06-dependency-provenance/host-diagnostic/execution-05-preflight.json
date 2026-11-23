@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-11-23T11:06:52.613838+00:00",
+  "helper_revision": "19333193192ba5a2d3667c0111235ec9e21a5898",
+  "helper_tree": "baeeb7bc7078e9301c68e94b1207032329be343d",
+  "helper_checkout": "/workspace/p06-dependency-corrected",
+  "preparation_checker": {
+    "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/review-05-preparation.py",
+    "sha256": "998c3ac3815f7e8886d3b7a559043ff3c0d1db49bbeca12387f12046c89b5c1c",
+    "size_bytes": 11266
+  },
+  "helper_checkout_clean": true,
+  "workspace": "/workspace/p06-host-diagnostic-fixed-05",
+  "prior_attempt_protected_bytes_unchanged": true,
+  "prior_attempt_protected_identities": [
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/driver.py",
+      "sha256": "743439b558db9ec39b12bb0bac5b838fd33aac72f9f996f3f8569090db33b91b",
+      "size_bytes": 23759
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/driver-04.py",
+      "sha256": "c2aeaf524fd134b4c7eca6544b9d03c51bbe374dabde5239fa0c4c4372c3ddd0",
+      "size_bytes": 23759
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-5527-03/prepared.json",
+      "sha256": "0083c760fc36ad58018c27d3ec0355fe91422d20ce4bfc58b07df52079b7e54c",
+      "size_bytes": 312958
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/prepared.json",
+      "sha256": "8a5d86be8362bcd1cdb3083f403d0ffb9600d1b2d34410aefb1894b434646a82",
+      "size_bytes": 312959
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-5527-03/evidence/host-diagnostic.json",
+      "sha256": "2d275a08f0a8547e720fa97bac99c23343fbcddfbfbd351d6d90bd2a437e2570",
+      "size_bytes": 751895
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/evidence/host-diagnostic.json",
+      "sha256": "8f1afcb69d5bd17dc9fa727411d0dd2bb67b5ae655fa484236cb9bed9bc36798",
+      "size_bytes": 1537077
+    }
+  ],
+  "driver_difference": "Exactly three reviewed changes from original driver03: REVISION literal; Ramulator required member archive becomes yaml-cpp only; Ramulator required LOADs become yaml-cpp and spdlog. Reversing the explicit map-policy text substitution and normalizing REVISION yields exact text and AST equality.",
+  "driver_semantic_change_basis": "agents/w10_a05-spdlog-selection.md and host-diagnostic/review-04-spdlog-selection.json; the parent approved this exact three-change transformation before preparation.",
+  "driver_unified_diff": "--- driver.py\n+++ driver-05.py\n@@ -18,7 +18,7 @@\n \n sys.dont_write_bytecode = True\n \n-REVISION = \"5527cb062e10dfff3266022d138dd7cdf63f5e5c\"\n+REVISION = \"19333193192ba5a2d3667c0111235ec9e21a5898\"\n \n \n def require(condition, message):\n@@ -276,8 +276,8 @@\n             if name == \"ramulator\":\n                 expected_inputs += [archives[key][\"output\"] for key in (\"yaml-cpp\", \"spdlog\")]\n                 completed += [archives[key][\"finished_ns\"] for key in (\"yaml-cpp\", \"spdlog\")]\n-                required = [archives[key][\"path\"] for key in (\"yaml-cpp\", \"spdlog\")]\n-                required_loads = []\n+                required = [archives[\"yaml-cpp\"][\"path\"]]\n+                required_loads = [archives[key][\"path\"] for key in (\"yaml-cpp\", \"spdlog\")]\n             else:\n                 expected_inputs.append(links[\"ramulator\"][\"output\"])\n                 completed.append(links[\"ramulator\"][\"finished_ns\"])\n",
+  "available_memory_bytes": 6551937024,
+  "free_disk_bytes": 58912083968,
+  "aggregate_rss_ceiling_bytes": 6442450944,
+  "scope": "Attempt05 prerequisites and exact revision plus reviewed Ramulator map-policy substitutions; no preparation or build at this snapshot",
+  "driver": {
+    "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/driver-05.py",
+    "sha256": "28c5abdeb959e92c53fa7d57bc09b5093478c78d57a09443c2b3479e2fe32682",
+    "size_bytes": 23787
+  },
+  "original_driver": {
+    "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/driver.py",
+    "sha256": "743439b558db9ec39b12bb0bac5b838fd33aac72f9f996f3f8569090db33b91b",
+    "size_bytes": 23759
+  },
+  "preparation_started": false,
+  "execution_started": false
+}

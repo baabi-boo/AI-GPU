@@ -250,9 +250,19 @@ separate pending-read and always-zero controls. The current
 [dependency provenance implementation](docs/project/evidence/p06-dependency-provenance/README.md)
 adds immutable source locks, observed compile/archive/link receipts, exact
 product and loader joins, complete 30-command application admission, and inert
-dependency/native/control readers. Its host controls and source audit do not
-establish execution of the complete fresh dependency graph or a new native
-original.
+dependency/native/control readers. The current production implementation is
+published at `19333193192ba5a2d3667c0111235ec9e21a5898`, including independently
+reviewed corrections exposed by actual host builds. The
+[validation record](docs/project/evidence/p06-dependency-provenance/validation-index.md)
+separates the earlier complete 4,118-test governance run from the 125-test
+validation of the final code changes. The separate
+[host diagnostic `05`](docs/project/evidence/p06-dependency-provenance/host-diagnostic/execution-05-summary.json)
+at `19333193` passes all **413 actual selected operations: 406 compilations,
+three archives, two indexes and two shared links**, with complete diagnostic
+graph validation and
+[independent host-original consistency review](docs/project/evidence/p06-dependency-provenance/host-diagnostic/review-05.json).
+It does not execute formal preparation/cache/staging or the
+managed native population, so the formal dependency/native original remains open.
 
 **The next bounded action is to collect one complete fresh dependency and
 managed-lifetime original at a named published revision, retain the separately
@@ -260,8 +270,9 @@ counted pending/always-zero and substituted-library controls, then replay and
 independently review the untouched original.** Follow the
 [dependency handoff](docs/project/p06-dependency-provenance-handoff.md) and
 [intake/replay guide](docs/project/evidence/p06-dependency-provenance/replay-guide.md).
-The complete 413-operation graph and original-based semantic mutations still
-need observed evidence. After that edge is established, the separately versioned
+The formal original must reconcile all 413 selected dependency operations with
+the actual managed builds and loaded products; original-based semantic
+mutations remain required. After that edge is established, the separately versioned
 [qualification binding](docs/project/p06-mpm-qualification-plan.md) must satisfy
 the complete 40-component lifetime/pending premise and no-wrap bounds under the
 [conditional lifetime argument](docs/designs/simx_counter_lifetime_v1.md), before

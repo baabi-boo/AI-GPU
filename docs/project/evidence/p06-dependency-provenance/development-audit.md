@@ -49,11 +49,13 @@ provides three worker slots; each wave uses two batches. The actual ledger
 counts completed contributions, not projected assignments. Recovery turns by
 existing authors do not increase the count.
 
-Waves 1–3 audit and implement source/build/receipt/CI foundations. Wave 4 integrates
-complete inert native review and meaningful negative controls. Waves 5–8 resolve
-actual hosted failures and independently verify original artifacts, loader joins,
-provenance sensitivity, regressions and historical compatibility. Waves 9–10
-reconcile documentation, the bounded next handoff and publication evidence.
+Waves 1–3 audited and implemented source/build/receipt/CI foundations. Wave 4
+integrated inert native review and meaningful negative controls. Waves 5–8
+expanded the readers, input and failure-retention controls, compatibility checks
+and integration evidence, while retaining observed hosted status. Waves 9–10
+completed full governance and actual pinned-source diagnostics, corrected the
+observed defects, independently reviewed originals and reconciled publication
+and the bounded next handoff.
 
 Resource bounds, golden files, the protected framework SVG, acceptance gates
 and inherited functionality remain unchanged. The initial filesystem lacked
@@ -61,3 +63,29 @@ the formal native reserve; an environment reset later removed the uncommitted
 checkout. The [recovery record](recovery/environment-reset.md) documents restored
 files and fresh verification. Native completion and acceptance are not inferred
 from this planning/audit record.
+
+## Delivered increment and remaining execution edge
+
+The final production-code checkpoint is published
+`19333193192ba5a2d3667c0111235ec9e21a5898`. The producer, complete application
+admission and dependency/native/control readers are implemented. The
+[validation index](validation-index.md) records the completed 4,118-test full
+replay-checkpoint suite and the separate 125-test final-code delta suite, with
+exact before/after source profiles and independent review.
+
+Actual pinned-source execution exposed three concrete assumptions that the
+small fixtures had not settled: a GCC dependency file can repeat a header;
+a link map is an artifact-file payload rather than a JSON receipt or command
+log; and Ramulator's pinned object targets can use spdlog header definitions
+without selecting any member from the separately built archive. The reviewed
+corrections preserve raw evidence, independent bounds, complete compile/archive
+inputs and actual selected-member identities. Earlier failed originals remain
+available.
+
+Fresh [host attempt 05](host-diagnostic/README.md) then passed all 406 compiles,
+three archives, two indexes and two shared links. Independent original review
+reconstructed the complete 413-operation host graph and retained byte inventory.
+This advances the selected source-to-product premise with actual execution.
+It does not supply formal preparation, staging, the new four-process managed
+native original or the loader/control joins. Those are the next bounded
+execution and original-review requirements before broader qualification work.

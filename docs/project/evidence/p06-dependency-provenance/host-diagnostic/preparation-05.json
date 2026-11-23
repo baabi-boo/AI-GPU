@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-11-23T11:07:23.730596+00:00",
+  "helper_revision": "19333193192ba5a2d3667c0111235ec9e21a5898",
+  "helper_tree": "baeeb7bc7078e9301c68e94b1207032329be343d",
+  "helper_checkout": "/workspace/p06-dependency-corrected",
+  "preparation_checker": {
+    "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/review-05-preparation.py",
+    "sha256": "998c3ac3815f7e8886d3b7a559043ff3c0d1db49bbeca12387f12046c89b5c1c",
+    "size_bytes": 11266
+  },
+  "helper_checkout_clean": true,
+  "workspace": "/workspace/p06-host-diagnostic-fixed-05",
+  "prior_attempt_protected_bytes_unchanged": true,
+  "prior_attempt_protected_identities": [
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/driver.py",
+      "sha256": "743439b558db9ec39b12bb0bac5b838fd33aac72f9f996f3f8569090db33b91b",
+      "size_bytes": 23759
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/driver-04.py",
+      "sha256": "c2aeaf524fd134b4c7eca6544b9d03c51bbe374dabde5239fa0c4c4372c3ddd0",
+      "size_bytes": 23759
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-5527-03/prepared.json",
+      "sha256": "0083c760fc36ad58018c27d3ec0355fe91422d20ce4bfc58b07df52079b7e54c",
+      "size_bytes": 312958
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/prepared.json",
+      "sha256": "8a5d86be8362bcd1cdb3083f403d0ffb9600d1b2d34410aefb1894b434646a82",
+      "size_bytes": 312959
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-5527-03/evidence/host-diagnostic.json",
+      "sha256": "2d275a08f0a8547e720fa97bac99c23343fbcddfbfbd351d6d90bd2a437e2570",
+      "size_bytes": 751895
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/evidence/host-diagnostic.json",
+      "sha256": "8f1afcb69d5bd17dc9fa727411d0dd2bb67b5ae655fa484236cb9bed9bc36798",
+      "size_bytes": 1537077
+    }
+  ],
+  "driver_difference": "Exactly three reviewed changes from original driver03: REVISION literal; Ramulator required member archive becomes yaml-cpp only; Ramulator required LOADs become yaml-cpp and spdlog. Reversing the explicit map-policy text substitution and normalizing REVISION yields exact text and AST equality.",
+  "driver_semantic_change_basis": "agents/w10_a05-spdlog-selection.md and host-diagnostic/review-04-spdlog-selection.json; the parent approved this exact three-change transformation before preparation.",
+  "driver_unified_diff": "--- driver.py\n+++ driver-05.py\n@@ -18,7 +18,7 @@\n \n sys.dont_write_bytecode = True\n \n-REVISION = \"5527cb062e10dfff3266022d138dd7cdf63f5e5c\"\n+REVISION = \"19333193192ba5a2d3667c0111235ec9e21a5898\"\n \n \n def require(condition, message):\n@@ -276,8 +276,8 @@\n             if name == \"ramulator\":\n                 expected_inputs += [archives[key][\"output\"] for key in (\"yaml-cpp\", \"spdlog\")]\n                 completed += [archives[key][\"finished_ns\"] for key in (\"yaml-cpp\", \"spdlog\")]\n-                required = [archives[key][\"path\"] for key in (\"yaml-cpp\", \"spdlog\")]\n-                required_loads = []\n+                required = [archives[\"yaml-cpp\"][\"path\"]]\n+                required_loads = [archives[key][\"path\"] for key in (\"yaml-cpp\", \"spdlog\")]\n             else:\n                 expected_inputs.append(links[\"ramulator\"][\"output\"])\n                 completed.append(links[\"ramulator\"][\"finished_ns\"])\n",
+  "available_memory_bytes": 7163224064,
+  "free_disk_bytes": 58868740096,
+  "aggregate_rss_ceiling_bytes": 6442450944,
+  "scope": "Prepared fresh host-only diagnostic attempt05; zero compiler or native execution at this snapshot",
+  "driver": {
+    "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/driver-05.py",
+    "sha256": "28c5abdeb959e92c53fa7d57bc09b5093478c78d57a09443c2b3479e2fe32682",
+    "size_bytes": 23787
+  },
+  "prepared": {
+    "path": "/workspace/p06-host-diagnostic-fixed-05/prepared.json",
+    "sha256": "a3a84f71db0eaea7bc270ef8ee5773841038fa65c396046ba125cfbdac83adbb",
+    "size_bytes": 312966
+  },
+  "tool_config": {
+    "path": "/workspace/p06-host-diagnostic-fixed-05/evidence/tool-config.json",
+    "sha256": "f585ac6250746711c245d9e4cd0a03ee8459439e9db6c5c1f100a2a2669c98d6",
+    "size_bytes": 1161
+  },
+  "helper_sources": [
+    {
+      "path": "ci/project/baseline_inventory.py",
+      "sha256": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+      "size_bytes": 20466
+    },
+    {
+      "path": "ci/project/baseline_matrix.py",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "size_bytes": 8890
+    },
+    {
+      "path": "ci/project/baseline_packet_contract.py",
+      "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+      "size_bytes": 53680
+    },
+    {
+      "path": "ci/project/baseline_packet_io.py",
+      "sha256": "53ac39e541628a68b3d405201734195e8ed606b26eab5ee72746e96b3148515d",
+      "size_bytes": 14315
+    },
+    {
+      "path": "ci/project/baseline_process.py",
+      "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+      "size_bytes": 12627
+    },
+    {
+      "path": "ci/project/compiler_records.py",
+      "sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+      "size_bytes": 7143
+    },
+    {
+      "path": "ci/project/p02_matrix.py",
+      "sha256": "e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17",
+      "size_bytes": 30055
+    },
+    {
+      "path": "ci/project/p02_matrix_records.py",
+      "sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+      "size_bytes": 12332
+    },
+    {
+      "path": "ci/project/p06_dependency_binary.py",
+      "sha256": "81397956f856e5658864ee59f198c760699160f5d7a78d73d80db41f361814e1",
+      "size_bytes": 16793
+    },
+    {
+      "path": "ci/project/p06_dependency_build.py",
+      "sha256": "57d4840b18b9788fb01b78badb813efd58fe7090ae59a0d9acb45b7c154f980e",
+      "size_bytes": 31979
+    },
+    {
+      "path": "ci/project/p06_dependency_contract.py",
+      "sha256": "deb76bca18567ce10e24156591ffbb00dd539e57c556727fbc073aa0d0d1b988",
+      "size_bytes": 4398
+    },
+    {
+      "path": "ci/project/p06_dependency_graph.py",
+      "sha256": "eb278cbd37d5191468d151339a88a665d792e0f31d7f1d41da30285b240e9f08",
+      "size_bytes": 5861
+    },
+    {
+      "path": "ci/project/p06_dependency_receipt.py",
+      "sha256": "fb277709072b1c0d589aa2a8ecb828225013eb4c984afd0e6b843a7870e27b5b",
+      "size_bytes": 61185
+    },
+    {
+      "path": "ci/project/p06_dependency_record.py",
+      "sha256": "5364a5036fb03bebed3aba6267d302cf36c379b30e7085ded1b59db077c33205",
+      "size_bytes": 26464
+    },
+    {
+      "path": "ci/project/p06_dependency_sources.py",
+      "sha256": "4e09b8f8357538591a843f465ca6a20465baf363e5a190b9edf8d01c807174a1",
+      "size_bytes": 17141
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_source_export.py",
+      "sha256": "1bec4cc1a296ae93bc9c29029ed5a28a02f6edd71adbdbfdbcea156eebf28b46",
+      "size_bytes": 21171
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_sources.py",
+      "sha256": "dc0374a1c3a059c36d47697ff2c8275bf0901b76468f72a15425ea2cfe687f2a",
+      "size_bytes": 32794
+    },
+    {
+      "path": "ci/project/preflight.py",
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+      "size_bytes": 15124
+    }
+  ],
+  "helper_sources_match_git_and_retained_bytes": true,
+  "changed_helper_files_from_attempt04": [
+    {
+      "path": "ci/project/p06_dependency_binary.py",
+      "before": {
+        "path": "ci/project/p06_dependency_binary.py",
+        "sha256": "23ac89c7ca579958cd272e651a60210cf7316092b805faf31bb46d27af9b341e",
+        "size_bytes": 16802
+      },
+      "after": {
+        "path": "ci/project/p06_dependency_binary.py",
+        "sha256": "81397956f856e5658864ee59f198c760699160f5d7a78d73d80db41f361814e1",
+        "size_bytes": 16793
+      }
+    },
+    {
+      "path": "ci/project/p06_dependency_build.py",
+      "before": {
+        "path": "ci/project/p06_dependency_build.py",
+        "sha256": "295ecacd837ad943f4d18641c106e553289f7e8e91eb07b8801bec5a4932a477",
+        "size_bytes": 31882
+      },
+      "after": {
+        "path": "ci/project/p06_dependency_build.py",
+        "sha256": "57d4840b18b9788fb01b78badb813efd58fe7090ae59a0d9acb45b7c154f980e",
+        "size_bytes": 31979
+      }
+    },
+    {
+      "path": "ci/project/p06_dependency_receipt.py",
+      "before": {
+        "path": "ci/project/p06_dependency_receipt.py",
+        "sha256": "437a9148f6a5db3d7a6ad477e2390f38df80c9222b6c971db82a2745b02ea3c6",
+        "size_bytes": 61150
+      },
+      "after": {
+        "path": "ci/project/p06_dependency_receipt.py",
+        "sha256": "fb277709072b1c0d589aa2a8ecb828225013eb4c984afd0e6b843a7870e27b5b",
+        "size_bytes": 61185
+      }
+    },
+    {
+      "path": "ci/project/p06_dependency_record.py",
+      "before": {
+        "path": "ci/project/p06_dependency_record.py",
+        "sha256": "79194816f9c35ef8032e18050aa7e1f4eb9168a28724cc461802bf8e327818f5",
+        "size_bytes": 26467
+      },
+      "after": {
+        "path": "ci/project/p06_dependency_record.py",
+        "sha256": "5364a5036fb03bebed3aba6267d302cf36c379b30e7085ded1b59db077c33205",
+        "size_bytes": 26464
+      }
+    }
+  ],
+  "tools": {
+    "ar": {
+      "path": "/usr/bin/ar",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-ar",
+      "sha256": "f8fe09d485b40b1d47c534c96f5cbaaa9148e247aa0494c087104421f48ac5eb",
+      "size_bytes": 52480
+    },
+    "cmake": {
+      "path": "/workspace/p06-build-tools/cmake/data/bin/cmake",
+      "resolved_path": "/workspace/p06-build-tools/cmake/data/bin/cmake",
+      "sha256": "a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83",
+      "size_bytes": 14672584
+    },
+    "g++": {
+      "path": "/usr/bin/g++",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-g++-14",
+      "sha256": "6b3696e4dcb85e1c949c732a02befa50e3983ecf94ce7e8e58d9d503b954b79d",
+      "size_bytes": 1166360
+    },
+    "gcc": {
+      "path": "/usr/bin/gcc",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-gcc-14",
+      "sha256": "a23ecab8ff08f09ad8c80602c2c5df7f49e09c25905cb8975902e101bf72635f",
+      "size_bytes": 1162264
+    },
+    "make": {
+      "path": "/usr/bin/make",
+      "resolved_path": "/usr/bin/make",
+      "sha256": "8a229baf64671988cfb5af43ba3070c6ce7214cf32bcf96155115559d1466fa7",
+      "size_bytes": 278448
+    },
+    "python3": {
+      "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "resolved_path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+      "size_bytes": 30894944
+    },
+    "ranlib": {
+      "path": "/usr/bin/ranlib",
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-ranlib",
+      "sha256": "4610e832470b987c8c9d82d78c1c16e5e2bc9b8c64db455fad0cf63d420ec86e",
+      "size_bytes": 52480
+    }
+  },
+  "selected_tools_verified": true,
+  "resources_before_prepare": {
+    "available_memory_bytes": 7080980480,
+    "free_disk_bytes": 58898423808
+  },
+  "budget": {
+    "build_timeout_seconds": 1800,
+    "configure_timeout_seconds": 120,
+    "jobs": 2,
+    "max_log_bytes": 16777216,
+    "max_rss_bytes": 4294967296,
+    "min_free_bytes": 16106127360,
+    "process_timeout_seconds": 180,
+    "simulation_workers": 1
+  },
+  "source_manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+  "source_plan_sha256": "f479cc6ed3ee4d4dd7fd305bc45943af33a3a2ba9069da48eebe627c5f817570",
+  "source_files": 1294,
+  "source_bytes": 10938128,
+  "planned_translation_units": 406,
+  "source_verification": {
+    "contract_id": "p06-dependency-source-inventory-v1",
+    "manifest_sha256": "c677abd7a1cbb78cab13c23b40a92a83be427e06c3dffa40419de92b8697cd2e",
+    "source_files": 1294,
+    "source_bytes": 10938128,
+    "generated_files": 0,
+    "generated_bytes": 0,
+    "generated_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "retained_sources_verified": true,
+  "actual_outer_commands": 0,
+  "actual_tool_records": 0,
+  "execution_marker_present": false,
+  "state": "prepared",
+  "outcome": "not_run",
+  "native_execution": "not_run",
+  "fresh_dependency_build_passed": false,
+  "host_diagnostic_passed": false,
+  "dependency_source_to_loaded_binary_verified": false,
+  "measurement_staging_executed": false,
+  "formal_preparation_executed": false,
+  "cache_restoration_claimed": false,
+  "qualified": false,
+  "ready_for_warm": false,
+  "warm_execution": false,
+  "full_warm_coverage": false,
+  "acceptance_claimed": false,
+  "phase_acceptance": false,
+  "performance_acceptance": false
+}

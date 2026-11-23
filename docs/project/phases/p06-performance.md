@@ -150,16 +150,23 @@ retains the earlier diagnostic scope.
 
 The [fresh dependency implementation packet](../evidence/p06-dependency-provenance/README.md)
 records the separately versioned source/build/product route. The foundation is
-published at `5527cb062e10dfff3266022d138dd7cdf63f5e5c`; subsequent native/control
-readers and review corrections have separately recorded validation scopes.
+published at `5527cb062e10dfff3266022d138dd7cdf63f5e5c`, the complete native/control
+readers at `8b71ee07392c1ed86f654b2d683d9a8d2d1f50ea`, and the current reviewed
+production code at `19333193192ba5a2d3667c0111235ec9e21a5898`.
 The producer verifies immutable source and transitive inputs, records selected
 configure/compile/archive/index/link execution, and binds products through
 staging, static links and dynamic loader admission. Live admission now invokes
 and binds the existing complete **30-command application graph**, including the
 **14-source runtime stub**, to build/process identities. The dependency, native
 and combined-control readers are implemented for bounded inert review with
-external pins. Source inventories, host controls and reader fixtures do not
-establish a completed fresh original.
+external pins. The [full governance receipt](../evidence/p06-dependency-provenance/validation/candidate-full-governance-verification.json)
+records 4,118 passing tests in 2,683.750 seconds at local `ba4deccd`, whose tree
+equals published `8b71ee07`. The later repeated-input, map-category and archive
+selection corrections have a separate
+[125-test result](../evidence/p06-dependency-provenance/validation/w10_a06-spdlog-tests-01.json)
+and [final-code review](../evidence/p06-dependency-provenance/agents/w09_a01-final-code.md)
+binding all 380 Python files to `19333193`. The earlier full suite is not a run
+of those later changes. These host checks establish no formal native original.
 
 **Next development action:** collect and retain a complete fresh dependency and
 managed-lifetime original, then perform caller-pinned inert replay and
@@ -169,12 +176,20 @@ independent review under the
 406 planned compilations and 413 selected tool operations with actual records,
 both format builds and the unchanged four-process/132-launch/4,224-word native
 population. Keep the pending-read/always-zero and alternate-library controls
-separate. The last attributed observation of the foundation's
-[fresh workflow](https://github.com/baabi-boo/AI-GPU/actions/runs/45146777986)
-was queued; recheck and retain the actual provider identities before intake.
-No new complete build or native original is established by this phase update.
+separate. At the
+[retained provider observation](../evidence/p06-dependency-provenance/validation/provider-observation-19333193.json)
+for `19333193`, fresh run `45162083701` was pending with no jobs, and governance
+run `45162084006` had one queued job and no steps. No queue cause or native
+result is inferred; recheck and retain the actual provider identities before
+intake. No formal dependency/native original is established by this phase update.
 The [host diagnostic](../evidence/p06-dependency-provenance/host-diagnostic/README.md)
-was prepared but unexecuted at this update and retains a separate, lower scope.
+retains its actual attempts and separate host-build scope.
+[Attempt `05` at `19333193`](../evidence/p06-dependency-provenance/host-diagnostic/execution-05-summary.json)
+passes 406 actual compilations, three archives, two indexes and two shared links:
+all 413 selected records, complete diagnostic graph validation and
+[independent host-original consistency review](../evidence/p06-dependency-provenance/host-diagnostic/review-05.json) pass. The earlier
+failed attempts remain retained. This result cannot replace formal
+preparation/cache/staging, the managed population or loader joins.
 The full 33-selector/40-component lifetime argument still needs complete reviewed
 source and monotonicity
 premises; the new pending/reset observations do not themselves qualify it.

@@ -12,17 +12,30 @@ remain unassigned until an actual owner is identified.
 **Current bounded task: P06-T01 — collect and independently review the complete
 fresh dependency/native original under the
 [dependency handoff](p06-dependency-provenance-handoff.md).**
-The provenance foundation is published at
-`5527cb062e10dfff3266022d138dd7cdf63f5e5c`; source locks, recorded-build receipts,
-exact product staging and full 30-command application admission are implemented.
-The subsequent candidate adds complete inert native/control readers and scoped
-review corrections. The [packet](evidence/p06-dependency-provenance/README.md)
-keeps their publication and validation identities distinct. Follow the
+The current production implementation is published at
+`19333193192ba5a2d3667c0111235ec9e21a5898`: immutable source locks, recorded-build
+receipts, exact product staging, full 30-command application admission and
+complete inert native/control readers. Actual host builds exposed three
+corrected issues: repeated compiler prerequisite names, a map assigned to the
+wrong payload-size category, and an unused spdlog archive incorrectly required
+to contribute a member. The [packet](evidence/p06-dependency-provenance/README.md)
+preserves the failed attempts, independent reviews and distinct validation
+checkpoints. Follow the
 [intake/replay guide](evidence/p06-dependency-provenance/replay-guide.md) for the
-still-required original and its external pins. The fresh workflow was queued
-with no steps, logs or conclusion at the
-[last retained observation](evidence/p06-dependency-provenance/agents/w07_a04.md);
-no queue cause or fresh native result is inferred.
+still-required formal original and its external pins. At the
+[2026-11-23 11:11:01 UTC provider observation](evidence/p06-dependency-provenance/validation/provider-observation-19333193.json),
+fresh run `45162083701` was pending with no jobs, while governance run
+`45162084006` had one queued job and no steps. No cause or fresh native result
+is established by that observation. The separate host diagnostic cannot supply
+formal preparation/cache/staging or native loader evidence.
+
+The [completed host diagnostic `05`](evidence/p06-dependency-provenance/host-diagnostic/execution-05-summary.json)
+at `19333193` passes all 413 actual selected operations: 406 compilations, three
+archives, two indexes and two shared links, with complete diagnostic graph
+validation and [independent host-original consistency review](evidence/p06-dependency-provenance/host-diagnostic/review-05.json).
+This establishes the host dependency-build scope; the next task
+still needs the formal producer, both managed format builds, four native
+processes and the separate controls in one identified original.
 
 The [native lifetime witness](evidence/p06-native-lifetime/README.md) is
 implemented at `b4127b19a004b5aebb8d52eab9ceda0da3ff4561`.
@@ -172,12 +185,13 @@ A separate transient pending observation does not close that complete theorem.
 The [dependency provenance route](p06-dependency-provenance-handoff.md) now has
 immutable source locks, recorded configure/compile/archive/link operations,
 product/loader admission and the existing complete application-build validator
-bound into live execution. The later candidate provides complete inert native
-and combined-control readers. The next action is to collect a successful fresh
-original at a named published revision, retain all earlier failures, and review
-the exact archive with independent external pins and provider identities. The
-source plan's 406 compilations/413 selected operations and host controls do not
-establish a completed original. Keep the four-process, 132-launch, 4,224-word
+bound into live execution. Complete inert native and combined-control readers
+are published. The next action is to collect a successful formal fresh original
+at a named published revision, retain all earlier failures, and review the exact
+archive with independent external pins and provider identities. Reconcile its
+406 compilations/413 selected operations with managed builds and actual loaded
+products; separate host diagnostics cannot establish that complete join.
+Keep the four-process, 132-launch, 4,224-word
 managed population unchanged, with pending-read, always-zero and alternate-library
 controls counted separately. Independently reconcile the complete original
 before advancing the broader qualification work.

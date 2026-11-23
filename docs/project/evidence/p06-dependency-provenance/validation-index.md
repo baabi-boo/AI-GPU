@@ -1,5 +1,41 @@
 # Validation evidence index
 
+## Latest verified code and test coverage
+
+The final production-code checkpoint is published
+`19333193192ba5a2d3667c0111235ec9e21a5898`, tree
+`baeeb7bc7078e9301c68e94b1207032329be343d`. Its
+[publication receipt](validation/member-selection-publication.json) records
+the equal-tree local review and non-forced remote update/readback. The
+[final code review](agents/w09_a01-final-code.md) verifies all 380 Python files
+against the **125-test** focused run, with no source mismatch. Relative to the
+earlier full-suite checkpoint, 372 files are unchanged, five modified, three
+added and none removed. Every modified/added Python file maps to a module in
+that focused run.
+
+The [full governance run](agents/w09_a02.md) completed **4,118 tests in
+2,683.750 seconds**, no skips, against actual local `ba4deccd25b8f2cd08581af6785348e5ee0781bd`
+and its exact tree `80146459e865581508315a18ffd1e11dd1a0773c`, also published as
+`8b71ee07392c1ed86f654b2d683d9a8d2d1f50ea`. It predates the repeated-input,
+map-category and archive-selection fixes; the later **125 tests in 6.283 seconds**
+cover those exact final-code deltas separately. Both results have passing bounded
+supervisor receipts, source stability and complete retained logs. These
+overlapping counts must not be added as a unique-test total.
+
+The [host diagnostic](host-diagnostic/README.md) separately records actual
+dependency-tool execution and its original-specific reviews. Fresh attempt 05
+passed all **413 actual tool operations** at published `19333193`; its
+[independent review](host-diagnostic/review-05.json) revalidated the full host
+graph and original retained inventory in **12.306428 seconds**. Neither these host
+results nor governance tests establish the required formal fresh dependency and
+managed-native original. The [provider observation](validation/provider-observation-19333193.json)
+found the final-code fresh workflow pending with no job returned, and hosted
+governance queued with no steps or assigned runner. No queue cause or native
+completion is inferred. All seven qualification, warm and acceptance claims
+remain false.
+
+## Original index snapshot and subsequent observations
+
 This index reconciles evidence available at **2026-11-23 10:16:22 UTC**. It is
 a checkpoint, not a claim that later working-tree changes have passed a final
 integration run. Counts below describe individual runs; overlapping suites are
@@ -264,3 +300,32 @@ members and `LOAD` rows still reject. Isolated published-old producer and reader
 calls reject the two corresponding positive cases as expected. This focused
 run includes all three later corrections; the running full governance suite
 remains bound to its earlier replay checkpoint.
+
+## Completed actual host graph at the final code checkpoint
+
+Fresh attempt `05` passed once against published
+`19333193192ba5a2d3667c0111235ec9e21a5898`. Its
+[summary](host-diagnostic/execution-05-summary.json) and
+[independent original review](agents/w10_a03-attempt05.md) establish **406
+actual compiles, three archives, two indexes and two shared links**, with all
+413 records passing. The 406 dependency prepasses and 413 selected tool children
+are 819 actual children; they are not additional selected compilation units.
+
+The independent reader checked the complete source-derived graph, actual
+generated CMake and 97-row compilation database, 345 archive object members,
+both actual link maps, all prerequisites and 12 source stability boundaries.
+It rehashed 3,682 retained files, 135,214,393 bytes excluding the report, without
+changing the original. The driver, preparation and complete report have external
+identities; the report hash is
+`3f961336605864771b803887c5c562d2bfdeccd8568168f53b473a69d2f2d47a`.
+
+The [derived-summary correction](host-diagnostic/execution-05-summary-correction.json)
+fixes a stage-name counting error and preserves the initial summary/script.
+The actual original report, successful records and execution were unchanged.
+
+This diagnostic executes the selected host recipes and performs complete
+host-graph consistency checks. It does not execute the formal dependency
+preparation/producer, restored toolchain cache, measurement staging, managed
+format builds or native lifetime population. Their false/not-run fields remain
+intact. Complete formal dependency/native original replay and its semantic
+mutation obligations remain distinct next work.

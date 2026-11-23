@@ -13,11 +13,26 @@ The [implementation packet](evidence/p06-dependency-provenance/README.md) and
 [v1 contract](../designs/dependency_provenance_v1.md) define the selected route.
 Its [foundation publication](evidence/p06-dependency-provenance/validation/foundation-publication.json)
 is `5527cb062e10dfff3266022d138dd7cdf63f5e5c`, tree
-`06beb70d004cf444488eee6e02512894c11bafef`. The packet records subsequent reader
-implementation, failure-retention corrections and independent review separately.
+`06beb70d004cf444488eee6e02512894c11bafef`. Complete native/control readers were
+published at `8b71ee07392c1ed86f654b2d683d9a8d2d1f50ea`. The
+[current production checkpoint](evidence/p06-dependency-provenance/validation/member-selection-publication.json)
+is `19333193192ba5a2d3667c0111235ec9e21a5898`, tree
+`baeeb7bc7078e9301c68e94b1207032329be343d`, including independently reviewed
+corrections exposed by actual host builds. Earlier failed attempts remain
+retained; no replacement attempt repairs their original outcomes.
 Use its [validation index](evidence/p06-dependency-provenance/validation-index.md)
-for exact tested files and evidence scopes; a foundation result does not certify
-later candidate bytes.
+for exact tested files and evidence scopes.
+
+The [completed full governance review](evidence/p06-dependency-provenance/validation/candidate-full-governance-verification.json)
+records **4,118 passing tests in 2,683.750 seconds, without skips**, at actual
+local `ba4deccd25b8f2cd08581af6785348e5ee0781bd`, whose complete tree equals
+published `8b71ee07`. The later corrections are covered by a separate
+[125-test run in 6.283 seconds](evidence/p06-dependency-provenance/validation/w10_a06-spdlog-tests-01.json).
+The [final-code review](evidence/p06-dependency-provenance/agents/w09_a01-final-code.md)
+matches its 380-file Python profile to `19333193`: 372 files are unchanged from
+the full-suite profile, five are modified and three added; every changed module
+is covered by the focused run. Do not attribute the earlier full suite to the
+later code or add overlapping runs into a unique-test count.
 
 The new producer verifies five immutable source trees, records actual selected
 tool invocations, and joins source/header inputs to objects, archive members,
@@ -26,8 +41,9 @@ builds. The live admission route invokes and binds the existing complete
 **30-command application validator**, including its **14-source runtime stub**,
 alongside the 43-unit model/backend checks and dependency receipt identity.
 The [source-input audit](evidence/p06-dependency-provenance/source-inputs/README.md)
-retains 1,294 files and the 406-translation-unit plan. These input observations
-do not establish the required 413 actual compile/archive/index/link operations.
+retains 1,294 files and the 406-translation-unit plan. The formal original must
+reconcile all 413 actual compile/archive/index/link operations with its products,
+both managed builds and the native loader observations.
 
 The [dependency reader](../../ci/project/p06_dependency_replay.py),
 [complete native reader](../../ci/project/p06_dependency_native_replay.py) and
@@ -40,18 +56,44 @@ retained source, commands and binaries remain data. A replay result reports
 `native_execution="not_run"` and `retained_code_executed=false`. It establishes
 consistency of selected retained evidence, not a new execution or qualification.
 
-At the last attributed provider observation in the
-[workflow review](evidence/p06-dependency-provenance/agents/w07_a04.md),
-[fresh run 45146777986](https://github.com/baabi-boo/AI-GPU/actions/runs/45146777986)
-at the foundation revision was queued, with no executed steps or conclusion.
-No queue cause is established. Recheck the provider and retain its actual run,
-attempt, job and artifact identities before original intake. This continuation
-has not yet observed the complete 406-compilation/413-operation build and new
-four-process native original. The
+At the [2026-11-23 11:11:01 UTC provider observation](evidence/p06-dependency-provenance/validation/provider-observation-19333193.json)
+for `19333193`,
+[fresh run 45162083701](https://github.com/baabi-boo/AI-GPU/actions/runs/45162083701)
+was pending with no jobs. Governance run `45162084006` had queued job
+`137649753222`, zero steps and runner ID zero. Neither a queue cause nor a native
+result is established. Recheck the provider and retain its actual run, attempt,
+job and artifact identities before original intake. The formal fresh dependency
+and four-process native original remain unobserved. The
 [separate host diagnostic](evidence/p06-dependency-provenance/host-diagnostic/README.md)
-was prepared but unexecuted at this update; any later result retains its own
-frozen revision and lower scope. It cannot replace the formal dependency
-producer, native loader joins or independent original review.
+retains the actual failed attempts `03` and `04` and each attempt's frozen
+revision.
+
+[Attempt `05`](evidence/p06-dependency-provenance/host-diagnostic/execution-05-summary.json)
+completed successfully at **2026-11-23 11:15:38 UTC** against frozen published
+`19333193`. All **413 actual selected records passed: 406 compilations, three
+archives, two indexes and two shared links**; complete diagnostic graph
+validation also passed. Its original report is retained unchanged, together
+with 3,682 files totaling 135,214,393 bytes excluding that report. The
+[independent host-original consistency review](evidence/p06-dependency-provenance/host-diagnostic/review-05.json)
+passes all 413 records and 819 actual child observations, the complete pinned
+source/configuration graph, archive/index joins, both maps and all 12 stability
+boundaries, with original bytes unchanged. The diagnostic
+establishes this host dependency-build scope, with formal preparation, cache
+restoration, measurement staging and native execution explicitly unperformed.
+`fresh_dependency_build_passed` and
+`dependency_source_to_loaded_binary_verified` remain false. It cannot replace
+the formal producer, managed population, native loader joins or independent
+review of the complete formal original.
+
+The reviewed corrections preserve raw GCC dependency-file bytes while admitting
+repeated prerequisite names as an ordered unique input inventory, apply the
+existing 64 MiB file bound to linker maps, and distinguish an archive's required
+link input from actual member extraction. The
+[repeated-input](evidence/p06-dependency-provenance/agents/w09_a06.md),
+[map-category](evidence/p06-dependency-provenance/agents/w10_a04.md) and
+[archive-selection](evidence/p06-dependency-provenance/agents/w10_a06.md) reviews
+retain the reproductions and meaningful negative controls. Source pins,
+compiler options, numerical thresholds and resource constants are unchanged.
 
 ## Preserved preceding native lifetime result
 
@@ -140,11 +182,14 @@ Ramulator's pinned build definition selects yaml-cpp `yaml-cpp-0.7.0`, spdlog
 [source-input audit](evidence/p06-dependency-provenance/source-inputs/README.md)
 now retain the resolved immutable commit/tree identities. Recheck those exact
 objects before a new execution. Declared tags do not authenticate the source
-used by a historical cache. The selected default
-Ramulator library incorporates yaml-cpp and spdlog, including bundled fmt;
-argparse is a header-only input for the separate executable, although the parent
-configure step fetches/configures it. Record that distinction in the selected
-build graph.
+used by a historical cache. The selected Ramulator link requires the exact
+yaml-cpp and spdlog archive inputs, while the observed pinned configuration
+selects yaml-cpp members and uses spdlog's header definitions without extracting
+a spdlog archive member. Both archives still require their complete fresh
+compile/archive/index evidence and unique link-map loads. Record every member
+actually selected without inventing spdlog object incorporation. Bundled fmt
+headers remain included-input evidence. Argparse is a header-only input for the
+separate executable, although the parent configure step fetches/configures it.
 
 Build the Ramulator library target and the existing extension. The complete
 library includes registered implementations beyond the selected HBM2 workload,
@@ -237,8 +282,11 @@ command relies on it. Bind both the complete application result and the existing
 exact final host-command result to the new build identity.
 
 Retain link-map or linker-trace evidence sufficient to identify the SoftFloat
-archive members consumed by the model and the yaml-cpp/spdlog objects consumed
-by Ramulator. A nearby archive hash alone does not identify what a linker used.
+archive members consumed by the model and the members actually selected by
+Ramulator. Require the unique, exact yaml-cpp and spdlog archive loads and actual
+yaml-cpp member selection; the pinned link may select no spdlog member. Validate
+every selected member against its complete admitted archive and compiled-object
+identity. A nearby archive hash alone does not identify what a linker used.
 Join the model, backend, stub, application and kernel products to their actual
 commands and final bytes. Keep the original path, duplicate and substitution
 checks for the five selected loaded libraries.
@@ -291,7 +339,9 @@ measurement build.
 Keep the existing **two build jobs, one simulation worker, 15 GiB disk reserve,
 4 GiB minimum available memory, 4 GiB RSS limit, 120-second configure limit,
 1,800-second build limit, 180-second native-process limit, 16 MiB command-log
-bound and 90-minute hosted-job ceiling**. The
+bound and 90-minute hosted-job ceiling**. JSON receipts retain their 16 MiB cap;
+linker maps use the existing 64 MiB retained-file category, with their separate
+line-count/line-length limits and the 1 GiB packet cap. The
 [existing dependency recipe](../../third_party/Makefile) contains an explicit
 nested `make -j4`; outer `MAKEFLAGS=-j2` does not cap it. Preserve the dedicated
 route's explicit two-job limit inside every selected nested build. Use the

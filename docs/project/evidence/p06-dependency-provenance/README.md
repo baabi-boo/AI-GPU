@@ -13,18 +13,36 @@ The implemented route records the source-to-compile/archive/link chain, checks
 the exact selected products and model link inputs, and binds the receipt to
 live managed admission. The live route also invokes the existing complete
 30-command application validator, including the 14-source runtime stub.
-The [published foundation](validation/foundation-publication.json) is commit
-`5527cb062e10dfff3266022d138dd7cdf63f5e5c`; later reader and failure-retention work
-has its own source identities and focused review in the
-[validation index](validation-index.md). A foundation result does not establish
-validation of later bytes.
+The final production-code checkpoint is published
+`19333193192ba5a2d3667c0111235ec9e21a5898`; its
+[publication receipt](validation/member-selection-publication.json) preserves
+the exact local reviewed tree and remote readback. It includes the
+[foundation](validation/foundation-publication.json), complete native/control
+readers, failure retention, and three independently reviewed corrections found
+while exercising actual dependency inputs: repeated prerequisite names, linker
+map file limits, and an archive that is linked without selected members.
+The [validation index](validation-index.md) separates the completed **4,118-test**
+full replay-checkpoint suite from the **125-test** final-code delta suite and
+actual dependency diagnostic evidence. A result at one source checkpoint does
+not establish validation of later bytes.
 
 Complete dependency, native and combined-control readers are now implemented.
+
+The [fresh host dependency diagnostic](host-diagnostic/README.md) completed
+**all 413 actual operations**, including 406 compiles and both shared links,
+against published `19333193`. Its [independent original review](host-diagnostic/review-05.json)
+verified the retained source, generated CMake, record, archive, map and stability
+joins without changing the original. Earlier failed attempts are preserved.
+This proves the declared host-diagnostic graph; formal preparation, cache
+restoration, measurement staging and managed-native execution retain their
+separate obligations.
+
 **The next bounded action is to collect one complete fresh dependency and
 managed-lifetime original, replay its untouched bytes with external intake
 pins, and independently review that original and its separate controls.**
-A successful complete original, complete inert original replay and independent
-original review remain unobserved in this continuation's recorded evidence.
+A successful complete formal dependency/native original, its complete inert
+replay and independent original review remain unobserved in this continuation's
+recorded evidence.
 Host fixtures and source auditing do not establish native execution or phase
 acceptance. The [control-coverage audit](control-coverage.md) preserves the
 remaining whole-original semantic mutation obligation.
@@ -52,14 +70,15 @@ source checkpoints. Its overlapping test runs are not an additive unique-test
 total. The [checkpoint-failure review](agents/w08_a01.md) retains the reproduced
 failure and subsequent 67-test pass for the probe/substitution correction.
 
-At the last attributed observation, **2026-11-23 10:07:16 UTC**, the
-[fresh hosted run](https://github.com/baabi-boo/AI-GPU/actions/runs/45146777986)
-was queued with no executed steps, logs or conclusion; see the
-[workflow/probe review](agents/w07_a04.md). That observation does not identify
-the queue's cause or promise an execution result. Recheck the provider at
-intake. The [separate host diagnostic](host-diagnostic/README.md) has a prepared
-attempt and distinct evidence contract. Its eventual lower-scope result cannot
-substitute for formal preparation, the native population or loader evidence.
+The [provider observation of final production code](validation/provider-observation-19333193.json)
+records [fresh hosted run 45162083701](https://github.com/baabi-boo/AI-GPU/actions/runs/45162083701)
+pending, with no job returned, and hosted governance queued without executed
+steps or runner assignment. These separate provider reads do not identify the
+queue's cause or promise an execution result. Recheck actual run/attempt/job and
+artifact identities at intake. The [separate host diagnostic](host-diagnostic/README.md)
+retains failed originals, actual dependency execution and independent reviews
+under its own evidence contract. Its lower scope cannot substitute for formal
+preparation, the native population or loader evidence.
 
 ## Immutable source audit
 
@@ -67,7 +86,9 @@ The [source-input audit](source-inputs/README.md) retains the complete manifest,
 406-unit source plan and repeated exact Git-object verification. All 1,294 files
 contain 10,938,128 bytes. The graph has 309 SoftFloat, 60 Ramulator, 29 yaml-cpp, 7 spdlog and 1 extension
 translation units. Argparse is configured without a selected compiled object.
-These observations do not establish the separately required 413 tool executions.
+The source inventory and plan alone do not establish execution. The separate
+attempt-05 host diagnostic supplies the 413 actual tool operations within its
+declared lower scope.
 
 ## Work and acceptance boundary
 
@@ -76,6 +97,13 @@ handed-off assignments across the requested ten waves of six. Recovery and
 validation follow-ups by the same authors do not inflate the sixty-agent count.
 Each report under [agents](agents/) names its scope and distinguishes inspected
 code, synthetic controls and observed execution.
+
+The [final closeout review](validation/final-closeout-review.json) confirms
+exactly 60 distinct assignments in ten waves of six, with all reports present:
+59 completed assignments and one interrupted-author handoff completed by root.
+It also checks the current evidence claims, retained summary correction and
+local document links. The complete raw diagnostic originals are delivered as a
+separate archive with a committed [identity](host-diagnostic/archive-identity.json).
 
 The managed population remains four FP16/BF16 × policy processes, 132 launches and
 4,224 exact FP32 words. Pending-accessor, always-zero and alternate-library controls
