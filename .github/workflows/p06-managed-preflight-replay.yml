@@ -1,0 +1,214 @@
+name: P06 Managed Preflight Replay
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/p06-managed-preflight-replay.yml'
+      - '.github/workflows/project-governance.yml'
+      - 'ci/project/**'
+      - 'ci/gen_config.py'
+      - 'docs/project/evidence/p05-torch/reviews/archive_reader.py'
+      - 'docs/project/evidence/p06-managed-preflight/**'
+      - 'docs/project/evidence/p06-managed-preflight-replay/**'
+      - 'docs/designs/**'
+      - 'profiles/p02-tfr.json'
+      - 'sw/common/**'
+      - 'sw/kernel/ai/matmul.cpp'
+      - 'sw/runtime/ai/**'
+      - 'tests/regression/ai_bench_common/**'
+      - 'tests/regression/sgemm_tcu/p02_fixtures.h'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - 'LICENSE'
+  pull_request:
+    paths:
+      - '.github/workflows/p06-managed-preflight-replay.yml'
+      - '.github/workflows/project-governance.yml'
+      - 'ci/project/**'
+      - 'ci/gen_config.py'
+      - 'docs/project/evidence/p05-torch/reviews/archive_reader.py'
+      - 'docs/project/evidence/p06-managed-preflight/**'
+      - 'docs/project/evidence/p06-managed-preflight-replay/**'
+      - 'docs/designs/**'
+      - 'profiles/p02-tfr.json'
+      - 'sw/common/**'
+      - 'sw/kernel/ai/matmul.cpp'
+      - 'sw/runtime/ai/**'
+      - 'tests/regression/ai_bench_common/**'
+      - 'tests/regression/sgemm_tcu/p02_fixtures.h'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - 'LICENSE'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p06-managed-preflight-replay-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  replay:
+    name: Verify retained managed preflight evidence
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          submodules: false
+          lfs: false
+          persist-credentials: false
+      - name: Retain replay identity and verify pinned inputs
+        run: |
+          set -euo pipefail
+          python3 -I - <<'PY'
+          import hashlib, json, os, shutil, sys
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'p06-managed-preflight-replay'
+          evidence = root / 'evidence'
+          evidence.mkdir(parents=True, exist_ok=False)
+          with Path(os.environ['GITHUB_ENV']).open('a', encoding='utf-8') as stream:
+              stream.write('P06_MANAGED_REPLAY_ROOT=' + str(root) + '\n')
+          native = Path('docs/project/evidence/p06-managed-preflight/native')
+          pins = {
+              'run-45085300171-attempt1.zip': 'cee5be4dba875494f6eafb83484933ab7693428e4773b932a26d5b91bd17969d',
+              'source-inventory-57248e73.json': '72ca7e9237060ca2831a275811d27ec6fdb3507dfd9a00b693aa177aa68382e8',
+              'source-derivation-57248e73.json': '3b25d30eceeee2dc5cebd1cce8ed7ab90da0fec64857e82fc7cc7fc3ca38e171',
+              'run-45084009157-attempt1.zip': '4f1e177ba930c132f5e8cc7558b3087d39789c346763f00a9d1bdd2a6d17d00c',
+              'source-inventory-8756f400-replay.json': '57a1290e4cadb7e357d109b49ff7e2ee85459c42b9a54d9522e1e178f3323c30',
+              'source-derivation-8756f400-replay.json': '492b142b047e71a84a62425aebf5d46bb35f2ec022a173d42d6463e04fe834b8',
+          }
+          inputs = []
+          for name, expected in pins.items():
+              path = native / name
+              digest = hashlib.sha256()
+              row = {'path': path.as_posix(), 'expected_sha256': expected,
+                     'sha256': None, 'size_bytes': None, 'error': None}
+              try:
+                  with path.open('rb') as stream:
+                      for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+                          digest.update(chunk)
+                  row.update(sha256=digest.hexdigest(), size_bytes=path.stat().st_size)
+              except OSError as error:
+                  row['error'] = str(error)
+              inputs.append(row)
+          workflow = Path('.github/workflows/p06-managed-preflight-replay.yml').read_bytes()
+          (evidence / 'workflow.yml').write_bytes(workflow)
+          data = {name: os.environ[name] for name in (
+              'GITHUB_SHA', 'GITHUB_EVENT_NAME', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT',
+              'GITHUB_JOB', 'GITHUB_REPOSITORY', 'GITHUB_REF')}
+          data.update(schema_version=1, scope='managed-preflight-retained-data-replay',
+              original_source_revision='57248e73dfce4ae2d21d2cbdb82c3953eef2e3db',
+              failed_source_revision='8756f40029e59c87546fa22f4da33acd4e5d8e02',
+              native_execution='not_run', retained_code_executed=False,
+              dependency_compilation_provenance_verified=False,
+              qualified=False, ready_for_warm=False, warm_execution=False,
+              full_warm_coverage=False, acceptance_claimed=False,
+              phase_acceptance=False, performance_acceptance=False,
+              workflow_sha256=hashlib.sha256(workflow).hexdigest(), inputs=inputs,
+              python_version=list(sys.version_info[:3]), implementation=sys.implementation.name,
+              platform=sys.platform, executable=sys.executable, python3_on_path=shutil.which('python3'))
+          (evidence / 'job.json').write_text(json.dumps(data, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+          if any(row['sha256'] != row['expected_sha256'] for row in inputs):
+              raise SystemExit('Historical replay inputs differ from their independent pins')
+          if (data['python_version'][:2] != [3, 12] or data['implementation'] != 'cpython'
+                  or data['platform'] != 'linux' or data['python3_on_path'] is None
+                  or Path(data['python3_on_path']).resolve() != Path(sys.executable).resolve()):
+              raise SystemExit('Replay requires the selected system CPython 3.12 on Linux')
+          PY
+      - name: Replay the original successful archive
+        run: |
+          set -euo pipefail
+          python3 ci/project/p06_managed_preflight_replay.py \
+            --archive "$PWD/docs/project/evidence/p06-managed-preflight/native/run-45085300171-attempt1.zip" \
+            --sha256 cee5be4dba875494f6eafb83484933ab7693428e4773b932a26d5b91bd17969d \
+            --source-revision 57248e73dfce4ae2d21d2cbdb82c3953eef2e3db \
+            --source-inventory "$PWD/docs/project/evidence/p06-managed-preflight/native/source-inventory-57248e73.json" \
+            --source-inventory-sha256 72ca7e9237060ca2831a275811d27ec6fdb3507dfd9a00b693aa177aa68382e8 \
+            --source-derivation "$PWD/docs/project/evidence/p06-managed-preflight/native/source-derivation-57248e73.json" \
+            --source-derivation-sha256 3b25d30eceeee2dc5cebd1cce8ed7ab90da0fec64857e82fc7cc7fc3ca38e171 \
+            --output "$P06_MANAGED_REPLAY_ROOT/evidence/replay.json" \
+            2>&1 | tee "$P06_MANAGED_REPLAY_ROOT/evidence/replay.log"
+      - name: Require the original failed archive to remain rejected
+        run: |
+          set -euo pipefail
+          python3 -I - <<'PY' 2>&1 | tee "$P06_MANAGED_REPLAY_ROOT/evidence/failed-control.log"
+          import json, os, subprocess, sys
+          from pathlib import Path
+          native = Path.cwd() / 'docs/project/evidence/p06-managed-preflight/native'
+          command = [sys.executable, 'ci/project/p06_managed_preflight_replay.py',
+              '--archive', str(native / 'run-45084009157-attempt1.zip'),
+              '--sha256', '4f1e177ba930c132f5e8cc7558b3087d39789c346763f00a9d1bdd2a6d17d00c',
+              '--source-revision', '8756f40029e59c87546fa22f4da33acd4e5d8e02',
+              '--source-inventory', str(native / 'source-inventory-8756f400-replay.json'),
+              '--source-inventory-sha256', '57a1290e4cadb7e357d109b49ff7e2ee85459c42b9a54d9522e1e178f3323c30',
+              '--source-derivation', str(native / 'source-derivation-8756f400-replay.json'),
+              '--source-derivation-sha256', '492b142b047e71a84a62425aebf5d46bb35f2ec022a173d42d6463e04fe834b8']
+          result = subprocess.run(command, text=True, capture_output=True, timeout=120)
+          evidence = Path(os.environ['P06_MANAGED_REPLAY_ROOT']) / 'evidence'
+          (evidence / 'failed-original.stdout').write_text(result.stdout, encoding='utf-8')
+          (evidence / 'failed-original.stderr').write_text(result.stderr, encoding='utf-8')
+          def unique_pairs(pairs):
+              value = {}
+              for key, item in pairs:
+                  if key in value:
+                      raise ValueError('Duplicate key in failed-original result: ' + key)
+                  value[key] = item
+              return value
+          data = json.loads(result.stdout, object_pairs_hook=unique_pairs)
+          expected = {'contract_id': 'p06-managed-counter-preflight-replay-v1', 'outcome': 'fail',
+              'reason': 'report.outcome: value differs', 'native_execution': 'not_run',
+              'retained_code_executed': False, 'dependency_compilation_provenance_verified': False,
+              'qualified': False, 'ready_for_warm': False, 'warm_execution': False,
+              'full_warm_coverage': False, 'acceptance_claimed': False,
+              'phase_acceptance': False, 'performance_acceptance': False}
+          if (result.returncode != 1 or result.stderr or type(data) is not dict
+                  or set(data) != set(expected)
+                  or any(type(data[key]) is not type(value) or data[key] != value
+                         for key, value in expected.items())):
+              raise SystemExit('Failed original did not reach its required semantic rejection')
+          (evidence / 'failed-control.json').write_text(json.dumps({
+              'outcome': 'pass', 'scope': 'original-failure-rejection-control',
+              'replay_exit_code': result.returncode, 'replay': data,
+              'native_execution': 'not_run', 'acceptance_claimed': False}, indent=2) + '\n', encoding='utf-8')
+          print('Original failed archive rejected at report.outcome; no acceptance or native execution')
+          PY
+      - name: Test the inert replay and source derivation
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' 2>&1 | tee "$P06_MANAGED_REPLAY_ROOT/evidence/tests.log"
+          import unittest
+          loader = unittest.TestLoader()
+          suite = unittest.TestSuite()
+          for pattern in (
+              'test_p06_managed_preflight_replay*.py',
+              'test_p06_managed_preflight_source_export.py',
+              'test_p06_managed_preflight_application_build.py',
+              'test_p06_managed_preflight_derivation.py',
+              'test_p06_managed_preflight_generated.py',
+          ):
+              selected = loader.discover('ci/project', pattern=pattern)
+              if selected.countTestCases() == 0:
+                  raise RuntimeError('Required replay test group is missing: ' + pattern)
+              suite.addTests(selected)
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          raise SystemExit(0 if result.wasSuccessful() else 1)
+          PY
+      - name: Preserve replay identity, results and failure logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p06-managed-preflight-replay-${{ github.sha }}-run${{ github.run_id }}-attempt${{ github.run_attempt }}
+          path: ${{ runner.temp }}/p06-managed-preflight-replay/evidence
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 6
+          include-hidden-files: true
