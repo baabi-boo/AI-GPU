@@ -850,14 +850,14 @@ def verify_document(document, read_bytes, *, expected_revision):
                 == (link["output"]["sha256"], link["output"]["size_bytes"], "payloads/" + link["output"]["payload"]),
                 "shared product differs from its observed link")
         if name == "ramulator":
-            required = [archive_results[key]["path"] for key in ("yaml-cpp", "spdlog")]
+            required = [archive_results["yaml-cpp"]["path"]]
             expected_inputs = [record["output"] for source, record in compiles.items()
                                if next(row for row in plan if str(PurePosixPath(config["roots"]["sources"]) / row["source"]) == source)["component"] == "ramulator"]
             expected_inputs += [archive_results[key]["output"] for key in ("yaml-cpp", "spdlog")]
             completed = [record["finished_ns"] for record in compiles.values()
                          if record["output"] in expected_inputs]
             completed += [archive_results[key]["finished_ns"] for key in ("yaml-cpp", "spdlog")]
-            loads = []
+            loads = [archive_results[key]["path"] for key in ("yaml-cpp", "spdlog")]
         else:
             required = []
             extension = next(row for row in plan if row["component"] == "extension")

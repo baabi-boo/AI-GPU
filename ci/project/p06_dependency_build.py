@@ -348,7 +348,8 @@ class Builder:
         archives = {row["original_path"]: row["members"] for row in self.report["archives"]}
         for name, path, cwd, required, loads in (
             ("ramulator", self.build_root / "ramulator.map", self.build_root / "ramulator",
-             [row["original_path"] for row in self.report["archives"] if row["name"] in ("yaml-cpp", "spdlog")], []),
+             [row["original_path"] for row in self.report["archives"] if row["name"] == "yaml-cpp"],
+             [row["original_path"] for row in self.report["archives"] if row["name"] in ("yaml-cpp", "spdlog")]),
             ("extension", self.build_root / "extension.map", self.build_root / "extension", [],
              [str(self.source_root / "ramulator/libramulator.so")]),
         ):

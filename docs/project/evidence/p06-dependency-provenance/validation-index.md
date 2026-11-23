@@ -230,3 +230,37 @@ line/packet/symlink restrictions, separate JSON bound and a real recorded link.
 The two decisive checks fail against unchanged published `146253...` helpers
 for the expected old-limit reasons. This scope does not resolve the separately
 observed zero-member spdlog admission boundary or establish a complete original.
+
+## Observed unselected archive and narrow admission correction
+
+The [independent source/map review](agents/w10_a05-spdlog-selection.md) found
+that all 60 actual Ramulator compile commands omit `SPDLOG_COMPILED_LIB`, while
+the seven spdlog units define it. Fifty-nine Ramulator units include the pinned
+header that selects header definitions in that configuration. The unchanged
+actual map loads yaml-cpp and spdlog once each, selects 25 yaml-cpp members and
+selects zero spdlog members. Requiring member extraction from both archives
+therefore rejects this legitimate observed link even after the size correction.
+
+The producer and inert receipt correction require yaml-cpp selected members and
+exact unique `LOAD` rows for both compiled archives. They preserve the full
+spdlog compile/archive/index population and exact link-input inventory, and
+validate every member that is actually selected. The generic required-member
+rule and guarded-model SoftFloat obligation remain unchanged. The
+[supplemental receipt](host-diagnostic/review-04-spdlog-selection.json) retains
+the original rejection, narrow map/project-input pass and missing/duplicate
+spdlog `LOAD` rejection. It is a partial-original supplement, not a complete
+formal dependency receipt or native observation.
+
+The [independent correction review](agents/w10_a06.md) passed **125 tests in
+6.283 seconds**, no skips, covering recorder, receipt, binary, producer, graph,
+repeated-input, map-limit and nine new archive-selection methods. The
+[source-bound receipt](validation/w10_a06-spdlog-tests-01.json) records every
+current Python source before and after. A tiny fixture actually executes six
+compiles, three archives, two indexes and two links, then tests the real
+producer and inert archive/link admission. Its full-receipt fixture explicitly
+substitutes upstream source/configuration/population boundaries; it is not a
+complete pinned original. Rehashed wrong or missing archive inputs, selected
+members and `LOAD` rows still reject. Isolated published-old producer and reader
+calls reject the two corresponding positive cases as expected. This focused
+run includes all three later corrections; the running full governance suite
+remains bound to its earlier replay checkpoint.

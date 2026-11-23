@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "scope": "Supplemental inert inspection of unchanged failed attempt04; actual map plus current size-corrected binary parser; never a repaired original or complete dependency/native result",
+  "checked_at_utc": "2026-11-23T10:59:27.433654+00:00",
+  "original_helper_revision": "146253db8407e21aaef70e05f3f0dd3c7f5f6d33",
+  "original_state": "finished",
+  "original_outcome": "fail",
+  "original_reason": "host diagnostic command failed: ramulator-build",
+  "inspecting_helper_files": [
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_binary.py",
+      "size_bytes": 16793,
+      "sha256": "81397956f856e5658864ee59f198c760699160f5d7a78d73d80db41f361814e1"
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_receipt.py",
+      "size_bytes": 61150,
+      "sha256": "437a9148f6a5db3d7a6ad477e2390f38df80c9222b6c971db82a2745b02ea3c6"
+    },
+    {
+      "path": "/workspace/AI-GPU/ci/project/p06_dependency_contract.py",
+      "size_bytes": 4398,
+      "sha256": "deb76bca18567ce10e24156591ffbb00dd539e57c556727fbc073aa0d0d1b988"
+    }
+  ],
+  "source_and_generated_input_identities": [
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-sources/ramulator/CMakeLists.txt",
+      "size_bytes": 2717,
+      "sha256": "c5f5979fb70db45711ebf497a81b643ad652aa979dc0bfe8d522f201b3a9294d"
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-sources/ramulator/src/base/CMakeLists.txt",
+      "size_bytes": 406,
+      "sha256": "74c9da56a6ef4df794e339a6a30d3d27c1380bce8da1e943817d986f6fb12ce7"
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-sources/ramulator/src/base/logging.cpp",
+      "size_bytes": 915,
+      "sha256": "72cdca2005887768d0fd877786336056d757cb36431fcfc1fd9f940a1a1661d3"
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-sources/spdlog/CMakeLists.txt",
+      "size_bytes": 14953,
+      "sha256": "03c972a5b27012fea3725c2c195b70b107292fbda8148fb3a7b6497eff43cbc4"
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-sources/spdlog/include/spdlog/common.h",
+      "size_bytes": 12011,
+      "sha256": "7da36771ba4778f73947b716ee72ed632deff007d3a4622ab33a75fe688f9123"
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-build/ramulator/src/base/CMakeFiles/ramulator-base.dir/flags.make",
+      "size_bytes": 514,
+      "sha256": "3ed749127230f83b4274990ceafa0a6d465d70bdf0466ca3e53eb72d8725e372"
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-build/ramulator/_deps/spdlog-build/CMakeFiles/spdlog.dir/flags.make",
+      "size_bytes": 382,
+      "sha256": "d499cce7e11dd848cf6dd2a2b85749eba0f30394b2835b123c21e25c35c17113"
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-build/ramulator/CMakeFiles/ramulator.dir/link.txt",
+      "size_bytes": 5228,
+      "sha256": "f228324c217c9e871277d94c34380064c51544b42cbf9af03241d360a9ea1c6d"
+    }
+  ],
+  "original_map": {
+    "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-build/ramulator.map",
+    "size_bytes": 18084083,
+    "sha256": "9d6fa3c32d3e5f821d830ebd23373d4f8e626d89f801e8ba00af3fe643d16ec4"
+  },
+  "archives": {
+    "yaml-cpp": {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-build/ramulator/_deps/yaml-cpp-build/libyaml-cpp.a",
+      "size_bytes": 1186384,
+      "sha256": "44cfb419541e882765d514a1debea139aaea89f9d295c4de938a21dc8ec92aef",
+      "member_count": 29,
+      "selected_member_count": 25,
+      "load_count": 1
+    },
+    "spdlog": {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-build/ramulator/_deps/spdlog-build/libspdlog.a",
+      "size_bytes": 1446976,
+      "sha256": "0008bb253f7035656211d7d4eb9f938968b1193d0efd72950b194f9d827e0a3a",
+      "member_count": 7,
+      "selected_member_count": 0,
+      "load_count": 1
+    }
+  },
+  "current_required_both_policy_result": {
+    "outcome": "reject",
+    "reason": "link map lacks required archive-member evidence"
+  },
+  "supplemental_narrow_policy": {
+    "required_archives": [
+      "/workspace/p06-host-diagnostic-fixed-04/dependency-build/ramulator/_deps/yaml-cpp-build/libyaml-cpp.a"
+    ],
+    "required_loads": [
+      "/workspace/p06-host-diagnostic-fixed-04/dependency-build/ramulator/_deps/yaml-cpp-build/libyaml-cpp.a",
+      "/workspace/p06-host-diagnostic-fixed-04/dependency-build/ramulator/_deps/spdlog-build/libspdlog.a"
+    ],
+    "outcome": "pass",
+    "selected_members": 25,
+    "loads": 80,
+    "actual_direct_inputs": 62,
+    "receipt_project_load_validator": "pass with in-memory map descriptor only; failed original fields unchanged"
+  },
+  "negative_load_controls": [
+    {
+      "case": "missing-spdlog-load",
+      "outcome": "reject",
+      "reason": "link map lacks a unique required LOAD record"
+    },
+    {
+      "case": "duplicate-spdlog-load",
+      "outcome": "reject",
+      "reason": "link map lacks a unique required LOAD record"
+    }
+  ],
+  "generic_default_remains_strict": {
+    "outcome": "reject",
+    "reason": "link map lacks required archive-member evidence"
+  },
+  "ramulator_actual_compile_count": 60,
+  "ramulator_compiles_with_SPDLOG_COMPILED_LIB": 0,
+  "ramulator_compiles_including_spdlog_common_h": 59,
+  "spdlog_actual_compile_count": 7,
+  "spdlog_compiles_with_SPDLOG_COMPILED_LIB": 7,
+  "protected_identities_before": [
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/prepared.json",
+      "size_bytes": 312959,
+      "sha256": "8a5d86be8362bcd1cdb3083f403d0ffb9600d1b2d34410aefb1894b434646a82"
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/evidence/host-diagnostic.json",
+      "size_bytes": 1537077,
+      "sha256": "8f1afcb69d5bd17dc9fa727411d0dd2bb67b5ae655fa484236cb9bed9bc36798"
+    },
+    {
+      "path": "/workspace/p06-host-diagnostic-fixed-04/dependency-build/ramulator.map",
+      "size_bytes": 18084083,
+      "sha256": "9d6fa3c32d3e5f821d830ebd23373d4f8e626d89f801e8ba00af3fe643d16ec4"
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/driver.py",
+      "size_bytes": 23759,
+      "sha256": "743439b558db9ec39b12bb0bac5b838fd33aac72f9f996f3f8569090db33b91b"
+    },
+    {
+      "path": "/workspace/AI-GPU/docs/project/evidence/p06-dependency-provenance/host-diagnostic/driver-04.py",
+      "size_bytes": 23759,
+      "sha256": "c2aeaf524fd134b4c7eca6544b9d03c51bbe374dabde5239fa0c4c4372c3ddd0"
+    }
+  ],
+  "protected_bytes_unchanged": true,
+  "inspecting_helpers_unchanged": true,
+  "elapsed_seconds": 9.983482,
+  "native_execution": "not_run",
+  "original_modified": false,
+  "qualified": false,
+  "ready_for_warm": false,
+  "warm_execution": false,
+  "full_warm_coverage": false,
+  "acceptance_claimed": false,
+  "phase_acceptance": false,
+  "performance_acceptance": false
+}

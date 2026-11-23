@@ -20,6 +20,21 @@ with that correction. It does not repair the failed original, reconstruct its
 missing post-link inputs, or establish complete map admission. A fresh execution
 needs a new sealed attempt and an exact published helper revision.
 
+Further inspection found a separate member-selection assumption before the
+next build. The [pinned-source and actual-map review](../agents/w10_a05-spdlog-selection.md)
+establishes that Ramulator's object targets use spdlog header definitions and
+that the actual link selected 25 yaml-cpp members and no spdlog member. The
+corrected Ramulator admission requires yaml-cpp member evidence and exact
+unique `LOAD` rows for both archives. All seven spdlog compilations, its archive
+and index, and its observed link-input bytes remain required; any selected
+member still needs its admitted byte identity. The generic required-member and
+guarded-model SoftFloat requirements retain their existing meaning.
+
+The [generated CMake supplement](review-04-generated-supplement.json) checks
+145 actual workspace-generated inputs without changing the failed original.
+The original's missing generated-input fields remain missing. These supplements
+guide the next reviewed attempt; they do not turn attempt `04` into a pass.
+
 ## Diagnostic boundary
 
 This driver exercises the published dependency recipe functions and actual tool

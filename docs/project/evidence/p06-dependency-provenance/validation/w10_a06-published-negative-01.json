@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "scope": "Two isolated published-old-callsite negative controls using the tiny actual host fixture and explicit upstream substitutions",
+  "published_old_revision": "c44bb0df7091f27e58d125d70fab80fb13b58557",
+  "old_sources": [
+    {
+      "path": "ci/project/p06_dependency_build.py",
+      "sha256": "295ecacd837ad943f4d18641c106e553289f7e8e91eb07b8801bec5a4932a477",
+      "size_bytes": 31882
+    },
+    {
+      "path": "ci/project/p06_dependency_receipt.py",
+      "sha256": "437a9148f6a5db3d7a6ad477e2390f38df80c9222b6c971db82a2745b02ea3c6",
+      "size_bytes": 61150
+    }
+  ],
+  "other_imports": "Current reviewed dependencies; only each named old callsite module is substituted in its individual control.",
+  "started_at_utc": "2026-11-23T11:03:55.640218+00:00",
+  "finished_at_utc": "2026-11-23T11:03:56.281225+00:00",
+  "observations": [
+    {
+      "boundary": "published old Builder.verify_products",
+      "outcome": "expected_rejection",
+      "reason": "link map lacks required archive-member evidence"
+    },
+    {
+      "boundary": "published old verify_document archive/link callsite",
+      "outcome": "expected_rejection",
+      "reason": "link map lacks required archive-member evidence"
+    }
+  ],
+  "expected_rejections": 2,
+  "current_callsite_positive_before_and_after": true,
+  "complete_pinned_dependency_original": false,
+  "native_execution": "not_run",
+  "qualification_or_acceptance_claimed": false
+}

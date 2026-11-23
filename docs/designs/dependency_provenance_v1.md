@@ -64,9 +64,17 @@ separate observed step where the upstream build uses it.
 
 Retain exact link commands and linker maps identifying consumed static archive
 members. A `LOAD` record alone does not establish member selection. Join
-yaml-cpp/spdlog objects to Ramulator and SoftFloat members to both guarded format
-models. Preserve the exact model/backend recipe, permitting only explicitly
-reviewed map-generation additions in the new route.
+each selected yaml-cpp/spdlog member to its compiled object and SoftFloat
+members to both guarded format models. Ramulator must select yaml-cpp members
+and must load both exact yaml-cpp and spdlog archives once. Its pinned object
+targets compile without `SPDLOG_COMPILED_LIB` and may use spdlog's header
+definitions without extracting an object from the separately built archive.
+Record that empty selection honestly; all seven spdlog compiles, the complete
+archive and index, exact link-input bytes and unique archive `LOAD` remain
+required. Every member actually selected from either archive must match its
+admitted inventory. The generic required-member rule and the model's required
+SoftFloat selection remain unchanged. Preserve the exact model/backend recipe,
+permitting only explicitly reviewed map-generation additions in the new route.
 
 Stage only byte-verified products and required fetched source inputs at the
 canonical measurement paths. Freeze them before configuring the managed builds,
