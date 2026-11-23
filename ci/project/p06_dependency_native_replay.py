@@ -70,6 +70,7 @@ RUNNER_HELPERS = tuple(sorted(set(managed.RUNNER_HELPERS) | {
         "p06_dependency_admission", "p06_dependency_binary", "p06_dependency_contract",
         "p06_dependency_graph", "p06_dependency_lifetime_execute", "p06_dependency_receipt",
         "p06_dependency_record", "p06_dependency_sources", "p06_managed_preflight_application_build",
+        "p06_dependency_local_prepare", "p06_local_toolchain",
         "p06_managed_preflight_source_export", "p06_managed_preflight_sources",
         "p06_native_lifetime_contract", "p06_native_lifetime_records")
 }))

@@ -219,7 +219,8 @@ class DependencyBuildTests(unittest.TestCase):
         workspace.mkdir()
         preparation = self.root / "preparation.json"
         revision = "1" * 40
-        body = {"outcome": "pass", "reason": None, "expected_revision": revision,
+        body = {"contract_id": "p06-dependency-preparation-v1",
+                "outcome": "pass", "reason": None, "expected_revision": revision,
                 "dependency_contract_sha256": contract.contract_hash(), "dependency_cache_used": False}
         build.write_json(preparation, body)
         args = SimpleNamespace(source_dir=build.ROOT, workspace_dir=workspace,

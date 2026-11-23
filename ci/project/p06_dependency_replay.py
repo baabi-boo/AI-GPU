@@ -31,6 +31,7 @@ MAX_CACHE_BYTES = contract.MAX_PACKET_BYTES
 DEPENDENCY_MODULES = (
     "p06_dependency_binary", "p06_dependency_contract", "p06_dependency_graph",
     "p06_dependency_receipt", "p06_dependency_record", "p06_dependency_sources",
+    "p06_dependency_local_prepare", "p06_local_toolchain",
     "p06_managed_preflight_source_export",
 )
 LIMITATIONS = [

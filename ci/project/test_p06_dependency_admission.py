@@ -70,6 +70,14 @@ class LiveInputs:
         self.verification = {"fresh_dependency_build_passed": True,
             "archives": {"softfloat": {"members": self.members}},
             **dict.fromkeys(dependency_contract.FALSE_CLAIMS, False)}
+        self.preparation_path = self.path.parent / "preparation.json"
+        self.preparation_path.write_bytes(preflight.base._json_bytes({
+            "schema_version": 1, "contract_id": "p06-dependency-preparation-v1",
+            "dependency_contract_sha256": dependency_contract.contract_hash(),
+            "expected_revision": REVISION, "outcome": "pass", "reason": None,
+            "dependency_cache_used": False}))
+        self.document["preparation"] = dict(admission._live_identity(self.preparation_path),
+                                             path=self.preparation_path.name)
         self.write()
 
     def write(self):

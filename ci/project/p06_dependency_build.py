@@ -84,8 +84,10 @@ def read_json(path):
     return load_json_bytes(path.read_bytes(), "dependency build input")
 
 
-def clean_environment(build):
-    return {"PATH": os.pathsep.join(dict.fromkeys((str(Path(sys.executable).parent), "/usr/bin", "/bin"))),
+def clean_environment(build, host_bin=None):
+    entries = ([str(host_bin)] if host_bin is not None else [])
+    entries += [str(Path(sys.executable).parent), "/usr/bin", "/bin"]
+    return {"PATH": os.pathsep.join(dict.fromkeys(entries)),
             "HOME": str(build / "home"), "TMPDIR": str(build / "tmp"),
             "LANG": "C", "LC_ALL": "C", "TZ": "UTC", "PYTHONUTF8": "1",
             "PYTHONDONTWRITEBYTECODE": "1", "CCACHE_DISABLE": "1", "OBJCACHE": "",
@@ -202,12 +204,15 @@ class Builder:
         require(self.output.is_relative_to(self.workspace) and self.output != self.workspace,
                 "dependency output must lie inside its owned workspace")
         require(not os.path.lexists(self.output), "dependency evidence output must be fresh")
+        host_bin = getattr(args, "host_bin", None)
+        self.host_bin = canonical(host_bin, existing=True) if host_bin is not None else None
+        require(self.host_bin is None or self.host_bin.is_dir(), "host-bin must be a directory")
         self.output.mkdir(mode=0o700)
         for name in ("logs", "records", "payloads", "helpers", "build-inputs", "launchers"):
             (self.output / name).mkdir(mode=0o700)
         self.source_root = self.workspace / "dependency-sources"
         self.build_root = self.workspace / "dependency-build"
-        self.environment = clean_environment(self.build_root)
+        self.environment = clean_environment(self.build_root, self.host_bin)
         self.report = {"schema_version": 1, "contract_id": contract.CONTRACT_ID,
             "dependency_contract_sha256": contract.contract_hash(), "expected_revision": args.expected_revision,
             "state": "running", "outcome": "blocked", "reason": None, "failures": [],
@@ -422,11 +427,13 @@ class Builder:
             self.report["source_checkout_before"] = self.snapshot("source-checkout-before.json", self.initial_checkout)
             preparation_path = canonical(self.args.preparation, existing=True)
             preparation = read_json(preparation_path)
-            require(preparation.get("outcome") == "pass" and preparation.get("reason") is None
-                    and preparation.get("expected_revision") == self.args.expected_revision
-                    and preparation.get("dependency_contract_sha256") == contract.contract_hash()
-                    and preparation.get("dependency_cache_used") is False,
-                    "dependency preparation did not establish the fresh locked inputs")
+            self.receipt_reader = importlib.import_module("p06_dependency_receipt")
+            require(Path(self.receipt_reader.__file__).resolve() == ROOT / "ci/project/p06_dependency_receipt.py",
+                    "dependency receipt reader loaded from an unexpected location")
+            declared_host_bin = self.receipt_reader.validate_preparation(
+                preparation, self.args.expected_revision, paths=self.report["paths"], checkout=self.initial_checkout)
+            require(declared_host_bin == (str(self.host_bin) if self.host_bin is not None else None),
+                    "host-bin differs from the selected dependency preparation")
             self.report["preparation"] = self.retain(preparation_path, "preparation.json")
             require(shutil.disk_usage(self.workspace).free >= contract.BUDGET["min_free_bytes"]
                     and shutil.disk_usage(self.source).free >= contract.BUDGET["min_free_bytes"],
@@ -439,15 +446,16 @@ class Builder:
             for name in ("home", "tmp", "extension"):
                 (self.build_root / name).mkdir(mode=0o700)
             self.report["tools"] = tool_inventory(self.environment)
-            self.receipt_reader = importlib.import_module("p06_dependency_receipt")
-            require(Path(self.receipt_reader.__file__).resolve() == ROOT / "ci/project/p06_dependency_receipt.py",
-                    "dependency receipt reader loaded from an unexpected location")
+            self.receipt_reader.validate_preparation(preparation, self.args.expected_revision,
+                paths=self.report["paths"], tools=self.report["tools"])
             self.helpers = helper_inventory()
             self.report["helper_sources"] = list(self.helpers)
             for row in self.helpers:
                 self.retain(self.source / row["path"], "helpers/" + row["path"])
             repositories = {name: Path(path) for name, path in preparation["repositories"].items()}
             self.report["source_manifest"] = sources.materialize_sources(repositories, self.source_root)
+            self.receipt_reader.validate_preparation(preparation, self.args.expected_revision,
+                paths=self.report["paths"], tools=self.report["tools"], manifest=self.report["source_manifest"])
             self.report["source_plan"] = graph.source_plan(self.report["source_manifest"],
                 lambda name, path: (self.source_root / name / path).read_bytes())
             for repository in self.report["source_manifest"]["sources"]:
@@ -545,6 +553,8 @@ def main(argv=None):
     parser.add_argument("--preparation", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--expected-revision", required=True)
+    parser.add_argument("--host-bin", type=Path,
+                        help="host-tool directory recorded by the selected local preparation")
     args = parser.parse_args(argv)
     try:
         report = build(args)

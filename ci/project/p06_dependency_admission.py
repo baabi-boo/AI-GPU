@@ -29,6 +29,7 @@ SOURCE_FILES = (
     "ci/project/p06_dependency_lifetime_execute.py",
     "ci/project/p06_dependency_build.py",
     "ci/project/p06_dependency_prepare.py",
+    "ci/project/p01_toolchain.lock.json",
     "docs/designs/dependency_provenance_v1.md",
     MODEL_MAKEFILE,
 )
@@ -60,7 +61,7 @@ def contract_hash():
     return dependency_contract.digest(contract())
 
 
-def _live_identity(path):
+def _live_identity(path, *, max_bytes=dependency_contract.MAX_FILE_BYTES):
     path = Path(os.path.abspath(path))
     require(re.fullmatch(r"/[A-Za-z0-9_./+()\-]+", str(path))
             and path.resolve(strict=True) == path
@@ -68,7 +69,7 @@ def _live_identity(path):
             "dependency data paths must be safe absolute literals without symlink traversal")
     status = path.stat()
     require(stat.S_ISREG(status.st_mode) and status.st_nlink == 1
-            and 0 <= status.st_size <= dependency_contract.MAX_FILE_BYTES,
+            and 0 <= status.st_size <= max_bytes,
             "dependency input is not a bounded, unlinked regular file: " + str(path))
     digest, size = _digest(path)
     return {"path": str(path), "sha256": digest, "size_bytes": size}
@@ -90,6 +91,19 @@ class Admission:
                 "dependency receipt did not establish a complete fresh build")
         require(all(self.document[name] is False for name in dependency_contract.FALSE_CLAIMS),
                 "dependency receipt changes a non-acceptance claim")
+        preparation_descriptor = self.document["preparation"]
+        receipt.fields(preparation_descriptor, receipt.DESCRIPTOR_FIELDS, "retained preparation descriptor")
+        preparation_path = self.path.parent / receipt.relative(preparation_descriptor["path"])
+        self.preparation_identity = _live_identity(preparation_path,
+            max_bytes=dependency_contract.MAX_RECEIPT_BYTES)
+        require(self.preparation_identity == dict(preparation_descriptor, path=str(preparation_path)),
+                "dependency preparation changed after validation")
+        with preparation_path.open("rb") as stream:
+            preparation_body = stream.read(dependency_contract.MAX_RECEIPT_BYTES + 1)
+        preparation = receipt.decode(receipt.descriptor(preparation_descriptor, lambda name: preparation_body))
+        receipt.validate_preparation(preparation, expected_revision)
+        self.local_toolchain_tools = (preparation["toolchain_receipt"]["tools"]
+            if preparation["contract_id"] == receipt.local_prepare.CONTRACT_ID else {})
         self.products = self.document["products"]
         require(set(self.products) == set(dependency_contract.PRODUCTS),
                 "dependency receipt changes the selected product inventory")
@@ -134,6 +148,9 @@ class Admission:
     def verify_stable(self, managed_tools=None):
         require(_live_identity(self.path) == self.receipt_identity,
                 "dependency receipt changed after admission")
+        require(_live_identity(self.preparation_identity["path"],
+                    max_bytes=dependency_contract.MAX_RECEIPT_BYTES) == self.preparation_identity,
+                "dependency preparation changed after admission")
         for item in (*self.source_inputs, *self.staged_files):
             require(_live_identity(item["path"]) == item,
                     "pinned dependency source or staged bytes changed: " + item["path"])
@@ -146,6 +163,16 @@ class Admission:
             if managed_tools is not None and name in managed_tools:
                 require(managed_tools[name] == expected,
                         "managed and dependency selected tools differ: " + name)
+        for name, expected in self.local_toolchain_tools.items():
+            path = Path(expected["path"])
+            require(path.is_file() and path.stat().st_size == expected["size_bytes"]
+                    and base._file_identity(path) == expected,
+                    "locally provisioned tool identity changed: " + name)
+            require(name.startswith(("libc64/", "libcrt64/")) or os.access(path, os.X_OK),
+                    "locally provisioned compiler is not executable: " + name)
+            if managed_tools is not None:
+                require(type(managed_tools) is dict and managed_tools.get(name) == expected,
+                        "managed and locally provisioned tools differ: " + name)
         for row in self.document.get("external_archives", []):
             digest, size = _digest(Path(row["original_path"]).resolve(strict=True))
             require((digest, size) == (row["descriptor"]["sha256"], row["descriptor"]["size_bytes"]),

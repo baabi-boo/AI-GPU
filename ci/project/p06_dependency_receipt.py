@@ -15,6 +15,7 @@ from baseline_process import LIMITATIONS as PROCESS_LIMITATIONS
 import p06_dependency_binary as binary
 import p06_dependency_contract as contract
 import p06_dependency_graph as graph
+import p06_dependency_local_prepare as local_prepare
 import p06_dependency_record as recorder
 from p06_dependency_sources import validate_manifest, CONTRACT_ID as SOURCE_CONTRACT_ID
 
@@ -431,7 +432,44 @@ def _verify_compile_graph(document, records, config, read_bytes):
     return plan, compiles, output_to_record
 
 
-def _verify_outer_commands(document, config, read_bytes):
+def validate_preparation(document, expected_revision, *, paths=None, tools=None, manifest=None, checkout=None):
+    require(type(document) is dict, "dependency preparation must be an object")
+    if document.get("contract_id") == local_prepare.CONTRACT_ID:
+        local_prepare.validate_local_preparation(document, expected_revision)
+        if paths is not None:
+            require(document["source_dir"] == paths["source"]
+                    and document["workspace_dir"] == paths["workspace"],
+                    "local preparation selects different dependency roots")
+        if tools is not None:
+            require(document["host_tools"] == tools,
+                    "selected host tools differ from the local preparation")
+        if manifest is not None:
+            require(document["source_manifest"] == manifest,
+                    "materialized sources differ from the local preparation")
+        if checkout is not None:
+            require(document["source_before"] == checkout,
+                    "measurement checkout differs from the local preparation")
+        return document["host_bin"]
+    hosted_fields = {
+        "schema_version", "contract_id", "dependency_contract_sha256", "expected_revision",
+        "outcome", "reason", "failures", "commands", "repositories", "toolchain_id",
+        "toolchain_cache_key", "dependency_cache_used", "native_execution", "source_before",
+        "source_after", "resources_before", "tools_dir", *contract.FALSE_CLAIMS,
+    }
+    require(set(document) <= hosted_fields,
+            "hosted preparation cannot carry local or unrecognized metadata")
+    require(document.get("contract_id") == "p06-dependency-preparation-v1"
+            and document.get("outcome") == "pass" and document.get("reason") is None
+            and document.get("dependency_cache_used") is False
+            and document.get("expected_revision") == expected_revision
+            and document.get("dependency_contract_sha256") == contract.contract_hash(),
+            "build lacks matching fresh dependency preparation")
+    require(document.get("host_bin") is None, "hosted preparation cannot select a custom host-bin")
+    return None
+
+
+def _verify_outer_commands(document, config, read_bytes, *, host_bin=None):
+    require(host_bin is None or absolute(host_bin) == host_bin, "host-bin is not a canonical producer path")
     rows = document["commands"]
     require(type(rows) is list and 5 <= len(rows) <= 7, "outer build command population differs")
     identifiers = [row.get("id") for row in rows if type(row) is dict]
@@ -513,9 +551,10 @@ def _verify_outer_commands(document, config, read_bytes):
                       "--target", "ramulator", "--parallel", "2", "--verbose"]
     require(rows[2]["argv"] == expected_build and rows[2]["cwd"] == build_root,
             "Ramulator build changes the target or nested job bound")
+    search = ([host_bin] if host_bin is not None else [])
+    search += [str(PurePosixPath(document["tools"]["python3"]["path"]).parent), "/usr/bin", "/bin"]
     expected_environment = {
-        "PATH": ":".join(dict.fromkeys((str(PurePosixPath(document["tools"]["python3"]["path"]).parent),
-                                        "/usr/bin", "/bin"))),
+        "PATH": ":".join(dict.fromkeys(search)),
         "HOME": build_root + "/home", "TMPDIR": build_root + "/tmp",
         "LANG": "C", "LC_ALL": "C", "TZ": "UTC", "PYTHONUTF8": "1", "PYTHONDONTWRITEBYTECODE": "1",
         "CCACHE_DISABLE": "1", "OBJCACHE": "", "MAKEFLAGS": "-j2", "CMAKE_BUILD_PARALLEL_LEVEL": "2", "THREADS": "1",
@@ -718,16 +757,13 @@ def verify_document(document, read_bytes, *, expected_revision):
     require(config["roots"]["sources"] == document["paths"]["sources"]
             and config["roots"]["build"] == document["paths"]["build"], "recorder and build roots differ")
     config_sha256 = hashlib.sha256(config_data).hexdigest()
-    commands = _verify_outer_commands(document, config, read_bytes)
     preparation = decode(descriptor(document["preparation"], read_bytes))
-    require(preparation.get("contract_id") == "p06-dependency-preparation-v1"
-            and preparation.get("outcome") == "pass" and preparation.get("reason") is None
-            and preparation.get("dependency_cache_used") is False
-            and preparation.get("expected_revision") == expected_revision
-            and preparation.get("dependency_contract_sha256") == contract.contract_hash(),
-            "build lacks matching fresh dependency preparation")
+    host_bin = validate_preparation(preparation, expected_revision, paths=document["paths"],
+        tools=document["tools"], manifest=document["source_manifest"])
+    commands = _verify_outer_commands(document, config, read_bytes, host_bin=host_bin)
     before = decode(descriptor(document["source_checkout_before"], read_bytes))
     after = decode(descriptor(document["source_checkout_after"], read_bytes))
+    validate_preparation(preparation, expected_revision, checkout=before)
     require(before == after and before.get("revision") == expected_revision
             and before.get("dirty") is False and before.get("blockers") == [],
             "measurement checkout identity changed or was not clean")
