@@ -1,0 +1,42 @@
+# SPDX-License-Identifier: Apache-2.0
+"""Correct missing-fixture setup; only an existing hashed measurement file mutates."""
+import hashlib,json,sys,time
+from pathlib import Path
+ROOT=Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+sys.path.insert(0,str(ROOT/'ci/project'))
+from test_p06_qualified_warm_runner import WarmHarness,contract,preflight
+plan=contract.process_plan()
+started=time.monotonic()
+with WarmHarness() as fixture:
+    relative='sw/kernel/ai/matmul.cpp'
+    path=fixture.paths['source']/relative
+    assert relative in fixture.source_names and path.is_file()
+    before=path.read_bytes()
+    assert hashlib.sha256(before).hexdigest()==preflight.KERNEL_SHA256
+    mutations=[]
+    def mutate(name,_):
+        if name==plan[-1]['id']:
+            path.write_bytes(before+b'\n')
+            mutations.append(name)
+    fixture.after_command=mutate
+    result=fixture.run()
+    assert mutations==[plan[-1]['id']]
+    assert result==fixture.saved and result['state']=='finished'
+    assert result['outcome']=='fail'
+    assert result['reason']=='source changed during execution',result['reason']
+    assert result['qualified_warm_passed'] is False and result['counter_qualification_passed'] is False
+    assert all(result[n] is False for n in preflight.manifest.FALSE_CLAIMS)
+    assert fixture.launches()==[p['id'] for p in plan]
+    assert result['completed_counts']['processes']==23
+    record={'id':'last-process-source-drift','passed':True,'outcome':result['outcome'],
+      'reason':result['reason'],'launches':24,'completed_processes':23,
+      'native_execution_field':result['native_execution'],
+      'qualified_warm_passed':result['qualified_warm_passed'],
+      'failure_stages':[p['stage'] for p in result['failures']],
+      'mutated_source':relative,'source_verified_present_before_execution':True,
+      'initial_source_sha256':hashlib.sha256(before).hexdigest(),
+      'mutated_source_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),
+      'native_execution_performed':False,'duration_seconds':time.monotonic()-started}
+target=ROOT/'docs/project/evidence/p06-qualified-warm/validation/w04_a03_source_correction.json'
+target.write_text(json.dumps(record,indent=2,sort_keys=True)+'\n')
+print(json.dumps(record,sort_keys=True))

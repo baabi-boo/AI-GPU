@@ -1,0 +1,167 @@
+#!/usr/bin/env python3
+"""Read-only final ledger and delivery integrity checks; no project imports."""
+import argparse
+import hashlib
+import json
+from pathlib import Path, PurePosixPath
+import re
+import stat
+import subprocess
+import sys
+
+SOURCE = 'c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+TREE = '13450812d279d55f36a172fcf38653ff567f6c86'
+BASE = 'docs/project/evidence/p06-qualified-warm'
+EXPECTED = {f'w{w:02}_a{a:02}' for w in range(1, 11) for a in range(1, 7)}
+DELIVERY = {
+    'ROADMAP.md',
+    'docs/project/backlog.md', 'docs/project/status.md',
+    'docs/project/phases/p06-performance.md',
+    'docs/project/p06-workspace-handoff.md',
+    'docs/project/p06-counter-qualification-handoff.md',
+    'docs/project/p06-qualified-warm-handoff.md',
+    'docs/project/p06-qualified-warm-audit.md',
+}
+
+
+def git(root, *args):
+    return subprocess.check_output(['git', '-C', str(root), *args])
+
+
+def regular(root, relative):
+    p = PurePosixPath(relative)
+    if p.is_absolute() or '..' in p.parts or str(p) != relative:
+        raise ValueError(f'unsafe path: {relative!r}')
+    current = root
+    for part in p.parts:
+        current = current / part
+        if current.is_symlink():
+            raise ValueError(f'symlink in path: {relative}')
+    if not stat.S_ISREG(current.stat().st_mode):
+        raise ValueError(f'not a regular file: {relative}')
+    if not current.resolve().is_relative_to(root):
+        raise ValueError(f'path escapes repository: {relative}')
+    return current
+
+
+def read_json(path):
+    def unique(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError(f'duplicate JSON key: {key}')
+            result[key] = value
+        return result
+    return json.loads(path.read_text(), object_pairs_hook=unique)
+
+
+def verify(root, ledger=None):
+    errors = []
+    def require(ok, message):
+        if not ok:
+            errors.append(message)
+    def nonempty(value):
+        return isinstance(value, str) and bool(value.strip())
+
+    require(git(root, 'rev-parse', SOURCE + '^{tree}').decode().strip() == TREE,
+            'frozen source tree mismatch')
+    tracked = {}
+    for item in git(root, 'ls-tree', '-rz', SOURCE).split(b'\0'):
+        if item:
+            metadata, name = item.split(b'\t', 1)
+            mode, kind, sha = metadata.decode().split()
+            tracked[name.decode()] = (mode, kind, sha)
+    def allowed(path):
+        return path in DELIVERY or (path.startswith(BASE + '/') and
+               (path not in tracked or path.endswith('.md')))
+    changed = {}
+    for label, args in (
+        ('worktree', ('diff', '--name-only', '-z', SOURCE, '--')),
+        ('index', ('diff', '--cached', '--name-only', '-z', SOURCE, '--')),
+        ('untracked', ('ls-files', '--others', '--exclude-standard', '-z')),
+    ):
+        changed[label] = sorted(x.decode() for x in git(root, *args).split(b'\0') if x)
+        require(all(allowed(p) for p in changed[label]),
+                f'{label} changes outside delivery scope: {[p for p in changed[label] if not allowed(p)]}')
+    receipt = read_json(regular(root, BASE + '/validation/implementation-publication.json'))
+    require(receipt.get('published_revision') == SOURCE, 'published revision mismatch')
+    require(receipt.get('tree') == receipt.get('remote_tree') == TREE,
+            'publication receipt local/remote tree mismatch')
+    for row in receipt['files']:
+        require(tracked.get(row['path']) == (row['mode'], row['type'], row['sha']),
+                'published blob mismatch: ' + row['path'])
+    remote = read_json(regular(root, BASE + '/validation/w09_a03-remote-publication-ci.json'))
+    require(remote['publication']['remote_commit'] == SOURCE and
+            remote['publication']['remote_tree'] == TREE,
+            'independent publication receipt mismatch')
+    reports = sorted(p.stem for p in (root / BASE / 'agents').glob('w??_a??.md'))
+    result = {'source_implementation': SOURCE, 'source_tree': TREE,
+              'report_population': len(reports), 'report_names': reports,
+              'missing_reports': sorted(EXPECTED - set(reports)),
+              'changed_paths': changed, 'publication_receipts_match': not errors,
+              'scope': 'File integrity and coordinator attestation structure; no independent proof of agent invocation, full governance, native execution or final remote publication.'}
+    if ledger is not None:
+        j = read_json(regular(root, ledger))
+        require(j.get('schema_version') == 1, 'schema_version must be 1')
+        require(j.get('source_implementation') == SOURCE and j.get('source_tree') == TREE,
+                'ledger source implementation/tree mismatch')
+        counts = {'agents': 60, 'waves': 10, 'agents_per_wave': 6,
+                  'completed': 60, 'coordinator': 0, 'supplemental': 0}
+        require(j.get('counts') == counts, 'counts must describe exactly 60 completed workers')
+        rows = j.get('agents', [])
+        require(isinstance(rows, list) and len(rows) == 60, 'exactly 60 agents required')
+        names, ids, paths = [], [], []
+        for row in rows:
+            name = row.get('name', '')
+            names.append(name)
+            ids.append(row.get('agent_id'))
+            report = row.get('report', '')
+            paths.append(report)
+            require(name in EXPECTED, 'unexpected worker name: ' + str(name))
+            require(row.get('wave') == (int(name[1:3]) if name in EXPECTED else None),
+                    'incorrect wave: ' + str(name))
+            require(nonempty(row.get('agent_id')) and row.get('agent_id') not in ('root', '/root'),
+                    'invalid worker ID: ' + str(name))
+            require(nonempty(row.get('task')) and nonempty(row.get('scope')),
+                    'missing task/scope: ' + str(name))
+            require(row.get('state') == 'completed', 'incomplete worker: ' + str(name))
+            require(report == f'{BASE}/agents/{name}.md', 'noncanonical report: ' + str(name))
+            try:
+                contents = regular(root, report).read_bytes()
+                require(bool(contents.strip()), 'empty report: ' + str(name))
+                require(re.fullmatch(r'[0-9a-f]{64}', row.get('sha256', '')) is not None and
+                        hashlib.sha256(contents).hexdigest() == row['sha256'],
+                        'report SHA-256 mismatch: ' + str(name))
+            except (OSError, ValueError) as exc:
+                errors.append(str(exc))
+        require(set(names) == EXPECTED and len(set(names)) == len(names),
+                'worker name set must be exactly six per wave, ten waves')
+        require(len(set(ids)) == 60 and len(set(paths)) == 60, 'IDs and report paths must be unique')
+        require(set(reports) == EXPECTED, 'on-disk report population must be exactly 60')
+        att = j.get('coordinator_attestation', {})
+        require(att.get('coordinator') == '/root' and att.get('basis') == 'actual_tool_history'
+                and att.get('actual_invocations') == 60 and att.get('completed_invocations') == 60
+                and att.get('excludes_coordinator') is True
+                and att.get('excludes_supplemental_probes') is True
+                and nonempty(att.get('statement')), 'missing actual-invocation coordinator attestation')
+        result['ledger'] = ledger
+    result['errors'] = errors
+    result['status'] = 'FAIL' if errors else ('PASS' if ledger else 'SNAPSHOT_ONLY')
+    return result
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--repo', type=Path, default=Path.cwd())
+    parser.add_argument('--ledger', default=BASE + '/execution-ledger.json')
+    parser.add_argument('--snapshot', action='store_true', help='Inspect current files without asserting a complete ledger')
+    args = parser.parse_args()
+    try:
+        result = verify(args.repo.resolve(), None if args.snapshot else args.ledger)
+    except (OSError, ValueError, TypeError, KeyError, AttributeError, subprocess.CalledProcessError) as exc:
+        result = {'status': 'FAIL', 'errors': [str(exc)]}
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 1 if result['status'] == 'FAIL' else 0
+
+if __name__ == '__main__':
+    sys.exit(main())

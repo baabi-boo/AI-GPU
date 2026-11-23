@@ -1,0 +1,208 @@
+{
+  "accepted_controls": 3,
+  "duration_seconds": 0.01860003599722404,
+  "native_execution": false,
+  "outcome": "pass",
+  "probes": [
+    {
+      "detail": {
+        "native_outcome": "pass",
+        "native_reported_cleanup_complete": true,
+        "native_supervision_sha256": "2f54b2f3ad5e46bd7562f33ca673e8cb38b33cc2d4b418f1157696125cb3fdba",
+        "reviewed_at": "2026-11-23T19:12:13Z"
+      },
+      "expected_allowed": true,
+      "name": "complete_success",
+      "observed_allowed": true
+    },
+    {
+      "detail": "RuntimeError: native supervision pin mismatch",
+      "expected_allowed": false,
+      "name": "native_pin_mismatch",
+      "observed_allowed": false
+    },
+    {
+      "detail": "RuntimeError: native attempt is unfinished",
+      "expected_allowed": false,
+      "name": "unfinished_even_with_review",
+      "observed_allowed": false
+    },
+    {
+      "detail": "RuntimeError: native revision differs",
+      "expected_allowed": false,
+      "name": "wrong_revision_even_with_review",
+      "observed_allowed": false
+    },
+    {
+      "detail": "RuntimeError: native attempt requires explicit cleanup review",
+      "expected_allowed": false,
+      "name": "missing_stage",
+      "observed_allowed": false
+    },
+    {
+      "detail": "RuntimeError: native attempt requires explicit cleanup review",
+      "expected_allowed": false,
+      "name": "reordered_stages",
+      "observed_allowed": false
+    },
+    {
+      "detail": "RuntimeError: native attempt requires explicit cleanup review",
+      "expected_allowed": false,
+      "name": "bool_exit_code",
+      "observed_allowed": false
+    },
+    {
+      "detail": "RuntimeError: native attempt requires explicit cleanup review",
+      "expected_allowed": false,
+      "name": "not_started",
+      "observed_allowed": false
+    },
+    {
+      "detail": "RuntimeError: native attempt requires explicit cleanup review",
+      "expected_allowed": false,
+      "name": "missing_cleanup",
+      "observed_allowed": false
+    },
+    {
+      "detail": "RuntimeError: native attempt requires explicit cleanup review",
+      "expected_allowed": false,
+      "name": "report_failure",
+      "observed_allowed": false
+    },
+    {
+      "detail": "RuntimeError: native attempt requires explicit cleanup review",
+      "expected_allowed": false,
+      "name": "nonzero_exit",
+      "observed_allowed": false
+    },
+    {
+      "detail": "RuntimeError: native attempt requires explicit cleanup review",
+      "expected_allowed": false,
+      "name": "reason_present",
+      "observed_allowed": false
+    },
+    {
+      "detail": "RuntimeError: native attempt requires explicit cleanup review",
+      "expected_allowed": false,
+      "name": "failed_without_review",
+      "observed_allowed": false
+    },
+    {
+      "detail": {
+        "coordinator_cleanup_review": "/workspace/scratch/dc8be1693f91/validation/w06-a03-adptxkbj/cleanup.json",
+        "coordinator_cleanup_review_sha256": "bdd329095c51417937e09cc24667d6d9d7a296d0d2dd3482fcb1cd21adad89b6",
+        "native_outcome": "fail",
+        "native_reported_cleanup_complete": true,
+        "native_supervision_sha256": "90d0bbd6addd4e7d37d68d06779aeb5f1c5d9768874fa606c126886ea766fcc5",
+        "reviewed_at": "2026-11-23T19:12:13Z"
+      },
+      "expected_allowed": true,
+      "name": "failed_with_explicit_review",
+      "observed_allowed": true
+    },
+    {
+      "detail": {
+        "coordinator_cleanup_review": "/workspace/scratch/dc8be1693f91/validation/w06-a03-adptxkbj/cleanup.json",
+        "coordinator_cleanup_review_sha256": "0afc04afa04bc906df54a699bfdab28abe453ba7d415b0081fa5af2a8b00cf55",
+        "native_outcome": "pass",
+        "native_reported_cleanup_complete": false,
+        "native_supervision_sha256": "2ee979513713171d533251f9cd089785ab87f67f84375cdaa06fece8e2dc0b57",
+        "reviewed_at": "2026-11-23T19:12:13Z"
+      },
+      "expected_allowed": true,
+      "name": "incomplete_cleanup_with_explicit_review",
+      "observed_allowed": true
+    },
+    {
+      "detail": "RuntimeError: cleanup review must identify this attempt and explain verified cleanup",
+      "expected_allowed": false,
+      "name": "cleanup_review_wrong_pin",
+      "observed_allowed": false
+    },
+    {
+      "detail": "RuntimeError: cleanup review must identify this attempt and explain verified cleanup",
+      "expected_allowed": false,
+      "name": "cleanup_review_wrong_revision",
+      "observed_allowed": false
+    },
+    {
+      "detail": "RuntimeError: cleanup review must identify this attempt and explain verified cleanup",
+      "expected_allowed": false,
+      "name": "cleanup_review_empty_reason",
+      "observed_allowed": false
+    },
+    {
+      "detail": "RuntimeError: cleanup review must identify this attempt and explain verified cleanup",
+      "expected_allowed": false,
+      "name": "cleanup_review_not_complete",
+      "observed_allowed": false
+    }
+  ],
+  "process_cleanup_execution": false,
+  "rejections": 16,
+  "schema_version": 1,
+  "scope": "independent supervisor static and extracted scheduling-predicate probes only",
+  "source_stable": true,
+  "static_commands": [
+    [
+      "preflight",
+      [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "ci/project/preflight.py",
+        "--tier",
+        "governance",
+        "--json"
+      ],
+      120
+    ],
+    [
+      "structure",
+      [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "ci/project/check_project.py"
+      ],
+      300
+    ],
+    [
+      "baseline-packets",
+      [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "ci/project/check_baseline_packets.py"
+      ],
+      300
+    ],
+    [
+      "unittest-discovery",
+      [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/project",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      3600
+    ],
+    [
+      "diff-check",
+      [
+        "git",
+        "diff",
+        "--check"
+      ],
+      60
+    ]
+  ],
+  "supervisor_sha256": "a5b43e6d929e511ad1dbfa8cbf5b9d1085a6d0ffab8bc263fa428bfd439d8c57",
+  "supervisor_size_bytes": 15402,
+  "syntax_compile": "pass",
+  "unique_predicate_probes": 19,
+  "unittest_body_execution": false
+}

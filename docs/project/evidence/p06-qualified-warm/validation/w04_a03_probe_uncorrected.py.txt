@@ -1,0 +1,96 @@
+# SPDX-License-Identifier: Apache-2.0
+"""Independent synthetic producer failure probes; no native execution."""
+import hashlib
+import json
+from pathlib import Path
+import sys
+import time
+ROOT = Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+sys.path.insert(0, str(ROOT / 'ci/project'))
+from test_p06_qualified_warm_runner import WarmHarness, contract, preflight
+PLAN = contract.process_plan()
+OUTPUT = ROOT / 'docs/project/evidence/p06-qualified-warm/validation/w04_a03_results.json'
+rows = []
+started = time.monotonic()
+def common(name, fixture, result, launched, completed):
+    assert result == fixture.saved
+    assert result['state'] == 'finished'
+    assert result['outcome'] in ('fail', 'blocked')
+    assert result['qualified_warm_passed'] is False
+    assert result['counter_qualification_passed'] is False
+    assert all(result[n] is False for n in preflight.manifest.FALSE_CLAIMS)
+    assert fixture.launches() == [p['id'] for p in PLAN[:launched]]
+    assert result['completed_counts']['processes'] == completed
+    assert len(set(fixture.launches())) == launched
+    rows.append({'id': name, 'passed': True, 'outcome': result['outcome'],
+        'reason': result['reason'], 'launches': launched, 'completed_processes': completed,
+        'native_execution_field': result['native_execution'],
+        'qualified_warm_passed': result['qualified_warm_passed'],
+        'failure_stages': [p['stage'] for p in result['failures']]})
+    OUTPUT.write_text(json.dumps({'state':'running', 'cases':rows}, indent=2)+'\n')
+    print(name, 'PASS', result['reason'], flush=True)
+with WarmHarness() as fixture:
+    fixture.exceptions[PLAN[12]['id']] = KeyboardInterrupt()
+    result = fixture.run()
+    common('midpopulation-interruption', fixture, result, 13, 12)
+    assert result['reason'] == 'interrupted'
+    assert result['native_execution'] == 'run'
+    report = fixture.paths['output'] / 'report.json'
+    before = report.read_bytes()
+    call_count = len(fixture.calls)
+    try:
+        fixture.run()
+    except FileExistsError:
+        pass
+    else:
+        raise AssertionError('resume into retained output accepted')
+    assert report.read_bytes() == before
+    assert len(fixture.calls) == call_count
+    rows.append({'id': 'same-attempt-resume-refused', 'passed': True,
+        'exception': 'FileExistsError', 'original_report_sha256': hashlib.sha256(before).hexdigest(),
+        'retained_report_unchanged': True, 'no_additional_commands': True})
+    print('same-attempt-resume-refused PASS', flush=True)
+with WarmHarness() as fixture:
+    def change_source(name, _):
+        if name == PLAN[-1]['id']:
+            path = fixture.paths['source'] / 'tests/regression/ai_counter_preflight/main.cpp'
+            path.write_bytes(path.read_bytes() + b'\n')
+    fixture.after_command = change_source
+    result = fixture.run()
+    common('last-process-source-drift', fixture, result, 24, 23)
+    assert result['reason'] and result['failures']
+with WarmHarness() as fixture:
+    def change_tool(name, _):
+        if name == PLAN[-1]['id']:
+            path = fixture.tool_paths['g++']
+            path.write_bytes(path.read_bytes() + b'changed')
+    fixture.after_command = change_tool
+    result = fixture.run()
+    common('last-process-tool-drift', fixture, result, 24, 23)
+    assert result['reason'] and result['failures']
+with WarmHarness() as fixture:
+    def final_resource_drop(count, result):
+        if count == 2:
+            result['free_disk_bytes']['output'] = preflight.BUDGET['min_free_bytes'] - 1
+        return result
+    fixture.mutate_resources = final_resource_drop
+    result = fixture.run()
+    common('complete-population-final-disk-breach', fixture, result, 24, 24)
+    assert result['reason'] == 'final disk reserve below 15 GiB'
+    assert result['failures'][-1]['stage'] == 'final-resources'
+    assert fixture.resource_count == 2
+record = {'schema_version':1, 'scope':'synthetic-producer-failure-and-retention-only',
+ 'native_execution_performed':False,
+ 'mocks':['native/compiler commands','compiler record validation','original diagnostic/control qualification admission',
+          'dependency archive receipt intake','source Git metadata','host tool identities','resource measurements'],
+ 'real_checks':['source/tool file hashing and stability','command checkpoint/error paths',
+                'raw output/lifetime validation','complete population accumulation','exclusive output creation',
+                'final resource threshold','qualification derivation'],
+ 'source_sha256': {name: hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in (
+  'ci/project/p06_managed_preflight_execute.py','ci/project/p06_qualified_warm_execute.py',
+  'ci/project/test_p06_qualified_warm_runner.py')},
+ 'cases':rows,'case_count':len(rows),'all_passed':all(r['passed'] for r in rows),
+ 'duration_seconds':time.monotonic()-started}
+OUTPUT.write_text(json.dumps(record,indent=2,sort_keys=True)+'\n')
+print(json.dumps({'case_count':len(rows),'all_passed':record['all_passed'],
+ 'duration_seconds':record['duration_seconds']}),flush=True)

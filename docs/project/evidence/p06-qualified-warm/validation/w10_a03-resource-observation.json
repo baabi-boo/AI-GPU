@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "scope": "read-only post-failure resource observation; not a cause-of-kill receipt",
+  "observed_at": "2026-11-23T20:11:58.122307+00:00",
+  "memory_kib": {
+    "Cached": 4342380,
+    "MemAvailable": 3125232,
+    "MemFree": 1912848,
+    "MemTotal": 10206468,
+    "Shmem": 3360612
+  },
+  "workspace_free_bytes": 16194138112,
+  "cgroup_mount_visible": false,
+  "memory_events_visible": false,
+  "memory_events_local_visible": false,
+  "kernel_log_probe": {
+    "argv": [
+      "dmesg",
+      "--ctime"
+    ],
+    "exit_code": 1,
+    "stderr": "dmesg: read kernel buffer failed: Operation not permitted",
+    "matching_lines": []
+  },
+  "actual_sigkill_cause_established": false,
+  "oom_attribution_established": false,
+  "limitations": [
+    "These values were observed after both workers exited; no before/at-kill event counter or memory peak is available.",
+    "Denied kernel-log access and absent counters do not establish that an OOM event did or did not occur.",
+    "Exit -9 establishes SIGKILL; its initiating cause remains unestablished."
+  ]
+}

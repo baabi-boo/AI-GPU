@@ -1,19 +1,48 @@
 # Complete counter qualification handoff
 
-The complete counter-qualification preflight is implemented and has a fresh
-passing native original. **Next, implement and independently review an explicit
-qualified route for the unchanged 24-process warm experiment, then execute it.**
-The existing qualified executor is fixed to four processes; it does not yet
-provide that full warm route.
+The complete counter-qualification preflight retains its passing fresh
+four-process original. The subsequent explicit 24-process qualified warm route
+is implemented and independently reviewed. Current execution work is in the
+[qualified warm handoff](p06-qualified-warm-handoff.md).
+
+The explicit 24-process qualified warm route is implemented and independently
+reviewed at published `c0b44ce64665fe11895f869eea8c38c9b820d6f7`, tree
+`13450812d279d55f36a172fcf38653ff567f6c86`. The clean source checkout, all eight
+submodules and all 69 projected source inputs match the selected proof. Its
+fresh native experiment is **unstarted**. The recorded readiness checks did not
+establish the unchanged 4 GiB available-RAM requirement together with enough
+disk headroom to preserve the 15 GiB reserve plus approximately 2.24 GB of fresh
+dependency products and warm-run growth. The audit retains dated measurements;
+capacity must be rechecked before launch. No old data was deleted and no native
+resource guard was relaxed.
+
+**Next bounded action:** obtain one uninterrupted governance invocation without
+skips and provision sufficient capacity. Then execute one fresh complete
+qualified warm attempt, retain its original archive unchanged, replay
+it independently and evaluate the unchanged predicates. Follow the
+[qualified warm handoff](p06-qualified-warm-handoff.md) and
+[runbook](evidence/p06-qualified-warm/runbook.md). The implemented route binds
+each new process before launch and requires complete source/build/load,
+numerical, lifetime, destruction and final-stability reconstruction. Preserve
+all 24 processes, 792 launches and 25,344 exact output words, including excluded
+primes and warm-ups; a complete valid attempt may reject the performance
+hypothesis. Pending reads remain a transient balance outside the 40 cumulative
+components.
+
+The old four-process proof rejects the changed current caller; preserving its
+no-flag grammar does not make that proof admit current execution. Replay of
+unchanged historical archives remains supported. The new route uses its own
+explicitly selected, independently reviewed projection; no earlier archive is
+promoted into a fresh warm result.
 
 Use the [evidence index](evidence/p06-counter-qualification/README.md) for exact
 original identities, execution and replay results; the
 [audit](p06-counter-qualification-audit.md) for findings and final governance
 outcomes; and the [implemented contract](../designs/complete_counter_qualification_v1.md)
-for the current qualification boundary. The existing
+for that historical qualification boundary. The existing
 [runbook](evidence/p06-counter-qualification/runbook.md) is the executable
-procedure for the current four-process route, not a command for the future
-24-process route.
+procedure for the historical four-process route at its pinned source; use the
+[new runbook](evidence/p06-qualified-warm/runbook.md) for current qualified warm work.
 
 ## What is complete
 
@@ -57,6 +86,23 @@ identify its GCC 12 toolchain. The complete source-root governance outcome is
 a separate coordinator receipt linked from the audit.
 
 ## Next bounded development
+
+Obtain one uninterrupted governance invocation without skips, provision capacity
+and follow the [current qualified warm handoff](p06-qualified-warm-handoff.md)
+for one fresh complete attempt, original retention, independent replay and
+unchanged-predicate evaluation. The route implementation/review is complete;
+native execution is unstarted. Passing coverage spans all 4,527 IDs across
+completed hosted/supplemental runs; a single full zero-skip invocation remains
+unproven. The current handoff preserves that distinction.
+
+### Historical development checklist — now implemented
+
+The following design obligations are retained from the four-process handoff.
+The [qualified warm contract](../designs/qualified_warm_workspace_v1.md) and
+[implementation evidence](evidence/p06-qualified-warm/README.md) now satisfy the
+route implementation/review portion. Their imperative wording records the
+original checklist; fresh execution and complete replay remain outstanding.
+
 
 ### 1. Specify a separately selected qualified warm envelope
 
@@ -166,12 +212,19 @@ trees or substitute prior diagnostic/control populations for new warm
 processes. Review actual raw numerical, lifetime and source/build/load evidence
 in addition to the summary result.
 
-## Completion evidence for that next task
+## Remaining completion evidence
 
-The next milestone needs an implemented and independently reviewed explicit
-warm qualification contract, passing focused and governance tests at identified
-source bytes, a fresh complete 24-process original, complete public replay and
-an unchanged-predicate evaluation. Record failures and pending results as such;
+The route implementation and independent review are complete, with 89 focused
+tests passing in 195.293 seconds. The
+[completed-run reconciliation](evidence/p06-qualified-warm/validation/coverage/final-reconciliation.json)
+establishes passing coverage for all 4,527 canonical IDs: 4,491 hosted passes
+plus 59 supplemental passes with 23 overlaps. All 36 hosted gaps were exercised
+in complete modules. The 59-case supplement has no skips; hosted skip events
+remain recorded. No complete 4,527-test local run or single invocation without
+skips is established. Earlier failed/unfinalized attempts are excluded from the
+coverage union and retained unchanged.
+A fresh complete 24-process original, complete public replay and an
+unchanged-predicate evaluation remain required. Record failures and pending results as such;
 an unsuccessful performance hypothesis is an experimental result, not grounds
 to weaken the workload or gate. Update the current status, backlog and phase
 handoff with the exact tested revision and remaining blockers.

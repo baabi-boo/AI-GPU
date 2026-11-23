@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Execute one complete-module partition; record every started/completed test."""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import signal
+import sys
+import time
+import unittest
+
+EXPECTED_IDS = 4527
+EXPECTED_IDS_SHA256 = '5fd7fbf2f57425467c8124307dbe6ad951e48fe2526a531c87023b58626761fc'
+
+def require(condition, message):
+    if not condition:
+        raise RuntimeError(message)
+
+def flatten(suite):
+    for case in suite:
+        if isinstance(case, unittest.TestSuite):
+            yield from flatten(case)
+        else:
+            yield case
+
+def main(argv=None):
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--manifest',type=Path,required=True)
+    parser.add_argument('--manifest-sha256',required=True)
+    parser.add_argument('--partition',type=int,choices=(0,1),required=True)
+    args=parser.parse_args(argv)
+    body=args.manifest.read_bytes()
+    require(hashlib.sha256(body).hexdigest()==args.manifest_sha256,'manifest pin differs')
+    manifest=json.loads(body)
+    require(Path.cwd()==Path(manifest['source']),'source-root invocation required')
+    require(sys.executable==manifest['interpreter'],'selected interpreter differs')
+    require(manifest['source_revision']=='c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+            and manifest['source_tree']=='13450812d279d55f36a172fcf38653ff567f6c86',
+            'source identities differ')
+    require(len(manifest['partitions'])==2,'partition count differs')
+    selected=manifest['partitions'][args.partition]
+    require(type(selected['index']) is int and selected['index']==args.partition,'partition index differs')
+    output=args.manifest.parent/('partition-'+str(args.partition)+'-result.json')
+    require(not output.exists() and not output.is_symlink(),'result path must be fresh')
+    started_ids,completed_ids=[],[]
+    class RecordedResult(unittest.TextTestResult):
+        def startTest(self,test):
+            started_ids.append(test.id());super().startTest(test)
+        def stopTest(self,test):
+            completed_ids.append(test.id());super().stopTest(test)
+    record={'schema_version':1,'state':'running','outcome':'running',
+        'partition':args.partition,'source_revision':manifest['source_revision'],
+        'source_tree':manifest['source_tree'],'manifest_sha256':args.manifest_sha256,
+        'program_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        'interpreter':sys.executable,'selected_ids':selected['ids'],
+        'started_ids':started_ids,'completed_ids':completed_ids,'tests_run':0,
+        'failures':[],'errors':[],'skipped':[],'expected_failures':[],'unexpected_successes':[]}
+    started=time.monotonic();result=None
+    def interrupted(number,frame):raise KeyboardInterrupt('received signal '+str(number))
+    for number in (signal.SIGINT,signal.SIGTERM):signal.signal(number,interrupted)
+    try:
+        loader=unittest.TestLoader()
+        all_cases=list(flatten(loader.discover('ci/project',pattern='test_*.py')))
+        all_ids=[case.id() for case in all_cases]
+        require(not loader.errors,'discovery import errors: '+repr(loader.errors))
+        require(all_ids==manifest['all_ids'] and len(all_ids)==len(set(all_ids))==EXPECTED_IDS,
+                'canonical discovery population differs')
+        require(hashlib.sha256(json.dumps(all_ids,separators=(',',':')).encode()).hexdigest()
+                ==EXPECTED_IDS_SHA256,'canonical discovery ID pin differs')
+        modules=set(selected['modules'])
+        cases=[case for case in all_cases if case.__class__.__module__ in modules]
+        require([case.id() for case in cases]==selected['ids'],'whole-module selection differs')
+        suite=unittest.TestSuite(cases)
+        del all_cases,cases
+        result=unittest.TextTestRunner(stream=sys.stdout,verbosity=2,resultclass=RecordedResult).run(suite)
+        record.update(tests_run=result.testsRun,
+            failures=[{'id':case.id(),'trace':trace} for case,trace in result.failures],
+            errors=[{'id':case.id(),'trace':trace} for case,trace in result.errors],
+            skipped=[{'id':case.id(),'reason':reason} for case,reason in result.skipped],
+            expected_failures=[{'id':case.id(),'trace':trace} for case,trace in result.expectedFailures],
+            unexpected_successes=[case.id() for case in result.unexpectedSuccesses])
+        require(result.wasSuccessful() and all(not record[key] for key in
+            ('failures','errors','skipped','expected_failures','unexpected_successes')),
+            'test outcomes include failure/error/skip/expected failure')
+        require(started_ids==completed_ids==selected['ids'] and result.testsRun==len(selected['ids']),
+                'selected/started/completed IDs do not match')
+        require(hashlib.sha256(args.manifest.read_bytes()).hexdigest()==args.manifest_sha256,
+                'manifest changed')
+        require(hashlib.sha256(Path(__file__).read_bytes()).hexdigest()==record['program_sha256'],
+                'worker program changed')
+        record['outcome']='pass'
+    except BaseException as error:
+        record['outcome']='fail';record['reason']=type(error).__name__+': '+str(error)
+    finally:
+        record.update(state='finished',duration_seconds=time.monotonic()-started)
+        with output.open('x',encoding='utf-8') as stream:
+            json.dump(record,stream,indent=2,sort_keys=True);stream.write('\n')
+        print(json.dumps({key:record[key] for key in ('partition','outcome','tests_run','duration_seconds')}),flush=True)
+    return 0 if record['outcome']=='pass' else 1
+
+if __name__=='__main__':
+    raise SystemExit(main())

@@ -1,0 +1,106 @@
+# SPDX-License-Identifier: Apache-2.0
+"""Independent scoped proof/prerequisite probes; archive replay boundaries mocked."""
+from copy import deepcopy
+import hashlib
+import json
+import os
+from pathlib import Path
+import sys
+import tempfile
+
+ROOT = Path.cwd()
+sys.path.insert(0, str(ROOT / 'ci/project'))
+import p06_qualified_warm_admission as admission
+import p06_qualified_warm_contract as contract
+from test_p06_qualified_warm_admission import WarmAdmissionInputs
+
+results = []
+def rejects(name, operation):
+    try:
+        operation()
+    except ValueError as error:
+        results.append({'case': name, 'outcome': 'rejected', 'reason': str(error)})
+    else:
+        results.append({'case': name, 'outcome': 'UNEXPECTED_ACCEPTANCE'})
+
+with tempfile.TemporaryDirectory(prefix='w04-a01-') as temporary:
+    inputs = WarmAdmissionInputs(temporary)
+    proof = inputs.warm_proof
+    original = inputs.proof
+    current_projection = contract.verify_source_projection(proof, proof['measurement_sources'])
+    historical_projection = contract.historical.verify_source_projection(original, original['measurement_sources'])
+    dependency_projection = admission.prerequisites.verify_dependency_projection(original, inputs.dependency.document)
+    def summarize(projection=None, diagnostics=None, controls=None):
+        return admission.admission_summary(proof, current_projection if projection is None else projection,
+            dependency_projection, inputs.diagnostics if diagnostics is None else diagnostics,
+            inputs.controls if controls is None else controls)
+    summarize()
+    results.append({'case': 'unmodified_summary_positive_control', 'outcome': 'accepted_nonexecution'})
+    rejects('historical_projection_presented_as_current', lambda: summarize(projection=historical_projection))
+    altered = deepcopy(current_projection)
+    altered['historical_source_proof_sha256'] = contract.SOURCE_PROOF_SHA256
+    rejects('historical_pin_relabelled_to_extension', lambda: summarize(projection=altered))
+    altered = deepcopy(inputs.controls)
+    altered['measurement_projection_sha256'] = contract.digest(proof['measurement_sources'])
+    rejects('old_controls_laundered_to_current_projection', lambda: summarize(controls=altered))
+    altered = deepcopy(inputs.controls)
+    altered['source_revision'] = inputs.dependency.document['expected_revision']
+    rejects('old_control_revision_relabelled_to_current_revision', lambda: summarize(controls=altered))
+    altered = deepcopy(inputs.diagnostics)
+    altered['source_revision'] = inputs.dependency.document['expected_revision']
+    rejects('old_diagnostics_revision_relabelled_to_current_revision', lambda: summarize(diagnostics=altered))
+    altered = deepcopy(inputs.diagnostics)
+    altered['public_source_inventory_sha256'] = contract.digest(proof['measurement_sources'])
+    rejects('diagnostic_inventory_relabelled_to_current_projection', lambda: summarize(diagnostics=altered))
+    # These production entrypoints reject the extension proof before archive access.
+    rejects('extension_sent_to_original_diagnostic_reader', lambda:
+        admission.prerequisites.verify_prerequisites(proof,
+            diagnostic_archive=inputs.archives['diagnostics'], diagnostic_sha256=original['diagnostics']['archive']['sha256']))
+    rejects('extension_sent_to_original_control_reader', lambda:
+        admission.prerequisites.verify_control_prerequisite(proof,
+            archive=inputs.archives['controls'], sha256=original['controls']['archive']['sha256']))
+    rejects('extension_sent_to_original_dependency_projection', lambda:
+        admission.prerequisites.verify_dependency_projection(proof, inputs.dependency.document))
+    with inputs.patches():
+        value = inputs.admit()
+        for name in (contract.historical.SOURCE_PROOF_PATH,
+                     original['diagnostics']['public_source_inventory']['path'],
+                     contract.SOURCE_PROOF_PATH):
+            path = inputs.source / name
+            body = path.read_bytes()
+            changed = bytearray(body)
+            changed[0] = ord('[')
+            path.write_bytes(changed)
+            rejects('late_same_length_input_drift:' + name, value.verify_stable)
+            path.write_bytes(body)
+        value.verify_stable()
+        results.append({'case': 'restored_inputs_stability_positive_control', 'outcome': 'accepted_nonexecution'})
+        # Replace an original input with an identical-byte symlink; content hashes alone are insufficient.
+        path = inputs.source / contract.historical.SOURCE_PROOF_PATH
+        body = path.read_bytes()
+        target = Path(temporary) / 'original-proof-copy.json'
+        target.write_bytes(body)
+        path.unlink()
+        path.symlink_to(target)
+        rejects('late_original_proof_same_bytes_symlink', value.verify_stable)
+        path.unlink()
+        path.write_bytes(body)
+    fifo = Path(temporary) / 'proof-fifo'
+    os.mkfifo(fifo)
+    rejects('fifo_proof_rejected_before_read', lambda: contract.load_proof(fifo, contract.SOURCE_PROOF_SHA256))
+    symlink_parent = Path(temporary) / 'source-link'
+    symlink_parent.symlink_to(inputs.source, target_is_directory=True)
+    rejects('proof_under_symlink_parent', lambda: contract.load_proof(symlink_parent / contract.SOURCE_PROOF_PATH, contract.SOURCE_PROOF_SHA256))
+
+output = {'scope': 'focused_adversarial_proof_and_prerequisite_checks',
+    'original_archive_replays': 'mocked only for live Admission fixture; never claimed executed',
+    'dependency_stability': 'mocked live dependency fixture',
+    'native_execution': 'not_run',
+    'results': results,
+    'negative_cases': sum(row['outcome']=='rejected' for row in results),
+    'positive_controls': sum(row['outcome']=='accepted_nonexecution' for row in results),
+    'unexpected_acceptances': sum(row['outcome']=='UNEXPECTED_ACCEPTANCE' for row in results),
+    'reviewed_sources': [{ 'path': name, 'sha256': hashlib.sha256((ROOT/name).read_bytes()).hexdigest() }
+        for name in ('ci/project/p06_qualified_warm_contract.py', 'ci/project/p06_qualified_warm_admission.py', 'ci/project/p06_qualified_warm_proof.json')]}
+print(json.dumps(output, indent=2, sort_keys=True))
+raise SystemExit(bool(output['unexpected_acceptances']))

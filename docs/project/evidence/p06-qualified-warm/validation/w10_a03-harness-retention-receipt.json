@@ -1,0 +1,48 @@
+{
+  "actual_sigkill_cause_established": false,
+  "canonical_project_tests_run": 0,
+  "full_suite_result": false,
+  "interpreter": "/workspace/scratch/dc8be1693f91/governance-host-venv/bin/python3",
+  "limitations": [
+    "This diagnostic uses four 4096-byte fixtures per variant and does not reproduce the real workload.",
+    "It demonstrates a retention mechanism, not memory usage or the cause of the original SIGKILL."
+  ],
+  "native_execution": "not_run",
+  "new_canonical_unittest_ids": 0,
+  "observations": [
+    {
+      "completed_case_instances_still_live": 4,
+      "completed_fixture_bytes_still_live": 16384,
+      "retain_selection_lists": true,
+      "suite_slots_cleared": true,
+      "synthetic_cases_run": 4,
+      "was_successful": true
+    },
+    {
+      "completed_case_instances_still_live": 0,
+      "completed_fixture_bytes_still_live": 0,
+      "retain_selection_lists": false,
+      "suite_slots_cleared": true,
+      "synthetic_cases_run": 4,
+      "was_successful": true
+    }
+  ],
+  "oom_attribution_established": false,
+  "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "recommended_harness_change": "Construct the TestSuite, then delete all_cases and cases before runner.run(suite); retain the original harness and failed receipts unchanged.",
+  "retention_mechanism_demonstrated": true,
+  "schema_version": 1,
+  "scope": "stdlib runner object-lifetime diagnostic only",
+  "selection_list_assignments": {
+    "all_cases": {
+      "expression": "list(flatten(loader.discover('ci/project', pattern='test_*.py')))",
+      "line": 64
+    },
+    "cases": {
+      "expression": "[case for case in all_cases if case.__class__.__module__ in modules]",
+      "line": 72
+    }
+  },
+  "selection_lists_deleted_in_original_worker": false,
+  "worker_sha256": "43ac491afecadbb05337fa4179d7b048ea9348d7bba3df097ace2f2129bc8a9b"
+}

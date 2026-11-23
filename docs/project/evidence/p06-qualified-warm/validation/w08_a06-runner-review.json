@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "scope": "independent static review and extracted scheduling/accounting probes only",
+  "native_execution": "not_run",
+  "project_test_bodies_executed": 0,
+  "full_suite_executed": false,
+  "outcome": "pass",
+  "duration_seconds": 0.15155274900462246,
+  "source_before": {
+    "run_governance.py.txt": "f898761bf4cecf5bdeabb8c57741e600592135511220983a39293ed35b9ed72a",
+    "run_partition.py.txt": "43ac491afecadbb05337fa4179d7b048ea9348d7bba3df097ace2f2129bc8a9b"
+  },
+  "source_after": {
+    "run_governance.py.txt": "f898761bf4cecf5bdeabb8c57741e600592135511220983a39293ed35b9ed72a",
+    "run_partition.py.txt": "43ac491afecadbb05337fa4179d7b048ea9348d7bba3df097ace2f2129bc8a9b"
+  },
+  "canonical_inventory_count": 4527,
+  "canonical_inventory_digest": "5fd7fbf2f57425467c8124307dbe6ad951e48fe2526a531c87023b58626761fc",
+  "observed_partition_counts": [
+    2264,
+    2263
+  ],
+  "observed_module_counts": [
+    137,
+    137
+  ],
+  "probes": [
+    {
+      "case": "actual 4527-ID inventory partitions exactly once without splitting modules",
+      "outcome": "pass",
+      "expected": "accept"
+    },
+    {
+      "case": "missing discovered ID rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: discovered population differs"
+    },
+    {
+      "case": "duplicate discovered ID rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: discovered population differs"
+    },
+    {
+      "case": "reordered canonical inventory rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: discovered IDs differ from independent inventory"
+    },
+    {
+      "case": "tiny complete parent result and verbose accounting accepted",
+      "outcome": "pass",
+      "expected": "accept"
+    },
+    {
+      "case": "unfinished worker rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition did not pass"
+    },
+    {
+      "case": "worker failure rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition did not pass"
+    },
+    {
+      "case": "wrong revision rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition result source_revision differs"
+    },
+    {
+      "case": "wrong manifest pin rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition result manifest_sha256 differs"
+    },
+    {
+      "case": "wrong worker pin rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition result program_sha256 differs"
+    },
+    {
+      "case": "boolean tests_run rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition result tests_run differs"
+    },
+    {
+      "case": "missing started ID rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition selected/started/completed IDs differ"
+    },
+    {
+      "case": "duplicate completed ID rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition selected/started/completed IDs differ"
+    },
+    {
+      "case": "skipped test rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition has failures/errors/skips/expected failures"
+    },
+    {
+      "case": "expected failure rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition has failures/errors/skips/expected failures"
+    },
+    {
+      "case": "unexpected success rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition has failures/errors/skips/expected failures"
+    },
+    {
+      "case": "class setup error rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition has failures/errors/skips/expected failures"
+    },
+    {
+      "case": "verbose ID substitution rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition verbose log IDs differ"
+    },
+    {
+      "case": "duplicate OK summary rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition unittest summary differs"
+    },
+    {
+      "case": "missing worker result rejected",
+      "outcome": "pass",
+      "expected": "reject",
+      "observed": "RuntimeError: partition result missing"
+    },
+    {
+      "case": "complete final bookkeeping accepted",
+      "outcome": "pass",
+      "expected": "accept"
+    },
+    {
+      "case": "stop request cannot pass",
+      "outcome": "pass",
+      "expected": "accept"
+    },
+    {
+      "case": "missing partition cannot pass",
+      "outcome": "pass",
+      "expected": "accept"
+    },
+    {
+      "case": "unfinished partition cannot pass",
+      "outcome": "pass",
+      "expected": "accept"
+    },
+    {
+      "case": "unrun guard command cannot pass",
+      "outcome": "pass",
+      "expected": "accept"
+    },
+    {
+      "case": "incomplete execution population cannot pass",
+      "outcome": "pass",
+      "expected": "accept"
+    },
+    {
+      "case": "native absence not confirmed cannot pass",
+      "outcome": "pass",
+      "expected": "accept"
+    }
+  ],
+  "probe_count": 27,
+  "limitations": [
+    "Process launch, timeout termination and cleanup were statically reviewed, not executed by these probes.",
+    "Tiny synthetic result records test validation paths and are not evidence that repository tests ran.",
+    "Whole-module grouping changes cross-module process state relative to one monolithic invocation."
+  ]
+}

@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+"""Collect canonical test IDs only; never execute test bodies."""
+import collections
+import gzip
+import hashlib
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import time
+import unittest
+
+source = Path(sys.argv[1]).resolve()
+destination = Path(sys.argv[2])
+os.chdir(source)
+sys.path.insert(0, str(source / 'ci/project'))
+started = time.monotonic()
+loader = unittest.TestLoader()
+suite = loader.discover('ci/project', pattern='test_*.py')
+
+def walk(item):
+    if isinstance(item, unittest.TestSuite):
+        for child in item:
+            yield from walk(child)
+    else:
+        yield item
+
+cases = list(walk(suite))
+ids = [case.id() for case in cases]
+counts = collections.Counter(ids)
+skips = []
+for case in cases:
+    method = getattr(case, case._testMethodName)
+    if getattr(case.__class__, '__unittest_skip__', False) or getattr(method, '__unittest_skip__', False):
+        skips.append({'id': case.id(), 'reason': getattr(method, '__unittest_skip_why__', getattr(case.__class__, '__unittest_skip_why__', None))})
+record = {
+    'scope': 'collection-only; no test method or class setup executed',
+    'source': str(source),
+    'revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+    'tree': subprocess.check_output(['git', 'rev-parse', 'HEAD^{tree}'], text=True).strip(),
+    'interpreter': sys.executable, 'base_executable': sys._base_executable,
+    'python_version': sys.version, 'count': len(ids), 'unique_count': len(counts),
+    'duplicate_ids': {key: count for key, count in counts.items() if count > 1},
+    'failed_test_ids': [case.id() for case in cases if isinstance(case, unittest.loader._FailedTest)],
+    'import_errors': loader.errors, 'predeclared_skips': skips,
+    'ids': ids, 'canonical_ids_sha256': hashlib.sha256(json.dumps(sorted(ids), separators=(',', ':')).encode()).hexdigest(),
+    'duration_seconds': time.monotonic() - started,
+}
+with destination.open('xb') as stream:
+    stream.write(gzip.compress((json.dumps(record, indent=2) + '\n').encode(), mtime=0))
+assert sys.version_info[:2] == (3, 12), record['python_version']
+assert not record['duplicate_ids'] and not record['failed_test_ids'] and not record['import_errors']
+print(json.dumps({key: value for key, value in record.items() if key != 'ids'}, indent=2))

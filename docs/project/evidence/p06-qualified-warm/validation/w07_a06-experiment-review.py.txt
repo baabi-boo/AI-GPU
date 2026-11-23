@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Small independent population accounting; no project imports or workloads."""
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import time
+
+ROOT = Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+OUT = ROOT / 'docs/project/evidence/p06-qualified-warm/validation/w07_a06-experiment-review.json'
+NAMES = (
+    'ci/project/p06_warm_contract.json',
+    'ci/project/p06_warm_contract.py',
+    'ci/project/p06_warm_analyze.py',
+    'ci/project/p06_qualified_warm_analyze.py',
+    'ci/project/p06_qualified_warm_replay.py',
+    'ci/project/p06_dependency_native_replay.py',
+    'ci/project/p06_managed_preflight_execute.py',
+    'docs/designs/warm_workspace_benchmark_v1.md',
+    'docs/designs/qualified_warm_workspace_v1.md',
+)
+def identities():
+    return {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in NAMES}
+before = identities()
+contract = json.loads((ROOT / NAMES[0]).read_bytes())
+sampling = contract['sampling']
+assert contract['formats'] == ['fp16', 'bf16']
+assert contract['policies'] == ['per_operation', 'reusable_single_tile']
+assert sampling['pair_indices'] == list(range(6))
+assert sampling['warmup_pairs'] == 1 and sampling['measured_pairs'] == 5
+assert sampling['prime_operations'] == 1 and sampling['timed_operations'] == 32
+assert sampling['operations_per_process'] == 33
+assert sampling['failed_sample_policy'] == 'retain_and_fail_entire_attempt_no_replacements'
+assert sampling['outlier_policy'] == 'none' and sampling['optional_stopping'] is False
+rows = []
+for pair in sampling['pair_indices']:
+    rows.append({'pair_index': pair, 'phase': 'warmup' if pair == 0 else 'measured',
+                 'first': 'reference' if pair % 2 == 0 else 'candidate',
+                 'second': 'candidate' if pair % 2 == 0 else 'reference',
+                 'processes_per_format': 2,
+                 'launches_per_format': 66,
+                 'primary_operations_per_format': 0 if pair == 0 else 64})
+counts = {'formats': 2, 'processes': 24, 'warmup_processes': 4,
+          'measured_processes': 20, 'launches': 24 * 33,
+          'checked_words': 24 * 33 * 32, 'primary_operations': 20 * 32,
+          'primary_checked_words': 20 * 32 * 32,
+          'excluded_primes': 24, 'excluded_warmup_nonprime_operations': 4 * 32,
+          'measured_batch_means_per_format_policy': 5,
+          'paired_comparisons_per_format': 5}
+assert counts['launches'] - counts['excluded_primes'] - counts['excluded_warmup_nonprime_operations'] == counts['primary_operations']
+assert (counts['processes'], counts['launches'], counts['checked_words'],
+        counts['primary_operations'], counts['primary_checked_words']) == (24, 792, 25344, 640, 20480)
+assert contract['analysis']['candidate_median_percent_of_reference_max'] == 95
+for name in ('each_measured_candidate_pair_must_not_be_slower',
+             'each_measured_candidate_pair_cycles_must_not_increase', 'all_formats_must_improve'):
+    assert contract['analysis'][name] is True
+assert contract['analysis']['decision_is_phase_acceptance'] is False
+after = identities()
+assert before == after
+result = {'schema_version': 1, 'scope': 'static-experimental-design-review-and-small-population-accounting',
+          'reviewed_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+          'source_revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
+          'outcome': 'pass', 'source_files_stable': before == after,
+          'source_sha256': before, 'sampling_rows_per_format': rows, 'counts': counts,
+          'order_counts_per_format': {'all_pairs': {'reference_first': 3, 'candidate_first': 3},
+                                      'measured_pairs': {'reference_first': 2, 'candidate_first': 3}},
+          'native_execution': 'not_run', 'archive_replay': 'not_run',
+          'test_bodies_executed': False, 'canonical_unittest_ids_added': 0,
+          'performance_result_established': False, 'statistical_significance_established': False,
+          'phase_acceptance': False,
+          'limitations': ['The arithmetic is an independent population check, not native evidence or a statistical test.',
+                          'The current native attempt is resource-blocked before launch; no favorable or unfavorable result exists.',
+                          'Static inspection of producer and reader is not a fresh dynamic interruption test.']}
+with OUT.open('x', encoding='utf-8') as stream:
+    json.dump(result, stream, indent=2, sort_keys=True)
+    stream.write('\n')
+print(json.dumps({'outcome': result['outcome'], 'counts': counts, 'source_files_stable': True}))

@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Small stdlib demonstration of completed TestCase retention by selection lists."""
+import argparse
+import ast
+import gc
+import hashlib
+import io
+import json
+from pathlib import Path
+import sys
+import unittest
+import weakref
+
+
+WORKER = Path(__file__).parent / 'governance' / 'partitioned' / 'run_partition.py.txt'
+WORKER_SHA = '43ac491afecadbb05337fa4179d7b048ea9348d7bba3df097ace2f2129bc8a9b'
+
+
+class SmallCase(unittest.TestCase):
+    def setUp(self):
+        self.fixture = bytearray(4096)
+
+    def test_fixture(self):
+        self.assertEqual(len(self.fixture), 4096)
+
+
+def variant(retain_selection_lists):
+    all_cases = [SmallCase('test_fixture') for _ in range(4)]
+    cases = list(all_cases)
+    references = [weakref.ref(case) for case in cases]
+    suite = unittest.TestSuite(cases)
+    if not retain_selection_lists:
+        del all_cases, cases
+    result = unittest.TextTestRunner(stream=io.StringIO(), verbosity=0).run(suite)
+    gc.collect()
+    living = [reference() for reference in references if reference() is not None]
+    observation = {
+        'retain_selection_lists': retain_selection_lists, 'synthetic_cases_run': result.testsRun,
+        'was_successful': result.wasSuccessful(),
+        'suite_slots_cleared': suite._tests == [None] * 4,
+        'completed_case_instances_still_live': len(living),
+        'completed_fixture_bytes_still_live': sum(len(case.fixture) for case in living),
+    }
+    return observation
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--receipt', type=Path, required=True)
+    args = parser.parse_args()
+    body = WORKER.read_bytes()
+    assert hashlib.sha256(body).hexdigest() == WORKER_SHA
+    tree = ast.parse(body)
+    main_node = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == 'main')
+    selected_assignments = {}
+    deletes = []
+    for node in ast.walk(main_node):
+        if isinstance(node, ast.Assign):
+            for target in node.targets:
+                if isinstance(target, ast.Name) and target.id in ('all_cases', 'cases'):
+                    selected_assignments[target.id] = {'line': node.lineno, 'expression': ast.unparse(node.value)}
+        if isinstance(node, ast.Delete):
+            deletes.extend(ast.unparse(target) for target in node.targets)
+    assert set(selected_assignments) == {'all_cases', 'cases'}
+    assert not {'all_cases', 'cases'}.intersection(deletes)
+    observations = [variant(True), variant(False)]
+    assert all(row['synthetic_cases_run'] == 4 and row['was_successful'] and row['suite_slots_cleared']
+               for row in observations)
+    assert [row['completed_case_instances_still_live'] for row in observations] == [4, 0]
+    assert [row['completed_fixture_bytes_still_live'] for row in observations] == [16384, 0]
+    receipt = {
+        'schema_version': 1, 'scope': 'stdlib runner object-lifetime diagnostic only',
+        'interpreter': sys.executable, 'python_version': sys.version,
+        'worker_sha256': WORKER_SHA, 'selection_list_assignments': selected_assignments,
+        'selection_lists_deleted_in_original_worker': False,
+        'observations': observations, 'retention_mechanism_demonstrated': True,
+        'actual_sigkill_cause_established': False, 'oom_attribution_established': False,
+        'canonical_project_tests_run': 0, 'new_canonical_unittest_ids': 0,
+        'native_execution': 'not_run', 'full_suite_result': False,
+        'recommended_harness_change': 'Construct the TestSuite, then delete all_cases and cases before runner.run(suite); retain the original harness and failed receipts unchanged.',
+        'limitations': ['This diagnostic uses four 4096-byte fixtures per variant and does not reproduce the real workload.',
+                       'It demonstrates a retention mechanism, not memory usage or the cause of the original SIGKILL.'],
+    }
+    with args.receipt.open('x') as stream:
+        json.dump(receipt, stream, indent=2, sort_keys=True)
+        stream.write('\n')
+    print(json.dumps(receipt, indent=2, sort_keys=True))
+
+
+if __name__ == '__main__':
+    main()

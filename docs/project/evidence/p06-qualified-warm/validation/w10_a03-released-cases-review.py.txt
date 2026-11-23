@@ -1,0 +1,154 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Independent exact-diff and tiny stdlib lifetime review; no project tests."""
+import argparse
+import ast
+from datetime import datetime, timezone
+import gc
+import hashlib
+import io
+import json
+import os
+from pathlib import Path
+import types
+import unittest
+import weakref
+
+BASE = Path(__file__).resolve().parent
+PINS = {
+    'governance/partitioned/run_governance.py.txt': 'f898761bf4cecf5bdeabb8c57741e600592135511220983a39293ed35b9ed72a',
+    'governance/partitioned/run_partition.py.txt': '43ac491afecadbb05337fa4179d7b048ea9348d7bba3df097ace2f2129bc8a9b',
+    'governance/released-cases/run_governance.py.txt': 'ad30126aed4eb077c444e04c930e7f31ec3797c0fda232b9b346905db48ae062',
+    'governance/released-cases/run_partition.py.txt': '68e32e344208a907551353822d701088353bced55220cee8d09d00764e8b5a7e',
+    'w09_a04-reconcile.py.txt': 'db6c278e40637f08f9714a5df2d7b9c58a137aab25fae34b43a39378177c7865',
+    'w10_a03-released-cases-reconcile.py.txt': '3b1178e9a83bda35d94f89bb0eb547a62222c058e45e34ba72936b2803850791',
+    'w10_a03-released-cases-reconcile.diff': '59ae29843a34b0a86b6a01ed052e26d912c7e9bcc552ce1b723f9b322873206e',
+}
+
+
+def restore(text, changes):
+    for newer, older in changes:
+        assert text.count(newer) == 1, newer
+        text = text.replace(newer, older)
+    return text
+
+
+class Case(unittest.TestCase):
+    def __init__(self, index):
+        super().__init__('test_fixture')
+        self.index = index
+
+    def id(self):
+        return 'diagnostic.fixture_' + str(self.index)
+
+    def setUp(self):
+        self.fixture = bytearray(4096)
+
+    def test_fixture(self):
+        self.assertEqual(len(self.fixture), 4096)
+
+
+def exact_statement_probe(worker_text, corrected):
+    tree = ast.parse(worker_text)
+    run = next(node for node in ast.walk(tree)
+               if isinstance(node, ast.Assign) and isinstance(node.value, ast.Call)
+               and ast.unparse(node.value).startswith('unittest.TextTestRunner('))
+    selected_nodes = [run]
+    if corrected:
+        selected_nodes = sorted((node for node in ast.walk(tree)
+                                 if isinstance(node, (ast.Assign, ast.Delete)) and
+                                 run.lineno - 2 <= node.lineno <= run.lineno), key=lambda node: node.lineno)
+        assert len(selected_nodes) == 3
+    started, completed = [], []
+
+    class RecordedResult(unittest.TextTestResult):
+        def startTest(self, test):
+            started.append(test.id())
+            super().startTest(test)
+
+        def stopTest(self, test):
+            completed.append(test.id())
+            super().stopTest(test)
+
+    environment = {'unittest': unittest, 'sys': types.SimpleNamespace(stdout=io.StringIO()),
+                   'RecordedResult': RecordedResult, 'all_cases': [Case(index) for index in range(4)]}
+    environment['cases'] = list(environment['all_cases'])
+    selected = [case.id() for case in environment['cases']]
+    references = [weakref.ref(case) for case in environment['cases']]
+    program = ast.fix_missing_locations(ast.Module(body=selected_nodes, type_ignores=[]))
+    exec(compile(program, '<exact reviewed runner statements>', 'exec'), environment)
+    gc.collect()
+    result = environment['result']
+    live_count = sum(reference() is not None for reference in references)
+    assert result.testsRun == 4 and result.wasSuccessful()
+    assert started == completed == selected and len(set(selected)) == 4
+    assert all(not getattr(result, name) for name in
+               ('failures', 'errors', 'skipped', 'expectedFailures', 'unexpectedSuccesses'))
+    assert live_count == (0 if corrected else 4)
+    if corrected:
+        assert environment['suite']._tests == [None] * 4
+        assert 'all_cases' not in environment and 'cases' not in environment
+    return {'corrected': corrected, 'synthetic_cases_run': result.testsRun,
+            'unique_synthetic_ids': len(set(selected)), 'live_completed_instances': live_count,
+            'started_equals_completed_equals_selected': True, 'adverse_outcomes': 0,
+            'executed_source': ast.unparse(program)}
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--receipt', type=Path, required=True)
+    args = parser.parse_args()
+    texts = {}
+    for path, expected in PINS.items():
+        body = (BASE / path).read_bytes()
+        assert hashlib.sha256(body).hexdigest() == expected, path
+        texts[path] = body.decode()
+        if path.endswith('.py.txt'):
+            compile(body, str(BASE / path), 'exec')
+    old_worker = texts['governance/partitioned/run_partition.py.txt']
+    new_worker = texts['governance/released-cases/run_partition.py.txt']
+    old_statement = '        result=unittest.TextTestRunner(stream=sys.stdout,verbosity=2,resultclass=RecordedResult).run(unittest.TestSuite(cases))'
+    new_statements = '        suite=unittest.TestSuite(cases)\n        del all_cases,cases\n        result=unittest.TextTestRunner(stream=sys.stdout,verbosity=2,resultclass=RecordedResult).run(suite)'
+    assert restore(new_worker, [(new_statements, old_statement)]) == old_worker
+    old_supervisor = texts['governance/partitioned/run_governance.py.txt']
+    new_supervisor = texts['governance/released-cases/run_governance.py.txt']
+    assert restore(new_supervisor, [
+        ('/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-released-cases', '/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-partitioned'),
+        ('/workspace/p06-qualified-warm-governance-partition-tmp-02', '/workspace/p06-qualified-warm-governance-partition-tmp-01'),
+    ]) == old_supervisor
+    assert restore(texts['w10_a03-released-cases-reconcile.py.txt'], [
+        (PINS['governance/released-cases/run_governance.py.txt'], PINS['governance/partitioned/run_governance.py.txt']),
+        (PINS['governance/released-cases/run_partition.py.txt'], PINS['governance/partitioned/run_partition.py.txt']),
+        ("DEFAULT = '/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-released-cases'", "DEFAULT = '/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-partitioned'"),
+        ("/ 'governance' / 'released-cases'", "/ 'governance' / 'partitioned'"),
+    ]) == texts['w09_a04-reconcile.py.txt']
+    output = '/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-released-cases'
+    temporary = '/workspace/p06-qualified-warm-governance-partition-tmp-02'
+    assert not os.path.lexists(output) and not os.path.lexists(temporary)
+    observations = [exact_statement_probe(old_worker, False), exact_statement_probe(new_worker, True)]
+    receipt = {
+        'schema_version': 1, 'scope': 'independent corrected harness static and small stdlib semantics review',
+        'observed_at': datetime.now(timezone.utc).isoformat(), 'outcome': 'pass-for-harness-review-only',
+        'pins': PINS, 'worker_exact_narrow_reversal': True, 'supervisor_exact_two_path_reversal': True,
+        'original_programs_and_reconciler_preserved': True, 'reconciler_exact_four_change_reversal': True,
+        'reconciler_all_checks_preserved': True, 'source_manifest_tool_and_id_pins_unchanged': True,
+        'bounds_unchanged': {'canonical_ids': 4527, 'partitions': 2, 'per_worker_seconds': 3600,
+                             'whole_seconds': 5400, 'per_log_bytes': 67108864},
+        'id_selection_order_zero_adverse_outcome_cleanup_and_final_source_rules_unchanged': True,
+        'original_native_absence_and_resource_review_gates_unchanged': True,
+        'fresh_output_absent_at_review': output, 'fresh_temporary_absent_at_review': temporary,
+        'coordinator_new_hash_bound_scheduling_receipt_required': True,
+        'exact_statement_probes': observations, 'project_tests_run': 0, 'new_canonical_ids': 0,
+        'full_suite_result': False, 'native_execution': 'not_run', 'actual_sigkill_cause_established': False,
+        'limitations': ['Tiny synthetic cases establish the narrow object lifetime change, not full-suite execution or OOM causation.',
+                       'All 4527 IDs require fresh complete execution; the original failed attempt remains failed.',
+                       'Whole-module partitions still differ from a monolithic invocation in cross-module state and order.'],
+    }
+    with args.receipt.open('x') as stream:
+        json.dump(receipt, stream, indent=2, sort_keys=True)
+        stream.write('\n')
+    print(json.dumps(receipt, indent=2, sort_keys=True))
+
+
+if __name__ == '__main__':
+    main()

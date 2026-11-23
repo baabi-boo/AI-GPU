@@ -1,10 +1,40 @@
 # P06 serial workspace handoff
 
-**Current continuation:** the [native lifetime packet](evidence/p06-native-lifetime/README.md)
-records the later pending-read/run-reset milestone at `b4127b19`; the
-[dependency provenance handoff](p06-dependency-provenance-handoff.md) selects the
-next bounded task. The implementation history and prospective measurement work
-below retain their original scopes, including the unqualified tick-budget proposal.
+**Current continuation:** use the
+[qualified warm handoff](p06-qualified-warm-handoff.md) for the implemented and
+independently reviewed 24-process route. The implementation history and earlier
+prospective work below retain their original scopes, including the then-unqualified
+tick-budget proposal.
+
+The explicit 24-process qualified warm route is implemented and independently
+reviewed at published `c0b44ce64665fe11895f869eea8c38c9b820d6f7`, tree
+`13450812d279d55f36a172fcf38653ff567f6c86`. The clean source checkout, all eight
+submodules and all 69 projected source inputs match the selected proof. Its
+fresh native experiment is **unstarted**. The recorded readiness checks did not
+establish the unchanged 4 GiB available-RAM requirement together with enough
+disk headroom to preserve the 15 GiB reserve plus approximately 2.24 GB of fresh
+dependency products and warm-run growth. The audit retains dated measurements;
+capacity must be rechecked before launch. No old data was deleted and no native
+resource guard was relaxed.
+
+**Next bounded action:** obtain one uninterrupted governance invocation without
+skips and provision sufficient capacity. Then execute one fresh complete
+qualified warm attempt, retain its original archive unchanged, replay
+it independently and evaluate the unchanged predicates. Follow the
+[qualified warm handoff](p06-qualified-warm-handoff.md) and
+[runbook](evidence/p06-qualified-warm/runbook.md). The implemented route binds
+each new process before launch and requires complete source/build/load,
+numerical, lifetime, destruction and final-stability reconstruction. Preserve
+all 24 processes, 792 launches and 25,344 exact output words, including excluded
+primes and warm-ups; a complete valid attempt may reject the performance
+hypothesis. Pending reads remain a transient balance outside the 40 cumulative
+components.
+
+The old four-process proof rejects the changed current caller; preserving its
+no-flag grammar does not make that proof admit current execution. Replay of
+unchanged historical archives remains supported. The new route uses its own
+explicitly selected, independently reviewed projection; no earlier archive is
+promoted into a fresh warm result.
 
 ## Current implementation and evidence
 
@@ -248,7 +278,24 @@ output is never native arithmetic evidence.
 
 ## Remaining development and acceptance
 
-**Next bounded development: freeze and independently review the exact counter,
+Current native execution is unstarted because adequate capacity has not been
+established. Completed hosted and supplemental executions provide passing
+coverage for all 4,527 canonical test IDs: 4,491 hosted passes plus 59 local
+passes, with 23 overlaps and all 36 hosted gaps covered. The supplement's source,
+tool and cleanup checks pass; the earlier unfinalized local attempt remains
+unchanged. This does not establish one complete local suite or a single
+invocation without skips. No new warm-performance or P06-A02/A03 acceptance
+is established. Use the current handoff's exact evidence boundaries.
+
+### Historical counter-qualification plan
+
+The following checklist records the earlier prerequisite plan. Its implementation
+and four-process execution are described in the
+[counter-qualification handoff](p06-counter-qualification-handoff.md), followed
+by the implemented [qualified warm route](p06-qualified-warm-handoff.md).
+It is preserved as history, not the current action queue.
+
+**Then-selected bounded development: freeze and independently review the exact counter,
 coherence and lifetime contract for the RV64 `p02-tfr`, timing SimX, `PERF=1`
 route.** Use the [qualification plan](p06-mpm-qualification-plan.md) after checking
 the exact-source completion receipts and review in the

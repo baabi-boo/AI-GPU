@@ -1,0 +1,238 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Read-only independent accounting of the failed frozen governance attempt."""
+import argparse
+from collections import Counter
+from datetime import datetime, timezone
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+
+ROOT = Path('/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-partitioned')
+SOURCE = Path('/workspace/p06-qualified-warm-source-01')
+REV = 'c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+TREE = '13450812d279d55f36a172fcf38653ff567f6c86'
+EXEC_SHA = 'cfb567d871be5dc5db286b8f814b25d83aecef69e21100b02452d0d4057e4d76'
+MANIFEST_SHA = 'ccaac86bf0e77a06c43db1b575716b575e95025cc2aeecf460fc9d05ecf8989f'
+SOURCE_SHA = '6944738200ca84711bb41559755960bb1ae221d3b196a7e45635d1e9a85ba303'
+IDS_SHA = '5fd7fbf2f57425467c8124307dbe6ad951e48fe2526a531c87023b58626761fc'
+SUPERVISOR_SHA = 'f898761bf4cecf5bdeabb8c57741e600592135511220983a39293ed35b9ed72a'
+WORKER_SHA = '43ac491afecadbb05337fa4179d7b048ea9348d7bba3df097ace2f2129bc8a9b'
+
+
+def digest(path):
+    with Path(path).open('rb') as stream:
+        return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+
+def pairs(items):
+    result = {}
+    for key, value in items:
+        if key in result:
+            raise ValueError('duplicate JSON key: ' + key)
+        result[key] = value
+    return result
+
+
+def read(path):
+    return json.loads(Path(path).read_text(), object_pairs_hook=pairs,
+                      parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
+
+
+def git(*arguments, cwd=SOURCE):
+    return subprocess.check_output(['git', '--no-optional-locks', *arguments],
+                                   cwd=cwd, timeout=60)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--receipt', type=Path, required=True)
+    args = parser.parse_args()
+    checks = []
+
+    def need(condition, label):
+        if not condition:
+            raise ValueError(label)
+        checks.append(label)
+
+    receipt = {
+        'schema_version': 1, 'scope': 'independent failed governance attempt accounting',
+        'observed_at': datetime.now(timezone.utc).isoformat(),
+        'source_revision': REV, 'source_tree': TREE, 'full_suite_result': False,
+        'native_execution': 'not_run', 'gpu_execution_certified': False,
+        'retained_code_executed': False, 'checks': checks,
+        'original_execution_outcome': 'fail',
+    }
+    try:
+        ex = read(ROOT / 'execution.json')
+        need(digest(ROOT / 'execution.json') == EXEC_SHA, 'fixed final failed execution receipt')
+        need(ex['state'] == 'finished' and ex['outcome'] == 'fail', 'attempt finished unsuccessfully')
+        need(ex['failures'] == ['RuntimeError: partition nonzero exit',
+              'partition 0 nonzero exit', 'partition 1 nonzero exit'] and
+              ex['not_run'] == ['diff-check'], 'exact supervisor failures and omitted final command')
+        need(ex['source_revision'] == ex['source_revision_after'] == REV and
+              ex['source_tree'] == ex['source_tree_after'] == TREE, 'recorded source identities stable')
+        manifest = read(ROOT / 'partition-manifest.json')
+        need(digest(ROOT / 'partition-manifest.json') == ex['manifest_sha256'] == MANIFEST_SHA,
+              'manifest pin unchanged')
+        all_ids = manifest['all_ids']
+        need(len(all_ids) == len(set(all_ids)) == 4527 and
+              hashlib.sha256(json.dumps(all_ids, separators=(',', ':')).encode()).hexdigest() == IDS_SHA,
+              '4527 unique frozen discovery IDs')
+        parts = manifest['partitions']
+        need([len(p['ids']) for p in parts] == [2264, 2263] and
+              [len(p['modules']) for p in parts] == [137, 137] and
+              not set(parts[0]['modules']) & set(parts[1]['modules']) and
+              Counter(x for p in parts for x in p['ids']) == Counter(all_ids),
+              'whole-module disjoint partition population')
+        receipt['execution_sha256'] = EXEC_SHA
+        receipt['manifest_sha256'] = MANIFEST_SHA
+        receipt['duration_seconds'] = ex['duration_seconds']
+        receipt['partitions'] = []
+        successful = []
+        for part, row in zip(parts, ex['partitions']):
+            index = part['index']
+            log_path = ROOT / row['log']
+            log = log_path.read_text()
+            need(digest(log_path) == row['log_sha256'] and
+                  log_path.stat().st_size == row['log_size_bytes'], 'log pin: ' + str(index))
+            headers, successes, pending = [], [], None
+            for line in log.splitlines():
+                found = re.match(r'^test_\S+ \((test_[\w.]+)\)(?: \.\.\.|$)', line)
+                if found:
+                    need(pending is None, 'previous logged test has an outcome: ' + str(index))
+                    pending = found[1]
+                    headers.append(pending)
+                if line.endswith(' ... ok'):
+                    need(pending is not None, 'success line belongs to a logged test')
+                    successes.append(pending)
+                    pending = None
+            need(headers == part['ids'][:len(headers)] and successes == part['ids'][:len(successes)],
+                  'exact selected prefixes for logged starts and successes: ' + str(index))
+            need(len(headers) == len(successes) + 1 and pending == headers[-1],
+                  'one terminal test without successful outcome: ' + str(index))
+            need(not re.search(r' \.\.\. (?:FAIL|ERROR|skipped|expected failure|unexpected success)', log)
+                  and not re.search(r'^Ran \d+ tests in ', log, re.M) and not re.search(r'^OK$', log, re.M),
+                  'no adverse verbose outcomes and no complete unittest summary: ' + str(index))
+            need(row['state'] == 'finished' and row['outcome'] == 'fail' and
+                  row['process_started'] is True and row['cleanup_complete'] is True,
+                  'failed worker final record with recorded cleanup: ' + str(index))
+            detail = {'partition': index, 'modules': len(part['modules']),
+                      'selected_ids': len(part['ids']), 'logged_start_ids': len(headers),
+                      'successful_ids': len(successes), 'terminal_test_without_success': pending,
+                      'exit_code': row['exit_code'], 'cleanup_complete_recorded': row['cleanup_complete'],
+                      'log_sha256': row['log_sha256'], 'log_size_bytes': row['log_size_bytes']}
+            result_path = ROOT / ('partition-' + str(index) + '-result.json')
+            if index == 0:
+                need(row['exit_code'] == -9 and not os.path.lexists(result_path) and len(successes) == 1289,
+                      'partition 0 SIGKILL with absent result and 1289 success outcomes')
+                detail.update(result_present=False, signal='SIGKILL', initiating_cause='unestablished')
+            else:
+                result = read(result_path)
+                need(row['exit_code'] == 1 and result['state'] == 'finished' and result['outcome'] == 'fail'
+                      and result['reason'] == 'KeyboardInterrupt: received signal 15',
+                      'partition 1 SIGTERM interruption')
+                need(result['selected_ids'] == part['ids'] and result['started_ids'] == result['completed_ids'] == headers
+                      and len(headers) == 1184 and len(successes) == 1183 and result['tests_run'] == 0,
+                      '1184 started and stopped IDs include one interrupted nonsuccess')
+                need(all(result[k] == [] for k in ('failures', 'errors', 'skipped', 'expected_failures',
+                                                  'unexpected_successes')),
+                      'unfinalized worker outcome arrays remain empty')
+                need(result['source_revision'] == REV and result['source_tree'] == TREE and
+                      result['manifest_sha256'] == MANIFEST_SHA and result['program_sha256'] == WORKER_SHA and
+                      result['interpreter'] == ex['interpreter'], 'interrupted worker source and program pins')
+                detail.update(result_present=True, result_sha256=digest(result_path),
+                              actual_started_ids=len(result['started_ids']), actual_stopped_ids=len(result['completed_ids']),
+                              result_tests_run=0, result_reason=result['reason'])
+            successful.extend(successes)
+            receipt['partitions'].append(detail)
+        need(len(successful) == len(set(successful)) == 2472 and len(set(all_ids) - set(successful)) == 2055,
+              '2472 distinct successful IDs and 2055 without successful outcome')
+        receipt.update(successful_unique_test_outcomes=2472, frozen_ids_without_success=2055)
+        need([r['id'] for r in ex['commands']] == ['preflight', 'structure', 'baseline-packets'],
+              'three setup commands only')
+        for row in ex['commands']:
+            path = ROOT / row['log']
+            need(row['state'] == 'finished' and row['outcome'] == 'pass' and row['exit_code'] == 0
+                  and row['cleanup_complete'] is True and row['process_started'] is True
+                  and digest(path) == row['log_sha256'] and path.stat().st_size == row['log_size_bytes'],
+                  'completed setup command and log pin: ' + row['id'])
+        program_dir = Path(__file__).parent / 'governance' / 'partitioned'
+        need(digest(program_dir / 'run_governance.py.txt') == ex['supervisor_sha256'] == SUPERVISOR_SHA and
+              digest(program_dir / 'run_partition.py.txt') == ex['partition_program_sha256'] == WORKER_SHA,
+              'supervisor and worker program pins stable')
+        before, after = read(ROOT / 'source-before.json'), read(ROOT / 'source-after.json')
+        need(before == after and digest(ROOT / 'source-before.json') == digest(ROOT / 'source-after.json') == SOURCE_SHA,
+              'before and after source inventories match pinned bytes')
+        current = []
+        for entry in git('ls-files', '--stage', '-z').split(b'\0'):
+            if not entry:
+                continue
+            metadata, name = entry.split(b'\t', 1)
+            mode, oid, stage = metadata.decode('ascii').split()
+            need(stage == '0', 'current source has no unmerged stage')
+            relative = name.decode('utf-8')
+            path = SOURCE / relative
+            row = {'path': relative, 'mode': mode, 'git_oid': oid}
+            if mode == '160000':
+                row['kind'] = 'gitlink-not-recursively-certified'
+            elif mode == '120000':
+                need(path.is_symlink(), 'tracked symlink preserved')
+                body = os.fsencode(os.readlink(path))
+                row.update(kind='symlink-text', size_bytes=len(body), sha256=hashlib.sha256(body).hexdigest())
+            else:
+                need(path.is_file() and not path.is_symlink(), 'regular tracked file preserved')
+                row.update(kind='regular-file', size_bytes=path.stat().st_size, sha256=digest(path))
+            current.append(row)
+        need(current == before, 'direct current tracked file hashes equal frozen source inventory')
+        need(git('rev-parse', 'HEAD').decode().strip() == REV and
+              git('rev-parse', 'HEAD^{tree}').decode().strip() == TREE and
+              git('status', '--porcelain=v1', '--untracked-files=all').decode().strip() == '',
+              'direct current source revision tree and clean status')
+        submodules = git('submodule', 'status', '--recursive').decode().strip()
+        need(submodules == ex['submodules_before'] == ex['submodules_after'] and len(submodules.splitlines()) == 8,
+              'direct eight recursive submodule pins stable')
+        receipt['submodules'] = []
+        for line in submodules.splitlines():
+            pin, path = line.strip().split()[:2]
+            head = git('rev-parse', 'HEAD', cwd=SOURCE / path).decode().strip()
+            status = git('status', '--porcelain=v1', '--untracked-files=all', cwd=SOURCE / path).decode().strip()
+            need(head == pin and status == '', 'direct submodule head and clean status: ' + path)
+            receipt['submodules'].append({'path': path, 'revision': head, 'status': status})
+        need(ex['tool_inputs_before'] == ex['tool_inputs_after'] and ex['tools_stable'] is True,
+              'before and after tool records stable')
+        for row in ex['tool_inputs_after']:
+            path = Path(row['path'])
+            need(str(path.resolve(strict=True)) == row['resolved'] and path.stat().st_size == row['size_bytes'] and
+                  digest(path) == row['sha256'], 'direct current tool identity: ' + path.name)
+        native_paths = ['/workspace/p06-qualified-warm-run-01',
+                        '/workspace/scratch/dc8be1693f91/native-qualified-warm-attempt-01/supervision.json']
+        need(all(not os.path.lexists(p) for p in native_paths) and
+              ex['native_execution'] == 'not_run' and ex['gpu_execution_certified'] is False and
+              ex['native_workspace_absent_after'] is True, 'native attempt remains unstarted')
+        need(digest(ROOT / 'execution.json') == EXEC_SHA, 'final receipt stable during independent review')
+        receipt.update(review_outcome='failed-run-evidence-reconciled', accounting_verified=True,
+                       source_inventory_rows=len(current), source_inventory_sha256=SOURCE_SHA,
+                       cleanup_evidence='Both final worker records report cleanup_complete=true; reviewed supervisor checks non-zombie process-group survivors before setting this field.',
+                       cleanup_limit='Independent exec calls have a separate PID namespace, so this review does not claim a second live process-group observation.',
+                       initiating_kill_cause='SIGKILL is established by exit -9; no memory.events counters are exposed, so OOM attribution is unproven.',
+                       limitation='Whole-module partitioning differs in cross-module process state/order from one monolithic invocation; the attempt is incomplete and establishes no native or phase acceptance.')
+        code = 0
+    except Exception as error:
+        receipt.update(review_outcome='accounting-error', accounting_verified=False,
+                       reason=type(error).__name__ + ': ' + str(error))
+        code = 1
+    receipt['checks'] = list(dict.fromkeys(checks))
+    with args.receipt.open('x') as stream:
+        json.dump(receipt, stream, indent=2, sort_keys=True)
+        stream.write('\n')
+    print(json.dumps({key: receipt.get(key) for key in ('review_outcome', 'accounting_verified',
+          'full_suite_result', 'successful_unique_test_outcomes', 'frozen_ids_without_success', 'reason')}, sort_keys=True))
+    return code
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

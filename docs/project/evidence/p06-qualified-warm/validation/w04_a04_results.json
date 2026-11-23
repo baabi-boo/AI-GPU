@@ -1,0 +1,98 @@
+{
+  "actual_original_archives_replayed": false,
+  "cases": [
+    {
+      "analysis_calls": 0,
+      "case": "actual_measured_pair_argv",
+      "commands_reached": 28,
+      "control_calls": 1,
+      "dependency_calls": 1,
+      "diagnostic_calls": 1,
+      "duration_seconds": 4.274731168996368,
+      "error_type": "ReplayError",
+      "fully_validated_processes_before_rejection": 7,
+      "mutation": "FP16 measured pair3 command invokes pair2; process plan, prelaunch binding and raw records still identify pair3",
+      "outcome": "rejected",
+      "process": "warm-simx-fp16-pair3-per_operation",
+      "reason": "command warm-simx-fp16-pair3-per_operation.argv[12]: value differs",
+      "repaired_native_report_sha256": "307f385e8446a014d61f05f55e31579b22d8b7ae3f1d3436c14cd47a8b0b6277"
+    },
+    {
+      "analysis_calls": 0,
+      "case": "late_format_command_order",
+      "commands_reached": 54,
+      "control_calls": 1,
+      "dependency_calls": 1,
+      "diagnostic_calls": 1,
+      "duration_seconds": 5.384965085002477,
+      "error_type": "ReplayError",
+      "fully_validated_processes_before_rejection": 20,
+      "mutation": "Reverse the two BF16 measured pair4 native command receipts while keeping exact process-plan order and all raw evidence",
+      "outcome": "rejected",
+      "processes": [
+        "warm-simx-bf16-pair4-per_operation",
+        "warm-simx-bf16-pair4-reusable_single_tile"
+      ],
+      "reason": "command warm-simx-bf16-pair4-per_operation.id: value differs",
+      "repaired_native_report_sha256": "56ac0394334807cdb193e2b0bc5a3e835e3ecefcd5d08f729fbcba43f635de5b"
+    },
+    {
+      "analysis_calls": 0,
+      "case": "repaired_supervisor_duration",
+      "commands_reached": 56,
+      "control_calls": 1,
+      "dependency_calls": 1,
+      "diagnostic_calls": 1,
+      "duration_seconds": 6.324450875996263,
+      "error_type": "ValueError",
+      "fully_validated_processes_before_rejection": 22,
+      "mutation": "Set final measured candidate supervisor duration to zero in both command and process summaries while retaining positive timed intervals",
+      "outcome": "rejected",
+      "process": "warm-simx-bf16-pair5-reusable_single_tile",
+      "reason": "in-process owner lifetime exceeds supervised process duration",
+      "repaired_native_report_sha256": "41df5aac465773ebaf39d38636324efc9a230ba12f619c8548ac054505ada823"
+    },
+    {
+      "analysis_calls": 0,
+      "attempt_started_at": "2026-11-23T07:21:13+00:00",
+      "case": "late_stability_chronology",
+      "commands_reached": 57,
+      "control_calls": 1,
+      "dependency_calls": 1,
+      "diagnostic_calls": 1,
+      "duration_seconds": 11.20408704199508,
+      "error_type": "ReplayError",
+      "fully_validated_processes_before_rejection": 24,
+      "label": "after-variant-simx-bf16",
+      "mutation": "Move only final stability observation before the complete attempt while preserving every source/proof/dependency digest",
+      "outcome": "rejected",
+      "reason": "invalid UTC observation timestamp",
+      "repaired_native_report_sha256": "01dbdf4e2fe78236eb5580d8ac372c3d2cc39233f4a0ff816aa7dd011bd2b23c"
+    }
+  ],
+  "duration_seconds": 87.40306197800237,
+  "mocked_boundaries": [
+    "complete dependency packet reader",
+    "original diagnostic prerequisite reader",
+    "original control prerequisite reader"
+  ],
+  "native_execution": "not_run",
+  "outcome": "pass",
+  "real_checks": "public verify_view; external-pin validation; trusted helper stability; complete native source/build/model/load/binding/raw/lifetime/chronology/inventory checks up to rejection",
+  "scope": "independent synthetic public-view semantic-repair probes",
+  "source_after": {
+    "ci/project/p06_dependency_native_replay.py": "ec4fd742820387a30989c26bfeea523ffa68e8b9dfabcc679a6928e68d8b652b",
+    "ci/project/p06_managed_preflight_replay.py": "9ab96bfb7a8940c61d37a13cd3d39f148c4b0c623ed085615e53d92c7eea4ade",
+    "ci/project/p06_qualified_warm_replay.py": "1937750bc374d6b4efc8322698f87c95ab825a0bfccff0701d714cfef9d6314f",
+    "ci/project/p06_qualified_warm_test_fixture.py": "e82c05cfc0e5fa7dbde0a9e228f314d0f73488c148dcb9083ec0dfc31b12330c",
+    "ci/project/test_p06_qualified_warm_complete_replay.py": "488eda19e8d6063f91f71e7e6de171880f6a056433864cd0be37eb6ffe9b2da3"
+  },
+  "source_before": {
+    "ci/project/p06_dependency_native_replay.py": "ec4fd742820387a30989c26bfeea523ffa68e8b9dfabcc679a6928e68d8b652b",
+    "ci/project/p06_managed_preflight_replay.py": "9ab96bfb7a8940c61d37a13cd3d39f148c4b0c623ed085615e53d92c7eea4ade",
+    "ci/project/p06_qualified_warm_replay.py": "1937750bc374d6b4efc8322698f87c95ab825a0bfccff0701d714cfef9d6314f",
+    "ci/project/p06_qualified_warm_test_fixture.py": "e82c05cfc0e5fa7dbde0a9e228f314d0f73488c148dcb9083ec0dfc31b12330c",
+    "ci/project/test_p06_qualified_warm_complete_replay.py": "488eda19e8d6063f91f71e7e6de171880f6a056433864cd0be37eb6ffe9b2da3"
+  },
+  "source_stable": true
+}

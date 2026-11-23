@@ -1,0 +1,194 @@
+{
+  "dependency_and_proof_admission_exercised": false,
+  "elapsed_seconds": 5.12188,
+  "finished_utc": "2026-11-23T18:54:51.861906+00:00",
+  "mutation_results": [
+    {
+      "case": "cross_format_abi",
+      "format": "fp16",
+      "policy": "reusable_single_tile",
+      "reason": "warm operation 16.dispatch does not match the actual frozen ABI",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "not_requested",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "cross_policy_accounting",
+      "format": "fp16",
+      "policy": "reusable_single_tile",
+      "reason": "warm operation 16.counts_before.buffer_create_calls differs from the frozen contract",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "not_requested",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "resident_relocation_with_repaired_wire",
+      "format": "fp16",
+      "policy": "reusable_single_tile",
+      "reason": "warm resident addresses[0]: differs from the frozen contract",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "not_requested",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "resident_memory_erasure_with_capacity_preserved",
+      "format": "fp16",
+      "policy": "reusable_single_tile",
+      "reason": "warm context accounting lacks its retained tensor payload",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "not_requested",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "half_reply_swap_with_sequence_repaired",
+      "format": "fp16",
+      "policy": "reusable_single_tile",
+      "reason": "managed read[68].tag: differs from the fixed contract",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "not_requested",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "interior_clock_gap_with_local_flush_repaired",
+      "format": "fp16",
+      "policy": "reusable_single_tile",
+      "reason": "native lifetime run[17].preceding boundary.ticks: differs from the fixed contract",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "accepted",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "interior_reset_jump_with_catchup_and_flush_repaired",
+      "format": "fp16",
+      "policy": "reusable_single_tile",
+      "reason": "native lifetime run[16].after.reset_generation: differs from the fixed contract",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "accepted",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "cross_pair_snapshot_hidden_after_outer_relabel",
+      "format": "fp16",
+      "policy": "reusable_single_tile",
+      "reason": "warm after_batch.sample_id: value differs",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "not_requested",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "cross_format_abi",
+      "format": "bf16",
+      "policy": "reusable_single_tile",
+      "reason": "warm operation 16.dispatch does not match the actual frozen ABI",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "not_requested",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "cross_policy_accounting",
+      "format": "bf16",
+      "policy": "reusable_single_tile",
+      "reason": "warm operation 16.counts_before.buffer_create_calls differs from the frozen contract",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "not_requested",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "resident_relocation_with_repaired_wire",
+      "format": "bf16",
+      "policy": "reusable_single_tile",
+      "reason": "warm resident addresses[0]: differs from the frozen contract",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "not_requested",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "resident_memory_erasure_with_capacity_preserved",
+      "format": "bf16",
+      "policy": "reusable_single_tile",
+      "reason": "warm context accounting lacks its retained tensor payload",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "not_requested",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "half_reply_swap_with_sequence_repaired",
+      "format": "bf16",
+      "policy": "reusable_single_tile",
+      "reason": "managed read[68].tag: differs from the fixed contract",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "not_requested",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "interior_clock_gap_with_local_flush_repaired",
+      "format": "bf16",
+      "policy": "reusable_single_tile",
+      "reason": "native lifetime run[17].preceding boundary.ticks: differs from the fixed contract",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "accepted",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "interior_reset_jump_with_catchup_and_flush_repaired",
+      "format": "bf16",
+      "policy": "reusable_single_tile",
+      "reason": "native lifetime run[16].after.reset_generation: differs from the fixed contract",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "accepted",
+      "unchanged_population_and_totals": true
+    },
+    {
+      "case": "cross_pair_snapshot_hidden_after_outer_relabel",
+      "format": "bf16",
+      "policy": "reusable_single_tile",
+      "reason": "warm after_batch.sample_id: value differs",
+      "result": "rejected",
+      "shared_warm_counter_semantics_control": "not_requested",
+      "unchanged_population_and_totals": true
+    }
+  ],
+  "native_evidence": false,
+  "positive_controls": [
+    {
+      "checked_words": 1056,
+      "format": "fp16",
+      "launches": 33,
+      "policy": "per_operation",
+      "result": "accepted"
+    },
+    {
+      "checked_words": 1056,
+      "format": "fp16",
+      "launches": 33,
+      "policy": "reusable_single_tile",
+      "result": "accepted"
+    },
+    {
+      "checked_words": 1056,
+      "format": "bf16",
+      "launches": 33,
+      "policy": "per_operation",
+      "result": "accepted"
+    },
+    {
+      "checked_words": 1056,
+      "format": "bf16",
+      "launches": 33,
+      "policy": "reusable_single_tile",
+      "result": "accepted"
+    }
+  ],
+  "producer_native_execution": false,
+  "schema_version": 1,
+  "scope": "synthetic raw-record and lifecycle contradiction probes",
+  "source_sha256": {
+    "ci/project/p06_managed_preflight_records.py": "3d6358c98544f4252be262125b70c87a72caaca7f35fbe3bc3e2512655654d10",
+    "ci/project/p06_native_lifetime_records.py": "5bf33d35e489397d96e0e0932c8d42e687f18deda646bb9725e05b326be50e3a",
+    "ci/project/p06_native_lifetime_test_fixture.py": "d6ff97dfde6561be7e8ab6306a0df4852da72a21f98f3a0884b70947be965a92",
+    "ci/project/p06_qualified_warm_records.py": "100a513d0e34b358c4f2676f9fc4d565160bd0b3b7499d9ae51f6ce1cbe3e29b",
+    "ci/project/p06_warm_records.py": "28d7e2c1553fc0929a106bc24a62fa2d612e415449ee0e9ac84ad582289381e7",
+    "ci/project/test_p06_qualified_warm_records.py": "6e21cbc6f198c30c922e63f2fb3a21486ddbe9ae01272ee4301b3694ef639b96"
+  },
+  "started_utc": "2026-11-23T18:54:46.740032+00:00"
+}

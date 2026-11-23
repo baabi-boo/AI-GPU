@@ -1,0 +1,138 @@
+#!/usr/bin/env python3
+"""Independent import/input closure probe; performs no native or replay execution."""
+import ast
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+ROOT = Path(__file__).resolve().parents[5]
+OUTPUT = Path(__file__).with_name('w05_a01-closure-inventory.json')
+
+def digest(body):
+    return hashlib.sha256(body).hexdigest()
+
+def modules():
+    found = set()
+    for module in tuple(sys.modules.values()):
+        value = getattr(module, '__file__', None)
+        if value and Path(value).suffix == '.py':
+            path = Path(value).resolve()
+            if path.is_relative_to(ROOT):
+                found.add(path.relative_to(ROOT).as_posix())
+    return sorted(found)
+
+if len(sys.argv) > 1:
+    mode = sys.argv[1]
+    sys.path.insert(0, str(ROOT / 'ci/project'))
+    accesses = set()
+    relative_open_labels = set()
+    def audit(event, args):
+        if event != 'open' or not isinstance(args[0], (str, bytes)):
+            return
+        path = Path(args[0].decode() if isinstance(args[0], bytes) else args[0])
+        if not path.is_absolute():
+            relative_open_labels.add(str(path))
+            return
+        if path.is_relative_to(ROOT) and '__pycache__' not in path.parts:
+            accesses.add(path.relative_to(ROOT).as_posix())
+    sys.addaudithook(audit)
+    if mode == 'producer':
+        import p06_qualified_warm_execute as cli
+        import p06_native_lifetime_contract
+        import p06_dependency_admission
+        import p06_qualified_warm_admission as admission
+        import p06_qualified_warm_contract as contract
+        import p06_qualified_warm_records
+        before = cli.preflight.loaded_helpers()
+        loaded = modules()
+        cli.argument_parser()
+        contract.load_proof(ROOT / contract.SOURCE_PROOF_PATH, contract.SOURCE_PROOF_SHA256)
+        contract.sampling_binding()
+        contract.process_plan()
+        admission_rows = admission.reader_sources()
+        prerequisite_rows = admission.prerequisite_input_rows(contract.validate_proof(
+            (ROOT / contract.SOURCE_PROOF_PATH).read_bytes()))
+        after = cli.preflight.loaded_helpers()
+        names = {row['path'] for row in before}
+        retained = names | set(admission.SOURCE_FILES) | {
+            row['path'] for row in (*admission_rows, *prerequisite_rows)}
+        missing_modules = sorted(set(loaded) - retained)
+        missing_reads = sorted(accesses - retained)
+        assert len(before) == 81 and before == after and not missing_modules, {
+            'before': len(before), 'after': len(after), 'missing_modules': missing_modules,
+            'added': sorted({row['path'] for row in after} - names)}
+        assert len(admission_rows) == 93 and not missing_reads, {'admission_count': len(admission_rows), 'missing_reads': missing_reads}
+        result = {'mode': mode, 'helpers': before, 'admission_helpers': admission_rows,
+                  'prerequisite_inputs': prerequisite_rows, 'loaded_modules': loaded,
+                  'absolute_read_paths': sorted(accesses), 'relative_open_labels_not_resolved': sorted(relative_open_labels),
+                  'missing_loaded_modules': missing_modules,
+                  'missing_read_inputs': missing_reads, 'stable': before == after}
+    elif mode == 'reader':
+        import p06_qualified_warm_replay as reader
+        before = reader._reader_sources()
+        reader.argument_parser()
+        reader.native.dependency_replay._archive_api()
+        reader.contract.sampling_binding()
+        reader.contract.process_plan()
+        reader.admission.prerequisite_input_rows(reader.contract.validate_proof(
+            (ROOT / reader.contract.SOURCE_PROOF_PATH).read_bytes()))
+        after = reader._reader_sources()
+        loaded = modules()
+        names = {row['path'] for row in before}
+        missing_modules = sorted(set(loaded) - names)
+        missing_reads = sorted(accesses - names)
+        assert len(before) == 100 and before == after == reader.TRUSTED_READER_SOURCES
+        assert not missing_modules and not missing_reads
+        result = {'mode': mode, 'trusted_inputs': before, 'loaded_modules': loaded,
+                  'absolute_read_paths': sorted(accesses), 'relative_open_labels_not_resolved': sorted(relative_open_labels),
+                  'missing_loaded_modules': missing_modules,
+                  'missing_read_inputs': missing_reads, 'stable': before == after,
+                  'expected_producer_helpers': list(reader.RUNNER_HELPERS),
+                  'expected_admission_helpers': list(reader.ADMISSION_HELPERS)}
+    else:
+        raise ValueError(mode)
+    print(json.dumps(result, sort_keys=True))
+    raise SystemExit(0)
+
+started = time.monotonic()
+results = {}
+for mode in ('producer', 'reader'):
+    result = subprocess.run([sys.executable, '-B', str(Path(__file__).resolve()), mode],
+                            cwd=ROOT, capture_output=True, text=True, check=True)
+    results[mode] = json.loads(result.stdout)
+assert [row['path'] for row in results['producer']['helpers']] == results['reader']['expected_producer_helpers']
+assert [row['path'] for row in results['producer']['admission_helpers']] == results['reader']['expected_admission_helpers']
+direct_importers = []
+for path in sorted((ROOT / 'ci/project').glob('*.py')):
+    tree = ast.parse(path.read_bytes())
+    if any(isinstance(node, ast.ImportFrom) and node.module == 'p06_counter_qualification_historical_fixture'
+           or isinstance(node, ast.Import) and any(alias.name == 'p06_counter_qualification_historical_fixture'
+                                                  for alias in node.names)
+           for node in ast.walk(tree)):
+        direct_importers.append(path.relative_to(ROOT).as_posix())
+assert direct_importers == ['ci/project/p06_counter_qualification_test_fixture.py',
+    'ci/project/test_p06_counter_qualification_admission.py',
+    'ci/project/test_p06_counter_qualification_contract.py']
+original = subprocess.check_output(['git', 'show',
+    'f80b58b06e7bcf734f3190f6db478fd11f0bab01:tests/regression/ai_counter_preflight/main.cpp'], cwd=ROOT)
+historical = (ROOT / 'ci/project/fixtures/p06_counter_preflight_main_v1.cpp').read_bytes()
+current = (ROOT / 'tests/regression/ai_counter_preflight/main.cpp').read_bytes()
+assert historical == original and current != historical
+record = {'schema_version': 1, 'outcome': 'pass', 'scope': 'independent trusted import and input closure only',
+    'duration_seconds': time.monotonic() - started, 'python': sys.version,
+    'argv': [sys.executable, '-B', str(Path(__file__).resolve())],
+    'base_revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
+    'working_tree_is_implementation_checkpoint': True, 'native_execution': 'not_run',
+    'archive_replay': 'not_run', 'unit_tests_rerun': 0,
+    'script_sha256': digest(Path(__file__).read_bytes()), 'inventory': results,
+    'historical_fixture': {'direct_importers': direct_importers,
+        'matches_original_git_blob': True, 'size_bytes': len(historical), 'sha256': digest(historical),
+        'current_caller_sha256': digest(current), 'production_closures_include_fixture': False}}
+OUTPUT.write_text(json.dumps(record, indent=2, sort_keys=True) + '\n')
+print(json.dumps({'outcome': record['outcome'], 'producer_helpers': len(results['producer']['helpers']),
+    'admission_helpers': len(results['producer']['admission_helpers']),
+    'trusted_reader_inputs': len(results['reader']['trusted_inputs']),
+    'duration_seconds': record['duration_seconds'], 'result': str(OUTPUT)}, sort_keys=True))

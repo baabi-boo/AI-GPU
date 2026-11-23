@@ -1,0 +1,340 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Manual governance-before-native scheduling; not a native evidence envelope.
+
+The selected native attempt has not started because its resource review blocks
+launch. A separately pinned coordinator scheduling review selects these source-
+root tests first. Native workspace and supervision must remain absent throughout.
+No native resource guard or execution prerequisite is waived; no poller launches
+this job and no governance outcome authorizes native execution automatically.
+"""
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import signal
+import subprocess
+import sys
+import time
+
+SOURCE = Path('/workspace/p06-qualified-warm-source-01')
+OUTPUT = Path('/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6')
+TEMP = Path('/workspace/p06-qualified-warm-governance-tmp-01')
+NATIVE = Path('/workspace/scratch/dc8be1693f91/native-qualified-warm-attempt-01/supervision.json')
+REVISION = 'c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+TREE = '13450812d279d55f36a172fcf38653ff567f6c86'
+PYTHON = '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3'
+NATIVE_WORKSPACE = Path('/workspace/p06-qualified-warm-run-01')
+RESOURCE_REVIEW = Path('/workspace/scratch/dc8be1693f91/AI-GPU/docs/project/evidence/p06-qualified-warm/validation/w06_a02-supervisor-resource-review.json')
+RESOURCE_REVIEW_SHA256 = '4803a73034fa4014a22dca1785d1e4d6528e328ede6052914c9c1060e693105b'
+WHOLE_SECONDS = 90 * 60
+SUITE_SECONDS = 60 * 60
+LOG_BUDGET_BYTES = 64 * 1024**2
+
+
+def now():
+    return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+
+
+def require(condition, message):
+    if not condition:
+        raise RuntimeError(message)
+
+
+def sha(path):
+    with Path(path).open('rb') as stream:
+        return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+
+def canonical(path, existing=True):
+    require(path.is_absolute(), 'absolute path required: ' + str(path))
+    require(all(not item.is_symlink() for item in (path, *path.parents)),
+            'symlink path rejected: ' + str(path))
+    require(path.resolve(strict=existing) == path, 'noncanonical path: ' + str(path))
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=SOURCE, text=True,
+                                   timeout=60).strip()
+
+
+def snapshot():
+    entries = subprocess.check_output(['git', 'ls-files', '--stage', '-z'],
+                                     cwd=SOURCE, timeout=60).split(b'\0')
+    rows = []
+    for entry in entries:
+        if not entry:
+            continue
+        metadata, raw_name = entry.split(b'\t', 1)
+        mode, oid, stage = metadata.decode('ascii').split()
+        name = raw_name.decode('utf-8')
+        require(stage == '0', 'unmerged index entry: ' + name)
+        path = SOURCE / name
+        row = {'path': name, 'mode': mode, 'git_oid': oid}
+        if mode == '160000':
+            row['kind'] = 'gitlink-not-recursively-certified'
+        elif mode == '120000':
+            require(path.is_symlink(), 'tracked symlink is missing: ' + name)
+            body = os.fsencode(os.readlink(path))
+            row.update(kind='symlink-text', size_bytes=len(body),
+                       sha256=hashlib.sha256(body).hexdigest())
+        else:
+            require(path.is_file() and not path.is_symlink(),
+                    'missing or nonregular tracked source: ' + name)
+            row.update(kind='regular-file', size_bytes=path.stat().st_size,
+                       sha256=sha(path))
+        rows.append(row)
+    return rows
+
+
+def write_new(path, value):
+    with path.open('x', encoding='utf-8') as stream:
+        json.dump(value, stream, indent=2, sort_keys=True)
+        stream.write('\n')
+
+
+def live_group(pid):
+    members = []
+    for path in Path('/proc').iterdir():
+        if not path.name.isdigit():
+            continue
+        try:
+            fields = (path / 'stat').read_text().rsplit(') ', 1)[1].split()
+            if int(fields[2]) == pid and fields[0] not in ('Z', 'X'):
+                members.append(int(path.name))
+        except (FileNotFoundError, ProcessLookupError):
+            continue
+    return members
+
+
+def stop_group(process):
+    for number in (signal.SIGTERM, signal.SIGKILL):
+        try:
+            os.killpg(process.pid, number)
+        except ProcessLookupError:
+            pass
+        try:
+            process.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            pass
+        if not live_group(process.pid):
+            return True
+    return not live_group(process.pid)
+
+
+def pinned_json(path, pin, label):
+    canonical(path)
+    require(type(pin) is str and len(pin) == 64
+            and all(c in '0123456789abcdef' for c in pin),
+            'exact ' + label + ' SHA-256 required')
+    body = path.read_bytes()
+    require(hashlib.sha256(body).hexdigest() == pin, label + ' pin mismatch')
+    value = json.loads(body)
+    require(sha(path) == pin, label + ' changed during scheduling check')
+    require(type(value) is dict, label + ' must be an object')
+    return value
+
+
+def native_absence():
+    for path in (NATIVE_WORKSPACE, NATIVE):
+        canonical(path, existing=False)
+        require(not os.path.lexists(path), 'native attempt has started: ' + str(path))
+
+
+def scheduling_receipt(pin, review_path):
+    native_absence()
+    resource = pinned_json(RESOURCE_REVIEW, RESOURCE_REVIEW_SHA256, 'resource review')
+    require(resource.get('execution_ready') is False
+            and resource.get('native_execution') == 'not_run'
+            and resource.get('resource_outcome') == 'blocked_pending_resource_resolution',
+            'selected review does not record native launch blocked before execution')
+    review = pinned_json(review_path, pin, 'coordinator scheduling review')
+    require(type(review.get('schema_version')) is int and review['schema_version'] == 1
+            and review.get('scope') == 'governance-before-native-scheduling'
+            and review.get('decision') == 'run_governance_before_native'
+            and review.get('source') == str(SOURCE)
+            and review.get('source_revision') == REVISION
+            and review.get('source_tree') == TREE
+            and review.get('native_workspace') == str(NATIVE_WORKSPACE)
+            and review.get('native_execution') == 'not_run'
+            and review.get('native_workspace_absent') is True
+            and review.get('no_native_attempt_started') is True
+            and review.get('native_launch_disabled_until_governance_finishes') is True
+            and review.get('native_resource_guards_unchanged') is True
+            and review.get('resource_review_sha256') == RESOURCE_REVIEW_SHA256
+            and review.get('governance_supervisor_sha256') == sha(__file__)
+            and type(review.get('reason')) is str and bool(review['reason'].strip()),
+            'coordinator review must explicitly select this bounded governance-first run')
+    native_absence()
+    return {'decision': review['decision'], 'reviewed_at': now(),
+            'coordinator_scheduling_review': str(review_path),
+            'coordinator_scheduling_review_sha256': pin,
+            'resource_review': str(RESOURCE_REVIEW),
+            'resource_review_sha256': RESOURCE_REVIEW_SHA256,
+            'native_execution': 'not_run', 'native_workspace_absent': True,
+            'native_resource_guards_unchanged': True}
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--scheduling-review-sha256', required=True)
+    parser.add_argument('--scheduling-review', type=Path, required=True)
+    args = parser.parse_args(argv)
+    require(sys.version_info[:2] == (3, 12), 'Python 3.12 required')
+    require(Path(sys.executable).resolve() == Path(PYTHON).resolve(),
+            'selected interpreter differs')
+    canonical(SOURCE)
+    canonical(OUTPUT, existing=False)
+    canonical(TEMP, existing=False)
+    require(not os.path.lexists(OUTPUT) and not os.path.lexists(TEMP),
+            'fresh output and temporary paths required')
+    handoff = scheduling_receipt(args.scheduling_review_sha256, args.scheduling_review)
+    require(git('rev-parse', 'HEAD') == REVISION, 'source revision differs')
+    require(git('rev-parse', 'HEAD^{tree}') == TREE, 'source tree differs')
+    require(not git('status', '--porcelain=v1', '--untracked-files=all'), 'source is dirty')
+    OUTPUT.mkdir(mode=0o700)
+    TEMP.mkdir(mode=0o700)
+    started = time.monotonic()
+    record = {'schema_version': 1, 'scope': 'source-root-governance-and-tooling-only',
+              'source': str(SOURCE), 'source_revision': REVISION, 'source_tree': TREE,
+              'python': PYTHON, 'python_version': sys.version, 'native_execution': 'not_run',
+              'gpu_execution_certified': False, 'supervisor_sha256': sha(__file__),
+              'scheduling_review': handoff, 'started_at': now(), 'state': 'running',
+              'outcome': 'running', 'commands': [], 'failures': [],
+              'limits': {'suite_seconds': SUITE_SECONDS, 'whole_seconds': WHOLE_SECONDS,
+                         'polled_log_budget_bytes': LOG_BUDGET_BYTES},
+              'limitations': ['This supervisor is bookkeeping, not phase acceptance.',
+                  'Manual invocation and independently pinned reviews record scheduling; they establish no native execution or origin.',
+                  'No additional memory or disk gate is imposed on governance tests.',
+                  'Log size is polled and can exceed its budget before termination.',
+                  'Process groups do not contain descendants that deliberately leave the group.',
+                  'Gitlinks are inventoried; this source-root gate does not certify recursive native checkout provenance.']}
+    target = OUTPUT / 'execution.json'
+    write_new(target, record)
+
+    def save():
+        temporary = OUTPUT / 'execution.next.json'
+        write_new(temporary, record)
+        temporary.replace(target)
+
+    environment = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', TMPDIR=str(TEMP))
+    record['environment_overrides'] = {'PYTHONDONTWRITEBYTECODE': '1', 'TMPDIR': str(TEMP)}
+    previous_handlers = {}
+
+    def interrupted(number, frame):
+        raise KeyboardInterrupt('received signal ' + str(number))
+
+    for number in (signal.SIGINT, signal.SIGTERM):
+        previous_handlers[number] = signal.signal(number, interrupted)
+    commands = [('preflight', [PYTHON, '-B', 'ci/project/preflight.py', '--tier', 'governance', '--json'], 120),
+                ('structure', [PYTHON, '-B', 'ci/project/check_project.py'], 300),
+                ('baseline-packets', [PYTHON, '-B', 'ci/project/check_baseline_packets.py'], 300),
+                ('unittest-discovery', [PYTHON, '-B', '-m', 'unittest', 'discover', '-s', 'ci/project', '-p', 'test_*.py', '-v'], SUITE_SECONDS),
+                ('diff-check', ['git', 'diff', '--check'], 60)]
+    before = None
+    try:
+        before = snapshot()
+        write_new(OUTPUT / 'source-before.json', before)
+        record['source_before_sha256'] = sha(OUTPUT / 'source-before.json')
+        save()
+        for name, command, maximum in commands:
+            native_absence()
+            remaining = WHOLE_SECONDS - (time.monotonic() - started)
+            require(remaining > 0, 'whole supervision deadline reached')
+            row = {'id': name, 'argv': command, 'cwd': str(SOURCE), 'state': 'running',
+                   'started_at': now(), 'timeout_seconds': min(maximum, remaining),
+                   'log': name + '.log', 'process_started': False}
+            record['commands'].append(row)
+            save()
+            process = None
+            command_start = time.monotonic()
+            reason = None
+            cleanup = True
+            try:
+                with (OUTPUT / row['log']).open('xb') as stream:
+                    process = subprocess.Popen(command, cwd=SOURCE, env=environment,
+                        stdin=subprocess.DEVNULL, stdout=stream, stderr=subprocess.STDOUT,
+                        start_new_session=True, close_fds=True)
+                    row['process_started'] = True
+                    save()
+                    while process.poll() is None:
+                        if os.path.lexists(NATIVE_WORKSPACE) or os.path.lexists(NATIVE):
+                            reason = 'native_attempt_started_during_governance'
+                            break
+                        if time.monotonic() - command_start >= row['timeout_seconds']:
+                            reason = 'timeout'
+                            break
+                        if os.fstat(stream.fileno()).st_size > LOG_BUDGET_BYTES:
+                            reason = 'log_budget'
+                            break
+                        time.sleep(0.2)
+                    if live_group(process.pid):
+                        reason = reason or 'descendants_after_exit'
+                    if reason is not None:
+                        cleanup = stop_group(process)
+                    process.wait(timeout=2)
+                    if os.fstat(stream.fileno()).st_size > LOG_BUDGET_BYTES:
+                        reason = reason or 'log_budget'
+                    if process.returncode != 0:
+                        reason = reason or 'nonzero_exit'
+            except BaseException as error:
+                reason = type(error).__name__ + ': ' + str(error)
+                if process is not None:
+                    cleanup = stop_group(process)
+                raise
+            finally:
+                row.update(state='finished', finished_at=now(),
+                           duration_seconds=time.monotonic() - command_start,
+                           exit_code=None if process is None else process.returncode,
+                           reason=reason, cleanup_complete=cleanup)
+                logfile = OUTPUT / row['log']
+                if logfile.exists():
+                    row.update(log_sha256=sha(logfile), log_size_bytes=logfile.stat().st_size)
+                row['outcome'] = 'pass' if (row['exit_code'] == 0 and reason is None
+                                          and row['process_started'] and cleanup) else 'fail'
+                if row['outcome'] != 'pass':
+                    record['failures'].append(name)
+                save()
+            require(cleanup, 'command cleanup incomplete')
+        require(len(record['commands']) == len(commands), 'command population incomplete')
+    except BaseException as error:
+        record['failures'].append(type(error).__name__ + ': ' + str(error))
+    finally:
+        try:
+            after = snapshot()
+            write_new(OUTPUT / 'source-after.json', after)
+            record.update(source_after_sha256=sha(OUTPUT / 'source-after.json'),
+                          source_files_stable=before is not None and before == after,
+                          status_after=git('status', '--porcelain=v1', '--untracked-files=all'),
+                          revision_after=git('rev-parse', 'HEAD'), tree_after=git('rev-parse', 'HEAD^{tree}'))
+        except BaseException as error:
+            record['failures'].append('final-source-check: ' + str(error))
+        try:
+            native_absence()
+            record['native_workspace_absent_after'] = True
+        except BaseException as error:
+            record['native_workspace_absent_after'] = False
+            record['failures'].append('native-absence-check: ' + str(error))
+        record['not_run'] = [name for name, _, _ in commands
+                             if name not in {row['id'] for row in record['commands']}]
+        if (record.get('source_files_stable') is not True or record.get('status_after') != ''
+                or record.get('revision_after') != REVISION or record.get('tree_after') != TREE):
+            record['failures'].append('source/revision/index state differs after execution')
+        passed = (not record['failures'] and not record['not_run']
+                  and record.get('native_workspace_absent_after') is True
+                  and record.get('source_files_stable') is True
+                  and record.get('status_after') == ''
+                  and record.get('revision_after') == REVISION and record.get('tree_after') == TREE)
+        record.update(state='finished', outcome='pass' if passed else 'fail',
+                      finished_at=now(), duration_seconds=time.monotonic() - started)
+        save()
+        for number, handler in previous_handlers.items():
+            signal.signal(number, handler)
+        print(json.dumps({'outcome': record['outcome'], 'execution': str(target),
+                          'commands': len(record['commands']), 'not_run': record['not_run']}), flush=True)
+    return 0 if record['outcome'] == 'pass' else 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

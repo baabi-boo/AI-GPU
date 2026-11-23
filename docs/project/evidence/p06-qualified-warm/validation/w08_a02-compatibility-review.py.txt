@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Read-only source/receipt review; no project imports or workload execution."""
+from pathlib import Path
+import gzip, hashlib, json, subprocess, time
+ROOT = Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+V = ROOT/'docs/project/evidence/p06-qualified-warm/validation'
+REVISION = 'c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+def sha(body): return hashlib.sha256(body).hexdigest()
+def body(name): return (ROOT/name).read_bytes()
+def descriptor(name):
+    b=body(name);return {'path':name,'sha256':sha(b),'size_bytes':len(b)}
+start=time.monotonic()
+reviewed=['ci/project/p06_counter_qualification_proof.json','ci/project/p06_qualified_warm_proof.json','ci/project/p06_counter_qualification_execute.py','ci/project/p06_counter_qualification_admission.py','ci/project/p06_counter_qualification_contract.py','ci/project/p06_counter_qualification_historical_fixture.py','ci/project/test_p06_counter_qualification_contract.py','ci/project/p06_counter_qualification_replay.py','ci/project/p06_dependency_native_replay.py','ci/project/p06_qualified_warm_admission.py','ci/project/p06_qualified_warm_contract.py','tests/regression/ai_counter_preflight/main.cpp','ci/project/fixtures/p06_counter_preflight_main_v1.cpp','docs/designs/qualified_warm_workspace_v1.md']
+before=[descriptor(n) for n in reviewed]
+for row in before:
+    assert sha(subprocess.check_output(['git','show',REVISION+':'+row['path']],cwd=ROOT))==row['sha256']
+old=json.loads(body('ci/project/p06_counter_qualification_proof.json'))
+new=json.loads(body('ci/project/p06_qualified_warm_proof.json'))
+caller='tests/regression/ai_counter_preflight/main.cpp'
+mismatches=[r['path'] for r in old['measurement_sources'] if descriptor(r['path'])!=r]
+assert len(old['measurement_sources'])==69 and mismatches==[caller]
+assert all(descriptor(r['path'])==r for r in new['measurement_sources'])
+fixture=body('ci/project/fixtures/p06_counter_preflight_main_v1.cpp')
+assert fixture==subprocess.check_output(['git','show','f80b58b06e7bcf734f3190f6db478fd11f0bab01:'+caller],cwd=ROOT)
+assert sha(fixture)==next(r['sha256'] for r in old['measurement_sources'] if r['path']==caller)
+probe=json.loads((V/'native-argument-probe.json').read_bytes())
+assert probe['caller_sha256']==sha(body(caller))
+assert [r['format'] for r in probe['results']]==['fp16','bf16']
+cases=[]
+for row in probe['results']:
+    assert row['compile_exit_code']==0 and len(row['cases'])==10
+    for case in row['cases']:
+        assert case['exit_code']==1 and case['output'].startswith('P06_MANAGED_PREFLIGHT_FAILURE:') and len(case['output'].splitlines())==1
+        assert 'P06_WARM_OPERATION' not in case['output']
+        cases.append({'format':row['format'],'case':case['name'],'exit_code':case['exit_code'],'output':case['output']})
+syntax=json.loads((V/'caller-syntax-results.json').read_bytes())
+assert [r['format'] for r in syntax]==['fp16','bf16']
+for row in syntax:
+    assert row['exit_code']==0 and '-fsyntax-only' in row['command']
+receipt=json.loads((V/'w03_a06-historical-replay-execution.json').read_bytes())
+assert receipt['exit_code']==0 and receipt['inputs_unchanged'] is True
+assert receipt['historical_summary_differences']=={} and len(receipt['compared_historical_summary_fields'])==27
+packed=(ROOT/receipt['complete_result']['path']).read_bytes()
+raw=gzip.decompress(packed)
+assert sha(packed)==receipt['complete_result']['gzip_sha256']
+assert sha(raw)==receipt['complete_result']['uncompressed_sha256']
+result=json.loads(raw)
+assert all(result[k]==receipt['result_summary'][k] for k in receipt['compared_historical_summary_fields'])
+assert result['source_revision']=='17e0284496bab10c7632a48e4f91efb6fb4fec0b'
+assert result['counts']['processes']==4 and result['counts']['launches']==132 and result['counts']['checked_words']==4224
+assert result['commands_checked']==37 and result['native_execution']=='not_run' and result['retained_code_executed'] is False
+claims=['qualified','ready_for_warm','warm_execution','full_warm_coverage','acceptance_claimed','phase_acceptance','performance_acceptance']
+assert all(result[k] is False for k in claims)
+for path,pin in receipt['inputs_before'].items():
+    with Path(path).open('rb') as f:assert hashlib.file_digest(f,'sha256').hexdigest()==pin
+assert before==[descriptor(n) for n in reviewed]
+out={'schema_version':1,'reviewer':'w08_a02','scope':'read-only operational compatibility and retained-receipt review','outcome':'pass','native_execution_by_reviewer':'not_run','archive_replay_by_reviewer':'not_run','canonical_test_bodies_executed':0,'source_revision':REVISION,'reviewed_sources':before,'source_bytes_stable':True,'historical_projection_sources':69,'current_historical_projection_mismatches':mismatches,'new_projection_matches_all_sources':True,'historical_fixture_matches_original_git_blob':True,'retained_native_argument_rejections':cases,'retained_native_argument_rejection_count':len(cases),'retained_syntax_only_invocations':len(syntax),'retained_historical_replay':{'exit_code':0,'duration_seconds':receipt['duration_seconds'],'summary_fields_reconciled':27,'source_revision':result['source_revision'],'commands':37,'processes':4,'launches':132,'checked_words':4224,'all_seven_claims_false':True,'original_and_current_reader_input_hashes_rechecked':True},'limitations':['Receipt verification is not a rerun or independent process-origin authentication.','The native rejection probes use earlier generated headers and dependency binaries; they do not qualify a fresh warm experiment.','Current native no-flag grammar preservation does not mean the historical frozen proof admits the changed current caller.'],'duration_seconds':time.monotonic()-start}
+(V/'w08_a02-compatibility-review.json').write_text(json.dumps(out,indent=2)+'\n')
+print(json.dumps({k:out[k] for k in ('outcome','historical_projection_sources','current_historical_projection_mismatches','retained_native_argument_rejection_count','retained_syntax_only_invocations','duration_seconds')}))

@@ -1,0 +1,175 @@
+name: Project Governance
+
+on:
+  push:
+    paths:
+      - '.github/workflows/project-governance.yml'
+      - '.github/workflows/p05-python.yml'
+      - '.github/workflows/p05-torch.yml'
+      - '.github/workflows/p06-baseline.yml'
+      - '.github/workflows/p06-workspace.yml'
+      - '.github/workflows/p06-warm-workspace.yml'
+      - '.github/workflows/p06-checked-counters.yml'
+      - '.github/workflows/p06-managed-preflight.yml'
+      - '.github/workflows/p06-native-lifetime.yml'
+      - '.github/workflows/p06-dependency-provenance.yml'
+      - '.github/workflows/p06-managed-preflight-replay.yml'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+      - 'ci/project/**'
+      - 'ci/gen_config.py'
+      - 'python/**'
+      - 'setup.py'
+      - 'pyproject.toml'
+      - 'MANIFEST.in'
+      - 'sw/runtime/ai/**'
+      - 'sw/runtime/common/**'
+      - 'sw/runtime/include/**'
+      - 'sw/common/ai_matmul*.h'
+      - 'sw/kernel/ai/**'
+      - 'tests/regression/ai_matmul/**'
+      - 'tests/regression/ai_mlp/**'
+      - 'tests/regression/ai_bench_common/**'
+      - 'tests/regression/ai_bench_matmul/**'
+      - 'tests/regression/ai_bench_mlp/**'
+      - 'tests/regression/ai_workspace/**'
+      - 'tests/regression/ai_warm_workspace/**'
+      - 'tests/regression/ai_counter_preflight/**'
+      - 'tests/runtime/**'
+      - 'tests/unittest/checked_counters/**'
+      - 'tests/unittest/pending_reads/**'
+      - 'sim/common/perf_counter.h'
+      - 'sim/simx/**'
+      - 'docs/project/**'
+      - 'docs/designs/tiny_mlp_fixture_v1.md'
+      - 'docs/designs/mlp_execution_records_v1.md'
+      - 'docs/designs/tensor_numerics_v1.md'
+      - 'docs/designs/python_binding_v1.md'
+      - 'docs/designs/torch_custom_ops_v1.md'
+      - 'docs/designs/native_benchmark_v1.md'
+      - 'docs/designs/native_baseline_analysis_v1.md'
+      - 'docs/designs/serial_matmul_workspace_v1.md'
+      - 'docs/designs/warm_workspace_benchmark_v1.md'
+      - 'docs/designs/managed_counter_preflight_v1.md'
+      - 'docs/designs/managed_counter_lifetime_v1.md'
+      - 'docs/designs/complete_counter_qualification_v1.md'
+      - 'docs/designs/qualified_warm_workspace_v1.md'
+      - 'docs/designs/dependency_provenance_v1.md'
+      - 'docs/designs/managed_counter_preflight_replay_v1.md'
+      - 'docs/designs/simx_checked_counters_v1.md'
+      - 'docs/index.md'
+      - 'docs/assets/img/vortex_framework_stack.svg'
+      - 'profiles/**'
+      - 'README.md'
+      - 'ROADMAP.md'
+      - 'AGENTS.md'
+      - 'CONTRIBUTING.md'
+      - 'SECURITY.md'
+      - 'CHANGELOG.md'
+      - 'LICENSE'
+      - 'VERSION'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - '.gitmodules'
+  pull_request:
+    paths:
+      - '.github/workflows/project-governance.yml'
+      - '.github/workflows/p05-python.yml'
+      - '.github/workflows/p05-torch.yml'
+      - '.github/workflows/p06-baseline.yml'
+      - '.github/workflows/p06-workspace.yml'
+      - '.github/workflows/p06-warm-workspace.yml'
+      - '.github/workflows/p06-checked-counters.yml'
+      - '.github/workflows/p06-managed-preflight.yml'
+      - '.github/workflows/p06-native-lifetime.yml'
+      - '.github/workflows/p06-dependency-provenance.yml'
+      - '.github/workflows/p06-managed-preflight-replay.yml'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+      - 'ci/project/**'
+      - 'ci/gen_config.py'
+      - 'python/**'
+      - 'setup.py'
+      - 'pyproject.toml'
+      - 'MANIFEST.in'
+      - 'sw/runtime/ai/**'
+      - 'sw/runtime/common/**'
+      - 'sw/runtime/include/**'
+      - 'sw/common/ai_matmul*.h'
+      - 'sw/kernel/ai/**'
+      - 'tests/regression/ai_matmul/**'
+      - 'tests/regression/ai_mlp/**'
+      - 'tests/regression/ai_bench_common/**'
+      - 'tests/regression/ai_bench_matmul/**'
+      - 'tests/regression/ai_bench_mlp/**'
+      - 'tests/regression/ai_workspace/**'
+      - 'tests/regression/ai_warm_workspace/**'
+      - 'tests/regression/ai_counter_preflight/**'
+      - 'tests/runtime/**'
+      - 'tests/unittest/checked_counters/**'
+      - 'tests/unittest/pending_reads/**'
+      - 'sim/common/perf_counter.h'
+      - 'sim/simx/**'
+      - 'docs/project/**'
+      - 'docs/designs/tiny_mlp_fixture_v1.md'
+      - 'docs/designs/mlp_execution_records_v1.md'
+      - 'docs/designs/tensor_numerics_v1.md'
+      - 'docs/designs/python_binding_v1.md'
+      - 'docs/designs/torch_custom_ops_v1.md'
+      - 'docs/designs/native_benchmark_v1.md'
+      - 'docs/designs/native_baseline_analysis_v1.md'
+      - 'docs/designs/serial_matmul_workspace_v1.md'
+      - 'docs/designs/warm_workspace_benchmark_v1.md'
+      - 'docs/designs/managed_counter_preflight_v1.md'
+      - 'docs/designs/managed_counter_lifetime_v1.md'
+      - 'docs/designs/complete_counter_qualification_v1.md'
+      - 'docs/designs/qualified_warm_workspace_v1.md'
+      - 'docs/designs/dependency_provenance_v1.md'
+      - 'docs/designs/managed_counter_preflight_replay_v1.md'
+      - 'docs/designs/simx_checked_counters_v1.md'
+      - 'docs/index.md'
+      - 'docs/assets/img/vortex_framework_stack.svg'
+      - 'profiles/**'
+      - 'README.md'
+      - 'ROADMAP.md'
+      - 'AGENTS.md'
+      - 'CONTRIBUTING.md'
+      - 'SECURITY.md'
+      - 'CHANGELOG.md'
+      - 'LICENSE'
+      - 'VERSION'
+      - 'VX_config.toml'
+      - 'VX_types.toml'
+      - '.gitmodules'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: project-governance-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  governance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          submodules: false
+          lfs: false
+          persist-credentials: false
+      - name: Verify system Python 3.12
+        run: python3 -c 'import sys; assert sys.version_info[:2] == (3, 12), sys.version; print(sys.version)'
+      - name: Inspect governance prerequisites
+        run: python3 ci/project/preflight.py --tier governance
+      - name: Validate project structure and evidence
+        run: python3 ci/project/check_project.py
+      - name: Check published baseline packet consistency
+        run: python3 ci/project/check_baseline_packets.py
+      - name: Test governance tooling
+        run: python3 -m unittest discover -s ci/project -p 'test_*.py' -v

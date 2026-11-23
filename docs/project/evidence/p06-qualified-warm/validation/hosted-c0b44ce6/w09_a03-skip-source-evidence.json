@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "revision": "c0b44ce64665fe11895f869eea8c38c9b820d6f7",
+  "sources": [
+    {
+      "path": "ci/project/p06_dependency_build.py",
+      "git_blob_sha": "7d54797fa89a0a72c4d846d55c9e8afeb8deb8f9",
+      "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+      "url": "https://github.com/baabi-boo/AI-GPU/blob/c0b44ce64665fe11895f869eea8c38c9b820d6f7/ci/project/p06_dependency_build.py",
+      "excerpts": [
+        {
+          "first_line": 35,
+          "last_line": 35,
+          "text": "HOST_TOOLS = (\"gcc\", \"g++\", \"ar\", \"ranlib\", \"cmake\", \"make\", \"python3\")"
+        },
+        {
+          "first_line": 87,
+          "last_line": 94,
+          "text": "def clean_environment(build, host_bin=None):\n    entries = ([str(host_bin)] if host_bin is not None else [])\n    entries += [str(Path(sys.executable).parent), \"/usr/bin\", \"/bin\"]\n    return {\"PATH\": os.pathsep.join(dict.fromkeys(entries)),\n            \"HOME\": str(build / \"home\"), \"TMPDIR\": str(build / \"tmp\"),\n            \"LANG\": \"C\", \"LC_ALL\": \"C\", \"TZ\": \"UTC\", \"PYTHONUTF8\": \"1\",\n            \"PYTHONDONTWRITEBYTECODE\": \"1\", \"CCACHE_DISABLE\": \"1\", \"OBJCACHE\": \"\",\n            \"MAKEFLAGS\": \"-j2\", \"CMAKE_BUILD_PARALLEL_LEVEL\": \"2\", \"THREADS\": \"1\"}"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_dependency_build.py",
+      "git_blob_sha": "4affe5f9149b6c02030d81c71f9bb6e0bc7f65fe",
+      "sha256": "2f6a9017eec0d7ff5104ab6e7c7813c40c545c5abc616c3ef1971f8ab15eece9",
+      "url": "https://github.com/baabi-boo/AI-GPU/blob/c0b44ce64665fe11895f869eea8c38c9b820d6f7/ci/project/test_p06_dependency_build.py",
+      "excerpts": [
+        {
+          "first_line": 23,
+          "last_line": 47,
+          "text": "class DependencyBuildTests(unittest.TestCase):\n    def setUp(self):\n        self.temporary = tempfile.TemporaryDirectory(prefix=\"p06-build-test-\")\n        self.addCleanup(self.temporary.cleanup)\n        self.root = Path(self.temporary.name)\n        self.sources = self.root / \"sources\"\n        self.build = self.root / \"build\"\n        self.packet = self.root / \"packet\"\n        for path in (self.sources, self.build, self.packet):\n            path.mkdir()\n        for name in (\"home\", \"tmp\", \"extension\"):\n            (self.build / name).mkdir()\n        for name in (\"records\", \"payloads\", \"launchers\"):\n            (self.packet / name).mkdir()\n        self.environment = build.clean_environment(self.build)\n        self.tools = {}\n        for name in build.HOST_TOOLS:\n            path = shutil.which(name, path=self.environment[\"PATH\"])\n            if path is not None:\n                self.tools[name] = recorder.file_identity(path)\n        self.config = {\"schema_version\": 1, \"contract_id\": recorder.CONTRACT_ID,\n            \"contract_sha256\": contract.contract_hash(), \"roots\": {\n                \"sources\": str(self.sources), \"build\": str(self.build),\n                \"receipts\": str(self.packet / \"records\"), \"payloads\": str(self.packet / \"payloads\")},\n            \"tools\": {name: self.tools[name] for name in recorder.TOOLS}}"
+        },
+        {
+          "first_line": 101,
+          "last_line": 104,
+          "text": "    def test_actual_cmake_records_static_archive_index_and_shared_link_only(self):\n        if \"cmake\" not in self.tools:\n            self.skipTest(\"CMake is required for the actual launcher integration fixture\")\n        ramulator = self.sources / \"ramulator\""
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_dependency_option_controls.py",
+      "git_blob_sha": "f66baa73de92274c4619b2e0394d93f11a47075b",
+      "sha256": "15eeec600f7227e03b537a3b9e6324760e7fef726a55ee2c392c0ac795c8f57d",
+      "url": "https://github.com/baabi-boo/AI-GPU/blob/c0b44ce64665fe11895f869eea8c38c9b820d6f7/ci/project/test_p06_dependency_option_controls.py",
+      "excerpts": [
+        {
+          "first_line": 23,
+          "last_line": 28,
+          "text": "class OuterRecipeOptionControls(unittest.TestCase):\n    def setUp(self):\n        self.fixture = receipt_tests.OuterRecipeReviewTests(\n            \"test_reviewed_exact_command_metadata_and_wrapper_bytes_pass\")\n        self.addCleanup(self.fixture.doCleanups)\n        self.fixture.setUp()"
+        },
+        {
+          "first_line": 190,
+          "last_line": 197,
+          "text": "class ActualGeneratedOptionControls(unittest.TestCase):\n    @classmethod\n    def setUpClass(cls):\n        cls.fixture = build_tests.DependencyBuildTests(\n            \"test_actual_cmake_records_static_archive_index_and_shared_link_only\")\n        cls.fixture.setUp()\n        cls.addClassCleanup(cls.fixture.doCleanups)\n        cls.fixture.test_actual_cmake_records_static_archive_index_and_shared_link_only()"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_dependency_receipt.py",
+      "git_blob_sha": "e6162f2a9205918c5c61dfbee982d2557da9fd0e",
+      "sha256": "4f5230d3560eafae3f19040182019a40377f21a77de085a2aa7c1f7513930129",
+      "url": "https://github.com/baabi-boo/AI-GPU/blob/c0b44ce64665fe11895f869eea8c38c9b820d6f7/ci/project/test_p06_dependency_receipt.py",
+      "excerpts": [
+        {
+          "first_line": 228,
+          "last_line": 236,
+          "text": "class ActualCMakeReviewTests(unittest.TestCase):\n    @classmethod\n    def setUpClass(cls):\n        # Reuse the separately authored real Make/CMake fixture, retaining its\n        # tiny generated graph for independent reader mutation tests.\n        cls.fixture = build_tests.DependencyBuildTests(\"test_actual_cmake_records_static_archive_index_and_shared_link_only\")\n        cls.fixture.setUp()\n        cls.addClassCleanup(cls.fixture.doCleanups)\n        cls.fixture.test_actual_cmake_records_static_archive_index_and_shared_link_only()"
+        },
+        {
+          "first_line": 382,
+          "last_line": 389,
+          "text": "class OuterRecipeReviewTests(unittest.TestCase):\n    def setUp(self):\n        self.fixture = build_tests.DependencyBuildTests(\"test_actual_make_override_preserves_automatic_outputs_and_archive_order\")\n        self.fixture.setUp()\n        self.addCleanup(self.fixture.doCleanups)\n        fixture = self.fixture\n        if \"cmake\" not in fixture.tools:\n            self.skipTest(\"CMake identity is required for the reviewed recipe metadata fixture\")"
+        }
+      ]
+    }
+  ],
+  "preflight_observations": [
+    {
+      "log_line": 160,
+      "text": "2026-11-23T19:36:23.9528295Z Tool cmake: available (optional)"
+    },
+    {
+      "log_line": 178,
+      "text": "2026-11-23T19:36:23.9538955Z Warning: submodules are not fully verified/initialized; not required for governance"
+    },
+    {
+      "log_line": 180,
+      "text": "2026-11-23T19:36:23.9541083Z Limitation: Tool availability means executable names are on PATH, not verified versions or Vortex target support."
+    }
+  ],
+  "explanation": "All 15 expected IDs without method rows belong to the two setUpClass skips. The fixtures raise SkipTest when cmake is absent from their clean-PATH inventory; ambient preflight had reported cmake available. This supports an environment visibility mismatch. Exact hosted cmake path is not logged; no runner-wide absence is claimed. No unexplained dynamic-generation or submodule population difference remains."
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "scope": "author syntax/exact-diff checks and three tiny standard-library lifetime probes only",
+  "outcome": "pass",
+  "files": [
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/governance/released-cases/run_governance.py.txt",
+      "size_bytes": 24633,
+      "sha256": "ad30126aed4eb077c444e04c930e7f31ec3797c0fda232b9b346905db48ae062",
+      "original_sha256": "f898761bf4cecf5bdeabb8c57741e600592135511220983a39293ed35b9ed72a"
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/governance/released-cases/run_partition.py.txt",
+      "size_bytes": 5716,
+      "sha256": "68e32e344208a907551353822d701088353bced55220cee8d09d00764e8b5a7e",
+      "original_sha256": "43ac491afecadbb05337fa4179d7b048ea9348d7bba3df097ace2f2129bc8a9b"
+    }
+  ],
+  "semantic_worker_change": "Construct the suite, delete all_cases and cases, then run the same suite.",
+  "supervisor_changes": "New owned output and temporary destinations only.",
+  "unchanged_bounds": {
+    "per_worker_seconds": 3600,
+    "whole_seconds": 5400,
+    "partitions": 2,
+    "expected_unique_test_ids": 4527
+  },
+  "exact_originals_preserved": true,
+  "original_worker_restored_by_reversing_only_narrow_fix": true,
+  "original_supervisor_restored_by_reversing_only_paths": true,
+  "tiny_lifetime_probes": [
+    {
+      "mode": "retain-both",
+      "tests_run": 6,
+      "live_cases_after_run": 6,
+      "started_equals_completed_equals_selected": true,
+      "outcome": "pass"
+    },
+    {
+      "mode": "delete-selected-only",
+      "tests_run": 6,
+      "live_cases_after_run": 6,
+      "started_equals_completed_equals_selected": true,
+      "outcome": "pass"
+    },
+    {
+      "mode": "delete-both",
+      "tests_run": 6,
+      "live_cases_after_run": 0,
+      "started_equals_completed_equals_selected": true,
+      "outcome": "pass"
+    }
+  ],
+  "initial_author_probe_issue": {
+    "outcome": "invalid probe; excluded from passing evidence",
+    "reason": "WeakSet deduplicated six equal TinyCase instances, so the expected live count of six was invalid. A list of independent weak references measures instance lifetime correctly.",
+    "observed_weakset_counts": [
+      1,
+      1,
+      0
+    ],
+    "program_changes_for_probe_correction": false
+  },
+  "duration_seconds": 0.024563357001170516,
+  "canonical_test_bodies_executed": 0,
+  "native_execution": "not_run"
+}

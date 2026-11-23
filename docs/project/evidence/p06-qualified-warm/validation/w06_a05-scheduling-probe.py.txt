@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+"""Independent extracted scheduling predicates; no supervisor process launch."""
+import ast
+from copy import deepcopy
+import hashlib
+import json
+from pathlib import Path
+import tempfile
+import time
+
+ROOT = Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+SOURCE = ROOT / 'docs/project/evidence/p06-qualified-warm/validation/governance/run_governance_before_native.py.txt'
+OUTPUT = ROOT / 'docs/project/evidence/p06-qualified-warm/validation/w06_a05-scheduling-probe.json'
+body = SOURCE.read_bytes()
+expected = 'e5ce09c81fdb6de60b56c0decdb91e12e3221fa2146f353bf16cd44742caa20f'
+assert hashlib.sha256(body).hexdigest() == expected
+module = ast.parse(body, filename=str(SOURCE))
+compile(module, str(SOURCE), 'exec')
+selected = [node for node in module.body if not isinstance(node, ast.If)]
+namespace = {'__file__': str(SOURCE), '__name__': 'independent_scheduling_probe'}
+exec(compile(ast.Module(body=selected, type_ignores=[]), str(SOURCE), 'exec'), namespace)
+records = []
+start = time.monotonic()
+with tempfile.TemporaryDirectory(prefix='w06-a05-', dir='/workspace/scratch/dc8be1693f91/validation') as directory:
+    scratch = Path(directory)
+    namespace['NATIVE_WORKSPACE'] = scratch / 'native-workspace'
+    namespace['NATIVE'] = scratch / 'native-review' / 'supervision.json'
+    review_path = scratch / 'coordinator.json'
+    base = {'schema_version': 1, 'scope': 'governance-before-native-scheduling',
+            'decision': 'run_governance_before_native', 'source': str(namespace['SOURCE']),
+            'source_revision': namespace['REVISION'], 'source_tree': namespace['TREE'],
+            'native_workspace': str(namespace['NATIVE_WORKSPACE']), 'native_execution': 'not_run',
+            'native_workspace_absent': True, 'no_native_attempt_started': True,
+            'native_launch_disabled_until_governance_finishes': True,
+            'native_resource_guards_unchanged': True,
+            'resource_review_sha256': namespace['RESOURCE_REVIEW_SHA256'],
+            'governance_supervisor_sha256': expected, 'reason': 'Explicit reviewed test scheduling; native remains unlaunched.'}
+    def write_review(value):
+        content = (json.dumps(value, sort_keys=True) + '\n').encode()
+        review_path.write_bytes(content)
+        return hashlib.sha256(content).hexdigest()
+    def check(name, value, reject=True, mutate_pin=False):
+        pin = write_review(value)
+        if mutate_pin:
+            pin = '0' * 64
+        try:
+            result = namespace['scheduling_receipt'](pin, review_path)
+        except RuntimeError as error:
+            assert reject, (name, str(error))
+            records.append({'id': name, 'expected': 'reject', 'outcome': 'pass', 'reason': str(error)})
+        else:
+            assert not reject, name
+            assert result['native_execution'] == 'not_run'
+            assert result['native_resource_guards_unchanged'] is True
+            records.append({'id': name, 'expected': 'accept', 'outcome': 'pass'})
+    check('exact_review_and_resource_pin', base, reject=False)
+    for field, value in (
+        ('schema_version', True), ('schema_version', 2), ('scope', 'native-qualification'),
+        ('decision', 'run_native'), ('source', '/another/source'), ('source_revision', '0'*40),
+        ('source_tree', '0'*40), ('native_workspace', '/another/workspace'),
+        ('native_execution', 'pass'), ('native_workspace_absent', 1),
+        ('no_native_attempt_started', False), ('native_launch_disabled_until_governance_finishes', False),
+        ('native_resource_guards_unchanged', False), ('resource_review_sha256', '0'*64),
+        ('governance_supervisor_sha256', '0'*64), ('reason', '  '), ('reason', 1)):
+        changed = deepcopy(base); changed[field] = value
+        check('review_' + field + '_' + str(value), changed)
+    check('coordinator_raw_pin_mismatch', base, mutate_pin=True)
+    namespace['NATIVE_WORKSPACE'].mkdir()
+    check('native_workspace_exists', base)
+    namespace['NATIVE_WORKSPACE'].rmdir()
+    namespace['NATIVE'].parent.mkdir()
+    namespace['NATIVE'].write_text('{}\n')
+    check('native_supervision_exists', base)
+    namespace['NATIVE'].unlink()
+    namespace['NATIVE_WORKSPACE'].symlink_to(scratch / 'absent-target')
+    check('native_workspace_dangling_symlink', base)
+    namespace['NATIVE_WORKSPACE'].unlink()
+    original_resource_path = namespace['RESOURCE_REVIEW']
+    original_resource_pin = namespace['RESOURCE_REVIEW_SHA256']
+    resource = json.loads(original_resource_path.read_bytes())
+    synthetic_resource = scratch / 'resource.json'
+    namespace['RESOURCE_REVIEW'] = synthetic_resource
+    for key, val in (('execution_ready', True), ('execution_ready', 0),
+                     ('native_execution', 'pass'), ('resource_outcome', 'pass')):
+        changed = deepcopy(resource); changed[key] = val
+        synthetic_resource.write_text(json.dumps(changed))
+        namespace['RESOURCE_REVIEW_SHA256'] = hashlib.sha256(synthetic_resource.read_bytes()).hexdigest()
+        candidate = deepcopy(base); candidate['resource_review_sha256'] = namespace['RESOURCE_REVIEW_SHA256']
+        check('resource_' + key + '_' + str(val), candidate)
+    namespace['RESOURCE_REVIEW'] = original_resource_path
+    namespace['RESOURCE_REVIEW_SHA256'] = original_resource_pin
+    check('clean_absence_after_probes', base, reject=False)
+assert hashlib.sha256(SOURCE.read_bytes()).hexdigest() == expected
+record = {'schema_version': 1, 'scope': 'extracted scheduling predicates only; no governance/native execution',
+          'outcome': 'pass', 'source': str(SOURCE), 'supervisor_sha256': expected,
+          'source_stable': True, 'cases': records, 'case_count': len(records),
+          'accepted_controls': sum(row['expected'] == 'accept' for row in records),
+          'rejections': sum(row['expected'] == 'reject' for row in records),
+          'duration_seconds': time.monotonic() - start,
+          'limitations': ['Native path checks use exclusively owned temporary paths.',
+                          'No process cleanup or polling loop was executed.',
+                          'Resource and coordinator records are selected by caller pins, not authenticated origin.',
+                          'Actual full-suite outcome requires separate execution and 4527-ID/runtime-skip reconciliation.']}
+OUTPUT.write_text(json.dumps(record, indent=2) + '\n')
+print(json.dumps({key:record[key] for key in ('outcome','case_count','accepted_controls','rejections','duration_seconds','source_stable')}))

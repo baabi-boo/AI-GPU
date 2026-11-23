@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "scope": "supplement author syntax/static and extracted log-verifier probes only",
+  "outcome": "pass",
+  "program": {
+    "path": "docs/project/evidence/p06-qualified-warm/validation/coverage/hosted-gap-supplement/run_supplement.py.txt",
+    "size_bytes": 16643,
+    "sha256": "e04b008700ffba8670f53e05b2f58ee2637d71b500c5600b0de5b5a13c6f3658"
+  },
+  "selection_manifest": {
+    "path": "docs/project/evidence/p06-qualified-warm/validation/coverage/hosted-gap-supplement/selection-manifest.json",
+    "size_bytes": 16375,
+    "sha256": "6c171ba3121445e1b2a5cc5f9c56f74d846c25c0cb4395b4d23eb4449b1e0adc"
+  },
+  "reviewed_helper_source": {
+    "path": "docs/project/evidence/p06-qualified-warm/validation/governance/released-cases/run_governance.py.txt",
+    "size_bytes": 24633,
+    "sha256": "ad30126aed4eb077c444e04c930e7f31ec3797c0fda232b9b346905db48ae062"
+  },
+  "unchanged_helper_asts": [
+    "now",
+    "require",
+    "sha",
+    "canonical",
+    "git",
+    "snapshot",
+    "write_new",
+    "live_group",
+    "stop_group",
+    "native_absence",
+    "identity",
+    "tool_inputs"
+  ],
+  "selected_modules": [
+    {
+      "module": "test_p06_dependency_build",
+      "count": 9
+    },
+    {
+      "module": "test_p06_dependency_option_controls",
+      "count": 21
+    },
+    {
+      "module": "test_p06_dependency_receipt",
+      "count": 29
+    }
+  ],
+  "selected_count": 59,
+  "all_ids_unique": true,
+  "selection_from_pinned_4527_manifest": true,
+  "log_verifier_probes": [
+    {
+      "case": "complete-test_p06_dependency_build",
+      "expected": "accept",
+      "outcome": "pass"
+    },
+    {
+      "case": "complete-test_p06_dependency_option_controls",
+      "expected": "accept",
+      "outcome": "pass"
+    },
+    {
+      "case": "complete-test_p06_dependency_receipt",
+      "expected": "accept",
+      "outcome": "pass"
+    },
+    {
+      "case": "missing-ID",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "verbose ordered test ID population differs"
+    },
+    {
+      "case": "reordered-IDs",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "verbose ordered test ID population differs"
+    },
+    {
+      "case": "duplicate-ID",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "verbose ordered test ID population differs"
+    },
+    {
+      "case": "wrong-Ran-count",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "unittest count summary differs"
+    },
+    {
+      "case": "skip-summary",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "unittest result is not one plain OK; failures/errors/skips are rejected"
+    },
+    {
+      "case": "expected-failure-summary",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "unittest result is not one plain OK; failures/errors/skips are rejected"
+    },
+    {
+      "case": "duplicate-OK",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "unittest result is not one plain OK; failures/errors/skips are rejected"
+    },
+    {
+      "case": "contradictory-failure-detail",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "nonpassing test outcome present"
+    }
+  ],
+  "limits": {
+    "per_command_seconds": 180,
+    "whole_seconds": 600,
+    "per_log_bytes": 16777216
+  },
+  "native_execution": "not_run",
+  "canonical_test_bodies_executed": 0,
+  "complete_local_suite_claimed": false,
+  "duration_seconds": 0.0440056099978392
+}

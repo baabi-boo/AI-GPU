@@ -1,0 +1,63 @@
+{
+  "actual_sigkill_cause_established": false,
+  "bounds_unchanged": {
+    "canonical_ids": 4527,
+    "partitions": 2,
+    "per_log_bytes": 67108864,
+    "per_worker_seconds": 3600,
+    "whole_seconds": 5400
+  },
+  "coordinator_new_hash_bound_scheduling_receipt_required": true,
+  "exact_statement_probes": [
+    {
+      "adverse_outcomes": 0,
+      "corrected": false,
+      "executed_source": "result = unittest.TextTestRunner(stream=sys.stdout, verbosity=2, resultclass=RecordedResult).run(unittest.TestSuite(cases))",
+      "live_completed_instances": 4,
+      "started_equals_completed_equals_selected": true,
+      "synthetic_cases_run": 4,
+      "unique_synthetic_ids": 4
+    },
+    {
+      "adverse_outcomes": 0,
+      "corrected": true,
+      "executed_source": "suite = unittest.TestSuite(cases)\ndel all_cases, cases\nresult = unittest.TextTestRunner(stream=sys.stdout, verbosity=2, resultclass=RecordedResult).run(suite)",
+      "live_completed_instances": 0,
+      "started_equals_completed_equals_selected": true,
+      "synthetic_cases_run": 4,
+      "unique_synthetic_ids": 4
+    }
+  ],
+  "fresh_output_absent_at_review": "/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-released-cases",
+  "fresh_temporary_absent_at_review": "/workspace/p06-qualified-warm-governance-partition-tmp-02",
+  "full_suite_result": false,
+  "id_selection_order_zero_adverse_outcome_cleanup_and_final_source_rules_unchanged": true,
+  "limitations": [
+    "Tiny synthetic cases establish the narrow object lifetime change, not full-suite execution or OOM causation.",
+    "All 4527 IDs require fresh complete execution; the original failed attempt remains failed.",
+    "Whole-module partitions still differ from a monolithic invocation in cross-module state and order."
+  ],
+  "native_execution": "not_run",
+  "new_canonical_ids": 0,
+  "observed_at": "2026-11-23T20:18:19.745158+00:00",
+  "original_native_absence_and_resource_review_gates_unchanged": true,
+  "original_programs_and_reconciler_preserved": true,
+  "outcome": "pass-for-harness-review-only",
+  "pins": {
+    "governance/partitioned/run_governance.py.txt": "f898761bf4cecf5bdeabb8c57741e600592135511220983a39293ed35b9ed72a",
+    "governance/partitioned/run_partition.py.txt": "43ac491afecadbb05337fa4179d7b048ea9348d7bba3df097ace2f2129bc8a9b",
+    "governance/released-cases/run_governance.py.txt": "ad30126aed4eb077c444e04c930e7f31ec3797c0fda232b9b346905db48ae062",
+    "governance/released-cases/run_partition.py.txt": "68e32e344208a907551353822d701088353bced55220cee8d09d00764e8b5a7e",
+    "w09_a04-reconcile.py.txt": "db6c278e40637f08f9714a5df2d7b9c58a137aab25fae34b43a39378177c7865",
+    "w10_a03-released-cases-reconcile.diff": "59ae29843a34b0a86b6a01ed052e26d912c7e9bcc552ce1b723f9b322873206e",
+    "w10_a03-released-cases-reconcile.py.txt": "3b1178e9a83bda35d94f89bb0eb547a62222c058e45e34ba72936b2803850791"
+  },
+  "project_tests_run": 0,
+  "reconciler_all_checks_preserved": true,
+  "reconciler_exact_four_change_reversal": true,
+  "schema_version": 1,
+  "scope": "independent corrected harness static and small stdlib semantics review",
+  "source_manifest_tool_and_id_pins_unchanged": true,
+  "supervisor_exact_two_path_reversal": true,
+  "worker_exact_narrow_reversal": true
+}

@@ -1,0 +1,108 @@
+{
+  "dependency_stability": "mocked live dependency fixture",
+  "native_execution": "not_run",
+  "negative_cases": 15,
+  "original_archive_replays": "mocked only for live Admission fixture; never claimed executed",
+  "positive_controls": 2,
+  "results": [
+    {
+      "case": "unmodified_summary_positive_control",
+      "outcome": "accepted_nonexecution"
+    },
+    {
+      "case": "historical_projection_presented_as_current",
+      "outcome": "rejected",
+      "reason": "qualified warm source projection summary differs"
+    },
+    {
+      "case": "historical_pin_relabelled_to_extension",
+      "outcome": "rejected",
+      "reason": "qualified warm source projection summary differs"
+    },
+    {
+      "case": "old_controls_laundered_to_current_projection",
+      "outcome": "rejected",
+      "reason": "qualification prerequisite projection differs"
+    },
+    {
+      "case": "old_control_revision_relabelled_to_current_revision",
+      "outcome": "rejected",
+      "reason": "qualification prerequisite original identity differs"
+    },
+    {
+      "case": "old_diagnostics_revision_relabelled_to_current_revision",
+      "outcome": "rejected",
+      "reason": "qualification prerequisite original identity differs"
+    },
+    {
+      "case": "diagnostic_inventory_relabelled_to_current_projection",
+      "outcome": "rejected",
+      "reason": "qualification prerequisite projection differs"
+    },
+    {
+      "case": "extension_sent_to_original_diagnostic_reader",
+      "outcome": "rejected",
+      "reason": "qualification proof differs from the reviewed semantic contract"
+    },
+    {
+      "case": "extension_sent_to_original_control_reader",
+      "outcome": "rejected",
+      "reason": "qualification proof differs from the reviewed semantic contract"
+    },
+    {
+      "case": "extension_sent_to_original_dependency_projection",
+      "outcome": "rejected",
+      "reason": "qualification proof differs from the reviewed semantic contract"
+    },
+    {
+      "case": "late_same_length_input_drift:ci/project/p06_counter_qualification_proof.json",
+      "outcome": "rejected",
+      "reason": "qualified warm helper or prerequisite input changed after admission: ci/project/p06_counter_qualification_proof.json"
+    },
+    {
+      "case": "late_same_length_input_drift:docs/project/evidence/p06-counter-diagnostics/native/public-source-inventory-4268d2d5.json",
+      "outcome": "rejected",
+      "reason": "qualified warm helper or prerequisite input changed after admission: docs/project/evidence/p06-counter-diagnostics/native/public-source-inventory-4268d2d5.json"
+    },
+    {
+      "case": "late_same_length_input_drift:ci/project/p06_qualified_warm_proof.json",
+      "outcome": "rejected",
+      "reason": "qualified warm proof changed after admission"
+    },
+    {
+      "case": "restored_inputs_stability_positive_control",
+      "outcome": "accepted_nonexecution"
+    },
+    {
+      "case": "late_original_proof_same_bytes_symlink",
+      "outcome": "rejected",
+      "reason": "counter qualification input must be a canonical absolute path without symlinks"
+    },
+    {
+      "case": "fifo_proof_rejected_before_read",
+      "outcome": "rejected",
+      "reason": "qualified warm proof must be a bounded unlinked regular file"
+    },
+    {
+      "case": "proof_under_symlink_parent",
+      "outcome": "rejected",
+      "reason": "qualified warm proof path must be canonical without symlinks"
+    }
+  ],
+  "reviewed_sources": [
+    {
+      "path": "ci/project/p06_qualified_warm_contract.py",
+      "sha256": "f8984c8f286094e7853410c2a8c67bc9aecf81aea860b3ffaff0bcd2aebac112"
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_admission.py",
+      "sha256": "849b3cf591d419bf50eea02b94f6801499859208f802b376a81a2c2b3bca28e2"
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_proof.json",
+      "sha256": "172721c671ddaa79541dde9c37c154b5ab5a99b8abb0caabf2e07036dd429efb"
+    }
+  ],
+  "scope": "focused_adversarial_proof_and_prerequisite_checks",
+  "unexpected_acceptances": 0
+}

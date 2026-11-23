@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "scope": "read-only interpreter-derived dependency fixture PATH review",
+  "observed_at": "2026-11-23T19:29:35Z",
+  "current_fixture_path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/usr/bin:/bin",
+  "current_fixture_cmake": null,
+  "prior_venv_fixture_path": "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/bin:/usr/bin:/bin",
+  "prior_venv_fixture_cmake": "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/bin/cmake",
+  "ambient_cmake": "/home/agent/.local/bin/cmake",
+  "cmake_test_bodies_executed": false,
+  "full_suite_interrupted_by_reviewer": false,
+  "native_execution": "not_run",
+  "finding": {
+    "severity": "F2",
+    "confidence": "high",
+    "evidence_type": "static-proof",
+    "description": "Current direct-canonical fixture PATH lacks CMake. The unchanged actual CMake integration method calls skipTest, and two class setup methods invoke it, so the current invocation cannot establish zero-skip exhaustive coverage. This is an invocation environment defect; no repository change is required."
+  },
+  "source_sha256": {
+    "ci/project/p06_dependency_build.py": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+    "ci/project/test_p06_dependency_build.py": "2f6a9017eec0d7ff5104ab6e7c7813c40c545c5abc616c3ef1971f8ab15eece9",
+    "ci/project/test_p06_dependency_receipt.py": "4f5230d3560eafae3f19040182019a40377f21a77de085a2aa7c1f7513930129",
+    "ci/project/test_p06_dependency_option_controls.py": "15eeec600f7227e03b537a3b9e6324760e7fef726a55ee2c392c0ac795c8f57d"
+  },
+  "prior_cmake": {
+    "path": "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/bin/cmake",
+    "resolved": "/workspace/p06-build-tools/cmake/data/bin/cmake",
+    "size_bytes": 14672584,
+    "sha256": "a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83"
+  },
+  "prior_venv_config": {
+    "path": "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/pyvenv.cfg",
+    "resolved": "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/pyvenv.cfg",
+    "size_bytes": 391,
+    "sha256": "284d39aaef3431bfe81e674f6b29a96d18794ff86c2ff37c756fa33827d24eb4"
+  }
+}

@@ -1,0 +1,198 @@
+--- reviewed-after-native
++++ governance-before-native
+@@ -1,11 +1,12 @@
+ #!/usr/bin/env python3
+ # SPDX-License-Identifier: Apache-2.0
+-"""Manually invoked governance supervision; never a native evidence envelope.
+-
+-Invoke only after reviewing the completed native supervision and its cleanup.
+-The required native receipt pin records that scheduling decision; no poller or
+-automatic trigger starts this job. A failed native attempt needs a separate,
+-explicit coordinator cleanup review selected through --cleanup-review.
++"""Manual governance-before-native scheduling; not a native evidence envelope.
++
++The selected native attempt has not started because its resource review blocks
++launch. A separately pinned coordinator scheduling review selects these source-
++root tests first. Native workspace and supervision must remain absent throughout.
++No native resource guard or execution prerequisite is waived; no poller launches
++this job and no governance outcome authorizes native execution automatically.
+ """
+ import argparse
+ import hashlib
+@@ -17,14 +18,16 @@
+ import sys
+ import time
+ 
+-SOURCE = Path('/workspace/p06-qualified-warm-governance-source-01')
++SOURCE = Path('/workspace/p06-qualified-warm-source-01')
+ OUTPUT = Path('/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6')
+ TEMP = Path('/workspace/p06-qualified-warm-governance-tmp-01')
+ NATIVE = Path('/workspace/scratch/dc8be1693f91/native-qualified-warm-attempt-01/supervision.json')
+ REVISION = 'c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+ TREE = '13450812d279d55f36a172fcf38653ff567f6c86'
+ PYTHON = '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3'
+-STAGES = ('preparation', 'dependency-build', 'qualified-warm')
++NATIVE_WORKSPACE = Path('/workspace/p06-qualified-warm-run-01')
++RESOURCE_REVIEW = Path('/workspace/scratch/dc8be1693f91/AI-GPU/docs/project/evidence/p06-qualified-warm/validation/w06_a02-supervisor-resource-review.json')
++RESOURCE_REVIEW_SHA256 = '4803a73034fa4014a22dca1785d1e4d6528e328ede6052914c9c1060e693105b'
+ WHOLE_SECONDS = 90 * 60
+ SUITE_SECONDS = 60 * 60
+ LOG_BUDGET_BYTES = 64 * 1024**2
+@@ -120,49 +123,63 @@
+     return not live_group(process.pid)
+ 
+ 
++def pinned_json(path, pin, label):
++    canonical(path)
++    require(type(pin) is str and len(pin) == 64
++            and all(c in '0123456789abcdef' for c in pin),
++            'exact ' + label + ' SHA-256 required')
++    body = path.read_bytes()
++    require(hashlib.sha256(body).hexdigest() == pin, label + ' pin mismatch')
++    value = json.loads(body)
++    require(sha(path) == pin, label + ' changed during scheduling check')
++    require(type(value) is dict, label + ' must be an object')
++    return value
++
++
++def native_absence():
++    for path in (NATIVE_WORKSPACE, NATIVE):
++        canonical(path, existing=False)
++        require(not os.path.lexists(path), 'native attempt has started: ' + str(path))
++
++
+ def scheduling_receipt(pin, review_path):
+-    canonical(NATIVE)
+-    require(len(pin) == 64 and all(c in '0123456789abcdef' for c in pin),
+-            'exact native supervision SHA-256 required')
+-    body = NATIVE.read_bytes()
+-    require(hashlib.sha256(body).hexdigest() == pin, 'native supervision pin mismatch')
+-    observed = json.loads(body)
+-    require(sha(NATIVE) == pin, 'native supervision changed during scheduling check')
+-    require(observed.get('state') == 'finished', 'native attempt is unfinished')
+-    require(observed.get('source_revision') == REVISION, 'native revision differs')
+-    rows = observed.get('stages')
+-    require(type(rows) is list and rows, 'native stages absent')
+-    cleanup = all(type(row) is dict and type(row.get('execution')) is dict
+-                  and row['execution'].get('cleanup_complete') is True for row in rows)
+-    passed = (observed.get('outcome') == 'pass' and len(rows) == 3
+-              and tuple(row.get('id') for row in rows) == STAGES
+-              and all(row['execution'].get('outcome') == 'pass'
+-                      and type(row['execution'].get('exit_code')) is int
+-                      and row['execution']['exit_code'] == 0
+-                      and row['execution'].get('reason') is None
+-                      and row['execution'].get('process_started') is True
+-                      and row.get('report_outcome') == 'pass'
+-                      and row.get('report_reason') is None for row in rows))
+-    selection = {'native_supervision_sha256': pin, 'native_outcome': observed.get('outcome'),
+-                 'native_reported_cleanup_complete': cleanup, 'reviewed_at': now()}
+-    if not (passed and cleanup):
+-        require(review_path is not None, 'native attempt requires explicit cleanup review')
+-        canonical(review_path)
+-        review = json.loads(review_path.read_bytes())
+-        require(review.get('native_supervision_sha256') == pin
+-                and review.get('source_revision') == REVISION
+-                and review.get('cleanup_complete') is True
+-                and type(review.get('reason')) is str and bool(review['reason'].strip()),
+-                'cleanup review must identify this attempt and explain verified cleanup')
+-        selection.update(coordinator_cleanup_review=str(review_path),
+-                         coordinator_cleanup_review_sha256=sha(review_path))
+-    return selection
++    native_absence()
++    resource = pinned_json(RESOURCE_REVIEW, RESOURCE_REVIEW_SHA256, 'resource review')
++    require(resource.get('execution_ready') is False
++            and resource.get('native_execution') == 'not_run'
++            and resource.get('resource_outcome') == 'blocked_pending_resource_resolution',
++            'selected review does not record native launch blocked before execution')
++    review = pinned_json(review_path, pin, 'coordinator scheduling review')
++    require(type(review.get('schema_version')) is int and review['schema_version'] == 1
++            and review.get('scope') == 'governance-before-native-scheduling'
++            and review.get('decision') == 'run_governance_before_native'
++            and review.get('source') == str(SOURCE)
++            and review.get('source_revision') == REVISION
++            and review.get('source_tree') == TREE
++            and review.get('native_workspace') == str(NATIVE_WORKSPACE)
++            and review.get('native_execution') == 'not_run'
++            and review.get('native_workspace_absent') is True
++            and review.get('no_native_attempt_started') is True
++            and review.get('native_launch_disabled_until_governance_finishes') is True
++            and review.get('native_resource_guards_unchanged') is True
++            and review.get('resource_review_sha256') == RESOURCE_REVIEW_SHA256
++            and review.get('governance_supervisor_sha256') == sha(__file__)
++            and type(review.get('reason')) is str and bool(review['reason'].strip()),
++            'coordinator review must explicitly select this bounded governance-first run')
++    native_absence()
++    return {'decision': review['decision'], 'reviewed_at': now(),
++            'coordinator_scheduling_review': str(review_path),
++            'coordinator_scheduling_review_sha256': pin,
++            'resource_review': str(RESOURCE_REVIEW),
++            'resource_review_sha256': RESOURCE_REVIEW_SHA256,
++            'native_execution': 'not_run', 'native_workspace_absent': True,
++            'native_resource_guards_unchanged': True}
+ 
+ 
+ def main(argv=None):
+     parser = argparse.ArgumentParser(description=__doc__)
+-    parser.add_argument('--native-supervision-sha256', required=True)
+-    parser.add_argument('--cleanup-review', type=Path)
++    parser.add_argument('--scheduling-review-sha256', required=True)
++    parser.add_argument('--scheduling-review', type=Path, required=True)
+     args = parser.parse_args(argv)
+     require(sys.version_info[:2] == (3, 12), 'Python 3.12 required')
+     require(Path(sys.executable).resolve() == Path(PYTHON).resolve(),
+@@ -172,7 +189,7 @@
+     canonical(TEMP, existing=False)
+     require(not os.path.lexists(OUTPUT) and not os.path.lexists(TEMP),
+             'fresh output and temporary paths required')
+-    handoff = scheduling_receipt(args.native_supervision_sha256, args.cleanup_review)
++    handoff = scheduling_receipt(args.scheduling_review_sha256, args.scheduling_review)
+     require(git('rev-parse', 'HEAD') == REVISION, 'source revision differs')
+     require(git('rev-parse', 'HEAD^{tree}') == TREE, 'source tree differs')
+     require(not git('status', '--porcelain=v1', '--untracked-files=all'), 'source is dirty')
+@@ -188,7 +205,7 @@
+               'limits': {'suite_seconds': SUITE_SECONDS, 'whole_seconds': WHOLE_SECONDS,
+                          'polled_log_budget_bytes': LOG_BUDGET_BYTES},
+               'limitations': ['This supervisor is bookkeeping, not phase acceptance.',
+-                  'Manual invocation and a pinned receipt record scheduling; they do not authenticate native origin.',
++                  'Manual invocation and independently pinned reviews record scheduling; they establish no native execution or origin.',
+                   'No additional memory or disk gate is imposed on governance tests.',
+                   'Log size is polled and can exceed its budget before termination.',
+                   'Process groups do not contain descendants that deliberately leave the group.',
+@@ -222,6 +239,7 @@
+         record['source_before_sha256'] = sha(OUTPUT / 'source-before.json')
+         save()
+         for name, command, maximum in commands:
++            native_absence()
+             remaining = WHOLE_SECONDS - (time.monotonic() - started)
+             require(remaining > 0, 'whole supervision deadline reached')
+             row = {'id': name, 'argv': command, 'cwd': str(SOURCE), 'state': 'running',
+@@ -241,6 +259,9 @@
+                     row['process_started'] = True
+                     save()
+                     while process.poll() is None:
++                        if os.path.lexists(NATIVE_WORKSPACE) or os.path.lexists(NATIVE):
++                            reason = 'native_attempt_started_during_governance'
++                            break
+                         if time.monotonic() - command_start >= row['timeout_seconds']:
+                             reason = 'timeout'
+                             break
+@@ -289,12 +310,19 @@
+                           revision_after=git('rev-parse', 'HEAD'), tree_after=git('rev-parse', 'HEAD^{tree}'))
+         except BaseException as error:
+             record['failures'].append('final-source-check: ' + str(error))
++        try:
++            native_absence()
++            record['native_workspace_absent_after'] = True
++        except BaseException as error:
++            record['native_workspace_absent_after'] = False
++            record['failures'].append('native-absence-check: ' + str(error))
+         record['not_run'] = [name for name, _, _ in commands
+                              if name not in {row['id'] for row in record['commands']}]
+         if (record.get('source_files_stable') is not True or record.get('status_after') != ''
+                 or record.get('revision_after') != REVISION or record.get('tree_after') != TREE):
+             record['failures'].append('source/revision/index state differs after execution')
+         passed = (not record['failures'] and not record['not_run']
++                  and record.get('native_workspace_absent_after') is True
+                   and record.get('source_files_stable') is True
+                   and record.get('status_after') == ''
+                   and record.get('revision_after') == REVISION and record.get('tree_after') == TREE)

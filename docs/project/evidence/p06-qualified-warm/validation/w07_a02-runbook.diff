@@ -1,0 +1,29 @@
+--- runbook.md.before-w07_a02
++++ runbook.md
+@@ -170,7 +170,7 @@
+ Compute the next stage's dependency pin from this completed original's **raw report bytes**, and retain it externally. This initial check does not replace the qualified executor's complete dependency admission:
+ 
+ ```bash
+-P06_DEPENDENCY_RECEIPT_SHA256="$("$P06_PYTHON" -B - \
++P06_DEPENDENCY_RECEIPT_SHA256="$("$P06_PYTHON" -I -B - \
+   "$P06_WORKSPACE/evidence/dependency-build/report.json" "$P06_SOURCE_REVISION" <<'PY'
+ import hashlib, json, pathlib, sys
+ body = pathlib.Path(sys.argv[1]).read_bytes()
+@@ -245,7 +245,7 @@
+ ```bash
+ : "${P06_ORIGINAL_ZIP:?Set a new absolute ZIP path outside source and workspace}"
+ export P06_SOURCE P06_WORKSPACE P06_ORIGINAL_ZIP
+-"$P06_PYTHON" -B - <<'PY'
++"$P06_PYTHON" -I -B - <<'PY'
+ import hashlib, json, os, pathlib, stat, zipfile
+ source = pathlib.Path(os.environ['P06_SOURCE'])
+ workspace = pathlib.Path(os.environ['P06_WORKSPACE'])
+@@ -362,7 +362,7 @@
+ 
+ ## 6. Interpret the fixed predicates and publish the handoff
+ 
+-Inspect `analysis.hypothesis_evaluation` in the complete replay result. `satisfied` means both formats satisfied all frozen experimental predicates; `not_satisfied` is a valid complete experiment whose optimization hypothesis failed. The public replay exits successfully for either valid outcome. A nonzero replay exit means consistency/qualification failed and does not supply an experimental result. Never use exit zero or `qualified_warm_passed=true` as a substitute for the hypothesis field.
++Inspect `analysis.hypothesis_evaluation` in the complete replay result. `satisfied` means both formats satisfied all frozen experimental predicates; `not_satisfied` is a valid complete experiment whose optimization hypothesis failed. The public replay exits successfully for either valid outcome. A nonzero replay exit means the command did not deliver a usable reported result. Inspect its reason: a consistency or qualification rejection differs from an output I/O failure after otherwise valid replay. Neither a failed command nor an incomplete output establishes an experimental result. Never use exit zero or `qualified_warm_passed=true` as a substitute for the hypothesis field.
+ 
+ For **each format independently**, use the five measured batch means per policy, each computed from exactly 32 primary timed intervals. The candidate median must be at most **95%** of the reference median; **every measured candidate pair** must be no slower in instrumented host time and have no increase in qualified modeled cycles. Both FP16 and BF16 must meet all predicates. The reducer uses exact integer/rational comparisons. All 24 prime operations and the four warm-up processes remain retained but excluded from the decision. Do not pool individual intervals into a different sample population, remove outliers, change the threshold, subtract observer overhead or correct for supervisor delay.
+ 

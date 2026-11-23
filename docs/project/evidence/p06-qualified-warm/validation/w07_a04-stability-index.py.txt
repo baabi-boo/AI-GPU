@@ -1,0 +1,59 @@
+# SPDX-License-Identifier: Apache-2.0
+"""Static review index only: no production imports, replay or native execution."""
+import ast
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import time
+ROOT = Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+REVISION = 'c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+NAMES = (
+ 'ci/project/p06_qualified_warm_admission.py',
+ 'ci/project/p06_qualified_warm_contract.py',
+ 'ci/project/p06_qualified_warm_execute.py',
+ 'ci/project/p06_qualified_warm_replay.py',
+ 'ci/project/p06_managed_preflight_execute.py',
+ 'ci/project/p06_counter_qualification_admission.py',
+ 'ci/project/p06_counter_qualification_prerequisites.py',
+ 'ci/project/p06_dependency_native_replay.py',
+ 'ci/project/p06_dependency_admission.py',
+ 'docs/project/evidence/p05-torch/reviews/archive_reader.py',
+ 'docs/designs/qualified_warm_workspace_v1.md',
+ 'docs/project/evidence/p06-qualified-warm/README.md',
+)
+rows = []
+for name in NAMES:
+ body = (ROOT / name).read_bytes()
+ published = subprocess.check_output(['git', 'show', REVISION + ':' + name], cwd=ROOT)
+ assert body == published, 'reviewed file differs from published bytes: ' + name
+ row = {'path':name, 'size_bytes':len(body), 'sha256':hashlib.sha256(body).hexdigest(),
+        'matches_published_blob':True}
+ if name.endswith('.py'):
+  tree = ast.parse(body, filename=name)
+  row['selected_anchors'] = [{'function': node.name, 'line':node.lineno,
+      'end_line':node.end_lineno} for node in ast.walk(tree)
+      if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name in {
+        'verify_stable', 'stable', 'command', 'execute', 'verify_view', 'replay_archive',
+        'reader_sources', '_reader_sources', 'validate_route_provenance',
+        'verify_prerequisites', 'verify_control_prerequisite', '_identity', '_path',
+        '_verify_original', '_stable', 'close', 'stability', 'run'}]
+ assert (ROOT / name).read_bytes() == body, 'reviewed file changed while indexed'
+ rows.append(row)
+report = {'schema_version':1, 'scope':'independent static temporal-stability and provenance-boundary review',
+ 'agent':'w07_a04', 'reviewed_at':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),
+ 'source_revision':REVISION, 'outcome':'pass', 'files':rows,
+ 'production_imports_executed':False, 'native_execution':'not_run',
+ 'archive_replay_executed':False, 'unittest_bodies_executed':False,
+ 'new_unique_unittest_ids':0, 'source_mutations':False,
+ 'scope_notes':[
+  'Byte stability is observed at specified boundaries; it is not continuous filesystem exclusion.',
+  'Prerequisite archives are independently verified through their own replay close, not kept open until warm analysis ends.',
+  'Main candidate archive remains open through analysis and its close rehashes the original bytes.',
+  'Trusted reader input closure is checked before reconstruction, before analysis, after analysis and after main archive close.',
+  'No producer authentication, in-memory tamper resistance, full host provenance or native result is established by this review.'
+ ]}
+out = ROOT/'docs/project/evidence/p06-qualified-warm/validation/w07_a04-stability-index.json'
+with out.open('x') as stream:
+ json.dump(report,stream,indent=2);stream.write('\n')
+print(json.dumps({'outcome':report['outcome'],'files_checked':len(rows),'native_execution':'not_run','new_unique_unittest_ids':0}))

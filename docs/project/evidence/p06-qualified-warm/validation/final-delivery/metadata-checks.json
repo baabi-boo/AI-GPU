@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-11-23T21:21:42.376910+00:00",
+  "source_implementation": "c0b44ce64665fe11895f869eea8c38c9b820d6f7",
+  "scope": "Final documentation metadata checks; does not add unique IDs or establish a full local suite or native execution.",
+  "outcome": "pass",
+  "commands": [
+    {
+      "name": "project-structure",
+      "argv": [
+        "/workspace/scratch/dc8be1693f91/governance-host-venv/bin/python3",
+        "-B",
+        "ci/project/check_project.py"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 4.184913723998761,
+      "log": "project-structure.log",
+      "sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+      "bytes": 96,
+      "tail": [
+        "Project governance validation passed (structure and metadata only; no GPU execution certified)."
+      ]
+    },
+    {
+      "name": "baseline-packets",
+      "argv": [
+        "/workspace/scratch/dc8be1693f91/governance-host-venv/bin/python3",
+        "-B",
+        "ci/project/check_baseline_packets.py"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.2890868749964284,
+      "log": "baseline-packets.log",
+      "sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be",
+      "bytes": 657,
+      "tail": [
+        "{\"outcome\": \"pass\", \"packets\": {\"clean-build\": {\"native_matrix_records_consistent\": false, \"outcome\": \"pass\", \"path\": \"docs/project/evidence/p01/clean-build\", \"published_integrity\": \"verified\", \"require_native_records\": false, \"run_outcome\": \"pass\"}, \"native\": {\"native_matrix_records_consistent\": true, \"outcome\": \"pass\", \"path\": \"docs/project/evidence/p01/native\", \"published_integrity\": \"verified\", \"require_native_records\": true, \"run_outcome\": \"pass\"}}, \"phase_complete\": false, \"raw_log_bytes_verified\": false, \"redaction_relationship_verified\": false, \"schema_version\": 1, \"scope\": \"Published evidence consistency only; no project-gate acceptance.\"}"
+      ]
+    },
+    {
+      "name": "repository-contract",
+      "argv": [
+        "/workspace/scratch/dc8be1693f91/governance-host-venv/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/project",
+        "-p",
+        "test_repository_contract.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.3558928139973432,
+      "log": "repository-contract.log",
+      "sha256": "53b15fc8d2f36ce7d137cfa8b12d7620f7f3f71ea45153ad8e9f69db389304b7",
+      "bytes": 3123,
+      "tail": [
+        "----------------------------------------------------------------------",
+        "Ran 18 tests in 0.030s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "name": "diff-check",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 0.06050122899614507,
+      "log": "diff-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "tail": []
+    }
+  ],
+  "full_suite_result": false,
+  "native_execution": "not_run",
+  "prior_help_probe": {
+    "command": [
+      "python3",
+      "-I",
+      "ci/project/check_baseline_packets.py",
+      "--help"
+    ],
+    "exit_code": 1,
+    "reason": "Isolated mode omits sibling-module imports required by this script; corrected to its normal -B invocation without source changes."
+  }
+}

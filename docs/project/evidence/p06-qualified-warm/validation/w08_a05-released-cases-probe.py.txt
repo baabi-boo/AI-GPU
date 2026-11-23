@@ -1,0 +1,66 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Tiny stdlib ownership probe, not a repository test or memory-budget claim."""
+import ast
+import gc
+import hashlib
+import io
+import json
+from pathlib import Path
+import time
+import unittest
+import weakref
+
+ROOT=Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+BASE=ROOT/'docs/project/evidence/p06-qualified-warm'
+OLD=BASE/'validation/governance/partitioned'
+NEW=BASE/'validation/governance/released-cases'
+
+def descriptor(path):
+    return {'path':str(path.relative_to(ROOT)),'size_bytes':path.stat().st_size,
+            'sha256':hashlib.sha256(path.read_bytes()).hexdigest()}
+
+def probe(mode):
+    references=[];started=[];completed=[]
+    class TinyCase(unittest.TestCase):
+        def __init__(self,label):
+            super().__init__('runTest');self.label=label
+            references.append(weakref.ref(self))
+        def id(self):return self.label
+        def runTest(self):self.fixture=bytearray(1024)
+    class Result(unittest.TextTestResult):
+        def startTest(self,test):started.append(test.id());super().startTest(test)
+        def stopTest(self,test):completed.append(test.id());super().stopTest(test)
+    all_cases=[TinyCase('synthetic.case'+str(i)) for i in range(6)]
+    cases=list(all_cases)
+    selected=[case.id() for case in cases]
+    suite=unittest.TestSuite(cases)
+    if mode=='delete-selected-only':del cases
+    if mode=='delete-both':del all_cases,cases
+    result=unittest.TextTestRunner(stream=io.StringIO(),verbosity=2,resultclass=Result).run(suite)
+    gc.collect()
+    remaining=sum(reference() is not None for reference in references)
+    assert result.testsRun==6 and result.wasSuccessful()
+    assert started==completed==selected
+    assert remaining==(0 if mode=='delete-both' else 6)
+    return {'mode':mode,'tests_run':6,'live_cases_after_run':remaining,
+            'started_equals_completed_equals_selected':True,'outcome':'pass'}
+
+start=time.monotonic()
+files=[]
+for name in ('run_governance.py.txt','run_partition.py.txt'):
+    path=NEW/name;compile(path.read_text(),str(path),'exec')
+    row=descriptor(path);row['original_sha256']=descriptor(OLD/name)['sha256'];files.append(row)
+old_worker=(OLD/'run_partition.py.txt').read_text()
+new_worker=(NEW/'run_partition.py.txt').read_text()
+a='        result=unittest.TextTestRunner(stream=sys.stdout,verbosity=2,resultclass=RecordedResult).run(unittest.TestSuite(cases))'
+b='        suite=unittest.TestSuite(cases)\n        del all_cases,cases\n        result=unittest.TextTestRunner(stream=sys.stdout,verbosity=2,resultclass=RecordedResult).run(suite)'
+assert new_worker.replace(b,a)==old_worker
+old_supervisor=(OLD/'run_governance.py.txt').read_text()
+restored=(NEW/'run_governance.py.txt').read_text().replace('/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-released-cases', '/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-partitioned').replace('/workspace/p06-qualified-warm-governance-partition-tmp-02','/workspace/p06-qualified-warm-governance-partition-tmp-01')
+assert restored==old_supervisor
+probes=[probe(mode) for mode in ('retain-both','delete-selected-only','delete-both')]
+record={'schema_version':1,'scope':'author syntax/exact-diff checks and three tiny standard-library lifetime probes only','outcome':'pass','files':files,'semantic_worker_change':'Construct the suite, delete all_cases and cases, then run the same suite.','supervisor_changes':'New owned output and temporary destinations only.','unchanged_bounds':{'per_worker_seconds':3600,'whole_seconds':5400,'partitions':2,'expected_unique_test_ids':4527},'exact_originals_preserved':True,'original_worker_restored_by_reversing_only_narrow_fix':True,'original_supervisor_restored_by_reversing_only_paths':True,'tiny_lifetime_probes':probes,'initial_author_probe_issue':{'outcome':'invalid probe; excluded from passing evidence','reason':'WeakSet deduplicated six equal TinyCase instances, so the expected live count of six was invalid. A list of independent weak references measures instance lifetime correctly.','observed_weakset_counts':[1,1,0],'program_changes_for_probe_correction':False},'duration_seconds':time.monotonic()-start,'canonical_test_bodies_executed':0,'native_execution':'not_run'}
+output=BASE/'validation/w08_a05-released-cases-author-validation.json'
+output.write_text(json.dumps(record,indent=2)+'\n')
+print(json.dumps(record,indent=2))

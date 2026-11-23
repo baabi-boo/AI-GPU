@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-11-23T19:20:43Z",
+  "reviewer": "w07_a02",
+  "scope": "independent static operator-runbook review; no native execution or archive replay",
+  "base_revision": "c0b44ce64665fe11895f869eea8c38c9b820d6f7",
+  "inputs": [
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/runbook.md",
+      "sha256": "a475b3f5083e411b0b82b484a1cb3759df765e5851c3bfa55923fc24496f6ac1",
+      "size_bytes": 29106
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_execute.py",
+      "sha256": "2eea05ae66b070bbdd1c6e48201d5108e4b9cc0bcd1f71c5fd8c23e8bea25dce",
+      "size_bytes": 2134
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_execute.py",
+      "sha256": "c9ffe924d504317e1dfe19ce5a853876f4385cdf5edb5074716df7e68becc55c",
+      "size_bytes": 2436
+    },
+    {
+      "path": "ci/project/p06_dependency_lifetime_execute.py",
+      "sha256": "ccf1d7c47f1bd045391360498b1b7b8ea389a244801c905557bf6a8904fc5217",
+      "size_bytes": 1917
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_execute.py",
+      "sha256": "2aa330b428852b3b0f0acc9bcc32cc464959b7f255d709f13cde310319b2fe4e",
+      "size_bytes": 54331
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_replay.py",
+      "sha256": "1937750bc374d6b4efc8322698f87c95ab825a0bfccff0701d714cfef9d6314f",
+      "size_bytes": 20355
+    },
+    {
+      "path": "ci/project/p06_dependency_local_prepare.py",
+      "sha256": "c810f31cf6106a5bbcd6eddcf8d818560cb94222da057fe9491a8e1dbc99316f",
+      "size_bytes": 20427
+    },
+    {
+      "path": "ci/project/p06_dependency_build.py",
+      "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+      "size_bytes": 32820
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_proof.json",
+      "sha256": "172721c671ddaa79541dde9c37c154b5ab5a99b8abb0caabf2e07036dd429efb",
+      "size_bytes": 21505
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_proof.json",
+      "sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e",
+      "size_bytes": 123781
+    },
+    {
+      "path": "ci/project/p06_warm_contract.json",
+      "sha256": "893d85401b1d5f7757d82cb7c743a89b36264fe19c7d08c239b7f216b7a8cbbd",
+      "size_bytes": 25793
+    }
+  ],
+  "bash_syntax": [
+    {
+      "block": 1,
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "block": 2,
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "block": 3,
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "block": 4,
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "block": 5,
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "block": 6,
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "block": 7,
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "block": 8,
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "block": 9,
+      "exit_code": 0,
+      "stderr": ""
+    }
+  ],
+  "python_syntax": [
+    {
+      "block": 1,
+      "syntax_pass": true,
+      "assert_statements": 4
+    },
+    {
+      "block": 2,
+      "syntax_pass": true,
+      "assert_statements": 17
+    }
+  ],
+  "source_pins_present": {
+    "ci/project/p06_qualified_warm_proof.json": true,
+    "ci/project/p06_counter_qualification_proof.json": true,
+    "ci/project/p06_warm_contract.json": true
+  },
+  "assert_guard_compile_control": {
+    "no_code_executed": true,
+    "normal_has_assertion_error": true,
+    "optimized_has_assertion_error": false,
+    "normal_opcodes": [
+      "RESUME",
+      "LOAD_ASSERTION_ERROR",
+      "RAISE_VARARGS"
+    ],
+    "optimized_opcodes": [
+      "RESUME",
+      "LOAD_CONST",
+      "STORE_NAME",
+      "RETURN_CONST"
+    ]
+  },
+  "findings": [
+    {
+      "id": "W07-A02-F1-01",
+      "severity": "F1",
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "summary": "The two direct stdlib Python heredocs inherit PYTHONOPTIMIZE; optimization removes assertions used to justify verification flags.",
+      "recommendation": "Use -I on only these two direct helper invocations, or replace assertion guards with explicit raises."
+    },
+    {
+      "id": "W07-A02-F1-02",
+      "severity": "F1",
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "summary": "Section6 equates every nonzero replay exit with consistency/qualification failure, but output I/O errors are also caught after a valid replay.",
+      "recommendation": "Describe nonzero as unsuccessful command/no usable reported result; inspect the reason before classifying evidence."
+    }
+  ],
+  "production_defect_found": false,
+  "native_execution": "not_run",
+  "retained_code_executed": false,
+  "full_governance_run": false,
+  "production_changes": false,
+  "corrections": {
+    "authorized_by": "root coordinator message",
+    "changed_file": "docs/project/evidence/p06-qualified-warm/runbook.md",
+    "before_sha256": "a475b3f5083e411b0b82b484a1cb3759df765e5851c3bfa55923fc24496f6ac1",
+    "after_sha256": "946fcf475ee85a22540826bf2c7df21c67efe18da70fbd1a79671e180f75ddaf",
+    "after_size_bytes": 29301,
+    "changed_lines_only": "Two isolated-mode helper invocations and one replay-exit interpretation paragraph.",
+    "findings_closed": [
+      "W07-A02-F1-01",
+      "W07-A02-F1-02"
+    ],
+    "bash_syntax": [
+      {
+        "block": 1,
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "block": 2,
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "block": 3,
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "block": 4,
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "block": 5,
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "block": 6,
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "block": 7,
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "block": 8,
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "block": 9,
+        "exit_code": 0,
+        "stderr": ""
+      }
+    ],
+    "python_syntax": [
+      {
+        "block": 1,
+        "syntax_pass": true,
+        "assert_statements": 4
+      },
+      {
+        "block": 2,
+        "syntax_pass": true,
+        "assert_statements": 17
+      }
+    ],
+    "heredocs_executed": false,
+    "production_or_clean_execution_checkout_changed": false,
+    "author_report_and_validation_preserved": true
+  },
+  "finished_at": "2026-11-23T19:22:11Z"
+}

@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "scope": "single known P05 copied-venv environment reproduction",
+  "source": "/workspace/p06-qualified-warm-source-01",
+  "revision": "c0b44ce64665fe11895f869eea8c38c9b820d6f7",
+  "source_before": {
+    "/workspace/p06-qualified-warm-source-01/ci/project/test_p05_installed_check.py": "a2102c005f8ca2618b5d62d95dd53dbd5a54452f9094382f6615f8a6b75d9d42",
+    "/workspace/p06-qualified-warm-source-01/ci/project/p05_installed_check.py": "72c8d2413cd278b0021785c6d0a88269b0f7859b232e317c11034d0808de98a0"
+  },
+  "native_execution": "not_run",
+  "new_unique_unittest_ids": 0,
+  "observed_at": "2026-11-23T19:27:16Z",
+  "interpreters": [
+    {
+      "label": "current-canonical",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "-c",
+        "import sys,os,json,shutil,pathlib; print(json.dumps({'executable':sys.executable,'resolved':str(pathlib.Path(sys.executable).resolve()),'base_executable':sys._base_executable,'prefix':sys.prefix,'base_prefix':sys.base_prefix,'version':sys.version,'cmake':shutil.which('cmake'),'path':os.environ.get('PATH')}))"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "resolved": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+        "base_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "prefix": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python",
+        "base_prefix": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python",
+        "version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+        "cmake": "/home/agent/.local/bin/cmake",
+        "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback"
+      },
+      "stderr": ""
+    },
+    {
+      "label": "previous-proper-venv",
+      "argv": [
+        "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/bin/python3",
+        "-B",
+        "-c",
+        "import sys,os,json,shutil,pathlib; print(json.dumps({'executable':sys.executable,'resolved':str(pathlib.Path(sys.executable).resolve()),'base_executable':sys._base_executable,'prefix':sys.prefix,'base_prefix':sys.base_prefix,'version':sys.version,'cmake':shutil.which('cmake'),'path':os.environ.get('PATH')}))"
+      ],
+      "exit_code": 0,
+      "identity": {
+        "executable": "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/bin/python3",
+        "resolved": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+        "base_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+        "prefix": "/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv",
+        "base_prefix": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python",
+        "version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+        "cmake": "/home/agent/.local/bin/cmake",
+        "path": "/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback"
+      },
+      "stderr": ""
+    }
+  ],
+  "test": {
+    "argv": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "ci/project",
+      "-p",
+      "test_p05_installed_check.py",
+      "-k",
+      "test_copied_checker_cannot_import_source_in_clean_venv",
+      "-v"
+    ],
+    "cwd": "/workspace/p06-qualified-warm-source-01",
+    "environment_overrides": {
+      "TMPDIR": "/workspace/scratch/dc8be1693f91/validation/w08-a01-p05-5jtq1m6q",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_code": 0,
+    "duration_seconds": 2.064191078003205,
+    "log": "w08_a01-canonical-p05.log",
+    "log_sha256": "88b25e3af9eca99165339f2f5584dc3afdee2d74af7fc0e7cb294946ad3b9d39",
+    "log_bytes": 263,
+    "exact_one_test": true,
+    "expected_test_id": "test_p05_installed_check.InstalledCheckerTests.test_copied_checker_cannot_import_source_in_clean_venv"
+  },
+  "source_after": {
+    "/workspace/p06-qualified-warm-source-01/ci/project/test_p05_installed_check.py": "a2102c005f8ca2618b5d62d95dd53dbd5a54452f9094382f6615f8a6b75d9d42",
+    "/workspace/p06-qualified-warm-source-01/ci/project/p05_installed_check.py": "72c8d2413cd278b0021785c6d0a88269b0f7859b232e317c11034d0808de98a0"
+  },
+  "source_stable": true,
+  "clean_source_after": true,
+  "native_workspace_absent": true,
+  "outcome": "pass",
+  "probe_sha256": "6ac55b0e01cabf2120814f39cfc6244ee2b4441cddda7b3a14aecc69b08e7134"
+}

@@ -1,0 +1,33 @@
+# SPDX-License-Identifier: Apache-2.0
+"""Aggregate valid observations while preserving and excluding a faulty probe."""
+import hashlib,json
+from pathlib import Path
+root=Path('/workspace/scratch/dc8be1693f91/AI-GPU/docs/project/evidence/p06-qualified-warm/validation')
+original=json.loads((root/'w04_a03_results_uncorrected.json').read_bytes())
+corrected=json.loads((root/'w04_a03_source_correction.json').read_bytes())
+path=json.loads((root/'w04_a03_path_result.json').read_bytes())
+invalid=[row for row in original['cases'] if row['id']=='last-process-source-drift']
+assert len(invalid)==1 and 'No such file or directory' in invalid[0]['reason']
+cases=[row for row in original['cases'] if row['id']!='last-process-source-drift']
+cases.append(corrected)
+cases.append(dict(path,id='aliased-output-path-rejected'))
+assert len(cases)==6 and all(row['passed'] for row in cases)
+record={**original,'scope':'independent-producer-failure-and-path-admission-probes',
+ 'cases':cases,'case_count':6,'all_passed':True,
+ 'duration_seconds':original['duration_seconds']+corrected['duration_seconds'],
+ 'duration_scope':'completed batch plus corrected source session; includes one excluded invalid fixture probe; initial aborted probe and path probe not timed',
+ 'excluded_invalid_probe':{'id':'last-process-source-drift-from-uncorrected-script',
+    'reason':'The selected native caller was absent from WarmHarness, so callback failed before mutating source.',
+    'not_counted_as_a_source_stability_pass':True,
+    'corrected_by':'w04_a03_source_correction.py.txt',
+    'initial_assertion_failure_preserved':'w04_a03_probe_initial.log',
+    'uncorrected_receipt_preserved':'w04_a03_results_uncorrected.json'},
+ 'evidence':[{ 'path':n,'sha256':hashlib.sha256((root/n).read_bytes()).hexdigest(),
+ 'size_bytes':(root/n).stat().st_size} for n in (
+ 'w04_a03_probe_initial.py.txt','w04_a03_probe_initial.log',
+ 'w04_a03_probe_uncorrected.py.txt','w04_a03_probe_uncorrected.log',
+ 'w04_a03_results_uncorrected.json','w04_a03_source_correction.py.txt',
+ 'w04_a03_source_correction.json','w04_a03_source_correction.log',
+ 'w04_a03_path_probe.py.txt','w04_a03_path_result.json')]}
+(root/'w04_a03_results.json').write_text(json.dumps(record,indent=2,sort_keys=True)+'\n')
+print(json.dumps({'all_passed':True,'valid_case_count':6,'excluded_invalid_probe_count':1}))

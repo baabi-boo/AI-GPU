@@ -1,0 +1,173 @@
+{
+  "all_passed": true,
+  "case_count": 6,
+  "cases": [
+    {
+      "completed_processes": 12,
+      "failure_stages": [
+        "execution"
+      ],
+      "id": "midpopulation-interruption",
+      "launches": 13,
+      "native_execution_field": "run",
+      "outcome": "fail",
+      "passed": true,
+      "qualified_warm_passed": false,
+      "reason": "interrupted"
+    },
+    {
+      "exception": "FileExistsError",
+      "id": "same-attempt-resume-refused",
+      "no_additional_commands": true,
+      "original_report_sha256": "ea5db7f6977bf0dfb83498accb8b265b7ff74099c9c6031b585c56e40d096770",
+      "passed": true,
+      "retained_report_unchanged": true
+    },
+    {
+      "completed_processes": 23,
+      "failure_stages": [
+        "execution",
+        "final-tools",
+        "final-dependency-admission"
+      ],
+      "id": "last-process-tool-drift",
+      "launches": 24,
+      "native_execution_field": "run",
+      "outcome": "fail",
+      "passed": true,
+      "qualified_warm_passed": false,
+      "reason": "tool or executing-interpreter identity changed"
+    },
+    {
+      "completed_processes": 24,
+      "failure_stages": [
+        "final-resources"
+      ],
+      "id": "complete-population-final-disk-breach",
+      "launches": 24,
+      "native_execution_field": "run",
+      "outcome": "fail",
+      "passed": true,
+      "qualified_warm_passed": false,
+      "reason": "final disk reserve below 15 GiB"
+    },
+    {
+      "completed_processes": 23,
+      "duration_seconds": 39.8090690359968,
+      "failure_stages": [
+        "execution",
+        "final-source"
+      ],
+      "id": "last-process-source-drift",
+      "initial_source_sha256": "ad3b6107f0eef91ec676412bc795ab70cd1c9f31647b2cea854de6234fe71d3e",
+      "launches": 24,
+      "mutated_source": "sw/kernel/ai/matmul.cpp",
+      "mutated_source_sha256": "16356cfee0bba665a6f9c6a28d185c97bb56cf5be434d889e91653e0c70f0c6c",
+      "native_execution_field": "run",
+      "native_execution_performed": false,
+      "outcome": "fail",
+      "passed": true,
+      "qualified_warm_passed": false,
+      "reason": "source changed during execution",
+      "source_verified_present_before_execution": true
+    },
+    {
+      "id": "aliased-output-path-rejected",
+      "mocks": [],
+      "native_execution_performed": false,
+      "passed": true,
+      "reason": "root paths must be absolute safe literals without symlink traversal",
+      "scope": "real-CLI-path-admission-only",
+      "target_not_created": true,
+      "work_not_created": true
+    }
+  ],
+  "duration_scope": "completed batch plus corrected source session; includes one excluded invalid fixture probe; initial aborted probe and path probe not timed",
+  "duration_seconds": 202.384679399991,
+  "evidence": [
+    {
+      "path": "w04_a03_probe_initial.py.txt",
+      "sha256": "fbaff4969ad8bc518e26dd2881afc485b7c2271e97c2fd58ea3c48ef4b3d63b6",
+      "size_bytes": 5014
+    },
+    {
+      "path": "w04_a03_probe_initial.log",
+      "sha256": "185bb731e65c3fed36f9007d945b88be77111c9178df34ab4b95e54d3000eebc",
+      "size_bytes": 419
+    },
+    {
+      "path": "w04_a03_probe_uncorrected.py.txt",
+      "sha256": "bf484c3a81b22bdc6a0069398ea79cbf4b04b3ee511403a2076256f505b526d0",
+      "size_bytes": 5073
+    },
+    {
+      "path": "w04_a03_probe_uncorrected.log",
+      "sha256": "3b3a5964b6e55a75f5fbf4238db94908a315713a6573fa8104fe290ade97c06d",
+      "size_bytes": 463
+    },
+    {
+      "path": "w04_a03_results_uncorrected.json",
+      "sha256": "89912797370320c9f50bba9c0764e8bd18dd132a60c4065ae6cd23065a27806d",
+      "size_bytes": 2967
+    },
+    {
+      "path": "w04_a03_source_correction.py.txt",
+      "sha256": "c64c5de78d46e40c8643bd060e17c9c635871f1026b236fd557c65d50a5410fe",
+      "size_bytes": 2259
+    },
+    {
+      "path": "w04_a03_source_correction.json",
+      "sha256": "52190cc2b15da6c171fd1d86ee16297d4ae86b5394d70ade41a96dcdaf28ace4",
+      "size_bytes": 673
+    },
+    {
+      "path": "w04_a03_source_correction.log",
+      "sha256": "6f6e5596a1ef1ce8327b97b69c7a91f96fa193f40e7dd93a0e8b1fae2dd52001",
+      "size_bytes": 629
+    },
+    {
+      "path": "w04_a03_path_probe.py.txt",
+      "sha256": "0e6d475a89c11ba8b6a3169dc6ece1d9814c33bd55a5465200d346296c574c4c",
+      "size_bytes": 1822
+    },
+    {
+      "path": "w04_a03_path_result.json",
+      "sha256": "03ade9b0aac95fbf1c42a79d84839e70b5ec68629f6e4c0229897021db33dcca",
+      "size_bytes": 259
+    }
+  ],
+  "excluded_invalid_probe": {
+    "corrected_by": "w04_a03_source_correction.py.txt",
+    "id": "last-process-source-drift-from-uncorrected-script",
+    "initial_assertion_failure_preserved": "w04_a03_probe_initial.log",
+    "not_counted_as_a_source_stability_pass": true,
+    "reason": "The selected native caller was absent from WarmHarness, so callback failed before mutating source.",
+    "uncorrected_receipt_preserved": "w04_a03_results_uncorrected.json"
+  },
+  "mocks": [
+    "native/compiler commands",
+    "compiler record validation",
+    "original diagnostic/control qualification admission",
+    "dependency archive receipt intake",
+    "source Git metadata",
+    "host tool identities",
+    "resource measurements"
+  ],
+  "native_execution_performed": false,
+  "real_checks": [
+    "source/tool file hashing and stability",
+    "command checkpoint/error paths",
+    "raw output/lifetime validation",
+    "complete population accumulation",
+    "exclusive output creation",
+    "final resource threshold",
+    "qualification derivation"
+  ],
+  "schema_version": 1,
+  "scope": "independent-producer-failure-and-path-admission-probes",
+  "source_sha256": {
+    "ci/project/p06_managed_preflight_execute.py": "2aa330b428852b3b0f0acc9bcc32cc464959b7f255d709f13cde310319b2fe4e",
+    "ci/project/p06_qualified_warm_execute.py": "2eea05ae66b070bbdd1c6e48201d5108e4b9cc0bcd1f71c5fd8c23e8bea25dce",
+    "ci/project/test_p06_qualified_warm_runner.py": "60021bb13fc792977c3ed2c36f0063c33790a24a0d5c9ea69a8a30509eff329c"
+  }
+}

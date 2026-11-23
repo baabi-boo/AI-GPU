@@ -1,0 +1,142 @@
+#!/usr/bin/env python3
+"""Small parser/routing probes; supplemental checks, not native evidence."""
+import hashlib
+import json
+from pathlib import Path
+import sys
+import tempfile
+import time
+from unittest import mock
+import zipfile
+
+sys.dont_write_bytecode = True
+ROOT = Path(__file__).resolve().parents[5]
+sys.path.insert(0, str(ROOT / 'ci/project'))
+import p06_qualified_warm_replay as replay
+
+rows = []
+started = time.monotonic()
+
+def check(name, action, expected='accepted', contains=None):
+    begin = time.monotonic()
+    try:
+        value = action()
+    except ValueError as error:
+        outcome, detail = 'rejected', str(error)
+    else:
+        outcome, detail = 'accepted', value
+    assert outcome == expected, (name, outcome, detail)
+    if contains:
+        assert contains in str(detail), (name, detail)
+    rows.append({'name': name, 'expected': expected, 'observed': outcome,
+                 'detail': detail, 'duration_seconds': time.monotonic() - begin})
+
+# 1. Escaped and literal keys compare after JSON unescaping.
+for name, body in (
+    ('escaped-duplicate-field', b'{"a":1,"\\u0061":2}'),
+    ('escaped-duplicate-nested-field', b'{"a":{"\\u0078":1,"x":2}}'),
+):
+    check(name, lambda body=body: replay.decode_report(body), 'rejected', 'duplicate')
+
+# 2. UTF-8 rejection includes noncanonical encodings and encoded surrogates.
+for name, body in (
+    ('overlong-utf8', b'{"x":"\xc0\xaf"}'),
+    ('utf8-encoded-surrogate', b'{"x":"\xed\xa0\x80"}'),
+):
+    check(name, lambda body=body: replay.decode_report(body), 'rejected', 'invalid bounded')
+
+# 3. The number token bound counts exponent spelling even if its value is tiny.
+check('64-character-exponent-token', lambda: replay.decode_report(
+    b'{"x":1e' + b'0' * 62 + b'}'))
+check('65-character-exponent-token', lambda: replay.decode_report(
+    b'{"x":1e' + b'0' * 63 + b'}'), 'rejected', 'oversized')
+
+# 4. The signed integer bound includes the leading minus sign.
+check('64-character-signed-integer', lambda: replay.decode_report(
+    b'{"x":-' + b'9' * 63 + b'}'))
+check('65-character-signed-integer', lambda: replay.decode_report(
+    b'{"x":-' + b'9' * 64 + b'}'), 'rejected', 'oversized')
+
+# 5. Mixed list/object depth follows the same value-depth accounting.
+def nested(levels):
+    value = 0
+    for level in range(levels - 1):
+        value = [value] if level % 2 else {'x': value}
+    return json.dumps({'root': value}).encode()
+check('mixed-container-depth-64', lambda: bool(replay.decode_report(nested(64))))
+check('mixed-container-depth-65', lambda: replay.decode_report(nested(65)),
+      'rejected', 'structure bound')
+
+# 6. JSON types are retained by decoding; semantic equality is strictly typed.
+decoded = replay.decode_report(b'{"integer":1,"float":1.0,"boolean":true}')
+check('decoded-types-preserved', lambda: {
+    key: type(value).__name__ for key, value in decoded.items()})
+assert [type(decoded[key]) for key in ('integer', 'float', 'boolean')] == [int, float, bool]
+for name, actual, expected in (
+    ('boolean-as-count', {'count': True}, {'count': 1}),
+    ('integer-as-qualification', {'qualified': 1}, {'qualified': True}),
+    ('float-as-schema-version', {'schema_version': 1.0}, {'schema_version': 1}),
+):
+    check(name, lambda actual=actual, expected=expected:
+          replay._same(actual, expected, 'typed-report'), 'rejected', 'value type differs')
+
+# 7. No alias or content string chooses the larger report decoder.
+for alias in ('./report.json', 'nested/report.json', 'REPORT.JSON'):
+    ordinary = mock.Mock()
+    ordinary.json.return_value = {'delegated': alias}
+    selected = replay._WarmReportView(ordinary)
+    check('noncanonical-report-name-' + alias.replace('/', '_'),
+          lambda alias=alias, selected=selected: selected.json(alias))
+    ordinary.read.assert_not_called()
+    ordinary.json.assert_called_once_with(alias, integers_only=False)
+
+# 8. Tiny real ZIP rejection is inert. Traversal prefixes fail before opening.
+arguments = dict(expected_revision='a' * 40, expected_receipt_sha256='b' * 64,
+    expected_native_report_sha256='c' * 64, expected_source_manifest_sha256='d' * 64,
+    expected_qualification_sha256=replay.contract.SOURCE_PROOF_SHA256,
+    diagnostic_archive=Path('/never-open-diagnostic.zip'), diagnostic_sha256='e' * 64,
+    control_archive=Path('/never-open-control.zip'), control_sha256='f' * 64)
+with tempfile.TemporaryDirectory(prefix='w04-a05-parser-') as temporary:
+    directory = Path(temporary)
+    path = directory / 'tiny.zip'
+    marker = directory / 'must-not-exist'
+    with zipfile.ZipFile(path, 'w') as archive:
+        archive.writestr('dependency-build/report.json', '{}')
+        archive.writestr('qualified-warm/report.json', json.dumps({
+            'contract_id': 'p06-counter-qualification-v1',
+            'reader': 'retained.py', 'qualified_warm_passed': True}))
+        archive.writestr('retained.py', 'raise RuntimeError("retained code executed")\n')
+    pin = hashlib.sha256(path.read_bytes()).hexdigest()
+    with mock.patch('subprocess.Popen', side_effect=AssertionError('process execution')), \
+         mock.patch('os.system', side_effect=AssertionError('shell execution')), \
+         mock.patch('runpy.run_path', side_effect=AssertionError('retained code execution')), \
+         mock.patch.object(zipfile.ZipFile, 'extract', side_effect=AssertionError('extraction')), \
+         mock.patch.object(zipfile.ZipFile, 'extractall', side_effect=AssertionError('extraction')):
+        check('declared-reader-cannot-select-route',
+              lambda: replay.replay_archive(path, pin, **arguments),
+              'rejected', 'complete local qualification archive roots')
+        check('traversal-prefix-rejected',
+              lambda: replay.replay_archive(path, pin, prefix='../outside', **arguments),
+              'rejected')
+    assert not marker.exists()
+
+result = {'scope': 'supplemental-small-parser-and-routing-probes',
+    'native_execution': 'not_run', 'retained_code_executed': False,
+    'production_files_modified': False, 'probe_count': len(rows),
+    'accepted_controls': sum(row['observed'] == 'accepted' for row in rows),
+    'rejected_cases': sum(row['observed'] == 'rejected' for row in rows),
+    'duration_seconds': time.monotonic() - started,
+    'reviewed_sources': [{'path': name, 'sha256': hashlib.sha256((ROOT / name).read_bytes()).hexdigest()}
+                        for name in ('ci/project/p06_qualified_warm_replay.py',
+                                     'ci/project/p06_replay.py',
+                                     'ci/project/p06_dependency_native_replay.py')],
+    'probes': rows,
+    'limitations': ['These probes supplement existing unit tests; they add no unique governance test IDs.',
+                    'No full native packet, source/build proof, native process or performance result is established.',
+                    'Inertness guards cover attempted entrypoints during two tiny archive rejections, not every possible interpreter effect.']}
+target = Path(__file__).with_name('w04_a05-parser-results.json')
+with target.open('x', encoding='utf-8') as stream:
+    json.dump(result, stream, indent=2, sort_keys=True)
+    stream.write('\n')
+print(json.dumps({key: result[key] for key in (
+    'scope', 'probe_count', 'accepted_controls', 'rejected_cases', 'duration_seconds')}))

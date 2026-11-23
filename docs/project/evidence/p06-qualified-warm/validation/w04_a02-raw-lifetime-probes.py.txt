@@ -1,0 +1,152 @@
+# SPDX-License-Identifier: Apache-2.0
+"""Independent synthetic raw/lifetime contradiction probes; no native evidence.
+Run from the repository root with python3 -B <this-file>.
+"""
+from copy import deepcopy
+import datetime
+import hashlib
+import json
+from pathlib import Path
+import sys
+import time
+
+ROOT = Path.cwd()
+sys.path.insert(0, str(ROOT / 'ci/project'))
+import p06_managed_preflight_contract as contract
+import p06_managed_preflight_records as managed
+import p06_qualified_warm_records as records
+import p06_warm_records as warm
+import test_p06_qualified_warm_records as fixture
+
+out = ROOT / 'docs/project/evidence/p06-qualified-warm/validation/w04_a02-raw-lifetime-results.json'
+assert not out.exists()
+started = datetime.datetime.now(datetime.timezone.utc).isoformat()
+t0 = time.monotonic()
+manifest = contract.load_contract()
+results = []
+controls = []
+
+def fresh(fmt, policy='reusable_single_tile', pair=1):
+    return fixture.raw_records(fmt, policy, pair_index=pair, contract=manifest)
+
+def arguments(raw):
+    s = raw[2]
+    return dict(contract=manifest, case=raw[0], fmt=s['format'], policy=s['policy'],
+                binding_id=fixture.BINDING, sample_id=s['sample_id'], process_id=s['sample_id'],
+                pair_index=s['pair_index'], phase=s['phase'], expected_libraries=fixture.EXPECTED_LIBRARIES)
+
+def verify(raw):
+    return records.verify_output(fixture.render_log(*raw[1:]), **arguments(raw))
+
+def verify_parent_semantics(raw):
+    # Execute the actual shared warm/counter semantic helpers without replacing
+    # identities or feeding a new contract into a historical route.
+    args = arguments(raw)
+    for k in ('process_id', 'expected_libraries'):
+        args.pop(k)
+    args['contract'] = contract.warm.load_contract(ROOT)
+    text = fixture.fixture.parent_fixture.render_log(*raw[1:4])
+    warm_text, witness = managed._split_output(text)
+    w = warm.verify_output(warm_text, **args)
+    managed._observation(witness['observation'])
+    managed._snapshots(witness, w, contract.counter_inventory(manifest))
+    managed._cache_flushes(witness)
+
+def relabel_operation(donor, target):
+    for k in contract.warm.IDENTITY_KEYS:
+        donor[k] = target[k]
+    donor['case_id'] = target['case_id']
+    return donor
+
+def cross_format_abi(raw):
+    donor = fresh('bf16' if raw[2]['format'] == 'fp16' else 'fp16', raw[2]['policy'])
+    raw[1][16] = relabel_operation(deepcopy(donor[1][16]), raw[1][16])
+
+def cross_policy_accounting(raw):
+    donor = fresh(raw[2]['format'], 'per_operation')
+    raw[1][16] = relabel_operation(deepcopy(donor[1][16]), raw[1][16])
+
+def resident_relocation_with_repaired_wire(raw):
+    dispatch = raw[1][16]['dispatch']
+    for name in ('a_address', 'b_address', 'd_address'):
+        dispatch[name] += 4096
+    wire = bytes.fromhex(dispatch['argument_bytes'])[:32]
+    wire += b''.join(dispatch[name].to_bytes(8, 'little') for name in ('a_address', 'b_address', 'd_address'))
+    dispatch['argument_bytes'] = wire.hex()
+
+def resident_memory_erasure_with_capacity_preserved(raw):
+    memory = raw[2]['memory']
+    for name in ('after_create', 'after_prime', 'after_batch'):
+        memory[name] = deepcopy(memory['after_open'])
+
+def half_reply_swap_with_sequence_repaired(raw):
+    reads = raw[3]['reads']
+    i, j = 68, 69
+    si, sj = reads[i]['sequence'], reads[j]['sequence']
+    reads[i], reads[j] = reads[j], reads[i]
+    reads[i]['sequence'], reads[j]['sequence'] = si, sj
+
+def interior_clock_gap_with_local_flush_repaired(raw):
+    raw[4]['runs'][16]['after']['ticks'] += 11
+    for key in ('ticks_before', 'ticks_after'):
+        raw[3]['cache_flush_reads'][16][key] += 11
+
+def interior_reset_jump_with_catchup_and_flush_repaired(raw):
+    raw[4]['runs'][16]['after']['reset_generation'] += 1
+    raw[4]['runs'][17]['before']['reset_generation'] += 1
+    for key in ('reset_before', 'reset_after'):
+        raw[3]['cache_flush_reads'][16][key] += 1
+
+def cross_pair_snapshot_hidden_after_outer_relabel(raw):
+    replacement = fresh(raw[2]['format'], raw[2]['policy'], pair=2)
+    raw[2]['snapshots']['after_batch'] = deepcopy(replacement[2]['snapshots']['after_batch'])
+
+cases = [
+    (cross_format_abi, 'does not match the actual frozen ABI', False),
+    (cross_policy_accounting, 'counts_before', False),
+    (resident_relocation_with_repaired_wire, 'warm resident addresses', False),
+    (resident_memory_erasure_with_capacity_preserved, 'retained tensor payload', False),
+    (half_reply_swap_with_sequence_repaired, '.tag', False),
+    (interior_clock_gap_with_local_flush_repaired, 'preceding boundary', True),
+    (interior_reset_jump_with_catchup_and_flush_repaired, 'reset_generation', True),
+    (cross_pair_snapshot_hidden_after_outer_relabel, 'sample_id', False),
+]
+for fmt in contract.FORMATS:
+    for policy in contract.POLICIES:
+        raw = fresh(fmt, policy)
+        v = verify(raw)
+        assert v['warm']['accounting']['launches'] == 33
+        assert v['warm']['accounting']['checked_words'] == 1056
+        controls.append(dict(format=fmt, policy=policy, result='accepted', launches=33, checked_words=1056))
+    for mutator, expected, parent_pass in cases:
+        raw = fresh(fmt)
+        mutator(raw)
+        # Population and aggregate accounting intentionally remain unmodified.
+        assert len(raw[1]) == len(raw[4]['runs']) == 33
+        assert raw[2]['checked'] == 1056 and raw[2]['operations'] == 33
+        assert raw[3]['observation']['run_completed'] == 33
+        if parent_pass:
+            verify_parent_semantics(raw)
+        try:
+            verify(raw)
+        except ValueError as error:
+            assert expected in str(error), (mutator.__name__, str(error))
+            results.append(dict(case=mutator.__name__, format=fmt, policy='reusable_single_tile',
+                result='rejected', reason=str(error), unchanged_population_and_totals=True,
+                shared_warm_counter_semantics_control='accepted' if parent_pass else 'not_requested'))
+        else:
+            raise AssertionError('unexpected acceptance: ' + mutator.__name__ + ' ' + fmt)
+
+paths = ['ci/project/p06_qualified_warm_records.py', 'ci/project/p06_warm_records.py',
+         'ci/project/p06_managed_preflight_records.py', 'ci/project/p06_native_lifetime_records.py',
+         'ci/project/test_p06_qualified_warm_records.py', 'ci/project/p06_native_lifetime_test_fixture.py']
+result = dict(schema_version=1, scope='synthetic raw-record and lifecycle contradiction probes',
+    started_utc=started, finished_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    elapsed_seconds=round(time.monotonic()-t0, 6), producer_native_execution=False,
+    native_evidence=False, dependency_and_proof_admission_exercised=False,
+    positive_controls=controls, mutation_results=results,
+    source_sha256={p: hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in paths})
+with out.open('x') as f:
+    json.dump(result, f, indent=2, sort_keys=True)
+    f.write('\n')
+print(json.dumps(dict(positive_controls=len(controls), mutations=len(results), result='pass', elapsed_seconds=result['elapsed_seconds'], output=str(out))))

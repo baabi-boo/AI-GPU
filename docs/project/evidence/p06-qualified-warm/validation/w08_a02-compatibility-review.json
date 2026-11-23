@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "reviewer": "w08_a02",
+  "scope": "read-only operational compatibility and retained-receipt review",
+  "outcome": "pass",
+  "native_execution_by_reviewer": "not_run",
+  "archive_replay_by_reviewer": "not_run",
+  "canonical_test_bodies_executed": 0,
+  "source_revision": "c0b44ce64665fe11895f869eea8c38c9b820d6f7",
+  "reviewed_sources": [
+    {
+      "path": "ci/project/p06_counter_qualification_proof.json",
+      "sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e",
+      "size_bytes": 123781
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_proof.json",
+      "sha256": "172721c671ddaa79541dde9c37c154b5ab5a99b8abb0caabf2e07036dd429efb",
+      "size_bytes": 21505
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_execute.py",
+      "sha256": "c9ffe924d504317e1dfe19ce5a853876f4385cdf5edb5074716df7e68becc55c",
+      "size_bytes": 2436
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_admission.py",
+      "sha256": "33053b52145167ced22a4793295f1cbfd07c78eb8072e65ed94090040e8eae43",
+      "size_bytes": 12578
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_contract.py",
+      "sha256": "d445b9447aefb4f2917f827105df9b5722c461f10f68629176f2dc2d2321fd0d",
+      "size_bytes": 10828
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_historical_fixture.py",
+      "sha256": "12fcae35335ccb868511728bc92802926f2c20c4d571cecd770d6b04a131eade",
+      "size_bytes": 716
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_contract.py",
+      "sha256": "6e1338b024906d218e468f8982d15906a3392cf3b557d911e81120b509d80485",
+      "size_bytes": 11524
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_replay.py",
+      "sha256": "4aece4442e31426b7ef60378499f338e3ec6909263ddca7db64d90442aa60798",
+      "size_bytes": 17454
+    },
+    {
+      "path": "ci/project/p06_dependency_native_replay.py",
+      "sha256": "ec4fd742820387a30989c26bfeea523ffa68e8b9dfabcc679a6928e68d8b652b",
+      "size_bytes": 60689
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_admission.py",
+      "sha256": "849b3cf591d419bf50eea02b94f6801499859208f802b376a81a2c2b3bca28e2",
+      "size_bytes": 9445
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_contract.py",
+      "sha256": "f8984c8f286094e7853410c2a8c67bc9aecf81aea860b3ffaff0bcd2aebac112",
+      "size_bytes": 8017
+    },
+    {
+      "path": "tests/regression/ai_counter_preflight/main.cpp",
+      "sha256": "721da20bffa4aed127dd5694af7263f37010164e5d836d13e5348afa48c3fe02",
+      "size_bytes": 27523
+    },
+    {
+      "path": "ci/project/fixtures/p06_counter_preflight_main_v1.cpp",
+      "sha256": "05738177b2930852eb5cf5e6d61de93f3cb465b2f221f0d9d95a8780adce99e1",
+      "size_bytes": 26844
+    },
+    {
+      "path": "docs/designs/qualified_warm_workspace_v1.md",
+      "sha256": "979936604fe95572804243ab5b9ad2b524aa0fcdcf9d066450e70dfc841257a6",
+      "size_bytes": 7078
+    }
+  ],
+  "source_bytes_stable": true,
+  "historical_projection_sources": 69,
+  "current_historical_projection_mismatches": [
+    "tests/regression/ai_counter_preflight/main.cpp"
+  ],
+  "new_projection_matches_all_sources": true,
+  "historical_fixture_matches_original_git_blob": true,
+  "retained_native_argument_rejections": [
+    {
+      "format": "fp16",
+      "case": "historical-measured",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "fp16",
+      "case": "lifetime-measured",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "fp16",
+      "case": "warm-without-lifetime",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: qualified warm execution requires lifetime observation\n"
+    },
+    {
+      "format": "fp16",
+      "case": "flags-reordered",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: qualified warm execution requires lifetime observation\n"
+    },
+    {
+      "format": "fp16",
+      "case": "duplicate-mode",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "fp16",
+      "case": "pair-six",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "fp16",
+      "case": "wrong-phase",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "fp16",
+      "case": "cross-pair-sample",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "fp16",
+      "case": "invalid-digest",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "fp16",
+      "case": "unknown-option",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "bf16",
+      "case": "historical-measured",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "bf16",
+      "case": "lifetime-measured",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "bf16",
+      "case": "warm-without-lifetime",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: qualified warm execution requires lifetime observation\n"
+    },
+    {
+      "format": "bf16",
+      "case": "flags-reordered",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: qualified warm execution requires lifetime observation\n"
+    },
+    {
+      "format": "bf16",
+      "case": "duplicate-mode",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "bf16",
+      "case": "pair-six",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "bf16",
+      "case": "wrong-phase",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "bf16",
+      "case": "cross-pair-sample",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "bf16",
+      "case": "invalid-digest",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    },
+    {
+      "format": "bf16",
+      "case": "unknown-option",
+      "exit_code": 1,
+      "output": "P06_MANAGED_PREFLIGHT_FAILURE: preflight requires pair-zero warm-up or explicitly selected qualified warm arguments\n"
+    }
+  ],
+  "retained_native_argument_rejection_count": 20,
+  "retained_syntax_only_invocations": 2,
+  "retained_historical_replay": {
+    "exit_code": 0,
+    "duration_seconds": 45.03831971999898,
+    "summary_fields_reconciled": 27,
+    "source_revision": "17e0284496bab10c7632a48e4f91efb6fb4fec0b",
+    "commands": 37,
+    "processes": 4,
+    "launches": 132,
+    "checked_words": 4224,
+    "all_seven_claims_false": true,
+    "original_and_current_reader_input_hashes_rechecked": true
+  },
+  "limitations": [
+    "Receipt verification is not a rerun or independent process-origin authentication.",
+    "The native rejection probes use earlier generated headers and dependency binaries; they do not qualify a fresh warm experiment.",
+    "Current native no-flag grammar preservation does not mean the historical frozen proof admits the changed current caller."
+  ],
+  "duration_seconds": 0.2955390650022309
+}

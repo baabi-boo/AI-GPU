@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "scope": "supervisor-authoring-and-static-validation-only",
+  "native_execution": "not_run",
+  "subprocess_execution": "not_run",
+  "source_revision": "c0b44ce64665fe11895f869eea8c38c9b820d6f7",
+  "original_supervisor": {
+    "path": "docs/project/evidence/p06-counter-qualification/native/attempt-01-supervisor.py.txt",
+    "sha256": "074676bddd69b415eaffe7105fa07dd5df1a8f698ca37ff524e17ac9aeec65e2"
+  },
+  "new_supervisor": {
+    "path": "docs/project/evidence/p06-qualified-warm/native/attempt-01-supervisor.py.txt",
+    "sha256": "df64450abc7fdbd21149285d1a231a9290d3dd7ed9974de2a813fdf185e1d198",
+    "size_bytes": 8346
+  },
+  "stage_order": [
+    "preparation",
+    "dependency-build",
+    "qualified-warm"
+  ],
+  "producer_modules": [
+    "p06_dependency_local_prepare",
+    "p06_dependency_build",
+    "p06_qualified_warm_execute"
+  ],
+  "expected_completed_counts": {
+    "processes": 24,
+    "launches": 792,
+    "checked_words": 25344,
+    "snapshots": 96,
+    "available_queries": 3168,
+    "half_replies": 6336,
+    "cache_flush_reads": 792,
+    "dcr_reads": 7128,
+    "unavailable_rows": 1152
+  },
+  "checks": {
+    "syntax_compile_without_execution": true,
+    "ast_stage_order_and_modules": true,
+    "exact_published_revision": true,
+    "exact_counts": true,
+    "single_bounded_launch_site": true,
+    "no_historical_route_reference": true,
+    "no_unresolved_placeholder": true
+  },
+  "limits_unchanged": {
+    "whole_attempt_seconds": 5400,
+    "preparation_stage_seconds": 1800,
+    "dependency_stage_seconds": 5400,
+    "native_stage_seconds": 5400,
+    "actual_stage_timeout": "minimum of stage cap and remaining whole-attempt budget",
+    "child_build_jobs": 2,
+    "child_simulation_threads": 1,
+    "child_configure_seconds": 120,
+    "child_build_seconds": 1800,
+    "child_native_process_seconds": 180,
+    "per_log_bytes": 16777216,
+    "sampled_process_group_rss_bytes": 4294967296,
+    "free_disk_reserve_bytes": 16106127360
+  },
+  "new_guard_scope": [
+    "exact revision must be40lowercasehex before imports or any subprocess",
+    "canonical existing review directory without symlink parents",
+    "supervision receipt and all three stage logs absent before workspace creation"
+  ],
+  "remaining": [
+    "independent supervisor review",
+    "exact clean source checkout with pinned recursive submodules",
+    "live resource guard and fresh three-stage execution",
+    "complete archive retention and independent public replay"
+  ]
+}

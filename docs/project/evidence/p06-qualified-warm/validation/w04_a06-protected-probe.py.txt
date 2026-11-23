@@ -1,0 +1,78 @@
+# SPDX-License-Identifier: Apache-2.0
+"""Independent baseline byte comparison and exact workflow insertion check."""
+import gzip, hashlib, json, os, subprocess, time
+from pathlib import Path
+ROOT = Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+BASE = 'f80b58b06e7bcf734f3190f6db478fd11f0bab01'
+OUT = ROOT / 'docs/project/evidence/p06-qualified-warm/validation/w04_a06-protected-results.json'
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+def blob_id(body):
+    return hashlib.sha1(b'blob '+str(len(body)).encode()+b'\0'+body).hexdigest()
+def sha(body):
+    return hashlib.sha256(body).hexdigest()
+start=time.monotonic()
+rows=[]
+links=[]
+for raw in git('ls-tree','-r','-z',BASE).split(b'\0'):
+    if not raw: continue
+    info,name=raw.split(b'\t',1)
+    mode,kind,objectid=info.decode().split()
+    name=name.decode()
+    if kind=='commit':
+        index=git('ls-files','--stage','--',name).decode().split()
+        links.append({'path':name,'baseline_gitlink':objectid,'index_gitlink':index[1],
+                      'unchanged':index[1]==objectid})
+        continue
+    path=ROOT/name
+    if mode=='120000': body=os.readlink(path).encode()
+    else: body=path.read_bytes()
+    actual=blob_id(body)
+    rows.append({'path':name,'baseline_blob':objectid,'observed_blob':actual,
+                 'sha256':sha(body),'size_bytes':len(body),'unchanged':actual==objectid})
+byname={r['path']:r for r in rows}
+
+def group(label, predicate):
+    selected=[r for r in rows if predicate(r['path'])]
+    return {'label':label,'files':len(selected),'bytes':sum(r['size_bytes'] for r in selected),
+            'changed':[r['path'] for r in selected if not r['unchanged']]}
+groups=[
+    group('RTL',lambda p:p.startswith('hw/rtl/')),
+    group('simulator/model',lambda p:p.startswith('sim/')),
+    group('native runtime/kernel/shared ABI',lambda p:p.startswith('sw/')),
+    group('golden baselines',lambda p:p.startswith('ci/baselines/')),
+    group('gate implementation and catalog',lambda p:p.startswith('ci/testcases/') or p in ('ci/perf_baseline.py','ci/testcase.py') or (p.startswith('ci/') and p.endswith('_gate.py'))),
+    group('all existing benchmark contracts and fixtures',lambda p:p.startswith('ci/project/fixtures/') or (p.startswith('ci/project/') and ('benchmark_contract' in p or 'warm_contract' in p)) or p.startswith(('tests/regression/ai_bench_','tests/regression/ai_warm_workspace/'))),
+    group('frozen native and warm experiment implementation',lambda p:p.startswith(('ci/project/p06_warm_','ci/project/p06_benchmark_','ci/project/p06_contract.','ci/project/p06_analyze.','ci/project/p06_execute.'))),
+    group('all existing proof JSON',lambda p:p.startswith('ci/project/') and p.endswith('_proof.json')),
+    group('toolchain/build/configuration',lambda p:p in ('VERSION','.gitmodules','configure','config.mk.in','Makefile.in','VX_config.toml','VX_types.toml','third_party/Makefile') or p.startswith(('ci/toolchain','ci/install_','profiles/'))),
+    group('all historical evidence',lambda p:p.startswith('docs/project/evidence/')),
+    group('roadmap/acceptance and protected README image',lambda p:p in ('docs/project/roadmap.json','docs/project/acceptance.md','README.md','docs/assets/img/vortex_framework_stack.svg')),
+]
+assert all(not g['changed'] for g in groups),groups
+assert all(r['unchanged'] for r in links),links
+wf='.github/workflows/project-governance.yml'
+before=git('show',BASE+':'+wf)
+after=(ROOT/wf).read_bytes()
+addition=b"      - 'docs/designs/qualified_warm_workspace_v1.md'\n"
+assert after.count(addition)==2 and addition not in before
+assert after.replace(addition,b'')==before
+import sys
+sys.path.insert(0,str(ROOT/'ci/project'))
+from test_p05_ci_workflow import workflow,children,path_filters
+current=workflow(ROOT/wf)
+events=children(current,'on',2)
+assert set(events)=={'push','pull_request','workflow_dispatch'}
+for event in ('push','pull_request'):
+    assert 'docs/designs/qualified_warm_workspace_v1.md' in path_filters(events,event)
+assert all(key in current for key in ('permissions','concurrency','jobs'))
+assert b'<img src="docs/assets/img/vortex_framework_stack.svg" alt="Vortex framework stack" width="100%">' in (ROOT/'README.md').read_bytes()
+record={'schema_version':1,'outcome':'pass','base_revision':BASE,'observed_head':git('rev-parse','HEAD').decode().strip(),'observed_tree_dirty':bool(git('status','--porcelain=v1','--untracked-files=all')),'scope':'working source byte comparison and textual/parsed workflow review only','started_at_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime(time.time()-(time.monotonic()-start))),'duration_seconds':time.monotonic()-start,'all_existing_blobs_checked':len(rows),'all_existing_blob_bytes':sum(r['size_bytes'] for r in rows),'changed_existing_paths':[r['path'] for r in rows if not r['unchanged']],'protected_groups':groups,'gitlinks':links,'workflow':{'sha256_before':sha(before),'sha256_after':sha(after),'only_change':'one identical literal new-design path insertion in each existing push and pull_request paths list','permissions_concurrency_jobs_runner_commands_unchanged':True,'events_unchanged':True},'selected_pins':{p:{'sha256':byname[p]['sha256'],'size_bytes':byname[p]['size_bytes'],'unchanged':byname[p]['unchanged']} for p in ('ci/project/p06_warm_contract.json','ci/project/p06_counter_qualification_proof.json','docs/assets/img/vortex_framework_stack.svg','VERSION','VX_config.toml','VX_types.toml')},'limitations':['Gitlink index identities checked; no new submodule checkout, build or recursive working-tree provenance claim.','No native execution, hosted CI, phase acceptance or base classifier result claimed.','Active documentation work may add or modify unprotected documentation after this snapshot.'],'all_blob_inventory':rows}
+full_body=(json.dumps(record,indent=2)+'\n').encode()
+full_path=OUT.with_name('w04_a06-protected-inventory.json.gz')
+full_path.write_bytes(gzip.compress(full_body,mtime=0))
+record.pop('all_blob_inventory')
+record['full_inventory']={'path':full_path.name,'sha256':sha(full_path.read_bytes()),'size_bytes':full_path.stat().st_size}
+OUT.write_text(json.dumps(record,indent=2)+'\n')
+print(json.dumps(record,indent=2))

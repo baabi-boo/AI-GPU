@@ -1,0 +1,348 @@
+{
+  "schema_version": 1,
+  "agent": "w08_a03",
+  "scope": "tiny synthetic trusted-runbook packaging; no native qualification/replay",
+  "runbook": "/workspace/scratch/dc8be1693f91/AI-GPU/docs/project/evidence/p06-qualified-warm/runbook.md",
+  "runbook_sha256": "946fcf475ee85a22540826bf2c7df21c67efe18da70fbd1a79671e180f75ddaf",
+  "recipe_sha256": "fd85bef2a043f2932930f21301a9710ad0e524920f3d716707ab0c34661e3ff8",
+  "recipe_bytes": 2930,
+  "source_stable": true,
+  "native_execution": "not_run",
+  "complete_archive_replay": "not_run",
+  "duration_seconds": 1.2403311150046648,
+  "cases": [
+    {
+      "name": "all_regular_members_including_hidden_and_opaque_preserved",
+      "expected": "accept",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": null,
+      "exit_code": 0,
+      "stdout": "{\"all_members_rehashed_against_original\": true, \"filename\": \"original.zip\", \"member_count\": 7, \"original_rehashed_after_packaging\": true, \"retained_code_executed\": false, \"roots\": [\"dependency-build\", \"qualified-warm\"], \"sha256\": \"e5871ec75c909280510445e0f98ebc9da38f9d1c4f17d3d442e972b65862d9c2\", \"size_bytes\": 1205, \"zip_crc_verified\": true}\n",
+      "stderr": "",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "exact_sorted_population": true,
+        "every_member_identical": true,
+        "crc_passed": true,
+        "hidden_locks_retained": true,
+        "outside_root_excluded": true,
+        "raw_zip_pin_matches": true,
+        "identity_exact_count": true,
+        "failed_reports_not_promoted": true,
+        "original_bytes_unchanged": true
+      },
+      "outcome": "pass"
+    },
+    {
+      "name": "isolation_ignores_pythonoptimize",
+      "expected": "accept",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": "2",
+      "exit_code": 0,
+      "stdout": "{\"all_members_rehashed_against_original\": true, \"filename\": \"original.zip\", \"member_count\": 7, \"original_rehashed_after_packaging\": true, \"retained_code_executed\": false, \"roots\": [\"dependency-build\", \"qualified-warm\"], \"sha256\": \"e5871ec75c909280510445e0f98ebc9da38f9d1c4f17d3d442e972b65862d9c2\", \"size_bytes\": 1205, \"zip_crc_verified\": true}\n",
+      "stderr": "",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "exact_sorted_population": true,
+        "every_member_identical": true,
+        "crc_passed": true,
+        "hidden_locks_retained": true,
+        "outside_root_excluded": true,
+        "raw_zip_pin_matches": true,
+        "identity_exact_count": true,
+        "failed_reports_not_promoted": true,
+        "original_bytes_unchanged": true
+      },
+      "outcome": "pass"
+    },
+    {
+      "name": "file_symlink_rejected",
+      "expected": "reject",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": null,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 38, in <module>\n  File \"<stdin>\", line 25, in inventory\nAssertionError\n",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "original_bytes_unchanged": true,
+        "no_new_zip_or_sidecar": true
+      },
+      "outcome": "pass"
+    },
+    {
+      "name": "directory_symlink_rejected",
+      "expected": "reject",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": null,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 38, in <module>\n  File \"<stdin>\", line 25, in inventory\nAssertionError\n",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "original_bytes_unchanged": true,
+        "no_new_zip_or_sidecar": true
+      },
+      "outcome": "pass"
+    },
+    {
+      "name": "hardlink_rejected",
+      "expected": "reject",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": null,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 38, in <module>\n  File \"<stdin>\", line 28, in inventory\nAssertionError\n",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "original_bytes_unchanged": true,
+        "no_new_zip_or_sidecar": true
+      },
+      "outcome": "pass"
+    },
+    {
+      "name": "fifo_rejected_without_reading",
+      "expected": "reject",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": null,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 38, in <module>\n  File \"<stdin>\", line 28, in inventory\nAssertionError\n",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "original_bytes_unchanged": true,
+        "no_new_zip_or_sidecar": true
+      },
+      "outcome": "pass"
+    },
+    {
+      "name": "existing_destination_preserved",
+      "expected": "reject",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": null,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 12, in <module>\nAssertionError\n",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "original_bytes_unchanged": true,
+        "no_new_zip_or_sidecar": true
+      },
+      "outcome": "pass"
+    },
+    {
+      "name": "existing_identity_sidecar_preserved",
+      "expected": "reject",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": null,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 14, in <module>\nAssertionError\n",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "original_bytes_unchanged": true,
+        "no_new_zip_or_sidecar": true
+      },
+      "outcome": "pass"
+    },
+    {
+      "name": "dangling_destination_symlink_rejected",
+      "expected": "reject",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": null,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 12, in <module>\nAssertionError\n",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "original_bytes_unchanged": true,
+        "no_new_zip_or_sidecar": true
+      },
+      "outcome": "pass"
+    },
+    {
+      "name": "unfinished_root_report_rejected",
+      "expected": "reject",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": null,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 18, in <module>\nAssertionError\n",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "original_bytes_unchanged": true,
+        "no_new_zip_or_sidecar": true
+      },
+      "outcome": "pass"
+    },
+    {
+      "name": "output_inside_workspace_rejected",
+      "expected": "reject",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": null,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 11, in <module>\nAssertionError\n",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "original_bytes_unchanged": true,
+        "no_new_zip_or_sidecar": true
+      },
+      "outcome": "pass"
+    },
+    {
+      "name": "output_inside_source_rejected",
+      "expected": "reject",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": null,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 11, in <module>\nAssertionError\n",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "original_bytes_unchanged": true,
+        "no_new_zip_or_sidecar": true
+      },
+      "outcome": "pass"
+    },
+    {
+      "name": "noncanonical_target_parent_rejected",
+      "expected": "reject",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": null,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 9, in <module>\nAssertionError\n",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "original_bytes_unchanged": true,
+        "no_new_zip_or_sidecar": true
+      },
+      "outcome": "pass"
+    },
+    {
+      "name": "symlinked_workspace_rejected",
+      "expected": "reject",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": null,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 7, in <module>\nAssertionError\n",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "original_bytes_unchanged": true,
+        "no_new_zip_or_sidecar": true
+      },
+      "outcome": "pass"
+    },
+    {
+      "name": "symlinked_target_parent_rejected",
+      "expected": "reject",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-I",
+        "-B",
+        "-"
+      ],
+      "pythonoptimize": null,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 9, in <module>\nAssertionError\n",
+      "checks": {
+        "expected_exit": true,
+        "retained_code_not_executed": true,
+        "original_bytes_unchanged": true,
+        "no_new_zip_or_sidecar": true
+      },
+      "outcome": "pass"
+    }
+  ],
+  "accepted_controls": 2,
+  "negative_cases": 13,
+  "outcome": "pass",
+  "new_unittest_ids": 0
+}

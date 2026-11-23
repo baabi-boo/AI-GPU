@@ -1,0 +1,99 @@
+#!/usr/bin/env python3
+"""Read-only independent native checkout verification; no preparation or execution."""
+import gzip, hashlib, json, os, shutil, stat, subprocess, sys, time
+from pathlib import Path
+sys.dont_write_bytecode = True
+SOURCE = Path('/workspace/p06-qualified-warm-source-01')
+ROOT = Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+OUT = ROOT/'docs/project/evidence/p06-qualified-warm/validation'
+REV = 'c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+TREE = '13450812d279d55f36a172fcf38653ff567f6c86'
+WORK = Path('/workspace/p06-qualified-warm-run-01')
+started = time.monotonic()
+def git(directory,*args):
+    return subprocess.check_output(['git','-C',str(directory),*args])
+def textgit(directory,*args): return git(directory,*args).decode().strip()
+def sha256(path):
+    with path.open('rb') as stream: return hashlib.file_digest(stream,'sha256').hexdigest()
+def signature(st): return (st.st_dev,st.st_ino,st.st_size,st.st_mtime_ns,st.st_ctime_ns,st.st_nlink)
+def canonical(path,existing=True):
+    assert path.is_absolute() and path.resolve(strict=existing)==path
+    assert all(not x.is_symlink() for x in (path,*path.parents))
+canonical(SOURCE)
+assert textgit(SOURCE,'rev-parse','HEAD')==REV
+assert textgit(SOURCE,'rev-parse','HEAD^{tree}')==TREE
+assert textgit(SOURCE,'remote','get-url','origin')=='https://github.com/baabi-boo/AI-GPU.git'
+assert not git(SOURCE,'status','--porcelain=v1','--untracked-files=all')
+inventory=[]; repositories=[]; gitlinks=[]
+def inspect_repo(directory,relative,expected):
+    assert textgit(directory,'rev-parse','HEAD')==expected
+    assert not git(directory,'status','--porcelain=v1','--untracked-files=all','--ignored')
+    rows=git(directory,'ls-tree','-r','-z','HEAD').split(b'\0')[:-1]
+    current=[]
+    for raw in rows:
+        meta,pathraw=raw.split(b'\t',1); mode,kind,oid=meta.decode().split(); name=pathraw.decode()
+        target=directory/name; display=(relative+'/'+name).lstrip('/')
+        if kind=='commit':
+            gitlinks.append({'path':display,'revision':oid,'mode':mode})
+            inspect_repo(target,display,oid); continue
+        assert kind=='blob'
+        before=target.lstat()
+        if mode=='120000':
+            assert stat.S_ISLNK(before.st_mode)
+            body=os.fsencode(os.readlink(target)); h=hashlib.sha1(b'blob '+str(len(body)).encode()+b'\0'+body).hexdigest(); size=len(body); sh=hashlib.sha256(body).hexdigest()
+        else:
+            assert stat.S_ISREG(before.st_mode)
+            size=before.st_size; git_hash=hashlib.sha1(b'blob '+str(size).encode()+b'\0'); digest=hashlib.sha256()
+            with target.open('rb') as stream:
+                while chunk:=stream.read(1024*1024): git_hash.update(chunk); digest.update(chunk)
+            h=git_hash.hexdigest(); sh=digest.hexdigest()
+            assert bool(before.st_mode & stat.S_IXUSR)==(mode=='100755')
+        assert signature(before)==signature(target.lstat())
+        assert h==oid, display
+        row={'path':display,'mode':mode,'git_blob':oid,'sha256':sh,'size_bytes':size}
+        inventory.append(row); current.append(row)
+    assert textgit(directory,'rev-parse','HEAD')==expected
+    assert not git(directory,'status','--porcelain=v1','--untracked-files=all','--ignored')
+    repositories.append({'path':relative or '.', 'revision':expected,'tree':textgit(directory,'rev-parse','HEAD^{tree}'),'tracked_blobs':len(current),'tracked_bytes':sum(x['size_bytes'] for x in current),'clean_including_ignored':True})
+inspect_repo(SOURCE,'',REV)
+assert len(gitlinks)==8 and len(repositories)==9
+sys.path.insert(0,str(SOURCE/'ci/project'))
+import p06_qualified_warm_contract as warm
+import p06_dependency_local_prepare as prepare
+import p06_dependency_contract as dependency
+proof=warm.load_proof(SOURCE/warm.SOURCE_PROOF_PATH,warm.SOURCE_PROOF_SHA256)
+lookup={x['path']:x for x in inventory}
+projection=[{key:lookup[row['path']][key] for key in ('path','sha256','size_bytes')} for row in proof['measurement_sources']]
+projection_result=warm.verify_source_projection(proof,projection)
+assert len(projection)==69
+source_before=prepare.collect_source(SOURCE)
+prepare._checkout_record(source_before,REV)
+assert len(source_before['submodules']['entries'])==8
+absence=[WORK,WORK/'tools',WORK/'work',WORK/'dependency-build',WORK/'dependency-sources',WORK/'evidence']
+absence.extend(SOURCE/name for name in dependency.PRODUCTS.values())
+absence.extend(SOURCE/dependency.PINS[name]['path'] for name in ('yaml-cpp','spdlog','argparse'))
+absence.extend(SOURCE/name for name in ('build','build32','build64','tools','work'))
+assert all(not os.path.lexists(x) for x in absence)
+canonical(WORK,existing=False)
+archives=Path('/workspace/p06-native-prebuilt'); deps=Path('/workspace/p06-pinned-inputs'); host=Path('/workspace/p06-local-host-02/bin')
+for path in (archives,deps,host): canonical(path)
+roots=(SOURCE,WORK,archives,deps)
+assert all(not a.is_relative_to(b) and not b.is_relative_to(a) for i,a in enumerate(roots) for b in roots[i+1:])
+prerequisites=[(SOURCE/'docs/project/evidence/p06-counter-diagnostics/native/run-45034575685-attempt1.zip','6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb'),(Path('/workspace/scratch/279b6658611e/AI-GPU_P06_local_attempt_04_passed_2026-11-23.zip'),'d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f'),(SOURCE/'ci/project/p06_counter_qualification_proof.json','d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e'),(SOURCE/warm.SOURCE_PROOF_PATH,warm.SOURCE_PROOF_SHA256)]
+inputs=[]
+for path,pin in prerequisites:
+    canonical(path); before=path.stat()
+    assert stat.S_ISREG(before.st_mode) and before.st_nlink==1
+    digest=sha256(path)
+    assert digest==pin and signature(before)==signature(path.stat())
+    assert not path.is_relative_to(WORK) and not WORK.is_relative_to(path)
+    inputs.append({'path':str(path),'sha256':digest,'size_bytes':before.st_size,'nlink':before.st_nlink})
+host_tools=prepare._host_tools(host)
+assert len(host_tools)==7
+source_after=prepare.collect_source(SOURCE)
+assert source_before==source_after
+ram=prepare.available_memory_bytes(); disk=shutil.disk_usage(SOURCE).free
+record={'schema_version':1,'outcome':'pass','scope':'read-only exact native checkout and selected input verification only','native_execution':'not_run','preparation':'not_run','source':str(SOURCE),'revision':REV,'tree':TREE,'origin':textgit(SOURCE,'remote','get-url','origin'),'repositories':sorted(repositories,key=lambda x:x['path']),'gitlinks':sorted(gitlinks,key=lambda x:x['path']),'all_tracked_blobs_match_git':True,'tracked_blob_count':len(inventory),'tracked_blob_bytes':sum(x['size_bytes'] for x in inventory),'source_observations_equal':True,'source_checkout':source_before,'projection':projection_result,'absent_paths':[str(x) for x in absence],'preparation_roots_pairwise_disjoint':True,'prerequisites':inputs,'prerequisite_relation':'Diagnostic and proofs intentionally reside inside selected clean source; all selected inputs are outside the absent workspace. Control archive is external.','host_tools':host_tools,'python':sys.version,'python_executable':sys.executable,'resource_snapshot':{'available_memory_bytes':ram,'free_disk_bytes':disk,'memory_satisfies_4GiB':ram>=4*1024**3,'disk_satisfies_15GiB':disk>=15*1024**3,'not_a_budget_guarantee':True},'duration_seconds':time.monotonic()-started,'probe_sha256':sha256(Path(__file__)),'limitations':['No preparation, extraction, dependency build, native execution or archive replay occurred.','Git identity consistency is not independent remote producer authentication.','Selected executable identities do not close system headers, compiler support, libraries or full host provenance.','Before/after snapshots do not defeat malicious concurrent writers.','Fresh preparation must independently recheck every condition and resource bound at invocation.']}
+with gzip.GzipFile(filename=str(OUT/'w06_a01-tracked-blobs.json.gz'),mode='xb',mtime=0) as stream: stream.write((json.dumps(sorted(inventory,key=lambda x:x['path']),indent=2)+'\n').encode())
+with (OUT/'w06_a01-checkout-review.json').open('x') as stream: json.dump(record,stream,indent=2); stream.write('\n')
+print(json.dumps({k:record[k] for k in ('outcome','tracked_blob_count','tracked_blob_bytes','duration_seconds','resource_snapshot')},indent=2))

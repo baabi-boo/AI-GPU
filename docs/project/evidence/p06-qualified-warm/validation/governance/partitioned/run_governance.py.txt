@@ -1,0 +1,438 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Exhaustive two-worker source-root governance; no native execution or waiver.
+
+This preserves every complete module and class's discovered internal order.
+Cross-module process state/order differs from a monolithic invocation. Native
+workspace/receipt remain absent. Create OUTPUT/stop-request.json with a reason
+for a graceful coordinator stop; never modify an existing receipt to stop work.
+"""
+import argparse
+import collections
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import signal
+import subprocess
+import sys
+import time
+import unittest
+
+SOURCE = Path('/workspace/p06-qualified-warm-source-01')
+OUTPUT = Path('/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-partitioned')
+TEMP = Path('/workspace/p06-qualified-warm-governance-partition-tmp-01')
+HOST = Path('/workspace/scratch/dc8be1693f91/governance-host-venv')
+PYTHON = str(HOST / 'bin/python3')
+REVISION = 'c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+TREE = '13450812d279d55f36a172fcf38653ff567f6c86'
+NATIVE_WORKSPACE = Path('/workspace/p06-qualified-warm-run-01')
+NATIVE = Path('/workspace/scratch/dc8be1693f91/native-qualified-warm-attempt-01/supervision.json')
+RESOURCE_REVIEW = Path('/workspace/scratch/dc8be1693f91/AI-GPU/docs/project/evidence/p06-qualified-warm/validation/w06_a02-supervisor-resource-review.json')
+RESOURCE_REVIEW_SHA256 = '4803a73034fa4014a22dca1785d1e4d6528e328ede6052914c9c1060e693105b'
+WORKER = Path(__file__).resolve().with_name('run_partition.py.txt')
+EXPECTED_IDS = 4527
+EXPECTED_IDS_SHA256 = '5fd7fbf2f57425467c8124307dbe6ad951e48fe2526a531c87023b58626761fc'
+PARTITIONS = 2
+WHOLE_SECONDS = 90 * 60
+SUITE_SECONDS = 60 * 60
+LOG_BUDGET_BYTES = 64 * 1024**2
+
+def now():
+    return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+
+def require(condition, message):
+    if not condition:
+        raise RuntimeError(message)
+
+def sha(path):
+    with Path(path).open('rb') as stream:
+        return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+def canonical(path, existing=True):
+    require(path.is_absolute(), 'absolute path required: ' + str(path))
+    require(all(not item.is_symlink() for item in (path, *path.parents)),
+            'symlink path rejected: ' + str(path))
+    require(path.resolve(strict=existing) == path, 'noncanonical path: ' + str(path))
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=SOURCE, text=True,
+                                   timeout=60).strip()
+
+def snapshot():
+    entries = subprocess.check_output(['git', 'ls-files', '--stage', '-z'],
+                                     cwd=SOURCE, timeout=60).split(b'\0')
+    rows = []
+    for entry in entries:
+        if not entry:
+            continue
+        metadata, raw_name = entry.split(b'\t', 1)
+        mode, oid, stage = metadata.decode('ascii').split()
+        name = raw_name.decode('utf-8')
+        require(stage == '0', 'unmerged index entry: ' + name)
+        path = SOURCE / name
+        row = {'path': name, 'mode': mode, 'git_oid': oid}
+        if mode == '160000':
+            row['kind'] = 'gitlink-not-recursively-certified'
+        elif mode == '120000':
+            require(path.is_symlink(), 'tracked symlink is missing: ' + name)
+            body = os.fsencode(os.readlink(path))
+            row.update(kind='symlink-text', size_bytes=len(body),
+                       sha256=hashlib.sha256(body).hexdigest())
+        else:
+            require(path.is_file() and not path.is_symlink(),
+                    'missing or nonregular tracked source: ' + name)
+            row.update(kind='regular-file', size_bytes=path.stat().st_size,
+                       sha256=sha(path))
+        rows.append(row)
+    return rows
+
+def write_new(path, value):
+    with path.open('x', encoding='utf-8') as stream:
+        json.dump(value, stream, indent=2, sort_keys=True)
+        stream.write('\n')
+
+def live_group(pid):
+    members = []
+    for path in Path('/proc').iterdir():
+        if not path.name.isdigit():
+            continue
+        try:
+            fields = (path / 'stat').read_text().rsplit(') ', 1)[1].split()
+            if int(fields[2]) == pid and fields[0] not in ('Z', 'X'):
+                members.append(int(path.name))
+        except (FileNotFoundError, ProcessLookupError):
+            continue
+    return members
+
+def stop_group(process):
+    for number in (signal.SIGTERM, signal.SIGKILL):
+        try:
+            os.killpg(process.pid, number)
+        except ProcessLookupError:
+            pass
+        try:
+            process.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            pass
+        if not live_group(process.pid):
+            return True
+    return not live_group(process.pid)
+
+def pinned_json(path, pin, label):
+    canonical(path)
+    require(type(pin) is str and len(pin) == 64
+            and all(c in '0123456789abcdef' for c in pin),
+            'exact ' + label + ' SHA-256 required')
+    body = path.read_bytes()
+    require(hashlib.sha256(body).hexdigest() == pin, label + ' pin mismatch')
+    value = json.loads(body)
+    require(sha(path) == pin, label + ' changed during scheduling check')
+    require(type(value) is dict, label + ' must be an object')
+    return value
+
+def native_absence():
+    for path in (NATIVE_WORKSPACE, NATIVE):
+        canonical(path, existing=False)
+        require(not os.path.lexists(path), 'native attempt has started: ' + str(path))
+
+
+def identity(path):
+    path = Path(path)
+    return {'path': str(path), 'resolved': str(path.resolve(strict=True)),
+            'size_bytes': path.stat().st_size, 'sha256': sha(path)}
+
+
+def tool_inputs():
+    return [identity(HOST / name) for name in ('bin/python3', 'bin/cmake', 'pyvenv.cfg')]
+
+
+def scheduling_receipt(pin, review_path):
+    native_absence()
+    resource = pinned_json(RESOURCE_REVIEW, RESOURCE_REVIEW_SHA256, 'resource review')
+    require(resource.get('execution_ready') is False
+            and resource.get('native_execution') == 'not_run'
+            and resource.get('resource_outcome') == 'blocked_pending_resource_resolution',
+            'native resource-block review differs')
+    review = pinned_json(review_path, pin, 'coordinator scheduling review')
+    expected = {'schema_version': 1, 'scope': 'governance-before-native-scheduling',
+        'decision': 'run_exhaustive_partitioned_governance_before_native',
+        'source': str(SOURCE), 'source_revision': REVISION, 'source_tree': TREE,
+        'native_workspace': str(NATIVE_WORKSPACE), 'native_execution': 'not_run',
+        'native_workspace_absent': True, 'no_native_attempt_started': True,
+        'native_launch_disabled_until_governance_finishes': True,
+        'native_resource_guards_unchanged': True,
+        'resource_review_sha256': RESOURCE_REVIEW_SHA256,
+        'governance_supervisor_sha256': sha(__file__),
+        'partition_program_sha256': sha(WORKER), 'partition_count': PARTITIONS,
+        'expected_unique_test_ids': EXPECTED_IDS,
+        'host_environment': str(HOST)}
+    require(all(type(review.get(k)) is type(v) and review[k] == v for k,v in expected.items()),
+            'coordinator must select exact exhaustive governance-only run')
+    require(type(review.get('reason')) is str and bool(review['reason'].strip()),
+            'coordinator reason is required')
+    return {'decision': review['decision'], 'reviewed_at': now(),
+        'coordinator_scheduling_review': str(review_path),
+        'coordinator_scheduling_review_sha256': pin,
+        'resource_review_sha256': RESOURCE_REVIEW_SHA256,
+        'native_execution': 'not_run', 'native_resource_guards_unchanged': True}
+
+
+def flatten(suite):
+    for case in suite:
+        if isinstance(case, unittest.TestSuite):
+            yield from flatten(case)
+        else:
+            yield case
+
+
+def partition_manifest(cases):
+    all_ids = [case.id() for case in cases]
+    require(len(all_ids) == len(set(all_ids)) == EXPECTED_IDS, 'discovered population differs')
+    require(hashlib.sha256(json.dumps(all_ids, separators=(',', ':')).encode()).hexdigest()
+            == EXPECTED_IDS_SHA256, 'discovered IDs differ from independent inventory')
+    counts = collections.Counter(case.__class__.__module__ for case in cases)
+    groups, weights = [[], []], [0, 0]
+    for module, count in sorted(counts.items(), key=lambda item: (-item[1], item[0])):
+        index = min(range(PARTITIONS), key=lambda number: (weights[number], number))
+        groups[index].append(module)
+        weights[index] += count
+    parts = [{'index': index, 'modules': sorted(group),
+        'ids': [case.id() for case in cases if case.__class__.__module__ in group]}
+        for index,group in enumerate(groups)]
+    require(collections.Counter(x for part in parts for x in part['ids'])
+            == collections.Counter(all_ids), 'partition population is not exactly once')
+    require(not set(groups[0]) & set(groups[1]), 'module split between partitions')
+    return {'schema_version': 1, 'source': str(SOURCE), 'source_revision': REVISION,
+        'source_tree': TREE, 'interpreter': PYTHON, 'expected_ids_sha256': EXPECTED_IDS_SHA256,
+        'all_ids': all_ids, 'partitions': parts}
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--scheduling-review', type=Path, required=True)
+    parser.add_argument('--scheduling-review-sha256', required=True)
+    args = parser.parse_args(argv)
+    require(sys.version_info[:2] == (3, 12) and sys.executable == PYTHON,
+            'selected proper Python 3.12 venv must execute supervisor')
+    for path in (SOURCE, HOST, WORKER):
+        canonical(path)
+    for path in (OUTPUT, TEMP):
+        canonical(path, existing=False)
+        require(not os.path.lexists(path), 'fresh path required: '+str(path))
+    require(Path.cwd() == SOURCE, 'source-root invocation required')
+    handoff = scheduling_receipt(args.scheduling_review_sha256, args.scheduling_review)
+    require(git('rev-parse','HEAD') == REVISION and git('rev-parse','HEAD^{tree}') == TREE,
+            'source revision/tree differs')
+    require(not git('status','--porcelain=v1','--untracked-files=all'), 'source is dirty')
+    tools_before = tool_inputs()
+    expected_tools = ('fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7',
+        'a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83',
+        'a1ba51de813cd6f482a20b6ea9421f9da1457f5ee1d732480f08a2fef519403b')
+    require(tuple(row['sha256'] for row in tools_before) == expected_tools,
+            'reviewed Python, CMake or venv configuration differs')
+    OUTPUT.mkdir(mode=0o700)
+    TEMP.mkdir(mode=0o700)
+    start = time.monotonic()
+    record = {'schema_version': 1, 'scope': 'source-root-governance-and-tooling-only',
+        'state': 'running', 'outcome': 'running', 'started_at': now(),
+        'source': str(SOURCE), 'source_revision': REVISION, 'source_tree': TREE,
+        'interpreter': PYTHON, 'python_version': sys.version,
+        'native_execution': 'not_run', 'gpu_execution_certified': False,
+        'supervisor_sha256': sha(__file__), 'partition_program_sha256': sha(WORKER),
+        'scheduling_review': handoff, 'tool_inputs_before': tools_before,
+        'submodules_before': git('submodule','status','--recursive'),
+        'limits': {'whole_seconds': WHOLE_SECONDS, 'per_worker_seconds': SUITE_SECONDS,
+                   'per_log_bytes': LOG_BUDGET_BYTES},
+        'limitations': ['Whole-module partitioning changes cross-module order/process state from one monolithic invocation.',
+            'Discovery alone is not execution; every selected ID must start and complete once with zero skips.',
+            'Process groups cannot contain deliberately detached descendants; deadlines/log sizes are polled.',
+            'Cleanup and final source inventories may finish after a command deadline.',
+            'This gate adds no native RAM/disk waiver and does not establish native, hardware or phase acceptance.'],
+        'commands': [], 'partitions': [], 'failures': []}
+    target = OUTPUT / 'execution.json'
+    write_new(target, record)
+    def save():
+        temporary = OUTPUT / 'execution.next.json'
+        write_new(temporary, record)
+        temporary.replace(target)
+    environment = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', TMPDIR=str(TEMP),
+        PATH=str(HOST/'bin')+os.pathsep+os.environ.get('PATH',''))
+    record['environment_overrides'] = {k:environment[k] for k in ('PYTHONDONTWRITEBYTECODE','TMPDIR','PATH')}
+    processes, streams = [], []
+    before, manifest, manifest_sha = None, None, None
+    old_handlers = {}
+    def interrupted(number, frame):
+        raise KeyboardInterrupt('received signal '+str(number))
+    for number in (signal.SIGINT,signal.SIGTERM):
+        old_handlers[number] = signal.signal(number,interrupted)
+    def guard():
+        native_absence()
+        if os.path.lexists(OUTPUT/'stop-request.json'):
+            raise InterruptedError('coordinator stop-request.json observed')
+        require(time.monotonic()-start < WHOLE_SECONDS, 'whole supervision deadline reached')
+    def run_short(name, arguments, maximum):
+        guard()
+        row = {'id': name, 'argv': arguments, 'cwd': str(SOURCE), 'state':'running',
+            'started_at': now(), 'log':name+'.log', 'process_started':False}
+        record['commands'].append(row);save()
+        process, reason, cleanup = None, None, True
+        command_start = time.monotonic()
+        try:
+            with (OUTPUT/row['log']).open('xb') as stream:
+                process = subprocess.Popen(arguments,cwd=SOURCE,env=environment,
+                    stdin=subprocess.DEVNULL,stdout=stream,stderr=subprocess.STDOUT,
+                    start_new_session=True,close_fds=True)
+                row['process_started']=True;row['pid']=process.pid;save()
+                while process.poll() is None:
+                    guard()
+                    require(time.monotonic()-command_start < maximum, name+' timeout')
+                    require(os.fstat(stream.fileno()).st_size <= LOG_BUDGET_BYTES, name+' log budget')
+                    time.sleep(0.2)
+                require(not live_group(process.pid), name+' surviving descendants')
+                require(os.fstat(stream.fileno()).st_size <= LOG_BUDGET_BYTES, name+' log budget')
+                require(process.returncode == 0, name+' nonzero exit')
+        except BaseException as error:
+            reason=type(error).__name__+': '+str(error)
+            if process is not None:cleanup=stop_group(process)
+            raise
+        finally:
+            row.update(state='finished',finished_at=now(),duration_seconds=time.monotonic()-command_start,
+                exit_code=None if process is None else process.returncode,reason=reason,cleanup_complete=cleanup)
+            if (OUTPUT/row['log']).exists():
+                row.update(log_sha256=sha(OUTPUT/row['log']),log_size_bytes=(OUTPUT/row['log']).stat().st_size)
+            row['outcome']='pass' if row['exit_code']==0 and reason is None and cleanup and row['process_started'] else 'fail'
+            save()
+    try:
+        before=snapshot();write_new(OUTPUT/'source-before.json',before)
+        record['source_before_sha256']=sha(OUTPUT/'source-before.json');save()
+        for name,args_list,bound in (
+            ('preflight',[PYTHON,'-B','ci/project/preflight.py','--tier','governance','--json'],120),
+            ('structure',[PYTHON,'-B','ci/project/check_project.py'],300),
+            ('baseline-packets',[PYTHON,'-B','ci/project/check_baseline_packets.py'],300)):
+            run_short(name,args_list,bound)
+        guard()
+        loader=unittest.TestLoader()
+        cases=list(flatten(loader.discover('ci/project',pattern='test_*.py')))
+        require(not loader.errors,'discovery import errors: '+repr(loader.errors))
+        manifest=partition_manifest(cases)
+        manifest_body=(json.dumps(manifest,indent=2,sort_keys=True)+'\n').encode()
+        with (OUTPUT/'partition-manifest.json').open('xb') as stream:stream.write(manifest_body)
+        manifest_sha=hashlib.sha256(manifest_body).hexdigest()
+        record.update(discovered_count=len(manifest['all_ids']),discovery_import_errors=loader.errors,
+            manifest_sha256=manifest_sha,partition_counts=[len(part['ids']) for part in manifest['partitions']])
+        save()
+        del cases,loader
+        for index in range(PARTITIONS):
+            guard()
+            temporary=TEMP/('partition-'+str(index));temporary.mkdir(mode=0o700)
+            env=dict(environment,TMPDIR=str(temporary))
+            arguments=[PYTHON,'-B',str(WORKER),'--manifest',str(OUTPUT/'partition-manifest.json'),
+                       '--manifest-sha256',manifest_sha,'--partition',str(index)]
+            row={'index':index,'argv':arguments,'cwd':str(SOURCE),'state':'running','started_at':now(),
+                'log':'partition-'+str(index)+'.log','tmpdir':str(temporary),'process_started':False}
+            record['partitions'].append(row);save()
+            stream=(OUTPUT/row['log']).open('xb');streams.append(stream)
+            process=subprocess.Popen(arguments,cwd=SOURCE,env=env,stdin=subprocess.DEVNULL,
+                stdout=stream,stderr=subprocess.STDOUT,start_new_session=True,close_fds=True)
+            processes.append((process,time.monotonic(),row,stream))
+            row.update(pid=process.pid,process_started=True);save()
+        while any(process.poll() is None for process,_,_,_ in processes):
+            guard()
+            for process,worker_start,row,stream in processes:
+                require(os.fstat(stream.fileno()).st_size <= LOG_BUDGET_BYTES,'partition log budget')
+                if process.poll() is None:
+                    require(time.monotonic()-worker_start < SUITE_SECONDS,'partition timeout')
+                elif 'exit_code' not in row:
+                    require(not live_group(process.pid),'partition surviving descendants')
+                    row.update(state='finished',exit_code=process.returncode,finished_at=now(),cleanup_complete=True)
+                    save()
+                    require(process.returncode == 0,'partition nonzero exit')
+            time.sleep(0.2)
+        guard()
+        for process,_,row,stream in processes:
+            require(not live_group(process.pid),'partition surviving descendants')
+            require(os.fstat(stream.fileno()).st_size <= LOG_BUDGET_BYTES,'partition log budget')
+            row.update(state='finished',exit_code=process.returncode,
+                finished_at=row.get('finished_at',now()),cleanup_complete=True)
+            require(process.returncode == 0,'partition nonzero exit')
+        actual_ids=[]
+        for row in record['partitions']:
+            selected=manifest['partitions'][row['index']]['ids']
+            result_path=OUTPUT/('partition-'+str(row['index'])+'-result.json')
+            require(result_path.is_file() and not result_path.is_symlink(),'partition result missing')
+            result_body=result_path.read_bytes();result=json.loads(result_body)
+            require(sha(result_path)==hashlib.sha256(result_body).hexdigest(),'partition result changed')
+            require(result.get('state')=='finished' and result.get('outcome')=='pass', 'partition did not pass')
+            for key,value in {'source_revision':REVISION,'source_tree':TREE,'partition':row['index'],
+                'manifest_sha256':manifest_sha,'program_sha256':record['partition_program_sha256'],
+                'interpreter':PYTHON,'tests_run':len(selected)}.items():
+                require(type(result.get(key)) is type(value) and result[key]==value,'partition result '+key+' differs')
+            require(result['selected_ids']==result['started_ids']==result['completed_ids']==selected,
+                    'partition selected/started/completed IDs differ')
+            require(all(type(result.get(key)) is list and not result[key] for key in
+                ('failures','errors','skipped','expected_failures','unexpected_successes')),
+                'partition has failures/errors/skips/expected failures')
+            log=(OUTPUT/row['log']).read_text(encoding='utf-8')
+            verbose=re.findall(r'^test_\S+ \((test_[\w.]+)\)(?: \.\.\.|$)',log,re.M)
+            require(verbose==selected,'partition verbose log IDs differ')
+            require(len(re.findall(r'^Ran '+str(len(selected))+r' tests in [0-9.]+s$',log,re.M))==1
+                    and len(re.findall(r'^OK$',log,re.M))==1,'partition unittest summary differs')
+            actual_ids.extend(result['completed_ids'])
+            row.update(outcome='pass',tests_run=result['tests_run'],duration_seconds=result['duration_seconds'],
+                result_sha256=hashlib.sha256(result_body).hexdigest(),verbose_log_matches_ids=True,
+                started_equals_completed_equals_selected=True,log_sha256=sha(OUTPUT/row['log']),
+                log_size_bytes=(OUTPUT/row['log']).stat().st_size)
+        require(collections.Counter(actual_ids)==collections.Counter(manifest['all_ids']),
+                'completed population is not exact once')
+        record.update(completed_ids_count=len(actual_ids),exact_once_complete_population=True)
+        save();run_short('diff-check',['git','diff','--check'],60)
+    except BaseException as error:
+        record['failures'].append(type(error).__name__+': '+str(error))
+    finally:
+        for process,_,row,stream in processes:
+            cleanup=stop_group(process) if process.poll() is None or live_group(process.pid) else True
+            row.update(exit_code=process.poll(),cleanup_complete=cleanup,state='finished',
+                finished_at=row.get('finished_at',now()))
+            if not cleanup:record['failures'].append('partition cleanup incomplete')
+            if process.returncode!=0:record['failures'].append('partition '+str(row['index'])+' nonzero exit')
+            if row.get('outcome')!='pass':row['outcome']='fail'
+            if (OUTPUT/row['log']).exists():
+                row.update(log_sha256=sha(OUTPUT/row['log']),log_size_bytes=(OUTPUT/row['log']).stat().st_size)
+        for stream in streams:stream.close()
+        try:
+            after=snapshot();write_new(OUTPUT/'source-after.json',after)
+            record.update(source_after_sha256=sha(OUTPUT/'source-after.json'),source_files_stable=before==after,
+                source_revision_after=git('rev-parse','HEAD'),source_tree_after=git('rev-parse','HEAD^{tree}'),
+                status_after=git('status','--porcelain=v1','--untracked-files=all'),
+                submodules_after=git('submodule','status','--recursive'),tool_inputs_after=tool_inputs())
+            record['tools_stable']=record['tool_inputs_after']==tools_before
+            require(record['source_files_stable'] and record['source_revision_after']==REVISION
+                    and record['source_tree_after']==TREE and not record['status_after']
+                    and record['submodules_after']==record['submodules_before'] and record['tools_stable'],
+                    'source, index, submodules or tools changed')
+            require(sha(__file__)==record['supervisor_sha256'] and sha(WORKER)==record['partition_program_sha256'],
+                    'supervision programs changed')
+            scheduling_receipt(args.scheduling_review_sha256,args.scheduling_review)
+            guard();record['native_workspace_absent_after']=True
+        except BaseException as error:record['failures'].append('final checks: '+str(error))
+        required_commands={'preflight','structure','baseline-packets','diff-check'}
+        record['not_run']=sorted(required_commands-{row['id'] for row in record['commands']})
+        passed=(not record['failures'] and not record['not_run']
+            and len(record['partitions'])==PARTITIONS
+            and all(row.get('outcome')=='pass' for row in record['commands']+record['partitions'])
+            and record.get('exact_once_complete_population') is True
+            and record.get('native_workspace_absent_after') is True)
+        record.update(state='finished',outcome='pass' if passed else 'fail',finished_at=now(),
+                      duration_seconds=time.monotonic()-start)
+        save()
+        for number,handler in old_handlers.items():signal.signal(number,handler)
+        print(json.dumps({'outcome':record['outcome'],'execution':str(target),
+            'completed_ids_count':record.get('completed_ids_count'),
+            'exact_once_complete_population':record.get('exact_once_complete_population',False)}),flush=True)
+    return 0 if record['outcome']=='pass' else 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

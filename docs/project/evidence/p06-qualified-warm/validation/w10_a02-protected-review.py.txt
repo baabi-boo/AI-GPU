@@ -1,0 +1,75 @@
+# SPDX-License-Identifier: Apache-2.0
+"""Independent streamed-byte final protected-source review; no tests or mutations."""
+import datetime, hashlib, json, os, stat, subprocess, time
+from pathlib import Path
+R=Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+BASE='f80b58b06e7bcf734f3190f6db478fd11f0bab01'
+PUB='c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+OUT=R/'docs/project/evidence/p06-qualified-warm/validation/w10_a02-protected-review.json'
+def git(*a): return subprocess.check_output(['git',*a],cwd=R)
+def tree(rev):
+    result={}
+    for raw in git('ls-tree','-rz',rev).split(b'\0'):
+        if raw:
+            meta,name=raw.split(b'\t',1); mode,kind,oid=meta.decode().split()
+            result[name.decode()]={'mode':mode,'kind':kind,'oid':oid}
+    return result
+start=time.monotonic(); now=datetime.datetime.now(datetime.timezone.utc).isoformat()
+base,pub=tree(BASE),tree(PUB); observed={}; failures=[]
+for name,entry in pub.items():
+    if entry['kind']=='commit':
+        index=git('ls-files','--stage','--',name).decode().split()
+        observed[name]={'oid':index[1],'mode':index[0]}; continue
+    path=R/name; st=path.lstat()
+    size=len(os.readlink(path).encode()) if stat.S_ISLNK(st.st_mode) else st.st_size
+    sha1=hashlib.sha1(b'blob '+str(size).encode()+b'\0'); sha256=hashlib.sha256()
+    if stat.S_ISLNK(st.st_mode):
+        body=os.readlink(path).encode(); sha1.update(body); sha256.update(body)
+    else:
+        with path.open('rb') as f:
+            while chunk:=f.read(1024*1024): sha1.update(chunk); sha256.update(chunk)
+    after=path.lstat()
+    if (st.st_ino,st.st_size,st.st_mtime_ns)!=(after.st_ino,after.st_size,after.st_mtime_ns): failures.append('changed-during-read:'+name)
+    mode='120000' if stat.S_ISLNK(st.st_mode) else ('100755' if st.st_mode&stat.S_IXUSR else '100644')
+    observed[name]={'oid':sha1.hexdigest(),'sha256':sha256.hexdigest(),'size_bytes':size,'mode':mode}
+def changed(ref,predicate): return [p for p,v in ref.items() if predicate(p) and (observed[p]['oid']!=v['oid'] or observed[p]['mode']!=v['mode'])]
+def group(name,predicate,ref=base):
+    rows=[p for p in ref if predicate(p)]
+    return {'name':name,'files':len(rows),'bytes':sum(observed[p].get('size_bytes',0) for p in rows),'changed':changed(ref,predicate)}
+groups=[
+ group('RTL',lambda p:p.startswith('hw/rtl/')),
+ group('simulator and model',lambda p:p.startswith('sim/')),
+ group('runtime and shared ABI',lambda p:p.startswith('sw/')),
+ group('golden baselines',lambda p:p.startswith('ci/baselines/')),
+ group('original evidence including accepted phase JSON and archives',lambda p:p.startswith('docs/project/evidence/')),
+ group('frozen warm manifest and original proof',lambda p:p in ['ci/project/p06_warm_contract.json','ci/project/p06_counter_qualification_proof.json']),
+ group('roadmap acceptance SVG and README embedding',lambda p:p in ['docs/project/roadmap.json','docs/project/acceptance.md','ROADMAP.md','README.md','docs/assets/img/vortex_framework_stack.svg']),
+ group('historical design contracts',lambda p:p.startswith('docs/designs/')),
+ group('production tests proofs workflows and design contracts at published revision',lambda p:not p.startswith('docs/project/'),pub),
+]
+for g in groups:
+    if g['changed']: failures.append(g['name'])
+tracked_changes=changed(pub,lambda p:True)
+unexpected=[p for p in tracked_changes if not (p.startswith('docs/project/') and p.endswith('.md'))]
+if unexpected: failures.append('unexpected tracked changes')
+untracked=git('ls-files','--others','--exclude-standard','-z').decode().split('\0')
+unexpected_untracked=[p for p in untracked if p and not p.startswith('docs/project/evidence/p06-qualified-warm/') and p!='docs/project/p06-qualified-warm-handoff.md']
+if unexpected_untracked: failures.append('unexpected untracked files')
+old=json.loads((R/'ci/project/p06_counter_qualification_proof.json').read_text()); new=json.loads((R/'ci/project/p06_qualified_warm_proof.json').read_text())
+a={x['path']:x for x in old['measurement_sources']}; b={x['path']:x for x in new['measurement_sources']}
+projection_changes=[p for p in a if a[p]!=b.get(p)]
+projection_mismatch=[p for p,v in b.items() if v!={'path':p,'sha256':observed[p]['sha256'],'size_bytes':observed[p]['size_bytes']}]
+caller='tests/regression/ai_counter_preflight/main.cpp'; fixture='ci/project/fixtures/p06_counter_preflight_main_v1.cpp'
+projection_pass=len(a)==len(b)==69 and set(a)==set(b) and projection_changes==[caller] and not projection_mismatch and new['source_changes']==[{'before':a[caller],'after':b[caller]}]
+fixture_pass=observed[fixture]['oid']==base[caller]['oid'] and observed[fixture]['sha256']==a[caller]['sha256'] and observed[fixture]['size_bytes']==a[caller]['size_bytes']
+if not projection_pass: failures.append('projection')
+if not fixture_pass: failures.append('historical fixture')
+wf='.github/workflows/project-governance.yml'; before=git('show',BASE+':'+wf); after=(R/wf).read_bytes(); addition=b"      - 'docs/designs/qualified_warm_workspace_v1.md'\n"
+workflow_pass=after.count(addition)==2 and addition not in before and after.replace(addition,b'')==before
+if not workflow_pass: failures.append('workflow beyond path additions')
+embedding=b'<img src="docs/assets/img/vortex_framework_stack.svg" alt="Vortex framework stack" width="100%">' in (R/'README.md').read_bytes()
+if not embedding: failures.append('README embedding')
+roadmap=json.loads((R/'docs/project/roadmap.json').read_text())
+docs=['docs/project/status.md','docs/project/backlog.md','docs/project/phases/p06-performance.md','docs/project/p06-workspace-handoff.md','docs/project/p06-counter-qualification-handoff.md','docs/project/p06-qualified-warm-handoff.md','docs/project/p06-qualified-warm-audit.md','docs/project/evidence/p06-qualified-warm/README.md','docs/project/evidence/p06-qualified-warm/runbook.md']
+record={'schema_version':1,'observed_at_utc':now,'duration_seconds':time.monotonic()-start,'outcome':'pass' if not failures else 'fail','failures':failures,'base_revision':BASE,'published_revision':PUB,'published_tree':git('rev-parse',PUB+'^{tree}').decode().strip(),'observed_head':git('rev-parse','HEAD').decode().strip(),'stream_chunk_bytes':1048576,'published_tracked_blobs_checked':sum(v['kind']=='blob' for v in pub.values()),'bytes_streamed':sum(v.get('size_bytes',0) for v in observed.values()),'protected_groups':groups,'changed_tracked_since_published':tracked_changes,'unexpected_tracked_changes':unexpected,'unexpected_untracked':unexpected_untracked,'gitlink_identities_unchanged':all(observed[p]['oid']==v['oid'] for p,v in pub.items() if v['kind']=='commit'),'projection':{'pass':projection_pass,'sources':len(b),'changed_sources':projection_changes,'mismatches':projection_mismatch,'historical_fixture_exact_base_blob':fixture_pass,'old_caller':a[caller],'new_caller':b[caller]},'workflow_only_two_design_path_insertions_from_base':workflow_pass,'README_SVG_embedding_present':embedding,'selected_pins':{p:{k:v for k,v in observed[p].items() if k!='mode'} for p in ['ci/project/p06_warm_contract.json','ci/project/p06_counter_qualification_proof.json','ci/project/p06_qualified_warm_proof.json','docs/project/roadmap.json','docs/assets/img/vortex_framework_stack.svg']},'documentation_scope':{'paths':docs,'sha256':{p:hashlib.sha256((R/p).read_bytes()).hexdigest() for p in docs},'review':'Current handoffs and phase/status wording keep route implementation separate from native execution and acceptance; historical checkpoint documents remain explicitly scoped. No gate or acceptance change is present.','P01':'blocked','P05':'in_progress','P06':'in_progress','P06_A02_A03':'open'},'execution_status_limit':'Coordinator reports proper-venv two-partition 4527-case governance RUNNING; native 24-process attempt UNSTARTED for capacity. This review neither polls nor completes either run.','findings':'No implementation F2 from protected-source/document-scope review; execution-capacity F2 remains OPEN.','limitations':['Snapshot of shared working tree; root must stage and run final base classifier separately.','No production/test edits, builds, tests, commits, pushes, or tested-checkout changes.','Gitlink index identity only; no recursive working-tree checkout claim.']}
+OUT.write_text(json.dumps(record,indent=2)+'\n'); print(json.dumps({k:record[k] for k in ['outcome','failures','published_tracked_blobs_checked','bytes_streamed','changed_tracked_since_published','projection','workflow_only_two_design_path_insertions_from_base']},indent=2))

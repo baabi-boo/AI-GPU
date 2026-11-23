@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+"""Independent synthetic semantic-repair probes; no execution evidence."""
+import gc
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import sys
+import time
+from unittest import mock
+
+ROOT = Path.cwd()
+sys.path.insert(0, str(ROOT / 'ci/project'))
+import p06_qualified_warm_replay as replay
+from p06_qualified_warm_test_fixture import SyntheticQualifiedWarmPacket
+from test_p06_dependency_native_replay import MemoryView
+
+FILES = ('ci/project/p06_dependency_native_replay.py',
+         'ci/project/p06_managed_preflight_replay.py',
+         'ci/project/p06_qualified_warm_replay.py',
+         'ci/project/p06_qualified_warm_test_fixture.py',
+         'ci/project/test_p06_qualified_warm_complete_replay.py')
+def hashes():
+    return {n: hashlib.sha256((ROOT/n).read_bytes()).hexdigest() for n in FILES}
+def selected(packet, fmt='fp16', pair=3, policy='per_operation'):
+    return next(row for row in packet.report['processes']
+                if row['format']==fmt and row['pair_index']==pair and row['policy']==policy)
+def command(packet, row):
+    return next(c for c in packet.report['commands'] if c['id']==row['command_id'])
+def argv_pair(packet):
+    row=selected(packet)
+    argv=command(packet,row)['argv']
+    argv[argv.index('--pair-index')+1]='2'
+    return {'mutation':'FP16 measured pair3 command invokes pair2; process plan, prelaunch binding and raw records still identify pair3', 'process':row['id']}
+def command_order(packet):
+    first=selected(packet,fmt='bf16',pair=4)
+    second=selected(packet,fmt='bf16',pair=4,policy='reusable_single_tile')
+    rows=packet.report['commands']
+    a=next(i for i,c in enumerate(rows) if c['id']==first['id'])
+    b=next(i for i,c in enumerate(rows) if c['id']==second['id'])
+    rows[a],rows[b]=rows[b],rows[a]
+    return {'mutation':'Reverse the two BF16 measured pair4 native command receipts while keeping exact process-plan order and all raw evidence', 'processes':[first['id'],second['id']]}
+def duration(packet):
+    row=selected(packet,fmt='bf16',pair=5,policy='reusable_single_tile')
+    c=command(packet,row)
+    c['duration_seconds']=0.0
+    row['process_duration_seconds']=0.0
+    return {'mutation':'Set final measured candidate supervisor duration to zero in both command and process summaries while retaining positive timed intervals', 'process':row['id']}
+def late_chronology(packet):
+    packet.report['stability_checks'][-1]['at']='2000'+packet.report['stability_checks'][-1]['at'][4:]
+    return {'mutation':'Move only final stability observation before the complete attempt while preserving every source/proof/dependency digest', 'label':packet.report['stability_checks'][-1]['label'], 'attempt_started_at':packet.report['started_at']}
+
+original_run=replay._QualifiedWarmReplay.run
+result={'scope':'independent synthetic public-view semantic-repair probes',
+        'native_execution':'not_run','actual_original_archives_replayed':False,
+        'mocked_boundaries':['complete dependency packet reader', 'original diagnostic prerequisite reader', 'original control prerequisite reader'],
+        'real_checks':'public verify_view; external-pin validation; trusted helper stability; complete native source/build/model/load/binding/raw/lifetime/chronology/inventory checks up to rejection',
+        'source_before':hashes(),'cases':[]}
+started=time.monotonic()
+for label,mutate in [('late_stability_chronology_corrected_utc_format',late_chronology)]:
+    packet=SyntheticQualifiedWarmPacket()
+    row={'case':label,**mutate(packet)}
+    packet.finish() # Repairs report bytes and all report/inventory digests selected by arguments.
+    args=packet.arguments()
+    row['repaired_native_report_sha256']=args['expected_native_report_sha256']
+    observed={}
+    def tracked_run(self):
+        try:
+            return original_run(self)
+        finally:
+            observed['fully_validated_processes_before_rejection']=len(self.process_results)
+            observed['commands_reached']=self.command_index
+    t=time.monotonic()
+    with mock.patch.object(replay.prerequisites,'verify_prerequisites',return_value=packet.diagnostics) as diagnostic, \
+         mock.patch.object(replay.prerequisites,'verify_control_prerequisite',return_value=packet.controls) as control, \
+         mock.patch.object(replay.native.dependency_replay,'verify_view',return_value={'retained_dependency_verification':packet.dependency_verification}) as dependency, \
+         mock.patch.object(replay._QualifiedWarmReplay,'run',tracked_run), \
+         mock.patch.object(replay.analysis,'analyze_population',wraps=replay.analysis.analyze_population) as analysis, \
+         mock.patch('subprocess.Popen',side_effect=AssertionError('No retained execution permitted')):
+        try:
+            replay.verify_view(MemoryView(packet.files,packet.api),
+                               MemoryView({'report.json':packet.dependency_body},packet.api),packet.api,**args)
+        except ValueError as error:
+            row.update(outcome='rejected',error_type=type(error).__name__,reason=str(error))
+        else:
+            row.update(outcome='UNEXPECTED_ACCEPTANCE')
+        row.update(observed, analysis_calls=analysis.call_count,
+                   dependency_calls=dependency.call_count,diagnostic_calls=diagnostic.call_count,control_calls=control.call_count)
+    row['duration_seconds']=time.monotonic()-t
+    result['cases'].append(row)
+    del packet
+    gc.collect()
+result.update(source_after=hashes(),duration_seconds=time.monotonic()-started)
+result['source_stable']=result['source_before']==result['source_after']
+result['outcome']='pass' if result['source_stable'] and all(row['outcome']=='rejected' and row['analysis_calls']==0 for row in result['cases']) else 'fail'
+target=Path(sys.argv[1])
+with target.open('x',encoding='utf-8') as stream:
+    json.dump(result,stream,indent=2,sort_keys=True);stream.write('\n')
+print(json.dumps(result,indent=2,sort_keys=True))
+sys.exit(0 if result['outcome']=='pass' else 1)

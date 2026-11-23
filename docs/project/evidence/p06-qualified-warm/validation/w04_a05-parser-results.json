@@ -1,0 +1,178 @@
+{
+  "accepted_controls": 7,
+  "duration_seconds": 0.20776018800097518,
+  "limitations": [
+    "These probes supplement existing unit tests; they add no unique governance test IDs.",
+    "No full native packet, source/build proof, native process or performance result is established.",
+    "Inertness guards cover attempted entrypoints during two tiny archive rejections, not every possible interpreter effect."
+  ],
+  "native_execution": "not_run",
+  "probe_count": 19,
+  "probes": [
+    {
+      "detail": "duplicate qualified warm report field",
+      "duration_seconds": 3.572899731807411e-05,
+      "expected": "rejected",
+      "name": "escaped-duplicate-field",
+      "observed": "rejected"
+    },
+    {
+      "detail": "duplicate qualified warm report field",
+      "duration_seconds": 1.600600080564618e-05,
+      "expected": "rejected",
+      "name": "escaped-duplicate-nested-field",
+      "observed": "rejected"
+    },
+    {
+      "detail": "invalid bounded qualified warm report",
+      "duration_seconds": 9.691000741440803e-06,
+      "expected": "rejected",
+      "name": "overlong-utf8",
+      "observed": "rejected"
+    },
+    {
+      "detail": "invalid bounded qualified warm report",
+      "duration_seconds": 3.5630000638775527e-06,
+      "expected": "rejected",
+      "name": "utf8-encoded-surrogate",
+      "observed": "rejected"
+    },
+    {
+      "detail": {
+        "x": 1.0
+      },
+      "duration_seconds": 1.8957995052915066e-05,
+      "expected": "accepted",
+      "name": "64-character-exponent-token",
+      "observed": "accepted"
+    },
+    {
+      "detail": "oversized qualified warm report number",
+      "duration_seconds": 8.802999218460172e-06,
+      "expected": "rejected",
+      "name": "65-character-exponent-token",
+      "observed": "rejected"
+    },
+    {
+      "detail": {
+        "x": -999999999999999999999999999999999999999999999999999999999999999
+      },
+      "duration_seconds": 1.0323004971724004e-05,
+      "expected": "accepted",
+      "name": "64-character-signed-integer",
+      "observed": "accepted"
+    },
+    {
+      "detail": "oversized qualified warm report integer",
+      "duration_seconds": 6.882000889163464e-06,
+      "expected": "rejected",
+      "name": "65-character-signed-integer",
+      "observed": "rejected"
+    },
+    {
+      "detail": true,
+      "duration_seconds": 9.571400005370378e-05,
+      "expected": "accepted",
+      "name": "mixed-container-depth-64",
+      "observed": "accepted"
+    },
+    {
+      "detail": "qualified warm report exceeds its structure bound",
+      "duration_seconds": 8.291700214613229e-05,
+      "expected": "rejected",
+      "name": "mixed-container-depth-65",
+      "observed": "rejected"
+    },
+    {
+      "detail": {
+        "boolean": "bool",
+        "float": "float",
+        "integer": "int"
+      },
+      "duration_seconds": 4.106004780624062e-06,
+      "expected": "accepted",
+      "name": "decoded-types-preserved",
+      "observed": "accepted"
+    },
+    {
+      "detail": "typed-report.count: value type differs",
+      "duration_seconds": 5.355002940632403e-06,
+      "expected": "rejected",
+      "name": "boolean-as-count",
+      "observed": "rejected"
+    },
+    {
+      "detail": "typed-report.qualified: value type differs",
+      "duration_seconds": 3.1750023481436074e-06,
+      "expected": "rejected",
+      "name": "integer-as-qualification",
+      "observed": "rejected"
+    },
+    {
+      "detail": "typed-report.schema_version: value type differs",
+      "duration_seconds": 2.6519992388784885e-06,
+      "expected": "rejected",
+      "name": "float-as-schema-version",
+      "observed": "rejected"
+    },
+    {
+      "detail": {
+        "delegated": "./report.json"
+      },
+      "duration_seconds": 4.472100408747792e-05,
+      "expected": "accepted",
+      "name": "noncanonical-report-name-._report.json",
+      "observed": "accepted"
+    },
+    {
+      "detail": {
+        "delegated": "nested/report.json"
+      },
+      "duration_seconds": 2.4849003239069134e-05,
+      "expected": "accepted",
+      "name": "noncanonical-report-name-nested_report.json",
+      "observed": "accepted"
+    },
+    {
+      "detail": {
+        "delegated": "REPORT.JSON"
+      },
+      "duration_seconds": 1.868400431703776e-05,
+      "expected": "accepted",
+      "name": "noncanonical-report-name-REPORT.JSON",
+      "observed": "accepted"
+    },
+    {
+      "detail": "complete local qualification archive roots: value differs",
+      "duration_seconds": 0.10456238199549261,
+      "expected": "rejected",
+      "name": "declared-reader-cannot-select-route",
+      "observed": "rejected"
+    },
+    {
+      "detail": "unsafe or noncanonical retained member name",
+      "duration_seconds": 0.10047907000262057,
+      "expected": "rejected",
+      "name": "traversal-prefix-rejected",
+      "observed": "rejected"
+    }
+  ],
+  "production_files_modified": false,
+  "rejected_cases": 12,
+  "retained_code_executed": false,
+  "reviewed_sources": [
+    {
+      "path": "ci/project/p06_qualified_warm_replay.py",
+      "sha256": "1937750bc374d6b4efc8322698f87c95ab825a0bfccff0701d714cfef9d6314f"
+    },
+    {
+      "path": "ci/project/p06_replay.py",
+      "sha256": "9a5e68de45ec923c56e39a05697d9f93b3d0fdd91c81d38d6637c12ba153d991"
+    },
+    {
+      "path": "ci/project/p06_dependency_native_replay.py",
+      "sha256": "ec4fd742820387a30989c26bfeea523ffa68e8b9dfabcc679a6928e68d8b652b"
+    }
+  ],
+  "scope": "supplemental-small-parser-and-routing-probes"
+}

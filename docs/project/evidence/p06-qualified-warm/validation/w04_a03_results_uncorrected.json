@@ -1,0 +1,95 @@
+{
+  "all_passed": true,
+  "case_count": 5,
+  "cases": [
+    {
+      "completed_processes": 12,
+      "failure_stages": [
+        "execution"
+      ],
+      "id": "midpopulation-interruption",
+      "launches": 13,
+      "native_execution_field": "run",
+      "outcome": "fail",
+      "passed": true,
+      "qualified_warm_passed": false,
+      "reason": "interrupted"
+    },
+    {
+      "exception": "FileExistsError",
+      "id": "same-attempt-resume-refused",
+      "no_additional_commands": true,
+      "original_report_sha256": "ea5db7f6977bf0dfb83498accb8b265b7ff74099c9c6031b585c56e40d096770",
+      "passed": true,
+      "retained_report_unchanged": true
+    },
+    {
+      "completed_processes": 23,
+      "failure_stages": [
+        "execution"
+      ],
+      "id": "last-process-source-drift",
+      "launches": 24,
+      "native_execution_field": "run",
+      "outcome": "fail",
+      "passed": true,
+      "qualified_warm_passed": false,
+      "reason": "[Errno 2] No such file or directory: '/tmp/managed-runner-host-uobohkav/source/tests/regression/ai_counter_preflight/main.cpp'"
+    },
+    {
+      "completed_processes": 23,
+      "failure_stages": [
+        "execution",
+        "final-tools",
+        "final-dependency-admission"
+      ],
+      "id": "last-process-tool-drift",
+      "launches": 24,
+      "native_execution_field": "run",
+      "outcome": "fail",
+      "passed": true,
+      "qualified_warm_passed": false,
+      "reason": "tool or executing-interpreter identity changed"
+    },
+    {
+      "completed_processes": 24,
+      "failure_stages": [
+        "final-resources"
+      ],
+      "id": "complete-population-final-disk-breach",
+      "launches": 24,
+      "native_execution_field": "run",
+      "outcome": "fail",
+      "passed": true,
+      "qualified_warm_passed": false,
+      "reason": "final disk reserve below 15 GiB"
+    }
+  ],
+  "duration_seconds": 162.5756103639942,
+  "mocks": [
+    "native/compiler commands",
+    "compiler record validation",
+    "original diagnostic/control qualification admission",
+    "dependency archive receipt intake",
+    "source Git metadata",
+    "host tool identities",
+    "resource measurements"
+  ],
+  "native_execution_performed": false,
+  "real_checks": [
+    "source/tool file hashing and stability",
+    "command checkpoint/error paths",
+    "raw output/lifetime validation",
+    "complete population accumulation",
+    "exclusive output creation",
+    "final resource threshold",
+    "qualification derivation"
+  ],
+  "schema_version": 1,
+  "scope": "synthetic-producer-failure-and-retention-only",
+  "source_sha256": {
+    "ci/project/p06_managed_preflight_execute.py": "2aa330b428852b3b0f0acc9bcc32cc464959b7f255d709f13cde310319b2fe4e",
+    "ci/project/p06_qualified_warm_execute.py": "2eea05ae66b070bbdd1c6e48201d5108e4b9cc0bcd1f71c5fd8c23e8bea25dce",
+    "ci/project/test_p06_qualified_warm_runner.py": "60021bb13fc792977c3ed2c36f0063c33790a24a0d5c9ea69a8a30509eff329c"
+  }
+}

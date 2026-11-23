@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Single P05 environment reproduction; no full suite or native execution."""
+from pathlib import Path
+import hashlib, json, os, subprocess, tempfile, time
+SOURCE = Path('/workspace/p06-qualified-warm-source-01')
+OUT = Path('/workspace/scratch/dc8be1693f91/AI-GPU/docs/project/evidence/p06-qualified-warm/validation')
+CANONICAL = '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3'
+PRIOR = '/workspace/scratch/e96519576778/w09_a04-governance-audit/host-venv/bin/python3'
+TMP_PARENT = Path('/workspace/scratch/dc8be1693f91/validation')
+SCRIPT = "import sys,os,json,shutil,pathlib; print(json.dumps({'executable':sys.executable,'resolved':str(pathlib.Path(sys.executable).resolve()),'base_executable':sys._base_executable,'prefix':sys.prefix,'base_prefix':sys.base_prefix,'version':sys.version,'cmake':shutil.which('cmake'),'path':os.environ.get('PATH')}))"
+def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+watched = [SOURCE / 'ci/project/test_p05_installed_check.py', SOURCE / 'ci/project/p05_installed_check.py']
+before = {str(p):sha(p) for p in watched}
+record = {'schema_version':1, 'scope':'single known P05 copied-venv environment reproduction', 'source':str(SOURCE), 'revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip(), 'source_before':before, 'native_execution':'not_run', 'new_unique_unittest_ids':0, 'observed_at':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()), 'interpreters':[]}
+for label, executable in [('current-canonical',CANONICAL),('previous-proper-venv',PRIOR)]:
+    r = subprocess.run([executable,'-B','-c',SCRIPT],cwd=SOURCE,capture_output=True,text=True,timeout=10)
+    record['interpreters'].append({'label':label,'argv':[executable,'-B','-c',SCRIPT],'exit_code':r.returncode,'identity':json.loads(r.stdout) if r.returncode==0 else None,'stderr':r.stderr})
+with tempfile.TemporaryDirectory(prefix='w08-a01-p05-',dir=TMP_PARENT) as tmp:
+    env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',TMPDIR=tmp)
+    argv=[CANONICAL,'-B','-m','unittest','discover','-s','ci/project','-p','test_p05_installed_check.py','-k','test_copied_checker_cannot_import_source_in_clean_venv','-v']
+    started=time.monotonic()
+    r=subprocess.run(argv,cwd=SOURCE,env=env,capture_output=True,text=True,timeout=90)
+    body=r.stdout+r.stderr
+    log=OUT/'w08_a01-canonical-p05.log'
+    with log.open('x') as stream:stream.write(body)
+    record['test']={'argv':argv,'cwd':str(SOURCE),'environment_overrides':{'TMPDIR':tmp,'PYTHONDONTWRITEBYTECODE':'1'},'exit_code':r.returncode,'duration_seconds':time.monotonic()-started,'log':log.name,'log_sha256':sha(log),'log_bytes':log.stat().st_size,'exact_one_test': 'Ran 1 test in ' in body,'expected_test_id':'test_p05_installed_check.InstalledCheckerTests.test_copied_checker_cannot_import_source_in_clean_venv'}
+record['source_after']={str(p):sha(p) for p in watched}
+record['source_stable']=record['source_after']==before
+record['clean_source_after']=not subprocess.check_output(['git','status','--porcelain=v1','--untracked-files=all'],cwd=SOURCE)
+record['native_workspace_absent']=not os.path.lexists('/workspace/p06-qualified-warm-run-01')
+record['outcome']='pass' if record['test']['exit_code']==0 and record['test']['exact_one_test'] and record['source_stable'] and record['clean_source_after'] and record['native_workspace_absent'] else 'fail'
+record['probe_sha256']=sha(Path(__file__))
+with (OUT/'w08_a01-environment-review.json').open('x') as stream:json.dump(record,stream,indent=2);stream.write('\n')
+print(json.dumps({'outcome':record['outcome'],'test':record['test'],'identities':[{'label':r['label'], 'identity':r['identity']} for r in record['interpreters']]},indent=2))
+raise SystemExit(0 if record['outcome']=='pass' else 1)

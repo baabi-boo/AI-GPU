@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "scope": "extracted scheduling predicates only; no governance/native execution",
+  "outcome": "pass",
+  "source": "/workspace/scratch/dc8be1693f91/AI-GPU/docs/project/evidence/p06-qualified-warm/validation/governance/run_governance_before_native.py.txt",
+  "supervisor_sha256": "e5ce09c81fdb6de60b56c0decdb91e12e3221fa2146f353bf16cd44742caa20f",
+  "source_stable": true,
+  "cases": [
+    {
+      "id": "exact_review_and_resource_pin",
+      "expected": "accept",
+      "outcome": "pass"
+    },
+    {
+      "id": "review_schema_version_True",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_schema_version_2",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_scope_native-qualification",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_decision_run_native",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_source_/another/source",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_source_revision_0000000000000000000000000000000000000000",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_source_tree_0000000000000000000000000000000000000000",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_native_workspace_/another/workspace",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_native_execution_pass",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_native_workspace_absent_1",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_no_native_attempt_started_False",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_native_launch_disabled_until_governance_finishes_False",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_native_resource_guards_unchanged_False",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_resource_review_sha256_0000000000000000000000000000000000000000000000000000000000000000",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_governance_supervisor_sha256_0000000000000000000000000000000000000000000000000000000000000000",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_reason_  ",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "review_reason_1",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator review must explicitly select this bounded governance-first run"
+    },
+    {
+      "id": "coordinator_raw_pin_mismatch",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "coordinator scheduling review pin mismatch"
+    },
+    {
+      "id": "native_workspace_exists",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "native attempt has started: /workspace/scratch/dc8be1693f91/validation/w06-a05-wihgx82z/native-workspace"
+    },
+    {
+      "id": "native_supervision_exists",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "native attempt has started: /workspace/scratch/dc8be1693f91/validation/w06-a05-wihgx82z/native-review/supervision.json"
+    },
+    {
+      "id": "native_workspace_dangling_symlink",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "symlink path rejected: /workspace/scratch/dc8be1693f91/validation/w06-a05-wihgx82z/native-workspace"
+    },
+    {
+      "id": "resource_execution_ready_True",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "selected review does not record native launch blocked before execution"
+    },
+    {
+      "id": "resource_execution_ready_0",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "selected review does not record native launch blocked before execution"
+    },
+    {
+      "id": "resource_native_execution_pass",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "selected review does not record native launch blocked before execution"
+    },
+    {
+      "id": "resource_resource_outcome_pass",
+      "expected": "reject",
+      "outcome": "pass",
+      "reason": "selected review does not record native launch blocked before execution"
+    },
+    {
+      "id": "clean_absence_after_probes",
+      "expected": "accept",
+      "outcome": "pass"
+    }
+  ],
+  "case_count": 27,
+  "accepted_controls": 2,
+  "rejections": 25,
+  "duration_seconds": 0.014360967004904523,
+  "limitations": [
+    "Native path checks use exclusively owned temporary paths.",
+    "No process cleanup or polling loop was executed.",
+    "Resource and coordinator records are selected by caller pins, not authenticated origin.",
+    "Actual full-suite outcome requires separate execution and 4527-ID/runtime-skip reconciliation."
+  ]
+}

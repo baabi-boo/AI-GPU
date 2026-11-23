@@ -1,0 +1,295 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Independently join completed hosted and supplemental passing test-ID evidence."""
+import argparse
+from collections import Counter
+from datetime import datetime, timezone
+import gzip
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+
+BASE = Path(__file__).resolve().parents[1]
+HOSTED = BASE / 'hosted-c0b44ce6'
+SUPPLEMENT = Path('/workspace/scratch/dc8be1693f91/hosted-gap-supplement-c0b44ce6')
+SOURCE = Path('/workspace/p06-qualified-warm-source-01')
+MANIFEST = Path('/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-partitioned/partition-manifest.json')
+PROGRAM = BASE / 'coverage/hosted-gap-supplement/run_supplement.py.txt'
+SELECTION = PROGRAM.with_name('selection-manifest.json')
+REV = 'c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+TREE = '13450812d279d55f36a172fcf38653ff567f6c86'
+MANIFEST_SHA = 'ccaac86bf0e77a06c43db1b575716b575e95025cc2aeecf460fc9d05ecf8989f'
+SOURCE_SHA = '6944738200ca84711bb41559755960bb1ae221d3b196a7e45635d1e9a85ba303'
+IDS_SHA = '5fd7fbf2f57425467c8124307dbe6ad951e48fe2526a531c87023b58626761fc'
+PROGRAM_SHA = 'e04b008700ffba8670f53e05b2f58ee2637d71b500c5600b0de5b5a13c6f3658'
+SELECTION_SHA = '6c171ba3121445e1b2a5cc5f9c56f74d846c25c0cb4395b4d23eb4449b1e0adc'
+HOST_LOG_SHA = '14bbd104e3ce5bf16f0241055b5975f417e2abb6e818f025fe8ccdeae7de1ba8'
+HOST_MAP_GZ_SHA = '57aa45d13be2b59f99321ccd11abe3ee71d45082013b824f3cc9f1ddfd66e624'
+
+
+def sha(path):
+    with Path(path).open('rb') as stream:
+        return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+
+def pairs(items):
+    result = {}
+    for key, value in items:
+        if key in result:
+            raise ValueError('duplicate JSON key: ' + key)
+        result[key] = value
+    return result
+
+
+def decode(body):
+    return json.loads(body, object_pairs_hook=pairs,
+                      parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
+
+
+def read(path):
+    return decode(Path(path).read_bytes())
+
+
+def git(*arguments, cwd=SOURCE):
+    return subprocess.check_output(['git', '--no-optional-locks', *arguments], cwd=cwd,
+                                   timeout=60).decode().strip()
+
+
+def parse_verbose(text, timestamped=False):
+    lines = text.splitlines()
+    if timestamped:
+        lines = [re.sub(r'^\ufeff?\d{4}-\d\d-\d\dT\S+Z ', '', line) for line in lines]
+    records, classes, pending = [], [], None
+    for number, line in enumerate(lines, 1):
+        header = re.match(r'^test_\S+ \((test_[\w.]+)\)(?: \.\.\. (.*))?$', line)
+        setup = re.match(r'^setUpClass \((test_[\w.]+)\) \.\.\. skipped (.*)$', line)
+        status = None
+        if header:
+            if pending is not None:
+                raise ValueError('new test before previous outcome: ' + pending['id'])
+            pending = {'id': header[1], 'log_line': number}
+            status = header[2]
+        elif setup:
+            if pending is not None:
+                raise ValueError('class setup skip while case outcome pending')
+            classes.append({'class': setup[1], 'reason': setup[2], 'log_line': number})
+        elif pending is not None:
+            tail = re.search(r' \.\.\. (ok|skipped .+|FAIL|ERROR|expected failure|unexpected success)$', line)
+            status = tail[1] if tail else line
+        if pending is not None and status is not None and (
+                status == 'ok' or status.startswith('skipped ') or
+                status in ('FAIL', 'ERROR', 'expected failure', 'unexpected success')):
+            records.append(dict(pending, status_text=status))
+            pending = None
+    if pending is not None:
+        raise ValueError('terminal test without outcome: ' + pending['id'])
+    return records, classes, lines
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--receipt', type=Path, required=True)
+    args = parser.parse_args()
+    args.receipt = args.receipt.resolve()
+    checks = []
+
+    def need(condition, label):
+        if not condition:
+            raise ValueError(label)
+        checks.append(label)
+
+    receipt = {'schema_version': 1, 'scope': 'combined passing test-ID coverage from completed hosted and local supplement only',
+        'observed_at': datetime.now(timezone.utc).isoformat(), 'source_revision': REV, 'source_tree': TREE,
+        'full_suite_result': False, 'single_full_zero_skip_invocation_proven': False,
+        'combined_passing_test_id_coverage_complete': False, 'native_execution': 'not_run',
+        'gpu_execution_certified': False, 'project_tests_run_by_reconciliation': 0, 'checks': checks,
+        'excluded_partial_success_counts': [1312, 2472, 3771],
+        'excluded_partial_verbose_ok_line_counts': [1312, 2472, 3770]}
+    try:
+        need(sha(MANIFEST) == MANIFEST_SHA, 'fixed canonical discovery manifest')
+        manifest = read(MANIFEST)
+        ids = manifest['all_ids']
+        need(len(ids) == len(set(ids)) == 4527 and hashlib.sha256(
+            json.dumps(ids, separators=(',', ':')).encode()).hexdigest() == IDS_SHA,
+            '4527 unique canonical IDs and ordered population hash')
+        need(manifest['source_revision'] == REV and manifest['source_tree'] == TREE,
+             'canonical discovery source identity')
+        hosted_raw = gzip.decompress((HOSTED / 'w09_a03-job.log.gz').read_bytes())
+        need(len(hosted_raw) == 955728 and hashlib.sha256(hosted_raw).hexdigest() == HOST_LOG_SHA,
+             'exact retained hosted UTF-8 log bytes including BOM')
+        rows, class_skips, lines = parse_verbose(hosted_raw.decode('utf-8'), True)
+        need(len(rows) == len({row['id'] for row in rows}) == 4512,
+             '4512 unique hosted method outcome records')
+        need(all(row['status_text'] == 'ok' or row['status_text'].startswith('skipped ') for row in rows),
+             'no hosted method failure error expected failure or unexpected success')
+        need(not any(re.match(r'^(?:FAIL|ERROR): ', line) for line in lines),
+             'no hosted fixture failure or error detail')
+        need([line for line in lines if re.match(r'^Ran \d+ tests in ', line)] ==
+             ['Ran 4512 tests in 3555.657s'] and
+             [line for line in lines if re.match(r'^(?:OK|FAILED)(?: \(.+\))?$', line)] == ['OK (skipped=23)'],
+             'one exact hosted completed unittest summary')
+        need("python3 -m unittest discover -s ci/project -p 'test_*.py' -v" in
+             [re.sub(r'\x1b\[[0-9;]*m', '', line) for line in lines],
+             'hosted canonical command retained')
+        passed = {row['id'] for row in rows if row['status_text'] == 'ok'}
+        method_skips = {row['id'] for row in rows if row['status_text'].startswith('skipped ')}
+        classes = {row['class'] for row in class_skips}
+        setup_skipped = {identifier for identifier in ids if identifier.rsplit('.', 1)[0] in classes}
+        need(len(passed) == 4491 and len(method_skips) == 21 and len(classes) == len(class_skips) == 2
+             and len(setup_skipped) == 15 and not setup_skipped.intersection(row['id'] for row in rows),
+             '4491 hosted passed bodies, 21 method skips and 15 bodies behind two class skips')
+        need([row['id'] for row in rows] == [identifier for identifier in ids if identifier not in setup_skipped],
+             'hosted method order equals canonical order with class-setup bodies absent')
+        need(passed | method_skips | setup_skipped == set(ids) and
+             not passed & (method_skips | setup_skipped), 'all hosted canonical outcomes independently accounted')
+        map_path = HOSTED / 'w09_a03-canonical-outcomes.json.gz'
+        need(sha(map_path) == HOST_MAP_GZ_SHA, 'independent hosted outcome map pin')
+        mapped = decode(gzip.decompress(map_path.read_bytes()))
+        expected_outcomes = {identifier: ('passed' if identifier in passed else
+                             'skipped_method' if identifier in method_skips else 'skipped_class_setup') for identifier in ids}
+        need([row['id'] for row in mapped] == ids and
+             all(row['outcome'] == expected_outcomes[row['id']] for row in mapped),
+             'independently parsed raw outcomes agree with prior full canonical map')
+        run = read(HOSTED / 'w09_a03-run-completed.json')['data']
+        jobs = read(HOSTED / 'w09_a03-jobs-20261123T203640291Z.json')['data']['jobs']
+        job = next(row for row in jobs if row['id'] == 137938581226)
+        need(run['id'] == 45244780344 and run['head_sha'] == REV and run['status'] == 'completed'
+             and run['conclusion'] == 'success' and job['status'] == 'completed' and job['conclusion'] == 'success',
+             'completed hosted run/job at exact selected revision')
+        need(any(step['name'] == 'Test governance tooling' and step['status'] == 'completed'
+             and step['conclusion'] == 'success' for step in job['steps']), 'hosted governance step completed successfully')
+        need(sha(PROGRAM) == PROGRAM_SHA and sha(SELECTION) == SELECTION_SHA,
+             'reviewed short supplement program and selection pins')
+        selection = read(SELECTION)
+        selected = selection['selected_ids']
+        need(len(selected) == len(set(selected)) == 59 and selection['complete_local_suite_claimed'] is False,
+             '59 unique supplemental IDs and no full-suite claim')
+        need(selection['source_revision'] == REV and selection['source_tree'] == TREE,
+             'supplement selected source matches hosted/canonical source')
+        module_counts = [('test_p06_dependency_build', 9), ('test_p06_dependency_option_controls', 21),
+                         ('test_p06_dependency_receipt', 29)]
+        need([(row['module'], row['expected_count']) for row in selection['modules']] == module_counts and
+             all(row['ids'] == [identifier for identifier in ids if identifier.split('.')[0] == row['module']]
+                 for row in selection['modules']), 'three complete selected modules with counts 9 21 29')
+        execution_body = (SUPPLEMENT / 'execution.json').read_bytes()
+        ex = decode(execution_body)
+        need(ex['state'] == 'finished' and ex['outcome'] == 'pass' and not ex['failures'] and not ex['not_run'],
+             'supplement finalized pass with no failures or omitted commands')
+        need(ex['source_revision'] == ex['source_revision_after'] == REV and
+             ex['source_tree'] == ex['source_tree_after'] == TREE and ex['program_sha256'] == PROGRAM_SHA and
+             ex['selection_manifest_sha256'] == SELECTION_SHA, 'supplement execution source/program/selection pins')
+        need(ex['complete_local_suite_claimed'] is False and ex['combined_coverage_requires_independent_hosted_join'] is True,
+             'supplement preserves combined-coverage-only scope')
+        need([row['id'] for row in ex['commands']] == [row[0] for row in module_counts],
+             'each selected module command exactly once in fixed order')
+        local_successes, command_evidence = [], []
+        for expected, command in zip(selection['modules'], ex['commands']):
+            log_path = SUPPLEMENT / command['log']
+            need(sha(log_path) == command['log_sha256'] and log_path.stat().st_size == command['log_size_bytes'],
+                 'supplement log bytes: ' + expected['module'])
+            actual, skipped_classes, local_lines = parse_verbose(log_path.read_text())
+            actual_ids = [row['id'] for row in actual]
+            need(actual_ids == expected['ids'] == command['expected_ids'] == command['verification']['ordered_ids']
+                 and all(row['status_text'] == 'ok' for row in actual) and not skipped_classes,
+                 'every selected ID has an actual successful raw outcome: ' + expected['module'])
+            count = expected['expected_count']
+            need(len(actual) == count and len([line for line in local_lines if
+                 re.fullmatch(r'Ran ' + str(count) + r' tests in [0-9.]+s', line)]) == 1 and
+                 [line for line in local_lines if re.match(r'^(?:OK|FAILED)(?: \(.+\))?$', line)] == ['OK'],
+                 'one exact count and plain OK summary: ' + expected['module'])
+            need(command['state'] == 'finished' and command['outcome'] == 'pass' and command['exit_code'] == 0
+                 and command['process_started'] is True and command['cleanup_complete'] is True
+                 and command['reason'] is None and command['verification']['all_selected_ids_completed'] is True
+                 and command['verification']['zero_failures_errors_skips_expected_failures_or_unexpected_successes'] is True,
+                 'closed successful zero-skip command with recorded cleanup: ' + expected['module'])
+            need(command['argv'] == [ex['interpreter'], '-B', '-m', 'unittest', 'discover', '-s',
+                 'ci/project', '-p', expected['pattern'], '-v'] and command['cwd'] == str(SOURCE),
+                 'exact selected module invocation: ' + expected['module'])
+            local_successes.extend(actual_ids)
+            command_evidence.append({key: command[key] for key in
+                ('id', 'exit_code', 'cleanup_complete', 'duration_seconds', 'log_sha256', 'log_size_bytes')})
+        need(local_successes == selected == ex['selected_ids'] == ex['completed_ids'] and
+             ex['completed_test_count'] == 59 and ex['exact_selected_population_completed_once'] is True,
+             '59 actual successful supplemental outcomes completed exactly once')
+        before = read(SUPPLEMENT / 'source-before.json')
+        after = read(SUPPLEMENT / 'source-after.json')
+        need(before == after and sha(SUPPLEMENT / 'source-before.json') == sha(SUPPLEMENT / 'source-after.json')
+             == ex['source_before_sha256'] == ex['source_after_sha256'] == SOURCE_SHA and
+             ex['source_files_stable'] is True and ex['status_after'] == '', 'fixed source inventories stable')
+        need(ex['tool_inputs_before'] == ex['tool_inputs_after'] and ex['tools_stable'] is True,
+             'before/after tool records stable')
+        need([tool['sha256'] for tool in ex['tool_inputs_before']] == [
+             'fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7',
+             'a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83',
+             'a1ba51de813cd6f482a20b6ea9421f9da1457f5ee1d732480f08a2fef519403b'],
+             'independently reviewed Python CMake and venv pins')
+        for tool in ex['tool_inputs_after']:
+            path = Path(tool['path'])
+            need(str(path.resolve(strict=True)) == tool['resolved'] and path.stat().st_size == tool['size_bytes']
+                 and sha(path) == tool['sha256'], 'current tool still matches execution pin: ' + path.name)
+        need(git('rev-parse', 'HEAD') == REV and git('rev-parse', 'HEAD^{tree}') == TREE and
+             git('status', '--porcelain=v1', '--untracked-files=all') == '', 'current source revision tree and clean status')
+        submodules = git('submodule', 'status', '--recursive')
+        need(submodules == ex['submodules_before'] == ex['submodules_after'] and len(submodules.splitlines()) == 8,
+             'current eight recursive submodule pins unchanged')
+        for line in submodules.splitlines():
+            revision, path = line.strip().split()[:2]
+            need(git('rev-parse', 'HEAD', cwd=SOURCE / path) == revision and
+                 git('status', '--porcelain=v1', '--untracked-files=all', cwd=SOURCE / path) == '',
+                 'current submodule head and status: ' + path)
+        need(ex['native_execution'] == 'not_run' and ex['gpu_execution_certified'] is False and
+             ex['native_workspace_absent_after'] is True and not os.path.lexists('/workspace/p06-qualified-warm-run-01')
+             and not os.path.lexists('/workspace/scratch/dc8be1693f91/native-qualified-warm-attempt-01/supervision.json'),
+             'native attempt remains unstarted')
+        local = set(local_successes)
+        gaps = set(ids) - passed
+        need(local - passed == gaps and len(gaps) == 36 and len(local & passed) == 23 and
+             passed | local == set(ids), '4491 hosted plus 59 supplement minus 23 overlap equals 4527 exact covered IDs')
+        need((SUPPLEMENT / 'execution.json').read_bytes() == execution_body,
+             'supplement receipt stable during reconciliation')
+        coverage = [{'id': identifier, 'hosted_passed': identifier in passed,
+                     'supplement_passed': identifier in local} for identifier in ids]
+        coverage_body = (json.dumps(coverage, indent=2, sort_keys=True) + '\n').encode()
+        coverage_path = args.receipt.with_name('final-id-coverage.json.gz')
+        with coverage_path.open('xb') as stream:
+            stream.write(gzip.compress(coverage_body, mtime=0))
+        receipt.update(outcome='pass-for-combined-passing-test-id-coverage',
+            combined_passing_test_id_coverage_complete=True, canonical_unique_ids=4527,
+            hosted_successful_unique_ids=4491, hosted_method_skips=21,
+            hosted_class_setup_skip_events=2, hosted_class_setup_unexecuted_bodies=15,
+            hosted_total_skip_events=23, hosted_unexecuted_bodies=36,
+            supplemental_successful_unique_ids=59, supplemental_failures=0, supplemental_errors=0,
+            supplemental_skips=0, supplemental_expected_failures=0, supplemental_unexpected_successes=0,
+            duplicate_coverage_ids=23, supplement_only_ids=36, uncovered_ids=[], unexpected_ids=[],
+            successful_execution_observations=4550, source_inventory_rows=len(before),
+            source_inventory_sha256=SOURCE_SHA, canonical_ids_sha256=IDS_SHA,
+            hosted_run_id=45244780344, hosted_job_id=137938581226, hosted_log_utf8_sha256=HOST_LOG_SHA,
+            hosted_python_version='3.12.3', supplemental_python_version=ex['python_version'],
+            supplemental_execution_sha256=hashlib.sha256(execution_body).hexdigest(),
+            supplemental_duration_seconds=ex['duration_seconds'], supplemental_commands=command_evidence,
+            coverage_file=str(coverage_path.relative_to(BASE)), coverage_decoded_sha256=hashlib.sha256(coverage_body).hexdigest(),
+            coverage_gzip_sha256=sha(coverage_path),
+            limitations=['This is combined passing test-ID coverage across completed hosted and local supplemental executions, not one full zero-skip invocation.',
+                         'Hosted Python 3.12.3 and the supplemental proper Python 3.12.14 venv are distinct environments.',
+                         'The earlier 1312/2472/3771 successful partial-outcome populations contribute no covered IDs; the released-cases log has3770 verbose ok lines plus one standalone ok outcome.',
+                         'The released-cases attempt remains unfinalized with unknown exit and cleanup; the earlier partitioned attempt remains failed.',
+                         'Supplemental cleanup is verified from reviewed process-group code and final closed-command receipts; no second live namespace observation is claimed.',
+                         'No native experiment, hardware result, performance result or phase acceptance is established.'])
+        code = 0
+    except Exception as error:
+        receipt.update(outcome='fail', reason=type(error).__name__ + ': ' + str(error))
+        code = 1
+    with args.receipt.open('x') as stream:
+        json.dump(receipt, stream, indent=2, sort_keys=True)
+        stream.write('\n')
+    print(json.dumps({key: receipt.get(key) for key in ('outcome', 'full_suite_result',
+        'combined_passing_test_id_coverage_complete', 'canonical_unique_ids', 'hosted_successful_unique_ids',
+        'supplemental_successful_unique_ids', 'duplicate_coverage_ids', 'uncovered_ids', 'reason')}, sort_keys=True))
+    return code
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

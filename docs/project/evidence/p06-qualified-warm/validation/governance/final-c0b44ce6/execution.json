@@ -1,0 +1,236 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "/workspace/scratch/dc8be1693f91/governance-host-venv/bin/python3",
+        "-B",
+        "ci/project/preflight.py",
+        "--tier",
+        "governance",
+        "--json"
+      ],
+      "cleanup_complete": true,
+      "cwd": "/workspace/p06-qualified-warm-source-01",
+      "duration_seconds": 0.4025572899990948,
+      "exit_code": 0,
+      "finished_at": "2026-11-23T19:50:21Z",
+      "id": "preflight",
+      "log": "preflight.log",
+      "log_sha256": "b12088ed8aa7302ec65804c763142712eed7037197ea185a4f850fde68a35af2",
+      "log_size_bytes": 4894,
+      "outcome": "pass",
+      "pid": 89,
+      "process_started": true,
+      "reason": null,
+      "started_at": "2026-11-23T19:50:21Z",
+      "state": "finished"
+    },
+    {
+      "argv": [
+        "/workspace/scratch/dc8be1693f91/governance-host-venv/bin/python3",
+        "-B",
+        "ci/project/check_project.py"
+      ],
+      "cleanup_complete": true,
+      "cwd": "/workspace/p06-qualified-warm-source-01",
+      "duration_seconds": 2.020350483006041,
+      "exit_code": 0,
+      "finished_at": "2026-11-23T19:50:23Z",
+      "id": "structure",
+      "log": "structure.log",
+      "log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+      "log_size_bytes": 96,
+      "outcome": "pass",
+      "pid": 172,
+      "process_started": true,
+      "reason": null,
+      "started_at": "2026-11-23T19:50:21Z",
+      "state": "finished"
+    },
+    {
+      "argv": [
+        "/workspace/scratch/dc8be1693f91/governance-host-venv/bin/python3",
+        "-B",
+        "ci/project/check_baseline_packets.py"
+      ],
+      "cleanup_complete": true,
+      "cwd": "/workspace/p06-qualified-warm-source-01",
+      "duration_seconds": 0.6030212769983336,
+      "exit_code": 0,
+      "finished_at": "2026-11-23T19:50:24Z",
+      "id": "baseline-packets",
+      "log": "baseline-packets.log",
+      "log_sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be",
+      "log_size_bytes": 657,
+      "outcome": "pass",
+      "pid": 173,
+      "process_started": true,
+      "reason": null,
+      "started_at": "2026-11-23T19:50:23Z",
+      "state": "finished"
+    }
+  ],
+  "discovered_count": 4527,
+  "discovery_import_errors": [],
+  "duration_seconds": 1052.5736696769964,
+  "environment_overrides": {
+    "PATH": "/workspace/scratch/dc8be1693f91/governance-host-venv/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/workspace/p06-qualified-warm-governance-partition-tmp-01"
+  },
+  "failures": [
+    "RuntimeError: partition nonzero exit",
+    "partition 0 nonzero exit",
+    "partition 1 nonzero exit"
+  ],
+  "finished_at": "2026-11-23T20:07:48Z",
+  "gpu_execution_certified": false,
+  "interpreter": "/workspace/scratch/dc8be1693f91/governance-host-venv/bin/python3",
+  "limitations": [
+    "Whole-module partitioning changes cross-module order/process state from one monolithic invocation.",
+    "Discovery alone is not execution; every selected ID must start and complete once with zero skips.",
+    "Process groups cannot contain deliberately detached descendants; deadlines/log sizes are polled.",
+    "Cleanup and final source inventories may finish after a command deadline.",
+    "This gate adds no native RAM/disk waiver and does not establish native, hardware or phase acceptance."
+  ],
+  "limits": {
+    "per_log_bytes": 67108864,
+    "per_worker_seconds": 3600,
+    "whole_seconds": 5400
+  },
+  "manifest_sha256": "ccaac86bf0e77a06c43db1b575716b575e95025cc2aeecf460fc9d05ecf8989f",
+  "native_execution": "not_run",
+  "native_workspace_absent_after": true,
+  "not_run": [
+    "diff-check"
+  ],
+  "outcome": "fail",
+  "partition_counts": [
+    2264,
+    2263
+  ],
+  "partition_program_sha256": "43ac491afecadbb05337fa4179d7b048ea9348d7bba3df097ace2f2129bc8a9b",
+  "partitions": [
+    {
+      "argv": [
+        "/workspace/scratch/dc8be1693f91/governance-host-venv/bin/python3",
+        "-B",
+        "/workspace/scratch/dc8be1693f91/AI-GPU/docs/project/evidence/p06-qualified-warm/validation/governance/partitioned/run_partition.py.txt",
+        "--manifest",
+        "/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-partitioned/partition-manifest.json",
+        "--manifest-sha256",
+        "ccaac86bf0e77a06c43db1b575716b575e95025cc2aeecf460fc9d05ecf8989f",
+        "--partition",
+        "0"
+      ],
+      "cleanup_complete": true,
+      "cwd": "/workspace/p06-qualified-warm-source-01",
+      "exit_code": -9,
+      "finished_at": "2026-11-23T20:07:43Z",
+      "index": 0,
+      "log": "partition-0.log",
+      "log_sha256": "ce304f8868f96624ff6a25755f4e8511dc90bc12ef96dab6a1bbfa13f12c3c3a",
+      "log_size_bytes": 225735,
+      "outcome": "fail",
+      "pid": 174,
+      "process_started": true,
+      "started_at": "2026-11-23T19:50:27Z",
+      "state": "finished",
+      "tmpdir": "/workspace/p06-qualified-warm-governance-partition-tmp-01/partition-0"
+    },
+    {
+      "argv": [
+        "/workspace/scratch/dc8be1693f91/governance-host-venv/bin/python3",
+        "-B",
+        "/workspace/scratch/dc8be1693f91/AI-GPU/docs/project/evidence/p06-qualified-warm/validation/governance/partitioned/run_partition.py.txt",
+        "--manifest",
+        "/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-partitioned/partition-manifest.json",
+        "--manifest-sha256",
+        "ccaac86bf0e77a06c43db1b575716b575e95025cc2aeecf460fc9d05ecf8989f",
+        "--partition",
+        "1"
+      ],
+      "cleanup_complete": true,
+      "cwd": "/workspace/p06-qualified-warm-source-01",
+      "exit_code": 1,
+      "finished_at": "2026-11-23T20:07:44Z",
+      "index": 1,
+      "log": "partition-1.log",
+      "log_sha256": "19eec354fe417bb89720cd1e5e46b6dccd14db045b0e84749931b2ccd0b3c1a6",
+      "log_size_bytes": 203701,
+      "outcome": "fail",
+      "pid": 175,
+      "process_started": true,
+      "started_at": "2026-11-23T19:50:27Z",
+      "state": "finished",
+      "tmpdir": "/workspace/p06-qualified-warm-governance-partition-tmp-01/partition-1"
+    }
+  ],
+  "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "scheduling_review": {
+    "coordinator_scheduling_review": "/workspace/scratch/dc8be1693f91/AI-GPU/docs/project/evidence/p06-qualified-warm/validation/governance/partitioned/coordinator-scheduling.json",
+    "coordinator_scheduling_review_sha256": "95b6e2cc355fd9304148430cf0c33f9f5201d4a2f9478c80b9a66065c17fd964",
+    "decision": "run_exhaustive_partitioned_governance_before_native",
+    "native_execution": "not_run",
+    "native_resource_guards_unchanged": true,
+    "resource_review_sha256": "4803a73034fa4014a22dca1785d1e4d6528e328ede6052914c9c1060e693105b",
+    "reviewed_at": "2026-11-23T19:50:15Z"
+  },
+  "schema_version": 1,
+  "scope": "source-root-governance-and-tooling-only",
+  "source": "/workspace/p06-qualified-warm-source-01",
+  "source_after_sha256": "6944738200ca84711bb41559755960bb1ae221d3b196a7e45635d1e9a85ba303",
+  "source_before_sha256": "6944738200ca84711bb41559755960bb1ae221d3b196a7e45635d1e9a85ba303",
+  "source_files_stable": true,
+  "source_revision": "c0b44ce64665fe11895f869eea8c38c9b820d6f7",
+  "source_revision_after": "c0b44ce64665fe11895f869eea8c38c9b820d6f7",
+  "source_tree": "13450812d279d55f36a172fcf38653ff567f6c86",
+  "source_tree_after": "13450812d279d55f36a172fcf38653ff567f6c86",
+  "started_at": "2026-11-23T19:50:15Z",
+  "state": "finished",
+  "status_after": "",
+  "submodules_after": "b1befdb36df8af7ac9e2c96acaf81957aab5d107 third_party/cocogfx (b1befdb)\n 79e453139072df42c9ec8f697132ba485d74e23d third_party/cvfpu (v0.6.6-34-g79e4531)\n 6aeee85d0a34fedc06c14f04fd6363c9f7b4eeea third_party/cvfpu/src/common_cells (v1.16.1-63-g6aeee85)\n 86e1f558b3c95e91577c41b2fc452c86b04e85ac third_party/cvfpu/src/fpu_div_sqrt_mvp (v1.0.4)\n 28be2d4fbf41b38fc37763bb6e90a1c88f6aaa61 third_party/cvfpu/tb/flexfloat (28be2d4)\n aaf5736dffa521603b681fd5853760c671446c85 third_party/hardfloat (heads/master)\n e62c84a6f0e06566ba6e182d308434b4532068a5 third_party/ramulator (e62c84a)\n b51ef8f3201669b2288104c28546fc72532a1ea4 third_party/softfloat (b51ef8f)",
+  "submodules_before": "b1befdb36df8af7ac9e2c96acaf81957aab5d107 third_party/cocogfx (b1befdb)\n 79e453139072df42c9ec8f697132ba485d74e23d third_party/cvfpu (v0.6.6-34-g79e4531)\n 6aeee85d0a34fedc06c14f04fd6363c9f7b4eeea third_party/cvfpu/src/common_cells (v1.16.1-63-g6aeee85)\n 86e1f558b3c95e91577c41b2fc452c86b04e85ac third_party/cvfpu/src/fpu_div_sqrt_mvp (v1.0.4)\n 28be2d4fbf41b38fc37763bb6e90a1c88f6aaa61 third_party/cvfpu/tb/flexfloat (28be2d4)\n aaf5736dffa521603b681fd5853760c671446c85 third_party/hardfloat (heads/master)\n e62c84a6f0e06566ba6e182d308434b4532068a5 third_party/ramulator (e62c84a)\n b51ef8f3201669b2288104c28546fc72532a1ea4 third_party/softfloat (b51ef8f)",
+  "supervisor_sha256": "f898761bf4cecf5bdeabb8c57741e600592135511220983a39293ed35b9ed72a",
+  "tool_inputs_after": [
+    {
+      "path": "/workspace/scratch/dc8be1693f91/governance-host-venv/bin/python3",
+      "resolved": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+      "size_bytes": 30894944
+    },
+    {
+      "path": "/workspace/scratch/dc8be1693f91/governance-host-venv/bin/cmake",
+      "resolved": "/workspace/p06-build-tools/cmake/data/bin/cmake",
+      "sha256": "a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83",
+      "size_bytes": 14672584
+    },
+    {
+      "path": "/workspace/scratch/dc8be1693f91/governance-host-venv/pyvenv.cfg",
+      "resolved": "/workspace/scratch/dc8be1693f91/governance-host-venv/pyvenv.cfg",
+      "sha256": "a1ba51de813cd6f482a20b6ea9421f9da1457f5ee1d732480f08a2fef519403b",
+      "size_bytes": 377
+    }
+  ],
+  "tool_inputs_before": [
+    {
+      "path": "/workspace/scratch/dc8be1693f91/governance-host-venv/bin/python3",
+      "resolved": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12",
+      "sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+      "size_bytes": 30894944
+    },
+    {
+      "path": "/workspace/scratch/dc8be1693f91/governance-host-venv/bin/cmake",
+      "resolved": "/workspace/p06-build-tools/cmake/data/bin/cmake",
+      "sha256": "a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83",
+      "size_bytes": 14672584
+    },
+    {
+      "path": "/workspace/scratch/dc8be1693f91/governance-host-venv/pyvenv.cfg",
+      "resolved": "/workspace/scratch/dc8be1693f91/governance-host-venv/pyvenv.cfg",
+      "sha256": "a1ba51de813cd6f482a20b6ea9421f9da1457f5ee1d732480f08a2fef519403b",
+      "size_bytes": 377
+    }
+  ],
+  "tools_stable": true
+}

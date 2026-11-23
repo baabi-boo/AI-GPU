@@ -10,14 +10,41 @@ launches. The [qualification audit](p06-qualification-audit.md),
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
 scope and new validation. P06-A02/A03 remain open.
 
-**The explicit qualified route for the unchanged 24-process warm experiment is
-implemented and independently reviewed; its fresh native attempt is next.**
-The [new route contract](../designs/qualified_warm_workspace_v1.md),
-[development audit](p06-qualified-warm-audit.md) and
-[evidence index](evidence/p06-qualified-warm/README.md) record the separately
-pinned caller extension, prelaunch sampling bindings, complete inert reader and
-unchanged statistical predicates. Its 89 focused tooling tests pass; this is
-not yet a fresh 24-process result or full governance result.
+The explicit 24-process qualified warm route is implemented and independently
+reviewed at published `c0b44ce64665fe11895f869eea8c38c9b820d6f7`, tree
+`13450812d279d55f36a172fcf38653ff567f6c86`. The clean source checkout, all eight
+submodules and all 69 projected source inputs match the selected proof. Its
+fresh native experiment is **unstarted**. The recorded readiness checks did not
+establish the unchanged 4 GiB available-RAM requirement together with enough
+disk headroom to preserve the 15 GiB reserve plus approximately 2.24 GB of fresh
+dependency products and warm-run growth. The audit retains dated measurements;
+capacity must be rechecked before launch. No old data was deleted and no native
+resource guard was relaxed.
+
+The [route contract](../designs/qualified_warm_workspace_v1.md),
+[development audit](p06-qualified-warm-audit.md),
+[evidence index](evidence/p06-qualified-warm/README.md) and
+[current handoff](p06-qualified-warm-handoff.md) separate implementation,
+execution and acceptance.
+
+The 89 new focused tests pass in 195.293 seconds. Current public replay of the
+unchanged historical four-process archive passes; 29 historical analyzer tests
+preserve the old route's unconditional qualification block. **All 4,527 canonical
+test IDs now have passing outcomes across completed hosted and supplemental
+executions on the same implementation.** Hosted governance passes 4,491 bodies;
+the separate 59-case local supplement passes without failures, errors or skips,
+covering all 36 hosted gaps and 23 overlapping IDs. The
+[independent reconciliation](evidence/p06-qualified-warm/validation/coverage/final-reconciliation.json)
+proves the exact union. This is complete passing test-ID coverage across two
+environments; no complete 4,527-test local run or single invocation without skips
+is established. Hosted skip events and earlier failed/unfinalized local records
+remain unchanged and are not counted as passing coverage.
+
+The old four-process proof rejects the changed current caller; preserving its
+no-flag grammar does not make that proof admit current execution. Replay of
+unchanged historical archives remains supported. The new route uses its own
+explicitly selected, independently reviewed projection; no earlier archive is
+promoted into a fresh warm result.
 
 **Complete counter qualification already passes for the preceding fresh
 four-process preflight.** The
@@ -33,7 +60,7 @@ derives `counter_qualification_passed=true` only for
 `recorded-four-process-preflight-only`. All seven historical qualification,
 readiness, warm and acceptance fields remain false. No 24-process warm result
 or P06-A02/A03 acceptance is established. Resume from the
-[qualification handoff](p06-counter-qualification-handoff.md).
+[qualified warm handoff](p06-qualified-warm-handoff.md).
 
 **The preceding complete local attempt 04 establishes its separate fresh
 dependency compilation-to-loader provenance prerequisite.** The
@@ -232,17 +259,18 @@ source/log review. Hosted and native retries were queued at the
 which contains no executed result for either retry. This is local governance
 verification; the latest audited native diagnostic scope stays at `4268d2d5`.
 
-**Next bounded development:** implement and independently review the explicit
-qualified warm route described in the
-[qualification handoff](p06-counter-qualification-handoff.md) and
-[qualification plan](p06-mpm-qualification-plan.md), then execute its fresh
-**24-process, 792-launch, 25,344-word** experiment. The completed qualification
-runner is fixed to four processes. Its success does not qualify future processes
-or expand that runner's population. The new warm route must bind the reviewed
-proof before every launch and reconstruct every process's exact source/build/
-dependency, numerical, lifetime and final-stability relationships under the
-unchanged sampling and performance predicates. Pending reads remain a transient
-balance outside the 40 cumulative components.
+**Next bounded action:** obtain one uninterrupted governance invocation without
+skips and provision sufficient capacity. Then execute one fresh complete
+qualified warm attempt, retain its original archive unchanged, replay
+it independently and evaluate the unchanged predicates. Follow the
+[qualified warm handoff](p06-qualified-warm-handoff.md) and
+[runbook](evidence/p06-qualified-warm/runbook.md). The implemented route binds
+each new process before launch and requires complete source/build/load,
+numerical, lifetime, destruction and final-stability reconstruction. Preserve
+all 24 processes, 792 launches and 25,344 exact output words, including excluded
+primes and warm-ups; a complete valid attempt may reject the performance
+hypothesis. Pending reads remain a transient balance outside the 40 cumulative
+components.
 
 Historical diagnostics, controls and preflight originals retain their own
 identities and populations. Warm v1 remains unconditionally blocked by
@@ -318,7 +346,7 @@ the linked reports define the exact accepted scope.
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
 | P04 — tiny-model inference | `complete` | A01 fixed fixture preserved; A02/A03 accept the full four-variant composed-model matrix at native processor RTL scope |
 | P05 — Python/framework bridge | `in_progress` | A01 accepts the bounded copying Python binding on SimX; the custom-op implementation and prior CI still need independent artifact review for A02/A03 |
-| P06 — Memory and performance scaling | `in_progress` | A01 is preserved; complete 33-selector/40-component qualification and inert replay pass for the fresh four-process original; an explicit qualified 24-process warm route, its execution and A02/A03 remain open |
+| P06 — Memory and performance scaling | `in_progress` | A01 is preserved; complete 33-selector/40-component qualification and inert replay pass for the fresh four-process original; the explicit qualified 24-process route is implemented and independently reviewed; its native attempt is unstarted for capacity; passing coverage spans all 4,527 IDs across completed hosted/supplemental runs, with no single full zero-skip invocation established; A02/A03 remain open |
 | P07–P11 | `not_started` | Later hardware, reliability, research and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
 | Physical FPGA / custom silicon | Not qualified | No physical board or fabricated silicon measurements are established |
@@ -327,7 +355,26 @@ Execution and integration owner for this continuation: the primary coding agent
 (`/root`). Independent agent reviews supply scoped engineering evidence; they
 are not invented human approvals or waivers.
 
-## Latest continuation — complete counter qualification preflight
+## Latest continuation — qualified warm route, execution unstarted
+
+The [publication receipt](evidence/p06-qualified-warm/validation/implementation-publication.json)
+and [clean-checkout review](evidence/p06-qualified-warm/validation/w06_a01-checkout-review.json)
+identify the published implementation and exact source/submodule/proof matches.
+The [capacity review](evidence/p06-qualified-warm/validation/w06_a06-resource-recovery.json)
+records why the fresh native attempt has not started. The
+[focused receipt](evidence/p06-qualified-warm/validation/qualified-warm-focused.json),
+[compatibility review](evidence/p06-qualified-warm/validation/w08_a02-compatibility-review.json),
+[interruption record](evidence/p06-qualified-warm/validation/governance/initial-canonical/coordinator-interruption.json)
+and [25-case environment validation](evidence/p06-qualified-warm/validation/w08_a04-environment-validation.json)
+retain the distinct validation scopes. The
+[completed-run ID union](evidence/p06-qualified-warm/validation/coverage/final-reconciliation.json)
+covers all 4,527 canonical IDs with passing outcomes across hosted and
+supplemental environments. A single complete invocation without skips remains
+unproven. Fresh native execution remains unstarted; no 24-process numerical,
+lifetime or performance result exists.
+Resume from the [qualified warm handoff](p06-qualified-warm-handoff.md).
+
+## Previous continuation — complete counter qualification preflight
 
 The [implemented contract](../designs/complete_counter_qualification_v1.md)
 adds a separately selected source proof, prerequisite replay, prelaunch admission,
@@ -362,8 +409,9 @@ tests passing without skips. These focused checks do not imply a complete-suite
 result; the [audit](p06-counter-qualification-audit.md) records full governance
 separately. None of these reader or fixture corrections reexecutes native work.
 
-The [handoff](p06-counter-qualification-handoff.md) records the remaining explicit
-qualified warm route. Keep the existing 24-process workload, statistical
+The [historical handoff](p06-counter-qualification-handoff.md) records the route
+design obligations now implemented; the [current handoff](p06-qualified-warm-handoff.md)
+records the remaining execution. Keep the existing 24-process workload, statistical
 predicates, cold baseline, resource bounds and phase gates unchanged.
 
 ## Previous continuation — explicit local dependency/native execution
@@ -1587,23 +1635,24 @@ remains blocked; tooling tests or a read-only plan cannot supply its missing run
 
 ## Next bounded action
 
-**P06-T01 — implement and independently review an explicit qualified route for
-the unchanged 24-process warm sampling contract, then execute its fresh attempt.**
-The [complete counter-qualification packet](evidence/p06-counter-qualification/README.md)
-now supplies the reviewed four-process original at `17e02844`; its separate
-outer qualification does not change the fixed preflight population or qualify
-a later process. Follow the [qualification handoff](p06-counter-qualification-handoff.md),
-[audit](p06-counter-qualification-audit.md) and
-[qualification plan](p06-mpm-qualification-plan.md).
+**Next bounded action:** obtain one uninterrupted governance invocation without
+skips and provision sufficient capacity. Then execute one fresh complete
+qualified warm attempt, retain its original archive unchanged, replay
+it independently and evaluate the unchanged predicates. Follow the
+[qualified warm handoff](p06-qualified-warm-handoff.md) and
+[runbook](evidence/p06-qualified-warm/runbook.md). The implemented route binds
+each new process before launch and requires complete source/build/load,
+numerical, lifetime, destruction and final-stability reconstruction. Preserve
+all 24 processes, 792 launches and 25,344 exact output words, including excluded
+primes and warm-ups; a complete valid attempt may reject the performance
+hypothesis. Pending reads remain a transient balance outside the 40 cumulative
+components.
 
-The new warm route must bind the reviewed 33-selector / 40-component /
-ten-premise proof into its build and every process identity before launch. Its
-inert validator must reconstruct the complete 24-process population, exact
-source/configuration and compile/link/load provenance, raw numerical and lifetime
-observations, pending/reset/drain/terminal ordering, actual destruction and final
-input stability. Meaningful rejection controls and independent enforcement
-review are required before executing under that route. Preserve the historical
-origins and scopes of every prerequisite; no earlier original becomes a new run.
+The old four-process proof rejects the changed current caller; preserving its
+no-flag grammar does not make that proof admit current execution. Replay of
+unchanged historical archives remains supported. The new route uses its own
+explicitly selected, independently reviewed projection; no earlier archive is
+promoted into a fresh warm result.
 
 The fresh matched warm attempt retains **24 processes, 792 launches and 25,344
 exact output words**, including excluded primes and warm-ups. Preserve all

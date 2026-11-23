@@ -1,0 +1,150 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Independent read-only accounting of the frozen 4527-ID partitioned gate.
+Exit 0: complete verified pass; 2: verified setup, execution still pending; 1: invalid.
+No test, native workload, replay, supervisor, or source program is executed.
+"""
+import argparse
+from collections import Counter
+import hashlib
+import json
+from pathlib import Path
+import re
+import sys
+from datetime import datetime, timezone
+
+REV = 'c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+TREE = '13450812d279d55f36a172fcf38653ff567f6c86'
+IDS_SHA = '5fd7fbf2f57425467c8124307dbe6ad951e48fe2526a531c87023b58626761fc'
+MANIFEST_SHA = 'ccaac86bf0e77a06c43db1b575716b575e95025cc2aeecf460fc9d05ecf8989f'
+SUPERVISOR_SHA = 'f898761bf4cecf5bdeabb8c57741e600592135511220983a39293ed35b9ed72a'
+WORKER_SHA = '43ac491afecadbb05337fa4179d7b048ea9348d7bba3df097ace2f2129bc8a9b'
+SOURCE_SHA = '6944738200ca84711bb41559755960bb1ae221d3b196a7e45635d1e9a85ba303'
+TOOL_SHAS = ['fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7',
+'a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83',
+'a1ba51de813cd6f482a20b6ea9421f9da1457f5ee1d732480f08a2fef519403b']
+DEFAULT = '/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-partitioned'
+
+
+def sha(path):
+    with Path(path).open('rb') as stream:
+        return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+
+def object_pairs(pairs):
+    value = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError('duplicate JSON key: ' + key)
+        value[key] = item
+    return value
+
+
+def read(path):
+    return json.loads(path.read_text(), object_pairs_hook=object_pairs,
+                      parse_constant=lambda x: (_ for _ in ()).throw(ValueError(x)))
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('output', nargs='?', type=Path, default=Path(DEFAULT))
+    parser.add_argument('--receipt', type=Path)
+    args = parser.parse_args()
+    checks = []
+    receipt = {'schema_version': 1, 'scope': 'independent governance evidence accounting',
+        'observed_at': datetime.now(timezone.utc).isoformat(), 'output': str(args.output),
+        'source_revision': REV, 'full_suite_result': False, 'native_execution': 'not_run',
+        'gpu_execution_certified': False, 'checks': checks}
+    def need(condition, name):
+        if not condition:
+            raise ValueError(name)
+        checks.append(name)
+    try:
+        root = args.output
+        execution_body = (root / 'execution.json').read_bytes()
+        ex = json.loads(execution_body, object_pairs_hook=object_pairs)
+        receipt['execution_sha256_at_observation'] = hashlib.sha256(execution_body).hexdigest()
+        receipt['raw_state'] = ex.get('state')
+        receipt['raw_outcome'] = ex.get('outcome')
+        manifest = read(root / 'partition-manifest.json')
+        need(sha(root / 'partition-manifest.json') == ex['manifest_sha256'] == MANIFEST_SHA, 'fixed manifest pin')
+        need(ex['source_revision'] == manifest['source_revision'] == REV and
+             ex['source_tree'] == manifest['source_tree'] == TREE, 'fixed source revision and tree')
+        need(ex['source'] == manifest['source'] == '/workspace/p06-qualified-warm-source-01' and
+             ex['interpreter'] == manifest['interpreter'] == '/workspace/scratch/dc8be1693f91/governance-host-venv/bin/python3', 'source root and proper venv')
+        ids = manifest['all_ids']
+        need(len(ids) == len(set(ids)) == ex['discovered_count'] == 4527 and
+             hashlib.sha256(json.dumps(ids, separators=(',', ':')).encode()).hexdigest() ==
+             manifest['expected_ids_sha256'] == IDS_SHA, '4527 unique frozen discovery IDs')
+        parts = manifest['partitions']
+        need(len(parts) == 2 and [p['index'] for p in parts] == [0, 1] and
+             [len(p['ids']) for p in parts] == ex['partition_counts'] == [2264, 2263], 'two fixed partition sizes')
+        need(Counter(x for p in parts for x in p['ids']) == Counter(ids), 'exact once partition union')
+        need(not set(parts[0]['modules']) & set(parts[1]['modules']) and
+             all(p['ids'] == [x for x in ids if x.split('.')[0] in p['modules']] for p in parts), 'whole modules preserve discovered order')
+        need(not ex['discovery_import_errors'] and not ex['failures'], 'no discovery or supervisor errors at observation')
+        program_dir = Path(__file__).resolve().parent / 'governance' / 'partitioned'
+        need(sha(program_dir / 'run_governance.py.txt') == ex['supervisor_sha256'] == SUPERVISOR_SHA and
+             sha(program_dir / 'run_partition.py.txt') == ex['partition_program_sha256'] == WORKER_SHA, 'supervisor and worker pins')
+        need(sha(root / 'source-before.json') == ex['source_before_sha256'] == SOURCE_SHA, 'source before inventory pin')
+        need([t['sha256'] for t in ex['tool_inputs_before']] == TOOL_SHAS, 'reviewed interpreter CMake and venv pins')
+        for t in ex['tool_inputs_before']:
+            p = Path(t['path'])
+            need(str(p.resolve(strict=True)) == t['resolved'] and p.stat().st_size == t['size_bytes'] and sha(p) == t['sha256'], 'current tool identity: ' + p.name)
+        need(ex['native_execution'] == 'not_run' and ex['gpu_execution_certified'] is False, 'governance only scope')
+        for row in ex['commands']:
+            need(row['state'] == 'finished' and row['outcome'] == 'pass' and row['exit_code'] == 0 and
+                 row['process_started'] is True and row['cleanup_complete'] is True, 'command pass: ' + row['id'])
+            need(sha(root / row['log']) == row['log_sha256'] and (root / row['log']).stat().st_size == row['log_size_bytes'], 'command log pin: ' + row['id'])
+        receipt['setup_verified'] = True
+        if ex['state'] == 'running' and ex['outcome'] == 'running':
+            receipt.update(outcome='pending', reason='Both final result files and final source/tool checks are required before a full-suite claim.')
+            code = 2
+        else:
+            need(ex['state'] == 'finished' and ex['outcome'] == 'pass' and not ex['not_run'], 'finished passing supervisor')
+            need(Counter(r['id'] for r in ex['commands']) == Counter(['preflight', 'structure', 'baseline-packets', 'diff-check']), 'all four governance commands exactly once')
+            need(len(ex['partitions']) == 2 and [r['index'] for r in ex['partitions']] == [0, 1], 'two final worker records')
+            completed = []
+            for part, row in zip(parts, ex['partitions']):
+                selected = part['ids']
+                result_path = root / ('partition-' + str(part['index']) + '-result.json')
+                result = read(result_path)
+                need(sha(result_path) == row['result_sha256'], 'result pin: ' + str(part['index']))
+                need(result['selected_ids'] == result['started_ids'] == result['completed_ids'] == selected, 'exact selected started completed IDs: ' + str(part['index']))
+                need(result['tests_run'] == row['tests_run'] == len(selected) and
+                     all(result[k] == [] for k in ('failures', 'errors', 'skipped', 'expected_failures', 'unexpected_successes')), 'zero failures errors skips expected failures or unexpected successes: ' + str(part['index']))
+                need(result['state'] == row['state'] == 'finished' and result['outcome'] == row['outcome'] == 'pass' and
+                     row['exit_code'] == 0 and row['cleanup_complete'] is True and row['process_started'] is True, 'worker successful completion: ' + str(part['index']))
+                need(result['source_revision'] == REV and result['source_tree'] == TREE and result['manifest_sha256'] == MANIFEST_SHA and
+                     result['program_sha256'] == WORKER_SHA and result['interpreter'] == ex['interpreter'] and result['partition'] == part['index'], 'worker source program manifest interpreter pins: ' + str(part['index']))
+                log_path = root / row['log']
+                need(sha(log_path) == row['log_sha256'] and log_path.stat().st_size == row['log_size_bytes'], 'worker log pin: ' + str(part['index']))
+                log = log_path.read_text()
+                logged = re.findall(r'^test_\S+ \((test_[\w.]+)\)(?: \.\.\.|$)', log, re.M)
+                need(logged == selected and len(re.findall(r'^Ran ' + str(len(selected)) + r' tests in [0-9.]+s$', log, re.M)) == 1 and
+                     len(re.findall(r'^OK$', log, re.M)) == 1, 'exact verbose log IDs and one successful summary: ' + str(part['index']))
+                completed.extend(result['completed_ids'])
+            need(Counter(completed) == Counter(ids) and len(completed) == ex['completed_ids_count'] == 4527 and
+                 ex['exact_once_complete_population'] is True, '4527 completed exactly once')
+            need(sha(root / 'source-after.json') == ex['source_after_sha256'] == SOURCE_SHA and
+                 read(root / 'source-before.json') == read(root / 'source-after.json') and ex['source_files_stable'] is True and
+                 ex['source_revision_after'] == REV and ex['source_tree_after'] == TREE and ex['status_after'] == '' and
+                 ex['submodules_before'] == ex['submodules_after'], 'source inventories revision tree status and submodule pins stable')
+            need(ex['tool_inputs_before'] == ex['tool_inputs_after'] and ex['tools_stable'] is True and
+                 ex['native_workspace_absent_after'] is True, 'final tools stable and native not started')
+            need((root / 'execution.json').read_bytes() == execution_body, 'final execution receipt stable during reconciliation')
+            receipt.update(outcome='pass', full_suite_result=True, unique_completed_tests=4527, skips=0,
+                           duration_seconds=ex['duration_seconds'], limitation='Whole-module partitions change cross-module process state/order from a monolithic invocation; no native or phase acceptance.')
+            code = 0
+    except Exception as error:
+        receipt.update(outcome='fail', reason=type(error).__name__ + ': ' + str(error))
+        code = 1
+    text = json.dumps(receipt, indent=2, sort_keys=True) + '\n'
+    if args.receipt:
+        with args.receipt.open('x') as stream:
+            stream.write(text)
+    print(text, end='')
+    return code
+
+if __name__ == '__main__':
+    sys.exit(main())

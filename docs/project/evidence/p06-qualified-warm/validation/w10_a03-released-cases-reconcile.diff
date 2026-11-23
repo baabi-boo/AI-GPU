@@ -1,0 +1,28 @@
+--- w09_a04-reconcile.py.txt
++++ w10_a03-released-cases-reconcile.py.txt
+@@ -17,13 +17,13 @@
+ TREE = '13450812d279d55f36a172fcf38653ff567f6c86'
+ IDS_SHA = '5fd7fbf2f57425467c8124307dbe6ad951e48fe2526a531c87023b58626761fc'
+ MANIFEST_SHA = 'ccaac86bf0e77a06c43db1b575716b575e95025cc2aeecf460fc9d05ecf8989f'
+-SUPERVISOR_SHA = 'f898761bf4cecf5bdeabb8c57741e600592135511220983a39293ed35b9ed72a'
+-WORKER_SHA = '43ac491afecadbb05337fa4179d7b048ea9348d7bba3df097ace2f2129bc8a9b'
++SUPERVISOR_SHA = 'ad30126aed4eb077c444e04c930e7f31ec3797c0fda232b9b346905db48ae062'
++WORKER_SHA = '68e32e344208a907551353822d701088353bced55220cee8d09d00764e8b5a7e'
+ SOURCE_SHA = '6944738200ca84711bb41559755960bb1ae221d3b196a7e45635d1e9a85ba303'
+ TOOL_SHAS = ['fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7',
+ 'a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83',
+ 'a1ba51de813cd6f482a20b6ea9421f9da1457f5ee1d732480f08a2fef519403b']
+-DEFAULT = '/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-partitioned'
++DEFAULT = '/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-released-cases'
+ 
+ 
+ def sha(path):
+@@ -83,7 +83,7 @@
+         need(not set(parts[0]['modules']) & set(parts[1]['modules']) and
+              all(p['ids'] == [x for x in ids if x.split('.')[0] in p['modules']] for p in parts), 'whole modules preserve discovered order')
+         need(not ex['discovery_import_errors'] and not ex['failures'], 'no discovery or supervisor errors at observation')
+-        program_dir = Path(__file__).resolve().parent / 'governance' / 'partitioned'
++        program_dir = Path(__file__).resolve().parent / 'governance' / 'released-cases'
+         need(sha(program_dir / 'run_governance.py.txt') == ex['supervisor_sha256'] == SUPERVISOR_SHA and
+              sha(program_dir / 'run_partition.py.txt') == ex['partition_program_sha256'] == WORKER_SHA, 'supervisor and worker pins')
+         need(sha(root / 'source-before.json') == ex['source_before_sha256'] == SOURCE_SHA, 'source before inventory pin')

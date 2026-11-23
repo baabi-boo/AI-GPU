@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: Apache-2.0
+"""Real path admission rejects aliased output before creating an attempt."""
+import json
+from pathlib import Path
+import sys
+import tempfile
+ROOT = Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+sys.path.insert(0,str(ROOT/'ci/project'))
+import p06_qualified_warm_execute as runner
+with tempfile.TemporaryDirectory(prefix='warm-path-probe-') as raw:
+    path = Path(raw).resolve()
+    tools = path/'tools'
+    tools.mkdir()
+    output = path/'output'
+    target = path/'target'
+    output.symlink_to(target, target_is_directory=True)
+    args = runner.argument_parser().parse_args(['run','--source-dir',str(ROOT),
+        '--tools-dir',str(tools),'--work-dir',str(path/'work'),'--output-dir',str(output),
+        '--expected-revision','a'*40,'--dependency-receipt',str(path/'receipt.json'),
+        '--dependency-receipt-sha256','b'*64,'--counter-qualification',str(path/'proof.json'),
+        '--counter-qualification-sha256','c'*64,'--diagnostic-archive',str(path/'diagnostic.zip'),
+        '--diagnostic-archive-sha256','d'*64,'--control-archive',str(path/'control.zip'),
+        '--control-archive-sha256','e'*64])
+    try:
+        runner.preflight.base.resolve_paths(args)
+    except ValueError as error:
+        reason = str(error)
+    else:
+        raise AssertionError('aliased output accepted')
+    assert 'without symlink traversal' in reason
+    assert not target.exists() and not (path/'work').exists()
+    result = {'scope':'real-CLI-path-admission-only','passed':True,'reason':reason,
+        'target_not_created':True,'work_not_created':True,'native_execution_performed':False,
+        'mocks':[]}
+(ROOT/'docs/project/evidence/p06-qualified-warm/validation/w04_a03_path_result.json').write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps(result,sort_keys=True))

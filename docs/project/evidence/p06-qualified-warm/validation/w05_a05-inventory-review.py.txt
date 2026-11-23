@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+"""Git/AST comparison and retained-base/current discovery reconciliation."""
+import ast
+import gzip
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+
+ROOT = Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+OUT = ROOT / 'docs/project/evidence/p06-qualified-warm/validation'
+BASE = 'f80b58b06e7bcf734f3190f6db478fd11f0bab01'
+FINAL = 'c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+PRIOR = '220399748ecab84d48ba5a5f123457c44a0c8699'
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+
+def entries(revision, prefix):
+    result = {}
+    for row in git('ls-tree', '-r', '-z', revision, '--', prefix).split(b'\0'):
+        if not row:
+            continue
+        meta, name = row.split(b'\t', 1)
+        mode, kind, sha = meta.decode().split()
+        result[name.decode()] = (mode, kind, sha)
+    return result
+
+prior_inputs = entries(PRIOR, 'ci/project')
+base_inputs = entries(BASE, 'ci/project')
+assert prior_inputs == base_inputs
+prior_changes = git('diff', '--name-only', PRIOR, BASE).decode().splitlines()
+assert all(name.startswith('docs/') or name == 'ROADMAP.md' for name in prior_changes)
+legacy_body = gzip.decompress((ROOT / 'docs/project/evidence/p06-counter-qualification/validation/w09_a06-discovery-inventories.json.gz').read_bytes())
+legacy = json.loads(legacy_body)['snapshots']['correction']
+assert legacy['tree'] == git('rev-parse', PRIOR + '^{tree}').decode().strip()
+assert legacy['collected_count'] == legacy['unique_count'] == len(legacy['collected_ids'])
+assert legacy['duplicate_ids'] == {} and legacy['import_errors'] == []
+assert legacy['status_before'] == legacy['status_after'] == ''
+current_path = OUT / 'w05_a05-current-discovery.json.gz'
+current = json.loads(gzip.decompress(current_path.read_bytes()))
+assert current['revision'] == FINAL
+assert current['tree'] == git('rev-parse', FINAL + '^{tree}').decode().strip()
+assert current['duplicate_ids'] == {} and current['failed_test_ids'] == [] and current['import_errors'] == []
+assert current['predeclared_skips'] == []
+current_inputs = entries(FINAL, 'ci/project')
+for name, (_, kind, sha) in current_inputs.items():
+    if kind == 'blob':
+        body = (ROOT / name).read_bytes()
+        assert hashlib.sha1(b'blob ' + str(len(body)).encode() + b'\0' + body).hexdigest() == sha, name
+source_entries = {}
+source_methods = {}
+source_blobs = {}
+for label, revision in [('base', BASE), ('current', FINAL)]:
+    rows = {name: value for name, value in entries(revision, 'ci/project').items()
+            if Path(name).parent == Path('ci/project') and Path(name).name.startswith('test_') and name.endswith('.py')}
+    source_entries[label] = rows
+    methods = {}
+    for name, (_, kind, sha) in rows.items():
+        assert kind == 'blob'
+        body = source_blobs.setdefault(sha, git('cat-file', 'blob', sha))
+        tree = ast.parse(body, filename=name)
+        for cls in tree.body:
+            if isinstance(cls, ast.ClassDef):
+                for method in cls.body:
+                    if isinstance(method, (ast.FunctionDef, ast.AsyncFunctionDef)) and method.name.startswith('test_'):
+                        key = '.'.join([Path(name).stem, cls.name, method.name])
+                        assert key not in methods
+                        methods[key] = method
+    source_methods[label] = methods
+base_ids = set(legacy['collected_ids'])
+final_ids = set(current['ids'])
+assert not base_ids - final_ids
+assert set(source_methods['base']) <= base_ids
+assert set(source_methods['current']) <= final_ids
+base_generated = base_ids - set(source_methods['base'])
+final_generated = final_ids - set(source_methods['current'])
+assert base_generated == final_generated
+assert not set(source_entries['base']) - set(source_entries['current'])
+assert not set(source_methods['base']) - set(source_methods['current'])
+changed_methods = []
+for name, before in source_methods['base'].items():
+    after = source_methods['current'][name]
+    assert [ast.dump(x) for x in before.decorator_list] == [ast.dump(x) for x in after.decorator_list]
+    def obligations(node):
+        return [ast.dump(x) for x in ast.walk(node)
+                if isinstance(x, ast.Assert) or isinstance(x, ast.Call)
+                and isinstance(x.func, ast.Attribute)
+                and (x.func.attr.startswith('assert') or x.func.attr == 'skipTest')]
+    assert obligations(before) == obligations(after), name
+    if ast.dump(before) != ast.dump(after):
+        changed_methods.append(name)
+added = sorted(final_ids - base_ids)
+new_route = [name for name in added if name.startswith('test_p06_qualified_warm_')]
+historical_additions = [name for name in added if name not in new_route]
+assert historical_additions == ['test_p06_counter_qualification_contract.FrozenProofTests.test_current_warm_caller_is_not_admitted_by_historical_proof']
+record = {
+    'scope': 'current canonical discovery plus independent Git/AST comparison against retained exact base IDs; no test bodies executed',
+    'outcome': 'pass-for-discovery-and-accounting-only',
+    'baseline_revision': BASE, 'current_revision': FINAL,
+    'baseline_id_origin': {'retained_clean_discovery_tree': legacy['tree'], 'matching_published_revision': PRIOR,
+        'all_ci_project_entries_equal_between_prior_and_base': True, 'compared_entries': len(base_inputs),
+        'other_prior_to_base_changes_are_documentation_only': True,
+        'retained_collection_payload_sha256': hashlib.sha256(legacy_body).hexdigest(),
+        'fresh_base_discovery_performed': False},
+    'base_count': len(base_ids), 'current_count': len(final_ids), 'added_count': len(added), 'removed_ids': [],
+    'new_route_ids': new_route, 'historical_added_ids': historical_additions,
+    'unchanged_generated_ids': len(base_generated),
+    'base_test_modules': len(source_entries['base']), 'current_test_modules': len(source_entries['current']),
+    'base_source_methods': len(source_methods['base']), 'current_source_methods': len(source_methods['current']),
+    'changed_preexisting_test_method_bodies': changed_methods,
+    'all_original_assertion_and_skip_calls_preserved': True,
+    'all_original_test_method_decorators_preserved': True,
+    'current_predeclared_skips': [], 'current_import_errors': [], 'current_duplicate_ids': {}, 'current_failed_test_ids': [],
+    'current_discovery_file_sha256': hashlib.sha256(current_path.read_bytes()).hexdigest(),
+    'post_discovery_ci_project_matches_published': True,
+    'post_discovery_ci_project_entries_checked': len(current_inputs),
+    'current_canonical_ids_sha256': current['canonical_ids_sha256'],
+    'runtime': {'interpreter': current['interpreter'], 'version': current['python_version']},
+    'limits': ['Collection is not test success.', 'Runtime skipTest decisions can only be observed during execution.',
+        'Baseline uses independently source-matched retained discovery; it was not recollected in this review.',
+        'The historical positive projection test selects the immutable original caller fixture; the new negative test verifies rejection of the current warm caller.'],
+}
+(OUT / 'w05_a05-inventory-review.json').write_text(json.dumps(record, indent=2) + '\n')
+print(json.dumps({key: value for key, value in record.items() if key not in ('new_route_ids',)}, indent=2))

@@ -1,0 +1,13 @@
+--- partitioned/run_partition.py.txt
++++ released-cases/run_partition.py.txt
+@@ -71,7 +71,9 @@
+         modules=set(selected['modules'])
+         cases=[case for case in all_cases if case.__class__.__module__ in modules]
+         require([case.id() for case in cases]==selected['ids'],'whole-module selection differs')
+-        result=unittest.TextTestRunner(stream=sys.stdout,verbosity=2,resultclass=RecordedResult).run(unittest.TestSuite(cases))
++        suite=unittest.TestSuite(cases)
++        del all_cases,cases
++        result=unittest.TextTestRunner(stream=sys.stdout,verbosity=2,resultclass=RecordedResult).run(suite)
+         record.update(tests_run=result.testsRun,
+             failures=[{'id':case.id(),'trace':trace} for case,trace in result.failures],
+             errors=[{'id':case.id(),'trace':trace} for case,trace in result.errors],

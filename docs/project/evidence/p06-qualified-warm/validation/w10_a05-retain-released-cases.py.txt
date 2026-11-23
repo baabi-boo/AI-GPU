@@ -1,0 +1,226 @@
+#!/usr/bin/env python3
+"""Retain finished governance evidence without rewriting any original bytes.
+
+Run only after independent reconciliation and observing supervisor exit.
+The absence of retention-manifest.json means a target is incomplete; never reuse it.
+"""
+import argparse
+import gzip
+import hashlib
+import json
+import os
+from pathlib import Path
+import stat
+import sys
+
+REVISION = "c0b44ce64665fe11895f869eea8c38c9b820d6f7"
+ORIGINAL = Path("/workspace/scratch/dc8be1693f91/full-governance-c0b44ce6-released-cases")
+SUPERVISOR_STDOUT = Path("/workspace/scratch/dc8be1693f91/validation/governance-released-cases-supervisor.stdout.log")
+TARGET = Path(__file__).absolute().parent / "governance" / "released-cases-result"
+CHUNK = 1024 * 1024
+
+
+def require(ok, message):
+    if not ok:
+        raise ValueError(message)
+
+
+def no_links(path):
+    path = Path(path).absolute()
+    for component in (path, *path.parents):
+        require(not stat.S_ISLNK(component.lstat().st_mode), "symlink: " + str(component))
+    return path
+
+
+def regular(path):
+    no_links(path)
+    st = path.lstat()
+    require(stat.S_ISREG(st.st_mode) and st.st_nlink == 1,
+            "not a single-link regular file: " + str(path))
+    return st
+
+
+def fingerprint(st):
+    # atime is deliberately excluded: ordinary read-only access may update it.
+    return {key: getattr(st, key) for key in
+            ("st_dev", "st_ino", "st_mode", "st_nlink", "st_size", "st_mtime_ns", "st_ctime_ns")}
+
+
+def open_regular(path):
+    before = regular(path)
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+    stream = os.fdopen(fd, "rb")
+    try:
+        require(fingerprint(os.fstat(fd)) == fingerprint(before), "open race: " + str(path))
+    except BaseException:
+        stream.close()
+        raise
+    return stream
+
+
+def digest(path):
+    before = regular(path)
+    sha = hashlib.sha256()
+    size = 0
+    with open_regular(path) as stream:
+        while block := stream.read(CHUNK):
+            sha.update(block)
+            size += len(block)
+    require(fingerprint(regular(path)) == fingerprint(before), "changed while hashing: " + str(path))
+    require(size == before.st_size, "size changed: " + str(path))
+    return {"sha256": sha.hexdigest(), "size_bytes": size, "stat": fingerprint(before)}
+
+
+def inventory(root):
+    no_links(root)
+    require(stat.S_ISDIR(root.lstat().st_mode), "output root is not a directory")
+    files, directories = {}, []
+
+    def walk(directory):
+        with os.scandir(directory) as scan:
+            entries = sorted(scan, key=lambda entry: entry.name)
+        for entry in entries:
+            path = Path(entry.path)
+            mode = entry.stat(follow_symlinks=False).st_mode
+            rel = path.relative_to(root).as_posix()
+            if stat.S_ISDIR(mode):
+                no_links(path)
+                directories.append(rel)
+                walk(path)
+            else:
+                require(stat.S_ISREG(mode), "link or special output file: " + rel)
+                files[rel] = digest(path)
+    walk(root)
+    return {"directories": sorted(directories), "files": files}
+
+
+def validate_execution(record, allow_failed):
+    require(isinstance(record, dict), "execution must be an object")
+    require(record.get("source_revision") == REVISION, "wrong source revision")
+    require(record.get("state") == "finished", "execution is not finished; retention refused")
+    require(record.get("outcome") in ({"pass", "fail"} if allow_failed else {"pass"}),
+            "failed finished execution requires --allow-failed-finished; other outcomes forbidden")
+    require(isinstance(record.get("finished_at"), str) and record["finished_at"], "missing finish time")
+    for key in ("commands", "partitions"):
+        require(isinstance(record.get(key), list), "missing execution rows: " + key)
+        for row in record[key]:
+            require(isinstance(row, dict) and row.get("state") == "finished",
+                    "unfinished command or partition")
+            require(row.get("cleanup_complete") is True, "command or partition cleanup incomplete")
+
+
+def retain_file(source, target, encoding, expected):
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with open_regular(source) as src, target.open("xb") as raw:
+        if encoding == "gzip":
+            # Empty filename avoids leaking local paths; mtime=0 avoids wall-clock variation.
+            with gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0, compresslevel=9) as dst:
+                while block := src.read(CHUNK):
+                    dst.write(block)
+        else:
+            while block := src.read(CHUNK):
+                raw.write(block)
+        raw.flush()
+        os.fsync(raw.fileno())
+    decoded_sha, decoded_size = hashlib.sha256(), 0
+    reader = gzip.open if encoding == "gzip" else open
+    with reader(target, "rb") as decoded, open_regular(source) as original:
+        while True:
+            block = decoded.read(CHUNK)
+            require(block == original.read(CHUNK), "decoded bytes differ: " + str(source))
+            if not block:
+                break
+            decoded_sha.update(block)
+            decoded_size += len(block)
+    require(decoded_sha.hexdigest() == expected["sha256"] and decoded_size == expected["size_bytes"],
+            "copy no longer matches original inventory: " + str(source))
+    stored = digest(target)
+    return {"encoding": encoding, "original_sha256": expected["sha256"],
+            "original_size_bytes": expected["size_bytes"],
+            "retained_sha256": stored["sha256"], "retained_size_bytes": stored["size_bytes"],
+            "decoded_sha256": decoded_sha.hexdigest(), "decoded_size_bytes": decoded_size,
+            "byte_comparison_verified": True}
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--supervisor-stdout", type=Path, required=True)
+    parser.add_argument("--supervisor-exit-confirmed", action="store_true",
+                        help="coordinator has observed the supervisor process exit")
+    parser.add_argument("--reconciled-execution-sha256", required=True,
+                        help="final execution.json SHA-256 independently reconciled by W10A03/coordinator")
+    parser.add_argument("--allow-failed-finished", action="store_true")
+    args = parser.parse_args()
+    require(args.supervisor_exit_confirmed, "coordinator must first observe supervisor exit")
+    require(args.supervisor_stdout.absolute() == SUPERVISOR_STDOUT, "unexpected supervisor stdout selection")
+    require(not os.path.lexists(TARGET), "target exists; clobber forbidden: " + str(TARGET))
+    no_links(TARGET.parent)
+    with open_regular(ORIGINAL / "execution.json") as stream:
+        execution_bytes = stream.read()
+    record = json.loads(execution_bytes)
+    validate_execution(record, args.allow_failed_finished)
+    expected_execution = hashlib.sha256(execution_bytes).hexdigest()
+    require(expected_execution == args.reconciled_execution_sha256, "reconciled execution hash differs")
+    before = inventory(ORIGINAL)
+    require(before["files"]["execution.json"]["sha256"] == expected_execution, "execution changed")
+    stdout_before = digest(args.supervisor_stdout)
+    with open_regular(args.supervisor_stdout) as stream:
+        stdout_lines = stream.read().splitlines()
+    require(stdout_lines, "supervisor stdout is empty")
+    terminal = json.loads(stdout_lines[-1])
+    require(isinstance(terminal, dict) and terminal.get("execution") == str(ORIGINAL / "execution.json")
+            and terminal.get("outcome") == record["outcome"], "supervisor terminal summary differs")
+    # mkdir is exclusive, including if another process creates the target after the earlier check.
+    TARGET.mkdir()
+    entries = []
+    for rel, expected in before["files"].items():
+        destination = Path("execution.json") if rel == "execution.json" else Path("output") / (rel + ".gz")
+        encoding = "identity" if rel == "execution.json" else "gzip"
+        entry = retain_file(ORIGINAL / rel, TARGET / destination, encoding, expected)
+        entry.update(source_kind="original-output", original_path=str(ORIGINAL / rel),
+                     original_relative_path=rel, retained_relative_path=destination.as_posix())
+        entries.append(entry)
+    destination = Path("coordinator") / "supervisor.stdout.log.gz"
+    entry = retain_file(args.supervisor_stdout, TARGET / destination, "gzip", stdout_before)
+    entry.update(source_kind="coordinator-selected-supervisor-stdout",
+                 original_path=str(args.supervisor_stdout), retained_relative_path=destination.as_posix())
+    entries.append(entry)
+    after = inventory(ORIGINAL)
+    stdout_after = digest(args.supervisor_stdout)
+    require(before == after, "original output inventory changed; retention is incomplete")
+    require(stdout_before == stdout_after, "supervisor stdout changed; retention is incomplete")
+    with open_regular(ORIGINAL / "execution.json") as stream:
+        require(stream.read() == execution_bytes, "original execution changed")
+    manifest = {
+        "schema_version": 1, "scope": "byte-preserving-governance-evidence-retention-only",
+        "original_output_directory": str(ORIGINAL), "target_directory": str(TARGET),
+        "execution_record_fields": {key: record[key] for key in
+                                    ("state", "outcome", "source_revision", "finished_at")},
+        "reconciled_execution_sha256": expected_execution,
+        "coordinator_declared_supervisor_exit_observed": True,
+        "failed_finished_retention_explicitly_allowed": args.allow_failed_finished,
+        "supervisor_stdout_selection": "explicit coordinator argument; outside original output directory",
+        "original_inventory_before": before, "original_inventory_after": after,
+        "supervisor_stdout_before": stdout_before, "supervisor_stdout_after": stdout_after,
+        "all_original_files_unchanged": True, "entries": entries,
+        "limitations": ["Retention does not establish governance correctness or native/GPU acceptance.",
+                        "No source checkout, virtual environment, temporary tree or native execution is copied.",
+                        "Read-only access may update source atime; content and recorded metadata must remain stable.",
+                        "This manifest excludes its own digest; final packet publication supplies that binding."]}
+    # Written last: exceptions leave an incomplete target that this program refuses to reuse.
+    with (TARGET / "retention-manifest.json").open("x", encoding="utf-8") as stream:
+        json.dump(manifest, stream, sort_keys=True, indent=2)
+        stream.write("\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+    print(json.dumps({"retention_manifest": str(TARGET / "retention-manifest.json"),
+                      "original_file_count": len(before["files"]), "retained_file_count": len(entries)}))
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        raise SystemExit(main())
+    except (ValueError, OSError, KeyError, TypeError) as error:
+        print("retention refused: " + str(error), file=sys.stderr)
+        raise SystemExit(1)

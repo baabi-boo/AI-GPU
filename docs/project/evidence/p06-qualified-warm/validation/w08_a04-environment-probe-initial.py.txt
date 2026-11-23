@@ -1,0 +1,111 @@
+#!/usr/bin/env python3
+"""Validate the isolated host environment; not native experiment evidence."""
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import tempfile
+import time
+
+ROOT = Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+SOURCE = Path('/workspace/p06-qualified-warm-source-01')
+OUTPUT = ROOT / 'docs/project/evidence/p06-qualified-warm/validation'
+HOST = Path('/workspace/scratch/dc8be1693f91/governance-host-venv')
+PYTHON = HOST / 'bin/python3'
+EXPECTED_REVISION = 'c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+EXPECTED_CMAKE = 'a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83'
+PRIOR = ROOT / 'docs/project/evidence/p06-counter-qualification/validation/w09_a04-proper-venv-25-tests.log'
+
+def identity(path):
+    body = path.read_bytes()
+    return {'path': str(path), 'resolved': str(path.resolve()), 'size_bytes': len(body),
+            'sha256': hashlib.sha256(body).hexdigest()}
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=SOURCE, text=True).strip()
+
+def tools():
+    return [identity(HOST / name) for name in ('bin/python3', 'bin/cmake', 'pyvenv.cfg')]
+
+names = [match.group(1) for match in re.finditer(r'^\S+ \(([^)]+)\) \.\.\. ok$',
+                                               PRIOR.read_text(), re.MULTILINE)]
+assert len(names) == len(set(names)) == 25
+assert names[0] == 'test_p05_installed_check.InstalledCheckerTests.test_copied_checker_cannot_import_source_in_clean_venv'
+assert git('rev-parse', 'HEAD') == EXPECTED_REVISION
+assert git('status', '--porcelain=v1', '--untracked-files=all') == ''
+before = tools()
+assert before[1]['sha256'] == EXPECTED_CMAKE
+reviewed_paths = [
+    'ci/project/test_p05_installed_check.py', 'ci/project/p05_installed_check.py',
+    'ci/project/test_p06_dependency_build.py', 'ci/project/test_p06_dependency_option_controls.py',
+    'ci/project/test_p06_dependency_receipt.py', 'ci/project/p06_dependency_build_test_fixture.py',
+]
+reviewed_before = [identity(SOURCE / name) for name in reviewed_paths]
+environment = dict(os.environ, PYTHONDONTWRITEBYTECODE='1',
+    PATH=str(HOST / 'bin') + ':' + os.environ['PATH'], PYTHONPATH=str(SOURCE / 'ci/project'))
+probe = """import sys,os,json,shutil,pathlib
+selected=str(pathlib.Path(sys.executable).parent)+':/usr/bin:/bin'
+print(json.dumps({'executable':sys.executable,'resolved':str(pathlib.Path(sys.executable).resolve()),
+'base_executable':sys._base_executable,'prefix':sys.prefix,'base_prefix':sys.base_prefix,
+'version':sys.version,'sanitized_path':selected,'sanitized_cmake':shutil.which('cmake',path=selected),
+'sanitized_cxx':shutil.which('g++',path=selected),'sanitized_make':shutil.which('make',path=selected)}))
+"""
+observed = json.loads(subprocess.check_output([str(PYTHON), '-B', '-c', probe],
+                                            cwd=SOURCE, env=environment, text=True))
+assert observed['sanitized_cmake'] == str(HOST / 'bin/cmake')
+assert observed['sanitized_cxx'] and observed['sanitized_make']
+assert observed['base_prefix'] == '/opt/codex/runtimes/codex-primary-runtime/dependencies/python'
+assert observed['prefix'] == str(HOST)
+argv = [str(PYTHON), '-B', '-m', 'unittest', '-v', *names]
+log = OUTPUT / 'w08_a04-proper-venv-25-tests.log'
+started_at = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+started = time.monotonic()
+with tempfile.TemporaryDirectory(prefix='w08-a04-fixtures-',
+                                dir='/workspace/scratch/dc8be1693f91') as temporary:
+    environment['TMPDIR'] = temporary
+    with log.open('xb') as stream:
+        completed = subprocess.run(argv, cwd=SOURCE, env=environment,
+            stdout=stream, stderr=subprocess.STDOUT, timeout=150)
+elapsed = time.monotonic() - started
+text = log.read_text()
+actual = [match.group(1) for match in re.finditer(r'^\S+ \(([^)]+)\) \.\.\. ok$',
+                                                text, re.MULTILINE)]
+after = tools()
+reviewed_after = [identity(SOURCE / name) for name in reviewed_paths]
+status_after = git('status', '--porcelain=v1', '--untracked-files=all')
+passed = (completed.returncode == 0 and actual == names and 'Ran 25 tests in ' in text
+          and text.rstrip().endswith('OK') and not re.search(r'\.\.\. (skipped|FAIL|ERROR)', text)
+          and before == after and reviewed_before == reviewed_after and status_after == '')
+record = {'schema_version': 1, 'scope': 'isolated host environment and affected existing tooling tests only',
+    'outcome': 'pass' if passed else 'fail', 'source_revision': EXPECTED_REVISION,
+    'source_tree': git('rev-parse', 'HEAD^{tree}'), 'source': str(SOURCE),
+    'started_at': started_at, 'finished_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+    'creation_argv': ['/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3',
+                      '-m', 'venv', '--without-pip', str(HOST)],
+    'only_added_tool_alias': {'path': str(HOST / 'bin/cmake'),
+                            'target': '/workspace/p06-build-tools/cmake/data/bin/cmake'},
+    'no_downloads_or_package_installation': True, 'shared_tool_directories_changed': False,
+    'runtime_observation': observed, 'argv': argv, 'cwd': str(SOURCE),
+    'environment_overrides': {name: environment[name] for name in
+        ('PYTHONDONTWRITEBYTECODE', 'PATH', 'PYTHONPATH', 'TMPDIR')},
+    'exit_code': completed.returncode, 'duration_seconds': elapsed,
+    'selected_ids': names, 'completed_ok_ids': actual, 'tests_run': len(actual),
+    'selected_equal_completed': names == actual, 'failures': 0 if passed else None,
+    'errors': 0 if passed else None, 'skips': 0 if passed else None,
+    'tools_before': before, 'tools_after': after, 'tools_stable': before == after,
+    'reviewed_sources_before': reviewed_before, 'reviewed_sources_after': reviewed_after,
+    'reviewed_sources_stable': reviewed_before == reviewed_after,
+    'status_after': status_after, 'source_clean': status_after == '',
+    'log': identity(log), 'probe': identity(Path(__file__)),
+    'native_execution': 'not_run', 'full_suite_executed': False, 'new_unique_unittest_ids': 0,
+    'limitations': ['These 25 existing IDs overlap the future exhaustive suite.',
+        'Tiny dependency fixture builds use existing host tools; this is not a fresh GPU dependency or native experiment.',
+        'Earlier partial governance records are preserved separately and not relabelled.']}
+with (OUTPUT / 'w08_a04-environment-validation.json').open('x') as stream:
+    json.dump(record, stream, indent=2)
+    stream.write('\n')
+print(json.dumps({'outcome':record['outcome'],'tests_run':len(actual),'exit_code':completed.returncode,
+                  'duration_seconds':elapsed,'tools_stable':before==after,'source_clean':status_after==''}))
+raise SystemExit(0 if passed else 1)

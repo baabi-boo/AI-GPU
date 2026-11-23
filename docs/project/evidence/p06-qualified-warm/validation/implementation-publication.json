@@ -1,0 +1,542 @@
+{
+  "parent": "f80b58b06e7bcf734f3190f6db478fd11f0bab01",
+  "tree": "13450812d279d55f36a172fcf38653ff567f6c86",
+  "review_commit": "89f51bc53a6de89657418a0a07ceb4a73c9dd91b",
+  "message": "Implement explicitly qualified 24-process warm workspace experiment\n\nPreserve historical proofs and gates; bind current native caller, sampling and complete replay to a separately reviewed extension.\n\n89 focused tooling tests pass. Fresh native execution and full governance follow this published checkpoint; no performance or phase acceptance is claimed.\n",
+  "files": [
+    {
+      "path": ".github/workflows/project-governance.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f36207bd14a36f34b32feefbe5c2c6409e94e071",
+      "status": "M",
+      "size_bytes": 6390
+    },
+    {
+      "path": "ci/project/fixtures/p06_counter_preflight_main_v1.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "552ce1a36686935b36af4e56a3b2b9d6a8648a75",
+      "status": "A",
+      "size_bytes": 26844
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_historical_fixture.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "491cfe2f595c7208685002f500939a06bd51b422",
+      "status": "A",
+      "size_bytes": 716
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_test_fixture.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "784fcd217846bea913c319a731a30ca81b47d4a2",
+      "status": "M",
+      "size_bytes": 11242
+    },
+    {
+      "path": "ci/project/p06_dependency_native_replay.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "522404b8945fa43ce2b1273c2118026f53b9dd0a",
+      "status": "M",
+      "size_bytes": 60689
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_execute.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d4f209070daf1c30d0bfb144dcbeb6518723a9d2",
+      "status": "M",
+      "size_bytes": 54331
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_admission.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e3e3d12850b5884844735d1947a6b045dbd0b196",
+      "status": "A",
+      "size_bytes": 9445
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_analyze.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8dd614415c97f3a78a604d3076efc82fb5ffd3fa",
+      "status": "A",
+      "size_bytes": 5737
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_contract.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bb6576f79b58ca0076a642f7942f18e6c32558ce",
+      "status": "A",
+      "size_bytes": 8017
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_execute.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b26953bcfde17802a742e4702f788c2edf22cbc9",
+      "status": "A",
+      "size_bytes": 2134
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_proof.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "81c2eeecf7f74c2711415c1c6a0c53329920a63c",
+      "status": "A",
+      "size_bytes": 21505
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_records.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6299b71c3eb1c87f04b7bae3317e91b530e7ad73",
+      "status": "A",
+      "size_bytes": 4514
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_replay.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c821508c4395d4a8d31152c4030136be81eeacb",
+      "status": "A",
+      "size_bytes": 20355
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_test_fixture.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "17ff7c83e8b677693e72ef5f8f136f24aa56eeb1",
+      "status": "A",
+      "size_bytes": 11516
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_admission.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4148250b26629eb803ef91cb9a93bd4d3153551a",
+      "status": "M",
+      "size_bytes": 15558
+    },
+    {
+      "path": "ci/project/test_p06_counter_qualification_contract.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b5e2cfbb2b335663fcb883361d54595577638e32",
+      "status": "M",
+      "size_bytes": 11524
+    },
+    {
+      "path": "ci/project/test_p06_qualified_warm_admission.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "39ea2dcd39b6eb14173d383088add2719d874285",
+      "status": "A",
+      "size_bytes": 8608
+    },
+    {
+      "path": "ci/project/test_p06_qualified_warm_analyze.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0c62b15fb6b960223f063a10774a4dc908b03b15",
+      "status": "A",
+      "size_bytes": 16419
+    },
+    {
+      "path": "ci/project/test_p06_qualified_warm_complete_replay.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c38c9d33b54e5154d8f13d9452b68dc3b245bf68",
+      "status": "A",
+      "size_bytes": 12743
+    },
+    {
+      "path": "ci/project/test_p06_qualified_warm_contract.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ec0a005984ae493ebceb354945f5717e4400c5a",
+      "status": "A",
+      "size_bytes": 6348
+    },
+    {
+      "path": "ci/project/test_p06_qualified_warm_records.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b22d00557fe748fa30f7071c3b7a2265dae4d6d",
+      "status": "A",
+      "size_bytes": 11705
+    },
+    {
+      "path": "ci/project/test_p06_qualified_warm_replay.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1169164185feb244c1b89ff0d84f11e0465d5b9a",
+      "status": "A",
+      "size_bytes": 9365
+    },
+    {
+      "path": "ci/project/test_p06_qualified_warm_runner.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c9800cd406b2be61bfba5e889254e64a37e3b96a",
+      "status": "A",
+      "size_bytes": 14736
+    },
+    {
+      "path": "docs/designs/qualified_warm_workspace_v1.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b3d76c9c758959305a9b3f683242f92f30e0934",
+      "status": "A",
+      "size_bytes": 7078
+    },
+    {
+      "path": "docs/project/backlog.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0fd81c7083ce3a6705cab3001212b49bb2418875",
+      "status": "M",
+      "size_bytes": 46244
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a2c4f4b065ff3399652127ec8620b2360a34e52",
+      "status": "A",
+      "size_bytes": 2789
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w01_a01.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e6b59932c1fec7e0a181cea7e4f1ed7386abeb75",
+      "status": "A",
+      "size_bytes": 10316
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w01_a02.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "84d4bdc04d2333bda4ca49dc14aee14abb26e8c8",
+      "status": "A",
+      "size_bytes": 9293
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w01_a03.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d7f5c1e74265238c27515bb7811790bedb0e6505",
+      "status": "A",
+      "size_bytes": 12269
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w01_a04.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "48a9301f0895bb596bb15899b9de27f3d1ee8c23",
+      "status": "A",
+      "size_bytes": 5095
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w01_a05.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b6a1555e1fa0786f2200e2a4d4219a48e7be2b00",
+      "status": "A",
+      "size_bytes": 7302
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w01_a06.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1ff96b2513a8f535f9267d9266591fe61f979694",
+      "status": "A",
+      "size_bytes": 8622
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w02_a01.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "06c6c3f5a52bfd58ca955c3b76373717f31751cd",
+      "status": "A",
+      "size_bytes": 3159
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w02_a02.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2a0869a25995086dc010ada4b7d90d8d498e3a9e",
+      "status": "A",
+      "size_bytes": 4987
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w02_a03.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7ba8361fa7f6008e5525fc28c4b1c0759345b687",
+      "status": "A",
+      "size_bytes": 4153
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w02_a04.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "061db0ad2bc048ad8d1527001ddd8762a66dbbdb",
+      "status": "A",
+      "size_bytes": 4125
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w02_a05.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "48f5601aa07c349c264ed76c1cf508ce5732ede0",
+      "status": "A",
+      "size_bytes": 3862
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w02_a06.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "975171b1ebd67d73154b4c5dc6afa43ef3b7db4f",
+      "status": "A",
+      "size_bytes": 5094
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w03_a01.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b234ee2d969b6894210cf8156b31f0c180617a6f",
+      "status": "A",
+      "size_bytes": 8263
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w03_a02.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4497bb1136cc375bfb776462e77d7bed16abcfcd",
+      "status": "A",
+      "size_bytes": 6637
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w03_a03.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f508935f57af2160210658ae3359937ce9c42fc2",
+      "status": "A",
+      "size_bytes": 7811
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w03_a04.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "79cdcfdc94f1f902cc9a00016dbf9dd24c10adea",
+      "status": "A",
+      "size_bytes": 5675
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w03_a05.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a2ddc17711936a7f97bf67a87398ebfb2c442bc",
+      "status": "A",
+      "size_bytes": 7296
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/agents/w03_a06.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f9c2ac04401ef88aba789c05cb271920eca55908",
+      "status": "A",
+      "size_bytes": 3969
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/caller-link-bf16.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "status": "A",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/caller-link-fp16.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "status": "A",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/caller-syntax-bf16.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "status": "A",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/caller-syntax-fp16.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "status": "A",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/caller-syntax-results.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a365ed2295a432404308a2ac91a85f222061cb79",
+      "status": "A",
+      "size_bytes": 23591
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/historical-qualification-initial.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d639fd14e5abeda2e396d3e4940a6e1272a39ad9",
+      "status": "A",
+      "size_bytes": 11150
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/native-argument-probe.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "93a477180e9068e032ae41df83b50bd76f3c08fd",
+      "status": "A",
+      "size_bytes": 42969
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/native-argument-probe.py.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ad881c366855928bde73929f23fd00781962375",
+      "status": "A",
+      "size_bytes": 2895
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/qualified-warm-focused.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd45f0bc1aa26c0d26eebee1270602a31ffcf43d",
+      "status": "A",
+      "size_bytes": 4506
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/qualified-warm-focused.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "31e09763b2f5ff185d818ff603c55bc910daff74",
+      "status": "A",
+      "size_bytes": 16931
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/w02-a03-historical-runner.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ae3c808db8ac771a10b9ef08379987054314200",
+      "status": "A",
+      "size_bytes": 2180
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/w02-a03-warm-runner.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b7dc87e5c6d7210d2067eb2b065947a80bb60eb",
+      "status": "A",
+      "size_bytes": 1690
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/w02-a05-analyze.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b92c463f934f7afd8fc16a9c2f0d01e47a15b69e",
+      "status": "A",
+      "size_bytes": 4020
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/w03_a06-historical-pins.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b1097fcacbbf4cc24280ffcc62501dc2239b6546",
+      "status": "A",
+      "size_bytes": 1407
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/w03_a06-historical-replay-execution.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "71fba80e83802bf7d4367691c3e0b930c3733459",
+      "status": "A",
+      "size_bytes": 6615
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/w03_a06-historical-replay-full.json.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a61465f6e72c719abd9bfbc806d707de150928dc",
+      "status": "A",
+      "size_bytes": 305355
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/w03_a06-historical-replay-supervisor.py.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dc2ae5ff60a5c32c3e04a55077e21ef79c9bd6d6",
+      "status": "A",
+      "size_bytes": 4130
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/w03_a06-historical-warm-analyzer-summary.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "73582be90f2782056ba66fc271c2163305bacd35",
+      "status": "A",
+      "size_bytes": 757
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/validation/w03_a06-historical-warm-analyzer.log",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2819f23fb11f77e9d0bfce565b98a0543531abc2",
+      "status": "A",
+      "size_bytes": 5371
+    },
+    {
+      "path": "docs/project/p06-qualified-warm-audit.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f4c260e41e9375ceaf4b855e9b3c61eab90f0236",
+      "status": "A",
+      "size_bytes": 5275
+    },
+    {
+      "path": "docs/project/status.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "33721a8ac6416e01e90f097d5d423d9cac89e8a2",
+      "status": "M",
+      "size_bytes": 114623
+    },
+    {
+      "path": "tests/regression/ai_counter_preflight/main.cpp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f98ce2f3a616f13c4ae19b220a9700f3252536cb",
+      "status": "M",
+      "size_bytes": 27523
+    }
+  ],
+  "published_revision": "c0b44ce64665fe11895f869eea8c38c9b820d6f7",
+  "remote_ref": "refs/heads/master",
+  "remote_tree": "13450812d279d55f36a172fcf38653ff567f6c86",
+  "blob_shas_verified": true,
+  "expected_sha_lease": "f80b58b06e7bcf734f3190f6db478fd11f0bab01",
+  "force": false
+}

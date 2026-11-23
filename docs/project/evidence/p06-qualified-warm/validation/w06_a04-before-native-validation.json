@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "scope": "author static and extracted-predicate validation only; full supervisor not invoked",
+  "supervisor_sha256": "e5ce09c81fdb6de60b56c0decdb91e12e3221fa2146f353bf16cd44742caa20f",
+  "supervisor_bytes": 16787,
+  "base_supervisor_sha256": "a5b43e6d929e511ad1dbfa8cbf5b9d1085a6d0ffab8bc263fa428bfd439d8c57",
+  "base_unchanged": true,
+  "syntax": "pass",
+  "unchanged_support_functions": [
+    "now",
+    "require",
+    "sha",
+    "canonical",
+    "git",
+    "snapshot",
+    "write_new",
+    "live_group",
+    "stop_group"
+  ],
+  "command_list_ast_identical": true,
+  "source_revision": "c0b44ce64665fe11895f869eea8c38c9b820d6f7",
+  "source_tree": "13450812d279d55f36a172fcf38653ff567f6c86",
+  "resource_review_sha256": "4803a73034fa4014a22dca1785d1e4d6528e328ede6052914c9c1060e693105b",
+  "absence_predicate_cases": [
+    {
+      "case": "both absent",
+      "outcome": "pass"
+    },
+    {
+      "case": "workspace present",
+      "outcome": "expected_rejection",
+      "reason": "native attempt has started: /workspace/scratch/dc8be1693f91/validation/w06-a04-absence-3gof8apr/workspace"
+    },
+    {
+      "case": "supervision present",
+      "outcome": "expected_rejection",
+      "reason": "native attempt has started: /workspace/scratch/dc8be1693f91/validation/w06-a04-absence-3gof8apr/supervision.json"
+    },
+    {
+      "case": "dangling workspace symlink",
+      "outcome": "expected_rejection",
+      "reason": "symlink path rejected: /workspace/scratch/dc8be1693f91/validation/w06-a04-absence-3gof8apr/workspace"
+    }
+  ],
+  "native_execution": "not_run",
+  "governance_suite_execution": "not_run",
+  "independent_review": "pending"
+}

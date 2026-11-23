@@ -1,0 +1,302 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Closed three-module tooling supplement; not a complete local-suite result.
+
+Run manually from the clean selected source with the reviewed proper venv.
+A separate reviewer must join these 59 IDs with completed hosted evidence.
+Earlier failed/incomplete local attempts remain independent and unchanged.
+"""
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import signal
+import subprocess
+import sys
+import time
+
+SOURCE = Path('/workspace/p06-qualified-warm-source-01')
+OUTPUT = Path('/workspace/scratch/dc8be1693f91/hosted-gap-supplement-c0b44ce6')
+TEMP = Path('/workspace/p06-qualified-warm-hosted-gap-tmp-01')
+HOST = Path('/workspace/scratch/dc8be1693f91/governance-host-venv')
+PYTHON = str(HOST / 'bin/python3')
+REVISION = 'c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+TREE = '13450812d279d55f36a172fcf38653ff567f6c86'
+NATIVE_WORKSPACE = Path('/workspace/p06-qualified-warm-run-01')
+NATIVE = Path('/workspace/scratch/dc8be1693f91/native-qualified-warm-attempt-01/supervision.json')
+SELECTION = Path(__file__).resolve().with_name('selection-manifest.json')
+SELECTION_SHA256 = '6c171ba3121445e1b2a5cc5f9c56f74d846c25c0cb4395b4d23eb4449b1e0adc'
+EXPECTED_MODULE_COUNTS = (('test_p06_dependency_build', 9),
+    ('test_p06_dependency_option_controls', 21), ('test_p06_dependency_receipt', 29))
+COMMAND_SECONDS = 180
+WHOLE_SECONDS = 600
+LOG_BUDGET_BYTES = 16 * 1024**2
+
+def now():
+    return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+
+def require(condition, message):
+    if not condition:
+        raise RuntimeError(message)
+
+def sha(path):
+    with Path(path).open('rb') as stream:
+        return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+def canonical(path, existing=True):
+    require(path.is_absolute(), 'absolute path required: ' + str(path))
+    require(all(not item.is_symlink() for item in (path, *path.parents)),
+            'symlink path rejected: ' + str(path))
+    require(path.resolve(strict=existing) == path, 'noncanonical path: ' + str(path))
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=SOURCE, text=True,
+                                   timeout=60).strip()
+
+def snapshot():
+    entries = subprocess.check_output(['git', 'ls-files', '--stage', '-z'],
+                                     cwd=SOURCE, timeout=60).split(b'\0')
+    rows = []
+    for entry in entries:
+        if not entry:
+            continue
+        metadata, raw_name = entry.split(b'\t', 1)
+        mode, oid, stage = metadata.decode('ascii').split()
+        name = raw_name.decode('utf-8')
+        require(stage == '0', 'unmerged index entry: ' + name)
+        path = SOURCE / name
+        row = {'path': name, 'mode': mode, 'git_oid': oid}
+        if mode == '160000':
+            row['kind'] = 'gitlink-not-recursively-certified'
+        elif mode == '120000':
+            require(path.is_symlink(), 'tracked symlink is missing: ' + name)
+            body = os.fsencode(os.readlink(path))
+            row.update(kind='symlink-text', size_bytes=len(body),
+                       sha256=hashlib.sha256(body).hexdigest())
+        else:
+            require(path.is_file() and not path.is_symlink(),
+                    'missing or nonregular tracked source: ' + name)
+            row.update(kind='regular-file', size_bytes=path.stat().st_size,
+                       sha256=sha(path))
+        rows.append(row)
+    return rows
+
+def write_new(path, value):
+    with path.open('x', encoding='utf-8') as stream:
+        json.dump(value, stream, indent=2, sort_keys=True)
+        stream.write('\n')
+
+def live_group(pid):
+    members = []
+    for path in Path('/proc').iterdir():
+        if not path.name.isdigit():
+            continue
+        try:
+            fields = (path / 'stat').read_text().rsplit(') ', 1)[1].split()
+            if int(fields[2]) == pid and fields[0] not in ('Z', 'X'):
+                members.append(int(path.name))
+        except (FileNotFoundError, ProcessLookupError):
+            continue
+    return members
+
+def stop_group(process):
+    for number in (signal.SIGTERM, signal.SIGKILL):
+        try:
+            os.killpg(process.pid, number)
+        except ProcessLookupError:
+            pass
+        try:
+            process.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            pass
+        if not live_group(process.pid):
+            return True
+    return not live_group(process.pid)
+
+def native_absence():
+    for path in (NATIVE_WORKSPACE, NATIVE):
+        canonical(path, existing=False)
+        require(not os.path.lexists(path), 'native attempt has started: ' + str(path))
+
+def identity(path):
+    path = Path(path)
+    return {'path': str(path), 'resolved': str(path.resolve(strict=True)),
+            'size_bytes': path.stat().st_size, 'sha256': sha(path)}
+
+def tool_inputs():
+    return [identity(HOST / name) for name in ('bin/python3', 'bin/cmake', 'pyvenv.cfg')]
+
+
+def load_selection():
+    canonical(SELECTION)
+    body=SELECTION.read_bytes()
+    require(hashlib.sha256(body).hexdigest()==SELECTION_SHA256, 'selection manifest pin differs')
+    value=json.loads(body)
+    require(value.get('source')==str(SOURCE) and value.get('source_revision')==REVISION
+            and value.get('source_tree')==TREE, 'selection source differs')
+    rows=value.get('modules')
+    require(type(rows) is list and len(rows)==3, 'three complete selected modules required')
+    selected=[]
+    for row,(module,count) in zip(rows,EXPECTED_MODULE_COUNTS):
+        require(type(row) is dict and row.get('module')==module and row.get('pattern')==module+'.py'
+                and type(row.get('expected_count')) is int and row['expected_count']==count,
+                'selected module/count differs')
+        ids=row.get('ids')
+        require(type(ids) is list and len(ids)==count
+                and all(type(identifier) is str and identifier.startswith(module+'.') for identifier in ids),
+                'selected IDs differ')
+        selected.extend(ids)
+    require(len(selected)==len(set(selected))==59 and value.get('selected_ids')==selected
+            and type(value.get('selected_count')) is int and value['selected_count']==59,
+            'selected population differs')
+    require(value.get('complete_local_suite_claimed') is False, 'supplement cannot claim a full local suite')
+    return value
+
+
+def verify_log(path, expected_ids):
+    log=path.read_text(encoding='utf-8')
+    ids=re.findall(r'^test_\S+ \((test_[\w.]+)\)(?: \.\.\.|$)', log, re.M)
+    require(ids==expected_ids, 'verbose ordered test ID population differs')
+    count=len(expected_ids)
+    require(len(re.findall(r'^Ran '+str(count)+r' tests in [0-9.]+s$',log,re.M))==1,
+            'unittest count summary differs')
+    require(re.findall(r'^(?:OK(?: \(.+\))?|FAILED(?: \(.+\))?)$',log,re.M)==['OK'],
+            'unittest result is not one plain OK; failures/errors/skips are rejected')
+    require(not re.findall(r'^test_.* \.\.\. (?:skipped|expected failure|unexpected success|FAIL|ERROR)',log,re.M)
+            and not re.findall(r'^(?:FAIL|ERROR): ',log,re.M), 'nonpassing test outcome present')
+    return {'ordered_ids':ids,'tests_run':count,'all_selected_ids_completed':True,
+            'zero_failures_errors_skips_expected_failures_or_unexpected_successes':True}
+
+
+def main():
+    require(sys.executable==PYTHON and sys.version_info[:2]==(3,12), 'reviewed proper Python 3.12 venv required')
+    require(Path.cwd()==SOURCE, 'clean source-root invocation required')
+    for path in (SOURCE,HOST,Path(__file__).resolve()):canonical(path)
+    for path in (OUTPUT,TEMP):
+        canonical(path,existing=False)
+        require(not os.path.lexists(path), 'fresh destination required: '+str(path))
+    native_absence()
+    selection=load_selection()
+    require(git('rev-parse','HEAD')==REVISION and git('rev-parse','HEAD^{tree}')==TREE,
+            'source revision/tree differs')
+    require(not git('status','--porcelain=v1','--untracked-files=all'), 'source is dirty')
+    tools_before=tool_inputs()
+    require(tuple(row['sha256'] for row in tools_before)==(
+        'fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7',
+        'a5560a96289c53778c9ba0112ce054f693d7d1a6975af3be69316fba31726f83',
+        'a1ba51de813cd6f482a20b6ea9421f9da1457f5ee1d732480f08a2fef519403b'),
+        'reviewed Python, CMake or venv configuration differs')
+    OUTPUT.mkdir(mode=0o700);TEMP.mkdir(mode=0o700)
+    started=time.monotonic()
+    record={'schema_version':1,'scope':'local-three-complete-module-tooling-supplement-only',
+        'state':'running','outcome':'running','started_at':now(),'source':str(SOURCE),
+        'source_revision':REVISION,'source_tree':TREE,'interpreter':PYTHON,
+        'python_version':sys.version,'program_sha256':sha(__file__),
+        'selection_manifest':str(SELECTION),'selection_manifest_sha256':SELECTION_SHA256,
+        'selected_ids':selection['selected_ids'],'expected_test_count':59,
+        'complete_local_suite_claimed':False,'combined_coverage_requires_independent_hosted_join':True,
+        'native_execution':'not_run','gpu_execution_certified':False,
+        'tool_inputs_before':tools_before,'submodules_before':git('submodule','status','--recursive'),
+        'limits':{'per_command_seconds':COMMAND_SECONDS,'whole_seconds':WHOLE_SECONDS,
+                  'polled_per_log_bytes':LOG_BUDGET_BYTES},
+        'commands':[],'failures':[],
+        'limitations':['This result covers only the three selected complete modules.',
+            'A separate independently verified hosted/local ID union is required for combined exhaustive coverage.',
+            'No result completes or promotes any earlier failed, interrupted or missing local attempt.',
+            'Process groups cannot contain deliberately detached descendants; log/deadline enforcement is polled.',
+            'Cleanup and final source inventories can finish after command deadlines.',
+            'No native resource limit, proof or phase acceptance is waived.']}
+    target=OUTPUT/'execution.json';write_new(target,record)
+    def save():
+        temporary=OUTPUT/'execution.next.json';write_new(temporary,record);temporary.replace(target)
+    environment=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',TMPDIR=str(TEMP),
+        PATH=str(HOST/'bin')+os.pathsep+os.environ.get('PATH',''))
+    record['environment_overrides']={key:environment[key] for key in ('PYTHONDONTWRITEBYTECODE','TMPDIR','PATH')}
+    def guard():
+        native_absence()
+        require(time.monotonic()-started<WHOLE_SECONDS, 'whole supplement deadline reached')
+        require(not os.path.lexists(OUTPUT/'stop-request.json'), 'coordinator stop request observed')
+    def interrupted(number,frame):raise KeyboardInterrupt('received signal '+str(number))
+    old_handlers={}
+    for number in (signal.SIGINT,signal.SIGTERM):old_handlers[number]=signal.signal(number,interrupted)
+    before=None
+    try:
+        before=snapshot();write_new(OUTPUT/'source-before.json',before)
+        record['source_before_sha256']=sha(OUTPUT/'source-before.json');save()
+        for module in selection['modules']:
+            guard()
+            arguments=[PYTHON,'-B','-m','unittest','discover','-s','ci/project','-p',module['pattern'],'-v']
+            row={'id':module['module'],'argv':arguments,'cwd':str(SOURCE),'state':'running',
+                'started_at':now(),'log':module['module']+'.log','process_started':False,
+                'expected_ids':module['ids'],'expected_test_count':module['expected_count'],
+                'timeout_seconds':min(COMMAND_SECONDS,WHOLE_SECONDS-(time.monotonic()-started))}
+            record['commands'].append(row);save()
+            process,reason,cleanup=None,None,True
+            command_start=time.monotonic()
+            try:
+                with (OUTPUT/row['log']).open('xb') as stream:
+                    process=subprocess.Popen(arguments,cwd=SOURCE,env=environment,stdin=subprocess.DEVNULL,
+                        stdout=stream,stderr=subprocess.STDOUT,start_new_session=True,close_fds=True)
+                    row.update(process_started=True,pid=process.pid);save()
+                    while process.poll() is None:
+                        guard()
+                        require(time.monotonic()-command_start<row['timeout_seconds'], 'module timeout')
+                        require(os.fstat(stream.fileno()).st_size<=LOG_BUDGET_BYTES, 'module log budget exceeded')
+                        time.sleep(0.1)
+                    require(not live_group(process.pid), 'module has surviving process-group children')
+                    require(os.fstat(stream.fileno()).st_size<=LOG_BUDGET_BYTES, 'module log budget exceeded')
+                    require(process.returncode==0, 'module returned nonzero exit')
+                row['verification']=verify_log(OUTPUT/row['log'],module['ids'])
+            except BaseException as error:
+                reason=type(error).__name__+': '+str(error)
+                if process is not None:cleanup=stop_group(process)
+                raise
+            finally:
+                row.update(state='finished',finished_at=now(),duration_seconds=time.monotonic()-command_start,
+                    exit_code=None if process is None else process.returncode,reason=reason,cleanup_complete=cleanup)
+                if (OUTPUT/row['log']).exists():
+                    row.update(log_sha256=sha(OUTPUT/row['log']),log_size_bytes=(OUTPUT/row['log']).stat().st_size)
+                row['outcome']='pass' if (row['process_started'] and row['exit_code']==0 and reason is None
+                    and cleanup and row.get('verification',{}).get('all_selected_ids_completed') is True) else 'fail'
+                save()
+        guard()
+        actual=[identifier for row in record['commands'] for identifier in row['verification']['ordered_ids']]
+        require(actual==selection['selected_ids'] and len(actual)==len(set(actual))==59,
+                'supplement completed population differs')
+        record.update(completed_ids=actual,completed_test_count=len(actual),exact_selected_population_completed_once=True)
+    except BaseException as error:record['failures'].append(type(error).__name__+': '+str(error))
+    finally:
+        try:
+            after=snapshot();write_new(OUTPUT/'source-after.json',after)
+            record.update(source_after_sha256=sha(OUTPUT/'source-after.json'),source_files_stable=before==after,
+                source_revision_after=git('rev-parse','HEAD'),source_tree_after=git('rev-parse','HEAD^{tree}'),
+                status_after=git('status','--porcelain=v1','--untracked-files=all'),
+                submodules_after=git('submodule','status','--recursive'),tool_inputs_after=tool_inputs())
+            record['tools_stable']=record['tool_inputs_after']==tools_before
+            require(record['source_files_stable'] and record['source_revision_after']==REVISION
+                    and record['source_tree_after']==TREE and not record['status_after']
+                    and record['submodules_after']==record['submodules_before'] and record['tools_stable'],
+                    'source, submodules, index or selected tools changed')
+            require(sha(__file__)==record['program_sha256'] and sha(SELECTION)==SELECTION_SHA256,
+                    'program or selection changed')
+            require(load_selection()==selection, 'selection changed')
+            guard();record['native_workspace_absent_after']=True
+        except BaseException as error:record['failures'].append('final checks: '+str(error))
+        record['not_run']=[row['module'] for row in selection['modules']
+                           if row['module'] not in {command['id'] for command in record['commands']}]
+        passed=(not record['failures'] and not record['not_run'] and len(record['commands'])==3
+            and all(row.get('outcome')=='pass' for row in record['commands'])
+            and record.get('exact_selected_population_completed_once') is True
+            and record.get('native_workspace_absent_after') is True)
+        record.update(state='finished',outcome='pass' if passed else 'fail',finished_at=now(),
+                      duration_seconds=time.monotonic()-started)
+        save()
+        for number,handler in old_handlers.items():signal.signal(number,handler)
+        print(json.dumps({'outcome':record['outcome'],'execution':str(target),
+            'completed_test_count':record.get('completed_test_count',0),
+            'complete_local_suite_claimed':False,'native_execution':'not_run'}),flush=True)
+    return 0 if record['outcome']=='pass' else 1
+
+if __name__=='__main__':
+    raise SystemExit(main())

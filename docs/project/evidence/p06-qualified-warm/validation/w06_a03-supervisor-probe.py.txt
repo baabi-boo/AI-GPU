@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+"""Small extracted scheduling-predicate probes; does not invoke the supervisor."""
+import ast
+from copy import deepcopy
+import hashlib
+import json
+from pathlib import Path
+import tempfile
+import time
+
+ROOT = Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+SOURCE = ROOT / 'docs/project/evidence/p06-qualified-warm/validation/governance/run_governance.py.txt'
+OUTPUT = ROOT / 'docs/project/evidence/p06-qualified-warm/validation/w06_a03-supervisor-probe.json'
+EXPECTED_SHA = 'a5b43e6d929e511ad1dbfa8cbf5b9d1085a6d0ffab8bc263fa428bfd439d8c57'
+body = SOURCE.read_bytes()
+assert hashlib.sha256(body).hexdigest() == EXPECTED_SHA
+tree = ast.parse(body)
+compile(tree, str(SOURCE), 'exec')
+selected = {'now', 'require', 'sha', 'canonical', 'scheduling_receipt'}
+nodes = [node for node in tree.body
+         if isinstance(node, (ast.Import, ast.ImportFrom, ast.Assign))
+         or isinstance(node, ast.FunctionDef) and node.name in selected]
+scope = {'__name__': 'w06_a03_review_only'}
+exec(compile(ast.Module(body=nodes, type_ignores=[]), '<extracted-predicates>', 'exec'), scope)
+main = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == 'main')
+commands_node = next(node.value for node in ast.walk(main) if isinstance(node, ast.Assign)
+                     and any(isinstance(target, ast.Name) and target.id == 'commands' for target in node.targets))
+commands = eval(compile(ast.Expression(commands_node), '<static-command-list>', 'eval'), scope)
+assert len(commands) == 5
+suite = next(row for row in commands if row[0] == 'unittest-discovery')
+assert suite[1] == [scope['PYTHON'], '-B', '-m', 'unittest', 'discover', '-s', 'ci/project', '-p', 'test_*.py', '-v']
+assert suite[2] == 3600 and scope['WHOLE_SECONDS'] == 5400
+assert scope['LOG_BUDGET_BYTES'] == 67108864
+assert scope['REVISION'] == 'c0b44ce64665fe11895f869eea8c38c9b820d6f7'
+assert scope['TREE'] == '13450812d279d55f36a172fcf38653ff567f6c86'
+
+base = {'state': 'finished', 'outcome': 'pass', 'source_revision': scope['REVISION'],
+        'stages': [{'id': stage, 'execution': {'cleanup_complete': True, 'outcome': 'pass',
+                    'exit_code': 0, 'reason': None, 'process_started': True},
+                    'report_outcome': 'pass', 'report_reason': None}
+                   for stage in scope['STAGES']]}
+results = []
+started = time.monotonic()
+with tempfile.TemporaryDirectory(prefix='w06-a03-', dir='/workspace/scratch/dc8be1693f91/validation') as directory:
+    native = Path(directory) / 'native.json'
+    review = Path(directory) / 'cleanup.json'
+    scope['NATIVE'] = native
+
+    def probe(name, mutate=None, *, allowed=False, cleanup_review=False, review_mutate=None, wrong_pin=False):
+        candidate = deepcopy(base)
+        if mutate:
+            mutate(candidate)
+        native.write_text(json.dumps(candidate))
+        pin = hashlib.sha256(native.read_bytes()).hexdigest()
+        cleanup = {'native_supervision_sha256': pin, 'source_revision': scope['REVISION'],
+                   'cleanup_complete': True, 'reason': 'Synthetic test: coordinator explicitly observed cleanup.'}
+        if review_mutate:
+            review_mutate(cleanup)
+        review.write_text(json.dumps(cleanup))
+        try:
+            value = scope['scheduling_receipt']('0' * 64 if wrong_pin else pin,
+                                               review if cleanup_review else None)
+        except (RuntimeError, ValueError, TypeError, KeyError, AttributeError) as error:
+            observed = False
+            detail = type(error).__name__ + ': ' + str(error)
+        else:
+            observed = True
+            detail = value
+        assert observed == allowed, (name, observed, allowed, detail)
+        results.append({'name': name, 'expected_allowed': allowed, 'observed_allowed': observed, 'detail': detail})
+
+    probe('complete_success', allowed=True)
+    probe('native_pin_mismatch', wrong_pin=True)
+    probe('unfinished_even_with_review', lambda x: x.update(state='running'), cleanup_review=True)
+    probe('wrong_revision_even_with_review', lambda x: x.update(source_revision='0' * 40), cleanup_review=True)
+    probe('missing_stage', lambda x: x['stages'].pop())
+    probe('reordered_stages', lambda x: x['stages'].reverse())
+    probe('bool_exit_code', lambda x: x['stages'][2]['execution'].update(exit_code=False))
+    probe('not_started', lambda x: x['stages'][2]['execution'].update(process_started=False))
+    probe('missing_cleanup', lambda x: x['stages'][2]['execution'].pop('cleanup_complete'))
+    probe('report_failure', lambda x: x['stages'][2].update(report_outcome='fail'))
+    probe('nonzero_exit', lambda x: x['stages'][2]['execution'].update(exit_code=1))
+    probe('reason_present', lambda x: x['stages'][2]['execution'].update(reason='timeout'))
+    probe('failed_without_review', lambda x: x.update(outcome='fail'))
+    probe('failed_with_explicit_review', lambda x: x.update(outcome='fail'), cleanup_review=True, allowed=True)
+    probe('incomplete_cleanup_with_explicit_review', lambda x: x['stages'][2]['execution'].update(cleanup_complete=False), cleanup_review=True, allowed=True)
+    probe('cleanup_review_wrong_pin', lambda x: x.update(outcome='fail'), cleanup_review=True,
+          review_mutate=lambda x: x.update(native_supervision_sha256='1' * 64))
+    probe('cleanup_review_wrong_revision', lambda x: x.update(outcome='fail'), cleanup_review=True,
+          review_mutate=lambda x: x.update(source_revision='1' * 40))
+    probe('cleanup_review_empty_reason', lambda x: x.update(outcome='fail'), cleanup_review=True,
+          review_mutate=lambda x: x.update(reason='  '))
+    probe('cleanup_review_not_complete', lambda x: x.update(outcome='fail'), cleanup_review=True,
+          review_mutate=lambda x: x.update(cleanup_complete=False))
+
+assert SOURCE.read_bytes() == body
+record = {'schema_version': 1, 'scope': 'independent supervisor static and extracted scheduling-predicate probes only',
+          'supervisor_sha256': EXPECTED_SHA, 'supervisor_size_bytes': len(body),
+          'source_stable': True, 'syntax_compile': 'pass', 'static_commands': commands,
+          'unittest_body_execution': False, 'native_execution': False,
+          'process_cleanup_execution': False, 'unique_predicate_probes': len(results),
+          'accepted_controls': sum(row['observed_allowed'] for row in results),
+          'rejections': sum(not row['observed_allowed'] for row in results),
+          'duration_seconds': time.monotonic() - started, 'outcome': 'pass', 'probes': results}
+OUTPUT.write_text(json.dumps(record, indent=2, sort_keys=True) + '\n')
+print(json.dumps({key: record[key] for key in ('outcome', 'unique_predicate_probes', 'accepted_controls', 'rejections', 'duration_seconds')}))

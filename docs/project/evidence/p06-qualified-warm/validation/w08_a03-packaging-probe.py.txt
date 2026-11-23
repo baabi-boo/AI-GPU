@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: Apache-2.0
+"""Tiny synthetic checks of the trusted runbook packaging recipe; no native evidence."""
+import hashlib, json, os, pathlib, re, subprocess, sys, tempfile, time, zipfile
+ROOT = pathlib.Path('/workspace/scratch/dc8be1693f91/AI-GPU')
+RUNBOOK = ROOT / 'docs/project/evidence/p06-qualified-warm/runbook.md'
+OUTPUT = ROOT / 'docs/project/evidence/p06-qualified-warm/validation/w08_a03-packaging-results.json'
+EXPECTED = '946fcf475ee85a22540826bf2c7df21c67efe18da70fbd1a79671e180f75ddaf'
+PYTHON = '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3'
+body = RUNBOOK.read_bytes()
+assert hashlib.sha256(body).hexdigest() == EXPECTED
+matches = re.findall(r"<<'PY'\n(.*?)\nPY", body.decode(), re.S)
+recipe = next(value for value in matches if 'import hashlib, json, os, pathlib, stat, zipfile' in value)
+compile(recipe, '<trusted-runbook-packaging>', 'exec')
+results = []
+started = time.monotonic()
+
+def case(name, mutation=None, success=False, optimize=False):
+    with tempfile.TemporaryDirectory(prefix='w08-a03-packaging-', dir='/workspace/scratch/dc8be1693f91/validation') as directory:
+        base = pathlib.Path(directory)
+        source = base / 'source'; source.mkdir()
+        workspace = base / 'workspace'; evidence = workspace / 'evidence'
+        for root in ('dependency-build', 'qualified-warm'):
+            selected = evidence / root; selected.mkdir(parents=True)
+            (selected / 'report.json').write_text('{"state":"finished","outcome":"fail"}\n')
+            (selected / '.retention.lock').write_bytes(b'finished synthetic lock\n')
+            (selected / 'opaque').mkdir()
+            (selected / 'opaque' / 'stats.bin').write_bytes(bytes(range(32)) + b'\x00\xff')
+        sentinel = base / 'retained-code-executed'
+        (evidence / 'qualified-warm' / 'retained.py').write_text('raise RuntimeError("must remain data")\n')
+        (evidence / 'qualified-warm' / 'empty').mkdir()
+        (evidence / 'dependency-preparation.json').write_text('outside selected roots\n')
+        out = base / 'output'; out.mkdir(); target = out / 'original.zip'
+        state = dict(base=base, source=source, workspace=workspace, evidence=evidence, target=target, sentinel=sentinel)
+        if mutation: mutation(state)
+        source, workspace, target = (state[k] for k in ('source','workspace','target'))
+        before = {}
+        for entry in base.rglob('*'):
+            if entry.is_file() and not entry.is_symlink():
+                before[str(entry)] = hashlib.sha256(entry.read_bytes()).hexdigest()
+        expected = {}
+        if success:
+            for root in ('dependency-build','qualified-warm'):
+                for entry in (evidence / root).rglob('*'):
+                    if entry.is_file(): expected[entry.relative_to(evidence).as_posix()] = entry.read_bytes()
+        env = dict(os.environ, P06_SOURCE=str(source), P06_WORKSPACE=str(workspace), P06_ORIGINAL_ZIP=str(target))
+        if optimize: env['PYTHONOPTIMIZE']='2'
+        argv = [PYTHON, '-I', '-B', '-']
+        run = subprocess.run(argv, input=recipe, text=True, env=env, capture_output=True, timeout=10)
+        checks = {'expected_exit': (run.returncode == 0) is success, 'retained_code_not_executed': not sentinel.exists()}
+        if success and run.returncode == 0:
+            identity = json.loads(target.with_suffix('.identity.json').read_bytes())
+            with zipfile.ZipFile(target) as archive:
+                checks['exact_sorted_population'] = archive.namelist() == sorted(expected)
+                checks['every_member_identical'] = all(archive.read(k) == v for k,v in expected.items())
+                checks['crc_passed'] = archive.testzip() is None
+                checks['hidden_locks_retained'] = all(root+'/.retention.lock' in archive.namelist() for root in ('dependency-build','qualified-warm'))
+                checks['outside_root_excluded'] = 'dependency-preparation.json' not in archive.namelist()
+            checks['raw_zip_pin_matches'] = identity['sha256'] == hashlib.sha256(target.read_bytes()).hexdigest()
+            checks['identity_exact_count'] = identity['member_count'] == len(expected) == 7
+            checks['failed_reports_not_promoted'] = all(json.loads(expected[root+'/report.json'])['outcome']=='fail' for root in ('dependency-build','qualified-warm'))
+            checks['original_bytes_unchanged'] = all(pathlib.Path(k).exists() and hashlib.sha256(pathlib.Path(k).read_bytes()).hexdigest()==v for k,v in before.items())
+        else:
+            checks['original_bytes_unchanged'] = all(pathlib.Path(k).exists() and hashlib.sha256(pathlib.Path(k).read_bytes()).hexdigest()==v for k,v in before.items())
+            checks['no_new_zip_or_sidecar'] = all(str(p) in before or not os.path.lexists(p) or p.is_symlink() for p in (target,target.with_suffix('.identity.json')))
+        result = {'name':name,'expected':'accept' if success else 'reject','argv':argv,'pythonoptimize':env.get('PYTHONOPTIMIZE'),'exit_code':run.returncode,'stdout':run.stdout,'stderr':run.stderr,'checks':checks,'outcome':'pass' if all(checks.values()) else 'fail'}
+        results.append(result)
+
+case('all_regular_members_including_hidden_and_opaque_preserved', success=True)
+case('isolation_ignores_pythonoptimize', success=True, optimize=True)
+case('file_symlink_rejected', lambda s: (s['evidence']/'qualified-warm'/'link').symlink_to(s['evidence']/'qualified-warm'/'report.json'))
+case('directory_symlink_rejected', lambda s: (s['evidence']/'qualified-warm'/'link-dir').symlink_to(s['evidence']/'dependency-build',target_is_directory=True))
+case('hardlink_rejected', lambda s: os.link(s['evidence']/'qualified-warm'/'report.json', s['base']/'report-alias'))
+case('fifo_rejected_without_reading', lambda s: os.mkfifo(s['evidence']/'qualified-warm'/'fifo'))
+case('existing_destination_preserved', lambda s: s['target'].write_bytes(b'original destination must survive'))
+case('existing_identity_sidecar_preserved', lambda s: s['target'].with_suffix('.identity.json').write_bytes(b'existing sidecar must survive'))
+case('dangling_destination_symlink_rejected', lambda s: s['target'].symlink_to(s['base']/'absent'))
+case('unfinished_root_report_rejected', lambda s: (s['evidence']/'qualified-warm'/'report.json').write_text('{"state":"running"}'))
+case('output_inside_workspace_rejected', lambda s: s.update(target=s['workspace']/'original.zip'))
+case('output_inside_source_rejected', lambda s: s.update(target=s['source']/'original.zip'))
+case('noncanonical_target_parent_rejected', lambda s: s.update(target=s['target'].parent/'..'/'output'/'original.zip'))
+case('symlinked_workspace_rejected', lambda s: ((s['base']/'alias').symlink_to(s['workspace'],target_is_directory=True), s.update(workspace=s['base']/'alias')))
+case('symlinked_target_parent_rejected', lambda s: ((s['base']/'out-alias').symlink_to(s['target'].parent,target_is_directory=True), s.update(target=s['base']/'out-alias'/'original.zip')))
+assert RUNBOOK.read_bytes()==body
+record = {'schema_version':1,'agent':'w08_a03','scope':'tiny synthetic trusted-runbook packaging; no native qualification/replay','runbook':str(RUNBOOK),'runbook_sha256':EXPECTED,'recipe_sha256':hashlib.sha256(recipe.encode()).hexdigest(),'recipe_bytes':len(recipe.encode()),'source_stable':True,'native_execution':'not_run','complete_archive_replay':'not_run','duration_seconds':time.monotonic()-started,'cases':results,'accepted_controls':sum(r['expected']=='accept' for r in results),'negative_cases':sum(r['expected']=='reject' for r in results),'outcome':'pass' if all(r['outcome']=='pass' for r in results) else 'fail','new_unittest_ids':0}
+OUTPUT.write_text(json.dumps(record,indent=2)+'\n')
+print(json.dumps({k:record[k] for k in ('outcome','duration_seconds','accepted_controls','negative_cases','new_unittest_ids')}))
+if record['outcome'] != 'pass':
+ print(json.dumps([r for r in results if r['outcome']!='pass'],indent=2));sys.exit(1)
