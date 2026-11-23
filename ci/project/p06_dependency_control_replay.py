@@ -30,6 +30,8 @@ from p06_replay import _fields, _integer, _number, _same, _timestamp, require
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_ID = "p06-dependency-controls-replay-v1"
+RUNTIME_DIAGNOSTIC_SOURCE = "sim/common/dram_sim.cpp"
+RUNTIME_DIAGNOSTIC_NAME = "ramulator.stats.log"
 PROBE_HELPERS = tuple("ci/project/" + name + ".py" for name in """
 baseline_inventory baseline_matrix baseline_packet_contract baseline_packet_io
 baseline_process compiler_records p02_fixture_oracle p02_layout_fixture_oracle
@@ -77,6 +79,7 @@ LIMITATIONS = [
     "Shared control inputs are joined to the verified native/dependency original. Additional control sources are bound by each external report pin and the trusted current control source bytes.",
     "Original tool identities, system-header/support-file coverage and before/after stability have the same limitations as the selected dependency and native readers.",
     "A consistently synthetic or forged packet is not promoted into actual execution evidence.",
+    "The exact Ramulator destructor side output is byte-accounted as an opaque runtime diagnostic; its contents do not contribute numerical, performance or qualification evidence.",
     "Complete 40-component qualification, absolute no-wrap bounds, warm performance and phase acceptance remain separate; all seven claims remain false.",
 ]
 
@@ -199,6 +202,24 @@ def _command(packet, row, identifier, argv, cwd, timeout, *, environment=None, n
                             "size_bytes": row["log_size_bytes"]}).decode("utf-8")
 
 
+def _runtime_diagnostic(packet, native, name):
+    require(name in (RUNTIME_DIAGNOSTIC_NAME, "work/" + RUNTIME_DIAGNOSTIC_NAME),
+            "unexpected runtime diagnostic path")
+    source = native.source_body(RUNTIME_DIAGNOSTIC_SOURCE)
+    declaration = (b'  ~RamulatorDram() override {\n'
+                   b'    std::ofstream nullstream("ramulator.stats.log");\n')
+    require(source.count(declaration) == 1,
+            "native Ramulator destructor side-output source differs")
+    require(name in packet.view.files(), "required Ramulator runtime diagnostic is absent")
+    body = packet.read(name, limit=contract.BUDGET["max_log_bytes"])
+    require(body, "Ramulator runtime diagnostic is empty")
+    # Finalization can emit .nan for an idle channel. These are inert diagnostic
+    # bytes, not a parser input, a per-process transcript or measurement data.
+    return dict(_descriptor(name, body), interpreted=False,
+                numerical_evidence=False, performance_evidence=False,
+                qualification_evidence=False)
+
+
 def verify_probe_view(view, *, native, expected_report_sha256, expected_native_report_sha256):
     """Join a pending-probe view to an already fully verified native context."""
     packet = _Packet(view, native.api, expected_report_sha256)
@@ -264,10 +285,12 @@ def verify_probe_view(view, *, native, expected_report_sha256, expected_native_r
                                     mode=mode, observation=observed), "pending product/raw observation")
         observations.append(observed)
     require(products[0]["sha256"] != products[1]["sha256"], "always-zero control did not change the executable bytes")
+    diagnostic = _runtime_diagnostic(packet, native, RUNTIME_DIAGNOSTIC_NAME)
     return {"outcome": "pass", "report_sha256": expected_report_sha256,
         "managed_population_included": False, "processes": 2, "contexts": 2,
         "positive_pending_contexts": observations[0]["contexts"],
         "always_zero_rejection": observations[1]["expected_failure"], "commands_checked": 5,
+        "runtime_diagnostic": diagnostic,
         "native_execution": "not_run", "retained_code_executed": False,
         **dict.fromkeys(contract.FALSE_CLAIMS, False), **packet.finish()}
 
@@ -438,12 +461,16 @@ def verify_substitution_view(view, *, native, expected_report_sha256, expected_n
         _same(report[name], value, "substitution recomputed " + name)
     native_replay.validate_process_duration(observation["observation"]["warm"], commands[2]["duration_seconds"],
                                           native_replay.warm_contract.load_contract(ROOT))
+    # The native process creates this after the frozen compilation products.
+    # Account it only in the final inventory, never either frozen snapshot.
+    diagnostic = _runtime_diagnostic(packet, native, "work/" + RUNTIME_DIAGNOSTIC_NAME)
     _same(report["retained_files"], [packet.row(name) for name in sorted(packet.cache) if name != "report.json"],
           "substitution complete retained inventory")
     return {"outcome": "pass", "report_sha256": expected_report_sha256, "managed_population_included": False,
         "control_counts": observation["control_counts"], "rejection": observation["rejection"],
         "control_binding_sha256": binding_id, "tool_records_checked": 2, "commands_checked": 3,
         "source_derivation": checked["source_derivation"], "map_verification": checked["map_verification"],
+        "runtime_diagnostic": diagnostic,
         "native_execution": "not_run", "retained_code_executed": False,
         **dict.fromkeys(contract.FALSE_CLAIMS, False), **packet.finish()}
 

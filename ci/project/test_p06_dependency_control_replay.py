@@ -147,6 +147,8 @@ class SyntheticControls:
                                                               raw, negative=zero))
             observed = replay.probe.verify_output(raw, libraries, zero_control=zero)
             self.probe_report["products"].append(dict(row, path=path, resolved_path=path, mode=mode, observation=observed))
+        self.put(files, replay.RUNTIME_DIAGNOSTIC_NAME,
+                 b"synthetic opaque Ramulator destructor diagnostic\nidle_latency: .nan\n")
         self.finish_probe()
 
     def finish_probe(self):
@@ -272,6 +274,9 @@ class SyntheticControls:
             self.substitution_report["commands"].append(self.command(files, role + "-alternate-extension", argv,
                 self.work, "synthetic tool receipt observation\n", timeout=1800, environment=self.environment))
         self.make_substitution_log()
+        # Native finalization emits this after the compilation products freeze.
+        self.put(files, "work/" + replay.RUNTIME_DIAGNOSTIC_NAME,
+                 b"synthetic opaque Ramulator destructor diagnostic\nidle_latency: .nan\n")
         self.finish_substitution()
 
     def make_substitution_log(self, change=None):
@@ -310,7 +315,8 @@ class SyntheticControls:
         report["dependency_control"]["records"] = [descriptor(row["path"], files[row["path"]])
             for row in report["dependency_control"]["records"]]
         frozen = [descriptor(name, body) for name, body in sorted(files.items())
-                  if name != "report.json" and not name.startswith("logs/")]
+                  if name not in ("report.json", "work/" + replay.RUNTIME_DIAGNOSTIC_NAME)
+                  and not name.startswith("logs/")]
         report["control_products_before"] = frozen
         report["control_products_after"] = deepcopy(frozen)
 
