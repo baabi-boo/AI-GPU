@@ -99,7 +99,7 @@ def read_json_file(path, *, limit=MAX_REQUEST_BYTES):
     return decode_json(raw), raw
 
 
-def validate_request(request, *, base_validator=None):
+def _request_header(request):
     fields(request, REQUEST_KEYS, "request")
     require(type(request["schema_version"]) is int and request["schema_version"] == 1
             and request["contract_id"] == "p05-torch-request-v1", "unsupported framework request contract")
@@ -109,11 +109,27 @@ def validate_request(request, *, base_validator=None):
     for key in ("contract_sha256", "adapter_sha256"):
         require(type(framework[key]) is str and SHA256.fullmatch(framework[key]),
                 "invalid framework request " + key)
+
+
+def validate_request(request, *, base_validator=None):
+    _request_header(request)
     if base_validator is None:
         from p05_installed_check import validate_request as base_validator
     try:
         base_validator(request["base_request"])
     except (OSError, RuntimeError, KeyError, TypeError, OverflowError) as error:
+        raise ValueError("invalid framework native request: " + str(error)) from error
+    return request
+
+
+def validate_request_data(request):
+    """Validate the frozen framework request without inspecting producer paths."""
+    from p05_installed_check import validate_request_data as validate_base_request_data
+
+    _request_header(request)
+    try:
+        validate_base_request_data(request["base_request"])
+    except (RuntimeError, KeyError, TypeError, OverflowError) as error:
         raise ValueError("invalid framework native request: " + str(error)) from error
     return request
 
@@ -133,7 +149,7 @@ def tensor_record_bytes(value, *, shape, strides, dtype, expected, label):
             "framework " + label + " physical bytes differ")
 
 
-def _framework(value, request, installation):
+def _framework_data(value, request, installation):
     fields(value, FRAMEWORK_KEYS, "identity")
     for key in ("version", "distribution_version"):
         require(value[key] == TORCH_VERSION, "observed framework version differs")
@@ -143,11 +159,31 @@ def _framework(value, request, installation):
     require(type(value["adapter_file"]) is str, "invalid installed adapter path")
     adapter = Path(value["adapter_file"])
     expected = Path(installation["package_file"]).parent / "torch_ops.py"
-    require(adapter == expected and adapter.is_absolute() and adapter.resolve(strict=True) == adapter
-            and not adapter.is_symlink() and adapter.is_file() and 0 < adapter.stat().st_size <= MAX_REQUEST_BYTES,
+    require(adapter == expected and adapter.is_absolute(),
+            "framework adapter is outside the observed installed package")
+
+
+def _framework(value, request, installation):
+    _framework_data(value, request, installation)
+    adapter = Path(value["adapter_file"])
+    require(adapter.resolve(strict=True) == adapter and not adapter.is_symlink()
+            and adapter.is_file() and 0 < adapter.stat().st_size <= MAX_REQUEST_BYTES,
             "framework adapter is outside the observed installed package")
     require(hashlib.sha256(adapter.read_bytes()).hexdigest() == value["adapter_sha256"],
             "installed framework adapter bytes differ")
+
+
+def _retained_framework(value, request, installation, retained_identity, adapter_bytes):
+    _framework_data(value, request, installation)
+    expected = str(Path(installation["package_file"]).parent / "torch_ops.py")
+    require(value["adapter_file"] == expected, "retained framework adapter path differs")
+    require(type(adapter_bytes) is bytes and 0 < len(adapter_bytes) <= MAX_REQUEST_BYTES,
+            "retained framework adapter bytes missing or oversized")
+    digest = hashlib.sha256(adapter_bytes).hexdigest()
+    require(digest == value["adapter_sha256"], "retained framework adapter bytes differ")
+    receipts = {name: (sha256, size) for name, sha256, size in retained_identity.installed_files}
+    require(receipts.get(expected) == (digest, len(adapter_bytes)),
+            "retained framework adapter installed receipt differs")
 
 
 def _raw_observations(raw_log):
@@ -179,11 +215,7 @@ def _packed_words(words):
     return b"".join(int(word, 16).to_bytes(4, "little") for word in words)
 
 
-def verify_observations(value, request, *, native_matmuls, native_models, model_cases, raw_log):
-    """Reconcile actual returned tensor bytes and unchanged native validation."""
-    import p05_execution_records as base_records
-
-    validate_request(request)
+def _observation_header(value, raw_log):
     fields(value, OBSERVATION_KEYS, "observation")
     require(type(value["schema_version"]) is int and value["schema_version"] == 1
             and value["contract_id"] == "p05-torch-observations-v1"
@@ -196,10 +228,44 @@ def verify_observations(value, request, *, native_matmuls, native_models, model_
     for kind in ("matmuls", "models"):
         same(raw["P05_TORCH_" + ("MATMUL" if kind == "matmuls" else "MODEL")],
              value["framework_" + kind], "framework " + kind + " differ from raw log")
+    return base
+
+
+def verify_observations(value, request, *, native_matmuls, native_models, model_cases, raw_log):
+    """Reconcile actual returned tensor bytes and unchanged native validation."""
+    import p05_execution_records as base_records
+
+    validate_request(request)
+    base = _observation_header(value, raw_log)
     result = base_records.verify_observations(base, request["base_request"],
         native_matmuls=native_matmuls, native_models=native_models,
         model_cases=model_cases, raw_log=raw_log)
     _framework(value["framework"], request, base["installation"])
+    return _verify_framework_records(value, request, result)
+
+
+def verify_retained_observations(value, request, *, retained_identity, adapter_bytes,
+                                 native_matmuls, native_models, model_cases, raw_log):
+    """Reconcile retained tensor records without accessing the producer host.
+
+    The trusted archive driver independently joins the base request digest,
+    installed receipts, framework contract and adapter bytes to the pinned
+    archive. These supplied facts alone do not authenticate retained evidence.
+    The adapter is hashed as inert bytes and is never imported or executed.
+    """
+    import p05_execution_records as base_records
+
+    validate_request_data(request)
+    base = _observation_header(value, raw_log)
+    result = base_records.verify_retained_observations(base, request["base_request"],
+        retained_identity=retained_identity, native_matmuls=native_matmuls,
+        native_models=native_models, model_cases=model_cases, raw_log=raw_log)
+    _retained_framework(value["framework"], request, base["installation"], retained_identity, adapter_bytes)
+    return _verify_framework_records(value, request, result)
+
+
+def _verify_framework_records(value, request, result):
+    base = value["base_observations"]
     require(type(value["framework_matmuls"]) is list and len(value["framework_matmuls"]) == 6
             and type(value["framework_models"]) is list and len(value["framework_models"]) == 10,
             "framework operator call inventory differs")

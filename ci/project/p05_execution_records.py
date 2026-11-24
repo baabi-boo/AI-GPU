@@ -8,8 +8,10 @@ gate, generate expected arithmetic, or infer execution from a successful label.
 from __future__ import annotations
 
 from collections import Counter
+from dataclasses import dataclass
+import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 
 from p02_matrix_records import require
@@ -34,6 +36,49 @@ INSTALLATION_KEYS = {
     "package_file", "extension_file", "distribution_version", "build_info", "runtime_libraries",
 }
 RESOURCE_KEYS = {"before_status", "after_status", "free_before", "used_before", "free_after", "used_after"}
+SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+
+
+def _producer_path(value, label):
+    """Interpret a producer path lexically; never resolve it on this host."""
+    require(type(value) is str and value.startswith("/") and not value.startswith("//")
+            and not any(ord(char) < 32 or 127 <= ord(char) <= 159 for char in value)
+            and "\\" not in value, "invalid retained producer path: " + label)
+    path = PurePosixPath(value)
+    require(str(path) == value and ".." not in path.parts,
+            "noncanonical retained producer path: " + label)
+    return path
+
+
+@dataclass(frozen=True)
+class RetainedIdentity:
+    """Immutable facts independently joined by the trusted archive driver.
+
+    ``request_sha256`` hashes sorted compact UTF-8 JSON of the base request.
+    ``installed_files`` contains exact (absolute producer path, SHA-256, size)
+    tuples from verified installed receipts. Interpreter bytes need not be
+    retained: their receipt is an observation, not a freshly hashed binary.
+    Constructing these facts alone authenticates nothing; only the complete
+    archive driver establishes the joins needed for a retained evidence result.
+    """
+
+    request_sha256: str
+    installed_files: tuple[tuple[str, str, int], ...]
+
+    def __post_init__(self):
+        require(type(self.request_sha256) is str and SHA256.fullmatch(self.request_sha256),
+                "invalid retained request digest")
+        require(type(self.installed_files) is tuple, "retained installed files must be immutable")
+        paths = set()
+        for row in self.installed_files:
+            require(type(row) is tuple and len(row) == 3, "invalid retained installed file receipt")
+            name, digest, size = row
+            _producer_path(name, "installed receipt")
+            require(name not in paths, "duplicate retained installed file receipt")
+            paths.add(name)
+            require(type(digest) is str and SHA256.fullmatch(digest),
+                    "invalid retained installed file digest")
+            _uint(size, "retained installed file size")
 
 
 def _object(pairs):
@@ -104,7 +149,7 @@ def _status(value, label):
           "P05 " + label + " is not completed successful cleanup")
 
 
-def _installation(value, request):
+def _installation_data(value, request):
     _fields(value, INSTALLATION_KEYS, "installation")
     version = value["python_version"]
     require(type(version) is list and len(version) == 3
@@ -118,11 +163,18 @@ def _installation(value, request):
             "installed check did not use its clean venv")
     require(value["executable"] == str(prefix / "bin/python"),
             "installed check executable differs from the copied venv interpreter")
-    for key in ("executable", "package_file", "extension_file"):
-        require(type(value[key]) is str, "invalid installed path: " + key)
-        path = Path(value[key])
-        require(path.is_absolute() and path.is_relative_to(prefix) and path.resolve(strict=True) == path
-                and path.is_file(), "installed path is outside the isolated venv: " + key)
+    return prefix
+
+
+def _installation_path(value, key, prefix):
+    require(type(value[key]) is str, "invalid installed path: " + key)
+    path = Path(value[key])
+    require(path.is_absolute() and path.is_relative_to(prefix),
+            "installed path is outside the isolated venv: " + key)
+    return path
+
+
+def _installation_layout_data(value, request):
     require(Path(value["package_file"]).name == "__init__.py"
             and Path(value["extension_file"]).parent == Path(value["package_file"]).parent
             and Path(value["extension_file"]).name.startswith("_native.")
@@ -134,6 +186,31 @@ def _installation(value, request):
     libraries = [str(Path(binding["bundle_root"]) / "lib" / name) for name in (
         "libramulator.so", "libramulator-vortex.so", "libvortex.so", "libsimx.so", "libvortex-simx.so")]
     _same(value["runtime_libraries"], libraries, "installed runtime library paths differ")
+
+
+def _installation(value, request):
+    prefix = _installation_data(value, request)
+    for key in ("executable", "package_file", "extension_file"):
+        path = _installation_path(value, key, prefix)
+        require(path.resolve(strict=True) == path and path.is_file(),
+                "installed path is outside the isolated venv: " + key)
+    _installation_layout_data(value, request)
+
+
+def _retained_installation(value, request, retained_identity):
+    _installation_data(value, request)
+    prefix = _producer_path(request["expected_prefix"], "expected prefix")
+    _producer_path(request["binding"]["bundle_root"], "bundle root")
+    for key in ("prefix", "base_prefix", "executable", "package_file", "extension_file"):
+        _producer_path(value[key], key)
+    for key in ("executable", "package_file", "extension_file"):
+        _installation_path(value, key, prefix)
+    _installation_layout_data(value, request)
+    package = prefix / "lib/python3.12/site-packages/vortex_ai/__init__.py"
+    require(value["package_file"] == str(package), "retained installed package layout differs")
+    receipts = {name: (digest, size) for name, digest, size in retained_identity.installed_files}
+    for key in ("executable", "package_file", "extension_file"):
+        require(value[key] in receipts, "missing retained installed file receipt: " + key)
 
 
 def _dispatch(value, case, iteration, binding_id):
@@ -184,15 +261,48 @@ def _raw_rows(text, marker):
     return result
 
 
-def verify_observations(value, request, *, native_matmuls, native_models, model_cases, raw_log):
-    """Verify actual installed records and return independently derived counts."""
+def _observation_header(value, request):
     _fields(value, OBSERVATION_KEYS, "observation")
     require(type(value["schema_version"]) is int and value["schema_version"] == 1
             and value["contract_id"] == "p05-installed-observations-v1"
             and value["scope"] == "simx-installed-python" and value["outcome"] == "pass"
             and value["acceptance_claimed"] is False, "installed observations did not complete")
     _same(value["binding"], request["binding"], "installed observed binding differs from request")
+
+
+def verify_observations(value, request, *, native_matmuls, native_models, model_cases, raw_log):
+    """Verify actual installed records and return independently derived counts."""
+    _observation_header(value, request)
     _installation(value["installation"], request)
+    return _verify_observation_records(value, request, native_matmuls=native_matmuls,
+        native_models=native_models, model_cases=model_cases, raw_log=raw_log)
+
+
+def verify_retained_observations(value, request, *, retained_identity, native_matmuls,
+                                 native_models, model_cases, raw_log):
+    """Reconcile inert observations using independently joined archive facts.
+
+    No producer path is accessed, and no retained code is imported or executed.
+    Callers must verify the original archive and its complete identity joins;
+    a caller-supplied ``RetainedIdentity`` is not independent authentication.
+    """
+    from p05_installed_check import validate_request_data
+
+    require(type(retained_identity) is RetainedIdentity, "invalid retained installation identity")
+    try:
+        validate_request_data(request)
+    except (RuntimeError, KeyError, TypeError, OverflowError) as error:
+        raise ValueError("invalid retained installed request: " + str(error)) from error
+    request_bytes = json.dumps(request, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+    require(hashlib.sha256(request_bytes).hexdigest() == retained_identity.request_sha256,
+            "retained installed request identity differs")
+    _observation_header(value, request)
+    _retained_installation(value["installation"], request, retained_identity)
+    return _verify_observation_records(value, request, native_matmuls=native_matmuls,
+        native_models=native_models, model_cases=model_cases, raw_log=raw_log)
+
+
+def _verify_observation_records(value, request, *, native_matmuls, native_models, model_cases, raw_log):
     _same(_raw_rows(raw_log, "P05_MATMUL"), value["matmuls"], "installed matmul file differs from raw log")
     _same(_raw_rows(raw_log, "P05_MODEL"), value["models"], "installed model file differs from raw log")
     require(type(value["matmuls"]) is list and len(value["matmuls"]) == 6

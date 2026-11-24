@@ -162,7 +162,7 @@ def read_request(path):
     return result
 
 
-def validate_request(request):
+def _request_header_data(request):
     fields(request, REQUEST_KEYS, "request")
     require(type(request["schema_version"]) is int and request["schema_version"] == 1
             and request["contract_id"] == "p05-installed-request-v1"
@@ -175,14 +175,15 @@ def validate_request(request):
     for key, pattern in (("bundle_sha256", SHA256), ("source_sha256", SHA256),
                          ("qualification_id", SHA256), ("source_revision", COMMIT)):
         require(type(binding[key]) is str and pattern.fullmatch(binding[key]), "invalid " + key)
-    for value, label in ((binding["bundle_root"], "bundle root"),
-                         (request["expected_prefix"], "expected prefix")):
-        require(type(value) is str and "\x00" not in value and Path(value).is_absolute(),
-                "invalid " + label)
-        path = Path(value)
-        require(path.resolve(strict=True) == path and path.is_dir(),
-                label + " must be a canonical existing directory")
-    fmt = binding["format"]
+
+
+def _request_path_data(value, label):
+    require(type(value) is str and "\x00" not in value and Path(value).is_absolute(),
+            "invalid " + label)
+
+
+def _request_cases_data(request):
+    fmt = request["binding"]["format"]
     cases = request["matmul_cases"]
     require(type(cases) is list and len(cases) == 3, "expected three frozen matmul cases")
     for case, (family, shape) in zip(cases, MATMUL_SELECTION):
@@ -195,6 +196,27 @@ def validate_request(request):
                 "matmul geometry differs")
     require(request["model_cases"] == [fmt + "-" + family for family in MODEL_FAMILIES],
             "model membership or order differs")
+
+
+def validate_request_data(request):
+    """Check the frozen request as data, without inspecting producer paths."""
+    _request_header_data(request)
+    for value, label in ((request["binding"]["bundle_root"], "bundle root"),
+                         (request["expected_prefix"], "expected prefix")):
+        _request_path_data(value, label)
+    _request_cases_data(request)
+
+
+def validate_request(request):
+    """Validate the live request, including its existing canonical directories."""
+    _request_header_data(request)
+    for value, label in ((request["binding"]["bundle_root"], "bundle root"),
+                         (request["expected_prefix"], "expected prefix")):
+        _request_path_data(value, label)
+        path = Path(value)
+        require(path.resolve(strict=True) == path and path.is_dir(),
+                label + " must be a canonical existing directory")
+    _request_cases_data(request)
 
 
 def inspect_installation(request, api):
