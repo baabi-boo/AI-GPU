@@ -100,7 +100,6 @@ class PythonGovernanceIntegrationTests(unittest.TestCase):
         self.assertEqual(self.job["timeout-minutes"], ("90", []))
         self.assertEqual(scalars(children(self.job, "env", 6)), {
             "PYTHONDONTWRITEBYTECODE": "'1'",
-            "GOVERNANCE_ROOT": "${{ runner.temp }}/project-governance",
         })
         checkout = self.steps[0]
         self.assertEqual(set(checkout), {"uses", "with"})

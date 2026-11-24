@@ -158,7 +158,6 @@ jobs:
     timeout-minutes: 90
     env:
       PYTHONDONTWRITEBYTECODE: '1'
-      GOVERNANCE_ROOT: ${{ runner.temp }}/project-governance
     steps:
       - uses: actions/checkout@v4
         with:
@@ -169,9 +168,11 @@ jobs:
       - name: Prepare governance evidence directory
         run: |
           set -euo pipefail
+          GOVERNANCE_ROOT="${RUNNER_TEMP}/project-governance"
           mkdir "$GOVERNANCE_ROOT"
           mkdir "$GOVERNANCE_ROOT/logs"
           git rev-parse HEAD > "$GOVERNANCE_ROOT/logs/source-revision.txt"
+          printf 'GOVERNANCE_ROOT=%s\n' "$GOVERNANCE_ROOT" >> "$GITHUB_ENV"
       - name: Verify system Python 3.12
         run: python3 -c 'import sys; assert sys.version_info[:2] == (3, 12), sys.version; print(sys.version)'
       - name: Inspect governance prerequisites

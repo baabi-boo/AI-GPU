@@ -278,7 +278,6 @@ class HistoricalNativeBaselineWorkflowTests(unittest.TestCase):
         self.assertEqual(job["timeout-minutes"], ("90", []))
         self.assertEqual(scalars(children(job, "env", 6)), {
             "PYTHONDONTWRITEBYTECODE": "'1'",
-            "GOVERNANCE_ROOT": "${{ runner.temp }}/project-governance",
         })
         checks = {"Inspect governance prerequisites": "python3 ci/project/preflight.py --tier governance",
                   "Validate project structure and evidence": "python3 ci/project/check_project.py",

@@ -17,6 +17,7 @@ from test_p05_ci_workflow import children, fields, path_filters, scalars, script
 
 ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = ROOT / ".github/workflows/project-governance.yml"
+EVIDENCE = "Prepare governance evidence directory"
 INSTALL = "Install pinned governance CMake"
 PREPARE = "Prepare checked governance invocation environment"
 RUN = "Test governance tooling"
@@ -32,7 +33,7 @@ PACKET_PATHS = (
     PACKET_PREFIX + "/run",
 )
 STAGE_NAMES = (
-    None, "Prepare governance evidence directory", "Verify system Python 3.12",
+    None, EVIDENCE, "Verify system Python 3.12",
     "Inspect governance prerequisites", "Validate project structure and evidence",
     "Check published baseline packet consistency", INSTALL, PREPARE, RUN, UPLOAD,
 )
@@ -93,7 +94,7 @@ def assert_envelope(case, source):
     case.assertEqual(job["runs-on"], ("ubuntu-24.04", []))
     case.assertEqual(job["timeout-minutes"], ("90", []))
     case.assertEqual(scalars(children(job, "env", 6)), {
-        "PYTHONDONTWRITEBYTECODE": "'1'", "GOVERNANCE_ROOT": PACKET_PREFIX,
+        "PYTHONDONTWRITEBYTECODE": "'1'",
     })
     case.assertNotRegex(source, r"secrets\s*[.\[]|pull_request_target|workflow_run|"
                         r"self-hosted|write-all|id-token\s*:|continue-on-error\s*:")
@@ -117,6 +118,18 @@ def assert_stages(case, sequence):
         invocations = [step for step in sequence if "run" in step and filename in script(step)]
         case.assertEqual(invocations, [one(case, sequence, "name", name)])
         case.assertEqual(script(invocations[0]).count(filename), 1)
+
+
+def assert_evidence_prepare(case, step):
+    case.assertEqual(set(step), {"name", "run"})
+    case.assertEqual(script(step).splitlines(), [
+        "set -euo pipefail",
+        'GOVERNANCE_ROOT="${RUNNER_TEMP}/project-governance"',
+        'mkdir "$GOVERNANCE_ROOT"',
+        'mkdir "$GOVERNANCE_ROOT/logs"',
+        'git rev-parse HEAD > "$GOVERNANCE_ROOT/logs/source-revision.txt"',
+        'printf \'GOVERNANCE_ROOT=%s\\n\' "$GOVERNANCE_ROOT" >> "$GITHUB_ENV"',
+    ])
 
 
 def assert_cmake_install(case, step):
@@ -177,6 +190,7 @@ def assert_workflow(case, source):
     assert_stages(case, sequence)
     for event in ("push", "pull_request"):
         case.assertEqual(path_filters(events, event), PATH_FILTERS)
+    assert_evidence_prepare(case, one(case, sequence, "name", EVIDENCE))
     assert_cmake_install(case, one(case, sequence, "name", INSTALL))
     assert_environment_prepare(case, one(case, sequence, "name", PREPARE))
     assert_strict_governance_step(case, one(case, sequence, "name", RUN))
@@ -228,6 +242,21 @@ class GovernanceWorkflowTests(unittest.TestCase):
         assert_envelope(self, self.source)
         assert_stages(self, self.sequence)
 
+    def test_runner_context_at_job_env_is_rejected(self):
+        assert_envelope(self, self.source)
+        anchor = "      PYTHONDONTWRITEBYTECODE: '1'\n"
+        self.assertEqual(self.source.count(anchor), 1)
+        invalid_source = self.source.replace(
+            anchor, anchor + "      GOVERNANCE_ROOT: " + PACKET_PREFIX + "\n", 1)
+        parsed = fields(invalid_source.splitlines(), 0)
+        job = children(children(parsed, "jobs", 2), "governance", 4)
+        # The plain mapping parser cannot validate GitHub expression contexts.
+        # runner is valid in step artifact inputs, but unavailable in job env.
+        self.assertEqual(scalars(children(job, "env", 6))["GOVERNANCE_ROOT"], PACKET_PREFIX)
+        with self.assertRaises(AssertionError):
+            assert_envelope(self, invalid_source)
+        assert_artifact(self, self.named(UPLOAD))
+
     def test_trigger_path_filters_remain_exactly_unchanged(self):
         for event in ("push", "pull_request"):
             with self.subTest(event=event):
@@ -238,6 +267,7 @@ class GovernanceWorkflowTests(unittest.TestCase):
 
     def test_checked_environment_precedes_the_single_unconditional_strict_run(self):
         assert_stages(self, self.sequence)
+        assert_evidence_prepare(self, self.named(EVIDENCE))
         assert_environment_prepare(self, self.named(PREPARE))
         assert_strict_governance_step(self, self.named(RUN))
 
@@ -247,6 +277,14 @@ class GovernanceWorkflowTests(unittest.TestCase):
 
     def test_security_and_retention_mutations_are_rejected(self):
         mutations = (
+            ("reused evidence directory", 'mkdir "$GOVERNANCE_ROOT"',
+             'mkdir -p "$GOVERNANCE_ROOT"'),
+            ("suppressed source identity failure",
+             'git rev-parse HEAD > "$GOVERNANCE_ROOT/logs/source-revision.txt"',
+             'git rev-parse HEAD > "$GOVERNANCE_ROOT/logs/source-revision.txt" || true'),
+            ("missing environment handoff",
+             '          printf \'GOVERNANCE_ROOT=%s\\n\' "$GOVERNANCE_ROOT" >> "$GITHUB_ENV"\n', ""),
+            ("overwritten environment file", '>> "$GITHUB_ENV"', '> "$GITHUB_ENV"'),
             ("changed wheel", CMAKE_REQUIREMENT, CMAKE_REQUIREMENT.replace("a2357c", "b2357c")),
             ("floating version", "cmake==3.22.6", "cmake>=3.22.6"),
             ("unhashed install", "--require-hashes", ""),
@@ -295,6 +333,83 @@ class GovernanceWorkflowTests(unittest.TestCase):
                         altered[index - 1], altered[index] = altered[index], altered[index - 1]
                     with self.assertRaises(AssertionError):
                         assert_stages(self, altered)
+
+    def test_evidence_shell_exports_once_after_fresh_directories_and_source_identity(self):
+        cases = (
+            ("pass", 0, True),
+            ("existing root", 1, False),
+            ("git failure", 7, True),
+            ("environment append failure", 1, True),
+            ("missing runner temp", 1, False),
+        )
+        for label, expected_status, calls_git in cases:
+            with self.subTest(case=label), tempfile.TemporaryDirectory(prefix="governance-setup-") as temporary:
+                directory = Path(temporary)
+                runner_temp = directory / "runner temp"
+                runner_temp.mkdir()
+                root = runner_temp / "project-governance"
+                environment_file = directory / "github environment"
+                prior_environment = "PRESERVED=existing-value\n"
+                if label == "environment append failure":
+                    environment_file.mkdir()
+                else:
+                    environment_file.write_text(prior_environment, encoding="utf-8")
+                revision = "0123456789abcdef0123456789abcdef01234567"
+                identity = root / "logs/source-revision.txt"
+                if label == "existing root":
+                    identity.parent.mkdir(parents=True)
+                    identity.write_text("previous-attempt\n", encoding="utf-8")
+                marker = directory / "git-calls.jsonl"
+                executable(directory / "bin/git", (
+                    "import json, os, sys\nfrom pathlib import Path\n"
+                    + "root = Path(" + repr(str(root)) + ")\n"
+                    + "environment = Path(os.environ['GITHUB_ENV'])\n"
+                    + "with Path(" + repr(str(marker)) + ").open('a') as target:\n"
+                    + "    target.write(json.dumps({'args': sys.argv[1:], 'root': root.is_dir(),\n"
+                    + "        'logs': (root / 'logs').is_dir(),\n"
+                    + "        'environment_before': environment.read_text() if environment.is_file() else None}) + '\\n')\n"
+                    + ("print('synthetic-git-failure', file=sys.stderr)\nraise SystemExit(7)\n"
+                       if label == "git failure" else "print(" + repr(revision) + ")\n")
+                ))
+                environment = {
+                    "PATH": str(directory / "bin") + os.pathsep + os.defpath,
+                    "RUNNER_TEMP": str(runner_temp), "GITHUB_ENV": str(environment_file),
+                    "PYTHONDONTWRITEBYTECODE": "1",
+                }
+                if label == "missing runner temp":
+                    del environment["RUNNER_TEMP"]
+                command = ["bash", "-e", "-c", script(self.named(EVIDENCE))]
+                result = subprocess.run(command, cwd=directory, env=environment,
+                                        capture_output=True, text=True, timeout=10)
+                self.assertEqual(result.returncode, expected_status, result.stderr)
+                if calls_git:
+                    self.assertEqual([json.loads(line) for line in marker.read_text().splitlines()], [{
+                        "args": ["rev-parse", "HEAD"], "root": True, "logs": True,
+                        "environment_before": (None if label == "environment append failure"
+                                               else prior_environment),
+                    }])
+                    self.assertEqual(identity.read_text(), "" if label == "git failure" else revision + "\n")
+                    self.assertEqual({path.relative_to(root).as_posix() for path in root.rglob("*")},
+                                     {"logs", "logs/source-revision.txt"})
+                else:
+                    self.assertFalse(marker.exists())
+                    if label == "existing root":
+                        self.assertEqual(identity.read_text(), "previous-attempt\n")
+                    else:
+                        self.assertFalse(root.exists())
+                if label == "environment append failure":
+                    self.assertEqual(list(environment_file.iterdir()), [])
+                else:
+                    handoff = "GOVERNANCE_ROOT=" + str(root) + "\n" if label == "pass" else ""
+                    self.assertEqual(environment_file.read_text(), prior_environment + handoff)
+                if label == "pass":
+                    # A repeated setup must fail before reusing evidence or publishing twice.
+                    repeated = subprocess.run(command, cwd=directory, env=environment,
+                                              capture_output=True, text=True, timeout=10)
+                    self.assertNotEqual(repeated.returncode, 0, repeated.stderr)
+                    self.assertEqual(environment_file.read_text(), prior_environment + handoff)
+                    self.assertEqual(len(marker.read_text().splitlines()), 1)
+                    self.assertEqual(identity.read_text(), revision + "\n")
 
     def test_install_shell_retains_logs_and_rejects_pip_native_and_version_failures(self):
         cases = (
