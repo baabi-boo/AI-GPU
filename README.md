@@ -14,7 +14,28 @@ simulator configuration. “NVIDIA-style” describes the ambition of programmab
 compute, specialized matrix units, fast memory and usable software. It does not
 mean NVIDIA performance, CUDA compatibility, product equivalence or affiliation.
 
-**Latest completed phase: P04 — tiny-model inference (`complete`).**
+**Latest completed phase: P05 — Python and framework integration (`complete`
+at bounded simulated scope).** The copying Python binding, two eager PyTorch
+operators, six matmul signatures and fixed model have their own
+[source-scoped acceptance and replay evidence](docs/project/evidence/p05-torch-replay/README.md).
+This result applies to the documented PyTorch/CPython/Linux/RV64 SimX
+configuration; it does not establish a general PyTorch device backend or physical
+accelerator performance.
+
+**Current work: P06-T01 — execute the qualified warm-workspace experiment.**
+The [explicit route](docs/project/p06-qualified-warm-handoff.md) is implemented.
+Its next prerequisites are one complete governance invocation without skipped
+tests and sufficient execution capacity, followed by a fresh 24-process,
+792-launch, 25,344-word original and independent replay. Fresh dependency
+provenance and the preceding four-process counter qualification already have
+their separate evidence; they are not a completed warm experiment.
+[P06-A01](docs/project/evidence/p06-baseline/acceptance.json) remains accepted;
+P06-A02/A03, vendor integration and physical hardware obligations remain open.
+Use [current status](docs/project/status.md) and the
+[ordered backlog](docs/project/backlog.md) for the latest execution handoff.
+
+### Earlier native model evidence (P04)
+
 The frozen synthetic, bias-free batch-16 **16 → 8 → 4 MLP** now runs through
 three native matmuls per model on SimX and native processor RTL, in FP16 and BF16.
 The fresh matrix at
@@ -33,8 +54,10 @@ archives, build provenance, independent audits and replay instructions. The
 earlier [P04-A01 fixture acceptance](docs/project/evidence/p04-fixture/acceptance.json)
 and [hashed manifest](ci/project/p04_model_manifest.json) remain unchanged.
 
-**Current work: P06-T01 — establish fresh dependency compilation and loaded-product
-provenance (`in_progress`), with [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json).**
+### Earlier P06 prerequisites
+
+The following records precede the completed fresh dependency and counter
+qualification work described in the current handoff above.
 The [native lifetime witness](docs/designs/managed_counter_lifetime_v1.md) is
 implemented at `b4127b19a004b5aebb8d52eab9ceda0da3ff4561`.
 [Run 45130300651, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300651)
@@ -65,13 +88,14 @@ tests** including that repair.
 The [completion summary](docs/project/evidence/p06-managed-preflight-replay/completion-summary.md)
 retains both exact source revisions, raw logs and independent reviews.
 
-The [current dependency handoff](docs/project/p06-dependency-provenance-handoff.md)
+The [dependency handoff](docs/project/p06-dependency-provenance-handoff.md)
 specifies fresh source, compile, archive and link receipts joined to the products
-actually linked and loaded. Complete qualification of all 40 backing components
-remains open. [Full governance](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300117)
+actually linked and loaded. At that historical checkpoint, complete qualification
+of all 40 backing components remained open.
+[Full governance](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300117)
 passes **3,813 tests in 2,498.078 seconds** at the implementation revision.
-[Generic CI](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300144) remains
-in progress at this documentation checkpoint. The existing cold acceptance
+[Generic CI](https://github.com/baabi-boo/AI-GPU/actions/runs/45130300144) was still
+in progress when that checkpoint was recorded. The existing cold acceptance
 remains scoped as follows.
 
 Independent review qualifies the original
@@ -212,14 +236,14 @@ The historical `57248e73` v1 original lacks per-run pending/reset observations;
 the [new lifetime original](docs/project/evidence/p06-native-lifetime/README.md)
 supplies those bounded observations without qualifying all 40 components.
 The [dependency handoff](docs/project/p06-dependency-provenance-handoff.md) and
-[qualification plan](docs/project/p06-mpm-qualification-plan.md) retain three
-unresolved obligations: complete lifetime/pending balance, dependency
+[qualification plan](docs/project/p06-mpm-qualification-plan.md) recorded three
+obligations then unresolved: complete lifetime/pending balance, dependency
 source-to-loaded-binary provenance, and independent complete counter
 qualification. Cached product hashes alone do not prove compilation origin.
 
-After fresh dependency provenance and complete admission/validation rules are
-independently reviewed, a fresh preflight must join that evidence to the
-implemented lifetime witness before the unchanged
+The next planned step at that checkpoint was to join independently reviewed
+fresh dependency provenance and complete admission/validation rules to the
+implemented lifetime witness in a fresh preflight before the unchanged
 warm matrix: **24 processes, 792 launches and 25,344 exact output words**.
 All seven claims remain false: `qualified`, `ready_for_warm`, `warm_execution`,
 `full_warm_coverage`, `acceptance_claimed`, `phase_acceptance` and
@@ -309,10 +333,13 @@ and P07–P11 are not started.
   and [P02 WMMA evidence](docs/project/evidence/p02-wmma/README.md).
 - Read the earlier contract checkpoint: [P02 numerical handoff](docs/project/p02-numerics-handoff.md)
   and [A01 evidence](docs/project/evidence/p02-numerics/README.md).
-- Continue with the [dependency provenance handoff](docs/project/p06-dependency-provenance-handoff.md)
-  and [native lifetime packet](docs/project/evidence/p06-native-lifetime/README.md),
-  within the [counter qualification plan](docs/project/p06-mpm-qualification-plan.md).
-  Earlier prerequisites remain in the [diagnostic audit](docs/project/p06-counter-diagnostics-audit.md),
+- Continue with the [qualified warm handoff](docs/project/p06-qualified-warm-handoff.md)
+  and its [execution runbook](docs/project/evidence/p06-qualified-warm/runbook.md).
+  Earlier prerequisites remain in the
+  [dependency provenance handoff](docs/project/p06-dependency-provenance-handoff.md),
+  [native lifetime packet](docs/project/evidence/p06-native-lifetime/README.md),
+  [counter qualification plan](docs/project/p06-mpm-qualification-plan.md),
+  [diagnostic audit](docs/project/p06-counter-diagnostics-audit.md),
   [evidence packet](docs/project/evidence/p06-counter-diagnostics/README.md) and
   [handoff](docs/project/p06-counter-diagnostics-handoff.md). The
   [checked-counter contract](docs/designs/simx_checked_counters_v1.md) retains

@@ -1,13 +1,14 @@
 # SPDX-License-Identifier: Apache-2.0
 """Static P05 coverage checks for the existing full source governance suite.
 
-These tests inspect workflow text only; no compiler, package installer, native
-loader, or accelerator qualification runs here.
+These tests inspect workflow and runner source only; no compiler, package
+installer, native loader, or accelerator qualification runs here.
 """
 
 from pathlib import Path
 import unittest
 
+from governance_workflow_test_support import assert_strict_governance_step
 from test_p04_ci_contract import positive_path_patterns
 from test_p05_ci_workflow import children, path_filters, scalars, script, steps, workflow
 
@@ -66,14 +67,25 @@ class PythonGovernanceIntegrationTests(unittest.TestCase):
             ("Inspect governance prerequisites", "python3 ci/project/preflight.py --tier governance"),
             ("Validate project structure and evidence", "python3 ci/project/check_project.py"),
             ("Check published baseline packet consistency", "python3 ci/project/check_baseline_packets.py"),
-            ("Test governance tooling", "python3 -m unittest discover -s ci/project -p 'test_*.py' -v"),
         ]
-        self.assertEqual(len(self.steps), len(expected) + 1)
-        for step, (name, command) in zip(self.steps[1:], expected):
+        self.assertEqual([step["name"][0] for step in self.steps[1:]], [
+            "Prepare governance evidence directory", *(name for name, _ in expected),
+            "Install pinned governance CMake", "Prepare checked governance invocation environment",
+            "Test governance tooling", "Retain complete governance packet",
+        ])
+        for step, (name, command) in zip(self.steps[2:6], expected):
             with self.subTest(step=name):
                 self.assertEqual(set(step), {"name", "run"})
                 self.assertEqual(step["name"], (name, []))
                 self.assertEqual(script(step), command)
+        self.assertEqual(set(self.steps[1]), {"name", "run"})
+        self.assertEqual(set(self.steps[6]), {"name", "run", "timeout-minutes"})
+        self.assertEqual(set(self.steps[7]), {"name", "run"})
+        assert_strict_governance_step(self, self.steps[8])
+        upload = self.steps[9]
+        self.assertEqual(set(upload), {"name", "if", "uses", "with"})
+        self.assertEqual(upload["if"], ("always()", []))
+        self.assertEqual(upload["uses"], ("actions/upload-artifact@v4", []))
 
     def test_hosted_system_python_runtime_keeps_existing_privilege_and_budget(self):
         self.assertEqual(set(self.workflow), {
@@ -85,9 +97,10 @@ class PythonGovernanceIntegrationTests(unittest.TestCase):
             "cancel-in-progress": "true",
         })
         self.assertEqual(self.job["runs-on"], ("ubuntu-24.04", []))
-        self.assertEqual(self.job["timeout-minutes"], ("60", []))
+        self.assertEqual(self.job["timeout-minutes"], ("90", []))
         self.assertEqual(scalars(children(self.job, "env", 6)), {
             "PYTHONDONTWRITEBYTECODE": "'1'",
+            "GOVERNANCE_ROOT": "${{ runner.temp }}/project-governance",
         })
         checkout = self.steps[0]
         self.assertEqual(set(checkout), {"uses", "with"})

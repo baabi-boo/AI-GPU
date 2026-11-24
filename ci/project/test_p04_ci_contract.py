@@ -5,7 +5,9 @@ from pathlib import Path
 import re
 import unittest
 
+from governance_workflow_test_support import assert_strict_governance_step
 from p04_model_contract import ARTIFACT_PATHS
+from test_p05_ci_workflow import fields
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -87,6 +89,5 @@ class TinyMlpCiCoverageTests(unittest.TestCase):
             if len(line) - len(line.lstrip(" ")) <= 6:
                 break
             body.append(line)
-        self.assertEqual(body, [
-            "        run: python3 -m unittest discover -s ci/project -p 'test_*.py' -v",
-        ], "the source test step must discover P04 tests and propagate failures")
+        step = fields(["        name: Test governance tooling", *body], 8)
+        assert_strict_governance_step(self, step)

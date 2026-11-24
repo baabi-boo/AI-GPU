@@ -40,6 +40,15 @@ python3 -m unittest discover -s ci/project -p 'test_*.py'
 git diff --check
 ```
 
+Use the recipe above and focused unittest runs during development. Full
+governance qualification follows the [governance runbook](governance-runbook.md):
+prepare a checked environment with `ci/project/governance_env.py`, then use the
+strict `ci/project/governance_run.py` to execute the same canonical, unfiltered
+discovery in one uninterrupted invocation with zero skips. Review its complete
+host/tool prerequisites and the resource policy below, and retain the environment
+receipt, manifest, events and final result. Ordinary unittest success or a union
+of partial runs does not establish that qualification.
+
 Preflight is read-only: it reports prerequisites, resource availability and asset
 integrity; it never installs, builds or cleans. Use `--json` for machine-readable
 output, `--root PATH` to inspect a different checkout, and `--min-free-gib N` only

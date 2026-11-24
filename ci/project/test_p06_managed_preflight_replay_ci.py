@@ -15,6 +15,7 @@ import tempfile
 import unittest
 from unittest import mock
 
+from governance_workflow_test_support import assert_strict_governance_step
 from test_p05_ci_workflow import children, path_filters, scalars, script, steps, workflow
 from test_p06_workspace_ci import covers
 
@@ -149,7 +150,11 @@ class ManagedPreflightReplayWorkflowTests(unittest.TestCase):
                          "docs/designs/managed_counter_preflight_replay_v1.md"):
                 self.assertTrue(covers(patterns, name), (event, name))
         job = children(children(governance, "jobs", 2), "governance", 4)
-        self.assertEqual(job["timeout-minutes"], ("60", []))
+        self.assertEqual(job["timeout-minutes"], ("90", []))
+        suite = [step for step in steps(job)
+                 if step.get("name", (None,))[0] == "Test governance tooling"]
+        self.assertEqual(len(suite), 1)
+        assert_strict_governance_step(self, suite[0])
 
     def test_job_cannot_install_or_execute_native_payloads_or_suppress_failure(self):
         self.assertEqual(set(self.job), {"name", "runs-on", "timeout-minutes", "defaults", "env", "steps"})

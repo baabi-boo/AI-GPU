@@ -13,6 +13,7 @@ import tempfile
 import unittest
 
 from baseline_inventory import SOURCE_INPUTS
+from governance_workflow_test_support import assert_strict_governance_step
 import p03_execute
 import p04_ci_prepare
 import p06_execute as runner
@@ -274,15 +275,24 @@ class HistoricalNativeBaselineWorkflowTests(unittest.TestCase):
         job = children(children(governance, "jobs", 2), "governance", 4)
         self.assertEqual(set(job), {"runs-on", "timeout-minutes", "env", "steps"})
         self.assertEqual(job["runs-on"], ("ubuntu-24.04", []))
-        self.assertEqual(job["timeout-minutes"], ("60", []))
+        self.assertEqual(job["timeout-minutes"], ("90", []))
+        self.assertEqual(scalars(children(job, "env", 6)), {
+            "PYTHONDONTWRITEBYTECODE": "'1'",
+            "GOVERNANCE_ROOT": "${{ runner.temp }}/project-governance",
+        })
         checks = {"Inspect governance prerequisites": "python3 ci/project/preflight.py --tier governance",
                   "Validate project structure and evidence": "python3 ci/project/check_project.py",
-                  "Check published baseline packet consistency": "python3 ci/project/check_baseline_packets.py",
-                  "Test governance tooling": "python3 -m unittest discover -s ci/project -p 'test_*.py' -v"}
+                  "Check published baseline packet consistency": "python3 ci/project/check_baseline_packets.py"}
+        governance_steps = steps(job)
         for name, expected in checks.items():
-            step = self.one("name", name, steps(job))
+            step = self.one("name", name, governance_steps)
             self.assertEqual(set(step), {"name", "run"})
             self.assertEqual(script(step), expected)
+        assert_strict_governance_step(self, self.one("name", "Test governance tooling", governance_steps))
+        upload = self.one("uses", "actions/upload-artifact@v4", governance_steps)
+        self.assertEqual(set(upload), {"name", "if", "uses", "with"})
+        self.assertEqual(upload["if"], ("always()", []))
+        self.assertEqual(governance_steps[-1], upload)
 
 
 class NativeBaselineBuildEntryTests(unittest.TestCase):

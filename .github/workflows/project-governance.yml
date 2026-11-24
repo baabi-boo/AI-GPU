@@ -155,9 +155,10 @@ concurrency:
 jobs:
   governance:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 90
     env:
       PYTHONDONTWRITEBYTECODE: '1'
+      GOVERNANCE_ROOT: ${{ runner.temp }}/project-governance
     steps:
       - uses: actions/checkout@v4
         with:
@@ -165,6 +166,12 @@ jobs:
           submodules: false
           lfs: false
           persist-credentials: false
+      - name: Prepare governance evidence directory
+        run: |
+          set -euo pipefail
+          mkdir "$GOVERNANCE_ROOT"
+          mkdir "$GOVERNANCE_ROOT/logs"
+          git rev-parse HEAD > "$GOVERNANCE_ROOT/logs/source-revision.txt"
       - name: Verify system Python 3.12
         run: python3 -c 'import sys; assert sys.version_info[:2] == (3, 12), sys.version; print(sys.version)'
       - name: Inspect governance prerequisites
@@ -173,5 +180,54 @@ jobs:
         run: python3 ci/project/check_project.py
       - name: Check published baseline packet consistency
         run: python3 ci/project/check_baseline_packets.py
+      - name: Install pinned governance CMake
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          # The retained compile_commands contract requires the pre-3.26 grammar.
+          cat > "$GOVERNANCE_ROOT/logs/cmake-requirements.txt" <<'REQUIREMENTS'
+          cmake==3.22.6 --hash=sha256:a2357c510e37db7df156c31ab43857b4583e3a2ece8220747e8a007aea50aa45
+          REQUIREMENTS
+          python3 -m pip --isolated --disable-pip-version-check install \
+            --index-url https://pypi.org/simple --no-cache-dir --no-deps --no-compile \
+            --only-binary=:all: --require-hashes \
+            --target "$GOVERNANCE_ROOT/cmake-package" \
+            --requirement "$GOVERNANCE_ROOT/logs/cmake-requirements.txt" \
+            2>&1 | tee "$GOVERNANCE_ROOT/logs/cmake-install.log"
+          cmake="$GOVERNANCE_ROOT/cmake-package/cmake/data/bin/cmake"
+          test -x "$cmake"
+          "$cmake" --version 2>&1 | tee "$GOVERNANCE_ROOT/logs/cmake-version.log"
+          test "$(head -n 1 "$GOVERNANCE_ROOT/logs/cmake-version.log")" = 'cmake version 3.22.6'
+      - name: Prepare checked governance invocation environment
+        run: |
+          set -euo pipefail
+          python3 ci/project/governance_env.py \
+            --output-dir "$GOVERNANCE_ROOT/environment" \
+            --cmake "$GOVERNANCE_ROOT/cmake-package/cmake/data/bin/cmake" \
+            2>&1 | tee "$GOVERNANCE_ROOT/logs/environment.log"
       - name: Test governance tooling
-        run: python3 -m unittest discover -s ci/project -p 'test_*.py' -v
+        run: |
+          set -euo pipefail
+          /usr/bin/env -i \
+            PATH="$GOVERNANCE_ROOT/environment/venv/bin:/usr/bin:/bin" \
+            HOME="$GOVERNANCE_ROOT/environment/home" \
+            TMPDIR="$GOVERNANCE_ROOT/environment/tmp" \
+            LANG=C LC_ALL=C TZ=UTC PYTHONUTF8=1 PYTHONDONTWRITEBYTECODE=1 \
+            CCACHE_DISABLE=1 OBJCACHE= MAKEFLAGS=-j2 CMAKE_BUILD_PARALLEL_LEVEL=2 THREADS=1 \
+            "$GOVERNANCE_ROOT/environment/venv/bin/python" ci/project/governance_run.py \
+            --output-dir "$GOVERNANCE_ROOT/run" \
+            --environment-receipt "$GOVERNANCE_ROOT/environment/environment.json" \
+            2>&1 | tee "$GOVERNANCE_ROOT/logs/governance.log"
+      - name: Retain complete governance packet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-governance-${{ github.sha }}-run${{ github.run_id }}-attempt${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/project-governance/logs
+            ${{ runner.temp }}/project-governance/environment/environment.json
+            ${{ runner.temp }}/project-governance/run
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 6
+          include-hidden-files: true

@@ -9,6 +9,9 @@ from pathlib import Path
 import re
 import unittest
 
+from governance_workflow_test_support import assert_strict_governance_step
+from test_p05_ci_workflow import children, steps, workflow
+
 
 ROOT = Path(__file__).resolve().parents[2]
 PROJECT = ROOT / "docs/project"
@@ -203,13 +206,19 @@ class RepositoryContractTests(unittest.TestCase):
         self.assertRegex(text, r"(?m)^    runs-on: ubuntu-[0-9]{2}\.[0-9]{2}\s*$")
         timeout = re.findall(r"(?m)^    timeout-minutes: ([0-9]+)\s*$", text)
         self.assertEqual(len(timeout), 1)
-        self.assertEqual(int(timeout[0]), 60)
+        self.assertEqual(int(timeout[0]), 90)
         for setting in ("persist-credentials", "submodules", "lfs"):
             self.assertRegex(text, rf"(?m)^          {setting}: false\s*$")
         for command in ("python3 ci/project/preflight.py --tier governance",
-                        "python3 ci/project/check_project.py",
-                        "python3 -m unittest discover -s ci/project -p 'test_*.py' -v"):
+                        "python3 ci/project/check_project.py"):
             self.assertIn("run: " + command, text)
+        parsed = workflow(ROOT / ".github/workflows/project-governance.yml")
+        job = children(children(parsed, "jobs", 2), "governance", 4)
+        self.assertTrue({"if", "continue-on-error"}.isdisjoint(job))
+        suite = [step for step in steps(job)
+                 if step.get("name", (None,))[0] == "Test governance tooling"]
+        self.assertEqual(len(suite), 1)
+        assert_strict_governance_step(self, suite[0])
 
 
 class ExecutionLedgerContractTests(unittest.TestCase):

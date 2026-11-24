@@ -16,6 +16,8 @@ This is the canonical entry point for **both human contributors and AI coding ag
 
 Project governance checks (`python3 ci/project/check_project.py` and `python3 -m unittest discover -s ci/project -p 'test_*.py'`) run from the **source root**, without a GPU build tree. They validate project metadata/tooling only. The inherited build-tree rule below continues to apply to GPU/kernel/RTL tests.
 
+For full governance qualification, follow the [governance runbook](docs/project/governance-runbook.md): use the checked environment from `ci/project/governance_env.py` and the strict `ci/project/governance_run.py` runner for the same canonical, unfiltered discovery in one uninterrupted invocation with zero skips. Ordinary and focused unittest runs remain development checks; qualification requires the runbook's complete execution and retained evidence.
+
 For the bounded vendor integration smoke, follow the [XRT integration guide](docs/project/p01-xrt-integration.md).
 The generic blackbox driver resets an inherited `TARGET`, and the generated
 `run-xrt` recipe assigns its own `XRT_INI_PATH`; exporting those variables alone

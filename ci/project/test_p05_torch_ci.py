@@ -13,6 +13,7 @@ import tempfile
 import tomllib
 import unittest
 
+from governance_workflow_test_support import assert_strict_governance_step
 from test_p05_ci_workflow import children, command, path_filters, scalars, script, steps, workflow
 
 
@@ -261,11 +262,17 @@ class InstalledTorchWorkflowTests(unittest.TestCase):
                 self.assertLessEqual({".github/workflows/p05-torch.yml", "docs/designs/torch_custom_ops_v1.md",
                                       "python/**", "ci/project/**"}, path_filters(events, event))
         job = children(children(self.governance, "jobs", 2), "governance", 4)
-        commands = [script(step) for step in steps(job) if "run" in step]
-        for required in ("python3 ci/project/check_project.py", "python3 ci/project/check_baseline_packets.py",
-                         "python3 -m unittest discover -s ci/project -p 'test_*.py' -v"):
-            self.assertIn(required, commands)
-        self.assertEqual(len(commands), 5)
+        governance_steps = steps(job)
+        commands = [script(step) for step in governance_steps if "run" in step]
+        for name, required in (
+                ("Validate project structure and evidence", "python3 ci/project/check_project.py"),
+                ("Check published baseline packet consistency", "python3 ci/project/check_baseline_packets.py")):
+            step = named(governance_steps, name)
+            self.assertEqual(set(step), {"name", "run"})
+            self.assertEqual(script(step), required)
+            self.assertEqual(commands.count(required), 1)
+        assert_strict_governance_step(self, named(governance_steps, "Test governance tooling"))
+        self.assertEqual(len(commands), 8)
 
 
 if __name__ == "__main__":

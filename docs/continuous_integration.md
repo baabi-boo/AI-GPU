@@ -3,6 +3,18 @@
 - This pipeline consists of creating the correct development environment, building your code, and running all tests
 - This is an extensive pipeline so it might take some time to complete
 
+## Project governance qualification
+
+Project governance uses the [governance workflow](../.github/workflows/project-governance.yml)
+and [complete invocation runbook](project/governance-runbook.md), from the source
+root without a GPU build tree. The checked `ci/project/governance_env.py`
+environment and strict `ci/project/governance_run.py` runner execute the same
+canonical `python3 -m unittest discover -s ci/project -p 'test_*.py'` population,
+unfiltered, in one uninterrupted invocation with zero skips. Qualification
+requires the retained manifest, event accounting and passing final receipt
+described in the runbook; ordinary and focused unittest runs remain development
+checks. GPU/kernel/RTL tests retain their configured build-tree and separate
+acceptance requirements.
 
 ## Protecting Master Branch
 Navigate to your Repository:

@@ -20,6 +20,8 @@ import check_baseline_packets as checker
 from baseline_packet_export import verify_export
 from baseline_packet_export_fixture import make_export, save_export_manifest
 from baseline_packet_fixture import CASE_IDS, save_report
+from governance_workflow_test_support import assert_strict_governance_step
+from test_p05_ci_workflow import children, steps as workflow_steps, workflow as parse_workflow
 
 
 HERE = Path(__file__).resolve().parent
@@ -338,14 +340,20 @@ class BaselinePacketCIWorkflowTests(unittest.TestCase):
         self.assertLess(workflow.index("run: python3 ci/project/check_project.py"),
                         workflow.index("run: python3 ci/project/check_baseline_packets.py"))
         self.assertLess(workflow.index("run: python3 ci/project/check_baseline_packets.py"),
-                        workflow.index("run: python3 -m unittest discover"))
+                        workflow.index("      - name: Test governance tooling"))
+        parsed = parse_workflow(ROOT / ".github/workflows/project-governance.yml")
+        job = children(children(parsed, "jobs", 2), "governance", 4)
+        suite = [step for step in workflow_steps(job)
+                 if step.get("name", (None,))[0] == "Test governance tooling"]
+        self.assertEqual(len(suite), 1)
+        assert_strict_governance_step(self, suite[0])
 
     def test_governance_keeps_the_existing_read_only_runtime_contract(self):
         workflow = (ROOT / ".github/workflows/project-governance.yml").read_text(encoding="utf-8")
         self.assertEqual(re.findall(r"(?m)^([ \t]*)permissions:", workflow), [""])
         self.assertRegex(workflow, r"(?m)^permissions:\n  contents: read$")
         self.assertEqual(re.findall(r"(?m)^    runs-on: (.+)$", workflow), ["ubuntu-24.04"])
-        self.assertEqual(re.findall(r"(?m)^    timeout-minutes: (.+)$", workflow), ["60"])
+        self.assertEqual(re.findall(r"(?m)^    timeout-minutes: (.+)$", workflow), ["90"])
         self.assertIn("assert sys.version_info[:2] == (3, 12)", workflow)
         for option in ("submodules", "lfs", "persist-credentials"):
             self.assertRegex(workflow, r"(?m)^          " + option + ": false$")
