@@ -2,6 +2,7 @@
 """Synthetic unittest executions exercise strict governance outcome accounting."""
 
 import gc
+import hashlib
 import io
 import sys
 import types
@@ -111,9 +112,231 @@ class GovernanceRunTests(unittest.TestCase):
         self.assertEqual(result.summary["tests_run"], 1)
         self.assertEqual(result.summary["outcome_counts"], {"success": 1})
         self.assertEqual(result.summary["subtest_counts"], {"success": 2})
-        self.assertEqual([event["test_id"] for event in events
-                          if event["event"] == "subtest_outcome"],
+        subtests = [event for event in events if event["event"] == "subtest_outcome"]
+        self.assertEqual([event["test_id"] for event in subtests],
                          ["fixture.Subtests.test_success"] * 2)
+        self.assertEqual([event["subtest_id"] for event in subtests], [
+            "fixture.Subtests.test_success (value=1)",
+            "fixture.Subtests.test_success (value=2)",
+        ])
+        for event in subtests:
+            self.assertNotIn("subtest_id_encoding", event)
+            self.assertNotIn("subtest_id_original_encoding", event)
+            self.assertNotIn("subtest_id_original_bytes", event)
+
+    def assert_hashed_subtest(self, event, original):
+        encoded = original.encode("utf-8")
+        self.assertGreater(len(encoded), governance_run.MAX_ID_BYTES)
+        self.assertEqual(event["subtest_id"], "sha256:" + hashlib.sha256(encoded).hexdigest())
+        self.assertEqual(event["subtest_id_encoding"], "sha256")
+        self.assertEqual(event["subtest_id_original_encoding"], "utf-8")
+        self.assertEqual(event["subtest_id_original_bytes"], len(encoded))
+        self.assertEqual(len(event["subtest_id"].encode("utf-8")), 71)
+
+    def test_oversized_successful_subtests_bind_full_labels_without_losing_outcomes(self):
+        identity = "fixture.Subtests.test_oversized_success"
+        prefix = "é" * governance_run.MAX_ID_BYTES
+        originals = []
+
+        def body(case):
+            for label in (prefix + "a", prefix + "b", prefix + "a"):
+                with case.subTest(label=label):
+                    originals.append(case._subtest.id())
+
+        result, events, _ = self.run_synthetic(unittest.TestSuite([_case(identity, body)]))
+        subtests = [event for event in events if event["event"] == "subtest_outcome"]
+
+        self.assertTrue(result.strict_success)
+        self.assertTrue(result.summary["execution_completed"])
+        self.assertTrue(result.summary["coverage_complete"])
+        self.assertIsNone(result.summary["abort"])
+        self.assertEqual(result.test_ids, (identity,))
+        self.assertEqual(result.summary["tests_run"], 1)
+        self.assertEqual(result.summary["started_count"], 1)
+        self.assertEqual(result.summary["stopped_count"], 1)
+        self.assertEqual(result.summary["outcome_counts"], {"success": 1})
+        self.assertEqual(result.summary["subtest_counts"], {"success": 3})
+        self.assertEqual([event["test_id"] for event in subtests], [identity] * 3)
+        self.assertEqual([event["outcome"] for event in subtests], ["success"] * 3)
+        self.assertEqual(len(originals), 3)
+        for event, original in zip(subtests, originals):
+            self.assert_hashed_subtest(event, original)
+            self.assertGreater(event["subtest_id_original_bytes"], len(original))
+        self.assertNotEqual(subtests[0]["subtest_id"], subtests[1]["subtest_id"])
+        self.assertEqual(subtests[0]["subtest_id"], subtests[2]["subtest_id"])
+        self.assertEqual(subtests[0]["subtest_id_original_bytes"],
+                         subtests[1]["subtest_id_original_bytes"])
+        self.assertEqual([event["event"] for event in events],
+                         ["test_start", "subtest_outcome", "subtest_outcome",
+                          "subtest_outcome", "test_outcome", "test_stop"])
+
+    def test_oversized_failing_and_erroring_subtests_keep_outcomes_and_continue(self):
+        for exception, outcome in ((AssertionError, "failure"), (RuntimeError, "error")):
+            with self.subTest(outcome=outcome):
+                identity = "fixture.Subtests.test_oversized_problem"
+                after_id = "fixture.Subtests.test_after"
+                originals, executed = [], []
+                label = "x" * (governance_run.MAX_ID_BYTES + 1)
+
+                def body(case):
+                    with case.subTest(label=label):
+                        originals.append(case._subtest.id())
+                        raise exception("synthetic oversized subtest problem")
+                    with case.subTest(part="good"):
+                        executed.append("continued")
+
+                result, events, output = self.run_synthetic(unittest.TestSuite([
+                    _case(identity, body),
+                    _case(after_id, lambda _: executed.append("after")),
+                ]))
+                subtests = [event for event in events if event["event"] == "subtest_outcome"]
+
+                self.assertEqual(executed, ["continued", "after"])
+                self.assertFalse(result.strict_success)
+                self.assertTrue(result.summary["execution_completed"])
+                self.assertIsNone(result.summary["abort"])
+                self.assertEqual(result.summary["tests_run"], 2)
+                self.assertEqual(result.summary["started_count"], 2)
+                self.assertEqual(result.summary["stopped_count"], 2)
+                self.assertEqual(result.summary["subtest_counts"], {outcome: 1, "success": 1})
+                self.assertEqual(result.summary["outcome_counts"], {"success": 1})
+                self.assertEqual(result.summary["missing_outcome_ids"], [identity])
+                self.assertEqual(result.summary["non_successful_ids"], [identity])
+                self.assertEqual([event["test_id"] for event in subtests], [identity] * 2)
+                self.assertEqual([event["outcome"] for event in subtests], [outcome, "success"])
+                self.assert_hashed_subtest(subtests[0], originals[0])
+                self.assertEqual(subtests[1]["subtest_id"], identity + " (part='good')")
+                records = result.failures if outcome == "failure" else result.errors
+                other_records = result.errors if outcome == "failure" else result.failures
+                self.assertEqual(len(records), 1)
+                self.assertEqual(other_records, [])
+                self.assertEqual(records[0][0], subtests[0]["subtest_id"])
+                self.assertIn("synthetic oversized subtest problem", output)
+                self.assertIn(subtests[0]["subtest_id"], output)
+                self.assertNotIn(label, output)
+
+    def test_oversized_skipped_subtests_keep_bounded_records_and_continue(self):
+        identity = "fixture.Subtests.test_oversized_skip"
+        originals, executed = [], []
+        label = "x" * (governance_run.MAX_ID_BYTES + 1)
+
+        def body(case):
+            with case.subTest(label=label):
+                originals.append(case._subtest.id())
+                case.skipTest("synthetic oversized subtest skip")
+            with case.subTest(part="good"):
+                executed.append("continued")
+
+        result, events, output = self.run_synthetic(unittest.TestSuite([
+            _case(identity, body),
+            _case("fixture.Subtests.test_after", lambda _: executed.append("after")),
+        ]))
+        subtests = [event for event in events if event["event"] == "subtest_outcome"]
+
+        self.assertEqual(executed, ["continued", "after"])
+        self.assertTrue(result.wasSuccessful())
+        self.assertFalse(result.strict_success)
+        self.assertTrue(result.summary["execution_completed"])
+        self.assertIsNone(result.summary["abort"])
+        self.assertEqual(result.summary["tests_run"], 2)
+        self.assertEqual(result.summary["started_count"], 2)
+        self.assertEqual(result.summary["stopped_count"], 2)
+        self.assertEqual(result.summary["subtest_counts"], {"skip": 1, "success": 1})
+        self.assertEqual(result.summary["outcome_counts"], {"success": 1})
+        self.assertEqual(result.summary["missing_outcome_ids"], [identity])
+        self.assertEqual(result.summary["non_successful_ids"], [identity])
+        self.assertEqual([event["test_id"] for event in subtests], [identity] * 2)
+        self.assertEqual([event["outcome"] for event in subtests], ["skip", "success"])
+        self.assert_hashed_subtest(subtests[0], originals[0])
+        self.assertEqual(subtests[0]["reason"], "synthetic oversized subtest skip")
+        self.assertEqual(subtests[1]["subtest_id"], identity + " (part='good')")
+        self.assertEqual(result.skipped,
+                         [(subtests[0]["subtest_id"], "synthetic oversized subtest skip")])
+        self.assertEqual(result.errors, [])
+        self.assertEqual(result.failures, [])
+        self.assertIn(subtests[0]["subtest_id"], output)
+        self.assertNotIn(label, output)
+
+    def test_subtest_identity_boundary_uses_utf8_bytes_and_keeps_short_records(self):
+        identity = "fixture.Subtests.test_utf8_boundary"
+        overhead = len((identity + " (label='')").encode("utf-8"))
+        available = governance_run.MAX_ID_BYTES - overhead
+        boundary = "é" * (available // 2) + "a" * (available % 2)
+        originals = []
+
+        def body(case):
+            for label in (boundary, boundary + "é"):
+                with case.subTest(label=label):
+                    originals.append(case._subtest.id())
+
+        result, events, _ = self.run_synthetic(unittest.TestSuite([_case(identity, body)]))
+        subtests = [event for event in events if event["event"] == "subtest_outcome"]
+
+        self.assertTrue(result.strict_success)
+        self.assertEqual(result.summary["outcome_counts"], {"success": 1})
+        self.assertEqual(result.summary["subtest_counts"], {"success": 2})
+        self.assertEqual(len(originals[0].encode("utf-8")), governance_run.MAX_ID_BYTES)
+        self.assertLess(len(originals[1]), governance_run.MAX_ID_BYTES)
+        self.assertEqual(subtests[0]["subtest_id"], originals[0])
+        self.assertNotIn("subtest_id_encoding", subtests[0])
+        self.assertNotIn("subtest_id_original_encoding", subtests[0])
+        self.assertNotIn("subtest_id_original_bytes", subtests[0])
+        self.assert_hashed_subtest(subtests[1], originals[1])
+        self.assertEqual(subtests[1]["subtest_id_original_bytes"],
+                         governance_run.MAX_ID_BYTES + 2)
+
+    def test_oversized_canonical_ids_are_still_rejected_before_execution(self):
+        self.assertEqual(governance_run.MAX_ID_BYTES, 4096)
+        for identity in ("x" * (governance_run.MAX_ID_BYTES + 1),
+                         "é" * (governance_run.MAX_ID_BYTES // 2 + 1)):
+            with self.subTest(byte_length=len(identity.encode("utf-8"))):
+                executed, events = [], []
+                suite = unittest.TestSuite([
+                    _case(identity, lambda _: executed.append("body")),
+                ])
+                with self.assertRaisesRegex(ValueError,
+                                            "^invalid or oversized unittest identity$"):
+                    governance_run.run_suite(suite, stream=io.StringIO(),
+                                             event_sink=events.append)
+                self.assertEqual(executed, [])
+                self.assertEqual(events, [])
+
+    def test_maximum_canonical_parent_id_is_preserved_with_a_hashed_subtest(self):
+        identity = "x" * governance_run.MAX_ID_BYTES
+        originals = []
+
+        def body(case):
+            with case.subTest(part="good"):
+                originals.append(case._subtest.id())
+
+        result, events, _ = self.run_synthetic(unittest.TestSuite([_case(identity, body)]))
+        subtests = [event for event in events if event["event"] == "subtest_outcome"]
+
+        self.assertTrue(result.strict_success)
+        self.assertEqual(result.test_ids, (identity,))
+        self.assertEqual(result.summary["outcome_counts"], {"success": 1})
+        self.assertEqual(result.summary["subtest_counts"], {"success": 1})
+        self.assertEqual([event["test_id"] for event in events], [identity] * 4)
+        self.assert_hashed_subtest(subtests[0], originals[0])
+
+    def test_oversized_subtests_still_obey_the_event_limit(self):
+        def body(case):
+            with case.subTest(label="x" * (governance_run.MAX_ID_BYTES + 1)):
+                pass
+
+        events = []
+        with mock.patch.object(governance_run, "MAX_EVENTS", 1):
+            result = governance_run.run_suite(
+                unittest.TestSuite([_case("fixture.Subtests.test_event_limit", body)]),
+                stream=io.StringIO(), event_sink=events.append)
+
+        self.assertFalse(result.strict_success)
+        self.assertFalse(result.summary["execution_completed"])
+        self.assertEqual(result.summary["abort"],
+                         {"type": "ValueError", "message": "governance event limit exceeded"})
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]["event"], "test_start")
+        self.assertGreater(result.summary["event_count"], len(events))
 
     def test_changed_execution_order_rejects_otherwise_complete_success(self):
         executed = []
@@ -538,6 +761,22 @@ class GovernanceRunTests(unittest.TestCase):
                 with self.subTest(part="skip"):
                     self.skipTest("synthetic subtest skip")
 
+            def test_oversized_subtest_error(self):
+                with self.subTest(label="x" * (governance_run.MAX_ID_BYTES + 1)):
+                    raise RuntimeError("synthetic oversized subtest error")
+
+            def test_oversized_subtest_failure(self):
+                with self.subTest(label="x" * (governance_run.MAX_ID_BYTES + 1)):
+                    self.fail("synthetic oversized subtest failure")
+
+            def test_oversized_subtest_skip(self):
+                with self.subTest(label="x" * (governance_run.MAX_ID_BYTES + 1)):
+                    self.skipTest("synthetic oversized subtest skip")
+
+            def test_oversized_subtest_success(self):
+                with self.subTest(label="x" * (governance_run.MAX_ID_BYTES + 1)):
+                    pass
+
             def test_success(self):
                 pass
 
@@ -558,10 +797,10 @@ class GovernanceRunTests(unittest.TestCase):
         result, events, output = self.run_synthetic(suite)
         gc.collect()
 
-        self.assertEqual(len(identities), 10)
+        self.assertEqual(len(identities), 14)
         self.assertEqual(released_during_execution, [True])
         self.assertTrue(all(reference() is None for reference in references))
-        self.assertEqual(result.summary["tests_run"], 11)
+        self.assertEqual(result.summary["tests_run"], 15)
         self.assertFalse(result.strict_success)
         self.assertGreater(len(events), 30)
         self.assertIn("synthetic subtest error", output)

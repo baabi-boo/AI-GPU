@@ -17,6 +17,12 @@ fixtures deliberately search only the interpreter directory, `/usr/bin` and
 sanitization; expose a checked native executable through the prepared interpreter
 directory instead.
 
+The executing interpreter must use the private `venv/bin/python3` alias. Existing
+dependency and replay contracts bind the selected `python3` path to the executing
+interpreter; another alias for the same binary is a different launch identity.
+Preparation checks both private alias paths and their common resolved binary,
+then probes and records the exact `python3` interpreter used for the suite.
+
 The [historical audit](p06-qualified-warm-audit.md) and
 [coverage reconciliation](evidence/p06-qualified-warm/validation/coverage/final-reconciliation.json)
 preserve the separate result: 4,491 hosted passing IDs plus 59 supplemental IDs,
@@ -122,7 +128,7 @@ a venv or prepending ambient PATH is insufficient. Do not omit private `HOME` or
   TMPDIR="$GOVERNANCE_ROOT/environment/tmp" \
   LANG=C LC_ALL=C TZ=UTC PYTHONUTF8=1 PYTHONDONTWRITEBYTECODE=1 \
   CCACHE_DISABLE=1 OBJCACHE= MAKEFLAGS=-j2 CMAKE_BUILD_PARALLEL_LEVEL=2 THREADS=1 \
-  "$GOVERNANCE_ROOT/environment/venv/bin/python" ci/project/governance_run.py \
+  "$GOVERNANCE_ROOT/environment/venv/bin/python3" ci/project/governance_run.py \
   --output-dir "$GOVERNANCE_ROOT/run" \
   --environment-receipt "$GOVERNANCE_ROOT/environment/environment.json" \
   2>&1 | tee "$GOVERNANCE_ROOT/logs/governance.log"
@@ -130,7 +136,11 @@ a venv or prepending ambient PATH is insufficient. Do not omit private `HOME` or
 
 The runner discovers `ci/project/test_*.py` from the source root and executes that
 same ordered suite once. It offers no filtering, partition, retry or resume
-option. Every discovered ID must have exactly one start, successful outcome and
+option. `--environment-receipt` is required: the runner validates the preparation
+receipt and checked tool identities before and after execution and retains the
+receipt argument in its launch record. There is no receipt-free qualifying CLI
+mode; a missing, empty or invalid receipt cannot produce a qualifying success.
+Every discovered ID must have exactly one start, successful outcome and
 stop; starts must follow the discovered order. Fixture and subtest events are
 accounted separately. Skips, expected failures, unexpected successes, errors, failures,
 import errors, empty/duplicate discovery and missing/unexpected/duplicate IDs
@@ -175,8 +185,10 @@ This extra time changes no population or acceptance predicate. Concurrency still
 cancels superseded runs for the same event/ref, so allow a validation candidate
 to finish uninterrupted.
 
-The workflow always attempts to upload `logs`, the environment receipt and the
-whole `run` directory, with source SHA, provider run ID and attempt in the
-artifact name, for 30 days. Retain provider step logs and verify the uploaded
-packet against that exact revision and attempt. The package and venv are not
-uploaded; their recorded identities support the governance-only result.
+The workflow makes a best-effort attempt to upload `logs`, the environment
+receipt and the whole `run` directory when the upload step can execute, with
+source SHA, provider run ID and attempt in the artifact name, for 30 days. A job
+timeout or runner loss can prevent upload. Confirm that the packet exists,
+retain provider step logs and verify the uploaded packet against that exact
+revision and attempt. The package and venv are not uploaded; their recorded
+identities support the governance-only result.

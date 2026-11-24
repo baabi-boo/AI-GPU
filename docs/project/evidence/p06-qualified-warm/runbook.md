@@ -6,7 +6,7 @@ This procedure operates the [qualified warm-workspace v1 contract](../../../desi
 2. `p06_dependency_build.py` compiles fresh dependency products and retains their provenance.
 3. `p06_qualified_warm_execute.py run` admits the separately pinned caller extension and original prerequisites before building and launching the full 24-process matrix.
 
-These instructions are a procedure, not a completed execution claim. The reviewed implementation checkpoint is `c0b44ce64665fe11895f869eea8c38c9b820d6f7`; select and record the exact published execution revision independently. Preserve the exact source, inputs, logs and outcome for each attempt. A successful original and complete independent replay establish the recorded 24-process experiment's validity. The frozen performance predicates may be satisfied or not satisfied. Neither outcome establishes performance acceptance, P06-A02/A03, vendor integration or physical hardware qualification.
+These instructions are a procedure, not a completed execution claim. The original route review is scoped to `c0b44ce64665fe11895f869eea8c38c9b820d6f7`; select and record the exact reviewed published execution revision independently. The [current governance/readiness audit](../../governance-readiness-audit.md) preserves the failed first strict hosted invocation and the corrected focused checks. A complete strict governance pass, original-control delivery and native capacity remain outstanding. Preserve the exact source, inputs, logs and outcome for each attempt. A successful original and complete independent replay establish the recorded 24-process experiment's validity. The frozen performance predicates may be satisfied or not satisfied. Neither outcome establishes performance acceptance, P06-A02/A03, vendor integration or physical hardware qualification.
 
 The historical four-process route and blocked historical warm-v1 route remain separate. Explicitly select the new producer and reader below; do not alter an old packet or rely on its self-reported metadata to choose a reader. The original qualification proof and both original prerequisite ZIPs retain their original identities and scope. Historical prerequisite projection and the current one-file caller extension are validated separately.
 
@@ -71,6 +71,86 @@ git -C "$P06_SOURCE" submodule status --recursive
 ```
 
 Check that status is clean and that each of `cocogfx`, `cvfpu`, `common_cells`, `fpu_div_sqrt_mvp`, `flexfloat`, `hardfloat`, `ramulator` and `softfloat` is initialized at its recorded commit. If populating a new checkout, use `git submodule update --init --recursive`, never `--remote`. The producers perform stronger full source/index-state checks; these displayed checks do not replace them.
+
+## Read-only readiness screen
+
+Before creating a native workspace or beginning preparation, collect the advisory
+screen from the same trusted checkout selected by `P06_SOURCE`. The
+[observer](../../../../ci/project/p06_qualified_warm_readiness.py) requires all
+**eight flags** below: seven explicit paths and the exact expected revision.
+`--source-dir` must identify the checkout containing that executing script.
+`--workspace-dir` may name an absent planned directory whose parent exists; the
+screen does not create it. Keep the external review directory outside all input
+roots, and select fresh output filenames.
+
+The screen reads pinned proofs and source identities, checks raw original and
+locked-part identities, inspects local dependency Git objects, observes host
+aliases, runs bounded host-version/Git probes, and reports capacity. It performs
+no download, archive extraction, dependency build or native execution. Missing
+or inadmissible inputs become explicit observations; it does not acquire or
+repair them.
+
+The preceding variable guards still apply. Run this as a separate observation
+before the mutating stages. The output writes below only retain the screen's
+report and invocation records in the external review directory.
+
+```bash
+test -d "$P06_REVIEW_DIRECTORY"
+(
+  set -o noclobber
+  date -u +%Y-%m-%dT%H:%M:%SZ > "$P06_REVIEW_DIRECTORY/readiness.started.txt"
+  if PYTHONDONTWRITEBYTECODE=1 "$P06_PYTHON" -B \
+    "$P06_SOURCE/ci/project/p06_qualified_warm_readiness.py" \
+    --source-dir "$P06_SOURCE" \
+    --workspace-dir "$P06_WORKSPACE" \
+    --archive-root "$P06_ARCHIVE_ROOT" \
+    --dependency-repositories "$P06_DEPENDENCY_REPOSITORIES" \
+    --host-bin "$P06_HOST_BIN" \
+    --diagnostic-archive "$P06_DIAGNOSTIC_ARCHIVE" \
+    --control-archive "$P06_CONTROL_ARCHIVE" \
+    --expected-revision "$P06_SOURCE_REVISION" \
+    > "$P06_REVIEW_DIRECTORY/readiness.json" \
+    2> "$P06_REVIEW_DIRECTORY/readiness.stderr.log"; then
+    P06_READINESS_STATUS=0
+  else
+    P06_READINESS_STATUS=$?
+  fi
+  printf '%s\n' "$P06_READINESS_STATUS" > "$P06_REVIEW_DIRECTORY/readiness.exit-code.txt"
+  date -u +%Y-%m-%dT%H:%M:%SZ > "$P06_REVIEW_DIRECTORY/readiness.finished.txt"
+  exit "$P06_READINESS_STATUS"
+)
+```
+
+The nonzero result is preserved and stops a surrounding `set -e` script. Inspect
+the retained JSON and stderr before continuing work. Do not replace the return
+code or delete failed observations to create an apparent successful screen.
+
+| Result | Interpretation |
+| --- | --- |
+| Check `observed` | The bounded observation met that row's selected requirement. |
+| Check `blocked` | A requirement failed or its input could not be admitted. |
+| Check `not_checked` | Another unavailable prerequisite prevented this check. |
+| Check `unknown` | This observer cannot establish the requirement. |
+| Exit `1` | At least one blocked, unknown or unchecked row remains. |
+| Exit `2` | Invalid invocation, reporting failure or unexpected observer error; argument/output failures may leave no JSON. |
+| Exit `0` | The generic no-blocker branch; it does not authorize native work. The current implementation cannot reach it while its unconditional cgroup-unknown row remains. |
+
+`resources.cgroup_capacity` deliberately remains `unknown`: host
+`MemAvailable` does not establish effective process allocation or hidden ancestor
+limits. The current real report therefore cannot be all clear. Disk snapshots
+reserve no space, shared filesystems provide no independent extra capacity, and
+the 15 GiB reserve is not an upper bound for extraction/build/log growth. Confirm
+adequate effective allocation independently and satisfy the existing production
+resource guards before native preparation.
+
+The advisory JSON is not a preparation receipt or an admission input. It leaves
+`native_execution="not_run"`, `counter_qualification_passed=false`,
+`qualified_warm_passed=false` and every historical acceptance field false. It
+cannot establish governance completion, authenticated artifact delivery, archive
+member safety, full historical replay, complete compiler support/runtime files,
+installed native tool validity or native execution. Source observations are
+bounded and non-atomic; all later stages must revalidate their own inputs. Keep
+both raw prerequisite ZIPs and every frozen native limit unchanged.
 
 ## 2. Inspect resources and prepare the supervisor environment
 

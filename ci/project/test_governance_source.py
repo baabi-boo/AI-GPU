@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Small real Git checkouts exercise governance source binding."""
 
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -80,12 +81,58 @@ class GovernanceSourceTests(unittest.TestCase):
         self.commit()
         return script
 
+    @staticmethod
+    def tool_identity(path):
+        content = path.read_bytes()
+        return {"path": str(path), "resolved_path": str(path.resolve()),
+                "size_bytes": len(content), "sha256": hashlib.sha256(content).hexdigest()}
+
+    def cli_environment(self):
+        """Bind inert fixture tools through the unmodified production validator."""
+        binary = self.base / "tools/bin"
+        native = self.base / "tools/native"
+        binary.mkdir(parents=True)
+        native.mkdir()
+        self.command_marker = self.base / "receipt-command-executed"
+        poison = "printf executed > " + shlex.quote(str(self.command_marker))
+        for name in sorted(runner.REQUIRED_ENVIRONMENT_TOOLS):
+            if name in ("python", "python3"):
+                target = Path(sys.executable).resolve()
+            elif name == "git":
+                target = Path(self.git_executable).resolve()
+            else:
+                target = native / name
+                target.write_text("#!/bin/sh\n" + poison + "\nexit 97\n", encoding="utf-8")
+                target.chmod(0o755)
+            (binary / name).symlink_to(target)
+        interpreter = binary / "python"
+        environment = {**self.environment,
+                       "PATH": os.pathsep.join((str(binary), "/usr/bin", "/bin"))}
+        receipt = {
+            "schema_version": 1, "status": "ready",
+            "scope": "synthetic-source-binding-fixture",
+            "interpreter": str(interpreter), "environment": {"PATH": environment["PATH"]},
+            "tools": {name: self.tool_identity(binary / name)
+                      for name in runner.REQUIRED_ENVIRONMENT_TOOLS},
+            "cmake_selection": {"resolution": "native",
+                                "requested": self.tool_identity(binary / "cmake"),
+                                "native": self.tool_identity(native / "cmake")},
+            "commands": [{"argv": ["/bin/sh", "-c", poison],
+                          "command": poison, "shell": True}],
+        }
+        path = self.base / "environment.json"
+        path.write_text(json.dumps(receipt) + "\n", encoding="utf-8")
+        return interpreter, path, environment
+
     def run_cli(self, script):
         output = self.base / "run"
+        interpreter, receipt, environment = self.cli_environment()
         completed = subprocess.run(
-            [sys.executable, str(script), "--output-dir", str(output)],
-            cwd=self.base, env=self.environment, stdout=subprocess.PIPE,
+            [str(interpreter), str(script), "--output-dir", str(output),
+             "--environment-receipt", str(receipt)],
+            cwd=self.base, env=environment, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE, text=True, timeout=20, check=False)
+        self.assertFalse(self.command_marker.exists(), "inert receipt content was executed")
         summary = json.loads((output / "summary.json").read_text(encoding="utf-8"))
         return completed, summary, output
 
@@ -109,6 +156,12 @@ class GovernanceSourceTests(unittest.TestCase):
         self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
         self.assertTrue(summary["governance_passed"])
         self.assertTrue(summary["source_stable"])
+        self.assertTrue(summary["environment_stable"])
+        self.assertEqual(summary["environment_before"], summary["environment_after"])
+        self.assertEqual(set(summary["environment_before"]["tools"]),
+                         runner.REQUIRED_ENVIRONMENT_TOOLS)
+        self.assertEqual(summary["environment_before"]["receipt_sha256"],
+                         hashlib.sha256((self.base / "environment.json").read_bytes()).hexdigest())
         self.assertEqual(summary["execution"]["outcome_counts"], {"success": 1})
         discovered = json.loads((output / "discovered.json").read_text(encoding="utf-8"))
         self.assertEqual(discovered["test_ids"], ["test_probe.Probe.test_committed_source"])
@@ -316,10 +369,14 @@ class GovernanceSourceTests(unittest.TestCase):
         """)
         self.write("ci/project/ignored_helper.py", "value = 17\n")
         self.assert_git_clean()
-        completed, summary, _ = self.run_cli(script)
+        completed, summary, output = self.run_cli(script)
         self.assertEqual(completed.returncode, 1, completed.stdout + completed.stderr)
         self.assertFalse(summary["governance_passed"])
+        self.assertFalse(summary["execution_completed"])
         self.assertTrue(summary["errors"])
+        self.assertRegex(" ".join(error["message"] for error in summary["errors"]),
+                         "ignored Python source.*ignored_helper")
+        self.assertFalse((output / "discovered.json").exists())
 
     def test_ignored_timestamp_valid_bytecode_cannot_replace_committed_test_code(self):
         self.write(".gitignore", "__pycache__/\n")
@@ -343,11 +400,13 @@ class GovernanceSourceTests(unittest.TestCase):
         os.utime(test_source, ns=(original_stat.st_atime_ns, original_stat.st_mtime_ns))
         self.assertTrue(cached.is_file())
         self.assert_git_clean()
-        completed, summary, _ = self.run_cli(script)
+        completed, summary, output = self.run_cli(script)
         self.assertEqual(completed.returncode, 1, completed.stdout + completed.stderr)
         self.assertFalse(summary["governance_passed"])
+        self.assertFalse(summary["execution_completed"])
         self.assertTrue(summary["errors"])
         self.assertRegex(" ".join(error["message"] for error in summary["errors"]), "bytecode|cached")
+        self.assertFalse((output / "discovered.json").exists())
         self.assertEqual(test_source.read_bytes(), original)
 
     def test_self_deleting_cached_bytecode_is_rejected_before_import(self):
@@ -388,11 +447,13 @@ class GovernanceSourceTests(unittest.TestCase):
                 "ls-files", "--others", "--ignored", "--exclude-standard"))
         self.assert_git_clean()
         self.assertTrue(cached.is_file())
-        completed, summary, _ = self.run_cli(script)
+        completed, summary, output = self.run_cli(script)
         self.assertEqual(completed.returncode, 1, completed.stdout + completed.stderr)
         self.assertFalse(summary["governance_passed"])
         self.assertFalse(summary["execution_completed"])
         self.assertTrue(summary["errors"])
+        self.assertRegex(" ".join(error["message"] for error in summary["errors"]), "bytecode|cached")
+        self.assertFalse((output / "discovered.json").exists())
         self.assertTrue(cached.is_file(), "unbound cached code reached import execution")
         self.assertEqual(test_source.read_bytes(), original)
 

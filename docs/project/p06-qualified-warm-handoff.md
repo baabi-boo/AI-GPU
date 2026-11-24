@@ -1,23 +1,56 @@
 # Qualified warm-workspace handoff
 
-The explicit qualified warm route is implemented and independently reviewed at
-published commit **`c0b44ce64665fe11895f869eea8c38c9b820d6f7`**, tree
-`13450812d279d55f36a172fcf38653ff567f6c86`. **The fresh native experiment has
-not started: available memory and projected disk headroom blocked launch.**
-The next bounded action is to obtain one uninterrupted governance invocation
-without skips and adequate native capacity, then recheck the unchanged admission
-requirements and execute one complete fresh attempt from the reviewed
-published source. Preserve its original before independent replay and evaluation
-of the existing performance predicates.
+**The fresh 24-process native experiment remains unstarted.** The current
+continuation repairs strict governance and adds a read-only advisory readiness
+screen. The first full strict hosted run failed; a full qualifying rerun of the
+corrected source is still required. Native capacity and stable hosted delivery
+of the unchanged control original remain unresolved.
 
-Use the [development audit](p06-qualified-warm-audit.md) for the coordinator's
-latest validation outcome, the [evidence index](evidence/p06-qualified-warm/README.md)
-for retained reports, the [implemented contract](../designs/qualified_warm_workspace_v1.md)
-for exact boundaries, and the [execution/replay runbook](evidence/p06-qualified-warm/runbook.md)
-for commands. These documents distinguish completed tooling work from the
-unstarted native experiment.
+The next bounded action is to independently review and publish the corrections,
+then retain one uninterrupted full invocation under the
+[governance runbook](governance-runbook.md), with zero skips, complete successful
+accounting and final source/tool stability. Use the
+[readiness commands](evidence/p06-qualified-warm/runbook.md#read-only-readiness-screen)
+to collect an advisory report for the explicitly selected checkout and inputs.
+Resolve its blockers and effective allocation limits before unchanged production
+admission and one complete fresh native attempt. Preserve that attempt's
+original before independent replay and evaluation of the frozen predicates.
 
-## What is implemented and verified
+The [current audit](governance-readiness-audit.md) and
+[evidence packet](evidence/governance-readiness/README.md) retain exact current
+source and validation scope. The [earlier development audit](p06-qualified-warm-audit.md)
+and [earlier evidence index](evidence/p06-qualified-warm/README.md) retain the
+original route review at **`c0b44ce64665fe11895f869eea8c38c9b820d6f7`**, tree
+`13450812d279d55f36a172fcf38653ff567f6c86`. The
+[implemented contract](../designs/qualified_warm_workspace_v1.md) and
+[execution/replay runbook](evidence/p06-qualified-warm/runbook.md) continue to
+define the native boundaries.
+
+## Current governance and readiness evidence
+
+[Hosted run 45405383871, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45405383871)
+at `457ddaa06b07e439b6f5ef2d15c09ef24131f6fe` executed **4,744 tests in
+3,116.381 seconds**, with **50 failures, 11 errors and zero skips**. All 4,744
+starts and stops were observed, but eight canonical parent outcome records were
+missing; this is an accounting failure, not eight unexecuted bodies. Finalization
+rejected generated unbound `baseline_inventory.cpython-312.pyc`, leaving no
+final source/interpreter/environment stability evidence. The summary remains
+`incomplete` and `governance_passed=false`. Preserve the original unchanged.
+
+Fresh focused validation of the current repairs passes **78 runner / receipt /
+source tests in 15.504 seconds**, **42 environment / workflow / isolated-import
+tests in 30.527 seconds**, and **57 readiness tests in 1.794 seconds**, separately
+on CPython 3.12.14. A separate strict-result rerun of the 46 canonical methods
+implicated in the hosted failure passes in 142.758 seconds, with zero failures,
+errors or skips. Current discovery contains 4,812 IDs. The new
+[evidence packet](evidence/governance-readiness/README.md) retains the logs;
+these overlapping selections are not a full strict qualifying invocation. The readiness
+source SHA-256 is
+`843916e3b7eb0a2bd4e50d0bf2d4a3e4bcf102db62a3a66f1af5bd5e743463ec`.
+Its report never runs preparation or native work, leaves effective cgroup
+capacity `unknown`, and is not an execution/admission receipt.
+
+## Earlier route implementation and historical validation
 
 The native caller accepts the explicit qualified-warm mode with actual pair and
 phase identities. Its separately pinned source extension changes that caller
@@ -44,8 +77,8 @@ See the [focused receipt](evidence/p06-qualified-warm/validation/qualified-warm-
 Supplemental reviewer probes and repeated selections do not increase the unique
 governance test count.
 
-The frozen population contains **4,527 unique IDs**: 4,437 original tests,
-89 new warm-route tests and one historical caller-rejection test. All now have
+The earlier frozen population contained **4,527 unique IDs**: 4,437 original
+tests, 89 new warm-route tests and one historical caller-rejection test. All had
 passing outcomes across completed executions on exact implementation
 `c0b44ce64665fe11895f869eea8c38c9b820d6f7`. The
 [independent reconciliation](evidence/p06-qualified-warm/validation/coverage/final-reconciliation.json)
@@ -90,6 +123,40 @@ observations contributes to the completed-run coverage union.**
 
 ## Resource condition before execution
 
+The execution-service reset removed the earlier temporary working area. Exact
+readiness source and its 57 test methods were recovered; old unretained raw
+readiness JSON and unpublished review reports were not. The coordinator's
+pre-reset 13:53 UTC observation on 2026-11-24 is historical only and cannot be
+used as a retained current readiness receipt.
+
+The [fresh retained screen](evidence/governance-readiness/validation/readiness-restored-smoke.json)
+at **14:57 UTC on 2026-11-24** returned exit 1 with **254 checks: 224 observed,
+26 blocked, three not checked and one unknown**. All 69 measurement pins and
+the diagnostic original's raw identity match. The restored source is dirty,
+five top-level gitlinks are uninitialized, fifteen toolchain parts and five
+dependency repositories are missing, and the control original is absent at the
+selected local path. This does not mean the historical original was deleted.
+
+Source and planned workspace share one filesystem with **2,877,046,784 free
+bytes**, a **13,229,080,576-byte deficit** against the unchanged
+**16,106,127,360-byte (15 GiB)** reserve. Host `MemAvailable` is
+**6,389,817,344 bytes**, above the **4,294,967,296-byte (4 GiB)** threshold, but
+effective cgroup capacity remains unknown. Select an adequately provisioned
+environment and re-observe exact inputs, clean source/gitlinks and effective
+allocation before production admission. The
+[receipt](evidence/governance-readiness/validation/readiness-restored-smoke.proof.json)
+proves eight selected before/after invariants only; concurrent documentation
+edits prevent a whole-checkout stability claim. Native execution remains
+`not_run` and all nine qualification/acceptance flags remain false.
+
+The unchanged local attempt-04 control original is **47,632,218 bytes**, SHA-256
+`d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f`.
+Stable hosted delivery remains unresolved. Preserve its raw identity; source
+presence or an alternate summary cannot replace the complete original.
+
+The following earlier independent resource reviews retain their historical
+scope. They do not describe the restored current working tree.
+
 The independent [supervisor/resource review](evidence/p06-qualified-warm/agents/w06_a02.md)
 found no supervisor implementation blocker, but found an execution-readiness
 blocker. One recorded snapshot had **3,390,668,800 available RAM bytes**, below
@@ -115,10 +182,10 @@ child log. The prepared supervisor's additional 90-minute outer bound and
 sampling limitations are separately documented. Do not lower a limit, omit
 recording, reuse populated products or remove observations to obtain a pass.
 
-The independently checked local source was
+At that earlier checkpoint, the independently checked local source was
 `/workspace/p06-qualified-warm-source-01`; the selected native workspace
-`/workspace/p06-qualified-warm-run-01` was absent. These paths are conveniences,
-not identity pins. The short supplement has completed with observed cleanup;
+`/workspace/p06-qualified-warm-run-01` was absent. These historical paths are
+not identity pins and must not be assumed to exist after the reset. The short supplement has completed with observed cleanup;
 that does not finalize the earlier lost long session. Before any native attempt,
 use a stable execution environment, verify that no previous workload remains
 active, and recheck source cleanliness, all gitlinks, destination absence and
@@ -175,9 +242,9 @@ one prime and 32 timed operations. The measured population is 20 processes,
 640 operations and 20,480 words. All primes and warm-up observations remain
 retained while excluded from the measured decision.
 
-Both formats must independently meet every unchanged predicate: candidate
-median host time at most 95% of reference, no slower measured candidate pair,
-and no increase in any measured pair's modeled cycles. No outlier removal,
+Both formats must independently meet every unchanged predicate:
+`100 * candidate_median <= 95 * reference_median`, no slower measured candidate
+pair, and no increase in any measured pair's modeled cycles. No outlier removal,
 sample replacement or optional stopping is allowed. The
 [interpretation review](evidence/p06-qualified-warm/agents/w07_a06.md) distinguishes
 five descriptive batch means from statistical significance and records the
@@ -187,8 +254,9 @@ pairs per format.
 `qualified_warm_passed=true` would establish the complete recorded experiment's
 validity. Its hypothesis can independently be `satisfied` or `not_satisfied`.
 A valid unfavorable result is useful evidence and must remain unfavorable.
-The present state is **not run because resources blocked launch**; it is neither
-a positive result nor a negative performance observation. All seven historical
+The present state is **not run**: strict governance, native input delivery and
+capacity prerequisites remain unresolved. No positive or negative performance
+observation exists for this fresh experiment. All seven historical
 qualification/readiness/warm/acceptance fields remain false. Performance and
 phase acceptance are separate obligations even after a valid experiment.
 

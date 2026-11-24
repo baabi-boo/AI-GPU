@@ -299,6 +299,12 @@ class GovernanceWorkflowTests(unittest.TestCase):
              'tee "$GOVERNANCE_ROOT/logs/cmake-install.log" || true'),
             ("conditional environment", "- name: " + PREPARE, "- name: " + PREPARE + "\n        if: success()"),
             ("ambient suite environment", "/usr/bin/env -i", "/usr/bin/env"),
+            ("alternate interpreter alias",
+             '"$GOVERNANCE_ROOT/environment/venv/bin/python3"',
+             '"$GOVERNANCE_ROOT/environment/venv/bin/python"'),
+            ("versioned interpreter alias",
+             '"$GOVERNANCE_ROOT/environment/venv/bin/python3"',
+             '"$GOVERNANCE_ROOT/environment/venv/bin/python3.12"'),
             ("secret forwarded", "LANG=C LC_ALL=C", "TOKEN=${{ secrets.TOKEN }} LANG=C LC_ALL=C"),
             ("success-only artifact", "if: always()", "if: success()"),
             ("incomplete run packet", PACKET_PREFIX + "/run\n", PACKET_PREFIX + "/run/summary.json\n"),
@@ -496,7 +502,7 @@ class GovernanceWorkflowTests(unittest.TestCase):
             with self.subTest(status=status):
                 root = self.packet_directory()
                 executable(root / "bin/env", "raise SystemExit(98)\n")
-                executable(root / "environment/venv/bin/python", (
+                executable(root / "environment/venv/bin/python3", (
                     "import json, os, sys\nfrom pathlib import Path\n"
                     + "root = Path(" + repr(str(root)) + ")\n"
                     + "with (root / 'suite-calls.jsonl').open('a') as target:\n"

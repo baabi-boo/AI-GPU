@@ -4,7 +4,7 @@
 Use [roadmap.json](../roadmap.json) for live status, dependencies and exit criteria.
 The accepted deliverable is a thin binding and a scoped PyTorch custom-op bridge.
 P05 is **complete for its bounded inference scope**: the
-[retained copying-binding result](../evidence/p06-serial-workspace/a01-retained-binding.json)
+[retained copying-binding result](../evidence/governance-readiness/a01-retained-binding.json)
 supports A01, and the [A02 execution](../evidence/p05-torch-replay/acceptance-torch.json)
 and [A03 compatibility](../evidence/p05-torch-replay/acceptance-compatibility.json)
 records accept PyTorch 2.15.0+cpu / CPython 3.12.14 / Linux x86_64 / RV64 SimX at

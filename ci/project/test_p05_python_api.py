@@ -172,6 +172,8 @@ class PythonImportTests(unittest.TestCase):
 import importlib.abc
 import sys
 
+assert sys.flags.isolated and sys.dont_write_bytecode
+
 class RejectNative(importlib.abc.MetaPathFinder):
     def find_spec(self, fullname, path=None, target=None):
         if fullname in ('vortex_ai._native', 'vortex_ai._bundle'):
@@ -186,7 +188,7 @@ assert 'vortex_ai._native' not in sys.modules
 assert 'vortex_ai._bundle' not in sys.modules
 print('pure Python import')
 """
-        result = subprocess.run([sys.executable, "-I", "-c", code, str(PACKAGE.parent)],
+        result = subprocess.run([sys.executable, "-I", "-B", "-c", code, str(PACKAGE.parent)],
                                 cwd=ROOT, capture_output=True, text=True, timeout=5)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertEqual(result.stdout, "pure Python import\n")

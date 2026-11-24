@@ -1,0 +1,222 @@
+# A60 — independent population, preservation, and publication evidence audit
+
+## Scope and decision
+
+I independently reviewed the canonical discovery population, protected source
+and contract bytes, the new coordinator assignment ledger, and the retained
+failed hosted governance original. I did not author repository implementation
+or operational documentation and made no changes inside the checkout.
+
+**No F2/F3 finding in this review scope.** The integrated working source contains
+exactly **4,812 unique canonical test IDs**, retains every original test ID in
+its original relative order, and preserves the checked protected assets and
+contracts. Discovery is not an execution result. The first retained hosted
+attempt is failed/incomplete, and no fresh complete governance qualification or
+native warm result is established by this report.
+
+The reviewed implementation was the uncommitted integration over
+`457ddaa06b07e439b6f5ef2d15c09ef24131f6fe`. Its complete `ci/project/*.py`
+inventory digest, using the JSON encoding recorded in the receipt, is
+`c21aad5278c8c054c919d99b2a02c81e08624b00ed13ab171348dc69b61c2765`.
+I checked that inventory again after the publication review; it still matched.
+Concurrent operational documentation edits are not treated as part of that
+source inventory.
+
+Final exact-commit change-impact classification and final ledger status/hash
+review remain follow-up work once the coordinator freezes the integrated
+commit. This report does not substitute an unstaged worktree for a classified
+commit or grant a policy waiver.
+
+## Applicable policy and method
+
+I read `AGENTS.md`, the code-review policy, the base change-impact policy,
+current status/backlog/roadmap and acceptance guidance, and the resource policy.
+The immutable task base is
+`ffea7a84b4f2b2cacf6b82aebff93acb008affb2`.
+
+Discovery used the checked environment's Python with `-B` in two separate
+processes: the current source checkout and exactly one owned detached worktree
+at the task base. Both processes used precisely:
+
+```python
+loader = unittest.TestLoader()
+suite = loader.discover("ci/project", pattern="test_*.py")
+```
+
+There were no test filters and no test bodies ran. I independently traversed
+the suite, checked duplicate identities and loader errors, inspected discovered
+modules for imported `TestCase` classes with runnable methods, and retained
+before/after bytecode and untracked-Python inventories. The discovery script
+itself is retained outside the repository as `coord/a60/discover.py`.
+
+The owned baseline worktree was created only after a budget check. Its status
+was clean after discovery, and I removed that exact worktree through
+`git worktree remove`; no shared checkout, source, tools, or retained original
+was deleted. At the budget observation, the temporary filesystem had
+5,225,713,664 bytes total and 2,901,151,744 bytes free. No GPU/toolchain download,
+native build, submodule initialization, or native experiment was attempted.
+
+## Canonical population reconciliation
+
+The identity digest is SHA-256 of every ordered UTF-8 test ID followed by one
+newline, including the final ID.
+
+| Population | Count | Ordered-ID SHA-256 |
+|---|---:|---|
+| Immutable task base `ffea7a84...` | 4,638 | `e83769a2c1b5201c07e8dcf0d7286cc695b96ac8bab3475c772111bbba2a0087` |
+| Retained hosted original at `457ddaa0...` | 4,744 | `835575b9ab2df75f2d86a2efdbf9e22e7f776f3b3bb134290442381b1ae55fed` |
+| Current integrated Python source | 4,812 | `d885b2614c828d4c673960b052bbae35fba0239521a59c8092c399f735334095` |
+
+All 4,638 original IDs occur in the current population, and projecting the
+current ordered list onto the original IDs reproduces the original list
+exactly. The same statements hold for all 4,744 published hosted IDs. There are
+no removed IDs, duplicate IDs, loader errors, or imported `TestCase` leaks.
+
+The current population adds 174 IDs to the task base and 68 to the published
+population:
+
+| Module | Added since task base | Added since published hosted population |
+|---|---:|---:|
+| `test_governance_env` | 27 | 1 |
+| `test_governance_run` | 29 | 7 |
+| `test_governance_run_receipts` | 25 | 3 |
+| `test_governance_source` | 24 | 0 |
+| `test_governance_workflow` | 12 | 0 |
+| `test_p06_qualified_warm_readiness` | 20 | 20 |
+| `test_p06_qualified_warm_readiness_boundaries` | 15 | 15 |
+| `test_p06_qualified_warm_readiness_inputs` | 22 | 22 |
+| **Total** | **174** | **68** |
+
+The machine-readable reconciliation contains every added ID, not just these
+counts. The 68 later additions are exactly 57 readiness tests, three mandatory
+receipt regressions, one Python alias regression, and seven bounded subtest
+identity regressions.
+
+Both discovery processes began and ended with zero `.pyc`/`.pyo` source files.
+The baseline had no untracked Python files. The current checkout had exactly
+the intended readiness implementation and its three test modules untracked;
+that four-file set was unchanged by discovery. No discovery evidence is
+reported as a successful test body execution.
+
+## Protected source and contracts
+
+I compared file bytes, file types, and executable bits directly between the
+owned immutable-base worktree and the current checkout. All **870 unique
+protected files** selected by the retained group definitions were unchanged.
+Groups overlap, so their counts must not be summed as distinct files.
+
+| Protected group | Files | Current bytes | Result |
+|---|---:|---:|---|
+| RTL and DPI | 419 | 4,052,253 | Unchanged |
+| SimX and common simulation code | 165 | 1,717,121 | Unchanged |
+| Public ABI headers and shared common code | 58 | 716,630 | Unchanged |
+| Canonical test catalog | 42 | 248,876 | Unchanged |
+| Golden data and reference assets | 73 | 1,221,357 | Unchanged |
+| Versioned design documents | 62 | 1,266,548 | Unchanged |
+| Acceptance policy, phase metadata, and existing acceptance records | 8 | 177,436 | Unchanged |
+| Toolchain/submodule pin files | 2 | 687 | Unchanged |
+| Review classifier and normative review policies | 3 | 101,586 | Unchanged |
+| Native proofs and frozen P06 manifests | 5 | 204,930 | Unchanged |
+| Native measurement descriptor files | 69 | 1,303,138 | Unchanged and each matches its frozen descriptor |
+| Protected README image | 1 | 48,225 | Unchanged and embedded |
+
+The protected SVG SHA-256 remains
+`db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4`.
+README retains its HTML `<img>` embedding of
+`docs/assets/img/vortex_framework_stack.svg`.
+
+The native qualified-warm proof is 21,505 bytes with SHA-256
+`172721c671ddaa79541dde9c37c154b5ab5a99b8abb0caabf2e07036dd429efb`.
+All 69 referenced measurement files match both this proof and the task base.
+The proof retains 24 processes, 792 launches, and 25,344 checked words, and all
+seven qualification/readiness/warm/acceptance claim flags remain false.
+
+All **five top-level recorded gitlinks** match the immutable task base. I did
+not fetch or initialize these repositories and did not independently establish
+the three nested gitlinks' current working-tree closure. The historical total
+of eight initialized submodules is not asserted for this fresh checkout.
+
+The changed-path inventory is confined to governance enforcement/support,
+associated tests, the new advisory readiness implementation/tests, and
+operational documentation/evidence. No checked native contract, golden,
+acceptance predicate, versioned design, RTL, SimX, ABI, test catalog, or pin was
+changed. In particular, the unchanged native 15 GiB disk reserve cannot be
+satisfied on this filesystem even if its entire 5.23 GB capacity were free.
+
+## Failed hosted original: independent inert verification
+
+I verified the packet copy is byte-identical to the retained original ZIP:
+
+- Size: **1,261,073 bytes**.
+- SHA-256: `06c1184f7d2bd4806108cb1584fe155cfe005fca6c8d8a056f374129646e8c2d`.
+- All **12** ZIP member CRC checks pass, and every member size and SHA-256
+  agrees with `hosted/first-attempt-verification.json`.
+- The copied strict summary equals the original decoded summary.
+- The **50,599** event sequence numbers are contiguous.
+- All **4,744** test starts and stops equal the discovered ordered population.
+- Parent plus subtest events produce **50 failures and 11 errors**, matching
+  the original unittest footer. There are **zero skip events**.
+
+The original retains eight missing parent outcome records and the source
+finalization error rejecting generated unbound bytecode. Its status remains
+`incomplete`, `execution_completed=true`, and `governance_passed=false`.
+Completed traversal with zero skips does not erase those failures or establish
+source/environment stability. This audit did not run retained archive code.
+
+## Assignment ledger and publication scope
+
+The reviewed `agent-ledger.json` snapshot has SHA-256
+`ccd97f3dddbf10a494d9192659b2b2868b8ebab1b4a86ce9ee038c775525552b`.
+It contains 60 unique sequential IDs A01–A60 and 60 unique task names, with
+57 completed and A58–A60 running at that snapshot.
+
+Its scope explicitly identifies a coordinator assignment record, not a
+platform attestation or test-pass ledger. All first 54 entries separate the
+retained assignment/conversation record from unavailable original unpublished
+reports; the top-level reset limitation and the entries describing lost
+readiness/packet records are explicit. I found no claim that those lost
+originals had been retained. Recovery follow-ups do not increase the count.
+
+This is a structural and claim-scope review. Fresh A60 does not independently
+attest the historical platform spawn events or reconstruct missing original
+reports. Completion metadata may be updated after the remaining agents
+actually finish; its final hash requires a follow-up review.
+
+Manual ledger review plus a bounded scan of the ledger, hosted verification,
+and all original ZIP members detected no GitHub credential strings, private
+keys, credential-bearing URLs, signed transfer queries, or bearer credential
+values. This is not an exhaustive proof of absence of every possible private
+datum. No private transfer addresses were added to this report.
+
+## Retained independent evidence
+
+All paths below are under the coordinator's `coord/a60/` directory outside the
+source checkout. The discovery and preservation receipts are suitable inputs
+for the coordinator's final evidence packet; the raw budget record need not be
+published to establish the stated discovery result.
+
+| Evidence file | SHA-256 |
+|---|---|
+| `baseline-discovery.json` | `b37b7131a0963963368de312221423f0ece41e442e4da0e3b6dab3476e7f27bc` |
+| `current-discovery.json` | `09604963a59208cc144051cb4373720bffff0bb038ccb0c21406d24a8682ce5d` |
+| `canonical-reconciliation.json` | `1e02bb2c57f687d13c96b0dab6262791e9f98933d4b16b50bc870b632160910d` |
+| `protected-preservation.json` | `27ba3ce831c8f0aa05c96a815922bb64d2dbb29100c3f039a3637ba3b9f971bd` |
+| `publication-consistency.json` | `e7d6b3c25a903bb241fc782855064b7858746702649177ae049bbf4bd900fcca` |
+| `budget-and-worktree.json` | `2096d81fb5074a210716dd03940fe1911ef2817fa8a44207e4e74826d1a7989f` |
+
+The task-base classifier was independently extracted with `git show` and is
+retained as `base-change-impact.py`, SHA-256
+`bd2ef579de90b14b7ab4cd5ef2f6b7c911753e154c4201aaf0f0d0b25a460779`.
+Its task-base policy is `base-change-impact.yaml`, SHA-256
+`489d1018c790bb6c383b774b119223889bb508be6c63db654d5c6c80520d0333`.
+The coordinator can request the exact-commit classifier/final-metadata
+follow-up without recreating the baseline worktree.
+
+## Remaining qualification limits
+
+This report establishes population preservation, bounded protected-file
+preservation, and the reviewed evidence's internal consistency. It does not
+claim a complete passing governance invocation, a native warm attempt, hardware
+performance, phase acceptance, independent platform authentication of the ZIP,
+or maintainer approval. The independent integration code review remains A58's
+separate scope. No new findings require a waiver in A60's completed scope.

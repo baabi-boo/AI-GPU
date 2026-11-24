@@ -244,32 +244,41 @@ class GovernanceEnvironmentTests(unittest.TestCase):
         for name in ("home", "tmp", "injection"):
             (self.base / name).mkdir()
         injection = self.base / "injection"
-        (injection / "sitecustomize.py").write_text(
-            'import sys\nsys.stderr.write("ambient-python-injected\\n")\n')
+        customization = injection / "sitecustomize.py"
+        customization.write_text(
+            'import sys\nsys._governance_ambient_injected = True\n'
+            'sys.stderr.write("ambient-python-injected\\n")\n')
+        probe = (
+            "import json, os, sys; print(json.dumps({'environment': dict(os.environ), "
+            "'path': sys.path, "
+            "'customization': getattr(sys.modules.get('sitecustomize'), '__file__', None), "
+            "'injected': getattr(sys, '_governance_ambient_injected', False)}))")
         cleaned = environment.clean_environment(sys.executable, self.base)
         injected = {"LD_PRELOAD": str(self.preload_fixture),
                     "LD_LIBRARY_PATH": str(injection), "PYTHONPATH": str(injection)}
-        control = subprocess.run([sys.executable, "-c", "pass"], cwd=self.base,
+        control = subprocess.run([sys.executable, "-c", probe], cwd=self.base,
                                  env=cleaned | injected, text=True, capture_output=True, timeout=10)
         self.assertEqual(control.returncode, 0, control.stderr)
         self.assertIn("ambient-native-injected", control.stderr)
         self.assertIn("ambient-python-injected", control.stderr)
+        poisoned = json.loads(control.stdout)
+        self.assertTrue(poisoned["injected"])
+        self.assertEqual(poisoned["customization"], str(customization))
         ambient = injected | {"PYTHONHOME": str(injection), "PYTHONUSERBASE": str(injection),
-                              "PYTHONSTARTUP": str(injection / "sitecustomize.py"),
+                              "PYTHONSTARTUP": str(customization),
                               "PYTHONINSPECT": "1", "CC": "untrusted-compiler",
                               "CMAKE_TOOLCHAIN_FILE": str(injection / "toolchain.cmake")}
         report = {"commands": []}
         with mock.patch.dict(os.environ, ambient):
             cleaned = environment.clean_environment(sys.executable, self.base)
-            result = environment.command(report, "isolated-python", [sys.executable, "-c",
-                "import json, os, sys; print(json.dumps({'environment': dict(os.environ), "
-                "'path': sys.path, 'customized': 'sitecustomize' in sys.modules}))"],
-                cleaned, self.base)
+            result = environment.command(report, "isolated-python", [sys.executable, "-c", probe],
+                                         cleaned, self.base)
         observed = json.loads(result["stdout"])
         self.assertEqual(observed["environment"], cleaned)
         self.assertFalse(set(ambient) & set(observed["environment"]))
         self.assertNotIn(str(injection), observed["path"])
-        self.assertFalse(observed["customized"])
+        self.assertFalse(observed["injected"])
+        self.assertNotEqual(observed["customization"], str(customization))
         self.assertEqual(result["stderr"], "")
         self.assertEqual(cleaned["PATH"].split(os.pathsep),
                          list(dict.fromkeys((str(Path(sys.executable).parent), "/usr/bin", "/bin"))))
@@ -290,8 +299,36 @@ class GovernanceEnvironmentTests(unittest.TestCase):
         self.assertFalse(report["python"]["pip_present"])
         self.assertFalse(report["python"]["user_site_enabled"])
         self.assertEqual(report["python"]["prefix"], str(self.output / "venv"))
+        self.assertEqual(report["interpreter"], str(self.output / "venv/bin/python3"))
+        self.assertEqual(report["python"]["executable"], report["interpreter"])
+        self.assertEqual(report["tools"]["python3"]["path"], report["interpreter"])
+        self.assertEqual(report["tools"]["python"]["path"], str(self.output / "venv/bin/python"))
+        self.assertEqual(report["tools"]["python3"]["resolved_path"],
+                         report["tools"]["python"]["resolved_path"])
         self.assertEqual(report["tools"]["cmake"]["resolved_path"], str(native))
         self.assertEqual(json.loads((self.output / "environment.json").read_text()), report)
+
+    def test_python_alias_selection_requires_exact_venv_paths(self):
+        native, original_which = self.cmake_fixture(), shutil.which
+        for selected, substitute in (("python3", "python"), ("python", "python3")):
+            with self.subTest(alias=selected):
+                output = self.base / ("output-" + selected)
+
+                def wrong_alias(name, **kwargs):
+                    if name == selected:
+                        return str(output / "venv/bin" / substitute)
+                    return original_which(name, **kwargs)
+
+                with mock.patch.object(environment.shutil, "which", side_effect=wrong_alias), \
+                        mock.patch.object(environment, "native_probes") as probes, \
+                        self.assertRaisesRegex(ValueError, "does not select the venv Python aliases"):
+                    environment.prepare_environment(str(output), str(native))
+                probes.assert_not_called()
+                report = self.failed_receipt(output, reason="does not select the venv Python aliases")
+                self.assertEqual(report["tools"]["python3"]["resolved_path"],
+                                 report["tools"]["python"]["resolved_path"])
+                self.assertEqual(report["tools"][selected]["path"],
+                                 str(output / "venv/bin" / substitute))
 
     def test_missing_cmake_retains_failed_receipt_before_venv_creation(self):
         with self.assertRaises(FileNotFoundError):

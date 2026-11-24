@@ -68,7 +68,7 @@ class _Workspace(unittest.TestCase):
         return {"path": str(path), "resolved_path": str(path.resolve()),
                 "size_bytes": len(content), "sha256": hashlib.sha256(content).hexdigest()}
 
-    def environment_fixture(self):
+    def environment_fixture(self, python_executable=None):
         binary = self.base / "tools/bin"
         native = self.base / "tools/native"
         binary.mkdir(parents=True)
@@ -78,6 +78,9 @@ class _Workspace(unittest.TestCase):
         for name in sorted(runner.REQUIRED_ENVIRONMENT_TOOLS):
             if name == "git":
                 (binary / name).symlink_to(Path(self.git_executable).resolve())
+                continue
+            if python_executable is not None and name in {"python", "python3"}:
+                (binary / name).symlink_to(Path(python_executable).resolve())
                 continue
             target = native / name
             target.write_text("#!/bin/sh\n" + poison + "\nexit 97\n", encoding="utf-8")
@@ -128,6 +131,10 @@ class _Workspace(unittest.TestCase):
                 return unittest.TestSuite(Probe(index, body)
                                           for index, body in enumerate(bodies))
 
+        if receipt is None:
+            receipt, _, fixture_interpreter = self.environment_fixture()
+            if interpreter is None:
+                interpreter = fixture_interpreter
         output = self.output if output is None else output
         loader = SyntheticLoader()
         stdout, stderr = io.StringIO(), io.StringIO()
@@ -160,13 +167,15 @@ class _Workspace(unittest.TestCase):
         self.assertIs(started["execution_completed"], False)
         return started
 
-    def assert_rejected_output(self, output):
+    def assert_rejected_output(self, output, receipt, expected_error):
         stderr = io.StringIO()
         with mock.patch.object(runner, "ROOT", self.source), \
                 contextlib.redirect_stderr(stderr), self.assertRaises(SystemExit) as rejected:
-            runner.main(["--output-dir", str(output)])
+            runner.main(["--output-dir", str(output), "--environment-receipt", str(receipt)])
         self.assertEqual(rejected.exception.code, 2)
         self.assertIn("error:", stderr.getvalue())
+        self.assertIn(expected_error, stderr.getvalue())
+        self.assertNotIn("the following arguments are required", stderr.getvalue())
 
 
 class GovernanceRunReceiptTests(_Workspace):
@@ -203,6 +212,12 @@ class GovernanceRunReceiptTests(_Workspace):
         self.assertEqual(summary["source_before"]["head"], self.git("rev-parse", "HEAD"))
         self.assertEqual(summary["source_before"]["tree"], self.git("rev-parse", "HEAD^{tree}"))
         self.assertEqual(summary["source_before"], summary["source_after"])
+        self.assertEqual(summary["environment_before"], summary["environment_after"])
+        self.assertEqual(set(summary["environment_before"]["tools"]),
+                         runner.REQUIRED_ENVIRONMENT_TOOLS)
+        self.assertEqual(summary["command"][-2:],
+                         ["--environment-receipt", str(self.base / "environment.json")])
+        self.assertFalse(self.command_marker.exists())
         discovered = self.read_json(self.output / "discovered.json")
         self.assertEqual(discovered["count"], 1)
         self.assertEqual(discovered["sha256"], hashlib.sha256(
@@ -220,6 +235,7 @@ class GovernanceRunReceiptTests(_Workspace):
         self.assertEqual(summary["log"], {"bytes": len(log.encode("utf-8")), "truncated": False})
 
     def test_existing_output_directory_and_file_are_preserved_and_rejected(self):
+        receipt, _, _ = self.environment_fixture()
         directory = self.base / "occupied-directory"
         directory.mkdir()
         marker = directory / "untouched"
@@ -228,12 +244,13 @@ class GovernanceRunReceiptTests(_Workspace):
         existing_file.write_bytes(b"original")
         for output in (directory, existing_file):
             with self.subTest(output=output.name):
-                self.assert_rejected_output(output)
+                self.assert_rejected_output(output, receipt, "File exists")
         self.assertEqual(marker.read_bytes(), b"original")
         self.assertEqual(existing_file.read_bytes(), b"original")
         self.assertEqual(list(directory.iterdir()), [marker])
 
     def test_output_symlinks_and_symlink_parent_are_rejected(self):
+        receipt, _, _ = self.environment_fixture()
         target = self.base / "target"
         target.mkdir()
         alias = self.base / "alias"
@@ -242,16 +259,23 @@ class GovernanceRunReceiptTests(_Workspace):
         dangling.symlink_to(self.base / "missing", target_is_directory=True)
         for output in (alias, alias / "child", dangling):
             with self.subTest(output=str(output)):
-                self.assert_rejected_output(output)
+                self.assert_rejected_output(
+                    output, receipt, "exact absolute path without symlink components")
         self.assertEqual(list(target.iterdir()), [])
         self.assertFalse((self.base / "missing").exists())
         self.assertTrue(dangling.is_symlink())
 
     def test_output_source_overlap_relative_path_and_traversal_are_rejected(self):
-        for output in (self.source, self.source / "receipt", self.base,
-                       "relative-receipt", str(self.base / "unused") + "/../escaped"):
+        receipt, _, _ = self.environment_fixture()
+        for output, expected_error in (
+                (self.source, "outside the source checkout"),
+                (self.source / "receipt", "outside the source checkout"),
+                (self.base, "outside the source checkout"),
+                ("relative-receipt", "exact absolute path without symlink components"),
+                (str(self.base / "unused") + "/../escaped",
+                 "exact absolute path without symlink components")):
             with self.subTest(output=str(output)):
-                self.assert_rejected_output(output)
+                self.assert_rejected_output(output, receipt, expected_error)
         self.assertFalse((self.source / "receipt").exists())
         self.assertFalse((self.base / "escaped").exists())
         self.assertEqual(self.git("status", "--porcelain"), "")
@@ -295,17 +319,21 @@ class GovernanceRunReceiptTests(_Workspace):
         self.assertFalse(summary["governance_passed"])
 
     def test_changed_interpreter_bytes_reject_an_otherwise_passing_suite(self):
-        interpreter = self.base / "interpreter"
+        path, receipt, selected_interpreter = self.environment_fixture()
+        interpreter = selected_interpreter.with_name("interpreter")
         interpreter.write_bytes(b"interpreter before\n")
         interpreter.chmod(0o755)
+        receipt["interpreter"] = str(interpreter)
+        self.write_receipt(path, receipt)
 
         def mutate():
             interpreter.write_bytes(b"interpreter after!\n")
 
-        code, summary, _, _, _ = self.run_main(mutate, interpreter=interpreter)
+        code, summary, _, _, _ = self.run_main(mutate, receipt=path, interpreter=interpreter)
         self.assertEqual(code, 1)
         self.assertTrue(summary["source_stable"])
         self.assertTrue(summary["execution"]["strict_success"])
+        self.assertTrue(summary["environment_stable"])
         self.assertFalse(summary["interpreter_stable"])
         self.assertFalse(summary["governance_passed"])
         self.assertNotEqual(summary["interpreter_before"]["executable"]["sha256"],
@@ -573,6 +601,66 @@ class GovernanceRunBlackboxTests(_Workspace):
         self.commit("bounded discovery fixture")
         return script
 
+    def run_receipt_rejection(self, *receipt_arguments):
+        script = self.prepare_runner("""
+            from pathlib import Path
+            import unittest
+
+            markers = Path(__file__).resolve().parents[3]
+            (markers / 'discovery-started').write_text('imported')
+
+            class TinyProbe(unittest.TestCase):
+                def test_body(self):
+                    (markers / 'body-started').write_text('executed')
+        """)
+        completed = subprocess.run(
+            [sys.executable, "-B", str(script), "--output-dir", str(self.output),
+             *receipt_arguments],
+            cwd=self.base, env=self.process_environment, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE, text=True, timeout=20, check=False)
+        self.assertFalse((self.base / "discovery-started").exists())
+        self.assertFalse((self.base / "body-started").exists())
+        self.assertNotIn("Strict governance PASSED", completed.stdout + completed.stderr)
+        return completed
+
+    def assert_incomplete_receipt_rejection(self, completed, error_type, error_message):
+        self.assertEqual(completed.returncode, 1, completed.stdout + completed.stderr)
+        summary = self.read_json(self.output / "summary.json")
+        self.assertEqual(summary["status"], "incomplete")
+        self.assertFalse(summary["execution_completed"])
+        self.assertFalse(summary["governance_passed"])
+        self.assertNotIn("execution", summary)
+        self.assertEqual(len(summary["errors"]), 1)
+        self.assertEqual(summary["errors"][0]["type"], error_type)
+        self.assertIn(error_message, summary["errors"][0]["message"])
+        self.assertIn(error_message, completed.stderr)
+        self.assertIn("Strict governance FAILED", completed.stdout)
+        self.assert_started_only()
+        self.assertEqual(set(path.name for path in self.output.iterdir()), {
+            "started.json", "events.jsonl", "unittest.log", "summary.json"})
+        self.assertEqual((self.output / "events.jsonl").read_bytes(), b"")
+        self.assertEqual((self.output / "unittest.log").read_bytes(), b"")
+
+    def test_real_cli_requires_environment_receipt_before_creating_output(self):
+        completed = self.run_receipt_rejection()
+        self.assertEqual(completed.returncode, 2)
+        self.assertIn("error: the following arguments are required: --environment-receipt",
+                      completed.stderr)
+        self.assertNotIn("Strict governance", completed.stdout)
+        self.assertFalse(self.output.exists())
+
+    def test_real_cli_rejects_empty_environment_receipt_before_discovery(self):
+        completed = self.run_receipt_rejection("--environment-receipt", "")
+        self.assert_incomplete_receipt_rejection(
+            completed, "ValueError", "environment receipt must be a bounded absolute regular file")
+
+    def test_real_cli_rejects_empty_environment_receipt_file_before_discovery(self):
+        path = self.base / "empty-environment.json"
+        path.write_bytes(b"")
+        completed = self.run_receipt_rejection("--environment-receipt", str(path))
+        self.assert_incomplete_receipt_rejection(completed, "JSONDecodeError", "Expecting value")
+        self.assertEqual(path.read_bytes(), b"")
+
     def test_real_cli_discovers_and_runs_only_the_tiny_committed_population(self):
         script = self.prepare_runner("""
             from pathlib import Path
@@ -583,14 +671,20 @@ class GovernanceRunBlackboxTests(_Workspace):
                     self.assertEqual(Path('tracked.txt').read_text(), 'committed input\\n')
                     print('real CLI body executed')
         """)
+        path, receipt, interpreter = self.environment_fixture(python_executable=sys.executable)
+        environment = {**self.process_environment, **receipt["environment"]}
         completed = subprocess.run(
-            [sys.executable, str(script), "--output-dir", str(self.output)],
-            cwd=self.base, env=self.process_environment, stdout=subprocess.PIPE,
+            [str(interpreter), "-B", str(script), "--output-dir", str(self.output),
+             "--environment-receipt", str(path)],
+            cwd=self.base, env=environment, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE, text=True, timeout=20, check=False)
         self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
         summary = self.read_json(self.output / "summary.json")
         self.assertTrue(summary["governance_passed"])
         self.assertTrue(summary["execution_completed"])
+        self.assertTrue(summary["environment_stable"])
+        self.assertEqual(summary["environment_before"], summary["environment_after"])
+        self.assertEqual(summary["environment_before"]["receipt_path"], str(path))
         self.assertEqual(summary["source_root"], str(self.source))
         self.assertEqual(summary["discovery"], {"start_directory": "ci/project", "pattern": "test_*.py"})
         self.assertEqual(self.read_json(self.output / "discovered.json")["test_ids"],
@@ -599,20 +693,26 @@ class GovernanceRunBlackboxTests(_Workspace):
         self.assertIn("real CLI body executed", (self.output / "unittest.log").read_text())
         self.assertEqual(self.git("status", "--porcelain"), "")
         self.assert_started_only()
+        self.assertFalse(self.command_marker.exists())
 
     def test_real_cli_rejects_discovery_filters_before_creating_output(self):
+        path, receipt, interpreter = self.environment_fixture(python_executable=sys.executable)
+        environment = {**self.process_environment, **receipt["environment"]}
         for index, arguments in enumerate((
                 ["--pattern", "test_probe.py"], ["--start-directory", "elsewhere"],
                 ["--test-id", "test_probe.TinyProbe.test_source"])):
             with self.subTest(arguments=arguments):
                 output = self.base / ("filter-" + str(index))
                 completed = subprocess.run(
-                    [sys.executable, str(RUNNER_PATH), "--output-dir", str(output), *arguments],
-                    cwd=self.base, env=self.process_environment, stdout=subprocess.PIPE,
+                    [str(interpreter), "-B", str(RUNNER_PATH), "--output-dir", str(output),
+                     "--environment-receipt", str(path), *arguments],
+                    cwd=self.base, env=environment, stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE, text=True, timeout=10, check=False)
                 self.assertEqual(completed.returncode, 2)
                 self.assertIn("unrecognized arguments", completed.stderr)
+                self.assertNotIn("the following arguments are required", completed.stderr)
                 self.assertFalse(output.exists())
+        self.assertFalse(self.command_marker.exists())
 
     def test_terminated_real_process_keeps_started_evidence_without_a_completed_pass(self):
         script = self.prepare_runner("""
@@ -628,10 +728,13 @@ class GovernanceRunBlackboxTests(_Workspace):
                     while True:
                         time.sleep(0.05)
         """)
-        environment = {**self.process_environment, "GOVERNANCE_TEST_OUTPUT": str(self.output)}
+        path, receipt, interpreter = self.environment_fixture(python_executable=sys.executable)
+        environment = {**self.process_environment, **receipt["environment"],
+                       "GOVERNANCE_TEST_OUTPUT": str(self.output)}
         with tempfile.TemporaryFile() as process_log:
             process = subprocess.Popen(
-                [sys.executable, str(script), "--output-dir", str(self.output)],
+                [str(interpreter), "-B", str(script), "--output-dir", str(self.output),
+                 "--environment-receipt", str(path)],
                 cwd=self.base, env=environment, stdout=process_log, stderr=subprocess.STDOUT)
             try:
                 deadline = time.monotonic() + 10
@@ -654,6 +757,7 @@ class GovernanceRunBlackboxTests(_Workspace):
         events = [json.loads(line) for line in (self.output / "events.jsonl").read_text().splitlines()]
         self.assertEqual([event["event"] for event in events], ["test_start"])
         self.assertEqual(events[0]["test_id"], "test_probe.TinyProbe.test_wait_for_termination")
+        self.assertFalse(self.command_marker.exists())
 
 
 if __name__ == "__main__":

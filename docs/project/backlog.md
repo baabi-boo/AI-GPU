@@ -9,42 +9,61 @@ remain unassigned until an actual owner is identified.
 
 ## Start here: P06-T01 explicit qualified warm route
 
-**Next bounded action:** obtain one uninterrupted governance invocation without
-skips and provision sufficient capacity. Then execute one fresh complete
-qualified warm attempt, retain its original archive unchanged, replay
-it independently and evaluate the unchanged predicates. Follow the
-[qualified warm handoff](p06-qualified-warm-handoff.md) and
-[runbook](evidence/p06-qualified-warm/runbook.md). The implemented route binds
-each new process before launch and requires complete source/build/load,
-numerical, lifetime, destruction and final-stability reconstruction. Preserve
-all 24 processes, 792 launches and 25,344 exact output words, including excluded
-primes and warm-ups; a complete valid attempt may reject the performance
-hypothesis. Pending reads remain a transient balance outside the 40 cumulative
-components.
+**Next bounded action:** independently review and publish the strict-runner
+corrections, then retain one uninterrupted full governance invocation from that
+exact published source using the [checked environment](governance-runbook.md).
+The invocation must establish complete successful accounting, zero skips and
+final source/tool stability. The first strict hosted failure remains unchanged.
+Use the [advisory readiness screen](evidence/p06-qualified-warm/runbook.md#read-only-readiness-screen)
+to record remaining native input and resource blockers. Resolve original-control
+artifact delivery and provision adequate capacity before a fresh native attempt.
+Follow the [current audit](governance-readiness-audit.md) and
+[qualified warm handoff](p06-qualified-warm-handoff.md).
 
-The explicit 24-process qualified warm route is implemented and independently
-reviewed at published `c0b44ce64665fe11895f869eea8c38c9b820d6f7`, tree
-`13450812d279d55f36a172fcf38653ff567f6c86`. The clean source checkout, all eight
-submodules and all 69 projected source inputs match the selected proof. Its
-fresh native experiment is **unstarted**. The recorded readiness checks did not
-establish the unchanged 4 GiB available-RAM requirement together with enough
-disk headroom to preserve the 15 GiB reserve plus approximately 2.24 GB of fresh
-dependency products and warm-run growth. The audit retains dated measurements;
-capacity must be rechecked before launch. No old data was deleted and no native
-resource guard was relaxed.
+After those prerequisites and the unchanged production admission checks are
+satisfied, execute one complete fresh 24-process qualified warm attempt, preserve
+its original, replay it independently and evaluate the frozen predicates. Retain
+all **792 launches and 25,344 exact output words**, including excluded primes and
+warm-ups; a complete valid result may reject the performance hypothesis. Pending
+reads remain a transient balance outside the 40 cumulative components.
 
-The 89 new focused tests pass in 195.293 seconds. Current public replay of the
-unchanged historical four-process archive passes; 29 historical analyzer tests
-preserve the old route's unconditional qualification block. **All 4,527 canonical
-test IDs now have passing outcomes across completed hosted and supplemental
-executions on the same implementation.** Hosted governance passes 4,491 bodies;
-the separate 59-case local supplement passes without failures, errors or skips,
-covering all 36 hosted gaps and 23 overlapping IDs. The
-[independent reconciliation](evidence/p06-qualified-warm/validation/coverage/final-reconciliation.json)
-proves the exact union. This is complete passing test-ID coverage across two
-environments; no complete 4,527-test local run or single invocation without skips
-is established. Hosted skip events and earlier failed/unfinalized local records
-remain unchanged and are not counted as passing coverage.
+The strict governance runner and checked environment were published at `2b9a18`,
+followed by the workflow-context repair at
+`457ddaa06b07e439b6f5ef2d15c09ef24131f6fe`. The first full strict
+[hosted run 45405383871](https://github.com/baabi-boo/AI-GPU/actions/runs/45405383871),
+attempt 1, failed: **4,744 tests in 3,116.381 seconds, 50 failures, 11 errors,
+zero skips**. Generated unbound bytecode also blocked finalization; no final
+source/tool stability or qualifying pass was established.
+
+The [current audit](governance-readiness-audit.md) and
+[evidence packet](evidence/governance-readiness/README.md) retain that original
+and the fresh focused passes: **78 runner / receipt / source tests**, **42
+environment / workflow / isolated-import tests**, and **57 readiness tests**.
+The exact 46 canonical methods implicated in the hosted failure also pass a
+selected strict-result rerun in 142.758 seconds. These overlapping selections
+do not replace the required full strict rerun of the current 4,812-ID population.
+The advisory
+readiness tool reports missing/blocked/unknown inputs without downloading,
+extracting, building or starting native execution. Effective cgroup capacity
+remains `unknown`; its JSON never authorizes execution.
+
+The qualified warm route's original implementation review remains scoped to
+`c0b44ce64665fe11895f869eea8c38c9b820d6f7`. Fresh native execution is
+**unstarted**. Stable hosted delivery of the unchanged attempt-04 control
+original and sufficient native capacity remain unresolved. The fresh
+[retained screen](evidence/governance-readiness/validation/readiness-restored-smoke.json)
+reports 254 rows with 26 blockers, three unchecked rows and one unknown; its
+69 measurement pins match, while source/gitlink closure and native inputs remain
+incomplete. The shared filesystem has 2,877,046,784 free bytes against the
+16,106,127,360-byte reserve. Host memory meets its snapshot threshold; effective
+cgroup capacity remains unknown. All unchanged production admission checks
+remain required.
+
+The historical [coverage reconciliation](evidence/p06-qualified-warm/validation/coverage/final-reconciliation.json)
+retains 4,491 hosted passing IDs plus 59 supplemental IDs, with 23 overlaps:
+4,527 unique IDs at the earlier implementation. This is historical combined
+coverage, not the current population or a single uninterrupted zero-skip pass.
+No failed, skipped or unfinalized record is relabelled as successful.
 
 The separately versioned
 [33-selector / 40-component / ten-premise contract](../designs/complete_counter_qualification_v1.md),
@@ -294,10 +313,12 @@ validation. The [new evidence packet](evidence/p06-qualified-warm/README.md)
 records independent enforcement and rejection checks; earlier originals retain
 their own scope and cannot become execution under the later contract.
 
-Obtain one uninterrupted governance invocation without skips and provision
-capacity, then execute one fresh complete qualified attempt under the
+Complete the reviewed strict-governance correction and its full uninterrupted
+rerun, then resolve the native input and capacity blockers recorded in the
+[current audit](governance-readiness-audit.md). After unchanged production
+admission, execute one complete qualified attempt under the
 [current handoff](p06-qualified-warm-handoff.md), retain and replay the original,
-and evaluate the unchanged
+and evaluate the frozen
 [sampling/rejection contract](../designs/warm_workspace_benchmark_v1.md).
 Keep the unconditional v1 `P06-WARM-RV64-MPM-HIGH-HALF` block, `qualified=false`
 and unestablished absolute no-wrap bound; source repair cannot recover historical
@@ -619,8 +640,8 @@ phase guides, the [development audit](p05-binding-audit.md) and the
 | **P03-T02 — Operator implementations and lifetime tests — complete** | Managed six-signature matmul has independent SimX/native-RTL arithmetic and actual common-runtime lifecycle acceptance; exact scope and partial-transfer limits remain recorded. | T01; kernel and runtime lead | [P03-A02](evidence/p03-managed-matmul/acceptance-numerics.json), [P03-A03](evidence/p03-managed-matmul/acceptance-lifecycle.json) |
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
 | **P04-T02 — Native model execution — complete** | Four clean SimX/native processor RTL × FP16/BF16 variants pass exact intermediate/final comparisons, live-input lineage, native placement and separate host/transfer accounting after independent review. | T01; model runtime lead | [P04-A02](evidence/p04-executor/acceptance-numerics.json), [P04-A03](evidence/p04-executor/acceptance-dispatch.json) |
-| **P05-T01 — Python/custom-op bridge — complete** | Preserve the accepted copying binding and bounded PyTorch 2.15.0+cpu / CPython 3.12.14 / RV64 SimX matrix at c6fb039e. Original-artifact replay, source joins, exact results/native dispatch and compatibility/failure evidence passed independent review. Any scope expansion needs separate qualification. | P04; framework integration lead; [replay handoff](p05-torch-replay-handoff.md) | [P05-A01 retained](evidence/p06-serial-workspace/a01-retained-binding.json); [P05-A02](evidence/p05-torch-replay/acceptance-torch.json), [P05-A03](evidence/p05-torch-replay/acceptance-compatibility.json) |
-| **P06-T01 — Measured optimization — in progress** | Obtain one uninterrupted governance invocation without skips and provision capacity for the implemented, independently reviewed qualified route. Execute one fresh 24-process, 792-launch, 25,344-word attempt, retain and independently replay the original, and evaluate unchanged predicates. Passing coverage spans all 4,527 IDs across completed hosted/supplemental runs; a single full zero-skip invocation remains unproven. Preserve historical originals and seven false fields. | P04; performance and memory lead; [qualified warm handoff](p06-qualified-warm-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
+| **P05-T01 — Python/custom-op bridge — complete** | Preserve the accepted copying binding and bounded PyTorch 2.15.0+cpu / CPython 3.12.14 / RV64 SimX matrix at c6fb039e. Original-artifact replay, source joins, exact results/native dispatch and compatibility/failure evidence passed independent review. Any scope expansion needs separate qualification. | P04; framework integration lead; [replay handoff](p05-torch-replay-handoff.md) | [P05-A01 retained](evidence/governance-readiness/a01-retained-binding.json); [P05-A02](evidence/p05-torch-replay/acceptance-torch.json), [P05-A03](evidence/p05-torch-replay/acceptance-compatibility.json) |
+| **P06-T01 — Measured optimization — in progress** | Review/publish the strict-governance repairs and retain a full uninterrupted zero-skip pass with successful finalization. The first strict hosted run failed; focused repairs pass separately. Record advisory readiness, resolve original-control delivery and native capacity, then admit one fresh 24-process, 792-launch, 25,344-word attempt. Preserve and independently replay the original under unchanged predicates and seven false historical fields. | P04; performance and memory lead; [current audit](governance-readiness-audit.md), [qualified warm handoff](p06-qualified-warm-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),
 [P04](phases/p04-inference.md), [P05](phases/p05-framework.md) and

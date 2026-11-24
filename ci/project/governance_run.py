@@ -58,6 +58,19 @@ def _identity(test):
     return value
 
 
+def _subtest_identity(test):
+    """Preserve short labels; bind oversized dynamic labels without truncation."""
+    value = test.id()
+    if not isinstance(value, str) or not value:
+        raise ValueError("invalid unittest subtest identity")
+    encoded = value.encode("utf-8")
+    if len(encoded) <= MAX_ID_BYTES:
+        return {"subtest_id": value}
+    return {"subtest_id": "sha256:" + hashlib.sha256(encoded).hexdigest(),
+            "subtest_id_encoding": "sha256", "subtest_id_original_encoding": "utf-8",
+            "subtest_id_original_bytes": len(encoded)}
+
+
 def collect_test_ids(suite):
     """Collect ordered strings without retaining additional test-case objects."""
     identities = []
@@ -99,7 +112,13 @@ class StrictResult(unittest.TextTestResult):
         self._started = time.monotonic()
 
     def getDescription(self, test):
-        return test if isinstance(test, str) else super().getDescription(test)
+        if isinstance(test, str):
+            return test
+        if isinstance(test, unittest.case._SubTest):
+            record = _subtest_identity(test)
+            if "subtest_id_encoding" in record:
+                return record["subtest_id"]
+        return super().getDescription(test)
 
     def _emit(self, event, **fields):
         self.event_count += 1
@@ -110,17 +129,21 @@ class StrictResult(unittest.TextTestResult):
                              "elapsed_seconds": round(time.monotonic() - self._started, 6), **fields})
 
     def _outcome(self, test, outcome, **fields):
-        identity = _identity(test)
         if isinstance(test, unittest.case._SubTest):
+            parent_id = _identity(test.test_case)
+            record = _subtest_identity(test)
             self.subtest_counts[outcome] += 1
-            self._emit("subtest_outcome", test_id=_identity(test.test_case),
-                       subtest_id=identity, outcome=outcome, **fields)
-        elif isinstance(test, unittest.TestCase):
+            self._emit("subtest_outcome", test_id=parent_id,
+                       outcome=outcome, **record, **fields)
+            return record["subtest_id"]
+        identity = _identity(test)
+        if isinstance(test, unittest.TestCase):
             self.outcomes[(identity, outcome)] += 1
             self._emit("test_outcome", test_id=identity, outcome=outcome, **fields)
         else:
             self.fixture_counts[outcome] += 1
             self._emit("fixture_outcome", fixture_id=identity, outcome=outcome, **fields)
+        return identity
 
     def startTest(self, test):
         identity = _identity(test)
@@ -150,9 +173,9 @@ class StrictResult(unittest.TextTestResult):
         self.errors[-1] = (self.getDescription(test), self.errors[-1][1])
 
     def addSkip(self, test, reason):
-        self._outcome(test, "skip", reason=str(reason)[:8192])
+        identity = self._outcome(test, "skip", reason=str(reason)[:8192])
         super().addSkip(test, reason)
-        self.skipped[-1] = (_identity(test), str(reason))
+        self.skipped[-1] = (identity, str(reason))
 
     def addExpectedFailure(self, test, err):
         self._outcome(test, "expected_failure")
@@ -741,7 +764,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", required=True,
                         help="fresh absolute directory outside the source checkout")
-    parser.add_argument("--environment-receipt", help="inert governance_env.py preparation receipt")
+    parser.add_argument("--environment-receipt", required=True,
+                        help="inert governance_env.py preparation receipt")
     args = parser.parse_args(argv)
     try:
         output = _fresh_output(args.output_dir)
@@ -752,8 +776,7 @@ def main(argv=None):
                "governance_passed": False, "execution_completed": False,
                "source_root": str(ROOT), "discovery": DISCOVERY,
                "command": [sys.executable, str(Path(__file__).resolve()), "--output-dir", str(output)]}
-    if args.environment_receipt:
-        receipt["command"].extend(("--environment-receipt", args.environment_receipt))
+    receipt["command"].extend(("--environment-receipt", args.environment_receipt))
     _write_json(output / "started.json", receipt)
     summary = {**receipt, "status": "incomplete", "errors": []}
     log_state = {"bytes": 0, "truncated": False}
@@ -776,8 +799,7 @@ def main(argv=None):
                     contextlib.redirect_stderr(_BoundedLog(log, sys.stderr, log_state)):
                 summary["source_before"] = source_snapshot()
                 summary["interpreter_before"] = interpreter_snapshot()
-                summary["environment_before"] = (environment_snapshot(args.environment_receipt)
-                                                  if args.environment_receipt else None)
+                summary["environment_before"] = environment_snapshot(args.environment_receipt)
                 receipt.update({key: summary[key] for key in (
                     "source_before", "interpreter_before", "environment_before")})
                 _write_json(output / "started.json", receipt)
@@ -794,8 +816,7 @@ def main(argv=None):
                 summary["execution_completed"] = result.execution_completed
                 summary["source_after"] = source_snapshot()
                 summary["interpreter_after"] = interpreter_snapshot()
-                summary["environment_after"] = (environment_snapshot(args.environment_receipt)
-                                                 if args.environment_receipt else None)
+                summary["environment_after"] = environment_snapshot(args.environment_receipt)
                 summary["source_stable"] = summary["source_before"] == summary["source_after"]
                 summary["interpreter_stable"] = summary["interpreter_before"] == summary["interpreter_after"]
                 summary["environment_stable"] = summary["environment_before"] == summary["environment_after"]

@@ -197,7 +197,7 @@ def assert_strict_governance_step(case, step):
         'HOME="$GOVERNANCE_ROOT/environment/home"', 'TMPDIR="$GOVERNANCE_ROOT/environment/tmp"',
         "LANG=C", "LC_ALL=C", "TZ=UTC", "PYTHONUTF8=1", "PYTHONDONTWRITEBYTECODE=1",
         "CCACHE_DISABLE=1", "OBJCACHE=", "MAKEFLAGS=-j2", "CMAKE_BUILD_PARALLEL_LEVEL=2", "THREADS=1",
-        '"$GOVERNANCE_ROOT/environment/venv/bin/python"', "ci/project/governance_run.py",
+        '"$GOVERNANCE_ROOT/environment/venv/bin/python3"', "ci/project/governance_run.py",
         "--output-dir", '"$GOVERNANCE_ROOT/run"',
         "--environment-receipt", '"$GOVERNANCE_ROOT/environment/environment.json"',
         "2>&1", "|", "tee", '"$GOVERNANCE_ROOT/logs/governance.log"',

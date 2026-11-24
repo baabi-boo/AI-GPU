@@ -1,0 +1,93 @@
+# A58 — Independent integration review of the current governance repairs
+
+## Decision and exact scope
+
+**Approve the 13 current tracked-file diffs for integration. No F2 or F3 blocker was found.** Confidence: **high** for the reviewed static properties; evidence type: **static-proof**. This is independent code-review advice, not a maintainer waiver, a successful full governance invocation, or native/warm acceptance.
+
+Reviewed baseline: `457ddaa06b07e439b6f5ef2d15c09ef24131f6fe` in `/tmp/ai-gpu-d0bf78aee086/repo`. Review completed at 2026-11-24T14:56:42.773954+00:00. A58 wrote no production file or repository test and published no commit or ref.
+
+I read `AGENTS.md` and `docs/review/code-review-policy.md`, checked the current working diff and relevant project acceptance/status context, and reviewed every changed hunk in the 13 tracked files listed below. The enforcement change is reviewed conservatively as **R3**: the qualifying CLI now requires its environment receipt. The workflow alias change does not add a trigger, credential, runner, or permission exposure.
+
+The four new readiness files are separately inventoried below. Their integration was checked statically, including import/bytecode behavior, advisory result scope, false acceptance fields, and direct method counts. I verified the production readiness SHA-256 equals the previously independently approved `843916e3b7eb0a2bd4e50d0bf2d4a3e4bcf102db62a3a66f1af5bd5e743463ec`. This limited integration check does **not** replace that prior readiness implementation review with a new exhaustive review.
+
+## Findings and concrete failure-path assessment
+
+No actionable defect was identified in the current repair hunks. The following are **F0 observations**, each **high confidence**, **static-proof**.
+
+### F0 — Large dynamic labels preserve failures and coverage accounting
+
+`governance_run._subtest_identity` changes only dynamic subtest-label representation. A label at or below 4,096 UTF-8 bytes remains its complete text. An oversized label is bound to SHA-256 over all UTF-8 bytes, with an explicit encoding discriminator and original byte count. Two labels with an identical 4,096-byte prefix and different suffixes therefore do not intentionally collapse through truncation. Repeated identical labels retain separate events and counts.
+
+Canonical discovered test IDs and parent IDs still pass through `_identity`, with the unchanged 4,096-byte rejection. The new helper is selected only for `unittest.case._SubTest`; fixture and parent identity rules remain in effect. Discovery count, ordering, one-start/one-stop/one-success requirements, and all strict-success conditions remain unchanged.
+
+A failing, erroring, or skipped large-label subtest is recorded before the corresponding superclass callback and still increments a non-success subtest counter. `finalize` rejects any such counter even if a later subtest succeeds. A counter or evidence-writer limit exception still propagates into the runner's abort handling and cannot become strict success. The changed `addSkip` uses the already generated bounded identity when replacing the superclass's retained test-object record, avoiding a second call to the canonical identity validator on an intentionally oversized dynamic label.
+
+Negative-result records retain a description string and traceback text, rather than `_SubTest` or parent objects. `getDescription` emits the digest for oversized labels, so the label is not reintroduced as a retained description. The expanded existing lifetime test continues to check release while result/events remain alive and now covers all four oversized-subtest outcome forms. I did not rerun it; the parent owns the focused execution.
+
+The twelve runner limit expressions are byte-for-byte equivalent as AST-unparsed expressions to HEAD: test count, canonical ID bytes, record bytes, log bytes, event count, Git/tool/source sizes, source time, and gitlink count. This review establishes bounded retained label representations, not a hard upper bound on all Python allocations: creating a subtest's `id()` and encoding it necessarily materializes transient data, and pre-existing traceback/skip-reason text behavior is outside this change.
+
+### F0 — Receipt requirement cannot make the old rejection fixtures vacuous
+
+`--environment-receipt` is now a required argparse argument. Both before and after snapshots call the production `environment_snapshot` unconditionally, and the launch record retains the argument. There is no branch that replaces both snapshots with `None` and allows equality alone to satisfy the environment-stability predicate.
+
+The recovered A47/A48 fixture changes provide actual on-disk tool identities and use the unmodified receipt validator. Real Python and Git aliases enable only their needed subprocess operations; unused tools and receipt command fields contain a poison marker whose absence is asserted. The source fixture explicitly labels its synthetic scope. These fixtures test inert receipt binding, not successful native environment preparation.
+
+Existing output-path and discovery-filter rejection tests supply the required argument and now assert the intended diagnostic while explicitly excluding the missing-required-argument diagnostic. This prevents a newly mandatory argument from causing a false positive before the behavior under test. Ignored-source and cached-bytecode rejection tests retain their original negative assertions and additionally require incomplete execution and absence of `discovered.json`; the self-deleting bytecode fixture must remain present, proving that its import body did not run.
+
+The changed interpreter-bytes fixture deliberately binds a different executable path in the receipt and confirms that source/receipt stability alone cannot hide the changed executing-interpreter bytes. The real positive CLI and process-termination tests retain their original assertions while binding an environment receipt. No negative test was changed to accept a general failure without its original purpose.
+
+### F0 — Exact Python alias repairs the selected launch identity
+
+Preparation selects private `venv/bin/python3`, and both the workflow and runbook launch that path. Preparation requires the exact private paths for both `python3` and `python`, plus their common resolved binary. This preserves path identity even when several aliases resolve to the same executable. The workflow's token-level contract and shell fixture use the same `python3` path; mutation cases explicitly reject alternate `python` and `python3.12` launch aliases.
+
+The environment-isolation test's positive poison control now demonstrates both the injected Python marker and its precise `sitecustomize.py` path, alongside the native preload marker. The cleaned execution requires absence of the injected marker, absence of that path, the same exact sanitized environment and restricted PATH, and empty stderr. Allowing an unrelated interpreter-supplied `sitecustomize` module corrects the previous overbroad assertion without removing the tested ambient-injection threat. No production sanitization was weakened.
+
+### F0 — Isolated child processes preserve the strict source boundary
+
+The three subprocess repairs add `-B` while retaining `-I`; the child bodies assert both isolated mode and `sys.dont_write_bytecode` before importing repository code. This fixes the concrete interaction in which `-I` ignores `PYTHONDONTWRITEBYTECODE` from the environment and an otherwise read-only test leaves source bytecode behind.
+
+All prior child-import/source-observation/helper-inventory assertions remain. The production source observer, ignored-source and cached-bytecode checks, no-filter discovery, and clean before/after source predicates were not changed. There is no exception list that simply tolerates these new files.
+
+### F0 — Population and contract scope remain intact
+
+An AST inventory of top-level test classes shows **all 207 original direct test methods preserved** in the eight changed test modules, with **11 additions** for **218 current direct methods**. No original method was removed or renamed. This is a static name inventory, not a fresh unittest-discovery or executed-ID count. The three restored readiness modules contain **57 direct methods** (20 + 15 + 22).
+
+The A47 receipt-test file matches recovered SHA-256 `ca691d25c9b68b60973f4054e2088a6792f13d1932e1ce82610fccfb69e3b485`; A48 source tests match `fc72ac5850fb259db8a5afe9e86a51cb092345f3c3cf9f4c6522daaa760a8dd0`. Both matches were computed from current bytes. No golden, measurement, runtime, native arithmetic, sampling, or acceptance-contract file appears in the current tracked diff. The runbook's upload caveat accurately limits artifact retention to attempts whose upload step can execute.
+
+## Work actually performed
+
+**Run:** read-only Git status/diff/HEAD inspection; every current tracked hunk and the surrounding affected control flow; AST parse/direct-method inventory against `git show HEAD:<path>`; SHA-256 and size inventory of all 17 current modified/new files; a final stable-bytes comparison; unchanged runner-limit expression comparison; and `git diff --check` (exit 0). Supplemental records are `coord/a58-review-evidence/reviewed-files.json` and `coord/a58-review-evidence/static-checks.json`.
+
+One initial analyst check tried `ast.literal_eval` on arithmetic constant expressions and exited 1. I corrected that checker to compare AST-unparsed expressions; the corrected check passed. This was an analysis-script error, not a product or test failure, and is recorded in `static-checks.json`.
+
+**Not run by A58:** unittest bodies, full discovery/execution, the 46-parent negative-outcome rerun, environment provisioning, native builds or workloads, replay, the base-revision impact classifier, or a hosted run. These omissions avoid duplicating the parent's active runs and preserve narrow ownership. The parent must retain its final classifier result and exact clean-revision full-run evidence before calling governance qualified. I grant no evidence waiver.
+
+The first full hosted attempt supplied in the task remains a failed historical run: run `45405383871`, attempt 1, source `457ddaa06b07e439b6f5ef2d15c09ef24131f6fe`, reported 4,744 tests, 50 failures, 11 errors, zero skips. I inspected the retained negative-event JSON only for context (61 records). I did not independently revalidate that archive or claim a corrected hosted pass. I read the newly created A47/A48 recovery notes; their lost pre-reset execution logs were not recreated and are not claimed retained by this review.
+
+## Exact reviewed file identities
+
+The first 13 entries are the exhaustive tracked-diff review scope. The final four are the readiness integration/hash scope described above. All identities were recomputed and remained stable at the final check.
+
+| File | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `.github/workflows/project-governance.yml` | 9525 | `74bf0cb4623e4db99a9e77e98c3270ef61d6355707cc4580a4d7a7221ddf6447` |
+| `ci/project/governance_env.py` | 17256 | `af4538a894a96abaf4848b19126ba0b55f8b5d1c3404f7bda3c24f8ac3d9dbe1` |
+| `ci/project/governance_run.py` | 40082 | `5fcb877775e5e35fd859686e875d0597d534326c679ff68b29f2151203d0bfdc` |
+| `ci/project/governance_workflow_test_support.py` | 11166 | `dde27dc564e0192a186c7563fb110165668777c4e2416ee6bbea5ce9fb041fc4` |
+| `ci/project/test_governance_env.py` | 28401 | `710ca0f7a9d23728cb3f4689aa2432e4bb6909ee3d5e59addc612d6180261551` |
+| `ci/project/test_governance_run.py` | 38561 | `cf36d5c0e8137954a7b1027966d7db821f83079512e88b930bb82d9dc5035a15` |
+| `ci/project/test_governance_run_receipts.py` | 40419 | `ca691d25c9b68b60973f4054e2088a6792f13d1932e1ce82610fccfb69e3b485` |
+| `ci/project/test_governance_source.py` | 21925 | `fc72ac5850fb259db8a5afe9e86a51cb092345f3c3cf9f4c6522daaa760a8dd0` |
+| `ci/project/test_governance_workflow.py` | 31614 | `5c4333f8ecb6bd0b852bccae21db357a047e2283c0e7be9f67f8ba45517f1e95` |
+| `ci/project/test_hwemu_source.py` | 19030 | `cdce6c2364dcf48aabdc976784cb13adf047d4e90c31249ad0edbe5da630e197` |
+| `ci/project/test_p05_python_api.py` | 50699 | `c48cc08abb9011f29d386a2a12cc19ec05a67bc260723f399fcf6940986487a3` |
+| `ci/project/test_p06_warm_replay.py` | 37848 | `1afe66c3ae44a846e2868981dec7597559383a2c4958d7e3125381732a368d0e` |
+| `docs/project/governance-runbook.md` | 11389 | `c820f4c2ac2a9fb11b049e8643c15df08c188c31fea3723869af292fe9a39253` |
+| `ci/project/p06_qualified_warm_readiness.py` | 31672 | `843916e3b7eb0a2bd4e50d0bf2d4a3e4bcf102db62a3a66f1af5bd5e743463ec` |
+| `ci/project/test_p06_qualified_warm_readiness.py` | 26856 | `6c2ba364e176f1db76db0c5fe3f6d11b067cb4a9b912b6915938014f8b3c32f1` |
+| `ci/project/test_p06_qualified_warm_readiness_boundaries.py` | 17392 | `aee0ff9d1a81a2ea4788655098b50e7f8d74a18e029e8608633b760e953613ec` |
+| `ci/project/test_p06_qualified_warm_readiness_inputs.py` | 28955 | `2d0aa15d98b5bb5973e14d90621a4679b162e8b0fee86b32399d6bc9a2a85d7e` |
+
+## Parent integration update received at review completion
+
+The parent supplied completed focused results of 42 tests covering environment/workflow behavior and three actual isolated imports (30.527 s), and 57 readiness tests (1.794 s). These are parent-reported results, not A58 executions. The parent also supplied the completed rerun of the exact 46 previously negative parent IDs. I read `coord/failed-parent-rerun-summary.json` at completion; its raw SHA-256 is `f74fbcacc55b47cf57623e5c78a2ca74f99a5b3f24a2b4d424cde8a587c740a2`. The summary data is retained in that separate artifact; this selected rerun does not replace a full qualifying invocation.

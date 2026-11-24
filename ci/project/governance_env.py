@@ -249,7 +249,7 @@ def native_probes(report, output, environment):
 
 def prepare_environment(output_dir, cmake):
     output = fresh_output(output_dir)
-    interpreter = output / "venv/bin/python"
+    interpreter = output / "venv/bin/python3"
     report = {"schema_version": 1, "status": "preparing", "source_root": str(ROOT),
               "output_dir": str(output), "interpreter": str(interpreter),
               "started_at": datetime.now(timezone.utc).isoformat(), "finished_at": None,
@@ -286,7 +286,8 @@ def prepare_environment(output_dir, cmake):
                 input_text="puts [info patchlevel]\n" if name == "tclsh" else None)
             tool["version"] = (version["stdout"] + version["stderr"]).strip()
             require(tool["version"], "tool returned an empty version: " + name)
-        require(report["tools"]["python"]["path"] == str(interpreter)
+        require(report["tools"]["python3"]["path"] == str(interpreter)
+                and report["tools"]["python"]["path"] == str(interpreter.with_name("python"))
                 and report["tools"]["python3"]["resolved_path"]
                 == report["tools"]["python"]["resolved_path"],
                 "clean PATH does not select the venv Python aliases")

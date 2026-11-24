@@ -33,6 +33,7 @@ SOURCE_FILES = {
 }
 OBSERVER = (
     "import json,sys; from pathlib import Path; "
+    "assert sys.flags.isolated and sys.dont_write_bytecode; "
     "sys.path.insert(0,sys.argv[1]); import hwemu_inventory; "
     "print(json.dumps(hwemu_inventory.observe_source(Path(sys.argv[2]))))"
 )
@@ -107,7 +108,7 @@ class SourceObservationTests(unittest.TestCase):
         variables = self.environment()
         variables.update(environment or {})
         process = subprocess.Popen(
-            [sys.executable, "-I", "-c", OBSERVER, str(PROJECT), str(root)],
+            [sys.executable, "-I", "-B", "-c", OBSERVER, str(PROJECT), str(root)],
             env=variables, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
             text=True, start_new_session=True,
         )

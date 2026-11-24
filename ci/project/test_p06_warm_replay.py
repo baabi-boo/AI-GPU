@@ -238,9 +238,10 @@ class WarmReplayTests(unittest.TestCase):
             self.assertEqual(row["failed_conditional_criteria"], ["host_median_at_most_95_percent_of_reference"])
 
     def test_fresh_entry_point_helper_inventory_is_independent_of_test_imports(self):
-        code = ("import json,sys;sys.path.insert(0,sys.argv[1]);import p06_warm_execute as r;"
+        code = ("import json,sys;assert sys.flags.isolated and sys.dont_write_bytecode;"
+                "sys.path.insert(0,sys.argv[1]);import p06_warm_execute as r;"
                 "print(json.dumps([v['path'] for v in r.LOADED_HELPERS]))")
-        run = subprocess.run([sys.executable, "-I", "-c", code, str(ROOT / "ci/project")],
+        run = subprocess.run([sys.executable, "-I", "-B", "-c", code, str(ROOT / "ci/project")],
                              check=True, text=True, capture_output=True, timeout=20)
         self.assertEqual(json.loads(run.stdout), list(NATIVE_HELPERS))
         self.assertEqual(len(NATIVE_HELPERS), 28)

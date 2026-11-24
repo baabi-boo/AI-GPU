@@ -1,0 +1,154 @@
+# A58 — Independent design review of P05-A01 historical retention
+
+## Decision
+
+**Final implementation approval is recorded below, after independent verification of the parent-authored candidate.**
+
+**Approve the proposed retention-successor design, subject to exact-byte verification of the implemented candidate.** This preserves the existing acceptance without a waiver. It does not create new acceptance, rerun the accepted native execution, or qualify the current governance repair as the historical execution. No F2/F3 design blocker is identified. **F0, high confidence, static-proof:** the repository has an explicit, independently reviewed precedent for this same kind of one-artifact retention relocation.
+
+Reviewed at 2026-11-24T15:06:42.703121+00:00 against HEAD `457ddaa06b07e439b6f5ef2d15c09ef24131f6fe`. This is a design review only; no successor had been implemented by A58 and no source, acceptance record, mapping, roadmap, or Git reference was edited by A58. The only written deliverable for this follow-up is this report.
+
+## Why this is valid preservation
+
+The normative evidence guide, `docs/project/evidence/README.md`, requires historical results to remain tied to their tested revision and contract and requires a corrected, reviewable record when an artifact changes. The acceptance policy requires preservation of tested source, raw results, scope and limitations; it prohibits presenting later work as the original successful execution. Neither rule requires a mutable working-tree path to remain frozen forever when its original bytes can be explicitly retained and independently verified.
+
+This repository already applied that interpretation twice to this exact P05-A01 lineage:
+
+1. `docs/project/evidence/p05-torch/a01-retained-binding.json` preserved four original source artifacts at inert retained locations, retained the original acceptance as its 58th artifact, and moved only the canonical P05-A01 evidence pointer. Its independent review is `docs/project/evidence/p05-torch/development/reviews/w03_a3.md`.
+2. `docs/project/evidence/p06-serial-workspace/a01-retained-binding.json` preserved one additional original native-binding test while leaving the original and immediate predecessor unchanged. Its `a01-source-retention.json` binds both predecessors and the previous mapping. The review/proof is `docs/project/evidence/p06-serial-workspace/agents/w04_a01.md`.
+
+I independently compared the second successor with its immediate predecessor. Their key sets are identical; the only changed fields are `artifacts`, `limitations`, `record_id`, `reviewer`, and `scope`. Within the artifact array, reversing only index 10's path restores the exact predecessor array. All five prior retained source files equal their original paths at accepted revision `e1420fd550f716df33a2556057b7086a03032cbe`. The current proposal is the same bounded operation for a sixth source artifact.
+
+The checker is correctly detecting a real mismatch. `check_project._artifact` hashes the bytes at each selected artifact path. The remedy can preserve the old digest by giving the successor a stable retained path to the actual old bytes. Editing the old acceptance hash to the current test hash would instead make the historical execution refer to unexecuted changed source and is not acceptable.
+
+## Independently established current facts
+
+The canonical P05-A01 pointer currently selects `docs/project/evidence/p06-serial-workspace/a01-retained-binding.json`. That record has **58 artifacts and 14 command entries**. I hashed all 58 current artifact targets: **the only mismatch is index 9**, `ci/project/test_p05_python_api.py`.
+
+| Item | Verified value |
+| --- | --- |
+| Accepted execution source | `e1420fd550f716df33a2556057b7086a03032cbe` |
+| Current publication base | `457ddaa06b07e439b6f5ef2d15c09ef24131f6fe` |
+| Original index 9 SHA-256 | `af6b5ed1aaeff080e9011bea9723e51119473bbcd900a80ed4591d5d37167165` |
+| Accepted and HEAD test bytes | **50,638 bytes**, exactly equal |
+| Current repaired test bytes | **50,699 bytes** |
+| Current repaired test SHA-256 | `c48cc08abb9011f29d386a2a12cc19ec05a67bc260723f399fcf6940986487a3` |
+
+Both historical Git objects are available locally. I compared the raw stdout bytes of:
+
+```text
+git show e1420fd550f716df33a2556057b7086a03032cbe:ci/project/test_p05_python_api.py
+git show HEAD:ci/project/test_p05_python_api.py
+```
+
+They are identical and match the original acceptance's artifact row as well as the immediate predecessor's row. This is a verified source identity, not an assumption that HEAD happens to contain accepted bytes.
+
+I also verified that the original acceptance, both prior successors, and both prior mapping records are byte-for-byte identical to HEAD. The roadmap was unchanged before implementation. Its observed phase states are P01 `blocked`, P05 `complete`, P06 `in_progress`, P07 `not_started`; this retention operation changes none of them.
+
+The current test repair remains separately reviewable: it adds explicit bytecode suppression to an isolated child and checks the child flags before importing repository code. It preserves the original substantive import assertions. A retention-only record neither excuses that repair from testing nor transfers the historical native result to it. The existing successful focused import execution is current governance evidence only.
+
+## Required implementation invariants
+
+### 1. Retain raw accepted bytes, with no transformation
+
+Create a new regular file under `docs/project/evidence/governance-readiness/retained/`, with an inert final extension such as `.py.txt`. Write raw `git show` bytes, preserving the **50,638-byte** content and **`af6b5ed1...67165`** digest exactly. No added provenance header, newline normalization, formatting, or code execution belongs in that file. Put provenance in the separate mapping record. It must not be a symlink, and its path must remain repository-relative and confined.
+
+The archived file is historical evidence only. Leave the current repaired `.py` file in canonical discovery. An inert snapshot outside `ci/project` cannot become an additional discovered test or replace the current body.
+
+### 2. Create a successor with the same historical acceptance semantics
+
+Copy the immediate serial-workspace successor, preserving its exact key set. Relative to that predecessor, permit changes only to:
+
+- `artifacts`: change **only the `path` of element 9** to the new inert file. Keep the element's SHA-256, array ordering, and all other 57 rows identical. Retain exactly 58 artifacts, including the unchanged original acceptance as the last artifact. Do not append lineage records to this array; the separate mapping binds them.
+- `record_id`: use a new unique retention-specific identifier, for example `p05-a01-governance-readiness-retained-source-v1`.
+- `reviewer`: name the actual final independent retention reviewer and explicitly limit the role to historical source retention. Do not imply a human approval or a new native acceptance review. This design approval alone is not approval of future candidate bytes; final verification must occur before a passing successor is published.
+- `scope`: preserve the entire predecessor text as a prefix and, if changed, append a concise retention-only explanation. The explanation must not widen any supported behavior or tested configuration.
+- `limitations`: preserve every predecessor limitation, in order, and append the reason for this sixth retention mapping and the absence of new execution/acceptance.
+
+Keep `schema_version`, `source_revision`, `configuration`, `kind`, `evidence_level`, `outcome`, `acceptance_ids`, and **all 14 commands** exactly equal to the predecessor. In particular, the accepted source stays `e1420fd550f716df33a2556057b7086a03032cbe`; the historical result remains `pass` at `simulation` / `simulated` scope. Current governance test results belong in separate current evidence, not in these old commands. Preserve historical phase-status wording in old scope/limitations; later phase decisions remain in their own records.
+
+### 3. Add a chained retention mapping
+
+Use a new mapping record under the same new evidence directory, following the serial-workspace `a01-source-retention.json` structure. It should include:
+
+- `schema_version: 1`, `scope: historical-source-retention-only`, accepted `source_revision`, and `publication_base: 457ddaa06b07e439b6f5ef2d15c09ef24131f6fe`.
+- Exact path/SHA descriptors for the original acceptance, the immediate serial-workspace predecessor, the prior serial-workspace mapping, and the newly serialized successor. Those records transitively preserve the earlier torch predecessor and mapping.
+- The five existing mapping rows unchanged, followed by the new row: original path, retained path, unchanged SHA-256 and `bytes: 50638`. Set `new_mapping_count: 1`; the cumulative mapping count becomes **six**.
+- Explicit `execution_claimed: false`, `new_acceptance_claimed: false`, and `acceptance_scope_changed: false`, plus the actual retention reviewer and a reason explaining the isolated-child bytecode repair.
+
+The mapping may also record the current test's separate digest and the two Git retrieval revisions, but label them as current/retrieval provenance. Do not confuse the current file digest with the accepted artifact digest. Compute the successor's final hash after its final review metadata has been set, then write that digest in the mapping; avoid circular hashing.
+
+### 4. Move only the canonical P05-A01 evidence pointer
+
+In `docs/project/roadmap.json`, change only the `record` value in the P05 evidence entry whose `acceptance_id` is `P05-A01`. No acceptance criterion, level, status, dependency, evidence entry, source revision, or P05-A02/A03 reference changes. Normalize that one pointer back to its prior path and require complete JSON equality with the pre-change roadmap.
+
+Historical documentation may continue linking old retention records as historical context. The current governance-readiness audit should briefly identify this additional retention and link the new mapping. Do not edit or silently relabel old records to make every historical link point at the newest successor.
+
+## Required narrow validation after implementation
+
+A small retained integrity comparison plus the existing project validator is sufficient for this data-only relocation. No new permanent test, native workload, or broad suite is needed merely to verify the archived copy.
+
+1. Compare all five protected original/prior record files to their HEAD bytes and expected hashes.
+2. Assert the new retained file equals both named `git show` outputs, has the exact historical size/digest, and is a regular, non-symlink file. Recheck its staged/committed bytes before publication so a text filter cannot silently alter them.
+3. Compare predecessor/successor key sets and all frozen fields. Reverse the single artifact-path substitution and require exact equality of all 58 artifact rows; preserve scope prefix and prior limitations.
+4. Verify every successor artifact hash, not only index 9. Verify every descriptor in the new mapping. Reverse all six cumulative source mappings and recover the original acceptance's 57 artifact rows, with the unchanged original acceptance reference remaining the 58th entry.
+5. Verify that the entire roadmap differs only by the intended P05-A01 pointer. Confirm no test removal/renaming or extra `.py` discovery input came from retention.
+6. Run the unchanged `python3 -B ci/project/check_project.py`, preserving its complete result, and `git diff --check`. This validates the selected successor instead of attempting to rewrite stale live-path references in historical immutable records. Record that the result is metadata/integrity validation, not new native acceptance.
+7. Obtain the planned independent final inspection of the actual successor, mapping, archived bytes and roadmap delta before publication. Keep the failed pre-retention checker observation as development history; a later valid pointer must not erase the initial mismatch.
+
+If any historical artifact hash, frozen acceptance field, original record, gate, or phase state must change to make the check pass, stop and investigate: that would exceed this approved retention design.
+
+## Checks actually performed and limits
+
+Performed: read the normative acceptance/evidence sections, the validator's report/artifact/reference code, both retention precedents and their reviews; raw Git-byte comparison of accepted versus HEAD test source; hashing of all 58 predecessor artifacts; byte comparison of five protected lineage records with HEAD; verification of all five prior retained sources against the accepted revision; structural predecessor/successor comparison; and confirmation of the unchanged pre-proposal roadmap.
+
+Not performed: writing the proposed successor, running its final project validation, executing tests or native workloads, staging/committing/publishing, or granting a waiver. No proposed artifact exists as a result of A58's work; this report establishes the conditions for the parent's implementation and final independent check.
+
+## Reviewed input identities
+
+| Input | SHA-256 |
+| --- | --- |
+| `docs/project/acceptance.md` | `065251c27555d2c588693a85546b2d18701352d939bd81ccf9daec984cc55bc0` |
+| `docs/project/evidence/README.md` | `3ffde993f4347b62a3e90c4379cdc19f24a5c86df057c2154db98b327e3ab3d2` |
+| `ci/project/check_project.py` | `3558b94dc59519f02f12b19257709cb56b853b3eab3bc3b65f4dc7e4a0214f85` |
+| `docs/project/evidence/p05-python/acceptance-binding.json` | `1896bae3b59273f51448b554b965dc7d98d6beafcd446527c41c878a32c740c5` |
+| `docs/project/evidence/p05-torch/a01-retained-binding.json` | `afe748b3bd33dea30ee78777a5e34314cd28f151875327a80dbd33f3b7ecc367` |
+| `docs/project/evidence/p05-torch/a01-source-retention.json` | `95facaaee3cc569ec0b403d903fd305a9a6dfb1364b14ae378c820105929e5ff` |
+| `docs/project/evidence/p06-serial-workspace/a01-retained-binding.json` | `9de532f05b99fa36a1b42822170aa720795fb8a9ca2f823b0daf06556928a85f` |
+| `docs/project/evidence/p06-serial-workspace/a01-source-retention.json` | `72949c8140fb849779c76f0e43041a29e2d5fc8a8db6bf8466412cfd634161b6` |
+| `docs/project/evidence/p06-serial-workspace/agents/w04_a01.md` | `5a7d82826f6b2280153c0d2e672e7a1e0eb97a97c20e2deba8738377c56b8fec` |
+| `docs/project/evidence/p05-torch/development/reviews/w03_a3.md` | `9121c26bb69238a3b6ecfbb698d62bd88d24ca508e72e10061b626d983de346f` |
+| `docs/project/evidence/p05-torch/development/w03_a3_audit_history.py` | `ba1defdb3566339f472aecb9f7e4441b472de3942441981d05669069e815add2` |
+| `docs/project/roadmap.json` | `3a6025806f6af6b73f14cb91fbd522cecab26024476afa9c557233515ca6f16e` |
+
+## Final independent review of the implemented successor
+
+Completed at 2026-11-24T15:08:19.114958+00:00. **APPROVED: the exact implemented successor, chained mapping, inert historical source, validation manifest, and one-pointer roadmap change listed below preserve P05-A01's existing historical acceptance. No waiver, new native execution, new acceptance, or scope expansion is granted or needed. No F2/F3 finding remains in this retention implementation.** Confidence: high. Evidence type: static-proof with executed raw-byte/hash/structural integrity comparisons.
+
+This final review satisfies the design review's condition for actual candidate-byte verification. The parent authored the candidate. A58 has now actually reviewed it, so the candidate's reviewer identity `/root/a58_integration_independent_review (historical source retention only)` accurately describes this completed independent retention review. The historical native acceptance remains attributed to its original preserved record and reviews.
+
+The independent verification script exited 0 and established:
+
+- All five original/prior acceptance and mapping files remain byte-identical to `457ddaa06b07e439b6f5ef2d15c09ef24131f6fe`.
+- Successor/predecessor key sets match exactly. The only changed fields are `artifacts`, `scope`, `limitations`, `record_id`, and `reviewer`; all eight frozen acceptance fields, including every one of the 14 command entries, remain equal.
+- Reversing only `artifacts[9].path` restores the exact 58-row predecessor artifact array. All 58 actual successor artifact files are regular non-symlink files with the recorded SHA-256 values.
+- The complete predecessor scope is retained as a prefix. Exactly one limitation is appended; all previous limitations remain in order. The appended text expressly distinguishes historical acceptance from the live bytecode-suppression repair.
+- The chained mapping binds the original, immediate predecessor, previous mapping and exact new successor. Its first five mapping rows equal the previous mapping, and its sixth row preserves the Python API source. Every one of the six retained files equals the corresponding raw file at accepted source `e1420fd550f716df33a2556057b7086a03032cbe`. Reversing all six mappings recovers all 57 original artifact rows, with the unchanged original acceptance reference remaining the successor's 58th row.
+- The new retained file equals both the accepted-source and current-base Git objects, is exactly 50,638 bytes, is a regular non-symlink file with no executable permission bits, and has the unchanged `af6b5ed1...67165` SHA-256. The current `.py` test remains at its separately reviewed repaired hash.
+- `execution_claimed`, `new_acceptance_claimed`, and `acceptance_scope_changed` are all false; `new_mapping_count` is 1 and the cumulative count is six. Accepted source and publication base are correctly distinct.
+- The entire roadmap object differs from the base at exactly `/phases/5/evidence/0/record`, selecting the new P05-A01 retention successor. Normalizing that single pointer restores complete equality, including all phase states, criteria, dependencies and other evidence references.
+- The parent's `validation/historical-retention.json` descriptors and 58 artifact rows agree with the independently verified candidate; they were not taken as authority for the checks.
+- All **17 file hashes from A58's earlier governance integration inventory remain unchanged**. The archive is a `.py.txt` evidence file outside canonical discovery and does not replace or add a current `.py` test.
+- `git diff --check` exits 0.
+
+I also inspected the current P05 overview links in status, backlog and `phases/p05-framework.md`; they select the new retention record while retaining the prior acceptance/phase wording. The new audit and evidence README identify the retention record and mapping. This link inspection does not replace the separate overall documentation review.
+
+A58 did not rerun the project validator or any unittest/native body. The parent was already running the unchanged project checker for the integrated tree; its retained execution result remains the parent's separate publication prerequisite. This approval confirms source/record integrity and the validity of the retention operation, rather than claiming that an unobserved validator or full suite passed. A58 made no repository edits, staged changes, commits, or ref updates.
+
+| Exact approved implementation file | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `docs/project/evidence/governance-readiness/a01-retained-binding.json` | 26412 | `d015566195b25e387f6f0593310e3bf3037a3a7511c4f91e083a23ad72200f39` |
+| `docs/project/evidence/governance-readiness/a01-source-retention.json` | 3156 | `c6cfecaa054aae9b3dcee6158b5aad8bfcea198ab69afa02be74510156e9f0f7` |
+| `docs/project/evidence/governance-readiness/retained/test_p05_python_api.py.txt` | 50638 | `af6b5ed1aaeff080e9011bea9723e51119473bbcd900a80ed4591d5d37167165` |
+| `docs/project/evidence/governance-readiness/validation/historical-retention.json` | 11395 | `67a0c553f80166c9b7170bda236cb0dc11d4614dec48c67f28123b7f1ae29732` |
+| `docs/project/roadmap.json` | 21380 | `3a6025806f6af6b73f14cb91fbd522cecab26024476afa9c557233515ca6f16e` |
