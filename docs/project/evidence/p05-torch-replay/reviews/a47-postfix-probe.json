@@ -1,0 +1,90 @@
+{
+  "command": "python3 -B ../agent-notes/a47-postfix-probe.py",
+  "controls_accepted": 4,
+  "format_mutations_rejected": 4,
+  "limitations": [
+    "No full original replay or fully rewritten public candidate was executed.",
+    "Public reachability remains complete-caller static analysis.",
+    "Compiler binary bytes are absent; recorded tool receipts cannot prove reproducible compilation."
+  ],
+  "native_execution": "not_run",
+  "observations": [
+    {
+      "archive_close_rehash": "pass",
+      "archive_sha256": "8c42f7e9f310972e2c0c67c56a03ce8f5460d706cb8dc3a5397435445ea6737c",
+      "control": "accepted",
+      "format": "fp16",
+      "header_sha256": "bf0e5fcf8553f41670ede440566f00f2ea54e1c2e580eef7bf5d78282798a692",
+      "kernel_record_role": "kernel",
+      "kernel_record_sha256": "69a7d6d7b7768dbbc7926e58c37a979fc3480f0df526c68f5c554d47b5b65880",
+      "mutated_header_sha256": "fcd53d392374d876a1787de54beb1269c470f62df7d5bc4867a6566b0d51aa6e",
+      "mutation": "rejected",
+      "reason": "effective header ITYPE differs",
+      "route": "native"
+    },
+    {
+      "archive_close_rehash": "pass",
+      "archive_sha256": "8c42f7e9f310972e2c0c67c56a03ce8f5460d706cb8dc3a5397435445ea6737c",
+      "control": "accepted",
+      "format": "fp16",
+      "header_sha256": "bf0e5fcf8553f41670ede440566f00f2ea54e1c2e580eef7bf5d78282798a692",
+      "kernel_record_role": "kernel",
+      "kernel_record_sha256": "69a7d6d7b7768dbbc7926e58c37a979fc3480f0df526c68f5c554d47b5b65880",
+      "mutated_header_sha256": "fcd53d392374d876a1787de54beb1269c470f62df7d5bc4867a6566b0d51aa6e",
+      "mutation": "rejected",
+      "reason": "effective header ITYPE differs",
+      "route": "python"
+    },
+    {
+      "archive_close_rehash": "pass",
+      "archive_sha256": "787fd1b41a27da8c100277613c581ba734920fd45b13e0707ba0f9ea2e866330",
+      "control": "accepted",
+      "format": "bf16",
+      "header_sha256": "fcd53d392374d876a1787de54beb1269c470f62df7d5bc4867a6566b0d51aa6e",
+      "kernel_record_role": "kernel",
+      "kernel_record_sha256": "7e92153ba4d42e412287cc91488e4e04ab4fa5f2ac4df01c24c28c6e0ff0a253",
+      "mutated_header_sha256": "bf0e5fcf8553f41670ede440566f00f2ea54e1c2e580eef7bf5d78282798a692",
+      "mutation": "rejected",
+      "reason": "effective header ITYPE differs",
+      "route": "native"
+    },
+    {
+      "archive_close_rehash": "pass",
+      "archive_sha256": "787fd1b41a27da8c100277613c581ba734920fd45b13e0707ba0f9ea2e866330",
+      "control": "accepted",
+      "format": "bf16",
+      "header_sha256": "fcd53d392374d876a1787de54beb1269c470f62df7d5bc4867a6566b0d51aa6e",
+      "kernel_record_role": "kernel",
+      "kernel_record_sha256": "7e92153ba4d42e412287cc91488e4e04ab4fa5f2ac4df01c24c28c6e0ff0a253",
+      "mutated_header_sha256": "bf0e5fcf8553f41670ede440566f00f2ea54e1c2e580eef7bf5d78282798a692",
+      "mutation": "rejected",
+      "reason": "effective header ITYPE differs",
+      "route": "python"
+    }
+  ],
+  "probe_sha256": "2d5c6cc7f50ca2cd3ae99e4c3cbf7cfdff7b20851b09f30375d9b3ed1ffee8a3",
+  "public_replay_executed": false,
+  "retained_code_executed": false,
+  "scope": "selected-member native/Python compiler plus effective-header helper joins, both c0 formats",
+  "source_after": {
+    "ci/project/baseline_packet_contract.py": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+    "ci/project/compiler_records.py": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+    "ci/project/p02_matrix_records.py": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+    "ci/project/p03_execution_records.py": "b26449105f17f9487cc4fbaab36884ceea42be9f502a26aa58331ed4cf1140de",
+    "ci/project/p05_replay_native.py": "88263ee6c53a0c95ba97dfdd8ee42c244ba5906c08b6328080db44811dbd4712",
+    "ci/project/test_p05_replay_effective_headers.py": "8e753932a6edf101536570eeae9c57062cdac5fe766bf4e9c0a8d337755871c7",
+    "ci/project/test_p05_replay_native.py": "ad2ce215c5a58f638cd21130a1cf2a48935285826d7fe4173e14327fd1ae73dd",
+    "docs/project/evidence/p05-torch/reviews/archive_reader.py": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3"
+  },
+  "source_before": {
+    "ci/project/baseline_packet_contract.py": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+    "ci/project/compiler_records.py": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+    "ci/project/p02_matrix_records.py": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+    "ci/project/p03_execution_records.py": "b26449105f17f9487cc4fbaab36884ceea42be9f502a26aa58331ed4cf1140de",
+    "ci/project/p05_replay_native.py": "88263ee6c53a0c95ba97dfdd8ee42c244ba5906c08b6328080db44811dbd4712",
+    "ci/project/test_p05_replay_effective_headers.py": "8e753932a6edf101536570eeae9c57062cdac5fe766bf4e9c0a8d337755871c7",
+    "ci/project/test_p05_replay_native.py": "ad2ce215c5a58f638cd21130a1cf2a48935285826d7fe4173e14327fd1ae73dd",
+    "docs/project/evidence/p05-torch/reviews/archive_reader.py": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3"
+  },
+  "source_stable": true
+}

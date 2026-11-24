@@ -1,0 +1,92 @@
+{
+  "scope": "Final candidate metadata/baseline consistency and affected workflow contracts; no full-suite/native claim",
+  "cwd": "/workspace/scratch/101d52695253/AI-GPU",
+  "git_head": "e71e63229870fcb61b7edf9793cb0d6dccdbaf63",
+  "working_tree_is_clean": false,
+  "source_sha256_before": {
+    ".github/workflows/project-governance.yml": "bb9060556ba1ea5bb4f46c96fa4775c2ec22f6877ec7aed11cc8d0e66122e43f",
+    "docs/project/roadmap.json": "2f5e1bd1b76de1d8537624dec3301c8a50b6d619e6d79fbf2cce25f02fccb50c",
+    "ci/project/check_project.py": "3558b94dc59519f02f12b19257709cb56b853b3eab3bc3b65f4dc7e4a0214f85",
+    "ci/project/check_baseline_packets.py": "4dbadb63a11b88ce161c6c9ea28035d91896a969cb53e1258deea155ede81bf6",
+    "ci/project/test_p05_governance_integration.py": "6d30ee4a6415591f1673aaf1276f5ac49ccfb8a1e39dfb282fb4688c70392645",
+    "ci/project/test_p05_torch_ci.py": "5fad4e91f7869eb84a633b252b9fdbed06cdc8f0abc1de14cafabec97f0c65b7",
+    "docs/project/evidence/p05-torch-replay/acceptance-torch.json": "fc2036af4dfd34ab8927434f68cf45f20beff72e0f27821bff985379b62988cf",
+    "docs/project/evidence/p05-torch-replay/acceptance-compatibility.json": "ba8ae92ef2522e5251889c8cb830f1d10dbfee5ddaf7cdbccb905e89d5778308",
+    "docs/project/p05-torch-compatibility.md": "d27bebfb6d1bfddec2fb22196d1cc046eb252926d17e68e0cfe3ca9cbf23fc27",
+    "docs/assets/img/vortex_framework_stack.svg": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4"
+  },
+  "source_sha256_after": {
+    ".github/workflows/project-governance.yml": "bb9060556ba1ea5bb4f46c96fa4775c2ec22f6877ec7aed11cc8d0e66122e43f",
+    "docs/project/roadmap.json": "2f5e1bd1b76de1d8537624dec3301c8a50b6d619e6d79fbf2cce25f02fccb50c",
+    "ci/project/check_project.py": "3558b94dc59519f02f12b19257709cb56b853b3eab3bc3b65f4dc7e4a0214f85",
+    "ci/project/check_baseline_packets.py": "4dbadb63a11b88ce161c6c9ea28035d91896a969cb53e1258deea155ede81bf6",
+    "ci/project/test_p05_governance_integration.py": "6d30ee4a6415591f1673aaf1276f5ac49ccfb8a1e39dfb282fb4688c70392645",
+    "ci/project/test_p05_torch_ci.py": "5fad4e91f7869eb84a633b252b9fdbed06cdc8f0abc1de14cafabec97f0c65b7",
+    "docs/project/evidence/p05-torch-replay/acceptance-torch.json": "fc2036af4dfd34ab8927434f68cf45f20beff72e0f27821bff985379b62988cf",
+    "docs/project/evidence/p05-torch-replay/acceptance-compatibility.json": "ba8ae92ef2522e5251889c8cb830f1d10dbfee5ddaf7cdbccb905e89d5778308",
+    "docs/project/p05-torch-compatibility.md": "d27bebfb6d1bfddec2fb22196d1cc046eb252926d17e68e0cfe3ca9cbf23fc27",
+    "docs/assets/img/vortex_framework_stack.svg": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4"
+  },
+  "source_changed": [],
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "ci/project/check_project.py"
+      ],
+      "exit_code": 0,
+      "seconds": 2.324185,
+      "log": "delivery-check-0.log",
+      "log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "ci/project/check_baseline_packets.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.16454,
+      "log": "delivery-check-1.log",
+      "log_sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/project",
+        "-p",
+        "test_p05_governance_integration.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "seconds": 0.114346,
+      "log": "delivery-check-2.log",
+      "log_sha256": "95a7dca656e3d53bae3354e849936915e47ec76f0d75c8b8cec149c620f1b079"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/project",
+        "-p",
+        "test_p05_torch_ci.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "seconds": 0.114789,
+      "log": "delivery-check-3.log",
+      "log_sha256": "71b20efb77bb12fff40b176586e55f88866fa32929c6b4f5cf2889e487d0dbe9"
+    }
+  ],
+  "outcome": "pass"
+}

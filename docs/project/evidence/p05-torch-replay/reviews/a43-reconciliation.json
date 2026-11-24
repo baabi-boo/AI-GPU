@@ -1,0 +1,2109 @@
+{
+  "acceptance_claimed": false,
+  "agent": "a43",
+  "failure_classification": {
+    "2_class_setup_errors": "Both tracebacks report Host command failed: disk_reserve (exit None); child bodies were never scheduled. Full process receipts were not retained for these two events.",
+    "55_subtest_failures": "Every retained receipt says blocked/disk_reserve, process_started=false, exit_code=null, duration=0, log_sha256=null.",
+    "cmake_skips": "36 bodies are skipped or suppressed because fixture CMake is missing from its sanitized tool inventory; no claim that ambient CMake is absent.",
+    "confidence": "high for explicit resource admission outcomes; no claim of untested code correctness",
+    "exact_physical_capacity_shortfall_or_timing_established": false,
+    "host_fixture_reserve_bytes": 1073741824,
+    "new_code_failure_demonstrated": false,
+    "p06_failure_skip_and_helper_source_equal_historical_revision": [
+      "ci/project/baseline_process.py",
+      "ci/project/p06_dependency_build.py",
+      "ci/project/tensor_host_tools.py",
+      "ci/project/test_p06_dependency_build.py",
+      "ci/project/test_p06_dependency_option_controls.py",
+      "ci/project/test_p06_dependency_receipt.py",
+      "ci/project/test_p06_workspace_caller.py",
+      "ci/project/test_p06_workspace_edges.py",
+      "ci/project/test_p06_workspace_model_guard.py"
+    ],
+    "p06_native_reserve_unchanged_bytes": 16106127360,
+    "per_failure_free_byte_measurements_retained": false,
+    "root_cause_of_disk_consumption_established": false,
+    "untested_failed_and_suppressed_bodies_are_not_passes": true
+  },
+  "findings": [
+    {
+      "confidence": "high",
+      "finding": "The broad run is failed and non-zero-skip; it cannot close the stricter P06 uninterrupted, no-concurrent-work invocation requirement.",
+      "scope": "execution capacity / governance evidence",
+      "severity": "F2"
+    },
+    {
+      "confidence": "high",
+      "finding": "All 542 selected P05 IDs passed; no prior canonical ID was omitted and 106 additions are P05 only.",
+      "scope": "P05 host regression evidence",
+      "severity": "F0"
+    },
+    {
+      "confidence": "high",
+      "finding": "Initial 520 IDs are reconstructible rather than separately retained; successful subtests are not enumerated by this verbose log; counts never add overlapping selections.",
+      "scope": "evidence limits",
+      "severity": "F0"
+    }
+  ],
+  "governance": {
+    "actual_method_rows": 4595,
+    "all_nonpassing_selected_ids": 67,
+    "class_error_events": 2,
+    "class_error_suppressed_bodies": 23,
+    "class_skip_events": 2,
+    "class_skip_suppressed_bodies": 15,
+    "duplicate_ids": [],
+    "elapsed_seconds": 2974.16,
+    "failed_methods": [
+      {
+        "failed_subtests": [
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+            "log_line": 4059,
+            "parameters": "(fmt='bf16', policy='per_operation', fault='lingering_charge')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+            "log_line": 4060,
+            "parameters": "(fmt='bf16', policy='per_operation', fault='capacity_drift')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+            "log_line": 4061,
+            "parameters": "(fmt='bf16', policy='per_operation', fault='memory_failure')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+            "log_line": 4062,
+            "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='allocation_charge')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+            "log_line": 4063,
+            "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='lingering_charge')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+            "log_line": 4064,
+            "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='capacity_drift')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+            "log_line": 4065,
+            "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='memory_failure')",
+            "status": "FAIL"
+          }
+        ],
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+        "start_line": 4058
+      },
+      {
+        "failed_subtests": [
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+            "log_line": 4067,
+            "parameters": "(fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/missing'))",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+            "log_line": 4068,
+            "parameters": "(fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules'))",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+            "log_line": 4069,
+            "parameters": "(fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/0'))",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+            "log_line": 4070,
+            "parameters": "(fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/15'))",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+            "log_line": 4071,
+            "parameters": "(fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/16777217'))",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+            "log_line": 4072,
+            "parameters": "(fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/missing'))",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+            "log_line": 4073,
+            "parameters": "(fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules'))",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+            "log_line": 4074,
+            "parameters": "(fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/0'))",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+            "log_line": 4075,
+            "parameters": "(fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/15'))",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+            "log_line": 4076,
+            "parameters": "(fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/16777217'))",
+            "status": "FAIL"
+          }
+        ],
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+        "start_line": 4066
+      },
+      {
+        "failed_subtests": [
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+            "log_line": 4078,
+            "parameters": "(fmt='fp16', policy='per_operation', size=16)",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+            "log_line": 4079,
+            "parameters": "(fmt='fp16', policy='per_operation', size=16777216)",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+            "log_line": 4080,
+            "parameters": "(fmt='fp16', policy='reusable_single_tile', size=16)",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+            "log_line": 4081,
+            "parameters": "(fmt='fp16', policy='reusable_single_tile', size=16777216)",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+            "log_line": 4082,
+            "parameters": "(fmt='bf16', policy='per_operation', size=16)",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+            "log_line": 4083,
+            "parameters": "(fmt='bf16', policy='per_operation', size=16777216)",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+            "log_line": 4084,
+            "parameters": "(fmt='bf16', policy='reusable_single_tile', size=16)",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+            "log_line": 4085,
+            "parameters": "(fmt='bf16', policy='reusable_single_tile', size=16777216)",
+            "status": "FAIL"
+          }
+        ],
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+        "start_line": 4077
+      },
+      {
+        "failed_subtests": [
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_recycled_default_addresses_remain_distinct_closed_allocation_lifetimes",
+            "log_line": 4087,
+            "parameters": "(fmt='fp16')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_recycled_default_addresses_remain_distinct_closed_allocation_lifetimes",
+            "log_line": 4088,
+            "parameters": "(fmt='bf16')",
+            "status": "FAIL"
+          }
+        ],
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_recycled_default_addresses_remain_distinct_closed_allocation_lifetimes",
+        "start_line": 4086
+      },
+      {
+        "failed_subtests": [
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_reported_release_failure_remains_failed_after_actual_host_cleanup",
+            "log_line": 4090,
+            "parameters": "(fmt='fp16', policy='per_operation')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_reported_release_failure_remains_failed_after_actual_host_cleanup",
+            "log_line": 4091,
+            "parameters": "(fmt='fp16', policy='reusable_single_tile')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_reported_release_failure_remains_failed_after_actual_host_cleanup",
+            "log_line": 4092,
+            "parameters": "(fmt='bf16', policy='per_operation')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_reported_release_failure_remains_failed_after_actual_host_cleanup",
+            "log_line": 4093,
+            "parameters": "(fmt='bf16', policy='reusable_single_tile')",
+            "status": "FAIL"
+          }
+        ],
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_reported_release_failure_remains_failed_after_actual_host_cleanup",
+        "start_line": 4089
+      },
+      {
+        "failed_subtests": [
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost",
+            "log_line": 4095,
+            "parameters": "(fmt='fp16', policy='per_operation')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost",
+            "log_line": 4096,
+            "parameters": "(fmt='fp16', policy='reusable_single_tile')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost",
+            "log_line": 4097,
+            "parameters": "(fmt='bf16', policy='per_operation')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost",
+            "log_line": 4098,
+            "parameters": "(fmt='bf16', policy='reusable_single_tile')",
+            "status": "FAIL"
+          }
+        ],
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost",
+        "start_line": 4094
+      },
+      {
+        "failed_subtests": [
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+            "log_line": 4100,
+            "parameters": "(fmt='fp16', policy='per_operation', fault='module_failure')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+            "log_line": 4101,
+            "parameters": "(fmt='fp16', policy='per_operation', fault='bad_address')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+            "log_line": 4102,
+            "parameters": "(fmt='fp16', policy='per_operation', fault='partial_enqueue')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+            "log_line": 4103,
+            "parameters": "(fmt='fp16', policy='reusable_single_tile', fault='module_failure')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+            "log_line": 4104,
+            "parameters": "(fmt='fp16', policy='reusable_single_tile', fault='bad_address')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+            "log_line": 4105,
+            "parameters": "(fmt='fp16', policy='reusable_single_tile', fault='partial_enqueue')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+            "log_line": 4106,
+            "parameters": "(fmt='bf16', policy='per_operation', fault='module_failure')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+            "log_line": 4107,
+            "parameters": "(fmt='bf16', policy='per_operation', fault='bad_address')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+            "log_line": 4108,
+            "parameters": "(fmt='bf16', policy='per_operation', fault='partial_enqueue')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+            "log_line": 4109,
+            "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='module_failure')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+            "log_line": 4110,
+            "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='bad_address')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+            "log_line": 4111,
+            "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='partial_enqueue')",
+            "status": "FAIL"
+          }
+        ],
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+        "start_line": 4099
+      },
+      {
+        "failed_subtests": [
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+            "log_line": 4113,
+            "parameters": "(fmt='fp16', policy='per_operation', fault='second_open')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+            "log_line": 4114,
+            "parameters": "(fmt='fp16', policy='per_operation', fault='premature_release')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+            "log_line": 4115,
+            "parameters": "(fmt='fp16', policy='reusable_single_tile', fault='second_open')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+            "log_line": 4116,
+            "parameters": "(fmt='fp16', policy='reusable_single_tile', fault='premature_release')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+            "log_line": 4117,
+            "parameters": "(fmt='bf16', policy='per_operation', fault='second_open')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+            "log_line": 4118,
+            "parameters": "(fmt='bf16', policy='per_operation', fault='premature_release')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+            "log_line": 4119,
+            "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='second_open')",
+            "status": "FAIL"
+          },
+          {
+            "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+            "log_line": 4120,
+            "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='premature_release')",
+            "status": "FAIL"
+          }
+        ],
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+        "start_line": 4112
+      }
+    ],
+    "failed_parent_method_ids": 8,
+    "failed_subtest_events": 55,
+    "failure_error_details": [
+      {
+        "class_name": "test_p06_workspace_edges.WorkspaceEdgeHostTests",
+        "classification": "resource_disk_reserve_class_setup_error",
+        "confidence": "high",
+        "detail_line": 4660,
+        "exit_code": null,
+        "header": "ERROR: setUpClass (test_p06_workspace_edges.WorkspaceEdgeHostTests)",
+        "process_started": "not retained; no launch is strongly supported by helper/monitor source and exit None",
+        "reason": "disk_reserve",
+        "traceback_sha256": "5d75dda93baa539b7ce4269fb17e8664ecb02000f71695a087e672e95047bdfa"
+      },
+      {
+        "class_name": "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests",
+        "classification": "resource_disk_reserve_class_setup_error",
+        "confidence": "high",
+        "detail_line": 4671,
+        "exit_code": null,
+        "header": "ERROR: setUpClass (test_p06_workspace_model_guard.WorkspaceModelGuardHostTests)",
+        "process_started": "not retained; no launch is strongly supported by helper/monitor source and exit None",
+        "reason": "disk_reserve",
+        "traceback_sha256": "0e24943fe0804dcac7b74bde202a940095910070b6ec50f994923c3ee7e19f91"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4682,
+        "exit_code": null,
+        "header": "FAIL: test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass) (fmt='bf16', policy='per_operation', fault='lingering_charge')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+        "parameters": "(fmt='bf16', policy='per_operation', fault='lingering_charge')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "f913b090f634b0b028689f389f4ae23bc48d9a5b6209da423f9fc17b44a2d1a0"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4695,
+        "exit_code": null,
+        "header": "FAIL: test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass) (fmt='bf16', policy='per_operation', fault='capacity_drift')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+        "parameters": "(fmt='bf16', policy='per_operation', fault='capacity_drift')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "f913b090f634b0b028689f389f4ae23bc48d9a5b6209da423f9fc17b44a2d1a0"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4708,
+        "exit_code": null,
+        "header": "FAIL: test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass) (fmt='bf16', policy='per_operation', fault='memory_failure')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+        "parameters": "(fmt='bf16', policy='per_operation', fault='memory_failure')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "f913b090f634b0b028689f389f4ae23bc48d9a5b6209da423f9fc17b44a2d1a0"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4721,
+        "exit_code": null,
+        "header": "FAIL: test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass) (fmt='bf16', policy='reusable_single_tile', fault='allocation_charge')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+        "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='allocation_charge')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "f913b090f634b0b028689f389f4ae23bc48d9a5b6209da423f9fc17b44a2d1a0"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4734,
+        "exit_code": null,
+        "header": "FAIL: test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass) (fmt='bf16', policy='reusable_single_tile', fault='lingering_charge')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+        "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='lingering_charge')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "f913b090f634b0b028689f389f4ae23bc48d9a5b6209da423f9fc17b44a2d1a0"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4747,
+        "exit_code": null,
+        "header": "FAIL: test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass) (fmt='bf16', policy='reusable_single_tile', fault='capacity_drift')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+        "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='capacity_drift')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "f913b090f634b0b028689f389f4ae23bc48d9a5b6209da423f9fc17b44a2d1a0"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4760,
+        "exit_code": null,
+        "header": "FAIL: test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass) (fmt='bf16', policy='reusable_single_tile', fault='memory_failure')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+        "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='memory_failure')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "f913b090f634b0b028689f389f4ae23bc48d9a5b6209da423f9fc17b44a2d1a0"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4773,
+        "exit_code": null,
+        "header": "FAIL: test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open) (fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/missing'))",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+        "parameters": "(fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/missing'))",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "11a325584907b4f8510656429917bbc1a58011a8af3a3910b322033e5f66f9a5"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4784,
+        "exit_code": null,
+        "header": "FAIL: test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open) (fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules'))",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+        "parameters": "(fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules'))",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "11a325584907b4f8510656429917bbc1a58011a8af3a3910b322033e5f66f9a5"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4795,
+        "exit_code": null,
+        "header": "FAIL: test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open) (fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/0'))",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+        "parameters": "(fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/0'))",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "11a325584907b4f8510656429917bbc1a58011a8af3a3910b322033e5f66f9a5"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4806,
+        "exit_code": null,
+        "header": "FAIL: test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open) (fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/15'))",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+        "parameters": "(fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/15'))",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "11a325584907b4f8510656429917bbc1a58011a8af3a3910b322033e5f66f9a5"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4817,
+        "exit_code": null,
+        "header": "FAIL: test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open) (fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/16777217'))",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+        "parameters": "(fmt='fp16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/16777217'))",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "11a325584907b4f8510656429917bbc1a58011a8af3a3910b322033e5f66f9a5"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4828,
+        "exit_code": null,
+        "header": "FAIL: test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open) (fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/missing'))",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+        "parameters": "(fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/missing'))",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "11a325584907b4f8510656429917bbc1a58011a8af3a3910b322033e5f66f9a5"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4839,
+        "exit_code": null,
+        "header": "FAIL: test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open) (fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules'))",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+        "parameters": "(fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules'))",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "11a325584907b4f8510656429917bbc1a58011a8af3a3910b322033e5f66f9a5"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4850,
+        "exit_code": null,
+        "header": "FAIL: test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open) (fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/0'))",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+        "parameters": "(fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/0'))",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "11a325584907b4f8510656429917bbc1a58011a8af3a3910b322033e5f66f9a5"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4861,
+        "exit_code": null,
+        "header": "FAIL: test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open) (fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/15'))",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+        "parameters": "(fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/15'))",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "11a325584907b4f8510656429917bbc1a58011a8af3a3910b322033e5f66f9a5"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4872,
+        "exit_code": null,
+        "header": "FAIL: test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open) (fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/16777217'))",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+        "parameters": "(fmt='bf16', module=PosixPath('/workspace/scratch/101d52695253/p06-workspace-caller-6jd7xcpk/modules/16777217'))",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "11a325584907b4f8510656429917bbc1a58011a8af3a3910b322033e5f66f9a5"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4883,
+        "exit_code": null,
+        "header": "FAIL: test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence) (fmt='fp16', policy='per_operation', size=16)",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+        "parameters": "(fmt='fp16', policy='per_operation', size=16)",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "1968a56c170507488630cef2fe6d3f6d9d1b7f61e6de045b46407c6dc88ed111"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4896,
+        "exit_code": null,
+        "header": "FAIL: test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence) (fmt='fp16', policy='per_operation', size=16777216)",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+        "parameters": "(fmt='fp16', policy='per_operation', size=16777216)",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "1968a56c170507488630cef2fe6d3f6d9d1b7f61e6de045b46407c6dc88ed111"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4909,
+        "exit_code": null,
+        "header": "FAIL: test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence) (fmt='fp16', policy='reusable_single_tile', size=16)",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+        "parameters": "(fmt='fp16', policy='reusable_single_tile', size=16)",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "1968a56c170507488630cef2fe6d3f6d9d1b7f61e6de045b46407c6dc88ed111"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4922,
+        "exit_code": null,
+        "header": "FAIL: test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence) (fmt='fp16', policy='reusable_single_tile', size=16777216)",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+        "parameters": "(fmt='fp16', policy='reusable_single_tile', size=16777216)",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "1968a56c170507488630cef2fe6d3f6d9d1b7f61e6de045b46407c6dc88ed111"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4935,
+        "exit_code": null,
+        "header": "FAIL: test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence) (fmt='bf16', policy='per_operation', size=16)",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+        "parameters": "(fmt='bf16', policy='per_operation', size=16)",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "1968a56c170507488630cef2fe6d3f6d9d1b7f61e6de045b46407c6dc88ed111"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4948,
+        "exit_code": null,
+        "header": "FAIL: test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence) (fmt='bf16', policy='per_operation', size=16777216)",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+        "parameters": "(fmt='bf16', policy='per_operation', size=16777216)",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "1968a56c170507488630cef2fe6d3f6d9d1b7f61e6de045b46407c6dc88ed111"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4961,
+        "exit_code": null,
+        "header": "FAIL: test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence) (fmt='bf16', policy='reusable_single_tile', size=16)",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+        "parameters": "(fmt='bf16', policy='reusable_single_tile', size=16)",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "1968a56c170507488630cef2fe6d3f6d9d1b7f61e6de045b46407c6dc88ed111"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4974,
+        "exit_code": null,
+        "header": "FAIL: test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence) (fmt='bf16', policy='reusable_single_tile', size=16777216)",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+        "parameters": "(fmt='bf16', policy='reusable_single_tile', size=16777216)",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "1968a56c170507488630cef2fe6d3f6d9d1b7f61e6de045b46407c6dc88ed111"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 4987,
+        "exit_code": null,
+        "header": "FAIL: test_recycled_default_addresses_remain_distinct_closed_allocation_lifetimes (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_recycled_default_addresses_remain_distinct_closed_allocation_lifetimes) (fmt='fp16')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_recycled_default_addresses_remain_distinct_closed_allocation_lifetimes",
+        "parameters": "(fmt='fp16')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "80c29ef0853bee7d54a5a4a51098b7a1602cbffb49fe70e6d43f631bbf0ae5ff"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5001,
+        "exit_code": null,
+        "header": "FAIL: test_recycled_default_addresses_remain_distinct_closed_allocation_lifetimes (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_recycled_default_addresses_remain_distinct_closed_allocation_lifetimes) (fmt='bf16')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_recycled_default_addresses_remain_distinct_closed_allocation_lifetimes",
+        "parameters": "(fmt='bf16')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "80c29ef0853bee7d54a5a4a51098b7a1602cbffb49fe70e6d43f631bbf0ae5ff"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5015,
+        "exit_code": null,
+        "header": "FAIL: test_reported_release_failure_remains_failed_after_actual_host_cleanup (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_reported_release_failure_remains_failed_after_actual_host_cleanup) (fmt='fp16', policy='per_operation')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_reported_release_failure_remains_failed_after_actual_host_cleanup",
+        "parameters": "(fmt='fp16', policy='per_operation')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "d50232fab849a53560d5e3e8e01797711fc7016e9af86442200ad9387cdf0e69"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5029,
+        "exit_code": null,
+        "header": "FAIL: test_reported_release_failure_remains_failed_after_actual_host_cleanup (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_reported_release_failure_remains_failed_after_actual_host_cleanup) (fmt='fp16', policy='reusable_single_tile')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_reported_release_failure_remains_failed_after_actual_host_cleanup",
+        "parameters": "(fmt='fp16', policy='reusable_single_tile')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "d50232fab849a53560d5e3e8e01797711fc7016e9af86442200ad9387cdf0e69"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5043,
+        "exit_code": null,
+        "header": "FAIL: test_reported_release_failure_remains_failed_after_actual_host_cleanup (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_reported_release_failure_remains_failed_after_actual_host_cleanup) (fmt='bf16', policy='per_operation')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_reported_release_failure_remains_failed_after_actual_host_cleanup",
+        "parameters": "(fmt='bf16', policy='per_operation')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "d50232fab849a53560d5e3e8e01797711fc7016e9af86442200ad9387cdf0e69"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5057,
+        "exit_code": null,
+        "header": "FAIL: test_reported_release_failure_remains_failed_after_actual_host_cleanup (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_reported_release_failure_remains_failed_after_actual_host_cleanup) (fmt='bf16', policy='reusable_single_tile')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_reported_release_failure_remains_failed_after_actual_host_cleanup",
+        "parameters": "(fmt='bf16', policy='reusable_single_tile')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "d50232fab849a53560d5e3e8e01797711fc7016e9af86442200ad9387cdf0e69"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5071,
+        "exit_code": null,
+        "header": "FAIL: test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost) (fmt='fp16', policy='per_operation')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost",
+        "parameters": "(fmt='fp16', policy='per_operation')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "1080256aaf140d8f2f4a306c9fc0ce12dbcdc4117d840860efa4e2a1bc25b054"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5085,
+        "exit_code": null,
+        "header": "FAIL: test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost) (fmt='fp16', policy='reusable_single_tile')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost",
+        "parameters": "(fmt='fp16', policy='reusable_single_tile')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "1080256aaf140d8f2f4a306c9fc0ce12dbcdc4117d840860efa4e2a1bc25b054"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5099,
+        "exit_code": null,
+        "header": "FAIL: test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost) (fmt='bf16', policy='per_operation')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost",
+        "parameters": "(fmt='bf16', policy='per_operation')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "1080256aaf140d8f2f4a306c9fc0ce12dbcdc4117d840860efa4e2a1bc25b054"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5113,
+        "exit_code": null,
+        "header": "FAIL: test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost) (fmt='bf16', policy='reusable_single_tile')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost",
+        "parameters": "(fmt='bf16', policy='reusable_single_tile')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "1080256aaf140d8f2f4a306c9fc0ce12dbcdc4117d840860efa4e2a1bc25b054"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5127,
+        "exit_code": null,
+        "header": "FAIL: test_setup_address_and_partial_submission_failures_do_not_emit_success (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success) (fmt='fp16', policy='per_operation', fault='module_failure')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+        "parameters": "(fmt='fp16', policy='per_operation', fault='module_failure')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "5867b6794dc4b98077fcac1443b8a23ebde18add22f513580a7c8429fa88c120"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5140,
+        "exit_code": null,
+        "header": "FAIL: test_setup_address_and_partial_submission_failures_do_not_emit_success (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success) (fmt='fp16', policy='per_operation', fault='bad_address')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+        "parameters": "(fmt='fp16', policy='per_operation', fault='bad_address')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "5867b6794dc4b98077fcac1443b8a23ebde18add22f513580a7c8429fa88c120"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5153,
+        "exit_code": null,
+        "header": "FAIL: test_setup_address_and_partial_submission_failures_do_not_emit_success (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success) (fmt='fp16', policy='per_operation', fault='partial_enqueue')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+        "parameters": "(fmt='fp16', policy='per_operation', fault='partial_enqueue')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "5867b6794dc4b98077fcac1443b8a23ebde18add22f513580a7c8429fa88c120"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5166,
+        "exit_code": null,
+        "header": "FAIL: test_setup_address_and_partial_submission_failures_do_not_emit_success (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success) (fmt='fp16', policy='reusable_single_tile', fault='module_failure')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+        "parameters": "(fmt='fp16', policy='reusable_single_tile', fault='module_failure')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "5867b6794dc4b98077fcac1443b8a23ebde18add22f513580a7c8429fa88c120"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5179,
+        "exit_code": null,
+        "header": "FAIL: test_setup_address_and_partial_submission_failures_do_not_emit_success (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success) (fmt='fp16', policy='reusable_single_tile', fault='bad_address')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+        "parameters": "(fmt='fp16', policy='reusable_single_tile', fault='bad_address')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "5867b6794dc4b98077fcac1443b8a23ebde18add22f513580a7c8429fa88c120"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5192,
+        "exit_code": null,
+        "header": "FAIL: test_setup_address_and_partial_submission_failures_do_not_emit_success (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success) (fmt='fp16', policy='reusable_single_tile', fault='partial_enqueue')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+        "parameters": "(fmt='fp16', policy='reusable_single_tile', fault='partial_enqueue')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "5867b6794dc4b98077fcac1443b8a23ebde18add22f513580a7c8429fa88c120"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5205,
+        "exit_code": null,
+        "header": "FAIL: test_setup_address_and_partial_submission_failures_do_not_emit_success (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success) (fmt='bf16', policy='per_operation', fault='module_failure')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+        "parameters": "(fmt='bf16', policy='per_operation', fault='module_failure')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "5867b6794dc4b98077fcac1443b8a23ebde18add22f513580a7c8429fa88c120"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5218,
+        "exit_code": null,
+        "header": "FAIL: test_setup_address_and_partial_submission_failures_do_not_emit_success (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success) (fmt='bf16', policy='per_operation', fault='bad_address')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+        "parameters": "(fmt='bf16', policy='per_operation', fault='bad_address')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "5867b6794dc4b98077fcac1443b8a23ebde18add22f513580a7c8429fa88c120"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5231,
+        "exit_code": null,
+        "header": "FAIL: test_setup_address_and_partial_submission_failures_do_not_emit_success (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success) (fmt='bf16', policy='per_operation', fault='partial_enqueue')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+        "parameters": "(fmt='bf16', policy='per_operation', fault='partial_enqueue')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "5867b6794dc4b98077fcac1443b8a23ebde18add22f513580a7c8429fa88c120"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5244,
+        "exit_code": null,
+        "header": "FAIL: test_setup_address_and_partial_submission_failures_do_not_emit_success (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success) (fmt='bf16', policy='reusable_single_tile', fault='module_failure')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+        "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='module_failure')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "5867b6794dc4b98077fcac1443b8a23ebde18add22f513580a7c8429fa88c120"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5257,
+        "exit_code": null,
+        "header": "FAIL: test_setup_address_and_partial_submission_failures_do_not_emit_success (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success) (fmt='bf16', policy='reusable_single_tile', fault='bad_address')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+        "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='bad_address')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "5867b6794dc4b98077fcac1443b8a23ebde18add22f513580a7c8429fa88c120"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5270,
+        "exit_code": null,
+        "header": "FAIL: test_setup_address_and_partial_submission_failures_do_not_emit_success (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success) (fmt='bf16', policy='reusable_single_tile', fault='partial_enqueue')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+        "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='partial_enqueue')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "5867b6794dc4b98077fcac1443b8a23ebde18add22f513580a7c8429fa88c120"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5283,
+        "exit_code": null,
+        "header": "FAIL: test_surplus_native_device_open_and_premature_buffer_release_are_observed (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed) (fmt='fp16', policy='per_operation', fault='second_open')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+        "parameters": "(fmt='fp16', policy='per_operation', fault='second_open')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "e48accbd05cbbf5dcd21636916f969be3dc6e9680a06e1f20a99c357f5359ede"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5297,
+        "exit_code": null,
+        "header": "FAIL: test_surplus_native_device_open_and_premature_buffer_release_are_observed (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed) (fmt='fp16', policy='per_operation', fault='premature_release')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+        "parameters": "(fmt='fp16', policy='per_operation', fault='premature_release')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "e48accbd05cbbf5dcd21636916f969be3dc6e9680a06e1f20a99c357f5359ede"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5311,
+        "exit_code": null,
+        "header": "FAIL: test_surplus_native_device_open_and_premature_buffer_release_are_observed (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed) (fmt='fp16', policy='reusable_single_tile', fault='second_open')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+        "parameters": "(fmt='fp16', policy='reusable_single_tile', fault='second_open')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "e48accbd05cbbf5dcd21636916f969be3dc6e9680a06e1f20a99c357f5359ede"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5325,
+        "exit_code": null,
+        "header": "FAIL: test_surplus_native_device_open_and_premature_buffer_release_are_observed (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed) (fmt='fp16', policy='reusable_single_tile', fault='premature_release')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+        "parameters": "(fmt='fp16', policy='reusable_single_tile', fault='premature_release')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "e48accbd05cbbf5dcd21636916f969be3dc6e9680a06e1f20a99c357f5359ede"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5339,
+        "exit_code": null,
+        "header": "FAIL: test_surplus_native_device_open_and_premature_buffer_release_are_observed (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed) (fmt='bf16', policy='per_operation', fault='second_open')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+        "parameters": "(fmt='bf16', policy='per_operation', fault='second_open')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "e48accbd05cbbf5dcd21636916f969be3dc6e9680a06e1f20a99c357f5359ede"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5353,
+        "exit_code": null,
+        "header": "FAIL: test_surplus_native_device_open_and_premature_buffer_release_are_observed (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed) (fmt='bf16', policy='per_operation', fault='premature_release')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+        "parameters": "(fmt='bf16', policy='per_operation', fault='premature_release')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "e48accbd05cbbf5dcd21636916f969be3dc6e9680a06e1f20a99c357f5359ede"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5367,
+        "exit_code": null,
+        "header": "FAIL: test_surplus_native_device_open_and_premature_buffer_release_are_observed (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed) (fmt='bf16', policy='reusable_single_tile', fault='second_open')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+        "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='second_open')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "e48accbd05cbbf5dcd21636916f969be3dc6e9680a06e1f20a99c357f5359ede"
+      },
+      {
+        "classification": "resource_admission_block_before_child_launch",
+        "confidence": "high",
+        "detail_line": 5381,
+        "exit_code": null,
+        "header": "FAIL: test_surplus_native_device_open_and_premature_buffer_release_are_observed (test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed) (fmt='bf16', policy='reusable_single_tile', fault='premature_release')",
+        "id": "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed",
+        "parameters": "(fmt='bf16', policy='reusable_single_tile', fault='premature_release')",
+        "process_started": false,
+        "reason": "disk_reserve",
+        "traceback_sha256": "e48accbd05cbbf5dcd21636916f969be3dc6e9680a06e1f20a99c357f5359ede"
+      }
+    ],
+    "method_skip_events": 21,
+    "method_skip_events_detail": [
+      {
+        "id": "test_p06_dependency_build.DependencyBuildTests.test_actual_cmake_records_static_archive_index_and_shared_link_only",
+        "log_line": 2563,
+        "reason": "skipped 'CMake is required for the actual launcher integration fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_cmake_archiver_and_indexer_cannot_bypass_retained_wrappers",
+        "log_line": 2742,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_cmake_cannot_enable_fetches_even_with_matching_configure_arguments",
+        "log_line": 2743,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_cmake_cannot_select_another_local_fetched_source",
+        "log_line": 2744,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_cmake_language_pic_and_selected_library_modes_cannot_change",
+        "log_line": 2745,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_extension_compiler_and_linker_selection_remain_fixed",
+        "log_line": 2746,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_extension_map_substitution_reaches_its_exact_link_recipe",
+        "log_line": 2747,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_external_and_standard_fmt_changes_update_declared_and_invoked_settings",
+        "log_line": 2748,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_positive_fixture_reaches_complete_outer_recipe_validation",
+        "log_line": 2749,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_selected_cmake_compiler_make_and_link_map_cannot_change",
+        "log_line": 2750,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_softfloat_archiver_and_archive_mode_cannot_change",
+        "log_line": 2751,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_softfloat_compiler_substitution_reaches_reviewed_launcher_recipe",
+        "log_line": 2752,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_softfloat_round_odd_and_fast_division_removal_reach_recipe_gate",
+        "log_line": 2753,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_softfloat_tls_removal_changes_both_declaration_and_compile_recipe",
+        "log_line": 2754,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_softfloat_tls_replacement_changes_both_declaration_and_compile_recipe",
+        "log_line": 2755,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_wrong_softfloat_specialization_changes_make_and_include_together",
+        "log_line": 2756,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_receipt.OuterRecipeReviewTests.test_cmake_launcher_cannot_be_consistently_substituted_in_options_and_outer_argv",
+        "log_line": 2817,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_receipt.OuterRecipeReviewTests.test_make_target_specialization_and_nested_job_changes_are_rejected",
+        "log_line": 2818,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_receipt.OuterRecipeReviewTests.test_retained_archive_wrapper_must_execute_the_exact_recorder",
+        "log_line": 2819,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_receipt.OuterRecipeReviewTests.test_reviewed_exact_command_metadata_and_wrapper_bytes_pass",
+        "log_line": 2820,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      },
+      {
+        "id": "test_p06_dependency_receipt.OuterRecipeReviewTests.test_unbounded_environment_resources_and_extra_fields_are_rejected",
+        "log_line": 2821,
+        "reason": "skipped 'CMake identity is required for the reviewed recipe metadata fixture'"
+      }
+    ],
+    "missing_method_rows": 38,
+    "nonpassing_ids": {
+      "E": [
+        "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_completion_query_error_survives_later_prefix_timeout_and_successful_drain",
+        "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_completion_query_timeouts_are_retryable_without_erasing_an_earlier_wait_error",
+        "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_context_allocation_error_and_rollback_cleanup_error_remain_distinct_and_poison",
+        "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_context_other_exception_and_rollback_cleanup_error_poison_without_reopening",
+        "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_each_context_allocation_failure_returns_reservation_and_frees_owned_memory",
+        "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_each_context_other_exception_preserves_internal_error_and_clean_retry",
+        "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_each_operation_allocation_failure_returns_lease_before_native_queue_creation",
+        "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_each_operation_other_exception_releases_staging_and_allows_healthy_retry",
+        "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_each_partial_dispatch_prefix_poll_timeout_preserves_original_submit_failure",
+        "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_each_prefix_event_timeout_retains_resources_and_can_complete_on_retry",
+        "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_each_profiling_error_after_timeout_is_separate_from_successful_completion",
+        "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_simultaneous_context_create_has_exactly_one_native_open_until_both_return",
+        "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_all_default_signatures_and_three_stage_models_allow_serial_healthy_handoffs",
+        "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_direct_operation_and_owner_cleanup_failures_poison_real_model_creation",
+        "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_every_partial_model_dispatch_retains_shared_guard_through_incomplete_close",
+        "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_idle_live_and_waited_direct_owners_exclude_real_models_until_owner_close",
+        "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_idle_suspended_and_terminal_model_destruction_returns_healthy_reservation",
+        "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_model_cleanup_destructor_and_rollback_failures_poison_all_managed_creation",
+        "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_model_setup_and_initial_memory_query_failures_return_shared_reservation",
+        "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_nondefault_and_unknown_model_policies_reject_before_native_open",
+        "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_operation_outliving_direct_owner_excludes_real_model_until_completed_close",
+        "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_real_model_excludes_models_and_matmul_when_idle_suspended_and_terminal",
+        "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_terminal_arithmetic_and_runtime_failures_retain_owner_until_explicit_close"
+      ],
+      "F": [
+        "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_live_memory_undercharging_lingering_charge_and_capacity_drift_cannot_pass",
+        "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_missing_short_directory_and_oversized_module_inputs_reject_before_native_open",
+        "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_module_minimum_and_maximum_sizes_are_read_with_exact_cli_order_independence",
+        "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_recycled_default_addresses_remain_distinct_closed_allocation_lifetimes",
+        "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_reported_release_failure_remains_failed_after_actual_host_cleanup",
+        "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_requested_payload_is_distinct_from_reconciled_rounded_allocator_cost",
+        "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_setup_address_and_partial_submission_failures_do_not_emit_success",
+        "test_p06_workspace_caller.WorkspaceCallerIntegrationTests.test_surplus_native_device_open_and_premature_buffer_release_are_observed"
+      ],
+      "K": [
+        "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_actual_tiny_records_and_generated_recipes_pass_without_semantic_patches",
+        "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_generated_archive_and_index_commands_cannot_bypass_wrappers_after_rehash",
+        "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_generated_release_and_linker_flags_reject_after_descriptor_rehash",
+        "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_self_consistent_archive_argv_change_reaches_generated_recipe_join",
+        "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_self_consistent_executable_substitution_reaches_selected_tool_identity",
+        "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_self_consistent_map_argv_changes_reach_retained_link_map_join",
+        "test_p06_dependency_receipt.ActualCMakeReviewTests.test_actual_generated_cache_flags_archives_and_links_pass",
+        "test_p06_dependency_receipt.ActualCMakeReviewTests.test_actual_shared_maps_and_equivalent_relative_loads_pass",
+        "test_p06_dependency_receipt.ActualCMakeReviewTests.test_changed_cmake_cache_configuration_is_rejected_after_rehash",
+        "test_p06_dependency_receipt.ActualCMakeReviewTests.test_changed_cmake_link_recipe_is_rejected_after_rehash",
+        "test_p06_dependency_receipt.ActualCMakeReviewTests.test_changed_cmake_target_flags_are_rejected_after_rehash",
+        "test_p06_dependency_receipt.ActualCMakeReviewTests.test_omitted_or_duplicate_generated_target_is_rejected",
+        "test_p06_dependency_receipt.ActualCMakeReviewTests.test_only_already_admitted_compiler_archives_are_exempt_inside_owned_roots",
+        "test_p06_dependency_receipt.ActualCMakeReviewTests.test_rehashed_unplanned_source_workspace_and_alias_loads_reject",
+        "test_p06_dependency_receipt.ActualCMakeReviewTests.test_relative_duplicate_direct_load_rejects"
+      ],
+      "S": [
+        "test_p06_dependency_build.DependencyBuildTests.test_actual_cmake_records_static_archive_index_and_shared_link_only",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_cmake_archiver_and_indexer_cannot_bypass_retained_wrappers",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_cmake_cannot_enable_fetches_even_with_matching_configure_arguments",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_cmake_cannot_select_another_local_fetched_source",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_cmake_language_pic_and_selected_library_modes_cannot_change",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_extension_compiler_and_linker_selection_remain_fixed",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_extension_map_substitution_reaches_its_exact_link_recipe",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_external_and_standard_fmt_changes_update_declared_and_invoked_settings",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_positive_fixture_reaches_complete_outer_recipe_validation",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_selected_cmake_compiler_make_and_link_map_cannot_change",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_softfloat_archiver_and_archive_mode_cannot_change",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_softfloat_compiler_substitution_reaches_reviewed_launcher_recipe",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_softfloat_round_odd_and_fast_division_removal_reach_recipe_gate",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_softfloat_tls_removal_changes_both_declaration_and_compile_recipe",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_softfloat_tls_replacement_changes_both_declaration_and_compile_recipe",
+        "test_p06_dependency_option_controls.OuterRecipeOptionControls.test_wrong_softfloat_specialization_changes_make_and_include_together",
+        "test_p06_dependency_receipt.OuterRecipeReviewTests.test_cmake_launcher_cannot_be_consistently_substituted_in_options_and_outer_argv",
+        "test_p06_dependency_receipt.OuterRecipeReviewTests.test_make_target_specialization_and_nested_job_changes_are_rejected",
+        "test_p06_dependency_receipt.OuterRecipeReviewTests.test_retained_archive_wrapper_must_execute_the_exact_recorder",
+        "test_p06_dependency_receipt.OuterRecipeReviewTests.test_reviewed_exact_command_metadata_and_wrapper_bytes_pass",
+        "test_p06_dependency_receipt.OuterRecipeReviewTests.test_unbounded_environment_resources_and_extra_fields_are_rejected"
+      ]
+    },
+    "outcome": "FAILED",
+    "passed_method_ids": 4566,
+    "passed_order_sha256": "d274e9b05a22121e1846cb23bcd2f518c80d2679a72c260204eea1ec6e0ae0c3",
+    "result_receipt": {
+      "elapsed_seconds": 2974.16,
+      "errors": 2,
+      "failures": 55,
+      "host_only": true,
+      "native_execution": "not_run",
+      "skips": 23,
+      "source_changed": [],
+      "success": false,
+      "tests_run": 4595,
+      "unique_test_ids": 4633
+    },
+    "run_order_sha256": "cf50ed74987ea6553e7b255bcb64f500027f9715938f5fd994882dc096d1e2e6",
+    "selected_ids": 4633,
+    "selected_modules": 282,
+    "selected_order_sha256": "06fa38ddcb33e477b338b0431ee7b85cbdbea28f507a184c3845941b461a07b6",
+    "setup_events": [
+      {
+        "class": "test_p06_dependency_option_controls.ActualGeneratedOptionControls",
+        "event": "setUpClass",
+        "log_line": 2741,
+        "status_text": "skipped 'CMake is required for the actual launcher integration fixture'",
+        "suppressed_count": 6,
+        "suppressed_ids": [
+          "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_actual_tiny_records_and_generated_recipes_pass_without_semantic_patches",
+          "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_generated_archive_and_index_commands_cannot_bypass_wrappers_after_rehash",
+          "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_generated_release_and_linker_flags_reject_after_descriptor_rehash",
+          "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_self_consistent_archive_argv_change_reaches_generated_recipe_join",
+          "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_self_consistent_executable_substitution_reaches_selected_tool_identity",
+          "test_p06_dependency_option_controls.ActualGeneratedOptionControls.test_self_consistent_map_argv_changes_reach_retained_link_map_join"
+        ]
+      },
+      {
+        "class": "test_p06_dependency_receipt.ActualCMakeReviewTests",
+        "event": "setUpClass",
+        "log_line": 2805,
+        "status_text": "skipped 'CMake is required for the actual launcher integration fixture'",
+        "suppressed_count": 9,
+        "suppressed_ids": [
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_actual_generated_cache_flags_archives_and_links_pass",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_actual_shared_maps_and_equivalent_relative_loads_pass",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_changed_cmake_cache_configuration_is_rejected_after_rehash",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_changed_cmake_link_recipe_is_rejected_after_rehash",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_changed_cmake_target_flags_are_rejected_after_rehash",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_omitted_or_duplicate_generated_target_is_rejected",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_only_already_admitted_compiler_archives_are_exempt_inside_owned_roots",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_rehashed_unplanned_source_workspace_and_alias_loads_reject",
+          "test_p06_dependency_receipt.ActualCMakeReviewTests.test_relative_duplicate_direct_load_rejects"
+        ]
+      },
+      {
+        "class": "test_p06_workspace_edges.WorkspaceEdgeHostTests",
+        "event": "setUpClass",
+        "log_line": 4153,
+        "status_text": "ERROR",
+        "suppressed_count": 12,
+        "suppressed_ids": [
+          "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_completion_query_error_survives_later_prefix_timeout_and_successful_drain",
+          "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_completion_query_timeouts_are_retryable_without_erasing_an_earlier_wait_error",
+          "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_context_allocation_error_and_rollback_cleanup_error_remain_distinct_and_poison",
+          "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_context_other_exception_and_rollback_cleanup_error_poison_without_reopening",
+          "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_each_context_allocation_failure_returns_reservation_and_frees_owned_memory",
+          "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_each_context_other_exception_preserves_internal_error_and_clean_retry",
+          "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_each_operation_allocation_failure_returns_lease_before_native_queue_creation",
+          "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_each_operation_other_exception_releases_staging_and_allows_healthy_retry",
+          "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_each_partial_dispatch_prefix_poll_timeout_preserves_original_submit_failure",
+          "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_each_prefix_event_timeout_retains_resources_and_can_complete_on_retry",
+          "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_each_profiling_error_after_timeout_is_separate_from_successful_completion",
+          "test_p06_workspace_edges.WorkspaceEdgeHostTests.test_simultaneous_context_create_has_exactly_one_native_open_until_both_return"
+        ]
+      },
+      {
+        "class": "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests",
+        "event": "setUpClass",
+        "log_line": 4154,
+        "status_text": "ERROR",
+        "suppressed_count": 11,
+        "suppressed_ids": [
+          "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_all_default_signatures_and_three_stage_models_allow_serial_healthy_handoffs",
+          "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_direct_operation_and_owner_cleanup_failures_poison_real_model_creation",
+          "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_every_partial_model_dispatch_retains_shared_guard_through_incomplete_close",
+          "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_idle_live_and_waited_direct_owners_exclude_real_models_until_owner_close",
+          "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_idle_suspended_and_terminal_model_destruction_returns_healthy_reservation",
+          "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_model_cleanup_destructor_and_rollback_failures_poison_all_managed_creation",
+          "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_model_setup_and_initial_memory_query_failures_return_shared_reservation",
+          "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_nondefault_and_unknown_model_policies_reject_before_native_open",
+          "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_operation_outliving_direct_owner_excludes_real_model_until_completed_close",
+          "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_real_model_excludes_models_and_matmul_when_idle_suspended_and_terminal",
+          "test_p06_workspace_model_guard.WorkspaceModelGuardHostTests.test_terminal_arithmetic_and_runtime_failures_retain_owner_until_explicit_close"
+        ]
+      }
+    ],
+    "status_by_selected_index": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPSPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPKKKKKKSSSSSSSSSSSSSSSPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPKKKKKKKKKPPPPPPPPPPPSSSSSPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPFFFFFFFFPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPEEEEEEEEEEEEEEEEEEEEEEEPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+    "status_code_order": "one character per ID in governance-test-ids.json; input hash retained below",
+    "status_codes": {
+      "E": "body omitted by errored class setup",
+      "F": "failed parent with failed subtests",
+      "K": "body omitted by skipped class setup",
+      "P": "passed method",
+      "S": "skipped method"
+    },
+    "unexpected_ids": [],
+    "unexplained_missing_ids": []
+  },
+  "historical_4527_comparison": {
+    "additions_by_module": {
+      "test_p05_replay_installation": 23,
+      "test_p05_replay_installation_identity": 8,
+      "test_p05_replay_lineage": 3,
+      "test_p05_replay_native": 16,
+      "test_p05_replay_native_closure": 6,
+      "test_p05_replay_nested_archives": 5,
+      "test_p05_retained_observation_records": 12,
+      "test_p05_torch_replay_driver": 33
+    },
+    "all_additions_are_p05": true,
+    "baseline_ids_omitted_from_current_selection": [],
+    "canonical_ids": 4527,
+    "current_broad_failure_not_overridden_by_historical_passes": true,
+    "current_nonpassing_baseline_ids": 67,
+    "current_passed_baseline_ids": 4460,
+    "current_skipped_body_ids_equal_historical_hosted_gaps": true,
+    "historical_pass_is_separate_revision_evidence": true,
+    "new_current_ids": 106,
+    "raw_hosted_passed": 4491,
+    "raw_passing_overlap": 23,
+    "raw_supplement_passed": 59,
+    "raw_unique_pass_union": 4527,
+    "single_full_zero_skip_invocation_proven": false,
+    "source_revision": "c0b44ce64665fe11895f869eea8c38c9b820d6f7",
+    "source_tree": "13450812d279d55f36a172fcf38653ff567f6c86"
+  },
+  "inputs": {
+    "../validation/governance-before.json": {
+      "sha256": "baac5686ac88eacddf474cc50936d1ce7a4988374458cd6a3937f779dd7d6ff2",
+      "size_bytes": 83129
+    },
+    "../validation/governance-result.json": {
+      "sha256": "7848ced4dbfef0c0581961af5198b0a302e6ce03f903b3b3c211dedf1ec4185a",
+      "size_bytes": 227
+    },
+    "../validation/governance-test-ids.json": {
+      "sha256": "2c184a256db83cac5ac9ec3969d0008bfca2ae81b493adafce21ff5c38d30517",
+      "size_bytes": 530155
+    },
+    "../validation/governance.log": {
+      "sha256": "d4107bfc39042cb13fe40871fec6ff449350b653c1996aef1570d191fd6bd6dc",
+      "size_bytes": 933635
+    },
+    "../validation/p05-suite-result.json": {
+      "sha256": "3d97d00b4c15ddf6b30f628704dca7f57d65743096c45c6c375f07d3b011b3dc",
+      "size_bytes": 567
+    },
+    "../validation/p05-suite-source-after.json": {
+      "sha256": "f7960ebb1d9becd85b3263b07057c37ee3b968713c1add9ff2eda99a4dd95a31",
+      "size_bytes": 5585
+    },
+    "../validation/p05-suite-source-before.json": {
+      "sha256": "f7960ebb1d9becd85b3263b07057c37ee3b968713c1add9ff2eda99a4dd95a31",
+      "size_bytes": 5585
+    },
+    "../validation/p05-suite.log": {
+      "sha256": "f6bfea08a30159e3904b7cd8027de223c80d31766b1f2712b6e5bc12df76277f",
+      "size_bytes": 622
+    },
+    "../validation/reader-core-suite-before.json": {
+      "sha256": "178b81afc2fc9e95a217b3c81223e8e9c202c505fd97dfc55c26ca5c310bcf0e",
+      "size_bytes": 7097
+    },
+    "../validation/reader-core-suite-result.json": {
+      "sha256": "3c97f61f6f9f8a8ebeceb382aa96587a63225aebbb189e215871267c2ce3a57f",
+      "size_bytes": 1027
+    },
+    "../validation/reader-core-suite-test-ids.json": {
+      "sha256": "3c8b2fc20574d367dda1a0a78d6b4e01224fd89d00c5069aeafde8198c933d53",
+      "size_bytes": 56668
+    },
+    "../validation/reader-core-suite.log": {
+      "sha256": "a9bfd834586b2699ae3f2b977ab6dfa5eafe15ffa5fcc20bb94208a6919b134d",
+      "size_bytes": 636
+    },
+    "../validation/run_governance.py": {
+      "sha256": "5776ccc1835b68535b31d1afdba88f481ced421f353ed9f9de80057d9f884cd6",
+      "size_bytes": 2290
+    },
+    "ci/project/baseline_process.py": {
+      "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+      "size_bytes": 12627
+    },
+    "ci/project/p05_execution_records.py": {
+      "sha256": "1f5c9f7d0e66de1537e952b9432e10543563c61eab164e1762416bae07fa7ffe",
+      "size_bytes": 21772
+    },
+    "ci/project/p05_installed_check.py": {
+      "sha256": "69d530bea385f2d0545cc677b8205585c42398f4ace2837b840b14d5cabfac5b",
+      "size_bytes": 33951
+    },
+    "ci/project/p05_replay_installation.py": {
+      "sha256": "759c6249ed503b9da66b077364fe481b52ac048eb29cecde1bf793bdaf14efc9",
+      "size_bytes": 46861
+    },
+    "ci/project/p05_replay_native.py": {
+      "sha256": "ec7808fd5b6fdfbce51fc28fba60fc8fd2c291ac1310d826f938b621137c4a1d",
+      "size_bytes": 43993
+    },
+    "ci/project/p05_torch_records.py": {
+      "sha256": "3ff925b09b3176b1f328101bfa9d062aac48f0c3f0939fd847646128f8587639",
+      "size_bytes": 14635
+    },
+    "ci/project/p05_torch_replay.py": {
+      "sha256": "737eafad91bccc251039bade0ee7af4ce976bbda3d983361d240420cd8158dd3",
+      "size_bytes": 43139
+    },
+    "ci/project/p06_dependency_build.py": {
+      "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+      "size_bytes": 32820
+    },
+    "ci/project/tensor_host_tools.py": {
+      "sha256": "ee664a6a70e9485e92158cc6c7870d0c13a223cface41763c4480c61a689382f",
+      "size_bytes": 949
+    },
+    "ci/project/test_p05_bundle.py": {
+      "sha256": "5e04c9bca36a3f822d3783867271fe56cdb38843ea97eea7114dba6eaf314b2e",
+      "size_bytes": 34513
+    },
+    "ci/project/test_p05_bundle_producer.py": {
+      "sha256": "3f89825a0ffe5ddfc2296db29b282c93b082b83a2d896ae3712df4775cb0acea",
+      "size_bytes": 21098
+    },
+    "ci/project/test_p05_ci_workflow.py": {
+      "sha256": "73f1bdd7ee03a05438d9a9ec0d90acd73a4f63fd693f1395acc7e31d6088f267",
+      "size_bytes": 14052
+    },
+    "ci/project/test_p05_execution_records.py": {
+      "sha256": "dc114451e46395f3386cdda9d487475e48160ee33ddf3b690f51e8f332c2013a",
+      "size_bytes": 22444
+    },
+    "ci/project/test_p05_governance_integration.py": {
+      "sha256": "6d30ee4a6415591f1673aaf1276f5ac49ccfb8a1e39dfb282fb4688c70392645",
+      "size_bytes": 5150
+    },
+    "ci/project/test_p05_installed_check.py": {
+      "sha256": "a2102c005f8ca2618b5d62d95dd53dbd5a54452f9094382f6615f8a6b75d9d42",
+      "size_bytes": 30431
+    },
+    "ci/project/test_p05_launcher.py": {
+      "sha256": "ad1150b6663f05e69c83c732bd9a34cd2fa984c6793862617e90eb1d81659b12",
+      "size_bytes": 19375
+    },
+    "ci/project/test_p05_native_binding.py": {
+      "sha256": "56d7bbcd854a8d9c1d1ed805f8eb64880f058799f7b586fc84a0723c4322bca5",
+      "size_bytes": 34563
+    },
+    "ci/project/test_p05_orchestration.py": {
+      "sha256": "c193396af8beb0c1a370b95ac1aa80060be3c1b9b048eeb0257e7bf501c30e4b",
+      "size_bytes": 22172
+    },
+    "ci/project/test_p05_packaging.py": {
+      "sha256": "5629c28a88b459d7e7637978193b353b809b229ba863c9421fefb8c298aa218d",
+      "size_bytes": 28802
+    },
+    "ci/project/test_p05_python_api.py": {
+      "sha256": "af6b5ed1aaeff080e9011bea9723e51119473bbcd900a80ed4591d5d37167165",
+      "size_bytes": 50638
+    },
+    "ci/project/test_p05_replay_installation.py": {
+      "sha256": "33d0fcf4d14b13be30976a8e02e3653533abe0f9391bc9ba4832271ddcc52cc3",
+      "size_bytes": 31185
+    },
+    "ci/project/test_p05_replay_installation_identity.py": {
+      "sha256": "34f1ba856b44dc323a82a4e1f869afbc97f939c6c1984c10da01d9ebe0cc0955",
+      "size_bytes": 7691
+    },
+    "ci/project/test_p05_replay_lineage.py": {
+      "sha256": "2a70ac7fe613b4a7bdb0366f5685b165c0a3713ff36f59d30ca40b69b621a19d",
+      "size_bytes": 7668
+    },
+    "ci/project/test_p05_replay_native.py": {
+      "sha256": "ad2ce215c5a58f638cd21130a1cf2a48935285826d7fe4173e14327fd1ae73dd",
+      "size_bytes": 16062
+    },
+    "ci/project/test_p05_replay_native_closure.py": {
+      "sha256": "a6b07ed62b471fafcb500932b729ff6d6e98be5a1eaef298953a16a1629985d8",
+      "size_bytes": 12586
+    },
+    "ci/project/test_p05_replay_nested_archives.py": {
+      "sha256": "f8c087ae8f6cc34f63b496a4bc57d0fc71dba798344e3f1a0bb5ceb624e0cae2",
+      "size_bytes": 4598
+    },
+    "ci/project/test_p05_retained_observation_records.py": {
+      "sha256": "39c13659ac9239e417005dc6cd8222b9d15470c474fb70db65db5f6aa4b0504c",
+      "size_bytes": 16354
+    },
+    "ci/project/test_p05_torch_adversarial.py": {
+      "sha256": "876d0aad8e99593980465224c8cf210c264578b215e707b86e8b5ff6804487e0",
+      "size_bytes": 5303
+    },
+    "ci/project/test_p05_torch_ci.py": {
+      "sha256": "5fad4e91f7869eb84a633b252b9fdbed06cdc8f0abc1de14cafabec97f0c65b7",
+      "size_bytes": 16015
+    },
+    "ci/project/test_p05_torch_contract.py": {
+      "sha256": "12d2aa4930446a218775dba23b288fb48f03b7feb062437e90c887884501cc6f",
+      "size_bytes": 4934
+    },
+    "ci/project/test_p05_torch_native_host_orchestration.py": {
+      "sha256": "7ef860514924dd131a4e8bb814a376e443f85d9971ef544129c7321dfe449781",
+      "size_bytes": 6207
+    },
+    "ci/project/test_p05_torch_orchestration.py": {
+      "sha256": "e0a54556260b6920bfa64ff5149a4f6994864cc9eb9c7daf64b56ae2c9c60197",
+      "size_bytes": 18501
+    },
+    "ci/project/test_p05_torch_records.py": {
+      "sha256": "aa92a04bb97b848c75440e81ae79b00d99fb52a0ee71601b177ffbb99d21b4e6",
+      "size_bytes": 14142
+    },
+    "ci/project/test_p05_torch_replay_driver.py": {
+      "sha256": "9a9b3439a5938ec7c0d416154207ff8170b51f25431b1a5ff22e7a37b9c5fd4c",
+      "size_bytes": 31731
+    },
+    "ci/project/test_p05_torch_retained_installation.py": {
+      "sha256": "29b5fbf91160892a1fc804fc4a1fa84c8795fe148d97168de120a48743ed3deb",
+      "size_bytes": 2368
+    },
+    "ci/project/test_p05_torch_runner_review.py": {
+      "sha256": "ced6fa40ff6bef502b25f0f6204a3fea8bed8b4fa7cd3484b18845e87f2329bc",
+      "size_bytes": 7614
+    },
+    "ci/project/test_p06_dependency_build.py": {
+      "sha256": "2f6a9017eec0d7ff5104ab6e7c7813c40c545c5abc616c3ef1971f8ab15eece9",
+      "size_bytes": 14758
+    },
+    "ci/project/test_p06_dependency_option_controls.py": {
+      "sha256": "15eeec600f7227e03b537a3b9e6324760e7fef726a55ee2c392c0ac795c8f57d",
+      "size_bytes": 17473
+    },
+    "ci/project/test_p06_dependency_receipt.py": {
+      "sha256": "4f5230d3560eafae3f19040182019a40377f21a77de085a2aa7c1f7513930129",
+      "size_bytes": 27754
+    },
+    "ci/project/test_p06_workspace_caller.py": {
+      "sha256": "5a5441fcad994a20c81c79c5ed20da506c020350ae99acca0fa8f05a3a812832",
+      "size_bytes": 19909
+    },
+    "ci/project/test_p06_workspace_edges.py": {
+      "sha256": "c12c3c04f81ff376c816958562a6650be94b213d09594d026b978047620f2e8e",
+      "size_bytes": 5674
+    },
+    "ci/project/test_p06_workspace_model_guard.py": {
+      "sha256": "687c14fb1ca12d360104c535db884e20bb91cd8f961e09a2368d74e2616ede87",
+      "size_bytes": 5703
+    },
+    "docs/project/evidence/p05-torch/reviews/archive_reader.py": {
+      "sha256": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3",
+      "size_bytes": 16065
+    },
+    "docs/project/evidence/p06-qualified-warm/validation/coverage/final-id-coverage.json.gz": {
+      "decoded_sha256": "adaf7b27ede6b38613557f6cc539035c49672c2b44a1c57feee19c3b675fa282",
+      "decoded_size_bytes": 857826,
+      "sha256": "d6c5203b24c96437d3b7061c965db6a04dab48eb1a1f115009fd0e2b68bfd17a",
+      "size_bytes": 97537
+    },
+    "docs/project/evidence/p06-qualified-warm/validation/coverage/final-reconciliation.json": {
+      "sha256": "3d180c916c6e3eeecd9e0b5d7d529185e8e68ce2d11e4d0110bc838fdad8c37d",
+      "size_bytes": 7834
+    },
+    "docs/project/evidence/p06-qualified-warm/validation/coverage/supplement-result/execution.json": {
+      "sha256": "7fc2efd8e7626001e95e73384f9bf7fc68d506b9dbbb27970b6461487294acfd",
+      "size_bytes": 40137
+    },
+    "docs/project/evidence/p06-qualified-warm/validation/coverage/supplement-result/output/test_p06_dependency_build.log.gz": {
+      "decoded_sha256": "96e5188a463a099208f3a3599ac673753223c329297dfb22f4ce0cabbebf94ea",
+      "decoded_size_bytes": 1678,
+      "sha256": "aa1ee5bfc4a03bbfef668521daa308ed36b3609f947efaaed2caabf1fdc740f8",
+      "size_bytes": 444
+    },
+    "docs/project/evidence/p06-qualified-warm/validation/coverage/supplement-result/output/test_p06_dependency_option_controls.log.gz": {
+      "decoded_sha256": "714a5784f6b9c269df319cc19bdd4f493ea658128278c90b223bf67c01417cbb",
+      "decoded_size_bytes": 4464,
+      "sha256": "b1e213b6a03b0a651e112189cccd157344a2abdae5036ca13d990d46031b9ed5",
+      "size_bytes": 787
+    },
+    "docs/project/evidence/p06-qualified-warm/validation/coverage/supplement-result/output/test_p06_dependency_receipt.log.gz": {
+      "decoded_sha256": "7401881a879558aecdd54845a064749518684703f9017d5cd333ca6b03120051",
+      "decoded_size_bytes": 5506,
+      "sha256": "e45d4d000489dd821315c102307702c370f5750f7256d957a7c9f1974bcdd4bd",
+      "size_bytes": 1042
+    },
+    "docs/project/evidence/p06-qualified-warm/validation/hosted-c0b44ce6/w09_a03-job.log.gz": {
+      "decoded_sha256": "14bbd104e3ce5bf16f0241055b5975f417e2abb6e818f025fe8ccdeae7de1ba8",
+      "decoded_size_bytes": 955728,
+      "sha256": "0bfcfca02a19dabcac8027464d9d20efbde5a7af8dc871f255fe180be4f3632c",
+      "size_bytes": 154011
+    },
+    "docs/project/evidence/p06-qualified-warm/validation/w05_a05-current-discovery.json.gz": {
+      "decoded_sha256": "eb5c0f03aa0ae8e986ad7e5fe2a48fad14990a9fae2848a5d65c8f4b8911169e",
+      "decoded_size_bytes": 528172,
+      "sha256": "a3c97be60ecab29e2926486a7cfc7bbde8631ec6523c4b548269e21353034c46",
+      "size_bytes": 91629
+    }
+  },
+  "native_execution": "not_run",
+  "p05_overlap_and_outcomes": {
+    "broad": {
+      "count": 542,
+      "errors": 0,
+      "failures": 0,
+      "passed": 542,
+      "selected_ids_sha256": "7167ee1b282aeea1887a9f45896ce1cc6df7c4671fb36f1e4dabfa1ef3ca0751",
+      "skips": 0
+    },
+    "broad_additions_to_core": [
+      "test_p05_replay_lineage.ReplayModelLineageTests.test_consistent_native_python_and_framework_substitution_still_uses_frozen_reference",
+      "test_p05_replay_lineage.ReplayModelLineageTests.test_cross_case_intermediates_cannot_replace_frozen_model_in_either_poison",
+      "test_p05_replay_lineage.ReplayModelLineageTests.test_parsed_intermediates_do_not_alias_references_or_saved_observations",
+      "test_p05_replay_nested_archives.NestedArchiveBoundaryTests.test_cli_returns_structured_failure_from_real_installation_verifier",
+      "test_p05_replay_nested_archives.NestedArchiveBoundaryTests.test_installation_verifier_normalizes_sparse_parser_failure",
+      "test_p05_replay_nested_archives.NestedArchiveBoundaryTests.test_sparse_parser_failure_at_initial_and_later_headers",
+      "test_p05_replay_nested_archives.NestedArchiveBoundaryTests.test_valid_nested_archives_and_installation",
+      "test_p05_replay_nested_archives.NestedArchiveBoundaryTests.test_validation_index_error_is_not_hidden_by_parser_normalization"
+    ],
+    "core": {
+      "count": 534,
+      "explicit_selected_id_file_retained": true,
+      "passed": true,
+      "seconds": 121.04,
+      "selected_ids_sha256": "e8fc898115cffb3f3c941bbcc5869a94f155d9216be41bd1b3b5c4cfcdda8730"
+    },
+    "core_broad_overlap": 534,
+    "core_to_broad_source_changes": [
+      {
+        "after": "759c6249ed503b9da66b077364fe481b52ac048eb29cecde1bf793bdaf14efc9",
+        "before": "cb191a1716ab9ed2205600529125b94dd5a9f6d6a0af9b2a2376cbe28341689e",
+        "path": "ci/project/p05_replay_installation.py"
+      }
+    ],
+    "direct_changed_module_methods": 174,
+    "direct_changed_module_methods_passed": 174,
+    "direct_changed_module_scope": "106 new replay IDs plus 23 execution-record, 28 installed-check and 17 torch-record methods; all are included in the 542 total.",
+    "initial": {
+      "count": 520,
+      "explicit_selected_id_file_retained": false,
+      "id_reconstruction": "Filter later explicit 534-ID inventory by the 23 test modules in the initial manifest; all 23 test-file SHA256 values match initial/core/broad manifests.",
+      "passed": true,
+      "reconstructed_ids_sha256": "db41c07ab63410127f38a09330a51716fb5bb122a843c64d962766918bd41bb4",
+      "seconds": 127.9
+    },
+    "initial_core_overlap": 520,
+    "initial_to_core_source_changes": [
+      {
+        "after": "cb191a1716ab9ed2205600529125b94dd5a9f6d6a0af9b2a2376cbe28341689e",
+        "before": "1ae0ce7006a21f2a41e5336dbcfd723fb4c01c7e9a16837e42cc2fb40506aff8",
+        "path": "ci/project/p05_replay_installation.py"
+      },
+      {
+        "after": "ec7808fd5b6fdfbce51fc28fba60fc8fd2c291ac1310d826f938b621137c4a1d",
+        "before": "68353accd535c95faaccf9725cb6fb611152773ef4a25bb1474114d9b35b4967",
+        "path": "ci/project/p05_replay_native.py"
+      }
+    ],
+    "module_outcomes": [
+      {
+        "P": 46,
+        "module": "test_p05_bundle",
+        "selected": 46
+      },
+      {
+        "P": 33,
+        "module": "test_p05_bundle_producer",
+        "selected": 33
+      },
+      {
+        "P": 6,
+        "module": "test_p05_ci_workflow",
+        "selected": 6
+      },
+      {
+        "P": 23,
+        "module": "test_p05_execution_records",
+        "selected": 23
+      },
+      {
+        "P": 4,
+        "module": "test_p05_governance_integration",
+        "selected": 4
+      },
+      {
+        "P": 28,
+        "module": "test_p05_installed_check",
+        "selected": 28
+      },
+      {
+        "P": 25,
+        "module": "test_p05_launcher",
+        "selected": 25
+      },
+      {
+        "P": 107,
+        "module": "test_p05_native_binding",
+        "selected": 107
+      },
+      {
+        "P": 17,
+        "module": "test_p05_orchestration",
+        "selected": 17
+      },
+      {
+        "P": 29,
+        "module": "test_p05_packaging",
+        "selected": 29
+      },
+      {
+        "P": 42,
+        "module": "test_p05_python_api",
+        "selected": 42
+      },
+      {
+        "P": 23,
+        "module": "test_p05_replay_installation",
+        "selected": 23
+      },
+      {
+        "P": 8,
+        "module": "test_p05_replay_installation_identity",
+        "selected": 8
+      },
+      {
+        "P": 3,
+        "module": "test_p05_replay_lineage",
+        "selected": 3
+      },
+      {
+        "P": 16,
+        "module": "test_p05_replay_native",
+        "selected": 16
+      },
+      {
+        "P": 6,
+        "module": "test_p05_replay_native_closure",
+        "selected": 6
+      },
+      {
+        "P": 5,
+        "module": "test_p05_replay_nested_archives",
+        "selected": 5
+      },
+      {
+        "P": 12,
+        "module": "test_p05_retained_observation_records",
+        "selected": 12
+      },
+      {
+        "P": 4,
+        "module": "test_p05_torch_adversarial",
+        "selected": 4
+      },
+      {
+        "P": 10,
+        "module": "test_p05_torch_ci",
+        "selected": 10
+      },
+      {
+        "P": 5,
+        "module": "test_p05_torch_contract",
+        "selected": 5
+      },
+      {
+        "P": 5,
+        "module": "test_p05_torch_native_host_orchestration",
+        "selected": 5
+      },
+      {
+        "P": 20,
+        "module": "test_p05_torch_orchestration",
+        "selected": 20
+      },
+      {
+        "P": 17,
+        "module": "test_p05_torch_records",
+        "selected": 17
+      },
+      {
+        "P": 33,
+        "module": "test_p05_torch_replay_driver",
+        "selected": 33
+      },
+      {
+        "P": 4,
+        "module": "test_p05_torch_retained_installation",
+        "selected": 4
+      },
+      {
+        "P": 11,
+        "module": "test_p05_torch_runner_review",
+        "selected": 11
+      }
+    ],
+    "no_additive_unique_test_claim": true,
+    "three_selection_union": 542
+  },
+  "probe_sha256": "6f2bce08e3d706af647cd6ec2d4838e0cb8410abb9107700c5208155b187272c",
+  "project_tests_run_by_probe": 0,
+  "schema_version": 1,
+  "scope": "read-only retained host unittest evidence reconciliation; no test or native execution",
+  "source_scope": {
+    "concurrency_limitation": "Markdown documentation and separately owned later work occurred concurrently; root owns final-source and documentation checks.",
+    "current_test_module_check_is_not_final_source_freeze": true,
+    "current_unselected_test_module_names_at_probe": [],
+    "git_head_at_governance_start": "d8abc24d2fd5dab5ceddbae3627e3d3eb9750358",
+    "monitor_patterns": [
+      "ci/project/*.py",
+      "python/**/*.py",
+      "profiles/*.json",
+      "docs/project/*.json"
+    ],
+    "monitored_path_count": 480,
+    "recorded_before_after_differences": [],
+    "reviewed_source_hashes": [
+      {
+        "path": "ci/project/baseline_process.py",
+        "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa"
+      },
+      {
+        "path": "ci/project/p05_execution_records.py",
+        "sha256": "1f5c9f7d0e66de1537e952b9432e10543563c61eab164e1762416bae07fa7ffe"
+      },
+      {
+        "path": "ci/project/p05_installed_check.py",
+        "sha256": "69d530bea385f2d0545cc677b8205585c42398f4ace2837b840b14d5cabfac5b"
+      },
+      {
+        "path": "ci/project/p05_replay_installation.py",
+        "sha256": "759c6249ed503b9da66b077364fe481b52ac048eb29cecde1bf793bdaf14efc9"
+      },
+      {
+        "path": "ci/project/p05_replay_native.py",
+        "sha256": "ec7808fd5b6fdfbce51fc28fba60fc8fd2c291ac1310d826f938b621137c4a1d"
+      },
+      {
+        "path": "ci/project/p05_torch_records.py",
+        "sha256": "3ff925b09b3176b1f328101bfa9d062aac48f0c3f0939fd847646128f8587639"
+      },
+      {
+        "path": "ci/project/p05_torch_replay.py",
+        "sha256": "737eafad91bccc251039bade0ee7af4ce976bbda3d983361d240420cd8158dd3"
+      },
+      {
+        "path": "ci/project/p06_dependency_build.py",
+        "sha256": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94"
+      },
+      {
+        "path": "ci/project/tensor_host_tools.py",
+        "sha256": "ee664a6a70e9485e92158cc6c7870d0c13a223cface41763c4480c61a689382f"
+      },
+      {
+        "path": "ci/project/test_p05_bundle.py",
+        "sha256": "5e04c9bca36a3f822d3783867271fe56cdb38843ea97eea7114dba6eaf314b2e"
+      },
+      {
+        "path": "ci/project/test_p05_bundle_producer.py",
+        "sha256": "3f89825a0ffe5ddfc2296db29b282c93b082b83a2d896ae3712df4775cb0acea"
+      },
+      {
+        "path": "ci/project/test_p05_ci_workflow.py",
+        "sha256": "73f1bdd7ee03a05438d9a9ec0d90acd73a4f63fd693f1395acc7e31d6088f267"
+      },
+      {
+        "path": "ci/project/test_p05_execution_records.py",
+        "sha256": "dc114451e46395f3386cdda9d487475e48160ee33ddf3b690f51e8f332c2013a"
+      },
+      {
+        "path": "ci/project/test_p05_governance_integration.py",
+        "sha256": "6d30ee4a6415591f1673aaf1276f5ac49ccfb8a1e39dfb282fb4688c70392645"
+      },
+      {
+        "path": "ci/project/test_p05_installed_check.py",
+        "sha256": "a2102c005f8ca2618b5d62d95dd53dbd5a54452f9094382f6615f8a6b75d9d42"
+      },
+      {
+        "path": "ci/project/test_p05_launcher.py",
+        "sha256": "ad1150b6663f05e69c83c732bd9a34cd2fa984c6793862617e90eb1d81659b12"
+      },
+      {
+        "path": "ci/project/test_p05_native_binding.py",
+        "sha256": "56d7bbcd854a8d9c1d1ed805f8eb64880f058799f7b586fc84a0723c4322bca5"
+      },
+      {
+        "path": "ci/project/test_p05_orchestration.py",
+        "sha256": "c193396af8beb0c1a370b95ac1aa80060be3c1b9b048eeb0257e7bf501c30e4b"
+      },
+      {
+        "path": "ci/project/test_p05_packaging.py",
+        "sha256": "5629c28a88b459d7e7637978193b353b809b229ba863c9421fefb8c298aa218d"
+      },
+      {
+        "path": "ci/project/test_p05_python_api.py",
+        "sha256": "af6b5ed1aaeff080e9011bea9723e51119473bbcd900a80ed4591d5d37167165"
+      },
+      {
+        "path": "ci/project/test_p05_replay_installation.py",
+        "sha256": "33d0fcf4d14b13be30976a8e02e3653533abe0f9391bc9ba4832271ddcc52cc3"
+      },
+      {
+        "path": "ci/project/test_p05_replay_installation_identity.py",
+        "sha256": "34f1ba856b44dc323a82a4e1f869afbc97f939c6c1984c10da01d9ebe0cc0955"
+      },
+      {
+        "path": "ci/project/test_p05_replay_lineage.py",
+        "sha256": "2a70ac7fe613b4a7bdb0366f5685b165c0a3713ff36f59d30ca40b69b621a19d"
+      },
+      {
+        "path": "ci/project/test_p05_replay_native.py",
+        "sha256": "ad2ce215c5a58f638cd21130a1cf2a48935285826d7fe4173e14327fd1ae73dd"
+      },
+      {
+        "path": "ci/project/test_p05_replay_native_closure.py",
+        "sha256": "a6b07ed62b471fafcb500932b729ff6d6e98be5a1eaef298953a16a1629985d8"
+      },
+      {
+        "path": "ci/project/test_p05_replay_nested_archives.py",
+        "sha256": "f8c087ae8f6cc34f63b496a4bc57d0fc71dba798344e3f1a0bb5ceb624e0cae2"
+      },
+      {
+        "path": "ci/project/test_p05_retained_observation_records.py",
+        "sha256": "39c13659ac9239e417005dc6cd8222b9d15470c474fb70db65db5f6aa4b0504c"
+      },
+      {
+        "path": "ci/project/test_p05_torch_adversarial.py",
+        "sha256": "876d0aad8e99593980465224c8cf210c264578b215e707b86e8b5ff6804487e0"
+      },
+      {
+        "path": "ci/project/test_p05_torch_ci.py",
+        "sha256": "5fad4e91f7869eb84a633b252b9fdbed06cdc8f0abc1de14cafabec97f0c65b7"
+      },
+      {
+        "path": "ci/project/test_p05_torch_contract.py",
+        "sha256": "12d2aa4930446a218775dba23b288fb48f03b7feb062437e90c887884501cc6f"
+      },
+      {
+        "path": "ci/project/test_p05_torch_native_host_orchestration.py",
+        "sha256": "7ef860514924dd131a4e8bb814a376e443f85d9971ef544129c7321dfe449781"
+      },
+      {
+        "path": "ci/project/test_p05_torch_orchestration.py",
+        "sha256": "e0a54556260b6920bfa64ff5149a4f6994864cc9eb9c7daf64b56ae2c9c60197"
+      },
+      {
+        "path": "ci/project/test_p05_torch_records.py",
+        "sha256": "aa92a04bb97b848c75440e81ae79b00d99fb52a0ee71601b177ffbb99d21b4e6"
+      },
+      {
+        "path": "ci/project/test_p05_torch_replay_driver.py",
+        "sha256": "9a9b3439a5938ec7c0d416154207ff8170b51f25431b1a5ff22e7a37b9c5fd4c"
+      },
+      {
+        "path": "ci/project/test_p05_torch_retained_installation.py",
+        "sha256": "29b5fbf91160892a1fc804fc4a1fa84c8795fe148d97168de120a48743ed3deb"
+      },
+      {
+        "path": "ci/project/test_p05_torch_runner_review.py",
+        "sha256": "ced6fa40ff6bef502b25f0f6204a3fea8bed8b4fa7cd3484b18845e87f2329bc"
+      },
+      {
+        "path": "ci/project/test_p06_dependency_build.py",
+        "sha256": "2f6a9017eec0d7ff5104ab6e7c7813c40c545c5abc616c3ef1971f8ab15eece9"
+      },
+      {
+        "path": "ci/project/test_p06_dependency_option_controls.py",
+        "sha256": "15eeec600f7227e03b537a3b9e6324760e7fef726a55ee2c392c0ac795c8f57d"
+      },
+      {
+        "path": "ci/project/test_p06_dependency_receipt.py",
+        "sha256": "4f5230d3560eafae3f19040182019a40377f21a77de085a2aa7c1f7513930129"
+      },
+      {
+        "path": "ci/project/test_p06_workspace_caller.py",
+        "sha256": "5a5441fcad994a20c81c79c5ed20da506c020350ae99acca0fa8f05a3a812832"
+      },
+      {
+        "path": "ci/project/test_p06_workspace_edges.py",
+        "sha256": "c12c3c04f81ff376c816958562a6650be94b213d09594d026b978047620f2e8e"
+      },
+      {
+        "path": "ci/project/test_p06_workspace_model_guard.py",
+        "sha256": "687c14fb1ca12d360104c535db884e20bb91cd8f961e09a2368d74e2616ede87"
+      }
+    ],
+    "separately_pinned_shared_reader": {
+      "in_governance_monitor": false,
+      "path": "docs/project/evidence/p05-torch/reviews/archive_reader.py",
+      "sha256": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3"
+    },
+    "task_python_diff_against_f01_sha256_at_probe": "e93e31b5dc2ab472ae282c85942fe74e98d74c6d33cea0765e5b5c80f47561f1",
+    "whole_checkout_frozen_or_clean_claimed": false,
+    "without_concurrent_work_proven": false
+  }
+}

@@ -228,25 +228,30 @@ remain open.** Warm v1 stays unconditionally blocked by
 `P06-WARM-RV64-MPM-HIGH-HALF`; the lifetime original and historical replay establish
 no warm speedup.
 
-**Parallel work: P05-T01 — the Python/custom-op bridge (`in_progress`).**
-[P05-A01 now accepts the copying Python binding](docs/project/evidence/p05-python/acceptance-binding.json)
-on SimX at
-[`e1420fd`](https://github.com/baabi-boo/AI-GPU/commit/e1420fd550f716df33a2556057b7086a03032cbe).
-Both fresh installed formats passed the six supported matmul signatures and ten
-frozen model cases: **144 combined Python/native launches and 660 event/profile
-pairs**, plus **2,174 clean hosted source tests**. The
-[Python evidence packet](docs/project/evidence/p05-python/README.md) retains exact
-source/build/package identities, independent reviews and earlier failures.
+**Completed P05-T01 — the bounded Python/custom-op bridge.**
+[P05-A01 preserves the accepted copying binding](docs/project/evidence/p06-serial-workspace/a01-retained-binding.json).
+[P05-A02](docs/project/evidence/p05-torch-replay/acceptance-torch.json) and
+[P05-A03](docs/project/evidence/p05-torch-replay/acceptance-compatibility.json)
+accept the independently reviewed installed **PyTorch 2.15.0+cpu / CPython
+3.12.14 / Linux x86_64 / RV64 SimX** matrix at
+[`c6fb039e`](https://github.com/baabi-boo/AI-GPU/commit/c6fb039e706e812b6b3f4d2a5db1828076fe50df).
+Both formats cover the six declared matmul signatures and fixed `16 → 8 → 4`
+model: **32 framework calls, 72 framework-route native launches and 216 distinct
+recorded launches** including the separate native and plain-Python comparisons.
+Packet copies and subsequent replay contribute no new launches.
 
-The scoped PyTorch custom-op implementation and successful prior installed CI
-jobs now exist, as recorded in the [current audit](docs/project/p06-benchmark-audit.md).
-Independent artifact review remains outstanding; this continuation makes no new
-P05 acceptance decision. **P05-A02/A03 remain unearned; no PyTorch version has
-accepted qualification.**
-Start with the [handoff](docs/project/p05-entry-handoff.md),
-[API contract](docs/designs/python_binding_v1.md) and [package guide](python/README.md).
-This simulated binding result establishes no Python RTL/XRT qualification,
-physical FPGA performance or full framework backend. The
+The [audit](docs/project/p05-torch-replay-audit.md),
+[compatibility matrix](docs/project/p05-torch-compatibility.md),
+[original-artifact evidence](docs/project/evidence/p05-torch-replay/README.md)
+and [inert replay handoff](docs/project/p05-torch-replay-handoff.md) retain exact
+source/package identities, independent reviews, explicit failures and limits.
+The reader checks retained bytes without running archived code or granting
+acceptance; the separate criterion records make the source-scoped decision.
+Use the [binding handoff](docs/project/p05-entry-handoff.md),
+[API contract](docs/designs/python_binding_v1.md) and [package guide](python/README.md)
+for the supported interface. This result establishes no autograd, training,
+general framework device backend, Python RTL/XRT qualification or physical GPU
+performance. The
 [executor audit](docs/project/p04-executor-audit.md) preserves the unresolved
 inherited tensor **267 → 283 DSP** area-gate failure.
 
@@ -283,7 +288,7 @@ review. [P01-A03](docs/project/evidence/p01-xrt-blocked.json) remains blocked by
 missing qualified vendor XRT `hw_emu` tools/platform.
 The authoritative [status](docs/project/status.md) and
 [phase gates](docs/project/roadmap.json) separate implementation from acceptance;
-P00, P02, P03 and P04 are complete, P01 is blocked, P05 and P06 are in progress,
+P00, P02, P03, P04 and P05 are complete, P01 is blocked, P06 is in progress,
 and P07–P11 are not started.
 
 ## Start here
@@ -324,7 +329,8 @@ and P07–P11 are not started.
   [accepted cold baseline](docs/project/evidence/p06-baseline/README.md) retain
   their separate scopes; [status](docs/project/status.md) and
   [backlog](docs/project/backlog.md) track the open gates.
-- Follow parallel framework work: [P05 binding handoff](docs/project/p05-entry-handoff.md).
+- Use the accepted framework scope: [P05 binding handoff](docs/project/p05-entry-handoff.md)
+  and [original-artifact replay](docs/project/p05-torch-replay-handoff.md).
 - Reproduce the accepted baseline: [P01 baseline runbook](docs/project/p01-baseline-runbook.md).
 - Follow current supplemental work: [P01 tensor-oracle hardening](docs/project/p01-tensor-oracles.md)
   and its [evidence index](docs/project/evidence/p01-tensor-oracles/README.md).
@@ -351,7 +357,7 @@ the exact starting revision and evidence boundaries.
 |---|---|---|
 | Compute | RISC-V parallel cores; WMMA/WGMMA tensor units and structured sparsity | Reproduce a supported native configuration and prove its numerical behavior |
 | Memory and platform | Caches, shared memory, asynchronous tile copies and FPGA integration | Measure useful data movement, usable external memory and real-board behavior |
-| Software | Accepted bounded matmul library, fixed tiny-model execution and copying Python binding; native tensor kernels and existing OpenCL/basic HIP routes | Add scoped PyTorch custom operators while preserving explicit placement/lifetimes |
+| Software | Accepted bounded matmul library, fixed tiny-model execution, copying Python binding and scoped PyTorch custom operators; existing OpenCL/basic HIP routes | Preserve explicit placement/lifetimes and independently qualify any expanded framework scope |
 | Verification | Simulators, RTL tests and regression catalogs | Attach reproducible results to every claimed capability and preserve inherited gates |
 
 Source presence is not a fresh passing test. Tensor acceleration is not enabled
@@ -361,8 +367,9 @@ tests, licenses and illustrations remain preserved.
 
 The current HIP route does not expose Vortex-specific tensor intrinsics, so the
 first model uses the existing **native kernel and runtime path**. A new HIP
-compiler is not its prerequisite. A PyTorch custom-op bridge is a later bounded
-integration—not a complete framework device backend.
+compiler is not its prerequisite. The accepted PyTorch custom-op bridge has a
+bounded eager inference scope; a complete framework device backend remains
+separate work.
 
 ## The first model milestone
 

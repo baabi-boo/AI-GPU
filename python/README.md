@@ -30,9 +30,14 @@ The current package adds the optional `vortex_ai.torch_ops` module and its
 `import vortex_ai` remains independent of PyTorch; importing the optional module
 requires the separately installed **PyTorch 2.15.0+cpu** closure below. The
 [framework compatibility matrix](../docs/project/p05-torch-compatibility.md)
-separates implemented behavior and actual host tests from installed SimX
-qualification, which is still pending. P05 remains `in_progress`; P05-A02/A03
-are unearned. No PyTorch version has installed-framework acceptance yet.
+separates implementation, host tests and the accepted installed SimX matrix at
+`c6fb039e706e812b6b3f4d2a5db1828076fe50df`. The
+[P05-A02 execution](../docs/project/evidence/p05-torch-replay/acceptance-torch.json)
+and [P05-A03 compatibility](../docs/project/evidence/p05-torch-replay/acceptance-compatibility.json)
+decisions complete P05 for the declared eager operators, six format/signature
+combinations and fixed model on CPython 3.12.14 / Linux x86_64 / RV64 SimX.
+The [replay handoff](../docs/project/p05-torch-replay-handoff.md) preserves exact
+original identities and the limits of reviewing recorded execution.
 
 Adding this module changes the current package inventory to **23 inputs**.
 Build a fresh matching bundle, sdist and wheel; the historical 22-input packages

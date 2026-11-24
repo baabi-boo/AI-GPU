@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "outcome": "pass",
+  "source_revision": "c6fb039e706e812b6b3f4d2a5db1828076fe50df",
+  "configuration": "Clean hosted source c6fb039e706e812b6b3f4d2a5db1828076fe50df, tree c5e61a961bff91e256c94752d88d020ef2b6ba56; GitHub Installed PyTorch run 45349805332 attempt 1, separate FP16/BF16 jobs. PyTorch 2.15.0+cpu; CPython 3.12.14, little endian, GIL/main interpreter; Linux x86_64; RV64 SimX under the frozen P02-TFR profile. Six format/shape combinations and the fixed five-family-per-format model, each with two poison iterations; host ReLU, exact casts and row assembly explicit. Hash-locked framework dependencies, bound Vortex wheel/bundle, clean install outside source, compiler/stamp/effective-header records and exact command/budget inventories are retained in the independently pinned originals. The separately trusted reader is e71e63229870fcb61b7edf9793cb0d6dccdbaf63, tree 9d47de23188837fbf766946e697a2afd9a933a7d, byte-identical to local tested commit 2e41134931b7293156cc2b6b114401b795a48e21; it supplies review, not execution.",
+  "limitations": [
+    "Only PyTorch 2.15.0+cpu, CPython 3.12.14 with the GIL/main interpreter, little-endian Linux x86_64 and RV64 SimX are qualified. This is simulated inference evidence, not processor RTL, AFU/vendor hw_emu, physical FPGA, silicon or physical performance.",
+    "The supported matmul set is FP16/BF16 crossed with (M,N,K)=(8,4,8),(8,4,16),(16,8,16), with FP32 output. Model scope is the frozen synthetic bias-free batch-16 16-to-8-to-4 ReLU MLP, five families per format and two destination poisons; arbitrary model loading and trained-model quality are outside scope.",
+    "CPU tensor storage, packing, exact conversion, ReLU and row assembly are declared host work. Native matmul dispatch and actual result lineage are checked; no CPU matmul fallback qualifies. Host timing/profile categories overlap and establish no physical speedup or additive device latency.",
+    "Autograd/training, a full framework device backend, CUDA binary compatibility, ONNX, multiple devices, real fork execution and unsupported platform/version combinations are unqualified. Higher-level linearize, input-free FX constant evaluation and scripted invocation can submit native work and are not covered by a universal rejection claim.",
+    "Independent host review reconciles 45 unique scripted definitions and nine compiled scenarios per original; these repeat across formats/revisions. Missing capture arrays and intermediate failure/ownership channels prevent complete host-assertion reconstruction. Synthetic or fixture host arithmetic is not native numerical evidence.",
+    "Per original, 82 retained first-party source paths and 731 additional receipt-only first-party paths match the execution Git revision. Receipt matches do not rehash absent historical files; 193 submodule paths lack the same byte comparison. Third-party wheel/payload, interpreter/tool/seed and some generated metadata bytes are absent.",
+    "Trusted hosted builder observations, source joins and inert replay establish bounded retained consistency, not arbitrary-producer authentication, reproducible compilation or complete offline binary qualification. Original ZIPs are retained unchanged outside Git with owner-authenticated access; public availability after provider expiry is not established.",
+    "The public reader performs no native execution and never grants acceptance. All native_execution, retained_code_executed, acceptance_claimed, phase_acceptance and host_fault_semantics_revalidated fields preserve their documented non-execution/false values; this separate review record makes the acceptance decision.",
+    "The c6 primary matrix and c0 historical matrix remain different execution populations. At one revision the pair contains 32 framework calls, 72 framework-route launches and 216 total distinct launches; copies and repeated reviews add zero launches.",
+    "Final host validation is the bounded 547-test P05 suite. Earlier local broad governance failed at the 1 GiB host-fixture reserve; d8 hosted governance passed with 23 skip events representing 36 unexecuted bodies. Neither supplies the P06 single full zero-skip invocation. Cancelled/pending workflows are not passes.",
+    "P01-A03 vendor integration, P06-A02/A03 and their resource/performance/RTL gates remain open. The native/P06 15 GiB reserve and inherited 267-to-283 DSP area finding against the unchanged 5 percent bound are not waived. No goldens, arithmetic fixtures, thresholds or native ABI changed."
+  ],
+  "reviewer": "Root integrator records the source-scoped decision using a53 independent frozen-criteria recommendation; a33 host evidence and a49 exact Git source joins; native fixes independently cleared by a17 and a51, installation fixes by a18 and a25, and complete driver by a24. A44 reconciled the matrix and a45 independently cleared the documentary gap. A55 independently checked final original/test/source identities and the retention boundary. The originating user explicitly authorized implementation, commit and direct master publication. This records actual agent review and integrator judgment; no human review or policy waiver is fabricated. Completed final document/ledger delivery reviews are retained separately in reviews/ledger.json without creating a self-hashing acceptance cycle.",
+  "record_id": "p05-a03-torch-compatibility-c6fb039e",
+  "kind": "design_review",
+  "evidence_level": "source_present",
+  "acceptance_ids": [
+    "P05-A03"
+  ],
+  "scope": "Accept the versioned compatibility matrix for the same c6 tested environment and two eager operators. The matrix names exactly tested framework/Python/platform versions, six format/signature combinations, model/layout/copy/ownership limits, observed scripted and compiled host failure coverage, unqualified transforms and the absence of CUDA binary compatibility or training claims. This source-level decision complements A02 simulated execution and preserves retained A01; it does not widen any runtime or hardware scope.",
+  "commands": [
+    {
+      "command": "At the same c6 hosted run, each actual installed framework interpreter ran: \"$P05_ROOT/torch-work/venv/bin/python\" -I -B ci/project/p05_torch_host_tests.py --source-dir \"$PWD\" --output \"$P05_ROOT/evidence/torch-host.json\"; then \"$P05_ROOT/torch-work/venv/bin/python\" -I -B ci/project/p05_torch_native_host_tests.py --source-dir \"$PWD\" --work-dir \"$P05_ROOT/evidence/torch-native-host\" --format \"$P05_FORMAT\". A33 independently reconciled raw logs, source identity and child results: 45 unique scripted definitions and nine compiled scenarios per original, with no scripted failures/errors/skips. This is host failure/ownership evidence, not native numerical execution or complete assertion reconstruction.",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "Independent a45 JSON/hash/link/AST review of the reconciled matrix, evidence index and handoff; 38 local links and three run URLs checked, all four original pins rehashed, actual CLI help checked and extracted Bash example passed bash -n. Actual commands and source/document hashes are in reviews/a45.md. The final root acceptance paragraphs are separately covered by the final document delivery review.",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/project/p05-torch-compatibility.md",
+      "sha256": "d27bebfb6d1bfddec2fb22196d1cc046eb252926d17e68e0cfe3ca9cbf23fc27"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/fresh-seam-intake.json",
+      "sha256": "26cffd07a889ad8f546574042dc79df787c832a3804f935f8679e2df103f6a97"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/intake.json",
+      "sha256": "3124cf1cd06111ac6ed93cc62d4316437e4d6a7e29cb7ac785875ebe13b7f02d"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/original-retention.json",
+      "sha256": "11cbfbedda08ef69cd93748f4fe54d9cee51f13819fc519cc9bad54ec31c6f0f"
+    },
+    {
+      "path": "docs/designs/torch_custom_ops_v1.md",
+      "sha256": "3d42a28a02b450334976a4b787a241af4da5050755f57bc287eebbd1662bd3fc"
+    },
+    {
+      "path": "docs/designs/torch_archive_replay_v1.md",
+      "sha256": "ff8619ca97a2ca37006a61da7b4ab6f91bbcfbb81cd5e39a8a2e55e35b68fba2"
+    },
+    {
+      "path": "ci/project/p05_torch_contract.json",
+      "sha256": "295d4cffec7391c25ad1c97f7f808945e9a9df88f10410600d2b17a054623a11"
+    },
+    {
+      "path": "ci/project/p05_torch_requirements.lock",
+      "sha256": "a4186e5b4f85ae6e9519e42d1bf063ac3cad11fedbe1dbf5a03ab746e4002d5b"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/reviews/a33.md",
+      "sha256": "aab05d53846deabfc1b68d51e203ae319e2430280de6550c60b52b01a93d0501"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/reviews/a33-evidence.json",
+      "sha256": "73ed16526089d5617100267732187dc54bec7c5799882b5718c9acc92091813b"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/reviews/a49.md",
+      "sha256": "4b72ab98f8de2d5a0c80571795c3acb8c1bbaa95e2ad8b29bbd5b315c75b9cc6"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/reviews/a49-git-source-joins.json",
+      "sha256": "0b1e405ddb32345a26f8ad04663f4b0a7f2a0cac1e0ef0174e2f528b2edbbc11"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/reviews/a49-git-source-join-paths.json",
+      "sha256": "98031381ba93e7abd940777e8c790342d6d7d7370c86c07b72cbd182080f28c8"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/reviews/a53.md",
+      "sha256": "57ea833f8d1b8b25dfae524eaf6b8ea479b05b341ffa38bd7cd1f5e8e6d1bde1"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/reviews/a53-criteria.json",
+      "sha256": "8e10e6d6ba03c94707f0f1aa9e5e647e28fb06056edc600840eec41f733c28ff"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/reviews/a45.md",
+      "sha256": "f08bd27b8675787e9b4599668e1ac26a237eeccec1219e1aaf6157f4fa4860ee"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/reviews/a17.md",
+      "sha256": "24bb81369439d9c2814ad04afdba9220b0e718a8b8af9f9534fcf9196376bb9e"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/reviews/a18.md",
+      "sha256": "73f295372490471f982c1e785febb22e9e5d94ff7524ee71dc98fa2a346d67f2"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/reviews/a24.md",
+      "sha256": "573e2916a48522441fc941b19e92f85f3aa6f669346d7c77396cf31ef29a0999"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/reviews/a25.md",
+      "sha256": "51b4a5293c7c5075528a7b01b3ee5dfdbfbd34f92a3cac4c80819af11b9f5c7b"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/reviews/a51.md",
+      "sha256": "a4fa431cd7c9da1e79e8e8207d70758b59a9f21a694ce17d8ae6cc9d7edf68a9"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/reviews/a55.md",
+      "sha256": "919c71dbc88b9cee6e057807fe8febe877024c3162f5aaf881038f0bea3c7526"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/validation/final-original-replays.json",
+      "sha256": "7ee182af04f49a922326e3da0cb3bac5f0b234aab96b75ffa49e60ace143440c"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/validation/repair-publication.json",
+      "sha256": "2cc2ad723c7e83d6afe1f4fc9fd14acd45c3553fc9cbe6b233e084b96fbfa878"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/validation/final-c6-fp16-replay.json",
+      "sha256": "4db797ee09284d576dd0577bf91d983fd22632db5dfb8a9dcf83a26af91252d6"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/validation/final-c6-bf16-replay.json",
+      "sha256": "c84fec9935da35f27c1df1d7e2e0dae92c9bee48a471e898aa2d8bee6274831b"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/validation/final-c0-fp16-replay.json",
+      "sha256": "eb2d16e1c7634b070a25670e7e83996c72c69fe9c6f2667224de840d4837fdde"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/validation/final-c0-bf16-replay.json",
+      "sha256": "c175582cf5c3609842628cd4bbbda6478ef353c486ccce2d67217f6c65f060bb"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/validation/final-p05-before.json",
+      "sha256": "8f1f74e2f67238fcea2a3263840ef1bd2b15b6b253f37cea703e8220e35cc786"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/validation/final-p05-result.json",
+      "sha256": "894f1295d38675c5004b68e036c90b3a10f118d5157607cf7928412f3498f44f"
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/validation/final-p05.log.gz",
+      "sha256": "12289909ef1069d381c706fb670d06cade1948f05c402d417b2fa9dc7646f3bf"
+    }
+  ]
+}

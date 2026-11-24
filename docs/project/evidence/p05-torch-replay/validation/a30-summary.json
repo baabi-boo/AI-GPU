@@ -1,0 +1,164 @@
+{
+  "agent": "a30",
+  "archive": {
+    "execution_revision": "c0b44ce64665fe11895f869eea8c38c9b820d6f7",
+    "expected_sha256": "8c42f7e9f310972e2c0c67c56a03ce8f5460d706cb8dc3a5397435445ea6737c",
+    "external_after_sha256": "8c42f7e9f310972e2c0c67c56a03ce8f5460d706cb8dc3a5397435445ea6737c",
+    "external_before_sha256": "8c42f7e9f310972e2c0c67c56a03ce8f5460d706cb8dc3a5397435445ea6737c",
+    "format": "fp16",
+    "path": "/workspace/scratch/101d52695253/originals/p05-torch-fp16-c0b44ce6-original.zip"
+  },
+  "archive_closes": [
+    {
+      "archive": "/workspace/scratch/101d52695253/originals/p05-torch-fp16-c0b44ce6-original.zip",
+      "closed": true,
+      "stream_closed": true
+    }
+  ],
+  "archive_internal_hash_checks": [
+    {
+      "bytes": 21439407,
+      "caller": "__init__",
+      "matches_external": true,
+      "sha256": "8c42f7e9f310972e2c0c67c56a03ce8f5460d706cb8dc3a5397435445ea6737c"
+    },
+    {
+      "bytes": 21439407,
+      "caller": "close",
+      "matches_external": true,
+      "sha256": "8c42f7e9f310972e2c0c67c56a03ce8f5460d706cb8dc3a5397435445ea6737c"
+    }
+  ],
+  "archive_receipt": {
+    "acceptance_claimed": false,
+    "archive": {
+      "path": "/workspace/scratch/101d52695253/originals/p05-torch-fp16-c0b44ce6-original.zip",
+      "sha256": "8c42f7e9f310972e2c0c67c56a03ce8f5460d706cb8dc3a5397435445ea6737c",
+      "size_bytes": 21439407
+    },
+    "charged_read_bytes": 129161898,
+    "data_files": 663,
+    "expanded_bytes": 74475503,
+    "read_attempts": 1447,
+    "read_bytes": 129161898,
+    "read_count": 1447,
+    "retained_code_executed": false,
+    "scope": "data-only-original-archive-read"
+  },
+  "artifacts": {
+    "detailed_evidence": {
+      "path": "validation/a30-result.json",
+      "sha256": "a927d27becdb77a256ba54842b93b74365fbcc7d134a084d4f12138e364f0107"
+    },
+    "probe": {
+      "path": "validation/a30_probe.py",
+      "sha256": "4e60d7390037b70101110a53f0d6b9e63f1dd88075ea2500eb3f50978f657a94"
+    }
+  },
+  "command": "PYTHONDONTWRITEBYTECODE=1 python3 ../validation/a30_probe.py",
+  "core_source_sha256": {
+    "ci/project/p05_execution_records.py": "1f5c9f7d0e66de1537e952b9432e10543563c61eab164e1762416bae07fa7ffe",
+    "ci/project/p05_installed_check.py": "69d530bea385f2d0545cc677b8205585c42398f4ace2837b840b14d5cabfac5b",
+    "ci/project/p05_replay_installation.py": "759c6249ed503b9da66b077364fe481b52ac048eb29cecde1bf793bdaf14efc9",
+    "ci/project/p05_replay_native.py": "ec7808fd5b6fdfbce51fc28fba60fc8fd2c291ac1310d826f938b621137c4a1d",
+    "ci/project/p05_torch_records.py": "3ff925b09b3176b1f328101bfa9d062aac48f0c3f0939fd847646128f8587639",
+    "ci/project/p05_torch_replay.py": "737eafad91bccc251039bade0ee7af4ce976bbda3d983361d240420cd8158dd3",
+    "docs/project/evidence/p05-torch/reviews/archive_reader.py": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3"
+  },
+  "elapsed_seconds": 185.788602,
+  "guard_controls_blocked": 23,
+  "limits": [
+    "One pinned FP16 original only; no BF16 or fresh c6 guarded run is claimed.",
+    "Python runtime audit/hooks plus static source inventory are not an OS sandbox or proof against a hostile interpreter.",
+    "Trusted standard-library and local reader modules are imported before guards; their startup imports are outside this dynamic boundary.",
+    "The public loader's exact trusted local archive_reader.py is repeatedly source-verified and allowed to execute; this is not retained payload execution.",
+    "Denied local bytecode-cache reads force the unmodified loader to fall back to pinned source; those denials are separately classified.",
+    "Native execution, acceptance, arbitrary-origin authentication, missing third-party bytes and full supplementary host-fault semantics remain unclaimed."
+  ],
+  "live_validation_calls": [],
+  "observed_operations": [
+    {
+      "count": 3045,
+      "decision": "allow",
+      "operation": "Path.resolve"
+    },
+    {
+      "count": 3,
+      "decision": "allow",
+      "operation": "ast_only_parse"
+    },
+    {
+      "count": 15415,
+      "decision": "allow",
+      "operation": "lstat"
+    },
+    {
+      "count": 226,
+      "decision": "allow",
+      "operation": "open"
+    },
+    {
+      "count": 3045,
+      "decision": "allow",
+      "operation": "realpath"
+    },
+    {
+      "count": 21634,
+      "decision": "allow",
+      "operation": "stat"
+    },
+    {
+      "count": 2,
+      "decision": "allow",
+      "operation": "trusted_local_reader_compile"
+    },
+    {
+      "count": 2,
+      "decision": "allow",
+      "operation": "trusted_local_reader_exec"
+    },
+    {
+      "count": 2,
+      "decision": "deny",
+      "operation": "trusted_reader_cache_fallback"
+    }
+  ],
+  "observed_unique_open_paths": 47,
+  "permitted_metadata_only_ancestor_count": 20,
+  "permitted_read_file_count": 47,
+  "reader_head": "d8abc24d2fd5dab5ceddbae3627e3d3eb9750358",
+  "replay": {
+    "acceptance_claimed": false,
+    "counts": {
+      "copied_packet_additional_launches": 0,
+      "distinct_total_launches": 108,
+      "framework_event_profile_pairs": 180,
+      "framework_launches": 36,
+      "framework_operator_calls": 16,
+      "native_comparison_launches": 36,
+      "plain_python_launches": 36
+    },
+    "host_fault_semantics_revalidated": false,
+    "limitations": [
+      "Replay checks retained consistency; it does not authenticate an arbitrary producer or execute a GPU.",
+      "The selected archive digest and execution revision must come from independently retained intake evidence.",
+      "Recorded runner paths are lexical data; archived code, binaries and wheels are never executed or extracted.",
+      "Third-party wheel and installed payload bytes, interpreter/seed bytes and venv configuration contents are not fully retained.",
+      "Their recorded identities and inventories can be reconciled, but missing bytes cannot be freshly hashed by replay.",
+      "One format is not the complete two-format qualification; copied packets add no executions.",
+      "Host fault-test reports remain host evidence. This reader does not grant framework, performance or phase acceptance.",
+      "Supplementary preparation and host fault packets have bounded envelope and byte-identity checks only; their fault, build and preparation semantics are not revalidated."
+    ],
+    "native_execution": "not_run",
+    "outcome": "pass",
+    "phase_acceptance": false,
+    "retained_code_executed": false,
+    "scope": "one-format-retained-installed-pytorch-consistency"
+  },
+  "schema_version": 1,
+  "scope": "one-complete-public-c0-fp16-original-replay-under-denial-guards",
+  "source_changes": [],
+  "source_file_count": 61,
+  "success": true,
+  "unexpected_replay_denials": []
+}

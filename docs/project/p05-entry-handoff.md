@@ -1,9 +1,16 @@
 # P05 handoff — from the copying binding to scoped custom operators
 
-**Current bounded action:** freeze and implement the supported PyTorch custom-op
-route through the existing Python/native owners, then qualify the fixed model
-against the independent native executable. No PyTorch version or custom operator
-is qualified yet. P05 remains `in_progress`; A02 and A03 are unearned.
+**Current state:** P05 is complete for the bounded copying binding and eager
+PyTorch custom operators. The [A02 execution](evidence/p05-torch-replay/acceptance-torch.json)
+and [A03 compatibility](evidence/p05-torch-replay/acceptance-compatibility.json)
+records accept PyTorch 2.15.0+cpu / CPython 3.12.14 / Linux x86_64 / RV64 SimX
+at `c6fb039e706e812b6b3f4d2a5db1828076fe50df`. Use the
+[current matrix](p05-torch-compatibility.md), [original evidence](evidence/p05-torch-replay/README.md)
+and [inert replay handoff](p05-torch-replay-handoff.md) to reproduce the review.
+The design and first-slice sequence below remain history and obligations for
+any extension. The next development experiment is the separately gated
+[qualified P06 warm route](p06-qualified-warm-handoff.md), subject to its
+unchanged full-governance and resource requirements.
 
 [P05-A01 accepts the copying binding](evidence/p05-python/acceptance-binding.json)
 on SimX at `e1420fd550f716df33a2556057b7086a03032cbe`. The
@@ -29,9 +36,9 @@ Implementation entry requires P04 to be `complete` in the
 [P04-A01 fixture acceptance](evidence/p04-fixture/acceptance.json).
 Review the [executor evidence](evidence/p04-executor/README.md) and its independent
 qualification decision before changing phase status. Individual passing CI jobs,
-an incomplete packet, or this handoff do not satisfy that condition. P05 is now
-`in_progress`; its acceptance gates require their own evidence and are not earned
-by P04 execution.
+an incomplete packet, or this handoff do not satisfy that condition. P05's
+own criterion-specific evidence now satisfies its three gates; P04 execution
+alone never supplied those results.
 
 Use these versioned inputs without broadening their accepted behavior:
 
@@ -105,7 +112,7 @@ before using that boundary. Preserve references to tensor exporters until copyin
 finishes; return independent output ownership so closing a native operation
 cannot invalidate a framework result.
 
-## Completed binding qualification and remaining framework proof
+## Historical binding qualification and framework obligations
 
 The hosted binding environment is CPython 3.12.14, G++ 11.4.0, Clang 20.1.8 and
 GNU Make 4.3; local unbound packaging used GCC/G++ 14.2.0. The package-build pins
@@ -145,11 +152,15 @@ or relabelling host-injected failures as accelerator observations. The new
 framework caller, external operator schemas and any changed enforcement require
 independent review and their own evidence.
 
-## Next bounded framework slice
+## Preserved framework qualification sequence
+
+This sequence was completed for the exact source and environment in the
+[accepted framework packet](evidence/p05-torch-replay/README.md). Apply the same
+obligations to any proposed expansion without extending the existing acceptance.
 
 1. Freeze one supported PyTorch version and platform. Specify the operator
    schemas, accepted tensor devices/dtypes/shapes/strides, packing/copy policy,
-   result ownership and explicit errors. No supported release is guessed here.
+   result ownership and explicit errors. Select a release from actual evidence.
 2. Implement only those custom operators through the qualified binding and
    existing owners. Reject unsupported layouts and gradients explicitly. Keep
    the fixed model and its expected arrays inside the trusted qualification
@@ -160,7 +171,7 @@ independent review and their own evidence.
    assembly and transfer accounting. A reference result cannot replace execution.
 4. Earn P05-A02 from the supported framework route's simulated execution and
    P05-A03 from its tested-version/operator/failure matrix. Preserve A01's exact
-   source scope; keep P05 in progress until all three gates are satisfied.
+   source scope; record a new decision only after all applicable gates are satisfied.
 
 A scoped custom operator establishes no full device backend, arbitrary model
 support, autograd, training, ONNX execution or CUDA binary compatibility.

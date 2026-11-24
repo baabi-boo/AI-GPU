@@ -1,0 +1,751 @@
+{
+  "a30_evidence": {
+    "exact_open_allowlist_match": true,
+    "guard_controls_blocked": 23,
+    "live_validation_calls": [],
+    "observed_open_paths": 47,
+    "original_command": "PYTHONDONTWRITEBYTECODE=1 python3 ../validation/a30_probe.py",
+    "original_scope": "one-complete-public-c0-fp16-original-replay-under-denial-guards",
+    "probe_sha256": "4e60d7390037b70101110a53f0d6b9e63f1dd88075ea2500eb3f50978f657a94",
+    "result_sha256": "a927d27becdb77a256ba54842b93b74365fbcc7d134a084d4f12138e364f0107",
+    "source_changes": [],
+    "summary_sha256": "c643859d9a0d957b6cc919c88a09fa70876c0ff830497fce43553356c7172d31",
+    "unexpected_denials": []
+  },
+  "agent": "a42",
+  "closure": {
+    "current_manifest_equals_a30": true,
+    "distinct_reader_inputs": 46,
+    "missing_project_modules": [],
+    "module_data_overlap": [
+      "ci/project/p02_layout_fixture_oracle.py",
+      "ci/project/p04_model_contract.py",
+      "ci/project/p04_reference.py"
+    ],
+    "reader_data": 24,
+    "reader_modules_including_driver": 25,
+    "static_project_modules": 25
+  },
+  "commands_and_outcomes": [
+    {
+      "command": "git diff --exit-code f01c9d03147343d274ee0a45b71b34f004709c0e -- docs/project/evidence/p05-torch/reviews/archive_reader.py ci/project/p06_replay.py",
+      "exit_code": 0,
+      "stdout": ""
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=ci/project python3 - <<'PY'\nimport ast, json, pathlib\nimport p05_torch_replay as r\nroot = pathlib.Path.cwd()\nknown = {p.stem: p for p in (root / \"ci/project\").glob(\"*.py\")}\nseen, queue = set(), [\"p05_torch_replay\"]\nwhile queue:\n    name = queue.pop()\n    if name in seen:\n        continue\n    seen.add(name)\n    for node in ast.walk(ast.parse(known[name].read_bytes())):\n        targets = ([a.name.split(\".\")[0] for a in node.names]\n                   if isinstance(node, ast.Import) else\n                   [node.module.split(\".\")[0]]\n                   if isinstance(node, ast.ImportFrom) and node.module else [])\n        queue.extend(target for target in targets if target in known)\nprior = json.loads((root.parent / \"validation/a30-result.json\").read_text())\nassert seen == set(r.READER_MODULES) | {\"p05_torch_replay\"}\nassert r._reader_sources() == prior[\"reader_input_manifest\"]\nprint(json.dumps({\"project_modules\": len(seen), \"reader_inputs\": len(r.READER_SOURCES),\n                  \"missing_modules\": [], \"same_a30_manifest\": True}))\nPY",
+      "exit_code": 0,
+      "outcome": "25/25 project imports closed; 25+24-3=46 identities exactly equal a30; zero gaps"
+    },
+    {
+      "command": "git diff f01c9d03147343d274ee0a45b71b34f004709c0e -- ci/project/p05_execution_records.py ci/project/p05_installed_check.py ci/project/p05_torch_records.py",
+      "exit_code": 0,
+      "outcome": "separate retained-data and live I/O entry points inspected"
+    }
+  ],
+  "confidence": "high",
+  "finding": "No actual used project input missing from reader identity; no retained or recorded-producer path reaches project filesystem/import operations in the reviewed public flow.",
+  "fixed_data_reads": [
+    {
+      "call": "p05_replay_native._frozen_cases",
+      "inputs": [
+        "ci/project/fixtures/p02_layout_v1.json",
+        "ci/project/fixtures/p02_tfr_v1.json",
+        "ci/project/fixtures/p02_wmma_numerical_v1.json",
+        "ci/project/fixtures/p04_tiny_mlp_v1.json"
+      ],
+      "root": "module ROOT, never retained source root"
+    },
+    {
+      "call": "p02_wmma_fixtures.load_cases(ROOT)",
+      "inputs": [
+        "ci/project/fixtures/p02_tfr_v1.json",
+        "ci/project/fixtures/p02_layout_v1.json",
+        "ci/project/fixtures/p02_wmma_numerical_v1.json"
+      ],
+      "optional_paths": "not passed by replay"
+    },
+    {
+      "call": "p04_fixture_adapter.load_cases(ROOT) -> p04_model_contract.validate",
+      "extra_implementation_reads": "three imported implementation paths, already enumerated",
+      "inputs": [
+        "LICENSE",
+        "VX_config.toml",
+        "VX_types.toml",
+        "ci/gen_config.py",
+        "ci/project/fixtures/p04_tiny_mlp_v1.json",
+        "ci/project/p02_layout_fixture_oracle.py",
+        "ci/project/p03_operator_manifest.json",
+        "ci/project/p04_model_contract.py",
+        "ci/project/p04_model_manifest.json",
+        "ci/project/p04_reference.py",
+        "docs/designs/tensor_numerics_v1.md",
+        "docs/designs/tiny_mlp_fixture_v1.md",
+        "profiles/p02-tfr.json",
+        "sw/common/ai_matmul_args.h",
+        "sw/common/ai_matmul_profile.h",
+        "sw/runtime/ai/contract.h",
+        "sw/runtime/ai/mlp_host.cpp",
+        "sw/runtime/ai/mlp_host.h"
+      ]
+    },
+    {
+      "a30_calls": 2,
+      "call": "p05_replay_native._package_probe",
+      "inputs": [
+        "ci/project/p05_execute.py"
+      ],
+      "interpretation": "ast.parse plus ast.literal_eval of PACKAGE_PROBE assignment; string compared to retained argv, never executed"
+    },
+    {
+      "a30_calls": 1,
+      "call": "p05_torch_replay._probe_source",
+      "inputs": [
+        "ci/project/p05_torch_execute.py"
+      ],
+      "interpretation": "ast.parse plus constant string FRAMEWORK_PROBE; string compared to retained argv, never executed"
+    },
+    {
+      "a30_calls": 2,
+      "call": "p06_replay._archive_api",
+      "inputs": [
+        "docs/project/evidence/p05-torch/reviews/archive_reader.py"
+      ],
+      "interpretation": "only dynamic project load; fixed local path and reviewed source hash pin"
+    },
+    {
+      "call": "p05_torch_replay._reader_sources",
+      "inputs": "all 46 reader_input_manifest paths",
+      "interpretation": "bounded regular-file reads at import, replay entry and replay completion"
+    }
+  ],
+  "limits": [
+    "No original archive opened or replayed in this audit.",
+    "a30 runtime observation covers one pinned c0 FP16 original, not all future inputs or BF16/c6.",
+    "No native GPU work, broad suite, hostile-local-filesystem proof, origin authentication or acceptance claim.",
+    "No repository source edits; only this mapping and a42.md created."
+  ],
+  "loader": {
+    "byte_identical_to_base": true,
+    "path": "ci/project/p06_replay.py",
+    "sha256": "9a5e68de45ec923c56e39a05697d9f93b3d0fdd91c81d38d6637c12ba153d991"
+  },
+  "project_import_edges": [
+    {
+      "from": "baseline_packet_contract",
+      "line": 11,
+      "owner": "<module>",
+      "to": "baseline_matrix"
+    },
+    {
+      "from": "baseline_packet_contract",
+      "line": 12,
+      "owner": "<module>",
+      "to": "baseline_packet_io"
+    },
+    {
+      "from": "compiler_records",
+      "line": 6,
+      "owner": "<module>",
+      "to": "baseline_packet_contract"
+    },
+    {
+      "from": "p02_matrix_records",
+      "line": 13,
+      "owner": "<module>",
+      "to": "baseline_packet_contract"
+    },
+    {
+      "from": "p02_matrix_records",
+      "line": 14,
+      "owner": "<module>",
+      "to": "compiler_records"
+    },
+    {
+      "from": "p02_wmma_fixtures",
+      "line": 28,
+      "owner": "<module>",
+      "to": "p02_fixture_oracle"
+    },
+    {
+      "from": "p02_wmma_fixtures",
+      "line": 29,
+      "owner": "<module>",
+      "to": "p02_layout_fixture_oracle"
+    },
+    {
+      "from": "p02_wmma_fixtures",
+      "line": 30,
+      "owner": "<module>",
+      "to": "p02_wmma_numerical_fixture_oracle"
+    },
+    {
+      "from": "p02_wmma_numerical_fixture_oracle",
+      "line": 21,
+      "owner": "<module>",
+      "to": "p02_fixture_oracle"
+    },
+    {
+      "from": "p02_wmma_numerical_fixture_oracle",
+      "line": 22,
+      "owner": "<module>",
+      "to": "p02_layout_fixture_oracle"
+    },
+    {
+      "from": "p03_execution_records",
+      "line": 9,
+      "owner": "<module>",
+      "to": "baseline_packet_contract"
+    },
+    {
+      "from": "p03_execution_records",
+      "line": 10,
+      "owner": "<module>",
+      "to": "compiler_records"
+    },
+    {
+      "from": "p03_execution_records",
+      "line": 11,
+      "owner": "<module>",
+      "to": "p02_matrix_records"
+    },
+    {
+      "from": "p04_execution_records",
+      "line": 10,
+      "owner": "<module>",
+      "to": "p02_matrix_records"
+    },
+    {
+      "from": "p04_fixture_adapter",
+      "line": 13,
+      "owner": "<module>",
+      "to": "p04_model_contract"
+    },
+    {
+      "from": "p04_fixture_adapter",
+      "line": 14,
+      "owner": "<module>",
+      "to": "p04_reference"
+    },
+    {
+      "from": "p04_model_contract",
+      "line": 14,
+      "owner": "<module>",
+      "to": "p02_layout_fixture_oracle"
+    },
+    {
+      "from": "p04_model_contract",
+      "line": 15,
+      "owner": "<module>",
+      "to": "p04_reference"
+    },
+    {
+      "from": "p04_reference",
+      "line": 19,
+      "owner": "<module>",
+      "to": "p02_layout_fixture_oracle"
+    },
+    {
+      "from": "p05_execution_records",
+      "line": 17,
+      "owner": "<module>",
+      "to": "p02_matrix_records"
+    },
+    {
+      "from": "p05_execution_records",
+      "line": 18,
+      "owner": "<module>",
+      "to": "p03_execution_records"
+    },
+    {
+      "from": "p05_execution_records",
+      "line": 19,
+      "owner": "<module>",
+      "to": "p04_execution_records"
+    },
+    {
+      "from": "p05_execution_records",
+      "line": 289,
+      "owner": "verify_retained_observations",
+      "to": "p05_installed_check"
+    },
+    {
+      "from": "p05_replay_installation",
+      "line": 29,
+      "owner": "<module>",
+      "to": "p05_execution_records"
+    },
+    {
+      "from": "p05_replay_installation",
+      "line": 30,
+      "owner": "<module>",
+      "to": "p06_replay"
+    },
+    {
+      "from": "p05_replay_native",
+      "line": 20,
+      "owner": "<module>",
+      "to": "baseline_process"
+    },
+    {
+      "from": "p05_replay_native",
+      "line": 21,
+      "owner": "<module>",
+      "to": "p02_matrix_records"
+    },
+    {
+      "from": "p05_replay_native",
+      "line": 22,
+      "owner": "<module>",
+      "to": "p02_wmma_fixtures"
+    },
+    {
+      "from": "p05_replay_native",
+      "line": 23,
+      "owner": "<module>",
+      "to": "p03_execution_records"
+    },
+    {
+      "from": "p05_replay_native",
+      "line": 24,
+      "owner": "<module>",
+      "to": "p04_execution_records"
+    },
+    {
+      "from": "p05_replay_native",
+      "line": 25,
+      "owner": "<module>",
+      "to": "p04_fixture_adapter"
+    },
+    {
+      "from": "p05_replay_native",
+      "line": 26,
+      "owner": "<module>",
+      "to": "p05_execution_records"
+    },
+    {
+      "from": "p05_torch_records",
+      "line": 117,
+      "owner": "validate_request",
+      "to": "p05_installed_check"
+    },
+    {
+      "from": "p05_torch_records",
+      "line": 127,
+      "owner": "validate_request_data",
+      "to": "p05_installed_check"
+    },
+    {
+      "from": "p05_torch_records",
+      "line": 236,
+      "owner": "verify_observations",
+      "to": "p05_execution_records"
+    },
+    {
+      "from": "p05_torch_records",
+      "line": 256,
+      "owner": "verify_retained_observations",
+      "to": "p05_execution_records"
+    },
+    {
+      "from": "p05_torch_replay",
+      "line": 19,
+      "owner": "<module>",
+      "to": "baseline_process"
+    },
+    {
+      "from": "p05_torch_replay",
+      "line": 20,
+      "owner": "<module>",
+      "to": "p04_model_contract"
+    },
+    {
+      "from": "p05_torch_replay",
+      "line": 21,
+      "owner": "<module>",
+      "to": "p05_execution_records"
+    },
+    {
+      "from": "p05_torch_replay",
+      "line": 22,
+      "owner": "<module>",
+      "to": "p05_installed_check"
+    },
+    {
+      "from": "p05_torch_replay",
+      "line": 23,
+      "owner": "<module>",
+      "to": "p05_torch_records"
+    },
+    {
+      "from": "p05_torch_replay",
+      "line": 24,
+      "owner": "<module>",
+      "to": "p05_replay_installation"
+    },
+    {
+      "from": "p05_torch_replay",
+      "line": 25,
+      "owner": "<module>",
+      "to": "p05_replay_native"
+    },
+    {
+      "from": "p05_torch_replay",
+      "line": 26,
+      "owner": "<module>",
+      "to": "p06_replay"
+    },
+    {
+      "from": "p06_compiler_records",
+      "line": 9,
+      "owner": "<module>",
+      "to": "baseline_packet_contract"
+    },
+    {
+      "from": "p06_compiler_records",
+      "line": 10,
+      "owner": "<module>",
+      "to": "compiler_records"
+    },
+    {
+      "from": "p06_compiler_records",
+      "line": 11,
+      "owner": "<module>",
+      "to": "p02_matrix_records"
+    },
+    {
+      "from": "p06_contract",
+      "line": 17,
+      "owner": "<module>",
+      "to": "p02_wmma_fixtures"
+    },
+    {
+      "from": "p06_contract",
+      "line": 18,
+      "owner": "<module>",
+      "to": "p04_fixture_adapter"
+    },
+    {
+      "from": "p06_records",
+      "line": 14,
+      "owner": "<module>",
+      "to": "p02_wmma_fixtures"
+    },
+    {
+      "from": "p06_records",
+      "line": 15,
+      "owner": "<module>",
+      "to": "p03_execution_records"
+    },
+    {
+      "from": "p06_records",
+      "line": 16,
+      "owner": "<module>",
+      "to": "p04_execution_records"
+    },
+    {
+      "from": "p06_records",
+      "line": 17,
+      "owner": "<module>",
+      "to": "p04_fixture_adapter"
+    },
+    {
+      "from": "p06_records",
+      "line": 18,
+      "owner": "<module>",
+      "to": "p06_contract"
+    },
+    {
+      "from": "p06_replay",
+      "line": 22,
+      "owner": "<module>",
+      "to": "baseline_packet_contract"
+    },
+    {
+      "from": "p06_replay",
+      "line": 23,
+      "owner": "<module>",
+      "to": "baseline_process"
+    },
+    {
+      "from": "p06_replay",
+      "line": 24,
+      "owner": "<module>",
+      "to": "p02_matrix_records"
+    },
+    {
+      "from": "p06_replay",
+      "line": 25,
+      "owner": "<module>",
+      "to": "p03_execution_records"
+    },
+    {
+      "from": "p06_replay",
+      "line": 26,
+      "owner": "<module>",
+      "to": "p06_compiler_records"
+    },
+    {
+      "from": "p06_replay",
+      "line": 27,
+      "owner": "<module>",
+      "to": "p06_contract"
+    },
+    {
+      "from": "p06_replay",
+      "line": 29,
+      "owner": "<module>",
+      "to": "p06_records"
+    }
+  ],
+  "reader_head": "d8abc24d2fd5dab5ceddbae3627e3d3eb9750358",
+  "reader_input_manifest": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "size_bytes": 11357
+    },
+    {
+      "path": "VX_config.toml",
+      "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+      "size_bytes": 30127
+    },
+    {
+      "path": "VX_types.toml",
+      "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+      "size_bytes": 36543
+    },
+    {
+      "path": "ci/gen_config.py",
+      "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+      "size_bytes": 60839
+    },
+    {
+      "path": "ci/project/baseline_matrix.py",
+      "sha256": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+      "size_bytes": 8890
+    },
+    {
+      "path": "ci/project/baseline_packet_contract.py",
+      "sha256": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+      "size_bytes": 53680
+    },
+    {
+      "path": "ci/project/baseline_packet_io.py",
+      "sha256": "469583bc558ccb010af82259de38248d7a9a8283cd873a96726aa3c3e2aaa94c",
+      "size_bytes": 14506
+    },
+    {
+      "path": "ci/project/baseline_process.py",
+      "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+      "size_bytes": 12627
+    },
+    {
+      "path": "ci/project/compiler_records.py",
+      "sha256": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+      "size_bytes": 7143
+    },
+    {
+      "path": "ci/project/fixtures/p02_layout_v1.json",
+      "sha256": "0543f9f4208de3ff4743fe1894d97ccf3b8cca4707e9a26acd1f3dde884725b2",
+      "size_bytes": 83960
+    },
+    {
+      "path": "ci/project/fixtures/p02_tfr_v1.json",
+      "sha256": "0d8b173af178875274a7bf29886a51838be8cdb54224d55353959a639a5ea6c3",
+      "size_bytes": 60925
+    },
+    {
+      "path": "ci/project/fixtures/p02_wmma_numerical_v1.json",
+      "sha256": "4102d74024e92e9887d7324b9326c0d6ad1fff206b5fad33f45c530d5bd03a73",
+      "size_bytes": 260308
+    },
+    {
+      "path": "ci/project/fixtures/p04_tiny_mlp_v1.json",
+      "sha256": "d22a899827afb3e8c22a528fc6a27fd12ff114ef39caf9ffa0cccd77e849cd03",
+      "size_bytes": 92301
+    },
+    {
+      "path": "ci/project/p02_fixture_oracle.py",
+      "sha256": "12e546864a4fef5b05e10c7a04b1006bcd59376e5921ea1221c4d42668490145",
+      "size_bytes": 23351
+    },
+    {
+      "path": "ci/project/p02_layout_fixture_oracle.py",
+      "sha256": "34e78c0313e2b032930615f02a790729d1c49293349728b55f7d04a29a2568a7",
+      "size_bytes": 10910
+    },
+    {
+      "path": "ci/project/p02_matrix_records.py",
+      "sha256": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+      "size_bytes": 12332
+    },
+    {
+      "path": "ci/project/p02_wmma_fixtures.py",
+      "sha256": "4a672a5d3357f220120f43e5f5d7e880f7d0ba36df380d69cd1873ea4879835e",
+      "size_bytes": 16440
+    },
+    {
+      "path": "ci/project/p02_wmma_numerical_fixture_oracle.py",
+      "sha256": "083450dc11712e5fc6dce7d19fb854bd9ef25b738347efd56bd07e81b079570b",
+      "size_bytes": 15556
+    },
+    {
+      "path": "ci/project/p03_execution_records.py",
+      "sha256": "b26449105f17f9487cc4fbaab36884ceea42be9f502a26aa58331ed4cf1140de",
+      "size_bytes": 6961
+    },
+    {
+      "path": "ci/project/p03_operator_manifest.json",
+      "sha256": "09f7071a40cec46f3fd7290a4aaadefc730a2bf006dc401a220050246d229f6b",
+      "size_bytes": 7936
+    },
+    {
+      "path": "ci/project/p04_execution_records.py",
+      "sha256": "abddfb06fb48bbd064c09d61879b278bca22778f5a8289f4c1ac93fb882b33e0",
+      "size_bytes": 16283
+    },
+    {
+      "path": "ci/project/p04_fixture_adapter.py",
+      "sha256": "37a50f6f0f80fd79b926b7ed5d13a233de6bf518590da7fa7d40800dcc91094a",
+      "size_bytes": 5364
+    },
+    {
+      "path": "ci/project/p04_model_contract.py",
+      "sha256": "c184d980d57aec54567d79025845c5fb34887741697ac78a66692a65da02e4b3",
+      "size_bytes": 15901
+    },
+    {
+      "path": "ci/project/p04_model_manifest.json",
+      "sha256": "8eb6acc6c8d19990eca2fc328395a1dcc3f41c7a3d6deee904a3e923163e9ec2",
+      "size_bytes": 7211
+    },
+    {
+      "path": "ci/project/p04_reference.py",
+      "sha256": "115a7db51948d69fc6267d5fe658d1a8e68c22e9f200d5ddc3f0a5181d7140a9",
+      "size_bytes": 11855
+    },
+    {
+      "path": "ci/project/p05_execute.py",
+      "sha256": "18f63ebd5bb04fbe9bcdf094d6d2464dbd8196ba3602d064f9b27ee87f9f7ef4",
+      "size_bytes": 41467
+    },
+    {
+      "path": "ci/project/p05_execution_records.py",
+      "sha256": "1f5c9f7d0e66de1537e952b9432e10543563c61eab164e1762416bae07fa7ffe",
+      "size_bytes": 21772
+    },
+    {
+      "path": "ci/project/p05_installed_check.py",
+      "sha256": "69d530bea385f2d0545cc677b8205585c42398f4ace2837b840b14d5cabfac5b",
+      "size_bytes": 33951
+    },
+    {
+      "path": "ci/project/p05_replay_installation.py",
+      "sha256": "759c6249ed503b9da66b077364fe481b52ac048eb29cecde1bf793bdaf14efc9",
+      "size_bytes": 46861
+    },
+    {
+      "path": "ci/project/p05_replay_native.py",
+      "sha256": "ec7808fd5b6fdfbce51fc28fba60fc8fd2c291ac1310d826f938b621137c4a1d",
+      "size_bytes": 43993
+    },
+    {
+      "path": "ci/project/p05_torch_execute.py",
+      "sha256": "92e61f2b659995f694c99ab05f401816507286dec7ff262cd4a94084473ab62d",
+      "size_bytes": 59599
+    },
+    {
+      "path": "ci/project/p05_torch_records.py",
+      "sha256": "3ff925b09b3176b1f328101bfa9d062aac48f0c3f0939fd847646128f8587639",
+      "size_bytes": 14635
+    },
+    {
+      "path": "ci/project/p05_torch_replay.py",
+      "sha256": "737eafad91bccc251039bade0ee7af4ce976bbda3d983361d240420cd8158dd3",
+      "size_bytes": 43139
+    },
+    {
+      "path": "ci/project/p06_compiler_records.py",
+      "sha256": "f441c12f4c9e4b9ef10eca13f8b5291fc41ffb86f1f42e42dfd320056dedd6da",
+      "size_bytes": 13614
+    },
+    {
+      "path": "ci/project/p06_contract.py",
+      "sha256": "780086070739b6d3586f9b3695ad4dc31d209a7817cf1af3651160a9fe6e1376",
+      "size_bytes": 31500
+    },
+    {
+      "path": "ci/project/p06_records.py",
+      "sha256": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7",
+      "size_bytes": 28046
+    },
+    {
+      "path": "ci/project/p06_replay.py",
+      "sha256": "9a5e68de45ec923c56e39a05697d9f93b3d0fdd91c81d38d6637c12ba153d991",
+      "size_bytes": 44626
+    },
+    {
+      "path": "docs/designs/tensor_numerics_v1.md",
+      "sha256": "2d7d3f18728fe77dd96a7de0c05c9550f2c2446ef7bee4fb0740fe8d367a06a2",
+      "size_bytes": 29061
+    },
+    {
+      "path": "docs/designs/tiny_mlp_fixture_v1.md",
+      "sha256": "8375616d9a498c08640c2d436d9764d6d10196001e7401730b121cdb64263b12",
+      "size_bytes": 12725
+    },
+    {
+      "path": "docs/project/evidence/p05-torch/reviews/archive_reader.py",
+      "sha256": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3",
+      "size_bytes": 16065
+    },
+    {
+      "path": "profiles/p02-tfr.json",
+      "sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+      "size_bytes": 4081
+    },
+    {
+      "path": "sw/common/ai_matmul_args.h",
+      "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+      "size_bytes": 4342
+    },
+    {
+      "path": "sw/common/ai_matmul_profile.h",
+      "sha256": "8b2eb9a819506227808537612672c08a574230736f13f840a9d83bbd35675680",
+      "size_bytes": 2675
+    },
+    {
+      "path": "sw/runtime/ai/contract.h",
+      "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+      "size_bytes": 3285
+    },
+    {
+      "path": "sw/runtime/ai/mlp_host.cpp",
+      "sha256": "de11f87400c61b166ab70913f437921ad9beed61a1aaa6ba8d35eb8eeb275256",
+      "size_bytes": 2225
+    },
+    {
+      "path": "sw/runtime/ai/mlp_host.h",
+      "sha256": "309e437aa9ca80c3a9c7c8ca7544478cdce4861203d32280709e2e940425cd0b",
+      "size_bytes": 774
+    }
+  ],
+  "retained_path_flow": {
+    "archive_stream": "only caller-selected original path reaches ArchiveReader; retained member names stay in bounded ZIP lookups",
+    "data_seams": "validate_request_data plus retained installation/framework validators use lexical path operations; live validators are separate",
+    "historical_sources": "hash/inventory comparisons only; no retained producer imported",
+    "installation_module": "PurePosixPath and PacketView joins; nested ZIP/TAR/GZIP parsing uses BytesIO and byte slices"
+  },
+  "review_base": "f01c9d03147343d274ee0a45b71b34f004709c0e",
+  "runtime_boundary": "Trusted Python interpreter, standard library, startup imports, sys.modules and normal bytecode caches are assumed; on-disk source identities are not hostile-runtime authentication. a30 denied two exact local cache reads, causing two pinned-source reader loads. This is trusted local code execution, not retained payload execution.",
+  "scope": "independent transitive trusted local input closure; no original replay rerun",
+  "severity": "F0",
+  "shared_reader": {
+    "byte_identical_to_base": true,
+    "path": "docs/project/evidence/p05-torch/reviews/archive_reader.py",
+    "pin_unchanged": true,
+    "sha256": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3",
+    "size_bytes": 16065
+  }
+}

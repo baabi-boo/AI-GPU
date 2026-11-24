@@ -1,0 +1,1100 @@
+{
+  "acceptance_claimed": false,
+  "agent": 48,
+  "claim_matrix": [
+    {
+      "boundary": "Pass is one-format retained consistency; 108 recorded launches, 16 framework calls, 180 event/profile pairs. No new execution, arbitrary-producer authentication or acceptance.",
+      "claim": "Complete replay pass / 663 members / verified observations",
+      "evidence": "a37/a38 actual public c0 results and independent raw joins; separate c6 public results and matching output digests",
+      "locations": [
+        "p05-torch-replay-handoff.md:105-128",
+        "p05-torch-compatibility.md:29-48,179-195",
+        "evidence/p05-torch-replay/README.md:51-100"
+      ]
+    },
+    {
+      "boundary": "Wheel/extension content identity and build/source pin consistency do not establish reproducible compilation or machine-code behavior. Native bundle shared libraries are retained; shared interpreter/OS libraries are absent.",
+      "claim": "Verified first-party wheel/extension/bundle and installed bytes",
+      "evidence": "11 retained wheel members, retained extension, 14 plain-Python installed files, six bundle artifacts plus manifest; c6 exact receipts included below",
+      "locations": [
+        "p05_replay_installation.py:_manifest,_packages,_plain_installation",
+        "p05-torch-replay-audit.md:100-104"
+      ]
+    },
+    {
+      "boundary": "Recorded hash/size/path and before/after joins only for absent bytes. Combined third-party payload has no per-wheel derivation. No fresh Torch _C/loader qualification.",
+      "claim": "Framework installation/package identity and stability",
+      "evidence": "17,122 installed, 16,231 payload, 861 seed and 13 distribution receipts; lock has 11 absent third-party wheels; 16,220 payload rows are non-first-party",
+      "locations": [
+        "p05_replay_installation.py:_locked_framework,_framework_inventory,_environments,LIMITATIONS"
+      ]
+    },
+    {
+      "boundary": "Compiler/interpreter/packaging-tool/seed/shared-OS-library bytes absent. pyvenv.cfg descriptor does not reproduce include-system-site-packages content. a47 effective-header finding is separate and was not re-investigated here.",
+      "claim": "Interpreter/compiler/tool/environment verification",
+      "evidence": "a49 distinguishes 22 observed tool identities, compiler/source bindings and retained outputs from missing executables; source logic joins descriptors only",
+      "locations": [
+        "p05_replay_native.py:_tools,_build_records",
+        "p05_replay_installation.py:_interpreter,_package_tools,LIMITATIONS",
+        "p05-torch-replay-handoff.md:145-151"
+      ]
+    },
+    {
+      "boundary": "Explicit limitation prevents substituting the plain installation metadata for the framework installation. General documentation phrase is bounded by its immediately stated missing-generated-metadata exception and detailed output.",
+      "claim": "First-party installation metadata is retained",
+      "evidence": "Plain-Python RECORD/direct_url bytes are retained; framework rewritten Vortex RECORD/direct_url bytes are absent",
+      "locations": [
+        "p05_replay_installation.py:_plain_installation,_framework_inventory,LIMITATIONS"
+      ]
+    },
+    {
+      "boundary": "Receipt/Git matches do not rehash historical producer filesystem. Five top-level gitlinks match; three nested observations remain unverified. Copies do not add unique paths or launches.",
+      "claim": "Source verified against exact execution Git revision",
+      "evidence": "Per original 421 byte-copy comparisons / 82 unique source paths; 11,269 receipt occurrences / 813-path union; 731 receipt-only; 193 submodule paths unverified",
+      "locations": [
+        "evidence/p05-torch-replay/README.md:92-100",
+        "p05-torch-compatibility.md:188-195",
+        "agent-notes/a49.md"
+      ]
+    },
+    {
+      "boundary": "Capture arrays and intermediate failure/ownership channels absent; two scripted sources and 42/63 compiled source paths use Git receipt joins. Full host semantics and assertion replay remain unavailable; all relevant reader flags stay false.",
+      "claim": "45 scripted host definitions and nine compiled scenarios passed",
+      "evidence": "a33 actual source/raw-log/child-result/artifact joins across all four originals; 45 unique definitions and nine unique scenarios repeated",
+      "locations": [
+        "p05-torch-compatibility.md:35,45-48",
+        "p05-torch-replay-handoff.md:136-143",
+        "evidence/p05-torch-replay/README.md:75-90"
+      ]
+    },
+    {
+      "boundary": "No pooling revisions or relabelling old results as current code validation. No inference to general governance (latest broad run failed), P01/P06 gates or physical/performance evidence. Acceptance attachments were absent at this review snapshot.",
+      "claim": "Primary c6 execution and earlier c0 corroboration / reader checkpoint",
+      "evidence": "c6 intake records hosted success; c6 and c0 raw replay identities are separate; a37/a38 used post-d8 installation parser 759c6249..., c6 results used cb191a17...",
+      "locations": [
+        "p05-torch-replay-handoff.md:14-31,97-103",
+        "evidence/p05-torch-replay/README.md:3-17,102-128"
+      ]
+    }
+  ],
+  "commands_and_outcomes": [
+    "git status --short; git diff --stat f01c9d03147343d274ee0a45b71b34f004709c0e: read-only inventory, exit 0",
+    "rg/sed/nl/cat of named source/docs/notes: successful read-only scope review",
+    "python3 heredocs: loaded existing JSON only, checked c6 output digest joins and four result/count/false-flag sets, a49 source/absent-byte counts and a33 repeated test/scenario counts; exit 0",
+    "hashlib.sha256 on reviewed files and git diff bytes: exact identities attached"
+  ],
+  "existing_replay_crosschecks": [
+    {
+      "archive": {
+        "path": "/workspace/scratch/101d52695253/originals/p05-torch-fp16-c0b44ce6-original.zip",
+        "sha256": "8c42f7e9f310972e2c0c67c56a03ce8f5460d706cb8dc3a5397435445ea6737c",
+        "size_bytes": 21439407
+      },
+      "counts": {
+        "copied_packet_additional_launches": 0,
+        "distinct_total_launches": 108,
+        "framework_event_profile_pairs": 180,
+        "framework_launches": 36,
+        "framework_operator_calls": 16,
+        "native_comparison_launches": 36,
+        "plain_python_launches": 36
+      },
+      "evidence": "agent-notes/a37-receipt.json",
+      "installation": {
+        "acceptance_claimed": false,
+        "binding_source_sha256": "b22abb281c8cf19ea20ba559eeea9695d8e2248ea6eeccfc5013d095717b8ea6",
+        "bound_wheel_members": 11,
+        "bundle_sha256": "4184e9beca0f74792a7e8d667e85b69f47a3c7d4f7fab93c153cbd5adfb59f98",
+        "framework_distribution_receipts": 13,
+        "framework_installed_receipts": 17122,
+        "framework_payload_receipts": 16231,
+        "framework_seed_receipts": 861,
+        "interpreter_bytes_rehashed": false,
+        "limitations": [
+          "Third-party wheel archives and installed framework payload bytes, including Torch binaries, are absent; their locked identities, inventory joins and stability are recorded observations only.",
+          "The combined framework payload inventory has no per-wheel ownership: absent wheel bytes prevent independent derivation of third-party payloads or entry-point metadata from the wheel lock.",
+          "Generated third-party entry points, seed pip, interpreter, packaging-tool and shared interpreter/OS library bytes are absent and cannot be freshly hashed.",
+          "Framework pyvenv.cfg is retained only as a descriptor; its include-system-site-packages content check cannot be repeated.",
+          "The framework installation's rewritten Vortex RECORD and direct_url.json bytes are absent; the retained plain-Python metadata does not establish those bytes.",
+          "The framework observations do not separately retain the loaded Torch _C object; no fresh loader or third-party binary qualification is established.",
+          "Retained extension bytes and build/source pins establish consistency, not reproducible compilation or machine-code behavior; trusted-builder/non-adversarial-filesystem scope remains."
+        ],
+        "native_execution": "not_run",
+        "phase_acceptance": false,
+        "retained_code_executed": false,
+        "retained_plain_installed_files": 14,
+        "scope": "retained-installation-consistency",
+        "third_party_bytes_rehashed": false,
+        "third_party_wheel_receipts": 11,
+        "venv_configuration_bytes_retained": false
+      },
+      "label": "c0-fp16",
+      "limitations": [
+        "Replay checks retained consistency; it does not authenticate an arbitrary producer or execute a GPU.",
+        "The selected archive digest and execution revision must come from independently retained intake evidence.",
+        "Recorded runner paths are lexical data; archived code, binaries and wheels are never executed or extracted.",
+        "Third-party wheel and installed payload bytes, interpreter/seed bytes and venv configuration contents are not fully retained.",
+        "Their recorded identities and inventories can be reconciled, but missing bytes cannot be freshly hashed by replay.",
+        "One format is not the complete two-format qualification; copied packets add no executions.",
+        "Host fault-test reports remain host evidence. This reader does not grant framework, performance or phase acceptance.",
+        "Supplementary preparation and host fault packets have bounded envelope and byte-identity checks only; their fault, build and preparation semantics are not revalidated."
+      ],
+      "outcome": "pass",
+      "selected_retained_package_receipts": [],
+      "supplementary": null
+    },
+    {
+      "archive": {
+        "path": "/workspace/scratch/101d52695253/originals/p05-torch-bf16-c0b44ce6-original.zip",
+        "sha256": "787fd1b41a27da8c100277613c581ba734920fd45b13e0707ba0f9ea2e866330",
+        "size_bytes": 21439104
+      },
+      "counts": {
+        "copied_packet_additional_launches": 0,
+        "distinct_total_launches": 108,
+        "framework_event_profile_pairs": 180,
+        "framework_launches": 36,
+        "framework_operator_calls": 16,
+        "native_comparison_launches": 36,
+        "plain_python_launches": 36
+      },
+      "evidence": "agent-notes/a38-receipt.json",
+      "installation": {
+        "acceptance_claimed": false,
+        "binding_source_sha256": "b22abb281c8cf19ea20ba559eeea9695d8e2248ea6eeccfc5013d095717b8ea6",
+        "bound_wheel_members": 11,
+        "bundle_sha256": "0dfe32438271eca9b9b8ca80fc214e85643e9733a24ceae046e6d9b7fd554556",
+        "framework_distribution_receipts": 13,
+        "framework_installed_receipts": 17122,
+        "framework_payload_receipts": 16231,
+        "framework_seed_receipts": 861,
+        "interpreter_bytes_rehashed": false,
+        "limitations": [
+          "Third-party wheel archives and installed framework payload bytes, including Torch binaries, are absent; their locked identities, inventory joins and stability are recorded observations only.",
+          "The combined framework payload inventory has no per-wheel ownership: absent wheel bytes prevent independent derivation of third-party payloads or entry-point metadata from the wheel lock.",
+          "Generated third-party entry points, seed pip, interpreter, packaging-tool and shared interpreter/OS library bytes are absent and cannot be freshly hashed.",
+          "Framework pyvenv.cfg is retained only as a descriptor; its include-system-site-packages content check cannot be repeated.",
+          "The framework installation's rewritten Vortex RECORD and direct_url.json bytes are absent; the retained plain-Python metadata does not establish those bytes.",
+          "The framework observations do not separately retain the loaded Torch _C object; no fresh loader or third-party binary qualification is established.",
+          "Retained extension bytes and build/source pins establish consistency, not reproducible compilation or machine-code behavior; trusted-builder/non-adversarial-filesystem scope remains."
+        ],
+        "native_execution": "not_run",
+        "phase_acceptance": false,
+        "retained_code_executed": false,
+        "retained_plain_installed_files": 14,
+        "scope": "retained-installation-consistency",
+        "third_party_bytes_rehashed": false,
+        "third_party_wheel_receipts": 11,
+        "venv_configuration_bytes_retained": false
+      },
+      "label": "c0-bf16",
+      "limitations": [
+        "Replay checks retained consistency; it does not authenticate an arbitrary producer or execute a GPU.",
+        "The selected archive digest and execution revision must come from independently retained intake evidence.",
+        "Recorded runner paths are lexical data; archived code, binaries and wheels are never executed or extracted.",
+        "Third-party wheel and installed payload bytes, interpreter/seed bytes and venv configuration contents are not fully retained.",
+        "Their recorded identities and inventories can be reconciled, but missing bytes cannot be freshly hashed by replay.",
+        "One format is not the complete two-format qualification; copied packets add no executions.",
+        "Host fault-test reports remain host evidence. This reader does not grant framework, performance or phase acceptance.",
+        "Supplementary preparation and host fault packets have bounded envelope and byte-identity checks only; their fault, build and preparation semantics are not revalidated."
+      ],
+      "outcome": "pass",
+      "selected_retained_package_receipts": [],
+      "supplementary": null
+    },
+    {
+      "archive": {
+        "path": "/workspace/scratch/101d52695253/originals/p05-torch-fp16-c6fb039e-original.zip",
+        "sha256": "d9e9a713ef716882086b6c8176d1d27c4c98acae77110c58f84bdb69a00c4aaa",
+        "size_bytes": 21444979
+      },
+      "counts": {
+        "copied_packet_additional_launches": 0,
+        "distinct_total_launches": 108,
+        "framework_event_profile_pairs": 180,
+        "framework_launches": 36,
+        "framework_operator_calls": 16,
+        "native_comparison_launches": 36,
+        "plain_python_launches": 36
+      },
+      "evidence": "validation/c6-fp16-replay.json",
+      "installation": {
+        "acceptance_claimed": false,
+        "binding_source_sha256": "b22abb281c8cf19ea20ba559eeea9695d8e2248ea6eeccfc5013d095717b8ea6",
+        "bound_wheel_members": 11,
+        "bundle_sha256": "bb3c14aba6becce2a974acae01666067492b6b7643ba5ea24a81c45946829817",
+        "framework_distribution_receipts": 13,
+        "framework_installed_receipts": 17122,
+        "framework_payload_receipts": 16231,
+        "framework_seed_receipts": 861,
+        "interpreter_bytes_rehashed": false,
+        "limitations": [
+          "Third-party wheel archives and installed framework payload bytes, including Torch binaries, are absent; their locked identities, inventory joins and stability are recorded observations only.",
+          "The combined framework payload inventory has no per-wheel ownership: absent wheel bytes prevent independent derivation of third-party payloads or entry-point metadata from the wheel lock.",
+          "Generated third-party entry points, seed pip, interpreter, packaging-tool and shared interpreter/OS library bytes are absent and cannot be freshly hashed.",
+          "Framework pyvenv.cfg is retained only as a descriptor; its include-system-site-packages content check cannot be repeated.",
+          "The framework installation's rewritten Vortex RECORD and direct_url.json bytes are absent; the retained plain-Python metadata does not establish those bytes.",
+          "The framework observations do not separately retain the loaded Torch _C object; no fresh loader or third-party binary qualification is established.",
+          "Retained extension bytes and build/source pins establish consistency, not reproducible compilation or machine-code behavior; trusted-builder/non-adversarial-filesystem scope remains."
+        ],
+        "native_execution": "not_run",
+        "phase_acceptance": false,
+        "retained_code_executed": false,
+        "retained_plain_installed_files": 14,
+        "scope": "retained-installation-consistency",
+        "third_party_bytes_rehashed": false,
+        "third_party_wheel_receipts": 11,
+        "venv_configuration_bytes_retained": false
+      },
+      "label": "c6-fp16",
+      "limitations": [
+        "Replay checks retained consistency; it does not authenticate an arbitrary producer or execute a GPU.",
+        "The selected archive digest and execution revision must come from independently retained intake evidence.",
+        "Recorded runner paths are lexical data; archived code, binaries and wheels are never executed or extracted.",
+        "Third-party wheel and installed payload bytes, interpreter/seed bytes and venv configuration contents are not fully retained.",
+        "Their recorded identities and inventories can be reconciled, but missing bytes cannot be freshly hashed by replay.",
+        "One format is not the complete two-format qualification; copied packets add no executions.",
+        "Host fault-test reports remain host evidence. This reader does not grant framework, performance or phase acceptance.",
+        "Supplementary preparation and host fault packets have bounded envelope and byte-identity checks only; their fault, build and preparation semantics are not revalidated."
+      ],
+      "outcome": "pass",
+      "selected_retained_package_receipts": [
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/INSTALLER",
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "size_bytes": 4
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/METADATA",
+          "sha256": "e2645b4e1050a0c068483ee7f6fa7a76cdd82612f5aababe55560d22501d1009",
+          "size_bytes": 19295
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/RECORD",
+          "sha256": "fa4439652fe524ae4c43deaed1c904cb1e0670044178f81c48a31ec39554ba99",
+          "size_bytes": 1192
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/REQUESTED",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/WHEEL",
+          "sha256": "86345c7d1bd20333b9f585c8463160c94ad3d8e4df2888c77071833ae91f4ee9",
+          "size_bytes": 177
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/direct_url.json",
+          "sha256": "bc15e8d7580d8fb539d066d54b7c1b6ae1cd732a82723afd4d80ab9d27fd155e",
+          "size_bytes": 384
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/licenses/LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "size_bytes": 11357
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/top_level.txt",
+          "sha256": "1597af1a702dd6264bd2d54e532e1f06835cce326bd51da44ad23317d11bd741",
+          "size_bytes": 10
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai/__init__.py",
+          "sha256": "19d006db3a52bac6b3a7eec0111edd7fa2927e6fc31c1a23308178fa05783465",
+          "size_bytes": 523
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai/_api.py",
+          "sha256": "f66748c6657ddd55e8753343f49b43cce87003df770e8bbb20c70ee57e3d0db2",
+          "size_bytes": 32061
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai/_bundle.py",
+          "sha256": "cf438f291359314844b6489545ad1b263639a36706ae3b86f94d9832c6ee4679",
+          "size_bytes": 12288
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai/_native.cpython-312-x86_64-linux-gnu.so",
+          "sha256": "8ca8b206191b6ff13681ab5cfcbbf32570ec939583e4bb5f3acff84b4bab1fbd",
+          "size_bytes": 2406008
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai/launch.py",
+          "sha256": "e09c48119bb73c3209d9ac163c5f3667ecc53a86630cbf677b444a07a68b5267",
+          "size_bytes": 3197
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai/torch_ops.py",
+          "sha256": "b38aec7920a4640aa7af8e01143bf5851ccb9c5132644e60d96f901b71b80d70",
+          "size_bytes": 14380
+        },
+        {
+          "path": "python/packages/sdist/vortex_ai-0.1.0.tar.gz",
+          "sha256": "66d82919b19c1b9ec49f4f2af128bb59cc66ae38892e2fef16fb349c37c534a3",
+          "size_bytes": 97942
+        },
+        {
+          "path": "python/packages/wheel/vortex_ai-0.1.0-1bb3c14aba6becce2a974acae01666067492b6b7643ba5ea24a81c45946829817-cp312-cp312-linux_x86_64.whl",
+          "sha256": "728e88dcc04f4991f9c5563cbbac3c7b18f1b975b5e82ac87920b7945d81dbf7",
+          "size_bytes": 886060
+        },
+        {
+          "path": "torch/packages/vortex_ai-0.1.0-1bb3c14aba6becce2a974acae01666067492b6b7643ba5ea24a81c45946829817-cp312-cp312-linux_x86_64.whl",
+          "sha256": "728e88dcc04f4991f9c5563cbbac3c7b18f1b975b5e82ac87920b7945d81dbf7",
+          "size_bytes": 886060
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/INSTALLER",
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "size_bytes": 4
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/METADATA",
+          "sha256": "e2645b4e1050a0c068483ee7f6fa7a76cdd82612f5aababe55560d22501d1009",
+          "size_bytes": 19295
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/RECORD",
+          "sha256": "fa4439652fe524ae4c43deaed1c904cb1e0670044178f81c48a31ec39554ba99",
+          "size_bytes": 1192
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/REQUESTED",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/WHEEL",
+          "sha256": "86345c7d1bd20333b9f585c8463160c94ad3d8e4df2888c77071833ae91f4ee9",
+          "size_bytes": 177
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/direct_url.json",
+          "sha256": "bc15e8d7580d8fb539d066d54b7c1b6ae1cd732a82723afd4d80ab9d27fd155e",
+          "size_bytes": 384
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/licenses/LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "size_bytes": 11357
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/top_level.txt",
+          "sha256": "1597af1a702dd6264bd2d54e532e1f06835cce326bd51da44ad23317d11bd741",
+          "size_bytes": 10
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai/__init__.py",
+          "sha256": "19d006db3a52bac6b3a7eec0111edd7fa2927e6fc31c1a23308178fa05783465",
+          "size_bytes": 523
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai/_api.py",
+          "sha256": "f66748c6657ddd55e8753343f49b43cce87003df770e8bbb20c70ee57e3d0db2",
+          "size_bytes": 32061
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai/_bundle.py",
+          "sha256": "cf438f291359314844b6489545ad1b263639a36706ae3b86f94d9832c6ee4679",
+          "size_bytes": 12288
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai/_native.cpython-312-x86_64-linux-gnu.so",
+          "sha256": "8ca8b206191b6ff13681ab5cfcbbf32570ec939583e4bb5f3acff84b4bab1fbd",
+          "size_bytes": 2406008
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai/launch.py",
+          "sha256": "e09c48119bb73c3209d9ac163c5f3667ecc53a86630cbf677b444a07a68b5267",
+          "size_bytes": 3197
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai/torch_ops.py",
+          "sha256": "b38aec7920a4640aa7af8e01143bf5851ccb9c5132644e60d96f901b71b80d70",
+          "size_bytes": 14380
+        },
+        {
+          "path": "torch/python/packages/sdist/vortex_ai-0.1.0.tar.gz",
+          "sha256": "66d82919b19c1b9ec49f4f2af128bb59cc66ae38892e2fef16fb349c37c534a3",
+          "size_bytes": 97942
+        },
+        {
+          "path": "torch/python/packages/wheel/vortex_ai-0.1.0-1bb3c14aba6becce2a974acae01666067492b6b7643ba5ea24a81c45946829817-cp312-cp312-linux_x86_64.whl",
+          "sha256": "728e88dcc04f4991f9c5563cbbac3c7b18f1b975b5e82ac87920b7945d81dbf7",
+          "size_bytes": 886060
+        }
+      ],
+      "supplementary": {
+        "additional_native_launches_counted": 0,
+        "host_fault_semantics_revalidated": false,
+        "host_test_results_revalidated": false,
+        "member_count": 71,
+        "preparation_semantics_revalidated": false,
+        "retained_outcomes": {
+          "compiled_fault_host": "pass",
+          "preparation": "pass",
+          "scripted_host": "pass"
+        },
+        "scope": "bounded-supplementary-envelopes-and-retained-bytes",
+        "size_bytes": 1494942
+      }
+    },
+    {
+      "archive": {
+        "path": "/workspace/scratch/101d52695253/originals/p05-torch-bf16-c6fb039e-original.zip",
+        "sha256": "85498037f9a8b06bbb44357208f236ad325dc686934059bc472348c4524a74b3",
+        "size_bytes": 21445834
+      },
+      "counts": {
+        "copied_packet_additional_launches": 0,
+        "distinct_total_launches": 108,
+        "framework_event_profile_pairs": 180,
+        "framework_launches": 36,
+        "framework_operator_calls": 16,
+        "native_comparison_launches": 36,
+        "plain_python_launches": 36
+      },
+      "evidence": "validation/c6-bf16-replay.json",
+      "installation": {
+        "acceptance_claimed": false,
+        "binding_source_sha256": "b22abb281c8cf19ea20ba559eeea9695d8e2248ea6eeccfc5013d095717b8ea6",
+        "bound_wheel_members": 11,
+        "bundle_sha256": "58962d40c6747a0e49bc525a33693a4c56ade6d3985e263c03af7044f5a11707",
+        "framework_distribution_receipts": 13,
+        "framework_installed_receipts": 17122,
+        "framework_payload_receipts": 16231,
+        "framework_seed_receipts": 861,
+        "interpreter_bytes_rehashed": false,
+        "limitations": [
+          "Third-party wheel archives and installed framework payload bytes, including Torch binaries, are absent; their locked identities, inventory joins and stability are recorded observations only.",
+          "The combined framework payload inventory has no per-wheel ownership: absent wheel bytes prevent independent derivation of third-party payloads or entry-point metadata from the wheel lock.",
+          "Generated third-party entry points, seed pip, interpreter, packaging-tool and shared interpreter/OS library bytes are absent and cannot be freshly hashed.",
+          "Framework pyvenv.cfg is retained only as a descriptor; its include-system-site-packages content check cannot be repeated.",
+          "The framework installation's rewritten Vortex RECORD and direct_url.json bytes are absent; the retained plain-Python metadata does not establish those bytes.",
+          "The framework observations do not separately retain the loaded Torch _C object; no fresh loader or third-party binary qualification is established.",
+          "Retained extension bytes and build/source pins establish consistency, not reproducible compilation or machine-code behavior; trusted-builder/non-adversarial-filesystem scope remains."
+        ],
+        "native_execution": "not_run",
+        "phase_acceptance": false,
+        "retained_code_executed": false,
+        "retained_plain_installed_files": 14,
+        "scope": "retained-installation-consistency",
+        "third_party_bytes_rehashed": false,
+        "third_party_wheel_receipts": 11,
+        "venv_configuration_bytes_retained": false
+      },
+      "label": "c6-bf16",
+      "limitations": [
+        "Replay checks retained consistency; it does not authenticate an arbitrary producer or execute a GPU.",
+        "The selected archive digest and execution revision must come from independently retained intake evidence.",
+        "Recorded runner paths are lexical data; archived code, binaries and wheels are never executed or extracted.",
+        "Third-party wheel and installed payload bytes, interpreter/seed bytes and venv configuration contents are not fully retained.",
+        "Their recorded identities and inventories can be reconciled, but missing bytes cannot be freshly hashed by replay.",
+        "One format is not the complete two-format qualification; copied packets add no executions.",
+        "Host fault-test reports remain host evidence. This reader does not grant framework, performance or phase acceptance.",
+        "Supplementary preparation and host fault packets have bounded envelope and byte-identity checks only; their fault, build and preparation semantics are not revalidated."
+      ],
+      "outcome": "pass",
+      "selected_retained_package_receipts": [
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/INSTALLER",
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "size_bytes": 4
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/METADATA",
+          "sha256": "e2645b4e1050a0c068483ee7f6fa7a76cdd82612f5aababe55560d22501d1009",
+          "size_bytes": 19295
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/RECORD",
+          "sha256": "908dc56712cda06481da55ce35fdf8bacb2a5fb087ef7b5c0a4b015d8c82ee78",
+          "size_bytes": 1192
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/REQUESTED",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/WHEEL",
+          "sha256": "0500b6b4ac9da39cb241e561a6efebcd960f364854dbfd93b07d88e9c05afb48",
+          "size_bytes": 177
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/direct_url.json",
+          "sha256": "800c07adff65f6374852240d5263a74ee3fa29957df3c1695f25e52550074800",
+          "size_bytes": 384
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/licenses/LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "size_bytes": 11357
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai-0.1.0.dist-info/top_level.txt",
+          "sha256": "1597af1a702dd6264bd2d54e532e1f06835cce326bd51da44ad23317d11bd741",
+          "size_bytes": 10
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai/__init__.py",
+          "sha256": "19d006db3a52bac6b3a7eec0111edd7fa2927e6fc31c1a23308178fa05783465",
+          "size_bytes": 523
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai/_api.py",
+          "sha256": "f66748c6657ddd55e8753343f49b43cce87003df770e8bbb20c70ee57e3d0db2",
+          "size_bytes": 32061
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai/_bundle.py",
+          "sha256": "cf438f291359314844b6489545ad1b263639a36706ae3b86f94d9832c6ee4679",
+          "size_bytes": 12288
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai/_native.cpython-312-x86_64-linux-gnu.so",
+          "sha256": "333f7e8724bf7032fec60781c4adfa27335e1e5f20871807cb168a583874f082",
+          "size_bytes": 2406008
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai/launch.py",
+          "sha256": "e09c48119bb73c3209d9ac163c5f3667ecc53a86630cbf677b444a07a68b5267",
+          "size_bytes": 3197
+        },
+        {
+          "path": "python/artifacts/installed/vortex_ai/torch_ops.py",
+          "sha256": "b38aec7920a4640aa7af8e01143bf5851ccb9c5132644e60d96f901b71b80d70",
+          "size_bytes": 14380
+        },
+        {
+          "path": "python/packages/sdist/vortex_ai-0.1.0.tar.gz",
+          "sha256": "c514638b5ee22fcb4c76e917041add51145537c9849d1a892996455a932c9f7a",
+          "size_bytes": 97961
+        },
+        {
+          "path": "python/packages/wheel/vortex_ai-0.1.0-158962d40c6747a0e49bc525a33693a4c56ade6d3985e263c03af7044f5a11707-cp312-cp312-linux_x86_64.whl",
+          "sha256": "4a2d6f75b722e9eff565acd6200133d9a710a1c3508f3ef302e5d937c17a1b55",
+          "size_bytes": 886079
+        },
+        {
+          "path": "torch/packages/vortex_ai-0.1.0-158962d40c6747a0e49bc525a33693a4c56ade6d3985e263c03af7044f5a11707-cp312-cp312-linux_x86_64.whl",
+          "sha256": "4a2d6f75b722e9eff565acd6200133d9a710a1c3508f3ef302e5d937c17a1b55",
+          "size_bytes": 886079
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/INSTALLER",
+          "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+          "size_bytes": 4
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/METADATA",
+          "sha256": "e2645b4e1050a0c068483ee7f6fa7a76cdd82612f5aababe55560d22501d1009",
+          "size_bytes": 19295
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/RECORD",
+          "sha256": "908dc56712cda06481da55ce35fdf8bacb2a5fb087ef7b5c0a4b015d8c82ee78",
+          "size_bytes": 1192
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/REQUESTED",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/WHEEL",
+          "sha256": "0500b6b4ac9da39cb241e561a6efebcd960f364854dbfd93b07d88e9c05afb48",
+          "size_bytes": 177
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/direct_url.json",
+          "sha256": "800c07adff65f6374852240d5263a74ee3fa29957df3c1695f25e52550074800",
+          "size_bytes": 384
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/licenses/LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "size_bytes": 11357
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai-0.1.0.dist-info/top_level.txt",
+          "sha256": "1597af1a702dd6264bd2d54e532e1f06835cce326bd51da44ad23317d11bd741",
+          "size_bytes": 10
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai/__init__.py",
+          "sha256": "19d006db3a52bac6b3a7eec0111edd7fa2927e6fc31c1a23308178fa05783465",
+          "size_bytes": 523
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai/_api.py",
+          "sha256": "f66748c6657ddd55e8753343f49b43cce87003df770e8bbb20c70ee57e3d0db2",
+          "size_bytes": 32061
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai/_bundle.py",
+          "sha256": "cf438f291359314844b6489545ad1b263639a36706ae3b86f94d9832c6ee4679",
+          "size_bytes": 12288
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai/_native.cpython-312-x86_64-linux-gnu.so",
+          "sha256": "333f7e8724bf7032fec60781c4adfa27335e1e5f20871807cb168a583874f082",
+          "size_bytes": 2406008
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai/launch.py",
+          "sha256": "e09c48119bb73c3209d9ac163c5f3667ecc53a86630cbf677b444a07a68b5267",
+          "size_bytes": 3197
+        },
+        {
+          "path": "torch/python/artifacts/installed/vortex_ai/torch_ops.py",
+          "sha256": "b38aec7920a4640aa7af8e01143bf5851ccb9c5132644e60d96f901b71b80d70",
+          "size_bytes": 14380
+        },
+        {
+          "path": "torch/python/packages/sdist/vortex_ai-0.1.0.tar.gz",
+          "sha256": "c514638b5ee22fcb4c76e917041add51145537c9849d1a892996455a932c9f7a",
+          "size_bytes": 97961
+        },
+        {
+          "path": "torch/python/packages/wheel/vortex_ai-0.1.0-158962d40c6747a0e49bc525a33693a4c56ade6d3985e263c03af7044f5a11707-cp312-cp312-linux_x86_64.whl",
+          "sha256": "4a2d6f75b722e9eff565acd6200133d9a710a1c3508f3ef302e5d937c17a1b55",
+          "size_bytes": 886079
+        }
+      ],
+      "supplementary": {
+        "additional_native_launches_counted": 0,
+        "host_fault_semantics_revalidated": false,
+        "host_test_results_revalidated": false,
+        "member_count": 71,
+        "preparation_semantics_revalidated": false,
+        "retained_outcomes": {
+          "compiled_fault_host": "pass",
+          "preparation": "pass",
+          "scripted_host": "pass"
+        },
+        "scope": "bounded-supplementary-envelopes-and-retained-bytes",
+        "size_bytes": 1494931
+      }
+    }
+  ],
+  "findings": [
+    {
+      "confidence": "high",
+      "disposition": "No missing-byte claim overstatement found in reviewed snapshots. Full compilation/host semantic reconstruction remains explicitly unestablished.",
+      "evidence_type": "Static source/document inspection and reconciliation of previously executed receipts; no rerun",
+      "severity": "F0"
+    }
+  ],
+  "host_limits_from_a33": [
+    "Source/log/counter reconciliation is historical retained evidence; no retained code or native backend was executed.",
+    "The scripted host-test source and NativeMock source are hash receipts matched against selected Git revisions, not standalone archived source members.",
+    "Compiled child stdout retains final counters and summary metrics, not capture arrays, all assertion inputs, individual failure statuses, or full ownership traces.",
+    "Real PyTorch/CPython versions are recorded; third-party framework/interpreter bytes are not independently requalified.",
+    "The public replay deliberately leaves host fault semantics and host test results unrevalidated; this external source-scoped review does not change its flags.",
+    "The 45 host test definitions run both formats internally and repeat per workflow job; they are not 90 unique definitions per revision.",
+    "Host compiled arithmetic is synthetic-pattern-or-immutable-fixture-response; nine scenarios are not accelerator launches or new native numerical evidence."
+  ],
+  "host_source_retention_limit": {
+    "compiled_manifest_source_paths": 63,
+    "scripted_host_paths_without_standalone_retention": [
+      "ci/project/p05_torch_host_tests.py",
+      "ci/project/test_p05_python_api.py"
+    ],
+    "source_paths_joined_to_git_only": 42,
+    "source_paths_with_standalone_retained_bytes": 21
+  },
+  "native_execution": "not_run",
+  "original_archives_opened": false,
+  "reader_head": "d8abc24d2fd5dab5ceddbae3627e3d3eb9750358",
+  "related_finding": "Coordinator reports a47 effective-header parser contradiction finding; separate scope, no independent verification by a48.",
+  "retained_members_executed_imported_or_extracted": false,
+  "review_base": "f01c9d03147343d274ee0a45b71b34f004709c0e",
+  "reviewed_file_identities": [
+    {
+      "path": "AI-GPU/ci/project/p05_torch_replay.py",
+      "sha256": "737eafad91bccc251039bade0ee7af4ce976bbda3d983361d240420cd8158dd3",
+      "size_bytes": 43139
+    },
+    {
+      "path": "AI-GPU/ci/project/p05_replay_installation.py",
+      "sha256": "759c6249ed503b9da66b077364fe481b52ac048eb29cecde1bf793bdaf14efc9",
+      "size_bytes": 46861
+    },
+    {
+      "path": "AI-GPU/ci/project/p05_replay_native.py",
+      "sha256": "ec7808fd5b6fdfbce51fc28fba60fc8fd2c291ac1310d826f938b621137c4a1d",
+      "size_bytes": 43993
+    },
+    {
+      "path": "AI-GPU/ci/project/p05_execution_records.py",
+      "sha256": "1f5c9f7d0e66de1537e952b9432e10543563c61eab164e1762416bae07fa7ffe",
+      "size_bytes": 21772
+    },
+    {
+      "path": "AI-GPU/ci/project/p05_torch_records.py",
+      "sha256": "3ff925b09b3176b1f328101bfa9d062aac48f0c3f0939fd847646128f8587639",
+      "size_bytes": 14635
+    },
+    {
+      "path": "AI-GPU/ci/project/p05_installed_check.py",
+      "sha256": "69d530bea385f2d0545cc677b8205585c42398f4ace2837b840b14d5cabfac5b",
+      "size_bytes": 33951
+    },
+    {
+      "path": "AI-GPU/docs/designs/torch_archive_replay_v1.md",
+      "sha256": "ff8619ca97a2ca37006a61da7b4ab6f91bbcfbb81cd5e39a8a2e55e35b68fba2",
+      "size_bytes": 4751
+    },
+    {
+      "path": "AI-GPU/docs/project/p05-torch-compatibility.md",
+      "sha256": "28a652cb23fd1dd6298bd21a459bc6d9d3da1dad20a664bd05ff31fcba81f4c6",
+      "size_bytes": 16177
+    },
+    {
+      "path": "AI-GPU/docs/project/p05-torch-replay-handoff.md",
+      "sha256": "3a21f3698fd028f765a11e5b14ce4b53e232d67f0cbf6b117d9a7e6f4a59498b",
+      "size_bytes": 9712
+    },
+    {
+      "path": "AI-GPU/docs/project/p05-torch-replay-audit.md",
+      "sha256": "6cc4a40e89542efc128768dec1649226091c9073f7d3797911f54cafaa0cf67b",
+      "size_bytes": 10279
+    },
+    {
+      "path": "AI-GPU/docs/project/evidence/p05-torch-replay/README.md",
+      "sha256": "27186d2cec915d926a7831b8b1534e1cc8e793c14763e50c3b874b1d920806ab",
+      "size_bytes": 7954
+    },
+    {
+      "path": "AI-GPU/docs/project/evidence/p05-torch-replay/intake.json",
+      "sha256": "3124cf1cd06111ac6ed93cc62d4316437e4d6a7e29cb7ac785875ebe13b7f02d",
+      "size_bytes": 1688
+    },
+    {
+      "path": "AI-GPU/docs/project/evidence/p05-torch-replay/fresh-seam-intake.json",
+      "sha256": "26cffd07a889ad8f546574042dc79df787c832a3804f935f8679e2df103f6a97",
+      "size_bytes": 6695
+    },
+    {
+      "path": "agent-notes/a37.md",
+      "sha256": "3ab5164f9df931fb84a47014c38add680118bbcec34fbaf58666065e82717e71",
+      "size_bytes": 4237
+    },
+    {
+      "path": "agent-notes/a37-receipt.json",
+      "sha256": "df72e9cad99710dcf1a6362a7e13d0db7db3167d81a14e8fe3a51248d5a59202",
+      "size_bytes": 24883
+    },
+    {
+      "path": "agent-notes/a38.md",
+      "sha256": "fd4e7527c4ee4aa084d2f1dc8ccd2662ba5003e05ac877a64d7ea42a2379d9ff",
+      "size_bytes": 3741
+    },
+    {
+      "path": "agent-notes/a38-receipt.json",
+      "sha256": "b7d324a9f71cb44ad95531d46953af182171c95b32b306428e654424c81e9111",
+      "size_bytes": 23060
+    },
+    {
+      "path": "agent-notes/a49.md",
+      "sha256": "4b72ab98f8de2d5a0c80571795c3acb8c1bbaa95e2ad8b29bbd5b315c75b9cc6",
+      "size_bytes": 4141
+    },
+    {
+      "path": "agent-notes/a49-git-source-joins.json",
+      "sha256": "0b1e405ddb32345a26f8ad04663f4b0a7f2a0cac1e0ef0174e2f528b2edbbc11",
+      "size_bytes": 75461
+    },
+    {
+      "path": "agent-notes/a49-git-source-join-paths.json",
+      "sha256": "98031381ba93e7abd940777e8c790342d6d7d7370c86c07b72cbd182080f28c8",
+      "size_bytes": 441188
+    },
+    {
+      "path": "agent-notes/a33.md",
+      "sha256": "aab05d53846deabfc1b68d51e203ae319e2430280de6550c60b52b01a93d0501",
+      "size_bytes": 3770
+    },
+    {
+      "path": "agent-notes/a33-evidence.json",
+      "sha256": "73ed16526089d5617100267732187dc54bec7c5799882b5718c9acc92091813b",
+      "size_bytes": 324894
+    },
+    {
+      "path": "validation/c6-intake.json",
+      "sha256": "523cb842f3257f30ca6cf7ddc8dae66a899ea3e5a962b8ed8407782c8d773174",
+      "size_bytes": 5623
+    },
+    {
+      "path": "validation/c6-replay-summary.json",
+      "sha256": "98cb10fcd6f263e247aa813d51cbb77edb0303e8e64b85128ba1ca7ba7226b9d",
+      "size_bytes": 19632
+    },
+    {
+      "path": "validation/c6-fp16-replay.json",
+      "sha256": "49498319c3a89130792e3de03c18f0777b6849d10ffb3b6d6632f66e0ad9b760",
+      "size_bytes": 148923
+    },
+    {
+      "path": "validation/c6-bf16-replay.json",
+      "sha256": "f5c90d9a3751b8f76f503346f0b3c3a232358ce935deef9b34dec23004b4e5f9",
+      "size_bytes": 148923
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Read-only missing-byte claim-boundary audit of current reader summaries and documentation against existing a33/a37/a38/a49/c6 receipts; no replays or tests rerun. Not a whole-reader correctness review or acceptance decision.",
+  "source_counts_from_a49": [
+    {
+      "absent_external_bytes": {
+        "framework_installed_after_rows": 17122,
+        "framework_installed_before_rows": 17122,
+        "framework_payload_rows": 16231,
+        "framework_payload_rows_other_than_first_party_package": 16220,
+        "framework_seed_rows": 861,
+        "third_party_locked_wheels": 11,
+        "tool_receipt_occurrences": 224,
+        "unique_observed_tool_identities": 22
+      },
+      "archive": {
+        "filename": "p05-torch-fp16-c0b44ce6-original.zip",
+        "sha256": "8c42f7e9f310972e2c0c67c56a03ce8f5460d706cb8dc3a5397435445ea6737c",
+        "size_bytes": 21439407
+      },
+      "source_byte_checks": {
+        "artifacts_source_copy_occurrences": 323,
+        "artifacts_source_packet_copies": {
+          "native-model": 57,
+          "python": 49,
+          "python/native": 57,
+          "torch": 54,
+          "torch/python": 49,
+          "torch/python/native": 57
+        },
+        "artifacts_source_unique_paths": 80,
+        "categories": {
+          "artifacts_source": 323,
+          "copied_build_makefile": 5,
+          "installed_checker": 4,
+          "installed_python_source_or_license": 12,
+          "sdist_source": 50,
+          "supplementary_host_python": 5,
+          "supplementary_host_snapshot": 1,
+          "wheel_first_party_source_or_license": 18,
+          "workflow_or_contract": 3
+        },
+        "copy_occurrences": 421,
+        "transcript_sha256": "9866e49a9e1c82517787e72a9c73e538afca7e477f6157f796d6e9979d340b35",
+        "unique_first_party_paths": 82,
+        "unique_repository_paths": 82
+      },
+      "source_receipt_checks": {
+        "categories": {
+          "json_path_receipt": 11072,
+          "package_record_csv": 30,
+          "scalar_source_pin": 167
+        },
+        "occurrences": 11269,
+        "source_paths_with_receipt_but_no_retained_source_bytes": 731,
+        "transcript_sha256": "c4586405068a69906c4796c3b9af3fdad045b0ba5b7af4b3f4458006ea169f05",
+        "unique_first_party_paths": 813,
+        "unique_repository_paths": 813,
+        "unique_tracked_third_party_paths": 0
+      },
+      "submodule_limits": {
+        "paths_sha256": "587600157bd0bb8e3aeb19c2eecc998ee7457dc09567a9237ae93dabc3023f3c",
+        "uncompared_source_receipt_occurrences": 2316,
+        "unique_uncompared_paths": 193
+      }
+    },
+    {
+      "absent_external_bytes": {
+        "framework_installed_after_rows": 17122,
+        "framework_installed_before_rows": 17122,
+        "framework_payload_rows": 16231,
+        "framework_payload_rows_other_than_first_party_package": 16220,
+        "framework_seed_rows": 861,
+        "third_party_locked_wheels": 11,
+        "tool_receipt_occurrences": 224,
+        "unique_observed_tool_identities": 22
+      },
+      "archive": {
+        "filename": "p05-torch-bf16-c0b44ce6-original.zip",
+        "sha256": "787fd1b41a27da8c100277613c581ba734920fd45b13e0707ba0f9ea2e866330",
+        "size_bytes": 21439104
+      },
+      "source_byte_checks": {
+        "artifacts_source_copy_occurrences": 323,
+        "artifacts_source_packet_copies": {
+          "native-model": 57,
+          "python": 49,
+          "python/native": 57,
+          "torch": 54,
+          "torch/python": 49,
+          "torch/python/native": 57
+        },
+        "artifacts_source_unique_paths": 80,
+        "categories": {
+          "artifacts_source": 323,
+          "copied_build_makefile": 5,
+          "installed_checker": 4,
+          "installed_python_source_or_license": 12,
+          "sdist_source": 50,
+          "supplementary_host_python": 5,
+          "supplementary_host_snapshot": 1,
+          "wheel_first_party_source_or_license": 18,
+          "workflow_or_contract": 3
+        },
+        "copy_occurrences": 421,
+        "transcript_sha256": "6991f69287de277612260efb5012d7fa7fb102e705c5aa0cc4d9651605ac96bc",
+        "unique_first_party_paths": 82,
+        "unique_repository_paths": 82
+      },
+      "source_receipt_checks": {
+        "categories": {
+          "json_path_receipt": 11072,
+          "package_record_csv": 30,
+          "scalar_source_pin": 167
+        },
+        "occurrences": 11269,
+        "source_paths_with_receipt_but_no_retained_source_bytes": 731,
+        "transcript_sha256": "1e18257c3e97ad2a9645f8dc47f298caa6c3efceec2efdddf20f769f501c1c6d",
+        "unique_first_party_paths": 813,
+        "unique_repository_paths": 813,
+        "unique_tracked_third_party_paths": 0
+      },
+      "submodule_limits": {
+        "paths_sha256": "587600157bd0bb8e3aeb19c2eecc998ee7457dc09567a9237ae93dabc3023f3c",
+        "uncompared_source_receipt_occurrences": 2316,
+        "unique_uncompared_paths": 193
+      }
+    },
+    {
+      "absent_external_bytes": {
+        "framework_installed_after_rows": 17122,
+        "framework_installed_before_rows": 17122,
+        "framework_payload_rows": 16231,
+        "framework_payload_rows_other_than_first_party_package": 16220,
+        "framework_seed_rows": 861,
+        "third_party_locked_wheels": 11,
+        "tool_receipt_occurrences": 224,
+        "unique_observed_tool_identities": 22
+      },
+      "archive": {
+        "filename": "p05-torch-fp16-c6fb039e-original.zip",
+        "sha256": "d9e9a713ef716882086b6c8176d1d27c4c98acae77110c58f84bdb69a00c4aaa",
+        "size_bytes": 21444979
+      },
+      "source_byte_checks": {
+        "artifacts_source_copy_occurrences": 323,
+        "artifacts_source_packet_copies": {
+          "native-model": 57,
+          "python": 49,
+          "python/native": 57,
+          "torch": 54,
+          "torch/python": 49,
+          "torch/python/native": 57
+        },
+        "artifacts_source_unique_paths": 80,
+        "categories": {
+          "artifacts_source": 323,
+          "copied_build_makefile": 5,
+          "installed_checker": 4,
+          "installed_python_source_or_license": 12,
+          "sdist_source": 50,
+          "supplementary_host_python": 5,
+          "supplementary_host_snapshot": 1,
+          "wheel_first_party_source_or_license": 18,
+          "workflow_or_contract": 3
+        },
+        "copy_occurrences": 421,
+        "transcript_sha256": "e36f5be2b53e0a696b11e58420cf12f075c9b374a4f95bd8e90fce457f930284",
+        "unique_first_party_paths": 82,
+        "unique_repository_paths": 82
+      },
+      "source_receipt_checks": {
+        "categories": {
+          "json_path_receipt": 11072,
+          "package_record_csv": 30,
+          "scalar_source_pin": 167
+        },
+        "occurrences": 11269,
+        "source_paths_with_receipt_but_no_retained_source_bytes": 731,
+        "transcript_sha256": "dabb5239e27c22a7fd66770ef7bd6e1f05c5faefb3d84c94649268c9dea4effa",
+        "unique_first_party_paths": 813,
+        "unique_repository_paths": 813,
+        "unique_tracked_third_party_paths": 0
+      },
+      "submodule_limits": {
+        "paths_sha256": "587600157bd0bb8e3aeb19c2eecc998ee7457dc09567a9237ae93dabc3023f3c",
+        "uncompared_source_receipt_occurrences": 2316,
+        "unique_uncompared_paths": 193
+      }
+    },
+    {
+      "absent_external_bytes": {
+        "framework_installed_after_rows": 17122,
+        "framework_installed_before_rows": 17122,
+        "framework_payload_rows": 16231,
+        "framework_payload_rows_other_than_first_party_package": 16220,
+        "framework_seed_rows": 861,
+        "third_party_locked_wheels": 11,
+        "tool_receipt_occurrences": 224,
+        "unique_observed_tool_identities": 22
+      },
+      "archive": {
+        "filename": "p05-torch-bf16-c6fb039e-original.zip",
+        "sha256": "85498037f9a8b06bbb44357208f236ad325dc686934059bc472348c4524a74b3",
+        "size_bytes": 21445834
+      },
+      "source_byte_checks": {
+        "artifacts_source_copy_occurrences": 323,
+        "artifacts_source_packet_copies": {
+          "native-model": 57,
+          "python": 49,
+          "python/native": 57,
+          "torch": 54,
+          "torch/python": 49,
+          "torch/python/native": 57
+        },
+        "artifacts_source_unique_paths": 80,
+        "categories": {
+          "artifacts_source": 323,
+          "copied_build_makefile": 5,
+          "installed_checker": 4,
+          "installed_python_source_or_license": 12,
+          "sdist_source": 50,
+          "supplementary_host_python": 5,
+          "supplementary_host_snapshot": 1,
+          "wheel_first_party_source_or_license": 18,
+          "workflow_or_contract": 3
+        },
+        "copy_occurrences": 421,
+        "transcript_sha256": "4a165f6a6f92f799ecc9d5ab8f8d8890b3be23c5984300b6bfea3a17e79fffd7",
+        "unique_first_party_paths": 82,
+        "unique_repository_paths": 82
+      },
+      "source_receipt_checks": {
+        "categories": {
+          "json_path_receipt": 11072,
+          "package_record_csv": 30,
+          "scalar_source_pin": 167
+        },
+        "occurrences": 11269,
+        "source_paths_with_receipt_but_no_retained_source_bytes": 731,
+        "transcript_sha256": "40f6e4d96af9ce93f62387f140748f9a6783012be9f32cf0a6a82c7318cb2121",
+        "unique_first_party_paths": 813,
+        "unique_repository_paths": 813,
+        "unique_tracked_third_party_paths": 0
+      },
+      "submodule_limits": {
+        "paths_sha256": "587600157bd0bb8e3aeb19c2eecc998ee7457dc09567a9237ae93dabc3023f3c",
+        "uncompared_source_receipt_occurrences": 2316,
+        "unique_uncompared_paths": 193
+      }
+    }
+  ],
+  "source_or_docs_modified": false,
+  "working_tree_diff_sha256": "d120be344ef9ec41de433ab3e119e0b06083c09310bb72d25d37b26f6b5fa554"
+}

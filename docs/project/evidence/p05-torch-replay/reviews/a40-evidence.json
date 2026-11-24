@@ -1,0 +1,77 @@
+{
+  "acceptance_claimed": false,
+  "discovered_count": 13,
+  "discovered_test_ids": [
+    "test_p05_replay_installation_identity.InstallationIdentityTests.test_complete_positive_preserves_missing_byte_limits",
+    "test_p05_replay_installation_identity.InstallationIdentityTests.test_consistent_shared_paths_and_resolved_aliases_remain_valid",
+    "test_p05_replay_installation_identity.InstallationIdentityTests.test_executable_aliases_cannot_contradict_each_other",
+    "test_p05_replay_installation_identity.InstallationIdentityTests.test_first_party_membership_cannot_absorb_third_party_or_seed",
+    "test_p05_replay_installation_identity.InstallationIdentityTests.test_first_party_membership_cannot_move_to_torch",
+    "test_p05_replay_installation_identity.InstallationIdentityTests.test_package_distributions_cannot_disagree_on_shared_path",
+    "test_p05_replay_installation_identity.InstallationIdentityTests.test_package_file_cannot_contradict_interpreter_or_copied_path",
+    "test_p05_replay_installation_identity.InstallationIdentityTests.test_package_file_cannot_contradict_other_tool_alias",
+    "test_p05_replay_nested_archives.NestedArchiveBoundaryTests.test_cli_returns_structured_failure_from_real_installation_verifier",
+    "test_p05_replay_nested_archives.NestedArchiveBoundaryTests.test_installation_verifier_normalizes_sparse_parser_failure",
+    "test_p05_replay_nested_archives.NestedArchiveBoundaryTests.test_sparse_parser_failure_at_initial_and_later_headers",
+    "test_p05_replay_nested_archives.NestedArchiveBoundaryTests.test_valid_nested_archives_and_installation",
+    "test_p05_replay_nested_archives.NestedArchiveBoundaryTests.test_validation_index_error_is_not_hidden_by_parser_normalization"
+  ],
+  "native_execution": "not_run",
+  "original_archives_opened": 0,
+  "phase_acceptance": false,
+  "retained_code_executed": false,
+  "scope": "bounded_synthetic_test_quality_witness",
+  "source_changes": [],
+  "source_sha256_after": {
+    "ci/project/p05_replay_installation.py": "759c6249ed503b9da66b077364fe481b52ac048eb29cecde1bf793bdaf14efc9",
+    "ci/project/p05_torch_replay.py": "737eafad91bccc251039bade0ee7af4ce976bbda3d983361d240420cd8158dd3",
+    "ci/project/test_p05_replay_installation.py": "33d0fcf4d14b13be30976a8e02e3653533abe0f9391bc9ba4832271ddcc52cc3",
+    "ci/project/test_p05_replay_installation_identity.py": "34f1ba856b44dc323a82a4e1f869afbc97f939c6c1984c10da01d9ebe0cc0955",
+    "ci/project/test_p05_replay_nested_archives.py": "f8c087ae8f6cc34f63b496a4bc57d0fc71dba798344e3f1a0bb5ceb624e0cae2",
+    "docs/project/evidence/p05-torch/reviews/archive_reader.py": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3"
+  },
+  "source_sha256_before": {
+    "ci/project/p05_replay_installation.py": "759c6249ed503b9da66b077364fe481b52ac048eb29cecde1bf793bdaf14efc9",
+    "ci/project/p05_torch_replay.py": "737eafad91bccc251039bade0ee7af4ce976bbda3d983361d240420cd8158dd3",
+    "ci/project/test_p05_replay_installation.py": "33d0fcf4d14b13be30976a8e02e3653533abe0f9391bc9ba4832271ddcc52cc3",
+    "ci/project/test_p05_replay_installation_identity.py": "34f1ba856b44dc323a82a4e1f869afbc97f939c6c1984c10da01d9ebe0cc0955",
+    "ci/project/test_p05_replay_nested_archives.py": "f8c087ae8f6cc34f63b496a4bc57d0fc71dba798344e3f1a0bb5ceb624e0cae2",
+    "docs/project/evidence/p05-torch/reviews/archive_reader.py": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3"
+  },
+  "test_id_sha256": "3b03bcabd3dc9a3939fddded044b9c4f1dea04473cd46393831530e35dd71b15",
+  "unittest_cases_executed": 0,
+  "witness_checks": [
+    {
+      "case": "valid_synthetic_installation",
+      "outcome": "pass"
+    },
+    {
+      "case": "independent_identity_collision",
+      "outcome": "expected_rejection",
+      "reason": "recorded file identity /producer/python-runtime/bin/python3 differs"
+    },
+    {
+      "case": "independent_ownership_exchange",
+      "outcome": "expected_rejection",
+      "reason": "framework first-party distribution membership differs"
+    },
+    {
+      "boundary": "tarfile.open",
+      "case": "sparse_later_false",
+      "cause": "IndexError",
+      "line": 305,
+      "outcome": "expected_rejection"
+    },
+    {
+      "boundary": "next(entries)",
+      "case": "sparse_later_true",
+      "cause": "IndexError",
+      "line": 312,
+      "outcome": "expected_rejection"
+    },
+    {
+      "case": "unrelated_validation_index_error",
+      "outcome": "propagated_unmodified"
+    }
+  ]
+}

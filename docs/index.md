@@ -13,6 +13,10 @@ qualified result; consult the current status and evidence before making a claim.
 - [Current status](project/status.md) and [backlog](project/backlog.md): observed progress, blockers and the next bounded work item
 - [Developer guide](project/developer-guide.md): source-only checks, execution prerequisites and resource safeguards
 - [Acceptance and evidence](project/acceptance.md): what phase completion actually requires
+- [P05 compatibility matrix](project/p05-torch-compatibility.md),
+  [original-artifact evidence](project/evidence/p05-torch-replay/README.md)
+  and [inert replay handoff](project/p05-torch-replay-handoff.md):
+  accepted bounded PyTorch/SimX execution and independent retained-data review
 - [Native lifetime witness](designs/managed_counter_lifetime_v1.md),
   [reviewed original packet](project/evidence/p06-native-lifetime/README.md) and
   [current dependency handoff](project/p06-dependency-provenance-handoff.md):

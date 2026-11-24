@@ -18,9 +18,14 @@ packaging commands and the injected-runtime checks are
 they do not substitute for the actual installed SimX executions.
 The clean hosted governance suite passed 2,174 tests at the recorded commit.
 
-**P05 remains `in_progress`; P05-A02 and P05-A03 remain unearned.** No PyTorch
-operator or framework version has been qualified. Live phase state and accepted
-records remain in [status](status.md) and [roadmap.json](roadmap.json).
+**P05 is complete for its bounded inference scope.** The separate
+[PyTorch compatibility matrix](p05-torch-compatibility.md) and
+[P05-A02/A03 evidence packet](evidence/p05-torch-replay/README.md) accept
+PyTorch 2.15.0+cpu / CPython 3.12.14 / Linux x86_64 / RV64 SimX at
+`c6fb039e706e812b6b3f4d2a5db1828076fe50df`. That later framework result does
+not relabel the historical plain-Python packages or add an adapter to them.
+Live phase state and accepted records remain in [status](status.md) and
+[roadmap.json](roadmap.json).
 
 ## Compatibility matrix
 
@@ -173,11 +178,13 @@ lifecycle reviews support the separate
 [acceptance policy](acceptance.md). Earlier failed development runs remain in
 the linked host-validation history.
 
-P05-A01 accepts this bounded binding/installation scope.
-P05-A02 still needs the scoped PyTorch custom-op model and native-dispatch proof;
-P05-A03 needs the tested framework compatibility matrix. This plain-Python slice
-does not complete [P05](phases/p05-framework.md). SimX is simulation evidence,
-not native processor RTL, physical FPGA/silicon, or physical performance proof.
+P05-A01 accepts this bounded binding/installation scope. The separate
+[P05-A02 execution](evidence/p05-torch-replay/acceptance-torch.json) and
+[P05-A03 compatibility](evidence/p05-torch-replay/acceptance-compatibility.json)
+decisions complete [P05](phases/p05-framework.md) for the documented framework
+scope; this historical plain-Python slice supplies no framework proof by itself.
+SimX remains simulation evidence, with no native processor RTL, physical
+FPGA/silicon or physical performance qualification for the Python route.
 [P01-A03 vendor XRT `hw_emu`](evidence/p01-xrt-blocked.json) remains blocked and
 required before P07 completion. The inherited **267 → 283 DSP** area-gate failure
 remains unresolved in the [P04 audit](p04-executor-audit.md); Python work does not

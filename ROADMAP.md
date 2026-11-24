@@ -169,19 +169,23 @@ and output comparisons, source/build provenance and separate host/transfer
 accounting passed independent review; 1,816 host tests passed in 366.568 seconds.
 Original packets and replayable audits are retained in the executor packet.
 The [executor plan](docs/project/p04-executor-plan.md) remains the reproduction
-contract. **P05-T01 remains in progress, with
-[P05-A01 accepted](docs/project/evidence/p05-python/acceptance-binding.json) for
-the copying Python binding.** Its installed two-format SimX matrix at
-`e1420fd550f716df33a2556057b7086a03032cbe` passed 144 combined Python/native
-launches and 660 event/profile pairs; 2,174 clean hosted source tests passed.
-The [Python packet](docs/project/evidence/p05-python/README.md) retains source-bound
-installation, lifecycle/error tests, exact outputs and independent review.
-The scoped PyTorch custom-op implementation has successful prior installed CI
-jobs, but independent artifact review remains outstanding. This continuation
-makes no new P05 acceptance decision.
-The [handoff](docs/project/p05-entry-handoff.md) preserves the
-[implemented binding contract](docs/designs/python_binding_v1.md).
-P05-A02/A03 remain unearned; no framework version has accepted qualification.
+contract. **P05-T01 and P05 are complete for the bounded copying binding and
+eager PyTorch custom operators.** The
+[retained P05-A01 result](docs/project/evidence/p06-serial-workspace/a01-retained-binding.json)
+is preserved. The separate
+[P05-A02 simulation decision](docs/project/evidence/p05-torch-replay/acceptance-torch.json)
+and [P05-A03 compatibility decision](docs/project/evidence/p05-torch-replay/acceptance-compatibility.json)
+accept PyTorch 2.15.0+cpu / CPython 3.12.14 / Linux x86_64 / RV64 SimX at
+`c6fb039e706e812b6b3f4d2a5db1828076fe50df`. FP16/BF16 cover six declared matmul
+signatures and the fixed model: 32 framework calls, 72 framework-route launches
+and 216 distinct recorded launches including independent native/Python routes.
+The [evidence packet](docs/project/evidence/p05-torch-replay/README.md),
+[compatibility matrix](docs/project/p05-torch-compatibility.md) and
+[inert replay handoff](docs/project/p05-torch-replay-handoff.md) retain the exact
+source, original digests, observed results, reviews and limitations. Replay
+executes no native work and cannot grant acceptance. Training, a full framework
+device backend, CUDA binary compatibility and physical performance remain
+outside this accepted scope.
 
 **P06-T01 remains `in_progress`, with
 [P06-A01 accepted](docs/project/evidence/p06-baseline/acceptance.json) at simulated scope.**

@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "agent": 36,
+  "scope": "bounded public-contract consistency audit",
+  "review_base": "f01c9d03147343d274ee0a45b71b34f004709c0e",
+  "reviewed_files": [
+    {
+      "path": "docs/designs/torch_archive_replay_v1.md",
+      "sha256": "ff8619ca97a2ca37006a61da7b4ab6f91bbcfbb81cd5e39a8a2e55e35b68fba2",
+      "size_bytes": 4751
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/README.md",
+      "sha256": "27186d2cec915d926a7831b8b1534e1cc8e793c14763e50c3b874b1d920806ab",
+      "size_bytes": 7954
+    },
+    {
+      "path": "docs/project/p05-torch-replay-handoff.md",
+      "sha256": "3a21f3698fd028f765a11e5b14ce4b53e232d67f0cbf6b117d9a7e6f4a59498b",
+      "size_bytes": 9712
+    },
+    {
+      "path": "docs/project/p05-torch-compatibility.md",
+      "sha256": "28a652cb23fd1dd6298bd21a459bc6d9d3da1dad20a664bd05ff31fcba81f4c6",
+      "size_bytes": 16177
+    },
+    {
+      "path": "ci/project/p05_torch_replay.py",
+      "sha256": "737eafad91bccc251039bade0ee7af4ce976bbda3d983361d240420cd8158dd3",
+      "size_bytes": 43139
+    },
+    {
+      "path": "ci/project/p05_replay_native.py",
+      "sha256": "ec7808fd5b6fdfbce51fc28fba60fc8fd2c291ac1310d826f938b621137c4a1d",
+      "size_bytes": 43993
+    },
+    {
+      "path": "ci/project/p05_replay_installation.py",
+      "sha256": "759c6249ed503b9da66b077364fe481b52ac048eb29cecde1bf793bdaf14efc9",
+      "size_bytes": 46861
+    },
+    {
+      "path": "ci/project/p05_execution_records.py",
+      "sha256": "1f5c9f7d0e66de1537e952b9432e10543563c61eab164e1762416bae07fa7ffe",
+      "size_bytes": 21772
+    },
+    {
+      "path": "ci/project/p05_torch_records.py",
+      "sha256": "3ff925b09b3176b1f328101bfa9d062aac48f0c3f0939fd847646128f8587639",
+      "size_bytes": 14635
+    },
+    {
+      "path": "ci/project/p05_installed_check.py",
+      "sha256": "69d530bea385f2d0545cc677b8205585c42398f4ace2837b840b14d5cabfac5b",
+      "size_bytes": 33951
+    },
+    {
+      "path": "ci/project/p06_replay.py",
+      "sha256": "9a5e68de45ec923c56e39a05697d9f93b3d0fdd91c81d38d6637c12ba153d991",
+      "size_bytes": 44626
+    },
+    {
+      "path": "docs/project/evidence/p05-torch/reviews/archive_reader.py",
+      "sha256": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3",
+      "size_bytes": 16065
+    }
+  ],
+  "contract_map": [
+    {
+      "contract": "Consistency and original identity, without origin authentication",
+      "enforcement": [
+        "ArchiveReader.__init__/_verify_original/close",
+        "p05_torch_replay._hosted"
+      ],
+      "limit": "Caller supplies digest/revision/format; independently obtaining them remains an operator obligation. provider_record.origin_authenticated_by_replay is false."
+    },
+    {
+      "contract": "Execution revision differs from trusted reader identity",
+      "enforcement": [
+        "p05_torch_replay._source/_source_and_python",
+        "p05_torch_replay._reader_sources/READER_SOURCES/replay_archive"
+      ],
+      "limit": "execution_revision names retained producer source; reader_sources hashes local inputs at import, entry and exit. Reader Git revision/working-tree state are separately captured by the handoff."
+    },
+    {
+      "contract": "Per-format population and combined same-revision review",
+      "enforcement": [
+        "p05_replay_native._results",
+        "p05_execution_records._verify_observation_records",
+        "p05_torch_records._verify_framework_records",
+        "p05_torch_replay.replay_archive"
+      ],
+      "limit": "Derived fixed per-format counts are 16 framework calls, 36+36+36 launches, 180 framework event/profile pairs. The two-format 32/216 total is an operator aggregation rule requiring independent passes and equal execution revision; there is no combined CLI result."
+    },
+    {
+      "contract": "Copied packets add zero launches; all retained member bytes checked",
+      "enforcement": [
+        "p05_replay_native._copies",
+        "p05_torch_replay._packet_members",
+        "p05_torch_replay.replay_archive complete archive byte coverage"
+      ],
+      "limit": "663 is the documented observed data-member count of these selected originals. Byte equality and exact inventories, rather than packet copies, determine population."
+    },
+    {
+      "contract": "Actual numerical, tensor, dispatch, lifecycle and raw-log consistency",
+      "enforcement": [
+        "p05_replay_native._frozen_cases/_results",
+        "p05_execution_records._verify_observation_records",
+        "p05_torch_records.tensor_record_bytes/_verify_framework_records"
+      ],
+      "limit": "Trusted local frozen fixtures and parsers validate retained observations; no current native execution or machine-code behavior is inferred."
+    },
+    {
+      "contract": "Separate live and retained validation with inert producer paths",
+      "enforcement": [
+        "p05_installed_check.validate_request/validate_request_data",
+        "p05_execution_records.verify_observations/verify_retained_observations",
+        "p05_torch_records.verify_observations/verify_retained_observations"
+      ],
+      "limit": "Live entry points retain directory/file/adapter-byte checks. Retained entry points use lexical paths and joined immutable facts. Chosen local reader code is trusted."
+    },
+    {
+      "contract": "Retained first-party package joins versus absent external bytes",
+      "enforcement": [
+        "p05_replay_installation._manifest/_packages/_plain_installation/_framework_inventory/_environments",
+        "p05_replay_installation.verify_installations/LIMITATIONS"
+      ],
+      "limit": "Missing third-party/interpreter/tool/seed/metadata bytes remain receipt consistency only. third_party_bytes_rehashed and interpreter_bytes_rehashed are false; reproducible compilation and third-party qualification are explicitly excluded."
+    },
+    {
+      "contract": "Supplementary host scope remains separate",
+      "enforcement": [
+        "p05_torch_replay._supplementary"
+      ],
+      "limit": "Bounded envelopes, retained bytes and outcome labels only; host_fault_semantics_revalidated and host_test_results_revalidated remain false. Independent a33 review is additional evidence, not a public-reader guarantee."
+    },
+    {
+      "contract": "No execution/acceptance flags and failure exits",
+      "enforcement": [
+        "p05_torch_replay.replay_archive/main",
+        "ArchiveReader.__exit__/close"
+      ],
+      "limit": "Success is printed only after final archive and reader checks. Handled replay failures return exit 1 plus small failure JSON with all four negative flags. --help is text/0; argparse usage failures are stderr/2/no JSON. Initialization is outside the result handler."
+    }
+  ],
+  "finding": {
+    "id": "a36-F1-01",
+    "severity": "F1",
+    "confidence": "high",
+    "evidence_type": "source inspection plus three host-only CLI probes",
+    "description": "Unconditional JSON-output wording disagreed with argparse help/usage behavior.",
+    "disposition": "Narrow handoff-only correction authorized by coordinator; independent review pending.",
+    "before_sha256": "27b2bd60b987e5f07d8c03153a49b617906982490e2f8072f2aafbf76147c85a",
+    "after_sha256": "3a21f3698fd028f765a11e5b14ce4b53e232d67f0cbf6b117d9a7e6f4a59498b",
+    "patch": "--- a/docs/project/p05-torch-replay-handoff.md\n+++ b/docs/project/p05-torch-replay-handoff.md\n@@ -82,11 +82,14 @@\n )\n ```\n \n-Each CLI invocation emits JSON on stdout and exits 0 only after all checks,\n-including the original's final stability/digest check and the reader-input\n-stability check, succeed. A validation rejection exits 1 and emits a failure\n-record; preserve that JSON and stderr. `set -e` stops this example after a\n-failed command, so the other format and final state capture may not have run.\n+After reader initialization and successful argument parsing, each replay\n+invocation emits JSON on stdout and exits 0 only after all checks, including the\n+original's final stability/digest check and the reader-input stability check,\n+succeed. A replay validation rejection exits 1 and emits a failure record;\n+preserve that JSON and stderr. `--help` prints text and exits 0; argument-usage\n+errors print diagnostics to stderr and exit 2 without a JSON result. `set -e`\n+stops this example after a failed command, so the other format and final state\n+capture may not have run.\n Record that distinction and investigate the reported failure without editing\n original bytes or relaxing a check. Preserve actual command text, exit status,\n outputs and reader identities in the review receipt.\n"
+  },
+  "probe_cwd": "/workspace/scratch/101d52695253/AI-GPU",
+  "probe_environment_override": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "probe_runner": "subprocess.run(argv, text=True, capture_output=True, timeout=15)",
+  "probes": [
+    {
+      "name": "help",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "ci/project/p05_torch_replay.py",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout_kind": "help text",
+      "stdout_bytes": 479,
+      "stderr": ""
+    },
+    {
+      "name": "invalid_format",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "ci/project/p05_torch_replay.py",
+        "--archive",
+        "/nonexistent/p05-contract-probe.zip",
+        "--sha256",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "--expected-revision",
+        "0000000000000000000000000000000000000000",
+        "--format",
+        "invalid"
+      ],
+      "exit_code": 2,
+      "stdout_kind": "empty",
+      "stdout_bytes": 0,
+      "stderr_kind": "argparse usage and invalid-choice diagnostic"
+    },
+    {
+      "name": "invalid_revision",
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "ci/project/p05_torch_replay.py",
+        "--archive",
+        "/nonexistent/p05-contract-probe.zip",
+        "--sha256",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "--expected-revision",
+        "invalid",
+        "--format",
+        "fp16"
+      ],
+      "exit_code": 1,
+      "stdout_kind": "failure JSON",
+      "stdout_bytes": 260,
+      "stderr": "",
+      "result": {
+        "acceptance_claimed": false,
+        "contract_id": "p05-retained-torch-consistency-v1",
+        "native_execution": "not_run",
+        "outcome": "fail",
+        "phase_acceptance": false,
+        "reason": "exact execution revision required",
+        "retained_code_executed": false,
+        "schema_version": 1
+      }
+    }
+  ],
+  "limitations": [
+    "No originals opened; all three probes terminate before archive access.",
+    "No unit suites, native builds, retained-member execution, extraction or producer-path access.",
+    "No origin-authentication or acceptance decision; no broad pin/link audit repeated."
+  ]
+}

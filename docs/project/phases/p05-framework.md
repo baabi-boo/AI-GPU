@@ -2,8 +2,17 @@
 
 **Accountable role:** Framework integration lead. Assign an owner before work.
 Use [roadmap.json](../roadmap.json) for live status, dependencies and exit criteria.
-The planned deliverable is a thin binding and a scoped PyTorch custom-op bridge,
-not a claim that a complete framework device backend exists.
+The accepted deliverable is a thin binding and a scoped PyTorch custom-op bridge.
+P05 is **complete for its bounded inference scope**: the
+[retained copying-binding result](../evidence/p06-serial-workspace/a01-retained-binding.json)
+supports A01, and the [A02 execution](../evidence/p05-torch-replay/acceptance-torch.json)
+and [A03 compatibility](../evidence/p05-torch-replay/acceptance-compatibility.json)
+records accept PyTorch 2.15.0+cpu / CPython 3.12.14 / Linux x86_64 / RV64 SimX at
+`c6fb039e706e812b6b3f4d2a5db1828076fe50df`. See the
+[matrix](../p05-torch-compatibility.md), [audit](../p05-torch-replay-audit.md)
+and [inert replay handoff](../p05-torch-replay-handoff.md).
+The ordered packages below preserve the qualification obligations for any
+extension; this result does not establish a complete framework device backend.
 
 ## Goal and boundaries
 

@@ -1,0 +1,121 @@
+{
+  "agent": "a43",
+  "detail_file": "a43-reconciliation.json",
+  "detail_sha256": "6cbf3e786bae54b2c08d42e4457d042900c43803f00aec6bebddcaeaa259ef58",
+  "failure_classification": {
+    "2_class_setup_errors": "Both tracebacks report Host command failed: disk_reserve (exit None); child bodies were never scheduled. Full process receipts were not retained for these two events.",
+    "55_subtest_failures": "Every retained receipt says blocked/disk_reserve, process_started=false, exit_code=null, duration=0, log_sha256=null.",
+    "cmake_skips": "36 bodies are skipped or suppressed because fixture CMake is missing from its sanitized tool inventory; no claim that ambient CMake is absent.",
+    "confidence": "high for explicit resource admission outcomes; no claim of untested code correctness",
+    "exact_physical_capacity_shortfall_or_timing_established": false,
+    "host_fixture_reserve_bytes": 1073741824,
+    "new_code_failure_demonstrated": false,
+    "p06_native_reserve_unchanged_bytes": 16106127360,
+    "per_failure_free_byte_measurements_retained": false,
+    "root_cause_of_disk_consumption_established": false,
+    "untested_failed_and_suppressed_bodies_are_not_passes": true
+  },
+  "findings": [
+    {
+      "confidence": "high",
+      "finding": "The broad run is failed and non-zero-skip; it cannot close the stricter P06 uninterrupted, no-concurrent-work invocation requirement.",
+      "scope": "execution capacity / governance evidence",
+      "severity": "F2"
+    },
+    {
+      "confidence": "high",
+      "finding": "All 542 selected P05 IDs passed; no prior canonical ID was omitted and 106 additions are P05 only.",
+      "scope": "P05 host regression evidence",
+      "severity": "F0"
+    },
+    {
+      "confidence": "high",
+      "finding": "Initial 520 IDs are reconstructible rather than separately retained; successful subtests are not enumerated by this verbose log; counts never add overlapping selections.",
+      "scope": "evidence limits",
+      "severity": "F0"
+    }
+  ],
+  "governance": {
+    "actual_method_rows": 4595,
+    "all_nonpassing_selected_ids": 67,
+    "class_error_events": 2,
+    "class_error_suppressed_bodies": 23,
+    "class_skip_events": 2,
+    "class_skip_suppressed_bodies": 15,
+    "duplicate_ids": [],
+    "elapsed_seconds": 2974.16,
+    "failed_parent_method_ids": 8,
+    "failed_subtest_events": 55,
+    "method_skip_events": 21,
+    "missing_method_rows": 38,
+    "outcome": "FAILED",
+    "passed_method_ids": 4566,
+    "selected_ids": 4633,
+    "selected_modules": 282,
+    "unexpected_ids": [],
+    "unexplained_missing_ids": []
+  },
+  "historical_4527_comparison": {
+    "additions_by_module": {
+      "test_p05_replay_installation": 23,
+      "test_p05_replay_installation_identity": 8,
+      "test_p05_replay_lineage": 3,
+      "test_p05_replay_native": 16,
+      "test_p05_replay_native_closure": 6,
+      "test_p05_replay_nested_archives": 5,
+      "test_p05_retained_observation_records": 12,
+      "test_p05_torch_replay_driver": 33
+    },
+    "all_additions_are_p05": true,
+    "baseline_ids_omitted_from_current_selection": [],
+    "canonical_ids": 4527,
+    "current_broad_failure_not_overridden_by_historical_passes": true,
+    "current_nonpassing_baseline_ids": 67,
+    "current_passed_baseline_ids": 4460,
+    "current_skipped_body_ids_equal_historical_hosted_gaps": true,
+    "historical_pass_is_separate_revision_evidence": true,
+    "new_current_ids": 106,
+    "raw_hosted_passed": 4491,
+    "raw_passing_overlap": 23,
+    "raw_supplement_passed": 59,
+    "raw_unique_pass_union": 4527,
+    "single_full_zero_skip_invocation_proven": false,
+    "source_revision": "c0b44ce64665fe11895f869eea8c38c9b820d6f7",
+    "source_tree": "13450812d279d55f36a172fcf38653ff567f6c86"
+  },
+  "p05": {
+    "broad_additional_tests": {
+      "test_p05_replay_lineage": 3,
+      "test_p05_replay_nested_archives": 5
+    },
+    "broad_passed": 542,
+    "core_broad_overlap": 534,
+    "core_passed": 534,
+    "direct_changed_module_passed": 174,
+    "direct_changed_module_scope": "106 new replay IDs plus 23 execution-record, 28 installed-check and 17 torch-record methods; all are included in the 542 total.",
+    "initial_core_overlap": 520,
+    "initial_ids_reconstructed_from_unchanged_test_manifests": true,
+    "initial_passed": 520,
+    "unique_union": 542
+  },
+  "p06_single_full_zero_skip_invocation_proven": false,
+  "probe_sha256": "6f2bce08e3d706af647cd6ec2d4838e0cb8410abb9107700c5208155b187272c",
+  "project_tests_run_by_probe": 0,
+  "scope": "read-only retained host unittest evidence reconciliation; no test or native execution",
+  "source_scope": {
+    "concurrency_limitation": "Markdown documentation and separately owned later work occurred concurrently; root owns final-source and documentation checks.",
+    "current_test_module_check_is_not_final_source_freeze": true,
+    "current_unselected_test_module_names_at_probe": [],
+    "git_head_at_governance_start": "d8abc24d2fd5dab5ceddbae3627e3d3eb9750358",
+    "monitor_patterns": [
+      "ci/project/*.py",
+      "python/**/*.py",
+      "profiles/*.json",
+      "docs/project/*.json"
+    ],
+    "monitored_path_count": 480,
+    "recorded_before_after_differences": [],
+    "whole_checkout_frozen_or_clean_claimed": false,
+    "without_concurrent_work_proven": false
+  }
+}

@@ -368,15 +368,18 @@ SimX matrix, clean packaging, ownership/error tests and independent audits.
 The matrix has 144 combined Python/native launches and 660 event/profile pairs;
 the clean hosted suite passed 2,174 tests at that source revision.
 
-**Parallel task: P05-T01 — independently review the scoped PyTorch custom-op
-qualification.** Use the [handoff](p05-entry-handoff.md),
-[binding contract](../designs/python_binding_v1.md) and
-[compatibility matrix](p05-python-compatibility.md). The implementation and
-successful prior installed CI jobs exist; independent original-artifact review
-and acceptance remain outstanding, as recorded in the
-[current audit](p06-benchmark-audit.md). This continuation makes no new P05
-acceptance decision. P05 remains `in_progress`; A02/A03 are unearned and no
-PyTorch version has accepted qualification.
+**Completed parallel task: P05-T01 — scoped PyTorch custom-op qualification.**
+The [P05-A02 execution](evidence/p05-torch-replay/acceptance-torch.json) and
+[P05-A03 compatibility](evidence/p05-torch-replay/acceptance-compatibility.json)
+decisions accept the independently reviewed FP16/BF16 installed matrix at
+`c6fb039e706e812b6b3f4d2a5db1828076fe50df`: PyTorch 2.15.0+cpu, CPython 3.12.14,
+Linux x86_64 and RV64 SimX. Its six matmul signatures and fixed model account
+for 32 framework calls, 72 framework-route launches and 216 distinct recorded
+launches; repeated packet copies add none. The
+[audit](p05-torch-replay-audit.md), [compatibility matrix](p05-torch-compatibility.md)
+and [replay handoff](p05-torch-replay-handoff.md) preserve source, provenance,
+failure/ownership and missing-byte limits. P05 is `complete` for this scope;
+new operators, platforms, training or a full framework backend remain separate work.
 The [executor audit](p04-executor-audit.md) retains the unresolved inherited
 267 → 283 DSP area-gate failure; Python qualification does not resolve it.
 
@@ -428,8 +431,8 @@ P01-T05 `probe`/`plan`/`run` route. Its strict receipt and artifact checks prepa
 the missing vendor run; they do not replace it or grant acceptance.
 It requires its own manifest/receipt, CLI budgets and fresh build directory;
 there is no automatic adapter from the read-only `hwemu.py` candidate.
-P00, P02, P03 and P04 are complete, P01 remains blocked on A03,
-P05 and P06 are `in_progress`, and P07–P11 remain `not_started`. Check the actual
+P00, P02, P03, P04 and P05 are complete, P01 remains blocked on A03,
+P06 is `in_progress`, and P07–P11 remain `not_started`. Check the actual
 execution state and accepted reports before extending the baseline:
 
 ```sh
@@ -578,8 +581,8 @@ acceptance; P03-T02 now has accepted A02 numerical and A03 lifecycle evidence,
 completing P03 for the declared six signatures. P04-T01 is complete with
 source-level P04-A01 acceptance. P04-T02 now has accepted A02/A03 execution and
 trace evidence for the fixed model, completing P04 at bounded processor RTL
-scope. P05-A01 now accepts the bounded copying Python binding; P05-T01 remains
-in progress for the scoped framework route. P06-T01 is also in progress, with
+scope. P05-A01 preserves the bounded copying Python binding; reviewed P05-A02/A03
+complete P05-T01 for the documented eager framework route. P06-T01 is in progress, with
 [P06-A01 accepted](evidence/p06-baseline/acceptance.json). Original serial-workspace
 correctness has [independent artifact review](evidence/p06-warm-workspace/README.md).
 The [transport handoff](p06-mpm-transport-handoff.md) tracks the RV64 counter
@@ -616,7 +619,7 @@ phase guides, the [development audit](p05-binding-audit.md) and the
 | **P03-T02 — Operator implementations and lifetime tests — complete** | Managed six-signature matmul has independent SimX/native-RTL arithmetic and actual common-runtime lifecycle acceptance; exact scope and partial-transfer limits remain recorded. | T01; kernel and runtime lead | [P03-A02](evidence/p03-managed-matmul/acceptance-numerics.json), [P03-A03](evidence/p03-managed-matmul/acceptance-lifecycle.json) |
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
 | **P04-T02 — Native model execution — complete** | Four clean SimX/native processor RTL × FP16/BF16 variants pass exact intermediate/final comparisons, live-input lineage, native placement and separate host/transfer accounting after independent review. | T01; model runtime lead | [P04-A02](evidence/p04-executor/acceptance-numerics.json), [P04-A03](evidence/p04-executor/acceptance-dispatch.json) |
-| **P05-T01 — Python/custom-op bridge — in progress** | Preserve the accepted copying binding; independently review the existing custom-op implementation's installed dispatch, compatibility and explicit failure evidence before an acceptance decision. | P04; framework integration lead; [handoff](p05-entry-handoff.md) | [P05-A01 accepted](evidence/p05-python/acceptance-binding.json); P05-A02/P05-A03 unearned |
+| **P05-T01 — Python/custom-op bridge — complete** | Preserve the accepted copying binding and bounded PyTorch 2.15.0+cpu / CPython 3.12.14 / RV64 SimX matrix at c6fb039e. Original-artifact replay, source joins, exact results/native dispatch and compatibility/failure evidence passed independent review. Any scope expansion needs separate qualification. | P04; framework integration lead; [replay handoff](p05-torch-replay-handoff.md) | [P05-A01 retained](evidence/p06-serial-workspace/a01-retained-binding.json); [P05-A02](evidence/p05-torch-replay/acceptance-torch.json), [P05-A03](evidence/p05-torch-replay/acceptance-compatibility.json) |
 | **P06-T01 — Measured optimization — in progress** | Obtain one uninterrupted governance invocation without skips and provision capacity for the implemented, independently reviewed qualified route. Execute one fresh 24-process, 792-launch, 25,344-word attempt, retain and independently replay the original, and evaluate unchanged predicates. Passing coverage spans all 4,527 IDs across completed hosted/supplemental runs; a single full zero-skip invocation remains unproven. Preserve historical originals and seven false fields. | P04; performance and memory lead; [qualified warm handoff](p06-qualified-warm-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),

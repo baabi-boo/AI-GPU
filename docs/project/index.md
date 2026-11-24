@@ -75,7 +75,11 @@ unexecuted template as a completion record.
 - [Draft warm performance experiment](p06-next-experiment-proposal.md) and
   [earlier ownership review matrix](p06-ownership-review-matrix.md): the separate
   measurement protocol still needs review and freezing before performance work.
-- [Python binding handoff](p05-entry-handoff.md): the parallel P05 framework track.
+- [Python binding handoff](p05-entry-handoff.md): the accepted bounded P05 framework track.
+- [P05 compatibility matrix](p05-torch-compatibility.md),
+  [original-artifact evidence](evidence/p05-torch-replay/README.md) and
+  [inert replay handoff](p05-torch-replay-handoff.md): source-scoped PyTorch/SimX
+  acceptance, exact original identities and independent retained-data review.
 - [Backlog](backlog.md): ordered work items with deliverables and gate mappings.
 - [P01 hw_emu preparation](p01-hwemu-runbook.md): read-only inventory and candidate
   planning, the corrected XRT hook and lean opt-in tracing; P01-A03 remains blocked.

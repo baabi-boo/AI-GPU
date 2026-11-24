@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "scope": "independent-frozen-criteria-adequacy-review-only",
+  "agent": "a53",
+  "reviewed_checkout_head": "d8abc24d2fd5dab5ceddbae3627e3d3eb9750358",
+  "review_base": "f01c9d03147343d274ee0a45b71b34f004709c0e",
+  "acceptance_claimed": false,
+  "phase_acceptance": false,
+  "gate_status_modified": false,
+  "native_execution": "not_run",
+  "retained_code_executed": false,
+  "criteria": [
+    {
+      "id": "P05-A02",
+      "frozen_definition": {
+        "id": "P05-A02",
+        "criterion": "A supported PyTorch custom-op path reproduces the native tiny-model result without silent CPU fallback or unsupported autograd claims.",
+        "verification": "Framework-to-device trace and numerical comparison",
+        "evidence_level": "simulated"
+      },
+      "assessment": "sufficient-bounded-experimental-evidence",
+      "recommendation": "Recommend acceptance at the exact c6 execution scope after normal documentary decision and delivery closure.",
+      "obligations": {
+        "native_tiny_model_numerical_comparison": "adequate: unchanged frozen fixtures, fresh native comparator, actual intermediates and framework returned bytes reconcile",
+        "framework_to_device_trace": "adequate: actual torch.ops invocation, Session.submit/model, launch/event/profile/close/resource records reconcile",
+        "no_silent_cpu_fallback": "adequate: native matrix route and actual-input lineage; CPU storage/ReLU/conversion/row assembly explicitly declared",
+        "no_unsupported_autograd_claims": "adequate: inference-only versioned contract, original-input guards, enumerated failure tests, higher-level unqualified contexts preserved"
+      },
+      "unmet_experimental_obligations_identified": []
+    },
+    {
+      "id": "P05-A03",
+      "frozen_definition": {
+        "id": "P05-A03",
+        "criterion": "The compatibility matrix names tested framework versions, operators and limitations; CUDA binary compatibility is not implied.",
+        "verification": "Versioned matrix and failure-mode tests",
+        "evidence_level": "source_present"
+      },
+      "assessment": "failure-evidence-adequate-matrix-reconciliation-required",
+      "recommendation": "Recommend bounded acceptance once the tested-execution matrix is reconciled and the actual source-scoped decision is recorded.",
+      "obligations": {
+        "versioned_versions_operators_limitations": "contract v1 and matrix present; PyTorch 2.15.0+cpu, CPython 3.12.14, two operators and limited eager scope explicit",
+        "cuda_binary_compatibility_not_implied": "satisfied by explicit exclusions",
+        "failure_mode_tests": "adequate historical evidence: 45 unique scripted-host definitions and nine compiled-host scenario definitions, repeated per packet"
+      },
+      "remaining_documentary_actions": [
+        "Replace stale installed FP16/BF16 pending rows with exact selected revision/run and bounded observed results.",
+        "Label the 43-test receipt historical and name the newer 45-test plus nine-scenario evidence without adding duplicate definitions.",
+        "Preserve unsupported/unqualified contexts and all receipt-only/absent-byte/host-semantic limits."
+      ]
+    }
+  ],
+  "selected_primary_execution": {
+    "revision": "c6fb039e706e812b6b3f4d2a5db1828076fe50df",
+    "run_id": 45349805332,
+    "formats": [
+      "fp16",
+      "bf16"
+    ],
+    "evidence_level": "simulated",
+    "originals": [
+      {
+        "id": 14899688801,
+        "size_bytes": 21444979,
+        "sha256": "d9e9a713ef716882086b6c8176d1d27c4c98acae77110c58f84bdb69a00c4aaa",
+        "local_original_name": "p05-torch-fp16-c6fb039e-original.zip"
+      },
+      {
+        "id": 14899668287,
+        "size_bytes": 21445834,
+        "sha256": "85498037f9a8b06bbb44357208f236ad325dc686934059bc472348c4524a74b3",
+        "local_original_name": "p05-torch-bf16-c6fb039e-original.zip"
+      }
+    ]
+  },
+  "separate_historical_execution": {
+    "revision": "c0b44ce64665fe11895f869eea8c38c9b820d6f7",
+    "run_id": 45244780331,
+    "formats": [
+      "fp16",
+      "bf16"
+    ],
+    "originals": [
+      {
+        "artifact_id": 14863723557,
+        "format": "fp16",
+        "size_bytes": 21439407,
+        "sha256": "8c42f7e9f310972e2c0c67c56a03ce8f5460d706cb8dc3a5397435445ea6737c",
+        "original_filename": "p05-torch-fp16-c0b44ce6-original.zip"
+      },
+      {
+        "artifact_id": 14862859929,
+        "format": "bf16",
+        "size_bytes": 21439104,
+        "sha256": "787fd1b41a27da8c100277613c581ba734920fd45b13e0707ba0f9ea2e866330",
+        "original_filename": "p05-torch-bf16-c0b44ce6-original.zip"
+      }
+    ]
+  },
+  "counts_per_format_per_revision": {
+    "framework_calls": 16,
+    "framework_launches": 36,
+    "framework_event_profile_pairs": 180,
+    "native_comparison_launches": 36,
+    "plain_python_launches": 36,
+    "distinct_total_launches": 108,
+    "copy_added_launches": 0
+  },
+  "counting_rule": "Do not combine source revisions into one qualified matrix or sum repeated host/scenario definitions.",
+  "source_evidence_per_original": {
+    "retained_first_party_unique_paths": 82,
+    "additional_receipt_only_first_party_paths": 731,
+    "git_joined_first_party_union": 813,
+    "unavailable_submodule_source_paths": 193,
+    "source_mismatches_in_a49": 0
+  },
+  "limits": [
+    "Trusted hosted builder and recorded observations; neither replay nor source joins authenticate an arbitrary producer.",
+    "Receipt-only first-party identities match Git but do not rehash absent historical producer bytes.",
+    "Third-party wheel/payload, interpreter/tool/seed and some generated metadata bytes are absent; no offline binary requalification or reproducible-build proof.",
+    "Host child capture/status data are incomplete: full assertion replay remains unavailable and public host_fault_semantics_revalidated stays false.",
+    "Scripted/compiled host arithmetic is synthetic or immutable fixture response, not native numerical execution.",
+    "No universal transform rejection, real fork execution, arbitrary models, autograd/training, processor RTL, vendor emulation, physical performance, FPGA or silicon claim."
+  ],
+  "not_new_frozen_requirements": [
+    "Complete offline third-party/dependency byte archival",
+    "Complete host intermediate-assertion replay",
+    "Another native execution solely because the evidence was reviewed after execution"
+  ],
+  "remaining_process_actions": [
+    "Preserve and hash-link original intake, exact replay outputs, source/host reviews and correction dispositions in the criterion-specific evidence chain.",
+    "Record an actual source-scoped decision and attach separate A02/A03 roadmap evidence entries through normal policy; this report does not do so.",
+    "Reconcile documentation/status/handoff and record actual applicable final delivery verification outcomes."
+  ],
+  "authorization_boundary": "P04 precedent records independent review plus originating-user implementation/publication authorization. No fictitious human review, new approval prerequisite, or waiver is inferred.",
+  "ci_snapshot_from_assignment": {
+    "local_governance_modules": 282,
+    "local_governance": "running-not-yet-pass",
+    "c6_project_governance": "cancelled",
+    "other_c6_workflows_successful": 13,
+    "c6_general_ci": "pending",
+    "overall_general_ci_success_claimed": false
+  },
+  "reader_identity_caution": "c6 public outputs bind repaired native ec7808fd... / installation cb191a17...; current installation 759c6249... has a22/a25 narrow parser repair. Original c0 validation/{fp16,bf16}-replay.json bind pre-repair readers; a15 records repaired complete c0 replay separately.",
+  "findings": [
+    {
+      "severity": "F0",
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "summary": "No additional missing frozen experimental obligation identified in assigned scope."
+    },
+    {
+      "severity": "F1",
+      "confidence": "high",
+      "evidence_type": "static-proof",
+      "summary": "Current compatibility matrix understates observed installed execution and needs exact newer host-evidence reconciliation."
+    }
+  ],
+  "receipt_check": {
+    "cwd": "/workspace/scratch/101d52695253/AI-GPU",
+    "command": "python3 - <<'PY'\nimport hashlib, json\nfrom pathlib import Path\nv = Path('../validation')\ns = json.loads((v / 'c6-replay-summary.json').read_text())\nfor r in s['replays']:\n    p = v / ('c6-' + r['format'] + '-replay.json')\n    print(r['format'], hashlib.sha256(p.read_bytes()).hexdigest() == r['output_sha256'])\na = json.loads(Path('../agent-notes/a33-evidence.json').read_text())\nprint('host/scenarios', [(r['label'], r['format'], r['host']['test_count'], r['compiled']['scenario_count'], r['successful_close_rehash']) for r in a['archives']])\na = json.loads(Path('../agent-notes/a49-git-source-joins.json').read_text())\nprint('source joins', [(r['execution_revision'][:8], r['format'], r['source_byte_checks']['unique_first_party_paths'], r['source_receipt_checks']['source_paths_with_receipt_but_no_retained_source_bytes'], len(r['mismatches']), r['close_rehash_passed']) for r in a['artifacts']])\nPY",
+    "exit_code": 0,
+    "result": "Both c6 summary/output hashes match; all four a33 records report 45/9 and successful close rehash; all four a49 records report 82 retained/731 receipt-only/zero mismatches/successful close rehash."
+  },
+  "reviewed_file_sha256": {
+    "docs/project/roadmap.json": "c3409db37618927f585a590031e0fd50205d650d79b7750ea09ffb53475e5b18",
+    "docs/project/acceptance.md": "065251c27555d2c588693a85546b2d18701352d939bd81ccf9daec984cc55bc0",
+    "docs/project/phases/p05-framework.md": "2c6112982c028ddd933d88b5eea71430a0a5d19f197946b841687d7b59e6915c",
+    "docs/project/p05-torch-compatibility.md": "cffb4bd89f7778e76e3bfe5d3d8660ebeaa00cdbf014a2fa12f8f53143f89d55",
+    "docs/designs/torch_custom_ops_v1.md": "3d42a28a02b450334976a4b787a241af4da5050755f57bc287eebbd1662bd3fc",
+    "docs/designs/torch_archive_replay_v1.md": "ff8619ca97a2ca37006a61da7b4ab6f91bbcfbb81cd5e39a8a2e55e35b68fba2",
+    "ci/project/p05_torch_contract.json": "295d4cffec7391c25ad1c97f7f808945e9a9df88f10410600d2b17a054623a11",
+    "python/vortex_ai/torch_ops.py": "b38aec7920a4640aa7af8e01143bf5851ccb9c5132644e60d96f901b71b80d70",
+    "ci/project/p05_execution_records.py": "1f5c9f7d0e66de1537e952b9432e10543563c61eab164e1762416bae07fa7ffe",
+    "ci/project/p05_installed_check.py": "69d530bea385f2d0545cc677b8205585c42398f4ace2837b840b14d5cabfac5b",
+    "ci/project/p05_torch_records.py": "3ff925b09b3176b1f328101bfa9d062aac48f0c3f0939fd847646128f8587639",
+    "ci/project/p05_replay_native.py": "ec7808fd5b6fdfbce51fc28fba60fc8fd2c291ac1310d826f938b621137c4a1d",
+    "ci/project/p05_replay_installation.py": "759c6249ed503b9da66b077364fe481b52ac048eb29cecde1bf793bdaf14efc9",
+    "ci/project/p05_torch_replay.py": "737eafad91bccc251039bade0ee7af4ce976bbda3d983361d240420cd8158dd3",
+    "docs/project/evidence/p05-torch/reviews/archive_reader.py": "4144becd4fe3c829380f7e66cdb66f7cf073b5e189c2620cd60c62940b9317d3",
+    "docs/project/evidence/p05-torch-replay/intake.json": "3124cf1cd06111ac6ed93cc62d4316437e4d6a7e29cb7ac785875ebe13b7f02d",
+    "docs/project/evidence/p05-torch-replay/fresh-seam-intake.json": "26cffd07a889ad8f546574042dc79df787c832a3804f935f8679e2df103f6a97",
+    "docs/project/evidence/p04-executor/acceptance-dispatch.json": "96b377c36de40d463fb4c2e04609388011aaef3e340d816836f5a3f5dadd1018",
+    "../validation/c6-replay-summary.json": "98cb10fcd6f263e247aa813d51cbb77edb0303e8e64b85128ba1ca7ba7226b9d",
+    "../validation/c6-fp16-replay.json": "49498319c3a89130792e3de03c18f0777b6849d10ffb3b6d6632f66e0ad9b760",
+    "../validation/c6-bf16-replay.json": "f5c90d9a3751b8f76f503346f0b3c3a232358ce935deef9b34dec23004b4e5f9",
+    "../agent-notes/a33-evidence.json": "73ed16526089d5617100267732187dc54bec7c5799882b5718c9acc92091813b",
+    "../agent-notes/a49-git-source-joins.json": "0b1e405ddb32345a26f8ad04663f4b0a7f2a0cac1e0ef0174e2f528b2edbbc11",
+    "../agent-notes/a13.md": "6507d1c2c829ca0f96da62a172ed1f5534e9c1ca49c966266cc398ffe6d66fcc",
+    "../agent-notes/a14.md": "ac179f4571b50cbbd868245628ebd30a594cdeccbcd9d7a00f0c3ff02df754f5",
+    "../agent-notes/a15.md": "92d1628acb0f15f4c022bbfc4fce45338f1095351d06079c75a32c08b0bd4332",
+    "../agent-notes/a16.md": "678f71f58f30ae9185fc8731b4f42279218b1ed3b50023383273b9de325d6532",
+    "../agent-notes/a17.md": "24bb81369439d9c2814ad04afdba9220b0e718a8b8af9f9534fcf9196376bb9e",
+    "../agent-notes/a18.md": "73f295372490471f982c1e785febb22e9e5d94ff7524ee71dc98fa2a346d67f2",
+    "../agent-notes/a19.md": "063f216612d56287c6a7af79d67c0654e2677910e552be4ebb3808c74e23bf86",
+    "../agent-notes/a20.md": "146167f7f06f1cc9a4361ff4f395f427297833ce221ee3c2e458cecd29679b77",
+    "../agent-notes/a21.md": "59fb474ebe3bfdec08b41e191d8678212c3215baae0e5139bcb076c5ed002e78",
+    "../agent-notes/a22.md": "9988791b0d19a481e88d991c8c283d05ac0bb5c489746272633454cde4081c6b",
+    "../agent-notes/a23.md": "8f7893cd675df126338470983b11e34bab72c803d1b1a861310e50739424175b",
+    "../agent-notes/a24.md": "573e2916a48522441fc941b19e92f85f3aa6f669346d7c77396cf31ef29a0999",
+    "../agent-notes/a25.md": "51b4a5293c7c5075528a7b01b3ee5dfdbfbd34f92a3cac4c80819af11b9f5c7b",
+    "../agent-notes/a33.md": "aab05d53846deabfc1b68d51e203ae319e2430280de6550c60b52b01a93d0501",
+    "../agent-notes/a49.md": "4b72ab98f8de2d5a0c80571795c3acb8c1bbaa95e2ad8b29bbd5b315c75b9cc6"
+  },
+  "changes_made": [
+    "../agent-notes/a53.md",
+    "../agent-notes/a53-criteria.json"
+  ],
+  "not_run": [
+    "test suites",
+    "original archive replays",
+    "native builds or execution",
+    "governance rerun",
+    "publication"
+  ]
+}

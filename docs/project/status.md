@@ -296,17 +296,21 @@ The complete host suite passed **1,816 tests in 366.568 seconds** at the same
 revision. The [executor packet](evidence/p04-executor/README.md) retains the
 original archives, failed attempts, exact auditors and successful relocated replay.
 
-**P05-T01 remains in progress; its plain-Python binding now has
-[P05-A01 acceptance](evidence/p05-python/acceptance-binding.json).** The
-[installed SimX packet](evidence/p05-python/README.md) binds the supported
-representations, ownership/error checks and clean installation to
-`e1420fd550f716df33a2556057b7086a03032cbe`. The scoped PyTorch custom-op route now
-has an implementation and successful prior installed CI jobs; its independent
-artifact review remains outstanding, as recorded in the
-[current audit](p06-benchmark-audit.md). The [binding handoff](p05-entry-handoff.md)
-retains the earlier contract. This continuation makes no new P05 acceptance decision.
-P05-A02 and P05-A03 remain unearned; this result establishes no framework backend
-or physical GPU performance.
+**P05-T01 and P05 are complete at their declared scope.** The
+[retained P05-A01 copying-binding result](evidence/p06-serial-workspace/a01-retained-binding.json)
+is preserved. Independently reviewed
+[P05-A02 execution](evidence/p05-torch-replay/acceptance-torch.json) and
+[P05-A03 compatibility](evidence/p05-torch-replay/acceptance-compatibility.json)
+accept the installed PyTorch 2.15.0+cpu / CPython 3.12.14 / Linux x86_64 /
+RV64 SimX pair at `c6fb039e706e812b6b3f4d2a5db1828076fe50df`.
+Six declared format/signature combinations and the fixed model account for
+32 framework calls, 72 framework-route native launches and 216 distinct recorded
+launches across the three routes. Both original archives, exact source joins,
+failure/ownership evidence and inert replay received independent review.
+The [audit](p05-torch-replay-audit.md), [evidence index](evidence/p05-torch-replay/README.md),
+[matrix](p05-torch-compatibility.md) and [handoff](p05-torch-replay-handoff.md)
+retain the decision and its limits. No training, general framework device
+backend, CUDA binary compatibility or physical GPU performance follows.
 
 **P03 is complete with independently reviewed A01–A03 evidence.** The
 [historical operator contract](evidence/p03-operators/acceptance.json) remains
@@ -331,8 +335,8 @@ At the accepted historical revision, all six frozen numerical executions pass
 from a clean GPU source checkout. The fresh generated FP16 SimX build and
 supplemental full-AFU integer `xrtsim` smoke also pass. Independent reviews accept
 the clean-build and native numerical packets. Qualified vendor tools/platform
-are still missing for P01-A03. P00, P02, P03 and P04 are complete,
-P05 and P06 are `in_progress`, and P07–P11 remain `not_started`.
+are still missing for P01-A03. P00, P02, P03, P04 and P05 are complete,
+P06 is `in_progress`, and P07–P11 remain `not_started`.
 [roadmap.json](roadmap.json) remains authoritative for phase state and evidence;
 the linked reports define the exact accepted scope.
 
@@ -345,7 +349,7 @@ the linked reports define the exact accepted scope.
 | P02 — tensor numerical contract | `complete` | A01 source contract, A02 ordinary WMMA and A03 bounded WGMMA evidence accepted after required review; T01/T02 complete |
 | P03 — native AI operator library | `complete` | T01/T02 complete; A01 manifest/ABI, A02 actual native arithmetic/dispatch and A03 simulated lifetime/error/resource evidence accepted |
 | P04 — tiny-model inference | `complete` | A01 fixed fixture preserved; A02/A03 accept the full four-variant composed-model matrix at native processor RTL scope |
-| P05 — Python/framework bridge | `in_progress` | A01 accepts the bounded copying Python binding on SimX; the custom-op implementation and prior CI still need independent artifact review for A02/A03 |
+| P05 — Python/framework bridge | `complete` | A01 preserves the copying binding; A02/A03 accept the two-format installed PyTorch 2.15.0+cpu fixed-model route on RV64 SimX at c6fb039e after independent original-artifact, source, dispatch, failure and compatibility review |
 | P06 — Memory and performance scaling | `in_progress` | A01 is preserved; complete 33-selector/40-component qualification and inert replay pass for the fresh four-process original; the explicit qualified 24-process route is implemented and independently reviewed; its native attempt is unstarted for capacity; passing coverage spans all 4,527 IDs across completed hosted/supplemental runs, with no single full zero-skip invocation established; A02/A03 remain open |
 | P07–P11 | `not_started` | Later hardware, reliability, research and silicon gates have not been earned |
 | Full vendor XRT `hw_emu` | `blocked` | Required vendor tools, identified platform and matching integration artifacts are unavailable |
@@ -1671,13 +1675,14 @@ qualification alone closes those gates. Preserve the inherited 267 → 283 DSP
 finding, the RV64 area finding and P01-A03 vendor `hw_emu`. See the
 [phase guide](phases/p06-performance.md) and [backlog](backlog.md).
 
-**Parallel framework task:** preserve the
-[accepted copying binding](evidence/p05-python/acceptance-binding.json) and
-[handoff](p05-entry-handoff.md), then independently review the existing PyTorch
-custom-op implementation's installed execution and compatibility artifacts.
-Prior successful CI does not itself close A02/A03; no new P05 acceptance decision
-is made here. P05 remains `in_progress`; its
-[phase guide](phases/p05-framework.md) retains the outstanding gates.
+**Completed parallel framework task:** preserve the accepted copying binding
+and source-scoped [P05-A02/A03 decisions](evidence/p05-torch-replay/README.md).
+P05 is `complete` for the two documented eager operators, six matmul signatures
+and fixed model on the tested PyTorch/CPython/RV64 SimX configuration. Use the
+[inert replay handoff](p05-torch-replay-handoff.md) for retained review;
+any expansion of operators, environments or execution modes needs its own
+contract and qualification. The [phase guide](phases/p05-framework.md) keeps
+training, a full device backend and physical performance outside this result.
 
 **Parallel blocked hardware task:** P01-T05 still needs a qualified vendor
 release/platform, matching prepared `hw_emu` artifact packet and actual reviewed
