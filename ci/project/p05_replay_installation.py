@@ -299,9 +299,23 @@ def _sdist_members(raw, api):
         unpacked = compressed.read(80 * MIB + 1)
     _require(len(unpacked) <= 80 * MIB, "source archive exceeds its decompression bound")
     files, names, total = {}, set(), 0
-    with tarfile.open(fileobj=io.BytesIO(unpacked), mode="r:") as archive:
-        for index, item in enumerate(archive):
+    # Truncated GNU sparse extension headers can raise IndexError before
+    # tarfile exposes their type. Normalize only parser entry/advancement.
+    try:
+        archive = tarfile.open(fileobj=io.BytesIO(unpacked), mode="r:")
+    except IndexError as error:
+        raise InstallationError("malformed source archive header") from error
+    with archive:
+        entries, index = iter(archive), 0
+        while True:
+            try:
+                item = next(entries)
+            except StopIteration:
+                break
+            except IndexError as error:
+                raise InstallationError("malformed source archive header") from error
             _require(index < 1024, "source archive has excessive members")
+            index += 1
             name = api.relative_name(item.name.rstrip("/") if item.isdir() else item.name)
             _require(name not in names and (item.isdir() or item.type in (tarfile.REGTYPE, tarfile.AREGTYPE))
                      and item.sparse is None, "source archive repeats a path or has a link/sparse member")

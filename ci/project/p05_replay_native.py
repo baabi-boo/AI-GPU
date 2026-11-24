@@ -345,6 +345,19 @@ def _build_records(view, prefix, artifacts, *, source, build, jobs, fmt, app):
                             read(app + "/config.stamp"), driver="simx", fmt=fmt, source=source, build=build, jobs=jobs)
 
 
+def _effective_header_macros(text, kernel_record):
+    result = validate_header_macros(text)
+    _same(kernel_record["role"], "kernel", "effective-header compiler role")
+    for name in ("ITYPE", "OTYPE", "KUNROLL"):
+        definitions = [line for line in text.splitlines()
+                       if re.match(r"#define[ \t]+" + name + r"(?:\W|$)", line)]
+        require(len(definitions) == 1, "effective header must define " + name + " exactly once")
+        match = re.fullmatch(r"#define " + name + r"(?:[ \t]+(.*))?", definitions[0])
+        require(match is not None, "effective header has a malformed " + name + " definition")
+        _same(match[1] or "", kernel_record["configuration"][name], "effective header " + name)
+    return result
+
+
 def _frozen_cases(view, fmt):
     for filename, digest in FIXTURES.items():
         name = "ci/project/fixtures/" + filename
@@ -616,8 +629,11 @@ def verify_native(outer_view, *, expected_revision, expected_format):
     native_members.update("artifacts/" + variant_id + "/" + name for name in native_artifacts
                           if name.endswith((".stamp", ".mk", ".h", ".vh", ".vlt")) or PurePosixPath(name).name == "Makefile")
     _same(list(native_view.files()), sorted(native_members), "native packet complete member closure")
-    for key, log in (("header_macros", "header"), ("backend_header_macros", "effective-header")):
-        _same(variant[key], validate_header_macros(_text(native_view, "logs/" + variant_id + "-" + log + ".log")), key)
+    _same(variant["header_macros"], validate_header_macros(_text(native_view, "logs/" + variant_id + "-header.log")),
+          "header_macros")
+    _same(variant["backend_header_macros"],
+          _effective_header_macros(_text(native_view, "logs/" + variant_id + "-effective-header.log"), model_compiler[2]),
+          "backend_header_macros")
     request = python_view.document(python["installed_request"], "snapshots/installed-request.json", integers_only=True)
     _fields(request, ("schema_version", "contract_id", "binding", "matmul_cases", "model_cases", "iterations", "expected_prefix"), "Python request")
     for key, expected in (("schema_version", 1), ("contract_id", "p05-installed-request-v1"), ("iterations", 2),
@@ -631,7 +647,9 @@ def verify_native(outer_view, *, expected_revision, expected_format):
     for key in ("bundle_sha256", "source_sha256"):
         require(type(request["binding"][key]) is str and SHA256.fullmatch(request["binding"][key]), "invalid Python request digest")
     _python_commands(python_view, python, python_tools, matmul_compiler, matmul_id, matmuls, request)
-    _same(python["matmul_backend_header_macros"], validate_header_macros(_text(python_view, "logs/native-matmul-effective-header.log")), "matmul backend macros")
+    _same(python["matmul_backend_header_macros"],
+          _effective_header_macros(_text(python_view, "logs/native-matmul-effective-header.log"), matmul_compiler[2]),
+          "matmul backend macros")
     native_matmuls, native_models, counts = _results(native_view, python_view, native, python, matmuls, models,
                                                     model_id, matmul_id, expected_revision, expected_format)
     observations = python_view.document(python["observations"], "artifacts/installed-observations.json", integers_only=True)
