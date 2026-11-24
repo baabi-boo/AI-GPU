@@ -1,21 +1,54 @@
 # Governance and qualified-warm readiness audit
 
-**The next bounded step is a full strict governance rerun of the independently
-reviewed, published correction. Fresh qualified-warm native execution remains
-unstarted.** The first strict hosted invocation failed. The current change
-repairs its identified harness/environment problems and implements a read-only
-advisory screen for the separate native prerequisites. Neither focused test
-success nor a readiness report changes phase acceptance.
+**The full strict rerun passed at the exact base revision
+`e8e73347ba598c9cd0ceed353148163721b7603d`; the fresh qualified-warm native
+experiment remains unstarted.** The new
+[hosted automation](p06-hosted-warm-guide.md) requires its own successful strict
+run after publication, together with private input/key configuration and observed
+native capacity. Neither the base pass nor focused development checks qualify
+subsequently changed code or establish phase acceptance.
 
-This audit describes the 2026-11-24 continuation based on
-`457ddaa06b07e439b6f5ef2d15c09ef24131f6fe`. The
-[evidence index](evidence/governance-readiness/README.md) records current source
-identities, retained logs, independent review and publication status. Tests of
-the corrected working tree are scoped to those file identities, not attributed
-to the earlier hosted revision. The [handoff](p06-qualified-warm-handoff.md),
+This audit retains the 2026-11-24 governance correction that started from
+`457ddaa06b07e439b6f5ef2d15c09ef24131f6fe`, then records the verified base rerun.
+The [historical evidence index](evidence/governance-readiness/README.md) preserves
+the first failed original, corrections and original focused checks. The
+[hosted continuation audit](p06-hosted-warm-audit.md),
+[qualified warm handoff](p06-qualified-warm-handoff.md),
 [governance runbook](governance-runbook.md) and
 [native/readiness runbook](evidence/p06-qualified-warm/runbook.md) define the
-remaining sequence.
+current sequence without changing historical dispositions.
+
+## Verified full strict rerun at the base revision
+
+The independently recovered original for
+[run 45422819749](https://github.com/baabi-boo/AI-GPU/actions/runs/45422819749),
+[job 138546650668](https://github.com/baabi-boo/AI-GPU/actions/runs/45422819749/job/138546650668),
+retains the checked environment, canonical discovery, events, raw logs and
+completed final summary for `e8e73347ba598c9cd0ceed353148163721b7603d`, tree
+`7ee501c7475f349cd47417e0e5b5f08bcd612165`.
+
+| Retained observation | Verified result |
+| --- | --- |
+| Canonical methods | **4,812 successful**; discovery, starts, stops and outcomes agree. |
+| Subtests and event stream | **36,821 successful subtests; 51,257 events**. |
+| Failures, errors and skips | **Zero**; no missing, duplicate, unexpected or non-successful method IDs. |
+| Ordering and completeness | `order_matches=true`, `coverage_complete=true`, `execution_completed=true`, `strict_success=true`. |
+| Finalization | `status="completed"`, `governance_passed=true`; source, interpreter and environment stability all true. |
+| Test duration and wrapper interval | Recorded test execution: **3,211.672274 seconds**. Wrapper interval: **3,218.763304 seconds**, from 15:14:17.059389 to 16:07:55.822693 UTC on 2026-11-24. |
+| Interpreter scope | Hosted CPython **3.12.3**, distinct from the native route's fixed CPython 3.12.14 requirement. |
+| Unchanged original ZIP | **1,266,394 bytes**, SHA-256 `39983c2984aab803ebf2029e02c624168493ac92446b294dd5a227dd71eedd1d`. |
+
+The recovered verification packet is
+`AI-GPU-e8e73347-governance-verification.zip`; the original ZIP's identity above
+names its contained hosted original, not that enclosing recovery packet. The
+separate [general CI run 45422819767](https://github.com/baabi-boo/AI-GPU/actions/runs/45422819767)
+succeeded with **43 of 43 jobs**. These results close the former full strict
+prerequisite only at the base revision. The implemented automation has
+source-scoped focused validation recorded in the
+[tooling evidence packet](evidence/p06-hosted-warm-automation/README.md).
+Verify its published revision's own full strict result from the exact Actions
+run; focused checks cannot supply that result.
+No native warm result follows from either CI result.
 
 ## First strict hosted invocation: failed and preserved
 
@@ -41,7 +74,7 @@ execution finishing does not establish a qualifying run: both successful
 accounting and final source/tool stability remain required. Preserve this
 failed original even after a later successful rerun.
 
-## Identified corrections and their validation
+## Historical corrections and their focused validation
 
 | Correction | Preserved boundary |
 | --- | --- |
@@ -51,7 +84,7 @@ failed original even after a later successful rerun.
 | Pass `-I -B` to the affected isolated Python test children. | Existing source/bytecode rejection remains enforced; isolated mode alone ignores environment bytecode settings. |
 | Check the attempted injection's marker and import origin, with a positive control. | Ambient injection must still be rejected; the test no longer assumes a distribution has no legitimate `sitecustomize` module. |
 
-Fresh focused results on Linux CPython **3.12.14** are retained separately:
+The correction's focused results on Linux CPython **3.12.14** remain retained separately:
 
 | Selection | Observed result | Retained evidence |
 | --- | --- | --- |
@@ -68,14 +101,15 @@ Independent discovery of the corrected source observes **4,812 canonical IDs**,
 SHA-256 `d885b2614c828d4c673960b052bbae35fba0239521a59c8092c399f735334095`.
 All 4,744 published IDs remain in their original relative order. The 68 additions
 comprise 57 readiness methods and 11 runner/receipt/alias regression methods.
-Discovery establishes the population to run; it does not establish that all
-4,812 methods passed.
+Discovery alone established the population to run. The independently verified
+strict rerun above subsequently established all 4,812 successful outcomes at
+`e8e73347`; these focused selections did not establish that result.
 
 The earlier [4,527-ID reconciliation](evidence/p06-qualified-warm/validation/coverage/final-reconciliation.json)
 is preserved at `c0b44ce64665fe11895f869eea8c38c9b820d6f7`: 4,491 hosted passing
 IDs plus 59 supplemental passing IDs, less 23 overlaps. That historical union
-crosses two environments and is neither the current population nor one full
-zero-skip invocation. Earlier skips, failures and unfinished invocations retain
+crosses two environments and is neither the later 4,812-ID population nor one
+full zero-skip invocation. Earlier skips, failures and unfinished invocations retain
 their original disposition.
 
 ## Advisory readiness implementation
@@ -118,7 +152,7 @@ shared runtimes or a successful build. Shared filesystems cannot be counted as
 independent capacity. Production preparation, build and process admission must
 still revalidate their complete unchanged requirements.
 
-## Recovery and remaining native blockers
+## Historical readiness recovery and remaining native blockers
 
 An execution-service reset removed the earlier temporary working area. Exact
 readiness source/tests were recovered, but unretained pre-reset raw JSON and
@@ -127,7 +161,7 @@ presented as retained current evidence. The coordinator's 13:53 UTC readiness
 observation on 2026-11-24 is historical only; it reported source/input and
 capacity blockers, not native admission.
 
-A new actual screen ran on the restored dirty checkout from **14:57:19.780907
+The retained historical screen ran on the then-restored dirty checkout from **14:57:19.780907
 to 14:57:22.109671 UTC on 2026-11-24**, using the checked CPython 3.12.14
 interpreter. It returned **exit 1, `outcome="blocked"`**, with **254 rows: 224
 observed, 26 blocked, three not checked and one unknown**. The
@@ -137,7 +171,7 @@ is **114,687 bytes**, SHA-256
 the [observation receipt](evidence/governance-readiness/validation/readiness-restored-smoke.proof.json)
 retains the exact command, timing and selected before/after invariants.
 
-| Fresh observation | Meaning |
+| Historical observation | Meaning |
 | --- | --- |
 | All 69 frozen measurement source identities match; the diagnostic original's raw identity matches. | These selected inputs match; complete source admission is still blocked. |
 | Dirty source and five uninitialized top-level gitlinks. | The restored checkout is not a clean complete native execution checkout. |
@@ -154,14 +188,33 @@ edit documentation concurrently. This is not a whole-checkout no-write or
 source-stability proof. The report reserves no capacity and cannot authorize
 launch.
 
-The historical local attempt-04 control original remains **47,632,218 bytes**,
-SHA-256 `d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f`.
-Stable hosted delivery of those exact original bytes is unresolved. A summary,
-repacked ZIP or historical source checkout does not replace it. Provision an
-adequately sized environment, restore the exact local prerequisites and clean
-complete source/gitlink closure, then independently establish effective memory
-capacity and satisfy production admission. None of those requirements is waived
-by this useful blocked observation.
+The historical local attempt-04 control original has since been recovered
+unchanged: **47,632,218 bytes**, SHA-256
+`d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f`.
+This resolves the earlier selected path's absence, not hosted delivery. Retained
+Micron verification sources under Ramulator carry proprietary/confidential
+notices; the original is not cleared for public redistribution, and fresh full
+dependency packets can contain the same sources. A summary, repacked ZIP or
+historical source checkout cannot replace its exact raw identity.
+
+The external owner still must configure private Azure/S3 transport through
+secret `P06_CONTROL_ARCHIVE_URL` and public variable
+`P06_EVIDENCE_AGE_RECIPIENT`, keeping the matching private decryption key outside
+Actions. The [hosted guide](p06-hosted-warm-guide.md) permits only encrypted
+retention and a minimal public summary in this public repository's artifacts.
+Missing configuration prevents checkout and creates no attempt packet. Later
+closeout is best effort: the
+[failure matrix](p06-hosted-warm-guide.md#failure-and-delivery-matrix) distinguishes
+local partial evidence from successfully uploaded validated ciphertext and its
+sanitized summary. Source copies, native reports, prerequisite archives and
+failure logs remain private.
+
+Observe a newly selected runner's actual capacity and clean source/gitlink
+closure. Preserve the **15 GiB free-disk reserve**, **4 GiB available-memory
+admission** and every native budget. The added bounded visible-cgroup observer
+records only what the exposed hierarchy establishes; incomplete visibility
+remains `unknown` and never authorizes launch. Neither a standard hosted-runner
+label nor an old host memory snapshot replaces production checks.
 
 ## Frozen experiment and project gates
 
@@ -208,10 +261,12 @@ canonical evidence pointer and current overview links select this successor.
 The live test's new `-I -B` behavior remains separately tested development work;
 no new native execution or acceptance is claimed by historical source retention.
 
-After independent review and publication, allow the corrected full strict
-hosted invocation to finish uninterrupted and retain its entire original.
-Resolve native artifact delivery and adequate effective capacity, then rerun the
-advisory screen and unchanged production admission before one fresh native
-attempt. Preserve the original result, obtain complete independent inert replay,
-and only then evaluate the frozen performance predicates and separate acceptance
-obligations.
+Configure private control delivery and the public age recipient, then verify
+the exact published automation revision's full strict Actions result and retain
+its complete original. The verified base run above cannot qualify the new
+helper or workflow bytes. Observe adequate actual capacity and follow the
+[manual hosted guide](p06-hosted-warm-guide.md) through unchanged production
+admission for one complete fresh attempt. Attempt private closeout and confirm
+actual encrypted delivery; obtain complete
+independent inert replay of a valid original before evaluating the frozen
+performance predicates and separate acceptance obligations.

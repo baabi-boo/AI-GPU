@@ -7,7 +7,7 @@ Completed work must carry the [evidence record](evidence/README.md) it earned.
 
 ## 1. Obtain the correct source
 
-Use authorized access to the private target repository. Its default branch is
+Use the authorized public target repository. Its default branch is
 `master`; do not substitute the upstream Vortex repository or rename the branch.
 For a new checkout:
 

@@ -6,7 +6,13 @@ This procedure operates the [qualified warm-workspace v1 contract](../../../desi
 2. `p06_dependency_build.py` compiles fresh dependency products and retains their provenance.
 3. `p06_qualified_warm_execute.py run` admits the separately pinned caller extension and original prerequisites before building and launching the full 24-process matrix.
 
-These instructions are a procedure, not a completed execution claim. The original route review is scoped to `c0b44ce64665fe11895f869eea8c38c9b820d6f7`; select and record the exact reviewed published execution revision independently. The [current governance/readiness audit](../../governance-readiness-audit.md) preserves the failed first strict hosted invocation and the corrected focused checks. A complete strict governance pass, original-control delivery and native capacity remain outstanding. Preserve the exact source, inputs, logs and outcome for each attempt. A successful original and complete independent replay establish the recorded 24-process experiment's validity. The frozen performance predicates may be satisfied or not satisfied. Neither outcome establishes performance acceptance, P06-A02/A03, vendor integration or physical hardware qualification.
+These instructions are a procedure, not a completed execution claim. The original route review is scoped to `c0b44ce64665fe11895f869eea8c38c9b820d6f7`; select and record the exact reviewed published execution revision independently. The [governance audit](../../governance-readiness-audit.md) verifies a full strict pass at `e8e73347ba598c9cd0ceed353148163721b7603d`: [run 45422819749](https://github.com/baabi-boo/AI-GPU/actions/runs/45422819749), 4,812 canonical tests, 36,821 subtests, zero failures/errors/skips and stable source/interpreter/environment. That pass qualifies only its exact revision. The automation is implemented with source-scoped focused validation in the [tooling evidence packet](../p06-hosted-warm-automation/README.md); verify its published revision's own full strict result from the exact Actions run.
+
+For the manual hosted route, use the [hosted operator guide](../../p06-hosted-warm-guide.md) and [automation contract](../../../designs/qualified_warm_automation_v1.md). The next operational action is private control URL/public recipient configuration, verification of the exact published revision's full strict Actions result, and one complete admitted attempt. The workflow accepts no revision input, selects trusted `master` at its provider SHA and requires a successful full governance run for that exact SHA. The steps below retain the existing direct local composition and independent replay commands.
+
+The exact control original has been recovered unchanged: **47,632,218 bytes**, SHA-256 `d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f`. Retained Micron verification sources under Ramulator carry proprietary/confidential notices. This original and fresh full dependency packets are not cleared for public redistribution. Keep raw prerequisite archives, source copies, native reports, partial attempts and logs private. Public Actions upload is restricted to encrypted retention and its minimal encryption summary.
+
+Preserve exact source, inputs, logs and outcome for each attempt. A complete native original and independent replay establish the recorded 24-process experiment's validity. The frozen performance predicates may be satisfied or not satisfied. Neither outcome establishes performance acceptance, P06-A02/A03, vendor integration or physical hardware qualification.
 
 The historical four-process route and blocked historical warm-v1 route remain separate. Explicitly select the new producer and reader below; do not alter an old packet or rely on its self-reported metadata to choose a reader. The original qualification proof and both original prerequisite ZIPs retain their original identities and scope. Historical prerequisite projection and the current one-file caller extension are validated separately.
 
@@ -33,7 +39,7 @@ Use canonical absolute paths without spaces, traversal or symlink ancestors. The
 
 The [earlier local input guide](../p06-dependency-provenance/local-execution/runbook.md#1-prepare-exact-separate-inputs) specifies the unchanged five dependency commits/trees, fifteen toolchain archive parts, complete host compiler installation and acquisition evidence. Preparation verifies the **15 parts / 606,992,434 compressed bytes**, source Git objects, native tools and all selected host tools. The new route does not substitute a moving tag, restored dependency cache, copied source tree or downloaded replacement. Verilator is outside this SimX-only selection.
 
-The reviewed host setup used GCC **12.2.0** with matching compiler support, C++ headers and shared runtime, and CMake **3.22.6**. An executable alone is not the complete host toolchain. The selected `python3` found through the sanitized path must have the executing interpreter's identity.
+The earlier reviewed host setup observed GCC **12.2.0** with matching compiler support, C++ headers and shared runtime. That observed version is not a frozen GCC minor-version constraint. The new Ubuntu 24.04 hosted route selects GCC/G++ 12 and must retain its actual exact package, compiler, support-file and shared-runtime identities. CPython **3.12.14** and CMake **3.22.6** remain fixed for the native route. An executable alone is not the complete host toolchain. The selected `python3` found through the sanitized path must have the executing interpreter's identity.
 
 The immutable source and prerequisite pins are:
 
@@ -51,7 +57,7 @@ Run the examples in a dedicated Bash script with the variables populated. The gu
 
 ```bash
 set -euo pipefail
-: "${P06_PYTHON:?Set the reviewed absolute Python 3.12.14 executable}"
+: "${P06_PYTHON:?Set the reviewed absolute CPython 3.12.14 python3 executable}"
 : "${P06_SOURCE_REVISION:?Set the exact reviewed published execution commit}"
 : "${P06_SOURCE:?Set the new dedicated source checkout}"
 : "${P06_WORKSPACE:?Set the new owned workspace path}"
@@ -156,7 +162,7 @@ both raw prerequisite ZIPs and every frozen native limit unchanged.
 
 Keep the existing limits: **two build jobs**, **one simulation worker**, **15 GiB free-disk reserve**, **4 GiB available memory** and **4 GiB sampled child process-group RSS**. Native configure/build/process timeouts are **120 / 1,800 / 180 seconds**, with **16 MiB per recorded child command log**. Toolchain extraction retains its own unchanged limits. The selected source and workspace filesystems must actually satisfy the checks; a roomy `/workspace` does not imply that `/tmp` has the same capacity.
 
-These are polled budgets, not hard cgroup or filesystem quotas. Sampling can miss peaks or double-count shared pages, and bounded termination/receipt writing can finish after a deadline. The direct three-stage composition does not claim the historical outer executor's 90-minute supervision or its descendant accounting. Record any additional supervisor's own limits and actual behavior separately. The retained [attempt-01 supervisor](native/attempt-01-supervisor.py.txt) adds a 90-minute whole-attempt bound and records its monitor limitations; it does not aggregate child-created process groups. Review it independently before use. Choose either its complete invocation or the direct composition below for a new attempt; the supervisor creates its own workspace, so do not precreate that workspace using the direct recipe.
+These are polled budgets, not hard cgroup or filesystem quotas. Sampling can miss peaks or double-count shared pages, and bounded termination/receipt writing can finish after a deadline. The direct three-stage composition does not claim the historical outer executor's 90-minute supervision or its descendant accounting. Record any additional supervisor's own limits and actual behavior separately. The retained [attempt-01 supervisor](native/attempt-01-supervisor.py.txt) records its historical 90-minute bound, old revision and scratch paths; preserve it as evidence and do not execute it unchanged. The new [parameterized wrapper](../../../../ci/project/p06_qualified_warm_run.py) supplies the separately documented 90-minute polled outer budget for the current route. Use that wrapper through the [hosted guide](../../p06-hosted-warm-guide.md), or the direct composition below. The wrapper creates its own absent workspace, so do not precreate that workspace using the direct recipe. The additional visible-cgroup observer records exposed bounds only; unknown hierarchy visibility never authorizes native execution.
 
 If the resource guard fails, stop, preserve the attempt and select an adequately provisioned new owned workspace/checkpoint. Do not lower reserves, widen timeouts, disable recording, prune an original or silently reuse partially built products to obtain a pass.
 
@@ -310,6 +316,25 @@ Wait until `qualified-warm/report.json` has `state="finished"`; require successf
 Stop and preserve the whole attempt on an admission, build, process, resource, stability or interruption failure. Do not resume it, replace a sample, omit an outlier or rerun until a favorable performance result appears. A later corrected source or environment requires its own separately identified fresh attempt, with earlier failures retained.
 
 ## 4. Preserve the exact two-root original
+
+The [packaging helper](../../../../ci/project/p06_qualified_warm_pack.py) offers
+separate `success` and `partial` modes after evidence writers finish. Its
+complete original preserves exactly the same two roots described below;
+acquisition/supervision records stay in a separate envelope. Its `PRIVATE`
+outputs, including partial bytes and packaging-failure records, must be retained
+privately. Use the [hosted encryption procedure](../../p06-hosted-warm-guide.md)
+before public artifact upload. Closeout attempts can fail: unknown launch or
+unresolved cleanup blocks packaging and encryption, and only successfully
+uploaded validated ciphertext and its sanitized summary establish durable
+hosted delivery. Inspect invocation/hosted-closeout status and failure receipts
+as well as any success-shaped packaging receipt; interruption can leave that
+receipt and verified final ZIPs after a failed invocation. Packaging and
+encryption do not establish replay, native validity or performance acceptance.
+Encryption uses a separate bounded retention-space check so a small failure
+packet can survive a native 15 GiB reserve failure when tools/configuration are
+available; native and acquisition resource guards remain unchanged. The
+[failure matrix](../../p06-hosted-warm-guide.md#failure-and-delivery-matrix)
+records setup, encryption and cancellation limits.
 
 Wait until both stage reports are finished and no producer is writing either tree. Preserve every failed attempt as well. If an early failure never produced both subpackets, retain its available files separately with the failure; do not fabricate the missing subtree or a complete original.
 
