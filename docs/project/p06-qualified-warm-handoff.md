@@ -1,6 +1,46 @@
 # Qualified warm-workspace handoff
 
-## Current execution and retention continuation
+## Current launch-readiness continuation
+
+**Production launch-readiness fixes are implemented; the next actual qualified
+warm experiment remains unstarted: 24 processes, 792 launches and 25,344 checked
+FP32 words.** The [current audit](p06-launch-readiness-audit.md) and
+[evidence packet](evidence/p06-launch-readiness/README.md) record confirmed
+nonstarts after failed prelaunch checkpoints, preservation of prior launches,
+failure classification for unresolved dispositions, cooperative CLI `SIGTERM`
+closeout, and failure retention for interrupted final observations. Interrupted
+final counts permit one pure recomputation without repeating native work.
+Hosted execution repeats the unchanged capacity gate after acquisition and
+provisioning, immediately before native supervision.
+
+Focused checks and synthetic reproductions establish source-scoped tooling
+behavior only; they are not native results or performance acceptance. The
+**69 frozen measurement sources, 21 dependency descriptors, proofs, sampling,
+numerical checks and performance criteria** remain unchanged. P06/P06-T01 remain
+`in_progress`, and P06-A02/A03 remain open.
+
+Before native admission, require the selected published revision's own complete,
+uninterrupted strict governance invocation with zero skips under the
+[checked environment](governance-runbook.md), followed by independent
+[governance-original replay](governance-artifact-replay.md). Historical base
+results and focused checks do not qualify the changed revision.
+
+**Next bounded action:** verify or configure private delivery of the exact
+historical control archive and the explicit public age recipient; retain the
+matching private identity outside Actions. These operational inputs were not
+supplied to this session, live provider secrets were not inspected, and observed
+local free disk is below the unchanged **15 GiB** reserve. Require actual runner
+admission with **15 GiB free disk and 4 GiB available memory**; repeated capacity
+observations do not reserve resources or establish hidden cgroup capacity.
+Use the existing [hosted operator commands](p06-hosted-warm-guide.md) and
+[execution/replay runbook](evidence/p06-qualified-warm/runbook.md). Preserve the
+separate dependency/four-process prerequisites, encrypted complete or explicitly
+partial retention, independent complete native replay and frozen performance
+decision.
+
+## Earlier execution and retention continuation (historical)
+
+The following paragraphs preserve that continuation's source and evidence scope.
 
 **The execution and retention continuation is implemented; the frozen qualified
 warm experiment remains unstarted: 24 processes, 792 launches and 25,344 checked
@@ -241,7 +281,7 @@ The exact historical control original has been recovered unchanged:
 It contains Micron verification sources with proprietary/confidential notices
 under the retained Ramulator tree and is **not cleared for public
 redistribution**. Fresh full dependency packets can contain the same sources.
-The external owner still needs to configure private storage for that original,
+Verify or configure private storage for that original,
 the signed Azure/S3 URL secret `P06_CONTROL_ARCHIVE_URL`, and the public
 `P06_EVIDENCE_AGE_RECIPIENT` value while retaining the matching private key
 outside Actions. Only encrypted retention and its minimal public summary may
@@ -369,8 +409,9 @@ The independently replayed hypothesis can be `satisfied` or `not_satisfied`;
 a complete, correctly retained experiment can yield a green hosted job and an
 unfavorable hypothesis. That result must remain unfavorable and establishes no
 performance, phase or hardware acceptance.
-The present native state is **not run**: the new automation's exact-revision
-strict governance, private input/key configuration and observed native capacity
+The present native state is **not run**: the selected published revision's own
+strict governance and independent original replay, private input/key
+configuration and observed native capacity
 remain prerequisites. No positive or negative performance
 observation exists for this fresh experiment. All seven historical
 qualification/readiness/warm/acceptance fields remain false. Performance and

@@ -9,6 +9,30 @@ remain unassigned until an actual owner is identified.
 
 ## Start here: P06-T01 explicit qualified warm route
 
+**Next actual development experiment:** one complete qualified warm attempt,
+after the selected published revision passes its own full strict governance
+and independent [governance-original admission](governance-artifact-replay.md).
+Verify or configure private delivery of the exact historical control archive
+and the public age recipient, then use the
+[manual hosted route](p06-hosted-warm-guide.md) on a runner meeting the unchanged
+**15 GiB free-disk and 4 GiB available-memory** gates. Those operational inputs
+were not supplied to this session; live provider secrets were not inspected,
+and observed local free disk remains below the reserve.
+
+The [launch-readiness fixes](p06-launch-readiness-audit.md) and
+[evidence packet](evidence/p06-launch-readiness/README.md) record implementation
+progress in launch accounting, interruption retention and the repeated capacity
+gate immediately before native supervision. Focused checks do not qualify the
+final changed revision and did not execute the frozen qualified-warm population.
+Preserve the 69 measurement files, 21 dependency descriptors and proofs, the
+**24-process, 792-launch, 25,344-word** population, dependency/four-process
+prerequisites, encrypted complete or partial retention, independent complete
+native replay and every frozen performance predicate. P06/P06-T01 remain
+`in_progress`, P06-A02/A03 remain open and P01 vendor integration remains blocked.
+
+**Earlier governance-original admission handoff (historical).** The following
+text preserves that continuation's source and evidence scope.
+
 **Next bounded action:** verify or configure private control delivery and the
 public age recipient, then run one complete
 [manual hosted attempt](p06-hosted-warm-guide.md) after the selected published

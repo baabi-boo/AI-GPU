@@ -1,0 +1,27 @@
+test_dependency_sigterm_during_install_restores_enclosing_handler (test_p06_cli_signal_setup.CliSignalSetupTests.test_dependency_sigterm_during_install_restores_enclosing_handler) ... FAIL
+test_qualified_warm_sigterm_during_install_restores_enclosing_handler (test_p06_cli_signal_setup.CliSignalSetupTests.test_qualified_warm_sigterm_during_install_restores_enclosing_handler) ... FAIL
+
+======================================================================
+FAIL: test_dependency_sigterm_during_install_restores_enclosing_handler (test_p06_cli_signal_setup.CliSignalSetupTests.test_dependency_sigterm_during_install_restores_enclosing_handler)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_cli_signal_setup.py", line 45, in test_dependency_sigterm_during_install_restores_enclosing_handler
+    self.interrupted_installation(dependency)
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_cli_signal_setup.py", line 39, in interrupted_installation
+    self.assertIs(signal.getsignal(signal.SIGTERM), enclosing)
+AssertionError: <function main.<locals>.interrupt at 0x7fe72d17d760> is not <function CliSignalSetupTests.interrupted_installation.<locals>.enclosing at 0x7fe72d788e00>
+
+======================================================================
+FAIL: test_qualified_warm_sigterm_during_install_restores_enclosing_handler (test_p06_cli_signal_setup.CliSignalSetupTests.test_qualified_warm_sigterm_during_install_restores_enclosing_handler)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_cli_signal_setup.py", line 48, in test_qualified_warm_sigterm_during_install_restores_enclosing_handler
+    self.interrupted_installation(qualified_warm)
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_cli_signal_setup.py", line 39, in interrupted_installation
+    self.assertIs(signal.getsignal(signal.SIGTERM), enclosing)
+AssertionError: <function main.<locals>.interrupt at 0x7fe72d17d940> is not <function CliSignalSetupTests.interrupted_installation.<locals>.enclosing at 0x7fe72d17d6c0>
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.007s
+
+FAILED (failures=2)

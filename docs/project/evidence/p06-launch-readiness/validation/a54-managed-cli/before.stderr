@@ -1,0 +1,288 @@
+test_all_cli_argv_and_success_or_failure_exit_statuses_are_preserved (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_argv_and_success_or_failure_exit_statuses_are_preserved) ... ok
+test_all_cli_entries_translate_sigterm_before_argument_parsing (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_entries_translate_sigterm_before_argument_parsing) ... 
+  test_all_cli_entries_translate_sigterm_before_argument_parsing (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_entries_translate_sigterm_before_argument_parsing) (entry='p06_managed_preflight_execute') ... FAIL
+  test_all_cli_entries_translate_sigterm_before_argument_parsing (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_entries_translate_sigterm_before_argument_parsing) (entry='p06_native_lifetime_execute') ... FAIL
+  test_all_cli_entries_translate_sigterm_before_argument_parsing (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_entries_translate_sigterm_before_argument_parsing) (entry='p06_dependency_lifetime_execute') ... FAIL
+  test_all_cli_entries_translate_sigterm_before_argument_parsing (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_entries_translate_sigterm_before_argument_parsing) (entry='p06_counter_qualification_execute') ... FAIL
+test_all_cli_handled_errors_keep_blocked_json_and_restore_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_handled_errors_keep_blocked_json_and_restore_handler) ... ok
+test_all_cli_parser_exit_codes_restore_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_parser_exit_codes_restore_handler) ... ok
+test_all_cli_signal_setup_error_preserves_identity_and_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_signal_setup_error_preserves_identity_and_restores_handler) ... 
+  test_all_cli_signal_setup_error_preserves_identity_and_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_signal_setup_error_preserves_identity_and_restores_handler) (entry='p06_managed_preflight_execute') ... FAIL
+  test_all_cli_signal_setup_error_preserves_identity_and_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_signal_setup_error_preserves_identity_and_restores_handler) (entry='p06_native_lifetime_execute') ... FAIL
+  test_all_cli_signal_setup_error_preserves_identity_and_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_signal_setup_error_preserves_identity_and_restores_handler) (entry='p06_dependency_lifetime_execute') ... FAIL
+  test_all_cli_signal_setup_error_preserves_identity_and_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_signal_setup_error_preserves_identity_and_restores_handler) (entry='p06_counter_qualification_execute') ... FAIL
+test_all_cli_sigterm_during_installation_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_sigterm_during_installation_restores_handler) ... 
+  test_all_cli_sigterm_during_installation_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_sigterm_during_installation_restores_handler) (entry='p06_managed_preflight_execute') ... FAIL
+  test_all_cli_sigterm_during_installation_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_sigterm_during_installation_restores_handler) (entry='p06_native_lifetime_execute') ... FAIL
+  test_all_cli_sigterm_during_installation_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_sigterm_during_installation_restores_handler) (entry='p06_dependency_lifetime_execute') ... FAIL
+  test_all_cli_sigterm_during_installation_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_sigterm_during_installation_restores_handler) (entry='p06_counter_qualification_execute') ... FAIL
+test_all_cli_unhandled_error_identity_and_handler_restoration (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_unhandled_error_identity_and_handler_restoration) ... ok
+test_sigterm_after_initial_checkpoint_finishes_without_dispatch (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_sigterm_after_initial_checkpoint_finishes_without_dispatch) ... FAIL
+test_sigterm_before_native_receipt_write_keeps_confirmed_start (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_sigterm_before_native_receipt_write_keeps_confirmed_start) ... FAIL
+
+======================================================================
+FAIL: test_all_cli_entries_translate_sigterm_before_argument_parsing (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_entries_translate_sigterm_before_argument_parsing) (entry='p06_managed_preflight_execute')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 226, in test_all_cli_entries_translate_sigterm_before_argument_parsing
+    module.main([])
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_managed_preflight_execute.py", line 873, in main
+    args = argument_parser().parse_args(argv)
+           ^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 218, in parser
+    self.assertIsNot(signal.getsignal(signal.SIGTERM), handlers[0])
+AssertionError: unexpectedly identical: <function _enclosing_handlers.<locals>.enclosing at 0x7f79fdc1ff60>
+
+======================================================================
+FAIL: test_all_cli_entries_translate_sigterm_before_argument_parsing (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_entries_translate_sigterm_before_argument_parsing) (entry='p06_native_lifetime_execute')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 226, in test_all_cli_entries_translate_sigterm_before_argument_parsing
+    module.main([])
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_native_lifetime_execute.py", line 27, in main
+    args = argument_parser().parse_args(argv)
+           ^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 218, in parser
+    self.assertIsNot(signal.getsignal(signal.SIGTERM), handlers[0])
+AssertionError: unexpectedly identical: <function _enclosing_handlers.<locals>.enclosing at 0x7f79fdcaf1a0>
+
+======================================================================
+FAIL: test_all_cli_entries_translate_sigterm_before_argument_parsing (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_entries_translate_sigterm_before_argument_parsing) (entry='p06_dependency_lifetime_execute')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 226, in test_all_cli_entries_translate_sigterm_before_argument_parsing
+    module.main([])
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_dependency_lifetime_execute.py", line 29, in main
+    args = argument_parser().parse_args(argv)
+           ^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 218, in parser
+    self.assertIsNot(signal.getsignal(signal.SIGTERM), handlers[0])
+AssertionError: unexpectedly identical: <function _enclosing_handlers.<locals>.enclosing at 0x7f79fdcaf060>
+
+======================================================================
+FAIL: test_all_cli_entries_translate_sigterm_before_argument_parsing (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_entries_translate_sigterm_before_argument_parsing) (entry='p06_counter_qualification_execute')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 226, in test_all_cli_entries_translate_sigterm_before_argument_parsing
+    module.main([])
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_counter_qualification_execute.py", line 37, in main
+    args = argument_parser().parse_args(argv)
+           ^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 218, in parser
+    self.assertIsNot(signal.getsignal(signal.SIGTERM), handlers[0])
+AssertionError: unexpectedly identical: <function _enclosing_handlers.<locals>.enclosing at 0x7f79fdc1ff60>
+
+======================================================================
+FAIL: test_all_cli_signal_setup_error_preserves_identity_and_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_signal_setup_error_preserves_identity_and_restores_handler) (entry='p06_managed_preflight_execute')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 340, in test_all_cli_signal_setup_error_preserves_identity_and_restores_handler
+    module.main([])
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_managed_preflight_execute.py", line 873, in main
+    args = argument_parser().parse_args(argv)
+           ^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: body entered
+
+======================================================================
+FAIL: test_all_cli_signal_setup_error_preserves_identity_and_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_signal_setup_error_preserves_identity_and_restores_handler) (entry='p06_native_lifetime_execute')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 340, in test_all_cli_signal_setup_error_preserves_identity_and_restores_handler
+    module.main([])
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_native_lifetime_execute.py", line 27, in main
+    args = argument_parser().parse_args(argv)
+           ^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: body entered
+
+======================================================================
+FAIL: test_all_cli_signal_setup_error_preserves_identity_and_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_signal_setup_error_preserves_identity_and_restores_handler) (entry='p06_dependency_lifetime_execute')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 340, in test_all_cli_signal_setup_error_preserves_identity_and_restores_handler
+    module.main([])
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_dependency_lifetime_execute.py", line 29, in main
+    args = argument_parser().parse_args(argv)
+           ^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: body entered
+
+======================================================================
+FAIL: test_all_cli_signal_setup_error_preserves_identity_and_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_signal_setup_error_preserves_identity_and_restores_handler) (entry='p06_counter_qualification_execute')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 340, in test_all_cli_signal_setup_error_preserves_identity_and_restores_handler
+    module.main([])
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_counter_qualification_execute.py", line 37, in main
+    args = argument_parser().parse_args(argv)
+           ^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: body entered
+
+======================================================================
+FAIL: test_all_cli_sigterm_during_installation_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_sigterm_during_installation_restores_handler) (entry='p06_managed_preflight_execute')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 317, in test_all_cli_sigterm_during_installation_restores_handler
+    module.main([])
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_managed_preflight_execute.py", line 873, in main
+    args = argument_parser().parse_args(argv)
+           ^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: body entered
+
+======================================================================
+FAIL: test_all_cli_sigterm_during_installation_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_sigterm_during_installation_restores_handler) (entry='p06_native_lifetime_execute')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 317, in test_all_cli_sigterm_during_installation_restores_handler
+    module.main([])
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_native_lifetime_execute.py", line 27, in main
+    args = argument_parser().parse_args(argv)
+           ^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: body entered
+
+======================================================================
+FAIL: test_all_cli_sigterm_during_installation_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_sigterm_during_installation_restores_handler) (entry='p06_dependency_lifetime_execute')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 317, in test_all_cli_sigterm_during_installation_restores_handler
+    module.main([])
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_dependency_lifetime_execute.py", line 29, in main
+    args = argument_parser().parse_args(argv)
+           ^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: body entered
+
+======================================================================
+FAIL: test_all_cli_sigterm_during_installation_restores_handler (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_all_cli_sigterm_during_installation_restores_handler) (entry='p06_counter_qualification_execute')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 317, in test_all_cli_sigterm_during_installation_restores_handler
+    module.main([])
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_counter_qualification_execute.py", line 37, in main
+    args = argument_parser().parse_args(argv)
+           ^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: body entered
+
+======================================================================
+FAIL: test_sigterm_after_initial_checkpoint_finishes_without_dispatch (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_sigterm_after_initial_checkpoint_finishes_without_dispatch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 177, in test_sigterm_after_initial_checkpoint_finishes_without_dispatch
+    result, _ = self.interrupted("initial")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 145, in interrupted
+    self.assertEqual(process.returncode, 1,
+AssertionError: -15 != 1 : checkpoint=initial; saved={"state": "running", "native_execution": "not_run", "commands": 0}; output=
+
+======================================================================
+FAIL: test_sigterm_before_native_receipt_write_keeps_confirmed_start (test_p06_managed_cli_cancellation.ManagedCliCancellationTests.test_sigterm_before_native_receipt_write_keeps_confirmed_start)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 190, in test_sigterm_before_native_receipt_write_keeps_confirmed_start
+    result, observed = self.interrupted("receipt")
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_cli_cancellation.py", line 145, in interrupted
+    self.assertEqual(process.returncode, 1,
+AssertionError: -15 != 1 : checkpoint=receipt; saved={"state": "running", "native_execution": "unknown", "commands": 20}; output=
+
+----------------------------------------------------------------------
+Ran 9 tests in 1.233s
+
+FAILED (failures=14)

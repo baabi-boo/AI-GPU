@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import signal
 import sys
 
 sys.dont_write_bytecode = True
@@ -27,7 +28,7 @@ def execute(args, paths):
                              counter_qualification=True, qualified_warm=True)
 
 
-def main(argv=None):
+def _main(argv=None):
     args = argument_parser().parse_args(argv)
     try:
         result = execute(args, preflight.base.resolve_paths(args))
@@ -48,6 +49,18 @@ def main(argv=None):
             "counter_qualification_passed": False, "qualified_warm_passed": False,
             **dict.fromkeys(preflight.manifest.FALSE_CLAIMS, False)}, sort_keys=True))
         return 1
+
+
+def main(argv=None):
+    def interrupt(number, frame):
+        raise KeyboardInterrupt
+
+    previous = signal.getsignal(signal.SIGTERM)
+    try:
+        signal.signal(signal.SIGTERM, interrupt)
+        return _main(argv)
+    finally:
+        signal.signal(signal.SIGTERM, previous)
 
 
 if __name__ == "__main__":

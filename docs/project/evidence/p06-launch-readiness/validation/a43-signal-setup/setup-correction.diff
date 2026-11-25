@@ -1,0 +1,26 @@
+--- before/p06_dependency_build.py
++++ after/p06_dependency_build.py
+@@ -577,8 +577,9 @@
+     def interrupt(number, frame):
+         raise KeyboardInterrupt
+ 
+-    previous = signal.signal(signal.SIGTERM, interrupt)
++    previous = signal.getsignal(signal.SIGTERM)
+     try:
++        signal.signal(signal.SIGTERM, interrupt)
+         return _main(argv)
+     finally:
+         signal.signal(signal.SIGTERM, previous)
+--- before/p06_qualified_warm_execute.py
++++ after/p06_qualified_warm_execute.py
+@@ -55,8 +55,9 @@
+     def interrupt(number, frame):
+         raise KeyboardInterrupt
+ 
+-    previous = signal.signal(signal.SIGTERM, interrupt)
++    previous = signal.getsignal(signal.SIGTERM)
+     try:
++        signal.signal(signal.SIGTERM, interrupt)
+         return _main(argv)
+     finally:
+         signal.signal(signal.SIGTERM, previous)

@@ -13,6 +13,7 @@ from pathlib import Path
 import re
 import shlex
 import shutil
+import signal
 import stat
 import sys
 
@@ -238,7 +239,8 @@ class Builder:
         self.report["failures"].append({"stage": stage, "reason": reason})
         if self.report["reason"] is None:
             self.report["reason"] = reason
-        self.report["outcome"] = "fail" if any(row.get("process_started") for row in self.report["commands"]) else "blocked"
+        self.report["outcome"] = "fail" if any(
+            row.get("process_started") is not False for row in self.report["commands"]) else "blocked"
         self.report["fresh_dependency_build_passed"] = False
 
     def retain(self, original, relative):
@@ -291,7 +293,13 @@ class Builder:
                "environment": dict(self.environment), "timeout_seconds": timeout,
                "log": "logs/" + identifier + ".log", "process_started": None}
         self.report["commands"].append(row)
-        self.save()
+        try:
+            self.save()
+        except (OSError, ValueError, RuntimeError, KeyError, TypeError, KeyboardInterrupt) as error:
+            # No child can start until its launch intent is retained.
+            row.update(process_started=False, cleanup_complete=True,
+                       outcome="blocked", reason=str(error) or "interrupted")
+            raise
         row.update(run_bounded(row["argv"], cwd, self.environment, self.output / row["log"],
             timeout_seconds=timeout, min_free_bytes=contract.BUDGET["min_free_bytes"],
             max_rss_bytes=contract.BUDGET["max_rss_bytes"], max_log_bytes=contract.BUDGET["max_log_bytes"],
@@ -506,11 +514,11 @@ class Builder:
                                      ("final-records", self._retain_record_inventory)):
                 try:
                     operation()
-                except (OSError, ValueError, RuntimeError, KeyError, TypeError) as error:
+                except (OSError, ValueError, RuntimeError, KeyError, TypeError, KeyboardInterrupt) as error:
                     self.fail(error, stage)
             try:
                 self.report["retained_files"] = self.retained_inventory()
-            except (OSError, ValueError, RuntimeError) as error:
+            except (OSError, ValueError, RuntimeError, KeyboardInterrupt) as error:
                 self.fail(error, "final-retention")
             self.report["state"] = "finished"
             self.report["fresh_dependency_build_passed"] = self.report["outcome"] == "pass"
@@ -520,7 +528,7 @@ class Builder:
                 self.receipt_reader.load_receipt(self.output / "report.json",
                     expected_sha256=identity(self.output / "report.json")["sha256"],
                     expected_revision=self.args.expected_revision)
-            except (OSError, ValueError, RuntimeError, KeyError, TypeError, ImportError) as error:
+            except (OSError, ValueError, RuntimeError, KeyError, TypeError, ImportError, KeyboardInterrupt) as error:
                 self.fail(error, "inert-verification")
                 self.save()
         return self.report
@@ -546,7 +554,7 @@ def build(args):
     return Builder(args).execute()
 
 
-def main(argv=None):
+def _main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-dir", type=Path, default=ROOT)
     parser.add_argument("--workspace-dir", type=Path, required=True)
@@ -563,6 +571,18 @@ def main(argv=None):
     except (OSError, ValueError, RuntimeError) as error:
         print(json.dumps({"outcome": "blocked", "reason": str(error), "fresh_dependency_build_passed": False}, sort_keys=True))
         return 1
+
+
+def main(argv=None):
+    def interrupt(number, frame):
+        raise KeyboardInterrupt
+
+    previous = signal.getsignal(signal.SIGTERM)
+    try:
+        signal.signal(signal.SIGTERM, interrupt)
+        return _main(argv)
+    finally:
+        signal.signal(signal.SIGTERM, previous)
 
 
 if __name__ == "__main__":

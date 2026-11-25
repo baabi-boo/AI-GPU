@@ -1,0 +1,222 @@
+test_complete_warm_counts_do_not_promote_any_derived_claim (test_p06_managed_final_counts.ManagedFinalCountsTests.test_complete_warm_counts_do_not_promote_any_derived_claim) ... FAIL
+test_final_persistence_failure_after_recovery_propagates_without_retry (test_p06_managed_final_counts.ManagedFinalCountsTests.test_final_persistence_failure_after_recovery_propagates_without_retry) ... 
+  test_final_persistence_failure_after_recovery_propagates_without_retry (test_p06_managed_final_counts.ManagedFinalCountsTests.test_final_persistence_failure_after_recovery_propagates_without_retry) (error='KeyboardInterrupt') ... FAIL
+  test_final_persistence_failure_after_recovery_propagates_without_retry (test_p06_managed_final_counts.ManagedFinalCountsTests.test_final_persistence_failure_after_recovery_propagates_without_retry) (error='OSError') ... FAIL
+test_first_final_interrupt_before_native_preserves_zero_counts (test_p06_managed_final_counts.ManagedFinalCountsTests.test_first_final_interrupt_before_native_preserves_zero_counts) ... 
+  test_first_final_interrupt_before_native_preserves_zero_counts (test_p06_managed_final_counts.ManagedFinalCountsTests.test_first_final_interrupt_before_native_preserves_zero_counts) (command_started=False) ... FAIL
+  test_first_final_interrupt_before_native_preserves_zero_counts (test_p06_managed_final_counts.ManagedFinalCountsTests.test_first_final_interrupt_before_native_preserves_zero_counts) (command_started=True) ... FAIL
+test_first_final_interrupt_counts_only_completed_original_processes (test_p06_managed_final_counts.ManagedFinalCountsTests.test_first_final_interrupt_counts_only_completed_original_processes) ... FAIL
+test_first_final_interrupt_preserves_complete_managed_population (test_p06_managed_final_counts.ManagedFinalCountsTests.test_first_final_interrupt_preserves_complete_managed_population) ... FAIL
+test_second_final_count_interrupt_propagates_without_further_attempts (test_p06_managed_final_counts.ManagedFinalCountsTests.test_second_final_count_interrupt_propagates_without_further_attempts) ... FAIL
+
+======================================================================
+FAIL: test_complete_warm_counts_do_not_promote_any_derived_claim (test_p06_managed_final_counts.ManagedFinalCountsTests.test_complete_warm_counts_do_not_promote_any_derived_claim)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 39, in recover
+    return fixture.run()
+           ^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_qualified_warm_runner.py", line 119, in run
+    result = runner.execute(self.args, self.paths)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_qualified_warm_execute.py", line 27, in execute
+    return preflight.execute(args, paths, lifetime=True, dependency=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_managed_preflight_execute.py", line 816, in execute
+    report["completed_counts"] = completion_counts(report["processes"])
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 32, in count
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 126, in test_complete_warm_counts_do_not_promote_any_derived_claim
+    result = self.recover(fixture)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 42, in recover
+    self.fail("final count interruption escaped: " + repr({
+AssertionError: final count interruption escaped: {'state': 'running', 'outcome': 'blocked', 'completed_counts': {'available_queries': 0, 'cache_flush_reads': 0, 'checked_words': 0, 'dcr_reads': 0, 'half_replies': 0, 'launches': 0, 'processes': 0, 'snapshots': 0, 'unavailable_rows': 0}}
+
+======================================================================
+FAIL: test_final_persistence_failure_after_recovery_propagates_without_retry (test_p06_managed_final_counts.ManagedFinalCountsTests.test_final_persistence_failure_after_recovery_propagates_without_retry) (error='KeyboardInterrupt')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 166, in test_final_persistence_failure_after_recovery_propagates_without_retry
+    self.assertIs(caught.exception, error)
+AssertionError: KeyboardInterrupt() is not KeyboardInterrupt()
+
+======================================================================
+FAIL: test_final_persistence_failure_after_recovery_propagates_without_retry (test_p06_managed_final_counts.ManagedFinalCountsTests.test_final_persistence_failure_after_recovery_propagates_without_retry) (error='OSError')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 166, in test_final_persistence_failure_after_recovery_propagates_without_retry
+    self.assertIs(caught.exception, error)
+AssertionError: KeyboardInterrupt() is not OSError('final persistence unavailable')
+
+======================================================================
+FAIL: test_first_final_interrupt_before_native_preserves_zero_counts (test_p06_managed_final_counts.ManagedFinalCountsTests.test_first_final_interrupt_before_native_preserves_zero_counts) (command_started=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 39, in recover
+    return fixture.run()
+           ^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_preflight_runner.py", line 211, in run
+    result = runner.execute(self.args, self.paths)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_managed_preflight_execute.py", line 816, in execute
+    report["completed_counts"] = completion_counts(report["processes"])
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 32, in count
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 110, in test_first_final_interrupt_before_native_preserves_zero_counts
+    result = self.recover(fixture)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 42, in recover
+    self.fail("final count interruption escaped: " + repr({
+AssertionError: final count interruption escaped: {'state': 'running', 'outcome': 'blocked', 'completed_counts': {'available_queries': 0, 'cache_flush_reads': 0, 'checked_words': 0, 'dcr_reads': 0, 'half_replies': 0, 'launches': 0, 'processes': 0, 'snapshots': 0, 'unavailable_rows': 0}}
+
+======================================================================
+FAIL: test_first_final_interrupt_before_native_preserves_zero_counts (test_p06_managed_final_counts.ManagedFinalCountsTests.test_first_final_interrupt_before_native_preserves_zero_counts) (command_started=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 39, in recover
+    return fixture.run()
+           ^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_preflight_runner.py", line 211, in run
+    result = runner.execute(self.args, self.paths)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_managed_preflight_execute.py", line 816, in execute
+    report["completed_counts"] = completion_counts(report["processes"])
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 32, in count
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 110, in test_first_final_interrupt_before_native_preserves_zero_counts
+    result = self.recover(fixture)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 42, in recover
+    self.fail("final count interruption escaped: " + repr({
+AssertionError: final count interruption escaped: {'state': 'running', 'outcome': 'blocked', 'completed_counts': {'available_queries': 0, 'cache_flush_reads': 0, 'checked_words': 0, 'dcr_reads': 0, 'half_replies': 0, 'launches': 0, 'processes': 0, 'snapshots': 0, 'unavailable_rows': 0}}
+
+======================================================================
+FAIL: test_first_final_interrupt_counts_only_completed_original_processes (test_p06_managed_final_counts.ManagedFinalCountsTests.test_first_final_interrupt_counts_only_completed_original_processes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 39, in recover
+    return fixture.run()
+           ^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_preflight_runner.py", line 211, in run
+    result = runner.execute(self.args, self.paths)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_managed_preflight_execute.py", line 816, in execute
+    report["completed_counts"] = completion_counts(report["processes"])
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 32, in count
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 89, in test_first_final_interrupt_counts_only_completed_original_processes
+    result = self.recover(fixture)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 42, in recover
+    self.fail("final count interruption escaped: " + repr({
+AssertionError: final count interruption escaped: {'state': 'running', 'outcome': 'blocked', 'completed_counts': {'available_queries': 0, 'cache_flush_reads': 0, 'checked_words': 0, 'dcr_reads': 0, 'half_replies': 0, 'launches': 0, 'processes': 0, 'snapshots': 0, 'unavailable_rows': 0}}
+
+======================================================================
+FAIL: test_first_final_interrupt_preserves_complete_managed_population (test_p06_managed_final_counts.ManagedFinalCountsTests.test_first_final_interrupt_preserves_complete_managed_population)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 39, in recover
+    return fixture.run()
+           ^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_preflight_runner.py", line 211, in run
+    result = runner.execute(self.args, self.paths)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_managed_preflight_execute.py", line 816, in execute
+    report["completed_counts"] = completion_counts(report["processes"])
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1204, in _execute_mock_call
+    result = effect(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 32, in count
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 75, in test_first_final_interrupt_preserves_complete_managed_population
+    result = self.recover(fixture)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 42, in recover
+    self.fail("final count interruption escaped: " + repr({
+AssertionError: final count interruption escaped: {'state': 'running', 'outcome': 'blocked', 'completed_counts': {'available_queries': 0, 'cache_flush_reads': 0, 'checked_words': 0, 'dcr_reads': 0, 'half_replies': 0, 'launches': 0, 'processes': 0, 'snapshots': 0, 'unavailable_rows': 0}}
+
+======================================================================
+FAIL: test_second_final_count_interrupt_propagates_without_further_attempts (test_p06_managed_final_counts.ManagedFinalCountsTests.test_second_final_count_interrupt_propagates_without_further_attempts)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/c36968d78f0b/AI-GPU/ci/project/test_p06_managed_final_counts.py", line 140, in test_second_final_count_interrupt_propagates_without_further_attempts
+    self.assertEqual(len(attempts), 2)
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 6 tests in 39.476s
+
+FAILED (failures=8)

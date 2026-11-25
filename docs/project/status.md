@@ -10,6 +10,39 @@ launches. The [qualification audit](p06-qualification-audit.md),
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
 scope and new validation. P06-A02/A03 remain open.
 
+**Production launch-readiness fixes are implemented; the frozen qualified warm
+experiment remains unstarted.** The [launch-readiness audit](p06-launch-readiness-audit.md)
+and [evidence packet](evidence/p06-launch-readiness/README.md) record confirmed
+nonstart accounting for failed prelaunch checkpoints, failure classification
+for unresolved launches, cooperative failure retention on dependency and
+managed-family CLI `SIGTERM` (including qualified warm), and first-interruption
+handling during managed finalization. Interrupted final-count aggregation permits one pure recomputation
+without repeating native work. Hosted execution repeats the unchanged capacity
+gate immediately before its native supervisor, after input acquisition and
+provisioning.
+
+These source-scoped checks establish implementation progress, not native or
+performance acceptance. The **69 frozen measurement files, 21 dependency
+descriptors, proofs and population of 24 processes, 792 launches and 25,344
+checked FP32 words** remain unchanged. Local development checks did not execute
+the frozen qualified-warm population; focused checks do not qualify the final
+changed revision.
+
+The next actual development experiment remains one complete qualified warm
+attempt. Require the selected published revision's own full strict governance
+and independent original replay, the exact historical control archive through
+private delivery, the public age recipient, and a runner admitted by the
+unchanged **15 GiB free-disk and 4 GiB available-memory** gates. This session
+was not supplied those operational inputs; live provider secrets were not
+inspected, and observed local free disk is below the reserve. Preserve the
+separate dependency/four-process prerequisites, encrypted complete or explicitly
+partial retention, independent complete native replay and frozen performance
+decision. P06/P06-T01 remain `in_progress`, P06-A02/A03 remain open and P01
+vendor integration remains blocked.
+
+**Earlier governance-original admission continuation (historical).** The
+following paragraphs preserve that continuation's source and evidence scope.
+
 **Independent governance-original admission is implemented; the frozen
 qualified warm experiment remains unstarted.** The
 [current audit](p06-governance-replay-audit.md),

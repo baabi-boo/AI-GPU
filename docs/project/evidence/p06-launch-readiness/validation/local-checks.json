@@ -1,0 +1,40 @@
+{
+  "scope": "prepublication structure and existing baseline-evidence consistency; not strict governance or native qualification",
+  "checks": [
+    {
+      "argv": [
+        "/tmp/ai-gpu-c36968d78f0b/environment/venv/bin/python3",
+        "-B",
+        "ci/project/check_project.py"
+      ],
+      "exit_code": 0,
+      "log": "final-check-project.log",
+      "log_sha256": "d505e20764bb8ca9754d5a40ae3dede73831b96c6b6d0020065e6a3b87960993",
+      "log_size_bytes": 96
+    },
+    {
+      "argv": [
+        "/tmp/ai-gpu-c36968d78f0b/environment/venv/bin/python3",
+        "-B",
+        "ci/project/check_baseline_packets.py"
+      ],
+      "exit_code": 0,
+      "log": "final-check-baseline.log",
+      "log_sha256": "fe35ed00868a1b653caa23c1fdade37cce4ad8691b9a9cd08a222e82afae28be",
+      "log_size_bytes": 657
+    }
+  ],
+  "git_diff_check": {
+    "authored_source_documentation_and_records_exit_code": 0,
+    "full_diff_exit_code": 2,
+    "preserved_raw_whitespace_paths": [
+      "docs/project/evidence/p06-launch-readiness/validation/a31-final-counts-before.log",
+      "docs/project/evidence/p06-launch-readiness/validation/a43-signal-setup/setup-correction.diff",
+      "docs/project/evidence/p06-launch-readiness/validation/a54-managed-cli/before.stderr",
+      "docs/project/evidence/p06-launch-readiness/validation/a54-managed-cli/bounded-production.diff"
+    ],
+    "reason": "Raw test-output bytes and diff context lines are retained unchanged; all other changed paths pass the whitespace check."
+  },
+  "full_strict_governance": false,
+  "qualified_warm_native_execution": "not_run"
+}

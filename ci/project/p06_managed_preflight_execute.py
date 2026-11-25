@@ -16,6 +16,7 @@ from pathlib import Path
 import platform
 import re
 import shutil
+import signal
 import sys
 
 sys.dont_write_bytecode = True
@@ -324,7 +325,7 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
         report["failures"].append({"stage": stage, "reason": reason, "at": base._now(),
             "variant_id": active_variant["id"] if active_variant else None,
             "process_id": active_process["id"] if active_process else None})
-        report["outcome"] = "fail" if any(row.get("process_started") for row in report["commands"]) else "blocked"
+        report["outcome"] = "fail" if any(row.get("process_started") is not False for row in report["commands"]) else "blocked"
         if report["reason"] is None:
             report["reason"] = reason
         for row in (active_process, active_variant):
@@ -395,7 +396,15 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
         previous_native_execution = report["native_execution"]
         if native_process:
             report["native_execution"] = native_execution_state(previous_native_execution, None)
-        checkpoint()
+        try:
+            checkpoint()
+        except (OSError, ValueError, RuntimeError, KeyError, TypeError, KeyboardInterrupt) as error:
+            # No command can start until its launch intent is retained.
+            row.update(process_started=False, cleanup_complete=True, outcome="blocked",
+                       exit_code=None, reason=str(error) or "interrupted")
+            if native_process:
+                report["native_execution"] = previous_native_execution
+            raise
         try:
             row.update(run_bounded(row["argv"], cwd, env, output / row["log"], timeout_seconds=timeout,
                 **BUDGET, resource_paths=(source, paths["tools"], work, output)))
@@ -429,8 +438,8 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
         variant.setdefault("retained_builds", []).append({"stage": stage,
             "files": retain_files(build, hash_artifacts(build, names), variant["id"] + "/" + stage)})
 
-    checkpoint()
     try:
+        checkpoint()
         require(type(args.jobs) is int and args.jobs in (1, 2), "build jobs exceed the two-job budget")
         require(type(args.timeout_seconds) is int and 1 <= args.timeout_seconds <= 1800,
                 "build timeout exceeds the fixed budget")
@@ -745,7 +754,7 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
         if active_variant is not None:
             try:
                 retain_build(active_variant, work / active_variant["id"], "failure")
-            except (OSError, ValueError, RuntimeError) as error:
+            except (OSError, ValueError, RuntimeError, KeyboardInterrupt) as error:
                 failure(error, "final-build-snapshot")
         for label, previous, observe in (
             ("source", initial, snapshot_source),
@@ -758,14 +767,14 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
                     report[label + "_after"] = save_json(label + "-after", final)
                     report[label + "_stable"] = previous == final
                     require(previous == final, label + " changed in final observation")
-                except (OSError, ValueError, RuntimeError) as error:
+                except (OSError, ValueError, RuntimeError, KeyboardInterrupt) as error:
                     failure(error, "final-" + label)
         for variant in report["variants"]:
             if "artifacts_before" in variant:
                 try:
                     variant["artifacts_after"] = hash_artifacts(work / variant["id"], build_artifacts(work / variant["id"]))
                     require(variant["artifacts_after"] == variant["artifacts_before"], "frozen build changed before finalization")
-                except (OSError, ValueError, RuntimeError) as error:
+                except (OSError, ValueError, RuntimeError, KeyboardInterrupt) as error:
                     failure(error, "final-artifacts-" + variant["id"])
         if admission is not None:
             try:
@@ -775,7 +784,7 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
                         admission.verify_model_stable(variant["dependency_model_link"])
                 require(report["dependency_admission_after"] == report.get("dependency_admission_before"),
                         "dependency admission changed before finalization")
-            except (OSError, ValueError, RuntimeError, KeyError, TypeError) as error:
+            except (OSError, ValueError, RuntimeError, KeyError, TypeError, KeyboardInterrupt) as error:
                 failure(error, "final-dependency-admission")
         if qualification_admission is not None:
             try:
@@ -783,7 +792,7 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
                 require(report["counter_qualification_admission_after"]
                         == report.get("counter_qualification_admission_before"),
                         "counter qualification admission changed before finalization")
-            except (OSError, ValueError, RuntimeError, KeyError, TypeError) as error:
+            except (OSError, ValueError, RuntimeError, KeyError, TypeError, KeyboardInterrupt) as error:
                 failure(error, "final-counter-qualification-admission")
         report["raw_logs"] = []
         for row in report["commands"]:
@@ -791,21 +800,26 @@ def execute(args, paths, *, lifetime=False, dependency=False, counter_qualificat
                 identity = verify_log(row)
                 if identity is not None:
                     report["raw_logs"].append(identity)
-            except (OSError, ValueError, RuntimeError) as error:
+            except (OSError, ValueError, RuntimeError, KeyboardInterrupt) as error:
                 failure(error, "final-log-verification")
         try:
             report["retained_files_stable"] = hash_artifacts(output, [row["path"] for row in retained]) == retained
             require(report["retained_files_stable"], "retained evidence or binary payload changed")
-        except (OSError, ValueError, RuntimeError) as error:
+        except (OSError, ValueError, RuntimeError, KeyboardInterrupt) as error:
             failure(error, "final-retained-evidence")
         try:
             report["resources_after"] = base._resources(paths)
             if report["commands"]:
                 require(all(value >= BUDGET["min_free_bytes"] for value in report["resources_after"]["free_disk_bytes"].values()),
                         "final disk reserve below 15 GiB")
-        except (OSError, ValueError, RuntimeError) as error:
+        except (OSError, ValueError, RuntimeError, KeyboardInterrupt) as error:
             failure(error, "final-resources")
-        report["completed_counts"] = completion_counts(report["processes"])
+        try:
+            report["completed_counts"] = completion_counts(report["processes"])
+        except KeyboardInterrupt:
+            failure("interrupted", "final-completion-counts")
+            # Pure in-memory aggregation can restart once without repeating execution.
+            report["completed_counts"] = completion_counts(report["processes"])
         report["native_preflight_passed"] = report["outcome"] == "pass" and report["completed_counts"] == complete_counts
         if lifetime:
             report["native_lifetime_passed"] = report["native_preflight_passed"]
@@ -855,7 +869,7 @@ def argument_parser():
     return parser
 
 
-def main(argv=None):
+def _main(argv=None):
     import json
     args = argument_parser().parse_args(argv)
     try:
@@ -869,6 +883,18 @@ def main(argv=None):
         print(json.dumps({"outcome": "blocked", "reason": str(error), "native_preflight_passed": False,
                           **dict.fromkeys(manifest.FALSE_CLAIMS, False)}, sort_keys=True))
         return 1
+
+
+def main(argv=None):
+    def interrupt(number, frame):
+        raise KeyboardInterrupt
+
+    previous = signal.getsignal(signal.SIGTERM)
+    try:
+        signal.signal(signal.SIGTERM, interrupt)
+        return _main(argv)
+    finally:
+        signal.signal(signal.SIGTERM, previous)
 
 
 if __name__ == "__main__":

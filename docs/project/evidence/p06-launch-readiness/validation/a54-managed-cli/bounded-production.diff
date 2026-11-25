@@ -1,0 +1,148 @@
+--- /tmp/ai-gpu-c36968d78f0b/a54-managed-cli-cancellation/before/p06_managed_preflight_execute.py	2026-11-25 14:27:46.246260811 -0700
++++ /workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_managed_preflight_execute.py	2026-11-25 14:31:13.222260292 -0700
+@@ -16,6 +16,7 @@
+ import platform
+ import re
+ import shutil
++import signal
+ import sys
+ 
+ sys.dont_write_bytecode = True
+@@ -868,7 +869,7 @@
+     return parser
+ 
+ 
+-def main(argv=None):
++def _main(argv=None):
+     import json
+     args = argument_parser().parse_args(argv)
+     try:
+@@ -884,5 +885,17 @@
+         return 1
+ 
+ 
++def main(argv=None):
++    def interrupt(number, frame):
++        raise KeyboardInterrupt
++
++    previous = signal.getsignal(signal.SIGTERM)
++    try:
++        signal.signal(signal.SIGTERM, interrupt)
++        return _main(argv)
++    finally:
++        signal.signal(signal.SIGTERM, previous)
++
++
+ if __name__ == "__main__":
+     sys.exit(main())
+--- /tmp/ai-gpu-c36968d78f0b/a54-managed-cli-cancellation/before/p06_native_lifetime_execute.py	2026-11-25 14:27:46.246302233 -0700
++++ /workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_native_lifetime_execute.py	2026-11-25 14:31:13.350262482 -0700
+@@ -6,6 +6,7 @@
+ 
+ import json
+ from pathlib import Path
++import signal
+ import sys
+ 
+ sys.dont_write_bytecode = True
+@@ -23,7 +24,7 @@
+     return preflight.execute(args, paths, lifetime=True)
+ 
+ 
+-def main(argv=None):
++def _main(argv=None):
+     args = argument_parser().parse_args(argv)
+     try:
+         result = execute(args, preflight.base.resolve_paths(args))
+@@ -41,5 +42,17 @@
+         return 1
+ 
+ 
++def main(argv=None):
++    def interrupt(number, frame):
++        raise KeyboardInterrupt
++
++    previous = signal.getsignal(signal.SIGTERM)
++    try:
++        signal.signal(signal.SIGTERM, interrupt)
++        return _main(argv)
++    finally:
++        signal.signal(signal.SIGTERM, previous)
++
++
+ if __name__ == "__main__":
+     sys.exit(main())
+--- /tmp/ai-gpu-c36968d78f0b/a54-managed-cli-cancellation/before/p06_dependency_lifetime_execute.py	2026-11-25 14:27:46.246326750 -0700
++++ /workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_dependency_lifetime_execute.py	2026-11-25 14:31:13.474264603 -0700
+@@ -6,6 +6,7 @@
+ 
+ import json
+ from pathlib import Path
++import signal
+ import sys
+ 
+ sys.dont_write_bytecode = True
+@@ -25,7 +26,7 @@
+     return preflight.execute(args, paths, lifetime=True, dependency=True)
+ 
+ 
+-def main(argv=None):
++def _main(argv=None):
+     args = argument_parser().parse_args(argv)
+     try:
+         result = execute(args, preflight.base.resolve_paths(args))
+@@ -45,5 +46,17 @@
+         return 1
+ 
+ 
++def main(argv=None):
++    def interrupt(number, frame):
++        raise KeyboardInterrupt
++
++    previous = signal.getsignal(signal.SIGTERM)
++    try:
++        signal.signal(signal.SIGTERM, interrupt)
++        return _main(argv)
++    finally:
++        signal.signal(signal.SIGTERM, previous)
++
++
+ if __name__ == "__main__":
+     sys.exit(main())
+--- /tmp/ai-gpu-c36968d78f0b/a54-managed-cli-cancellation/before/p06_counter_qualification_execute.py	2026-11-25 14:27:46.246348272 -0700
++++ /workspace/scratch/c36968d78f0b/AI-GPU/ci/project/p06_counter_qualification_execute.py	2026-11-25 14:31:13.610266930 -0700
+@@ -6,6 +6,7 @@
+ 
+ import json
+ from pathlib import Path
++import signal
+ import sys
+ 
+ sys.dont_write_bytecode = True
+@@ -33,7 +34,7 @@
+                              counter_qualification=True)
+ 
+ 
+-def main(argv=None):
++def _main(argv=None):
+     args = argument_parser().parse_args(argv)
+     try:
+         result = execute(args, preflight.base.resolve_paths(args))
+@@ -55,5 +56,17 @@
+         return 1
+ 
+ 
++def main(argv=None):
++    def interrupt(number, frame):
++        raise KeyboardInterrupt
++
++    previous = signal.getsignal(signal.SIGTERM)
++    try:
++        signal.signal(signal.SIGTERM, interrupt)
++        return _main(argv)
++    finally:
++        signal.signal(signal.SIGTERM, previous)
++
++
+ if __name__ == "__main__":
+     sys.exit(main())

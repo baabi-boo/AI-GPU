@@ -601,6 +601,9 @@ def _execute(source, revision, attempt_root):
         acquired = _read(attempt / "acquisition/input-acquisition.json")
         require(acquired.get("state") == "finished" and acquired.get("outcome") == "pass"
                 and acquired.get("expected_revision") == revision, "acquisition_receipt")
+        observed = capacity_gate(source, attempt)
+        _write(attempt / "hosted/pre-native-capacity.json", observed)
+        require(observed["gate_satisfied"], "native_capacity")
         stage("native-supervisor", cli("p06_qualified_warm_run", *paths, "--host-bin", host),
               runner.BUDGET["execution_timeout_seconds"] + 120)
         native = _read(attempt / "workspace/evidence/qualified-warm-run.json")

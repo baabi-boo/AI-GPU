@@ -1,0 +1,3446 @@
+{
+  "schema_version": 1,
+  "receipt_id": "p06-launch-readiness-a45-protected-invariants",
+  "reviewer": "A45 independent final protected-input reviewer",
+  "base_revision": "e3ad6bd1e2b002aa234d57cd8a02519cec915830",
+  "observed_head": "e3ad6bd1e2b002aa234d57cd8a02519cec915830",
+  "observed_worktree": "uncommitted launch-readiness continuation after A31 and A43 source fixes",
+  "result": "pass",
+  "evidence_level": "source_present",
+  "scope": "Protected-input preservation and project-helper name closure only; not whole-tree qualification or publication verification.",
+  "method": {
+    "protected_bytes": "Read each regular tracked working-tree file; require byte equality with git show BASE:path, exact Git blob identity and mode; compare 69 qualified descriptors with size_bytes and SHA-256.",
+    "proofs": "Compare both full proof JSON byte streams with base and AST-read raw/semantic identities in their unchanged contract modules.",
+    "dependency_descriptors": "Compare all 21 serialized descriptors, selected dependency graph and dependency revision against the historical proof at BASE; no dependency file bytes read or downloaded.",
+    "helper_names": "Isolated substitution import before reader import; one existing isolated blocked-launch warm inventory unittest, with native-child starts prohibited by its mock; AST import and require-call comparisons against BASE.",
+    "path_classification": "git diff --name-only BASE plus git ls-files --others --exclude-standard; classify current production, test and documentation paths; no orchestration-content hash binding."
+  },
+  "measurement": {
+    "qualified_pinned_sources": 69,
+    "matching_qualified_size_and_sha256": 69,
+    "matching_base_bytes": 69,
+    "historical_descriptors_preserved": 69,
+    "historical_and_qualified_shared_descriptors": 68,
+    "previously_reviewed_source_extension": [
+      "tests/regression/ai_counter_preflight/main.cpp"
+    ],
+    "extension_before_after_and_parent_proof_preserved": true
+  },
+  "dependency": {
+    "unchanged_descriptors": 21,
+    "dependency_revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+    "descriptors": [
+      {
+        "git_blob": "d324fbe12ed4ba061abab975b62f907d56a18a50",
+        "path": "src/addr_mapper/addr_mapper.h",
+        "sha256": "ba7705cc29b0359c719a75ccb2169684db1f30f56cfba7a97f367ec0fd2d03bc",
+        "size_bytes": 633
+      },
+      {
+        "git_blob": "3792f08e45de4fa5fd7e749cec35632cc6b240e3",
+        "path": "src/addr_mapper/impl/linear_mappers.cpp",
+        "sha256": "dc4ccf6aaac17dde42215dc0ef140ae9d89b89f0bd7c50e38180300834251597",
+        "size_bytes": 4516
+      },
+      {
+        "git_blob": "1a7643ac1c931b92294f751aa1566df7586abbfa",
+        "path": "src/base/base.h",
+        "sha256": "3319ae542abea98b0eeb7928447058c1e1e2c8255a6c0d6a12979e83fe5c9d15",
+        "size_bytes": 12276
+      },
+      {
+        "git_blob": "2e3fe8b62740e957da8063b61963cf509e83f552",
+        "path": "src/base/factory.cpp",
+        "sha256": "c83810cee12ca83877372ce9e6556d897ce2721347debe4656afdb152b6fbd5a",
+        "size_bytes": 5730
+      },
+      {
+        "git_blob": "c1d8f864f0fc2b35116d1841a80460ac1d3ff543",
+        "path": "src/base/stats.cpp",
+        "sha256": "063c16db3f7817b061ca58e3bdcb513a17ee2146facaedfd5b12fa98d014da02",
+        "size_bytes": 269
+      },
+      {
+        "git_blob": "3b6afa6bf6d83d20016461e37ba7c9ff4f7ab772",
+        "path": "src/base/stats.h",
+        "sha256": "5892927523c7e1784a7c5179704f1c0e87a3ebb01815e9f47470abe560ba5cea",
+        "size_bytes": 2690
+      },
+      {
+        "git_blob": "823c827ea33c4211db71ffdd928fea53aaa8ee18",
+        "path": "src/dram/dram.h",
+        "sha256": "ff12c7b1fc2e03bdf06964bea0c95ac934afd21f5d276db0d0125fc9e9e004db",
+        "size_bytes": 6928
+      },
+      {
+        "git_blob": "39c4a65e45d223cf8e8e03e886a7a82cf90c76c1",
+        "path": "src/dram/impl/HBM2.cpp",
+        "sha256": "0f67e6147ebf36c188345fb22c851802624b3343aa3067b75c0b0fff82a6a97e",
+        "size_bytes": 19064
+      },
+      {
+        "git_blob": "ccbd9a6a08e0336ca0ae66f2f9cecc6c9584fcda",
+        "path": "src/dram_controller/controller.h",
+        "sha256": "d29a1e825aa809b7e95e37a2cb25a8b3a2de1b593cb9e21e9e19609be8e3aa08",
+        "size_bytes": 1483
+      },
+      {
+        "git_blob": "388a564a740745fd755db8abe92361570e33279e",
+        "path": "src/dram_controller/impl/generic_dram_controller.cpp",
+        "sha256": "a7842d66c56e90eb11efe3d886e9e31f7d24c711e16defe38d459d4ab8774a68",
+        "size_bytes": 15480
+      },
+      {
+        "git_blob": "155ccabcd410a188a6b6e7c249e3977231c6b674",
+        "path": "src/dram_controller/impl/plugin/trace_recorder.cpp",
+        "sha256": "9917313ba7a8532a011a89dcc4498c1a1f9681a272c990b01d153491ffd85dea",
+        "size_bytes": 1979
+      },
+      {
+        "git_blob": "cf27477993951702c8ebc928378950608d2982f9",
+        "path": "src/dram_controller/impl/refresh/all_bank_refresh.cpp",
+        "sha256": "5ad610a8620f086277eba58a39d36bf57de51856262b87fc555b2bfc67af8cbe",
+        "size_bytes": 1642
+      },
+      {
+        "git_blob": "36a94d962064d6ab5edeb1ec18b9d6d653df0dab",
+        "path": "src/dram_controller/impl/rowpolicy/basic_rowpolicies.cpp",
+        "sha256": "8c2127128faeac28a76fe5f000762541d83bf64f71640c392a9ab3e351b52ec8",
+        "size_bytes": 4168
+      },
+      {
+        "git_blob": "2d0b389171ce80db608d1e70b4acc705019e7ef3",
+        "path": "src/dram_controller/impl/scheduler/generic_scheduler.cpp",
+        "sha256": "85239e4a321538bc76965bafbe36b5737ffb1318d58e3ef7135ebdeac9d2a87a",
+        "size_bytes": 1586
+      },
+      {
+        "git_blob": "4d21be2cb9b9827b722cb1cde3b44dfb40bb478f",
+        "path": "src/dram_controller/refresh.h",
+        "sha256": "1901efe332e7f47e1d2460c5592b9e7833307028e90112cf0c5d6aacbbc3cf47",
+        "size_bytes": 434
+      },
+      {
+        "git_blob": "7ab1dcce1445301382fe3175681addd758cf8c21",
+        "path": "src/dram_controller/rowpolicy.h",
+        "sha256": "afb8067e9a0f4673371ae8c0954cc63ff75515b09758e06e567bbffcf09414e9",
+        "size_bytes": 521
+      },
+      {
+        "git_blob": "50b9703117e5e48e64b0cbe007b186006e5911fe",
+        "path": "src/dram_controller/scheduler.h",
+        "sha256": "875a966db1c219a7676b5bdaf6d008720c302d2e525b3390a9bd2020145e98be",
+        "size_bytes": 624
+      },
+      {
+        "git_blob": "a1855bbf9fac3e172f46866fc0dc2f1d52a74298",
+        "path": "src/frontend/frontend.h",
+        "sha256": "526df2d4095234419709aae87ab9a931a4a2f73eb9eb83a2d5f1505ffb971d22",
+        "size_bytes": 1882
+      },
+      {
+        "git_blob": "1fdde713e0c2192f6ab75e4269714298f391f04f",
+        "path": "src/frontend/impl/external_wrapper/gem5_frontend.cpp",
+        "sha256": "4768775d1a3b81daba53124f5302edf5ec5d38bc008c2091343e30d1e71b7e26",
+        "size_bytes": 689
+      },
+      {
+        "git_blob": "a7cce15d64c44b15366a92e107980e03d8c9d193",
+        "path": "src/memory_system/impl/generic_DRAM_system.cpp",
+        "sha256": "d70ce69afa4c10927f4fcc977877562da7940190c6d72516acaf4727df2ec1e3",
+        "size_bytes": 2729
+      },
+      {
+        "git_blob": "beaf83cb71c042800adc375f8125bd39751e1080",
+        "path": "src/memory_system/memory_system.h",
+        "sha256": "260af74ac066a8083b6933cfaf6427ff68fdfdac92dfb3f47351369b497cd279",
+        "size_bytes": 2030
+      }
+    ],
+    "descriptor_array_sha256": "4fd559e543947b76cc9ac3f28493fecf273534741987f23197bed1b083efcc35",
+    "selected_graph_sha256": "707ecae6554b69f2bb8f290e758cdcd039823ecc3018db88974e1aa1bc05cd0e",
+    "downloaded_dependency_bytes_verified": false,
+    "downloads_performed": false,
+    "distinction": "21 descriptors are preserved pins, not verification of downloaded dependency source or binary content."
+  },
+  "proofs": [
+    {
+      "path": "ci/project/p06_qualified_warm_proof.json",
+      "size_bytes": 21505,
+      "sha256": "172721c671ddaa79541dde9c37c154b5ab5a99b8abb0caabf2e07036dd429efb",
+      "equals_base_bytes": true,
+      "matches_contract_raw_and_semantic_pins": true
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_proof.json",
+      "size_bytes": 123781,
+      "sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e",
+      "equals_base_bytes": true,
+      "matches_contract_raw_and_semantic_pins": true
+    }
+  ],
+  "experiment": {
+    "manifest": {
+      "path": "ci/project/p06_warm_contract.json",
+      "sha256": "893d85401b1d5f7757d82cb7c743a89b36264fe19c7d08c239b7f216b7a8cbbd",
+      "equals_base_bytes": true
+    },
+    "sampling": {
+      "warmup_pairs": 1,
+      "measured_pairs": 5,
+      "prime_operations": 1,
+      "timed_operations": 32,
+      "operations_per_process": 33,
+      "pair_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "order": "fp16_then_bf16_pairs_ascending_alternating_reference_first_at_zero",
+      "context_policy": "one_fresh_process_and_context_per_policy_batch",
+      "warm_context": "prime_closed_then_32_serial_operations_each_explicitly_closed",
+      "poisons": [
+        3735928559,
+        2143346349
+      ],
+      "poison_order": "alternate_by_operation_index_prime_is_zero",
+      "failed_sample_policy": "retain_and_fail_entire_attempt_no_replacements",
+      "outlier_policy": "none",
+      "optional_stopping": false
+    },
+    "formats": [
+      "fp16",
+      "bf16"
+    ],
+    "policies": [
+      "per_operation",
+      "reusable_single_tile"
+    ],
+    "complete_counts": {
+      "processes": 24,
+      "launches": 792,
+      "checked_words": 25344,
+      "snapshots": 96,
+      "available_queries": 3168,
+      "half_replies": 6336,
+      "cache_flush_reads": 792,
+      "dcr_reads": 7128,
+      "unavailable_rows": 1152
+    },
+    "complete_matrix": {
+      "processes": 24,
+      "warmup_processes": 4,
+      "measured_processes": 20,
+      "launches": 792,
+      "checked_words": 25344,
+      "measured_operations": 640,
+      "measured_checked_words": 20480,
+      "measured_useful_flops": 327680
+    },
+    "timing": {
+      "clock": "std_chrono_steady_clock_nanoseconds",
+      "primary_metric": "instrumented_host_nanoseconds_per_validated_operation",
+      "begin": "immediately_before_submit",
+      "end": "after_wait_exact_comparison_explicit_close_and_success_checks",
+      "included": [
+        "submit",
+        "wait",
+        "exact_output_comparison",
+        "explicit_operation_close",
+        "success_checks",
+        "minimal_fixed_storage_allocation_observer"
+      ],
+      "excluded": [
+        "input_packing",
+        "context_create",
+        "counter_queries",
+        "memory_queries",
+        "trace_copy",
+        "output_copy_for_retention",
+        "record_serialization",
+        "owner_close"
+      ],
+      "positive_duration_required": true,
+      "counter_queries_outside_primary_interval": true,
+      "memory_queries_outside_primary_interval": true,
+      "supervisor_duration": "separate_observation_never_corrected_or_subtracted",
+      "supervisor_containment_allowance_ns": 1000
+    },
+    "performance_predicates": {
+      "batch_statistic": "arithmetic_mean_of_32_primary_intervals",
+      "population": "five_measured_batch_means_per_format_and_policy",
+      "statistics": [
+        "count",
+        "minimum",
+        "maximum",
+        "median",
+        "population_stddev"
+      ],
+      "candidate_median_percent_of_reference_max": 95,
+      "each_measured_candidate_pair_must_not_be_slower": true,
+      "each_measured_candidate_pair_cycles_must_not_increase": true,
+      "all_formats_must_improve": true,
+      "required_validity": [
+        "numerics",
+        "dispatch",
+        "ownership",
+        "cleanup",
+        "provenance",
+        "resources"
+      ],
+      "decision_is_phase_acceptance": false
+    },
+    "budget": {
+      "jobs_max": 2,
+      "max_rss_bytes": 4294967296,
+      "min_free_bytes": 16106127360,
+      "max_log_bytes": 16777216,
+      "build_timeout_seconds": 1800,
+      "run_timeout_seconds": 180,
+      "hosted_job_timeout_minutes": 90
+    },
+    "historical_false_claims": {
+      "qualified": false,
+      "ready_for_warm": false,
+      "warm_execution": false,
+      "full_warm_coverage": false,
+      "acceptance_claimed": false,
+      "phase_acceptance": false,
+      "performance_acceptance": false
+    },
+    "contracts_and_native_measurement_sources_unchanged": true
+  },
+  "protected_categories": {
+    "distinct_files_compared": 253,
+    "goldens": {
+      "total": 73,
+      "baseline_json": 25,
+      "reference_images": 47,
+      "beacon_calibrations": 1
+    },
+    "acceptance_named_records": 16,
+    "canonical_roadmap_evidence_records": 18,
+    "roadmap_acceptance_criteria": 36,
+    "phase_statuses": {
+      "P00": "complete",
+      "P01": "blocked",
+      "P02": "complete",
+      "P03": "complete",
+      "P04": "complete",
+      "P05": "complete",
+      "P06": "in_progress",
+      "P07": "not_started",
+      "P08": "not_started",
+      "P09": "not_started",
+      "P10": "not_started",
+      "P11": "not_started"
+    },
+    "p06_roadmap_acceptance_evidence_ids": [
+      "P06-A01"
+    ],
+    "readme_protected_image_embed_preserved": true,
+    "protected_asset": [
+      {
+        "path": "docs/assets/img/vortex_framework_stack.svg",
+        "sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4"
+      }
+    ],
+    "gitlinks": [
+      {
+        "path": "third_party/cocogfx",
+        "revision": "b1befdb36df8af7ac9e2c96acaf81957aab5d107",
+        "matches_base_and_index": true,
+        "initialized": false
+      },
+      {
+        "path": "third_party/cvfpu",
+        "revision": "79e453139072df42c9ec8f697132ba485d74e23d",
+        "matches_base_and_index": true,
+        "initialized": false
+      },
+      {
+        "path": "third_party/hardfloat",
+        "revision": "aaf5736dffa521603b681fd5853760c671446c85",
+        "matches_base_and_index": true,
+        "initialized": false
+      },
+      {
+        "path": "third_party/ramulator",
+        "revision": "e62c84a6f0e06566ba6e182d308434b4532068a5",
+        "matches_base_and_index": true,
+        "initialized": false
+      },
+      {
+        "path": "third_party/softfloat",
+        "revision": "b51ef8f3201669b2288104c28546fc72532a1ea4",
+        "matches_base_and_index": true,
+        "initialized": false
+      }
+    ]
+  },
+  "helpers": {
+    "substitution": {
+      "count": 49,
+      "observed_import_names_equal_reader_names": true,
+      "names": [
+        "ci/project/baseline_inventory.py",
+        "ci/project/baseline_matrix.py",
+        "ci/project/baseline_packet_contract.py",
+        "ci/project/baseline_packet_io.py",
+        "ci/project/baseline_process.py",
+        "ci/project/compiler_records.py",
+        "ci/project/p02_fixture_oracle.py",
+        "ci/project/p02_layout_fixture_oracle.py",
+        "ci/project/p02_matrix.py",
+        "ci/project/p02_matrix_records.py",
+        "ci/project/p02_wmma_fixtures.py",
+        "ci/project/p02_wmma_numerical_fixture_oracle.py",
+        "ci/project/p03_execute.py",
+        "ci/project/p03_execution_records.py",
+        "ci/project/p04_execution_records.py",
+        "ci/project/p04_fixture_adapter.py",
+        "ci/project/p04_model_contract.py",
+        "ci/project/p04_reference.py",
+        "ci/project/p06_compiler_records.py",
+        "ci/project/p06_contract.py",
+        "ci/project/p06_dependency_admission.py",
+        "ci/project/p06_dependency_binary.py",
+        "ci/project/p06_dependency_build.py",
+        "ci/project/p06_dependency_contract.py",
+        "ci/project/p06_dependency_graph.py",
+        "ci/project/p06_dependency_local_prepare.py",
+        "ci/project/p06_dependency_receipt.py",
+        "ci/project/p06_dependency_record.py",
+        "ci/project/p06_dependency_sources.py",
+        "ci/project/p06_dependency_substitution.py",
+        "ci/project/p06_local_toolchain.py",
+        "ci/project/p06_managed_preflight_application_build.py",
+        "ci/project/p06_managed_preflight_build.py",
+        "ci/project/p06_managed_preflight_contract.py",
+        "ci/project/p06_managed_preflight_execute.py",
+        "ci/project/p06_managed_preflight_records.py",
+        "ci/project/p06_managed_preflight_source_export.py",
+        "ci/project/p06_managed_preflight_sources.py",
+        "ci/project/p06_native_lifetime_contract.py",
+        "ci/project/p06_native_lifetime_records.py",
+        "ci/project/p06_pending_probe.py",
+        "ci/project/p06_records.py",
+        "ci/project/p06_warm_compiler_records.py",
+        "ci/project/p06_warm_contract.py",
+        "ci/project/p06_warm_execute.py",
+        "ci/project/p06_warm_records.py",
+        "ci/project/p06_workspace_compiler_records.py",
+        "ci/project/p06_workspace_records.py",
+        "ci/project/preflight.py"
+      ]
+    },
+    "qualified_warm": {
+      "count": 81,
+      "blocked_cli_names_equal_reader_names": true,
+      "names": [
+        "ci/project/baseline_inventory.py",
+        "ci/project/baseline_matrix.py",
+        "ci/project/baseline_packet_contract.py",
+        "ci/project/baseline_packet_io.py",
+        "ci/project/baseline_process.py",
+        "ci/project/compiler_records.py",
+        "ci/project/p02_fixture_oracle.py",
+        "ci/project/p02_layout_fixture_oracle.py",
+        "ci/project/p02_matrix.py",
+        "ci/project/p02_matrix_records.py",
+        "ci/project/p02_wmma_fixtures.py",
+        "ci/project/p02_wmma_numerical_fixture_oracle.py",
+        "ci/project/p03_execute.py",
+        "ci/project/p03_execution_records.py",
+        "ci/project/p04_execution_records.py",
+        "ci/project/p04_fixture_adapter.py",
+        "ci/project/p04_model_contract.py",
+        "ci/project/p04_reference.py",
+        "ci/project/p06_checked_execute.py",
+        "ci/project/p06_compiler_records.py",
+        "ci/project/p06_contract.py",
+        "ci/project/p06_counter_diagnostics_replay.py",
+        "ci/project/p06_counter_public_build.py",
+        "ci/project/p06_counter_public_records.py",
+        "ci/project/p06_counter_public_replay.py",
+        "ci/project/p06_counter_qualification_admission.py",
+        "ci/project/p06_counter_qualification_contract.py",
+        "ci/project/p06_counter_qualification_execute.py",
+        "ci/project/p06_counter_qualification_prerequisites.py",
+        "ci/project/p06_counter_source_inventory.py",
+        "ci/project/p06_dependency_admission.py",
+        "ci/project/p06_dependency_binary.py",
+        "ci/project/p06_dependency_build.py",
+        "ci/project/p06_dependency_contract.py",
+        "ci/project/p06_dependency_control_replay.py",
+        "ci/project/p06_dependency_graph.py",
+        "ci/project/p06_dependency_lifetime_execute.py",
+        "ci/project/p06_dependency_local_execute.py",
+        "ci/project/p06_dependency_local_prepare.py",
+        "ci/project/p06_dependency_local_replay.py",
+        "ci/project/p06_dependency_native_replay.py",
+        "ci/project/p06_dependency_receipt.py",
+        "ci/project/p06_dependency_record.py",
+        "ci/project/p06_dependency_replay.py",
+        "ci/project/p06_dependency_sources.py",
+        "ci/project/p06_dependency_substitution.py",
+        "ci/project/p06_local_toolchain.py",
+        "ci/project/p06_managed_preflight_application_build.py",
+        "ci/project/p06_managed_preflight_backend_build.py",
+        "ci/project/p06_managed_preflight_build.py",
+        "ci/project/p06_managed_preflight_contract.py",
+        "ci/project/p06_managed_preflight_derivation.py",
+        "ci/project/p06_managed_preflight_execute.py",
+        "ci/project/p06_managed_preflight_generated.py",
+        "ci/project/p06_managed_preflight_records.py",
+        "ci/project/p06_managed_preflight_replay.py",
+        "ci/project/p06_managed_preflight_replay_build.py",
+        "ci/project/p06_managed_preflight_replay_hosted.py",
+        "ci/project/p06_managed_preflight_source_export.py",
+        "ci/project/p06_managed_preflight_sources.py",
+        "ci/project/p06_mpm_execute.py",
+        "ci/project/p06_native_lifetime_contract.py",
+        "ci/project/p06_native_lifetime_records.py",
+        "ci/project/p06_pending_probe.py",
+        "ci/project/p06_qualified_warm_admission.py",
+        "ci/project/p06_qualified_warm_contract.py",
+        "ci/project/p06_qualified_warm_execute.py",
+        "ci/project/p06_qualified_warm_records.py",
+        "ci/project/p06_records.py",
+        "ci/project/p06_replay.py",
+        "ci/project/p06_warm_analyze.py",
+        "ci/project/p06_warm_compiler_records.py",
+        "ci/project/p06_warm_contract.py",
+        "ci/project/p06_warm_execute.py",
+        "ci/project/p06_warm_records.py",
+        "ci/project/p06_warm_replay.py",
+        "ci/project/p06_workspace_compiler_records.py",
+        "ci/project/p06_workspace_execute.py",
+        "ci/project/p06_workspace_records.py",
+        "ci/project/p06_workspace_replay.py",
+        "ci/project/preflight.py"
+      ]
+    },
+    "reader_name_contract_files_equal_base": true,
+    "production_ast_comparisons": [
+      {
+        "path": "ci/project/p06_dependency_build.py",
+        "added_import_ast": [
+          "Import(names=[alias(name='signal')])"
+        ],
+        "removed_import_ast": [],
+        "new_project_imports": [],
+        "base_require_call_count": 44,
+        "current_require_call_count": 44,
+        "removed_or_modified_existing_require_calls": [],
+        "added_require_calls": []
+      },
+      {
+        "path": "ci/project/p06_managed_preflight_execute.py",
+        "added_import_ast": [],
+        "removed_import_ast": [],
+        "new_project_imports": [],
+        "base_require_call_count": 63,
+        "current_require_call_count": 63,
+        "removed_or_modified_existing_require_calls": [],
+        "added_require_calls": []
+      },
+      {
+        "path": "ci/project/p06_qualified_warm_execute.py",
+        "added_import_ast": [
+          "Import(names=[alias(name='signal')])"
+        ],
+        "removed_import_ast": [],
+        "new_project_imports": [],
+        "base_require_call_count": 0,
+        "current_require_call_count": 0,
+        "removed_or_modified_existing_require_calls": [],
+        "added_require_calls": []
+      },
+      {
+        "path": "ci/project/p06_qualified_warm_hosted.py",
+        "added_import_ast": [],
+        "removed_import_ast": [],
+        "new_project_imports": [],
+        "base_require_call_count": 62,
+        "current_require_call_count": 63,
+        "removed_or_modified_existing_require_calls": [],
+        "added_require_calls": [
+          "Call(func=Name(id='require', ctx=Load()), args=[Subscript(value=Name(id='observed', ctx=Load()), slice=Constant(value='gate_satisfied'), ctx=Load()), Constant(value='native_capacity')], keywords=[])"
+        ]
+      }
+    ],
+    "a43_setup_fix_adds_no_project_import": true
+  },
+  "validation": {
+    "working_directory": "repository source root",
+    "interpreter": "/tmp/ai-gpu-c36968d78f0b/environment/venv/bin/python3",
+    "initial_inventory_test_invocation": {
+      "command": "PYTHONDONTWRITEBYTECODE=1 TMPDIR=/tmp/ai-gpu-c36968d78f0b /tmp/ai-gpu-c36968d78f0b/environment/venv/bin/python3 -B -m unittest ci.project.test_p06_qualified_warm_cancellation.QualifiedWarmCancellationTests.test_cli_helper_inventory_still_matches_the_complete_reader",
+      "exit_code": 1,
+      "result": "loader error before test body: ModuleNotFoundError for baseline_process because ci/project was absent from import search path"
+    },
+    "qualified_warm_inventory_test": {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=ci/project TMPDIR=/tmp/ai-gpu-c36968d78f0b /tmp/ai-gpu-c36968d78f0b/environment/venv/bin/python3 -B -m unittest test_p06_qualified_warm_cancellation.QualifiedWarmCancellationTests.test_cli_helper_inventory_still_matches_the_complete_reader",
+      "exit_code": 0,
+      "tests": 1,
+      "duration_seconds": 0.756,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "output": ".\n----------------------------------------------------------------------\nRan 1 test in 0.756s\n\nOK\n",
+      "scope": "Blocked CLI import closure only; no native child starts."
+    },
+    "substitution_isolated_import": {
+      "exit_code": 0,
+      "actual_names": 49,
+      "expected_names": 49,
+      "missing": [],
+      "extra": []
+    },
+    "full_governance_run": "not_run",
+    "native_gpu_or_toolchain_execution": "not_run"
+  },
+  "observed_changed_path_classification": {
+    "tracked_production_orchestration": [
+      "ci/project/p06_dependency_build.py",
+      "ci/project/p06_managed_preflight_execute.py",
+      "ci/project/p06_qualified_warm_execute.py",
+      "ci/project/p06_qualified_warm_hosted.py"
+    ],
+    "tracked_documentation": [
+      "README.md",
+      "docs/project/backlog.md",
+      "docs/project/ci-contract.md",
+      "docs/project/p06-qualified-warm-handoff.md",
+      "docs/project/status.md"
+    ],
+    "untracked_tests": [
+      "ci/project/test_p06_cli_signal_setup.py",
+      "ci/project/test_p06_dependency_cancellation.py",
+      "ci/project/test_p06_dependency_failure_state.py",
+      "ci/project/test_p06_dependency_launch_failures.py",
+      "ci/project/test_p06_hosted_native_capacity.py",
+      "ci/project/test_p06_managed_failure_state.py",
+      "ci/project/test_p06_managed_final_counts.py",
+      "ci/project/test_p06_managed_finalization_interrupt.py",
+      "ci/project/test_p06_managed_launch_failures.py",
+      "ci/project/test_p06_qualified_warm_cancellation.py"
+    ],
+    "untracked_documentation_scope": [
+      "docs/project/p06-launch-readiness-audit.md",
+      "docs/project/evidence/p06-launch-readiness/**"
+    ],
+    "changed_protected_paths": [],
+    "unclassified_paths": [],
+    "orchestration_hashes_bound": false,
+    "temporal_scope": "This records observed path classes and preserved protected bytes; subsequent edits require their own check."
+  },
+  "protected_files": [
+    {
+      "path": ".gitmodules",
+      "size_bytes": 575,
+      "sha256": "632677b727feb911c5d2fa9d2991d9f87434fc83d99fc4ae15ee8e4556ecbabb",
+      "base_git_blob": "f3e8e71419622652f728938afe58ff2f689a7704",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "AGENTS.md",
+      "size_bytes": 26221,
+      "sha256": "2173e534f2f4b757508ccc335e1e271e778e86e11fbccc53d5ea39f90d4cd309",
+      "base_git_blob": "fc9a4f7b9c101807fdab21c4757627053978008c",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "project_policy"
+      ]
+    },
+    {
+      "path": "ROADMAP.md",
+      "size_bytes": 23386,
+      "sha256": "a4d7afb55bf5740117f231639f27f6e05a2d7d8e52cc59e5a0a3890d486875d0",
+      "base_git_blob": "d4c2e83788dfa44ddfd3343d2fc654fbee1749bd",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "project_policy"
+      ]
+    },
+    {
+      "path": "VERSION",
+      "size_bytes": 112,
+      "sha256": "018ec3baa6903a49e5fee8cd88e3a235e50f36e6b40a54c0540e1f4339c675fe",
+      "base_git_blob": "10c26942531a10a78e1d7010aa85bf6c1457e2e7",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "VX_config.toml",
+      "size_bytes": 30127,
+      "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+      "base_git_blob": "fdf49ad7e1459dff3bd4bb607ffb607a92a88fa5",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "VX_types.toml",
+      "size_bytes": 36543,
+      "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+      "base_git_blob": "10a5a39505ee6d89cf260f00d620af4f1d0ffbbf",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "ci/asic_gate.py",
+      "size_bytes": 1718,
+      "sha256": "6ebbaae108d22054ae5ea5a6c471c90e6b5b45cde1f75961b1e36941dc76d777",
+      "base_git_blob": "84b11ec4c6178700e0e0e164e0c4d103776cb116",
+      "mode": "100755",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/baselines/perf/core.json",
+      "size_bytes": 4110,
+      "sha256": "2e0b69c0f92401bee05c2cda7ec79f2ec49e6dc17f711da546efdbd34382e182",
+      "base_git_blob": "f914b97a05158361068728a579921e4314866419",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/perf/dxa.json",
+      "size_bytes": 3851,
+      "sha256": "648909a52e523874fe1008c76b6bb93d9b84583a28f2fba42782423c977280b7",
+      "base_git_blob": "e2859a3f5e6910c4a7762c824a813c7fc959f16a",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/perf/graphics.json",
+      "size_bytes": 3119,
+      "sha256": "752b2e428f01f4d1393ae91a10f561b1bfe9a2ed2b08f4116b9059cb2019397d",
+      "base_git_blob": "de58e1480b6151f9edc55da507a9a60b73153b0c",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/perf/raytracing.json",
+      "size_bytes": 906,
+      "sha256": "e7190d40dd242e3947cc4f5e568573cd0f52a6e71f21b2bc412eadd75b68d260",
+      "base_git_blob": "993e67ac73fed612330cd416811168e9c323d818",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/perf/tensor.json",
+      "size_bytes": 1995,
+      "sha256": "74bfbe74c0165a4e1263ab58355700c03466f7ca2e982dc2bb25dfe084d17246",
+      "base_git_blob": "6a2c4225af6b7cb498875c7f70d51bc907b52f16",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/perf/tensor_mx.json",
+      "size_bytes": 396,
+      "sha256": "005c317cdcb33245e7c73cfa8a4ae15b8092bd93520700fa9d67e95488852326",
+      "base_git_blob": "8435035c31a1eef5b0df1c27f385ab7668222d72",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/perf/tensor_sp.json",
+      "size_bytes": 337,
+      "sha256": "10fa4e21a4e411cb6105708ee76c9cc56a67edcd422e6d3a7fd521a9ffe21c88",
+      "base_git_blob": "96c94b4422566b7bcb18d3a868216b3ab0047127",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/perf/tensor_wg.json",
+      "size_bytes": 1536,
+      "sha256": "c6c3fd75ed3befed6eaad836dff8ba85192b38eec8350939e441ae8d0978f073",
+      "base_git_blob": "33107d60b128db6a153c4a3b77a5e62ab78351b2",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/core.json",
+      "size_bytes": 28970,
+      "sha256": "9d44a8cb4df9968fcba2f06068891ca64619b56b15263feb3369487bd6585788",
+      "base_git_blob": "d77308c7c064d908211981de949d8d6766788b3e",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/dxa.json",
+      "size_bytes": 2328,
+      "sha256": "b704ffb416f1e117104b970e89a75d4e256c95ab1b5895451370bdaef99734b8",
+      "base_git_blob": "5ab16b9eaa593353f1327c36024a1418d97331fd",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/graphics.json",
+      "size_bytes": 30678,
+      "sha256": "99b4e2ffdc4c5ef52f01d3eecd5414d1a00d4100bb0ffd45d3a9bdf66e2994b3",
+      "base_git_blob": "6eaf5e90b98391a232e1f7d0aadea65643512ab2",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/tensor.json",
+      "size_bytes": 12461,
+      "sha256": "7c20e2fdeab2bc597641354c138d79a4e054c1b42a9e4856d88ff157a65ef969",
+      "base_git_blob": "36d6b1775224175a70a66068d0ae7dd351cdb134",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/vm.json",
+      "size_bytes": 8367,
+      "sha256": "74e984dd4e3f1aeb406046ba9ef58efecebc84d856e4bce2abd0a056c04dff00",
+      "base_git_blob": "2cf7e28295f8efeca22f9965d06bc24bb9b91821",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/core.json",
+      "size_bytes": 31559,
+      "sha256": "35c440089e5b5ea68ffb36c9d063237f2fbb2da7f8026519c969accafc452c0b",
+      "base_git_blob": "eb957311658017c086daae526d2fda779df21c08",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/dxa.json",
+      "size_bytes": 5735,
+      "sha256": "7a6a523cbaf3f4dc1e8ba423262d6d26a6b1b2ff58e711e748b3167f4043ee7a",
+      "base_git_blob": "e1017968eecfbd76b739bf68377eed9378735a14",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/graphics.json",
+      "size_bytes": 31793,
+      "sha256": "bfb045d843d0d08e29ea0a507584d9a21e1afd50cc54f472781615a5c2a8aec7",
+      "base_git_blob": "8353c8aebee7b3bce4850e5787a4b9df3cff987f",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/mufu.json",
+      "size_bytes": 5693,
+      "sha256": "1f7a375f75ec05aa8885d19b2684aa74586dfa6fabbff9a34039c4796b56f567",
+      "base_git_blob": "33021e13b650281b929a5728e1daf07b296fce87",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/tensor.json",
+      "size_bytes": 15655,
+      "sha256": "81b645180b72327c9bf44777f2914bc9b2378c9dabd87ab32f05d78e0d8f6f18",
+      "base_git_blob": "d1eb396511a3961bd3c9641178c195c91d110fa0",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/vm.json",
+      "size_bytes": 6057,
+      "sha256": "aecb3717cec9d0b58e184718fdfcf2894d562f72f55b7bdb96b915e303d7600f",
+      "base_git_blob": "932071afc54ca0a27d443e8f4a2bfb317ba7c2ae",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/core.json",
+      "size_bytes": 2373,
+      "sha256": "3d73cbaee0c1b903340c9752b0079bc3073a4c3edfdffe579cdcbf99e5006bf3",
+      "base_git_blob": "7d640d4ff2678455b6a2672900285782f401a601",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/dxa.json",
+      "size_bytes": 549,
+      "sha256": "aa249a7f621768ac02f1d0f85ef4a5eea9d95d32fb6a566ca4adc599a43729aa",
+      "base_git_blob": "b981098265e8a99cc5def5be00c21c4cd8475277",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/graphics.json",
+      "size_bytes": 2841,
+      "sha256": "1f43cf0ea627b32525f77fbdd0e2dc70eac6fc93a525d1d60200eb95be995370",
+      "base_git_blob": "dc5d66875ae7919d10c9a5fade7aa8d989e5d6e1",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/mufu.json",
+      "size_bytes": 548,
+      "sha256": "2b84aa5d1a201b1239755fd3ec4e147f7b3bc6f64041034ba4f413a61f16ffa9",
+      "base_git_blob": "30d74945a11f9ca87916f1ede315e80902f4e78b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/tensor.json",
+      "size_bytes": 1154,
+      "sha256": "01cf957355f05b63dc98b19ca4a69899b0c26383ef86025a24513c1a07d4eadd",
+      "base_git_blob": "b59fd0922155fa8550e08115389eeba9db36741e",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/vm.json",
+      "size_bytes": 599,
+      "sha256": "9ce940cfcdef1bc0f8554de0da13231eda3125bc5a014e7596c83bf0a46372bc",
+      "base_git_blob": "80a9234b8f1c97b99684a9616b7de64155c80f25",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "ci/fpga_gate.py",
+      "size_bytes": 1458,
+      "sha256": "6076518e4d71f4f17f7da334fde2b4b4ba3a6b9d3afb04da1287377248bf0445",
+      "base_git_blob": "3bb07792c570c4f080d877786573beb1826142f3",
+      "mode": "100755",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/gen_config.py",
+      "size_bytes": 60839,
+      "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+      "base_git_blob": "5bcf6c576b497541f29f851ec962f8f86f8a3ca8",
+      "mode": "100755",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "ci/logic_gate.py",
+      "size_bytes": 2039,
+      "sha256": "c15fff67c438c659697d6250d9a1a7076dd6027c2be0865668555cbe50b87efb",
+      "base_git_blob": "79f1f33ce6321e05830beddfb686998b5000af89",
+      "mode": "100755",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/perf_baseline.py",
+      "size_bytes": 6274,
+      "sha256": "262bfee8273e03c95173908a16c75768861afc208c0dc475f0ef292361f4a03f",
+      "base_git_blob": "d722aa9099348ac07cdddd0063f19e5ba4d5aa4d",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/project/p06_contract.py",
+      "size_bytes": 31500,
+      "sha256": "780086070739b6d3586f9b3695ad4dc31d209a7817cf1af3651160a9fe6e1376",
+      "base_git_blob": "8bb2fcad360acbfa6699d5bf75f8f3ceb8d991a4",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_admission.py",
+      "size_bytes": 12578,
+      "sha256": "33053b52145167ced22a4793295f1cbfd07c78eb8072e65ed94090040e8eae43",
+      "base_git_blob": "3bd0b0bd055c743ee1f3bbbdc1e6a4c415e10e46",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_contract.py",
+      "size_bytes": 10828,
+      "sha256": "d445b9447aefb4f2917f827105df9b5722c461f10f68629176f2dc2d2321fd0d",
+      "base_git_blob": "19ff44cfebff01f921ef956de756e428c665ece3",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_prerequisites.py",
+      "size_bytes": 18956,
+      "sha256": "b94d293f8dc4846e4b2de3344169362899d3da9503efcbac0a2e63ebad68d586",
+      "base_git_blob": "742cfd4efd415d344b74b8523afe6b0abe7a415f",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_proof.json",
+      "size_bytes": 123781,
+      "sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e",
+      "base_git_blob": "ef3a73efddeaa83a1dc19779493f2a6db84dbe1c",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "frozen_source_proof"
+      ]
+    },
+    {
+      "path": "ci/project/p06_counter_qualification_replay.py",
+      "size_bytes": 17454,
+      "sha256": "4aece4442e31426b7ef60378499f338e3ec6909263ddca7db64d90442aa60798",
+      "base_git_blob": "ffb7f46ed228dacba1095c6689e9dd77789b6b55",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "helper_name_contract"
+      ]
+    },
+    {
+      "path": "ci/project/p06_dependency_contract.py",
+      "size_bytes": 4438,
+      "sha256": "d6151024fbe7e8a651075fd76b9bdc006bb18c0f61c538a2928842f865ddd364",
+      "base_git_blob": "94e9160f2a579f8c7f6832f020210cd4ddae4e66",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_dependency_control_replay.py",
+      "size_bytes": 39549,
+      "sha256": "1c418b3f0fa58423c94eedd28e9fbda02a6ce8a5423b042abc1574281a67faa2",
+      "base_git_blob": "856acea21b657392362bf9abe9d0e2a140825164",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "helper_name_contract"
+      ]
+    },
+    {
+      "path": "ci/project/p06_dependency_graph.py",
+      "size_bytes": 5861,
+      "sha256": "eb278cbd37d5191468d151339a88a665d792e0f31d7f1d41da30285b240e9f08",
+      "base_git_blob": "a7827a4cf8794fc66cd00d29a9f82f383351ad2b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_dependency_sources.py",
+      "size_bytes": 17141,
+      "sha256": "4e09b8f8357538591a843f465ca6a20465baf363e5a190b9edf8d01c807174a1",
+      "base_git_blob": "4d0c157d973d87bbd2b5191ac01db1775c489c1f",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_managed_preflight_contract.py",
+      "size_bytes": 14917,
+      "sha256": "5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb",
+      "base_git_blob": "5b2854542ef17a96a31cc96918afc2fb657a401f",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_native_lifetime_contract.py",
+      "size_bytes": 4545,
+      "sha256": "266a50e5b4c0d07b432accf2aa13ff8d3db7fc175a24a4263e3cdb0acafb5b74",
+      "base_git_blob": "70b72be008a18a60ed851b2be60db68682e6b7dd",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_admission.py",
+      "size_bytes": 9445,
+      "sha256": "849b3cf591d419bf50eea02b94f6801499859208f802b376a81a2c2b3bca28e2",
+      "base_git_blob": "e3e3d12850b5884844735d1947a6b045dbd0b196",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_analyze.py",
+      "size_bytes": 5737,
+      "sha256": "7443625aefbefbdb749527c333ff13b4e9e1144ce256acee460247187acbc28f",
+      "base_git_blob": "8dd614415c97f3a78a604d3076efc82fb5ffd3fa",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_capacity.py",
+      "size_bytes": 24839,
+      "sha256": "fe3f6eb302e86e7db403c6f5fdc97718ef784d246b579a880f321ca9324411f0",
+      "base_git_blob": "fcb7419928c84fb6b2d35629abbe93e7c8ea17b4",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_contract.py",
+      "size_bytes": 8017,
+      "sha256": "f8984c8f286094e7853410c2a8c67bc9aecf81aea860b3ffaff0bcd2aebac112",
+      "base_git_blob": "bb6576f79b58ca0076a642f7942f18e6c32558ce",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_proof.json",
+      "size_bytes": 21505,
+      "sha256": "172721c671ddaa79541dde9c37c154b5ab5a99b8abb0caabf2e07036dd429efb",
+      "base_git_blob": "81c2eeecf7f74c2711415c1c6a0c53329920a63c",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "frozen_source_proof"
+      ]
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_records.py",
+      "size_bytes": 4514,
+      "sha256": "100a513d0e34b358c4f2676f9fc4d565160bd0b3b7499d9ae51f6ce1cbe3e29b",
+      "base_git_blob": "6299b71c3eb1c87f04b7bae3317e91b530e7ad73",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_replay.py",
+      "size_bytes": 20450,
+      "sha256": "1f6cb5cb1dec4c45553d19b3f3e76f1594a570fcac80eabf9d39d5f2564068e4",
+      "base_git_blob": "794328e15c8caf05461d0f099fdb2cf1a405895b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "helper_name_contract"
+      ]
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_run.py",
+      "size_bytes": 35159,
+      "sha256": "8455ff73d618e41714c0737fc3ac25ee3d8afbb538fb95b42779d9b3740dfcd3",
+      "base_git_blob": "37377074d13b4fe0c764c3eadda66217f337b722",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_warm_analyze.py",
+      "size_bytes": 19568,
+      "sha256": "ac273f587f759900d16ad41c7c63c2d2b10ca0864d5018f8403572f75e5a3e88",
+      "base_git_blob": "47f6578e09352848954d4b1672ba97d6fe038916",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_warm_contract.json",
+      "size_bytes": 25793,
+      "sha256": "893d85401b1d5f7757d82cb7c743a89b36264fe19c7d08c239b7f216b7a8cbbd",
+      "base_git_blob": "50d7dc5f0162293a303c288eee56af432f2e4466",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_warm_contract.py",
+      "size_bytes": 19379,
+      "sha256": "d311c5fb77e651a93fde368f0e41d517f40199a3bd43e27c302d4d00888cc31e",
+      "base_git_blob": "27e76e626a610c66527f0f3814da991bbb4095db",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/project/p06_warm_records.py",
+      "size_bytes": 11637,
+      "sha256": "28d7e2c1553fc0929a106bc24a62fa2d612e415449ee0e9ac84ad582289381e7",
+      "base_git_blob": "244d2501d34a815e9731d939c040348819e7f3ae",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "ci/synth_gate.py",
+      "size_bytes": 75799,
+      "sha256": "ea4d9f64194fc81fc404de6743f278d2dcdf6f474e001aa6bfe48e2a63c479d7",
+      "base_git_blob": "b986ac225e604552555bc3273d592cb5d7080179",
+      "mode": "100755",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcase.py",
+      "size_bytes": 31994,
+      "sha256": "7aa17b1fc104b2224dadb300f5d4c8e54c104963b8a9af734b9bf1ecf7e662d6",
+      "base_git_blob": "719aad87f4d59507b628dd37949bbd5ed5360a28",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/asic_gate.yaml",
+      "size_bytes": 9625,
+      "sha256": "642eb1360737c1594c01ec86991e3fee84cd664da31942e73a4db41c3fa29cce",
+      "base_git_blob": "eb9386794a764fc908534f452b5bace8788265fa",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/cache.yaml",
+      "size_bytes": 10710,
+      "sha256": "4dbf91e06161f0d8c15c0271c513335cf2f8ffaabfe7e22f1030c7050e1887ec",
+      "base_git_blob": "a188955e5399ac32ae6a79cf25802f5fe6f49fab",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/config1.yaml",
+      "size_bytes": 8090,
+      "sha256": "c86fe991747cb7a07f514bc96fb6863fe97409fb010cc630407cdaa9ec5d4263",
+      "base_git_blob": "a5d8bdcf457ec004909ce03897265cd50f7521fe",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/config2.yaml",
+      "size_bytes": 3119,
+      "sha256": "4ae631e5c0fb30f630de7b6f07b8daa54e0f59609062f55b7aa8985b3cd04841",
+      "base_git_blob": "3b1eff7c2e64cc46c6ebefee707fd24177de3ff8",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/core.yaml",
+      "size_bytes": 15632,
+      "sha256": "82c00040e8c16a90b730dafe87e221ba3136904a83c137545f16e5287ee93021",
+      "base_git_blob": "2855bed7555d7a74b3518a8849be8e5505b03fd2",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/debug.yaml",
+      "size_bytes": 2096,
+      "sha256": "9928446e0493b1fbd7ed0470f7381a7cf64f791d3790e80a4b6ab12a71ae2f37",
+      "base_git_blob": "21b4ccd8fc6df485f03991e5b80b7b84957a1086",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/dxa.yaml",
+      "size_bytes": 20316,
+      "sha256": "f6986782f041a4f9dcf4b4c3381efc30d35c0cb92beb67184468af6dbfad385c",
+      "base_git_blob": "a1129da99b37e3e219fcbfdae3756abdb1cfd9a6",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/foldsim.yaml",
+      "size_bytes": 1919,
+      "sha256": "737d51b83a819387de69592656b3f00f351bfb01d1b177478fb6a3db3bd614cb",
+      "base_git_blob": "c1d37f73a5587b50689d246976494a56b5332c4e",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/fpga_gate.yaml",
+      "size_bytes": 9047,
+      "sha256": "615aa45abe9979906639b227a04304e23527da4f50631bd5a33439c69b9e4c06",
+      "base_git_blob": "1062f7279da4c271427de9a8309e20e23cab9993",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/graphics.yaml",
+      "size_bytes": 23420,
+      "sha256": "770ac002c4d9eef3c272fc8bcf3d7111edb6fd2fa83e7edc160867f51248a95d",
+      "base_git_blob": "252736abaf3e50965d60f0c463f3bafd9d771b07",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/graphics_parity.yaml",
+      "size_bytes": 3376,
+      "sha256": "b856f845af72def9cff6451f4b3e1cfbe3c53055ba96938e3d218555d91a7837",
+      "base_git_blob": "bcbaadd6d683dd36e3218e3073bc75baf8848f29",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/integration/cupbop.yaml",
+      "size_bytes": 301,
+      "sha256": "1808b83598b0f9df9b3ad15e4cfb10e3b39d39fcfa01789a970adfda08f784c6",
+      "base_git_blob": "434dd2b4b02d4fd3342124060de7bc0d5cd9e2c0",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/integration/dtm.yaml",
+      "size_bytes": 313,
+      "sha256": "8dbbc664216b69e5d51386ccf036215ce0ef2896db4e9dbb9bde2450726287b1",
+      "base_git_blob": "e96cf7bf3df7f874017c979854a5b91b58c53e6d",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/integration/gem5.yaml",
+      "size_bytes": 317,
+      "sha256": "de745b87d04d1e7e831766c965fefef289e3b394708aef668bf8d6783d3f5780",
+      "base_git_blob": "62aeafb8fd9025ccbcd6ef4bf774aa219cb7e833",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/integration/mpi.yaml",
+      "size_bytes": 1251,
+      "sha256": "9fb487e32c884d54289dc8d43ef580ce677d25f959a257998d848e77e52249a0",
+      "base_git_blob": "fdada744bfcdbf096cf44df2848ee6357add201b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/integration/sst.yaml",
+      "size_bytes": 313,
+      "sha256": "2711e2eeb83c71767e93562e73c484ac3e8847dc6cca7490f89e15bcffdb42f9",
+      "base_git_blob": "6787cbf9a86ba89d54653d31cbb737a225120cae",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/isa/amo.yaml",
+      "size_bytes": 2340,
+      "sha256": "b3a65f48f5938c1c891d7e74514413aafd09ba51ed3e86c5f007739195b19431",
+      "base_git_blob": "746155d75cc0536c4499dea415ec17b9b05e0484",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/isa/mufu.yaml",
+      "size_bytes": 2019,
+      "sha256": "6a117e916672a80041e2075508130a401fe06629855e4e3ec19f937980155f10",
+      "base_git_blob": "7e9eb016167b47a60b558f72f56e7882bea5d63d",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/isa/riscv.yaml",
+      "size_bytes": 3140,
+      "sha256": "5cb62972f2e2735fd3d3030f0dc08596c83053717414518623adbcd0c4ede4fb",
+      "base_git_blob": "b2f75e6b7b889e480f039dc6f3dc185c11fd06d4",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/isa/rvc.yaml",
+      "size_bytes": 1965,
+      "sha256": "e088f9617cc4b3b6b6a1b48f33484de81db3b5b6384097370b3cebf3eca368cf",
+      "base_git_blob": "a73d258dbfa2a224c50e6ddf74bc5f0a20cdb6ff",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/isa/zfhmin.yaml",
+      "size_bytes": 1833,
+      "sha256": "062743ecd454b78d4aaa34dbad1f75ba6eb4ef7d6e35fb256837781e0f8ea828",
+      "base_git_blob": "edbbcf461f39454c7191be797ea116d5f17cfc86",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/logic_gate.yaml",
+      "size_bytes": 11977,
+      "sha256": "f6191eba423394b3480c97cc5e48ba282314d5e6904549c3e65813eb563899fb",
+      "base_git_blob": "b8d38bac0a48228307294758e47ddb91d2ed768b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/p02_wgmma.yaml",
+      "size_bytes": 3177,
+      "sha256": "48b7c375c3e907fc539229fe8e2b4f1e2001b7b31eba8befc3119a19d0a9c234",
+      "base_git_blob": "2387daec7b2ece12f1e48cf54f033cc492c651ce",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/p04_mlp.yaml",
+      "size_bytes": 2113,
+      "sha256": "9afbf381c5185fa37977e45b87a692be334d4d6eb4eb062e1ad7c20fbffe11e6",
+      "base_git_blob": "dcb973089f4e3ee2bc95a8116986017f61fa19d6",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/perf.yaml",
+      "size_bytes": 872,
+      "sha256": "b7c78af4b96587cad0c7ed2d6cddf585e8bd9d8d067fe66ec04e1beccb076b2a",
+      "base_git_blob": "82c737e938eb9a502378160a2c4f5653fa838c71",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/raytracing.yaml",
+      "size_bytes": 3698,
+      "sha256": "72dba83890ce8ca89812b04d75f6031d8bd5253827028642b68c57dcc06d2730",
+      "base_git_blob": "66c1e171db74440fbc66a9486e5529d0fbb28a1b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/regression.yaml",
+      "size_bytes": 17648,
+      "sha256": "c747bc258b8ed36a992bc90d2bdab79cb1856e96fc43562b9ae0e727dfd3562b",
+      "base_git_blob": "40759e9f2f7deeb61771f0359de2aa90c40c9d42",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/scope.yaml",
+      "size_bytes": 341,
+      "sha256": "a7fe645bf5701807d7e08cdd98c62fadddd487e70d038af107233645c5ac186a",
+      "base_git_blob": "43ef24d9c6ae7ff1ad81eff339d31aea4cadefb3",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/stress.yaml",
+      "size_bytes": 943,
+      "sha256": "faa01057a00307fa832f5e46bb9a5ae90f5751294f1fc61056318fff51f4e62e",
+      "base_git_blob": "0d3b1d907f757e1a4e1ab335c9ed7aa75b43eacf",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/sw/hip.yaml",
+      "size_bytes": 314,
+      "sha256": "dfc975846c5f7a2f2be7fdb56348fbba9396eaec59c6e0d174956ef7eef58221",
+      "base_git_blob": "bdada43c65b5e60ca08eb9aa45def01998f21dd6",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/sw/kernel.yaml",
+      "size_bytes": 332,
+      "sha256": "63f919d562b24a74406263801b864e7178b75821472dbaaa697add635f7d1ebe",
+      "base_git_blob": "cd7bff31d5a8e912dcfad07fba7a46ac2b2c6616",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/sw/opencl.yaml",
+      "size_bytes": 3038,
+      "sha256": "e7e6a7b5e355551ca617550a7478434a59cdfd9391b414caf19cc5de4545fe5b",
+      "base_git_blob": "5662416194fd64c7933e0ee26610a215e2e7a82d",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/sw/runtime.yaml",
+      "size_bytes": 891,
+      "sha256": "926cb515e94f68b4f8b2a8567e633d109f41b95c3bc5883d13cb7a45077d7731",
+      "base_git_blob": "fc5ae32fb338aac914dfad760ab346e810928f66",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/synthesis.yaml",
+      "size_bytes": 302,
+      "sha256": "c155ef07cc49da2bdc3c790a5fe53276fb04b56fa6e8145e5e321943dd4f330a",
+      "base_git_blob": "0c1e0dd0261173828efc259360b88b47cc151f8d",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/tensor.yaml",
+      "size_bytes": 14935,
+      "sha256": "5ae8567109b68e7852be5ab66cb92af117983b80693fa5ea7762c82eb19dde61",
+      "base_git_blob": "fe48951f3f3a70233b40ac4ade79d2526617c2fc",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/tensor_mx.yaml",
+      "size_bytes": 12431,
+      "sha256": "7769e7c9eabdb86a05acd29899b598eab458a513cc432cb79414cc05129c9ef9",
+      "base_git_blob": "a8e7305c53956aba6d0153af74bd5cab84b31013",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/tensor_sp/tensor_sp.yaml",
+      "size_bytes": 12689,
+      "sha256": "0a1323fc3e2b41776ea8690bf291982a982703c591e6de29f16ffc8e7b8c38bd",
+      "base_git_blob": "0b7bfff7df29d955f89d1b2f3be028689429809b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/tensor_sp/tensor_sp_mx.yaml",
+      "size_bytes": 1412,
+      "sha256": "e6ca643cf39104767081fb02fdeddcd1c5780d3720bbdff3cb3b466b6f4041f7",
+      "base_git_blob": "0a3521319c975ad59c1ccb605777aabc6ff9a294",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/tensor_wg.yaml",
+      "size_bytes": 19605,
+      "sha256": "477d313b40f1fe5c54488098a7f3ad482ccf5d149919b88c834d04bd994155cd",
+      "base_git_blob": "fb30e02ab2f4225104df8e96ddb6b1f2fc0b71d6",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/unittest.yaml",
+      "size_bytes": 8802,
+      "sha256": "c774b8ea85abd91c93aec8bd7b98566c74b098df4b8e206325ad4ed7f0584b41",
+      "base_git_blob": "f58a3c3ca80a6e1a3c1e5c48c8e229fc3942dee8",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/vm.yaml",
+      "size_bytes": 8978,
+      "sha256": "9c3d4db9ef2325ca9c9d063ff1453690ddebe3b7473b9b65c95ed5373ab1c0a2",
+      "base_git_blob": "7ad58cc922623a42076e07ae8bf0bf88486535f9",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "ci/testcases/vulkan.yaml",
+      "size_bytes": 3236,
+      "sha256": "72cd5b2dbbc46d9910d34aa524c2db5da3f86c92f36a92e306448298f7f914b0",
+      "base_git_blob": "903d3fc28c9cd44f6194dd15b2a8084cbbd2da97",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "inherited_gate_or_testcase"
+      ]
+    },
+    {
+      "path": "configure",
+      "size_bytes": 11438,
+      "sha256": "645cdad95c31a959a36c795c37b2b7e4c0202f19c53093aa9067cda3ef23a0be",
+      "base_git_blob": "dce21ed6d25f7716d166e2da0c32abf0870b19e1",
+      "mode": "100755",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "docs/assets/img/vortex_framework_stack.svg",
+      "size_bytes": 48225,
+      "sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+      "base_git_blob": "92cb193580afd5b6d19e859c9736bd5ee5994cbd",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "protected_asset"
+      ]
+    },
+    {
+      "path": "docs/designs/complete_counter_qualification_v1.md",
+      "size_bytes": 7039,
+      "sha256": "ef645f043916a01473eba28f7b285a5377f9c63f36021a2cdee8bb8f68990178",
+      "base_git_blob": "fa90ab39e50ef625b11c18b5d2e6e4e3f9f38cc1",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "docs/designs/dependency_provenance_v1.md",
+      "size_bytes": 7834,
+      "sha256": "5943a11fd3e89ed272e307dd8de4ada3655863f599ad8f4108e50046dcfd528a",
+      "base_git_blob": "f235f65aba4e273cb9b07f57a1221e650ae4a893",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "docs/designs/managed_counter_lifetime_v1.md",
+      "size_bytes": 12589,
+      "sha256": "73ca91df9a2fadff0041710bb237da191511731c977fd33037d0e90b679faa89",
+      "base_git_blob": "a54230cd11d08e16162b5c7afb1fe64c0d066415",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "docs/designs/managed_counter_preflight_v1.md",
+      "size_bytes": 15839,
+      "sha256": "7d627a9e5fd8f2bdd8ca855309cd59a8b312f7a3360c3c810629912d09f2f6d8",
+      "base_git_blob": "0662bc5a33de3700899b301f102630d21cf7514f",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "docs/designs/qualified_warm_workspace_v1.md",
+      "size_bytes": 7078,
+      "sha256": "979936604fe95572804243ab5b9ad2b524aa0fcdcf9d066450e70dfc841257a6",
+      "base_git_blob": "1b3d76c9c758959305a9b3f683242f92f30e0934",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "docs/designs/serial_matmul_workspace_v1.md",
+      "size_bytes": 17846,
+      "sha256": "133f3a53b883910e01998ef8bfc96d8e98b728c5902e7e95a8a8c270f6da2004",
+      "base_git_blob": "388d35577ef71b4d174230281245a17befc6046f",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "docs/designs/tensor_numerics_v1.md",
+      "size_bytes": 29061,
+      "sha256": "2d7d3f18728fe77dd96a7de0c05c9550f2c2446ef7bee4fb0740fe8d367a06a2",
+      "base_git_blob": "6af8f7ffc20c275bc61544849084aa3e96d90c4d",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "docs/designs/warm_workspace_benchmark_v1.md",
+      "size_bytes": 23976,
+      "sha256": "91e4657c8e4c8eca3eb0b959b1bbc0430d2991cdd65e30f4d45b3da12b4e37c2",
+      "base_git_blob": "80e65e360268e44851857c5537ea6c36a366ad46",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin"
+      ]
+    },
+    {
+      "path": "docs/project/acceptance.md",
+      "size_bytes": 9059,
+      "sha256": "065251c27555d2c588693a85546b2d18701352d939bd81ccf9daec984cc55bc0",
+      "base_git_blob": "def16eadd5d13a16996dee69cd0ba11f52312f6d",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "project_policy"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/governance-readiness/a01-retained-binding.json",
+      "size_bytes": 26412,
+      "sha256": "d015566195b25e387f6f0593310e3bf3037a3a7511c4f91e083a23ad72200f39",
+      "base_git_blob": "c5f1f0240fce2fb8cdbc4b1745b42c707a636290",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p01-build.json",
+      "size_bytes": 14472,
+      "sha256": "7c31c2c58fce7e3f9fe2229f9dcc4d1ede8aa2c1ee7afb4b9714a67ef9ae38a0",
+      "base_git_blob": "4117d302daf962e697d6a7786ffa31eae5d363e3",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p01-native.json",
+      "size_bytes": 14190,
+      "sha256": "7cf5ae93704e22fa9172ac2eb8dd93275ab312a1dc39e689d907f8e08b38b026",
+      "base_git_blob": "489f893c436c808ba175a7b50fa295abb5c231d5",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p01-xrt-blocked.json",
+      "size_bytes": 13336,
+      "sha256": "c480d1eb390a237b5e33c55b2115f3a43e997207a9122c319264671284e82551",
+      "base_git_blob": "9d10f198bfbd663d202bd2ea28ad334490511c65",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p02-numerics/acceptance.json",
+      "size_bytes": 21992,
+      "sha256": "5cfa9e078bd42b5aa8100b8996675ed1bf34d9133320baaed7437545dd3b72fb",
+      "base_git_blob": "f68b573c97757fbcb66d4700c781692e9cbd21db",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record",
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p02-wgmma/processor/acceptance.json",
+      "size_bytes": 72999,
+      "sha256": "5aa45a3e6bd1920167874e97bbb75a91738c2a32933f39c1d638786ee381f92f",
+      "base_git_blob": "56f060959cc198d3129da8821c2ef219e7a2fff8",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record",
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p02-wmma/acceptance.json",
+      "size_bytes": 17015,
+      "sha256": "364f49da0eb495ffcd2ea9ff5a402396eab531db3422819a972ccb2f7be9396a",
+      "base_git_blob": "01ef4bbb7549db4b15a554a16058971618488f54",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record",
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/acceptance-lifecycle.json",
+      "size_bytes": 5684,
+      "sha256": "5bcedb8c6db3c81a9ca87fc654548ae7e01e860733ae1c1813c246442022abf9",
+      "base_git_blob": "ed3788377e0a1ad62c5701885d6bfb5f14b1bcbd",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record",
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p03-managed-matmul/acceptance-numerics.json",
+      "size_bytes": 5126,
+      "sha256": "400da6d933c4cd6d21506f0000626c4aa1324e305026890c435cc2ced2575ef4",
+      "base_git_blob": "9744c184a45214802b56f94cab940b2092a712cf",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record",
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/acceptance.json",
+      "size_bytes": 10024,
+      "sha256": "6cac806e58f0de5cded827fc9f272c7d3cb189584013722d917a75352b812dcc",
+      "base_git_blob": "d8a3f72f307583c74c0b1b240c5354453c252f5b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record",
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p03-operators/acceptance.original.json",
+      "size_bytes": 9696,
+      "sha256": "281ec293e83344ca67a4876a78e492048032ae6345fca220c383b449046aca40",
+      "base_git_blob": "c9b57b907febbe8d872129fb469e4d816ef32b8d",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/acceptance-dispatch.json",
+      "size_bytes": 14719,
+      "sha256": "96b377c36de40d463fb4c2e04609388011aaef3e340d816836f5a3f5dadd1018",
+      "base_git_blob": "eef4ce903ec56762215cb4c4720ff9ce75dca94f",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record",
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p04-executor/acceptance-numerics.json",
+      "size_bytes": 14098,
+      "sha256": "890b6eaa5ce8d44f3a9d975d747e1ac09caff0a66782ac8cc7c3b174678f375a",
+      "base_git_blob": "377ff494fa51826c18ebe1262dc279d72f9ea6e4",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record",
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p04-fixture/acceptance.json",
+      "size_bytes": 15127,
+      "sha256": "c1b0055aef8ceef1a8fe900cb8630d900686bdff8fec14e37a66b583bcad6838",
+      "base_git_blob": "44ab1516e6a7669ec46edb598037f7b5002cbc49",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record",
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p05-python/acceptance-binding.json",
+      "size_bytes": 24130,
+      "sha256": "1896bae3b59273f51448b554b965dc7d98d6beafcd446527c41c878a32c740c5",
+      "base_git_blob": "50015261f9dfd8f7dc132d658e44e686abe357c8",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p05-python/development/qualification/w09_a6/acceptance-pins-before.json",
+      "size_bytes": 7341,
+      "sha256": "98f4ed16747b02507b4bd6197e114717802eedc35257e09df1e10b4e00b47b64",
+      "base_git_blob": "730f07322312f9d3122f308f57b4098306641dbd",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/acceptance-compatibility.json",
+      "size_bytes": 12733,
+      "sha256": "ba8ae92ef2522e5251889c8cb830f1d10dbfee5ddaf7cdbccb905e89d5778308",
+      "base_git_blob": "4787b820ab2a380469f95c970381aef32ecc9011",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record",
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p05-torch-replay/acceptance-torch.json",
+      "size_bytes": 12999,
+      "sha256": "20b65657ca4af335a86a229560a7d5b5bacb22514c4a2d39e24bdb547fa7b22c",
+      "base_git_blob": "0153a7e6e234418ddfb0f0492eaacb4b4fb4b4d1",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record",
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/acceptance.json",
+      "size_bytes": 9840,
+      "sha256": "aced72e481acfea91677c50e8cc4c7245011e7d9208c52b18b83bc0bb4fa7293",
+      "base_git_blob": "8d94ca42a8c81315a6f66e52712ce07cb3f60d3f",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p06-baseline/reviews/acceptance-review.json",
+      "size_bytes": 25291,
+      "sha256": "cdc01ad08629b8044ebb4ca3254cb55a139bc7ff5fa19110ff40afab285a1f6b",
+      "base_git_blob": "43c8cfb6e6c574b89126aeb8f40cfd555d4facf9",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "acceptance_named_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/p06-serial-workspace/p06-a01-retained-baseline.json",
+      "size_bytes": 9966,
+      "sha256": "9d2991f2346886a7ba0a15f51d3a980d7c1da2225920ebc1b3e45329d91efc02",
+      "base_git_blob": "2fe7a7c46df5cac2cc78833f3cdcfeecdca9bb02",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/setup-accepted.json",
+      "size_bytes": 2371,
+      "sha256": "1879f316e4f9aa0dd68ab98ecaf354859d9935260e832c61c820fcf8ee87ba69",
+      "base_git_blob": "3cdddd4fdfc38b8e31ed553d376f375f98a22865",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/evidence/setup-validation.json",
+      "size_bytes": 4671,
+      "sha256": "a5d4f47850b49434e164162ee3f5bb7a7fb625e0d59f738c9b25376cab3f40fa",
+      "base_git_blob": "0901cf259a6c7442ff10bd260ab57616976093b3",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "roadmap_evidence_record"
+      ]
+    },
+    {
+      "path": "docs/project/roadmap.json",
+      "size_bytes": 21380,
+      "sha256": "3a6025806f6af6b73f14cb91fbd522cecab26024476afa9c557233515ca6f16e",
+      "base_git_blob": "48dd5fadc1cb65b3ff3431f8d361c228e5083839",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "project_policy"
+      ]
+    },
+    {
+      "path": "docs/review/change-impact.yaml",
+      "size_bytes": 11511,
+      "sha256": "489d1018c790bb6c383b774b119223889bb508be6c63db654d5c6c80520d0333",
+      "base_git_blob": "f9f5693f22acf7ffffa80a66c209cfe288d8dc91",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "project_policy"
+      ]
+    },
+    {
+      "path": "docs/review/code-review-policy.md",
+      "size_bytes": 9318,
+      "sha256": "99426ced05c04c1b14422f4fdacabcce3c680600461c4887b14e5eabf8b0587d",
+      "base_git_blob": "d9fea38a9526c1de19311eb6fbe97e739955ec03",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "project_policy"
+      ]
+    },
+    {
+      "path": "hw/scripts/beacon_calibration_u55c.json",
+      "size_bytes": 666162,
+      "sha256": "186daebb70a2b4e10814474d4dad157d517940b7fd4d5bcf1b21e9529caa7128",
+      "base_git_blob": "a5d74018054e58c1433313bcac3f3e636c91fa14",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "profiles/p02-tfr.json",
+      "size_bytes": 4081,
+      "sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+      "base_git_blob": "dca9dd952f612e4c906a14152b32031c3436896a",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "experiment_contract_or_pin",
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/common.mk",
+      "size_bytes": 170,
+      "sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+      "base_git_blob": "a936f7a6046fce72e89b239212d81b75f16d1372",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/common/cmd_processor.cpp",
+      "size_bytes": 27823,
+      "sha256": "c7090583f8dd1774d71755dc96f11845ff4d96340e51451643ec1ab16b14dd42",
+      "base_git_blob": "2e8c510594feb4ef028c4a2b6ff89487991eedbf",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/common/cmd_processor.h",
+      "size_bytes": 12851,
+      "sha256": "8efce8fe5ff166cc0742b3846dc37ae5dd93463a10e71c154959d4b2daacda11",
+      "base_git_blob": "de5199979ab0f914cffd95cff8c3f7fa0f5621f0",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/common/dram_sim.cpp",
+      "size_bytes": 14483,
+      "sha256": "aaf02d73ca7801d93c0fa010c4682e8e0476e7a55fa0104d4e48587f55dc40f1",
+      "base_git_blob": "4c019d38cedaa79868f71a75359a65e2636b1722",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/common/dram_sim.h",
+      "size_bytes": 1988,
+      "sha256": "8245f87d313387bdc7bc8eb8244395aade8c78c3aa8ace7df85543094f2839ac",
+      "base_git_blob": "cf260c132bbf8eb117e6940f032ed4cee5e0c9b0",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/common/mem.cpp",
+      "size_bytes": 23576,
+      "sha256": "2dc21e7ccb04e773b091f209652107bac673edbc6d6640cfca0418ad89a73cba",
+      "base_git_blob": "59f379b0f66a969e93b5b516bb645ec9fd187d38",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/common/mem.h",
+      "size_bytes": 9109,
+      "sha256": "c6fb3dc152b641edac6d1d373f7b7425d038a902b3ef2899d39f5aab00baf152",
+      "base_git_blob": "5687613d84f7842b61ad0e7bdf7dc399552cc016",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/common/perf_counter.h",
+      "size_bytes": 3979,
+      "sha256": "8635c832c9fc4ad60cf3bf21665a5bc22a6d3500b1f5c012dd056fb4c6907417",
+      "base_git_blob": "f701f42b60b547ec7f0b042407760f333d75146c",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/common/simobject.h",
+      "size_bytes": 49004,
+      "sha256": "0e0369f5ea1ba85f5e461e03b85e9723bb47f0e118499ba2b21a7923594f7004",
+      "base_git_blob": "6b7c422559d107338b7aaa64b827aa0f0eac298a",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/Makefile",
+      "size_bytes": 10608,
+      "sha256": "c719966647f32fef5421dd798a89d3eeddccd692e7c61046e5744b7a8e722403",
+      "base_git_blob": "d584e20ea0b36503c0c1e968481fb65250e37155",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/checked_counters.mk",
+      "size_bytes": 2365,
+      "sha256": "5080bbe88f3c6612258932953ada6d7ac983617bbba56806f37d3ab488b9ae99",
+      "base_git_blob": "7d157621b2d9b0bfb9ae12c6513058573b8d8c6e",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/cluster.cpp",
+      "size_bytes": 31886,
+      "sha256": "caf8ed6865e91d7f6b1cc7392ef1e5c2c410f13535a31236cbf7da7f80a39a6c",
+      "base_git_blob": "222fce9185bab9d1ea113f23c69c505e9c09292b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/constants.h",
+      "size_bytes": 9231,
+      "sha256": "d7d9a69db704475a698b2ae652874250dc866f4d3eacf8a07f7c65e55e180113",
+      "base_git_blob": "3a8fff8b79c4c1606e06fd74d400cce07fd22033",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/core.cpp",
+      "size_bytes": 65344,
+      "sha256": "f95003971a6052962b761b1ee8e815ead42f6a60fccf8157fa94c3ded3e44f31",
+      "base_git_blob": "bfc689bb258a77f3cd85fa5ce864511d2a51075e",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/core.h",
+      "size_bytes": 5800,
+      "sha256": "642af0adfae25333fc822289293a0d10273f58c8b1442a4acad63fad5a2f8609",
+      "base_git_blob": "41db531a9f6c64c464f8422ffc0c2a0285196dcf",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/csr_unit.cpp",
+      "size_bytes": 19085,
+      "sha256": "c35bd6a80120f76c9cf65076c736aaf577329285a74aac8c11c03f0ce829fc3d",
+      "base_git_blob": "229ccb7ab5387f3b288e86ec73203061aef79017",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/lsu_unit.cpp",
+      "size_bytes": 32227,
+      "sha256": "d1105256786bc7f2227d4c963a0b4368d84d480aba93fdf3188019ae466b30fb",
+      "base_git_blob": "837cb0f5c17af9503a7eac10565529a1938b693e",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/mem/cache.cpp",
+      "size_bytes": 137410,
+      "sha256": "c8eacd73616bb9f82533bbe45ba8a317524717948de08d73ecdb78dfb0c4a53d",
+      "base_git_blob": "c9128b0804e24d4f035c044159ad5d12614b0a4e",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/mem/cache.h",
+      "size_bytes": 4452,
+      "sha256": "839637e7738c774b02f1f556da86a4c716215696a70dd384d9e413ad6943653b",
+      "base_git_blob": "82bf8a111fc8c4f5e7356bcdaacd595a9a153ef9",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/mem/cache_cluster.cpp",
+      "size_bytes": 3697,
+      "sha256": "ad5e592d87234764df3186c8fdd9dbfc18b2a7dbdfdb207ba2cc6071d4e3fa44",
+      "base_git_blob": "5b8bddc2b85b5925dc86dad82d1fc87bb16e9998",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/mem/local_mem.cpp",
+      "size_bytes": 21068,
+      "sha256": "07aa27331d6ef604a432b99e70df12b7853787d4151cc1517092d76406cd4d33",
+      "base_git_blob": "69d3ee00d1126ac2231f95b8ba5e3abcdc92af43",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/mem/local_mem.h",
+      "size_bytes": 2652,
+      "sha256": "708446110e56f8cce88f50bcbca8fb8e1ff741a4019e16b4c9fda48d86f67635",
+      "base_git_blob": "f166149a8b4d0f726204d93cb3e4888b3942404d",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/mem/mem_coalescer.cpp",
+      "size_bytes": 10432,
+      "sha256": "9fcf09145f6fee29c5f5494fff155f2c0fa90e5f984893cb756c31d75b155a88",
+      "base_git_blob": "e7d0a6444957f5bacd7c8b24df6f6aecf09c43f6",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/mem/mem_coalescer.h",
+      "size_bytes": 2407,
+      "sha256": "3368578b678a354eb5a876d1121351cd22987c729514fcfb7bfe4d86795961c7",
+      "base_git_blob": "043b5692850155ac40993444285f93b27c3ee137",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/mem/memory.cpp",
+      "size_bytes": 5976,
+      "sha256": "4d73809cd63a0c768115c5de0205989f6f941446895de1831587002fc94ed474",
+      "base_git_blob": "50db7006ae1f881323b9f6c28dbac4a27e0c8326",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/mem/memory.h",
+      "size_bytes": 2042,
+      "sha256": "8cdd7e1945842b3f58f64bcb3fad1fd3e61555cbc82d9063996e53453a71301a",
+      "base_git_blob": "81dc66f701e30054a5a3e1383151dcbf523ed8a8",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/processor.cpp",
+      "size_bytes": 21493,
+      "sha256": "ecc3e0e51ecbbdb6b97b04eccd7fc5427fb25f87e5162ef33484262ab8da869f",
+      "base_git_blob": "5c0f62ca9c8ecd00dd2777f7e12aa0d9a153e175",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/processor.h",
+      "size_bytes": 2588,
+      "sha256": "af83a0fdb8d81ccf903dacc5957edb4933974229c28443c6fee7af1114c6083e",
+      "base_git_blob": "926e30bc2253078dc51fcfee2ca1d693c150cf9a",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/processor_impl.h",
+      "size_bytes": 4473,
+      "sha256": "99f91bd1a19c32849f68c72311bbd271aa1f85543bff07184eeb2ecbd200f6e6",
+      "base_git_blob": "237bf26faf6f41fdbd1106ca7f671f610b6b917b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/socket.cpp",
+      "size_bytes": 26124,
+      "sha256": "e30e63d3523411bad58eb49c8526aabe032bed584c8d044b677c18906cf844d4",
+      "base_git_blob": "74db221def4912cdb0cfcfc3742fd3d1fd64fa1e",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/tcu/tcu_tbuf.cpp",
+      "size_bytes": 7231,
+      "sha256": "eb20f6c16dd0915bebf39a0f85f7c11ee28a0ed681418385205b898f4b557463",
+      "base_git_blob": "6644b6bbf6123b1b450f1d7b91f7befe3a43428f",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/tcu/tcu_tbuf.h",
+      "size_bytes": 2667,
+      "sha256": "8b05c6d23de3d5fb5423d7ce93d1d1a1395a4d474856371281ed943abe8c2be3",
+      "base_git_blob": "91d3f32224f891f74b0909103c00edde36017040",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/tcu/tcu_unit.cpp",
+      "size_bytes": 75472,
+      "sha256": "b48d0e7fe5145292ad354168d3fe73b0bcdbbb508335656ce6fe07608af8fb5b",
+      "base_git_blob": "f3fb1d911dd3457c2289c57c65fb6cdd74632231",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/tcu/tcu_unit.h",
+      "size_bytes": 4561,
+      "sha256": "8546c4db53cc938c9a91ddcab002fa020195d39b93f9e35de3c21d9ecee28cb8",
+      "base_git_blob": "1759c0695346011a33037028a5298fd8912c3e0a",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sim/simx/types.h",
+      "size_bytes": 54373,
+      "sha256": "c09d02ca868b9b7fd28142c4c5aa922b9500975feddaf92695d220a5be6bd546",
+      "base_git_blob": "f5a1787a520908813b207834ec30af0203e8974e",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/common/ai_matmul_args.h",
+      "size_bytes": 4342,
+      "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+      "base_git_blob": "ca15667b5502a69ad6a360a86d5b8de2c98eae4c",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/common/ai_matmul_profile.h",
+      "size_bytes": 2675,
+      "sha256": "8b2eb9a819506227808537612672c08a574230736f13f840a9d83bbd35675680",
+      "base_git_blob": "f4216d84653d330c9f3bcfe3f07df4cc95bac082",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/kernel/ai/matmul.cpp",
+      "size_bytes": 1565,
+      "sha256": "ad3b6107f0eef91ec676412bc795ab70cd1c9f31647b2cea854de6234fe71d3e",
+      "base_git_blob": "2179cb1aa918f96f9717975d9e5cf2999c291dab",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/ai/contract.cpp",
+      "size_bytes": 10833,
+      "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+      "base_git_blob": "5b638bb494fd58b9a4b14888cba63026f0d29f16",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/ai/contract.h",
+      "size_bytes": 3285,
+      "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+      "base_git_blob": "c77277e247c727bbe21711ebf770372cd7ebcb4c",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/ai/runtime.cpp",
+      "size_bytes": 22983,
+      "sha256": "f55365110aed41cfaa290b69da8d91d9fa0ae04063dda591b94ae6ca626cf675",
+      "base_git_blob": "2b26d3af38bb7f49c1df4d977fb84f835f69d27f",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/ai/runtime.h",
+      "size_bytes": 3719,
+      "sha256": "aa76760f2e25c1969b86e08dacf7823c9b441dc82ef2c65f803bdc80ee9f657e",
+      "base_git_blob": "4a9aaa654ce4ea7a76236a19d25b7b90ee3d48fa",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/common/async_run.h",
+      "size_bytes": 2383,
+      "sha256": "a9f63b2a896c5e512f7c592c758618ea88b774c9dac4bca29e847e2e3719a24e",
+      "base_git_blob": "b033563668b795aa8a95432697f66d1e8759d79b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/common/buffer.cpp",
+      "size_bytes": 6787,
+      "sha256": "e0f4c550a7591f723d6cf18e43302fd1955a56e2c2ecc53e0f5eb037482c1366",
+      "base_git_blob": "7f536f02d33951ab9178651d94d5e84a8690cdcb",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/common/callbacks.h",
+      "size_bytes": 4532,
+      "sha256": "2105743e37226644faf52b4766738b85dd1de687af614fd548723bf08fee9a0d",
+      "base_git_blob": "4f032dfd72352baa04a3ba80cf23deb9dfa9b85b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/common/callbacks.inc",
+      "size_bytes": 3813,
+      "sha256": "13852934ab10776964fd2a68036ac8876303a60d2a3f3fce415186a3a13d10f2",
+      "base_git_blob": "f52108fda56d93ade279cd90d17d5a3b5b1e1c56",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/common/device.cpp",
+      "size_bytes": 66201,
+      "sha256": "9b32e38a9bbc0460a7f2af522fd5efdc96e1c06e359e28c5151285557f89d90a",
+      "base_git_blob": "91bef3c7a931b2f31871e59e2d4ad9aaace67d7f",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/common/module.cpp",
+      "size_bytes": 13216,
+      "sha256": "5d2efe2ba92801d3dbb1e836b077e7d966bc9a6b2beb8d29c50f89ce4ee67f06",
+      "base_git_blob": "07894f129c38d8a3dd2079ade000ac94f57070b6",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/common/perf.cpp",
+      "size_bytes": 43664,
+      "sha256": "fa6945cf379ae184d4e3edca5fcbc147d11f725e5ad3574ff3f89a16167099b3",
+      "base_git_blob": "8489a3a59ddfa779b0c73997d8ce03a7ecfc13b4",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/common/queue.cpp",
+      "size_bytes": 64122,
+      "sha256": "1d785262d128de3ffbf1feb32cc2b32f6457a6644df6ef9a04d4e8b4d45c962e",
+      "base_git_blob": "ec8676a0680697f67e22e10d7d5a17a131a66891",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/common/vortex2_internal.h",
+      "size_bytes": 44458,
+      "sha256": "3997d6ecca442eb04cf1df3129d0b90a9c0ec66015c798fc4d4510b93dd1f9ce",
+      "base_git_blob": "891658648b1f4594fc4633f720f6802c14ebab6a",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/include/vortex2.h",
+      "size_bytes": 27464,
+      "sha256": "9738cdf35a7344d6a974b4d78f7b02d3c1e7ce87cfe68ef668b03c8eb1832614",
+      "base_git_blob": "afe3f0ceb12a8dcb6a029ea7283991c5739b33e8",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "sw/runtime/simx/vortex.cpp",
+      "size_bytes": 7552,
+      "sha256": "0d890c95fecb67da26d23ea4a0af10ac328dddf110cd2575baff3aa5d4c905cb",
+      "base_git_blob": "31d7b2e83d8f7abdc18c980a4b4ed5a9743eaa9e",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/box_ref_128.png",
+      "size_bytes": 11243,
+      "sha256": "61f5cca3ee4d03cc4d0d162cc472f6b6aa98d7611ae5a58150f2384643cc65a7",
+      "base_git_blob": "3d35f27af8ba3e37e9c6e3f2a84fc67349d1f40b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/carnival_ref_128.png",
+      "size_bytes": 31559,
+      "sha256": "41d27496e6d745e25bf25bd9114f4cdfc7cc4b3c15b545e7d839c973502fa8c4",
+      "base_git_blob": "b78273550ff2fbc66a0998dceeee100f4275c060",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/coverflow_ref_128.png",
+      "size_bytes": 29341,
+      "sha256": "c3b700d69199f33762c650182278f0a02a2bb5a0dcba4f54bff525347b3546de",
+      "base_git_blob": "5e7b60e9503e85f272b26eafa81004985ce02a12",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/coverflow_ref_32.png",
+      "size_bytes": 2338,
+      "sha256": "cd6cf59aec9889fe8637864f000293a615f3574ca1177412288abec15edf30b1",
+      "base_git_blob": "480757d1e79d61bd4fb7e37aba505147e7a3f118",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/evilskull_ref_128.png",
+      "size_bytes": 22189,
+      "sha256": "1e32629727c8a8d345b8786537e47dab9e2234f9debbb9e27300bf2641484b44",
+      "base_git_blob": "3cebd421af611090935e58c05890de01e12b8071",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/evilskull_ref_32.png",
+      "size_bytes": 2069,
+      "sha256": "10e91b840f6db3d2d60e913b7ff5cee0e4b00c91bdf9991ed300eb98a93fc2b7",
+      "base_git_blob": "6a5d4e42855c413f3bb8f36c0e3c91c4e1baf392",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/filmtv_ref_128.png",
+      "size_bytes": 42711,
+      "sha256": "e6d760ed0ad0e399744ef8dd8e6e90cab751b57f898a37ca3defb9c5e1088a1c",
+      "base_git_blob": "a2055a14a75492f900429b843937af489144a44c",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/filmtv_ref_32.png",
+      "size_bytes": 3117,
+      "sha256": "041e4776317ebd6b6e48fb7590e36b4c47b589eae5f5f0d7f237f6234f541693",
+      "base_git_blob": "7ed2bd28ef3056262de6ca6c04dc7670bcc677ee",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/mouse_ref_128.png",
+      "size_bytes": 16152,
+      "sha256": "6ce151ee3644f63b48631fd923135683b62d3f8928609d4479faaa7a58ca914a",
+      "base_git_blob": "9e98dd26ec92b0128a7df2344efcb1b093aa28b9",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/mouse_ref_32.png",
+      "size_bytes": 1691,
+      "sha256": "39d5014b05aa4edc6c30a8c538d647ff862564beca017324cfbb3906b5e256bd",
+      "base_git_blob": "f88c25d3796d74421505a7ba883fcdcd1c4f0a3f",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/polybump_ref_128.png",
+      "size_bytes": 15206,
+      "sha256": "78f4ae54086aea7d00c18d2c510a2023fa1208064d93042820b2327718277e3f",
+      "base_git_blob": "de704ff3856006cd08f44597eb6ec6fe1c0a232a",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/polybump_ref_32.png",
+      "size_bytes": 1458,
+      "sha256": "e0032b9b2c6f9d912280839cfce5e5f73cc7baa3c9c2f585abc8cc26840711a0",
+      "base_git_blob": "30ef0b70990c65da38ba8832d2137510f3b6b0e8",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/scene_ref_128.png",
+      "size_bytes": 4042,
+      "sha256": "cbbb76553f3945a0300af23e46fb5dfaecf82b79657c0f5dbe6e3e3d6f869ccf",
+      "base_git_blob": "8e90c240dc66b07c53761f6d6ff401e643a56737",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/skybox_ref_128.png",
+      "size_bytes": 33118,
+      "sha256": "1eff44172cc0d640d6843f25e68ea0a2a99f52f4c69b222d0412d5bcafe125bd",
+      "base_git_blob": "f960a688d14f8b38b8ddac5e84b60add28e2fd44",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/skybox_ref_32.png",
+      "size_bytes": 2692,
+      "sha256": "9ce1cb5648a4e7dee721a15ef0d09342e983ad6f2af9bae8d71facd2fc6c1b98",
+      "base_git_blob": "bd5c097a9da256e447ef854b538b6f077620c2f5",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/tekkaman_ref_128.png",
+      "size_bytes": 37119,
+      "sha256": "884577b3ca465ce3bea6dd725b536d7e432078cd86985ea0ae19aac6355e2d73",
+      "base_git_blob": "e4ed758e6fb9b13c3acc927d52594ed259ced047",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/triangle_ref_128.png",
+      "size_bytes": 1097,
+      "sha256": "ba8aa8efed782b789e30c833e5a2b860b742d0b15101e54ffd1762b2928a8fa0",
+      "base_git_blob": "cec52f59fa0559bd22b2a2f927375cb4ebb041fa",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/triangle_ref_16.png",
+      "size_bytes": 166,
+      "sha256": "765b5546e696b21207bfe503b46eed2156377403b5f3ce9715ba6975d996ccb7",
+      "base_git_blob": "30fd0c6115931b11326164ea9b66f69920ac8281",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/triangle_ref_32.png",
+      "size_bytes": 282,
+      "sha256": "bb89a1ccf9489b612a160ea868ab40be444410ee2582d2237c8d922d682c5508",
+      "base_git_blob": "96b194aa6908f3423de8c66e60b2f7cdf3d9178f",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/triangle_ref_64.png",
+      "size_bytes": 530,
+      "sha256": "c2e5e4398916bfe77f018bb47d81b15ed6a5434b76c1fc015762f52851454e4e",
+      "base_git_blob": "c5f1de4c2c32bdd28a4e164b426e2f691cdb8d29",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/triangle_ref_8.png",
+      "size_bytes": 119,
+      "sha256": "8f99aefc8040d9f909a4e31e20b1e39d9ad9e7e36a0ce57350d8811f4575f09d",
+      "base_git_blob": "c60ecef04e190412464364689f178a7e45c1e34c",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/vase_ref_128.png",
+      "size_bytes": 43118,
+      "sha256": "f3c63b7d9c0954f44ae12ca2609ff9b0e573c3571690785cda3acc8ec42d65ba",
+      "base_git_blob": "45cacd0b53615fbf2cc26f0cc526389adbf7df26",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_draw3d/vase_ref_32.png",
+      "size_bytes": 3365,
+      "sha256": "0aaab93dce74e4d7d150fab53f085b25fe252770f5f4576573b120a3eee5e109",
+      "base_git_blob": "4cf427190a8741787ecda9782de6d9fb8ff732d8",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_raster/triangle_ref_128.png",
+      "size_bytes": 647,
+      "sha256": "6a5c01239e0b4c6b5566b86da6ff45e1e0c5e2966cdb234bc8c9e28a643b0588",
+      "base_git_blob": "4478389976c3c4b1681e7e6676f2266dd548a6d1",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_raster/triangle_ref_16.png",
+      "size_bytes": 115,
+      "sha256": "84d016b9e6f22aa8c82059e27c47db63fb713fa16f046cea400bb5ece8c12db2",
+      "base_git_blob": "7d4cad10515e04c80de2464d66cd86be0cb81e1b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_raster/triangle_ref_32.png",
+      "size_bytes": 160,
+      "sha256": "586094d7a1d894b1ea99f63da71986196c250fd5b9d8f3f1c3aff4a07067b3d9",
+      "base_git_blob": "1604d87182e2dbdc38bb10fb923280540f9bba50",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_raster/triangle_ref_64.png",
+      "size_bytes": 300,
+      "sha256": "794e3508250b16b923c59be499fb8140063c4bc29e846b6da6e8e45820626d56",
+      "base_git_blob": "9050545a210970bdb12057a338fa46393954f4a3",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_raster/triangle_ref_8.png",
+      "size_bytes": 99,
+      "sha256": "8f97c77ab321f79785682ea019f7e2eb82cdc24e55935bfe13e381013ebb031b",
+      "base_git_blob": "6a165632321568c46c2b23aecd3377c22bec4eb2",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/palette16_ref_g0.png",
+      "size_bytes": 106,
+      "sha256": "ce29d9e02fb273950274f44ab6ced6cf1a132df11ccd9cab31f9ebd8c97d1fc5",
+      "base_git_blob": "f269b3f631c906512c0a6192885abdf65e3a3aec",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/palette16_ref_g1.png",
+      "size_bytes": 106,
+      "sha256": "ce29d9e02fb273950274f44ab6ced6cf1a132df11ccd9cab31f9ebd8c97d1fc5",
+      "base_git_blob": "f269b3f631c906512c0a6192885abdf65e3a3aec",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/palette16_ref_g2.png",
+      "size_bytes": 106,
+      "sha256": "ce29d9e02fb273950274f44ab6ced6cf1a132df11ccd9cab31f9ebd8c97d1fc5",
+      "base_git_blob": "f269b3f631c906512c0a6192885abdf65e3a3aec",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/palette4_ref_g0.png",
+      "size_bytes": 94,
+      "sha256": "bb35cacb7cd0b2aef4c673e1b32ff0c2d94b502b157baf3db829ca4f2350b7b9",
+      "base_git_blob": "3449671cea2d5aab28a7ad8898ee76758367210b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/palette4_ref_g1.png",
+      "size_bytes": 94,
+      "sha256": "bb35cacb7cd0b2aef4c673e1b32ff0c2d94b502b157baf3db829ca4f2350b7b9",
+      "base_git_blob": "3449671cea2d5aab28a7ad8898ee76758367210b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/palette4_ref_g2.png",
+      "size_bytes": 94,
+      "sha256": "bb35cacb7cd0b2aef4c673e1b32ff0c2d94b502b157baf3db829ca4f2350b7b9",
+      "base_git_blob": "3449671cea2d5aab28a7ad8898ee76758367210b",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/palette64_ref_g0.png",
+      "size_bytes": 871,
+      "sha256": "b78590ca193167049cf4eb822a48db73228e674c151fc59aba83606d962c46bf",
+      "base_git_blob": "4eeb3b725cb260ec65f99a97cbdea938de918b82",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/palette64_ref_g1.png",
+      "size_bytes": 871,
+      "sha256": "b78590ca193167049cf4eb822a48db73228e674c151fc59aba83606d962c46bf",
+      "base_git_blob": "4eeb3b725cb260ec65f99a97cbdea938de918b82",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/palette64_ref_g2.png",
+      "size_bytes": 871,
+      "sha256": "b78590ca193167049cf4eb822a48db73228e674c151fc59aba83606d962c46bf",
+      "base_git_blob": "4eeb3b725cb260ec65f99a97cbdea938de918b82",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/soccer_ref_g0.png",
+      "size_bytes": 5762,
+      "sha256": "76dd4e5348d7b4727df020ec729edd8ab806ab7fcb411a242fbac36c69011ec4",
+      "base_git_blob": "78d255e30656d07ff4ad67886631d9064dd82349",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/soccer_ref_g1.png",
+      "size_bytes": 5762,
+      "sha256": "76dd4e5348d7b4727df020ec729edd8ab806ab7fcb411a242fbac36c69011ec4",
+      "base_git_blob": "78d255e30656d07ff4ad67886631d9064dd82349",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/soccer_ref_g2.png",
+      "size_bytes": 5762,
+      "sha256": "76dd4e5348d7b4727df020ec729edd8ab806ab7fcb411a242fbac36c69011ec4",
+      "base_git_blob": "78d255e30656d07ff4ad67886631d9064dd82349",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/toad_ref_f0.png",
+      "size_bytes": 6003,
+      "sha256": "372cf814a9ce593e47f5ee1692245e0d99d738f5977097182cd55b665678291f",
+      "base_git_blob": "baca56d8e949d01f4675a7a51e976053fbc41d4c",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/toad_ref_f1.png",
+      "size_bytes": 3767,
+      "sha256": "1b1878297b86ba4ddcbd7d639ef249e433ddd9f83801a345e68cc4981c61f62a",
+      "base_git_blob": "756d48086317a59e4b1fb2bed1c8127c5a38e4cd",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/toad_ref_f2.png",
+      "size_bytes": 3253,
+      "sha256": "0d4321039bba4e62534b72192bb06ced89ec194f2c70c753428a67ffb08c42ae",
+      "base_git_blob": "48b42eef85f5e91bd3826d9ac317e9f0cd022a5c",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/toad_ref_f3.png",
+      "size_bytes": 2686,
+      "sha256": "8d6d236c1bc32cfa2c12198a776194ddbdcda99d95cd823c66acd1f8c2192804",
+      "base_git_blob": "f0210788dd617f5a469eaf0e2f7af8bf993f16a3",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/toad_ref_f4.png",
+      "size_bytes": 4424,
+      "sha256": "8ea418429114cedbc23124604706084e414c5f24ea315ce97421322b4ef6fb10",
+      "base_git_blob": "92059ae9c3942f559d377c77be3a18ac412c40b1",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/toad_ref_f5.png",
+      "size_bytes": 3824,
+      "sha256": "2b39dfd2b4b4413ce014868e1bac03ed391edcddcdd47da4afe7982fa76863c1",
+      "base_git_blob": "a50d914179e32e06e49488a35f4256f4c1d66b2c",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/graphics/gfx_tex/toad_ref_f6.png",
+      "size_bytes": 1086,
+      "sha256": "d8d29d38077ecc039f755bb33c26d7d3751f91f1f5499abd326a77975061e150",
+      "base_git_blob": "9800988b881595ad51cf4b1ffe353325b1057dff",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "policy_protected_golden"
+      ]
+    },
+    {
+      "path": "tests/regression/ai_bench_common/counters.h",
+      "size_bytes": 6002,
+      "sha256": "ef71a80f2624159cac03e42a60c8b3671489ee1ae89e4e9bd27941a143047acf",
+      "base_git_blob": "c57f04a41e4fb9d5f8d8c48b921e1846f1e2edb8",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "tests/regression/ai_counter_preflight/Makefile",
+      "size_bytes": 1330,
+      "sha256": "1fefa29e176fff3ce05f1a606aebabc434f83fbaba6704afc14b9728c50f4bd2",
+      "base_git_blob": "f83b1f14b7cbfd26ee06290802ec550f066e14a1",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "tests/regression/ai_counter_preflight/backend.mk",
+      "size_bytes": 858,
+      "sha256": "d71ba6fe3f653a19e42aea6d52c605e9d41d92f99fc1aa8ef1448fc03e72a326",
+      "base_git_blob": "ad51603ca71f248a3a35be83083537e145a24e42",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "tests/regression/ai_counter_preflight/dependency_model.mk",
+      "size_bytes": 108,
+      "sha256": "4d53b1b35b2468fce76ec659ecf66c2b62e88ebe36fa37c1c0f51c03c9673715",
+      "base_git_blob": "edc5aaa98df1d4b0911c591184363e52deeb7b75",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "tests/regression/ai_counter_preflight/hooks.cpp",
+      "size_bytes": 15094,
+      "sha256": "7744cfbb48b6dda21acda4db582fcf4f4b7a519670525d0df887b7296739c7e4",
+      "base_git_blob": "94e5e55ae49c0b66533e91fec00aa4ac5c17289e",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "tests/regression/ai_counter_preflight/hooks.h",
+      "size_bytes": 3046,
+      "sha256": "1fba0275808ec30e42dced1c69fb8b47d1d78dd0ecfc13391f9e0d93bbaf0ccc",
+      "base_git_blob": "4ff11b70405210ce2bfda7cbb673dd28b9337e49",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "tests/regression/ai_counter_preflight/main.cpp",
+      "size_bytes": 27523,
+      "sha256": "721da20bffa4aed127dd5694af7263f37010164e5d836d13e5348afa48c3fe02",
+      "base_git_blob": "f98ce2f3a616f13c4ae19b220a9700f3252536cb",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "tests/regression/ai_warm_workspace/main.cpp",
+      "size_bytes": 20984,
+      "sha256": "0bec5ac729b3aa6c5ffcf7ff95084d84e4d47d54e470d21e234d00aa16556ce0",
+      "base_git_blob": "25ecceee37a77cfbf5a4ecb1dca36186b3e412d3",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "tests/regression/ai_warm_workspace/observer.cpp",
+      "size_bytes": 9647,
+      "sha256": "ac12eddcbfb2cf04981a8b8a945134ce763b93cd881fe5da549d28b7ed02021c",
+      "base_git_blob": "bf68f0cb25f52188a6e2537532c2cae2b1b1b3d1",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    },
+    {
+      "path": "tests/regression/ai_warm_workspace/observer.h",
+      "size_bytes": 1777,
+      "sha256": "7c5236827536b9faf286f6cbfb3e13459b7f43aa895207213125cc67299d488e",
+      "base_git_blob": "80a82411a567ed955bb2842e1c4737c98d80082a",
+      "mode": "100644",
+      "equals_base_bytes": true,
+      "roles": [
+        "qualified_measurement_source"
+      ]
+    }
+  ],
+  "limitations": [
+    "Preserved source and descriptor bytes do not establish runtime, toolchain, host-timing, native numerical or performance equivalence.",
+    "Five submodules remain uninitialized; downloaded dependency contents were neither obtained nor qualified.",
+    "Existing require-call AST preservation does not by itself verify changed control flow; independent production review remains separate.",
+    "No full governance, native experiment, GPU build, download, commit, push or final publication readback occurred in this review.",
+    "P06-A02/A03 remain open, P01 remains blocked, and P07 through P11 remain not_started."
+  ]
+}

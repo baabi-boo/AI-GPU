@@ -24,28 +24,30 @@ accelerator performance.
 
 **Current work: P06-T01 — execute the qualified warm-workspace experiment.**
 The frozen experiment remains **unstarted: 24 processes, 792 launches and
-25,344 checked FP32 words**. Its hosted launch gate now requires independent
-reconciliation of the exact revision's retained governance original, in addition
-to successful provider run, attempt, job and step observations. The
-[development audit](docs/project/p06-governance-replay-audit.md),
+25,344 checked FP32 words**. The
+[launch-readiness audit](docs/project/p06-launch-readiness-audit.md) and
+[evidence packet](docs/project/evidence/p06-launch-readiness/README.md) document
+implemented fixes that distinguish confirmed nonstarts from unresolved launch
+failures, preserve observations and counts through cooperative cancellation and
+bounded finalization recovery, and repeat the unchanged capacity gate immediately
+before native supervision. These development checks establish no new native or
+performance acceptance.
+
+Each selected revision requires its own full strict governance result and
+independent original replay before native admission. The
+[earlier governance audit](docs/project/p06-governance-replay-audit.md),
 [reader contract](docs/designs/governance_artifact_replay_v1.md) and
-[evidence packet](docs/project/evidence/p06-governance-replay/README.md) describe
-the implemented verification and its limits.
+[evidence packet](docs/project/evidence/p06-governance-replay/README.md) retain
+the exact provider binding and trusted-source replay details.
 
-The reader checks bounded ZIP structure, complete ordered test events, source
-and environment receipts, retained logs, and canonical discovery from an
-explicitly trusted checkout. It executes no archive content or test bodies.
-The provider helper binds the original bytes to the exact artifact, revision,
-run and attempt before native admission. Each selected revision requires its
-own complete strict governance result; the independently replayed historical
-`f3123513` original qualifies that source only.
-
-Verify or configure private control delivery and the public age recipient, then
-run one complete attempt after unchanged **15 GiB free-disk and 4 GiB
-available-memory admission**. Preserve complete or explicitly partial originals
-through encrypted delivery. After private decryption, restore and independently
-replay a complete native original from trusted reader code, then evaluate the
-frozen performance predicates. Follow the
+Next, verify or configure private delivery of the exact historical control
+archive and the public age recipient, then run one complete attempt on a runner
+meeting the unchanged **15 GiB free-disk and 4 GiB available-memory** gates.
+These inputs were not supplied to this session; live provider secrets were not
+inspected. Preserve complete or explicitly partial originals through encrypted
+delivery. After private restoration, independently replay a complete native
+original from trusted reader code before evaluating the frozen performance
+predicates. Follow the
 [governance replay guide](docs/project/governance-artifact-replay.md) and
 [qualified warm handoff](docs/project/p06-qualified-warm-handoff.md).
 

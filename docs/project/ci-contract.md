@@ -7,47 +7,74 @@ actual results and unresolved work belong in [status](status.md) and reviewed
 [evidence records](evidence/README.md). Start from the [README](../../README.md)
 or [documentation index](../index.md) for the wider development path.
 
-## Lightweight project workflow
+## Project governance workflow
 
 The additive [Project Governance workflow](../../.github/workflows/project-governance.yml)
-runs the following commands from the **source root**:
+starts with the following checks from the **source root**:
 
 ```sh
 python3 ci/project/preflight.py --tier governance
 python3 ci/project/check_project.py
 python3 ci/project/check_baseline_packets.py
-python3 -m unittest discover -s ci/project -p 'test_*.py'
 ```
+
+It then installs pinned native CMake **3.22.6**, prepares the checked environment
+with [governance_env.py](../../ci/project/governance_env.py), and invokes the
+[strict runner](../../ci/project/governance_run.py) through the private
+`venv/bin/python3` with its required `--environment-receipt`. Follow the
+[governance runbook](governance-runbook.md) for the complete commands, exact clean
+environment, fresh external output paths and pipeline failure handling.
 
 | Check | What it establishes | Important limit |
 |---|---|---|
 | Preflight | Read-only source/pin, tool, submodule, resource and image inventory | Missing GPU tools/submodules are optional for governance; presence alone does not prove a usable execution environment |
 | Project validator | Roadmap structure, dependency/gate references, evidence metadata and hashes, protected image, and scoped local documentation links | It does not execute recorded commands, authenticate a measurement or grant approval |
 | Published baseline consistency | Retained baseline metadata, integrity and required native-record relationships | It does not rerun workloads or grant project-gate acceptance |
-| Unit suite | Positive/negative governance fixtures, cross-document contracts, source-only configuration plumbing and bounded host tensor-oracle tests | These do not execute GPU workloads or native RTL, or provide physical measurements |
+| Checked environment | Interpreter/tool identities and native prerequisite probes | A ready receipt does not establish suite execution |
+| Strict unit suite | Complete canonical governance fixtures, cross-document contracts, source-only configuration plumbing and bounded host tensor-oracle tests | These do not execute GPU workloads or native RTL, or provide physical measurements |
 
-The Python tooling uses Python's standard library and Git. The unit suite also
-requires a Linux host and a native C++17 compiler (`c++`, `g++` or `clang++` on
-`PATH`) with UndefinedBehaviorSanitizer (UBSan) support and runtime libraries.
+Ordinary `python3 -m unittest discover -s ci/project -p 'test_*.py'` is a
+development check and cannot qualify an exact revision. Qualification requires
+one uninterrupted, unfiltered invocation of the full discovered manifest:
+every ID starts once in order, succeeds and stops once; subtests also succeed,
+with zero skips, expected failures, unexpected successes, errors or failures.
+Require exit zero and `governance_passed: true`, backed by complete events and
+receipts, clean/stable source and checked/stable interpreter and tools.
+
+Retain the complete packet, including the manifest, events, preparation and
+completion receipts, internal and outer logs, and source/tool identities. For
+qualified warm hosted admission, retain the original artifact and provider
+identity for the exact revision, run and current attempt; verify it against an
+independently selected digest and perform
+[independent replay](governance-artifact-replay.md) against a clean exact checkout.
+CI attempts upload even after failure and retains artifacts for
+30 days; timeout or runner loss can prevent upload. Preserve failed/incomplete
+attempts. Historical or partial results cannot qualify changed source.
+
+The checked environment requires GIL-enabled Linux CPython **3.12.x** on a
+little-endian x86-64 glibc host and the runbook's native tools and probes,
+including C++17 and UndefinedBehaviorSanitizer (UBSan) support.
 Tensor host tests compile and run in temporary directories under explicit time
 and resource budgets. No initialized GPU submodules, RISC-V compiler, Verilator,
-vendor tools or board are needed. The workflow uses
-GitHub-hosted `ubuntu-24.04`, explicitly checks system **Python 3.12**, and has a
-**60-minute job timeout**. It does not install GPU dependencies. Checkout still
-requires ordinary GitHub access; the local validation commands themselves are
-offline. Follow the [developer guide](developer-guide.md) for resource requirements
-and other tiers.
+vendor tools or board are needed. The workflow uses GitHub-hosted `ubuntu-24.04`
+and a **90-minute total job budget**, including preparation, validators, the
+suite and artifact upload. It does not install GPU dependencies. Checkout
+requires GitHub access and the pinned CMake installation requires PyPI access;
+environment preparation is offline. Follow the [developer guide](developer-guide.md)
+for resource requirements and other tiers.
 
-The execution window increased from 40 to 60 minutes after the retained
+The historical increase from 40 to 60 minutes followed the retained
 [baseline cancellation](evidence/p06-managed-preflight-replay/hosted/baseline-57248-governance.json)
 at source `57248e73`, run `45085300201`. That run stopped while its suite was
 still executing, with no complete-suite result. Its 2,445-second observed
 interval is consistent with the former 40-minute deadline; attributing the
-cancellation to that deadline is an inference. The change preserves existing
-commands, coverage and acceptance thresholds. A larger execution window neither
-guarantees completion nor turns the cancelled run into a pass. The
+cancellation to that deadline is an inference. The
 [independent CI review](evidence/p06-managed-preflight-replay/agents/w04_a05.md)
-records the reviewed workflow and timeout assertions.
+records that change. The [runbook](governance-runbook.md) explains the later
+60-to-90-minute increase: a retained 3,555.657-second suite left only 44.343
+seconds for other steps under the former budget. These budget changes do not
+reduce coverage or acceptance thresholds, guarantee completion, or turn a
+cancelled run into a pass.
 
 Governance preflight inventories host compilers as optional and does not test
 C++17 or UBSan support. Its success alone does not establish readiness to run
@@ -118,8 +145,8 @@ project workflow's path filter. Its event defaults select SimX smoke coverage
 for pushes and SimX/RTL smoke/full coverage for pull requests. **A toolchain cache
 miss overrides those push/PR defaults to broad driver/tier coverage**, and an
 indeterminate change base can also broaden driver selection. A documentation
-change therefore does not guarantee a small inherited run. The 60-minute
-governance timeout does not bound other workflows, downloads or test matrices.
+change therefore does not guarantee a small inherited run. The 90-minute
+governance budget does not bound other workflows, downloads or test matrices.
 
 The `full` setup profile builds the pinned SST **core** from source, because its
 installation embeds absolute prefix paths. The hostless integration uses only
