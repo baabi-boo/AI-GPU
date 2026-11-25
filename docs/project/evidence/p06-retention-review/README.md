@@ -15,6 +15,16 @@ archives and process records remain synthetic. Successful retention inspection
 can preserve a failed or partial attempt without making it a complete native
 original.
 
+## Hosted failure and directory-fixture correction
+
+The first published continuation, `0c32d04c5d37679bb0273f07a50bd26a2e21a5e8`,
+completed its full strict invocation but failed one directory-replacement test.
+The [post-publication record](followups/README.md) preserves the original failed
+run, the deterministic fixture correction, independent reviews and focused
+validation. Production reader/restore code and all acceptance gates remain
+unchanged. These follow-ups belong to the same 60 assignments; they do not add
+agents or replace the original reports and validation artifacts below.
+
 ## Audited base and changed-source qualification
 
 The audited base is `25543e1cf96530264746c0e2d130018dd0dba465`, tree
@@ -84,10 +94,12 @@ claim of a final published commit. Later documented observations, if present,
 must be read at their own scope; an older whole-file review hash is not silently
 assigned to revised documentation.
 The [separate follow-up observation](validation/source-identity-followup.json)
-records the later status/backlog wording corrections identified by A49. The
-other 25 inventoried paths, including all production/test/workflow files,
-remain unchanged. The original A46 inventory is preserved without rewriting
-its observation time or earlier documentation identities.
+records the pre-publication status/backlog wording corrections identified by
+A49. At that observation, the other 25 inventoried paths, including all
+production/test/workflow files, remained unchanged. The later directory-fixture
+correction has its own [source observation](followups/source-identities.json).
+The original A46 inventory is preserved without rewriting its observation time
+or earlier identities.
 
 ## Verification accounting
 
@@ -149,8 +161,12 @@ After that focused invocation, [A39](reviews/A39.md) added only the retention
 contract path to the governance workflow's two filters and existing test oracle.
 Its separate existing workflow module passed **12 tests**. A36's aggregate
 531-file inventory therefore describes the source before that later oracle
-edit; the production files and all 137 executed test bodies remain unchanged.
-The focused invocations are not added into a full-suite result.
+edit. At that pre-publication observation, the production files and all 137
+executed test bodies remained unchanged. The subsequent directory-fixture
+correction changes one of those test bodies, as recorded in the
+[separate follow-up](followups/README.md); A36's original execution is not
+reassigned to the corrected bytes. The focused invocations are not added into
+a full-suite result.
 [A47](reviews/A47.md) independently checked the exact three additions and the
 base-policy **R2 CI-enforcement** classification. The earlier narrower R1
 observation does not cover this workflow change. Final publication also requires

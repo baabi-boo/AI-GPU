@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Synthetic, offline restore fixtures; no ciphertext or native qualification."""
 
-from contextlib import redirect_stderr, redirect_stdout
+from contextlib import ExitStack, redirect_stderr, redirect_stdout
 import hashlib
 import io
 import json
@@ -252,6 +252,7 @@ class QualifiedWarmRestoreTests(unittest.TestCase):
         for index, change in enumerate(("bytes", "extra", "link", "directory")):
             output = self.root / ("changed-" + str(index))
             changed = False
+            directory_identities = []
 
             def mutate(root_fd, directories, files):
                 nonlocal changed
@@ -265,14 +266,26 @@ class QualifiedWarmRestoreTests(unittest.TestCase):
                         (output / "private/private.raw").unlink()
                         (output / "private/private.raw").symlink_to(self.archive)
                     else:
-                        (output / "private/empty").rmdir()
-                        (output / "private/empty").mkdir(mode=0o700)
+                        empty = output / "private/empty"
+                        old_fd = os.open(empty, os.O_RDONLY | os.O_DIRECTORY)
+                        held.callback(os.close, old_fd)
+                        before = os.fstat(old_fd)
+                        empty.rmdir()
+                        empty.mkdir(mode=0o700)
+                        after = empty.stat()
+                        directory_identities.extend(((before.st_dev, before.st_ino),
+                                                     (after.st_dev, after.st_ino)))
                 return original(root_fd, directories, files)
 
-            with self.subTest(change=change), mock.patch.object(restore, "_verify_tree", side_effect=mutate), \
-                 self.assertRaises(restore.RestoreError):
-                self.run_restore(output_dir=output)
-            self.assert_incomplete(output)
+            with self.subTest(change=change), ExitStack() as held:
+                with mock.patch.object(restore, "_verify_tree", side_effect=mutate), \
+                     self.assertRaises(restore.RestoreError) as caught:
+                    self.run_restore(output_dir=output)
+                if change == "directory":
+                    self.assertEqual(len(directory_identities), 2)
+                    self.assertNotEqual(*directory_identities)
+                    self.assertEqual(caught.exception.code, "output-changed")
+                self.assert_incomplete(output)
 
     def test_renamed_owned_root_never_cleans_up_an_unrelated_replacement(self):
         displaced = self.root / "displaced-owned"

@@ -1,0 +1,333 @@
+{
+  "actual_replacement": {
+    "control": "actual_replacement",
+    "errors": 0,
+    "failures": 0,
+    "fd_identities_after": {
+      "0": [
+        31,
+        9,
+        8630,
+        259
+      ],
+      "1": [
+        12,
+        8935300,
+        4480,
+        0
+      ],
+      "2": [
+        12,
+        8935301,
+        4480,
+        0
+      ]
+    },
+    "fd_identities_before": {
+      "0": [
+        31,
+        9,
+        8630,
+        259
+      ],
+      "1": [
+        12,
+        8935300,
+        4480,
+        0
+      ],
+      "2": [
+        12,
+        8935301,
+        4480,
+        0
+      ]
+    },
+    "held_close_count": 1,
+    "held_fd": 7,
+    "held_initial_identity": [
+      41,
+      76055
+    ],
+    "held_open": false,
+    "held_path": "/home/agent/ai-gpu-d37f66a85d88/tmp/a35-post-publication/p06-restore-1q2g2xk8/changed-3/private/empty",
+    "hooks_restored": true,
+    "log": "/home/agent/ai-gpu-d37f66a85d88/tmp/a35-post-publication/actual_replacement.log",
+    "log_sha256": "5b05692b8e1a047980c8f9499143cfc7ecfe2f697be5521d6f11e601856a1dc7",
+    "no_descriptor_change": true,
+    "restores": [
+      {
+        "error_code": "output-verification-failed",
+        "exception_type": "RestoreError",
+        "output_name": "changed-0",
+        "returned": false
+      },
+      {
+        "error_code": "output-verification-failed",
+        "exception_type": "RestoreError",
+        "output_name": "changed-1",
+        "returned": false
+      },
+      {
+        "error_code": "filesystem-failed",
+        "exception_type": "RestoreError",
+        "output_name": "changed-2",
+        "returned": false
+      },
+      {
+        "error_code": "output-changed",
+        "exception_type": "RestoreError",
+        "output_name": "changed-3",
+        "returned": false
+      }
+    ],
+    "setup_fault_injected": false,
+    "skips": 0,
+    "subtests": [
+      {
+        "params": {
+          "change": "bytes"
+        },
+        "passed": true
+      },
+      {
+        "params": {
+          "change": "extra"
+        },
+        "passed": true
+      },
+      {
+        "params": {
+          "change": "link"
+        },
+        "passed": true
+      },
+      {
+        "params": {
+          "change": "directory"
+        },
+        "passed": true
+      }
+    ],
+    "test_success": true,
+    "tests_run": 1,
+    "verification_observations": [
+      {
+        "held_identity": [
+          41,
+          76055
+        ],
+        "identities_differ": true,
+        "old_link_count": 0,
+        "replacement_identity": [
+          41,
+          76062
+        ]
+      }
+    ]
+  },
+  "command": [
+    "/home/agent/ai-gpu-d37f66a85d88/governance-environment/venv/bin/python3",
+    "-B",
+    "/home/agent/ai-gpu-d37f66a85d88/tmp/a35-post-publication/probe.py"
+  ],
+  "date_utc": "2026-11-25",
+  "diff_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check",
+      "--",
+      "ci/project/test_p06_qualified_warm_restore.py"
+    ],
+    "exit_code": 0
+  },
+  "elapsed_seconds": 0.05509647300641518,
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/home/agent/ai-gpu-d37f66a85d88/tmp/a35-post-publication"
+  },
+  "followup_limits": [
+    "The coordinator owns the complete 19-test restore module run. A35 did not run that module or the full suite.",
+    "No source file, public report, phase gate, or production policy was changed by A35.",
+    "A57 independently reviews production and contract semantics; this report concerns the corrected test fixture and assertion placement."
+  ],
+  "head": "0c32d04c5d37679bb0273f07a50bd26a2e21a5e8",
+  "limits": [
+    "Hosted failure inode values were not observed here; inode reuse remains inferred for that historical failure.",
+    "Only one actual replacement and one injected setup-fault control were performed; this is focused synthetic host evidence.",
+    "The expected failing setup-fault control is not represented as a passing test."
+  ],
+  "probe_invocations": 1,
+  "probe_passed": true,
+  "published_test_sha256": "fee089dbe7823d04ecfe7f2dc8f3e378a2e8c49a9fef307e0ad721cd93d646fe",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "review_decision": "No blocking test-validity finding.",
+  "reviewed_test_diff_sha256": "76e9ffaabca70dce80aa9ad7452c5e23d554179b00a688e7421307f41a068f53",
+  "reviewer": "A35",
+  "same_assignment_followup": true,
+  "scope": "One probe invocation, two distinct controls of the exact changed test method; no full module or suite run.",
+  "script_sha256": "7deb9b1f9a14cffb0d9ba9b85d96bdb92f9731e6613dc5979bb1f43b02d02b80",
+  "setup_fault": {
+    "control": "setup_fault",
+    "errors": 0,
+    "failures": 1,
+    "fd_identities_after": {
+      "0": [
+        31,
+        9,
+        8630,
+        259
+      ],
+      "1": [
+        12,
+        8935300,
+        4480,
+        0
+      ],
+      "2": [
+        12,
+        8935301,
+        4480,
+        0
+      ]
+    },
+    "fd_identities_before": {
+      "0": [
+        31,
+        9,
+        8630,
+        259
+      ],
+      "1": [
+        12,
+        8935300,
+        4480,
+        0
+      ],
+      "2": [
+        12,
+        8935301,
+        4480,
+        0
+      ]
+    },
+    "held_close_count": 1,
+    "held_fd": 7,
+    "held_initial_identity": [
+      41,
+      76109
+    ],
+    "held_open": false,
+    "held_path": "/home/agent/ai-gpu-d37f66a85d88/tmp/a35-post-publication/p06-restore-lzlftsmg/changed-3/private/empty",
+    "hooks_restored": true,
+    "log": "/home/agent/ai-gpu-d37f66a85d88/tmp/a35-post-publication/setup_fault.log",
+    "log_sha256": "1fe1b1047340d88d2a61609d9c919cc4d9129a5940a5a45e6337ad47d579fe92",
+    "no_descriptor_change": true,
+    "restores": [
+      {
+        "error_code": "output-verification-failed",
+        "exception_type": "RestoreError",
+        "output_name": "changed-0",
+        "returned": false
+      },
+      {
+        "error_code": "output-verification-failed",
+        "exception_type": "RestoreError",
+        "output_name": "changed-1",
+        "returned": false
+      },
+      {
+        "error_code": "filesystem-failed",
+        "exception_type": "RestoreError",
+        "output_name": "changed-2",
+        "returned": false
+      },
+      {
+        "error_code": "filesystem-failed",
+        "exception_type": "RestoreError",
+        "output_name": "changed-3",
+        "returned": false
+      }
+    ],
+    "setup_fault_injected": true,
+    "skips": 0,
+    "subtests": [
+      {
+        "params": {
+          "change": "bytes"
+        },
+        "passed": true
+      },
+      {
+        "params": {
+          "change": "extra"
+        },
+        "passed": true
+      },
+      {
+        "params": {
+          "change": "link"
+        },
+        "passed": true
+      },
+      {
+        "exception_type": "AssertionError",
+        "frames": [
+          {
+            "file": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/case.py",
+            "function": "testPartExecutor",
+            "line": 58,
+            "source": "yield"
+          },
+          {
+            "file": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/case.py",
+            "function": "subTest",
+            "line": 539,
+            "source": "yield"
+          },
+          {
+            "file": "/home/agent/ai-gpu-d37f66a85d88/AI-GPU/ci/project/test_p06_qualified_warm_restore.py",
+            "function": "test_changed_restored_bytes_and_unexpected_entries_are_detected",
+            "line": 285,
+            "source": "self.assertEqual(len(directory_identities), 2)"
+          },
+          {
+            "file": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/case.py",
+            "function": "assertEqual",
+            "line": 885,
+            "source": "assertion_func(first, second, msg=msg)"
+          },
+          {
+            "file": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/case.py",
+            "function": "_baseAssertEqual",
+            "line": 878,
+            "source": "raise self.failureException(msg)"
+          }
+        ],
+        "message": "0 != 2",
+        "outside_restore_mapper": true,
+        "params": {
+          "change": "directory"
+        },
+        "passed": false
+      }
+    ],
+    "test_success": false,
+    "tests_run": 1,
+    "verification_observations": []
+  },
+  "source_after": {
+    "ci/project/p06_qualified_warm_encrypt.py": "4beadf5cd67fe8847fb00b881a45661e710b6275fb5d5e5baa0a52a1440de275",
+    "ci/project/p06_qualified_warm_restore.py": "21bc047ef9b76232aa79ce5199b82fca48cb6611aab4b61018f8ff9f08bbbf1d",
+    "ci/project/p06_qualified_warm_retention.py": "4645e2a4aac840c87b467b08cb2d338818739d6fbdbbd3ec95a1103dfa11bcbe",
+    "ci/project/test_p06_qualified_warm_restore.py": "9ef2cb211135a3b4f024056208492a9aef389823d452174c7bfdd8efcab15fb6"
+  },
+  "source_before": {
+    "ci/project/p06_qualified_warm_encrypt.py": "4beadf5cd67fe8847fb00b881a45661e710b6275fb5d5e5baa0a52a1440de275",
+    "ci/project/p06_qualified_warm_restore.py": "21bc047ef9b76232aa79ce5199b82fca48cb6611aab4b61018f8ff9f08bbbf1d",
+    "ci/project/p06_qualified_warm_retention.py": "4645e2a4aac840c87b467b08cb2d338818739d6fbdbbd3ec95a1103dfa11bcbe",
+    "ci/project/test_p06_qualified_warm_restore.py": "9ef2cb211135a3b4f024056208492a9aef389823d452174c7bfdd8efcab15fb6"
+  },
+  "sources_stable": true
+}
