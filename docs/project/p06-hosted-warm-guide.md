@@ -2,6 +2,27 @@
 
 ## Current result and next action
 
+**The hosted governance gate now verifies the retained original.** Before
+provisioning or acquiring private native inputs, preflight selects the exact
+successful governance run and attempt, downloads the digest-bound artifact,
+reconciles its complete records against a separate canonical collection of the
+trusted source, and rechecks provider/source stability. During composition it
+retains `hosted/governance/governance.zip` and scoped receipts inside the existing
+encrypted evidence path. Standalone preflight uses temporary local evidence.
+The [reader guide](governance-artifact-replay.md),
+[implementation audit](p06-governance-replay-audit.md) and
+[evidence packet](evidence/p06-governance-replay/README.md) define this scope.
+
+The unchanged `f3123513` governance original passes the complete reader with
+5,167 canonical tests, 37,544 successful subtests and 53,045 events. That
+historical replay does not qualify a later revision. Every selected revision
+requires its own complete strict invocation and original. The 24-process native
+experiment remains unstarted; private configuration, native admission,
+encrypted delivery and independent native replay remain required below.
+
+**Earlier execution and retention continuation (historical).** The following
+records retain their original source and evidence scope.
+
 **No fresh 24-process qualified warm experiment has run.** The current execution
 and retention continuation corrects prelaunch failure accounting, preserves
 finished native dispositions without promoting failed attempts, and repairs
@@ -131,7 +152,9 @@ success alone does not satisfy historical replay or authenticate an earlier job.
 `baabi-boo/AI-GPU` repository's `master` branch. It executes its exact provider
 `github.sha`. It requires a successful Project Governance run for that same SHA,
 on `master` from an allowed push/manual event, including the required full-run
-steps. An older green run cannot satisfy that requirement.
+steps. It then requires exact artifact retrieval, independent source-bound
+governance replay and unchanged provider observations. An older green run cannot
+satisfy that requirement.
 
 Inspect the current revision and its governance results:
 
@@ -143,9 +166,11 @@ gh run list --repo baabi-boo/AI-GPU \
   --json databaseId,headSha,event,status,conclusion,url
 ```
 
-Review the strict original under the [governance runbook](governance-runbook.md).
-Require zero skips, complete successful ordered accounting and final stability.
-The operator inspection does not replace the workflow's exact-revision check.
+Review the strict original under the [governance runbook](governance-runbook.md)
+and [artifact replay guide](governance-artifact-replay.md). Require zero skips,
+complete successful ordered accounting and final stability. The hosted gate
+automates that reconciliation; independent operator inspection remains useful
+and cannot replace its exact-revision checks.
 When the selected revision and configuration are ready:
 
 ```bash

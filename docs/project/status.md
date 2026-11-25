@@ -10,6 +10,40 @@ launches. The [qualification audit](p06-qualification-audit.md),
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
 scope and new validation. P06-A02/A03 remain open.
 
+**Independent governance-original admission is implemented; the frozen
+qualified warm experiment remains unstarted.** The
+[current audit](p06-governance-replay-audit.md),
+[reader contract](../designs/governance_artifact_replay_v1.md) and
+[evidence packet](evidence/p06-governance-replay/README.md) describe the bounded
+reader, trusted-source collection, exact provider artifact binding, and mandatory
+hosted preflight integration. Source-scoped checks establish tooling behavior;
+the native population remains **24 processes, 792 launches and 25,344 checked
+FP32 words**.
+
+The unchanged original from source `f3123513bb5bc5fa1c409bf0e7366d2f47c2d85b`,
+[run 45625012254, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45625012254),
+passes the new complete reader against a separate exact checkout: **5,167
+canonical tests, 37,544 successful subtests and 53,045 events in 3,763.184129
+seconds**. The archive SHA-256 is
+`a7df58f9462692e9994a8a9f2a15a8c2cd4f59301272c0d446b01353620059a0`.
+The [original](evidence/p06-governance-replay/base-original.json) and
+[replay receipt](evidence/p06-governance-replay/base-replay.json) preserve that
+historical source scope. Each later selected revision requires its own complete
+strict invocation and independently reconciled original before native dispatch.
+
+The next operational action remains verification or configuration of exact
+private control delivery and the explicit public age recipient, followed by one
+admitted hosted attempt. This session did not inspect live provider secrets.
+Its local capacity observation reported an incomplete cgroup mapping; it does
+not establish native admission. Keep the **15 GiB disk and 4 GiB available-memory**
+checks, the separate dependency/four-process prerequisites, encrypted complete
+or partial retention, independent native replay and frozen performance decision.
+P06-A02/A03 and P01 vendor integration remain open. The new governance reader
+does not grant hardware or performance acceptance.
+
+**Earlier execution and retention continuation (historical).** The following
+paragraphs retain that continuation's original source and evidence scope.
+
 **The execution and retention correction is implemented; the frozen qualified
 warm experiment remains unstarted: 24 processes, 792 launches and 25,344 checked
 FP32 words.** The [current audit](p06-execution-retention-audit.md) and

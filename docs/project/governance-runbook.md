@@ -192,3 +192,19 @@ timeout or runner loss can prevent upload. Confirm that the packet exists,
 retain provider step logs and verify the uploaded packet against that exact
 revision and attempt. The package and venv are not uploaded; their recorded
 identities support the governance-only result.
+
+## Independently replay an original
+
+Use the [governance artifact replay guide](governance-artifact-replay.md) for the
+bounded original ZIP reader. It joins the retained manifest, events, receipts
+and logs to an explicit clean checkout at the exact recorded revision. Its
+isolated discovery imports that trusted source to enumerate canonical test IDs;
+it runs no test bodies and executes no archive content. Supply an independently
+selected archive digest. Provider identity remains separate from offline record
+consistency.
+
+The qualified warm hosted preflight additionally retrieves the exact artifact
+for its selected successful run and attempt, verifies its provider digest,
+requires this replay, and reobserves provider/source stability. Expired, absent,
+partial or substituted originals block that route. A replay of an earlier
+revision does not qualify changed source or grant native/phase acceptance.

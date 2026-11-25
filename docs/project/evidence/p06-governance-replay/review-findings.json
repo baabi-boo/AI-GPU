@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "scope": "implementation-review-closure-only",
+  "findings": [
+    {
+      "id": "GOV-01",
+      "severity": "F2",
+      "summary": "ZIP64 interpretation could replace the validated ordinary central-directory bounds before ZipFile construction",
+      "owner": "root",
+      "status": "fixed_independently_confirmed",
+      "files": [
+        "ci/project/governance_replay_archive.py",
+        "ci/project/test_governance_replay_archive.py"
+      ],
+      "confirmation": "a31_archive_corrections",
+      "validation": "Three focused regressions pass; both unsupported ZIP64 variants reject before ZipFile construction; parser locator position independently inspected",
+      "report_members": [
+        "10.md",
+        "31.md",
+        "43.md"
+      ]
+    },
+    {
+      "id": "GOV-02",
+      "severity": "F2",
+      "summary": "One requested executable path can claim different resolved identities",
+      "owner": "root",
+      "status": "fixed_independently_confirmed",
+      "files": [
+        "ci/project/governance_replay_records.py",
+        "ci/project/test_governance_replay_records.py"
+      ],
+      "confirmation": "a33_records_corrections",
+      "validation": "Nine selected regressions pass; exact original and cross-role original mutations reject; legitimate native/package/Python aliases remain accepted",
+      "report_members": [
+        "12.md",
+        "33.md",
+        "44.md"
+      ]
+    },
+    {
+      "id": "GOV-03",
+      "severity": "F2",
+      "summary": "Stat-then-unlink cleanup can remove a concurrent replacement inode",
+      "owner": "a17_provider_corrections",
+      "status": "fixed_independently_confirmed",
+      "files": [
+        "ci/project/p06_governance_artifact.py",
+        "ci/project/test_p06_governance_artifact.py"
+      ],
+      "confirmation": "a23_provider_controls",
+      "validation": "Existing deterministic ownership-replacement regression passes independently; final helper has no pathname deletion",
+      "report_members": [
+        "14.md",
+        "17.md",
+        "23.md",
+        "45.md"
+      ]
+    },
+    {
+      "id": "GOV-04",
+      "severity": "F2",
+      "summary": "A requested path could disagree with another tool whose canonical resolved path is the same pathname",
+      "owner": "root",
+      "status": "fixed_independently_confirmed",
+      "files": [
+        "ci/project/governance_replay_records.py",
+        "ci/project/test_governance_replay_record_controls.py"
+      ],
+      "confirmation": "a33_records_corrections",
+      "validation": "Nine selected regressions pass; exact original and cross-role original mutations reject; legitimate native/package/Python aliases remain accepted",
+      "remedy": "Reconcile shared keys across requested and resolved identity maps",
+      "report_members": [
+        "21.md",
+        "33.md",
+        "44.md"
+      ]
+    },
+    {
+      "id": "GOV-05",
+      "severity": "F1",
+      "summary": "A failed buffered stdout flush was retried during interpreter shutdown, producing exit120 and raw diagnostic text",
+      "owner": "root",
+      "status": "fixed_independently_confirmed",
+      "files": [
+        "ci/project/governance_replay.py",
+        "ci/project/test_governance_replay_cli_controls.py"
+      ],
+      "confirmation": "a24_cli_controls",
+      "validation": "Real CLI regression fails before correction, then passes with sanitized exit1 for /dev/full and successful positive control",
+      "remedy": "Close failed output streams before returning the documented sanitized CLI failure; preserve fail-closed status",
+      "report_members": [
+        "24.md",
+        "46.md"
+      ]
+    },
+    {
+      "id": "GOV-06",
+      "severity": "F2",
+      "summary": "Optional receipt output cleanup could delete a concurrent replacement after its ownership check",
+      "owner": "root",
+      "status": "fixed_independently_confirmed",
+      "files": [
+        "ci/project/governance_replay.py",
+        "ci/project/test_governance_replay_output_controls.py"
+      ],
+      "confirmation": "a46_final_cli",
+      "validation": "Final independent R3 review plus both output-ownership regressions pass; no pathname deletion remains",
+      "report_members": [
+        "36.md",
+        "46.md"
+      ]
+    },
+    {
+      "id": "GOV-07",
+      "severity": "F2",
+      "summary": "Inherited synchronous metadata API socket timeouts do not bound DNS or total transfer duration in expanded admission",
+      "owner": "a42_metadata_deadline",
+      "status": "fixed_independently_confirmed",
+      "files": [
+        "ci/project/p06_governance_api.py",
+        "ci/project/p06_qualified_warm_hosted.py",
+        "ci/project/test_p06_governance_api.py",
+        "ci/project/test_p06_qualified_warm_hosted.py"
+      ],
+      "confirmation": "a45_final_provider",
+      "validation": "101 API/hosted/artifact/admission checks pass; actual offline resolver stall is killed and reaped; final R3 review confirms source closure and preserved callbacks",
+      "report_members": [
+        "40.md",
+        "42.md",
+        "45.md"
+      ]
+    },
+    {
+      "id": "GOV-08",
+      "severity": "F2",
+      "summary": "Recorded fresh run output could contain or collide with the prepared environment and live inputs",
+      "owner": "root",
+      "status": "fixed_independently_confirmed",
+      "files": [
+        "ci/project/governance_replay_records.py",
+        "ci/project/test_governance_replay_record_controls.py"
+      ],
+      "confirmation": "a44_final_events",
+      "validation": "Final R3 followup confirms original unchanged receipts accept, original contradictions reject, and two new methods pass with six negative/five valid cases",
+      "report_members": [
+        "44.md",
+        "56.md"
+      ]
+    },
+    {
+      "id": "GOV-09",
+      "severity": "F2",
+      "summary": "The new design workflow trigger path was absent from the exact expected path contract in existing workflow tests",
+      "owner": "root",
+      "status": "fixed_independently_confirmed",
+      "files": [
+        "ci/project/test_governance_workflow.py",
+        ".github/workflows/project-governance.yml"
+      ],
+      "confirmation": "a49_ci_governance",
+      "validation": "All 12 existing workflow contract tests pass after adding only the new expected design path; all prior paths and test IDs preserved",
+      "remedy": "Add only the new design path to PATH_FILTERS, retaining all existing trigger paths and test IDs",
+      "report_members": [
+        "49.md",
+        "56.md",
+        "57.md"
+      ]
+    }
+  ],
+  "total": 9,
+  "all_fixed_independently_confirmed": true,
+  "report_archive": "agent-reports.zip",
+  "report_hash_index": "agent-ledger.json",
+  "published_source_strict_qualification_claimed": false,
+  "native_acceptance": false,
+  "notes": [
+    "Source hashes and actual before/after results are recorded in the referenced original reports.",
+    "Review closure is separate from the published revision complete strict governance result.",
+    "No acceptance gates, resource thresholds or measured native workload changed."
+  ]
+}

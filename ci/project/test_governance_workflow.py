@@ -62,6 +62,7 @@ PATH_FILTERS = {
     "docs/designs/managed_counter_preflight_v1.md", "docs/designs/managed_counter_lifetime_v1.md",
     "docs/designs/complete_counter_qualification_v1.md", "docs/designs/qualified_warm_workspace_v1.md",
     "docs/designs/qualified_warm_automation_v1.md",
+    "docs/designs/governance_artifact_replay_v1.md",
     "docs/designs/qualified_warm_retention_review_v1.md",
     "docs/designs/dependency_provenance_v1.md", "docs/designs/managed_counter_preflight_replay_v1.md",
     "docs/designs/simx_checked_counters_v1.md", "docs/index.md",

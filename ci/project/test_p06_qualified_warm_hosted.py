@@ -38,7 +38,8 @@ def governance():
            "head_sha": REVISION, "head_branch": "master", "event": "push", "status": "completed",
            "conclusion": "success", "repository": {"full_name": hosted.REPOSITORY},
            "head_repository": {"full_name": hosted.REPOSITORY}}
-    job = {"name": "governance", "head_sha": REVISION, "run_attempt": 2, "status": "completed",
+    job = {"id": 456, "run_id": 123, "name": "governance", "head_sha": REVISION,
+           "run_attempt": 2, "status": "completed",
            "conclusion": "success", "steps": [{"name": name, "status": "completed", "conclusion": "success"}
                                                for name in hosted.GOVERNANCE_STEPS]}
     return [
@@ -132,9 +133,11 @@ class HostedTrustTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             keylog = Path(directory) / "session-keys.log"
             with mock.patch.dict(os.environ, {"SSLKEYLOGFILE": str(keylog)}), \
-                    mock.patch.object(hosted, "build_opener", return_value=opener) as factory:
-                self.assertEqual(hosted._api("/repos/" + hosted.REPOSITORY + "/actions/runs", "fixture_token"), {})
-                handler = next(arg for arg in factory.call_args.args if isinstance(arg, hosted.HTTPSHandler))
+                    mock.patch.object(hosted.governance_api, "build_opener", return_value=opener) as factory:
+                self.assertEqual(hosted.governance_api._network_bytes(
+                    "/repos/" + hosted.REPOSITORY + "/actions/runs", "fixture_token"), b"{}")
+                handler = next(arg for arg in factory.call_args.args
+                               if isinstance(arg, hosted.governance_api.HTTPSHandler))
                 self.assertIsNone(handler._context.keylog_filename)
                 self.assertEqual(handler._context.verify_mode, ssl.CERT_REQUIRED)
                 self.assertTrue(handler._context.check_hostname)
@@ -161,7 +164,8 @@ class HostedTrustTests(unittest.TestCase):
                 mock.patch.object(http.client.HTTPSConnection, "connect", new=connect), \
                 mock.patch("sys.stdout", new_callable=io.StringIO) as stdout, \
                 mock.patch("sys.stderr", new_callable=io.StringIO) as stderr:
-            self.assertEqual(hosted._api("/repos/" + hosted.REPOSITORY + "/actions/runs", "fixture_token"), {})
+            self.assertEqual(hosted.governance_api._network_bytes(
+                "/repos/" + hosted.REPOSITORY + "/actions/runs", "fixture_token"), b"{}")
             self.assertEqual(stdout.getvalue() + stderr.getvalue(), "")
 
     def test_source_requires_clean_exact_eight_recursive_gitlinks(self):
@@ -335,7 +339,10 @@ class HostedCompositionTests(unittest.TestCase):
         self.assertEqual(hosted.selected_sources(retained), hosted.selected_sources(self.source))
         required = {hosted.WORKFLOW, hosted.GOVERNANCE_WORKFLOW,
                     *("ci/project/p06_qualified_warm_" + name + ".py"
-                      for name in ("hosted", "control", "capacity", "pack", "encrypt"))}
+                      for name in ("hosted", "control", "capacity", "pack", "encrypt")),
+                    "ci/project/p06_governance_artifact.py",
+                    *("ci/project/governance_replay" + name + ".py"
+                      for name in ("", "_archive", "_events", "_records", "_source", "_collect"))}
         self.assertTrue(required <= {row["path"] for row in result["selected_sources_before"]})
         self.assertLessEqual(len(result["selected_sources_before"]), hosted.runner.MAX_SOURCE_FILES)
         self.assertTrue(all((retained / row["path"]).stat().st_mode & 0o777 == 0o600

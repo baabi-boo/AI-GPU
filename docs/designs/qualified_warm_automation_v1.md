@@ -174,8 +174,15 @@ The manual hosted workflow accepts no arbitrary revision input: it selects the
 trusted repository's `master` provider SHA and requires a successful complete
 Project Governance job for that exact revision before prerequisite acquisition
 or native work. An earlier revision's success cannot qualify changed automation.
-Provider status checks do not replace independent review of the retained strict
-governance original.
+Provider status checks are followed by the
+[governance-original reader](governance_artifact_replay_v1.md): exact artifact
+identity and bytes, complete canonical event accounting, source/environment/log
+joins and independently collected trusted-source IDs must all pass. Provider
+run/attempt/job observations and source identity are rechecked afterward. The
+composition retains the original and scoped replay receipts under its existing
+private hosted envelope; standalone preflight discards its owned temporary copy.
+This enforces original consistency and source binding before native work while
+preserving independent reviewer judgment.
 
 No automation result alone closes P06-A02/A03, XRT integration, physical FPGA
 qualification, synthesis/resource obligations or phase acceptance.

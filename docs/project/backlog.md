@@ -9,6 +9,32 @@ remain unassigned until an actual owner is identified.
 
 ## Start here: P06-T01 explicit qualified warm route
 
+**Next bounded action:** verify or configure private control delivery and the
+public age recipient, then run one complete
+[manual hosted attempt](p06-hosted-warm-guide.md) after the selected published
+revision passes its own full strict governance and the new independent
+[governance-original admission](governance-artifact-replay.md). The hosted gate
+now requires an exact provider artifact and complete source-bound replay of its
+manifest, events, environment, source records and logs. The
+[audit](p06-governance-replay-audit.md) and
+[evidence packet](evidence/p06-governance-replay/README.md) retain implementation
+and independent review scope.
+
+The historical original at `f3123513` replays successfully with **5,167 tests,
+37,544 subtests and 53,045 events**; it cannot qualify changed source. Require the
+chosen revision's own complete original. Keep the native population fixed at
+**24 processes, 792 launches and 25,344 checked FP32 words**, preserve the
+**15 GiB disk and 4 GiB available-memory gates**, and retain complete or explicitly
+partial outputs through encrypted delivery. After private restoration,
+independently replay a complete native original and evaluate every frozen
+performance predicate. P06 and P06-T01 remain `in_progress`; P06-A02/A03 and P01
+vendor integration remain open. Live private provider configuration was not
+inspected, and this session's incomplete local cgroup observation does not admit
+native execution.
+
+**Earlier execution and retention handoff (historical).** The following text
+preserves the prior continuation's source and evidence scope.
+
 **Next bounded action:** verify or configure exact private control delivery and
 the public age recipient, verify the final published execution and retention
 revision's own complete strict Actions result under the

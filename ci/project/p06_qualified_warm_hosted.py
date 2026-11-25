@@ -5,18 +5,18 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
 import platform
 import re
 import shutil
-import ssl
 import sys
 import tarfile
+import tempfile
 import time
 from urllib.parse import urlencode
-from urllib.request import HTTPSHandler, HTTPRedirectHandler, ProxyHandler, Request, build_opener
 
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -27,9 +27,12 @@ from p06_qualified_warm_inputs import (
 from baseline_packet_contract import RECURSIVE_SUBMODULES
 from baseline_packet_io import load_json_bytes
 from baseline_process import run_bounded
+import governance_replay
 import p02_matrix as base
 import p06_dependency_contract as dependency
 import p06_dependency_local_prepare as preparation
+import p06_governance_api as governance_api
+import p06_governance_artifact as governance_artifact
 import p06_qualified_warm_capacity as capacity
 import p06_qualified_warm_encrypt as encryption
 import p06_qualified_warm_run as runner
@@ -71,9 +74,13 @@ SOURCE_FILES = tuple(sorted(set(runner.SOURCE_FILES) | {
     "ci/project/p06_qualified_warm_hosted.py", "ci/project/p06_qualified_warm_control.py",
     "ci/project/p06_qualified_warm_capacity.py", "ci/project/p06_qualified_warm_pack.py",
     "ci/project/p06_qualified_warm_encrypt.py", WORKFLOW, GOVERNANCE_WORKFLOW,
+    "ci/project/governance_replay.py", "ci/project/governance_replay_archive.py",
+    "ci/project/governance_replay_events.py", "ci/project/governance_replay_records.py",
+    "ci/project/governance_replay_source.py", "ci/project/governance_replay_collect.py",
+    "ci/project/p06_governance_api.py", "ci/project/p06_governance_artifact.py",
 }))
 LIMITATIONS = [
-    "Provider API observations require a successful exact-revision full governance job; they do not independently replay its retained packet.",
+    "Governance admission independently replays the exact provider-bound original and collects tests from the trusted checkout; it does not reproduce test execution or establish native acceptance.",
     "Visible capacity observations never establish complete cgroup hierarchy visibility or reserve host resources.",
     "Ubuntu GCC 12 package and executable identities are retained for this attempt; equivalence to a historical compiler is not claimed.",
     "The native supervisor retains its 90-minute budget and existing 120/1800/180-second child limits; outer monitors do not contain child-created process groups.",
@@ -135,28 +142,8 @@ def trusted_context(environment, revision):
     return {**expected, **{key: environment[key] for key in ("GITHUB_RUN_ID", "GITHUB_RUN_ATTEMPT")}}
 
 
-class _NoRedirect(HTTPRedirectHandler):
-    def redirect_request(self, *_args, **_kwargs):
-        raise HostedError("api_redirect")
-
-
 def _api(path, token):
-    require(path.startswith("/repos/" + REPOSITORY + "/actions/"), "api_path")
-    request = Request("https://api.github.com" + path, headers={
-        "Accept": "application/vnd.github+json", "Authorization": "Bearer " + token,
-        "X-GitHub-Api-Version": "2022-11-28", "User-Agent": CONTRACT_ID})
-    # Avoid the default-context factory's ambient SSLKEYLOGFILE side effect.
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-    context.load_default_certs(ssl.Purpose.SERVER_AUTH)
-    context.minimum_version = ssl.TLSVersion.TLSv1_2
-    opener = build_opener(ProxyHandler({}), HTTPSHandler(context=context, debuglevel=0), _NoRedirect())
-    with opener.open(request, timeout=20) as response:
-        require(response.status == 200, "api_status")
-        body = response.read(MAX_API_BYTES + 1)
-    require(0 < len(body) <= MAX_API_BYTES, "api_bound")
-    document = load_json_bytes(body, "provider governance observation")
-    require(type(document) is dict, "api_shape")
-    return document
+    return governance_api.request(path, token)
 
 
 def _governance_run(row, revision, workflow_id):
@@ -170,7 +157,38 @@ def _governance_run(row, revision, workflow_id):
                     for key in ("repository", "head_repository")))
 
 
+def _governance_job(jobs, revision, run_id, run_attempt):
+    require(type(jobs) is dict and type(jobs.get("total_count")) is int
+            and jobs["total_count"] == 1 and type(jobs.get("jobs")) is list
+            and len(jobs["jobs"]) == 1, "governance_jobs")
+    job = jobs["jobs"][0]
+    require(type(job) is dict and type(job.get("id")) is int and job["id"] > 0
+            and type(job.get("run_id")) is int and job["run_id"] == run_id
+            and job.get("name") == "governance" and job.get("head_sha") == revision
+            and type(job.get("run_attempt")) is int and job["run_attempt"] == run_attempt
+            and job.get("status") == "completed" and job.get("conclusion") == "success", "governance_job")
+    steps = job.get("steps")
+    require(type(steps) is list and all(type(step) is dict and step.get("status") == "completed"
+            and step.get("conclusion") == "success" for step in steps), "governance_steps")
+    names = [step.get("name") for step in steps]
+    require(all(names.count(name) == 1 for name in GOVERNANCE_STEPS), "governance_full_run")
+    return job
+
+
+def _provider_digest(document):
+    require(type(document) is dict, "governance_observation")
+    body = json.dumps(document, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+    require(0 < len(body) <= MAX_API_BYTES, "governance_observation")
+    return hashlib.sha256(body).hexdigest()
+
+
+def _provider_observations(workflow, run, jobs):
+    return {key: _provider_digest(value) for key, value in (
+        ("workflow_sha256", workflow), ("run_sha256", run), ("jobs_sha256", jobs))}
+
+
 def verify_governance(revision, token, api=None):
+    require(_revision(revision), "revision")
     require(type(token) is str and re.fullmatch(r"[A-Za-z0-9_.-]{1,256}", token), "api_token")
     get = (lambda path: _api(path, token)) if api is None else api
     prefix = "/repos/" + REPOSITORY + "/actions/"
@@ -186,23 +204,30 @@ def verify_governance(revision, token, api=None):
     row = max(selected, key=lambda value: (value["id"], value["run_attempt"]))
     run_path = prefix + "runs/" + str(row["id"])
     jobs = get(run_path + "/attempts/" + str(row["run_attempt"]) + "/jobs?per_page=100")
-    require(jobs.get("total_count") == 1 and type(jobs.get("jobs")) is list
-            and len(jobs["jobs"]) == 1, "governance_jobs")
-    job = jobs["jobs"][0]
-    require(job.get("name") == "governance" and job.get("head_sha") == revision
-            and job.get("run_attempt") == row["run_attempt"] and job.get("status") == "completed"
-            and job.get("conclusion") == "success", "governance_job")
-    steps = job.get("steps")
-    require(type(steps) is list and all(type(step) is dict and step.get("status") == "completed"
-            and step.get("conclusion") == "success" for step in steps), "governance_steps")
-    names = [step.get("name") for step in steps]
-    require(all(names.count(name) == 1 for name in GOVERNANCE_STEPS), "governance_full_run")
+    job = _governance_job(jobs, revision, row["id"], row["run_attempt"])
     latest = get(run_path)
     require(_governance_run(latest, revision, workflow["id"])
-            and latest["id"] == row["id"] and latest["run_attempt"] == row["run_attempt"], "governance_changed")
+            and latest["id"] == row["id"] and latest["run_attempt"] == row["run_attempt"]
+            and latest["event"] == row["event"], "governance_changed")
     return {"workflow_id": workflow["id"], "run_id": row["id"], "run_attempt": row["run_attempt"],
-            "head_sha": revision, "event": row["event"], "required_steps": list(GOVERNANCE_STEPS),
+            "job_id": job["id"], "head_sha": revision, "event": row["event"],
+            "required_steps": list(GOVERNANCE_STEPS),
+            "provider_observations": _provider_observations(workflow, latest, jobs),
             "provider_observed_success": True, "independent_packet_replay": False}
+
+
+def _reobserve_governance(revision, token, governance):
+    prefix = "/repos/" + REPOSITORY + "/actions/"
+    run_path = prefix + "runs/" + str(governance["run_id"])
+    workflow = _api(prefix + "workflows/project-governance.yml", token)
+    run = _api(run_path, token)
+    jobs = _api(run_path + "/attempts/" + str(governance["run_attempt"]) + "/jobs?per_page=100", token)
+    require(_governance_run(run, revision, governance["workflow_id"]), "governance_changed")
+    _governance_job(jobs, revision, governance["run_id"], governance["run_attempt"])
+    require(_provider_observations(workflow, run, jobs) == governance["provider_observations"],
+            "governance_changed")
+    require(_provider_digest(_api(run_path, token)) == governance["provider_observations"]["run_sha256"],
+            "governance_changed")
 
 
 def verify_source(source, revision):
@@ -220,12 +245,71 @@ def verify_source(source, revision):
     return snapshot
 
 
-def preflight(source, revision, environment=None):
-    environment = os.environ if environment is None else environment
-    context = trusted_context(environment, revision)
-    snapshot = verify_source(source, revision)
-    governance = verify_governance(revision, environment.get("GITHUB_TOKEN"))
-    return {"context": context, "source": snapshot, "governance": governance}
+def _governance_admission(source, revision, token, parent, snapshot, governance):
+    parent = runner._canonical(parent, existing=True)
+    require(parent.is_dir() and not base._overlap(source, parent), "governance_output")
+    directory = parent / "governance"
+    artifact = governance_artifact.download_artifact(
+        revision, governance["run_id"], governance["run_attempt"], token, directory, api=_api)
+    require(type(artifact) is dict and artifact.get("provider_observed_stable") is True
+            and type(artifact.get("artifact_id")) is int and artifact["artifact_id"] > 0
+            and artifact.get("artifact_name") == (f"project-governance-{revision}-run"
+                f"{governance['run_id']}-attempt{governance['run_attempt']}")
+            and artifact.get("repository") == REPOSITORY and artifact.get("head_sha") == revision
+            and type(artifact.get("run_id")) is int and artifact["run_id"] == governance["run_id"]
+            and type(artifact.get("run_attempt")) is int
+            and artifact["run_attempt"] == governance["run_attempt"]
+            and type(artifact.get("bytes")) is int
+            and 0 < artifact["bytes"] <= governance_artifact.MAX_ARCHIVE_BYTES
+            and type(artifact.get("sha256")) is str
+            and re.fullmatch(r"[0-9a-f]{64}", artifact["sha256"]), "governance_artifact")
+    archive = runner._canonical(artifact.get("archive_path"), existing=True)
+    require(archive == directory / "governance.zip", "governance_artifact")
+    identity, _ = runner._file(archive, governance_artifact.MAX_ARCHIVE_BYTES)
+    require(identity["sha256"] == artifact["sha256"] and identity["size_bytes"] == artifact["bytes"],
+            "governance_artifact")
+    replay = governance_replay.verify_archive(
+        archive, revision=revision, source_dir=source, expected_sha256=artifact["sha256"])
+    require(type(replay) is dict and type(replay.get("schema_version")) is int
+            and replay["schema_version"] == 1 and replay.get("revision") == revision
+            and replay.get("scope") == "project-governance-artifact-replay-only"
+            and replay.get("independent_packet_replay") is True
+            and replay.get("trusted_source_imported") is True
+            and all(replay.get(field) is False for field in (
+                "provider_authenticated", "retained_code_executed", "tests_executed_by_replay",
+                "native_acceptance", "phase_acceptance", "performance_acceptance"))
+            and runner._same_json(replay.get("archive"), {
+                "bytes": artifact["bytes"], "sha256": artifact["sha256"]}), "governance_replay")
+    require(runner._same_json(verify_source(source, revision), snapshot), "source_changed")
+    _reobserve_governance(revision, token, governance)
+    require(runner._same_json(verify_source(source, revision), snapshot)
+            and runner._file(archive, governance_artifact.MAX_ARCHIVE_BYTES)[0] == identity,
+            "governance_changed")
+    provider = {key: artifact[key] for key in (
+        "artifact_id", "artifact_name", "sha256", "bytes", "repository", "head_sha", "run_id", "run_attempt")}
+    governance = dict(governance, artifact=provider, independent_packet_replay=True,
+                      provider_observed_stable=True, source_observed_stable=True, replay=replay)
+    _write(directory / "provider.json", {key: value for key, value in governance.items() if key != "replay"})
+    _write(directory / "replay.json", replay)
+    return governance
+
+
+def preflight(source, revision, environment=None, *, output_parent=None):
+    try:
+        environment = os.environ if environment is None else environment
+        context = trusted_context(environment, revision)
+        source = runner._canonical(source, existing=True)
+        snapshot = verify_source(source, revision)
+        token = environment.get("GITHUB_TOKEN")
+        governance = verify_governance(revision, token)
+        if output_parent is None:
+            with tempfile.TemporaryDirectory(prefix="p06-governance-", dir="/tmp") as directory:
+                governance = _governance_admission(source, revision, token, Path(directory), snapshot, governance)
+        else:
+            governance = _governance_admission(source, revision, token, output_parent, snapshot, governance)
+        return {"context": context, "source": snapshot, "governance": governance}
+    except Exception:
+        raise HostedError("governance_admission") from None
 
 
 def capacity_gate(source, attempt):
@@ -487,7 +571,7 @@ def _execute(source, revision, attempt_root):
         require(secret is not None and bool(secret), "control_configuration")
         encryption.validate_recipient(recipient)
         require(environment.get("P06_HOST_SETUP_READY") == "true", "host_setup")
-        record["preflight"] = preflight(source, revision, environment)
+        record["preflight"] = preflight(source, revision, environment, output_parent=attempt / "hosted")
         require(sys.version_info[:3] == (3, 12, 14) and platform.python_implementation() == "CPython"
                 and sys.platform == "linux" and platform.machine() == "x86_64"
                 and Path(sys.executable).name == "python3", "interpreter")
