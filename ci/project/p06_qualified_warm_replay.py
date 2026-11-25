@@ -115,11 +115,13 @@ def _reader_sources():
     _same(tuple(row["path"] for row in helper_rows), ADMISSION_HELPERS,
           "fixed qualified warm admission helper inventory")
     rows.update({row["path"]: row for row in helper_rows})
-    for module in (records, analysis, sys.modules[__name__]):
-        path = ROOT / "ci/project" / (module.__name__ + ".py")
+    for module, name in (
+            (records, "ci/project/p06_qualified_warm_records.py"),
+            (analysis, "ci/project/p06_qualified_warm_analyze.py"),
+            (sys.modules[__name__], "ci/project/p06_qualified_warm_replay.py")):
+        path = ROOT / name
         require(Path(module.__file__).resolve(strict=True) == path,
                 "qualified warm reader loaded outside the trusted checkout")
-        name = path.relative_to(ROOT).as_posix()
         body = path.read_bytes()
         rows[name] = {"path": name, "sha256": hashlib.sha256(body).hexdigest(), "size_bytes": len(body)}
     for expected in admission.prerequisite_input_rows(contract.validate_proof(

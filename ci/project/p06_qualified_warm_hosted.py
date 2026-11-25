@@ -386,7 +386,7 @@ def writers_finished(attempt, stages):
                                       warm=row["id"] == "qualified-warm")
                         if row["id"] != "preparation" and child.get("state") != "finished":
                             return False
-                        child_commands = child.get("commands", [])
+                        child_commands = child.get("commands", [] if row["id"] == "preparation" else None)
                         if type(child_commands) is not list or any(type(command) is not dict
                                or type(command.get("process_started")) is not bool
                                or (command["process_started"] and command.get("cleanup_complete") is not True)
