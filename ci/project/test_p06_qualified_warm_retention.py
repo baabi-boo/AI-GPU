@@ -337,6 +337,36 @@ class RetentionReaderTests(unittest.TestCase):
         self.assertIn(retention.CHUNK_BYTES, requested)
         self.assertEqual((self.root / "large-copy").read_bytes(), payload)
 
+    def test_mutating_public_metadata_cannot_change_successful_copies_or_report(self):
+        files = {"alpha": b"original-A\x00\xff", "dir/bravo": b"other-distinct-payload"}
+        data, manifest, raw = fixture(files)
+        digest = self.save(data)
+        with retention.RetentionArchive(self.archive, digest, expected_revision=REVISION) as archive:
+            report = archive.report()
+            entries = copy.deepcopy(archive.entries)
+            exposed_manifest = archive.manifest
+            exposed_manifest["expected_revision"] = "f" * 40
+            exposed_manifest["directories"].clear()
+            exposed_manifest["files"][0].update(path="changed", size_bytes=0, sha256="0" * 64)
+            exposed_manifest["files"].append({"path": "phantom", "size_bytes": 1, "sha256": "f" * 64})
+            exposed_entries = archive.entries
+            exposed_entries["alpha"].update(directory=True,
+                                             size_bytes=entries["dir/bravo"]["size_bytes"],
+                                             sha256=entries["dir/bravo"]["sha256"],
+                                             offset=entries["dir/bravo"]["offset"])
+            del exposed_entries["dir/bravo"]
+            exposed_entries["phantom"] = dict(exposed_entries["alpha"])
+            self.assertEqual(archive.manifest, manifest)
+            self.assertEqual(archive.manifest_bytes, raw)
+            self.assertEqual(archive.entries, entries)
+            self.assertEqual(archive.report(), report)
+            for index, (name, body) in enumerate(files.items()):
+                output = self.root / f"isolated-copy-{index}"
+                with output.open("xb") as stream:
+                    archive.copy_file(name, stream.fileno())
+                self.assertEqual(output.read_bytes(), body)
+            self.assertEqual(archive.report(), report)
+
     def test_final_archive_hash_is_checked_independently_of_identity_observations(self):
         data, _, _ = fixture()
         digest = self.save(data)

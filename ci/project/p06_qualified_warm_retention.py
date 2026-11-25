@@ -58,6 +58,26 @@ def _require(condition, code):
         raise RetentionError(code)
 
 
+def _close_all(resources, close, *, suppress=False):
+    failure = None
+    for resource in resources:
+        if resource is not None:
+            try:
+                close(resource)
+            except BaseException as error:
+                if failure is None:
+                    failure = error
+    if failure is not None and not suppress:
+        raise failure
+
+
+def _close_fds(*fds, suppress=False):
+    try:
+        _close_all(fds, os.close, suppress=suppress)
+    except Exception:
+        raise RetentionError("retention-invalid") from None
+
+
 def _relative(name):
     _require(type(name) is str and name, "noncanonical-path")
     try:
@@ -96,12 +116,12 @@ def _directory(path):
         identities.append(_stamp(os.fstat(fd))[:2])
         for part in path.parts[1:]:
             child = os.open(part, flags, dir_fd=fd)
-            os.close(fd)
-            fd = child
+            previous, fd = fd, child
+            _close_fds(previous)
             identities.append(_stamp(os.fstat(fd))[:2])
         return fd, identities
     except BaseException:
-        os.close(fd)
+        _close_fds(fd, suppress=True)
         raise
 
 
@@ -120,13 +140,14 @@ class _Input:
                               | os.O_CLOEXEC, dir_fd=self.parent)
             self.assert_identity()
         except BaseException as error:
-            self.close()
+            self.close(suppress=True)
             if isinstance(error, OSError):
                 raise RetentionError(kind + "-unavailable") from None
             raise
 
     def assert_identity(self):
         parent = None
+        completed = False
         try:
             parent, ancestors = _directory(self.path.parent)
             _require(ancestors == self.ancestors
@@ -134,11 +155,11 @@ class _Input:
                      and _stamp(os.stat(self.path.name, dir_fd=parent,
                                         follow_symlinks=False)) == self.identity,
                      self.kind + "-changed")
+            completed = True
         except OSError:
             raise RetentionError(self.kind + "-changed") from None
         finally:
-            if parent is not None:
-                os.close(parent)
+            _close_fds(parent, suppress=not completed)
 
     def blocks(self, offset, length):
         _require(0 <= offset <= self.size and 0 <= length <= self.size - offset,
@@ -168,12 +189,11 @@ class _Input:
         except OSError:
             raise RetentionError(self.kind + "-changed") from None
 
-    def close(self):
-        for attribute in ("fd", "parent"):
-            fd = getattr(self, attribute)
-            if fd is not None:
-                setattr(self, attribute, None)
-                os.close(fd)
+    def close(self, *, suppress=False):
+        fds = self.fd, self.parent
+        # A failed close may already have released its descriptor; never retry it.
+        self.fd = self.parent = None
+        _close_fds(*fds, suppress=suppress)
 
 
 def _json_bytes(value):
@@ -292,23 +312,30 @@ class RetentionArchive:
             self._validated = True
             return self
         except BaseException:
-            self.close()
+            self.close(suppress=True)
             raise
 
     def __exit__(self, exc_type, exc_value, traceback):
+        if exc_type is not None:
+            self.close(suppress=True)
+            return
         try:
-            if exc_type is None:
-                self.assert_unchanged()
-        finally:
-            self.close()
+            self.assert_unchanged()
+        except BaseException:
+            self.close(suppress=True)
+            raise
+        self.close()
 
-    def close(self):
+    def close(self, *, suppress=False):
         self._validated = False
-        for attribute in ("_summary", "_archive"):
-            source = getattr(self, attribute)
-            if source is not None:
-                setattr(self, attribute, None)
-                source.close()
+        sources = self._summary, self._archive
+        self._summary = self._archive = None
+        try:
+            _close_all(sources, lambda source: source.close(), suppress=suppress)
+        except RetentionError:
+            raise
+        except Exception:
+            raise RetentionError("retention-invalid") from None
 
     def _ready(self):
         _require(self._validated and self._archive is not None, "reader-state")

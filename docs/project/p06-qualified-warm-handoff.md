@@ -1,36 +1,55 @@
 # Qualified warm-workspace handoff
 
-**The fresh 24-process native experiment remains unstarted. Full strict
-governance now passes at the exact base revision `e8e73347`; the new hosted
-automation needs its own full strict run.** The remaining external prerequisites
-are owner-configured private control storage, the signed-URL secret, a public
-age recipient with a privately held matching key, and observed native capacity.
+## Current retention and replay continuation
 
-The [hosted operator guide](p06-hosted-warm-guide.md) describes the new manual
-workflow, which accepts no revision input and selects trusted `master` at its
-actual `github.sha`. A successful full Project Governance run for that exact
-revision is required before acquisition. The automation is implemented with
-source-scoped focused validation recorded in the
-[tooling evidence packet](evidence/p06-hosted-warm-automation/README.md).
-Verify the published revision's own full strict result from its exact Actions
-run. The [hosted audit](p06-hosted-warm-audit.md) and
-[automation contract](../designs/qualified_warm_automation_v1.md) describe the
-separate acquisition, supervision, packaging and encrypted-retention boundaries.
+**The retention and replay continuation is implemented; the fresh 24-process
+native experiment remains unstarted.** Start with the
+[continuation audit](p06-retention-review-audit.md),
+[retention review contract](../designs/qualified_warm_retention_review_v1.md) and
+[tooling evidence packet](evidence/p06-retention-review/README.md). They record
+the direct replay entry-point and started-child command-inventory corrections,
+checked plaintext inspection, private restoration and cleanup review. Their
+focused checks establish tooling behavior at their recorded source identities.
 
-**Next bounded action:** configure private control delivery and the public age
-recipient, verify the exact published automation revision's full strict Actions
-result under the [checked environment](governance-runbook.md), and dispatch one
-complete [manual hosted attempt](p06-hosted-warm-guide.md) on a runner that passes
-unchanged capacity and native admission. The verified `e8e73347` pass remains
-base-revision evidence. Follow the [hosted audit](p06-hosted-warm-audit.md) and
+The audited base `25543e1cf96530264746c0e2d130018dd0dba465` passed
+[strict governance](https://github.com/baabi-boo/AI-GPU/actions/runs/45475313555/job/138733849431)
+with **5,036 tests in 2,136.484 seconds**. That result qualifies the exact base
+only. The final published retention/replay revision requires its own complete,
+uninterrupted strict result under the [checked environment](governance-runbook.md);
+verify its exact Actions run and retained original receipts before dispatch.
+Neither the base pass nor focused development checks substitutes for that
+qualification.
+
+**Next bounded action:** verify or configure delivery of the exact private
+control original, the signed-URL secret and the public age recipient with its
+matching private key held outside Actions. Live provider secret configuration
+was not inspected for this continuation. Require the final published revision's
+own full strict pass, observe actual runner capacity and pass unchanged native
+admission before the complete **24-process, 792-launch, 25,344-word** attempt.
+Use the [manual hosted operator guide](p06-hosted-warm-guide.md) and the frozen
 [execution/replay runbook](evidence/p06-qualified-warm/runbook.md).
 
 Closeout attempts private packaging and encryption of complete or failed
 attempts. Only successful upload of the validated ciphertext and sanitized
 summary establishes durable hosted delivery; see the
 [failure matrix](p06-hosted-warm-guide.md#failure-and-delivery-matrix).
-Independent replay and the frozen performance evaluation follow only from a
-usable complete original.
+Follow the guide's [private decryption, checked inspection and restoration](p06-hosted-warm-guide.md#5-download-decrypt-privately-and-replay),
+then its [standalone independent replay setup](p06-hosted-warm-guide.md#independent-complete-replay-from-a-fresh-shell)
+from a separate trusted reader checkout. Replay and the frozen performance
+evaluation require a usable complete original. Successful retention or
+restoration establishes neither native validity nor producer authentication,
+performance or phase acceptance; failed or partial attempts retain their scope.
+
+## Earlier automation and route context
+
+The preceding [hosted automation](p06-hosted-warm-guide.md) added the manual
+workflow, which accepts no revision input and selects trusted `master` at its
+actual `github.sha`. A successful full Project Governance run for that exact
+revision is required before acquisition. Its source-scoped focused validation
+remains in the [earlier tooling packet](evidence/p06-hosted-warm-automation/README.md).
+The [hosted audit](p06-hosted-warm-audit.md) and
+[automation contract](../designs/qualified_warm_automation_v1.md) describe the
+separate acquisition, supervision, packaging and encrypted-retention boundaries.
 
 The [earlier development audit](p06-qualified-warm-audit.md) and
 [earlier evidence index](evidence/p06-qualified-warm/README.md) retain the
@@ -41,7 +60,7 @@ original route review at **`c0b44ce64665fe11895f869eea8c38c9b820d6f7`**, tree
 define the fixed native experiment; all 69 measurement source identities and
 existing proof inputs remain unchanged by the automation.
 
-## Verified base governance and historical readiness
+## Historical base governance and readiness
 
 At exact source `e8e73347ba598c9cd0ceed353148163721b7603d`,
 [run 45422819749](https://github.com/baabi-boo/AI-GPU/actions/runs/45422819749),

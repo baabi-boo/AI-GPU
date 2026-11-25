@@ -9,15 +9,34 @@ remain unassigned until an actual owner is identified.
 
 ## Start here: P06-T01 explicit qualified warm route
 
-**Next bounded action:** configure private control delivery and the public age
-recipient, verify the exact published automation revision's full strict Actions
-result under the [checked environment](governance-runbook.md), and dispatch one
+**Next bounded action:** verify or configure exact private control delivery and
+the public age recipient, obtain and verify the final published retention/replay
+revision's own full strict Actions result under the
+[checked environment](governance-runbook.md), and dispatch one
 complete [manual hosted attempt](p06-hosted-warm-guide.md) on a runner that passes
-unchanged capacity and native admission. The verified `e8e73347` pass remains
-base-revision evidence. Review and publication records are in the
-[tooling evidence packet](evidence/p06-hosted-warm-automation/README.md).
-Follow the [hosted audit](p06-hosted-warm-audit.md) and
+unchanged capacity and native admission. Live provider secret configuration was
+not inspected for this continuation. The audited base
+`25543e1cf96530264746c0e2d130018dd0dba465` passed
+[strict governance](https://github.com/baabi-boo/AI-GPU/actions/runs/45475313555/job/138733849431);
+that result does not qualify the changed source. Require that published
+revision's own complete strict invocation and retained original receipts. Follow the
+[retention audit](p06-retention-review-audit.md),
+[retention contract](../designs/qualified_warm_retention_review_v1.md),
+[tooling evidence packet](evidence/p06-retention-review/README.md) and
 [qualified warm handoff](p06-qualified-warm-handoff.md).
+
+The current tooling repairs direct-CLI `__main__` source binding and missing
+command inventories for started dependency/native children, and adds strict
+inert plaintext inspection and private restoration with corrected cleanup.
+Focused results remain source-scoped in the new packet. Checked restoration
+preserves bytes; a separate complete inert native replay from a trusted reader
+checkout must precede the frozen performance decision. Retention success cannot
+promote failed or partial work into a complete native original, authenticate its
+producer or close P06-A02/A03. The frozen proof, goldens and phase records remain
+unchanged; P06 and P06-T01 remain `in_progress`.
+
+The earlier automation-base observations below remain preserved at their exact
+source and tooling scope.
 
 At exact source `e8e73347ba598c9cd0ceed353148163721b7603d`,
 [run 45422819749](https://github.com/baabi-boo/AI-GPU/actions/runs/45422819749),
@@ -35,16 +54,16 @@ The exact historical control original has been recovered unchanged:
 It contains Micron verification sources with proprietary/confidential notices
 under the retained Ramulator tree and is **not cleared for public
 redistribution**. Fresh full dependency packets can contain the same sources.
-The external owner still needs to configure private storage for that original,
+Verify or configure owner-managed private storage for that original,
 the signed Azure/S3 URL secret `P06_CONTROL_ARCHIVE_URL`, and the public
 `P06_EVIDENCE_AGE_RECIPIENT` value while retaining the matching private key
 outside Actions. Only encrypted retention and its minimal public summary may
 be uploaded to this public repository's Actions artifacts.
 
 The [governance audit](governance-readiness-audit.md) preserves the first failed
-strict run and the intervening focused corrections. The automation is
-implemented with source-scoped focused validation; read its published
-revision's own full strict result from the exact Actions run.
+strict run and the intervening focused corrections. The new retention and replay
+changes require their own published revision's full strict result from the exact
+Actions run; focused checks in the retention packet do not replace it.
 The manual workflow selects only trusted `master` at the exact provider SHA,
 requires that revision's full governance success, acquires locked inputs,
 supervises the existing three stages and attempts packaging and encryption of
@@ -57,11 +76,13 @@ performance decision remain separate steps. Fresh native execution is
 
 After those prerequisites and unchanged admission are satisfied, execute one
 complete **24-process, 792-launch, 25,344-word** attempt. Retain every prime and
-warm-up observation, preserve the original, replay it independently and evaluate
-both formats against every frozen predicate. A complete valid result may reject
-the performance hypothesis. Pending reads remain a transient balance outside
-the 40 cumulative components. No sample replacement, optional stopping, resource
-waiver or acceptance change is authorized.
+warm-up observation, preserve the original and confirm encrypted delivery.
+After private decryption, inspect and restore it with the checked commands,
+independently replay the complete native original from a separate trusted reader
+checkout, and evaluate both formats against every frozen predicate. A complete
+valid result may reject the performance hypothesis. Pending reads remain a
+transient balance outside the 40 cumulative components. No sample replacement,
+optional stopping, resource waiver or acceptance change is authorized.
 
 The [14:57 readiness screen](evidence/governance-readiness/validation/readiness-restored-smoke.json)
 is historical and predates control recovery. Its blocked source/input state and
@@ -321,6 +342,10 @@ into each warm process through exact build/prelaunch bindings and complete inert
 validation. The [new evidence packet](evidence/p06-qualified-warm/README.md)
 records independent enforcement and rejection checks; earlier originals retain
 their own scope and cannot become execution under the later contract.
+
+**Earlier automation action (historical):** the following paragraph records the
+preceding continuation's next action. Use the current retention/replay action
+at the top of this document.
 
 Configure private delivery and the public recipient, verify the published
 hosted-automation revision's own full strict Actions result, and observe actual
@@ -634,11 +659,15 @@ establishes the complete fresh dependency/native/control original and inert
 replay within its declared scope. The separately versioned
 [complete qualification](evidence/p06-counter-qualification/README.md) now passes
 for a fresh four-process preflight. The explicit 24-process route is now
-implemented and independently reviewed. The new hosted automation needs its
-own strict governance result and owner configuration for private delivery and
-encryption. Observe capacity, execute one fresh complete qualified warm attempt,
-privately retain/replay its original and evaluate the unchanged predicates.
-Follow the [hosted operator guide](p06-hosted-warm-guide.md) and
+implemented and independently reviewed. The current retention/replay changes
+need their own final published revision's full strict governance result. Verify
+or configure exact private control delivery and the public age recipient,
+observe capacity, and execute one fresh complete qualified warm attempt.
+Privately retain and restore its original, then replay it from a separate trusted
+reader checkout and evaluate the unchanged predicates. Follow the
+[retention audit](p06-retention-review-audit.md),
+[tooling packet](evidence/p06-retention-review/README.md),
+[hosted operator guide](p06-hosted-warm-guide.md) and
 [qualified warm handoff](p06-qualified-warm-handoff.md);
 the four-process result does not qualify those future warm processes.
 Detailed work packages remain in the
@@ -654,7 +683,7 @@ phase guides, the [development audit](p05-binding-audit.md) and the
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
 | **P04-T02 — Native model execution — complete** | Four clean SimX/native processor RTL × FP16/BF16 variants pass exact intermediate/final comparisons, live-input lineage, native placement and separate host/transfer accounting after independent review. | T01; model runtime lead | [P04-A02](evidence/p04-executor/acceptance-numerics.json), [P04-A03](evidence/p04-executor/acceptance-dispatch.json) |
 | **P05-T01 — Python/custom-op bridge — complete** | Preserve the accepted copying binding and bounded PyTorch 2.15.0+cpu / CPython 3.12.14 / RV64 SimX matrix at c6fb039e. Original-artifact replay, source joins, exact results/native dispatch and compatibility/failure evidence passed independent review. Any scope expansion needs separate qualification. | P04; framework integration lead; [replay handoff](p05-torch-replay-handoff.md) | [P05-A01 retained](evidence/governance-readiness/a01-retained-binding.json); [P05-A02](evidence/p05-torch-replay/acceptance-torch.json), [P05-A03](evidence/p05-torch-replay/acceptance-compatibility.json) |
-| **P06-T01 — Measured optimization — in progress** | Configure private control transport and the public age recipient; verify the published automation revision's own full strict Actions result, preserving `e8e73347` as base-only evidence. Observe adequate capacity, then manually admit one fresh 24-process, 792-launch, 25,344-word attempt. Attempt private retention of complete and failed attempts and confirm actual encrypted delivery; independently replay only a usable complete original under unchanged predicates and seven false historical fields. | P04; performance and memory lead; [hosted operator guide](p06-hosted-warm-guide.md), [qualified warm handoff](p06-qualified-warm-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
+| **P06-T01 — Measured optimization — in progress** | Verify or configure exact private control delivery and the public age recipient; obtain and verify the final published retention/replay revision's full strict Actions result, preserving `25543e1` as base-only evidence. Observe adequate capacity, then manually admit one fresh 24-process, 792-launch, 25,344-word attempt. Privately retain complete and failed attempts and confirm encrypted delivery. After decryption, perform checked restoration, then independently replay only a usable complete native original from a separate trusted reader checkout before the frozen performance decision; keep seven historical fields false. | P04; performance and memory lead; [retention audit](p06-retention-review-audit.md), [retention contract](../designs/qualified_warm_retention_review_v1.md), [tooling packet](evidence/p06-retention-review/README.md), [hosted operator guide](p06-hosted-warm-guide.md), [qualified warm handoff](p06-qualified-warm-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),
 [P04](phases/p04-inference.md), [P05](phases/p05-framework.md) and

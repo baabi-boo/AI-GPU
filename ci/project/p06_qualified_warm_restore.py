@@ -52,6 +52,17 @@ def _require(condition, code):
         raise RestoreError(code)
 
 
+def _close_fds(*fds, suppress=False):
+    try:
+        retention._close_all(fds, os.close, suppress=suppress)
+    except KeyboardInterrupt:
+        raise RestoreError("interrupted") from None
+    except OSError:
+        raise RestoreError("filesystem-failed") from None
+    except Exception:
+        raise RestoreError("restore-failed") from None
+
+
 def _json_bytes(document):
     return (json.dumps(document, sort_keys=True, separators=(",", ":"), allow_nan=False)
             + "\n").encode("utf-8")
@@ -97,17 +108,17 @@ def _stamp(info):
 
 def _open_directory(path):
     fd = os.open("/", _DIRECTORY_FLAGS)
-    identities = [_identity(os.fstat(fd))]
     try:
+        identities = [_identity(os.fstat(fd))]
         for part in path.parts[1:]:
             child = os.open(part, _DIRECTORY_FLAGS, dir_fd=fd)
-            os.close(fd)
-            fd = child
+            previous, fd = fd, child
+            _close_fds(previous)
             identities.append(_identity(os.fstat(fd)))
         _require(len(set(identities)) == len(identities), "output-changed")
         return fd, tuple(identities)
     except BaseException:
-        os.close(fd)
+        _close_fds(fd, suppress=True)
         raise
 
 
@@ -144,7 +155,7 @@ def _mkdir(parent_fd, name):
                  "output-changed")
         return fd, identity
     except BaseException:
-        os.close(fd)
+        _close_fds(fd, suppress=True)
         raise
 
 
@@ -156,12 +167,12 @@ def _open_owned_directory(root_fd, directories, relative):
         for part in relative.split("/") if relative else ():
             prefix = prefix + "/" + part if prefix else part
             child = os.open(part, _DIRECTORY_FLAGS, dir_fd=fd)
-            os.close(fd)
-            fd = child
+            previous, fd = fd, child
+            _close_fds(previous)
             _directory_identity(fd, directories[prefix])
         return fd
     except BaseException:
-        os.close(fd)
+        _close_fds(fd, suppress=True)
         raise
 
 
@@ -205,6 +216,7 @@ def _new_file(root_fd, directories, relative, size, sha256, writer):
     parent, _, name = relative.rpartition("/")
     parent_fd = _open_owned_directory(root_fd, directories, parent)
     fd = None
+    completed = False
     try:
         fd = os.open(name, _CREATE_FLAGS, 0o600, dir_fd=parent_fd)
         os.fchmod(fd, 0o600)
@@ -214,13 +226,10 @@ def _new_file(root_fd, directories, relative, size, sha256, writer):
         expected = replace(expected, stamp=_verify_file(fd, expected))
         _require(_stamp(os.stat(name, dir_fd=parent_fd, follow_symlinks=False)) == expected.stamp,
                  "output-changed")
+        completed = True
         return expected
     finally:
-        try:
-            if fd is not None:
-                os.close(fd)
-        finally:
-            os.close(parent_fd)
+        _close_fds(fd, parent_fd, suppress=not completed)
 
 
 def _bytes_file(root_fd, directories, relative, body):
@@ -247,6 +256,7 @@ def _verify_tree(root_fd, directories, files):
             path = relative + "/" + name if relative else name
             directory = path in directories
             child_fd = os.open(name, _DIRECTORY_FLAGS if directory else _READ_FLAGS, dir_fd=fd)
+            completed = False
             try:
                 if directory:
                     visit(child_fd, path)
@@ -256,8 +266,9 @@ def _verify_tree(root_fd, directories, files):
                     _verify_file(child_fd, files[path])
                     _require(_stamp(os.stat(name, dir_fd=fd, follow_symlinks=False))
                              == files[path].stamp, "output-changed")
+                completed = True
             finally:
-                os.close(child_fd)
+                _close_fds(child_fd, suppress=not completed)
         _require(_stamp(os.fstat(fd)) == _stamp(before), "output-changed")
         os.fsync(fd)
 
@@ -266,6 +277,7 @@ def _verify_tree(root_fd, directories, files):
 
 def _verify_root(output, parent_fd, parent_identities, root_fd, root_identity):
     reopened, identities = _open_directory(output.parent)
+    completed = False
     try:
         _require(identities == parent_identities
                  and _identity(os.fstat(reopened)) == _identity(os.fstat(parent_fd)),
@@ -274,8 +286,9 @@ def _verify_root(output, parent_fd, parent_identities, root_fd, root_identity):
         _require(stat.S_ISDIR(named.st_mode) and _identity(named) == root_identity,
                  "output-changed")
         _directory_identity(root_fd, root_identity)
+        completed = True
     finally:
-        os.close(reopened)
+        _close_fds(reopened, suppress=not completed)
 
 
 def _retain_incomplete(root_fd, root_identity):
@@ -292,17 +305,14 @@ def _retain_incomplete(root_fd, root_identity):
         # the private bytes already retained through the owned descriptor.
         pass
     finally:
-        if fd is not None:
-            try:
-                os.close(fd)
-            except BaseException:
-                pass
+        _close_fds(fd, suppress=True)
 
 
 def restore_archive(archive, expected_sha256, *, expected_revision, output_dir, summary=None):
     """Restore validated bytes into one absent private directory, or fail closed."""
     parent_fd = root_fd = None
     root_identity = None
+    completed = False
     try:
         output = _absolute(output_dir)
         with retention.RetentionArchive(archive, expected_sha256,
@@ -312,7 +322,7 @@ def restore_archive(archive, expected_sha256, *, expected_revision, output_dir, 
             input_ancestors = set()
             for path in inputs:
                 input_fd, identities = _open_directory(path.parent)
-                os.close(input_fd)
+                _close_fds(input_fd)
                 input_ancestors.update(identities)
             parent_fd, parent_identities = _open_directory(output.parent)
             input_ancestors.update(parent_identities)
@@ -332,15 +342,17 @@ def restore_archive(archive, expected_sha256, *, expected_revision, output_dir, 
                 relative = PRIVATE_NAME + ("/" + name if name else "")
                 parent, _, base = relative.rpartition("/")
                 directory_fd = _open_owned_directory(root_fd, directories, parent)
+                directory_completed = False
                 try:
                     child_fd, identity = _mkdir(directory_fd, base)
-                    os.close(child_fd)
+                    _close_fds(child_fd)
                     _require(identity not in directory_identities and identity not in input_ancestors,
                              "output-changed")
                     directory_identities.add(identity)
                     directories[relative] = identity
+                    directory_completed = True
                 finally:
-                    os.close(directory_fd)
+                    _close_fds(directory_fd, suppress=not directory_completed)
             for name, entry in sorted(retained.entries.items()):
                 if not entry["directory"]:
                     relative = PRIVATE_NAME + "/" + name
@@ -359,6 +371,7 @@ def restore_archive(archive, expected_sha256, *, expected_revision, output_dir, 
             _verify_root(output, parent_fd, parent_identities, root_fd, root_identity)
             os.fsync(parent_fd)
             report = dict(retained.report(), restoration_completed=True)
+        completed = True
         return report
     except BaseException as error:
         if root_fd is not None and root_identity is not None:
@@ -375,9 +388,7 @@ def restore_archive(archive, expected_sha256, *, expected_revision, output_dir, 
             raise RestoreError("restore-failed") from None
         raise
     finally:
-        for fd in (root_fd, parent_fd):
-            if fd is not None:
-                os.close(fd)
+        _close_fds(root_fd, parent_fd, suppress=not completed)
 
 
 class _Parser(argparse.ArgumentParser):

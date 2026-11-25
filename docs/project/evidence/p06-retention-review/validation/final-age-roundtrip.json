@@ -1,0 +1,499 @@
+{
+  "archive": {
+    "path": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/decrypted-synthetic.tar",
+    "sha256": "eb719b4ad8a8a76b9f0d8384cb7caf04921b772fffec2661b626c75835e83610",
+    "size_bytes": 153600
+  },
+  "assignment": "a33",
+  "checkout_head": "583985564ddbfd564f15344efe96c74a7c94c55b",
+  "checks": {
+    "actual_producer_module": true,
+    "age_keygen_verified_binary_hash": true,
+    "age_keygen_version": true,
+    "age_verified_binary_hash": true,
+    "age_version": true,
+    "bounded_retention_disk_reserve": true,
+    "canary_still_absent_after_negative_checks": true,
+    "ciphertext_and_plain_archive_unchanged": true,
+    "ciphertext_summary_hash_and_size": true,
+    "cli_runs_outside_checkout": true,
+    "decrypted_archive_private_mode": true,
+    "disposable_identity_cleanup": true,
+    "empty_directories_preserved": true,
+    "encrypted_output_private_modes": true,
+    "fresh_owned_work_directory": true,
+    "generated_test-identity.agekey": true,
+    "generated_wrong-test-identity.agekey": true,
+    "hidden_files_and_directories_preserved": true,
+    "inert_executable_never_executed": true,
+    "inspect_bad_digest_exit": true,
+    "inspect_bad_digest_no_false_acceptance": true,
+    "inspect_bad_digest_no_output": true,
+    "inspect_cli_success": true,
+    "inspect_counts_and_digest": true,
+    "inspect_no_native_or_authentication_claims": true,
+    "manifest_exact_inventory": true,
+    "no_incomplete_marker_after_success": true,
+    "persisted_summary_exact": true,
+    "public_output_exact_pair": true,
+    "public_recipient_derived": true,
+    "real_age_decrypt_success": true,
+    "release_archive_sha256": true,
+    "requested_final_source_hashes_after": true,
+    "requested_final_source_hashes_before": true,
+    "restore_bad_digest_exit": true,
+    "restore_bad_digest_no_false_acceptance": true,
+    "restore_bad_digest_no_output": true,
+    "restore_cli_success": true,
+    "restore_completion_flag": true,
+    "restore_counts_and_digest": true,
+    "restore_no_native_or_authentication_claims": true,
+    "restored_all_source_bytes": true,
+    "restored_exact_inventory": true,
+    "restored_manifest_bytes": true,
+    "restored_private_modes": true,
+    "source_bytes_unchanged": true,
+    "source_private_modes": true,
+    "sources_unchanged_during_run": true,
+    "summary_counts": true,
+    "tar_all_source_bytes": true,
+    "tar_exact_members": true,
+    "tar_private_modes": true,
+    "task_local_tmpdir": true,
+    "wrong_identity_no_plaintext": true,
+    "wrong_identity_rejected": true
+  },
+  "commands": [
+    {
+      "argv": [
+        "/home/agent/ai-gpu-d37f66a85d88/tools/age",
+        "--version"
+      ],
+      "cwd": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga",
+      "name": "age_version",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "v1.3.2\n"
+    },
+    {
+      "argv": [
+        "/home/agent/ai-gpu-d37f66a85d88/tools/age-keygen",
+        "--version"
+      ],
+      "cwd": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga",
+      "name": "age_keygen_version",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "v1.3.2\n"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "cwd": "/home/agent/ai-gpu-d37f66a85d88/AI-GPU",
+      "name": "git_status_before",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": " M ci/project/p06_qualified_warm_restore.py\n M ci/project/p06_qualified_warm_retention.py\n M ci/project/test_p06_qualified_warm_retention.py\n M docs/project/p06-hosted-warm-guide.md\n?? ci/project/test_p06_qualified_warm_cleanup.py\n?? docs/designs/qualified_warm_retention_review_v1.md\n?? docs/project/p06-retention-review-audit.md\n"
+    },
+    {
+      "argv": [
+        "/home/agent/ai-gpu-d37f66a85d88/tools/age-keygen",
+        "--output",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/test-identity.agekey"
+      ],
+      "cwd": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga",
+      "name": "generate_test-identity.agekey",
+      "output_not_retained": true,
+      "returncode": 0,
+      "stderr_bytes": 75,
+      "stdout_bytes": 0
+    },
+    {
+      "argv": [
+        "/home/agent/ai-gpu-d37f66a85d88/tools/age-keygen",
+        "--output",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/wrong-test-identity.agekey"
+      ],
+      "cwd": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga",
+      "name": "generate_wrong-test-identity.agekey",
+      "output_not_retained": true,
+      "returncode": 0,
+      "stderr_bytes": 75,
+      "stdout_bytes": 0
+    },
+    {
+      "argv": [
+        "/home/agent/ai-gpu-d37f66a85d88/tools/age-keygen",
+        "-y",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/test-identity.agekey"
+      ],
+      "cwd": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga",
+      "name": "derive_public_recipient",
+      "output_not_retained": true,
+      "returncode": 0,
+      "stderr_bytes": 0,
+      "stdout_bytes": 63
+    },
+    {
+      "argv": [
+        "/home/agent/ai-gpu-d37f66a85d88/tools/age",
+        "--decrypt",
+        "--identity",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/test-identity.agekey",
+        "--output",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/decrypted-synthetic.tar",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/encrypted-output/qualified-warm-retention.tar.age"
+      ],
+      "cwd": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga",
+      "name": "real_age_decrypt",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "/home/agent/ai-gpu-d37f66a85d88/tools/age",
+        "--decrypt",
+        "--identity",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/wrong-test-identity.agekey",
+        "--output",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/wrong-key-output.tar",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/encrypted-output/qualified-warm-retention.tar.age"
+      ],
+      "cwd": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga",
+      "name": "real_age_wrong_identity",
+      "returncode": 1,
+      "stderr": "age: error: no identity matched any of the recipients\nage: report unexpected or unhelpful errors at https://filippo.io/age/report\n",
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "/home/agent/ai-gpu-d37f66a85d88/governance-environment/venv/bin/python3",
+        "/home/agent/ai-gpu-d37f66a85d88/AI-GPU/ci/project/p06_qualified_warm_restore.py",
+        "inspect",
+        "--archive",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/decrypted-synthetic.tar",
+        "--sha256",
+        "eb719b4ad8a8a76b9f0d8384cb7caf04921b772fffec2661b626c75835e83610",
+        "--expected-revision",
+        "583985564ddbfd564f15344efe96c74a7c94c55b",
+        "--summary",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/encrypted-output/encryption-summary.json"
+      ],
+      "cwd": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/outside-checkout",
+      "name": "outside_checkout_inspect",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\"archive_bytes\":153600,\"archive_sha256\":\"eb719b4ad8a8a76b9f0d8384cb7caf04921b772fffec2661b626c75835e83610\",\"contract_id\":\"p06-qualified-warm-retention-review-v1\",\"directory_count\":9,\"expected_revision\":\"583985564ddbfd564f15344efe96c74a7c94c55b\",\"file_count\":9,\"input_bytes\":131613,\"limitations\":[\"caller-selected-digest-is-not-origin-authentication\",\"public-summary-ciphertext-is-not-verified\",\"retention-consistency-is-not-native-or-performance-acceptance\",\"observed-stability-does-not-exclude-malicious-concurrent-writers\"],\"native_acceptance\":false,\"native_execution\":\"not_run\",\"origin_authenticated\":false,\"outcome\":\"pass\",\"performance_acceptance\":false,\"phase_acceptance\":false,\"retained_code_executed\":false,\"retention_verified\":true,\"schema_version\":1,\"summary_checked\":true}\n"
+    },
+    {
+      "argv": [
+        "/home/agent/ai-gpu-d37f66a85d88/governance-environment/venv/bin/python3",
+        "/home/agent/ai-gpu-d37f66a85d88/AI-GPU/ci/project/p06_qualified_warm_restore.py",
+        "restore",
+        "--archive",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/decrypted-synthetic.tar",
+        "--sha256",
+        "eb719b4ad8a8a76b9f0d8384cb7caf04921b772fffec2661b626c75835e83610",
+        "--expected-revision",
+        "583985564ddbfd564f15344efe96c74a7c94c55b",
+        "--summary",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/encrypted-output/encryption-summary.json",
+        "--output-dir",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/restored-output"
+      ],
+      "cwd": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/outside-checkout",
+      "name": "outside_checkout_restore",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "{\"archive_bytes\":153600,\"archive_sha256\":\"eb719b4ad8a8a76b9f0d8384cb7caf04921b772fffec2661b626c75835e83610\",\"contract_id\":\"p06-qualified-warm-retention-review-v1\",\"directory_count\":9,\"expected_revision\":\"583985564ddbfd564f15344efe96c74a7c94c55b\",\"file_count\":9,\"input_bytes\":131613,\"limitations\":[\"caller-selected-digest-is-not-origin-authentication\",\"public-summary-ciphertext-is-not-verified\",\"retention-consistency-is-not-native-or-performance-acceptance\",\"observed-stability-does-not-exclude-malicious-concurrent-writers\"],\"native_acceptance\":false,\"native_execution\":\"not_run\",\"origin_authenticated\":false,\"outcome\":\"pass\",\"performance_acceptance\":false,\"phase_acceptance\":false,\"restoration_completed\":true,\"retained_code_executed\":false,\"retention_verified\":true,\"schema_version\":1,\"summary_checked\":true}\n"
+    },
+    {
+      "argv": [
+        "/home/agent/ai-gpu-d37f66a85d88/governance-environment/venv/bin/python3",
+        "/home/agent/ai-gpu-d37f66a85d88/AI-GPU/ci/project/p06_qualified_warm_restore.py",
+        "inspect",
+        "--archive",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/decrypted-synthetic.tar",
+        "--sha256",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "--expected-revision",
+        "583985564ddbfd564f15344efe96c74a7c94c55b",
+        "--summary",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/encrypted-output/encryption-summary.json"
+      ],
+      "cwd": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/outside-checkout",
+      "name": "reject_bad_digest_inspect",
+      "returncode": 1,
+      "stderr": "",
+      "stdout": "{\"contract_id\":\"p06-qualified-warm-retention-review-v1\",\"error_code\":\"retention-rejected\",\"native_acceptance\":false,\"native_execution\":\"not_run\",\"origin_authenticated\":false,\"outcome\":\"fail\",\"performance_acceptance\":false,\"phase_acceptance\":false,\"restoration_completed\":false,\"retained_code_executed\":false,\"retention_verified\":false,\"schema_version\":1}\n"
+    },
+    {
+      "argv": [
+        "/home/agent/ai-gpu-d37f66a85d88/governance-environment/venv/bin/python3",
+        "/home/agent/ai-gpu-d37f66a85d88/AI-GPU/ci/project/p06_qualified_warm_restore.py",
+        "restore",
+        "--archive",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/decrypted-synthetic.tar",
+        "--sha256",
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "--expected-revision",
+        "583985564ddbfd564f15344efe96c74a7c94c55b",
+        "--summary",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/encrypted-output/encryption-summary.json",
+        "--output-dir",
+        "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/rejected-bad-digest-restore"
+      ],
+      "cwd": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/outside-checkout",
+      "name": "reject_bad_digest_restore",
+      "returncode": 1,
+      "stderr": "",
+      "stdout": "{\"contract_id\":\"p06-qualified-warm-retention-review-v1\",\"error_code\":\"retention-rejected\",\"native_acceptance\":false,\"native_execution\":\"not_run\",\"origin_authenticated\":false,\"outcome\":\"fail\",\"performance_acceptance\":false,\"phase_acceptance\":false,\"restoration_completed\":false,\"retained_code_executed\":false,\"retention_verified\":false,\"schema_version\":1}\n"
+    }
+  ],
+  "earlier_results_promoted_to_final_bytes": false,
+  "encryption_summary": {
+    "ciphertext_bytes": 153832,
+    "ciphertext_sha256": "c4f4fbece53c88f0682632bc21a88d4f4fe4715447556228338e4718a7c5470c",
+    "contract_id": "p06-qualified-warm-encrypted-retention-v1",
+    "directory_count": 9,
+    "encryption_passed": true,
+    "expected_revision": "583985564ddbfd564f15344efe96c74a7c94c55b",
+    "file_count": 9,
+    "input_bytes": 131613,
+    "outcome": "pass",
+    "schema_version": 1
+  },
+  "finished_utc": "2026-11-25T06:45:39Z",
+  "fixture": {
+    "directories": [
+      "",
+      ".hidden",
+      ".hidden/empty",
+      "empty-root",
+      "nested",
+      "nested/empty",
+      "nested/space dir",
+      "pax-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "unicod\u00e9"
+    ],
+    "directory_count": 9,
+    "executable_canary_present": true,
+    "file_count": 9,
+    "files": [
+      {
+        "path": ".dotfile",
+        "sha256": "215c7b911e342ba162b6dc90b2d0ed91f01c2446d841ca3e4714344d5c61cfc1",
+        "size_bytes": 25
+      },
+      {
+        "path": ".hidden/config.json",
+        "sha256": "3f08670ddd5751d827ef2176511050e0ddb79bd239a642f8e2c2e4168ce00e10",
+        "size_bytes": 30
+      },
+      {
+        "path": "inert-canary.sh",
+        "sha256": "3d7292f07b15dd1c79f27af2970cc0b215b0165daffb6fdd0906b8e70cbc9db1",
+        "size_bytes": 118
+      },
+      {
+        "path": "nested/data.bin",
+        "sha256": "e70309705144399370c3c3dc8851dfa160d7b38c854ce41af4a5007912ee0b75",
+        "size_bytes": 131334
+      },
+      {
+        "path": "nested/empty-file",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      {
+        "path": "nested/space dir/name with spaces.txt",
+        "sha256": "c8569d41563a92d23d5b3a93be3cdbbee511affe1ec8e23ac7b047cb41be82ea",
+        "size_bytes": 17
+      },
+      {
+        "path": "pax-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/payload.txt",
+        "sha256": "e8b2e997a2bde4f4da0fe6215be79a5241ee59218b1cb0e7a7df27d72ed7a0aa",
+        "size_bytes": 28
+      },
+      {
+        "path": "plain.txt",
+        "sha256": "579202df86eeb5f3283eb8958b80cd615e7e0d37a37d01883ce82d060b676560",
+        "size_bytes": 34
+      },
+      {
+        "path": "unicod\u00e9/caf\u00e9.txt",
+        "sha256": "f843b9097ea4567095852268ea7c9271f5db6c907234dab8cbbb54518e831735",
+        "size_bytes": 27
+      }
+    ],
+    "input_bytes": 131613
+  },
+  "free_bytes_before": 3627323392,
+  "genuine_private_user_or_vendor_data_used": false,
+  "identity_files_deleted": true,
+  "inspect_report": {
+    "archive_bytes": 153600,
+    "archive_sha256": "eb719b4ad8a8a76b9f0d8384cb7caf04921b772fffec2661b626c75835e83610",
+    "contract_id": "p06-qualified-warm-retention-review-v1",
+    "directory_count": 9,
+    "expected_revision": "583985564ddbfd564f15344efe96c74a7c94c55b",
+    "file_count": 9,
+    "input_bytes": 131613,
+    "limitations": [
+      "caller-selected-digest-is-not-origin-authentication",
+      "public-summary-ciphertext-is-not-verified",
+      "retention-consistency-is-not-native-or-performance-acceptance",
+      "observed-stability-does-not-exclude-malicious-concurrent-writers"
+    ],
+    "native_acceptance": false,
+    "native_execution": "not_run",
+    "origin_authenticated": false,
+    "outcome": "pass",
+    "performance_acceptance": false,
+    "phase_acceptance": false,
+    "retained_code_executed": false,
+    "retention_verified": true,
+    "schema_version": 1,
+    "summary_checked": true
+  },
+  "invocation": {
+    "argv": [
+      "/home/agent/ai-gpu-d37f66a85d88/governance-environment/venv/bin/python3",
+      "/home/agent/ai-gpu-d37f66a85d88/notes/a33_probe.py",
+      "--work",
+      "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga"
+    ],
+    "cwd": "/home/agent/ai-gpu-d37f66a85d88/AI-GPU",
+    "incoming_tmpdir": "/home/agent/ai-gpu-d37f66a85d88/tmp"
+  },
+  "manifest_sha256": "9a8f0cf2ccd05a44594ce1d3f33936c6351df6281af9f52e6de583cf082ca132",
+  "native_acceptance": false,
+  "native_execution": "not_run",
+  "negative_reports": {
+    "inspect_bad_digest": {
+      "contract_id": "p06-qualified-warm-retention-review-v1",
+      "error_code": "retention-rejected",
+      "native_acceptance": false,
+      "native_execution": "not_run",
+      "origin_authenticated": false,
+      "outcome": "fail",
+      "performance_acceptance": false,
+      "phase_acceptance": false,
+      "restoration_completed": false,
+      "retained_code_executed": false,
+      "retention_verified": false,
+      "schema_version": 1
+    },
+    "restore_bad_digest": {
+      "contract_id": "p06-qualified-warm-retention-review-v1",
+      "error_code": "retention-rejected",
+      "native_acceptance": false,
+      "native_execution": "not_run",
+      "origin_authenticated": false,
+      "outcome": "fail",
+      "performance_acceptance": false,
+      "phase_acceptance": false,
+      "restoration_completed": false,
+      "retained_code_executed": false,
+      "retention_verified": false,
+      "schema_version": 1
+    }
+  },
+  "outcome": "pass",
+  "performance_acceptance": false,
+  "phase_acceptance": false,
+  "probe_sha256": "11f576c116ee66746b95234ccd768168bc69e4854491a03976e32dbe822cbb43",
+  "producer_call": {
+    "age_binary": "/home/agent/ai-gpu-d37f66a85d88/tools/age",
+    "callable": "p06_qualified_warm_encrypt.encrypt_private_directory",
+    "expected_revision": "583985564ddbfd564f15344efe96c74a7c94c55b",
+    "input_dir": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/synthetic-private",
+    "monkeypatches_or_mocks_used": false,
+    "outcome": "pass",
+    "output_dir": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga/encrypted-output",
+    "recipient": "public recipient derived from disposable test identity; omitted"
+  },
+  "python": {
+    "path": "/home/agent/ai-gpu-d37f66a85d88/governance-environment/venv/bin/python3",
+    "resolved_sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+    "version": "3.12.14"
+  },
+  "restore_report": {
+    "archive_bytes": 153600,
+    "archive_sha256": "eb719b4ad8a8a76b9f0d8384cb7caf04921b772fffec2661b626c75835e83610",
+    "contract_id": "p06-qualified-warm-retention-review-v1",
+    "directory_count": 9,
+    "expected_revision": "583985564ddbfd564f15344efe96c74a7c94c55b",
+    "file_count": 9,
+    "input_bytes": 131613,
+    "limitations": [
+      "caller-selected-digest-is-not-origin-authentication",
+      "public-summary-ciphertext-is-not-verified",
+      "retention-consistency-is-not-native-or-performance-acceptance",
+      "observed-stability-does-not-exclude-malicious-concurrent-writers"
+    ],
+    "native_acceptance": false,
+    "native_execution": "not_run",
+    "origin_authenticated": false,
+    "outcome": "pass",
+    "performance_acceptance": false,
+    "phase_acceptance": false,
+    "restoration_completed": true,
+    "retained_code_executed": false,
+    "retention_verified": true,
+    "schema_version": 1,
+    "summary_checked": true
+  },
+  "reused_probe": {
+    "path": "/home/agent/ai-gpu-d37f66a85d88/notes/a12_probe.py",
+    "sha256": "427e7ce4ed130d2b8c1c1cec9496509d61f257ad9cadec0efdb5c4b8e9057422"
+  },
+  "scope": "final cleanup bytes: synthetic real-age transport and retention integration only",
+  "scope_limitations": [
+    "Final cleanup source bytes received a new synthetic roundtrip; earlier runs retain their own source hashes.",
+    "No native experiment, vendor data, actual control archive, performance or phase acceptance.",
+    "No assertion of origin authentication or exclusion of malicious concurrent writers.",
+    "No full strict governance qualification or injected close-fault coverage from this roundtrip."
+  ],
+  "source_sha256_after": {
+    "ci/project/p06_qualified_warm_encrypt.py": "4beadf5cd67fe8847fb00b881a45661e710b6275fb5d5e5baa0a52a1440de275",
+    "ci/project/p06_qualified_warm_restore.py": "21bc047ef9b76232aa79ce5199b82fca48cb6611aab4b61018f8ff9f08bbbf1d",
+    "ci/project/p06_qualified_warm_retention.py": "4645e2a4aac840c87b467b08cb2d338818739d6fbdbbd3ec95a1103dfa11bcbe"
+  },
+  "source_sha256_before": {
+    "ci/project/p06_qualified_warm_encrypt.py": "4beadf5cd67fe8847fb00b881a45661e710b6275fb5d5e5baa0a52a1440de275",
+    "ci/project/p06_qualified_warm_restore.py": "21bc047ef9b76232aa79ce5199b82fca48cb6611aab4b61018f8ff9f08bbbf1d",
+    "ci/project/p06_qualified_warm_retention.py": "4645e2a4aac840c87b467b08cb2d338818739d6fbdbbd3ec95a1103dfa11bcbe"
+  },
+  "source_sha256_required": {
+    "ci/project/p06_qualified_warm_encrypt.py": "4beadf5cd67fe8847fb00b881a45661e710b6275fb5d5e5baa0a52a1440de275",
+    "ci/project/p06_qualified_warm_restore.py": "21bc047ef9b76232aa79ce5199b82fca48cb6611aab4b61018f8ff9f08bbbf1d",
+    "ci/project/p06_qualified_warm_retention.py": "4645e2a4aac840c87b467b08cb2d338818739d6fbdbbd3ec95a1103dfa11bcbe"
+  },
+  "started_utc": "2026-11-25T06:45:38Z",
+  "tools": {
+    "age": {
+      "path": "/home/agent/ai-gpu-d37f66a85d88/tools/age",
+      "sha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c",
+      "version": "v1.3.2"
+    },
+    "age_keygen": {
+      "path": "/home/agent/ai-gpu-d37f66a85d88/tools/age-keygen",
+      "sha256": "0a0009db842259d6717f7eeb30acb6b90d2a2eb924c6acd0a0db0ca1f1537899",
+      "version": "v1.3.2"
+    },
+    "release_archive_sha256": "cbe24006683f8eb669266162894b9a522a1af52f2665fbc63a4bb032ed26ac10"
+  },
+  "work_directory": "/home/agent/ai-gpu-d37f66a85d88/tmp/a33-real-age.vdt4a_ga",
+  "working_tree_status_before": " M ci/project/p06_qualified_warm_restore.py\n M ci/project/p06_qualified_warm_retention.py\n M ci/project/test_p06_qualified_warm_retention.py\n M docs/project/p06-hosted-warm-guide.md\n?? ci/project/test_p06_qualified_warm_cleanup.py\n?? docs/designs/qualified_warm_retention_review_v1.md\n?? docs/project/p06-retention-review-audit.md\n",
+  "wrong_identity": {
+    "no_plaintext_released": true,
+    "output_exists": false,
+    "returncode": 1,
+    "stderr": "age: error: no identity matched any of the recipients\nage: report unexpected or unhelpful errors at https://filippo.io/age/report\n"
+  }
+}
