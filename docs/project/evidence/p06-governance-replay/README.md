@@ -89,6 +89,32 @@ and observed results retain their individual scopes. Neither the number of
 reviews nor closure of these findings establishes complete strict governance
 or native acceptance.
 
+## First published failure and correction
+
+[Run 45671761974, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45671761974)
+at `00a6c275af918b51a36dbbdb454e9b480e25bb98` completed all 5,406 tests with
+one error in the inherited process-group timeout test. This invocation failed
+strict qualification. The [failure record](first-publication-failure.json)
+and [unchanged original](originals/run-45671761974-attempt1-failed.zip) preserve
+the actual result: 1,380,549 ZIP bytes, SHA-256
+`050f3b408d0befc37a0a3cb3e722f45551c9a5365ab5dd72eac263a281c620fb`.
+
+The bounded procfs-read correction is documented in the [audit](../../p06-governance-replay-audit.md)
+and [independent follow-up review](procfs-review-56.md). Seven
+[before controls](procfs-before-controls.json) and seven
+[after controls](procfs-after-controls.json) retain their respective
+[before log](procfs-before-controls.log) and [after log](procfs-after-controls.log).
+Each control executes the existing real process-group test. Forced disappearance
+now passes, while readable live states and unrelated read errors still fail.
+These are expected-outcome development controls, not 14 new canonical test IDs.
+
+The [replay rejection record](failed-original-replay.json) confirms the actual
+failed original receives no success receipt. Its reader bytes are unchanged by
+the procfs test correction. The 60-report archive remains the original
+prepublication snapshot; the additional review is an explicitly separate
+follow-up on an existing agent context. The corrected revision requires its own
+complete strict result and original replay.
+
 ## Scope and continuation
 
 Local replay establishes internal consistency and agreement with independently

@@ -1,0 +1,85 @@
+CASE actual_procfs (expected pass)
+test_command_timeout_kills_its_process_group_and_retains_output (test_governance_env.GovernanceEnvironmentTests.test_command_timeout_kills_its_process_group_and_retains_output) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.088s
+
+OK
+
+CASE missing_before_open (expected pass)
+test_command_timeout_kills_its_process_group_and_retains_output (test_governance_env.GovernanceEnvironmentTests.test_command_timeout_kills_its_process_group_and_retains_output) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.084s
+
+OK
+
+CASE disappeared_during_read (expected error)
+test_command_timeout_kills_its_process_group_and_retains_output (test_governance_env.GovernanceEnvironmentTests.test_command_timeout_kills_its_process_group_and_retains_output) ... ERROR
+
+======================================================================
+ERROR: test_command_timeout_kills_its_process_group_and_retains_output (test_governance_env.GovernanceEnvironmentTests.test_command_timeout_kills_its_process_group_and_retains_output)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/22ba639a4a87/AI-GPU/ci/project/test_governance_env.py", line 488, in test_command_timeout_kills_its_process_group_and_retains_output
+    state = process_state.read_text().rsplit(")", 1)[1].split()[0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/22ba639a4a87/validation/governance-proc-race/controls.py", line 44, in observe
+    raise ProcessLookupError(errno.ESRCH, "controlled disappearance during procfs read")
+ProcessLookupError: [Errno 3] controlled disappearance during procfs read
+
+----------------------------------------------------------------------
+Ran 1 test in 1.090s
+
+FAILED (errors=1)
+
+CASE live_descendant (expected failure)
+test_command_timeout_kills_its_process_group_and_retains_output (test_governance_env.GovernanceEnvironmentTests.test_command_timeout_kills_its_process_group_and_retains_output) ... FAIL
+
+======================================================================
+FAIL: test_command_timeout_kills_its_process_group_and_retains_output (test_governance_env.GovernanceEnvironmentTests.test_command_timeout_kills_its_process_group_and_retains_output)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/22ba639a4a87/AI-GPU/ci/project/test_governance_env.py", line 492, in test_command_timeout_kills_its_process_group_and_retains_output
+    self.assertIn(state, ("Z", "X"), "timed-out descendant remained alive")
+AssertionError: 'S' not found in ('Z', 'X') : timed-out descendant remained alive
+
+----------------------------------------------------------------------
+Ran 1 test in 1.101s
+
+FAILED (failures=1)
+
+CASE zombie_descendant (expected pass)
+test_command_timeout_kills_its_process_group_and_retains_output (test_governance_env.GovernanceEnvironmentTests.test_command_timeout_kills_its_process_group_and_retains_output) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.078s
+
+OK
+
+CASE dead_descendant (expected pass)
+test_command_timeout_kills_its_process_group_and_retains_output (test_governance_env.GovernanceEnvironmentTests.test_command_timeout_kills_its_process_group_and_retains_output) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.070s
+
+OK
+
+CASE unrelated_read_failure (expected error)
+test_command_timeout_kills_its_process_group_and_retains_output (test_governance_env.GovernanceEnvironmentTests.test_command_timeout_kills_its_process_group_and_retains_output) ... ERROR
+
+======================================================================
+ERROR: test_command_timeout_kills_its_process_group_and_retains_output (test_governance_env.GovernanceEnvironmentTests.test_command_timeout_kills_its_process_group_and_retains_output)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/22ba639a4a87/AI-GPU/ci/project/test_governance_env.py", line 488, in test_command_timeout_kills_its_process_group_and_retains_output
+    state = process_state.read_text().rsplit(")", 1)[1].split()[0]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/22ba639a4a87/validation/governance-proc-race/controls.py", line 46, in observe
+    raise PermissionError(errno.EACCES, "controlled unrelated procfs error")
+PermissionError: [Errno 13] controlled unrelated procfs error
+
+----------------------------------------------------------------------
+Ran 1 test in 1.103s
+
+FAILED (errors=1)

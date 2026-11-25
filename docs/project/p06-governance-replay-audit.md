@@ -113,6 +113,49 @@ admission, even though the unchanged base classifier labels the initial
 committed integration R2 through its CI-enforcement path rule. Reviewers who
 did not author the components inspect the enforcement changes and corrections.
 
+## First published qualification and procfs correction
+
+The first published revision, `00a6c275af918b51a36dbbdb454e9b480e25bb98`,
+received its own complete strict invocation in
+[run 45671761974, attempt 1](https://github.com/baabi-boo/AI-GPU/actions/runs/45671761974).
+It **failed** with one error after all 5,406 canonical tests ran. The
+[failed original and accounting](evidence/p06-governance-replay/first-publication-failure.json)
+preserve 5,405 successful parent outcomes, one error, 38,492 successful subtests
+and 54,710 events. Execution accounting reports 3,157.916707 seconds; the
+unittest trailer reports 3,157.906 seconds. Source, interpreter and environment
+records remained stable. None of these counts establishes strict qualification.
+
+The error was an inherited race in
+`test_command_timeout_kills_its_process_group_and_retains_output`. After the
+test verified the timeout, the parent's `-SIGKILL` result and retained child PID,
+the descendant disappeared between opening and reading `/proc/<pid>/stat`.
+Linux reported `ProcessLookupError` rather than the already-handled
+`FileNotFoundError`. The production timeout implementation and this test were
+both byte-identical to the audited starting revision.
+
+The correction recognizes those two specific disappearance errors at the
+existing procfs read. Every timeout/output assertion and the rejection of
+readable live process states remains. It adds no sleep, retry, skip, expected
+failure, production behavior change or gate exception. All existing canonical
+test IDs remain. This is a tenth finding discovered by actual published CI,
+separate from the nine findings closed in the original 60-report snapshot.
+
+The [before](evidence/p06-governance-replay/procfs-before-controls.json) and
+[after](evidence/p06-governance-replay/procfs-after-controls.json) controls each
+execute the real process-group timeout seven times, with tightly scoped final
+procfs observations. The forced `ProcessLookupError` fails before and passes
+afterward; live-state and unrelated permission-error controls still reject.
+Actual procfs, absent-record and dead/zombie controls pass. The
+[independent follow-up review](evidence/p06-governance-replay/procfs-review-56.md)
+records the exact corrected source and preserved obligations. This follow-up
+uses an existing agent context and adds no agent to the count of 60.
+
+The [documented replay CLI rejection](evidence/p06-governance-replay/failed-original-replay.json)
+rejects the actual failed original with exit 1, sanitized stderr, no success
+stdout and no receipt. The failed original is retained byte for byte. The
+corrected source still requires a fresh complete strict invocation and its own
+successful original replay; retrying the old revision is not its qualification.
+
 ## Delivery and verification
 
 The [historical evidence packet](evidence/p06-governance-replay/README.md)
@@ -129,7 +172,8 @@ with at most three workers alongside the integrator. Its machine-readable index
 binds every completed assignment to the unchanged report bytes in the retained
 archive. Follow-up turns and a report retry do not increase the distinct-agent
 count. The [findings record](evidence/p06-governance-replay/review-findings.json)
-links all nine corrected findings to their independent confirmations.
+links the original nine corrected findings to their independent confirmations.
+The additional published-CI finding and its follow-up review are recorded above.
 
 Focused development results retain their separate source identities: 261
 integration checks, followed by scoped 28-test receipt-output, 101-test metadata

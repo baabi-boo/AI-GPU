@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "phase": "after",
+  "scope": "development-controls-for-existing-real-process-group-test",
+  "test_id": "test_governance_env.GovernanceEnvironmentTests.test_command_timeout_kills_its_process_group_and_retains_output",
+  "checks_match_expected": true,
+  "full_governance_qualification": false,
+  "real_process_group_timeout_executed_in_each_case": true,
+  "source_sha256": {
+    "test_governance_env.py": "e4a0e1a89a54af92af48393a7551122ce8ac827635964f6e76a443461e32ca89",
+    "governance_env.py": "af4538a894a96abaf4848b19126ba0b55f8b5d1c3404f7bda3c24f8ac3d9dbe1"
+  },
+  "cases": [
+    {
+      "case": "actual_procfs",
+      "injection": null,
+      "expected": "pass",
+      "observed": "pass",
+      "tests_run": 1,
+      "skips": 0,
+      "duration_seconds": 1.0763159439993615,
+      "proc_reads": []
+    },
+    {
+      "case": "missing_before_open",
+      "injection": "ENOENT",
+      "expected": "pass",
+      "observed": "pass",
+      "tests_run": 1,
+      "skips": 0,
+      "duration_seconds": 1.0911170770013996,
+      "proc_reads": [
+        "/proc/28/stat"
+      ]
+    },
+    {
+      "case": "disappeared_during_read",
+      "injection": "ESRCH",
+      "expected": "pass",
+      "observed": "pass",
+      "tests_run": 1,
+      "skips": 0,
+      "duration_seconds": 1.1085676009988674,
+      "proc_reads": [
+        "/proc/40/stat"
+      ]
+    },
+    {
+      "case": "live_descendant",
+      "injection": "S",
+      "expected": "failure",
+      "observed": "failure",
+      "tests_run": 1,
+      "skips": 0,
+      "duration_seconds": 1.070748372001617,
+      "proc_reads": [
+        "/proc/52/stat"
+      ]
+    },
+    {
+      "case": "zombie_descendant",
+      "injection": "Z",
+      "expected": "pass",
+      "observed": "pass",
+      "tests_run": 1,
+      "skips": 0,
+      "duration_seconds": 1.0793658750008035,
+      "proc_reads": [
+        "/proc/64/stat"
+      ]
+    },
+    {
+      "case": "dead_descendant",
+      "injection": "X",
+      "expected": "pass",
+      "observed": "pass",
+      "tests_run": 1,
+      "skips": 0,
+      "duration_seconds": 1.0749401619996206,
+      "proc_reads": [
+        "/proc/76/stat"
+      ]
+    },
+    {
+      "case": "unrelated_read_failure",
+      "injection": "EACCES",
+      "expected": "error",
+      "observed": "error",
+      "tests_run": 1,
+      "skips": 0,
+      "duration_seconds": 1.0728254360001301,
+      "proc_reads": [
+        "/proc/88/stat"
+      ]
+    }
+  ]
+}

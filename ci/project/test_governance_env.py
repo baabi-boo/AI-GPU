@@ -486,7 +486,8 @@ class GovernanceEnvironmentTests(unittest.TestCase):
         process_state = Path("/proc") / str(child_pid) / "stat"
         try:
             state = process_state.read_text().rsplit(")", 1)[1].split()[0]
-        except FileNotFoundError:
+        except (FileNotFoundError, ProcessLookupError):
+            # Reaping can remove the task between opening and reading its procfs record.
             pass
         else:
             self.assertIn(state, ("Z", "X"), "timed-out descendant remained alive")
