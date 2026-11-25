@@ -1,0 +1,688 @@
+{
+  "agent": 37,
+  "review": "independent-regression-quality",
+  "reviewed_at_utc": "2026-11-25T12:43:44.452129+00:00",
+  "base_revision": "622662ad9cece6da4e3375be7e977dbe04cde862",
+  "snapshot_path": "/tmp/ai-gpu-ae456f837c05/validation/operational-source-freeze.json",
+  "snapshot_sha256": "714deb35f890b197d43e5b2de0a02c3ede1cb8ec0bf944f057cb349c9b1bdceb",
+  "scope": "Six production diffs, fourteen new test modules, Response.close fixture addition; static inspection and retained evidence review.",
+  "repository_edits": false,
+  "test_bodies_executed_by_this_agent": 0,
+  "full_strict_governance_run": false,
+  "native_execution": "not_run",
+  "findings": [],
+  "verdict": "No blocking regression-quality finding; final frozen-source qualification remains coordinator-owned.",
+  "checks": {
+    "frozen_files": 22,
+    "frozen_matches": true,
+    "new_modules": 14,
+    "new_methods": 50,
+    "existing_control_test_methods": 37,
+    "existing_control_test_methods_unchanged": true,
+    "new_skip_or_expected_failure_calls": [
+      {
+        "path": "ci/project/test_p06_operational_cancellation.py",
+        "line": 168,
+        "expression": "unittest.skipUnless(os.name == 'posix' and Path('/proc/self/stat').exists(), 'operational cancellation requires Linux /proc')"
+      }
+    ],
+    "signal_guard_true_here": true,
+    "existing_fixture_delta": "Only three lines add Response.close(), setting the pre-existing closed flag.",
+    "fd_reuse": "Real close followed synchronously by /dev/null open, exact fd equality asserted; real fstat and close counts detect leaks/double-close. Fixture finally releases test-created handles after mocks exit; no concurrent opener is created.",
+    "signals": "Readiness marker precedes send_signal; 8-second startup deadline, 8-second completion communicate timeout, 3-second final wait; real run_bounded children and handler restoration assertions."
+  },
+  "interpretation": "Defect regressions are sensitive to base/pre-fix behavior. Companion safety controls cover tempting invalid alternatives or preservation of existing behavior; do not claim every new method independently failed base.",
+  "files": [
+    {
+      "path": "ci/project/p06_qualified_warm_control.py",
+      "size_bytes": 25599,
+      "sha256": "a303c3dc56076bbb203376521534e465c5d97b997c9ae1b93e6375e98d298fcd",
+      "mode": "0o644",
+      "actual_sha256": "a303c3dc56076bbb203376521534e465c5d97b997c9ae1b93e6375e98d298fcd",
+      "actual_size_bytes": 25599,
+      "matches": true
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_encrypt.py",
+      "size_bytes": 31580,
+      "sha256": "70b5cc6e52d112b75d7009b3fe4b431ef56d17fea2a78e2a537538333b694053",
+      "mode": "0o644",
+      "actual_sha256": "70b5cc6e52d112b75d7009b3fe4b431ef56d17fea2a78e2a537538333b694053",
+      "actual_size_bytes": 31580,
+      "matches": true
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_hosted.py",
+      "size_bytes": 34745,
+      "sha256": "01bee3115ba5b2ff0abb2583d76b165718a08216e3064faeb28324655d27b3ff",
+      "mode": "0o644",
+      "actual_sha256": "01bee3115ba5b2ff0abb2583d76b165718a08216e3064faeb28324655d27b3ff",
+      "actual_size_bytes": 34745,
+      "matches": true
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_inputs.py",
+      "size_bytes": 19816,
+      "sha256": "f4077dc42117f4e2e121c18e9be72ac6de1a480450245db19cb8ce951f4860bb",
+      "mode": "0o644",
+      "actual_sha256": "f4077dc42117f4e2e121c18e9be72ac6de1a480450245db19cb8ce951f4860bb",
+      "actual_size_bytes": 19816,
+      "matches": true
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_pack.py",
+      "size_bytes": 33280,
+      "sha256": "e4cff314b8a2a0dbb277baef1bc5b3eb78b10a90f777a4d3b60ff74b682dac0e",
+      "mode": "0o644",
+      "actual_sha256": "e4cff314b8a2a0dbb277baef1bc5b3eb78b10a90f777a4d3b60ff74b682dac0e",
+      "actual_size_bytes": 33280,
+      "matches": true
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_run.py",
+      "size_bytes": 35159,
+      "sha256": "8455ff73d618e41714c0737fc3ac25ee3d8afbb538fb95b42779d9b3740dfcd3",
+      "mode": "0o644",
+      "actual_sha256": "8455ff73d618e41714c0737fc3ac25ee3d8afbb538fb95b42779d9b3740dfcd3",
+      "actual_size_bytes": 35159,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_control_closeout_review.py",
+      "size_bytes": 7808,
+      "sha256": "8502a9c800a864aaa947e3f9a68f112a5213ce8401a59121ad16514a811b72a2",
+      "mode": "0o644",
+      "actual_sha256": "8502a9c800a864aaa947e3f9a68f112a5213ce8401a59121ad16514a811b72a2",
+      "actual_size_bytes": 7808,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_control_final_review.py",
+      "size_bytes": 4716,
+      "sha256": "2726f9b782f94b2e4cc5d9ec4df2c3335981ab9f2af6fcf642e96274c5429368",
+      "mode": "0o644",
+      "actual_sha256": "2726f9b782f94b2e4cc5d9ec4df2c3335981ab9f2af6fcf642e96274c5429368",
+      "actual_size_bytes": 4716,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_control_finalization.py",
+      "size_bytes": 13711,
+      "sha256": "7020fea4b05a002f8d6353aed429d66e4162f9e2d4f202a0ca401edfb2c6e06c",
+      "mode": "0o644",
+      "actual_sha256": "7020fea4b05a002f8d6353aed429d66e4162f9e2d4f202a0ca401edfb2c6e06c",
+      "actual_size_bytes": 13711,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_control_operational_failures.py",
+      "size_bytes": 8249,
+      "sha256": "b281681fdf158062be763ce46aecff9b18634faba937072e490636a99b494e09",
+      "mode": "0o644",
+      "actual_sha256": "b281681fdf158062be763ce46aecff9b18634faba937072e490636a99b494e09",
+      "actual_size_bytes": 8249,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_directory_cleanup_review.py",
+      "size_bytes": 3422,
+      "sha256": "0ae6b592c82c81b7191280137c73a7f5109cded9f0fa5e377eb2315f30ab32aa",
+      "mode": "0o644",
+      "actual_sha256": "0ae6b592c82c81b7191280137c73a7f5109cded9f0fa5e377eb2315f30ab32aa",
+      "actual_size_bytes": 3422,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_encrypt_operational_failures.py",
+      "size_bytes": 10059,
+      "sha256": "5804c519149e3131c6183286c3c599d1b27f9849a4139d24765c311691169e88",
+      "mode": "0o644",
+      "actual_sha256": "5804c519149e3131c6183286c3c599d1b27f9849a4139d24765c311691169e88",
+      "actual_size_bytes": 10059,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_encrypt_publication_review.py",
+      "size_bytes": 3059,
+      "sha256": "94167a1faada5d880d73e4f89006c3fd96c65f859cdd75c3fe89ceecdf77d5ed",
+      "mode": "0o644",
+      "actual_sha256": "94167a1faada5d880d73e4f89006c3fd96c65f859cdd75c3fe89ceecdf77d5ed",
+      "actual_size_bytes": 3059,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_hosted_operational_failures.py",
+      "size_bytes": 6222,
+      "sha256": "ad165dd0ec63cc7e0b6e547ba1b504f06f0ba3876e29aa6d75163ab442033eb9",
+      "mode": "0o644",
+      "actual_sha256": "ad165dd0ec63cc7e0b6e547ba1b504f06f0ba3876e29aa6d75163ab442033eb9",
+      "actual_size_bytes": 6222,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_input_operational_failures.py",
+      "size_bytes": 7339,
+      "sha256": "2f3867cb359dd9fa5a499f66b0aeb9633f81827969cc45b5a9853421f5de50ce",
+      "mode": "0o644",
+      "actual_sha256": "2f3867cb359dd9fa5a499f66b0aeb9633f81827969cc45b5a9853421f5de50ce",
+      "actual_size_bytes": 7339,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_operational_cancellation.py",
+      "size_bytes": 13778,
+      "sha256": "9e04008693a5410a1ede7e6d88ccb86800ed7514a56852fdfffa2fb90877fc6b",
+      "mode": "0o644",
+      "actual_sha256": "9e04008693a5410a1ede7e6d88ccb86800ed7514a56852fdfffa2fb90877fc6b",
+      "actual_size_bytes": 13778,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_pack_operational_failures.py",
+      "size_bytes": 6428,
+      "sha256": "a7e93f6deb807c6cea46816c822cb2740b16ddba6d8ab892057bc18582fbe372",
+      "mode": "0o644",
+      "actual_sha256": "a7e93f6deb807c6cea46816c822cb2740b16ddba6d8ab892057bc18582fbe372",
+      "actual_size_bytes": 6428,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_pack_setup_cleanup.py",
+      "size_bytes": 4349,
+      "sha256": "206756440cdfc4bbac6370d8f664db5c4dfdb9acc4b2eb3f644a48817ed85991",
+      "mode": "0o644",
+      "actual_sha256": "206756440cdfc4bbac6370d8f664db5c4dfdb9acc4b2eb3f644a48817ed85991",
+      "actual_size_bytes": 4349,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_prelaunch_review.py",
+      "size_bytes": 6228,
+      "sha256": "c02d423ca1a3533fcf5ec7fe055ff6ff5e012f5010e5d6c0fbf35309568411ae",
+      "mode": "0o644",
+      "actual_sha256": "c02d423ca1a3533fcf5ec7fe055ff6ff5e012f5010e5d6c0fbf35309568411ae",
+      "actual_size_bytes": 6228,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_qualified_warm_control.py",
+      "size_bytes": 26406,
+      "sha256": "9dddf361cc18d72b40636156e36f40d359c36872bebae9925e6c96a063808ead",
+      "mode": "0o644",
+      "actual_sha256": "9dddf361cc18d72b40636156e36f40d359c36872bebae9925e6c96a063808ead",
+      "actual_size_bytes": 26406,
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_warm_supervision_failures.py",
+      "size_bytes": 2817,
+      "sha256": "c8f81e415fd9a9625403cba2a4c767a45ec1883919b13c7992be59e39f77e264",
+      "mode": "0o644",
+      "actual_sha256": "c8f81e415fd9a9625403cba2a4c767a45ec1883919b13c7992be59e39f77e264",
+      "actual_size_bytes": 2817,
+      "matches": true
+    },
+    {
+      "path": "ci/project/xrt_signals.py",
+      "size_bytes": 730,
+      "sha256": "a9531608094a233e5336a35e9fa7ebd028aaa3fc6dd7d3ed0f6f4d3f83a94fb8",
+      "mode": "0o644",
+      "actual_sha256": "a9531608094a233e5336a35e9fa7ebd028aaa3fc6dd7d3ed0f6f4d3f83a94fb8",
+      "actual_size_bytes": 730,
+      "matches": true
+    }
+  ],
+  "modules": [
+    {
+      "path": "ci/project/test_p06_control_closeout_review.py",
+      "family": "control transfer/receipt close errors",
+      "pre_fix_failure_mechanism": "Wrong primary reason or success-shaped receipt; real writes and consumed receipt close are observed.",
+      "methods": [
+        {
+          "id": "test_p06_control_closeout_review.ControlCloseoutReviewTests.test_transport_cleanup_preserves_first_storage_failure",
+          "line": 40,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_control_closeout_review.ControlCloseoutReviewTests.test_transport_cleanup_preserves_partial_interruption",
+          "line": 78,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_control_closeout_review.ControlCloseoutReviewTests.test_receipt_close_failure_invalidates_owned_success",
+          "line": 98,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_control_closeout_review.ControlCloseoutReviewTests.test_receipt_symlink_replacement_cannot_truncate_last_original",
+          "line": 125,
+          "role": "companion-safety-control"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-12-red-tests.log",
+          "kind": "retained-result",
+          "sha256": "ce4c445e78a6d49f441991af4dbef95055cd637055ac4d39260a5d4be06195ba"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_control_final_review.py",
+      "family": "control recovery directory ownership",
+      "pre_fix_failure_mechanism": "Reused unrelated descriptor is closed and opened child leaks under pre-fix traversal.",
+      "methods": [
+        {
+          "id": "test_p06_control_final_review.ControlRecoveryWalkReviewTests.test_recovery_walk_close_failure_preserves_unrelated_reused_descriptor",
+          "line": 25,
+          "role": "defect-regression"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-21-recovery-probe.log",
+          "kind": "retained-result",
+          "sha256": "d8bc276f51a5e40210b6919eae35adde0245de83c54117afb98f988ce4aecdba"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_control_finalization.py",
+      "family": "control outer finalization and recovery",
+      "pre_fix_failure_mechanism": "Archive-close failure skips directory close; directory-close failure retains success or masks first error.",
+      "methods": [
+        {
+          "id": "test_p06_control_finalization.ControlFinalizationTests.test_archive_close_after_release_invalidates_success_and_closes_directory",
+          "line": 98,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_control_finalization.ControlFinalizationTests.test_directory_close_after_release_invalidates_owned_success",
+          "line": 113,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_control_finalization.ControlFinalizationTests.test_primary_receipt_failure_survives_directory_close_failure",
+          "line": 128,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_control_finalization.ControlFinalizationTests.test_primary_interruption_survives_both_outer_close_failures",
+          "line": 146,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_control_finalization.ControlFinalizationTests.test_post_release_receipt_replacements_remain_unchanged",
+          "line": 166,
+          "role": "companion-safety-control"
+        },
+        {
+          "id": "test_p06_control_finalization.ControlFinalizationTests.test_post_release_directory_replacement_is_not_used_for_repair",
+          "line": 198,
+          "role": "companion-safety-control"
+        },
+        {
+          "id": "test_p06_control_finalization.ControlFinalizationTests.test_recovery_open_race_cannot_truncate_last_original",
+          "line": 217,
+          "role": "companion-safety-control"
+        },
+        {
+          "id": "test_p06_control_finalization.ControlFinalizationTests.test_recovery_close_errors_are_bounded_and_both_descriptors_are_released",
+          "line": 244,
+          "role": "companion-safety-control"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-16-red-tests.log",
+          "kind": "retained-result",
+          "sha256": "45b24e98b462c98a81385bf6e47b6e885bb225a24d8a1ba12d6a0a0ec96e8268"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_control_operational_failures.py",
+      "family": "control I/O classification, receipt invalidation and response lifetime",
+      "pre_fix_failure_mechanism": "Base labels ENOSPC/EIO transport_failed, retains pass receipt or leaves real HTTPResponse body open.",
+      "methods": [
+        {
+          "id": "test_p06_control_operational_failures.ControlStorageFailureTests.test_disk_full_reports_storage_failure_and_actual_partial_bytes",
+          "line": 47,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_control_operational_failures.ControlStorageFailureTests.test_archive_sync_failure_is_local_storage_failure",
+          "line": 71,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_control_operational_failures.ControlStorageFailureTests.test_failed_receipt_sync_cannot_leave_a_success_receipt",
+          "line": 87,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_control_operational_failures.ControlStorageFailureTests.test_failed_receipt_cleanup_does_not_modify_a_replacement",
+          "line": 112,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_control_operational_failures.ControlResponseCloseTests.test_unread_connection_close_responses_are_closed_on_failure",
+          "line": 135,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_control_operational_failures.ControlResponseCloseTests.test_response_close_failure_still_closes_connection",
+          "line": 164,
+          "role": "defect-regression"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-06.md",
+          "kind": "author-report-only",
+          "sha256": "994298ade064a9cee1bbb21a18b82ff282efc2b093d9a27113ddb76d95f8bff4"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_directory_cleanup_review.py",
+      "family": "pack/encrypt directory ownership",
+      "pre_fix_failure_mechanism": "Pre-fix traversal closes reused unrelated descriptor, leaks child and may replace original exception.",
+      "methods": [
+        {
+          "id": "test_p06_directory_cleanup_review.DirectoryCleanupReviewTests.test_parent_close_error_preserves_unrelated_fd_and_releases_child",
+          "line": 67,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_directory_cleanup_review.DirectoryCleanupReviewTests.test_child_cleanup_error_does_not_replace_parent_close_failure",
+          "line": 72,
+          "role": "defect-regression"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-23-before.log",
+          "kind": "retained-result",
+          "sha256": "d243923fd6c4b1d29e36244f95c056f236b6caccefea55a60c07924e079f753b"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_encrypt_operational_failures.py",
+      "family": "encryption named-directory binding",
+      "pre_fix_failure_mechanism": "Base returns success after source/output/private/ancestor replacement.",
+      "methods": [
+        {
+          "id": "test_p06_encrypt_operational_failures.EncryptionOperationalFailuresTests.test_changed_named_paths_after_final_inventory_reject_publication",
+          "line": 49,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_encrypt_operational_failures.EncryptionOperationalFailuresTests.test_changed_named_paths_during_publication_roll_back_owned_links",
+          "line": 78,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_encrypt_operational_failures.EncryptionOperationalFailuresTests.test_source_replacement_before_first_inventory_is_not_rebound",
+          "line": 102,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_encrypt_operational_failures.EncryptionOperationalFailuresTests.test_replaced_ancestor_with_original_leaf_directories_is_rejected",
+          "line": 120,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_encrypt_operational_failures.EncryptionOperationalFailuresTests.test_path_change_during_committed_cleanup_reports_failure_and_preserves_ciphertext",
+          "line": 144,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_encrypt_operational_failures.EncryptionOperationalFailuresTests.test_interrupt_after_committed_private_unlink_keeps_last_ciphertext",
+          "line": 172,
+          "role": "companion-safety-control"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-05.md",
+          "kind": "author-report-only",
+          "sha256": "6336673649a943859d811f4bd6943e36b627c34063d867722947bd016f6e7efb"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_encrypt_publication_review.py",
+      "family": "encryption first-link path drift with last ciphertext copy",
+      "pre_fix_failure_mechanism": "Both base subcases fail with EncryptionError not raised.",
+      "methods": [
+        {
+          "id": "test_p06_encrypt_publication_review.EncryptionPublicationReviewTests.test_path_drift_after_first_public_link_preserves_last_ciphertext",
+          "line": 15,
+          "role": "defect-regression"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-11-head-control.log",
+          "kind": "retained-result",
+          "sha256": "a58830460db8351560fcc720c9bd8651fe8a480212bf5ea9285adb4fd8813b44"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_hosted_operational_failures.py",
+      "family": "hosted finished failure disposition",
+      "pre_fix_failure_mechanism": "Base converts observed not_run/run to unknown despite completed writers.",
+      "methods": [
+        {
+          "id": "test_p06_hosted_operational_failures.HostedOperationalFailureTests.test_finished_failure_preserves_observed_disposition_in_encrypted_selection",
+          "line": 44,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_hosted_operational_failures.HostedOperationalFailureTests.test_untrusted_or_nonterminal_failure_disposition_stays_unknown",
+          "line": 60,
+          "role": "companion-safety-control"
+        },
+        {
+          "id": "test_p06_hosted_operational_failures.HostedOperationalFailureTests.test_unobserved_launch_cannot_borrow_a_finished_failure_disposition",
+          "line": 73,
+          "role": "companion-safety-control"
+        },
+        {
+          "id": "test_p06_hosted_operational_failures.HostedOperationalFailureTests.test_unresolved_nested_writer_cannot_borrow_a_finished_failure_disposition",
+          "line": 83,
+          "role": "companion-safety-control"
+        },
+        {
+          "id": "test_p06_hosted_operational_failures.HostedOperationalFailureTests.test_observed_nested_prelaunch_failure_remains_not_run",
+          "line": 94,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_hosted_operational_failures.HostedOperationalFailureTests.test_source_drift_cannot_authorize_failure_disposition_or_delivery",
+          "line": 107,
+          "role": "companion-safety-control"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-01.md",
+          "kind": "author-report-only",
+          "sha256": "1d9a65b550e37730d69bf5c33a7567a896bc36b073a8049c33d12d08da852001"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_input_operational_failures.py",
+      "family": "input prelaunch checkpoint accounting",
+      "pre_fix_failure_mechanism": "Eight before subcases fail None is not False.",
+      "methods": [
+        {
+          "id": "test_p06_input_operational_failures.QualifiedWarmInputOperationalFailureTests.test_prelaunch_checkpoint_failure_records_known_unstarted_command",
+          "line": 37,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_input_operational_failures.QualifiedWarmInputOperationalFailureTests.test_unobserved_command_exception_still_blocks_writer_closeout",
+          "line": 70,
+          "role": "companion-safety-control"
+        },
+        {
+          "id": "test_p06_input_operational_failures.QualifiedWarmInputOperationalFailureTests.test_failed_transfer_preserves_raw_bytes_and_completed_process_status",
+          "line": 80,
+          "role": "companion-safety-control"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-04-before.log",
+          "kind": "retained-result",
+          "sha256": "6818822413aace646a52e1090ca7b67865161b7a41e253412b78cd6e0b4a6171"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_operational_cancellation.py",
+      "family": "CLI-wide SIGTERM handler scope",
+      "pre_fix_failure_mechanism": "Three between-stage probes exit -15; bounded-child probe lacks enclosing handler.",
+      "methods": [
+        {
+          "id": "test_p06_operational_cancellation.OperationalCancellationTests.test_sigterm_after_acquisition_child_retains_finished_failure",
+          "line": 230,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_operational_cancellation.OperationalCancellationTests.test_sigterm_after_preparation_retains_finished_supervision_failure",
+          "line": 237,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_operational_cancellation.OperationalCancellationTests.test_sigterm_after_hosted_child_attempts_partial_closeout",
+          "line": 249,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_operational_cancellation.OperationalCancellationTests.test_sigterm_inside_bounded_child_preserves_monitor_cleanup",
+          "line": 264,
+          "role": "defect-regression"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-10-before.log",
+          "kind": "retained-result",
+          "sha256": "721573eeb21a46d894649c5e499ea650b0a1bf4989645682a2d157a92c83d16e"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_pack_operational_failures.py",
+      "family": "packaging retained output identity",
+      "pre_fix_failure_mechanism": "Base success writes to replacement output directory; corrected path rejects and retains owned failure.",
+      "methods": [
+        {
+          "id": "test_p06_pack_operational_failures.PackagingDirectoryIdentityTests.test_replacement_before_copy_rejects_complete_and_partial_packaging",
+          "line": 50,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_pack_operational_failures.PackagingDirectoryIdentityTests.test_replacement_after_copy_preserves_owned_incomplete_archive",
+          "line": 73,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_pack_operational_failures.PackagingDirectoryIdentityTests.test_replacement_after_receipt_publication_withdraws_owned_final_names",
+          "line": 91,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_pack_operational_failures.PackagingDirectoryIdentityTests.test_output_permission_change_is_observed_before_copy",
+          "line": 119,
+          "role": "defect-regression"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-03-reproduction.json",
+          "kind": "retained-result",
+          "sha256": "5fd31686f4b21e778c332b0da0903c29da5d5fbc812a7fc2bd7e4ab29754eb8d"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_pack_setup_cleanup.py",
+      "family": "packaging setup output-descriptor lifetime",
+      "pre_fix_failure_mechanism": "Six before subcases fail output descriptor still open after consumed parent-close error.",
+      "methods": [
+        {
+          "id": "test_p06_pack_setup_cleanup.PackagingSetupCleanupTests.test_parent_close_failure_releases_output_and_preserves_reused_descriptor",
+          "line": 82,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_pack_setup_cleanup.PackagingSetupCleanupTests.test_output_cleanup_failure_preserves_parent_close_failure",
+          "line": 87,
+          "role": "defect-regression"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-28-red.log",
+          "kind": "retained-result",
+          "sha256": "e7128121da451926981b3d08d0f70177d75b194e179cb5aef0a46eaeb71816af"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_prelaunch_review.py",
+      "family": "supervisor launch/no-launch closeout composition",
+      "pre_fix_failure_mechanism": "Base leaves warm launch unknown and blocks closeout at prelaunch write failure.",
+      "methods": [
+        {
+          "id": "test_p06_prelaunch_review.QualifiedWarmPrelaunchReviewTests.test_unstarted_warm_stage_allows_closeout_without_fabricated_child_files",
+          "line": 40,
+          "role": "defect-regression"
+        },
+        {
+          "id": "test_p06_prelaunch_review.QualifiedWarmPrelaunchReviewTests.test_failed_child_bytes_do_not_substitute_for_a_returned_monitor_result",
+          "line": 66,
+          "role": "companion-safety-control"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-02.md",
+          "kind": "author-report-only",
+          "sha256": "82a4743bcc280bc546988daf8fa257e3bef38c8abc16739e54182166f376e6d5"
+        }
+      ]
+    },
+    {
+      "path": "ci/project/test_p06_warm_supervision_failures.py",
+      "family": "supervisor prelaunch checkpoint accounting",
+      "pre_fix_failure_mechanism": "Base first stage is incorrectly fail; later stages remain unresolved and warm execution becomes unknown.",
+      "methods": [
+        {
+          "id": "test_p06_warm_supervision_failures.QualifiedWarmSupervisionFailureTests.test_prelaunch_checkpoint_failure_records_known_unstarted_stage",
+          "line": 12,
+          "role": "defect-regression"
+        }
+      ],
+      "evidence": [
+        {
+          "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-02.md",
+          "kind": "author-report-only",
+          "sha256": "82a4743bcc280bc546988daf8fa257e3bef38c8abc16739e54182166f376e6d5"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Read retained result files; did not independently rerun old or current test bodies.",
+    "Several earliest red runs are reported in author notes rather than standalone raw logs.",
+    "Synthetic age and hosted command doubles establish orchestration, not cryptography, native execution or delivery."
+  ]
+}

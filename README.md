@@ -23,14 +23,29 @@ configuration; it does not establish a general PyTorch device backend or physica
 accelerator performance.
 
 **Current work: P06-T01 — execute the qualified warm-workspace experiment.**
-The [explicit route](docs/project/p06-qualified-warm-handoff.md) is implemented.
-Its next prerequisites are one complete governance invocation without skipped
-tests and sufficient execution capacity, followed by a fresh 24-process,
-792-launch, 25,344-word original and independent replay. Fresh dependency
-provenance and the preceding four-process counter qualification already have
-their separate evidence; they are not a completed warm experiment.
+The frozen experiment remains **unstarted: 24 processes, 792 launches and
+25,344 checked FP32 words**. The
+[execution and retention audit](docs/project/p06-execution-retention-audit.md) and
+[evidence packet](docs/project/evidence/p06-execution-retention/README.md) record
+corrections to launch and interruption accounting, failure closeout and private
+retention. Strict governance passes at audited base `622662ad`; the published
+changed revision requires its own complete strict result. Verify that exact
+Actions run and its original receipts before native dispatch.
+
+Verify or configure exact private control delivery and the public age recipient,
+then run one complete attempt after unchanged **15 GiB free-disk and 4 GiB
+available-memory admission**. Preserve complete or explicitly partial originals
+through encrypted delivery. After private decryption, validate and restore the
+retained bytes, independently replay a complete original from trusted reader
+code, and evaluate the frozen performance predicates. Live provider secrets were
+not inspected; private control delivery and the public recipient were not supplied
+to this session, and no local native admission is established. The
+[qualified warm handoff](docs/project/p06-qualified-warm-handoff.md) retains the
+separate dependency and four-process qualification prerequisites.
+
 [P06-A01](docs/project/evidence/p06-baseline/acceptance.json) remains accepted;
-P06-A02/A03, vendor integration and physical hardware obligations remain open.
+P06-A02/A03 remain open, P01 vendor integration remains blocked, and physical
+hardware obligations remain open. Proofs, goldens and resource gates are unchanged.
 Use [current status](docs/project/status.md) and the
 [ordered backlog](docs/project/backlog.md) for the latest execution handoff.
 

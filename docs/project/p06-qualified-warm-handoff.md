@@ -1,6 +1,56 @@
 # Qualified warm-workspace handoff
 
-## Current retention and replay continuation
+## Current execution and retention continuation
+
+**The execution and retention continuation is implemented; the frozen qualified
+warm experiment remains unstarted: 24 processes, 792 launches and 25,344 checked
+FP32 words.** Start with the [current audit](p06-execution-retention-audit.md)
+and [evidence packet](evidence/p06-execution-retention/README.md). They record
+corrections to prelaunch failure accounting, preservation of finished native
+dispositions without promoting failed attempts, interruption handling,
+directory identity, descriptor ownership and control cleanup. Focused checks,
+independent reviews and real-tool synthetic retention controls establish
+source-scoped tooling behavior only. All 69 measurement-source identities,
+proof inputs, sampling, numerical comparisons, performance predicates and
+resource admission remain unchanged. P06-A02/A03 remain open.
+
+The audited base `622662ad9cece6da4e3375be7e977dbe04cde862` passed strict
+governance in
+[run 45583904526](https://github.com/baabi-boo/AI-GPU/actions/runs/45583904526),
+[job 139100502944](https://github.com/baabi-boo/AI-GPU/actions/runs/45583904526/job/139100502944):
+**5,114 canonical tests, 37,449 successful subtests and 52,791 ordered events
+in 3,122.11397 seconds**, with zero failures, errors or skips and stable source,
+interpreter and environment. That result qualifies the exact base only. The
+published changed revision requires its own complete, uninterrupted strict
+invocation under the [checked environment](governance-runbook.md). Verify its
+exact Actions result and retained original receipts before dispatch; neither
+the base pass nor focused development checks replaces that qualification.
+
+**Next bounded action:** verify or configure delivery of the exact private
+control original, the signed-URL secret and the public age recipient. The
+owner's private control-delivery input and public recipient were not supplied
+to this session; live provider secret configuration was not inspected and no
+admitted native runner is established. The reviewer keeps the matching private
+identity outside Actions and this session for later private decryption.
+Require the published revision's own full strict result, observe actual runner
+capacity and pass the unchanged **15 GiB free-disk and 4 GiB available-memory
+admission** before one complete **24-process, 792-launch, 25,344-word** attempt.
+Use the [manual hosted operator guide](p06-hosted-warm-guide.md) and the frozen
+[execution/replay runbook](evidence/p06-qualified-warm/runbook.md).
+
+Retain complete or explicitly partial originals and confirm successful upload
+of the validated ciphertext and sanitized summary; see the
+[failure matrix](p06-hosted-warm-guide.md#failure-and-delivery-matrix).
+Require successful [private decryption, checked inspection and restoration](p06-hosted-warm-guide.md#5-download-decrypt-privately-and-replay),
+then follow the [standalone independent replay setup](p06-hosted-warm-guide.md#independent-complete-replay-from-a-fresh-shell)
+from a separate trusted reader checkout. Replay and the frozen performance
+decision require a usable complete native original. Retention and restoration
+establish neither native completeness nor producer authentication, performance
+or phase acceptance; failed or partial attempts retain their scope.
+
+## Earlier retention and replay continuation
+
+The following paragraphs preserve that continuation's source and evidence scope.
 
 **The retention and replay continuation is implemented; the fresh 24-process
 native experiment remains unstarted.** Start with the

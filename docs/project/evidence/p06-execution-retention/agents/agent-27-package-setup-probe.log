@@ -1,0 +1,15 @@
+test_consumed_parent_close_releases_opened_output (__main__.PackagingSetupOwnershipProbe.test_consumed_parent_close_releases_opened_output) ... {"closed_parent_fd": 3, "original_exception_preserved": true, "output_fd": 4, "output_fd_leaked": true, "output_fd_target": "/tmp/ai-gpu-ae456f837c05/tmp/agent27-package-njq1scr6/result", "reused_unrelated_fd": 3, "unrelated_fd_survives": true}
+FAIL
+
+======================================================================
+FAIL: test_consumed_parent_close_releases_opened_output (__main__.PackagingSetupOwnershipProbe.test_consumed_parent_close_releases_opened_output)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-ae456f837c05/notes/agent-27-package-setup-probe.py", line 72, in test_consumed_parent_close_releases_opened_output
+    self.assertFalse(result["output_fd_leaked"], "opened output fd escaped _package setup cleanup")
+AssertionError: True is not false : opened output fd escaped _package setup cleanup
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)

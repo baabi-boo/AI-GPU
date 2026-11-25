@@ -1,0 +1,90 @@
+{
+  "agent": 28,
+  "role": "implementation",
+  "base_head": "622662ad9cece6da4e3375be7e977dbe04cde862",
+  "finding": "agent27-pack-output-setup-fd-leak",
+  "status": "fixed-awaiting-independent-review",
+  "changed_files": [
+    "ci/project/p06_qualified_warm_pack.py",
+    "ci/project/test_p06_pack_setup_cleanup.py"
+  ],
+  "production_scope": "_package output directory descriptor acquisition and setup-failure cleanup only",
+  "before_sha256": {
+    "ci/project/p06_qualified_warm_pack.py": "73ef372dbf76256304c2db73bddddfdae15a492695f5ae39ada68f1aa72c3f3a"
+  },
+  "after_sha256": {
+    "ci/project/p06_qualified_warm_pack.py": "e4cff314b8a2a0dbb277baef1bc5b3eb78b10a90f777a4d3b60ff74b682dac0e",
+    "ci/project/test_p06_pack_setup_cleanup.py": "206756440cdfc4bbac6370d8f664db5c4dfdb9acc4b2eb3f644a48817ed85991"
+  },
+  "reproduction": {
+    "real_descriptors": true,
+    "parent_close_consumes_descriptor": true,
+    "exact_parent_number_reused_by_dev_null": true,
+    "original_exception_identity_preserved": true,
+    "unrelated_reused_descriptor_survives": true,
+    "output_closed_exactly_once_after_fix": true,
+    "parent_close_never_retried": true,
+    "public_apis": ["package_success", "package_partial"],
+    "secondary_cleanup_errors": ["OSError", "KeyboardInterrupt"]
+  },
+  "environment": {
+    "python": "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin/python3",
+    "python_version": "3.12.14",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "TMPDIR": "/tmp/ai-gpu-ae456f837c05/tmp",
+    "PYTHONPATH_for_affected_modules": "ci/project",
+    "cwd": "/tmp/ai-gpu-ae456f837c05/AI-GPU"
+  },
+  "tests": [
+    {
+      "phase": "before-production-edit",
+      "command": "python3 -m unittest discover -s ci/project -p test_p06_pack_setup_cleanup.py -v",
+      "tests": 2,
+      "subcases": 6,
+      "failures": 6,
+      "errors": 0,
+      "skips": 0,
+      "duration_seconds": 0.008,
+      "exit_code": 1,
+      "expected_failure": true,
+      "failure_reason": "output descriptor remains open after parent close consumed its descriptor and raised EIO",
+      "log": "agent-28-red.log"
+    },
+    {
+      "phase": "after-production-edit",
+      "command": "python3 -m unittest discover -s ci/project -p test_p06_pack_setup_cleanup.py -v",
+      "tests": 2,
+      "subcases": 6,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "duration_seconds": 0.006,
+      "exit_code": 0,
+      "log": "agent-28-green.log"
+    },
+    {
+      "phase": "affected-modules",
+      "command": "python3 -m unittest -v test_p06_pack_setup_cleanup test_p06_qualified_warm_pack test_p06_pack_operational_failures test_p06_directory_cleanup_review test_p06_qualified_warm_encrypt test_p06_qualified_warm_retention_integration",
+      "tests": 90,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "duration_seconds": 4.006,
+      "exit_code": 0,
+      "log": "agent-28-affected.log"
+    },
+    {
+      "command": "git diff --check -- ci/project/p06_qualified_warm_pack.py ci/project/test_p06_pack_setup_cleanup.py",
+      "exit_code": 0
+    }
+  ],
+  "commits_or_pushes": false,
+  "limitations": [
+    "host Python/filesystem fault injection and focused development tests only",
+    "no native or hardware execution",
+    "no full strict governance",
+    "no fresh warm performance result or phase acceptance",
+    "independent final review remains required"
+  ],
+  "next_action": "Coordinator obtains independent review of the exact corrected source hash, then validates the final frozen tree."
+}

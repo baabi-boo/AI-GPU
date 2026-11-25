@@ -1,0 +1,331 @@
+{
+  "active_skip_ids": [],
+  "added_by_module": {
+    "test_p06_control_closeout_review": 4,
+    "test_p06_control_final_review": 1,
+    "test_p06_control_finalization": 8,
+    "test_p06_control_operational_failures": 6,
+    "test_p06_directory_cleanup_review": 2,
+    "test_p06_encrypt_operational_failures": 6,
+    "test_p06_encrypt_publication_review": 1,
+    "test_p06_hosted_operational_failures": 6,
+    "test_p06_input_operational_failures": 3,
+    "test_p06_operational_cancellation": 4,
+    "test_p06_pack_operational_failures": 4,
+    "test_p06_pack_setup_cleanup": 2,
+    "test_p06_prelaunch_review": 2,
+    "test_p06_warm_supervision_failures": 1
+  },
+  "added_ids": [
+    "test_p06_control_closeout_review.ControlCloseoutReviewTests.test_receipt_close_failure_invalidates_owned_success",
+    "test_p06_control_closeout_review.ControlCloseoutReviewTests.test_receipt_symlink_replacement_cannot_truncate_last_original",
+    "test_p06_control_closeout_review.ControlCloseoutReviewTests.test_transport_cleanup_preserves_first_storage_failure",
+    "test_p06_control_closeout_review.ControlCloseoutReviewTests.test_transport_cleanup_preserves_partial_interruption",
+    "test_p06_control_final_review.ControlRecoveryWalkReviewTests.test_recovery_walk_close_failure_preserves_unrelated_reused_descriptor",
+    "test_p06_control_finalization.ControlFinalizationTests.test_archive_close_after_release_invalidates_success_and_closes_directory",
+    "test_p06_control_finalization.ControlFinalizationTests.test_directory_close_after_release_invalidates_owned_success",
+    "test_p06_control_finalization.ControlFinalizationTests.test_post_release_directory_replacement_is_not_used_for_repair",
+    "test_p06_control_finalization.ControlFinalizationTests.test_post_release_receipt_replacements_remain_unchanged",
+    "test_p06_control_finalization.ControlFinalizationTests.test_primary_interruption_survives_both_outer_close_failures",
+    "test_p06_control_finalization.ControlFinalizationTests.test_primary_receipt_failure_survives_directory_close_failure",
+    "test_p06_control_finalization.ControlFinalizationTests.test_recovery_close_errors_are_bounded_and_both_descriptors_are_released",
+    "test_p06_control_finalization.ControlFinalizationTests.test_recovery_open_race_cannot_truncate_last_original",
+    "test_p06_control_operational_failures.ControlResponseCloseTests.test_response_close_failure_still_closes_connection",
+    "test_p06_control_operational_failures.ControlResponseCloseTests.test_unread_connection_close_responses_are_closed_on_failure",
+    "test_p06_control_operational_failures.ControlStorageFailureTests.test_archive_sync_failure_is_local_storage_failure",
+    "test_p06_control_operational_failures.ControlStorageFailureTests.test_disk_full_reports_storage_failure_and_actual_partial_bytes",
+    "test_p06_control_operational_failures.ControlStorageFailureTests.test_failed_receipt_cleanup_does_not_modify_a_replacement",
+    "test_p06_control_operational_failures.ControlStorageFailureTests.test_failed_receipt_sync_cannot_leave_a_success_receipt",
+    "test_p06_directory_cleanup_review.DirectoryCleanupReviewTests.test_child_cleanup_error_does_not_replace_parent_close_failure",
+    "test_p06_directory_cleanup_review.DirectoryCleanupReviewTests.test_parent_close_error_preserves_unrelated_fd_and_releases_child",
+    "test_p06_encrypt_operational_failures.EncryptionOperationalFailuresTests.test_changed_named_paths_after_final_inventory_reject_publication",
+    "test_p06_encrypt_operational_failures.EncryptionOperationalFailuresTests.test_changed_named_paths_during_publication_roll_back_owned_links",
+    "test_p06_encrypt_operational_failures.EncryptionOperationalFailuresTests.test_interrupt_after_committed_private_unlink_keeps_last_ciphertext",
+    "test_p06_encrypt_operational_failures.EncryptionOperationalFailuresTests.test_path_change_during_committed_cleanup_reports_failure_and_preserves_ciphertext",
+    "test_p06_encrypt_operational_failures.EncryptionOperationalFailuresTests.test_replaced_ancestor_with_original_leaf_directories_is_rejected",
+    "test_p06_encrypt_operational_failures.EncryptionOperationalFailuresTests.test_source_replacement_before_first_inventory_is_not_rebound",
+    "test_p06_encrypt_publication_review.EncryptionPublicationReviewTests.test_path_drift_after_first_public_link_preserves_last_ciphertext",
+    "test_p06_hosted_operational_failures.HostedOperationalFailureTests.test_finished_failure_preserves_observed_disposition_in_encrypted_selection",
+    "test_p06_hosted_operational_failures.HostedOperationalFailureTests.test_observed_nested_prelaunch_failure_remains_not_run",
+    "test_p06_hosted_operational_failures.HostedOperationalFailureTests.test_source_drift_cannot_authorize_failure_disposition_or_delivery",
+    "test_p06_hosted_operational_failures.HostedOperationalFailureTests.test_unobserved_launch_cannot_borrow_a_finished_failure_disposition",
+    "test_p06_hosted_operational_failures.HostedOperationalFailureTests.test_unresolved_nested_writer_cannot_borrow_a_finished_failure_disposition",
+    "test_p06_hosted_operational_failures.HostedOperationalFailureTests.test_untrusted_or_nonterminal_failure_disposition_stays_unknown",
+    "test_p06_input_operational_failures.QualifiedWarmInputOperationalFailureTests.test_failed_transfer_preserves_raw_bytes_and_completed_process_status",
+    "test_p06_input_operational_failures.QualifiedWarmInputOperationalFailureTests.test_prelaunch_checkpoint_failure_records_known_unstarted_command",
+    "test_p06_input_operational_failures.QualifiedWarmInputOperationalFailureTests.test_unobserved_command_exception_still_blocks_writer_closeout",
+    "test_p06_operational_cancellation.OperationalCancellationTests.test_sigterm_after_acquisition_child_retains_finished_failure",
+    "test_p06_operational_cancellation.OperationalCancellationTests.test_sigterm_after_hosted_child_attempts_partial_closeout",
+    "test_p06_operational_cancellation.OperationalCancellationTests.test_sigterm_after_preparation_retains_finished_supervision_failure",
+    "test_p06_operational_cancellation.OperationalCancellationTests.test_sigterm_inside_bounded_child_preserves_monitor_cleanup",
+    "test_p06_pack_operational_failures.PackagingDirectoryIdentityTests.test_output_permission_change_is_observed_before_copy",
+    "test_p06_pack_operational_failures.PackagingDirectoryIdentityTests.test_replacement_after_copy_preserves_owned_incomplete_archive",
+    "test_p06_pack_operational_failures.PackagingDirectoryIdentityTests.test_replacement_after_receipt_publication_withdraws_owned_final_names",
+    "test_p06_pack_operational_failures.PackagingDirectoryIdentityTests.test_replacement_before_copy_rejects_complete_and_partial_packaging",
+    "test_p06_pack_setup_cleanup.PackagingSetupCleanupTests.test_output_cleanup_failure_preserves_parent_close_failure",
+    "test_p06_pack_setup_cleanup.PackagingSetupCleanupTests.test_parent_close_failure_releases_output_and_preserves_reused_descriptor",
+    "test_p06_prelaunch_review.QualifiedWarmPrelaunchReviewTests.test_failed_child_bytes_do_not_substitute_for_a_returned_monitor_result",
+    "test_p06_prelaunch_review.QualifiedWarmPrelaunchReviewTests.test_unstarted_warm_stage_allows_closeout_without_fabricated_child_files",
+    "test_p06_warm_supervision_failures.QualifiedWarmSupervisionFailureTests.test_prelaunch_checkpoint_failure_records_known_unstarted_stage"
+  ],
+  "agent_40_comparison": {
+    "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-40-hashes.json",
+    "sha256": "9cf85ef86fa2fafe143ed721f564b4b1dd0caa002474664422f917fafbd47ef0"
+  },
+  "all_checks_passed": true,
+  "base_archive": {
+    "path": "/tmp/ai-gpu-ae456f837c05/notes/base-governance.zip",
+    "sha256": "928e3d87bf32d2ea2d9b48581457f9bdd3086113b3129e0c562072da8d232156"
+  },
+  "base_manifest": {
+    "file_sha256": "db8665fccccf134902c1739d8c5eb55d8f2021cd9d394c43e39f0f615d2836cd",
+    "member": "run/discovered.json",
+    "ordered_ids_sha256": "a33e6215dd12a601aefe3161615083699a8e9fef0ef22a9faaef0331939a71cd"
+  },
+  "base_revision": "622662ad9cece6da4e3375be7e977dbe04cde862",
+  "candidate_commit": null,
+  "candidate_manifest": {
+    "file_sha256": "70ddd7339544a865137583625575b833e27c08e81dd398a8ab39fee2d75fbf6d",
+    "ordered_ids_sha256": "d154be26f6e4c82cb1da4d58d7c0901ad552829415dd36315c73695b4368794f",
+    "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-44-discovered.json"
+  },
+  "canonical_discovery_calls": 1,
+  "canonical_runner": {
+    "mode": "0o644",
+    "path": "ci/project/governance_run.py",
+    "sha256": "5fcb877775e5e35fd859686e875d0597d534326c679ff68b29f2151203d0bfdc",
+    "size_bytes": 40082
+  },
+  "checks": {
+    "added_ids_match_agent_40": true,
+    "added_module_counts_match": true,
+    "all_base_ids_retained": true,
+    "all_governance_python_stable": true,
+    "base_ids_unique": true,
+    "base_manifest_count_valid": true,
+    "base_manifest_digest_valid": true,
+    "base_relative_order_preserved": true,
+    "base_revision_valid": true,
+    "candidate_count_5164": true,
+    "candidate_ids_unique": true,
+    "exactly_14_added_modules": true,
+    "exactly_50_added_ids": true,
+    "freeze_matches_after": true,
+    "freeze_matches_before": true,
+    "freeze_record_stable": true,
+    "frozen_22_sources_stable": true,
+    "head_stable": true,
+    "no_active_skip_flags": true,
+    "no_expected_failure_flags": true,
+    "no_import_failure_cases": true,
+    "no_imported_testcase_bindings": true,
+    "no_loader_errors": true
+  },
+  "collection_finished_at": "2026-11-25T12:51:04.809478+00:00",
+  "collection_started_at": "2026-11-25T12:51:02.439384+00:00",
+  "counts": {
+    "active_skip_flags": 0,
+    "added": 50,
+    "added_modules": 14,
+    "base": 5114,
+    "candidate": 5164,
+    "duplicate_ids": 0,
+    "expected_failure_flags": 0,
+    "import_failure_cases": 0,
+    "imported_testcase_bindings": 0,
+    "loader_errors": 0,
+    "removed": 0,
+    "retained_base": 5114
+  },
+  "discovery": {
+    "pattern": "test_*.py",
+    "start_directory": "ci/project"
+  },
+  "duplicate_ids": [],
+  "environment": {
+    "bytecode_disabled": true,
+    "executable": "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin/python3",
+    "explicit_B_flag": true,
+    "implementation": "CPython",
+    "machine": "x86_64",
+    "new_signal_guard_enabled": true,
+    "path": "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin:/usr/bin:/bin",
+    "platform": "Linux",
+    "python_version": "3.12.14",
+    "tmpdir": "/tmp/ai-gpu-ae456f837c05/tmp"
+  },
+  "expected_failure_ids": [],
+  "finished_at": "2026-11-25T12:51:04.868373+00:00",
+  "frozen_sources": {
+    "count": 22,
+    "inventory_sha256_after": "cf8a0b41ab5e529b0bb07de64577fcb63363a1e337fe3552d68d2741d4dc5641",
+    "inventory_sha256_before": "cf8a0b41ab5e529b0bb07de64577fcb63363a1e337fe3552d68d2741d4dc5641",
+    "matches_freeze_after": true,
+    "matches_freeze_before": true,
+    "mismatch_paths_after": [],
+    "mismatch_paths_before": [],
+    "observed_files": [
+      {
+        "mode": "0o644",
+        "path": "ci/project/p06_qualified_warm_control.py",
+        "sha256": "a303c3dc56076bbb203376521534e465c5d97b997c9ae1b93e6375e98d298fcd",
+        "size_bytes": 25599
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/p06_qualified_warm_encrypt.py",
+        "sha256": "70b5cc6e52d112b75d7009b3fe4b431ef56d17fea2a78e2a537538333b694053",
+        "size_bytes": 31580
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/p06_qualified_warm_hosted.py",
+        "sha256": "01bee3115ba5b2ff0abb2583d76b165718a08216e3064faeb28324655d27b3ff",
+        "size_bytes": 34745
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/p06_qualified_warm_inputs.py",
+        "sha256": "f4077dc42117f4e2e121c18e9be72ac6de1a480450245db19cb8ce951f4860bb",
+        "size_bytes": 19816
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/p06_qualified_warm_pack.py",
+        "sha256": "e4cff314b8a2a0dbb277baef1bc5b3eb78b10a90f777a4d3b60ff74b682dac0e",
+        "size_bytes": 33280
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/p06_qualified_warm_run.py",
+        "sha256": "8455ff73d618e41714c0737fc3ac25ee3d8afbb538fb95b42779d9b3740dfcd3",
+        "size_bytes": 35159
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_control_closeout_review.py",
+        "sha256": "8502a9c800a864aaa947e3f9a68f112a5213ce8401a59121ad16514a811b72a2",
+        "size_bytes": 7808
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_control_final_review.py",
+        "sha256": "2726f9b782f94b2e4cc5d9ec4df2c3335981ab9f2af6fcf642e96274c5429368",
+        "size_bytes": 4716
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_control_finalization.py",
+        "sha256": "7020fea4b05a002f8d6353aed429d66e4162f9e2d4f202a0ca401edfb2c6e06c",
+        "size_bytes": 13711
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_control_operational_failures.py",
+        "sha256": "b281681fdf158062be763ce46aecff9b18634faba937072e490636a99b494e09",
+        "size_bytes": 8249
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_directory_cleanup_review.py",
+        "sha256": "0ae6b592c82c81b7191280137c73a7f5109cded9f0fa5e377eb2315f30ab32aa",
+        "size_bytes": 3422
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_encrypt_operational_failures.py",
+        "sha256": "5804c519149e3131c6183286c3c599d1b27f9849a4139d24765c311691169e88",
+        "size_bytes": 10059
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_encrypt_publication_review.py",
+        "sha256": "94167a1faada5d880d73e4f89006c3fd96c65f859cdd75c3fe89ceecdf77d5ed",
+        "size_bytes": 3059
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_hosted_operational_failures.py",
+        "sha256": "ad165dd0ec63cc7e0b6e547ba1b504f06f0ba3876e29aa6d75163ab442033eb9",
+        "size_bytes": 6222
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_input_operational_failures.py",
+        "sha256": "2f3867cb359dd9fa5a499f66b0aeb9633f81827969cc45b5a9853421f5de50ce",
+        "size_bytes": 7339
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_operational_cancellation.py",
+        "sha256": "9e04008693a5410a1ede7e6d88ccb86800ed7514a56852fdfffa2fb90877fc6b",
+        "size_bytes": 13778
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_pack_operational_failures.py",
+        "sha256": "a7e93f6deb807c6cea46816c822cb2740b16ddba6d8ab892057bc18582fbe372",
+        "size_bytes": 6428
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_pack_setup_cleanup.py",
+        "sha256": "206756440cdfc4bbac6370d8f664db5c4dfdb9acc4b2eb3f644a48817ed85991",
+        "size_bytes": 4349
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_prelaunch_review.py",
+        "sha256": "c02d423ca1a3533fcf5ec7fe055ff6ff5e012f5010e5d6c0fbf35309568411ae",
+        "size_bytes": 6228
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_qualified_warm_control.py",
+        "sha256": "9dddf361cc18d72b40636156e36f40d359c36872bebae9925e6c96a063808ead",
+        "size_bytes": 26406
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/test_p06_warm_supervision_failures.py",
+        "sha256": "c8f81e415fd9a9625403cba2a4c767a45ec1883919b13c7992be59e39f77e264",
+        "size_bytes": 2817
+      },
+      {
+        "mode": "0o644",
+        "path": "ci/project/xrt_signals.py",
+        "sha256": "a9531608094a233e5336a35e9fa7ebd028aaa3fc6dd7d3ed0f6f4d3f83a94fb8",
+        "size_bytes": 730
+      }
+    ],
+    "path": "/tmp/ai-gpu-ae456f837c05/validation/operational-source-freeze.json",
+    "record_sha256_after": "714deb35f890b197d43e5b2de0a02c3ede1cb8ec0bf944f057cb349c9b1bdceb",
+    "record_sha256_before": "714deb35f890b197d43e5b2de0a02c3ede1cb8ec0bf944f057cb349c9b1bdceb",
+    "stable_before_after": true
+  },
+  "full_governance_qualification": false,
+  "governance_python": {
+    "changed_paths": [],
+    "count_after": 492,
+    "count_before": 492,
+    "inventory_sha256_after": "b06c2af7b70af50200d0c40895fd2eac2a1c86fcbbd69236f6d667681b44ad23",
+    "inventory_sha256_before": "b06c2af7b70af50200d0c40895fd2eac2a1c86fcbbd69236f6d667681b44ad23"
+  },
+  "head_after": "622662ad9cece6da4e3375be7e977dbe04cde862",
+  "head_before": "622662ad9cece6da4e3375be7e977dbe04cde862",
+  "import_failure_cases": [],
+  "imported_testcase_bindings": [],
+  "limitations": [
+    "Collection only: no test runner, setup/teardown, test body, or native workload was invoked.",
+    "Inactive collection flags cannot rule out runtime skips, failures, or expected outcomes.",
+    "This uncommitted candidate population is not an exact-revision full strict qualification."
+  ],
+  "loader_errors": [],
+  "native_execution": "not_run",
+  "removed_ids": [],
+  "schema_version": 1,
+  "scope": "final-canonical-population-preservation-review-only",
+  "started_at": "2026-11-25T12:51:02.385226+00:00",
+  "test_bodies_executed": 0,
+  "test_fixtures_executed": 0
+}

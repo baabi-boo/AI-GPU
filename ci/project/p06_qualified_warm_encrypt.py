@@ -9,8 +9,8 @@ plaintext tar is written to disk. The encrypted tar contains manifest.json
 and the entire selected tree under private/, including hidden files and empty
 directories. The manifest records exact relative names, sizes and SHA256.
 
-Stop all writers before calling this helper. Repeated descriptor identities and
-hashes detect observed changes; they do not exclude malicious concurrent writers.
+Stop all writers before calling this helper. Repeated descriptor and named-path
+identities and hashes detect observed changes; they do not exclude concurrent writers.
 The explicitly selected age executable is trusted software, not retained input.
 This wrapper does not authenticate that executable, authenticate a producer,
 perform replay, grant acceptance, obtain credentials, or upload anything.
@@ -140,14 +140,29 @@ def _directory(path):
         identities.append((info.st_dev, info.st_ino))
         for part in path.parts[1:]:
             child = os.open(part, flags, dir_fd=fd)
-            os.close(fd)
-            fd = child
+            parent, fd = fd, child
+            os.close(parent)
             info = os.fstat(fd)
             identities.append((info.st_dev, info.st_ino))
         return fd, identities
     except BaseException:
-        os.close(fd)
+        try:
+            os.close(fd)
+        except BaseException:
+            pass
         raise
+
+
+def _verify_directories(directories):
+    for path, expected, code in directories:
+        try:
+            fd, identities = _directory(path)
+        except OSError:
+            raise EncryptionError(code) from None
+        try:
+            _require(identities == expected, code)
+        finally:
+            os.close(fd)
 
 
 def _overlap(left, right):
@@ -568,8 +583,12 @@ def encrypt_private_directory(*, input_dir, output_dir, recipient, age_binary="a
         output_fd = os.open(output.name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC,
                             dir_fd=parent_fd)
         os.fchmod(output_fd, 0o700)
+        directories = ((source, source_chain, "source-changed"),
+            (output, parent_chain + [_stamp(os.fstat(output_fd))[:2]], "public-output-changed"),
+            (private, parent_chain + [_stamp(os.fstat(private_fd))[:2]], "private-output-changed"))
         stage = "inventory"
         entries = _inventory(source, deadline)
+        _verify_directories(directories)
         _require(not any(entry.directory and entry.identity[:2] in parent_chain for entry in entries.values()),
                  "path-alias")
         manifest = _json_bytes({"schema_version": 1, "contract_id": CONTRACT_ID,
@@ -618,6 +637,7 @@ def encrypt_private_directory(*, input_dir, output_dir, recipient, age_binary="a
         # strand a public pass receipt whose ownership was never registered.
         summary_identity = _write_json(private_fd, PRIVATE_SUMMARY_NAME, summary)
         _check_time(deadline)
+        _verify_directories(directories)
         _require(_stamp(os.stat(INCOMPLETE_NAME, dir_fd=private_fd, follow_symlinks=False)) == cipher_stamp,
                  "ciphertext-changed")
         _require(os.listdir(output_fd) == [], "public-output-changed")
@@ -631,6 +651,7 @@ def encrypt_private_directory(*, input_dir, output_dir, recipient, age_binary="a
         os.link(PRIVATE_SUMMARY_NAME, SUMMARY_NAME, src_dir_fd=private_fd,
                 dst_dir_fd=output_fd, follow_symlinks=False)
         os.fsync(output_fd)
+        _verify_directories(directories)
         _require(_owned(output_fd, CIPHERTEXT_NAME, cipher_identity)
                  and _owned(output_fd, SUMMARY_NAME, summary_identity), "public-output-changed")
         committed = True
@@ -640,6 +661,7 @@ def encrypt_private_directory(*, input_dir, output_dir, recipient, age_binary="a
         stage = "private-cleanup"
         _unlink_owned(private_fd, INCOMPLETE_NAME, cipher_identity)
         _unlink_owned(private_fd, PRIVATE_SUMMARY_NAME, summary_identity)
+        _verify_directories(directories)
         return summary
     except BaseException as error:
         cleanup_complete = _cleanup(process)

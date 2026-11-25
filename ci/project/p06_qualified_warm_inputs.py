@@ -26,6 +26,7 @@ import p06_dependency_sources as sources
 import p06_local_toolchain as toolchain
 import p06_qualified_warm_contract as qualification
 from preflight import available_memory_bytes
+from xrt_signals import terminate_as_interrupt
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -255,9 +256,16 @@ def acquire(args):
         base._write_json(target, report)
 
     def run(identifier, argv, cwd):
-        row = {"id": identifier, "argv": argv, "cwd": str(cwd), "log": "logs/" + identifier + ".log"}
+        row = {"id": identifier, "argv": argv, "cwd": str(cwd), "log": "logs/" + identifier + ".log",
+               "process_started": None}
         report["commands"].append(row)
-        save()
+        try:
+            save()
+        except (OSError, ValueError, RuntimeError, KeyError, TypeError, KeyboardInterrupt) as error:
+            # A failed launch checkpoint cannot have started this command.
+            row.update(process_started=False, cleanup_complete=True, outcome="blocked",
+                       exit_code=None, reason=str(error) or "interrupted")
+            raise
         row.update(run_bounded(argv, cwd, _environment(), roots["output"] / row["log"],
             timeout_seconds=COMMAND_TIMEOUT_SECONDS, min_free_bytes=dependency.BUDGET["min_free_bytes"],
             max_rss_bytes=dependency.BUDGET["max_rss_bytes"], max_log_bytes=dependency.BUDGET["max_log_bytes"],
@@ -352,6 +360,7 @@ def argument_parser():
     return parser
 
 
+@terminate_as_interrupt()
 def main(argv=None):
     args = argument_parser().parse_args(argv)
     try:

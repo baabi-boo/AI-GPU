@@ -26,6 +26,7 @@ import p06_dependency_contract as dependency
 import p06_qualified_warm_contract as qualification
 import p06_qualified_warm_replay as qualified_warm_replay
 from preflight import available_memory_bytes
+from xrt_signals import terminate_as_interrupt
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -46,7 +47,7 @@ MAX_TERMINAL_BYTES = 64 * 1024
 SOURCE_FILES = tuple(sorted(set(qualified_warm_replay.RUNNER_HELPERS)
     | set(qualified_warm_replay.ADMISSION_HELPERS)
     | {row["path"] for row in qualified_warm_replay.TRUSTED_READER_SOURCES}
-    | {SOURCE_FILE, "ci/project/p06_qualified_warm_inputs.py"}))
+    | {SOURCE_FILE, "ci/project/p06_qualified_warm_inputs.py", "ci/project/xrt_signals.py"}))
 # These are the unchanged original ZIP identities in the historical proof.
 ORIGINAL_ARCHIVES = {
     "diagnostic_archive": {"sha256": "6d7673032857904468dc2e212d2583da0d2b72bf14885c335d77c159eb717efb",
@@ -458,7 +459,15 @@ def execute(args):
             report["stages"].append(active)
             if name == "qualified-warm":
                 report["native_execution"] = "unknown"
-            checkpoint()
+            try:
+                checkpoint()
+            except ERRORS as error:
+                # No child can start until its launch intent is retained.
+                active.update(process_started=False, cleanup_complete=True,
+                    outcome="blocked", reason=str(error) or "interrupted", finished_at=base._now())
+                if name == "qualified-warm":
+                    report["native_execution"] = "not_run"
+                raise
             try:
                 active.update(run_bounded(active["argv"], source, active["environment"], evidence / active["log"],
                     timeout_seconds=active["timeout_seconds"], min_free_bytes=BUDGET["min_free_bytes"],
@@ -565,6 +574,7 @@ def argument_parser():
     return parser
 
 
+@terminate_as_interrupt()
 def main(argv=None):
     args = argument_parser().parse_args(argv)
     try:

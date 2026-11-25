@@ -1,0 +1,46 @@
+test_archive_close_after_release_invalidates_success_and_closes_directory (test_p06_control_finalization.ControlFinalizationTests.test_archive_close_after_release_invalidates_success_and_closes_directory) ... FAIL
+test_directory_close_after_release_invalidates_owned_success (test_p06_control_finalization.ControlFinalizationTests.test_directory_close_after_release_invalidates_owned_success) ... FAIL
+test_primary_interruption_survives_both_outer_close_failures (test_p06_control_finalization.ControlFinalizationTests.test_primary_interruption_survives_both_outer_close_failures) ... FAIL
+test_primary_receipt_failure_survives_directory_close_failure (test_p06_control_finalization.ControlFinalizationTests.test_primary_receipt_failure_survives_directory_close_failure) ... FAIL
+
+======================================================================
+FAIL: test_archive_close_after_release_invalidates_success_and_closes_directory (test_p06_control_finalization.ControlFinalizationTests.test_archive_close_after_release_invalidates_success_and_closes_directory)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/test_p06_control_finalization.py", line 97, in test_archive_close_after_release_invalidates_success_and_closes_directory
+    self.assertEqual(observed.directory_closes, 1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_directory_close_after_release_invalidates_owned_success (test_p06_control_finalization.ControlFinalizationTests.test_directory_close_after_release_invalidates_owned_success)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/test_p06_control_finalization.py", line 114, in test_directory_close_after_release_invalidates_owned_success
+    self.assertEqual(report["outcome"], "fail")
+AssertionError: 'pass' != 'fail'
+- pass
++ fail
+
+
+======================================================================
+FAIL: test_primary_interruption_survives_both_outer_close_failures (test_p06_control_finalization.ControlFinalizationTests.test_primary_interruption_survives_both_outer_close_failures)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/test_p06_control_finalization.py", line 150, in test_primary_interruption_survives_both_outer_close_failures
+    self.assertEqual(observed.directory_closes, 1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_primary_receipt_failure_survives_directory_close_failure (test_p06_control_finalization.ControlFinalizationTests.test_primary_receipt_failure_survives_directory_close_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/test_p06_control_finalization.py", line 134, in test_primary_receipt_failure_survives_directory_close_failure
+    self.assert_sanitized_failure(caught.exception, "receipt_failed")
+  File "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/test_p06_control_finalization.py", line 88, in assert_sanitized_failure
+    self.assertIsInstance(error, control.IntakeError)
+AssertionError: OSError(5, 'synthetic-private-detail https://fixtureaccount.blob.core.windows.net/private/control.zip?sv=2025-01-05&se=2099-01-01T00%3A00%3A00Z&sp=r&sr=b&spr=https&sig=never-retain-this-secret') is not an instance of <class 'p06_qualified_warm_control.IntakeError'>
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.012s
+
+FAILED (failures=4)

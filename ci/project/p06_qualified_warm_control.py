@@ -168,12 +168,28 @@ def _open_https(value, *, timeout):
     context.minimum_version = ssl.TLSVersion.TLSv1_2
     connection = http.client.HTTPSConnection(parsed.hostname, port=443, timeout=timeout, context=context)
     connection.set_debuglevel(0)
+    response, failed = None, False
     try:
         connection.request("GET", parsed.path + "?" + parsed.query,
                            headers={"Accept-Encoding": "identity", "Connection": "close"})
-        yield connection.getresponse()
+        response = connection.getresponse()
+        yield response
+    except BaseException:
+        failed = True
+        raise
     finally:
-        connection.close()
+        close_error = None
+        # HTTPConnection relinquishes a response with Connection: close;
+        # both resources must close without replacing an active failure.
+        for resource in (response, connection):
+            if resource is not None:
+                try:
+                    resource.close()
+                except BaseException as error:
+                    if close_error is None:
+                        close_error = error
+        if not failed and close_error is not None:
+            raise close_error
 
 
 def _response_header_check(response, expected):
@@ -212,11 +228,14 @@ def _open_directory(path):
     try:
         for part in path.parts[1:]:
             child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=descriptor)
-            os.close(descriptor)
-            descriptor = child
+            parent, descriptor = descriptor, child
+            os.close(parent)
         return descriptor
     except BaseException:
-        os.close(descriptor)
+        try:
+            os.close(descriptor)
+        except BaseException:
+            pass
         raise
 
 
@@ -281,7 +300,10 @@ class _PrivateOutput:
 def _write_all(descriptor, body):
     view = memoryview(body)
     while view:
-        written = os.write(descriptor, view)
+        try:
+            written = os.write(descriptor, view)
+        except OSError:
+            raise IntakeError("storage_failed") from None
         _require(written > 0, "storage_failed")
         view = view[written:]
 
@@ -303,36 +325,108 @@ def _stream(response, descriptor, expected, deadline):
 
 
 def _retained_identity(output, descriptor, maximum):
-    os.fsync(descriptor)
-    before = output.file_status(descriptor, ARCHIVE_NAME)
-    _require(0 <= before.st_size <= maximum, "unsafe_retention")
-    os.lseek(descriptor, 0, os.SEEK_SET)
-    digest, size = hashlib.sha256(), 0
-    while block := os.read(descriptor, min(CHUNK_BYTES, maximum + 1 - size)):
-        size += len(block)
-        _require(size <= maximum, "unsafe_retention")
-        digest.update(block)
-    after = output.file_status(descriptor, ARCHIVE_NAME)
-    signature = lambda row: (row.st_dev, row.st_ino, row.st_size, row.st_mtime_ns,
-                             row.st_ctime_ns, row.st_nlink, row.st_mode)
-    _require(signature(before) == signature(after) and size == after.st_size, "unsafe_retention")
-    return {"path": ARCHIVE_NAME, "sha256": digest.hexdigest(), "size_bytes": size}
+    try:
+        os.fsync(descriptor)
+        before = output.file_status(descriptor, ARCHIVE_NAME)
+        _require(0 <= before.st_size <= maximum, "unsafe_retention")
+        os.lseek(descriptor, 0, os.SEEK_SET)
+        digest, size = hashlib.sha256(), 0
+        while block := os.read(descriptor, min(CHUNK_BYTES, maximum + 1 - size)):
+            size += len(block)
+            _require(size <= maximum, "unsafe_retention")
+            digest.update(block)
+        after = output.file_status(descriptor, ARCHIVE_NAME)
+        signature = lambda row: (row.st_dev, row.st_ino, row.st_size, row.st_mtime_ns,
+                                 row.st_ctime_ns, row.st_nlink, row.st_mode)
+        _require(signature(before) == signature(after) and size == after.st_size, "unsafe_retention")
+        return {"path": ARCHIVE_NAME, "sha256": digest.hexdigest(), "size_bytes": size}
+    except OSError:
+        raise IntakeError("storage_failed") from None
+
+
+def _repair_receipt(output, report, owned, *, descriptor=None, directory_owned=None):
+    recovered_directory = None
+    try:
+        if descriptor is None and owned is not None:
+            directory = output.descriptor
+            if directory is None:
+                recovered_directory = directory = _open_directory(output.path)
+                actual = os.fstat(directory)
+                _require(directory_owned is not None and _same_inode(actual, directory_owned)
+                         and stat.S_IMODE(actual.st_mode) == 0o700
+                         and actual.st_uid == os.geteuid(), "receipt_failed")
+            else:
+                output.check()
+            named = os.stat(RECEIPT_NAME, dir_fd=directory, follow_symlinks=False)
+            _require(_same_inode(named, owned) and stat.S_ISREG(named.st_mode)
+                     and named.st_nlink == 1 and stat.S_IMODE(named.st_mode) == 0o600
+                     and named.st_uid == os.geteuid(), "receipt_failed")
+            descriptor = os.open(RECEIPT_NAME, os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK,
+                                 dir_fd=directory)
+            actual = os.fstat(descriptor)
+            named = os.stat(RECEIPT_NAME, dir_fd=directory, follow_symlinks=False)
+            _require(_same_inode(actual, owned) and _same_inode(actual, named)
+                     and stat.S_ISREG(actual.st_mode) and actual.st_nlink == named.st_nlink == 1
+                     and stat.S_IMODE(actual.st_mode) == 0o600
+                     and actual.st_uid == os.geteuid(), "receipt_failed")
+        if descriptor is not None:
+            # Only an owned inode may be invalidated, even after the original
+            # descriptors have been consumed by failing close calls.
+            os.ftruncate(descriptor, 0)
+            os.lseek(descriptor, 0, os.SEEK_SET)
+            failed = dict(report)
+            if failed["outcome"] == "pass":
+                failed.update(outcome="fail", reason_code="receipt_failed",
+                              reason=_REASONS["receipt_failed"], original_verified=False,
+                              retained_state="partial")
+            _write_all(descriptor, (json.dumps(failed, indent=2, sort_keys=True) + "\n").encode("ascii"))
+            os.fsync(descriptor)
+    except (Exception, KeyboardInterrupt):
+        # Storage failure can also prevent a complete failure receipt.
+        pass
+    finally:
+        for resource in (descriptor, recovered_directory):
+            if resource is not None:
+                try:
+                    os.close(resource)
+                except (Exception, KeyboardInterrupt):
+                    pass
 
 
 def _write_receipt(output, report):
-    descriptor = None
+    descriptor, owned = None, None
     try:
         descriptor = output.create(RECEIPT_NAME)
-        output.file_status(descriptor, RECEIPT_NAME)
+        owned = output.file_status(descriptor, RECEIPT_NAME)
         _write_all(descriptor, (json.dumps(report, indent=2, sort_keys=True) + "\n").encode("ascii"))
         os.fsync(descriptor)
-        output.file_status(descriptor, RECEIPT_NAME)
+        owned = output.file_status(descriptor, RECEIPT_NAME)
         os.fsync(output.descriptor)
+        directory_owned = os.fstat(output.descriptor)
+        # A failed close may already release the descriptor; never retry it.
+        closing, descriptor = descriptor, None
+        os.close(closing)
+        return owned, directory_owned
     except (Exception, KeyboardInterrupt):
+        repairing, descriptor = descriptor, None
+        _repair_receipt(output, report, owned, descriptor=repairing)
         raise IntakeError("receipt_failed") from None
     finally:
         if descriptor is not None:
-            os.close(descriptor)
+            try:
+                os.close(descriptor)
+            except (Exception, KeyboardInterrupt):
+                # Cleanup must not replace the sanitized receipt failure.
+                pass
+
+
+def _close_failure(report, error):
+    code = report["reason_code"] or (
+        "interrupted" if isinstance(error, KeyboardInterrupt) else "storage_failed")
+    if report["outcome"] == "pass":
+        report.update(outcome="fail", reason_code=code, reason=_REASONS[code],
+                      original_verified=False, retained_state="partial")
+    return IntakeError(code)
 
 
 def acquire_control(output_dir, *, opener=None):
@@ -392,12 +486,30 @@ def acquire_control(output_dir, *, opener=None):
                 report["retention_identity_unavailable"] = True
     finally:
         location = None
+        failure, receipt_identity = None, None
+        if descriptor is not None:
+            closing, descriptor = descriptor, None
+            try:
+                os.close(closing)
+            except (Exception, KeyboardInterrupt) as error:
+                failure = _close_failure(report, error)
         try:
-            _write_receipt(output, report)
+            receipt_identity = _write_receipt(output, report)
+        except (Exception, KeyboardInterrupt) as error:
+            if failure is None:
+                failure = error
         finally:
-            if descriptor is not None:
-                os.close(descriptor)
-            output.close()
+            try:
+                output.close()
+            except (Exception, KeyboardInterrupt) as error:
+                close_error = _close_failure(report, error)
+                if failure is None:
+                    failure = close_error
+                if receipt_identity is not None:
+                    owned, directory_owned = receipt_identity
+                    _repair_receipt(output, report, owned, directory_owned=directory_owned)
+        if failure is not None:
+            raise failure from None
     return report
 
 

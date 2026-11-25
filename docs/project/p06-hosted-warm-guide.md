@@ -2,31 +2,35 @@
 
 ## Current result and next action
 
-**No fresh 24-process qualified warm experiment has run.** The current retention
-and replay continuation repairs direct-CLI trusted-source binding, requires
-explicit command inventories for started dependency/native writers, and adds
-checked inert plaintext retention inspection and private restoration with
-corrected cleanup. The [continuation audit](p06-retention-review-audit.md),
-[retention review contract](../designs/qualified_warm_retention_review_v1.md) and
-[tooling evidence packet](evidence/p06-retention-review/README.md) record the
-implemented boundaries, source-scoped focused checks and independent reviews.
-These establish tooling behavior only. Measurement sources, proofs, sampling,
-numerical comparisons and performance predicates remain frozen.
+**No fresh 24-process qualified warm experiment has run.** The current execution
+and retention continuation corrects prelaunch failure accounting, preserves
+finished native dispositions without promoting failed attempts, and repairs
+interruption handling, directory identity, descriptor ownership and control
+cleanup. The [current audit](p06-execution-retention-audit.md) and
+[evidence packet](evidence/p06-execution-retention/README.md) record the
+corrections, source-scoped focused checks, independent reviews and real-tool
+synthetic retention controls. These establish tooling behavior only.
+Measurement sources, proofs, sampling, numerical comparisons, performance
+predicates and resource admission remain frozen. P06-A02/A03 remain open.
 
-The audited base `25543e1cf96530264746c0e2d130018dd0dba465` passed strict
+The audited base `622662ad9cece6da4e3375be7e977dbe04cde862` passed strict
 governance in
-[run 45475313555](https://github.com/baabi-boo/AI-GPU/actions/runs/45475313555),
-[job 138733849431](https://github.com/baabi-boo/AI-GPU/actions/runs/45475313555/job/138733849431):
-**5,036 tests in 2,136.484 seconds**, `OK`, and `Strict governance PASSED`.
-That result qualifies the exact base only. The final published changed revision
-requires its own complete, uninterrupted strict invocation under the
-[checked environment](governance-runbook.md). Verify its exact Actions result
-and retained original receipts before dispatch; focused checks do not replace
-that qualification.
+[run 45583904526](https://github.com/baabi-boo/AI-GPU/actions/runs/45583904526),
+[job 139100502944](https://github.com/baabi-boo/AI-GPU/actions/runs/45583904526/job/139100502944):
+**5,114 canonical tests, 37,449 successful subtests and 52,791 ordered events
+in 3,122.11397 seconds**, with zero failures, errors or skips and stable source,
+interpreter and environment. That result qualifies the exact base only. The
+final published changed revision requires its own complete, uninterrupted strict
+invocation under the [checked environment](governance-runbook.md). Verify its
+exact Actions result and retained original receipts before dispatch; focused
+checks do not replace that qualification.
 
 The next operational action is to verify or configure delivery of the exact
-private control original and the public age recipient below. Live provider
-secret configuration was not inspected for this continuation. Require the
+private control original and the public age recipient below. The owner's
+private control-delivery input and public recipient were not supplied to this
+session; live provider secret configuration was not inspected and no admitted
+native runner is established. The reviewer keeps the matching private identity
+outside Actions and this session for later private decryption. Require the
 published revision's own full strict result, observe actual runner capacity and
 pass unchanged native admission before one complete **24-process, 792-launch,
 25,344-word** attempt. Preserve the original and confirm encrypted delivery.
@@ -36,6 +40,20 @@ reader checkout before evaluating every frozen performance predicate. Follow the
 [qualified warm handoff](p06-qualified-warm-handoff.md). Restoration does not
 establish native completeness, producer authentication or performance acceptance;
 failed or partial attempts retain their scope.
+
+The preceding retention and replay continuation repaired direct-CLI
+trusted-source binding, required explicit command inventories for started
+dependency/native writers, and added checked inert plaintext retention
+inspection and private restoration with corrected cleanup. Its
+[audit](p06-retention-review-audit.md),
+[retention review contract](../designs/qualified_warm_retention_review_v1.md) and
+[tooling packet](evidence/p06-retention-review/README.md) retain those boundaries
+and their recorded validation scope. Its audited base
+`25543e1cf96530264746c0e2d130018dd0dba465` passed strict governance in
+[run 45475313555](https://github.com/baabi-boo/AI-GPU/actions/runs/45475313555),
+[job 138733849431](https://github.com/baabi-boo/AI-GPU/actions/runs/45475313555/job/138733849431):
+**5,036 tests in 2,136.484 seconds**, `OK`, and `Strict governance PASSED`.
+That historical result qualifies its exact base only.
 
 The earlier independently verified automation base
 [run 45422819749](https://github.com/baabi-boo/AI-GPU/actions/runs/45422819749),
@@ -215,6 +233,18 @@ private inventory/failure receipts. Retain all hidden regular files, opaque
 outputs and available failure bytes in the selected evidence roots; do not
 invent missing stages or repair raw records.
 
+Read failure receipts with their actual invocation status. Acquisition and
+native-supervisor launch checkpoint failures record an unstarted child only
+when execution was never entered; earlier completed commands and partial bytes
+remain evidence. A failed hosted supervisor may retain `native_execution=run`
+or `not_run` from a matching finished receipt only after source stability and
+writer cleanup are observed. This does not change the failed invocation into
+success. Unknown launch status and unresolved cleanup remain unknown or
+unresolved and block packaging and encryption. Scoped interruption handling
+attempts failure finalization; it does not guarantee closeout after abrupt
+termination. The [current audit](p06-execution-retention-audit.md) records these
+operational failure boundaries.
+
 For this workflow, `attempt/` below means
 `$RUNNER_TEMP/p06-qualified-warm-attempt/`. Hosted closeout attempts to encrypt
 the entire `attempt/retention/` tree: `packet/` contains the packaged original/envelope or
@@ -222,6 +252,13 @@ partial products and their receipts; `packaging.log` and `hosted-closeout.json`
 record packaging and the pre-encryption disposition. A packaging failure may
 leave only incomplete copied bytes there. Encrypting those bytes does not prove
 that all original failure evidence was captured.
+
+Packaging and encryption also reject observed directory replacement or
+ancestry changes at their checked boundaries. Cleanup and finalization errors
+remain failures even when private partial bytes, a success-shaped receipt or
+committed ciphertext survive. Preserve their actual failure records and any
+unknown cleanup state; existing output paths do not authorize a retry in place
+or establish successful delivery.
 
 The hosted evidence selection includes a private `hosted/sources/` snapshot of
 the native wrapper's helper closure, the hosted/control/capacity/pack/encrypt
@@ -359,6 +396,21 @@ test ! -L "$P06_RESTORED_TAR"
 age --decrypt -i "$P06_IDENTITY_FILE" \
   -o "$P06_RESTORED_TAR" "$P06_CIPHERTEXT"
 ```
+
+Require a zero decryption exit status before proceeding. A failed or
+interrupted `age` command can leave private partial plaintext at the output
+path. Discard that partial output or retain it privately as rejected failure
+evidence before any normal inspection, restoration or replay; never treat it
+as a usable archive. Use another absent private path for a later retry. The
+dedicated script's `set -e` stops this sequence on decryption failure.
+
+The [real-tool controls](p06-execution-retention-audit.md) observed partial
+plaintext after ciphertext truncation, a payload bit flip and appended
+ciphertext, all with nonzero decryption exits. A separate malformed tar in a
+valid age envelope decrypted successfully but failed strict archive inspection
+even with a matching plaintext digest. Successful age decryption therefore
+does not establish strict tar validity, completed restoration, producer
+authentication or native acceptance; the following validation remains required.
 
 After successful decryption, select and record the raw plaintext tar SHA-256
 in the private intake record; `sha256sum -- "$P06_RESTORED_TAR"` hashes those

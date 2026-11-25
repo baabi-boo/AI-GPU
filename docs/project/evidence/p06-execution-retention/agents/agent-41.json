@@ -1,0 +1,425 @@
+{
+  "archive": {
+    "byte_equal": true,
+    "member_count": 7,
+    "packaged": {
+      "sha256": "7249da4d1bdaae8e60261950132056e152517b21555d1c61f53ab1905bcc00c2",
+      "size_bytes": 1954
+    },
+    "restored": {
+      "sha256": "7249da4d1bdaae8e60261950132056e152517b21555d1c61f53ab1905bcc00c2",
+      "size_bytes": 1954
+    }
+  },
+  "base_revision": "622662ad9cece6da4e3375be7e977dbe04cde862",
+  "ciphertext": {
+    "sha256": "953de766a3b802494dd9d92ba1cf9f09e33e0198a877eaa19c20fff70ecdbb27",
+    "size_bytes": 20680
+  },
+  "command_output_hashes": {
+    "age-keygen-version": {
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stdout": {
+        "sha256": "a934c1143c788f915bc859df1c72790712bf1d44c348a580602dd0939b0ab270",
+        "size_bytes": 7
+      }
+    },
+    "age-version": {
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stdout": {
+        "sha256": "a934c1143c788f915bc859df1c72790712bf1d44c348a580602dd0939b0ab270",
+        "size_bytes": 7
+      }
+    },
+    "decrypt": {
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stdout": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      }
+    },
+    "encrypt": {
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stdout": {
+        "sha256": "eaa8abfc2da8d2084a67681024a5e0cfd3ff6eae99f9e06ef64404287b753e7f",
+        "size_bytes": 350
+      }
+    },
+    "inspect": {
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stdout": {
+        "sha256": "843d36343ece4d8a16b3290c753100dd1f9e9b6c9fe943bfeabb4287238359b5",
+        "size_bytes": 781
+      }
+    },
+    "package-partial": {
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stdout": {
+        "sha256": "6809e96c34da3d708288e3cd67804ecfb1dfde5fd1164f295575e5d23bd1a089",
+        "size_bytes": 174
+      }
+    },
+    "restore": {
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_bytes": 0
+      },
+      "stdout": {
+        "sha256": "e0a71025d659c767517119cf04a48cdf9969f71af6bacab55c317849db083f67",
+        "size_bytes": 810
+      }
+    }
+  },
+  "commands": [
+    {
+      "command": "/tmp/ai-gpu-ae456f837c05/roundtrip-tools/age --version",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "id": "age-version"
+    },
+    {
+      "command": "/tmp/ai-gpu-ae456f837c05/roundtrip-tools/age-keygen --version",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "id": "age-keygen-version"
+    },
+    {
+      "command": "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin/python3 -B /tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/p06_qualified_warm_pack.py partial --source-dir '<SYNTHETIC_ROOT>/synthetic-source' --workspace-dir '<SYNTHETIC_ROOT>/synthetic-workspace' --output-dir '<SYNTHETIC_ROOT>/selected-retention/packet' --writers-finished --extra-root 'acquisition=<SYNTHETIC_ROOT>/synthetic-acquisition'",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "id": "package-partial"
+    },
+    {
+      "command": "/tmp/ai-gpu-ae456f837c05/roundtrip-tools/age-keygen -o '<SYNTHETIC_ROOT>/reviewer-private/ephemeral-identity.PRIVATE.txt'",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "id": "keygen"
+    },
+    {
+      "command": "/tmp/ai-gpu-ae456f837c05/roundtrip-tools/age-keygen -y '<SYNTHETIC_ROOT>/reviewer-private/ephemeral-identity.PRIVATE.txt'",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "id": "recipient"
+    },
+    {
+      "command": "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin/python3 -B /tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/p06_qualified_warm_encrypt.py --input-dir '<SYNTHETIC_ROOT>/selected-retention' --output-dir '<SYNTHETIC_ROOT>/public-delivery' --recipient '<EPHEMERAL_PUBLIC_RECIPIENT>' --age-binary /tmp/ai-gpu-ae456f837c05/roundtrip-tools/age --expected-revision 622662ad9cece6da4e3375be7e977dbe04cde862",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "id": "encrypt"
+    },
+    {
+      "command": "/tmp/ai-gpu-ae456f837c05/roundtrip-tools/age --decrypt -i '<SYNTHETIC_ROOT>/reviewer-private/ephemeral-identity.PRIVATE.txt' -o '<SYNTHETIC_ROOT>/reviewer-private/decrypted-retention.PRIVATE.tar' '<SYNTHETIC_ROOT>/public-delivery/qualified-warm-retention.tar.age'",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "id": "decrypt"
+    },
+    {
+      "command": "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin/python3 -B /tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/p06_qualified_warm_restore.py inspect --archive '<SYNTHETIC_ROOT>/reviewer-private/decrypted-retention.PRIVATE.tar' --sha256 2b20f675a52c1032120b777a9b2ebfb76c5ee1a8c81c9034252c2a546334337b --expected-revision 622662ad9cece6da4e3375be7e977dbe04cde862 --summary '<SYNTHETIC_ROOT>/public-delivery/encryption-summary.json'",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "id": "inspect"
+    },
+    {
+      "command": "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin/python3 -B /tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/p06_qualified_warm_restore.py restore --archive '<SYNTHETIC_ROOT>/reviewer-private/decrypted-retention.PRIVATE.tar' --sha256 2b20f675a52c1032120b777a9b2ebfb76c5ee1a8c81c9034252c2a546334337b --expected-revision 622662ad9cece6da4e3375be7e977dbe04cde862 --summary '<SYNTHETIC_ROOT>/public-delivery/encryption-summary.json' --output-dir '<SYNTHETIC_ROOT>/reviewer-private/restored'",
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "id": "restore"
+    }
+  ],
+  "complete_restored_inventory_matches_manifest_and_input": true,
+  "driver_sha256": "8032a84cf0a1ac36fcb2c4beec1ffdd21e01fa709e3df3d85084f8e2212e4507",
+  "encryption_summary": {
+    "ciphertext_bytes": 20680,
+    "ciphertext_sha256": "953de766a3b802494dd9d92ba1cf9f09e33e0198a877eaa19c20fff70ecdbb27",
+    "contract_id": "p06-qualified-warm-encrypted-retention-v1",
+    "directory_count": 3,
+    "encryption_passed": true,
+    "expected_revision": "622662ad9cece6da4e3375be7e977dbe04cde862",
+    "file_count": 8,
+    "input_bytes": 8690,
+    "outcome": "pass",
+    "schema_version": 1
+  },
+  "every_restored_payload_byte_equal_to_input": true,
+  "frozen_source_hashes": {
+    "ci/project/p06_qualified_warm_control.py": "a303c3dc56076bbb203376521534e465c5d97b997c9ae1b93e6375e98d298fcd",
+    "ci/project/p06_qualified_warm_encrypt.py": "70b5cc6e52d112b75d7009b3fe4b431ef56d17fea2a78e2a537538333b694053",
+    "ci/project/p06_qualified_warm_hosted.py": "01bee3115ba5b2ff0abb2583d76b165718a08216e3064faeb28324655d27b3ff",
+    "ci/project/p06_qualified_warm_inputs.py": "f4077dc42117f4e2e121c18e9be72ac6de1a480450245db19cb8ce951f4860bb",
+    "ci/project/p06_qualified_warm_pack.py": "e4cff314b8a2a0dbb277baef1bc5b3eb78b10a90f777a4d3b60ff74b682dac0e",
+    "ci/project/p06_qualified_warm_run.py": "8455ff73d618e41714c0737fc3ac25ee3d8afbb538fb95b42779d9b3740dfcd3",
+    "ci/project/test_p06_control_closeout_review.py": "8502a9c800a864aaa947e3f9a68f112a5213ce8401a59121ad16514a811b72a2",
+    "ci/project/test_p06_control_final_review.py": "2726f9b782f94b2e4cc5d9ec4df2c3335981ab9f2af6fcf642e96274c5429368",
+    "ci/project/test_p06_control_finalization.py": "7020fea4b05a002f8d6353aed429d66e4162f9e2d4f202a0ca401edfb2c6e06c",
+    "ci/project/test_p06_control_operational_failures.py": "b281681fdf158062be763ce46aecff9b18634faba937072e490636a99b494e09",
+    "ci/project/test_p06_directory_cleanup_review.py": "0ae6b592c82c81b7191280137c73a7f5109cded9f0fa5e377eb2315f30ab32aa",
+    "ci/project/test_p06_encrypt_operational_failures.py": "5804c519149e3131c6183286c3c599d1b27f9849a4139d24765c311691169e88",
+    "ci/project/test_p06_encrypt_publication_review.py": "94167a1faada5d880d73e4f89006c3fd96c65f859cdd75c3fe89ceecdf77d5ed",
+    "ci/project/test_p06_hosted_operational_failures.py": "ad165dd0ec63cc7e0b6e547ba1b504f06f0ba3876e29aa6d75163ab442033eb9",
+    "ci/project/test_p06_input_operational_failures.py": "2f3867cb359dd9fa5a499f66b0aeb9633f81827969cc45b5a9853421f5de50ce",
+    "ci/project/test_p06_operational_cancellation.py": "9e04008693a5410a1ede7e6d88ccb86800ed7514a56852fdfffa2fb90877fc6b",
+    "ci/project/test_p06_pack_operational_failures.py": "a7e93f6deb807c6cea46816c822cb2740b16ddba6d8ab892057bc18582fbe372",
+    "ci/project/test_p06_pack_setup_cleanup.py": "206756440cdfc4bbac6370d8f664db5c4dfdb9acc4b2eb3f644a48817ed85991",
+    "ci/project/test_p06_prelaunch_review.py": "c02d423ca1a3533fcf5ec7fe055ff6ff5e012f5010e5d6c0fbf35309568411ae",
+    "ci/project/test_p06_qualified_warm_control.py": "9dddf361cc18d72b40636156e36f40d359c36872bebae9925e6c96a063808ead",
+    "ci/project/test_p06_warm_supervision_failures.py": "c8f81e415fd9a9625403cba2a4c767a45ec1883919b13c7992be59e39f77e264",
+    "ci/project/xrt_signals.py": "a9531608094a233e5336a35e9fa7ebd028aaa3fc6dd7d3ed0f6f4d3f83a94fb8"
+  },
+  "frozen_source_manifest": {
+    "all_entries_match_before_and_after": true,
+    "entry_count": 22,
+    "manifest_bytes_unchanged": true,
+    "path": "docs/project/evidence/p06-execution-retention/validation/operational-source-freeze.json",
+    "sha256": "714deb35f890b197d43e5b2de0a02c3ede1cb8ec0bf944f057cb349c9b1bdceb",
+    "size_bytes": 4798
+  },
+  "native_acceptance": false,
+  "native_execution": "not_run",
+  "negative_ciphertext_controls_repeated": false,
+  "observations": {
+    "actual_ciphertext_hash_and_length_checked_before_decryption": true,
+    "binary_hidden_empty_files_retained": true,
+    "complete_replay_original_created": false,
+    "empty_directory_retained": true,
+    "encryption_input_bytes_and_identity_stamps_unchanged": true,
+    "input_sentinel_mode_preserved": "0600",
+    "malformed_partial_report_retained": true,
+    "no_network_acquisition_or_native_gpu_execution": true,
+    "original_source_workspace_acquisition_bytes_and_identity_stamps_unchanged": true,
+    "partial_attempt_preserved": true,
+    "private_key_printed_or_committed": false,
+    "private_key_unlinked_after_decryption": true,
+    "public_output_only_ciphertext_and_exact_minimal_summary": true,
+    "public_output_plaintext_synthetic_markers_absent": true,
+    "public_summary_does_not_authenticate_origin": true,
+    "restore_directories_mode": "0700",
+    "restore_files_mode": "0600",
+    "restored_sentinel_mode": "0600",
+    "restored_tree_matches_encryption_input": true,
+    "retained_sentinel_executed": false,
+    "summary_check_does_not_verify_ciphertext_relationship": true
+  },
+  "outcome": "pass",
+  "performance_acceptance": false,
+  "phase_acceptance": false,
+  "plaintext_tar": {
+    "sha256": "2b20f675a52c1032120b777a9b2ebfb76c5ee1a8c81c9034252c2a546334337b",
+    "size_bytes": 20480,
+    "unchanged_after_review": true
+  },
+  "production_sources_modified_by_validation": false,
+  "public_output_members": [
+    "encryption-summary.json",
+    "qualified-warm-retention.tar.age"
+  ],
+  "python": {
+    "executable_sha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+    "version": "3.12.14"
+  },
+  "reports": {
+    "inspection": {
+      "archive_bytes": 20480,
+      "archive_sha256": "2b20f675a52c1032120b777a9b2ebfb76c5ee1a8c81c9034252c2a546334337b",
+      "contract_id": "p06-qualified-warm-retention-review-v1",
+      "directory_count": 3,
+      "expected_revision": "622662ad9cece6da4e3375be7e977dbe04cde862",
+      "file_count": 8,
+      "input_bytes": 8690,
+      "limitations": [
+        "caller-selected-digest-is-not-origin-authentication",
+        "public-summary-ciphertext-is-not-verified",
+        "retention-consistency-is-not-native-or-performance-acceptance",
+        "observed-stability-does-not-exclude-malicious-concurrent-writers"
+      ],
+      "native_acceptance": false,
+      "native_execution": "not_run",
+      "origin_authenticated": false,
+      "outcome": "pass",
+      "performance_acceptance": false,
+      "phase_acceptance": false,
+      "retained_code_executed": false,
+      "retention_verified": true,
+      "schema_version": 1,
+      "summary_checked": true
+    },
+    "packaging": {
+      "artifact_count": 1,
+      "classification": "PRIVATE",
+      "contract_id": "p06-qualified-warm-private-pack-v1",
+      "outcome": "pass",
+      "packaging_passed": true,
+      "partial_attempt": true
+    },
+    "packaging_false_claims": {
+      "acceptance_claimed": false,
+      "full_warm_coverage": false,
+      "performance_acceptance": false,
+      "phase_acceptance": false,
+      "qualified": false,
+      "ready_for_warm": false,
+      "warm_execution": false
+    },
+    "restoration": {
+      "archive_bytes": 20480,
+      "archive_sha256": "2b20f675a52c1032120b777a9b2ebfb76c5ee1a8c81c9034252c2a546334337b",
+      "contract_id": "p06-qualified-warm-retention-review-v1",
+      "directory_count": 3,
+      "expected_revision": "622662ad9cece6da4e3375be7e977dbe04cde862",
+      "file_count": 8,
+      "input_bytes": 8690,
+      "limitations": [
+        "caller-selected-digest-is-not-origin-authentication",
+        "public-summary-ciphertext-is-not-verified",
+        "retention-consistency-is-not-native-or-performance-acceptance",
+        "observed-stability-does-not-exclude-malicious-concurrent-writers"
+      ],
+      "native_acceptance": false,
+      "native_execution": "not_run",
+      "origin_authenticated": false,
+      "outcome": "pass",
+      "performance_acceptance": false,
+      "phase_acceptance": false,
+      "restoration_completed": true,
+      "retained_code_executed": false,
+      "retention_verified": true,
+      "schema_version": 1,
+      "summary_checked": true
+    }
+  },
+  "sanitized_command_root": "<SYNTHETIC_ROOT> denotes the owned final-roundtrip-agent41 directory; no private payloads are reproduced",
+  "schema_version": 1,
+  "scope": "final-frozen-source-synthetic-partial-retention-real-age-roundtrip-only",
+  "source_files_unchanged": true,
+  "source_hashes": {
+    "ci/gen_config.py": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+    "ci/project/baseline_inventory.py": "ae98afa10a19703c4247b22bdf3d7218cba12ef37b95da8a7caefb788ad7b259",
+    "ci/project/baseline_matrix.py": "165f0d091fa842617471405fb046247d893c8a0c5a2245b16bb4257ad300ebdc",
+    "ci/project/baseline_packet_contract.py": "0cbdbebbceac67440fa1baa9ac9951f9f705aed9476275955815d6cb867e58df",
+    "ci/project/baseline_packet_io.py": "469583bc558ccb010af82259de38248d7a9a8283cd873a96726aa3c3e2aaa94c",
+    "ci/project/baseline_process.py": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+    "ci/project/compiler_records.py": "7a7088deb078eaa58016fc09dacd0f2a3415aaeac18a6dec8c8304de22bf66b4",
+    "ci/project/p02_fixture_oracle.py": "12e546864a4fef5b05e10c7a04b1006bcd59376e5921ea1221c4d42668490145",
+    "ci/project/p02_layout_fixture_oracle.py": "34e78c0313e2b032930615f02a790729d1c49293349728b55f7d04a29a2568a7",
+    "ci/project/p02_matrix.py": "e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17",
+    "ci/project/p02_matrix_records.py": "b32804945e687c6a02debddc6fad2b7aaf4bd87aa7a8e2315b92605fdfa0c8d9",
+    "ci/project/p02_wmma_fixtures.py": "4a672a5d3357f220120f43e5f5d7e880f7d0ba36df380d69cd1873ea4879835e",
+    "ci/project/p02_wmma_numerical_fixture_oracle.py": "083450dc11712e5fc6dce7d19fb854bd9ef25b738347efd56bd07e81b079570b",
+    "ci/project/p03_execute.py": "bee5c380eb0d328e72586e2c51e4162b8ca5314ef68d2987a7d744fc1c05aa82",
+    "ci/project/p03_execution_records.py": "b26449105f17f9487cc4fbaab36884ceea42be9f502a26aa58331ed4cf1140de",
+    "ci/project/p04_execution_records.py": "abddfb06fb48bbd064c09d61879b278bca22778f5a8289f4c1ac93fb882b33e0",
+    "ci/project/p04_fixture_adapter.py": "37a50f6f0f80fd79b926b7ed5d13a233de6bf518590da7fa7d40800dcc91094a",
+    "ci/project/p04_model_contract.py": "c184d980d57aec54567d79025845c5fb34887741697ac78a66692a65da02e4b3",
+    "ci/project/p04_reference.py": "115a7db51948d69fc6267d5fe658d1a8e68c22e9f200d5ddc3f0a5181d7140a9",
+    "ci/project/p06_checked_execute.py": "86ba0b3fd2bbfa97ebb2346e69fed85968fd3da8bf267d4dc1a13aaacf8b358e",
+    "ci/project/p06_compiler_records.py": "f441c12f4c9e4b9ef10eca13f8b5291fc41ffb86f1f42e42dfd320056dedd6da",
+    "ci/project/p06_contract.py": "780086070739b6d3586f9b3695ad4dc31d209a7817cf1af3651160a9fe6e1376",
+    "ci/project/p06_counter_diagnostics_replay.py": "4d959363229859bd1ac5f4ede4f09937b8418e50f85a1c2eab3f131956532f0b",
+    "ci/project/p06_counter_public_build.py": "22982ed2264626fb1be2b86785fddb89655c9e0f82a2257ce0e9ab7c89eab758",
+    "ci/project/p06_counter_public_records.py": "d947be071b670edcbc0b7d613860c288ee1b013f16e256679747afe0353a7e78",
+    "ci/project/p06_counter_public_replay.py": "6489dff8b39bda3d18df97fb72092fd2014d86d8c0129bcd56a13f08acd942a0",
+    "ci/project/p06_counter_qualification_admission.py": "33053b52145167ced22a4793295f1cbfd07c78eb8072e65ed94090040e8eae43",
+    "ci/project/p06_counter_qualification_contract.py": "d445b9447aefb4f2917f827105df9b5722c461f10f68629176f2dc2d2321fd0d",
+    "ci/project/p06_counter_qualification_prerequisites.py": "b94d293f8dc4846e4b2de3344169362899d3da9503efcbac0a2e63ebad68d586",
+    "ci/project/p06_counter_qualification_replay.py": "4aece4442e31426b7ef60378499f338e3ec6909263ddca7db64d90442aa60798",
+    "ci/project/p06_counter_source_inventory.py": "8961331993ceb112f80a83314ee7a6a3020163a89ca1b8781139c103e98f6862",
+    "ci/project/p06_dependency_admission.py": "8d9d65960d7f2336911823c29ee1c9eb14cba76ca0c097e9d42ad02b5744a1e7",
+    "ci/project/p06_dependency_binary.py": "81397956f856e5658864ee59f198c760699160f5d7a78d73d80db41f361814e1",
+    "ci/project/p06_dependency_build.py": "ec40c043aba91c68fafe1b15449b3df466fb6a0decbabd5a9c21cac38ca39f94",
+    "ci/project/p06_dependency_contract.py": "d6151024fbe7e8a651075fd76b9bdc006bb18c0f61c538a2928842f865ddd364",
+    "ci/project/p06_dependency_control_replay.py": "1c418b3f0fa58423c94eedd28e9fbda02a6ce8a5423b042abc1574281a67faa2",
+    "ci/project/p06_dependency_graph.py": "eb278cbd37d5191468d151339a88a665d792e0f31d7f1d41da30285b240e9f08",
+    "ci/project/p06_dependency_local_execute.py": "b6651948b2ee4ce4fe99c94fac8ac7e86bfec8a8658f258b3ef76081104b3c79",
+    "ci/project/p06_dependency_local_prepare.py": "c810f31cf6106a5bbcd6eddcf8d818560cb94222da057fe9491a8e1dbc99316f",
+    "ci/project/p06_dependency_local_replay.py": "a16983cf6c4083b9d2eb8f5a8d4e72660d8d10a92ef7d8dd9f8ba1a994ce298b",
+    "ci/project/p06_dependency_native_replay.py": "ec4fd742820387a30989c26bfeea523ffa68e8b9dfabcc679a6928e68d8b652b",
+    "ci/project/p06_dependency_receipt.py": "6a45f224b57cbc2e4d7edfd540712eb468b1aa92407e2b65bc5a2de7c3581c70",
+    "ci/project/p06_dependency_record.py": "5364a5036fb03bebed3aba6267d302cf36c379b30e7085ded1b59db077c33205",
+    "ci/project/p06_dependency_replay.py": "1c5dc29aa92a18ac4b89bdd3bbd53c4bc5ed0fad37d9cc4d907ed92f3f862218",
+    "ci/project/p06_dependency_sources.py": "4e09b8f8357538591a843f465ca6a20465baf363e5a190b9edf8d01c807174a1",
+    "ci/project/p06_dependency_substitution.py": "e37c31fb769d7c1d5374bf40216c5099eb9a24d0017ceef876b36cbbec6a9f87",
+    "ci/project/p06_local_toolchain.py": "0bd80e40b6a22bf78a665e8f1b18818a21178bcc32248a20bfd3133d3c3d5aa8",
+    "ci/project/p06_managed_preflight_application_build.py": "b0dbadf26a1189ea0f5b7f7aa88f54fd0ce26d875f197e4f3c062a0a00fcd298",
+    "ci/project/p06_managed_preflight_backend_build.py": "f37fd2f53713a25bd23df989b2469bb6327a9d8769983177b349b6d8f653f700",
+    "ci/project/p06_managed_preflight_build.py": "0c6a5c2c6415071566f66363289e245c4e8b486e987615ffab74f15fb39ee559",
+    "ci/project/p06_managed_preflight_contract.py": "5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb",
+    "ci/project/p06_managed_preflight_derivation.py": "8ba5e019cd4f2cc1b74b3a8839c93e6d7baf4766da1a2169e757e22d3e45a3d6",
+    "ci/project/p06_managed_preflight_execute.py": "2aa330b428852b3b0f0acc9bcc32cc464959b7f255d709f13cde310319b2fe4e",
+    "ci/project/p06_managed_preflight_generated.py": "6b777ca99c82d2e2c3f7bddf2a15d70df1cd2303a56b53cacb89114c8b2bb5cc",
+    "ci/project/p06_managed_preflight_records.py": "3d6358c98544f4252be262125b70c87a72caaca7f35fbe3bc3e2512655654d10",
+    "ci/project/p06_managed_preflight_replay.py": "9ab96bfb7a8940c61d37a13cd3d39f148c4b0c623ed085615e53d92c7eea4ade",
+    "ci/project/p06_managed_preflight_replay_build.py": "0034e67683dc8291d2aec980602b55dca56af57f5a1a94d3a9cae576a51fb7db",
+    "ci/project/p06_managed_preflight_replay_hosted.py": "918027091c40eda7eaccd5c9c634a41de65647bd55c070e853d39767c58ff031",
+    "ci/project/p06_managed_preflight_source_export.py": "1bec4cc1a296ae93bc9c29029ed5a28a02f6edd71adbdbfdbcea156eebf28b46",
+    "ci/project/p06_managed_preflight_sources.py": "dc0374a1c3a059c36d47697ff2c8275bf0901b76468f72a15425ea2cfe687f2a",
+    "ci/project/p06_mpm_execute.py": "c9524652c24121401f7d2cb044cae72c4f6dece7f8d8357d886d7b1ef63fcea0",
+    "ci/project/p06_native_lifetime_contract.py": "266a50e5b4c0d07b432accf2aa13ff8d3db7fc175a24a4263e3cdb0acafb5b74",
+    "ci/project/p06_native_lifetime_records.py": "5bf33d35e489397d96e0e0932c8d42e687f18deda646bb9725e05b326be50e3a",
+    "ci/project/p06_pending_probe.py": "89300a063bf26e20312fe6026377db300cdf40b6a91bc3d6327340e66b51d42d",
+    "ci/project/p06_qualified_warm_admission.py": "849b3cf591d419bf50eea02b94f6801499859208f802b376a81a2c2b3bca28e2",
+    "ci/project/p06_qualified_warm_analyze.py": "7443625aefbefbdb749527c333ff13b4e9e1144ce256acee460247187acbc28f",
+    "ci/project/p06_qualified_warm_contract.py": "f8984c8f286094e7853410c2a8c67bc9aecf81aea860b3ffaff0bcd2aebac112",
+    "ci/project/p06_qualified_warm_encrypt.py": "70b5cc6e52d112b75d7009b3fe4b431ef56d17fea2a78e2a537538333b694053",
+    "ci/project/p06_qualified_warm_inputs.py": "f4077dc42117f4e2e121c18e9be72ac6de1a480450245db19cb8ce951f4860bb",
+    "ci/project/p06_qualified_warm_pack.py": "e4cff314b8a2a0dbb277baef1bc5b3eb78b10a90f777a4d3b60ff74b682dac0e",
+    "ci/project/p06_qualified_warm_records.py": "100a513d0e34b358c4f2676f9fc4d565160bd0b3b7499d9ae51f6ce1cbe3e29b",
+    "ci/project/p06_qualified_warm_replay.py": "1f6cb5cb1dec4c45553d19b3f3e76f1594a570fcac80eabf9d39d5f2564068e4",
+    "ci/project/p06_qualified_warm_restore.py": "21bc047ef9b76232aa79ce5199b82fca48cb6611aab4b61018f8ff9f08bbbf1d",
+    "ci/project/p06_qualified_warm_retention.py": "4645e2a4aac840c87b467b08cb2d338818739d6fbdbbd3ec95a1103dfa11bcbe",
+    "ci/project/p06_qualified_warm_run.py": "8455ff73d618e41714c0737fc3ac25ee3d8afbb538fb95b42779d9b3740dfcd3",
+    "ci/project/p06_records.py": "cb5740ae915a0c383fd41c9f67d4f40a02875487383c67d22cf211f1a9ba3fb7",
+    "ci/project/p06_replay.py": "9a5e68de45ec923c56e39a05697d9f93b3d0fdd91c81d38d6637c12ba153d991",
+    "ci/project/p06_warm_analyze.py": "ac273f587f759900d16ad41c7c63c2d2b10ca0864d5018f8403572f75e5a3e88",
+    "ci/project/p06_warm_compiler_records.py": "fe32aa772439e98975cdcb4807b269022d461c5e99c0021c4689c9712d7988f9",
+    "ci/project/p06_warm_contract.py": "d311c5fb77e651a93fde368f0e41d517f40199a3bd43e27c302d4d00888cc31e",
+    "ci/project/p06_warm_execute.py": "61c6caa04e8bb2a28d7f2e7b73cf41baa43abaeb8330882d7ab219bfe33d2f6a",
+    "ci/project/p06_warm_records.py": "28d7e2c1553fc0929a106bc24a62fa2d612e415449ee0e9ac84ad582289381e7",
+    "ci/project/p06_warm_replay.py": "8982c9ec5b1599080c8df09dd685ecf7aae7488af4708463dda819c4bcb62890",
+    "ci/project/p06_workspace_compiler_records.py": "d89496a4e08737c6bb5c72b5b05a94994bb70a63e17b88c11547f38d47c06375",
+    "ci/project/p06_workspace_execute.py": "83f97cf2a8584dcd6b9099f37415dd3b28c75982900b8adb02d15834c8d9fff7",
+    "ci/project/p06_workspace_records.py": "9e3f9af15f2981d19a05fcd83ddd369bae43f6530fd4383831c9d2942d8fee21",
+    "ci/project/p06_workspace_replay.py": "aa039e92123ceed8b83eddb8362457c2214f96cbd2dc058739bf14c47ef938e6",
+    "ci/project/preflight.py": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+    "ci/project/xrt_signals.py": "a9531608094a233e5336a35e9fa7ebd028aaa3fc6dd7d3ed0f6f4d3f83a94fb8"
+  },
+  "source_state": "final frozen uncommitted operational candidate; freeze manifest and file SHA-256 identities are authoritative; base revision is only the synthetic selector",
+  "strict_governance_run": false,
+  "tool_binaries_match_verified_archive_members": true,
+  "tools": {
+    "files": {
+      "age": {
+        "sha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c",
+        "size_bytes": 6977014
+      },
+      "age-keygen": {
+        "sha256": "0a0009db842259d6717f7eeb30acb6b90d2a2eb924c6acd0a0db0ca1f1537899",
+        "size_bytes": 4051278
+      },
+      "age-v1.3.2-linux-amd64.tar.gz": {
+        "sha256": "cbe24006683f8eb669266162894b9a522a1af52f2665fbc63a4bb032ed26ac10",
+        "size_bytes": 19405817
+      }
+    },
+    "versions": {
+      "age": "v1.3.2",
+      "age-keygen": "v1.3.2"
+    }
+  }
+}

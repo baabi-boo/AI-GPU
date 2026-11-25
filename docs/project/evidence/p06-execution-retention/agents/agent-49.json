@@ -1,0 +1,308 @@
+{
+  "agent": 49,
+  "artifact_hashes": {
+    "agent-49-execution.json": "371e72333280ce2b5a4c0c3294346d7d3f7c33243e62cf4d85e7f9fd483f7cd5",
+    "agent-49-focused.log": "127fd34ce2b31c5fb0e55ee0426fd63b8c3e8fad8f0676987a649d74901e3bd5",
+    "agent-49-independent-probe.log": "67769fedd2c45be10a3886b084808935a25a97f6a64637f99e0694ab68316676",
+    "agent-49.md": "2bd323fc3618abda71e1ffdf46b9a9374781dcbef4de07ff3bf8102d3de2a9ac"
+  },
+  "base_commit": "622662ad9cece6da4e3375be7e977dbe04cde862",
+  "child_agents": 0,
+  "confidence": "high",
+  "diff_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check",
+      "--",
+      "ci/project/p06_qualified_warm_pack.py"
+    ],
+    "exit_code": 0
+  },
+  "disposition": "pass_for_bounded_correction",
+  "evidence_types": [
+    "static-proof",
+    "executed-real-descriptor-host-faults"
+  ],
+  "execution": [
+    {
+      "case_count": 6,
+      "command": [
+        "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin/python3",
+        "-B",
+        "/tmp/ai-gpu-ae456f837c05/notes/agent-47-final-close-probe.py"
+      ],
+      "cwd": "/tmp/ai-gpu-ae456f837c05/AI-GPU",
+      "elapsed_seconds": 0.7183559209952364,
+      "environment_overrides": {
+        "PATH": "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin:/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project",
+        "TMPDIR": "/tmp/ai-gpu-ae456f837c05/tmp"
+      },
+      "exit_code": 0,
+      "independent_observation_assertions_passed": true,
+      "log": "/tmp/ai-gpu-ae456f837c05/notes/agent-49-independent-probe.log",
+      "log_sha256": "67769fedd2c45be10a3886b084808935a25a97f6a64637f99e0694ab68316676",
+      "masked_primary_count": 0,
+      "name": "independent-probe",
+      "preserved_primary_count": 6
+    },
+    {
+      "command": [
+        "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_p06_pack_final_cleanup",
+        "test_p06_qualified_warm_pack.PrivatePackagingTests.test_success_is_exact_two_roots_with_hidden_locks_and_opaque_bytes",
+        "test_p06_qualified_warm_pack.PrivatePackagingTests.test_envelope_preserves_full_raw_supervision_and_explicit_extra_evidence",
+        "test_p06_qualified_warm_pack.PrivatePackagingTests.test_partial_preserves_missing_native_root_without_fabrication",
+        "test_p06_qualified_warm_pack.PrivatePackagingTests.test_partial_keeps_malformed_unfinished_and_failed_cleanup_records_verbatim"
+      ],
+      "cwd": "/tmp/ai-gpu-ae456f837c05/AI-GPU",
+      "elapsed_seconds": 1.6718376789940521,
+      "environment_overrides": {
+        "PATH": "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin:/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYTHONPATH": "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project",
+        "TMPDIR": "/tmp/ai-gpu-ae456f837c05/tmp"
+      },
+      "exit_code": 0,
+      "log": "/tmp/ai-gpu-ae456f837c05/notes/agent-49-focused.log",
+      "log_sha256": "127fd34ce2b31c5fb0e55ee0426fd63b8c3e8fad8f0676987a649d74901e3bd5",
+      "name": "focused"
+    }
+  ],
+  "focused": {
+    "cleanup_only_error_fatal_after_complete_and_partial": true,
+    "cleanup_only_error_fatal_inside_unrelated_caller_except": true,
+    "complete_and_partial_positive_paths_passed": true,
+    "errors": 0,
+    "exact_foreign_descriptor_identity_checked": true,
+    "existing_positive_methods": 4,
+    "failures": 0,
+    "new_fault_subcases": 10,
+    "new_regression_methods": 3,
+    "skips": 0,
+    "test_methods": 7
+  },
+  "git_mutation": false,
+  "historical_freeze": {
+    "path": "docs/project/evidence/p06-execution-retention/validation/operational-source-freeze.json",
+    "sha256": "714deb35f890b197d43e5b2de0a02c3ede1cb8ec0bf944f057cb349c9b1bdceb",
+    "unchanged": true
+  },
+  "independent_probe": {
+    "all_close_attempt_counts_one": true,
+    "all_exact_reused_numbers_survived": true,
+    "all_receipts_name_primary_error": true,
+    "case_count": 6,
+    "cases": [
+      {
+        "action": "package_success",
+        "failure_receipt_error_type": "KeyboardInterrupt",
+        "failure_receipt_outcome": "fail",
+        "failure_receipt_stage": "inventory",
+        "output_close_attempts": 1,
+        "output_fd": 4,
+        "primary_type": "KeyboardInterrupt",
+        "raised_primary": true,
+        "raised_secondary": false,
+        "retained_names": [
+          "packaging-failure.PRIVATE.json"
+        ],
+        "secondary_context_is_primary": false,
+        "unrelated_fd": 4,
+        "unrelated_survived": true
+      },
+      {
+        "action": "package_success",
+        "failure_receipt_error_type": "ValueError",
+        "failure_receipt_outcome": "fail",
+        "failure_receipt_stage": "inventory",
+        "output_close_attempts": 1,
+        "output_fd": 4,
+        "primary_type": "ValueError",
+        "raised_primary": true,
+        "raised_secondary": false,
+        "retained_names": [
+          "packaging-failure.PRIVATE.json"
+        ],
+        "secondary_context_is_primary": false,
+        "unrelated_fd": 4,
+        "unrelated_survived": true
+      },
+      {
+        "action": "package_success",
+        "failure_receipt_error_type": "RuntimeError",
+        "failure_receipt_outcome": "fail",
+        "failure_receipt_stage": "inventory",
+        "output_close_attempts": 1,
+        "output_fd": 4,
+        "primary_type": "RuntimeError",
+        "raised_primary": true,
+        "raised_secondary": false,
+        "retained_names": [
+          "packaging-failure.PRIVATE.json"
+        ],
+        "secondary_context_is_primary": false,
+        "unrelated_fd": 4,
+        "unrelated_survived": true
+      },
+      {
+        "action": "package_partial",
+        "failure_receipt_error_type": "KeyboardInterrupt",
+        "failure_receipt_outcome": "fail",
+        "failure_receipt_stage": "inventory",
+        "output_close_attempts": 1,
+        "output_fd": 4,
+        "primary_type": "KeyboardInterrupt",
+        "raised_primary": true,
+        "raised_secondary": false,
+        "retained_names": [
+          "packaging-failure.PRIVATE.json"
+        ],
+        "secondary_context_is_primary": false,
+        "unrelated_fd": 4,
+        "unrelated_survived": true
+      },
+      {
+        "action": "package_partial",
+        "failure_receipt_error_type": "ValueError",
+        "failure_receipt_outcome": "fail",
+        "failure_receipt_stage": "inventory",
+        "output_close_attempts": 1,
+        "output_fd": 4,
+        "primary_type": "ValueError",
+        "raised_primary": true,
+        "raised_secondary": false,
+        "retained_names": [
+          "packaging-failure.PRIVATE.json"
+        ],
+        "secondary_context_is_primary": false,
+        "unrelated_fd": 4,
+        "unrelated_survived": true
+      },
+      {
+        "action": "package_partial",
+        "failure_receipt_error_type": "RuntimeError",
+        "failure_receipt_outcome": "fail",
+        "failure_receipt_stage": "inventory",
+        "output_close_attempts": 1,
+        "output_fd": 4,
+        "primary_type": "RuntimeError",
+        "raised_primary": true,
+        "raised_secondary": false,
+        "retained_names": [
+          "packaging-failure.PRIVATE.json"
+        ],
+        "secondary_context_is_primary": false,
+        "unrelated_fd": 4,
+        "unrelated_survived": true
+      }
+    ],
+    "observations_independently_asserted": true,
+    "primary_masked_count": 0,
+    "primary_preserved_count": 6,
+    "probe_unchanged": true
+  },
+  "limitations": [
+    "Focused host-side development evidence only; no full strict governance or native execution.",
+    "Primary fault injection is at inventory; the enclosing exception/finally structure was reviewed for the remaining protected body.",
+    "No performance, phase acceptance, commit, or publication claim."
+  ],
+  "new_findings": [],
+  "next_action": "Root binds reviewed hashes to the final source manifest and completes remaining qualification/publication.",
+  "production_or_repository_test_edits": false,
+  "resolved_finding": "Agent 47 final output close masking primary packaging exception",
+  "reviewed_correction_hunks": 3,
+  "reviewed_new_test_module_entirely": true,
+  "source_after": {
+    "author_red_log": {
+      "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-48-red.log",
+      "sha256": "242b27cc7a5b7c5a612237790786ab56f9f6b42b1af34374ec745648eafaf581",
+      "size_bytes": 7939
+    },
+    "author_red_result": {
+      "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-48-red.json",
+      "sha256": "d65ad0609ee3781f968eb9d0170cb5a805001acbb95bdcf8d1efb34bcfd82c67",
+      "size_bytes": 1091
+    },
+    "historical_source": {
+      "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-48-pack-before.py",
+      "sha256": "e4cff314b8a2a0dbb277baef1bc5b3eb78b10a90f777a4d3b60ff74b682dac0e",
+      "size_bytes": 33280
+    },
+    "original_probe": {
+      "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-47-final-close-probe.py",
+      "sha256": "245402ecbf431aa40dd5ad2f3cd9945175159b157edfb28528f62a0ae8efed56",
+      "size_bytes": 4653
+    },
+    "original_red_log": {
+      "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-47-final-close-probe.log",
+      "sha256": "eedfb7170d83e4103967a15ed3c5a3f4ff07c1cf0dc3b05299596c832bb50cf4",
+      "size_bytes": 3474
+    },
+    "pack": {
+      "path": "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/p06_qualified_warm_pack.py",
+      "sha256": "585341fd1a7734f06468d8ca25ad8d9f4dc2a08dc861111e98c94e3cf4028134",
+      "size_bytes": 33596
+    },
+    "positive_fixtures": {
+      "path": "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/test_p06_qualified_warm_pack.py",
+      "sha256": "290a67b637f5507e97f9bd5f073864edc47a179943e5ccd95493d01f5c754a6b",
+      "size_bytes": 33431
+    },
+    "regression": {
+      "path": "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/test_p06_pack_final_cleanup.py",
+      "sha256": "fe8a7835b51d132f286f5f3e453d873ac52408b7b0ab59f5c5eebd58de3484af",
+      "size_bytes": 5880
+    }
+  },
+  "source_before": {
+    "author_red_log": {
+      "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-48-red.log",
+      "sha256": "242b27cc7a5b7c5a612237790786ab56f9f6b42b1af34374ec745648eafaf581",
+      "size_bytes": 7939
+    },
+    "author_red_result": {
+      "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-48-red.json",
+      "sha256": "d65ad0609ee3781f968eb9d0170cb5a805001acbb95bdcf8d1efb34bcfd82c67",
+      "size_bytes": 1091
+    },
+    "historical_source": {
+      "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-48-pack-before.py",
+      "sha256": "e4cff314b8a2a0dbb277baef1bc5b3eb78b10a90f777a4d3b60ff74b682dac0e",
+      "size_bytes": 33280
+    },
+    "original_probe": {
+      "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-47-final-close-probe.py",
+      "sha256": "245402ecbf431aa40dd5ad2f3cd9945175159b157edfb28528f62a0ae8efed56",
+      "size_bytes": 4653
+    },
+    "original_red_log": {
+      "path": "/tmp/ai-gpu-ae456f837c05/notes/agent-47-final-close-probe.log",
+      "sha256": "eedfb7170d83e4103967a15ed3c5a3f4ff07c1cf0dc3b05299596c832bb50cf4",
+      "size_bytes": 3474
+    },
+    "pack": {
+      "path": "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/p06_qualified_warm_pack.py",
+      "sha256": "585341fd1a7734f06468d8ca25ad8d9f4dc2a08dc861111e98c94e3cf4028134",
+      "size_bytes": 33596
+    },
+    "positive_fixtures": {
+      "path": "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/test_p06_qualified_warm_pack.py",
+      "sha256": "290a67b637f5507e97f9bd5f073864edc47a179943e5ccd95493d01f5c754a6b",
+      "size_bytes": 33431
+    },
+    "regression": {
+      "path": "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project/test_p06_pack_final_cleanup.py",
+      "sha256": "fe8a7835b51d132f286f5f3e453d873ac52408b7b0ab59f5c5eebd58de3484af",
+      "size_bytes": 5880
+    }
+  },
+  "sources_and_original_red_artifacts_unchanged": true,
+  "task": "Independent review of final packaging cleanup primary-error correction"
+}

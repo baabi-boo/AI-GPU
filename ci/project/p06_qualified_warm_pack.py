@@ -90,11 +90,14 @@ def _directory(path):
     try:
         for part in path.parts[1:]:
             child = os.open(part, flags, dir_fd=descriptor)
-            os.close(descriptor)
-            descriptor = child
+            parent, descriptor = descriptor, child
+            os.close(parent)
         return descriptor
     except BaseException:
-        os.close(descriptor)
+        try:
+            os.close(descriptor)
+        except BaseException:
+            pass
         raise
 
 
@@ -114,10 +117,11 @@ class _File:
         return {"path": self.name, "sha256": self.sha256, "size_bytes": self.size_bytes}
 
 
-def _read_file(path, *, maximum=None, expected=None, destination=None, contents=False):
+def _read_file(path, *, maximum=None, expected=None, destination=None, contents=False,
+               directory_fd=None):
     """Hash/copy the same single-link regular descriptor through a bounded read."""
     maximum = MAX_MEMBER_BYTES if maximum is None else maximum
-    parent = _directory(path.parent)
+    parent = _directory(path.parent) if directory_fd is None else os.dup(directory_fd)
     try:
         before = os.stat(path.name, dir_fd=parent, follow_symlinks=False)
         require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1
@@ -328,8 +332,8 @@ class _BoundedOutput:
         return getattr(self.stream, name)
 
 
-def _exclusive(path):
-    parent = _directory(path.parent)
+def _exclusive(path, *, directory_fd=None):
+    parent = _directory(path.parent) if directory_fd is None else os.dup(directory_fd)
     try:
         descriptor = os.open(path.name, os.O_CREAT | os.O_EXCL | os.O_RDWR | os.O_NOFOLLOW | os.O_CLOEXEC,
                              0o600, dir_fd=parent)
@@ -374,10 +378,10 @@ def _verify_zip(path, members, final_name):
             "all_members_rehashed_against_original": True, "zip_crc_verified": True}
 
 
-def _write_receipt(path, document):
+def _write_receipt(path, document, *, directory_fd=None):
     raw = (json.dumps(document, sort_keys=True, indent=2, allow_nan=False) + "\n").encode("utf-8")
     require(len(raw) <= MAX_RECEIPT_BYTES, "packaging receipt exceeds its byte bound")
-    with _exclusive(path) as stream:
+    with _exclusive(path, directory_fd=directory_fd) as stream:
         stream.write(raw)
         stream.flush()
         os.fsync(stream.fileno())
@@ -409,22 +413,65 @@ def _package(*, source_dir, workspace_dir, output_dir, writers_finished=False,
     require(all(not _overlap(output, path) for path in (source, workspace, *roots)),
             "output overlaps source, workspace, or selected evidence")
     parent = _directory(output.parent)
+    output_fd = None
     try:
-        os.mkdir(output.name, mode=0o700, dir_fd=parent)
-    finally:
-        os.close(parent)
+        try:
+            os.mkdir(output.name, mode=0o700, dir_fd=parent)
+            output_fd = os.open(output.name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC,
+                                dir_fd=parent)
+        finally:
+            os.close(parent)
+    except BaseException:
+        if output_fd is not None:
+            try:
+                os.close(output_fd)
+            except BaseException:
+                pass
+        raise
     created, published = [], []
+    output_identity = None
+
+    def check_output():
+        descriptor = _directory(output)
+        try:
+            require(_stamp(os.fstat(descriptor))[:3] == output_identity,
+                    "packaging output directory changed")
+        finally:
+            os.close(descriptor)
+
+    def withdraw(target, temporary=None):
+        # A renamed/replaced output pathname must not redirect recovery into
+        # another directory. Keep the originally opened directory available
+        # for best-effort reclassification and the private failure receipt.
+        try:
+            check_output()
+        except (OSError, ValueError):
+            if temporary is not None:
+                os.link(target.name, temporary.name, src_dir_fd=output_fd, dst_dir_fd=output_fd,
+                        follow_symlinks=False)
+            os.unlink(target.name, dir_fd=output_fd)
+        else:
+            if temporary is None:
+                target.unlink()
+            else:
+                _publish(target, temporary)
 
     def publish(temporary, target):
+        check_output()
         info = temporary.lstat()
         # Record ownership before linking: interruption can leave both names,
         # or only the target, even when _publish has not returned.
         published.append((target, temporary, (info.st_dev, info.st_ino)))
         _publish(temporary, target)
+        check_output()
 
+    # Track this invocation even when its caller is handling another error.
+    package_failed = False
     stage = "inventory"
     try:
+        output_identity = _stamp(os.fstat(output_fd))[:3]
         before = _inventory(selections)
+        check_output()
         files, _, missing = before
         require(files, "there is no existing selected evidence to preserve")
         if not partial:
@@ -446,14 +493,18 @@ def _package(*, source_dir, workspace_dir, output_dir, writers_finished=False,
             groups = {ORIGINAL_NAME: original, ENVELOPE_NAME: envelope}
         archives = []
         for name, members in groups.items():
+            check_output()
             temporary = output / ("incomplete-" + name)
             created.append(temporary)
             stage = "write-" + name
             _write_zip(temporary, members)
+            check_output()
             stage = "verify-" + name
             archives.append(_verify_zip(temporary, members, name))
+            check_output()
         stage = "final-source-inventory"
         require(_inventory(selections) == before, "selected source identities or bytes changed during packaging")
+        check_output()
         receipt = {"schema_version": 1, "contract_id": CONTRACT_ID, "classification": "PRIVATE",
             "scope": "local-byte-preserving-retention-only", "outcome": "pass", "packaging_passed": True,
             "attempt_kind": "partial-attempt" if partial else "finished-success-original",
@@ -468,6 +519,7 @@ def _package(*, source_dir, workspace_dir, output_dir, writers_finished=False,
         stage = "write-inventory-receipt"
         receipt_temporary = output / ("incomplete-" + RECEIPT_NAME)
         _write_receipt(receipt_temporary, receipt)
+        check_output()
         stage = "publish"
         for temporary, archive in zip(created, archives):
             target = output / archive["filename"]
@@ -480,26 +532,27 @@ def _package(*, source_dir, workspace_dir, output_dir, writers_finished=False,
         publish(receipt_temporary, output / RECEIPT_NAME)
         return receipt
     except BaseException as error:
+        package_failed = True
         # Never remove an original source or an incomplete ZIP. Reclassify any
         # just-published bytes as incomplete, without replacing another file.
         receipt_withdrawal_unresolved = False
         for target, temporary, identity in reversed(published):
             try:
-                info = target.lstat()
+                info = os.stat(target.name, dir_fd=output_fd, follow_symlinks=False)
                 if (info.st_dev, info.st_ino) != identity:
                     continue
                 try:
-                    original = temporary.lstat()
+                    original = os.stat(temporary.name, dir_fd=output_fd, follow_symlinks=False)
                 except FileNotFoundError:
-                    _publish(target, temporary)
+                    withdraw(target, temporary)
                 else:
                     if (original.st_dev, original.st_ino) == identity:
-                        target.unlink()
+                        withdraw(target)
             except OSError:
                 pass
             if target.name == RECEIPT_NAME:
                 try:
-                    info = target.lstat()
+                    info = os.stat(target.name, dir_fd=output_fd, follow_symlinks=False)
                     receipt_withdrawal_unresolved = (info.st_dev, info.st_ino) == identity
                 except FileNotFoundError:
                     pass
@@ -515,11 +568,13 @@ def _package(*, source_dir, workspace_dir, output_dir, writers_finished=False,
             retained_paths.extend((target, identity) for target, _, identity in published
                                   if target.name != RECEIPT_NAME)
         for path, owned_identity in retained_paths:
-            if not os.path.lexists(path):
+            try:
+                os.stat(path.name, dir_fd=output_fd, follow_symlinks=False)
+            except FileNotFoundError:
                 continue
             row = {"filename": path.name, "complete_replay_verified": False}
             try:
-                identity, _ = _read_file(path, maximum=MAX_ARCHIVE_BYTES)
+                identity, _ = _read_file(path, maximum=MAX_ARCHIVE_BYTES, directory_fd=output_fd)
                 if owned_identity is not None and identity.stamp[:2] != owned_identity:
                     continue
                 row.update(sha256=identity.sha256, size_bytes=identity.size_bytes)
@@ -535,10 +590,17 @@ def _package(*, source_dir, workspace_dir, output_dir, writers_finished=False,
             "created_files": retained,
             **dict.fromkeys(runner.qualification.FALSE_CLAIMS, False), "limitations": list(LIMITATIONS)}
         try:
-            _write_receipt(output / FAILURE_NAME, failure)
+            _write_receipt(output / FAILURE_NAME, failure, directory_fd=output_fd)
         except (OSError, ValueError):
             pass
         raise
+    finally:
+        try:
+            os.close(output_fd)
+        except BaseException:
+            # A failed close may have consumed the descriptor; never retry it.
+            if not package_failed:
+                raise
 
 
 def package_success(*, source_dir, workspace_dir, output_dir, writers_finished=False, extra_roots=None):

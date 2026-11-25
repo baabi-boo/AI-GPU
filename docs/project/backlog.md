@@ -10,6 +10,41 @@ remain unassigned until an actual owner is identified.
 ## Start here: P06-T01 explicit qualified warm route
 
 **Next bounded action:** verify or configure exact private control delivery and
+the public age recipient, verify the final published execution and retention
+revision's own complete strict Actions result under the
+[checked environment](governance-runbook.md), and run one complete
+[manual hosted attempt](p06-hosted-warm-guide.md) after unchanged native admission.
+The frozen experiment remains **unstarted: 24 processes, 792 launches and 25,344
+checked FP32 words**. Live provider secrets were not inspected, private control
+delivery and the public recipient were not supplied to this session, and no
+local native admission is established. Keep the **15 GiB free-disk and 4 GiB
+available-memory gates** unchanged.
+
+The [execution and retention audit](p06-execution-retention-audit.md) and
+[evidence packet](evidence/p06-execution-retention/README.md) record corrections
+to launch and interruption accounting, failed-attempt closeout and private
+retention. Audited base `622662ad9cece6da4e3375be7e977dbe04cde862` passed
+[strict run 45583904526, job 139100502944](https://github.com/baabi-boo/AI-GPU/actions/runs/45583904526/job/139100502944):
+**5,114 canonical tests, 37,449 successful subtests and 52,791 ordered events in
+3,122.11397 seconds**, with zero failures, errors or skips. The independent
+reconciliation and original SHA-256 are retained in the audit. That result
+qualifies the base only. The published changed revision requires its own complete
+strict result. Inspect that exact Actions run and retain its original receipts
+before dispatch.
+
+Preserve complete or explicitly partial attempt originals through encrypted
+delivery. After successful private decryption, validate and restore the archive,
+then independently replay a complete native original from a separate trusted
+reader checkout before the frozen performance decision. Failed or partial
+attempts retain their actual scope. Follow the
+[qualified warm handoff](p06-qualified-warm-handoff.md); proofs, goldens and
+resource thresholds are unchanged. P06 and P06-T01 remain `in_progress`,
+P06-A02/A03 remain open, and P01 vendor integration remains blocked.
+
+**Earlier retention and replay handoff (historical).** The following paragraphs
+preserve that continuation's source and evidence scope.
+
+**Next bounded action:** verify or configure exact private control delivery and
 the public age recipient, obtain and verify the final published retention/replay
 revision's own full strict Actions result under the
 [checked environment](governance-runbook.md), and dispatch one
@@ -659,14 +694,17 @@ establishes the complete fresh dependency/native/control original and inert
 replay within its declared scope. The separately versioned
 [complete qualification](evidence/p06-counter-qualification/README.md) now passes
 for a fresh four-process preflight. The explicit 24-process route is now
-implemented and independently reviewed. The current retention/replay changes
-need their own final published revision's full strict governance result. Verify
+implemented and independently reviewed. The current execution and retention
+corrections need their own final published revision's full strict governance
+result; the reconciled `622662ad` pass qualifies the audited base only. Verify
 or configure exact private control delivery and the public age recipient,
-observe capacity, and execute one fresh complete qualified warm attempt.
-Privately retain and restore its original, then replay it from a separate trusted
-reader checkout and evaluate the unchanged predicates. Follow the
-[retention audit](p06-retention-review-audit.md),
-[tooling packet](evidence/p06-retention-review/README.md),
+observe unchanged capacity and native admission, and execute one fresh complete
+qualified warm attempt. Confirm encrypted delivery of complete or explicitly
+partial originals. After private decryption, validate and restore the archive,
+then replay a complete original from a separate trusted reader checkout and
+evaluate the unchanged predicates. Follow the
+[execution and retention audit](p06-execution-retention-audit.md),
+[tooling packet](evidence/p06-execution-retention/README.md),
 [hosted operator guide](p06-hosted-warm-guide.md) and
 [qualified warm handoff](p06-qualified-warm-handoff.md);
 the four-process result does not qualify those future warm processes.
@@ -683,7 +721,7 @@ phase guides, the [development audit](p05-binding-audit.md) and the
 | **P04-T01 — Fixed tiny model — complete** | Fixed nonlinear MLP, ten deterministic FP16/BF16 cases, independent exact references, manifest, placement contract and checked host bridge have reviewed exact-source/host qualification. | P03; model runtime lead | [P04-A01 accepted at source scope](evidence/p04-fixture/acceptance.json) |
 | **P04-T02 — Native model execution — complete** | Four clean SimX/native processor RTL × FP16/BF16 variants pass exact intermediate/final comparisons, live-input lineage, native placement and separate host/transfer accounting after independent review. | T01; model runtime lead | [P04-A02](evidence/p04-executor/acceptance-numerics.json), [P04-A03](evidence/p04-executor/acceptance-dispatch.json) |
 | **P05-T01 — Python/custom-op bridge — complete** | Preserve the accepted copying binding and bounded PyTorch 2.15.0+cpu / CPython 3.12.14 / RV64 SimX matrix at c6fb039e. Original-artifact replay, source joins, exact results/native dispatch and compatibility/failure evidence passed independent review. Any scope expansion needs separate qualification. | P04; framework integration lead; [replay handoff](p05-torch-replay-handoff.md) | [P05-A01 retained](evidence/governance-readiness/a01-retained-binding.json); [P05-A02](evidence/p05-torch-replay/acceptance-torch.json), [P05-A03](evidence/p05-torch-replay/acceptance-compatibility.json) |
-| **P06-T01 — Measured optimization — in progress** | Verify or configure exact private control delivery and the public age recipient; obtain and verify the final published retention/replay revision's full strict Actions result, preserving `25543e1` as base-only evidence. Observe adequate capacity, then manually admit one fresh 24-process, 792-launch, 25,344-word attempt. Privately retain complete and failed attempts and confirm encrypted delivery. After decryption, perform checked restoration, then independently replay only a usable complete native original from a separate trusted reader checkout before the frozen performance decision; keep seven historical fields false. | P04; performance and memory lead; [retention audit](p06-retention-review-audit.md), [retention contract](../designs/qualified_warm_retention_review_v1.md), [tooling packet](evidence/p06-retention-review/README.md), [hosted operator guide](p06-hosted-warm-guide.md), [qualified warm handoff](p06-qualified-warm-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
+| **P06-T01 — Measured optimization — in progress** | Verify or configure exact private control delivery and the public age recipient; verify the final published execution and retention revision's full strict Actions result, preserving `622662ad` as base-only evidence. Keep 15 GiB free-disk and 4 GiB available-memory gates unchanged, then admit one fresh 24-process, 792-launch, 25,344-word attempt. Confirm encrypted retention of complete or explicitly partial originals. After successful private decryption, validate and restore the archive, then independently replay only a complete native original from a separate trusted reader checkout before the frozen performance decision; keep seven historical fields false. | P04; performance and memory lead; [execution and retention audit](p06-execution-retention-audit.md), [retention contract](../designs/qualified_warm_retention_review_v1.md), [tooling packet](evidence/p06-execution-retention/README.md), [hosted operator guide](p06-hosted-warm-guide.md), [qualified warm handoff](p06-qualified-warm-handoff.md), [qualification plan](p06-mpm-qualification-plan.md) | [P06-A01 accepted](evidence/p06-baseline/acceptance.json); [A02/A03 open](phases/p06-performance.md) |
 
 Use [P02](phases/p02-tensor.md), [P03](phases/p03-operators.md),
 [P04](phases/p04-inference.md), [P05](phases/p05-framework.md) and

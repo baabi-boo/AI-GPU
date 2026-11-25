@@ -1,0 +1,147 @@
+{
+  "agent": 48,
+  "task": "Preserve packaging primary exceptions during final output descriptor cleanup",
+  "base_commit": "622662ad9cece6da4e3375be7e977dbe04cde862",
+  "source_state": "uncommitted candidate after prior operational corrections",
+  "owned_repository_files": [
+    "ci/project/p06_qualified_warm_pack.py",
+    "ci/project/test_p06_pack_final_cleanup.py"
+  ],
+  "finding": "The final os.close(output_fd) replaced active inventory RuntimeError, KeyboardInterrupt, and ValueError if close consumed the descriptor then raised EIO.",
+  "implementation": "Explicit per-invocation package_failed state suppresses final cleanup failure only while this packaging call is failing. Cleanup-only errors remain fatal, including calls made inside a caller exception handler. The output descriptor receives one close attempt and is never retried.",
+  "old_source_sha256": "e4cff314b8a2a0dbb277baef1bc5b3eb78b10a90f777a4d3b60ff74b682dac0e",
+  "final_source_hashes": {
+    "ci/project/p06_qualified_warm_pack.py": "585341fd1a7734f06468d8ca25ad8d9f4dc2a08dc861111e98c94e3cf4028134",
+    "ci/project/test_p06_pack_final_cleanup.py": "fe8a7835b51d132f286f5f3e453d873ac52408b7b0ab59f5c5eebd58de3484af"
+  },
+  "red": {
+    "command": [
+      "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin/python3",
+      "-m",
+      "unittest",
+      "-v",
+      "test_p06_pack_final_cleanup"
+    ],
+    "cwd": "/tmp/ai-gpu-ae456f837c05/AI-GPU",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "TMPDIR": "/tmp/ai-gpu-ae456f837c05/tmp",
+      "PYTHONPATH": "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project",
+      "PATH": "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin:/usr/bin:/bin"
+    },
+    "exit_code": 1,
+    "elapsed_seconds": 1.4529577359935502,
+    "source_before": {
+      "ci/project/p06_qualified_warm_pack.py": "e4cff314b8a2a0dbb277baef1bc5b3eb78b10a90f777a4d3b60ff74b682dac0e",
+      "ci/project/test_p06_pack_final_cleanup.py": "fe8a7835b51d132f286f5f3e453d873ac52408b7b0ab59f5c5eebd58de3484af"
+    },
+    "source_after": {
+      "ci/project/p06_qualified_warm_pack.py": "e4cff314b8a2a0dbb277baef1bc5b3eb78b10a90f777a4d3b60ff74b682dac0e",
+      "ci/project/test_p06_pack_final_cleanup.py": "fe8a7835b51d132f286f5f3e453d873ac52408b7b0ab59f5c5eebd58de3484af"
+    },
+    "log": "agent-48-red.log",
+    "test_methods": 3,
+    "subcases": 10,
+    "failed_subcases": 6,
+    "expected_failure": true
+  },
+  "focused": {
+    "command": [
+      "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin/python3",
+      "-m",
+      "unittest",
+      "-v",
+      "test_p06_pack_final_cleanup",
+      "test_p06_pack_setup_cleanup",
+      "test_p06_pack_operational_failures",
+      "test_p06_qualified_warm_pack",
+      "test_p06_directory_cleanup_review"
+    ],
+    "cwd": "/tmp/ai-gpu-ae456f837c05/AI-GPU",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "TMPDIR": "/tmp/ai-gpu-ae456f837c05/tmp",
+      "PYTHONPATH": "/tmp/ai-gpu-ae456f837c05/AI-GPU/ci/project",
+      "PATH": "/tmp/ai-gpu-ae456f837c05/governance-bootstrap/environment/venv/bin:/usr/bin:/bin"
+    },
+    "exit_code": 0,
+    "elapsed_seconds": 3.5285501500038663,
+    "source_before": {
+      "ci/project/p06_qualified_warm_pack.py": "585341fd1a7734f06468d8ca25ad8d9f4dc2a08dc861111e98c94e3cf4028134",
+      "ci/project/test_p06_pack_final_cleanup.py": "fe8a7835b51d132f286f5f3e453d873ac52408b7b0ab59f5c5eebd58de3484af",
+      "ci/project/test_p06_pack_setup_cleanup.py": "206756440cdfc4bbac6370d8f664db5c4dfdb9acc4b2eb3f644a48817ed85991",
+      "ci/project/test_p06_pack_operational_failures.py": "a7e93f6deb807c6cea46816c822cb2740b16ddba6d8ab892057bc18582fbe372",
+      "ci/project/test_p06_qualified_warm_pack.py": "290a67b637f5507e97f9bd5f073864edc47a179943e5ccd95493d01f5c754a6b",
+      "ci/project/test_p06_directory_cleanup_review.py": "0ae6b592c82c81b7191280137c73a7f5109cded9f0fa5e377eb2315f30ab32aa"
+    },
+    "source_after": {
+      "ci/project/p06_qualified_warm_pack.py": "585341fd1a7734f06468d8ca25ad8d9f4dc2a08dc861111e98c94e3cf4028134",
+      "ci/project/test_p06_pack_final_cleanup.py": "fe8a7835b51d132f286f5f3e453d873ac52408b7b0ab59f5c5eebd58de3484af",
+      "ci/project/test_p06_pack_setup_cleanup.py": "206756440cdfc4bbac6370d8f664db5c4dfdb9acc4b2eb3f644a48817ed85991",
+      "ci/project/test_p06_pack_operational_failures.py": "a7e93f6deb807c6cea46816c822cb2740b16ddba6d8ab892057bc18582fbe372",
+      "ci/project/test_p06_qualified_warm_pack.py": "290a67b637f5507e97f9bd5f073864edc47a179943e5ccd95493d01f5c754a6b",
+      "ci/project/test_p06_directory_cleanup_review.py": "0ae6b592c82c81b7191280137c73a7f5109cded9f0fa5e377eb2315f30ab32aa"
+    },
+    "log": "agent-48-focused.log",
+    "test_methods": 44,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "new_regressions": {
+    "primary_failures": [
+      "RuntimeError",
+      "KeyboardInterrupt",
+      "ValueError"
+    ],
+    "secondary_failure": "OSError(errno.EIO) after real os.close consumes the owned fd",
+    "apis": [
+      "package_success",
+      "package_partial"
+    ],
+    "assertions": [
+      "original exception object survives",
+      "exactly one owned-fd close",
+      "dup2 reused fd remains open on unrelated /dev/null identity",
+      "private failure receipt records original inventory failure",
+      "source bytes unchanged",
+      "cleanup-only failure is fatal after actual successful packaging",
+      "cleanup-only failure remains fatal inside an unrelated caller except"
+    ]
+  },
+  "python": "Python 3.12.14",
+  "diff_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check",
+      "--",
+      "ci/project/p06_qualified_warm_pack.py",
+      "ci/project/test_p06_pack_final_cleanup.py"
+    ],
+    "exit_code": 0,
+    "new_test_trailing_whitespace": false
+  },
+  "historical_freeze": {
+    "path": "docs/project/evidence/p06-execution-retention/validation/operational-source-freeze.json",
+    "sha256": "714deb35f890b197d43e5b2de0a02c3ede1cb8ec0bf944f057cb349c9b1bdceb",
+    "unchanged": true,
+    "scope": "Original 22-file snapshot remains historical; this correction requires a subsequent final source manifest."
+  },
+  "artifact_hashes": {
+    "agent-48-pack-before.py": "e4cff314b8a2a0dbb277baef1bc5b3eb78b10a90f777a4d3b60ff74b682dac0e",
+    "agent-48-before.json": "6288dba2c1e2b5f0dc3becb5f8c5b1f3e372004618bda8c8da1c346654a01a78",
+    "agent-48-red.log": "242b27cc7a5b7c5a612237790786ab56f9f6b42b1af34374ec745648eafaf581",
+    "agent-48-red.json": "d65ad0609ee3781f968eb9d0170cb5a805001acbb95bdcf8d1efb34bcfd82c67",
+    "agent-48-focused.log": "7297c5406319f789f8c927708f774ef72a805c6e48bbb41660d2daa311996bc4",
+    "agent-48-focused.json": "1ede2c1cc78785a4eb1eada71a7d9b60979e3f0c70288e638409f9cc878797d6",
+    "agent-48-pack.diff": "b19341ec30c53f1f1c796f70d6c9e52e9e4179817b774d1aa841e4f37e41bd86"
+  },
+  "independent_review": "Requested from root; not performed by implementing agent",
+  "limitations": [
+    "Focused development checks only; no full strict governance qualification.",
+    "No native execution, performance measurement, acceptance change, schema change, budget change, or descriptor-close retry.",
+    "No git writes, commits, child agents, or edits outside assigned repository files."
+  ],
+  "next_action": "Independent review, then root reconciliation into the final source snapshot and exact published-revision qualification."
+}

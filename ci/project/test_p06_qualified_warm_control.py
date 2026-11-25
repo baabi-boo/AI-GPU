@@ -43,6 +43,9 @@ class Response:
     def getheaders(self):
         return self.headers
 
+    def close(self):
+        self.closed = True
+
     def read(self, bound):
         self.reads.append(bound)
         if self.read_hook is not None:

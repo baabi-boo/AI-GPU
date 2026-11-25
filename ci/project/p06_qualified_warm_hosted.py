@@ -33,6 +33,7 @@ import p06_dependency_local_prepare as preparation
 import p06_qualified_warm_capacity as capacity
 import p06_qualified_warm_encrypt as encryption
 import p06_qualified_warm_run as runner
+from xrt_signals import terminate_as_interrupt
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -397,6 +398,19 @@ def writers_finished(attempt, stages):
     return True
 
 
+def observed_native_execution(attempt, revision):
+    try:
+        report = _read(attempt / "workspace/evidence/qualified-warm-run.json")
+    except (OSError, ValueError):
+        return "unknown"
+    observed = report.get("native_execution")
+    if (report.get("contract_id") == runner.CONTRACT_ID
+            and report.get("expected_revision") == revision and report.get("state") == "finished"
+            and observed in ("not_run", "unknown", "run")):
+        return observed
+    return "unknown"
+
+
 def execute(source, revision, attempt_root):
     previous_umask = os.umask(0o077)
     try:
@@ -528,6 +542,8 @@ def _execute(source, revision, attempt_root):
         if not native_success and any(row["id"] == "native-supervisor" and row.get("process_started") is not False
                                       for row in record["stages"]):
             record["native_execution"] = "unknown"
+            if record["selected_sources_stable"] and record["writers_finished_observed"]:
+                record["native_execution"] = observed_native_execution(attempt, revision)
         try:
             _write(attempt / "hosted/attempt-before-closeout.json", record)
             require(record["writers_finished_observed"], "writers_unresolved")
@@ -580,6 +596,7 @@ def argument_parser():
     return parser
 
 
+@terminate_as_interrupt()
 def main(argv=None):
     revision, command = None, "invocation"
     try:
