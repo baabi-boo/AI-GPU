@@ -370,16 +370,69 @@ module VX_tcu_core import VX_gpu_pkg::*, VX_tcu_pkg::*; #(
 `else
     localparam MX_MAX_MN = `MAX(TCU_TILE_M, TCU_TILE_N);
 `endif
-    localparam MX_IDX_W = $clog2(MX_MAX_MN);
+    localparam MX_IDX_W = `LOG2UP(MX_MAX_MN);
     localparam MX_TILE_K_MAX = `MAX(TCU_TILE_K, TCU_WG_K_STEPS * TCU_WG_FEDP_K);
     localparam MX_K_IDX_W = `LOG2UP(MX_TILE_K_MAX * TCU_MAX_ELT_RATIO);
-    localparam MX_SCALE_BLOCKS_MAX = mx_scale_blocks_k_words(TCU_NVFP4_ID, MX_TILE_K_MAX);
-    localparam MX_SCALE_IDX_W = $clog2(MX_MAX_MN * MX_SCALE_BLOCKS_MAX);
+    localparam MX_SCALE_BLOCKS_MAX = `MAX(1, mx_scale_blocks_k_words(TCU_NVFP4_ID, MX_TILE_K_MAX));
+    localparam MX_SCALE_IDX_W = `LOG2UP(MX_MAX_MN * MX_SCALE_BLOCKS_MAX);
+    localparam MX_SCALE_SHIFT_MAX = `MAX(1, $clog2(MX_SCALE_BLOCKS_MAX));
+    localparam MX_SCALE_SHIFT_W = `LOG2UP(MX_SCALE_SHIFT_MAX + 1);
+    localparam MX_BLOCK_SHIFT_W = `LOG2UP($clog2(32) + 1);
+
+    localparam [MX_SCALE_SHIFT_W-1:0] MX_WM_K_SHIFT_FP8   = MX_SCALE_SHIFT_W'($clog2(`MAX(1, mx_scale_blocks_k_words(TCU_MXFP8_ID, TCU_TILE_K))));
+    localparam [MX_SCALE_SHIFT_W-1:0] MX_WM_K_SHIFT_MXFP4 = MX_SCALE_SHIFT_W'($clog2(`MAX(1, mx_scale_blocks_k_words(TCU_MXFP4_ID, TCU_TILE_K))));
+    localparam [MX_SCALE_SHIFT_W-1:0] MX_WM_K_SHIFT_NVFP4 = MX_SCALE_SHIFT_W'($clog2(`MAX(1, mx_scale_blocks_k_words(TCU_NVFP4_ID, TCU_TILE_K))));
+`ifdef VX_CFG_TCU_WGMMA_ENABLE
+    localparam [MX_SCALE_SHIFT_W-1:0] MX_WG_K_SHIFT_FP8   = MX_SCALE_SHIFT_W'($clog2(`MAX(1, mx_scale_blocks_k_words(TCU_MXFP8_ID, TCU_WG_K_STEPS * TCU_WG_FEDP_K))));
+    localparam [MX_SCALE_SHIFT_W-1:0] MX_WG_K_SHIFT_MXFP4 = MX_SCALE_SHIFT_W'($clog2(`MAX(1, mx_scale_blocks_k_words(TCU_MXFP4_ID, TCU_WG_K_STEPS * TCU_WG_FEDP_K))));
+    localparam [MX_SCALE_SHIFT_W-1:0] MX_WG_K_SHIFT_NVFP4 = MX_SCALE_SHIFT_W'($clog2(`MAX(1, mx_scale_blocks_k_words(TCU_NVFP4_ID, TCU_WG_K_STEPS * TCU_WG_FEDP_K))));
+`endif
+
+    function automatic [MX_SCALE_SHIFT_W-1:0] mx_scale_blocks_k_shift(
+        input logic [4:0] fmt,
+        input logic wgmma
+    );
+    `ifndef VX_CFG_TCU_WGMMA_ENABLE
+        `UNUSED_VAR(wgmma);
+    `endif
+        case (fmt)
+            TCU_MXFP8_ID, TCU_MXBF8_ID:
+            `ifdef VX_CFG_TCU_WGMMA_ENABLE
+                mx_scale_blocks_k_shift = wgmma ? MX_WG_K_SHIFT_FP8 : MX_WM_K_SHIFT_FP8;
+            `else
+                mx_scale_blocks_k_shift = MX_WM_K_SHIFT_FP8;
+            `endif
+            TCU_MXFP4_ID:
+            `ifdef VX_CFG_TCU_WGMMA_ENABLE
+                mx_scale_blocks_k_shift = wgmma ? MX_WG_K_SHIFT_MXFP4 : MX_WM_K_SHIFT_MXFP4;
+            `else
+                mx_scale_blocks_k_shift = MX_WM_K_SHIFT_MXFP4;
+            `endif
+            TCU_NVFP4_ID:
+            `ifdef VX_CFG_TCU_WGMMA_ENABLE
+                mx_scale_blocks_k_shift = wgmma ? MX_WG_K_SHIFT_NVFP4 : MX_WM_K_SHIFT_NVFP4;
+            `else
+                mx_scale_blocks_k_shift = MX_WM_K_SHIFT_NVFP4;
+            `endif
+            default:
+                mx_scale_blocks_k_shift = MX_SCALE_SHIFT_W'(0);
+        endcase
+    endfunction
+
+    function automatic [MX_BLOCK_SHIFT_W-1:0] mx_scale_block_shift(
+        input logic [4:0] fmt
+    );
+        case (fmt)
+            TCU_MXFP8_ID, TCU_MXBF8_ID, TCU_MXFP4_ID: mx_scale_block_shift = MX_BLOCK_SHIFT_W'(5); // 32
+            TCU_NVFP4_ID:                             mx_scale_block_shift = MX_BLOCK_SHIFT_W'(4); // 16
+            default:                                  mx_scale_block_shift = MX_BLOCK_SHIFT_W'(0); // 1
+        endcase
+    endfunction
 
     function automatic [7:0] mx_scale_at(
         input logic [TCU_BLOCK_CAP-1:0][31:0] meta,
         input logic [4:0] fmt,
-        input logic [MX_SCALE_IDX_W-1:0] scale_blocks_k,
+        input logic [MX_SCALE_SHIFT_W-1:0] scale_blocks_k_shift,
         input logic [MX_IDX_W-1:0] mn_idx,
         input logic [MX_K_IDX_W-1:0] k_base_idx
     );
@@ -388,8 +441,8 @@ module VX_tcu_core import VX_gpu_pkg::*, VX_tcu_pkg::*; #(
         logic [`LOG2UP(TCU_BLOCK_CAP)-1:0] word_idx;
         logic [1:0] byte_idx;
         begin
-            scale_k = MX_SCALE_IDX_W'(k_base_idx / mx_scale_block_size(fmt));
-            scale_idx = MX_SCALE_IDX_W'(mn_idx) * scale_blocks_k + scale_k;
+            scale_k = MX_SCALE_IDX_W'(k_base_idx >> mx_scale_block_shift(fmt));
+            scale_idx = (MX_SCALE_IDX_W'(mn_idx) << scale_blocks_k_shift) + scale_k;
             word_idx = `LOG2UP(TCU_BLOCK_CAP)'(scale_idx >> 2);
             byte_idx = scale_idx[1:0];
             mx_scale_at = meta[word_idx][byte_idx * 8 +: 8];
@@ -399,12 +452,11 @@ module VX_tcu_core import VX_gpu_pkg::*, VX_tcu_pkg::*; #(
     wire [TCU_TC_M-1:0][FEDP_SF-1:0][7:0] mx_sf_a;
     wire [TCU_TC_N-1:0][FEDP_SF-1:0][7:0] mx_sf_b;
     wire [3:0] mx_elems_per_word = 4'(32 / tcu_fmt_width(fmt_s));
-    wire [MX_SCALE_IDX_W-1:0] mx_scale_blocks_k_eff =
+    wire [MX_SCALE_SHIFT_W-1:0] mx_scale_blocks_k_shift_eff =
     `ifdef VX_CFG_TCU_WGMMA_ENABLE
-        is_wgmma ? MX_SCALE_IDX_W'(mx_scale_blocks_k_words(fmt_s, TCU_WG_K_STEPS * TCU_WG_FEDP_K))
-                 : MX_SCALE_IDX_W'(mx_scale_blocks_k_words(fmt_s, TCU_TILE_K));
+        mx_scale_blocks_k_shift(fmt_s, is_wgmma);
     `else
-        MX_SCALE_IDX_W'(mx_scale_blocks_k_words(fmt_s, TCU_TILE_K));
+        mx_scale_blocks_k_shift(fmt_s, 1'b0);
     `endif
     wire [MX_K_IDX_W:0] mx_uop_k_words =
     `ifdef VX_CFG_TCU_WGMMA_ENABLE
@@ -424,7 +476,7 @@ module VX_tcu_core import VX_gpu_pkg::*, VX_tcu_pkg::*; #(
         wire [MX_IDX_W-1:0] mx_a_idx = MX_IDX_W'(step_m) * MX_IDX_W'(TCU_TC_M) + MX_IDX_W'(i);
         for (genvar s = 0; s < FEDP_SF; ++s) begin : g_s
             wire [MX_K_IDX_W-1:0] mx_k_idx = mx_k_base_idx + MX_K_IDX_W'((s * mx_fedp_k_elems) / FEDP_SF);
-            assign mx_sf_a[i][s] = mx_scale_at(mx_meta_a, fmt_s, mx_scale_blocks_k_eff, mx_a_idx, mx_k_idx);
+            assign mx_sf_a[i][s] = mx_scale_at(mx_meta_a, fmt_s, mx_scale_blocks_k_shift_eff, mx_a_idx, mx_k_idx);
         end
     end
 
@@ -432,7 +484,7 @@ module VX_tcu_core import VX_gpu_pkg::*, VX_tcu_pkg::*; #(
         wire [MX_IDX_W-1:0] mx_b_idx = MX_IDX_W'(step_n) * MX_IDX_W'(TCU_TC_N) + MX_IDX_W'(j);
         for (genvar s = 0; s < FEDP_SF; ++s) begin : g_s
             wire [MX_K_IDX_W-1:0] mx_k_idx = mx_k_base_idx + MX_K_IDX_W'((s * mx_fedp_k_elems) / FEDP_SF);
-            assign mx_sf_b[j][s] = mx_scale_at(mx_meta_b, fmt_s, mx_scale_blocks_k_eff, mx_b_idx, mx_k_idx);
+            assign mx_sf_b[j][s] = mx_scale_at(mx_meta_b, fmt_s, mx_scale_blocks_k_shift_eff, mx_b_idx, mx_k_idx);
         end
     end
 `endif
