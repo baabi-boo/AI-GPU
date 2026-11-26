@@ -93,7 +93,8 @@ def _write_json(path, value):
     body = _json_bytes(value)
     require(len(body) <= 16 * MIB, "JSON checkpoint exceeds 16 MiB")
     temporary = path.name + ".tmp"
-    directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+    # Anchoring directory-relative writes does not require listing its entries.
+    directory = os.open(path.parent, os.O_PATH | os.O_DIRECTORY)
     descriptor = None
     identity = None
     stream = None
