@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "contract_id": "p03-native-operators-v2",
+  "contract_version": 2,
+  "supersedes_v1": false,
+  "v1_contract_id": "p03-native-operators-v1",
+  "v1_manifest": "ci/project/p03_operator_manifest.json",
+  "specification": "docs/designs/ai_operator_contract_v2.md",
+  "argument_header": "sw/common/ai_ops_v2_args.h",
+  "device_kernel": "sw/kernel/ai/ops_v2.cpp",
+  "regression_test": "tests/regression/ai_ops_v2/main.cpp",
+  "regression_makefile": "tests/regression/ai_ops_v2/Makefile",
+  "cpu_fallback": false,
+  "installed_api": false,
+  "profile": {
+    "id": "p02_tfr_wmma_v1",
+    "source": "profiles/p02-tfr.json",
+    "execution_address_bits": 64,
+    "threads_per_warp": 4,
+    "warps_per_core": 4,
+    "cores": 1,
+    "clusters": 1,
+    "issue_width": 1,
+    "local_mem_bytes": 16384,
+    "fpu_type": "STD"
+  },
+  "operators": [
+    {
+      "id": "relu_fp32",
+      "family": "activation",
+      "op_code": 1,
+      "state": "implemented",
+      "input_dtypes": ["fp32"],
+      "output_dtype": "fp32",
+      "shape_constraint": "rows >= 1, cols >= 1, rows * cols <= 65536",
+      "tolerance": {"type": "bit_exact_ulp0", "max_ulp": 0, "negative_zero_canonical_positive": true}
+    },
+    {
+      "id": "gelu_fp32",
+      "family": "activation",
+      "op_code": 2,
+      "state": "implemented",
+      "input_dtypes": ["fp32"],
+      "output_dtype": "fp32",
+      "formula": "0.5 * x * (1 + tanh(sqrt(2/pi) * (x + 0.044715 * x^3)))",
+      "shape_constraint": "rows >= 1, cols >= 1, rows * cols <= 65536",
+      "tolerance": {"type": "max_abs_err", "max_abs_err": 1e-4, "reference_precision": "fp64"}
+    },
+    {
+      "id": "cast_fp32_to_fp16",
+      "family": "cast",
+      "op_code": 3,
+      "state": "implemented",
+      "input_dtypes": ["fp32"],
+      "output_dtype": "fp16",
+      "shape_constraint": "rows >= 1, cols >= 1, rows * cols <= 65536",
+      "tolerance": {"type": "bit_exact_ulp0", "max_ulp": 0, "rounding": "ieee754_rne", "subnormal_exp_min": -25}
+    },
+    {
+      "id": "cast_fp16_to_fp32",
+      "family": "cast",
+      "op_code": 4,
+      "state": "implemented",
+      "input_dtypes": ["fp16"],
+      "output_dtype": "fp32",
+      "shape_constraint": "rows >= 1, cols >= 1, rows * cols <= 65536",
+      "tolerance": {"type": "bit_exact_ulp0", "max_ulp": 0}
+    },
+    {
+      "id": "cast_fp32_to_bf16",
+      "family": "cast",
+      "op_code": 5,
+      "state": "implemented",
+      "input_dtypes": ["fp32"],
+      "output_dtype": "bf16",
+      "shape_constraint": "rows >= 1, cols >= 1, rows * cols <= 65536",
+      "tolerance": {"type": "bit_exact_ulp0", "max_ulp": 0, "rounding": "ieee754_rne"}
+    },
+    {
+      "id": "cast_bf16_to_fp32",
+      "family": "cast",
+      "op_code": 6,
+      "state": "implemented",
+      "input_dtypes": ["bf16"],
+      "output_dtype": "fp32",
+      "shape_constraint": "rows >= 1, cols >= 1, rows * cols <= 65536",
+      "tolerance": {"type": "bit_exact_ulp0", "max_ulp": 0}
+    },
+    {
+      "id": "softmax_fp32",
+      "family": "softmax",
+      "op_code": 7,
+      "state": "implemented",
+      "input_dtypes": ["fp32"],
+      "output_dtype": "fp32",
+      "axis": -1,
+      "shape_constraint": "rows >= 1, cols >= 1, rows * cols <= 65536",
+      "tolerance": {"type": "max_abs_err", "max_abs_err": 1e-4, "reference_precision": "fp64"}
+    },
+    {
+      "id": "rmsnorm_fp32",
+      "family": "normalization",
+      "op_code": 8,
+      "state": "implemented",
+      "input_dtypes": ["fp32", "fp32"],
+      "output_dtype": "fp32",
+      "axis": -1,
+      "shape_constraint": "rows >= 1, cols >= 1, rows * cols <= 65536",
+      "tolerance": {"type": "max_abs_err", "max_abs_err": 1e-4, "reference_precision": "fp64"}
+    },
+    {
+      "id": "layernorm_fp32",
+      "family": "normalization",
+      "op_code": 9,
+      "state": "implemented",
+      "input_dtypes": ["fp32", "fp32", "fp32"],
+      "output_dtype": "fp32",
+      "axis": -1,
+      "shape_constraint": "rows >= 1, cols >= 1, rows * cols <= 65536",
+      "tolerance": {"type": "max_abs_err", "max_abs_err": 1e-4, "reference_precision": "fp64"}
+    },
+    {
+      "id": "attention_fp32",
+      "family": "attention",
+      "op_code": 10,
+      "state": "implemented",
+      "input_dtypes": ["fp32", "fp32", "fp32"],
+      "output_dtype": "fp32",
+      "shape_constraint": "1 <= seq_len (rows) <= 64, 1 <= d_k (cols) <= 64",
+      "default_regression_shape": [8, 16],
+      "tolerance": {"type": "max_abs_err", "max_abs_err": 1e-4, "reference_precision": "fp64"}
+    }
+  ],
+  "argument_abi": {
+    "version": 2,
+    "size_bytes": 72,
+    "alignment_bytes": 8,
+    "byte_order": "little_endian",
+    "shared_header": "sw/common/ai_ops_v2_args.h",
+    "legacy_kernel_arg_compatible": false,
+    "v1_matmul_arg_compatible": false,
+    "host_pointers_allowed": false,
+    "fields": [
+      {"name": "abi_version", "offset": 0, "type": "u32", "value": 2},
+      {"name": "byte_size", "offset": 4, "type": "u32", "value": 72},
+      {"name": "op_code", "offset": 8, "type": "u32"},
+      {"name": "flags", "offset": 12, "type": "u32", "value": 0},
+      {"name": "rows", "offset": 16, "type": "u32"},
+      {"name": "cols", "offset": 20, "type": "u32"},
+      {"name": "eps_bits", "offset": 24, "type": "u32", "default": "0x3727c5ac"},
+      {"name": "reserved", "offset": 28, "type": "u32", "value": 0},
+      {"name": "src0_addr", "offset": 32, "type": "u64"},
+      {"name": "src1_addr", "offset": 40, "type": "u64"},
+      {"name": "src2_addr", "offset": 48, "type": "u64"},
+      {"name": "dst_addr", "offset": 56, "type": "u64"},
+      {"name": "reserved64", "offset": 64, "type": "u64", "value": 0}
+    ]
+  }
+}
