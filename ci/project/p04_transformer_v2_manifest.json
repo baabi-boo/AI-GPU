@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "model_id": "p04-tiny-transformer-v2",
+  "contract_version": 2,
+  "supersedes_v1": false,
+  "v1_contract_id": "p04-tiny-mlp-v1",
+  "v1_manifest": "ci/project/p04_model_manifest.json",
+  "operator_contract_id": "p03-native-operators-v2",
+  "operator_manifest": "ci/project/p03_operator_manifest_v2.json",
+  "specification": "docs/designs/tiny_transformer_v2.md",
+  "native_test": "tests/regression/ai_transformer_v2/main.cpp",
+  "native_makefile": "tests/regression/ai_transformer_v2/Makefile",
+  "device_kernels": [
+    "sw/kernel/ai/ops_v2.cpp",
+    "sw/kernel/ai/matmul.cpp"
+  ],
+  "python_resident_module": "python/vortex_ai/resident_v2.py",
+  "python_resident_tests": "ci/project/test_resident_v2.py",
+  "cpu_fallback": false,
+  "profile": {
+    "id": "p02_tfr_wmma_v1",
+    "source": "profiles/p02-tfr.json",
+    "execution_address_bits": 64,
+    "threads_per_warp": 4,
+    "warps_per_core": 4,
+    "cores": 1,
+    "clusters": 1,
+    "issue_width": 1,
+    "local_mem_bytes": 16384,
+    "fpu_type": "STD",
+    "tcu_type": "TFR",
+    "itype": "fp16",
+    "otype": "fp32",
+    "kunroll": 1
+  },
+  "architecture": {
+    "layers": 1,
+    "seq_len": 8,
+    "d_model": 16,
+    "n_heads": 2,
+    "d_head": 8,
+    "d_ff": 16,
+    "rms_eps": 1e-5,
+    "rms_eps_bits": "0x3727c5ac",
+    "activation": "gelu_fp32",
+    "normalization": "rmsnorm_fp32",
+    "attention": "attention_fp32"
+  },
+  "generator": {
+    "algorithm": "splitmix64",
+    "external_downloads": false,
+    "streams": {
+      "x": {"seed": "0x50405b00", "shape": [8, 16], "scale": 0.25, "quantize": "fp16_exact"},
+      "rms1_w": {"seed": "0x50405b01", "shape": [16], "offset": 0.75, "scale": 0.25},
+      "wq": {"seed": "0x50405b02", "shape": [16, 16], "scale": 0.1875, "quantize": "fp16_exact"},
+      "wk": {"seed": "0x50405b03", "shape": [16, 16], "scale": 0.1875, "quantize": "fp16_exact"},
+      "wv": {"seed": "0x50405b04", "shape": [16, 16], "scale": 0.1875, "quantize": "fp16_exact"},
+      "wo": {"seed": "0x50405b05", "shape": [16, 16], "scale": 0.1875, "quantize": "fp16_exact"},
+      "rms2_w": {"seed": "0x50405b06", "shape": [16], "offset": 0.75, "scale": 0.25},
+      "w1": {"seed": "0x50405b07", "shape": [16, 16], "scale": 0.1875, "quantize": "fp16_exact"},
+      "w2": {"seed": "0x50405b08", "shape": [16, 16], "scale": 0.1875, "quantize": "fp16_exact"}
+    }
+  },
+  "graph_stages": [
+    {"id": "rmsnorm_1", "kernel": "ops_v2", "op": "rmsnorm_fp32", "op_code": 8, "shape": [8, 16], "launches": 1},
+    {"id": "cast_norm1_fp16", "kernel": "ops_v2", "op": "cast_fp32_to_fp16", "op_code": 3, "shape": [8, 16], "launches": 1},
+    {"id": "qkv_proj", "kernel": "matmul", "op": "matmul_fp16_fp32", "tile_mnk": [8, 4, 16], "launches": 12},
+    {"id": "mha_2head", "kernel": "ops_v2", "op": "attention_fp32", "op_code": 10, "shape": [8, 8], "heads": 2, "launches": 2},
+    {"id": "cast_attn_fp16", "kernel": "ops_v2", "op": "cast_fp32_to_fp16", "op_code": 3, "shape": [8, 16], "launches": 1},
+    {"id": "out_proj", "kernel": "matmul", "op": "matmul_fp16_fp32", "tile_mnk": [8, 4, 16], "launches": 4},
+    {"id": "residual_1", "kernel": "ops_v2+matmul", "op": "cast_and_identity_add", "launches": 6},
+    {"id": "rmsnorm_2", "kernel": "ops_v2", "op": "rmsnorm_fp32", "op_code": 8, "shape": [8, 16], "launches": 1},
+    {"id": "cast_norm2_fp16", "kernel": "ops_v2", "op": "cast_fp32_to_fp16", "op_code": 3, "shape": [8, 16], "launches": 1},
+    {"id": "ffn_w1", "kernel": "matmul", "op": "matmul_fp16_fp32", "tile_mnk": [8, 4, 16], "launches": 4},
+    {"id": "ffn_gelu", "kernel": "ops_v2", "op": "gelu_fp32", "op_code": 2, "shape": [8, 16], "launches": 1},
+    {"id": "cast_ffn_fp16", "kernel": "ops_v2", "op": "cast_fp32_to_fp16", "op_code": 3, "shape": [8, 16], "launches": 1},
+    {"id": "ffn_w2", "kernel": "matmul", "op": "matmul_fp16_fp32", "tile_mnk": [8, 4, 16], "launches": 4},
+    {"id": "residual_2", "kernel": "ops_v2+matmul", "op": "cast_and_identity_add", "launches": 6}
+  ],
+  "residency_policy": {
+    "device_resident_intermediates": true,
+    "intermediate_h2d_bytes": 0,
+    "intermediate_d2h_bytes": 0,
+    "single_context_serial_only": true,
+    "multi_context_concurrency_claimed": false
+  },
+  "numerics": {
+    "reference_precision": "fp64",
+    "comparison": "max_abs_err",
+    "max_abs_err": 5e-4
+  },
+  "provenance": {
+    "license": "Apache-2.0",
+    "original_synthetic_data": true,
+    "external_downloads": false,
+    "trained_accuracy_claimed": false
+  }
+}
