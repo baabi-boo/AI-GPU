@@ -149,7 +149,7 @@ class CheckpointOwnershipTests(unittest.TestCase):
                     self.assertEqual(identity(temporary.stat()), observed["foreign"])
 
     def test_fdopen_failure_releases_owned_descriptors(self):
-        actual_open = os.open
+        actual_open, actual_close = os.open, os.close
         for error_type in (OSError, KeyboardInterrupt):
             with self.subTest(error=error_type.__name__):
                 path, temporary = self.checkpoint(error_type.__name__)
@@ -158,20 +158,29 @@ class CheckpointOwnershipTests(unittest.TestCase):
 
                 def record_open(*args, **kwargs):
                     descriptor = actual_open(*args, **kwargs)
-                    opened.append(descriptor)
+                    opened.append((descriptor, identity(os.fstat(descriptor))))
                     return descriptor
 
-                with mock.patch.object(matrix.os, "open", side_effect=record_open), \
-                        mock.patch.object(matrix.os, "fdopen", side_effect=original):
-                    with self.assertRaises(error_type) as raised:
-                        matrix._write_json(path, {"next": True})
+                try:
+                    with mock.patch.object(matrix.os, "open", side_effect=record_open), \
+                            mock.patch.object(matrix.os, "fdopen", side_effect=original):
+                        with self.assertRaises(error_type) as raised:
+                            matrix._write_json(path, {"next": True})
 
-                self.assertIs(raised.exception, original)
-                self.assertEqual(len(opened), 2)
-                for descriptor in opened:
-                    self.assert_closed(descriptor)
-                self.assertEqual(path.read_bytes(), PREVIOUS)
-                self.assertFalse(temporary.exists())
+                    self.assertIs(raised.exception, original)
+                    self.assertEqual(len(opened), 2)
+                    for descriptor, _ in opened:
+                        self.assert_closed(descriptor)
+                    self.assertEqual(path.read_bytes(), PREVIOUS)
+                    self.assertFalse(temporary.exists())
+                finally:
+                    for descriptor, owned_identity in opened:
+                        try:
+                            if identity(os.fstat(descriptor)) == owned_identity:
+                                actual_close(descriptor)
+                        except OSError as cleanup_error:
+                            if cleanup_error.errno != errno.EBADF:
+                                raise
 
     def test_unlink_failure_preserves_original_exception(self):
         for error_type in (OSError, KeyboardInterrupt):

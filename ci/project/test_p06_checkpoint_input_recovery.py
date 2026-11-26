@@ -89,6 +89,10 @@ class CheckpointInputRecoveryTests(unittest.TestCase):
         self.assertFalse(any(path.is_file() for path in case.args.archive_root.rglob("*")))
         self.assertEqual(result["network_acquisition"],
                          any("fetch" in argv for argv, *_ in case.observed))
+        for field in (*inputs.dependency.FALSE_CLAIMS, "retained_code_executed",
+                      "counter_qualification_passed", "qualified_warm_passed",
+                      "toolchain_cache_used", "dependency_cache_used"):
+            self.assertIs(result[field], False, field)
         for field, value in result.items():
             if type(value) is bool and field != "network_acquisition":
                 self.assertIs(value, False, field)
