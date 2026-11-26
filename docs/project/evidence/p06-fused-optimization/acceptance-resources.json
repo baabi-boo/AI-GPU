@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "record_id": "p06-a03-resource-budgets-1cf68ff",
+  "kind": "rtl",
+  "outcome": "pass",
+  "evidence_level": "rtl_verified",
+  "scope": "Accept P06-A03 for the explicit RV64 p02-tfr and scaled 2-core VX_tensor_top resource and timing budgets at rtl_verified synthesis-estimate scope, grounded at commit 1cf68ff701c78331f84cb68607764de445689381. Local Beacon (virtexuplusHBM xcu55c-fsvh2892-2L-e) establishes p02-tfr 1-core RV64 (132,962 LUT [10.2% U55C], 89,432 FF [3.4%], 3,904 LUTRAM, 20.0 BRAM [1.0%], 0 URAM, 33 DSP [0.37%], 24 max logic levels) and scaled 2-core VX_tensor_top + 256 KiB L2 + WGMMA + DXA (367,926 LUT [28.2% U55C], 197,220 FF [7.6%], 15,818 LUTRAM, 132.5 BRAM [6.6%], 0 URAM, 11 DSP [0.12%], 25 max logic levels). Gated XLEN=32 Beacon logic_gate passes at 1cf68ff on tensor (267 DSP +0%, 258,820 LUT -1% live vs 260,189 LUT in ci/baselines/synthesis/beacon/tensor.json, 253.4 MHz), core (97 DSP +0%, 143,793 LUT, 285.6 MHz), and tcu (769 DSP +0%, 119,629 LUT live vs 119,887 LUT in ci/baselines/synthesis/beacon/tensor.json, 277.7 MHz). Checked-in ASAP7 Yosys baselines are recorded separately as academic pre-layout ASIC estimates.",
+  "source_revision": "1cf68ff701c78331f84cb68607764de445689381",
+  "configuration": "Beacon logic/area estimation targeting AMD/Xilinx Alveo U55C (xcu55c-fsvh2892-2L-e, virtexuplusHBM): (1) local RV64 runs at 1cf68ff for p02-tfr 1-core (VX_core_top) and scaled 2-core VX_tensor_top (USE_DSP=0, STD FPU, VX_CFG_NUM_CORES=4, VX_CFG_SOCKET_SIZE=4, VX_CFG_L2_ENABLE, VX_CFG_L2_SIZE=262144); (2) gated XLEN=32 Beacon logic_gate against ci/baselines/synthesis/beacon/{tensor,core}.json; (3) checked-in ASAP7 Yosys 0.69 + OpenSTA 3.1.0 baselines (xlen=32, tt corner, 800 MHz target) in ci/baselines/synthesis/yosys/{core,tensor}.json.",
+  "acceptance_ids": [
+    "P06-A03"
+  ],
+  "commands": [
+    {
+      "command": "python3 ci/logic_gate.py -b tensor -j 1 --build-dir /home/antigravity/vortex_builds/build32_logic_gate",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 ci/logic_gate.py -b core -b tcu -j 1 --build-dir /home/antigravity/vortex_builds/build32_logic_gate",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "env -C /home/antigravity/vortex_builds/build64_p02tfr make -j2 -C hw/syn/xilinx/dut core-beacon",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "env -C /home/antigravity/vortex_builds/build64_p02tfr CONFIGS=\"-DVX_CFG_NUM_CORES=4 -DVX_CFG_SOCKET_SIZE=4 -DVX_CFG_L2_ENABLE -DVX_CFG_L2_SIZE=262144\" make -j2 -C hw/syn/xilinx/dut tensor-beacon",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 ci/project/check_project.py",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/project/evidence/p06-fused-optimization/README.md",
+      "sha256": "5f6a6ca2097ea60a6acd31bc3a961ff7e8fc7275ac9771f2c751252c0ae8b557"
+    },
+    {
+      "path": "docs/project/evidence/p06-fused-optimization/resource-budgets.json",
+      "sha256": "b9bbb6a7a31266466cf1639da76943d7596e349d1ea9da33421459be80fa6992"
+    },
+    {
+      "path": "hw/rtl/tcu/VX_tcu_core.sv",
+      "sha256": "c0e91a10712e5f31e37e00c18f713010a78835f59c34e1b000ba741c17509143"
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/tensor.json",
+      "sha256": "7c20e2fdeab2bc597641354c138d79a4e054c1b42a9e4856d88ff157a65ef969"
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/core.json",
+      "sha256": "9d44a8cb4df9968fcba2f06068891ca64619b56b15263feb3369487bd6585788"
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/core.json",
+      "sha256": "3d73cbaee0c1b903340c9752b0079bc3073a4c3edfdffe579cdcbf99e5006bf3"
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/tensor.json",
+      "sha256": "01cf957355f05b63dc98b19ca4a69899b0c26383ef86025a24513c1a07d4eadd"
+    },
+    {
+      "path": "profiles/p02-tfr.json",
+      "sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102"
+    }
+  ],
+  "limitations": [
+    "All Beacon and Yosys synthesis metrics are rtl_verified pre-implementation estimates and are explicitly NOT physical Vivado FPGA timing, placed-and-routed bitstream utilization, or physical FPGA/silicon measurements.",
+    "Local RV64 Beacon U55C estimates evaluate isolated RTL DUTs and exclude the Alveo U55C static/dynamic XRT shell, XDMA host bridge, HBM AXI crossbar, and SLR crossing overhead.",
+    "Checked-in ASAP7 Yosys baselines are XLEN=32 academic pre-layout estimates with black-box SRAM heuristics and cannot be cited as foundry sign-off or RV64 silicon PPA.",
+    "P01-A03 vendor XRT hw_emu remains blocked and required before P07 can close; P07-P11 remain not_started pending physical Alveo U55C/V80 hardware and human go/no-go approval and funding."
+  ],
+  "reviewer": "Independent Neon R2 RTL review completed on 1cf68ff (eliminating the +16 DSP regression to 267 DSP +0% PASS on Beacon logic_gate -b tensor and PASS on -b core -b tcu); P06-A03 closure record prepared by Gemini Hydrogen implementer."
+}

@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "record_id": "p06-a03-resource-budgets-1cf68ff",
+  "acceptance_id": "P06-A03",
+  "evidence_scope": "rtl_verified open-source Beacon and Yosys synthesis estimates; explicitly NOT physical Vivado FPGA timing, placed-and-routed bitstream utilization, or foundry ASIC sign-off.",
+  "source_revision": "1cf68ff701c78331f84cb68607764de445689381",
+  "target_fpga_device": {
+    "board": "AMD/Xilinx Alveo U55C (primary proposed target, unapproved ODR-004)",
+    "part": "xcu55c-fsvh2892-2L-e",
+    "family": "virtexuplusHBM",
+    "capacity": {
+      "lut": 1303680,
+      "ff": 2607360,
+      "bram_36k": 2016,
+      "uram": 960,
+      "dsp": 9024
+    }
+  },
+  "local_rv64_beacon_u55c_estimates": [
+    {
+      "name": "p02-tfr 1-core RV64 (VX_core_top)",
+      "profile": "profiles/p02-tfr.json",
+      "tool": "Local Beacon (virtexuplusHBM xcu55c-fsvh2892-2L-e)",
+      "source_revision": "1cf68ff701c78331f84cb68607764de445689381",
+      "lut": 132962,
+      "lut_pct_u55c": 10.2,
+      "ff": 89432,
+      "ff_pct_u55c": 3.4,
+      "lutram": 3904,
+      "bram_36k": 20.0,
+      "bram_pct_u55c": 1.0,
+      "uram": 0,
+      "dsp": 33,
+      "dsp_pct_u55c": 0.37,
+      "max_logic_levels": 24,
+      "excludes_xrt_shell_and_routing": true
+    },
+    {
+      "name": "VX_tensor_top scaled RV64 2-core + 256 KiB L2 + WGMMA + DXA",
+      "configuration": "USE_DSP=0, STD FPU, 16T/16W, SOCKET_SIZE=2, VX_CFG_TCU_MX_ENABLE, VX_CFG_PLATFORM_MEMORY_NUM_BANKS=1",
+      "tool": "Local Beacon (virtexuplusHBM xcu55c-fsvh2892-2L-e)",
+      "source_revision": "1cf68ff701c78331f84cb68607764de445689381",
+      "lut": 367926,
+      "lut_pct_u55c": 28.2,
+      "ff": 197220,
+      "ff_pct_u55c": 7.6,
+      "lutram": 15818,
+      "bram_36k": 132.5,
+      "bram_pct_u55c": 6.6,
+      "uram": 0,
+      "dsp": 11,
+      "dsp_pct_u55c": 0.12,
+      "max_logic_levels": 25,
+      "excludes_xrt_shell_and_routing": true
+    }
+  ],
+  "gated_xlen32_beacon_logic_gate_results": {
+    "source_revision": "1cf68ff701c78331f84cb68607764de445689381",
+    "device": "xcu55c-fsvh2892-2L-e",
+    "measurement_note": "258,820 LUT (tensor) and 119,629 LUT (tcu) are the live 1cf68ff ci/logic_gate.py measurements compared against the checked-in baselines in ci/baselines/synthesis/beacon/tensor.json (260,189 LUT for tensor and 119,887 LUT for tcu).",
+    "duts": {
+      "tensor": {
+        "gate_status": "PASS",
+        "baseline_file": "ci/baselines/synthesis/beacon/tensor.json",
+        "dsp": 267,
+        "dsp_before_fix": 283,
+        "dsp_delta_vs_baseline": "+0%",
+        "lut": 258820,
+        "baseline_lut": 260189,
+        "lut_delta_vs_baseline": "-1%",
+        "max_levels": 25,
+        "max_levels_delta": "+0%",
+        "pred_fmax_mhz": 253.4,
+        "pred_fmax_delta": "+0%"
+      },
+      "core": {
+        "gate_status": "PASS",
+        "baseline_file": "ci/baselines/synthesis/beacon/core.json",
+        "dsp": 97,
+        "dsp_delta_vs_baseline": "+0%",
+        "lut": 143793,
+        "baseline_lut": 143793,
+        "pred_fmax_mhz": 285.6
+      },
+      "tcu": {
+        "gate_status": "PASS",
+        "baseline_file": "ci/baselines/synthesis/beacon/tensor.json",
+        "dsp": 769,
+        "dsp_delta_vs_baseline": "+0%",
+        "lut": 119629,
+        "baseline_lut": 119887,
+        "pred_fmax_mhz": 277.7
+      }
+    }
+  },
+  "academic_asap7_yosys_baselines": {
+    "note": "Separately scoped academic pre-layout ASAP7 Yosys 0.69 + OpenSTA 3.1.0 estimates (xlen=32, tt corner, 800 MHz target, black-box SRAM heuristic); NOT foundry sign-off or RV64 post-layout PPA.",
+    "core_baseline_file": "ci/baselines/synthesis/yosys/core.json",
+    "tensor_baseline_file": "ci/baselines/synthesis/yosys/tensor.json",
+    "duts": {
+      "core": {
+        "cell_area_um2": 76015.6,
+        "seq_area_um2": 25929.947,
+        "sram_area_um2": 27814.4,
+        "fmax_mhz": 1019.992,
+        "power_mw": 832.0
+      },
+      "tensor": {
+        "cell_area_um2": 96735.909,
+        "seq_area_um2": 41783.364,
+        "sram_area_um2": 52361.6,
+        "fmax_mhz": 1119.445,
+        "power_mw": 236.0
+      },
+      "tcu": {
+        "cell_area_um2": 74231.737,
+        "seq_area_um2": 12099.067,
+        "sram_area_um2": 0.0,
+        "fmax_mhz": 870.549,
+        "power_mw": 359.0
+      }
+    }
+  },
+  "limitations": [
+    "All Beacon and Yosys figures are pre-implementation RTL synthesis/logic-level estimates, not physical Vivado FPGA place-and-route timing or measured hardware power/frequency.",
+    "Local RV64 Beacon U55C estimates exclude the Alveo U55C static/dynamic XRT shell, XDMA bridge, HBM AXI crossbar, and SLR crossings.",
+    "Checked-in ASAP7 Yosys baselines are XLEN=32 academic predictive estimates with black-box SRAM heuristics."
+  ]
+}

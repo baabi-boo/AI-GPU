@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "record_id": "p06-a02-optimization-results-786f0ee",
+  "acceptance_id": "P06-A02",
+  "profile": {
+    "name": "p02-tfr",
+    "path": "profiles/p02-tfr.json",
+    "xlen": 64,
+    "clusters": 1,
+    "cores": 1,
+    "warps": 4,
+    "threads": 4,
+    "issue_width": 1,
+    "tcu_type": "TFR",
+    "tcu_use_dsp": 0,
+    "fpu_type": "STD",
+    "lmem_enabled": true
+  },
+  "baseline": {
+    "acceptance_id": "P06-A01",
+    "source_revision": "84b6ca0ca75fba248ba330642bbf8764db3d459c",
+    "record": "docs/project/evidence/p06-serial-workspace/p06-a01-retained-baseline.json",
+    "model": "batch-16 16->8->4 Tiny-MLP (3 native matmul launches + host ReLU/cast/assembly)",
+    "launches": 3,
+    "active_core_cycles": 18189,
+    "logical_h2d_plus_d2h_bytes": 2688,
+    "host_bridge": "Host-side ReLU, IEEE-754 RNE cast, and row assembly"
+  },
+  "optimizations": {
+    "trace_owner_raii": {
+      "commit": "8a38d8847605867fd1793d21e4f863289796bd80",
+      "short_commit": "8a38d88",
+      "title": "Core-scoped TraceOwner RAII ownership for instr_trace_t",
+      "verified_checks": [
+        "simx timed + simx_completion_test",
+        "SIMX_MT=2 (bit-identical instrs=2460, cycles=6448 vs rtlsim instrs=2460, cycles=6404)",
+        "SIMX_FUNCTIONAL",
+        "demo",
+        "sgemm_tcu FP16 TFR (instrs=128, cycles=1352)",
+        "Independent Neon R2 review"
+      ]
+    },
+    "tcu_mx_scale_shift_fix": {
+      "commit": "1cf68ff701c78331f84cb68607764de445689381",
+      "short_commit": "1cf68ff",
+      "title": "Precomputed localparam shifts in mx_scale_at eliminating +16 DSP regression",
+      "verified_checks": [
+        "Beacon logic_gate -b tensor: 283 -> 267 DSP (+0%), 258,820 LUT (-1%), max_lv 25 (+0%), p_fmax 253.4 MHz (+0%), PASS",
+        "Beacon logic_gate -b core -b tcu: PASS (core 97 DSP / 285.6 MHz; tcu 769 DSP / 277.7 MHz)",
+        "Verilator 5.050 --lint-only: 0 errors/warnings in VX_tcu_core.sv",
+        "Independent Neon R2 RTL review"
+      ]
+    },
+    "fused_tiny_mlp": {
+      "commit": "786f0ee43fbc4a5153c82c66baef98eaef2c372f",
+      "short_commit": "786f0ee",
+      "title": "Single-launch 4-warp fused native Tiny-MLP kernel (ai_mlp_fused)",
+      "build_dir": "build64_p02tfr",
+      "configure": "--xlen=64 --profile=p02-tfr",
+      "launches": 1,
+      "launch_reduction_vs_baseline": "3.0x",
+      "logical_h2d_bytes": 1088,
+      "logical_d2h_bytes": 256,
+      "logical_h2d_plus_d2h_bytes": 1344,
+      "traffic_reduction_vs_baseline": "2.0x",
+      "device_bridge": "4-warp parallel CTA, on-device ReLU + exact IEEE-754 RNE cast in registers, on-core LMEM activation bridge, zero host round-trip",
+      "pairing_and_run_notes": "P06-A01 baseline (18,189 active core cycles) is SimX-only (simulated); SimX-to-SimX comparisons are 18,189 -> 9,913 (-n 2 post-fix) / 10,130 (-n 1) for BF16 and 18,189 -> 12,628 for FP16, while rtlsim (10,078 BF16 / 12,573 FP16) adds native processor RTL parity. Post-R2-fix verification used --args='-n 2 -v' for FP16 SimX (materializing and checking h_scratch hidden and bridge words via -v) and --args='-n 2' for BF16 SimX (9,913 cycles under -n 2 vs 10,130 under -n 1).",
+      "bf16": {
+        "seeded_dense": {
+          "baseline_simx_cycles": 18189,
+          "rtlsim_cycles": 10078,
+          "rtlsim_instrs": 3256,
+          "rtlsim_mismatches": 0,
+          "simx_cycles_n2_post_fix": 9913,
+          "simx_cycles_n1_initial": 10130,
+          "simx_cycles_min": 9913,
+          "simx_cycles_max": 10130,
+          "simx_speedup_vs_simx_baseline": "1.83x (-n 2) / ~1.80x (-n 1)",
+          "rtlsim_vs_simx_baseline_ratio": "~1.80x",
+          "speedup_vs_baseline": "~1.80x"
+        },
+        "five_case_rtlsim_total": {
+          "cases": 5,
+          "rtlsim_instrs": 16040,
+          "rtlsim_cycles": 49278,
+          "exact_fp32_logits_checked": 320,
+          "mismatches": 0
+        }
+      },
+      "fp16": {
+        "seeded_dense": {
+          "baseline_simx_cycles": 18189,
+          "rtlsim_cycles": 12573,
+          "rtlsim_instrs": 3946,
+          "simx_cycles": 12628,
+          "simx_instrs": 3946,
+          "instr_delta": 0,
+          "cycle_parity_pct": 0.44,
+          "simx_speedup_vs_simx_baseline": "1.44x",
+          "rtlsim_vs_simx_baseline_ratio": "1.45x",
+          "speedup_vs_baseline": "1.44x",
+          "mismatches": 0
+        },
+        "five_case_total": {
+          "cases": 5,
+          "h_scratch_verified_flag": "-v (FP16 SimX --args='-n 2 -v')",
+          "exact_fp32_logits_checked": 320,
+          "exact_fp32_hidden_checked": 640,
+          "exact_bridge_words_checked": 320,
+          "mismatches": 0
+        }
+      },
+      "review": "Independent Neon R2 review completed (4 F2 + 2 F1 findings resolved and re-verified on SimX -n 2 -v and rtlsim)"
+    },
+    "v2_native_operators": {
+      "commit": "cc459f843efe72d47a1ff0a0728680fb1e0676cd",
+      "short_commit": "cc459f8",
+      "title": "Additive v2 native AI operator library (p03-native-operators-v2, abi_version=2)",
+      "opcodes_passed": 10,
+      "opcodes_total": 10,
+      "covered_ops": [
+        "relu_fp32",
+        "gelu_fp32",
+        "cast_*",
+        "softmax_fp32",
+        "rmsnorm_fp32",
+        "layernorm_fp32",
+        "attention_fp32"
+      ],
+      "simx_instrs": 40030,
+      "simx_cycles": 159046,
+      "rtlsim_instrs": 40030,
+      "rtlsim_cycles": 158597,
+      "instr_delta": 0,
+      "cycle_parity_pct": 0.28,
+      "mismatches": 0
+    },
+    "p07_to_p11_prep": {
+      "commit": "3b8ca48418e9c80f8708ffbbdac9a8ac5db95799",
+      "short_commit": "3b8ca48",
+      "title": "P07-P11 preparatory harnesses, dossiers, SBOM, and simulated P09 research prototypes",
+      "unit_tests_passed": 71,
+      "unit_tests_total": 71,
+      "review": "Independent Neon R1 review"
+    }
+  },
+  "external_blockers_preserved": {
+    "p06_qualified_warm_local": {
+      "status": "blocked_external_input",
+      "reason": "Owner-retained private control archive d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f not supplied; preserved without waiver"
+    },
+    "p01_a03_vendor_hw_emu": "blocked",
+    "physical_fpga_and_human_approvals": "Pending physical Alveo U55C/V80 hardware (P07/P08/P09) and human go/no-go approval & funding (P10/P11)"
+  }
+}

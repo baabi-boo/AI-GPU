@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "record_id": "p06-a02-fused-optimization-786f0ee",
+  "kind": "rtl",
+  "outcome": "pass",
+  "evidence_level": "rtl_verified",
+  "scope": "Accept P06-A02 for the bounded RV64 p02-tfr optimization suite through commit 786f0ee43fbc4a5153c82c66baef98eaef2c372f: (1) SimX Core-scoped TraceOwner RAII ownership (8a38d88), (2) TCU mx_scale_at localparam shift fix eliminating the +16 DSP regression (1cf68ff), and (3) single-launch 4-warp fused native Tiny-MLP kernel ai_mlp_fused (786f0ee) reducing launches from 3 to 1 (3.0x), logical H2D+D2H traffic from 2,688 B to 1,344 B (2.0x), and active cycles from 18,189 SimX baseline cycles to 9,913 (-n 2) / 10,130 (-n 1) simx (~1.80x-1.83x SimX speedup) and 10,078 rtlsim (~1.80x vs SimX baseline) for BF16 seeded_dense, and 12,628 simx (1.44x SimX speedup) / 12,573 rtlsim (1.45x vs SimX baseline, 0-instr delta, 0.44% cycle parity) for FP16 seeded_dense with zero numerical mismatches across all 320 FP32 logits, 640 FP32 hidden words (-v), and 320 bridge words (-v). All P02/P03/P04/P06-A01 numerical contracts and baselines are preserved untouched.",
+  "source_revision": "786f0ee43fbc4a5153c82c66baef98eaef2c372f",
+  "configuration": "build64_p02tfr configured via ../configure --xlen=64 --profile=p02-tfr (profiles/p02-tfr.json: 1 cluster, 1 core, 4 warps, 4 threads, issue width 1, native TFR TCU, USE_DSP=0, STD FPU, LMEM enabled); verified on both SimX timing model and native processor RTL (rtlsim) in FP16 (-DKUNROLL=1, --args='-n 2 -v') and BF16 (-DKUNROLL=1, --args='-n 2' on SimX and default args on rtlsim) modes.",
+  "acceptance_ids": [
+    "P06-A02"
+  ],
+  "commands": [
+    {
+      "command": "env -C /home/antigravity/vortex_builds/build64_p02tfr MAKEFLAGS=-j2 CONFIGS=\"-DITYPE=fp16 -DOTYPE=fp32 -DKUNROLL=1\" ./ci/blackbox.sh --profile=p02-tfr --driver=simx --app=ai_mlp_fused --perf=1 --args=\"-n 2 -v\"",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "env -C /home/antigravity/vortex_builds/build64_p02tfr MAKEFLAGS=-j2 CONFIGS=\"-DITYPE=bf16 -DOTYPE=fp32 -DKUNROLL=1\" ./ci/blackbox.sh --profile=p02-tfr --driver=simx --app=ai_mlp_fused --perf=1 --args=\"-n 2\"",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "env -C /home/antigravity/vortex_builds/build64_p02tfr MAKEFLAGS=-j2 CONFIGS=\"-DITYPE=fp16 -DOTYPE=fp32 -DKUNROLL=1\" ./ci/blackbox.sh --profile=p02-tfr --driver=rtlsim --app=ai_mlp_fused --perf=1",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "env -C /home/antigravity/vortex_builds/build64_p02tfr MAKEFLAGS=-j2 CONFIGS=\"-DITYPE=bf16 -DOTYPE=fp32 -DKUNROLL=1\" ./ci/blackbox.sh --profile=p02-tfr --driver=rtlsim --app=ai_mlp_fused --perf=1",
+      "result": "pass",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 ci/project/check_project.py",
+      "result": "pass",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/project/evidence/p06-fused-optimization/README.md",
+      "sha256": "5f6a6ca2097ea60a6acd31bc3a961ff7e8fc7275ac9771f2c751252c0ae8b557"
+    },
+    {
+      "path": "docs/project/evidence/p06-fused-optimization/optimization-results.json",
+      "sha256": "96a663ef09cc99a04ea904a3ae512181f533d83523632b697be18dfcd2cda930"
+    },
+    {
+      "path": "profiles/p02-tfr.json",
+      "sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102"
+    },
+    {
+      "path": "sim/simx/core.cpp",
+      "sha256": "6a080cf0de035c38a1a87912729c1f1ad07140ae6ad62d2c463568e78b1e4c55"
+    },
+    {
+      "path": "sim/simx/core.h",
+      "sha256": "1c4a23eb2e420638ac5a67362513a7d735b8d50099f07142699e4fa2c56ea994"
+    },
+    {
+      "path": "sim/simx/instr_trace.h",
+      "sha256": "aa05b6a498125e014b2cef8b6ae86d3a322cc131de0a2965bea4ca24f92f789f"
+    },
+    {
+      "path": "hw/rtl/tcu/VX_tcu_core.sv",
+      "sha256": "c0e91a10712e5f31e37e00c18f713010a78835f59c34e1b000ba741c17509143"
+    },
+    {
+      "path": "sw/common/ai_mlp_fused_args.h",
+      "sha256": "9cf848e631ee1fbff92fa24bd540aa26a551fb61d6d9ceb0aab5693e2d43d624"
+    },
+    {
+      "path": "sw/kernel/ai/mlp_fused.cpp",
+      "sha256": "1c29e201a396b4d692ec1096c996eeda6339fccd288dcd6737fa1395200fef94"
+    },
+    {
+      "path": "tests/regression/ai_mlp_fused/Makefile",
+      "sha256": "52d54b573b6ab3c84231de08eb2f6fc8c0921df4906784bf2097941bd98ae6cb"
+    },
+    {
+      "path": "tests/regression/ai_mlp_fused/main.cpp",
+      "sha256": "0f37f1ee7640c9bb5f96993e2c25f3cefa56f27b905322fc34aab50c9a716010"
+    }
+  ],
+  "limitations": [
+    "Acceptance covers P06-A02 at rtl_verified evidence level on SimX and native processor RTL (rtlsim) under RV64 p02-tfr; it does not establish physical FPGA performance, XRT hw_emu, or silicon execution.",
+    "P06-A01 baseline (18,189 active core cycles) is SimX-only (simulated); SimX-to-SimX comparisons are 18,189 -> 9,913 (-n 2) / 10,130 (-n 1) for BF16 and 18,189 -> 12,628 for FP16, while rtlsim establishes native processor RTL parity (10,078 BF16 / 12,573 FP16).",
+    "Local p06_qualified_warm execution remains externally blocked because the owner-retained private control archive d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f was not supplied; that block is preserved without waiver.",
+    "P01-A03 vendor XRT hw_emu remains blocked and is required before P07 can close; P07-P11 remain not_started pending physical Alveo U55C/V80 FPGA hardware and human approval/funding.",
+    "Logical H2D+D2H transfer bytes (1,344 B vs 2,688 B) measure explicit tensor buffer traffic and exclude command/argument staging and physical PCIe/HBM DMA overhead."
+  ],
+  "reviewer": "Independent Neon R2 review completed on 8a38d88 (TraceOwner RAII), 1cf68ff (TCU mx_scale_at localparam shift fix), and 786f0ee (ai_mlp_fused, all 4 F2 + 2 F1 findings resolved and re-verified on SimX -n 2 -v and rtlsim); P06-A02 closure record prepared by Gemini Hydrogen implementer."
+}

@@ -1,5 +1,69 @@
 # Current project status
 
+**P06 is `complete` (`P06-A01`, `P06-A02`, and `P06-A03` accepted); `P01` remains
+`blocked` on `P01-A03`, and `P07`–`P11` remain `not_started`.** The
+[fused optimization packet](evidence/p06-fused-optimization/README.md) records
+[`P06-A02`](evidence/p06-fused-optimization/acceptance-optimization.json) and
+[`P06-A03`](evidence/p06-fused-optimization/acceptance-resources.json) at
+`rtl_verified` scope alongside the untouched
+[`P06-A01`](evidence/p06-serial-workspace/p06-a01-retained-baseline.json)
+cold-context SimX baseline (`84b6ca0`).
+
+- **Wave 2 — SimX `TraceOwner` RAII (`8a38d88`):** Core-scoped `TraceOwner` RAII
+  ownership for `instr_trace_t` verified on `simx` timed, `simx_completion_test`,
+  `SIMX_MT=2` (`instrs=2460`, `cycles=6448` vs `rtlsim` `2460`/`6404`),
+  `SIMX_FUNCTIONAL`, `demo`, `sgemm_tcu`, and independent Neon R2 review.
+- **Wave 4A — TCU MX scale-shift DSP fix (`1cf68ff`):** Precomputed `localparam`
+  shifts in `mx_scale_at` in [`VX_tcu_core.sv`](../../hw/rtl/tcu/VX_tcu_core.sv)
+  eliminated the `+16` DSP regression (`283 -> 267` DSP `+0%`, `258,820` LUT
+  `-1%`, `max_lv 25 +0%`, `p_fmax 253.4 MHz +0%` PASS on `logic_gate -b tensor`;
+  `logic_gate -b core -b tcu` PASS; Verilator 5.050 `--lint-only` `0`
+  errors/warnings; independent Neon R2 RTL review).
+- **Wave 3 — Fused native Tiny-MLP (`786f0ee`, `P06-A02`):** Single-launch
+  4-warp parallel CTA `ai_mlp_fused` with on-core LMEM activation bridge and
+  zero host round-trip on `build64_p02tfr` (`--xlen=64 --profile=p02-tfr`) vs.
+  `P06-A01` baseline (`3` launches, `18,189` cycles, `2,688 B` logical H2D+D2H):
+  `1` launch (`3.0x` fewer), `1,344 B` (`1,088 B` H2D + `256 B` D2H, `2.0x` less
+  traffic); **BF16 `seeded_dense`** `10,078` `rtlsim` cycles (`3,256` instrs) /
+  `9,913`–`10,130` `simx` cycles (`~1.80x` speedup, `0` mismatches; 5-case
+  `rtlsim` total `16,040` instrs, `49,278` cycles, `320/320` exact FP32 logits);
+  **FP16 `seeded_dense`** `12,573` `rtlsim` cycles (`3,946` instrs) / `12,628`
+  `simx` cycles (`3,946` instrs, `0`-instr delta, `0.44%` cycle parity, `1.44x`
+  speedup; 5-case total `320/320` exact logits, `640/640` exact FP32 hidden,
+  `320/320` exact bridge words); independent Neon R2 review completed (4 F2 + 2 F1
+  findings resolved and re-verified).
+- **Wave 4B — Resource & timing budgets (`1cf68ff`, `P06-A03`):** Open-source
+  Beacon + Yosys synthesis estimates (explicitly NOT physical Vivado FPGA
+  timing): local RV64 Beacon (`virtexuplusHBM` U55C) `p02-tfr` 1-core
+  `VX_core_top` (`132,962` LUT `10.2%`, `89,432` FF `3.4%`, `3,904` LUTRAM,
+  `20.0` BRAM `1.0%`, `0` URAM, `33` DSP `0.37%`, `24` max levels) and scaled
+  2-core `VX_tensor_top` + 256 KiB L2 + WGMMA + DXA (`367,926` LUT `28.2%`,
+  `197,220` FF `7.6%`, `15,818` LUTRAM, `132.5` BRAM `6.6%`, `0` URAM, `11` DSP
+  `0.12%`, `25` max levels); gated XLEN=32 Beacon `logic_gate` PASS (`tensor`
+  `267` DSP / `258,820` LUT / `253.4 MHz`, `core` `97` DSP / `143,793` LUT /
+  `285.6 MHz`, `tcu` `769` DSP / `119,629` LUT / `277.7 MHz`); ASAP7 Yosys
+  baselines referenced separately as academic pre-layout estimates.
+- **Wave 5A — Additive v2 native AI operators (`cc459f8`):** 10/10 native v2
+  opcodes (`relu_fp32`, `gelu_fp32`, `cast_*`, `softmax_fp32`, `rmsnorm_fp32`,
+  `layernorm_fp32`, `attention_fp32`) passed on SimX (`40,030` instrs, `159,046`
+  cycles) and `rtlsim` (`40,030` instrs exact, `158,597` cycles, `0.28%` parity,
+  `0` mismatches).
+- **Waves 6–7A — P07–P11 preparatory tooling (`3b8ca48`):** Machine-checked
+  harnesses, [U55C readiness dossier](p07-u55c-readiness.md),
+  [threat model/SBOM](p08-threat-model-and-release.md),
+  [simulated P09 prototypes](p09-research-prototypes.md),
+  [ASIC feasibility dossier](p10-asic-feasibility-dossier.md), and
+  [bring-up template](p11-silicon-bringup-plan.md) (`71/71` unit tests passing,
+  independent Neon R1 review).
+- **Preserved external blockers (no waivers):**
+  - Wave 1 `p06_qualified_warm` local execution remains externally blocked on
+    owner-retained private control archive `d3a16e1e...` (preserved without waiver).
+  - `P01-A03` vendor XRT `hw_emu` remains `blocked`.
+  - `P07`–`P11` remain `not_started`, awaiting physical Alveo U55C/V80 FPGA
+    hardware (`P07`/`P08`/`P09`) and human go/no-go approval and funding (`P10`/`P11`).
+
+**Historical P06-A01 acceptance and prior continuations (preserved below):**
+
 **P06-A01 is [accepted at simulated scope](evidence/p06-baseline/acceptance.json);
 P06 and P06-T01 remain `in_progress`.** Independent original-artifact review
 qualifies the eight-workload baseline at `84b6ca0ca75fba248ba330642bbf8764db3d459c`,

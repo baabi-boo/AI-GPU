@@ -7,7 +7,35 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Start here: P06-T01 explicit qualified warm route
+## Current status & external blockers (P06 closed; P01 blocked; P07–P11 preparatory)
+
+- **P06 closed (`complete`):** `P06-A01`
+  ([`p06-a01-retained-baseline.json`](evidence/p06-serial-workspace/p06-a01-retained-baseline.json),
+  `84b6ca0`), `P06-A02`
+  ([`acceptance-optimization.json`](evidence/p06-fused-optimization/acceptance-optimization.json),
+  `786f0ee` fused Tiny-MLP + `8a38d88` TraceOwner RAII + `1cf68ff` DSP fix +
+  `cc459f8` additive v2 ops), and `P06-A03`
+  ([`acceptance-resources.json`](evidence/p06-fused-optimization/acceptance-resources.json),
+  `1cf68ff` Beacon/Yosys resource & timing budgets) are all accepted in
+  [roadmap.json](roadmap.json). See the
+  [fused optimization packet](evidence/p06-fused-optimization/README.md).
+- **Wave 1 `p06_qualified_warm` local execution:** honestly recorded as
+  externally blocked on the owner-retained private control archive
+  (`d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f`),
+  preserved without waiver.
+- **Waves 2–7A (`8a38d88`, `1cf68ff`, `786f0ee`, `cc459f8`, `3b8ca48`):**
+  all implemented, verified, and independently reviewed; P07–P11 harnesses and
+  dossiers (`3b8ca48`, `71/71` unit tests, Neon R1 review) are ready for
+  downstream hardware/approval intake.
+- **Remaining external blockers (require external hardware, vendor tools, or human authorization):**
+  1. **`P01-A03` (`blocked`):** vendor XRT `hw_emu` execution (required before
+     `P07` can close).
+  2. **`P07` / `P08` / `P09` (`not_started`):** physical Alveo U55C/V80 FPGA
+     hardware access and `ODR-004` board approval.
+  3. **`P10` / `P11` (`not_started`):** human go/no-go approval, foundry/IP
+     quotes, and funding authorization.
+
+## Historical P06-T01 explicit qualified warm route (preserved below)
 
 The [archive ownership continuation](p06-archive-ownership-audit.md) fixes
 reproduced packer and governance-reader descriptor cleanup failures and adds

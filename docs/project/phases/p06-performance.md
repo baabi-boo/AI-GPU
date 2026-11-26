@@ -1,10 +1,16 @@
 # P06 — Memory and performance scaling
 
 **Goal:** measure and improve useful work per second, byte and joule without
-confusing simulated behavior with physical speed. **P06 is `in_progress`**, with
-[P06-A01 accepted](../evidence/p06-baseline/acceptance.json) for the frozen cold
-SimX baseline and P06-A02/A03 open. Live state and canonical gates are in
-[roadmap.json](../roadmap.json); the accountable role is Performance and memory lead.
+confusing simulated behavior with physical speed. **P06 is complete**, with
+[P06-A01 accepted](../evidence/p06-serial-workspace/p06-a01-retained-baseline.json)
+for the frozen cold SimX baseline (`84b6ca0`),
+[P06-A02 accepted](../evidence/p06-fused-optimization/acceptance-optimization.json)
+for the fused native Tiny-MLP optimization (`786f0ee`) at `rtl_verified` scope,
+and [P06-A03 accepted](../evidence/p06-fused-optimization/acceptance-resources.json)
+for Beacon/Yosys synthesis resource and timing budgets (`1cf68ff`) at
+`rtl_verified` scope. Live state and canonical gates are in
+[roadmap.json](../roadmap.json), [status.md](../status.md), and
+[backlog.md](../backlog.md); the accountable role is Performance and memory lead.
 
 ## Entry and boundaries
 
@@ -256,9 +262,13 @@ accepted cold baseline. The two-job, one-simulator-worker, 4 GiB memory and
 15 GiB disk prerequisites remain unchanged. No 24-process native result,
 performance acceptance or P06-A02/A03 decision is established.
 
-P06 and P06-T01 remain `in_progress`; P06-A02/A03 remain open. P04 supplies the
-entry dependency and P05 is independent. The missing P01 vendor `hw_emu` evidence
-and inherited [267 → 283 DSP area-gate failure](../p04-executor-audit.md) remain unresolved.
+Historical context above (`p06_qualified_warm` local execution remains
+externally blocked without waiver on the unsupplied private control archive
+`d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f`). The
+inherited `267 -> 283` DSP regression was resolved in `1cf68ff`, and **P06 is
+complete** with `P06-A01`, `P06-A02`, and `P06-A03` accepted in
+[roadmap.json](../roadmap.json); P01 vendor `hw_emu` (`P01-A03`) remains
+`blocked` and is still required before `P07` can close.
 
 ## Ordered work packages
 
@@ -306,15 +316,15 @@ Block acceptance for numerical failures, unexplained parity/gate regressions,
 uncontrolled benchmark changes, missing resource budgets or exhausted resources.
 Do not hide a regression with a compensating improvement elsewhere.
 
-After the P06 gates are accepted, hand P07 the selected configuration,
-constraints, bounded workloads, memory-map assumptions and reproducible reports.
-P07 also requires P01's vendor integration gate. Update [status](../status.md)
-and [backlog](../backlog.md) as each gate earns evidence. The current next action
-is one uninterrupted governance invocation without skips and capacity
-provisioning, followed by one fresh complete qualified warm attempt,
-original retention, independent replay and unchanged-predicate evaluation in
-the [qualified warm handoff](../p06-qualified-warm-handoff.md). The completed four-process
-qualification cannot be copied into those new process records, and historical
-warm-v1 remains blocked.
-A documented board-readiness decision and physical
-implementation plan follow later.
+**P06 is complete** with `P06-A01`, `P06-A02`, and `P06-A03` accepted in
+[roadmap.json](../roadmap.json), [status](../status.md), and
+[backlog](../backlog.md) (see the
+[fused optimization packet](../evidence/p06-fused-optimization/README.md)). P07
+handoff now carries the selected `p02-tfr` and scaled `VX_tensor_top`
+configurations, bounded workloads, memory-map assumptions, and Beacon/Yosys
+synthesis estimates; P07 completion remains dependent on closing `P01-A03`
+(vendor XRT `hw_emu`) and acquiring physical Alveo U55C/V80 FPGA hardware.
+The separate `p06_qualified_warm` local execution remains externally blocked
+without waiver on the unsupplied private control archive
+(`d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f`), and
+historical warm-v1 remains blocked.
