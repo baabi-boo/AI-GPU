@@ -1,0 +1,53 @@
+{
+  "name": "aigpu-b1-tile",
+  "description": "Pre-silicon RTL-verifiable 4-core compute tile slice for aigpu-b1 (1 cluster x 4 cores, RV64 AI-only TFR/WGMMA, graphics disabled; NOT measured physical silicon).",
+  "xlen": 64,
+  "core": {
+    "VX_CFG_NUM_WARPS": 8,
+    "VX_CFG_NUM_THREADS": 8,
+    "VX_CFG_ISSUE_WIDTH": 2,
+    "VX_CFG_LMEM_ENABLE": true,
+    "VX_CFG_FPU_TYPE": "STD",
+    "VX_CFG_EXT_TCU_ENABLE": true,
+    "VX_CFG_TCU_TYPE": "TFR",
+    "VX_CFG_TCU_WGMMA_ENABLE": true,
+    "VX_CFG_TCU_FP16_ENABLE": true,
+    "VX_CFG_TCU_FP8_ENABLE": true,
+    "VX_CFG_TCU_FP4_ENABLE": true,
+    "VX_CFG_TCU_MX_ENABLE": true,
+    "VX_CFG_TCU_MXFP4_ENABLE": true,
+    "VX_CFG_TCU_NVFP4_ENABLE": true,
+    "VX_CFG_TCU_INT8_ENABLE": true,
+    "VX_CFG_TCU_SPARSE_ENABLE": true,
+    "VX_CFG_EXT_DXA_ENABLE": true,
+    "VX_CFG_EXT_MUFU_ENABLE": true,
+    "VX_CFG_EXT_A_ENABLE": true,
+    "VX_CFG_EXT_TEX_ENABLE": false,
+    "VX_CFG_EXT_RASTER_ENABLE": false,
+    "VX_CFG_EXT_OM_ENABLE": false,
+    "VX_CFG_EXT_RTU_ENABLE": false
+  },
+  "chip": {
+    "VX_CFG_NUM_CLUSTERS": 1,
+    "VX_CFG_NUM_CORES": 4,
+    "VX_CFG_SOCKET_SIZE": 4,
+    "VX_CFG_L2_ENABLE": true,
+    "VX_CFG_L2_SIZE": 262144
+  },
+  "reference": {
+    "fp32_lanes": 64,
+    "dram_bandwidth_gbs": 460,
+    "dram_peak_bytes_per_cycle": 1150,
+    "clock_mhz": 400
+  },
+  "sources": {
+    "evidence_status": "PRE-SILICON RTL-VERIFIABLE COMPUTE TILE SLICE ONLY: 4-core verification target for rtlsim, Beacon, and non-sign-off open-source synthesis per ADR-006; NOT measured physical silicon and NOT full 64-core aigpu-b1 SoC closure.",
+    "xlen": "64-bit RV64IMAFD machine (configure --profile=aigpu-b1-tile selects build64 and build32 rejects the profile).",
+    "NUM_CLUSTERS, NUM_CORES, SOCKET_SIZE": "1 cluster x 4 cores in a single 4-core socket (RTL-bounded verification slice: NUM_CORES == SOCKET_SIZE = 4).",
+    "NUM_WARPS, NUM_THREADS, ISSUE_WIDTH": "8 warps x 8 threads per core, 2 issue slices (TCU geometry: 4x2x2 block, 8x8x8 WMMA tile, 2 TCU blocks x 8 lanes/core).",
+    "LMEM_ENABLE, L2_ENABLE, L2_SIZE": "Default 16 KiB shared LMEM (LMEM_LOG_SIZE=14 <= 18 WGMMA limit, 8 banks) plus shared 256 KiB write-back L2 cache (262144 B, 8 ways, 128 B lines => 256 sets).",
+    "FPU_TYPE, EXT_TCU_ENABLE, TCU_TYPE, TCU_WGMMA_ENABLE, TCU_*, EXT_DXA_ENABLE, EXT_MUFU_ENABLE, EXT_A_ENABLE": "Native STD scalar FPU and TFR tensor cores (zero DPI substitution) enabling WGMMA, FP16/BF16, FP8/BF8, FP4/MX/MXFP4/NVFP4, INT8, 2:4 structured sparsity, DXA async DMA, MUFU transcendentals, and RV64A atomics.",
+    "EXT_TEX_ENABLE, EXT_RASTER_ENABLE, EXT_OM_ENABLE, EXT_RTU_ENABLE": "Explicitly false: graphics/RTU units removed in the AI-only tile slice to match aigpu-b1 pruning.",
+    "reference": "Modeled analytical baseline from resolved defaults (64 FP32 lanes = 4 cores x 2 issue blocks x 8 FPU lanes; default VX_config.toml platform 400 MHz and 460 GB/s) checked by ci/profile_check.py --metrics=peak. Explicitly NOT measured FPGA or silicon hardware."
+  }
+}
