@@ -7,8 +7,14 @@ adding issue links or evidence. Role names below describe responsibilities;
 the active execution owner is recorded in [status](status.md). Later-phase roles
 remain unassigned until an actual owner is identified.
 
-## Current status & external blockers (P06 closed; P01 blocked; P07–P11 preparatory)
+## Current status & external blockers (Pre-Silicon Tracks A–F & P06 complete; P01 blocked; P07–P11 preparatory)
 
+- **ADR-006 Pre-Silicon Tracks A–F (`complete`):** All six pre-silicon tapeout-readiness
+  tracks (`TRACK-A` through `TRACK-F`, Waves 8–12: `fe022e6`..`6d18295`) are closed with
+  SHA-256-verified `source_present` / `simulated` / `rtl_verified` evidence in
+  [presilicon_readiness.json](presilicon_readiness.json), validated offline by
+  `python3 ci/project/check_presilicon.py`. Investor & Foundry RFQ collateral lives under
+  [`docs/dataroom/`](../dataroom/aigpu-b1-architecture-datasheet.md).
 - **P06 closed (`complete`):** `P06-A01`
   ([`p06-a01-retained-baseline.json`](evidence/p06-serial-workspace/p06-a01-retained-baseline.json),
   `84b6ca0`), `P06-A02`
@@ -23,9 +29,10 @@ remain unassigned until an actual owner is identified.
   externally blocked on the owner-retained private control archive
   (`d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f`),
   preserved without waiver.
-- **Waves 2–7A (`8a38d88`, `1cf68ff`, `786f0ee`, `cc459f8`, `3b8ca48`):**
-  all implemented, verified, and independently reviewed; P07–P11 harnesses and
-  dossiers (`3b8ca48`, `71/71` unit tests, Neon R1 review) are ready for
+- **Waves 2–12 (`8a38d88`..`6d18295`):** all pre-silicon architecture, AI/LLM kernel,
+  Python SDK/compiler, ASIC RTL collateral, OpenROAD PDN-routed GDSII, SVA/Z3 formal/DV,
+  and Foundry RFQ/PPA data-room deliverables are implemented, verified, and independently
+  reviewed; P07–P11 harnesses and dossiers (`3b8ca48`, `71/71` unit tests) are ready for
   downstream hardware/approval intake.
 - **Remaining external blockers (require external hardware, vendor tools, or human authorization):**
   1. **`P01-A03` (`blocked`):** vendor XRT `hw_emu` execution (required before

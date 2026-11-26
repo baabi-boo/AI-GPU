@@ -45,16 +45,16 @@ class RealCheckoutPresiliconTests(unittest.TestCase):
         self.assertEqual(
             track_statuses,
             {
-                "TRACK-A": "not_started",
-                "TRACK-B": "in_progress",
-                "TRACK-C": "not_started",
-                "TRACK-D": "not_started",
-                "TRACK-E": "not_started",
-                "TRACK-F": "not_started",
+                "TRACK-A": "complete",
+                "TRACK-B": "complete",
+                "TRACK-C": "complete",
+                "TRACK-D": "complete",
+                "TRACK-E": "complete",
+                "TRACK-F": "complete",
             },
         )
         for track in ledger["tracks"]:
-            self.assertEqual(track["evidence"], [])
+            self.assertGreater(len(track["evidence"]), 0)
 
     def test_cli_main_passes_on_real_checkout(self):
         stdout = io.StringIO()
@@ -74,6 +74,9 @@ class PresiliconValidatorTests(unittest.TestCase):
         self.ledger = json.loads(
             (SOURCE_ROOT / "docs/project/presilicon_readiness.json").read_text(encoding="utf-8")
         )
+        for track in self.ledger["tracks"]:
+            track["status"] = "not_started"
+            track["evidence"] = []
         self.roadmap = json.loads(
             (SOURCE_ROOT / "docs/project/roadmap.json").read_text(encoding="utf-8")
         )
@@ -317,6 +320,43 @@ class PresiliconValidatorTests(unittest.TestCase):
             )
         self.assertEqual(rc, 1)
         self.assertIn("ERROR:", stderr.getvalue())
+
+    def test_rejects_non_json_or_promoted_source_present_for_rtl_verified_and_affirmative_summary(self):
+        # Raw markdown cannot be claimed as rtl_verified
+        self._add_valid_evidence(
+            "TRACK-B",
+            rel_path="docs/designs/prose_only.md",
+            payload=b"# design prose\n",
+            evidence_level="rtl_verified",
+            mark_complete=True,
+        )
+        errors_md = self._validate()
+        self.assertTrue(any("structured .json report" in err for err in errors_md))
+
+        # source_present JSON cannot be promoted to rtl_verified
+        self.ledger["tracks"][1]["evidence"] = []
+        self._add_valid_evidence(
+            "TRACK-B",
+            rel_path="docs/project/evidence/manifest.json",
+            payload=b'{"evidence_level": "source_present"}\n',
+            evidence_level="rtl_verified",
+            mark_complete=True,
+        )
+        errors_promote = self._validate()
+        self.assertTrue(any("cannot promote source_present JSON" in err for err in errors_promote))
+
+        # Affirmative physical claim in summary is rejected
+        self.ledger["tracks"][1]["evidence"] = []
+        self._add_valid_evidence(
+            "TRACK-B",
+            rel_path="docs/project/evidence/rtl_ok.json",
+            payload=b'{"evidence_level": "rtl_verified"}\n',
+            evidence_level="rtl_verified",
+            summary="Achieved silicon_measured timing closure.",
+            mark_complete=True,
+        )
+        errors_sum = self._validate()
+        self.assertTrue(any("affirmative physical/silicon level reference" in err for err in errors_sum))
 
 
 if __name__ == "__main__":

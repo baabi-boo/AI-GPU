@@ -521,6 +521,16 @@ def validate_presilicon_data(
                 )
 
             _nonempty_str(entry.get("summary"), f"{ev_where}.summary", errors)
+            summary_text = entry.get("summary")
+            if isinstance(summary_text, str) and FORBIDDEN_LEVEL_TOKEN_RE.search(summary_text):
+                if not re.search(
+                    r"(?:zero|no|not|without)\s+(?:fpga_measured|silicon_measured)|(?:fpga_measured|silicon_measured)\s*=\s*false",
+                    summary_text,
+                    re.IGNORECASE,
+                ):
+                    errors.append(
+                        f"{ev_where}.summary: affirmative physical/silicon level reference is prohibited in pre-silicon scope"
+                    )
 
             ev_level = entry.get("evidence_level")
             if ev_level in FORBIDDEN_LEVELS:
@@ -533,14 +543,32 @@ def validate_presilicon_data(
                     f"{ev_where}.evidence_level: unsupported level {ev_level!r}; "
                     f"allowed: {ALLOWED_LEVELS!r}"
                 )
-            elif req_level in ALLOWED_LEVELS:
-                if _level_rank(ev_level) < _level_rank(req_level):
-                    errors.append(
-                        f"{ev_where}.evidence_level: {ev_level!r} is below track "
-                        f"required_evidence_level {req_level!r}"
-                    )
-                elif len(errors) == before_entry_errors:
-                    valid_sufficient_evidence += 1
+            else:
+                if ev_level == "rtl_verified" and ev_path is not None:
+                    if ev_path.suffix.lower() != ".json":
+                        errors.append(
+                            f"{ev_where}.path: rtl_verified evidence must reference a structured .json report, got {entry.get('path')!r}"
+                        )
+                    else:
+                        ev_json = _load_json(ev_path, ev_where, errors)
+                        if isinstance(ev_json, dict):
+                            inner_level = ev_json.get("evidence_level")
+                            if inner_level == "source_present":
+                                errors.append(
+                                    f"{ev_where}.evidence_level: cannot promote source_present JSON artifact {entry.get('path')!r} to rtl_verified"
+                                )
+                            elif inner_level in FORBIDDEN_LEVELS:
+                                errors.append(
+                                    f"{ev_where}.path: referenced JSON artifact claims forbidden level {inner_level!r}"
+                                )
+                if req_level in ALLOWED_LEVELS:
+                    if _level_rank(ev_level) < _level_rank(req_level):
+                        errors.append(
+                            f"{ev_where}.evidence_level: {ev_level!r} is below track "
+                            f"required_evidence_level {req_level!r}"
+                        )
+                    elif len(errors) == before_entry_errors:
+                        valid_sufficient_evidence += 1
 
         if status == "complete":
             if not evidence:

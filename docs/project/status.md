@@ -1,8 +1,59 @@
 # Current project status
 
-**P06 is `complete` (`P06-A01`, `P06-A02`, and `P06-A03` accepted); `P01` remains
-`blocked` on `P01-A03`, and `P07`–`P11` remain `not_started`.** The
-[fused optimization packet](evidence/p06-fused-optimization/README.md) records
+**ADR-006 Pre-Silicon Tapeout Readiness Tracks A–F (Waves 8–12) and P06 are
+`complete`; `P01` remains `blocked` on `P01-A03` (vendor XRT `hw_emu`), and
+`P07`–`P11` remain `not_started` (unwaived physical FPGA / commercial tapeout
+gates).** See the machine-validated [pre-silicon readiness ledger](presilicon_readiness.json),
+the [`aigpu-b1` architecture datasheet](../dataroom/aigpu-b1-architecture-datasheet.md),
+and the [foundry RFQ handoff package](../dataroom/foundry-rfq-package.md).
+
+- **Wave 8 — ADR-006 & `aigpu-b1` / `aigpu-b1-tile` Target Architecture (`fe022e6`, `3f85bcc`):**
+  Added [`ADR-006`](decisions.md), [`presilicon_readiness.json`](presilicon_readiness.json),
+  [`check_presilicon.py`](../../ci/project/check_presilicon.py) (`11/11` tests PASS),
+  datacenter AI-only profiles [`profiles/aigpu-b1.json`](../../profiles/aigpu-b1.json)
+  (64 RV64 cores, 64 MiB L2, 4 TB/s modeled HBM3E @ 2 GHz, graphics stripped) and
+  [`profiles/aigpu-b1-tile.json`](../../profiles/aigpu-b1-tile.json) (4 cores, 256 KiB L2),
+  [`b1_roofline_compare.py`](../../ci/project/b1_roofline_compare.py) (`8/8` tests PASS),
+  8/8 `aigpu-b1-tile` SimX workloads PASS ([`b1_tile_simx_suite.json`](evidence/presilicon-b1-tile/b1_tile_simx_suite.json)),
+  and `build64` RV64 full-AFU `xrtsim` `demo` PASS (`2,460` instrs, `6,386` cycles,
+  [`rtl_ai_and_xrtsim_evidence.json`](evidence/presilicon-b1-tile/rtl_ai_and_xrtsim_evidence.json)).
+- **Wave 9 — Blackwell LLM Kernels, End-to-End Llama `.safetensors` LLM & ONNX/FX Compiler (`296feeb`, `304945f`, `a041e71`):**
+  11/11 native Blackwell LLM Ops v3 (`RoPE`, `SwiGLU`, `KV-cache`, `4:2 GQA`, LMEM-tiled
+  `FlashAttention`) verified on SimX & `rtlsim` (`409,824` instrs exact, `0.028%` parity,
+  `0/3,312` mismatches); 2-layer Llama `.safetensors` decoder LLM (21 binary tensors, 170
+  native GPU launches, prefill + 4-step KV-cache decode, `0` intermediate host copies)
+  verified token-for-token on SimX & `rtlsim` (`820,178` instrs exact, `0.32%` parity,
+  `max_abs_err=4.66e-7`); additive [`python/aigpu_sdk/`](../../python/aigpu_sdk/) ONNX/PyTorch
+  FX compiler (`18/18` SDK tests PASS, preserving frozen P05 `python/vortex_ai/` `29/29` PASS).
+- **Wave 10 — Fab-Handoff ASIC RTL Collateral (`0775c9a`):** Latch-free swappable SRAM
+  wrappers (`VX_sram_1rw/1r1w/2rw`) + [`sram_macro_manifest.json`](../../hw/asic/sram/sram_macro_manifest.json)
+  (`100.34 MiB` / `8,256` arrays for `aigpu-b1`; `0.516 MiB` / `131` arrays for `aigpu-b1-tile`),
+  multi-clock [`aigpu_b1.sdc`](../../hw/asic/constraints/aigpu_b1.sdc), IEEE-1801 UPF 2.1
+  [`aigpu_b1.upf`](../../hw/asic/power/aigpu_b1.upf), IEEE-1149.1 JTAG/MBIST
+  [`VX_asic_dft_top.sv`](../../hw/asic/dft/VX_asic_dft_top.sv), and CDC-clean dual-clock
+  AXI4 SoC shell [`VX_asic_soc_top.sv`](../../hw/asic/soc/VX_asic_soc_top.sv) (independent
+  Neon RTL review findings resolved and re-verified).
+- **Wave 11 — OpenROAD PDN-Routed 0-DRC GDSII Physical Proof & Silicon-Grade DV/Formal (`db78dc8`, `1e844b6`):**
+  Yosys 0.69 + OpenSTA 3.1.0 synthesis matrix (`VX_tcu_fedp_tfr` `1,071.83 MHz` ASAP7) and
+  4 real OpenROAD ORFS PDN-routed 0-DRC KLayout-verified GDSII layouts
+  ([`phys_results.json`](../../hw/asic/phys/phys_results.json), `foundry_signoff: false`:
+  `VX_asic_soc_top` + `fakeram7_256x32` `16,866` PDN segs / `1,966.66 MHz` `clk_core` /
+  `1,061.01 MHz` `clk_axi` / `12.66 MB` GDS; `VX_tcu_tfr_mul_f16` `2,958` PDN segs /
+  `1,079.53 MHz`; `VX_asic_dft_top` ASAP7 & Nangate45); plus 70 active SVA monitors,
+  4/4 Yosys+Z3 formal proofs (`dft_tap_k_induction` bound directly to `dut.tap_state_q` via
+  `read_slang` with 4/4 DUT mutation negative controls), and Verilator dual-clock stress
+  coverage (`96.9%` line / `89.8%` branch / `83.5%` toggle, `0` SVA failures;
+  [`dv_results.json`](../../hw/dv/dv_results.json)).
+- **Wave 12 — Investor & Foundry RFQ Data Room (`6d18295`):** Consolidated
+  [`aigpu-b1-architecture-datasheet.md`](../dataroom/aigpu-b1-architecture-datasheet.md),
+  [`foundry-rfq-package.md`](../dataroom/foundry-rfq-package.md), parametric PPA model
+  [`aigpu_ppa_model.py`](../../ci/project/aigpu_ppa_model.py) (`7/7` tests PASS; N4P est.
+  `244.40 mm²` / `296.2 W`, `28.49%` of reticle), and automated clean-IP RTL exporter
+  [`export_clean_rtl_handoff.py`](../../ci/project/export_clean_rtl_handoff.py) (`6/6` tests
+  PASS; `443` clean Apache-2.0/BSD files, `101,282` RTL lines, `0` proprietary violations).
+
+**Prior P06 closure (`d46934a`) and Waves 2–7A summary (preserved below):**
+The [fused optimization packet](evidence/p06-fused-optimization/README.md) records
 [`P06-A02`](evidence/p06-fused-optimization/acceptance-optimization.json) and
 [`P06-A03`](evidence/p06-fused-optimization/acceptance-resources.json) at
 `rtl_verified` scope alongside the untouched

@@ -774,6 +774,13 @@ def validate_project(root):
             if not isinstance(assets, list) or {"path": IMAGE_PATH, "sha256": IMAGE_SHA256} not in assets:
                 errors.append("roadmap.protected_assets: original README image protection is missing or changed")
         _validate_links(root, errors)
+        presilicon_path = root / "docs/project/presilicon_readiness.json"
+        if presilicon_path.exists():
+            try:
+                from ci.project import check_presilicon as _check_presilicon
+            except ImportError:
+                import check_presilicon as _check_presilicon
+            errors.extend(_check_presilicon.validate_presilicon(root=root))
     except (OSError, RuntimeError, ValueError, TypeError) as exc:
         errors.append(f"project validation could not complete ({type(exc).__name__}: {exc})")
     return errors
