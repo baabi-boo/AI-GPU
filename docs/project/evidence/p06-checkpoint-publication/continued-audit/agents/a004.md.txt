@@ -1,0 +1,47 @@
+# Agent 004 — transactional JSON checkpoint implementation
+
+## Ownership and source
+
+- Assignment: production edits only in `ci/project/p02_matrix.py`; no commits or pushes.
+- Repository: `/tmp/ai-gpu-2bfab0261c05/repo`.
+- Starting revision: `858090410a992756808256ace90d36b9b3b88dd3`.
+- Inspected `AGENTS.md`, project status, roadmap, backlog, acceptance policy, and bug-fix discipline before editing.
+- Current implementation SHA-256: `e652ba17b6f97a5945d2753ee822e67e73f19a5fb3c79d18c4d21b21eb37cc7a`.
+- Confirmed `ci/project/p06_qualified_warm_proof.json` contains exactly 69 measurement source paths and excludes `ci/project/p02_matrix.py`.
+
+## Reproduced cause
+
+On the original implementation, injected `os.fsync` failure left the caller-created `report.json.tmp` in place. The old committed report bytes survived, but a subsequent explicit failure-receipt save raised `FileExistsError` before writing. The write helper lacked failure cleanup, making a transient checkpoint failure persistent across the caller's existing finalization path.
+
+## Implementation
+
+`_write_json` retains the exact existing JSON encoder, trailing newline, 16 MiB pre-open bound, function signature, exclusive `.tmp` name, and mode subject to the existing umask. It adds:
+
+1. A directory descriptor anchoring creation, lookup, replacement, and cleanup to one parent directory.
+2. Exclusive `os.open` temporary creation and the created file's device/inode identity.
+3. A live locally owned file descriptor through publication or cleanup; `os.fdopen(..., closefd=False)` keeps descriptor ownership unambiguous even when wrapping or buffered close fails.
+4. One write, one explicit flush, one fsync, and buffered close before publication. A short write fails instead of publishing a truncated checkpoint.
+5. A non-following temporary-entry identity check before `os.replace`.
+6. Failure cleanup only when the temporary entry still matches this call's created inode; pre-existing temporaries are neither opened for writing nor deleted, and observed foreign replacements are not published or deleted.
+7. First-exception retention across `BaseException`, including `KeyboardInterrupt`, buffered cleanup, unlink cleanup, and both descriptor close attempts. Each owned descriptor receives one close attempt.
+
+No checkpoint retry, native retry, fallback publication, new production module, changed proof, golden, threshold, acceptance state, or native workload is introduced.
+
+## Tiny direct verification
+
+A source-root inline Python smoke imported the real helper and used real temporary files with controlled fault injection. All eight checks passed:
+
+- Successful output exactly matches the existing `json.dumps(..., indent=2, sort_keys=True, allow_nan=False)` encoding plus newline.
+- Fsync `OSError`: same exception object returned, previous final bytes preserved, owned temporary removed, later explicit save succeeds.
+- Fsync `KeyboardInterrupt`: same preservation and cleanup behavior.
+- Replace `OSError`: same preservation and cleanup behavior.
+- Pre-existing temporary: `FileExistsError`, temporary and previous final bytes untouched.
+- Foreign temporary replacement during fsync: rejected before publication; foreign bytes and old report untouched.
+- Stream-wrapping failure: same exception, owned temporary removed, `/proc/self/fd` count unchanged.
+- Parent directory rename/replacement during fsync failure: cleanup affected only the anchored original directory; replacement directory's report and temporary remained untouched.
+
+`git diff --check` passed. Independent agents own persistent direct-fault and caller-integration regression tests; this smoke is development evidence only, not full governance qualification or native execution.
+
+## Limits
+
+Cleanup remains best effort if stat/unlink itself fails, filesystem access is lost, or ownership cannot be established. Preserving a pre-existing or observed foreign temporary deliberately keeps exclusive-name collision behavior. Directory-relative stat followed by replace/unlink is not an atomic compare-and-act operation; this implementation does not claim protection against a malicious concurrent writer racing between those operations. It does not fsync the parent directory, promise crash durability, tolerate uncatchable kills, or claim reliable closeout under repeated interruptions. An error reported after a successful replacement can leave the newly committed report in place. An initial fstat failure leaves the temporary untouched because its owned identity could not be established safely.

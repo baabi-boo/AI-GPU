@@ -1,0 +1,47 @@
+# A077 — Frozen qualified-warm performance decision
+
+## Scope and result
+
+Read-only review of published source `30b2e8ca69fba47646392c0cf6650cbb75155843` (tree `548b85370e3d13119730b5a30d1ec388d3e141a9`) against base `858090410a992756808256ace90d36b9b3b88dd3`. No loosened performance predicate, population, numerical condition, or resource bound was found in the continuation. Fifteen directly relevant contracts, proof, analyzers, record readers, admission/orchestration files, replay readers and analyzer test source are byte-identical to the base and published commit. File identities and the complete changed-path inventory are retained in `a077-performance-identities.json`. The checkout was clean during inspection.
+
+This was source/byte inspection only: no tests, replay, native process, GPU workload, build, baseline modification, repository edit, commit or push was performed.
+
+## Frozen population and comparisons
+
+The experiment has FP16 and BF16, reference `per_operation` and candidate `reusable_single_tile`, and pairs 0–5 per format. Pair 0 is warmup; pairs 1–5 are measured. Every policy batch uses a fresh process and 33 operations: one excluded prime followed by 32 timed operations. This yields 24 processes, 792 launches and 25,344 checked FP32 words, including four warmup processes. The measured population is 20 processes, 640 operations, 20,480 checked words and 327,680 useful FLOPs. All 24 primes and the four warmup batches are excluded from comparisons. The order, poison sequence, no-replacement policy, no outlier removal and no optional stopping remain frozen. [Sources: `ci/project/p06_warm_contract.json:690–750`; `ci/project/p06_qualified_warm_analyze.py:43–76`.]
+
+For each format, let Rᵢ and Cᵢ be the sums of the 32 measured reference/candidate host intervals in pair i. Let Mᵣ/M꜀ be the middle sorted totals across the five pairs. The conjunction is:
+
+1. `100 × M꜀ <= 95 × Mᵣ` — at least a 5% median reduction, inclusive at the exact boundary.
+2. `Cᵢ <= Rᵢ` for every measured pair i = 1…5.
+3. Candidate modeled active-cycle count `<=` reference count for every measured pair.
+
+All three must hold in **both** formats. A favorable median cannot hide a slower pair or a higher paired cycle count. Each batch mean is its exact integer total divided by 32; therefore comparing totals is equivalent. Decisions use integer cross-products, not rounded displayed ratios, variance or standard deviation. Min/max/median/population standard deviation are descriptive. [Sources: `ci/project/p06_warm_analyze.py:87–107,203–234`; `ci/project/p06_warm_contract.json:944–966`; `ci/project/p06_qualified_warm_analyze.py:57–85`.]
+
+The primary interval begins immediately before submit and ends after wait, exact comparison, explicit operation close and success checks; it includes fixed allocation-observer bookkeeping. Packing, context creation, counter/memory queries, retention copying, serialization and owner close are excluded. Supervisor duration is separate and is never subtracted or used to correct the primary measurement. These are instrumented host times and modeled cumulative batch cycles, not physical GPU throughput, latency, power or energy. [Sources: `ci/project/p06_warm_contract.json:915–943`; `ci/project/p06_qualified_warm_analyze.py:79–86`.]
+
+## Validity and resource guards precede arithmetic
+
+The arithmetic helper requires an exact source revision, exactly the planned 24 passing processes in order, both common format builds, matching per-format build identities, valid execution identities and unique raw transcript hashes. It requires 33 positive integer intervals whose final 32 exactly equal the timed list; booleans are rejected. Exactly one available `cycles` delta must be a positive integer below 2⁶⁴. These checks do not authenticate input dictionaries. [Source: `ci/project/p06_qualified_warm_analyze.py:16–56,83`.]
+
+The complete reader independently reconstructs dependency evidence and native evidence using external source/report/receipt/proof pins and pinned diagnostic/control originals; only after `replay.run()` succeeds does it invoke arithmetic. The inherited replay checks command/population inventories, recomputed complete counts, all retained members and source stability. Thus synthetic caller summaries cannot substitute for the original evidence. [Sources: `ci/project/p06_qualified_warm_replay.py:237–272`; `ci/project/p06_dependency_native_replay.py:642–707`.]
+
+Every operation requires shape 8×4×8, the prescribed poison, exactly 32 lowercase-hex FP32 output words equal to the fixed expected words, zero mismatches, correct dispatch, successful submit/wait/close and exact ownership accounting. A process summary must account for 33 operations and 1,056 checked words. Reusable addresses must remain consistent; final allocations/releases balance; observed simulator capacity is constant; idle/final memory returns to the prescribed snapshots. Timing positivity, lifetime/counter reconstruction, pending reads, reset generations, run records and destruction are separately checked. [Sources: `ci/project/p06_warm_records.py:82–139,184–215`; `ci/project/p06_qualified_warm_records.py:35–79`.]
+
+Bounds remain: at most two build jobs, one managed thread, 4 GiB peak RSS, at least 15 GiB free disk, 16 MiB command logs, at most 1,800 seconds/build and 180 seconds/run, and a 90-minute native budget. Replay demands the prescribed budget, initial available memory at least 4 GiB, disk reserves at source/tools/work/output before and after, passing commands with successful cleanup, and RSS/log values within their caps. Configure time is at most 120 seconds and no greater than the build limit. The native deadline is polled; bounded termination/finalization may finish later. The qualified hosted workflow's surrounding 180-minute provisioning/closeout timeout does not replace the native budget. [Sources: `ci/project/p06_warm_contract.json:968–976`; `ci/project/p06_managed_preflight_replay.py:184–208,334–350`; `ci/project/p06_qualified_warm_run.py:68,439–475`; `.github/workflows/p06-qualified-warm.yml:22–23`.]
+
+## Outcome meanings
+
+| Evidence/decision state | Correct interpretation |
+| --- | --- |
+| Invalid, incomplete, missing, reordered, failed or inconsistent evidence | Reconstruction rejects it; CLI failure reports qualified flags false and returns 1. It is not a completed hypothesis result. |
+| Complete valid qualified original, at least one comparison false | Replay may pass/return 0 while `hypothesis_evaluation` is `not_satisfied`. All samples and failed comparisons remain recorded. |
+| Complete valid qualified original, every comparison true | `hypothesis_evaluation` is `satisfied`, but `performance_acceptance`, `phase_acceptance` and `acceptance_claimed` remain false. |
+
+“Not accepted” is an interpretation of those false acceptance claims, not an additional analyzer enum. Replay success establishes the scoped retained consistency; it neither authenticates origin by consistency alone nor executes retained/native code. [Sources: `ci/project/p06_qualified_warm_replay.py:41–44,333–359`; `ci/project/p06_qualified_warm_analyze.py:69–86`.]
+
+## Why automatic green/checkpoint tests cannot grant acceptance
+
+The automatic `P06 Warm Workspace` workflow invokes the legacy `p06_warm_execute.py`, whose result keeps the hypothesis unevaluated and acceptance false. Its independent ordinary analyzer always leaves full hypothesis evaluation **blocked**: the historical RV64 MPM route drops the high half, and plausible low-word comparisons cannot establish an absolute no-wrap bound. Retained low words cannot be upgraded by relabeling source or asserting qualification. The qualified route is a separate explicit-dispatch workflow. Identical numeric workload counts do not make these evidence populations interchangeable. [Sources: `.github/workflows/p06-warm-workspace.yml:1–6,190–197`; `ci/project/p06_warm_execute.py:60,147–148`; `ci/project/p06_warm_analyze.py:71–83,237–263`; `.github/workflows/p06-qualified-warm.yml:1–4,17–23`.]
+
+The source diff changes `_write_json` publication/ownership cleanup and launcher direct-child SIGTERM forwarding/reaping. The writer retains its 16 MiB serialized-checkpoint limit; neither change introduces benchmark selection, new comparisons, altered numerical references or a success override. Current documentation explicitly limits checkpoint tests to filesystem/consumer behavior, preserves frozen inputs/predicates and keeps the qualified experiment unstarted with P06-A02/A03 open. Such tests supply no original warm measurements. [Sources: `ci/project/p02_matrix.py:92–150`; `python/vortex_ai/launch.py:47–100`; `docs/designs/checkpoint_publication_v1.md:56–67`; `README.md:39–57`; `docs/project/status.md:13–47`; the inspected base-to-published diff and identity receipt.]

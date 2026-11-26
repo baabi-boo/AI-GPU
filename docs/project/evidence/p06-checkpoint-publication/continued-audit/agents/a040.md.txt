@@ -1,0 +1,89 @@
+# Agent 040 — qualified-warm archive boundary audit
+
+## Scope and result
+
+Read-only inspection at `a693d6f8828e4e10b5374db7fef8c727aa69d34e` of
+`ci/project/p06_qualified_warm_pack.py`, the inventory/publication boundary in
+`p06_qualified_warm_encrypt.py`, the plaintext retention reader in
+`p06_qualified_warm_retention.py`, the hosted caller and the explicit upload
+paths in `.github/workflows/p06-qualified-warm.yml`. Relevant existing packaging
+and retention tests were inspected, not executed. Concurrent root documentation
+edits were left untouched.
+
+**No concrete supported-contract defect found** in the assigned path traversal,
+link handling, member identity, partial/complete classification or public-output
+boundary. This is a source audit, not a new execution or qualification result.
+
+## Evidence
+
+### Input paths and archive members
+
+Packaging `_canonical` requires absolute canonical literals and delegates member
+syntax to the same pinned archive reader used by complete qualified replay.
+`_directory` opens every ancestor with `O_DIRECTORY | O_NOFOLLOW`.
+`_inventory` uses no-follow child metadata and accepts only directories or
+single-link regular files. `_read_file` checks the observed descriptor and named
+path before and after bounded reads, including size, inode, timestamps and hash.
+The selected roots and output cannot lexically overlap the source or each other.
+
+Archive names are built from validated prefixes and member names; exact duplicate
+member names are rejected in inventory. `_write_zip` emits regular-file metadata
+only and enforces member, expanded, central-directory and compressed bounds.
+`_verify_zip` then reopens the result through the pinned reader, requires the
+exact sorted member population and rehashes each member against its original.
+The source inventory is repeated before publication. These checks reject
+accidental mutation or malformed copied archive bytes rather than silently
+publishing a complete receipt.
+
+The encryption inventory independently rejects repeated filesystem identities,
+case-fold aliases, noncanonical names, links and special files. Its decrypted
+retention reader requires canonical JSON, unique/fold-unique manifest names,
+declared directory parents, exact member headers and ordering, exact padding and
+EOF, and both per-file and whole-archive hashes. It reads bounded file ranges
+without extracting arbitrary paths.
+
+### Complete versus partial retention
+
+`package_success` requires the caller's explicit writers-finished assertion,
+finished/cleaned producer records, exact helper population and retained bytes,
+successful stage order and logs, and matching report hashes. It creates the
+declared two-root original plus a separate evidence envelope. The package itself
+still disclaims complete semantic replay, origin authentication and acceptance.
+
+`package_partial` preserves only observed selected bytes under
+`partial-attempt/`. Missing or malformed reports remain unresolved, missing roots
+remain listed, and `complete_replay_original_created` stays false. Failure paths
+retain incomplete bytes and attempt a private failure receipt. Publication uses
+no-clobber links and ownership-aware withdrawal; if the owned final receipt
+cannot be withdrawn, its referenced verified archive names remain intact.
+
+### Private/public separation
+
+Packaging creates owner-only output directories and files and labels every raw
+artifact PRIVATE. The encryption stage streams a tar into the selected trusted
+age process; it does not create a plaintext tar on disk. Names and raw diagnostics
+remain in the encrypted manifest or private sibling directory. The public summary
+contains the fixed schema, revision, outcome, counts, ciphertext size and digest.
+
+Hosted closeout selects complete or partial packaging from the actual native
+outcome, requires observed writer/cleanup completion, and independently checks the
+public directory's exact two filenames, summary, ciphertext bytes and terminal
+record before advertising encrypted retention readiness. The workflow upload
+enumerates only `public/qualified-warm-retention.tar.age` and
+`public/encryption-summary.json`; it does not upload the parent retention tree,
+raw originals, private diagnostics or private control delivery.
+
+## Coverage and limits
+
+Existing source tests specifically cover traversal and symlink ancestors, linked
+or special inputs, duplicate ZIP members, partial/malformed producer records,
+mutation during copy, output collisions and publication interruption, private
+permissions and sanitized CLI output, raw tar header overrides, duplicate or
+reordered members, hash mismatch and undeclared inner payloads. Their presence
+was inspected without adding their counts to the parent's focused run.
+
+Writer completion remains a caller assertion plus observations, not hard process
+or filesystem exclusion. Malicious same-user races, abrupt process death and
+persistent filesystem errors are explicitly outside guaranteed recovery. No
+private execution inputs were accessed, no upload was performed, and no native
+run, build, full test suite, repository edit, commit or push was performed.

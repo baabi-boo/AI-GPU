@@ -1,0 +1,59 @@
+# A057 — source preservation and recovery audit
+
+## Result
+
+The temporary checkout and all five incremental bundles pass the assigned
+read-only preservation checks. At the observation completed at
+**2026-11-26 07:16:48 UTC**, local `master` was
+`9f369a579ca764800b22eedd15e09795f09615da`, while a live
+`git ls-remote origin refs/heads/master` still returned published base
+`858090410a992756808256ace90d36b9b3b88dd3`. This observation establishes local
+commit/back-up completion, **not publication of the new commits**. A later push
+requires its own readback.
+
+## Checkout and ancestry
+
+- Main checkout: `/tmp/ai-gpu-2bfab0261c05/repo`.
+- Git/common directory is its local `.git`; neither it nor its object directory
+  is a symlink. The object store contains no symlinks.
+- `objects/info/alternates` is absent; neither
+  `GIT_ALTERNATE_OBJECT_DIRECTORIES` nor `GIT_OBJECT_DIRECTORY` is set.
+  No alternate-object dependency on an earlier workspace was found.
+- `git merge-base --is-ancestor 8580904… HEAD` and
+  `git fsck --connectivity-only --no-dangling` both returned **0**.
+- Five continuation commits descend from the base: `ba88572`, `93bb3f0`,
+  `a693d6f`, `d31e887`, and `9f369a5`.
+- Index and worktree were clean at both observations; HEAD remained unchanged.
+- The repository is **shallow**. This audit does not claim complete project
+  history or a standalone full-history backup.
+
+## Bundle checks
+
+Every bundle in `/workspace/scratch/2bfab0261c05/checkpoints` returned **0** from
+`git bundle verify`, advertised the expected `refs/heads/master`, and named the
+same prerequisite: full base `858090410a992756808256ace90d36b9b3b88dd3`.
+These are incremental continuation backups; restoring one requires that base.
+
+| Bundle | Advertised tip | Bytes | Verify |
+|---|---|---:|---|
+| `ai-gpu-checkpoint.bundle` | `ba88572` | 8,471 | pass |
+| `ai-gpu-checkpoint-v2.bundle` | `93bb3f0` | 17,337 | pass |
+| `ai-gpu-checkpoint-v3.bundle` | `a693d6f` | 18,269 | pass |
+| `ai-gpu-checkpoint-v4.bundle` | `d31e887` | 23,446 | pass |
+| `ai-gpu-checkpoint-v5.bundle` | `9f369a5` | 1,840,126 | pass |
+
+The latest bundle advertises the complete current source HEAD. Its SHA-256 is
+`142cc28963445f115c68f0115f3f4a44cefafaed71e7aa6d2d795933ea038476`.
+The previously saved patches and pending-evidence archive remain present.
+
+## Resource observation
+
+`df -B1` reported **3,935,973,376 bytes available on `/tmp`** and
+**401,670,144 bytes available on `/workspace`**. `free -b` reported
+**6,486,482,944 bytes available RAM**, with no swap. These are instantaneous
+observations. Temporary storage has room for this source continuation, but
+neither observed filesystem meets the unchanged 15 GiB native-experiment disk
+reserve. No native admission or execution is claimed.
+
+No repository mutations, deletions, fetches, commits, pushes, builds or tests
+were performed. Only this scratch audit report was written.

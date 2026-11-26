@@ -1,0 +1,27 @@
+# Agent 021: checkpoint ownership test review
+
+Reviewed revision `93bb3f0`, limited to `ci/project/test_checkpoint_ownership.py` and the corresponding `p02_matrix._write_json` implementation. Read the repository AGENTS instructions. No repository files were changed and no passing suite was repeated.
+
+## Finding: failing descriptor-release assertions leave descriptors open
+
+**Severity: low; test failure isolation.** At `test_checkpoint_ownership.py:159–174`, `record_open` retains the two descriptor numbers, but neither a `finally` block nor a registered cleanup releases a descriptor if `assert_closed` fails. `setUp` only registers `TemporaryDirectory.cleanup` (lines 25–27), which removes directory entries without releasing those open descriptors. A regression in the writer's close loop therefore makes this test both fail and leak its owned descriptors into the remaining tests. The first failed assertion also prevents checking the second descriptor for that subcase.
+
+A focused, in-memory probe wrapped the existing writer and suppressed its `os.close` calls only while it ran. It executed only `test_fdopen_failure_releases_owned_descriptors`, then inspected descriptors after unittest had run the test's registered cleanup. Result:
+
+```text
+subtest_failures: 2
+errors: 0
+owned_descriptors_still_open_after_test_cleanup: 4
+temporary_root_removed: True
+```
+
+The probe explicitly closed all four descriptors afterward. This demonstrates failure-path leakage in the test; it does not claim the repaired writer currently leaks. Add a local resource guard around these assertions, retaining each descriptor's identity and using the saved real close function to release any still-owned live descriptor without accidentally closing a reused number.
+
+## Checks with no finding
+
+- Foreign regular files and symlinks are created before the owned temporary, then moved with real `os.replace`. Their existing live inodes make replacement deterministic; the prepublication hook also explicitly checks distinct identity. The cleanup hook confirms the owned descriptor remains open while it replaces the directory entry.
+- Assertions inside the cleanup `os.stat` hook can be swallowed by the writer's best-effort cleanup. However, `observed["replaced"]` is assigned only after those assertions, and the test checks it after leaving the patch; this prevents those swallowed assertions from silently passing the test.
+- All process-wide `os` patches use context managers. Postconditions and registered temporary-directory cleanup run after patch restoration, including assertion-failure paths.
+- The close-failure test forces reuse with `dup2` from a live sentinel. It checks both the number and uniqueness of close calls, and verifies the reused descriptor's identity. Its `finally` uses the saved real close function outside the patch and runs even if a postcondition fails. The sentinel's own context manager also closes normally.
+
+No concrete current false positive was found in those inode-replacement, patch-lifetime, or forced-reuse checks.

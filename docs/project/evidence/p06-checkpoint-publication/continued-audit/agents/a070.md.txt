@@ -1,0 +1,98 @@
+# A070 — Managed Preflight Replay CI scope
+
+## Result and inspected source
+
+**No concrete supported-contract integration or source-binding blocker found.**
+This is a read-only source and retained-input audit of local commit
+`9f369a579ca764800b22eedd15e09795f09615da`. It is not a CI-status observation or
+a new replay. The companion `a070-preflight-replay-identities.json` records
+nine source identities and six direct retained-input SHA-256 checks. All nine
+files match that commit, all six input hashes match their literal workflow pins,
+and source bytes remained stable. Only `ci/project/p02_matrix.py` differs from
+base `858090410a992756808256ace90d36b9b3b88dd3` within the recorded set.
+
+## What a successful workflow establishes
+
+The workflow replays the fixed historical successful archive from run
+`45085300171`, source `57248e73dfce4ae2d21d2cbdb82c3953eef2e3db`, and requires
+the fixed failed archive from run `45084009157`, source
+`8756f40029e59c87546fa22f4da33acd4e5d8e02`, to remain rejected. Both original
+ZIPs and both corresponding inventory/derivation pairs have independently
+selected literal digests. Current hosted reader identity is retained separately
+from the original producer identity. The job runs on Linux CPython 3.12 and
+retains its current workflow bytes, input observations and logs, including on
+failure. Sources: `.github/workflows/p06-managed-preflight-replay.yml:62–149,
+150–239`.
+
+The successful original represents exactly **four SimX processes, 132 native
+launches and 4,224 checked words**: FP16/BF16 crossed with the two workspace
+policies, 33 launches and 1,056 checked words per process. It also accounts for
+16 snapshots, 528 available queries, 1,056 half replies and 1,188 DCR reads.
+Replaying those observations adds **zero native executions**. The failed
+original completed no managed processes; CI requires exit 1, empty stderr and
+the exact typed failure object with reason `report.outcome: value differs`.
+An unrelated error cannot satisfy that control. Sources:
+`ci/project/p06_managed_preflight_contract.py:37–62`;
+`.github/workflows/p06-managed-preflight-replay.yml:150–196`;
+`docs/project/evidence/p06-managed-preflight-replay/README.md:17–25,61–83,139–154`.
+
+The workflow also runs the nonempty dedicated replay/export/derivation/generated
+test groups. Its green result is not a substitute for the current revision's
+separate complete strict Project Governance result. No number of methods or
+zero-skip execution result is inferred from the workflow source alone.
+
+## Complete archive and source joins
+
+The reader requires the original report to be `finished`, `pass`, and fully
+complete, with exactly 35 command envelopes, two format variants and four
+processes. It re-derives complete counts from process observations, closes the
+raw-log, retained-file, managed-member and whole hosted-archive inventories,
+and verifies stable source/tool/dependency records. Partial, failed or extra
+members cannot be relabeled as the successful complete original. Sources:
+`ci/project/p06_managed_preflight_replay.py:211–282,411–483`;
+`ci/project/p06_managed_preflight_replay_hosted.py:109–175`.
+
+The archive digest, producer revision, source inventory and derivation receipt
+are explicit external inputs. Every historical source body is compared with
+the selected inventory; the separately pinned derivation joins repository/blob
+membership records, retained source and generated/build inputs. Retained
+commands, paths, binaries and Python source are treated as data. The current
+trusted reader and generator are imported only from their expected local paths,
+and their identities are checked before and after reading. Sources:
+`ci/project/p06_managed_preflight_replay.py:70–140,240–282,486–511`;
+`ci/project/p06_managed_preflight_sources.py:2–7`;
+`ci/project/p06_managed_preflight_derivation.py:14–62`.
+
+The hosted-envelope reader binds the recorded original `GITHUB_SHA`, repository,
+job, event/ref shape, run/attempt syntax, workflow bytes, interpreter,
+preparation, cache identities and terminal execution summary. It explicitly
+returns **`origin_authenticated: false`**. These consistency joins do not
+authenticate GitHub origin or replace independent provider intake; the workflow
+does not fetch fresh provider attestations for the historical producer.
+Sources: `ci/project/p06_managed_preflight_replay_hosted.py:109–175`;
+`ci/project/p06_managed_preflight_replay.py:93–104`.
+
+## Current repair interaction and claim limits
+
+`p02_matrix.py` remains in both the historical runner helper inventory and the
+current trusted reader inventory. Its changed current bytes are reported as
+current reader identity; they do not replace old retained helper bytes, which
+remain checked against the historical external source expectations. No new
+project helper import was introduced by the repair. The replay CLI writes its
+own optional receipt with exclusive `open("x")`; it does not use the repaired
+`_write_json` publication path. This workflow therefore does not establish the
+new checkpoint fault-recovery behavior or installed launcher SIGTERM behavior.
+Sources: `ci/project/p06_managed_preflight_replay.py:70–91,108–125,253–255,514–546`.
+
+Replay output explicitly keeps `native_execution="not_run"`,
+`retained_code_executed=false`, dependency compilation provenance false, and
+all seven qualification/warm/phase/performance claims false. Stable retained
+payload identities do not prove fresh dependency compilation; absent model
+object bodies cannot be independently rehashed. A synthetic or consistently
+forged packet remains synthetic or forged. The four-process original and its
+inert replay cannot qualify the separate complete warm experiment or close
+P06-A02/A03. Sources: `ci/project/p06_managed_preflight_replay.py:93–104,467–483`;
+`docs/project/evidence/p06-managed-preflight-replay/README.md:125–137`.
+
+No test bodies, builds, native workloads, replay commands, remote queries,
+repository edits, commits or pushes were performed by this audit.

@@ -1,0 +1,106 @@
+# A082 — Governance retention and replay bounds
+
+## Conclusion
+
+**No concrete current source-size, member-count, discovery-size, or collector-input bound regression was found.** The published source adds 5,148,527 committed blob bytes and 88 tracked entries, all comfortably inside the unchanged source budgets. The governance original has a fixed 12-member layout containing receipts, discovered identities, events, and logs; it does not embed a copy of the source checkout or recursively include evidence ZIPs.
+
+This is a **read-only static/retained-metadata audit**, not a new full-suite, source-binder, canonical-collector, replay, native, or build execution. The final revision’s actual event/log/archive sizes, source-binding elapsed time, collector time/memory, and successful qualification remain observations for the current CI original and its independently bound replay. No limits were raised or proposed.
+
+## Exact source and audit identity
+
+- Published source: `/tmp/ai-gpu-2bfab0261c05/published-source`.
+- Audited HEAD: `30b2e8ca69fba47646392c0cf6650cbb75155843`.
+- Audited tree: `548b85370e3d13119730b5a30d1ec388d3e141a9`.
+- Explicit base: `858090410a992756808256ace90d36b9b3b88dd3`.
+- Diff: 97 paths, comprising 88 additions and 9 modifications. Seven additions are canonical `ci/project/test_*.py` modules; the committed `.py` inventory grows by 23 because retained readers/audit scripts also count as Python source.
+- HEAD, tree, empty porcelain status, and SHA-256 of all eight selected workflow/runner/replay definition files were identical before and after this audit. Each of those eight files is also byte-identical to the base revision. No source files were edited.
+- Detailed observations, hashes, constants, and qualifications: `/tmp/ai-gpu-2bfab0261c05/a082-governance-retention.json`.
+
+## What the original retains
+
+The workflow creates its output beneath `RUNNER_TEMP/project-governance`, outside the checkout. The final `actions/upload-artifact@v4` step runs with `if: always()` and retains only `logs`, `environment/environment.json`, and `run`; retention is 30 days with compression level 6. Failure output can therefore be retained without being mistaken for passing qualification. Sources: `.github/workflows/project-governance.yml:165–244`; strict runner fresh-output setup and receipt/event writes in `ci/project/governance_run.py:755–835`.
+
+The replay requires exactly the 12 names below, not merely a subset within the generic ZIP member cap. New test modules affect the canonical discovery record, their actual event ledger, and logs. All new tracked evidence bytes affect source binding, but their contents are not copied into the governance original. The original’s source receipts retain revision/tree and aggregate tracked/index/worktree identities; a clean, independently supplied exact-revision checkout supplies the source for replay. Sources: `ci/project/governance_replay.py:25–42,160–189`; `ci/project/governance_run.py:602–643`; `ci/project/governance_replay_source.py:253–316`.
+
+### Exact retained member budgets and the prior original
+
+This table measures the **base** original only, `/tmp/ai-gpu-2bfab0261c05/base-governance/run-45762183368-attempt1.zip`; it does not claim current CI has produced the same sizes.
+
+| Member | Base expanded bytes | Current fixed member limit, bytes |
+|---|---:|---:|
+| `logs/cmake-install.log` | 446 | 1,048,576 |
+| `logs/cmake-requirements.txt` | 93 | 256 |
+| `logs/cmake-version.log` | 91 | 65,536 |
+| `logs/environment.log` | 189 | 16,384 |
+| `logs/governance.log` | 991,288 | 268,435,456 |
+| `logs/source-revision.txt` | 41 | 65 |
+| `environment/environment.json` | 46,350 | 1,048,576 |
+| `run/discovered.json` | 649,843 | 33,554,432 |
+| `run/events.jsonl` | 19,791,689 | 33,554,432 |
+| `run/started.json` | 7,380 | 33,554,432 |
+| `run/summary.json` | 15,342 | 33,554,432 |
+| `run/unittest.log` | 990,785 | 134,217,728 |
+
+The strict runner’s internal log cap is 128 MiB; exceeding it prevents a passing summary. The outer workflow log has its own 256 MiB replay cap. Record and event budgets are independent of compression: a highly compressible ledger still must fit its 32 MiB expanded-byte limit. Sources: `ci/project/governance_run.py:34–36,715–724,728–747,789–795`; `ci/project/governance_replay.py:25–42,129–144`.
+
+## Source growth versus fixed budgets
+
+The measurements below use inert `git ls-tree` metadata for committed blobs and gitlinks. They do not execute the production timed source binder. Blob totals include committed evidence ZIPs and other binary files.
+
+| Measurement | Base | Published source | Existing bound |
+|---|---:|---:|---:|
+| Tracked entries | 8,295 | 8,383 | 32,768 |
+| Committed blob bytes | 529,054,119 | 534,202,646 | 1,073,741,824 |
+| Largest committed blob, bytes | 62,821,534 | 62,821,534 | 134,217,728 |
+| Gitlinks | 5 | 5 | 32 |
+| `git ls-tree -r -z` bytes | 928,657 | 940,453 | 4,194,304 per Git-command output |
+| Tracked regular `.py` entries | 912 | 935 | Part of the overall source inventory |
+
+The total growth is 5,148,527 bytes, less than 1% of the base total. The largest blob remains `tests/opencl/spmv/Dubcova3.mtx`, Git blob `a38ddc38f1713f6513b76ab05e2a6e965413fe65`. Current committed blob bytes leave 539,539,178 bytes below the total source cap. Gitlinks are bound as pinned identities; this is not recursive native/submodule qualification.
+
+Runner and replay both enforce 32,768 source entries, 128 MiB per source file, 1 GiB total materialized source bytes, 32 gitlinks, a 4 MiB output limit per Git command, and a 30-second source-binding deadline. Every tracked materialized blob/symlink participates, including the additional retained evidence. The inventory budget does not disappear because a file is unrelated to Python. Conversely, 8,383 source entries do not become 8,383 ZIP members. Sources: `ci/project/governance_run.py:37–43,452–497,602–643`; `ci/project/governance_replay_source.py:20–25,216–250,253–316`.
+
+**Remaining timing qualification:** a static byte count cannot prove a 30-second source-binding deadline will be met on a particular runner. The small byte increase supplies no evidence for changing that deadline. Its actual enforcement remains part of the original run and replay.
+
+## Canonical discovery and collector growth
+
+The retained A050 discovery record enumerates 5,547 unique ordered identities, 32 more than the base’s 5,515, with no removals and preserved relative order of existing IDs. This audit compared all 549 Python-file hashes in that record against the published source: every file matched. This connects the retained discovery observation to unchanged code bytes without importing or executing them again. Record: `/tmp/ai-gpu-2bfab0261c05/validation/a050-discovery.json`, SHA-256 `be32544298b6485906a8904e0f802cacf43aba55a194dd266ecfbc6f7899678e`.
+
+| Measurement | Observed/reconstructed | Existing bound |
+|---|---:|---:|
+| Canonical identities in retained A050 | 5,547 | 100,000 |
+| Maximum canonical identity UTF-8 bytes | 166 | 4,096 |
+| Production-format `discovered.json` reconstructed from those IDs | 653,673 bytes | 33,554,432 bytes |
+| Current collector Python inventory | 935 files | Overall source bounds also apply |
+| Current compact serialized collector request | 103,416 bytes | 8,388,608 bytes |
+
+The discovery reconstruction uses the exact current `schema_version/scope/discovery/test_ids/count/sha256` record shape and `_write_json` serializer. Its ordered identity digest is `0e8dbaad34266093f76db937eba670ce8f628ceb500998cb9094cdd2f12071fa`. The collector request reconstruction uses the exact current serializer, committed Python modes/blob IDs, and this audit checkout’s root path; another checkout changes the root-string length. Neither reconstruction invokes test collection or bodies. Sources: `ci/project/governance_run.py:74–89,715–724,808–814`; `ci/project/governance_replay_collect.py:284–287,361–380`.
+
+The trusted collector also caps output at 32 MiB, diagnostics at 1 MiB, child lifetime at 60 seconds, and child address space at 1 GiB. These remain unchanged. It binds source before and after collection, builds the Python inventory from the exact tree, binds imports to recorded source blob IDs, rechecks loaded source, and never executes member bytes from the archive. Sources: `ci/project/governance_replay_collect.py:22–28,98–132,284–382`.
+
+## Event and archive growth
+
+The retained base original has SHA-256 `21c1c6bda5e8513d99642dd12d5db8c52d4b2bcae8726119b12236e7708fc74e`, rehashed during this audit. Its original compressed size is 1,395,652 bytes, and its 12 members total 22,493,537 expanded bytes.
+
+| Measurement | Base original | Existing bound |
+|---|---:|---:|
+| Original ZIP bytes | 1,395,652 | 268,435,456 |
+| Total expanded member bytes | 22,493,537 | 536,870,912 |
+| ZIP member count | 12 | Generic reader: 64; governance: exactly 12 names |
+| Event ledger bytes | 19,791,689 | 33,554,432 |
+| Event count | 55,200 | 1,000,000 |
+| Maximum event line, including newline | 3,883 bytes | 65,536 bytes |
+
+The base ledger leaves 13,762,743 bytes below its byte cap. The strict runner measures actual UTF-8 event bytes as it writes and enforces both the count and byte caps. The replay checks every line’s bounded length, complete schema/sequence, test/subtest identities, outcomes, and exact reconciliation with the summary. Oversized subtest labels use the existing hash-bound identity representation rather than silently omitting their identity. Sources: `ci/project/governance_run.py:56–72,123–158,789–795`; `ci/project/governance_replay_events.py:15–19,87–147`.
+
+As a bounded explanatory comparison only, the retained A049 focused result records 75 successful subtest outcomes belonging to the 32 new methods. If those were the only changed events, the normal three method events plus those subtests would add 171 events. This does not predict current full-run event bytes or prove the full ledger remains under its cap: other tests and labels must still be measured in the final original. Record: `/tmp/ai-gpu-2bfab0261c05/validation/a049-focused-results.json`, SHA-256 `051278306932ada72693c01a7d8b30e54e2be390edbca8c64204fbc596b80da0`.
+
+The generic ZIP reader also fixes the central-directory budget at 65,536 bytes and each member-name budget at 512 bytes. It rejects ZIP64, unsafe/aliased/duplicate names, special/encrypted/unsupported members, inconsistent local/central metadata, overlap, growth, bad expanded sizes/CRC, and archive mutation. Per-member limits do not override the aggregate 512 MiB expanded limit. Sources: `ci/project/governance_replay_archive.py:16–21,86–107,137–180,186–250,268–288`.
+
+## Before/after stability and closure
+
+The original runner compares source, interpreter, and environment snapshots before and after the complete suite, requires clean source on both sides, and cannot mark truncation or an incomplete/failed event population as passing. The source snapshot checks descriptor-anchored files and metadata during the read, then rechecks source states and repository metadata. Sources: `ci/project/governance_run.py:452–497,602–643,800–832`.
+
+Replay bounds the ZIP before opening, checks file identity and archive bytes while reading, hashes it again to detect mutation, validates the expected whole-archive SHA-256 and exact member population, independently binds the supplied exact source revision, compares that source to the retained source projection, recollects canonical identities, reconciles events, and checks source identity again before completing the receipt. Sources: `ci/project/governance_replay_archive.py:86–107,268–288`; `ci/project/governance_replay.py:160–208`; `ci/project/governance_replay_collect.py:361–382`.
+
+All 15 recorded static/identity checks passed. The current additions neither bypass those checks nor change their caps. No source edits, arbitrary new budgets, repeated full-suite runs, replay runs, or native/build runs are warranted by this size audit. The remaining closure is the current original’s actual successful complete event/log/archive evidence and exact-source replay, not a speculative size-limit increase.

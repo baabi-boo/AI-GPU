@@ -1,0 +1,10 @@
+tree 21b1a2247078d376d61a25523e9f74cf93fafbcf
+parent 858090410a992756808256ace90d36b9b3b88dd3
+author Codex <codex@openai.com> 1795673364 -0700
+committer Codex <codex@openai.com> 1795673364 -0700
+
+fix(checkpoint): clean owned temporaries after interrupted publication
+
+Keep the previous committed JSON until atomic replacement, bind temporary cleanup to the created inode and open parent directory, and preserve the original failure through cleanup. Retain exclusive collisions and the existing JSON limit without retrying writes or child work.
+
+Add real filesystem fault controls and qualified-warm supervisor regressions demonstrating that existing failure finalization can complete after mid-write errors. Frozen measurement files, dependency descriptors, resource gates and experiment predicates remain unchanged.

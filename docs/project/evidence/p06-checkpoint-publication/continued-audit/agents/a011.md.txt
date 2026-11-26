@@ -1,0 +1,15 @@
+# Agent 011 — shared writer consumer compatibility
+
+Reviewed `ba88572af0bea1e355af08038abcc1f62773a438` against `8580904`; no source edits.
+
+## Finding: existing write/search-only evidence directories stop working
+
+`ci/project/p02_matrix.py:96` adds a parent-directory read-permission requirement through `os.open(..., O_RDONLY | O_DIRECTORY)`. Previously creating and replacing the temporary required directory write/search permission only. `ci/project/p04_ci_prepare.py:113–118` explicitly accepts an existing evidence directory and does not require read permission. Its receipt write at line 200 therefore fails for an otherwise supported owner-writable/searchable directory, such as mode `0300`.
+
+Tiny host reproduction used the real `p04_ci_prepare.prepare()` with an existing mode-`0300` evidence directory and an invalid revision (so no relocation/build occurs). The current writer raised `PermissionError(errno=13)` and produced no receipt; substituting the exact baseline writer produced the expected blocked receipt with reason `invalid source revision`. This is a narrow compatibility regression, not a failure of the default mode-`0700` path.
+
+## Other callers
+
+No other concrete compatibility regression found. Output and snapshot directories exist before writes in `p02_wgmma_matrix.py:215,274–276`, `p03_execute.py:82–84`, and `p04_execute.py:101–103`. Root paths are normalized by `p02_matrix.py:148–168`; snapshot wrappers use normal `Path` joins and hash the unchanged serialized bytes (`p02_wgmma_matrix.py:230–233`, `p03_execute.py:100–103`, `p04_execute.py:119–122`). File creation mode remains `0666` subject to umask. The existing `OSError`/`ValueError` handlers cover new ordinary I/O and ownership failures; final checkpoint failures already propagated before this change.
+
+Validation: static review plus the single host permission reproduction; no broad/native tests.

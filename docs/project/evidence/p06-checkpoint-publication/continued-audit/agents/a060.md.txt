@@ -1,0 +1,100 @@
+# A060 — Installed PyTorch workflow interpretation
+
+## Result and inspected source
+
+No concrete source-bound gap found in the inspected workflow and runner.
+This was a read-only source audit at
+`9f369a579ca764800b22eedd15e09795f09615da`, compared with base
+`858090410a992756808256ace90d36b9b3b88dd3`. All 12 recorded files match that
+commit; only `python/vortex_ai/launch.py` differs from the base among those
+files. The worktree was clean. Exact sizes and SHA-256 identities are in
+`a060-installed-torch.json`.
+
+No workflow status was queried, and no tests, builds, framework installation,
+native execution, repository edits, commits or pushes were performed. Counts
+below describe the checked success contract, not a newly observed CI result.
+
+## What a successful workflow establishes
+
+`.github/workflows/p05-torch.yml:87–106` runs separate FP16/BF16 SimX jobs on
+Ubuntu 22.04. The job pins CPython 3.12.14 and build tools, validates the clean
+checkout against `GITHUB_SHA`, and provisions hash-locked CPU framework wheels
+(`:132–212`). The ordered execution stages are a fresh native model reference,
+fresh installed plain-Python comparison, and fresh installed PyTorch comparison
+(`:214–240`).
+
+`p05_torch_execute.py:288–318` requires the preceding P05 packet's before/after
+source snapshots to agree with the current clean checkout, and verifies current
+source, loaded-helper and retained-source bytes. Its live-input revalidation
+checks the completed native/Python packet, actual native outputs, compiler and
+artifact identities, the bound package and installation, and exact preceding
+commands (`:320–542`). It does not rerun native reference work inside this third
+stage or count copied packets as executions.
+
+The new framework venv must have the exact copied interpreter, no system site
+packages, the closed wheel/distribution set, and independently verified installed
+payload bytes. Before/after source, original packet, wheelhouse, interpreter,
+bundle and installed identities remain checked (`:593–646`, `:687–780`). The
+supported environment is Linux x86-64, little-endian CPython with the GIL and
+PyTorch 2.15.0+cpu. This is the existing bounded eager custom-operator route,
+not a general device backend.
+
+## Exact checked population
+
+The unchanged contract and execution checker require the following per format
+(`p05_torch_contract.json:121–159`, `p05_torch_execute.py:767–784`):
+
+| Population | Per format |
+|---|---:|
+| Standalone matmul selections | 3, each with two output poisons |
+| Standalone framework calls / launches | 6 / 6 |
+| Fixed model families | 5, each with two output poisons |
+| Model framework calls / native launches | 10 / 30 |
+| Total framework operator calls / native launches | 16 / 36 |
+| Framework event/profile pairs | 180 |
+| Prior native-reference launches | 36 |
+| Prior plain-Python launches | 36 |
+| Distinct launches across all three routes | 108 |
+| Additional launches from copying packets | 0 |
+
+Both format jobs therefore require **72 framework-route launches and 360
+framework event/profile pairs**, and **216 distinct launches / 1,020 pairs**
+across the full three-route workflow. The latter total is explicitly scoped in
+`docs/designs/torch_custom_ops_v1.md:145–150`.
+
+Per-format comparison records count 384 standalone FP32 result words and 1,280
+hidden, 640 bridge and 640 final model words, totaling 2,944 checked FP32 words
+for that route (`p05_execution_records.py:391–395`; the corresponding fixed
+expectations are in `test_p05_torch_records.py:44–45`). The framework layer also
+matches actual tensor dtype, shape, strides and byte representation against the
+actual retained native outputs and unchanged fixtures, using the exact raw-log
+chronology (`p05_torch_records.py:204–302`). Intermediate data is not a returned
+framework tensor and must not be counted as additional operator calls.
+
+## Launcher change and evidence boundaries
+
+The installed stage invokes `python -I -B -m vortex_ai.launch --bundle ... --
+SCRIPT ...` from the isolated venv (`p05_torch_execute.py:756–764`). Consequently
+a source-matched successful new workflow exercises the changed launcher on its
+normal main-thread startup path, with its existing verified environment and
+interpreter-argument contract. The main-thread requirement is satisfied by this
+module entry point. Launcher bytes remain included in the package's immutable
+source binding; old qualification is not silently reused for changed bytes.
+
+Normal successful execution does not prove native SIGTERM cancellation or
+bounded native cleanup. The existing outer process supervisor retains its own
+process-group timeout/cleanup behavior. The separate real-PyTorch scripted
+failure tests and compiled fault-runtime tests are explicitly **host-only**;
+the latter supplies synthetic/frozen responses and runs no SimX backend
+(`p05_torch_host_tests.py:1–24`, `p05_torch_native_host_tests.py:1–9`). Their green
+statuses must not be added to the native numerical population.
+
+Runner results keep `acceptance_claimed` and `phase_complete` false. Finalization
+retains available partial observations, records source stability, and keeps a
+failed result failed; the workflow uploads evidence under `if: always()`
+(`p05_torch_execute.py:557–566`, `:785–820`; workflow `:254–264`). Independent
+acceptance and original-artifact replay remain separate. Historical P05
+acceptance records and unchanged numerical contracts do not qualify a new
+source revision, and this workflow establishes no P06 qualified-warm
+performance acceptance, RTL/vendor/FPGA/silicon execution, training, autograd,
+arbitrary models, CUDA inputs or zero-copy result.

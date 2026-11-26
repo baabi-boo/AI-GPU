@@ -1,0 +1,99 @@
+# A053 — platform contract audit
+
+**Verdict: no concrete blocker for the documented, named supported routes.**
+
+Read-only inspection at code commit
+`d31e8879e7c248b1a72615128882533ccdd0b3b4`. The repository contains concurrent
+documentation/evidence work; this review did not modify it. The scope was the
+Linux directory-path handle used by the checkpoint writer and the Linux pidfd
+APIs used by new launcher tests, rather than the already-reviewed ownership
+algorithm or a general cross-platform port.
+
+## Declared platform and actual workflow selection
+
+- `docs/project/developer-guide.md:29–45` explicitly places source-root
+  development checks on Linux. Full qualification separately requires checked
+  preparation and one strict, unfiltered invocation with zero skips.
+- `docs/project/governance-runbook.md:37–43` requires GIL-enabled Linux CPython
+  3.12.x on little-endian x86-64 glibc, with POSIX filesystem support, `/proc`,
+  `/dev/full` and named native tools. The executable checks at
+  `ci/project/governance_env.py:190–200` enforce that platform.
+- `.github/workflows/project-governance.yml:165,184–185,210–228` selects
+  `ubuntu-24.04`, verifies system Python 3.12, prepares the checked environment
+  and runs the strict runner. No macOS or Windows governance route is selected.
+- `pyproject.toml:11,17–19` declares Python 3.12 and Linux/CPython classifiers.
+  `setup.py:201–206` rejects extension builds outside GIL-enabled Linux CPython
+  3.12. `docs/designs/python_binding_v1.md:143` requires the main interpreter.
+  `python/README.md:3–13` scopes the historical package qualification to Linux
+  x86_64 CPython 3.12.14, and explicitly makes no ABI3 or manylinux claim.
+- The installed Python and PyTorch workflows select `ubuntu-22.04` and pinned
+  CPython 3.12.14 (`.github/workflows/p05-python.yml:83,128–152` and
+  `.github/workflows/p05-torch.yml:89,134–158`). The qualified warm workflow uses
+  `ubuntu-24.04` and the same pinned interpreter
+  (`.github/workflows/p06-qualified-warm.yml:21,65–69`).
+
+## Directory access remains write/search compatible
+
+`ci/project/p02_matrix.py:97` opens the parent with `O_PATH | O_DIRECTORY`, not
+`O_RDONLY`. The parent descriptor is used only to anchor create, stat, replace
+and unlink operations and is then closed. `fstat`, buffered output and `fsync`
+operate on the separately created ordinary file descriptor. The implementation
+does not enumerate directory entries, open the directory for reading, change
+its mode or add a permissions fallback.
+
+The two unconditional regressions in
+`ci/project/test_checkpoint_directory_access.py:27–60` keep the directory at
+mode `0300` through actual initial publication/replacement and the P04
+preparation consumer. They assert preserved mode and restore it in `finally`
+before temporary-directory cleanup. The prior independent review retained at
+`docs/project/evidence/p06-checkpoint-publication/reviews/directory-access.md`
+records successful real checks under UID 1000, including rejection of the old
+read-only open and continued denial when write/search permissions are absent.
+This audit inspected that evidence; it did not rerun those probes. As already
+recorded there, DAC-bypass privileges can weaken a mode-based negative control.
+
+## pidfd use and skip behavior
+
+The new `os.pidfd_open` and `signal.pidfd_send_signal` calls are confined to
+`ci/project/test_p05_launcher_signals.py:109,118`. They retain an exact-child
+handle for test cleanup. The installed production launcher does not acquire
+pidfds; its new imports are standard-library `signal` and `threading`.
+
+Neither that test module nor the directory-access test contains a skip
+decorator, `skipTest`, `SkipTest`, a capability-based fallback, or a platform
+guard that suppresses the assertions. Source/AST inspection found no skip
+calls. The strict runner also treats skips as unsuccessful qualification
+(`ci/project/governance_run.py:175–178,217–221`). Missing or denied pidfd
+capability therefore fails the test; it cannot silently become a qualifying
+pass.
+
+A local attribute inventory observed Linux x86_64 CPython 3.12.14 with
+`os.O_PATH`, `os.O_DIRECTORY`, `os.pidfd_open` and
+`signal.pidfd_send_signal` present. This was an inventory, not a fresh syscall
+or lifecycle test. The current source still requires its own hosted strict
+qualification; workflow configuration alone is not execution evidence.
+
+## Scope limit
+
+The governance preparer's platform check does not currently probe O_PATH or
+pidfd operation explicitly. An older or syscall-restricted Linux host may
+therefore pass the initial platform screen and later fail the full suite.
+This review found no demonstrated failure on a named supported route and does
+not claim arbitrary Linux kernel/container compatibility. Extending readiness
+diagnostics would be a separate task; adding skips or weakening the strict
+suite would not establish compatibility. No non-Linux package, test, or
+governance qualification follows from this audit.
+
+## Inspected source identities
+
+All four hashes were rechecked unchanged at the end of this audit:
+
+| Source | SHA-256 |
+|---|---|
+| `ci/project/p02_matrix.py` | `c7544854b1fda853fad7c382e6e51605e812f5a377128fa6198f4da8662d7432` |
+| `ci/project/test_checkpoint_directory_access.py` | `3fc9d9b3ccb7ffd6b0b1eef0580d0a720a07c0bef95db7f0ef64524da4f2a5e2` |
+| `ci/project/test_p05_launcher_signals.py` | `21583916f92b8bc6d44a5f7743052dd8222216979d3922f62dcf545ef03f1eed` |
+| `python/vortex_ai/launch.py` | `01bdadc8469b50fc2b6e511684d37f1bc92d2f4030d3a0900481b8fb5173a128` |
+
+No tests, builds, native execution, repository edits, commits or pushes were
+performed. Only this scratch review report was written.

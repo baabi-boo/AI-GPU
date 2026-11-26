@@ -1,0 +1,102 @@
+# A063 — Host MPM Transport workflow scope
+
+## Finding and revision
+
+**No concrete supported-contract integration blocker found.** This read-only
+review inspected commit `9f369a579ca764800b22eedd15e09795f09615da`. All 13 inspected
+files match that commit; their byte lengths and SHA-256 values are retained in
+`a063-host-transport.json`. Among those files, only the shared checkpoint writer
+and Python launcher differ from base `858090410a992756808256ace90d36b9b3b88dd3`.
+No CI status was queried. No test bodies, builds or native work were executed.
+
+## What a successful workflow establishes
+
+| Component | Required execution and bounded interpretation |
+|---|---|
+| Native transport job | Eight directed cells: RV32/RV64 × PERF off/on × actual RTL-leaf/SimX targets. The CLI selects both widths and engines, requires native completion markers and records each actual run. |
+| Old-code control | Two RV64/PERF-on native targets at pinned parent `4df7186edbca82b21b2b8cba9b3b192248b99209`, with identical test overlays. Success requires the expected native high-half assertion failure after successful build, not an arbitrary error or compile failure. |
+| Paired circuit job | Four parent/candidate configuration pairs, measured first through Beacon and then generic Yosys. A successful job means measurements completed; its report can still retain a failed/not-passed gate verdict. |
+
+Sources: `.github/workflows/p06-mpm-transport.yml:90–250,397–419`;
+`ci/project/p06_mpm_execute.py:183–204,310–362`;
+`ci/project/p06_mpm_parent.py:43–72,200–228`;
+`ci/project/p06_mpm_synthesis.py:237–318,359–360`.
+
+This workflow is **not wholly a host-only software test suite**. It exercises
+native directed transport units, including the actual RTL `VX_dcr_data` and
+`VX_csr_mpm` leaf and SimX `Processor::dcr_read` route. It launches no matmul,
+fixed model, complete processor workload or qualified-warm population. The RTL
+leaf does not cover `VX_csr_data` or a full AFU. The SimX harness seeds counters
+and performs reads without simulation ticks between them. It cannot establish
+atomic moving-counter reads, rollover retry, shared-response concurrency,
+absolute no-wrap, physical performance or a phase acceptance.
+Sources: `docs/designs/host_mpm_transport_v1.md:34–40,119–154,177–193`;
+`tests/unittest/mpm_transport/main.cpp:183–238`.
+
+## Reconstruction, publication and errors
+
+The stable wire contract uses two unsigned 32-bit replies on both XLENs. The
+public API accepts low CSR addresses `0xB00..0xB1F`, reads low before high, and
+publishes the reconstructed uint64 only after both reads succeed. The all-core
+route uses unsigned 64-bit accumulation and publishes only after every core
+succeeds. Null handles/output, invalid addresses, capability failure, and the
+first failing low/high read retain their explicit error results; failed or
+partially completed reads do not replace the caller's output sentinel.
+Sources: `sw/runtime/common/perf.cpp:265–303`;
+`ci/project/fixtures/p06_mpm_transport_host.cpp:230–291`.
+
+The separate host adapter copies the actual production definitions into a
+controlled-responder fixture, compiles C++17 with UBSan for RV32/RV64 semantics,
+and checks exact vectors, class restoration, architectural aliases, sum carry,
+publication and error ordering. It explicitly describes itself as an extracted
+host adapter, not a full SimX or native public-runtime execution. Those tests
+belong to governance discovery; the transport workflow does not independently
+run this host unittest module. A green transport workflow alone must not be
+credited with these separate controlled-responder tests.
+Sources: `ci/project/test_p06_mpm_transport.py:1–3,35–149`;
+`docs/designs/host_mpm_transport_v1.md:138–141`.
+
+RTL counters remain 44 bits; SimX retains uint64 bits above bit 43. The contract
+also keeps the backend-specific PERF/class and invalid-core behavior rather
+than inventing cross-backend equality or new validation. Stable serialized
+sampling remains a prerequisite. Sources:
+`docs/designs/host_mpm_transport_v1.md:42–87`.
+
+## Source, tools and artifacts
+
+The workflow binds preparation to `GITHUB_SHA`, pins CPython 3.12.14, retains
+workflow/provider identity and requires the existing 15 GiB disk / 4 GiB memory
+reserve. The native runner requires a clean tracked checkout; checks loaded
+helper bytes; hashes critical inputs, actual compiler/linker/interpreter tools,
+Verilator for RTL, and three dependency libraries for SimX; verifies generated
+XLEN/profile/source/tool paths; retains generated/copied configuration and SimX
+compiler stamps; and rechecks source/tools/libraries/configurations/binaries
+through execution and finalization. Commands retain arguments, environments,
+limits, logs and exits. Selected-cell success cannot qualify the full eight-cell
+matrix. Both workflow jobs retain their evidence even after failure.
+Sources: `.github/workflows/p06-mpm-transport.yml:109–212,242–252,407–419`;
+`ci/project/p06_mpm_execute.py:29–65,108–180,237–273,304–362`.
+
+These identities do not inventory every host header or dynamic library, defend
+against malicious concurrent writers, or archive every produced executable.
+The paired synthesis producer preserves raw NO-BASELINE/regression outcomes;
+it never rewrites a golden or promotes measurement completion to gate acceptance.
+Sources: `ci/project/p06_mpm_execute.py:48–65`;
+`ci/project/p06_mpm_synthesis.py:49–60,292–318`.
+
+## Effect of this continuation
+
+The shared-writer correction reaches this workflow through
+`p04_ci_prepare.py`'s use of `p02_matrix._write_json` for its preparation report.
+The native transport, pinned-parent and synthesis producers use their own
+unchanged checkpoint functions. Their reports are not newly covered by the
+shared writer's cleanup guarantee. No workflow stage invokes the installed
+Python launcher, so this workflow cannot establish its new SIGTERM behavior.
+Sources: `ci/project/p04_ci_prepare.py:17,200`;
+`ci/project/p06_mpm_execute.py:211–214`;
+`ci/project/p06_mpm_parent.py:120–123`;
+`ci/project/p06_mpm_synthesis.py:172–175`.
+
+No repository edits, tests, builds, native executions, commits or pushes were
+performed by A063. The report and identity sidecar were written only outside
+the repository for later evidence retention.

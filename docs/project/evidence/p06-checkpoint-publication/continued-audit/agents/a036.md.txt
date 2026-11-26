@@ -1,0 +1,26 @@
+# Agent 036 — Native session ownership audit
+
+## Result
+
+No concrete reachable defect found within the assigned close/deallocation and live-owner-retention scope. This is a source review, not runtime qualification. No test, build, production edit, frozen-contract change, commit, or push was performed.
+
+Reviewed checkout: `a693d6f8828e4e10b5374db7fef8c727aa69d34e`. Existing unrelated edits were present in README/project status/backlog and checkpoint-publication documentation. The audited implementation files were not listed as modified.
+
+## Contract checks
+
+- **Completed wait retains ownership.** `operation_wait` changes only the stored native result (`python/native/module.cpp:709–733`). It does not clear the lease. `submit_into` rejects another matmul while the shared lease has another owner (`:686–690`); `operation_close` clears that lease only after native completion (`:752–760`). The managed runtime independently retains `operation_leased` until `OperationState::release` (`sw/runtime/ai/runtime.cpp:181–213`).
+- **Partial submission survives.** The binding copies the session lease before native submit and retains the returned operation (`module.cpp:698–704`). The first accepted write sets `complete=false` (`runtime.cpp:334–346`); later enqueue failures therefore return an operation owning the accepted prefix, staging, events, buffers, and shared context (`:500–570`). Completion must be established before close releases resources (`:609–676`). Input-buffer validation was outside this audit.
+- **Incomplete close stays recoverable.** Operation/session close leaves native handles and leases intact while `complete=false` (`module.cpp:606–626,736–762`). The Python registry is populated before submission and removes an operation only following completed explicit close (`python/vortex_ai/_api.py:478–488,631–645`). A completed cleanup failure is terminal and poisons new work; it is not a retryable unconsumed handle.
+- **Session destruction preserves active work.** `SessionOwner` destruction attempts owner close; native member destruction then drops only its shared context reference (`module.cpp:89–116`, `runtime.cpp:430–433,579–606`). The operation retains both its binding lease and the native shared context. Last-operation close performs context teardown and propagates observed cleanup failure (`runtime.cpp:199–211`). Operation destruction drains indefinitely before releasing its lease.
+- **No concurrent context opening.** Binding lease acquisition rejects a still-live weak reservation and runs under the retained GIL (`module.cpp:38–55,159–180`). The linked runtime additionally reserves atomically before device open (`runtime.cpp:44–50,435–466`). Cleanup poisoning precedes reservation release.
+- **Workspace lifetime.** Python exposes the default `per_operation` policy; it has no separately exposed Workspace owner (`module.cpp:404–412`, `sw/runtime/ai/runtime.h:23–31`). Resident C++ workspace buffers belong to the shared context and release before kernel/module/device (`runtime.cpp:98–148`), so operation retention also retains resident storage.
+
+The apparent difference between Python session close permanently disallowing submissions and native managed-owner close remaining resumable is intentional: `python_binding_v1.md` explicitly defines the Python closing state, while `serial_matmul_workspace_v1.md` specifies the internal managed-owner behavior.
+
+Existing host fixture cases inspected, not executed: `overlap`, `native_second_submission`, `pending_after_wait`, `orphaned_operation`, `partial_submission`, `transient_event_failure`, and `destructor_cleanup` in `ci/project/test_p05_native_binding.py`.
+
+## Source identities
+
+- `python/native/module.cpp`: `3e0688fef091dcc58bfaeb13e1ab18d2bcc147a601ceaa3a48cc91a34464170e`
+- `sw/runtime/ai/runtime.cpp`: `f55365110aed41cfaa290b69da8d91d9fa0ae04063dda591b94ae6ca626cf675`
+- `python/vortex_ai/_api.py`: `f66748c6657ddd55e8753343f49b43cce87003df770e8bbb20c70ee57e3d0db2`

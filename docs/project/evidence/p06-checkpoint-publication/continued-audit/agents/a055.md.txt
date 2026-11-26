@@ -1,0 +1,85 @@
+# A055 — Checked Counters workflow interpretation
+
+## Result and scope
+
+**No concrete supported-contract blocker found.** This is a read-only review of
+`9f369a579ca764800b22eedd15e09795f09615da`, compared with explicit base `858090410a992756808256ace90d36b9b3b88dd3`. No CI run was queried or executed;
+no tests, native workloads, builds, repository edits, commits or pushes were
+performed. The source identities are retained in `a055-checked-counters.json`.
+All ten inspected files match the recorded HEAD; only the shared
+`ci/project/p02_matrix.py` differs from the base among those files.
+
+## What a successful run establishes
+
+The workflow runs on `ubuntu-22.04`, pins Linux CPython **3.12.14**, restores
+identified tool/dependency caches without writing them, and uses the exact
+`GITHUB_SHA` for preparation and both execution commands. It requires **15 GiB
+free disk and 4 GiB available RAM**. Its push trigger selects `master` and the
+`ci/project/**` changes in this continuation. Read-only repository permissions,
+nonpersistent checkout credentials, and an `always()` upload retain the packet
+under a name including SHA, run ID and attempt for 30 days.
+Sources: `.github/workflows/p06-checked-counters.yml:3–9,71–98,99–155,164–227`.
+
+| Producer | Successful native diagnostic scope |
+|---|---|
+| `p06_checked_execute.py` | Two fresh serial RV64 `p02-tfr` SimX builds, ordinary and checked; one boundary cell per build and five checked negative modes. The boundary parser requires exactly 33 available selectors, 40 backing-source components, 400 component vectors, 1,788 transport reads and 6,389 checks, and leaves 12 unavailable selectors unqueried. Ordinary/checked boundary observations must agree except for the checked flag. |
+| `p06_counter_public_execute.py` | A fresh checked model boundary control and five real public-runtime modes: normal, immediate overflow, delayed overflow, cache overflow and coherent terminal. The diagnostic uses identified test-only wrappers/accessors around real runtime/Processor operations. |
+
+Sources: `ci/project/p06_checked_execute.py:78–105,320–334,378–390,463–524,580–612`;
+`ci/project/p06_counter_public_execute.py:34–64,109–120,197–219,321–355`;
+`docs/designs/simx_counter_public_diagnostics_v1.md:38–85,87–130`.
+
+A green workflow means the source-matched producers and retention step passed.
+It is not an independent replay decision. The initialization `job.json`
+intentionally says `record_stage=job-initialization` and `native_execution=not_run`;
+completed execution must be read from the two producer reports, rather than
+relabeling that initialization observation as a final receipt.
+Source: `.github/workflows/p06-checked-counters.yml:112–123,200–227`.
+
+## Source and output bindings
+
+Both runners reject dirty or untracked critical inputs and enforce the requested
+revision. They retain source bytes with checked copy hashes, loaded-helper
+identities, generated inputs/compiler records, and binary/object identities.
+Their execution boundaries and finalization recheck source, tool and dependency
+library identities. The public runner additionally binds exact execution inputs
+before/after, checks retained bytes/log hashes, and requires every model/public
+cell to pass before its diagnostic success field becomes true.
+Sources: `ci/project/p06_mpm_execute.py:115–155`;
+`ci/project/p06_checked_execute.py:68–77,110–114,228–296,406–420,444–459,498–524,532–585`;
+`ci/project/p06_counter_public_execute.py:40–52,68–72,137–169,197–213,312–328`.
+
+These are source/build/receipt bindings, not complete dependency rebuilding or
+host-system attestation. The reused libraries are identified, and object/binary
+payloads remain in the work tree. Neither execution route consumes the complete
+counter-qualification proof or the qualified-warm proof, and neither substitutes
+for the separate fresh-dependency and complete-lifetime obligations.
+Sources: `ci/project/p04_ci_prepare.py:26–29`;
+`ci/project/p06_mpm_execute.py:54–65,133–155`;
+`ci/project/p06_counter_public_execute.py:53–63`;
+`docs/designs/simx_checked_counters_v1.md:14–20`.
+
+## Effect of this continuation and claim limits
+
+The repaired shared writer is reached by **P04 preparation report publication**
+(`p04_ci_prepare.py:17,200`). The two native diagnostic producers use their own
+unchanged `checkpoint()` functions (`p06_checked_execute.py:397–400` and
+`p06_counter_public_execute.py:128–131`). The public runner's helper inventory
+covers all non-test project Python files, including the changed shared writer;
+no new project helper import was added. A normal successful diagnostic job is
+not itself a test of mid-write fault recovery.
+
+This workflow does **not** invoke `vortex_ai.launch`; it cannot be presented as
+verification of the new Python launcher signal behavior. That behavior has its
+own focused tests and installed-package/full-governance obligations.
+
+Both producers explicitly retain false warm/acceptance claims. Seeded diagnostic
+binaries are not measurement binaries. They execute no warm GEMM fixture,
+workspace reuse population, complete cumulative launch lifetime, numerical
+acceptance or performance hypothesis. Success is software-simulation evidence,
+not processor RTL, full-AFU emulation, FPGA or silicon evidence. In particular it
+cannot complete the separate **24-process, 792-launch, 25,344-word** qualified
+warm experiment or close P06-A02/A03.
+Sources: `ci/project/p06_checked_execute.py:94–105,383–390,610–612`;
+`ci/project/p06_counter_public_execute.py:53–63,112–120,353–355`;
+`docs/designs/simx_counter_public_diagnostics_v1.md:31–36`.

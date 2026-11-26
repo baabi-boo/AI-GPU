@@ -1,0 +1,34 @@
+# Agent 032 — dependency consumer compatibility review
+
+Reviewed revision: `a693d6f8828e4e10b5374db7fef8c727aa69d34e`.
+
+## Result
+
+No actionable compatibility regression found in the four assigned consumers of `p02_matrix._write_json`. This is a bounded static review, not execution or native qualification evidence.
+
+## Scope and evidence
+
+Read the repository `AGENTS.md`, the shared writer change relative to `e3ad6bd`, and the relevant setup, checkpoint, command, exception, finalization, and retained-input paths in:
+
+- `ci/project/p06_dependency_local_execute.py`
+- `ci/project/p06_dependency_prepare.py`
+- `ci/project/p06_pending_probe.py`
+- `ci/project/p06_dependency_substitution.py`
+
+The four consumers themselves are unchanged over that comparison. Also inspected the independent dependency evidence writer/staging functions and existing sequential-failure test assertions; those tests were not executed.
+
+## Compatibility assessment
+
+**Directory setup and permissions.** Local execution creates its fresh workspace and evidence directory with mode `0700` before the first checkpoint (local executor lines 196–224). Preparation creates or reuses canonical `evidence` before saving (preparation lines 37–53). Probe and substitution create fresh output directories before report publication (probe lines 198–211; substitution lines 229–252). The shared helper opens the existing parent using `O_PATH | O_DIRECTORY`, so it does not introduce a directory-listing permission requirement. Temporary files retain the previous `0666` creation mode subject to the process umask; callers retain their private parent directories. The local execution route explicitly requires Linux CPython.
+
+**Reports versus snapshots.** All four direct shared-writer callsites publish their own evolving report/envelope. Probe and substitution read and hash the admitted managed snapshots; they do not rewrite them. Substitution writes its immutable `tool-config.json` through the separate exclusive-create `builder.write_json` function and copies admitted reports through `stage_file`, which verifies matching bytes and unchanged originals. The shared writer's serialization and size bound remain unchanged.
+
+**Error and interrupt propagation.** The helper cleans only its owned temporary and rethrows the original failure. `OSError`, validation failures, and `KeyboardInterrupt` arising from guarded checkpoints reach the consumers' existing failure paths. Probe/substitution retain an already recorded primary command failure when a later checkpoint fails. Persistent final-publication errors escape to existing non-success handling rather than returning a successful report. Initial/final checkpoint coverage gaps predate this change and were excluded as requested.
+
+**No child retry.** Checkpoints bracket each `run_bounded` call. A checkpoint failure leaves the active command loop through its outer exception handler; finalization attempts report publication only. No examined path restarts an acquisition, compiler, probe, native control, or local child stage.
+
+**Preserved originals.** Local execution binds child reports by path, SHA-256, and byte count, then rechecks every original after all stages (local executor lines 279–323). Probe/substitution compare admitted input snapshots before/after commands and at finalization. Those checks do not rely on checkpoint inode identity. Pre-publication failure preserves the previous destination bytes; deleting an owned failed temporary enables the existing final report attempt without changing admitted inputs. Successful temporary cleanup also avoids introducing a failed-checkpoint artifact into substitution's final retained-file inventory.
+
+## Validation limits
+
+No source edits, tests, native commands, downloads, commits, or pushes were performed. No concrete new failure was identified that warranted the authorized tiny reproduction.

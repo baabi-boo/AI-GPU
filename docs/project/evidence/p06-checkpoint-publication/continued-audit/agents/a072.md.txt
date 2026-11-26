@@ -1,0 +1,33 @@
+# A072 — Evidence disclosure and provenance review
+
+## Result and scope
+
+**No actual credential, live signed-download URL or private-control disclosure found in the reviewed snapshot.** No evidence redaction is indicated by this review.
+
+Read-only review covered the main `docs/project/evidence/p06-checkpoint-publication/` packet at local commit `9f369a579ca764800b22eedd15e09795f09615da` and the then-present `aNNN-*` scratch artifacts under the task directory. It did not inspect machine credential stores, runtime secret values or unrelated files. Later-created agent/delivery artifacts are outside this snapshot.
+
+The retained index binds **194 files**. Text inspection covered **204 files or decompressed archive-member streams**, including all 12 members of the original governance ZIP (22,493,537 uncompressed bytes) and both losslessly compressed negative-control logs. One derived scratch `a033-base-classifier/__pycache__/change_impact.cpython-312.pyc` cache was not decoded as text; it is not in the published packet and need not be copied into delivery evidence. No indexed file changed during the review; the source checkout remained clean.
+
+## Environment and credential observations
+
+The two focused result records store environment values as **648 SHA-256 values across six maps**; every entry is a 64-character hexadecimal digest. They do not publish the corresponding runtime environment values. Their explicit bytecode-mode field is the intended test setting.
+
+The original governance receipt contains **21 execution-environment maps**, each with exactly the 13 keys declared by `ci/project/governance_env.py::clean_environment`: build settings, locale, thread count and process paths. None has credential-named fields, URL values or embedded authorization values. Individual command path values can differ; this review does not claim that all command maps are identical.
+
+Credential-pattern checks found no GitHub/API/AWS/Slack credential-shaped values, private-key blocks or literal bearer tokens. The only signed-query pattern matches were **18 subtest labels** in the original `run/events.jsonl`. All 18 were resolved to deterministic negative-test fixtures in the exact base's `ci/project/test_p06_governance_artifact.py`: two are direct source literals and sixteen are reconstructed from declared literals by a bounded AST evaluator. No test body, validator, import or network request was executed for that reconstruction. These labels are not live provider download capabilities and must not be removed by rewriting the original archive.
+
+No candidate value was printed or copied into this review's analysis outputs; those outputs retain only categories, locations, fixture digests and classification results.
+
+## Source and provider boundary
+
+The repository uses Apache-2.0, and all seven retained original-reader/helper snapshots keep their Apache-2.0 SPDX notices. The new packet contains project source, review/validation records and an unchanged GitHub governance original, rather than newly acquired proprietary control archives, dependency libraries or model payloads.
+
+The original ZIP's byte length and SHA-256 exactly match the retained provider metadata: **1,395,652 bytes**, SHA-256 `21c1c6bda5e8513d99642dd12d5db8c52d4b2bcae8726119b12236e7708fc74e`. Its contents are execution/discovery/event/environment/log records; the retained metadata uses stable provider API references, not the temporary signed download URL. This content review relies on the separately recorded authenticated provider acquisition for provenance; matching a digest alone is not independent provider authentication or a general licensing determination.
+
+## Retained review artifacts
+
+- `a072-scan-index.json`: scoped file hashes, archive-member sizes and redacted candidate locations.
+- `a072-fixture-classification.json`: exact original test-source identity and all 18 static-fixture classifications.
+- `a072-structure-review.json`: environment-field and provider-identity observations.
+
+No source/evidence edits, test suites, builds, native execution, credential-store access, commits or pushes were performed. Only these scratch review artifacts were written.

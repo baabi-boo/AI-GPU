@@ -1,0 +1,79 @@
+# A096 — bounded final-source CI observation
+
+## Result and scope
+
+**All 24 provider-identity and population assertions passed; main CI remains in progress.** This is a status observation for published source `30b2e8ca69fba47646392c0cf6650cbb75155843`, not a final all-workflows-success claim.
+
+Two bounded read-only observations were taken:
+
+- Initial requests: **2026-11-26 08:17:30–08:17:31 UTC**.
+- One reobservation: **2026-11-26 08:18:08–08:18:10 UTC**.
+
+Both observations found the same high-level counts: **14 successful workflows and one active workflow**. The active workflow is [main CI run 45775559567](https://github.com/baabi-boo/AI-GPU/actions/runs/45775559567), attempt 1. Project Governance run 45775559523 is now successful.
+
+No rerun, cancellation, dispatch, source edit, build, test execution, commit or push was performed. Provider endpoints are not an atomic snapshot.
+
+## Complete observed workflow population
+
+The head-filtered workflow endpoint returned `total_count=15`, 15 unique records on `page=1&per_page=100`, and an empty closing second page with the same total. All records bind to the exact requested head, repository, `master` branch and attempt 1.
+
+| Workflow | Run ID | Status | Conclusion |
+|---|---:|---|---|
+| P06 Frozen Baseline Replay | 45775559583 | completed | success |
+| P06 Warm Workspace | 45775559621 | completed | success |
+| P06 Native Counter Lifetime | 45775559736 | completed | success |
+| P06 Host MPM Transport | 45775559687 | completed | success |
+| P06 Simulator Completion | 45775559538 | completed | success |
+| P05 Installed Python | 45775559470 | completed | success |
+| P06 Managed Preflight Replay | 45775559537 | completed | success |
+| P06 Managed Counter Preflight | 45775559587 | completed | success |
+| P06 Checked Counters | 45775559475 | completed | success |
+| P06 Fresh Dependency Provenance | 45775559670 | completed | success |
+| P05 Installed PyTorch | 45775559485 | completed | success |
+| P06 Serial Workspace | 45775559847 | completed | success |
+| P04 Native Model | 45775559655 | completed | success |
+| CI | 45775559567 | in_progress | pending |
+| Project Governance | 45775559523 | completed | success |
+
+No failed, cancelled or skipped workflow was observed. Pending main CI has no passing conclusion.
+
+## Main-CI job population
+
+The attempt-specific endpoint was:
+
+`/actions/runs/45775559567/attempts/1/jobs?per_page=100&page=1`
+
+It returned `total_count=42`, all 42 unique jobs, and an empty closing second page with the same total. Every job binds to the requested run, attempt and full head SHA. The direct run endpoint and the head-filtered collection both report main CI `in_progress` with a null conclusion.
+
+| Population | Success | In progress | Queued | Failed | Cancelled | Skipped |
+|---|---:|---:|---:|---:|---:|---:|
+| All 42 instantiated jobs | 37 | 5 | 0 | 0 | 0 | 0 |
+| 37 instantiated test-cell jobs | 32 | 5 | 0 | 0 | 0 | 0 |
+
+The five non-test planning/setup/build jobs succeeded. No `complete` job was present yet; a later job population may grow.
+
+### Remaining jobs at the final observation
+
+| Job ID | Job | Status | Active workflow step |
+|---:|---|---|---|
+| 139763535641 | tests (regression, simx, 64) | in_progress | Run cell |
+| 139763535657 | tests (regression, simx, 32) | in_progress | Run cell |
+| 139763535705 | tests (vulkan, simx, 32) | in_progress | Run cell |
+| 139763535709 | tests (tensor_wg, simx, 64) | in_progress | Run cell |
+| 139763535712 | tests (vulkan, simx, 64) | in_progress | Run cell |
+
+All five remaining jobs were already running at the first observation and remained active in the second. This report gives them no inferred completion time or passing result.
+
+## Workflow steps and coverage limits
+
+The final job responses contain **697 workflow steps**: **386 successful, 286 skipped, five in progress and 20 pending**. No failed or cancelled step was observed.
+
+Those 286 skips are conditional **workflow-step** outcomes. They are not pytest-item skips, and this task did not inspect JUnit or a test-item population. Likewise, a successful instantiated matrix does not establish that every catalog case ran. The earlier A088 cache/tier observations were not rechecked or used as a new claim here.
+
+Project Governance's successful provider status is recorded. Its actual full execution and independent original replay are separate A092/A093 evidence. This provider-status review does not execute or establish the separate qualified native experiment, hardware acceptance or a performance decision.
+
+## Retained evidence
+
+`a096-final-ci.json` retains both complete sanitized workflow/job/step snapshots, exact queried URLs and observation times, counts, all 24 assertions, the five remaining job records and explicit limits. It contains no credentials, signed download URL or raw log contents.
+
+No further polling was performed in this assignment. A later observation must retain its own timestamp and must not relabel this pending snapshot as a completed result.

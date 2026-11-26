@@ -1,0 +1,87 @@
+# A079 — native measurement boundaries
+
+## Result and source scope
+
+**No concrete supported-contract measurement-definition blocker found.**
+This read-only review concerns published master
+`30b2e8ca69fba47646392c0cf6650cbb75155843`, compared with base
+`858090410a992756808256ace90d36b9b3b88dd3`.
+
+All 20 recorded files match the published commit. The 18 inspected native
+instrumentation, record-reading, arithmetic, contract and supervision files
+remain byte-identical to the base; only `ci/project/p02_matrix.py` and
+`python/vortex_ai/launch.py` differ within this set. The six inspected native
+measurement files also match their frozen proof entries. HEAD and the clean
+working-tree status remained unchanged. Exact identities are retained in
+`a079-measurement-boundary-identities.json`.
+
+## Three different clocks and observations
+
+| Observation | Actual boundary | Relationship to the corrections |
+|---|---|---|
+| Native operation host interval | `steady_clock` immediately before `submit` through `wait`, exact output-word comparison and operation `close`; the endpoint precedes trace/output copying, later snapshots and normal transcript printing | The shared Python JSON writer and installed Python launcher are not called inside this interval. The interval includes instrumented host work and is not physical GPU latency. |
+| Modeled batch counter deltas | Public cumulative snapshots after the prime operation and after the final timed operation, with chronology, availability and no-decrease/wrap checks | The corrected writer does not change the native selector, snapshot or delta definitions. The qualified route separately validates the complete native lifetime/counter witnesses. |
+| Supervised process duration | `run_bounded`'s own monotonic interval, including its resource checks, process startup, monitoring/log draining, waiting and cleanup | Caller checkpoints precede the call or follow its returned receipt. This outer duration is retained and bounds the in-process lifetime; it is not substituted for the native interval sum used in the frozen mean calculation. |
+
+The native clock is `std::chrono::steady_clock` in
+`tests/regression/ai_warm_workspace/observer.cpp:53–56`. The successful operation
+interval and its host comparison/close work are explicit in
+`tests/regression/ai_warm_workspace/main.cpp:365–404`. Successful transcript
+emission follows completed operations and owner close at lines 444–476; the
+failure-print path cannot constitute an accepted complete population.
+
+The qualified executable includes the same warm implementation under a renamed
+entry point (`tests/regression/ai_counter_preflight/main.cpp:1–4`) and invokes it
+after validating the qualified/lifetime arguments (lines 527–540). This is not a
+separate rewritten timing loop.
+
+`ci/project/p06_warm_records.py:148–208` validates the ordering around prime,
+batch and owner-close snapshots, derives each operation duration from its raw
+end and start timestamps, and selects the 32 intervals after the prime.
+`ci/project/p06_qualified_warm_records.py:39–87` additionally joins those warm
+records to their checked-counter, pending-read, run and destruction witnesses.
+
+`ci/project/p06_qualified_warm_analyze.py:41–68` requires one prime plus 32
+positive timed intervals and a positive qualified cycle delta. It computes the
+batch mean from `sum(durations) / 32`, retains the outer process duration as a
+separate field, and passes the reconstructed batches to the unchanged frozen
+arithmetic. These reader/arithmetic files are outside the 69-file native
+projection, so their unchanged status was checked separately rather than
+inferred from that projection.
+
+## Python orchestration boundary
+
+The actual qualified runner delegates to the managed preflight implementation
+with lifetime, dependency, counter-qualification and qualified-warm modes all
+enabled (`ci/project/p06_qualified_warm_execute.py:26–28`). Its command helper
+retains launch intent before calling `run_bounded`, then checkpoints the
+returned result and verifies the retained log
+(`ci/project/p06_managed_preflight_execute.py:387–434`).
+
+The native process is `ai_counter_preflight` with the explicit mode arguments,
+not `vortex_ai.launch` (lines 709–727). The raw transcript is validated before the
+observation and completed process are retained (lines 727–738). No native work is
+repeated by the checkpoint correction. `baseline_process.py:154–170, 235–317`
+shows the separate supervisory timer and unchanged concurrent monitoring/log
+draining. The outer qualified supervisor's total wall time and budget also
+remain distinct (`p06_qualified_warm_run.py:363–383, 559–562`).
+
+## What unchanged definitions do not establish
+
+There is no direct addition of checkpoint publication calls to the frozen native
+interval definitions, and the installed launcher is outside this qualified
+native route. **This does not prove performance equivalence.** Checkpoint I/O,
+inter-process delays, resource availability, scheduling and other host conditions
+can affect a later real run indirectly. Matching measured-source bytes is not
+evidence that two executions have identical timing or environmental state.
+
+The full current source and loaded helper identities remain part of the actual
+execution binding and stability checks
+(`p06_managed_preflight_execute.py:85–107, 369–385, 497–503, 671–727`). Native
+admission therefore still requires the selected master revision's own strict
+governance/original replay, exact private prerequisites, real resource admission,
+fresh complete source-matched execution and independent complete native replay.
+Focused failure tests, unchanged hashes and this review cannot replace them.
+
+No test bodies, planner/analysis/replay execution, builds, native work,
+performance measurement, repository edits, commits or pushes were performed.

@@ -1,0 +1,96 @@
+# A038 — checkpoint publication packet review
+
+## Scope and conclusion
+
+Read-only review of the current uncommitted `README.md`,
+`docs/project/status.md`, `docs/project/backlog.md`,
+`docs/project/p06-checkpoint-publication-audit.md`, and
+`docs/project/evidence/p06-checkpoint-publication/README.md` at repository HEAD
+`a693d6f8828e4e10b5374db7fef8c727aa69d34e`.
+
+**No blocking contradiction in the reported results or execution scope.** The
+packet is still being assembled by the root agent. Its remaining provenance
+items below are publication-completeness work, not failed validation or
+production-code findings. No tests, replay, native work, builds, source edits,
+commits or pushes were performed by this reviewer.
+
+## Evidence reconciled
+
+- The focused result contains 225 started and completed unique test IDs, 225
+  successful test events, and 670 successful subtests; failure/error/skip counts,
+  duplicate IDs and missing selected IDs are all zero. The raw log records
+  `Ran 225 tests in 30.761s`. The JSON records 31.5562625 seconds for its enclosing
+  invocation. The prose uses the correct unittest duration.
+- Its 117 loaded-source records have no hash mismatches or missing baselines.
+  Both recorded execution/process deltas are empty. Recorded HEAD, the two
+  modified test files and the untracked audit are disclosed accurately. The
+  two test-file hashes match those independently reviewed in A030.
+- The copied focused result, log and invocation script, invariant JSON and
+  discovery JSON are byte-for-byte identical to their retained scratch inputs.
+- Canonical discovery reports 5,539 unique IDs, exactly 24 added and none
+  removed from 5,515 base IDs, with existing relative order preserved. The prose
+  correctly distinguishes discovery from execution.
+- The invariant record supports 69 measurement files / 1,303,138 bytes, 21
+  unchanged dependency descriptors, 25 baseline golden files and 39 numerical
+  fixtures. It expressly does not hash absent dependency source bytes. The
+  packet preserves that limitation.
+- The base replay receipt reports revision
+  `858090410a992756808256ace90d36b9b3b88dd3`, 5,515 canonical tests, 38,655
+  successful subtests, and 55,200 events. This reviewer independently hashed the
+  retained ZIP: `21c1c6bda5e8513d99642dd12d5db8c52d4b2bcae8726119b12236e7708fc74e`,
+  matching both provider metadata and replay receipt. The receipt does not
+  authenticate the provider itself; the separate provider observation must
+  travel with it.
+- A static local-link scan found no missing relative file targets in the five
+  reviewed Markdown files (200, 336, 197, 4 and 9 link occurrences respectively).
+  It did not validate remote URLs or heading fragments.
+- The native population remains explicitly unstarted; private inputs, selected
+  revision qualification, actual resource admission and independent native
+  replay remain prerequisites. No performance or phase acceptance is claimed.
+
+## Planned provenance still needed before publication
+
+1. **Link discovery evidence.** `validation/discovery.json` already exists in the
+   packet, but its README does not yet link or describe it. Add the source
+   revision and discovery-only scope alongside the count/delta stated in the
+   root/status/backlog documents.
+2. **Retain and link the base governance original and provenance.** The new
+   status/backlog sections describe the successful base original and replay,
+   but the packet currently contains neither the original ZIP nor provider
+   metadata, invocation/reader identities, replay receipt/log and A028 report.
+   These exist under `base-governance/` and are already planned for inclusion.
+   Preserve the receipt's provider-authentication limitation and exact base
+   scope; do not relabel it as qualification of the changed head.
+3. **Back the old-revision negative-control claim.** The audit currently says
+   its packet retains negative controls against the explicit starting revision.
+   At this observation the packet has A010/A017/A030 reviews but no A005–A009
+   negative-control reports or their referenced retained results. Copy and link
+   the available reports/evidence, or narrow the sentence until those inputs
+   are actually included. A030 describes later fixture isolation controls; it
+   does not by itself substantiate all old-writer controls.
+4. **Expose the test-correction review.** `reviews/test-corrections.md` is
+   present but not linked from the packet README. A link would make the final
+   two test-source identities and correction rationale reviewable.
+
+## Wording refinements
+
+- The invariant result selected `93bb3f0` but observed `a693d6f` after the two
+  test corrections. It records `head_matches_selected: false` and explicitly
+  lists only those test changes between the revisions. This does not invalidate
+  the protected-source observations. State the observed revision when adding
+  invariant provenance rather than implying an entirely clean selected tree.
+- The packet says roadmap and acceptance "records are unchanged from the
+  audited base." At the invariant observation that was true, including the
+  then-unmodified status/backlog documents. Those handoff documents are now
+  intentionally edited. Prefer "phase and acceptance states remain unchanged"
+  for the current claim, or explicitly date the byte-identity statement to the
+  retained observation. Keep the existing separate qualification about the
+  historical evidence tree.
+- In status, "This qualifies that base only" is understandable in the strict
+  governance paragraph, but "This establishes governance qualification for that
+  base only" would avoid implying every CI workflow or native acceptance.
+
+If subsequent launcher work adds tests or changes source, keep this 225/670
+record as its original checkpoint-focused observation and update the current
+discovery/all-new-method counts from a new observation. Do not rewrite the
+retained historical result.

@@ -1,6 +1,50 @@
 # Qualified warm-workspace handoff
 
-## Current closeout reliability continuation
+## Checkpoint publication and launcher continuation
+
+The [current audit](p06-checkpoint-publication-audit.md),
+[source evidence packet](evidence/p06-checkpoint-publication/README.md) and
+[current status](status.md) supersede the earlier closeout summary below. The
+shared writer now removes only its own failed temporary, preserves the committed
+report and first exception, and supports write/search-only directories. Existing
+finalization can then publish a failed attempt without repeating child work.
+The installed Python launcher also forwards PID-directed `SIGTERM` to its direct
+child and reaps it before returning, preserving its verified environment and
+exit-status mapping. Neither correction promises cleanup after uncatchable
+termination or repeated failures.
+
+Final focused integration passed **258 methods and 752 subtests**, including
+**32 new methods**, with zero failures, errors or skips and stable recorded
+source/process state. Canonical discovery contains **5,547 unique IDs**; it
+does not execute test bodies. These results are development evidence, not full
+revision qualification or native performance acceptance.
+
+The published implementation is
+[`30b2e8ca69fba47646392c0cf6650cbb75155843`](https://github.com/baabi-boo/AI-GPU/commit/30b2e8ca69fba47646392c0cf6650cbb75155843).
+The [publication and review record](evidence/p06-checkpoint-publication/continued-audit/README.md)
+retains its exact local/API source mapping and later observations. This
+documentation follow-up is on the separate audit branch. The published source's
+own strict governance run and independent original replay now reconcile
+**5,547 methods, 38,738 successful subtests and 55,379 events**, with zero
+failed, errored or skipped method outcomes. The retained original and separate
+provider observations are linked from that record. Hosted native admission must
+still reobserve the actual selected master's provider, source and artifact
+identities; an audit-branch run cannot replace that check.
+
+The **qualified warm experiment remains unstarted: 24 processes, 792 launches
+and 25,344 checked FP32 words**. Exact private control delivery, the intended
+reviewer's verified public age recipient and actual **15 GiB free disk / 4 GiB
+available memory** admission remain required. Preserve all frozen measurement
+sources, dependency descriptors, proofs, numerical guards, performance bounds
+and encrypted complete or explicitly partial retention. The automatic legacy
+Warm Workspace workflow's matching counts do not establish the separate
+qualified route. P06-A02/A03 remain open and P01 vendor integration remains
+blocked.
+
+## Earlier closeout reliability continuation (historical)
+
+The following section preserves that continuation's original source, test scope
+and then-existing temporary-file limitation.
 
 **Closeout reliability fixes are implemented; the next actual qualified warm
 experiment remains unstarted: 24 processes, 792 launches and 25,344 checked FP32

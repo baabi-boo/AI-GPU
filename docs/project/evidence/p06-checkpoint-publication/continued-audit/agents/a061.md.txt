@@ -1,0 +1,91 @@
+# A061 — P04 Native Model workflow and replay scope
+
+## Result
+
+No concrete workflow integration or source-binding blocker found. This is a
+read-only source review at `9f369a579ca764800b22eedd15e09795f09615da`, not a new workflow-status observation, test,
+build, replay, numerical run or acceptance decision.
+
+## What a complete green workflow establishes
+
+`.github/workflows/p04-model.yml:63–78,133–161` fixes four independent jobs:
+SimX/processor rtlsim × FP16/BF16, each at the provider checkout SHA. Each runs
+five frozen cases twice. `p04_execute.py:66–88,254–280` and
+`p04_execution_records.py:188–257` constrain the observed population:
+
+| Scope | Case/backend pairs | Model runs | Native matmul launches | Event/profile pairs |
+|---|---:|---:|---:|---:|
+| One backend/format job | 5 | 10 | 30 | 150 |
+| All four jobs | 20 | 40 | 120 | 600 |
+
+Cases are seeded dense, negated dense, zero, signed basis and split boundary.
+Each model is the fixed synthetic bias-free batch-16 `16 → 8 → 4` network.
+Three native matmuls are connected by declared host ReLU, exact conversion and
+row assembly; no CPU matmul fallback is accepted. The complete population checks
+5,120 hidden words, 2,560 bridge words, 2,560 output-block words and 2,560 assembled
+output words. These are static contract counts, not newly observed execution.
+A single selected job is expressly a partial variant packet; its
+`full_matrix_requested` is false. Only all four successful source-matched
+packets support the complete matrix interpretation.
+
+## Source, compiler and report binding
+
+Preparation (`p04_ci_prepare.py:129–221`) compares the actual Git revision to
+`GITHUB_SHA`, validates clean recursive source and exact cache identities,
+retains actual tool/dependency hashes, and enforces 15 GiB free disk and 4 GiB
+available RAM. Restored toolchain/dependency inputs are identified reused inputs,
+not a claim of a fresh rebuild of all dependencies.
+
+The producer checks imported helper bytes and clean source, freezes the
+`p02-tfr` profile and generated fixtures, makes fresh per-variant builds,
+reproduces generated headers, validates separate runtime/backend/application
+compiler records and effective macros, and binds source/configuration,
+fixture/dependency and built artifact identities into the qualification ID
+(`p04_execute.py:144–245`). Source/tools/dependencies and binaries are rechecked
+before and after launches and at closeout. Result parsing rejects malformed or
+extra fields, duplicate JSON keys, failure markers, wrong source/backend/binding,
+missing or reordered repetitions, numerical mismatches, invalid wire arguments,
+incomplete cleanup and missing/invalid profiles
+(`p04_execution_records.py:67–117,134–185,188–312`).
+
+The report starts with `acceptance_claimed=False` and `phase_complete=False`.
+Failures remain failed or blocked and the workflow retains evidence with
+`if: always()`. A green job cannot convert those fields into phase acceptance.
+
+## Shared-writer correction
+
+Both preparation and execution call `p02_matrix._write_json`; the producer uses
+it for JSON checkpoints and snapshots, while raw native output stays in bounded
+command logs. The loaded-helper inventory and retained source set include the
+actual shared writer (`p04_execute.py:50–57,116–123,149–182`). Its correction adds
+no new local import and preserves JSON encoding, schemas, numerical records and
+fixtures. It permits the producer's existing explicit finalization to write
+after an owned failed temporary is cleaned up; it introduces no retry of a
+native command. Preparation still has a single final write, so a persistent
+write failure can prevent its receipt and block execution. No unconditional
+closeout or crash-durability guarantee follows.
+
+All 13 inspected files match the committed source. Only `p02_matrix.py` differs
+from base among them; the workflow, native producer/parser, fixtures and retained
+historical replay programs remain unchanged. Exact hashes are in
+`a061-native-model.json`.
+
+## Historical replay and acceptance boundaries
+
+The retained P04 replay command checks archive/member populations, lengths and
+SHA-256 identities before extraction, then runs separate numerics, dispatch and
+provenance auditors. Those readers reconcile original observations and retained
+source/compiler bodies; they do not rerun the model or rehash unarchived tools
+and executable bytes. The accepted historical c9d139c matrix and its replay stay
+at that historical source. They cannot qualify the current helper or a later
+published source revision merely because those files still exist.
+
+Processor rtlsim bypasses the AFU and retains integer DPI helpers. Host steady
+clock profiles do not establish physical device latency, throughput, speedup,
+FPGA, power, silicon or vendor hw_emu. This workflow does not execute or decide
+the separate P06 qualified-warm population of 24 processes, 792 launches and
+25,344 checked words. A successful P04 matrix remains distinct numerical/native
+regression evidence with independent review and separate acceptance required.
+
+No tests, builds, native workloads, replay commands, remote queries, repository
+edits, commits or pushes were performed.

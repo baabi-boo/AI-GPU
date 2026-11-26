@@ -1,0 +1,60 @@
+A091 final closure follow-up
+
+Result: PASS — 36/36 checks passed.
+Observation: 2026-11-26T08:31:34.463657+00:00 through 2026-11-26T08:31:34.652393+00:00.
+
+This is a follow-up to existing assignment A091, not assignment 101.
+The original A091 report and JSON remain byte-for-byte unchanged.
+
+Observed populations:
+- 100 distinct completed ledger reports and 100 matching unique roster tasks.
+- Five retained reports (A001, A002, A018, A083, A088) are gzip compressed; decompression exactly matches the unchanged scratch originals and the recorded original lengths/SHA-256 values.
+- All 100 retained report lengths and SHA-256 digests match their ledger records.
+- No missing, duplicate or unindexed retained report. All 100 original report byte sequences are distinct.
+- All 81 supporting-index entries match retained hashes, original lengths/hashes and exact scratch original bytes; ten supporting logs are losslessly gzip compressed.
+- All 21 current-governance retained files match indexed lengths/SHA-256 and exact scratch original bytes. No extra unindexed file apart from the index itself.
+- All observed retained/original files are regular files, not symlinks.
+- The staged snapshot has exactly 225 changed paths, all under docs/. git diff --cached --check exited 0 without output.
+- HEAD, full porcelain status, staged raw diff and all captured input hashes remained unchanged across this observation.
+
+Checklist:
+- PASS: ledger_exactly_100_completed_reports
+- PASS: ledger_numbers_exactly_1_to_100
+- PASS: ledger_unique_numbers
+- PASS: ledger_unique_task_names
+- PASS: ledger_unique_report_paths
+- PASS: ledger_all_statuses_completed
+- PASS: roster_exactly_100_contiguous_unique_tasks
+- PASS: all_ledger_numbers_and_tasks_match_roster
+- PASS: all_task_prefixes_match_numbers
+- PASS: all_report_retained_lengths_match
+- PASS: all_report_retained_hashes_match
+- PASS: all_report_original_metadata_matches
+- PASS: all_report_original_bytes_match_unique_scratch_files
+- PASS: exactly_five_specified_reports_losslessly_gzip_retained
+- PASS: all_report_compression_types_known
+- PASS: all_report_files_regular_and_not_symlinks
+- PASS: all_report_original_byte_sequences_distinct
+- PASS: no_missing_or_unindexed_retained_reports
+- PASS: supporting_index_exactly_81_unique_paths
+- PASS: supporting_all_retained_hashes_match
+- PASS: supporting_all_original_lengths_and_hashes_match
+- PASS: supporting_all_original_bytes_match_scratch
+- PASS: supporting_all_compression_types_known
+- PASS: supporting_all_files_regular_not_symlinks
+- PASS: supporting_no_missing_or_unindexed_retained_files
+- PASS: current_governance_exactly_21_unique_retained_paths
+- PASS: current_governance_all_lengths_match
+- PASS: current_governance_all_hashes_match
+- PASS: current_governance_all_original_bytes_match_scratch
+- PASS: current_governance_all_files_regular_not_symlinks
+- PASS: current_governance_no_missing_or_unindexed_retained_files
+- PASS: original_a091_report_and_json_unchanged_from_prior_review
+- PASS: staged_diff_exactly_225_documentation_paths
+- PASS: staged_whitespace_check_passed_without_output
+- PASS: head_status_and_staged_diff_unchanged
+- PASS: all_observed_input_file_bytes_unchanged
+
+Scope: This is a bounded artifact and ledger integrity review. It does not independently reproduce earlier tests or provider observations, rerun governance replay, attest every runtime spawn event, qualify native execution or change acceptance. The root may add these closure files after this snapshot; that expected addition is not part of the observed 225-path staged diff.
+
+Outputs: /tmp/ai-gpu-2bfab0261c05/audit-closure-review.json and audit-closure-review.txt. Only these two new scratch review outputs were written. No shared ledger, roster, source, evidence or Git reference was changed. No test suite, build, native workload, network request, commit or push was performed.

@@ -1,0 +1,18 @@
+# Agent035 — Python bundle validation audit
+
+## Scope and result
+
+Read-only audit at `a693d6f8828e4e10b5374db7fef8c727aa69d34e`, focused on `python/vortex_ai/_bundle.py` and its producer, launcher, package-build, and native-loader consumers. Read the repository guidance and relevant installed-binding contract. Existing edits were confined to unrelated project documentation/evidence; this audit changed no repository files.
+
+**No actionable defect found within the supported installed-bundle contract.** This is source inspection, not native qualification or a test-suite result. No tests, builds, or native code were run; no reproduction was necessary.
+
+## Checks supporting the result
+
+- **Duplicate fields and identity:** `_pairs` rejects duplicate JSON object keys recursively (`_bundle.py:66–71`); `read_manifest` requires canonical bytes and strict parsing (`224–239`). Source inventory order/membership, inventory digest, qualification digest, format/profile/fixture agreement, exact artifact roles, and cross-inventory duplicate paths are checked (`164–220`). JSON integer fields use exact integer types where required, excluding booleans.
+- **Mutable files:** `_read_regular` obtains bytes and digest from one nonblocking, no-follow descriptor, bounds the stream, requires regular/nonempty files, and compares device/inode/size/mtime/ctime before and after reading and against the current pathname (`97–125`). `validate_files` checks all six pinned artifacts, the smaller module limit, and exactly five library-directory entries (`242–258`). No unsupported guarantee of an atomic snapshot across all files is inferred.
+- **Installed identity:** the launcher compares the manifest and source hashes with the compiled extension pin before generating the child environment (`launch.py:25–41`). Native loading independently checks compiled manifest/artifact identities and rejects symlink traversal (`runtime_loader.cpp:270–329,752–795`), so Python preflight is not the execution trust boundary.
+- **Qualification scope:** the manifest reader requires nonempty compiler-record metadata without re-running its qualification validation. The bundle producer validates actual compiler records, frozen artifacts, source snapshots, and retained native results before publishing the receipt (`ci/project/p05_bundle.py`). The package guide explicitly says package building neither creates nor qualifies a GPU bundle. Treating the reader as an independent qualification verifier would expand its stated purpose.
+
+## Considered but not promoted
+
+Python preflight resolves a root alias before checking it, whereas native path traversal rejects symlink components. The documented supported input is a canonical absolute root without symlink components; no failure for that supported input was established. Likewise, mutations after an individual verification are not a filesystem-sandbox guarantee, and native execution re-verifies the installed pin and files. Neither observation warrants a new security feature under this audit's scope.

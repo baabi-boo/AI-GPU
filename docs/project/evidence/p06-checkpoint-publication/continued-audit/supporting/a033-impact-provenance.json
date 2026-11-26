@@ -1,0 +1,56 @@
+{
+  "base": "858090410a992756808256ace90d36b9b3b88dd3",
+  "head": "a693d6f8828e4e10b5374db7fef8c727aa69d34e",
+  "files": {
+    "ci/change_impact.py": {
+      "sha256": "bd2ef579de90b14b7ab4cd5ef2f6b7c911753e154c4201aaf0f0d0b25a460779",
+      "path": "/tmp/ai-gpu-2bfab0261c05/a033-base-classifier/change_impact.py"
+    },
+    "docs/review/change-impact.yaml": {
+      "sha256": "489d1018c790bb6c383b774b119223889bb508be6c63db654d5c6c80520d0333",
+      "path": "/tmp/ai-gpu-2bfab0261c05/a033-base-classifier/change-impact.yaml"
+    },
+    "docs/review/code-review-policy.md": {
+      "sha256": "99426ced05c04c1b14422f4fdacabcce3c680600461c4887b14e5eabf8b0587d",
+      "path": "/tmp/ai-gpu-2bfab0261c05/a033-base-classifier/code-review-policy.md"
+    }
+  },
+  "classify": {
+    "command": [
+      "python3",
+      "-I",
+      "/tmp/ai-gpu-2bfab0261c05/a033-base-classifier/change_impact.py",
+      "--repo",
+      "/tmp/ai-gpu-2bfab0261c05/repo",
+      "--policy",
+      "/tmp/ai-gpu-2bfab0261c05/a033-base-classifier/change-impact.yaml",
+      "classify",
+      "--base",
+      "858090410a992756808256ace90d36b9b3b88dd3",
+      "--head",
+      "a693d6f8828e4e10b5374db7fef8c727aa69d34e",
+      "--format",
+      "json"
+    ],
+    "exit_code": 0,
+    "output": "/tmp/ai-gpu-2bfab0261c05/a033-impact.json"
+  },
+  "explain": {
+    "command": [
+      "python3",
+      "-I",
+      "/tmp/ai-gpu-2bfab0261c05/a033-base-classifier/change_impact.py",
+      "--repo",
+      "/tmp/ai-gpu-2bfab0261c05/repo",
+      "--policy",
+      "/tmp/ai-gpu-2bfab0261c05/a033-base-classifier/change-impact.yaml",
+      "explain",
+      "--base",
+      "858090410a992756808256ace90d36b9b3b88dd3",
+      "--head",
+      "a693d6f8828e4e10b5374db7fef8c727aa69d34e"
+    ],
+    "exit_code": 0,
+    "output": "/tmp/ai-gpu-2bfab0261c05/a033-impact-explain.txt"
+  }
+}

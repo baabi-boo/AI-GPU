@@ -1,0 +1,68 @@
+# Agent023 focused integration validation
+
+**Result: PASS for one focused development invocation.** 225 selected test methods executed once; 670 subtest events passed. Failures: 0; errors: 0; skips: 0; expected failures: 0; unexpected successes: 0. No retry or repeated test invocation occurred.
+
+## Revision and invocation
+
+HEAD before and after: `93bb3f0342eff0b469a0da06cb067916af7c539e`.
+The run used the working tree with these identical before/after porcelain entries:
+
+```text
+ M ci/project/test_checkpoint_ownership.py
+ M ci/project/test_p06_checkpoint_input_recovery.py
+?? docs/project/p06-checkpoint-publication-audit.md
+```
+
+Working directory: `/tmp/ai-gpu-2bfab0261c05/repo`.
+Interpreter: `/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3`; Python 3.12.14; UID/EUID 1000.
+The two modified test files above were stabilized before this invocation; their exact before/after SHA-256 values are retained in the JSON. This is evidence for that working tree, not an unmodified committed checkout.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 /tmp/ai-gpu-2bfab0261c05/validation/a023_focused_runner.py
+```
+
+The standalone runner used one `unittest.TestLoader.loadTestsFromNames` selection and one `unittest.TextTestRunner.run` call from the source root. Start: `2026-11-26T06:27:41.831649+00:00`; finish: `2026-11-26T06:28:13.387890+00:00`. Unittest reported 30.761 seconds; total runner duration was 31.556 seconds. Process exit code: 0. `sys.dont_write_bytecode` was true.
+
+## Selection and execution
+
+| Module | Tests |
+| --- | ---: |
+| `test_checkpoint_write_failures` | 4 |
+| `test_checkpoint_ownership` | 7 |
+| `test_checkpoint_directory_access` | 2 |
+| `test_p06_checkpoint_run_recovery` | 4 |
+| `test_p06_checkpoint_input_recovery` | 2 |
+| `test_p06_checkpoint_prepare_build` | 5 |
+| `test_p02_matrix` | 55 |
+| `test_p02_wgmma_matrix` | 37 |
+| `test_p04_ci_prepare` | 20 |
+| `test_p06_qualified_warm_run` | 20 |
+| `test_p06_qualified_warm_inputs` | 34 |
+| `test_p06_dependency_local_prepare` | 21 |
+| `test_p06_initial_checkpoint_closeout` | 2 |
+| `test_p06_input_initial_closeout` | 2 |
+| `test_p06_preparation_initial_closeout` | 5 |
+| `test_p06_builder_initial_closeout` | 5 |
+| **Total** | **225** |
+
+The JSON records all selected, started and completed test IDs, per-test outcomes, and every subtest ID/outcome. Selected IDs: 225; unique IDs: 225; duplicate selected IDs: 0; duplicate executed IDs: 0. All selected IDs started and completed once, with no unselected started IDs. Module origins matched all 16 requested source files. Loader errors: 0. Subtest outcomes: 670 success, 0 failure, 0 error, 0 skip.
+
+## Source integrity and process state
+
+A pre-import baseline hashed 918 repository Python files. Complete before/after SHA-256 records cover all 117 local files loaded into this process, including the 16 selected test files and production `ci/project/p02_matrix.py`. All 117 matched; no loaded local path lacked a pre-import baseline. HEAD and porcelain status were unchanged across execution.
+
+Snapshots before imports, before tests and after tests detected no changes in cwd, environment key/value hashes, signal handlers or blocked signals, Python threads, Linux task IDs, or open file descriptor identities/flags. Environment values were not retained in clear text. These are point-in-time process-state checks; they do not establish absence of transient changes or independently audit child processes. No production or test source edits were made by Agent023.
+
+## Evidence boundary
+
+`AGENTS.md` and `docs/project/governance-runbook.md` distinguish focused source-root unittest development checks from strict, complete governance qualification. This result is the former. Canonical discovery was not run here. No full governance qualification, native GPU execution, RTL/FPGA execution, performance result, or phase acceptance is claimed. The checkpoint recovery fixtures use injected host faults and synthetic orchestration.
+
+## Retained artifacts
+
+All artifacts are outside the source checkout under `/tmp/ai-gpu-2bfab0261c05/validation/`.
+
+| File | SHA-256 |
+| --- | --- |
+| `a023_focused_runner.py` | `df5f34b88a82a302d1767be9f994eb3064208952c0b864c5dfc79bf065bfa6e1` |
+| `a023-focused.log` | `28687977736cfeec4c274e2947b393fc05106f60b22e9b975ff06b0ed578583f` |
+| `a023-focused-results.json` | `a4c9109f1e29acfcee16f005f8a332228c06492f513c0ec1382fb0de90e59ad3` |

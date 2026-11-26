@@ -1,0 +1,16 @@
+# Agent 014 — bounded PyTorch operator audit
+
+## Scope and result
+
+Reviewed `python/vortex_ai/torch_ops.py` against `docs/designs/torch_custom_ops_v1.md` at HEAD `ba88572af0bea1e355af08038abcc1f62773a438`, with supporting ownership checks in `python/vortex_ai/_api.py` and inspection of existing host tests. No concrete user-triggerable defect was identified within the supported contract. This is source-review evidence only; no execution, framework qualification, GPU test, package installation, repository modification, commit, or push occurred.
+
+## Exact references checked
+
+- **Environment and dispatch:** `torch_ops.py:36–45` pins the declared environment; `64–71` checks eager mode; `340–353` registers native-entry implementations and rejects enumerated transforms. Contract: `torch_custom_ops_v1.md:7–46`. Documented unqualified higher-level transform behavior was not treated as a defect.
+- **Original tensor validation:** `torch_ops.py:74–107` checks exact tensor type, strided CPU placement, FP16/BF16, original gradient/tangent state, unresolved negative/conjugate views, rank, offset, packed storage extent, allowed signatures, exact strides, and session format. Contract: `torch_custom_ops_v1.md:48–70`. The stronger exact-storage-extent restriction is explicitly described in `python/README.md:339–340` and tested at `ci/project/p05_torch_host_tests.py:296`; it was not reported as a supported-input defect.
+- **Bit representation and ownership:** `torch_ops.py:110–119` uses integer reinterpretation and little-endian packing, then constructs and clones CPU FP32 output. `291–310` invokes `Session.submit`, waits, explicitly closes, and only then reads output. Contract: `torch_custom_ops_v1.md:72–82`; no CPU arithmetic fallback appears.
+- **Failure and cleanup semantics:** `torch_ops.py:122–181, 233–245, 275–288, 311–337` preserve owners/errors, bound retry waits, reject detach with pending work, and forbid success output after failed status. Contract: `torch_custom_ops_v1.md:97–133`. Supporting binding ownership is retained at `_api.py:478–489, 633–657, 719–751`.
+
+## Verification limits
+
+`python3 -c 'import importlib.util; print(importlib.util.find_spec("torch"))'` returned `None`; no behavioral reproduction was attempted. Existing host-test coverage was inspected, not executed. Three unrelated staged test additions were present and untouched: `ci/project/test_checkpoint_ownership.py`, `ci/project/test_p06_checkpoint_input_recovery.py`, and `ci/project/test_p06_checkpoint_prepare_build.py`.

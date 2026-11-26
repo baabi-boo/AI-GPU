@@ -1,0 +1,88 @@
+# Agent 024: checkpoint test isolation and claim assertions
+
+## Scope
+
+Base revision: `93bb3f0342eff0b469a0da06cb067916af7c539e`.
+Read root `AGENTS.md`, current project status/roadmap/backlog/acceptance context,
+and the A021 and A022 review reports. Modified only:
+
+- `ci/project/test_checkpoint_ownership.py`
+- `ci/project/test_p06_checkpoint_input_recovery.py`
+
+No production code, golden data, gate, or acceptance predicate was changed.
+No commits or pushes were made. The preexisting untracked
+`docs/project/p06-checkpoint-publication-audit.md` was left untouched.
+
+## Changes
+
+The `fdopen` failure test now records `(descriptor, device/inode identity)` for
+each opened descriptor. Its existing exception, descriptor-release, previous
+content, and temporary-removal assertions remain before fixture cleanup. A
+per-subtest `finally` then closes a still-live descriptor only when its current
+device/inode matches the recorded identity. Cleanup uses the saved real
+`os.close` after the patches have exited; `EBADF` is accepted and other OS
+errors propagate. An assertion failure therefore remains a failure but does
+not leak the test's owned descriptors into later subtests or tests.
+
+Acquisition recovery now explicitly indexes every required false-claim field
+and requires `is False`, covering `inputs.dependency.FALSE_CLAIMS`,
+`retained_code_executed`, `counter_qualification_passed`,
+`qualified_warm_passed`, `toolchain_cache_used`, and `dependency_cache_used`.
+Missing fields and non-Boolean substitutes can no longer evade this check.
+The original scan for any other true Boolean field remains, as does the
+separate `network_acquisition` assertion tied to the fixture's modeled fetches.
+
+## Focused verification
+
+Run from `/tmp/ai-gpu-2bfab0261c05/repo`:
+
+```sh
+PYTHONPATH=ci/project python3 -m unittest -v test_checkpoint_ownership.CheckpointOwnershipTests.test_fdopen_failure_releases_owned_descriptors test_p06_checkpoint_input_recovery.CheckpointInputRecoveryTests
+```
+
+Result: exit 0; **3 tests passed in 0.321 seconds**; no failures, errors, or
+skips. This runs only the changed ownership method and the two input-recovery
+methods that use the changed assertion helper. `git diff --check` passed for
+both modified files.
+
+## Negative failure-isolation probes
+
+A one-shot Python command (`PYTHONPATH=ci/project python3 - <<'PY'`) executed
+only `test_fdopen_failure_releases_owned_descriptors` through
+`unittest.TestResult`. An in-memory wrapper around the real `_write_json`
+recorded every writer descriptor and patched `os.close` only during each
+writer invocation. The first mode suppressed writer closes. The second mode
+really closed each owned descriptor and immediately reused its number with
+`os.dup2` from a live, unrelated sentinel. In both modes the original `fdopen`
+fault and all fixture assertions still ran. Results were inspected after
+`case.run(result)` completed unittest's registered cleanup. The probe itself
+closed all retained sentinel duplicates afterward, using the saved real close
+and an identity check.
+
+The probe asserted all listed counts and exited 0:
+
+| Observation | Suppressed writer close | Forced unrelated descriptor reuse |
+|---|---:|---:|
+| Recorded owned descriptors | 4 | 4 |
+| Expected failing subtests | 2 | 2 |
+| Errors | 0 | 0 |
+| Owned descriptors still live after test cleanup | 0 | 0 |
+| Unrelated reused descriptors preserved after test cleanup | 0 | 4 |
+| Temporary root removed | true | true |
+
+This reproduces A021's deliberate regression while changing its leaked owned
+descriptor count from 4 to 0. The two assertion failures remain visible. The
+reuse mode directly checks that cleanup preserves unrelated descriptors whose
+numbers match earlier owned descriptors.
+
+## Stable source identities
+
+| File | SHA-256 |
+|---|---|
+| `ci/project/test_checkpoint_ownership.py` | `7f18c215bcfb1b8cd69bbbfaad55e54fee651ef5b2d843ce05c761cfb17ff127` |
+| `ci/project/test_p06_checkpoint_input_recovery.py` | `ed1a9315c42883b4b3c9e0405e00424d153357a9b352dfbff599d16e961f9bbc` |
+
+Source was held unchanged after notifying the parent that it was stable for
+A023's combined integration. These focused synthetic host tests and negative
+probes establish test behavior only; they do not establish native execution,
+performance acceptance, or full strict governance qualification.

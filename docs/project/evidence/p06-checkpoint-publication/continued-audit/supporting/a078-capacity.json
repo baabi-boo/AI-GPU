@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "scope": "read-only resource snapshot and static admission-contract review; no native admission attempted",
+  "published_revision": "30b2e8ca69fba47646392c0cf6650cbb75155843",
+  "started_at_utc": "2026-11-26T07:45:22.420024+00:00",
+  "finished_at_utc": "2026-11-26T07:45:22.422484+00:00",
+  "requirements": {
+    "free_disk_bytes_each_selected_filesystem": 16106127360,
+    "available_memory_bytes": 4294967296,
+    "build_jobs": 2,
+    "simulation_workers": 1,
+    "sampled_process_group_rss_bytes": 4294967296
+  },
+  "filesystems": [
+    {
+      "path": "/tmp/ai-gpu-2bfab0261c05/published-source",
+      "device": 39,
+      "free_bytes": 2826969088,
+      "total_bytes": 5225713664,
+      "free_gib": 2.6328201293945312,
+      "meets_15_gib_reserve": false
+    },
+    {
+      "path": "/tmp/ai-gpu-2bfab0261c05/repo",
+      "device": 39,
+      "free_bytes": 2826969088,
+      "total_bytes": 5225713664,
+      "free_gib": 2.6328201293945312,
+      "meets_15_gib_reserve": false
+    },
+    {
+      "path": "/tmp/ai-gpu-2bfab0261c05/audit",
+      "device": 39,
+      "free_bytes": 2826969088,
+      "total_bytes": 5225713664,
+      "free_gib": 2.6328201293945312,
+      "meets_15_gib_reserve": false
+    },
+    {
+      "path": "/tmp",
+      "device": 39,
+      "free_bytes": 2826969088,
+      "total_bytes": 5225713664,
+      "free_gib": 2.6328201293945312,
+      "meets_15_gib_reserve": false
+    },
+    {
+      "path": "/workspace/scratch/2bfab0261c05",
+      "device": 65040,
+      "free_bytes": 399290368,
+      "total_bytes": 20957446144,
+      "free_gib": 0.3718681335449219,
+      "meets_15_gib_reserve": false
+    },
+    {
+      "path": "/workspace",
+      "device": 65040,
+      "free_bytes": 399290368,
+      "total_bytes": 20957446144,
+      "free_gib": 0.3718681335449219,
+      "meets_15_gib_reserve": false
+    }
+  ],
+  "host_memavailable_bytes": 5051174912,
+  "host_memavailable_gib": 4.704273223876953,
+  "host_memory_threshold_observed": true,
+  "visible_memory_observer": {
+    "schema_version": 1,
+    "contract_id": "p06-qualified-warm-capacity-v1",
+    "scope": "advisory-read-only-visible-memory-snapshot",
+    "status": "unknown",
+    "exit_code": 1,
+    "required_bytes": 4294967296,
+    "known_memory_shortfall": false,
+    "observation_complete": false,
+    "host_available_bytes": 5051174912,
+    "host_available_samples_bytes": [
+      5051174912,
+      5051174912
+    ],
+    "visible_limit_bytes": null,
+    "visible_headroom_bytes": null,
+    "visible_shortfall_observed": false,
+    "visible_capacity_status": "unknown",
+    "effective_capacity_status": "unknown",
+    "effective_headroom_bytes": null,
+    "full_ancestry_status": "unknown",
+    "ancestry_complete": null,
+    "topology_stable": null,
+    "limits_stable": null,
+    "membership": {
+      "status": "observed",
+      "depth": 0,
+      "namespace_relative_root": true,
+      "sha256": "e57fd7b21104f091de366ace1464596378a498b0a5e63f1b21147a8998c20107"
+    },
+    "mount_mapping": {
+      "status": "unknown"
+    },
+    "visible_root_observation": {
+      "status": "unknown"
+    },
+    "ancestors": [],
+    "errors": [
+      "mapping:missing_or_ambiguous_v2_mount"
+    ],
+    "native_execution": "not_run",
+    "native_launch_authorized": false,
+    "retained_code_executed": false,
+    "qualified": false,
+    "ready_for_warm": false,
+    "warm_execution": false,
+    "full_warm_coverage": false,
+    "acceptance_claimed": false,
+    "phase_acceptance": false,
+    "performance_acceptance": false,
+    "counter_qualification_passed": false,
+    "qualified_warm_passed": false,
+    "governance_passed": false,
+    "limitations": [
+      "Full ancestry has no reviewed witness; namespace-relative root and all-max are not unlimited proof.",
+      "Observation completeness covers visible reads only; hidden ancestors can impose tighter limits.",
+      "A supported visible-root interface pattern is not a full-ancestry or unlimited-memory witness.",
+      "Snapshots reserve nothing, are not atomic, and cannot prove allocation or native launch safety.",
+      "Finite headroom uses ancestor usage including descendants; reclaim can change this margin.",
+      "memory.high is a separate throttle observation; swap is never added to RAM.",
+      "Topology equality at endpoints cannot exclude intervening migration or limit changes.",
+      "The monotonic deadline is polled; it cannot interrupt a blocked kernel read or injected reader.",
+      "Paths and ancestor names are omitted; relative level zero is the process's visible cgroup."
+    ],
+    "observation_bounds": {
+      "max_file_reads": 512,
+      "file_reads": 6,
+      "max_read_calls": 1024,
+      "read_calls": 14,
+      "max_total_bytes": 2097152,
+      "bytes_read": 12186,
+      "max_path_depth": 64,
+      "max_ancestors": 64,
+      "max_path_bytes": 4096,
+      "max_mounts": 4096,
+      "max_meminfo_bytes": 65536,
+      "max_membership_bytes": 65536,
+      "max_mountinfo_bytes": 1048576,
+      "max_scalar_bytes": 4096,
+      "max_json_bytes": 65536,
+      "max_seconds": 2.0,
+      "exhausted": null
+    }
+  },
+  "no_local_disk_path_meets_reserve": true,
+  "native_admission_attempted": false,
+  "native_execution": "not_run",
+  "effective_cgroup_capacity_established": false,
+  "resources_reserved": false,
+  "source_identities": [
+    {
+      "path": "ci/project/p06_qualified_warm_capacity.py",
+      "sha256": "fe3f6eb302e86e7db403c6f5fdc97718ef784d246b579a880f321ca9324411f0",
+      "unchanged_after": true,
+      "matches_published_commit": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_hosted.py",
+      "sha256": "875e1e095253cbe38c6424adfdc324bdd88ee1152536a993ae6d03dba0992220",
+      "unchanged_after": true,
+      "matches_published_commit": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_run.py",
+      "sha256": "5417b5b5b090953f93bbccc4514f1574aef26ca6737e4a6821a118c88df8610a",
+      "unchanged_after": true,
+      "matches_published_commit": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_inputs.py",
+      "sha256": "8685e1a6ef105c94cdb8891de5403babe9353fd56a0b69ab45b48a047f595b45",
+      "unchanged_after": true,
+      "matches_published_commit": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p06_qualified_warm_control.py",
+      "sha256": "c0368265402be85f4216d6a3b3f84de8c2cf98cea374593ae45b01854a4a2a5b",
+      "unchanged_after": true,
+      "matches_published_commit": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/p06_dependency_contract.py",
+      "sha256": "d6151024fbe7e8a651075fd76b9bdc006bb18c0f61c538a2928842f865ddd364",
+      "unchanged_after": true,
+      "matches_published_commit": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/baseline_process.py",
+      "sha256": "54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa",
+      "unchanged_after": true,
+      "matches_published_commit": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/project/preflight.py",
+      "sha256": "102c174cb6e3baa082957a88e05080f9b18e80340e663702f8585586eecf6032",
+      "unchanged_after": true,
+      "matches_published_commit": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "docs/project/p06-hosted-warm-guide.md",
+      "sha256": "3a509fca0586fadb8d471ab70cb13f3cf083fa4fb4d4b97aad4326f8f00bad5f",
+      "unchanged_after": true,
+      "matches_published_commit": true,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "docs/project/evidence/p06-qualified-warm/runbook.md",
+      "sha256": "2856483ad7fd8e3e3a2bf682742ba149491a4a69b7e380125a0fd04f83b5fb2c",
+      "unchanged_after": true,
+      "matches_published_commit": true,
+      "unchanged_from_base": true
+    }
+  ],
+  "source_stable": true,
+  "head_unchanged": true,
+  "worktree_status_before": "",
+  "worktree_status_after": "",
+  "observation_invocation": {
+    "interpreter_mode": "python3 -B, bytecode disabled",
+    "call": "p06_qualified_warm_capacity.observe_capacity() once with its default reader; preflight.available_memory_bytes(); shutil.disk_usage() for six existing paths",
+    "test_bodies_run": false,
+    "pressure_or_allocation_tests_run": false,
+    "no_repository_write": true
+  }
+}

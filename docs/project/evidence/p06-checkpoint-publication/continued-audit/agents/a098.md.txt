@@ -1,0 +1,87 @@
+# A098 — Local recovery and published-head alignment
+
+## Result and exact scope
+
+Local `master` at `/tmp/ai-gpu-2bfab0261c05/repo` now points to published
+`30b2e8ca69fba47646392c0cf6650cbb75155843` and remains clean. The original local
+head `9f369a579ca764800b22eedd15e09795f09615da` is preserved by the new local
+branch `recovery/checkpoint-original-9f369a5` and by `ORIG_HEAD`. Both commits
+retain exact tree `548b85370e3d13119730b5a30d1ec388d3e141a9`.
+
+This was a bounded local reference alignment after publication. No remote read,
+fetch, push, remote reference update, hard reset, file deletion, test, build or
+native workload was performed. The repository default branch remains `master`.
+
+## Preconditions and actions
+
+Before either mutation, the main checkout was on the expected original master
+commit, its complete porcelain status was empty, `origin/master` matched the
+published commit, both trees matched the expected tree, and their complete file
+diff was empty. The original checkpoint bundle and five raw original commit
+bodies were independently checked first.
+
+The only mutations were these two successful commands, run from the main
+checkout:
+
+```sh
+git branch recovery/checkpoint-original-9f369a5 9f369a579ca764800b22eedd15e09795f09615da
+git reset --soft 30b2e8ca69fba47646392c0cf6650cbb75155843
+```
+
+An initial existence probe using `git show-ref --verify --hash` returned exit
+128 for the absent recovery branch, while the first precondition script expected
+exit 1. That script stopped before any mutation. A complete successful
+`git for-each-ref` inventory then established absence, and all immediate main
+checkout preconditions were rechecked before creating the branch. This earlier
+precondition stop is retained in the machine record; it is not a passing probe.
+
+## Preservation checks
+
+The complete reference maps before and after differ only in the intended local
+master move and new recovery branch. `origin/master`, `origin/HEAD`, the audit
+branch and every unrelated reference remained unchanged. The original commit
+is still readable and reachable through its recovery branch.
+
+All four worktree indexes retain exactly the same SHA-256 values as before:
+main, audit, base-governance/source and published-source. Main remains clean with
+its identical tree. The other three worktrees retain their prior HEAD, branch,
+index and full porcelain status, including the audit worktree's existing pending
+files. The published-source detached worktree remains clean at the exact source
+revision. No audit-branch mutation occurred.
+
+The machine record contains **251 successful bounded assertions**, including
+199 individual archive-member byte-length checks. There are zero failed final
+preservation assertions. This count describes record and identity checks, not
+project tests or acceptance evidence.
+
+## Retained recovery materials
+
+`/workspace/scratch/2bfab0261c05/checkpoints/ai-gpu-checkpoint-v5.bundle` is exactly
+1,840,126 bytes with SHA-256
+`142cc28963445f115c68f0115f3f4a44cefafaed71e7aa6d2d795933ea038476`.
+`git bundle verify` returned 0, and the bundle advertises the original local
+head. It is an incremental bundle requiring its recorded base, not a standalone
+export of the entire repository history.
+
+All five exact raw commit bodies in the publication directory match their Git
+objects and reproduce their original object IDs using the Git commit-object
+header and SHA-1. Their audit packet copies are identical.
+
+`/workspace/scratch/2bfab0261c05/checkpoints/audit-pending-v1.tar.gz` is exactly
+2,457,406 bytes with SHA-256
+`e513265e9273e466dd8d96dc99c9ddc1435adf004ffa51130bd129562fafc7d3`.
+Its **199 unique regular-file members** have safe relative paths and verified
+read lengths; their complete paths, byte counts and SHA-256 values are retained
+in the JSON report. This is the earlier pending audit snapshot only. It does not
+claim to preserve later report additions or the eventual final audit commit.
+
+## Evidence and limits
+
+- `a098-local-recovery.json`: before/after worktree and complete reference records,
+  exact mutation commands/results, bundle verification output, raw commit
+  identities, complete pending-backup inventory and assertions.
+- `a098-preflight.json`: pre-mutation observations and recovery checks.
+
+No fresh remote state was observed by this local task; the aligned target is the
+already selected and independently published commit. No governance, native,
+performance or phase-acceptance claim is added by this recovery alignment.

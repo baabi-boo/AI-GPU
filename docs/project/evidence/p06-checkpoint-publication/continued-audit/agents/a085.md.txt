@@ -1,0 +1,84 @@
+# A085 — reconstruction of the original local commits
+
+## Result and scope
+
+**All 49 preservation assertions passed.** This was an actual
+reconstruction in a new isolated bare Git object database, not merely a hash
+comparison against the original checkout. No project test bodies, GPU/native
+workloads, builds, replay commands, network requests or remote writes ran.
+
+The published head is `30b2e8ca69fba47646392c0cf6650cbb75155843`. The reconstructed original
+local head is `9f369a579ca764800b22eedd15e09795f09615da`. Their complete tracked trees
+are identical at `548b85370e3d13119730b5a30d1ec388d3e141a9`, and `git diff --exit-code` returned 0 with no output.
+
+## Controlled starting object set
+
+The source checkout's published API head supplied exactly **8,896
+reachable objects**: 7,969 blobs, eight commits and 919 trees, totaling
+**522,558,228 raw bytes**. None of the five original local
+commit IDs was in that set. The source's shallow boundary at
+`e3ad6bd1e2b002aa234d57cd8a02519cec915830` was retained explicitly.
+
+The objects were packed from that explicit ID list using one thread, zero delta
+search window/depth and no delta reuse, then indexed with one thread into
+`/tmp/ai-gpu-2bfab0261c05/a085-restoration-work/objects.git`. The resulting pack is **231,264,075
+bytes**. Packing and indexing took **6.619761 seconds**.
+The isolated database has **no object alternates**, no checkout and no refs.
+
+A complete `cat-file --batch-all-objects` inventory exactly matched the selected
+published-reachability set. Before restoration, all five original commit lookups
+failed as expected. This proves the verification did not obtain the originals
+through an alternate object store or an accidentally copied original branch.
+
+## Actual restoration
+
+Each exact retained raw body was supplied to
+`git hash-object -t commit -w --stdin` in the isolated database, in original
+parent order. The output ID, stored raw body, original parent, root tree and
+complete recursive tree entries were checked against the record and mapped
+published commit.
+
+| Reconstructed original commit | Published API counterpart | Raw body bytes |
+|---|---|---:|
+| `ba88572af0bea1e355af08038abcc1f62773a438` | `3a4df86e1de0307132086b5c7be873008848c09b` | 817 |
+| `93bb3f0342eff0b469a0da06cb067916af7c539e` | `913465324786ced3f8ff7acb6c225ff1a165218c` | 706 |
+| `a693d6f8828e4e10b5374db7fef8c727aa69d34e` | `7cf44e7cbdbc1d09c5ab7f44a3928cd5baf5992f` | 749 |
+| `d31e8879e7c248b1a72615128882533ccdd0b3b4` | `2e789c1edc16dd60fad57c72be7470f51d16da68` | 256 |
+| `9f369a579ca764800b22eedd15e09795f09615da` | `30b2e8ca69fba47646392c0cf6650cbb75155843` | 256 |
+
+Restoration added **exactly five objects**, bringing the database to
+**8,901 objects**. The restored local chain above the common
+published base contains exactly the expected five local commits in order.
+Both scratch ref inventories remained empty.
+
+`git fsck --full --strict --no-reflogs` over the published and restored heads
+returned **0**, with empty stdout and stderr. Restoration and these checks took
+**4.135990 seconds**. The strict
+connectivity result honors the recorded shallow boundary; it is not a claim
+that history beyond that boundary or external submodule repositories was exported.
+
+## Resource and source preservation
+
+`/tmp` had **2,825,949,184 bytes free** before packing and
+**2,594,254,848 bytes free** after the restoration verification.
+A further observation at **2026-11-26T08:02:35.639980+00:00**
+found **2,594,226,176 free disk bytes** and
+**4,743,585,792 host `MemAvailable` bytes**. These are observations, not measured peak RSS, effective
+cgroup capacity or resource reservations. The pack/index operations used one
+thread each. No user work, source file or existing artifact was deleted.
+
+The existing source checkout's **HEAD, clean working-tree state, index bytes,
+shallow-file bytes and complete ref listing remained unchanged**. All new Git
+objects reside only in the owned scratch database. The published source and
+audit worktrees were not changed by this task.
+
+## Retained evidence
+
+`a085-restoration.json` records the 49 assertions, commands, exact source states,
+publication/raw-body/object-list/pack identities, pre-restoration absence checks,
+restored parent/tree mappings, resource observations and full strict-fsck result.
+Scratch inputs and pack details remain under `a085-restoration-work/`.
+
+This demonstrates preservation of the original local Git history using the
+published trees/blobs plus five raw commit bodies. It supplies no new project,
+CI, native, numerical, performance or phase qualification.

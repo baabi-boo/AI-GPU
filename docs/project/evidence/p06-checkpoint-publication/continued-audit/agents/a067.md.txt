@@ -1,0 +1,101 @@
+# A067 — Simulator Completion workflow scope
+
+## Result and source
+
+No concrete supported-contract integration or source-binding blocker found.
+This is a read-only review at local source commit
+`9f369a579ca764800b22eedd15e09795f09615da`, compared with
+`858090410a992756808256ace90d36b9b3b88dd3`. All 13 inspected files match that
+commit; only `ci/project/p02_matrix.py` differs from the base within this set.
+The companion `a067-simulator-completion.json` records byte lengths and SHA-256
+identities. No tests, native execution, builds, replay, remote status query,
+repository edits, commits or pushes were performed.
+
+## What this workflow actually runs
+
+The workflow has one fixed job on Ubuntu 22.04, pinned CPython 3.12.14, with
+`simx`/`fp16` preparation and `THREADS=1`. It invokes only the completion native
+producer after P04 preparation; its retained initialization explicitly says
+prerequisite scope and `acceptance_claimed=false`.
+Sources: `.github/workflows/p06-simulator-completion.yml:69–133,162–194`.
+
+The producer declares **two native cells**, both RV64 `p02-tfr` **timing SimX**
+with performance counters enabled:
+
+| Cell | Required observations | Limit |
+|---|---|---|
+| Native processor unit | Five contexts, nine checked successes, three legacy successes, one checked `OutOfRange` exception consumed through the asynchronous future, and one legacy caught error; a fresh normal context follows the failed context | Real Processor/RAM behavior, not native public-runtime fault injection |
+| Native public runtime | Two contexts and six serial successful kernel launches, all with nonzero low `gp`; exact fixed-input output witnesses, poison/write/read checks, repeated completed event wait, cleanup and context recreation | Successful native path, without an injected native backend fault |
+
+The verifier requires the complete ordered unit transcript and all six ordered
+public witnesses; it rejects failure markers, omissions, changed counts or
+incorrect values. Unit checked/legacy calls are distinct categories and should
+not be relabeled as a matmul/model launch population or added to P06 warm
+counts. Sources: `ci/project/p06_simulator_execute.py:281–313,316–325,437–449`;
+`tests/unittest/simx_completion/main.cpp:53–111`;
+`tests/regression/simx_completion/main.cpp:85–140,158–163`.
+
+## RTL, pending work and separate controls
+
+This job **does not run an RTL datapath or a backpressure matrix**. The broader
+completion contract covers both SimX and processor-RTL runtime host boundaries,
+but controlled pending/busy-edge, overlap, sticky failure, RAM/LLC/drain and
+teardown cases are separate host fixtures. Likewise, the timing/functional
+SimObject cleanup fixtures test abandoned accounting with one executor worker;
+they are not native functional SimX or RTL processor executions.
+Sources: `docs/designs/simulator_completion_v1.md:33–99,120–173,184–204`;
+`ci/project/test_p06_simulator_async_run.py:61–85`;
+`ci/project/test_p06_simulator_platform.py:71–80`.
+
+The separate pinned-parent sensitivity producer declares **eight host cells**:
+two backend implementations × standard/unknown exception groups × RAM/LLC.
+It requires the exact intended behavioral failure, not a timeout or compile
+failure. That program is not called by this workflow and explicitly records
+`native_execution=false`, `qualified=false` and `acceptance_claimed=false`.
+Sources: `ci/project/p06_simulator_parent.py:31–42,95–103,158–174`.
+
+## Source, tool and receipt binding
+
+P04 preparation verifies the workflow SHA before execution. The producer
+requires clean source, the frozen profile, unchanged imported helper bytes,
+identified tools/interpreter and dependency libraries. It retains source,
+generated configuration, compiler records, effective-header observations and
+raw logs; validates exact compiler options/include order; and checks source,
+tools, dependencies, configuration and products before/after native cells and
+again during finalization. Native binaries are identified but not archived.
+These checks do not constitute a hermetic inventory of every system header or
+dynamic dependency, nor protection against malicious replacement restored
+between observations.
+Sources: `ci/project/p04_ci_prepare.py:142–182`;
+`ci/project/p06_simulator_execute.py:56–91,94–116,202–257,356–436,456–479`.
+
+Each command must have actually started, exited zero, completed cleanup and
+retained a log matching its process receipt. Failure or interruption remains
+failed/blocked; unfinished cells cannot become passes. The final complete flag
+requires both cells to pass, and the CLI returns nonzero otherwise. Workflow
+artifact upload runs even after failure. Green status therefore supports the
+two declared prerequisite cells only: `qualified` and `acceptance_claimed`
+remain false. It does not close counter/no-wrap qualification, warm performance,
+P06-A02/A03, vendor or physical-device obligations.
+Sources: `ci/project/p06_simulator_execute.py:318–325,339–354,450–492,507–517`;
+`docs/designs/simulator_completion_v1.md:212–226`;
+`.github/workflows/p06-simulator-completion.yml:185–194`.
+
+## Effect of the current corrections
+
+This producer directly calls the repaired `base._write_json` for report
+checkpoints, including its protected initial checkpoint and final save. The
+helper is included in dynamically retained source identities. Recoverable
+owned-temporary publication errors can now reach the existing finalization
+without repeating native work. Persistent write failure still cannot promise a
+receipt. P04 preparation also uses the shared writer.
+Sources: `ci/project/p06_simulator_execute.py:67–85,336–347,384–385,491–492`;
+`ci/project/p04_ci_prepare.py:200`.
+
+The workflow invokes the two native executables through `run_bounded`, never
+the installed `vortex_ai.launch`. The Python launcher's new SIGTERM supervision
+does not alter these cells, and their green status cannot prove native Python
+launcher cancellation or cleanup. Signals, process termination, hung workers
+and Verilator fatal aborts remain outside the completion contract's recovery
+guarantees. Sources: `ci/project/p06_simulator_execute.py:442–446`;
+`docs/designs/simulator_completion_v1.md:158–173`.

@@ -1,0 +1,51 @@
+# A093 — Independent current-governance provider binding
+
+## Result and scope
+
+All **30 read-only assertions passed**, with zero failures. This review independently queried the authenticated GitHub connector, checked the unchanged original ZIP bytes, and linked the separate successful A092 replay receipt. It did not execute the reader, test bodies, native workloads, or the hosted admission procedure.
+
+The final provider requests ran **2026-11-26 08:14:30–08:14:31 UTC**, after the A092 reader ended at **08:13:34.816664 UTC**. A closing run reread followed the parallel run, pinned-attempt job-page and artifact-page requests. The first independent provider observation completed at **08:13:58 UTC**; all corresponding metadata remained unchanged across both independent observations and the root's retained pre-replay observation.
+
+## Verified provider identity
+
+| Field | Observed and verified value |
+| --- | --- |
+| Repository and head repository | `baabi-boo/AI-GPU`, both numeric IDs `1457409699` |
+| Published revision | `30b2e8ca69fba47646392c0cf6650cbb75155843` |
+| Branch and event | `master`, `push` |
+| Workflow | `Project Governance`, ID `418772913`, `.github/workflows/project-governance.yml` |
+| Run and attempt | `45775559523`, attempt `1`, completed successfully |
+| Sole job | `139758253740`, `governance`, completed successfully |
+| Job steps | All **13** returned steps completed successfully; each of the eight required names occurred exactly once |
+| Artifact | ID `15098885472`, exact name `project-governance-30b2e8ca69fba47646392c0cf6650cbb75155843-run45775559523-attempt1` |
+| Original ZIP length | **1,397,895 bytes**, matching provider `size_in_bytes` |
+| Original ZIP SHA-256 | `446526e0735f450081978566f713f1288d56562bf2ce65e9e4fb3f9b3bd9b864`, matching provider `digest` |
+| Artifact lifetime | Not expired; created/updated `2026-11-26T08:08:26Z`, expires `2026-12-26T08:08:25Z` |
+
+The exact attempt-1 jobs endpoint returned `total_count: 1`, one job on page 1 and an empty page 2. The complete artifact population likewise returned `total_count: 1`, one artifact on page 1 and an empty closing page 2, both using `per_page=100`. The artifact workflow binding matches the run, both repository IDs, branch and full source revision. Its optional `run_attempt` field is absent; the exact artifact name and unchanged successful current run establish the attempt join, with no explicit mismatch present.
+
+Canonical full-response comparisons use sorted-key, compact, finite JSON and SHA-256. Run metadata, the complete first job page and both artifact pages equal the root's retained pre-replay responses. All independently reobserved pages match the first independent observation. The closing run reread equals the preceding current-run response. These comparisons cover the observed full response objects, rather than only the abbreviated table above.
+
+## Original stability and replay link
+
+The local original at `/tmp/ai-gpu-2bfab0261c05/current-governance/run-45775559523-attempt1.zip` is a canonical-path, nonsymlink, singly linked regular file. Its length, SHA-256, device, inode, mode and link count remained equal across this review. The final byte observation completed at **08:15:32.640044 UTC**. No archive member was extracted or changed by this agent.
+
+The separately produced A092 invocation record reports exit code `0` with reader/source revision `30b2e8ca69fba47646392c0cf6650cbb75155843`. Its recorded before/after original lengths and digests match the independently observed provider-bound bytes. Its receipt at `current-governance/replay/replay.json` hashes to:
+
+`42b30ac59d6dc41b3c49ca0677b354a9a94d39c612bb49ad66049486eeffe247`
+
+This review verifies that receipt's retained identity and source/original join; A092 owns the actual reader execution and detailed execution-event reconciliation.
+
+## Limits retained
+
+The prior artifact-detail endpoint request was rejected by the connector's supported-endpoint capability, and workflow active state was not independently observed. This review did not retry those endpoints or use alternate access. It therefore makes **no claim that full hosted governance admission ran**. The authenticated connector metadata is retained separately from the local reader's deliberately false `provider_authenticated` claim; no receipt field was modified. Native qualification, phase acceptance and performance acceptance remain outside this review.
+
+The saved after-observation removes unrelated public actor/author fields while retaining relevant run, repository, job, step and artifact bindings. Full-response canonical digests preserve the equality checks. No token, secret, private control content or signed storage URL is retained.
+
+## Evidence
+
+- `/tmp/ai-gpu-2bfab0261c05/a093-provider-review.json` — 30 assertions and the after-observation identity.
+- `/tmp/ai-gpu-2bfab0261c05/current-governance/provider-after-independent.json` — safe post-replay provider observations, endpoints, canonical full-response digests, original before/after identities and replay link; SHA-256 `cc360ba1b1e6f57a0dffae108311b8beba2028bfd10bb3e447d7974ff96abc70`.
+- `/tmp/ai-gpu-2bfab0261c05/current-governance/provider-before.json` — root's pre-replay provider observation, independently compared here.
+
+Provider sources: [run](https://github.com/baabi-boo/AI-GPU/actions/runs/45775559523), its pinned `/attempts/1/jobs` pages and `/artifacts` pages under the public repository API. No source file, Git object, reference, original archive or existing replay record changed. Only the requested new review artifacts were written.

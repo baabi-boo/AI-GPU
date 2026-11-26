@@ -1,0 +1,7 @@
+# Agent 012 — Python matmul input audit
+
+No blocker found in the examined scope at `ba88572`.
+
+Reviewed `python/vortex_ai/_api.py` against `docs/designs/python_binding_v1.md`, plus the native input boundary in `python/native/module.cpp`. Exact storage types, rank/itemsize/format/contiguity/stride, byte extent, immutable tensor metadata, positive bounded dimensions/strides, dtype/layout, and the three supported matrix signatures are enforced (`_api.py:230–290,458–494`). Submission revalidates mutable or released storage before owner creation and retains both buffer views until native submission returns. Native input acquisition repeats byte-storage and extent checks (`module.cpp:350–380,677–700`). Timeout validation rejects wrong types, negatives, values above one second, and integer overflow before native access (`_api.py:35–49,622–635,710–720`).
+
+Static read-only development audit; no tests or native execution performed, no source edits. `_api.py` has no difference between baseline `8580904` and `ba88572`.

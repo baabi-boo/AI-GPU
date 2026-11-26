@@ -1,0 +1,238 @@
+{
+  "base": "858090410a992756808256ace90d36b9b3b88dd3",
+  "head": "a693d6f8828e4e10b5374db7fef8c727aa69d34e",
+  "changed_files": [
+    "ci/project/p02_matrix.py",
+    "ci/project/test_checkpoint_directory_access.py",
+    "ci/project/test_checkpoint_ownership.py",
+    "ci/project/test_checkpoint_write_failures.py",
+    "ci/project/test_p06_checkpoint_input_recovery.py",
+    "ci/project/test_p06_checkpoint_prepare_build.py",
+    "ci/project/test_p06_checkpoint_run_recovery.py",
+    "docs/designs/checkpoint_publication_v1.md"
+  ],
+  "protected_checks": {
+    "rtl": {
+      "patterns": [
+        "hw/rtl/**",
+        "hw/dpi/**",
+        "third_party/cvfpu",
+        "third_party/hardfloat",
+        "third_party/cvfpu/**",
+        "third_party/hardfloat/**"
+      ],
+      "changed_matches": []
+    },
+    "simx-model": {
+      "patterns": [
+        "sim/simx/**",
+        "sim/common/**"
+      ],
+      "changed_matches": []
+    },
+    "sw-stack": {
+      "patterns": [
+        "sw/common/**",
+        "sw/runtime/**",
+        "sw/kernel/**"
+      ],
+      "changed_matches": []
+    },
+    "build-config": {
+      "patterns": [
+        "configure",
+        "Makefile",
+        "**/Makefile",
+        "**/*.mk",
+        "**/*.mk.in",
+        "VX_config.toml",
+        "VX_types.toml",
+        "VERSION",
+        "ci/gen_config.py",
+        "hw/scripts/**",
+        "third_party/*"
+      ],
+      "changed_matches": []
+    },
+    "ci-enforcement": {
+      "patterns": [
+        ".github/**",
+        "ci/testcase.py",
+        "ci/conftest.py",
+        "ci/test_runner.py",
+        "ci/*_gate.py",
+        "ci/synth_*.py",
+        "ci/beacon.py",
+        "ci/perf_baseline.py",
+        "ci/toolchain_*",
+        "ci/*_install.sh.in",
+        "ci/check_*.sh",
+        "ci/regression.sh.in",
+        "ci/blackbox.sh",
+        "ci/change_impact.py",
+        "docs/review/change-impact.yaml"
+      ],
+      "changed_matches": []
+    },
+    "golden-data": {
+      "patterns": [
+        "ci/baselines/**",
+        "tests/**/*_ref*.png",
+        "tests/**/*_ref*.ppm",
+        "hw/scripts/beacon_calibration_*.json"
+      ],
+      "changed_matches": []
+    },
+    "detector:rtl-interface": {
+      "patterns": [
+        "hw/rtl/interfaces/*.sv"
+      ],
+      "changed_matches": []
+    },
+    "detector:gpu-pkg-types": {
+      "patterns": [
+        "hw/rtl/VX_gpu_pkg.sv"
+      ],
+      "changed_matches": []
+    },
+    "detector:isa-localparams": {
+      "patterns": [
+        "hw/rtl/VX_gpu_pkg.sv",
+        "hw/rtl/VX_define.vh"
+      ],
+      "changed_matches": []
+    },
+    "detector:isa-decoder": {
+      "patterns": [
+        "hw/rtl/core/VX_decode.sv",
+        "sim/simx/decode.cpp"
+      ],
+      "changed_matches": []
+    },
+    "detector:isa-encoding": {
+      "patterns": [
+        "VX_types.toml"
+      ],
+      "changed_matches": []
+    },
+    "detector:config-knobs": {
+      "patterns": [
+        "VX_config.toml",
+        "configure",
+        "ci/gen_config.py"
+      ],
+      "changed_matches": []
+    },
+    "detector:sw-common-abi": {
+      "patterns": [
+        "sw/common/*abi*.h",
+        "sw/common/rtu_cfg.h",
+        "sw/common/dxa_meta.h",
+        "sw/common/gfx_dcr.h",
+        "sw/common/vm_types.h",
+        "sw/common/gfx_setup.h",
+        "sw/common/tensor_cfg.h",
+        "sw/common/vx_tex_lod.h"
+      ],
+      "changed_matches": []
+    },
+    "detector:installed-api": {
+      "patterns": [
+        "sw/runtime/include/*.h",
+        "sw/kernel/include/*.h",
+        "sw/common/tensor_cfg.h",
+        "sw/common/vx_gfx_abi.h",
+        "sw/common/gfx_frontend_abi.h",
+        "sw/common/gfx_dcr.h",
+        "sw/common/rtu_cfg.h",
+        "sw/common/gfx_sw_abi.h",
+        "sw/common/vx_tex_lod.h"
+      ],
+      "changed_matches": []
+    },
+    "detector:build-surface": {
+      "patterns": [
+        "Makefile.in",
+        "config.mk.in",
+        "**/Makefile",
+        "**/Makefile.in",
+        "**/*.mk",
+        "**/*.mk.in"
+      ],
+      "changed_matches": []
+    },
+    "detector:toolchain-pins": {
+      "patterns": [
+        "VERSION"
+      ],
+      "changed_matches": []
+    },
+    "detector:workflow-trust": {
+      "patterns": [
+        ".github/workflows/*.yml",
+        ".github/workflows/*.yaml",
+        ".github/actions/**"
+      ],
+      "changed_matches": []
+    },
+    "detector:test-coverage": {
+      "patterns": [
+        "ci/testcases/*.yaml",
+        "ci/testcases/*/*.yaml"
+      ],
+      "changed_matches": []
+    },
+    "detector:golden-values": {
+      "patterns": [
+        "ci/baselines/**",
+        "tests/**/*_ref*.png",
+        "tests/**/*_ref*.ppm",
+        "hw/scripts/beacon_calibration_*.json"
+      ],
+      "changed_matches": []
+    },
+    "detector:gate-thresholds": {
+      "patterns": [
+        "ci/perf_baseline.py",
+        "ci/*_gate.py",
+        "ci/synth_*.py",
+        "ci/testcase.py",
+        "ci/conftest.py",
+        "ci/test_runner.py",
+        "ci/beacon.py"
+      ],
+      "changed_matches": []
+    },
+    "additional-governance": {
+      "paths": [
+        ".gitattributes",
+        "AGENTS.md",
+        "ci/project/check_project.py",
+        "ci/project/governance_env.py",
+        "ci/project/governance_run.py",
+        "docs/project/acceptance.md",
+        "docs/project/roadmap.json",
+        "docs/review/code-review-policy.md"
+      ],
+      "changed_matches": []
+    }
+  },
+  "untracked_snapshot": [
+    "?? docs/project/evidence/p06-checkpoint-publication/README.md",
+    "?? docs/project/evidence/p06-checkpoint-publication/reviews/directory-access.md",
+    "?? docs/project/evidence/p06-checkpoint-publication/reviews/implementation.md",
+    "?? docs/project/evidence/p06-checkpoint-publication/validation/focused-runner.py",
+    "?? docs/project/evidence/p06-checkpoint-publication/validation/focused.json",
+    "?? docs/project/evidence/p06-checkpoint-publication/validation/focused.log",
+    "?? docs/project/evidence/p06-checkpoint-publication/validation/protected-invariants.json",
+    "?? docs/project/evidence/p06-checkpoint-publication/validation/protected-invariants.py",
+    "?? docs/project/p06-checkpoint-publication-audit.md"
+  ],
+  "reviewed_content_digests": {
+    "ci/project/p02_matrix.py": "c7544854b1fda853fad7c382e6e51605e812f5a377128fa6198f4da8662d7432",
+    "ci/project/test_checkpoint_directory_access.py": "3fc9d9b3ccb7ffd6b0b1eef0580d0a720a07c0bef95db7f0ef64524da4f2a5e2",
+    "docs/designs/checkpoint_publication_v1.md": "729e640d86b866191266aa86e4689a0dab83cad3127be126f299d51922c885e8",
+    "ci/project/test_checkpoint_ownership.py": "7f18c215bcfb1b8cd69bbbfaad55e54fee651ef5b2d843ce05c761cfb17ff127",
+    "ci/project/test_p06_checkpoint_input_recovery.py": "ed1a9315c42883b4b3c9e0405e00424d153357a9b352dfbff599d16e961f9bbc"
+  }
+}

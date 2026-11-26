@@ -1,0 +1,11 @@
+# Agent 027 — checkpoint writer provenance review
+
+**Result: no findings in the requested scope.** Static review of `a693d6f8828e4e10b5374db7fef8c727aa69d34e`; no source changes, producer execution, archive replay, or test suite runs.
+
+- `p06_managed_preflight_replay.py:70–89` explicitly includes `p02_matrix` in both producer helper and trusted-reader inventories. `p06_managed_preflight_sources.py:59` also requires its source. The producer’s `source_snapshot` adds loaded helper paths (`p06_managed_preflight_execute.py:99–105`).
+- `p06_dependency_native_replay.py:68`, `p06_counter_qualification_replay.py:31–50`, and `p06_qualified_warm_replay.py:31–38` inherit and extend that helper inventory. The qualified supervisor’s `SOURCE_FILES` union includes these inventories and trusted-reader sources (`p06_qualified_warm_run.py:47–50`); `selected_sources` copies and verifies every selected body (`:129–146`). Thus the changed writer remains retained throughout the scoped chain.
+- Dependency builds import the writer (`p06_dependency_build.py:24`), inventory all loaded local Python modules (`:109–118`), and retain their actual bytes (`:459–462`). Dependency receipt verification rehashes those archive helper bodies (`p06_dependency_receipt.py:770–780`).
+- Changes since `ba88572^` only alter the writer implementation. AST comparison confirms its import graph is unchanged; no new local transitive snapshot requirement is introduced. New calls use the already imported standard-library `os` module.
+- Historical originals remain source-bound. Native replay verifies the external source-manifest digest, every retained body, and each original loaded-helper descriptor (`p06_dependency_native_replay.py:262–274`). `source_body` reads verified archive bytes (`p06_replay.py:205–208`). Counter and warm stability reconstruction use `self.sources` descriptors (`p06_counter_qualification_replay.py:133–142`; `p06_qualified_warm_replay.py:187–196`), while current trusted-reader hashes are recorded separately. Current writer bytes are not substituted for original writer bytes.
+
+Reviewed root `AGENTS.md` and project contract context. These observations establish source-binding structure only; they do not qualify native execution or historical archive replay success.

@@ -1,0 +1,253 @@
+# A025 frozen invariant review
+
+Observation: `2026-11-26T06:31:06.460493+00:00`. Repository: `/tmp/ai-gpu-2bfab0261c05/repo`.
+Base: `858090410a992756808256ace90d36b9b3b88dd3`. Selected revision: `93bb3f0342eff0b469a0da06cb067916af7c539e`. Observed HEAD: `a693d6f8828e4e10b5374db7fef8c727aa69d34e`.
+
+**Result: all requested source invariant checks passed.** This is a read-only source and metadata review; it contains no test execution or native qualification.
+
+## Findings
+
+- All **69** distinct frozen measurement paths match both their declared byte length and SHA-256 in `ci/project/p06_qualified_warm_proof.json`: **1,303,138 bytes** read. Their base-to-working-tree diff is empty.
+- All **21** Ramulator dependency descriptors in `ci/project/p06_counter_qualification_proof.json` equal their base-revision values, including path, Git blob, SHA-256 and byte size. The dependency contract pin, proof revision and repository gitlink remain `e62c84a6f0e06566ba6e182d308434b4532068a5`.
+- **Dependency-source limitation:** none of those 21 submodule files is materialized locally. No dependency fetch or source-byte rehash was performed. This establishes descriptor/proof-input preservation, not fresh source verification.
+- Both frozen proof files match the literal byte-count, SHA-256 and canonical-JSON SHA-256 constants in their contracts, and are byte-identical to the base. All seven claim fields remain false.
+- All **25** inherited golden baseline files and the **39** tracked files under `ci/project/fixtures/` are unchanged relative to base. The entire retained `docs/project/evidence/` tree has an empty diff; historical packets were not broadly rehashed.
+- Resource and performance contracts, their selected enforcement files, both roadmap files, phase documents and acceptance records have empty base-to-working-tree diffs. P01 remains blocked, P06 remains in progress, and P06-A02/A03 have no acceptance evidence added.
+- The retained SVG matches its roadmap SHA-256, is byte-identical to base, and remains embedded in the unchanged README.
+- The only changed pre-existing production file is `ci/project/p02_matrix.py`; an AST comparison confirms that changes are confined to `_write_json`. Serialization and the existing 16 MiB checkpoint bound are unchanged. The six added test files and one added design document are not frozen measurement inputs.
+
+## Exact verification method and commands
+
+The retained standalone script is `/tmp/ai-gpu-2bfab0261c05/a025-verify-invariants.py`. It imports only Python standard-library modules and reads repository files without importing or executing project code.
+
+```bash
+cd /tmp/ai-gpu-2bfab0261c05/repo
+python /tmp/ai-gpu-2bfab0261c05/a025-verify-invariants.py
+git diff --name-status 858090410a992756808256ace90d36b9b3b88dd3 93bb3f0
+git status --short
+```
+
+For each of the 69 frozen entries, the script computes `len(Path(path).read_bytes())` and `hashlib.sha256(body).hexdigest()` and compares both values to that entry. It checks uniqueness and the expected count of 69. For each dependency row it compares the entire parsed descriptor against `git show BASE:ci/project/p06_counter_qualification_proof.json`. Proof constants are read with `ast.literal_eval` from source, without importing their modules. Canonical proof hashes use `json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True, allow_nan=False)`.
+
+The compact summary and complete machine-readable inventories, exact protected-path command arguments, return codes, source hashes, proof identities and status snapshots are in `/tmp/ai-gpu-2bfab0261c05/a025-invariants.json`.
+
+| Protected group | Exact path arguments after `git diff --quiet BASE --` | Exit |
+|---|---|---:|
+| golden_baselines | `ci/baselines` | 0 |
+| numerical_fixture_directory | `ci/project/fixtures` | 0 |
+| resource_and_performance_contracts_and_enforcement | `ci/project/p06_warm_contract.json`<br>`ci/project/p06_warm_contract.py`<br>`ci/project/p06_benchmark_contract.json`<br>`ci/project/p06_contract.py`<br>`ci/project/p06_workspace_contract.json`<br>`ci/project/p06_dependency_contract.py`<br>`ci/project/p06_managed_preflight_contract.py`<br>`ci/project/p06_qualified_warm_capacity.py`<br>`ci/project/p06_qualified_warm_analyze.py`<br>`ci/project/p06_qualified_warm_hosted.py`<br>`ci/project/p06_qualified_warm_run.py`<br>`.github/workflows/p06-qualified-warm.yml`<br>`docs/project/developer-guide.md`<br>`ci/asic_gate.py`<br>`ci/fpga_gate.py`<br>`ci/logic_gate.py`<br>`ci/synth_gate.py`<br>`ci/perf_baseline.py` | 0 |
+| frozen_proofs_and_dependency_contract | `ci/project/p06_qualified_warm_proof.json`<br>`ci/project/p06_counter_qualification_proof.json`<br>`ci/project/p06_qualified_warm_contract.py`<br>`ci/project/p06_counter_qualification_contract.py`<br>`ci/project/p06_dependency_contract.py`<br>`.gitmodules`<br>`third_party/ramulator` | 0 |
+| roadmap_and_acceptance_records | `docs/project/roadmap.json`<br>`ROADMAP.md`<br>`docs/project/status.md`<br>`docs/project/backlog.md`<br>`docs/project/acceptance.md`<br>`docs/project/phases`<br>`docs/project/evidence/p01-xrt-blocked.json`<br>`docs/project/evidence/p06-baseline/acceptance.json`<br>`docs/project/evidence/p06-serial-workspace/p06-a01-retained-baseline.json` | 0 |
+| retained_evidence_tree | `docs/project/evidence` | 0 |
+| retained_svg_and_readme | `docs/assets/img/vortex_framework_stack.svg`<br>`README.md` | 0 |
+
+The measurement-source diff additionally supplies every path listed in the 69-row inventory below; it exited 0. Exit 0 establishes no base-to-working-tree change for the supplied paths, including staged and unstaged tracked changes. Untracked files outside these protected inventories are not treated as frozen inputs.
+
+## Frozen measurement source inventory
+
+| Path | Bytes | SHA-256 | Size/hash match |
+|---|---:|---|---|
+| `VX_config.toml` | 30127 | `a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf` | yes / yes |
+| `VX_types.toml` | 36543 | `f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23` | yes / yes |
+| `ci/gen_config.py` | 60839 | `b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165` | yes / yes |
+| `ci/project/p06_contract.py` | 31500 | `780086070739b6d3586f9b3695ad4dc31d209a7817cf1af3651160a9fe6e1376` | yes / yes |
+| `configure` | 11438 | `645cdad95c31a959a36c795c37b2b7e4c0202f19c53093aa9067cda3ef23a0be` | yes / yes |
+| `profiles/p02-tfr.json` | 4081 | `79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102` | yes / yes |
+| `sim/common.mk` | 170 | `086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b` | yes / yes |
+| `sim/common/cmd_processor.cpp` | 27823 | `c7090583f8dd1774d71755dc96f11845ff4d96340e51451643ec1ab16b14dd42` | yes / yes |
+| `sim/common/cmd_processor.h` | 12851 | `8efce8fe5ff166cc0742b3846dc37ae5dd93463a10e71c154959d4b2daacda11` | yes / yes |
+| `sim/common/dram_sim.cpp` | 14483 | `aaf02d73ca7801d93c0fa010c4682e8e0476e7a55fa0104d4e48587f55dc40f1` | yes / yes |
+| `sim/common/dram_sim.h` | 1988 | `8245f87d313387bdc7bc8eb8244395aade8c78c3aa8ace7df85543094f2839ac` | yes / yes |
+| `sim/common/mem.cpp` | 23576 | `2dc21e7ccb04e773b091f209652107bac673edbc6d6640cfca0418ad89a73cba` | yes / yes |
+| `sim/common/mem.h` | 9109 | `c6fb3dc152b641edac6d1d373f7b7425d038a902b3ef2899d39f5aab00baf152` | yes / yes |
+| `sim/common/perf_counter.h` | 3979 | `8635c832c9fc4ad60cf3bf21665a5bc22a6d3500b1f5c012dd056fb4c6907417` | yes / yes |
+| `sim/common/simobject.h` | 49004 | `0e0369f5ea1ba85f5e461e03b85e9723bb47f0e118499ba2b21a7923594f7004` | yes / yes |
+| `sim/simx/Makefile` | 10608 | `c719966647f32fef5421dd798a89d3eeddccd692e7c61046e5744b7a8e722403` | yes / yes |
+| `sim/simx/checked_counters.mk` | 2365 | `5080bbe88f3c6612258932953ada6d7ac983617bbba56806f37d3ab488b9ae99` | yes / yes |
+| `sim/simx/cluster.cpp` | 31886 | `caf8ed6865e91d7f6b1cc7392ef1e5c2c410f13535a31236cbf7da7f80a39a6c` | yes / yes |
+| `sim/simx/constants.h` | 9231 | `d7d9a69db704475a698b2ae652874250dc866f4d3eacf8a07f7c65e55e180113` | yes / yes |
+| `sim/simx/core.cpp` | 65344 | `f95003971a6052962b761b1ee8e815ead42f6a60fccf8157fa94c3ded3e44f31` | yes / yes |
+| `sim/simx/core.h` | 5800 | `642af0adfae25333fc822289293a0d10273f58c8b1442a4acad63fad5a2f8609` | yes / yes |
+| `sim/simx/csr_unit.cpp` | 19085 | `c35bd6a80120f76c9cf65076c736aaf577329285a74aac8c11c03f0ce829fc3d` | yes / yes |
+| `sim/simx/lsu_unit.cpp` | 32227 | `d1105256786bc7f2227d4c963a0b4368d84d480aba93fdf3188019ae466b30fb` | yes / yes |
+| `sim/simx/mem/cache.cpp` | 137410 | `c8eacd73616bb9f82533bbe45ba8a317524717948de08d73ecdb78dfb0c4a53d` | yes / yes |
+| `sim/simx/mem/cache.h` | 4452 | `839637e7738c774b02f1f556da86a4c716215696a70dd384d9e413ad6943653b` | yes / yes |
+| `sim/simx/mem/cache_cluster.cpp` | 3697 | `ad5e592d87234764df3186c8fdd9dbfc18b2a7dbdfdb207ba2cc6071d4e3fa44` | yes / yes |
+| `sim/simx/mem/local_mem.cpp` | 21068 | `07aa27331d6ef604a432b99e70df12b7853787d4151cc1517092d76406cd4d33` | yes / yes |
+| `sim/simx/mem/local_mem.h` | 2652 | `708446110e56f8cce88f50bcbca8fb8e1ff741a4019e16b4c9fda48d86f67635` | yes / yes |
+| `sim/simx/mem/mem_coalescer.cpp` | 10432 | `9fcf09145f6fee29c5f5494fff155f2c0fa90e5f984893cb756c31d75b155a88` | yes / yes |
+| `sim/simx/mem/mem_coalescer.h` | 2407 | `3368578b678a354eb5a876d1121351cd22987c729514fcfb7bfe4d86795961c7` | yes / yes |
+| `sim/simx/mem/memory.cpp` | 5976 | `4d73809cd63a0c768115c5de0205989f6f941446895de1831587002fc94ed474` | yes / yes |
+| `sim/simx/mem/memory.h` | 2042 | `8cdd7e1945842b3f58f64bcb3fad1fd3e61555cbc82d9063996e53453a71301a` | yes / yes |
+| `sim/simx/processor.cpp` | 21493 | `ecc3e0e51ecbbdb6b97b04eccd7fc5427fb25f87e5162ef33484262ab8da869f` | yes / yes |
+| `sim/simx/processor.h` | 2588 | `af83a0fdb8d81ccf903dacc5957edb4933974229c28443c6fee7af1114c6083e` | yes / yes |
+| `sim/simx/processor_impl.h` | 4473 | `99f91bd1a19c32849f68c72311bbd271aa1f85543bff07184eeb2ecbd200f6e6` | yes / yes |
+| `sim/simx/socket.cpp` | 26124 | `e30e63d3523411bad58eb49c8526aabe032bed584c8d044b677c18906cf844d4` | yes / yes |
+| `sim/simx/tcu/tcu_tbuf.cpp` | 7231 | `eb20f6c16dd0915bebf39a0f85f7c11ee28a0ed681418385205b898f4b557463` | yes / yes |
+| `sim/simx/tcu/tcu_tbuf.h` | 2667 | `8b05c6d23de3d5fb5423d7ce93d1d1a1395a4d474856371281ed943abe8c2be3` | yes / yes |
+| `sim/simx/tcu/tcu_unit.cpp` | 75472 | `b48d0e7fe5145292ad354168d3fe73b0bcdbbb508335656ce6fe07608af8fb5b` | yes / yes |
+| `sim/simx/tcu/tcu_unit.h` | 4561 | `8546c4db53cc938c9a91ddcab002fa020195d39b93f9e35de3c21d9ecee28cb8` | yes / yes |
+| `sim/simx/types.h` | 54373 | `c09d02ca868b9b7fd28142c4c5aa922b9500975feddaf92695d220a5be6bd546` | yes / yes |
+| `sw/common/ai_matmul_args.h` | 4342 | `732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147` | yes / yes |
+| `sw/common/ai_matmul_profile.h` | 2675 | `8b2eb9a819506227808537612672c08a574230736f13f840a9d83bbd35675680` | yes / yes |
+| `sw/kernel/ai/matmul.cpp` | 1565 | `ad3b6107f0eef91ec676412bc795ab70cd1c9f31647b2cea854de6234fe71d3e` | yes / yes |
+| `sw/runtime/ai/contract.cpp` | 10833 | `0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff` | yes / yes |
+| `sw/runtime/ai/contract.h` | 3285 | `7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b` | yes / yes |
+| `sw/runtime/ai/runtime.cpp` | 22983 | `f55365110aed41cfaa290b69da8d91d9fa0ae04063dda591b94ae6ca626cf675` | yes / yes |
+| `sw/runtime/ai/runtime.h` | 3719 | `aa76760f2e25c1969b86e08dacf7823c9b441dc82ef2c65f803bdc80ee9f657e` | yes / yes |
+| `sw/runtime/common/async_run.h` | 2383 | `a9f63b2a896c5e512f7c592c758618ea88b774c9dac4bca29e847e2e3719a24e` | yes / yes |
+| `sw/runtime/common/buffer.cpp` | 6787 | `e0f4c550a7591f723d6cf18e43302fd1955a56e2c2ecc53e0f5eb037482c1366` | yes / yes |
+| `sw/runtime/common/callbacks.h` | 4532 | `2105743e37226644faf52b4766738b85dd1de687af614fd548723bf08fee9a0d` | yes / yes |
+| `sw/runtime/common/callbacks.inc` | 3813 | `13852934ab10776964fd2a68036ac8876303a60d2a3f3fce415186a3a13d10f2` | yes / yes |
+| `sw/runtime/common/device.cpp` | 66201 | `9b32e38a9bbc0460a7f2af522fd5efdc96e1c06e359e28c5151285557f89d90a` | yes / yes |
+| `sw/runtime/common/module.cpp` | 13216 | `5d2efe2ba92801d3dbb1e836b077e7d966bc9a6b2beb8d29c50f89ce4ee67f06` | yes / yes |
+| `sw/runtime/common/perf.cpp` | 43664 | `fa6945cf379ae184d4e3edca5fcbc147d11f725e5ad3574ff3f89a16167099b3` | yes / yes |
+| `sw/runtime/common/queue.cpp` | 64122 | `1d785262d128de3ffbf1feb32cc2b32f6457a6644df6ef9a04d4e8b4d45c962e` | yes / yes |
+| `sw/runtime/common/vortex2_internal.h` | 44458 | `3997d6ecca442eb04cf1df3129d0b90a9c0ec66015c798fc4d4510b93dd1f9ce` | yes / yes |
+| `sw/runtime/include/vortex2.h` | 27464 | `9738cdf35a7344d6a974b4d78f7b02d3c1e7ce87cfe68ef668b03c8eb1832614` | yes / yes |
+| `sw/runtime/simx/vortex.cpp` | 7552 | `0d890c95fecb67da26d23ea4a0af10ac328dddf110cd2575baff3aa5d4c905cb` | yes / yes |
+| `tests/regression/ai_bench_common/counters.h` | 6002 | `ef71a80f2624159cac03e42a60c8b3671489ee1ae89e4e9bd27941a143047acf` | yes / yes |
+| `tests/regression/ai_counter_preflight/Makefile` | 1330 | `1fefa29e176fff3ce05f1a606aebabc434f83fbaba6704afc14b9728c50f4bd2` | yes / yes |
+| `tests/regression/ai_counter_preflight/backend.mk` | 858 | `d71ba6fe3f653a19e42aea6d52c605e9d41d92f99fc1aa8ef1448fc03e72a326` | yes / yes |
+| `tests/regression/ai_counter_preflight/dependency_model.mk` | 108 | `4d53b1b35b2468fce76ec659ecf66c2b62e88ebe36fa37c1c0f51c03c9673715` | yes / yes |
+| `tests/regression/ai_counter_preflight/hooks.cpp` | 15094 | `7744cfbb48b6dda21acda4db582fcf4f4b7a519670525d0df887b7296739c7e4` | yes / yes |
+| `tests/regression/ai_counter_preflight/hooks.h` | 3046 | `1fba0275808ec30e42dced1c69fb8b47d1d78dd0ecfc13391f9e0d93bbaf0ccc` | yes / yes |
+| `tests/regression/ai_counter_preflight/main.cpp` | 27523 | `721da20bffa4aed127dd5694af7263f37010164e5d836d13e5348afa48c3fe02` | yes / yes |
+| `tests/regression/ai_warm_workspace/main.cpp` | 20984 | `0bec5ac729b3aa6c5ffcf7ff95084d84e4d47d54e470d21e234d00aa16556ce0` | yes / yes |
+| `tests/regression/ai_warm_workspace/observer.cpp` | 9647 | `ac12eddcbfb2cf04981a8b8a945134ce763b93cd881fe5da549d28b7ed02021c` | yes / yes |
+| `tests/regression/ai_warm_workspace/observer.h` | 1777 | `7c5236827536b9faf286f6cbfb3e13459b7f43aa895207213125cc67299d488e` | yes / yes |
+
+## Dependency descriptor inventory
+
+Paths below are relative to the unmaterialized `third_party/ramulator` submodule. Every complete descriptor equals the base proof. The JSON also records all expected Git blob IDs.
+
+| Path | Expected bytes | Expected SHA-256 | Descriptor unchanged |
+|---|---:|---|---|
+| `src/addr_mapper/addr_mapper.h` | 633 | `ba7705cc29b0359c719a75ccb2169684db1f30f56cfba7a97f367ec0fd2d03bc` | yes |
+| `src/addr_mapper/impl/linear_mappers.cpp` | 4516 | `dc4ccf6aaac17dde42215dc0ef140ae9d89b89f0bd7c50e38180300834251597` | yes |
+| `src/base/base.h` | 12276 | `3319ae542abea98b0eeb7928447058c1e1e2c8255a6c0d6a12979e83fe5c9d15` | yes |
+| `src/base/factory.cpp` | 5730 | `c83810cee12ca83877372ce9e6556d897ce2721347debe4656afdb152b6fbd5a` | yes |
+| `src/base/stats.cpp` | 269 | `063c16db3f7817b061ca58e3bdcb513a17ee2146facaedfd5b12fa98d014da02` | yes |
+| `src/base/stats.h` | 2690 | `5892927523c7e1784a7c5179704f1c0e87a3ebb01815e9f47470abe560ba5cea` | yes |
+| `src/dram/dram.h` | 6928 | `ff12c7b1fc2e03bdf06964bea0c95ac934afd21f5d276db0d0125fc9e9e004db` | yes |
+| `src/dram/impl/HBM2.cpp` | 19064 | `0f67e6147ebf36c188345fb22c851802624b3343aa3067b75c0b0fff82a6a97e` | yes |
+| `src/dram_controller/controller.h` | 1483 | `d29a1e825aa809b7e95e37a2cb25a8b3a2de1b593cb9e21e9e19609be8e3aa08` | yes |
+| `src/dram_controller/impl/generic_dram_controller.cpp` | 15480 | `a7842d66c56e90eb11efe3d886e9e31f7d24c711e16defe38d459d4ab8774a68` | yes |
+| `src/dram_controller/impl/plugin/trace_recorder.cpp` | 1979 | `9917313ba7a8532a011a89dcc4498c1a1f9681a272c990b01d153491ffd85dea` | yes |
+| `src/dram_controller/impl/refresh/all_bank_refresh.cpp` | 1642 | `5ad610a8620f086277eba58a39d36bf57de51856262b87fc555b2bfc67af8cbe` | yes |
+| `src/dram_controller/impl/rowpolicy/basic_rowpolicies.cpp` | 4168 | `8c2127128faeac28a76fe5f000762541d83bf64f71640c392a9ab3e351b52ec8` | yes |
+| `src/dram_controller/impl/scheduler/generic_scheduler.cpp` | 1586 | `85239e4a321538bc76965bafbe36b5737ffb1318d58e3ef7135ebdeac9d2a87a` | yes |
+| `src/dram_controller/refresh.h` | 434 | `1901efe332e7f47e1d2460c5592b9e7833307028e90112cf0c5d6aacbbc3cf47` | yes |
+| `src/dram_controller/rowpolicy.h` | 521 | `afb8067e9a0f4673371ae8c0954cc63ff75515b09758e06e567bbffcf09414e9` | yes |
+| `src/dram_controller/scheduler.h` | 624 | `875a966db1c219a7676b5bdaf6d008720c302d2e525b3390a9bd2020145e98be` | yes |
+| `src/frontend/frontend.h` | 1882 | `526df2d4095234419709aae87ab9a931a4a2f73eb9eb83a2d5f1505ffb971d22` | yes |
+| `src/frontend/impl/external_wrapper/gem5_frontend.cpp` | 689 | `4768775d1a3b81daba53124f5302edf5ec5d38bc008c2091343e30d1e71b7e26` | yes |
+| `src/memory_system/impl/generic_DRAM_system.cpp` | 2729 | `d70ce69afa4c10927f4fcc977877562da7940190c6d72516acaf4727df2ec1e3` | yes |
+| `src/memory_system/memory_system.h` | 2030 | `260af74ac066a8083b6933cfaf6427ff68fdfdac92dfb3f47351369b497cd279` | yes |
+
+## Golden baseline inventory
+
+| Path | Bytes | Current SHA-256 |
+|---|---:|---|
+| `ci/baselines/perf/core.json` | 4110 | `2e0b69c0f92401bee05c2cda7ec79f2ec49e6dc17f711da546efdbd34382e182` |
+| `ci/baselines/perf/dxa.json` | 3851 | `648909a52e523874fe1008c76b6bb93d9b84583a28f2fba42782423c977280b7` |
+| `ci/baselines/perf/graphics.json` | 3119 | `752b2e428f01f4d1393ae91a10f561b1bfe9a2ed2b08f4116b9059cb2019397d` |
+| `ci/baselines/perf/raytracing.json` | 906 | `e7190d40dd242e3947cc4f5e568573cd0f52a6e71f21b2bc412eadd75b68d260` |
+| `ci/baselines/perf/tensor.json` | 1995 | `74bfbe74c0165a4e1263ab58355700c03466f7ca2e982dc2bb25dfe084d17246` |
+| `ci/baselines/perf/tensor_mx.json` | 396 | `005c317cdcb33245e7c73cfa8a4ae15b8092bd93520700fa9d67e95488852326` |
+| `ci/baselines/perf/tensor_sp.json` | 337 | `10fa4e21a4e411cb6105708ee76c9cc56a67edcd422e6d3a7fd521a9ffe21c88` |
+| `ci/baselines/perf/tensor_wg.json` | 1536 | `c6c3fd75ed3befed6eaad836dff8ba85192b38eec8350939e441ae8d0978f073` |
+| `ci/baselines/synthesis/beacon/core.json` | 28970 | `9d44a8cb4df9968fcba2f06068891ca64619b56b15263feb3369487bd6585788` |
+| `ci/baselines/synthesis/beacon/dxa.json` | 2328 | `b704ffb416f1e117104b970e89a75d4e256c95ab1b5895451370bdaef99734b8` |
+| `ci/baselines/synthesis/beacon/graphics.json` | 30678 | `99b4e2ffdc4c5ef52f01d3eecd5414d1a00d4100bb0ffd45d3a9bdf66e2994b3` |
+| `ci/baselines/synthesis/beacon/tensor.json` | 12461 | `7c20e2fdeab2bc597641354c138d79a4e054c1b42a9e4856d88ff157a65ef969` |
+| `ci/baselines/synthesis/beacon/vm.json` | 8367 | `74e984dd4e3f1aeb406046ba9ef58efecebc84d856e4bce2abd0a056c04dff00` |
+| `ci/baselines/synthesis/xilinx/core.json` | 31559 | `35c440089e5b5ea68ffb36c9d063237f2fbb2da7f8026519c969accafc452c0b` |
+| `ci/baselines/synthesis/xilinx/dxa.json` | 5735 | `7a6a523cbaf3f4dc1e8ba423262d6d26a6b1b2ff58e711e748b3167f4043ee7a` |
+| `ci/baselines/synthesis/xilinx/graphics.json` | 31793 | `bfb045d843d0d08e29ea0a507584d9a21e1afd50cc54f472781615a5c2a8aec7` |
+| `ci/baselines/synthesis/xilinx/mufu.json` | 5693 | `1f7a375f75ec05aa8885d19b2684aa74586dfa6fabbff9a34039c4796b56f567` |
+| `ci/baselines/synthesis/xilinx/tensor.json` | 15655 | `81b645180b72327c9bf44777f2914bc9b2378c9dabd87ab32f05d78e0d8f6f18` |
+| `ci/baselines/synthesis/xilinx/vm.json` | 6057 | `aecb3717cec9d0b58e184718fdfcf2894d562f72f55b7bdb96b915e303d7600f` |
+| `ci/baselines/synthesis/yosys/core.json` | 2373 | `3d73cbaee0c1b903340c9752b0079bc3073a4c3edfdffe579cdcbf99e5006bf3` |
+| `ci/baselines/synthesis/yosys/dxa.json` | 549 | `aa249a7f621768ac02f1d0f85ef4a5eea9d95d32fb6a566ca4adc599a43729aa` |
+| `ci/baselines/synthesis/yosys/graphics.json` | 2841 | `1f43cf0ea627b32525f77fbdd0e2dc70eac6fc93a525d1d60200eb95be995370` |
+| `ci/baselines/synthesis/yosys/mufu.json` | 548 | `2b84aa5d1a201b1239755fd3ec4e147f7b3bc6f64041034ba4f413a61f16ffa9` |
+| `ci/baselines/synthesis/yosys/tensor.json` | 1154 | `01cf957355f05b63dc98b19ca4a69899b0c26383ef86025a24513c1a07d4eadd` |
+| `ci/baselines/synthesis/yosys/vm.json` | 599 | `9ce940cfcdef1bc0f8554de0da13231eda3125bc5a014e7596c83bf0a46372bc` |
+
+## Frozen proofs
+
+| Proof | Bytes | SHA-256 |
+|---|---:|---|
+| `ci/project/p06_qualified_warm_proof.json` | 21505 | `172721c671ddaa79541dde9c37c154b5ab5a99b8abb0caabf2e07036dd429efb` |
+| `ci/project/p06_counter_qualification_proof.json` | 123781 | `d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e` |
+
+## Preserved resource and performance predicates
+
+- Warm and dependency disk floor: **16,106,127,360 bytes (15 GiB)**. Warm/dependency maximum RSS and capacity required available memory: **4,294,967,296 bytes (4 GiB)**.
+- Warm contract: at most **2 jobs**, **16 MiB** maximum log size, **1,800 s** build timeout, **180 s** per-process run timeout, and **90 min** hosted job timeout.
+- Both formats must improve; candidate median is at most **95% of reference**; each measured candidate pair must not be slower and must not increase modeled cycles. All validity requirements are preserved. The decision is not phase acceptance.
+- The unchanged population is **24 processes, 792 launches, 25,344 checked words**; five measured pairs and one warm-up pair per format/policy, one prime and 32 timed operations per process. No sample replacement, outlier removal or optional stopping is permitted.
+
+## Roadmap phases
+
+| Phase | Title | Status |
+|---|---|---|
+| P00 | Project foundation | `complete` |
+| P01 | Reproducible baseline | `blocked` |
+| P02 | Tensor numerical contract | `complete` |
+| P03 | AI operator library | `complete` |
+| P04 | Tiny-model inference | `complete` |
+| P05 | Python and framework integration | `complete` |
+| P06 | Memory and performance scaling | `in_progress` |
+| P07 | Physical FPGA prototype | `not_started` |
+| P08 | Reliability and release hardening | `not_started` |
+| P09 | Training and multi-device research | `not_started` |
+| P10 | ASIC feasibility and sign-off planning | `not_started` |
+| P11 | Funded silicon realization and bring-up | `not_started` |
+
+## Retained image
+
+`docs/assets/img/vortex_framework_stack.svg`: **48225 bytes**, SHA-256 `db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4`. Matches the protected-asset manifest, base bytes and README embedding.
+
+## Revision and concurrent-file scope
+
+Base-to-selected change list:
+
+```text
+M	ci/project/p02_matrix.py
+A	ci/project/test_checkpoint_directory_access.py
+A	ci/project/test_checkpoint_ownership.py
+A	ci/project/test_checkpoint_write_failures.py
+A	ci/project/test_p06_checkpoint_input_recovery.py
+A	ci/project/test_p06_checkpoint_prepare_build.py
+A	ci/project/test_p06_checkpoint_run_recovery.py
+A	docs/designs/checkpoint_publication_v1.md
+```
+
+Working tree status at completion:
+
+```text
+?? docs/project/p06-checkpoint-publication-audit.md
+```
+
+The assertions apply to the protected path inventories as observed. A024 may add or edit unbound test files while this review runs; these are deliberately outside protected assertions and are not evidence of a frozen-input mutation.
+
+## Limitations
+
+- No tests, governance qualification, dependency fetch/build, simulator, RTL, FPGA or physical-device execution was performed.
+- All 21 Ramulator descriptors are unchanged, but all corresponding submodule files are absent; this is not a rehash of dependency source bytes or verification of remote availability.
+- Tracked evidence preservation is established by git diff, not by rehashing every historical evidence artifact or revalidating its claims.
+- The source inventory proves frozen identities at the observation time, not execution evidence, producer authentication, native admission, performance acceptance or phase acceptance.
+- Concurrent new or modified unbound test-only files and an untracked publication audit are outside the protected assertions; status snapshots disclose them.
+
+## Concurrent test-only commit observed
+
+HEAD advanced from selected `93bb3f0342eff0b469a0da06cb067916af7c539e` to `a693d6f8828e4e10b5374db7fef8c727aa69d34e` during review. The protected-path working-tree comparisons and hashes reported above were rerun at the observed HEAD and all still passed. The additional commit changed only these test paths:
+
+```text
+M	ci/project/test_checkpoint_ownership.py
+M	ci/project/test_p06_checkpoint_input_recovery.py
+```
+
+These unbound test-only edits are excluded from frozen-input assertions; no native qualification is inferred from the new commit.

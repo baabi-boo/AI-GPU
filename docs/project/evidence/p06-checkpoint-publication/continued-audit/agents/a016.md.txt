@@ -1,0 +1,54 @@
+# Agent 016 — runtime loader audit
+
+## Scope and result
+
+Read-only review of `python/native/runtime_loader.cpp` and `.h` at commit
+`ba88572af0bea1e355af08038abcc1f62773a438`, compared with
+`docs/designs/python_binding_v1.md`, the relevant `vortex2.h` declarations,
+`python/native/module.cpp`, and the existing host fixture builder
+`ci/project/p05_test_runtime.py`.
+
+**No concrete reachable defect found in the assigned scope.** This conclusion
+applies to the documented Linux CPython 3.12 main-interpreter, pinned SimX
+bundle contract. It does not establish runtime qualification.
+
+## Findings by concern
+
+- **Supported ABI:** `ApiTable` uses `decltype(&::name)` from `vortex2.h`
+  (`runtime_loader.cpp:677–681`); the twenty forwarding signatures agree with
+  those declarations. Every required symbol must resolve to the verified
+  runtime DSO (`719–739`, `886–896`). The backend entry is only checked for
+  presence/origin, never invoked through its local placeholder type. Exact
+  artifact hashes bind the implementation; the public contract does not
+  promise loading interchangeable runtime versions or external plugins.
+- **Missing symbols / partial loads:** the API table remains unpublished on
+  every failure path. `attempted` is set before the first `dlopen`, and a
+  subsequent request cannot continue a partially loaded state (`847–865`).
+  Retaining already acquired handles is deliberate (`697–701`), consistent
+  with the contract's process-lifetime selection. A missing-symbol failure
+  therefore does not expose a partly initialized dispatch table or dangling
+  callable pointer; recovery requires a fresh process.
+- **Reference ownership:** the heap-allocated `LoadState` permanently owns
+  all successful `dlopen` references and the published table. There is no
+  unload API or destructor ordering dependency. `VerifiedBundle` owns copies
+  of all metadata and module bytes (`runtime_loader.h:11–22`).
+- **Repeated use:** same-path retries after success reverify artifacts and
+  loaded object paths without acquiring additional `dlopen` references
+  (`833–856`); another path/backend is rejected. PID checks reject inherited
+  dispatch after fork (`704–705`, `816–817`). No supported unload/reload cycle
+  was assumed.
+- **Diagnostic lifetime:** both `dlsym` and `dlopen` diagnostics are copied
+  into `std::string` before another loader operation (`722–728`, `872–877`).
+  Persistent failure text is owned by `LoadState`; outward errors are copied.
+  `session_open` passes the resulting owned string to `PyErr_SetString`
+  (`module.cpp:526–528`). Compiled digest pointers reference static receipt
+  data (`runtime_loader.cpp:744–750`).
+
+## Validation and limits
+
+Source inspection only; no tests, builds, downloads, or native execution were
+performed because inspection produced no candidate defect requiring a repro.
+The repository already contained unrelated checkpoint-governance changes; this
+audit modified no repository files. Relevant `AGENTS.md` rules and current
+project status/roadmap/backlog/acceptance records were consulted. No acceptance
+gate or evidence level is changed by this report.

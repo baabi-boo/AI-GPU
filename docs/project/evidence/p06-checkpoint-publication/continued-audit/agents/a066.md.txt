@@ -1,0 +1,107 @@
+# A066 — Fresh Dependency Provenance workflow scope
+
+## Finding and reviewed source
+
+No concrete supported-contract integration blocker found. This is read-only
+source review at local commit `9f369a579ca764800b22eedd15e09795f09615da`, not a
+workflow-status observation, execution, independent original replay or new
+acceptance. All 14 recorded files match that commit; among those files, only
+`ci/project/p02_matrix.py` differs from explicit base
+`858090410a992756808256ace90d36b9b3b88dd3`. The companion
+`a066-dependency-provenance.json` records the complete file identities.
+
+## What a successful source-matched workflow establishes
+
+The workflow is a fresh dependency build followed by native lifetime and
+separate controls, not merely a cache-integrity screen. It selects Ubuntu
+22.04 and CPython 3.12.14, restores only the pinned toolchain, records job/workflow
+identity, and checks the 15 GiB disk/4 GiB available-memory admission bounds.
+Preparation and all execution stages receive the provider's exact `GITHUB_SHA`.
+See `.github/workflows/p06-dependency-provenance.yml:105–233`.
+
+The locked source set is SoftFloat, Ramulator, yaml-cpp, spdlog and argparse.
+The three selected products are `softfloat.a`, `libramulator.so` and
+`libramulator-vortex.so`. The plan has 406 translation units: 309 SoftFloat,
+60 Ramulator, 29 yaml-cpp, seven spdlog and one extension. The receipt reader
+requires exactly **406 compile, three archive, two index and two link records**
+—413 tool operations—with unique identities and the complete locked graph.
+It checks objects, archive members, links and exact staged product/source
+population. These are execution requirements; this review did not run them.
+See `p06_dependency_contract.py:12–78` and
+`p06_dependency_receipt.py:787–944` under `ci/project/`.
+
+The builder requires fresh source/build directories, clean exact-revision
+measurement source, pinned preparation and host-tool identities. It retains
+the loaded local helper inventory, sources, command/tool records, build inputs
+and products. It repeats helper/tool/source/staging stability checks around
+commands and at finalization, checks the source checkout again after staging,
+then validates its completed original receipt through the inert reader.
+See `p06_dependency_build.py:109–125,272–313,427–534`.
+
+The workflow pins the **actual original receipt bytes** by SHA-256 and size
+before native execution. Admission checks the exact source revision, selected
+measurement root, staged product identities, helper files and tool/source
+stability; model-link validation joins those products to the actual application
+build. The native runner binds the receipt to each variant and process,
+verifies expected loaded libraries in each native output, and repeats closing
+stability checks. The complete managed population is **four processes,
+132 launches and 4,224 checked FP32 words** across both formats and allocation
+policies. `dependency_source_to_loaded_binary_verified` requires the complete
+passing lifetime population and both admitted variant builds. See workflow
+`:234–276`, `p06_dependency_admission.py:79–254` and
+`p06_managed_preflight_execute.py:465–471,604–630,680–747,779–833`.
+
+Separate later workflow steps require the positive pending-read observation,
+the always-zero accessor rejection, and rejection of a freshly built alternate
+dependency despite correct numerical output. The alternate-library control's
+33 launches and 1,056 checked words are outside the four-process managed
+population; its passing numerics must not turn wrong provenance into a pass.
+See workflow `:277–297` and
+`p06_dependency_substitution.py:53,109–127,421–433`.
+
+## Claims that remain false
+
+The contract fixes seven flags to false: `qualified`, `ready_for_warm`,
+`warm_execution`, `full_warm_coverage`, `acceptance_claimed`,
+`phase_acceptance` and `performance_acceptance`. The builder initializes them
+false, the workflow requires their exact false values when pinning the original,
+and the receipt/admission readers reject a changed claim. Thus a green run can
+establish its bounded fresh source-to-loaded-product prerequisite without
+establishing complete 40-component counter qualification, an absolute no-wrap
+bound, the qualified-warm experiment or performance/phase acceptance. Complete
+compiler/system-input closure and malicious concurrent-writer protection are
+also outside the stated contract. See `p06_dependency_contract.py:56–86`,
+workflow `:249–257`, `p06_dependency_receipt.py:690–702`, and
+`p06_dependency_admission.py:79–93`.
+
+The separate inert readers report `native_execution="not_run"` and
+`retained_code_executed=false`. Their consistency result is not a new native
+execution or producer authentication. The upload step uses `if: always()` and
+retains the original evidence after failure as well; a partial artifact does
+not become a completed successful receipt. See workflow `:298–307`,
+`p06_dependency_replay.py:175–184` and
+`p06_dependency_native_replay.py:879–885`.
+
+## Interaction with the current fixes
+
+The shared checkpoint helper is used directly by preparation, dependency
+builder reports, native-runner reports/snapshots, pending probes and substitution
+controls. The builder's loaded-helper inventory includes the helper and checks
+its retained identity; no new project import or helper path was introduced by
+the repair. The owned-temporary cleanup permits the existing explicit failure
+finalization after a recoverable publication fault. It adds no command retry,
+does not re-execute a compiler or native process, and does not change receipt
+schemas, outputs or the seven false claims. Failed preparation/build/native
+work remains blocked or failed. Persistent publication failure remains possible.
+See `p06_dependency_prepare.py:45–51`,
+`p06_dependency_build.py:233–243,288–313,510–534`,
+`p06_managed_preflight_execute.py:312–318`,
+`p06_pending_probe.py:211` and `p06_dependency_substitution.py:252`.
+
+This workflow launches its native executable through the existing bounded
+command supervisor, not `vortex_ai.launch`. Its success cannot demonstrate the
+installed Python launcher's new SIGTERM forwarding or native cancellation
+cleanup. See `p06_managed_preflight_execute.py:720–724`.
+
+No CI queries, tests, builds, native workloads, repository edits, commits or
+pushes were performed by this review.

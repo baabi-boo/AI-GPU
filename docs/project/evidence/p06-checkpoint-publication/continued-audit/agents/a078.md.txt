@@ -1,0 +1,88 @@
+# A078 — resource admission and current local capacity
+
+## Result
+
+**No resource-contract or guard-integration defect found. The observed local
+filesystems cannot satisfy native admission.** This is a read-only source review
+and resource snapshot, not an attempt, a reservation or an admission receipt.
+The exact published source is `30b2e8ca69fba47646392c0cf6650cbb75155843`.
+
+Observation interval: **2026-11-26T07:45:22.420024+00:00** through
+**2026-11-26T07:45:22.422484+00:00** (UTC). The complete bounded observer result, filesystem
+observations and ten source identities are retained in `a078-capacity.json`.
+
+| Observed location | Available bytes | GiB | Unchanged requirement |
+|---|---:|---:|---|
+| Published source, local source, audit worktree and `/tmp` (one shared filesystem) | 2,826,969,088 | 2.633 | At least 15 GiB on every selected filesystem |
+| Scratch workspace and `/workspace` (one other shared filesystem) | 399,290,368 | 0.372 | At least 15 GiB on every selected filesystem |
+| Host `MemAvailable` | 5,051,174,912 | 4.704 | At least 4 GiB; this is not effective cgroup capacity |
+
+The corresponding exact disk threshold is **16,106,127,360 bytes** and the memory
+threshold is **4,294,967,296 bytes**. The temporary filesystem's entire capacity
+is only **5,225,713,664 bytes**. Moving files between the three temporary
+worktrees cannot create independent space or meet the 15 GiB reserve. The disk
+shortfall alone precludes this local native route; no deletion or provisioning
+was attempted.
+
+The actual bounded memory observer reported `status=unknown`,
+`observation_complete=false`, `visible_capacity_status=unknown` and
+`effective_capacity_status=unknown`. Its sanitized reason was
+`mapping:missing_or_ambiguous_v2_mount`. Both host samples were
+**5,051,174,912 bytes**, so host RAM crossed the numerical
+4 GiB threshold at that instant, while no visible cgroup completeness or effective
+allocation margin was established. All native/qualification/acceptance claims
+remain false. The observer performed **6 file reads / 14 read calls / 12,186
+bytes**, with no exhausted observation budget.
+
+## Admission semantics and caller consumption
+
+- `ci/project/p06_dependency_contract.py:53` fixes two build jobs, one simulation
+  worker, the 15 GiB reserve, 4 GiB sampled process-group RSS, 16 MiB command logs
+  and the existing configure/build/process timeouts. All these bytes are unchanged.
+- `ci/project/p06_qualified_warm_capacity.py:323` constructs a non-authorizing
+  advisory report. `observe_capacity()` samples host availability twice,
+  investigates only the uniquely mapped visible v2 ancestry, compares topology
+  and limits at endpoints, and never changes its effective-capacity status from
+  `unknown`. Hidden ancestors, allocations after the sample and intervening
+  migrations remain outside the observation. Swap is not added to RAM.
+- `ci/project/p06_qualified_warm_hosted.py:315` separately consumes those fields:
+  no known memory shortfall, complete visible observation, the declared unknown
+  effective status, sufficient host RAM and sufficient source/attempt disk are
+  all required for its observational resource gate. Even a favorable gate sets
+  `effective_capacity_established=false`; it is not a quota or reservation. The
+  present observations fail both disk and visible-observation conditions.
+- The hosted route records and requires this gate before acquisition
+  (`p06_qualified_warm_hosted.py:604`) and repeats it after host/input provisioning,
+  immediately before the native supervisor (`:624`). An earlier favorable sample
+  therefore cannot replace the explicit pre-native observation.
+- Input acquisition checks every selected root's current free space and host
+  memory before and after acquisition (`p06_qualified_warm_inputs.py:145`, `:294`
+  and `:337`). Private control intake separately requires the disk reserve **plus
+  the exact control bytes and one 64 KiB chunk** before creating the archive
+  (`p06_qualified_warm_control.py:459`).
+- The qualified runner checks its selected roots and host memory before its
+  three stages (`p06_qualified_warm_run.py:439`) and passes the unchanged reserve,
+  4 GiB RSS and log budgets into `run_bounded` (`:473`). The monitor checks disk
+  before spawning and polls disk, elapsed time and process-group RSS while the
+  child runs (`baseline_process.py:139`). It does not continuously reserve host
+  `MemAvailable`, establish cgroup limits or count deliberately escaped groups.
+
+These are polled budgets, not hard memory/filesystem quotas. RSS samples can miss
+peaks, double-count shared pages and exclude page cache. Repeated checks reduce
+staleness but do not guarantee future allocation. The documented observer time
+budget is itself polled and cannot interrupt a blocked kernel read. These limits
+are explicit in `baseline_process.py:20`, the capacity report and the qualified
+runbook's resource section; no gate relaxation is recommended or made.
+
+## Identity and execution boundary
+
+All **10 reviewed resource/guard/source documents** matched the published commit,
+matched base `858090410a992756808256ace90d36b9b3b88dd3`, and retained their hashes
+through this review. The published checkout remained clean with unchanged HEAD.
+
+The only executed project operation was one bounded, read-only capacity
+observation. No test bodies, stress/pressure probes, allocation tests, builds,
+provisioning, deletions, native launches, repository edits, commits or pushes were
+performed. Existing local work and backups were preserved. An adequately
+provisioned runner and all separate source/governance/private-input prerequisites
+remain necessary; these observations do not authorize a native attempt.

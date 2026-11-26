@@ -1,0 +1,88 @@
+# A058 — exact-tree publication transport review
+
+## Decision
+
+Use the connected GitHub Git-data API to publish each of the five local commits
+as a corresponding API commit with an identical verified tree. Keep the raw
+local commit bodies and an explicit mapping. Update `master` once, with expected
+old head `858090410a992756808256ace90d36b9b3b88dd3` and `force=false`, only after
+all object and parent checks pass. The API-assigned commit IDs are distinct;
+their equality must not be claimed. The actual published final SHA requires its
+own strict governance original and independent replay.
+
+This is an established repository procedure, not an authentication workaround:
+
+- `docs/project/evidence/p03-managed-matmul/publication.md` explains the same
+  missing-HTTPS-credential condition, authorized connected Git-data publication,
+  blob/tree verification, mapped parents, a single expected-head non-force ref
+  update, and reconstruction of original local commits from exact raw bodies.
+- Its `publication-map.json` retains original commit bodies and all publication
+  identities without relabeling test or acceptance sources.
+- `docs/project/evidence/p06-analysis-validation/checkpoint-publication.json`
+  records the same concrete Git push authentication failure and a subsequent
+  verified identical-tree API publication.
+- `docs/project/evidence/p06-dependency-provenance/validation/depfile-fix-publication.json`
+  separately records local and published commits, identical tree, guarded
+  non-force publication, and exact-revision qualification limits.
+- `docs/project/evidence/p01-compiler-records/publication-map.json` binds a raw
+  local commit body by its byte length, SHA-256 and framed Git object SHA-1.
+
+## Verified local chain
+
+Read-only Git inspection found this exact linear continuation:
+
+| Local commit | Local tree | Parent |
+|---|---|---|
+| `ba88572af0bea1e355af08038abcc1f62773a438` | `21b1a2247078d376d61a25523e9f74cf93fafbcf` | `858090410a992756808256ace90d36b9b3b88dd3` |
+| `93bb3f0342eff0b469a0da06cb067916af7c539e` | `2d1d19b5f48a18f9c72569683752c6d5bddc165f` | `ba88572af0bea1e355af08038abcc1f62773a438` |
+| `a693d6f8828e4e10b5374db7fef8c727aa69d34e` | `7d36a4dab10389ef3fce843cf4cb4b488ae2bab2` | `93bb3f0342eff0b469a0da06cb067916af7c539e` |
+| `d31e8879e7c248b1a72615128882533ccdd0b3b4` | `364ae3cb38750521a0404d6f55ab037d6af64e14` | `a693d6f8828e4e10b5374db7fef8c727aa69d34e` |
+| `9f369a579ca764800b22eedd15e09795f09615da` | `548b85370e3d13119730b5a30d1ec388d3e141a9` | `d31e8879e7c248b1a72615128882533ccdd0b3b4` |
+
+All five `git cat-file commit` bodies are lossless UTF-8. Independently framing
+each as `commit <byte length>\0<body>` and hashing with SHA-1 reproduced its
+declared original commit ID. Body lengths are respectively **817, 706, 749,
+256 and 256 bytes**. Preserve their exact bytes, including terminal newlines.
+
+## Concrete publication and retention sequence
+
+1. Preserve the existing local refs and verified incremental bundles. Do not
+   discard the original chain merely because API commit metadata differs.
+2. For each local commit in order, publish any new blob objects, checking each
+   returned blob ID against the local object ID. Rebuild its tree with exact
+   paths, modes and blob IDs against the preceding tree. Require the complete
+   root tree ID to equal the corresponding local tree in the table.
+3. Create the API commit with the original message and mapped API parent (the
+   first parent remains the exact base). Check the returned/fetched tree and
+   parent identities. Keep every intermediate tree reachable through this
+   mapped commit chain, including overwritten intermediate helper/test bytes.
+4. Read the remote branch immediately before the one ref update. If it moved,
+   inspect and reconcile that new head; do not force or blindly retry a failed
+   expected-head lease. Use `force=false` with the exact observed expected head.
+5. Read back the remote head and fetch it locally. Verify its root tree equals
+   `548b85370e3d13119730b5a30d1ec388d3e141a9`. Record the actual published SHA and
+   every local/API mapping, original and API parents, verified tree IDs, raw
+   local commit bodies and publication observations.
+6. Retain the mapping on the planned audit branch after publishing the source
+   tree. This avoids adding a mapping file to the source tree being compared.
+   Keep the already recorded focused-test source IDs unchanged and make the
+   API publication relationship explicit. Qualify the actual published master
+   SHA independently before native admission.
+
+Because the corresponding API history retains all trees and blobs, the compact
+raw local commit bodies suffice to reconstruct the original local commit
+objects with `git hash-object -t commit -w --stdin`. This is the existing P03
+procedure. A large incremental bundle may remain an additional local backup;
+it is not necessary to upload that bundle just to preserve the five original
+commit identities. The parent base must remain available, as it is in the
+intended append-only remote history.
+
+## Scope and limits
+
+The review inspected existing publication records and performed read-only local
+Git/raw-object checks. It did not publish objects, change refs, fetch credentials,
+inspect secret stores, run tests, or claim that publication had succeeded. The
+task's remote-base observation is an input; a fresh pre-update readback remains
+the publishing agent's responsibility. Exact-tree equivalence preserves source
+bytes and modes; it does not turn an earlier focused run into strict governance
+or native qualification at a different commit.

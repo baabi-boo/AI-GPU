@@ -1,0 +1,10 @@
+tree 2d1d19b5f48a18f9c72569683752c6d5bddc165f
+parent ba88572af0bea1e355af08038abcc1f62773a438
+author Codex <codex@openai.com> 1795673992 -0700
+committer Codex <codex@openai.com> 1795673992 -0700
+
+fix(checkpoint): preserve directory access and verify producer recovery
+
+Use a Linux path handle so anchored publication requires directory write and search access without introducing read access. Add actual preparation-consumer permission coverage and independent ownership, acquisition, preparation and builder fault regressions.
+
+The six checkpoint modules pass 24 tests. Old-writer controls reproduce stale temporary failures; no native workload, resource threshold or frozen measurement input is changed.

@@ -1,0 +1,143 @@
+# A075 — exact historical control-original intake
+
+## Result and inspection scope
+
+**No concrete supported-contract intake blocker found.** Read-only inspection
+used clean published source `30b2e8ca69fba47646392c0cf6650cbb75155843`.
+The 15 source/document identities listed below match that commit and the
+explicit base `858090410a992756808256ace90d36b9b3b88dd3` byte-for-byte.
+No private URL was fetched, no secret or credential store was queried, no
+control archive was downloaded or opened, and no test body, build, replay or
+native process was executed. No repository or remote mutation was made.
+
+## Exact original and provider-location boundary
+
+The required file is `AI-GPU_P06_local_attempt_04_passed_2026-11-23.zip`,
+**47,632,218 bytes**, SHA-256
+`d3a16e1e6e92a68414f5fdcce564b963dde2e9e801601191d52ceeb974faea6f`.
+The retained identity binds historical local source
+`0f9aaa36d46364c297254164f5dab0d4f0e88349`, 5,597 archive members and the original
+local evidence root. That root is historical provenance; this review did not
+check whether it exists in the present workspace.
+
+**No public GitHub run/job/artifact identifier for this exact original is
+provided by the reviewed normative delivery guide or retained identity.** The
+local execution packet explicitly describes a local origin and rejects invented
+GitHub producer identity. The guide instead requires the owner-managed private
+Azure Blob or S3 object. It states that retained Micron verification material is
+not cleared for public redistribution and disallows public mirrors or repacking.
+A hash/filename is not a current accessible delivery location.
+
+Sources: `docs/project/evidence/p06-dependency-provenance/local-execution/originals/AI-GPU_P06_local_attempt_04_passed_2026-11-23.identity.json`;
+`docs/project/evidence/p06-dependency-provenance/local-execution/README.md:11–25,58–62`;
+`docs/project/p06-hosted-warm-guide.md:96–145`.
+
+## Transport and retained-byte checks
+
+`_reviewed_identity` checks the qualified proof and its historical base proof,
+then requires the compiled exact size/digest pair. There is no CLI override for
+the URL, expected identity, proof or resource budget. The URL is consumed from
+`P06_CONTROL_ARCHIVE_URL`, removed from the environment and omitted from receipts.
+
+Only bounded ASCII canonical HTTPS signed object URLs on explicitly recognized
+Azure Blob and virtual-hosted S3 names are accepted. User information, custom
+ports, arbitrary aliases, fragments, path traversal, malformed escapes,
+duplicate query keys and nonconforming signature shapes are rejected. Azure
+requires blob/read-only fields; S3 requires its declared HMAC/host-signed shape
+and a bounded expiry field. These are input-shape checks, not independent
+validation of a provider signature or proof that the link remains unexpired.
+The provider must accept the request.
+
+The transport performs one direct HTTPS GET with a certificate/hostname-checked
+TLS client context and TLS 1.2 minimum. It does not select a redirect target or
+proxy override; HTTP debug output is disabled and the context does not enable
+ambient TLS key logging. Only status 200 with exact decimal Content-Length,
+accepted binary content type and unambiguous unencoded framing can reach the
+stream reader. Redirects, range responses, chunked/encoded responses and other
+statuses are rejected without reading response text.
+
+The connection timeout is 20 seconds; an unused main-thread POSIX alarm bounds
+the transfer at 120 seconds. Reads use at most 64 KiB, request only a bounded
+extra byte at the end, and retain no more than the exact expected archive size.
+Before transport, the output filesystem must have the unchanged 15 GiB reserve
+**plus 47,632,218 bytes plus one 64 KiB chunk**. This intake disk test does not
+replace the hosted capacity checks, memory checks or later native admission.
+
+The fresh canonical output directory is outside the source checkout, owner-held
+mode 0700. New archive/receipt files are exclusive, nonsymlink, owner-held mode
+0600 with one link; checks bind retained descriptors to named inodes. After
+streaming, the code synchronizes and re-reads the retained file to compute the
+actual digest, checks size and metadata stability, repeats the frozen proof
+identity check and checks the exact initial output inventory before declaring
+`original_verified=true`. HTTP success or exact length alone cannot pass.
+
+Sources: `ci/project/p06_qualified_warm_control.py:32–62,87–218,220–345,432–473`;
+`ci/project/p06_dependency_contract.py:51–55`.
+
+## Failure accounting and later admission
+
+Pre-network rejection remains `blocked`; failures after network acquisition
+starts remain `fail`. The receipt records only fixed sanitized reason codes and
+messages, never raw URL/response/exception details. Actual partial bytes remain
+at the private original path with `original_verified=false`; a known digest for
+partial bytes does not make them usable input. Owned receipt recovery invalidates
+a previously successful record on close/finalization failure without adopting a
+foreign replacement. Persistent storage failure can still prevent a complete
+failure receipt; this limit is explicitly retained. The CLI prints a reduced
+sanitized summary and returns nonzero except for a successful byte intake.
+
+This module uses its own private descriptor/receipt implementation. It does not
+import the changed shared `p02_matrix._write_json` helper or the installed Python
+launcher. Its scoped SIGTERM handling and closeout tests are separate prior work.
+The surrounding hosted wrapper does use the shared writer, but a successful
+control intake still establishes only byte identity: native execution is
+`not_run`, retained code is not executed, no archive is extracted/repacked, and
+all qualification/warm/acceptance claims remain false.
+
+The hosted route requires the passing verified control receipt before input
+acquisition. Later qualified admission independently checks the complete control
+archive against the historical proof and source revision, all pinned report
+identities, complete member/managed populations, exact pending-read and alternate
+library rejections, and false claims. It checks the historical source projection
+and retains separate control populations. Byte intake cannot substitute for
+those semantic checks, same-revision governance or independent final replay.
+
+Sources: `ci/project/p06_qualified_warm_control.py:348–427,432–551`;
+`ci/project/p06_qualified_warm_hosted.py:588–625`;
+`ci/project/p06_qualified_warm_admission.py:111–155`;
+`ci/project/p06_counter_qualification_prerequisites.py:226–296`;
+`.github/workflows/p06-qualified-warm.yml:5–98`.
+
+## Existing checks inspected, not run
+
+The inspected test source covers URL/provider shapes, immutable pins, CLI
+redaction, verified TLS, ambient debug/key-log suppression, missing configuration,
+disk admission, exclusive/private output identity, redirect/status/framing
+rejection, short/long/corrupt streams, transport timeout/interruption, preserved
+partial bytes and finite deadline restoration. Separate closeout, finalization,
+operational-failure and SIGTERM modules contain receipt failure, replacement,
+first-error and descriptor-reuse regressions. Their presence is not a fresh test
+pass; no test suite was executed by A075.
+
+## Source identities at completion
+
+HEAD remained the selected published revision and the worktree was clean.
+Every listed file matched both that commit and the explicit base.
+
+| File | Bytes | SHA-256 |
+|---|---:|---|
+| `ci/project/p06_qualified_warm_control.py` | 25884 | `c0368265402be85f4216d6a3b3f84de8c2cf98cea374593ae45b01854a4a2a5b` |
+| `ci/project/test_p06_qualified_warm_control.py` | 26406 | `9dddf361cc18d72b40636156e36f40d359c36872bebae9925e6c96a063808ead` |
+| `ci/project/test_p06_control_closeout_review.py` | 7808 | `8502a9c800a864aaa947e3f9a68f112a5213ce8401a59121ad16514a811b72a2` |
+| `ci/project/test_p06_control_finalization.py` | 13711 | `7020fea4b05a002f8d6353aed429d66e4162f9e2d4f202a0ca401edfb2c6e06c` |
+| `ci/project/test_p06_control_operational_failures.py` | 8249 | `b281681fdf158062be763ce46aecff9b18634faba937072e490636a99b494e09` |
+| `ci/project/test_p06_control_sigterm_closeout.py` | 12356 | `dcd6e1650a8fc3a41416104c17d55758aa24d60aa4e3e020c65c988dd8be1766` |
+| `ci/project/p06_qualified_warm_admission.py` | 9445 | `849b3cf591d419bf50eea02b94f6801499859208f802b376a81a2c2b3bca28e2` |
+| `ci/project/p06_counter_qualification_prerequisites.py` | 18956 | `b94d293f8dc4846e4b2de3344169362899d3da9503efcbac0a2e63ebad68d586` |
+| `ci/project/p06_counter_qualification_proof.json` | 123781 | `d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e` |
+| `ci/project/p06_qualified_warm_proof.json` | 21505 | `172721c671ddaa79541dde9c37c154b5ab5a99b8abb0caabf2e07036dd429efb` |
+| `ci/project/p06_qualified_warm_hosted.py` | 41480 | `875e1e095253cbe38c6424adfdc324bdd88ee1152536a993ae6d03dba0992220` |
+| `.github/workflows/p06-qualified-warm.yml` | 3912 | `261efa4bcf9c2ca7a9bca8a25dcb03eefd70848426a4c6c61ca55b68a14a7b2e` |
+| `docs/project/p06-hosted-warm-guide.md` | 48210 | `3a509fca0586fadb8d471ab70cb13f3cf083fa4fb4d4b97aad4326f8f00bad5f` |
+| `docs/project/evidence/p06-dependency-provenance/local-execution/README.md` | 15583 | `b5ce1c7634177af14e98eb85803f23d4ea3261419c057a308c2fcfa2163de18a` |
+| `docs/project/evidence/p06-dependency-provenance/local-execution/originals/AI-GPU_P06_local_attempt_04_passed_2026-11-23.identity.json` | 2082 | `d7bbab3bb8173b7fa07a861efe59bdf40af9bd31149590e0974705978dbe82bd` |

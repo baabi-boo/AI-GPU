@@ -1,0 +1,36 @@
+# A089 — retained audit artifact inventory
+
+## Result and exact snapshot
+
+**PASS: 34 read-only inventory and identity assertions passed; 0 failed.** The reviewed audit worktree is based on published source `30b2e8ca69fba47646392c0cf6650cbb75155843` (tree `548b85370e3d13119730b5a30d1ec388d3e141a9`). The snapshot contains **148 files / 943,033 bytes**, **79 completed agent reports**, **50 supporting files**, **six gzip log containers**, **six retained Python probe sources**, and **five raw local commit bodies**. The tracked change is only `docs/project/p06-qualified-warm-handoff.md`.
+
+The snapshot was read from 2026-11-26T08:11:02.906069+00:00 to 2026-11-26T08:11:03.043919+00:00. Its file inventory, handoff bytes, HEAD and porcelain status remained unchanged during the verification. The inventory manifest digest is `fe94fa54024d67cb51f5b16fc38109198ac0dbade155e685a774151ffd5bf3c9`; its exact serialization and every path/size/mode/SHA-256 are recorded in the accompanying JSON. This result covers the observed snapshot. Later reports and CI receipts are outside this review.
+
+## Identity and lossless retention
+
+All 79 ledger sizes and SHA-256 values match their retained `.md.txt` files. Every report also matches an exact original scratch Markdown report. Assignments are unique and contiguous A001–A079. The ledger says 100 requested and 79 completed, and records a limit of three agents alongside the root; it does not claim that all 100 had completed. Historical reports keep their original source revisions, outcomes and references. Their counts are not test or acceptance counts.
+
+All 50 supporting records match their retained SHA-256 values, original sizes and original SHA-256 values. Every retained payload also matches its original scratch file. The six gzip entries decompress byte-for-byte to the indexed original logs. Two original logs contain trailing whitespace; compression retains those bytes without rewriting the originals. There are no unindexed files in the `agents`, `supporting` or `publication/raw` directories.
+
+Each of the five raw commit bodies reproduces its original Git commit ID using both direct Git-object SHA-1 calculation and read-only `git hash-object -t commit`. Every body also equals the original local Git object, with its exact tree, parent and terminal newline. Sizes are 817, 706, 749, 256 and 256 bytes in publication order. The manifest and publication mapping agree; the 89 uploaded-blob identities and sizes match the manifest. Both published and local delivery commit trees resolve to the recorded common tree. This review did not write Git objects or move refs.
+
+## Packaging and disclosure boundary
+
+All 148 files are regular mode-0644 files. No symlink, bytecode cache, dependency tree, native executable, compiled library, private-key filename, encrypted private-control archive or unexpected archive container appears in this bounded inventory. All retained payloads are UTF-8 text after log decompression, with no NUL bytes. A limited private-key marker probe found no matches. The continuity-input record contains sanitized result metadata and limitations, without a raw Personal Context payload.
+
+The six `.py` files are retained historical invocation/probe source under `continued-audit/supporting`; none is a canonical `test_*.py` module or installed helper. They were syntax-parsed only, never imported or executed. The README already scopes the packet as source-specific evidence. An explicit sentence describing the retained scripts and linking `supporting-index.json` would make this distinction easier for later readers.
+
+The exact preserved `publication/a056-impact.md` mentions two empty stderr originals (`a056-impact.json.stderr` and `a056-impact-explain.txt.stderr`). Both still exist as zero-byte scratch files, but neither is copied into this packet snapshot. This is a small self-containment improvement, not a mismatched hash or lost original: retaining and indexing the two files would satisfy the historical report's filename references without altering its bytes.
+
+The inventory does not inspect credential stores, environment credential values or unrelated personal files. It is not a new exhaustive disclosure certification, and it does not enlarge A072's earlier review scope. No suspected sensitive values were printed.
+
+## Handoff and links
+
+All **70 active Markdown relative file links** in the packet's Markdown files and corrected handoff resolve within the worktree. Raw `.md.txt` agent reports intentionally keep their original references. The former handoff body remains byte-identical after its new historical label and explanatory lead-in. The new lead section names published source `30b2e8ca69fba47646392c0cf6650cbb75155843`, scopes focused testing and discovery appropriately, and preserves the separate governance, private-input, capacity and native-admission boundaries.
+
+No source tests, native workloads, full governance run, CI-status query, remote readback, commit, push or repository mutation was performed. The parent retains responsibility for later audit additions, publication and the published source's own CI qualification.
+
+## Retained review output
+
+- `a089-audit-inventory.json`: exact snapshot inventory, 34 assertions, per-report and supporting-file identity checks, raw-commit identities, link results, and explicit limitations.
+- `a089-audit-inventory.md`: this report.

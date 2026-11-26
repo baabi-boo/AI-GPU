@@ -1,0 +1,102 @@
+# A094 — Audit delta and protected-source review
+
+## Result and scope
+
+**All 35 read-only assertions passed, with zero failures.** This review compared
+the audit worktree at `/tmp/ai-gpu-2bfab0261c05/audit` with published source
+`30b2e8ca69fba47646392c0cf6650cbb75155843`, tree
+`548b85370e3d13119730b5a30d1ec388d3e141a9`. Its branch was
+`audit/checkpoint-publication-30b2e8c`, with HEAD still at that published source.
+
+The stable inventory was captured from **2026-11-26 08:16:08.464876 UTC through
+08:16:09.491842 UTC**. It contained one tracked modification and **176 untracked
+files totaling 1,619,571 bytes**. Every untracked file was under
+`docs/project/evidence/p06-checkpoint-publication/continued-audit/`, was a regular
+nonsymlink file, and had mode 0644. No ignored untracked file, hidden index flag,
+new cache or bytecode file was observed. The captured file population and bytes
+were unchanged across the inspection.
+
+This is an audit-packet snapshot, not project test execution, canonical discovery,
+strict governance qualification, native execution or acceptance. Later agent
+reports and current-governance evidence additions are outside this snapshot.
+
+## Tracked source and protection
+
+The sole tracked change was `docs/project/p06-qualified-warm-handoff.md`. The
+new leading section describes the published checkpoint/launcher work and labels
+the previous closeout section historical. The entire previous section body is
+byte-identical after its new historical heading and explanatory introduction.
+
+The review independently recomputed Git blob identities for all **8,378 tracked
+blob entries**, reading **534,205,404 materialized bytes**, and compared modes
+against the published tree. The handoff was the only blob mismatch. All tracked
+modes matched, and there was no missing tracked blob. The remaining five tree
+entries are unchanged gitlink pins; this does not attest the contents or native
+closure of unmaterialized dependency checkouts.
+
+| Protected group | Existing tracked entries checked | Result |
+| --- | ---: | --- |
+| GitHub workflows | 20 | Unchanged |
+| Project governance tooling | 597 | Unchanged |
+| Existing project evidence | 4,611 | Unchanged |
+| Production and test roots (`hw`, `sim`, `sw`, `runtime`, `python`, `tests`) | 2,650 | Unchanged |
+| License, copying and notice files | 9 | Unchanged |
+| Project instructions, roadmap, status, backlog, acceptance and review policy | 8 | Unchanged |
+| Protected SVG and its embedding README | 2 | Unchanged |
+
+These groups overlap and are not additive populations. The whole tracked-tree
+comparison also covers existing files outside these named groups. No production
+implementation, workflow trust surface, enforcement code, numerical golden,
+phase state, acceptance policy, existing evidence or upstream attribution was
+modified by this audit delta. The index had no staged delta and its bytes
+remained unchanged, as did HEAD and the tracked-diff population.
+
+## Canonical tests and retained Python
+
+Seven new `.py` files were present, all inside `continued-audit/supporting/`.
+They are historical reproduction or verification source, labeled as such in the
+packet README. None has a `test_` prefix, an `__init__.py`, `conftest.py`,
+`sitecustomize.py` or `usercustomize.py` name; none is executable. Their syntax
+was parsed with the standard library without importing or executing them.
+
+The unchanged strict runner declares discovery as `ci/project` with the
+`test_*.py` pattern. The unchanged trusted replay collector uses the same
+directory and pattern. There are no added files in `ci/project`, no changed
+canonical modules, and no production-tooling reference to `continued-audit`.
+The audit packet therefore adds no canonical test registration. This static
+finding is not a fresh observed test-ID count and does not replace the existing
+5,547-ID discovery evidence or the independent current-source original replay.
+
+Adding retained Python and other evidence **will change the future audit
+commit's tracked source inventory and commit/tree identity**. Its strict
+governance result must bind that audit revision. It cannot qualify the distinct
+published master revision by borrowing matching implementation files. Newly
+added Markdown also becomes input to the existing project-document link check;
+this review does not claim that future additions pass that check.
+
+## Acceptance bindings
+
+`docs/project/roadmap.json` remains byte-identical to the published source,
+SHA-256 `42ab3303e6eaa6ad4dd0af44b2d0db916651b180d7f927ec6295ee12ef196de5`.
+None of its acceptance-record paths points into the new audit packet. Its
+existing P02 retained-source and P05 launcher-history bindings are unchanged,
+as are all existing evidence bytes those records reference. The validator
+continues to use the roadmap's explicit evidence references; adding an unrelated
+JSON report to this packet does not create an acceptance record or mark a gate
+passed.
+
+No corrective source edit is required by this snapshot. Root should retain the
+new evidence with its own source and time scope and run the normal final
+documentation/metadata checks after the packet is complete.
+
+## Reproducible review artifacts
+
+- `/tmp/ai-gpu-2bfab0261c05/a094-audit-delta.json` records all assertions, the full
+  176-file inventory, five gitlink pins, protected-group counts and exact source
+  identities.
+- `/tmp/ai-gpu-2bfab0261c05/a094-audit-delta-check.py` is the read-only,
+  standard-library checker used for this review. It writes its review JSON
+  outside the repository; it does not execute project source.
+
+No repository file, Git object, ref, workflow, native workload or remote state
+was changed. No tests were collected or run.

@@ -1,0 +1,63 @@
+# A084 — Strict governance event and outcome reconciliation
+
+## Result and source identity
+
+No concrete supported-contract defect was identified in this read-only review of the strict runner and independent retained-event reader. Their checks require complete ordered canonical method identity, exactly one start/success/stop per method, and successful outcomes for every recorded subtest. A completed focused run cannot qualify the entire revision.
+
+Reviewed source: `30b2e8ca69fba47646392c0cf6650cbb75155843` in `/tmp/ai-gpu-2bfab0261c05/published-source`. The nine source and test files inventoried below are byte-identical to comparison revision `858090410a992756808256ace90d36b9b3b88dd3`. The checkout was clean when inspected and after identity capture.
+
+This audit read source and tests; it did not run tests, canonical discovery, artifact replay, builds, native code, or provider actions. It did not edit the repository, commit, or push. The report and its identity receipt are the only created artifacts. Archive-size analysis is outside this report.
+
+## Canonical identity, completeness, and order
+
+`governance_run.run_suite` collects the supplied suite's identities before execution and rejects empty discovery, duplicate IDs, explicit loader errors, and `unittest.loader._FailedTest` identities. It invokes `runner.run(suite)` once, and marks execution complete only after that call returns. The helper explicitly states that running a supplied suite alone does not qualify source. [Source: `ci/project/governance_run.py:238–268`.]
+
+For each expected identity, finalization independently counts starts, stops, and terminal outcomes. Missing, unexpected, or repeated observations produce discrepancies. Every method must have exactly one successful terminal outcome and exactly one terminal outcome overall. Exact start order must equal the collected ordered list, and `testsRun` must equal discovery count. Completion, absence of abort/loader errors, and all these conditions are required simultaneously. [Source: `ci/project/governance_run.py:199–234`.]
+
+The reader does not accept the summary's success flags as proof. It validates the discovery schema, unique nonempty IDs, ordered ID digest, and count; then reconstructs serial execution from the event stream. A start must name the next discovered method, only one method may be active, and outcomes/stops must name that active method. A method must have one successful outcome before it stops. After the stream, started, stopped, and terminal-success counts must all equal the entire discovery count with no active method left. A trailing start is explicitly bounded before indexing the canonical manifest. [Source: `ci/project/governance_replay_events.py:134–205`; boundary regression: `ci/project/test_governance_replay_event_controls.py:11–25`.]
+
+Event sequence numbers must match record positions; clocks must be valid and nondecreasing, and total duration cannot precede the final event. The reader derives all execution flags, counts, subtest totals, empty error/discrepancy arrays, and digest from accepted evidence, then requires exact equality with the recorded execution summary. Missing or extra observations cannot be repaired by editing a success flag. [Source: `ci/project/governance_replay_events.py:175–221`.]
+
+## Failures, skips, fixtures, and subtests
+
+The runner records failure, error, skip, expected failure, and unexpected success as distinct outcomes. Subtests are attached to their parent method; their outcomes are tracked separately from the parent's terminal outcome. Strict success requires no nonsuccess subtest counts, no fixture outcomes, no skips, and no expected failures, in addition to the normal unittest success result. Thus unittest's permissive treatment of skips and expected failures cannot satisfy strict governance. A failing subtest followed by a successful one remains a failing method. [Source: `ci/project/governance_run.py:131–197,209–222`.]
+
+The independent reader accepts only the four supported event kinds: method start, method outcome, method stop, and subtest outcome. Fixture outcomes and unknown event kinds fail. A subtest must occur inside its named active parent body, before the parent's terminal outcome. Every method and subtest outcome must be exactly `success`; failure, error, skip, expected failure, and unexpected success are all rejected. Successful subtests are observations within a method; they are not extra canonical methods. [Source: `ci/project/governance_replay_events.py:162–205,210–221`.]
+
+Inspected regressions cover method skip, runtime skip, class/module setup skip, teardown error, expected failure, unexpected success, failed/erroring subtests followed by success, skipped subtests followed by success, duplicate discovery, import failure, and empty discovery. The reader regressions deliberately resequence duplicate/reordered/missing observations and retain success claims when injecting nonsuccess outcomes. [Tests inspected, not executed: `ci/project/test_governance_run.py:394–665`; `ci/project/test_governance_replay_events.py:242–287`.]
+
+## Recorder errors and incomplete execution
+
+The event sink is called synchronously without swallowing its exceptions. The CLI sink serializes each event, enforces its evidence bound, writes it, and flushes it. Exceptions escaping execution are caught as `BaseException`, recorded as an abort, and leave `execution_completed` false; strict success additionally requires no abort. Counter increments before a failing emission therefore cannot turn a broken recording into a pass. The outer CLI also catches exceptions, forces `governance_passed` false, and returns a failing status when it can complete the summary write. [Source: `ci/project/governance_run.py:123–129,148–159,217–222,259–267,789–796,829–839`.]
+
+The event-limit regression explicitly requires an incomplete, nonpassing result when recording aborts after only the first start event. The tests also inspect interrupted and escaping process-exit behavior. I did not find a direct event-file `write`/`flush` `OSError` injection in the inspected runner test files; the source propagation path supports fail-closed handling, but this audit did not execute a fault-injection experiment. This is a test-coverage observation, not evidence of a current qualification bypass or a proposed blocking change. Severe filesystem failure or an uncatchable process kill can prevent a final receipt from being written; absence of that complete receipt does not establish success. [Sources: `ci/project/test_governance_run.py:322–339,666–731`; `ci/project/governance_run.py:780–781,829–839`; terminated-process regression: `ci/project/test_governance_run_receipts.py:717` onward.]
+
+## Why 258 focused methods cannot replace the full 5,547
+
+The population figures here are supplied upstream by A049/A050, not newly measured by A084: the final focused development invocation covered 258 methods and 752 successful subtests, while published-source canonical discovery contains 5,547 unique method IDs, with ordered digest `0e8dbaad34266093f76db937eba670ce8f628ceb500998cb9094cdd2f12071fa`.
+
+A 258-method run leaves 5,289 canonical methods outside that invocation. The 752 successful subtest observations do not fill those method identities. Even a perfectly self-consistent focused manifest, event stream, digest, and passing summary cannot satisfy the complete replay path: after reconciling events, `governance_replay` independently collects the explicitly trusted revision's canonical ordered IDs and requires that full list to equal `discovered["test_ids"]` exactly. It also compares the trusted source binding before and after collection. This equality joins the event evidence to the revision's full canonical discovery, preventing a selected subset from qualifying by merely recomputing its own digest. [Source: `ci/project/governance_replay.py:177–189`; `ci/project/governance_replay_collect.py:361–382`.]
+
+The CLI itself discovers the prescribed start directory and pattern, retains that ordered manifest, and requires strict execution plus unchanged clean source, stable interpreter/environment, and an untruncated log before claiming governance success. A new revision therefore needs its own complete strict-run evidence; development results and earlier-revision results cannot substitute for it. [Source: `ci/project/governance_run.py:800–827`.]
+
+## Limits on the conclusion
+
+This review does not establish that the upcoming own-revision original completed or passed. The actual retained records, their provider provenance, and complete original-run outcome remain separate evidence. The replay implementation states its own limited scope: it reconciles retained observations, imports an explicitly trusted checkout for canonical discovery without executing test bodies, and does not authenticate the provider or establish native, phase, or performance acceptance. These boundaries should be preserved in the final status. [Source: `ci/project/governance_replay.py:190–206`.]
+
+## File identity inventory
+
+Full SHA-256 values and byte counts are also retained in `a084-strict-events.identity.json`. All files below match the comparison base exactly.
+
+| File | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `ci/project/governance_run.py` | 40082 | `5fcb877775e5e35fd859686e875d0597d534326c679ff68b29f2151203d0bfdc` |
+| `ci/project/governance_replay.py` | 15883 | `256a07bacab995253ae2716467e5912249d0c631b38aeb24c442d90a19574c66` |
+| `ci/project/governance_replay_events.py` | 9710 | `743799138f8cab40dd44941650075c132071e47e801c7cb92649b0f9a1454195` |
+| `ci/project/governance_replay_records.py` | 26503 | `561b2d64fa27f6704ef35b0959fd725ac41ede194d076b63b1cf5863918c9d44` |
+| `ci/project/governance_replay_collect.py` | 17625 | `dbb04f76fb6632ac7e26de40113dff392ed15f5f497875e71fbde19ea283ecf9` |
+| `ci/project/test_governance_run.py` | 38561 | `cf36d5c0e8137954a7b1027966d7db821f83079512e88b930bb82d9dc5035a15` |
+| `ci/project/test_governance_run_receipts.py` | 40419 | `ca691d25c9b68b60973f4054e2088a6792f13d1932e1ce82610fccfb69e3b485` |
+| `ci/project/test_governance_replay_events.py` | 20009 | `0e0284dbc7d478d59b9137c0e6798acd8cc313362244e1bc75e36794a47b8236` |
+| `ci/project/test_governance_replay_event_controls.py` | 1304 | `56b875c1dcc5262787375b653a5af6442c8085bb6b6bddc829b926c2cf6b9d64` |
+
+No source fix or additional qualification claim is proposed by this audit.

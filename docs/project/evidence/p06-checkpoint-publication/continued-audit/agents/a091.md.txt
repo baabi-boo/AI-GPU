@@ -1,0 +1,94 @@
+# A091 — distinct-agent ledger and report-scope review
+
+## Result and observed population
+
+**PASS — all 24 structural and identity checks passed for the captured snapshot.**
+The read-only observation ran from **2026-11-26 08:11:42.191118 UTC** through
+**08:11:42.223070 UTC**. It contained **91 roster assignments**, **79 retained
+completed-report entries** and **89 top-level scratch reports**. These are
+different populations. This report does not claim that 100 assignments have
+finished, and later ledger extensions do not change this earlier observation.
+
+The retained ledger is internally complete for **A001–A079**. Its
+`requested_distinct_agents: 100` is explicitly separate from
+`completed_reports: 79`. The existing scratch reports **A080–A089** were not yet
+copied into that retained snapshot. They were all present in the updated roster;
+the roster's A090 and A091 had no completed top-level Markdown report at the
+instant of capture. This A091 report was written after the inventory.
+
+## Identity and preservation checks
+
+- The roster contains exactly one contiguous entry per number from 1 through
+  91. Every task name is unique and begins with its matching numbered prefix.
+- The ledger contains exactly one contiguous entry per number from 1 through
+  79. Each task name matches the corresponding roster assignment, and every
+  recorded entry has status `completed`.
+- All **79** retained report sizes and SHA-256 digests match the ledger. Each
+  report is a regular file rather than a symbolic link and is byte-identical to
+  exactly one corresponding top-level scratch report.
+- The retained `agents/` directory has exactly the 79 paths named by the
+  ledger: no missing or unindexed report. All 79 retained report byte sequences
+  are distinct.
+- The scratch report inventory has exactly one report for each number from 1
+  through 89. All 89 byte sequences are distinct. No follow-up creates an extra
+  ledger row for an existing assignment number.
+- The roster, ledger and packet README bytes were unchanged across this bounded
+  observation. Root's subsequent announced ledger extension is expected and
+  outside this snapshot.
+
+These checks establish uniqueness and fidelity of the recorded assignments and
+their artifacts. They do not independently attest the conversation runtime's
+entire spawn history. The report count is not a test count or an acceptance
+decision.
+
+## Historical source and execution scopes
+
+The ledger's `published_source_revision` identifies the delivered source
+`30b2e8ca69fba47646392c0cf6650cbb75155843`. It does not relabel every earlier
+report as an execution at that revision: the ledger explicitly preserves each
+report's own source, execution and review limits. Exact raw-byte retention
+preserves those original declarations. The packet README also says that reports
+are not test passes, native executions or acceptance decisions and that their
+counts are not added to test totals.
+
+The following source-sensitive records were inspected for that distinction:
+
+| Report | Retained source or observation | Actual scope preserved |
+|---|---|---|
+| A001 / A018 | Original published base `8580904` | Earlier pending provider observations; no original replay or complete qualification at those observations |
+| A023 | `93bb3f0` plus specifically recorded working-tree test changes | One focused 225-method / 670-subtest invocation; not a clean committed-tree qualification |
+| A028 | Original execution at `8580904`, reviewed reader at `a693d6f` | Independent replay of the unchanged base original; no test bodies executed by replay and no changed-head qualification |
+| A029 | Earlier checkpoint-stage discovery | 5,539 discovered IDs, exactly 24 additions from the 5,515-ID base; discovery only |
+| A033 | Committed `8580904..a693d6f` diff | Earlier change-impact classification, explicitly excluding later uncommitted evidence |
+| A038 | Earlier uncommitted evidence packet | Review of the then-current 225/670 focused and 5,539-ID discovery records, retaining that historical scope |
+| A049 | Code commit `d31e887`, recorded documentation/evidence working-tree changes | One uninterrupted focused 258-method / 752-subtest invocation; no complete-source or native qualification |
+| A050 | `d31e887` with its recorded working-tree state | 5,547 discovered IDs, exactly 32 additions and no removals from base; no test bodies executed |
+| A051 | `d31e887` working-tree snapshot against `8580904` | Protected-input preservation; dependency descriptors and pins checked, zero unavailable dependency source bytes rehashed |
+| A056 | Clean committed `8580904..9f369a5` diff | Final impact classification and review-scope assessment, not an execution result |
+| A068 | Published `30b2e8c` and corresponding local commits | Independent parent/tree/raw-commit identity verification; exact-tree mapping rather than identical API commit IDs |
+| A079 | Published-source identities compared with `8580904` | Measurement-boundary review, with no native performance experiment or acceptance claim |
+
+The earlier and later focused test selections overlap; neither the ledger nor
+its README sums their counts. Discovery is distinguished from execution. The
+base original's successful replay is distinguished from the still-required
+published-source original. No record inspected requires changing historical
+source hashes or rewriting earlier report text to the latest commit.
+
+## Input identities and retained output
+
+| Captured input | Bytes | SHA-256 |
+|---|---:|---|
+| `agent-roster.tsv` | 3,143 | `9fb438446a7906e9a93a7e33cea391fa041d4fe8006fb481c86ba5b315ca3fc7` |
+| `continued-audit/agent-ledger.json` | 21,803 | `f4176377dc6d5fd7d65b70d965e69afe766502fc5d8dd3b8c0ff92a0af5461c0` |
+| `continued-audit/README.md` | 4,799 | `d15e2124f05eabcd7eb927bcab4814542b864cee8037ae1b047d22873d7b4195` |
+
+`/tmp/ai-gpu-2bfab0261c05/a091-ledger-review.json` retains the 24 named check
+results, all 79 ledger-to-file comparisons, the captured 91-row roster, all 89
+scratch report identities and bounded original source-scope excerpts. Those
+excerpts are evidence of the declarations being preserved; this review did not
+re-run earlier tests or independently reproduce every substantive finding in
+all 89 reports.
+
+No shared ledger, roster, source, retained evidence, Git object or reference was
+modified. Only this review's two scratch outputs were written. No network
+request, build, test suite, native execution, commit or push was performed.

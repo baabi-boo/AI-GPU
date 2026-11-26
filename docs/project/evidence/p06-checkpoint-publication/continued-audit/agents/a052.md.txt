@@ -1,0 +1,141 @@
+# Agent 052 — Exact-revision governance admission review
+
+## Result and scope
+
+No missing workflow trigger, discovery rule, retained project-helper path, or
+strict-runner configuration defect was found for this continuation. No workflow
+or governance-enforcement edit is needed.
+
+This was a read-only prepublication review at code commit
+`d31e8879e7c248b1a72615128882533ccdd0b3b4`, compared with immutable base
+`858090410a992756808256ace90d36b9b3b88dd3`. Pending documentation/evidence changes
+were present and were not modified. The reviewer read source, inspected the
+already retained A050 discovery record, and imported the reviewed operational
+modules only to inspect their source-inventory constants. No unittest bodies,
+full suite, native workload, build, workflow dispatch, commit or push ran.
+
+## Observed configuration
+
+- `.github/workflows/project-governance.yml` includes `ci/project/**`,
+  `python/**`, `docs/project/**` and the current root documentation in both push
+  and pull-request path filters. The current code changes therefore trigger
+  governance on publication without an additional workflow edit.
+- The workflow uses Ubuntu 24.04, verifies system Python 3.12, runs project and
+  published-baseline validators, installs hash-pinned native CMake 3.22.6, and
+  prepares the checked environment before invoking the strict runner with the
+  private `venv/bin/python3` alias and an empty ambient environment.
+- `governance_env.py:190–200` requires GIL-enabled Linux CPython 3.12, little-endian
+  x86-64 glibc, POSIX no-follow/FIFO behavior, `/proc` and `/dev/full`. The new
+  Linux file-descriptor and process tests fit the explicitly declared hosted
+  platform; they do not add a claim of arbitrary-host portability.
+- `governance_run.py:785–839` uses its canonical `ci/project/test_*.py` discovery,
+  executes that ordered suite once, and compares exact source, interpreter and
+  environment identities before and after. There is no selection/retry/resume
+  CLI. Its strict accounting rejects skips, expected failures, unexpected
+  successes, errors, failures, loader failures and incomplete/duplicate IDs.
+- The workflow retains logs, the checked environment receipt and the complete
+  run directory using `if: always()`, naming revision/run/attempt, with 30-day
+  retention. This is a best-effort upload opportunity; completion and actual
+  artifact availability must still be observed.
+
+The workflow, strict runner, environment preparer, replay reader and its helpers,
+provider artifact reader, and hosted admission module remain unchanged from the
+base in the reviewed diff. No enforcement weakening was introduced.
+
+## New tests and source closure
+
+The existing A050 record contains **5,547 unique canonical IDs**, ordered digest
+`0e8dbaad34266093f76db937eba670ce8f628ceb500998cb9094cdd2f12071fa`, with its
+recorded checks passing. All eight methods in `test_p05_launcher_signals` are
+present. Its delta is the original 5,515 IDs plus 24 checkpoint methods and eight
+launcher methods, with no removals. This reviewer inspected that result and did
+not independently rerun discovery or test bodies.
+
+AST comparison of the two production files found no added import in
+`ci/project/p02_matrix.py`; the launcher adds only standard-library `signal` and
+`threading`. The launcher remains in `_bundle.SOURCE_PATHS`, `MANIFEST.in`, and
+the P05 installation/native replay inventories. No new project helper file was
+created by either production fix.
+
+Read-only inspection of operational inventory constants confirmed
+`ci/project/p02_matrix.py` remains in both the qualified-warm runner and hosted
+source sets: respectively **106** and **121** paths, within the existing **256**
+path bound. The changed helper therefore remains retained under its existing
+path; no frozen proof or helper-list expansion is needed.
+
+Observed production hashes:
+
+| File | SHA-256 |
+| --- | --- |
+| `ci/project/p02_matrix.py` | `c7544854b1fda853fad7c382e6e51605e812f5a377128fa6198f4da8662d7432` |
+| `python/vortex_ai/launch.py` | `01bdadc8469b50fc2b6e511684d37f1bc92d2f4030d3a0900481b8fb5173a128` |
+
+## Remaining publication and qualification obligations
+
+1. Finish and commit the intended evidence/reference changes, check the remote
+   head and preserve concurrent work, then publish the exact final candidate.
+   The presently dirty checkout cannot supply strict revision qualification.
+2. Observe that candidate's own complete governance job, including every required
+   step, succeeds. Use that invocation's manifest as the authoritative population;
+   5,547 is the current discovery count, not a hard-coded acceptance threshold.
+   The 258-method development run and the base revision's 15 passing workflows
+   do not qualify a later commit.
+3. Let the final candidate finish uninterrupted. Governance concurrency is keyed
+   by event/ref with `cancel-in-progress: true`; a later push on the same ref can
+   cancel it. Even a later documentation/evidence commit changes the revision
+   being admitted.
+4. Obtain the unchanged original ZIP for the selected successful run and exact
+   attempt. Select its expected digest from authenticated provider metadata,
+   verify the downloaded bytes, and independently replay it using reviewed
+   reader code and a clean trusted checkout of that exact final revision.
+   Retain the reader identity, invocation, result and provider/run/attempt binding
+   outside the trusted source checkout. Do not repair/repack the original or
+   calculate its expected identity solely from the download.
+5. Before native admission, the existing hosted checks additionally require the
+   same repository, `master`, selected SHA, successful run/job/steps, exact
+   artifact identity and unchanged reobserved provider/source state. A local
+   replay alone does not authenticate the provider or grant native acceptance.
+   Private control delivery, the public age recipient and actual resource
+   admission remain separate prerequisites.
+
+These are outstanding execution obligations already required by `AGENTS.md`,
+the governance runbook and artifact replay guide, not newly discovered source
+defects or reasons to weaken a gate. Native/performance/phase acceptance is not
+established by this review.
+
+## Separate audit-branch publication
+
+The root subsequently proposed keeping the selected implementation and current
+evidence on `master`, then publishing the remaining read-only agent ledger and
+final provider/replay receipts on a separate audit branch. This preserves the
+selected master commit's source identity when those later changes contain only
+audit metadata. Any subsequently required production correction would still
+need its own new master revision and complete qualification.
+
+The branch filtering was inspected in every workflow using a non-executing YAML
+parser, then the main CI planner was read directly:
+
+| Workflow population | Push branch/path behavior | Effect of a docs/project-only audit-branch push |
+| --- | --- | --- |
+| Project Governance | No branch filter; includes `docs/project/**` | Runs on the audit branch. |
+| Main CI | No branch or path filter | Runs on the audit branch. |
+| P04 Native Model, two P05 installed workflows, ten P06 automatic workflows | Push branch filter is exactly `master`, with their existing path filters | Do not run on the audit branch. |
+| Apptainer CI | No branch filter; only Apptainer/dependency-install/version paths | Not selected by a docs/project-only change. |
+| P06 Qualified Warm | Manual dispatch only | Does not run automatically. |
+| ASIC, FPGA and timing gates | Schedule/manual or manual only | No automatic audit-branch push execution. |
+
+Governance concurrency is
+`project-governance-${github.event_name}-${github.ref}` with cancellation enabled.
+The audit ref therefore has a different group and does not cancel the master
+invocation. Main CI has no workflow concurrency group; it starts separately.
+
+This separation does **not** make audit-branch delivery CI-free. In `ci.yml`, a
+push normally selects SimX/smoke. A toolchain-cache miss expands drivers and
+tiers. An indeterminate base, including the zero `PUSH_BEFORE` on a first branch
+push, expands driver coverage even with a cache hit. The audit branch can
+therefore consume substantial CI resources despite containing only records.
+No workflow change or gate relaxation was proposed or made by this review.
+
+Hosted native admission remains restricted to a successful governance run whose
+provider `head_branch` is `master`; a successful audit-branch governance run is
+not a substitute for the selected master source's original.

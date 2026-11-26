@@ -1,0 +1,68 @@
+# Agent020 — direct checkpoint test review
+
+## Scope and disposition
+
+Read-only review of `ci/project/test_checkpoint_write_failures.py` and
+`ci/project/test_checkpoint_directory_access.py` at
+`93bb3f0342eff0b469a0da06cb067916af7c539e`, under the repository's `AGENTS.md`.
+No blocking finding in the reviewed test code. No source files were changed,
+and no test suite or old-writer control was rerun.
+
+The worktree contained an unrelated untracked
+`docs/project/p06-checkpoint-publication-audit.md`; it was left untouched.
+
+## Findings
+
+### Fault checks have meaningful external assertions
+
+The write/flush/fsync/replace matrix exercises both ordinary I/O errors and
+`KeyboardInterrupt`, with and without an existing final checkpoint. It checks
+the exact propagated exception object, exactly one recorded failure, closed
+streams, the actual partial or complete temporary bytes, final-file
+preservation, temporary-name removal, and a later successful explicit write.
+These assertions would distinguish a writer that leaves its owned temporary
+entry behind after the injected error.
+
+The write failure performs and flushes a real partial write before raising.
+The other stages capture complete bytes from a real temporary file. The
+injection remains armed for the duration of the call; the assertion that it
+was hit exactly once detects an implicit retry. The later successful write
+runs after all patches are restored. These are bounded, observable host I/O
+fault checks, not a claim about power-loss durability.
+
+### Ownership, encoding, and bounds are checked directly
+
+The preexisting temporary-entry cases cover regular files, live and dangling
+symlinks, and directories. They assert inode identity, preserved final and
+foreign bytes, exact symlink targets or directory contents, and the complete
+remaining entry set. The expected failure is specifically `FileExistsError`.
+
+The serialization cases forbid file opening for unsupported objects,
+nonfinite numbers, and circular structures. Encoding checks use literal
+expected bytes for sorted keys, indentation, ASCII escaping, JSON booleans and
+null, and the trailing newline. The size boundary accepts exactly 16 MiB and
+rejects one additional encoded byte before opening a file. No JSON contract,
+golden expectation, or size bound was relaxed in these tests.
+
+### Cleanup is protected on assertion failures
+
+`ExitStack` scopes every monkeypatch, and each filesystem fixture is owned by
+`TemporaryDirectory`. The restrictive-directory helper restores the original
+mode in `finally`, including when the writer or an assertion raises. Directory
+enumeration occurs after permission restoration, so an ordinary unprivileged
+Linux run does not need directory read access during publication.
+
+### Directory permission evidence is UID-dependent
+
+The two directory tests check successful initial/replacement publication and
+the blocked preparation receipt while the relevant directory remains mode
+0300. This is a realistic unprivileged Linux scenario. Under a privileged root
+process, mode 0300 alone does not establish that directory read access is
+denied, so a root pass does not discriminate against a writer that opens the
+directory for reading.
+
+This is an evidence-scope qualifier, not a production blocker or a request to
+add tests or skips. The parent reviewer reports that the negative control and
+A013/A017 evidence explicitly bind execution to UID 1000. That external
+execution was not independently rerun in this bounded review. No UID changes,
+skip additions, or privilege manipulation were performed.

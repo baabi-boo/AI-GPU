@@ -1,0 +1,152 @@
+# A071 — Frozen Baseline Replay workflow scope
+
+## Result and observed source
+
+**No concrete supported-contract integration or source-binding blocker found.**
+This was a read-only source and archive-byte audit at local commit
+`9f369a579ca764800b22eedd15e09795f09615da`, compared with explicit base
+`858090410a992756808256ace90d36b9b3b88dd3`. All 14 inspected files match the
+recorded HEAD; only `ci/project/p02_matrix.py` differs from that base among them.
+Both original archive identities match the independent index and the base
+bytes. HEAD and working-tree status remained unchanged.
+
+The companion `a071-frozen-baseline-identities.json` retains exact file hashes,
+archive sizes/digests and a statically parsed local import graph. No project
+module was imported by that inspection. No CI status was queried, and no test,
+reader/replay, build or native workload was executed. Source citations below
+refer to this inspected repository tree.
+
+## Historical acceptance actually reconciled
+
+The job reanalyzes the accepted **P06-A01 cold-context SimX baseline**, original
+source `84b6ca0ca75fba248ba330642bbf8764db3d459c`, hosted run **44901052221,
+attempt 1**. The existing acceptance record is a `simulation` / `simulated`
+`pass` for P06-A01 only. Its eight workloads span FP16/BF16 and contain **48
+processes and 72 launches**, including **40 measured processes and 60 measured
+launches**; eight warm-up processes account for the other twelve launches.
+Each invocation has a fresh process/device context. This is neither resident
+workspace reuse nor the later qualified-warm population.
+
+Sources: `docs/project/evidence/p06-baseline/acceptance.json` fields
+`record_id`, `scope`, `source_revision`, `acceptance_ids`, and `limitations`;
+`docs/project/evidence/p06-baseline/README.md` sections “Original execution and
+reviewed results” and “Limits and continuation”.
+
+The workflow fixes the historical revision and both unchanged originals:
+
+| Format | Original bytes | SHA-256 |
+|---|---:|---|
+| FP16 | 3,854,925 | `aaf54ff60b8f4f889264fb3efa4249cbdb02a7fad2b20124b4ad0ba9ae2f41dc` |
+| BF16 | 3,855,324 | `f19f174879e2c1fb120a3328ec919d42b4d67f59ba056ceb6e0b6f5607f4996b` |
+
+Sources: `.github/workflows/p06-baseline.yml:146–156`;
+`docs/project/evidence/p06-baseline/archive-index.json`. The byte sizes and
+digests above were independently recomputed during this audit, without opening
+or executing archive members.
+
+## What a green current workflow establishes
+
+The current job runs on Ubuntu 22.04 with a 15-minute job bound, provisions and
+checks Linux CPython 3.12.14, records the current GitHub/job/workflow identity,
+and invokes `p06_analyze.py` on those two originals. Initialization explicitly
+records `native_execution=not_run` and `acceptance_claimed=false`, separately
+from the historical baseline source. The command uses `set -euo pipefail`, so
+`tee` cannot hide analyzer failure. The replay packet is uploaded with
+`if: always()` and a unique source/run/attempt name, including failure output.
+There is no native toolchain installation, build or GPU executable invocation
+in this job.
+
+Sources: `.github/workflows/p06-baseline.yml:88–166`;
+`ci/project/test_p06_replay_ci.py:111–164,238–276` (tests inspected, not run).
+
+The analyzer replays **both** originals before aggregation. It requires matching
+source, dependency inventory, frozen contract/manifest, tool names and byte
+identities, sampling, budget, helper inventory, expanded hardware configuration
+and hosted workflow/run identity. Format-specific bindings deliberately remain
+separate. It recomputes the complete frozen matrix and canonical FP16/BF16 order
+from samples. Its result explicitly reports `native_execution=not_run`,
+`acceptance_claimed=false`, `phase_complete=false` and
+`optimization_claimed=false`.
+
+Sources: `ci/project/p06_analyze.py:195–265`.
+
+The reader validates original retained source and loaded-helper bytes, clean
+historical checkout identity, frozen source pins, generated/build/compiler
+records, command receipts and stable before/after identities. Every warm-up and
+measured sample is rechecked from its raw log, including exact numerical output,
+counter/dispatch semantics and original process timing. Both stored summary
+copies must equal the recomputed summary; only the declared five measured
+samples per workload feed descriptive statistics.
+
+Sources: `ci/project/p06_replay.py:240–302,351–509,511–555,599–652`.
+
+## Cryptographic and trust boundaries
+
+The archive API is loaded only from the trusted local reader file after checking
+its reviewed SHA-256 pin. Current replay helpers must resolve to the expected
+repository paths and retain their recorded identities throughout replay. The
+archive owner checks canonical non-symlink regular files, original SHA-256,
+unique safe member names, ordinary members, reviewed compression methods and
+bounded encoded/expanded populations. It rechecks file identity while reading
+and closing. Recorded absolute historical paths are interpreted as data, not
+opened on the current machine; retained binaries and Python are not executed.
+
+Sources: `ci/project/p06_replay.py:28–31,87–96,139–163,639–652`;
+`docs/project/evidence/p05-torch/reviews/archive_reader.py:130–191,203–239,255–299`.
+
+Digest matching and internal hosted-envelope consistency do **not** authenticate
+GitHub origin or prove that an arbitrary self-consistent producer executed a
+GPU. The original acceptance relies on its separate provider/source/measurement
+review; this workflow preserves that already scoped evidence. Current trusted
+reader evolution never authorizes replacing original execution-source bytes
+with today's runtime implementation.
+
+Sources: `ci/project/p06_replay.py:3–7,87–96,175–180,560–597`;
+`ci/project/p06_contract.py:479–502`;
+`ci/project/p06_analyze.py:54–65`.
+
+## Required rejection cases and coverage limits
+
+The inspected reader/analyzer tests specify rejection of:
+
+- Wrong or absent external ZIP digest, historical revision or format identity;
+  missing, swapped or duplicated format archives.
+- Traversal/absolute names, duplicate members, symlinks/special files, trailing
+  ZIP bytes, changed archive files and pinned trusted-reader/source drift.
+- Missing or altered retained helpers, rehashed frozen runtime/source
+  substitutions, broken compiler/build bindings and before/after instability.
+- Corrupted raw warm-up or measured numerics, unsigned-counter violations,
+  incomplete or reordered samples/commands, and fabricated matching summary
+  copies that disagree with the observations.
+- Cross-format source/tool/dependency/configuration or hosted-run mismatches,
+  inadequate recorded resources, invalid process/cleanup receipts and widened
+  execution or acceptance claims.
+
+Sources: `ci/project/test_p06_replay.py:208–451`;
+`ci/project/test_p06_analyze.py:78–149`;
+`ci/project/test_p06_published_baseline.py:38–155`.
+These test bodies were **not run** in this audit. The replay workflow invokes
+the analyzer on the two fixed positives; the negative unit cases are separate
+governance coverage and must not be counted as executed by that workflow job.
+
+## Effect of this continuation
+
+The current repaired `p02_matrix._write_json` is **not an imported or called
+writer on this analysis route**. A static traversal of the analyzer's 20 local
+module imports excludes `p02_matrix`; the similarly named
+`p02_matrix_records` is a separate unchanged reader dependency. The name
+`p02_matrix.py` occurs in `RUNNER_HELPERS` to validate the historical archived
+producer-helper inventory, whose old bytes remain intact. The analyzer writes
+its own new result through exclusive `open("x")`; it does not use the repaired
+checkpoint writer. The installed Python launcher is not invoked either.
+
+Sources: `ci/project/p06_replay.py:20–26,54–62,287–296`;
+`ci/project/p06_analyze.py:21–23,270–293`;
+companion static-import identity record.
+
+Consequently a current green Frozen Baseline Replay confirms continued
+reconciliation of the accepted historical baseline through current trusted
+readers. It adds **zero native executions**, does not qualify changed source as
+a fresh native baseline, and establishes no new performance, optimization,
+RTL/physical result or launcher cancellation behavior. P06-A02/A03 and the
+separate qualified-warm experiment remain outside this job's acceptance scope.

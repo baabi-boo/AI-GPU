@@ -1,0 +1,20 @@
+# Agent026 — P06 checkpoint consumer compatibility review
+
+## Result and scope
+
+**No blocking regression found in the four assigned consumers.** Read-only source review at production revision `93bb3f0342eff0b469a0da06cb067916af7c539e`, limited to checkpoint compatibility in `ci/project/p06_execute.py`, `ci/project/p06_workspace_execute.py`, `ci/project/p06_warm_execute.py`, and `ci/project/p06_simulator_execute.py`. The shared writer and its publication contract were read only to establish the interface. Relevant root `AGENTS.md` requirements were followed. No code changes, test execution, native work, commits, or pushes occurred.
+
+The four consumer files have no working-tree differences from the reviewed revision and no differences across the shared-writer change (`ba88572^..93bb3f0`). Concurrent changes elsewhere were left untouched.
+
+## Checks
+
+- **Directory setup:** Each runner creates its output directory before its first report checkpoint. The three runners publishing standalone snapshots also create `snapshots/` before using `save_json` (`p06_execute.py:115–119`, workspace `191–195`, warm `136–140`; simulator report directory `326–328`). The writer's anchored directory handle therefore has the required existing parent. `O_PATH` does not introduce a directory-listing permission requirement.
+- **Byte identities:** The shared `_json_bytes` serializer, sorted/indented JSON, trailing newline, and 16 MiB bound remain unchanged. Standalone snapshot identities are computed with `hash_artifacts` only after `_write_json` returns successfully (baseline `139–142`, workspace `218–223`, warm `164–169`). Workspace and warm finalization recheck retained snapshot identities. Simulator source/tool snapshots remain inline report objects; its retained artifacts and logs are independently hashed. No consumer computes identities from temporary names or relies on the replaced file's inode.
+- **Failure/finalization:** Checkpoint errors within execution enter the existing failure handlers and finalization blocks (baseline `401–436`, workspace `463–515`, warm `442–498`, simulator `451–492`). Clearing an owned failed temporary permits those separate final publications without converting the failed run to success. Persistent failures or foreign temporary collisions continue to propagate. A final publication can still fail; the new writer does not promise otherwise.
+- **Native execution:** All four command wrappers record and checkpoint a unique command before their single `run_bounded` call, then checkpoint its receipt. Checkpoint failures propagate out of execution loops. Finalization only retains evidence, observes stability/resources, and writes a final report; it never calls `run_bounded` or repeats a native sample.
+
+## Existing boundary
+
+The initial checkpoint in baseline (`218`), workspace (`307`), and warm (`253`) precedes the outer `try`. Failure there still exits without that runner's normal finalization. This placement predates the shared-writer change and executes no native command. Simulator's initial checkpoint is inside its `try` (`384–385`). This review therefore does **not** claim universal initial-checkpoint recovery for all four consumers. The publication contract promises compatibility with existing finalization paths, not creation of missing ones.
+
+Validation was source inspection and git comparison only. No runtime or acceptance evidence is claimed.

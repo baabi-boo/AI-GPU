@@ -1,0 +1,284 @@
+{
+  "base": "858090410a992756808256ace90d36b9b3b88dd3",
+  "head": "9f369a579ca764800b22eedd15e09795f09615da",
+  "tree": "548b85370e3d13119730b5a30d1ec388d3e141a9",
+  "status_before": "",
+  "start_utc": "2026-11-26T07:15:07.902102+00:00",
+  "files": {
+    "ci/change_impact.py": {
+      "path": "/tmp/ai-gpu-2bfab0261c05/a033-base-classifier/change_impact.py",
+      "sha256": "bd2ef579de90b14b7ab4cd5ef2f6b7c911753e154c4201aaf0f0d0b25a460779",
+      "size_bytes": 80757,
+      "equals_immutable_base": true,
+      "live_copy_equals_base": true
+    },
+    "docs/review/change-impact.yaml": {
+      "path": "/tmp/ai-gpu-2bfab0261c05/a033-base-classifier/change-impact.yaml",
+      "sha256": "489d1018c790bb6c383b774b119223889bb508be6c63db654d5c6c80520d0333",
+      "size_bytes": 11511,
+      "equals_immutable_base": true,
+      "live_copy_equals_base": true
+    },
+    "docs/review/code-review-policy.md": {
+      "path": "/tmp/ai-gpu-2bfab0261c05/a033-base-classifier/code-review-policy.md",
+      "sha256": "99426ced05c04c1b14422f4fdacabcce3c680600461c4887b14e5eabf8b0587d",
+      "size_bytes": 9318,
+      "equals_immutable_base": true,
+      "live_copy_equals_base": true
+    }
+  },
+  "classify": {
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-B",
+      "/tmp/ai-gpu-2bfab0261c05/a033-base-classifier/change_impact.py",
+      "--repo",
+      "/tmp/ai-gpu-2bfab0261c05/repo",
+      "--policy",
+      "/tmp/ai-gpu-2bfab0261c05/a033-base-classifier/change-impact.yaml",
+      "classify",
+      "--base",
+      "858090410a992756808256ace90d36b9b3b88dd3",
+      "--head",
+      "9f369a579ca764800b22eedd15e09795f09615da",
+      "--format",
+      "json"
+    ],
+    "exit_code": 0,
+    "output": "/tmp/ai-gpu-2bfab0261c05/a056-impact.json",
+    "stdout_sha256": "a4e25b9d521f4e0da23d823e9782a347375c026b0cafb845a54fa7f1e3f14574",
+    "stderr": ""
+  },
+  "explain": {
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-I",
+      "-B",
+      "/tmp/ai-gpu-2bfab0261c05/a033-base-classifier/change_impact.py",
+      "--repo",
+      "/tmp/ai-gpu-2bfab0261c05/repo",
+      "--policy",
+      "/tmp/ai-gpu-2bfab0261c05/a033-base-classifier/change-impact.yaml",
+      "explain",
+      "--base",
+      "858090410a992756808256ace90d36b9b3b88dd3",
+      "--head",
+      "9f369a579ca764800b22eedd15e09795f09615da"
+    ],
+    "exit_code": 0,
+    "output": "/tmp/ai-gpu-2bfab0261c05/a056-impact-explain.txt",
+    "stdout_sha256": "caecb8ff005e520ee130709fd1a207ecd6333261930b1bcdf2f7b530a1a83159",
+    "stderr": ""
+  },
+  "status_after": "",
+  "head_after": "9f369a579ca764800b22eedd15e09795f09615da",
+  "end_utc": "2026-11-26T07:15:08.337159+00:00",
+  "immutable_files_stable": true,
+  "changed_paths": [
+    "README.md",
+    "ci/project/p02_matrix.py",
+    "ci/project/test_checkpoint_directory_access.py",
+    "ci/project/test_checkpoint_ownership.py",
+    "ci/project/test_checkpoint_write_failures.py",
+    "ci/project/test_p05_launcher.py",
+    "ci/project/test_p05_launcher_signals.py",
+    "ci/project/test_p06_checkpoint_input_recovery.py",
+    "ci/project/test_p06_checkpoint_prepare_build.py",
+    "ci/project/test_p06_checkpoint_run_recovery.py",
+    "docs/designs/checkpoint_publication_v1.md",
+    "docs/project/backlog.md",
+    "docs/project/evidence/p02-wmma/README.md",
+    "docs/project/evidence/p02-wmma/acceptance-retained-source.json",
+    "docs/project/evidence/p02-wmma/retained-source/p02_matrix.py.txt",
+    "docs/project/evidence/p02-wmma/source-retention.json",
+    "docs/project/evidence/p06-checkpoint-publication/README.md",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/all-workflows.json",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/provider-original.json",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/replay/invocation-completed.json",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/replay/invocation.json",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/replay/reader-source/baseline_packet_io.py",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/replay/reader-source/governance_replay.py",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/replay/reader-source/governance_replay_archive.py",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/replay/reader-source/governance_replay_collect.py",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/replay/reader-source/governance_replay_events.py",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/replay/reader-source/governance_replay_records.py",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/replay/reader-source/governance_replay_source.py",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/replay/reader-source/untracked-audit-at-replay.md.txt",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/replay/reader-status.txt",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/replay/replay.json",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/replay/replay.log",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/replay/retained-execution-summary.json",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/review.md",
+    "docs/project/evidence/p06-checkpoint-publication/base-governance/run-45762183368-attempt1.zip",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/a01-retained-binding.json",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/baseline.json",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/baseline.log",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/design-review.md",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/existing-tests.json",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/existing-tests.log",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/history-assertions.json",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/history-review.md",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/history/ci/project/test_p05_launcher.py.txt",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/history/python/vortex_ai/launch.py.txt",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/implementation-review.md",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/implementation.md",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/negative-runner.py",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/new-tests-runner.py",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/new-tests.json",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/new-tests.log",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/new-tests.md",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/original-finding.md",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/packaging-review.md",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/source-retention.json",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/test-review.md",
+    "docs/project/evidence/p06-checkpoint-publication/negative-controls/README.md",
+    "docs/project/evidence/p06-checkpoint-publication/negative-controls/a003-orchestration-audit.md",
+    "docs/project/evidence/p06-checkpoint-publication/negative-controls/a003-orchestration-repro.jsonl",
+    "docs/project/evidence/p06-checkpoint-publication/negative-controls/a003-orchestration-repro.py",
+    "docs/project/evidence/p06-checkpoint-publication/negative-controls/a005-baseline.log.gz",
+    "docs/project/evidence/p06-checkpoint-publication/negative-controls/a005-tests.md",
+    "docs/project/evidence/p06-checkpoint-publication/negative-controls/a006-baseline.log.gz",
+    "docs/project/evidence/p06-checkpoint-publication/negative-controls/a006-current.log",
+    "docs/project/evidence/p06-checkpoint-publication/negative-controls/a006-integration.md",
+    "docs/project/evidence/p06-checkpoint-publication/negative-controls/a006-run-baseline.py",
+    "docs/project/evidence/p06-checkpoint-publication/negative-controls/a007-ownership.md",
+    "docs/project/evidence/p06-checkpoint-publication/negative-controls/a008-input-recovery.md",
+    "docs/project/evidence/p06-checkpoint-publication/negative-controls/a009-prepare-build.md",
+    "docs/project/evidence/p06-checkpoint-publication/negative-controls/compressed-originals.json",
+    "docs/project/evidence/p06-checkpoint-publication/reviews/directory-access.md",
+    "docs/project/evidence/p06-checkpoint-publication/reviews/historical-binding-assertions.json",
+    "docs/project/evidence/p06-checkpoint-publication/reviews/historical-binding-design.md",
+    "docs/project/evidence/p06-checkpoint-publication/reviews/historical-binding-review.md",
+    "docs/project/evidence/p06-checkpoint-publication/reviews/implementation.md",
+    "docs/project/evidence/p06-checkpoint-publication/reviews/test-corrections.md",
+    "docs/project/evidence/p06-checkpoint-publication/validation/discovery.json",
+    "docs/project/evidence/p06-checkpoint-publication/validation/final-discovery-review.md",
+    "docs/project/evidence/p06-checkpoint-publication/validation/final-discovery-runner.py",
+    "docs/project/evidence/p06-checkpoint-publication/validation/final-discovery.json",
+    "docs/project/evidence/p06-checkpoint-publication/validation/final-focused-review.md",
+    "docs/project/evidence/p06-checkpoint-publication/validation/final-focused-runner.py",
+    "docs/project/evidence/p06-checkpoint-publication/validation/final-focused.json",
+    "docs/project/evidence/p06-checkpoint-publication/validation/final-focused.log",
+    "docs/project/evidence/p06-checkpoint-publication/validation/final-protected-inputs.json",
+    "docs/project/evidence/p06-checkpoint-publication/validation/final-protected-inputs.py",
+    "docs/project/evidence/p06-checkpoint-publication/validation/final-protected-review.md",
+    "docs/project/evidence/p06-checkpoint-publication/validation/focused-runner.py",
+    "docs/project/evidence/p06-checkpoint-publication/validation/focused.json",
+    "docs/project/evidence/p06-checkpoint-publication/validation/focused.log",
+    "docs/project/evidence/p06-checkpoint-publication/validation/protected-invariants.json",
+    "docs/project/evidence/p06-checkpoint-publication/validation/protected-invariants.py",
+    "docs/project/p06-checkpoint-publication-audit.md",
+    "docs/project/roadmap.json",
+    "docs/project/status.md",
+    "python/README.md",
+    "python/vortex_ai/launch.py"
+  ],
+  "changed_executable_python_source_bindings": [
+    {
+      "path": "ci/project/p02_matrix.py",
+      "sha256": "c7544854b1fda853fad7c382e6e51605e812f5a377128fa6198f4da8662d7432",
+      "matches_focused_before_after": true
+    },
+    {
+      "path": "ci/project/test_checkpoint_directory_access.py",
+      "sha256": "3fc9d9b3ccb7ffd6b0b1eef0580d0a720a07c0bef95db7f0ef64524da4f2a5e2",
+      "matches_focused_before_after": true
+    },
+    {
+      "path": "ci/project/test_checkpoint_ownership.py",
+      "sha256": "7f18c215bcfb1b8cd69bbbfaad55e54fee651ef5b2d843ce05c761cfb17ff127",
+      "matches_focused_before_after": true
+    },
+    {
+      "path": "ci/project/test_checkpoint_write_failures.py",
+      "sha256": "0d08db14a774b24dff87acba44d2b43622bf88aa3ed81bf35e4a0a6ce8adb420",
+      "matches_focused_before_after": true
+    },
+    {
+      "path": "ci/project/test_p05_launcher.py",
+      "sha256": "55d6d31580ceca32c6ca91e94191bcd9c55c6eac8e57b09f00da2c593f1da5ea",
+      "matches_focused_before_after": true
+    },
+    {
+      "path": "ci/project/test_p05_launcher_signals.py",
+      "sha256": "21583916f92b8bc6d44a5f7743052dd8222216979d3922f62dcf545ef03f1eed",
+      "matches_focused_before_after": true
+    },
+    {
+      "path": "ci/project/test_p06_checkpoint_input_recovery.py",
+      "sha256": "ed1a9315c42883b4b3c9e0405e00424d153357a9b352dfbff599d16e961f9bbc",
+      "matches_focused_before_after": true
+    },
+    {
+      "path": "ci/project/test_p06_checkpoint_prepare_build.py",
+      "sha256": "89a9a60da92d4a1510d213e8331360b0546c92b2739ae09c859c50187e4eb15c",
+      "matches_focused_before_after": true
+    },
+    {
+      "path": "ci/project/test_p06_checkpoint_run_recovery.py",
+      "sha256": "c167c3c478caa3cc43bdd7995a8f5a0a85c12a2d27efa79de55a5e56f4176074",
+      "matches_focused_before_after": true
+    },
+    {
+      "path": "python/vortex_ai/launch.py",
+      "sha256": "01bdadc8469b50fc2b6e511684d37f1bc92d2f4030d3a0900481b8fb5173a128",
+      "matches_focused_before_after": true
+    }
+  ],
+  "reviewed_content_bindings": [
+    {
+      "path": "ci/project/p02_matrix.py",
+      "expected_sha256": "c7544854b1fda853fad7c382e6e51605e812f5a377128fa6198f4da8662d7432",
+      "current_sha256": "c7544854b1fda853fad7c382e6e51605e812f5a377128fa6198f4da8662d7432",
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_checkpoint_directory_access.py",
+      "expected_sha256": "3fc9d9b3ccb7ffd6b0b1eef0580d0a720a07c0bef95db7f0ef64524da4f2a5e2",
+      "current_sha256": "3fc9d9b3ccb7ffd6b0b1eef0580d0a720a07c0bef95db7f0ef64524da4f2a5e2",
+      "matches": true
+    },
+    {
+      "path": "docs/designs/checkpoint_publication_v1.md",
+      "expected_sha256": "729e640d86b866191266aa86e4689a0dab83cad3127be126f299d51922c885e8",
+      "current_sha256": "729e640d86b866191266aa86e4689a0dab83cad3127be126f299d51922c885e8",
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_checkpoint_ownership.py",
+      "expected_sha256": "7f18c215bcfb1b8cd69bbbfaad55e54fee651ef5b2d843ce05c761cfb17ff127",
+      "current_sha256": "7f18c215bcfb1b8cd69bbbfaad55e54fee651ef5b2d843ce05c761cfb17ff127",
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p06_checkpoint_input_recovery.py",
+      "expected_sha256": "ed1a9315c42883b4b3c9e0405e00424d153357a9b352dfbff599d16e961f9bbc",
+      "current_sha256": "ed1a9315c42883b4b3c9e0405e00424d153357a9b352dfbff599d16e961f9bbc",
+      "matches": true
+    },
+    {
+      "path": "python/vortex_ai/launch.py",
+      "expected_sha256": "01bdadc8469b50fc2b6e511684d37f1bc92d2f4030d3a0900481b8fb5173a128",
+      "current_sha256": "01bdadc8469b50fc2b6e511684d37f1bc92d2f4030d3a0900481b8fb5173a128",
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p05_launcher.py",
+      "expected_sha256": "55d6d31580ceca32c6ca91e94191bcd9c55c6eac8e57b09f00da2c593f1da5ea",
+      "current_sha256": "55d6d31580ceca32c6ca91e94191bcd9c55c6eac8e57b09f00da2c593f1da5ea",
+      "matches": true
+    },
+    {
+      "path": "ci/project/test_p05_launcher_signals.py",
+      "expected_sha256": "21583916f92b8bc6d44a5f7743052dd8222216979d3922f62dcf545ef03f1eed",
+      "current_sha256": "21583916f92b8bc6d44a5f7743052dd8222216979d3922f62dcf545ef03f1eed",
+      "matches": true
+    }
+  ],
+  "p05_reviewed_draft_reconstructed_sha256": "363a373611aa645f3a08f95b7d09a52c4615f169c0e2ba52aeda91457e9158b4",
+  "p05_final_reviewer_equals_review_recommendation": true,
+  "protected_changed_paths": [],
+  "head_at_completion": "9f369a579ca764800b22eedd15e09795f09615da",
+  "status_at_completion": ""
+}

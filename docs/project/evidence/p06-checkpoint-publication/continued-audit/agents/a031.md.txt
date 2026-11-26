@@ -1,0 +1,27 @@
+# Agent031 — completed-but-failed retention boundary review
+
+## Result
+
+No concrete remaining blocker or ownership leak found in the reviewed recovery path. A supervisor whose post-child checkpoint fails once, then successfully publishes its finished failure report, remains eligible for partial retention when its own monitor and all started child writers have completed cleanup. Preserved complete child reports do not promote that failed attempt into orchestration success or performance acceptance.
+
+## Scope and revision
+
+Read-only source review of `/tmp/ai-gpu-2bfab0261c05/repo` at `a693d6f8828e4e10b5374db7fef8c727aa69d34e`. Read the canonical AGENTS instructions and current project/gate context. The initial working tree had only the concurrent, untracked checkpoint-publication audit/evidence paths; no tracked changes were present. No code changes, tests, native execution, full suite, commit, or push performed. Existing test assertions below were inspected, not executed.
+
+## Trace
+
+1. **Recovery preserves child ownership and failure.** `ci/project/p02_matrix.py:92` serializes before creating a temporary, creates exclusively, retains the descriptor/inode identity through cleanup, and removes only the temporary inode owned by that invocation. It propagates the original exception. `ci/project/p06_qualified_warm_run.py:478` observes the completed child's report/log before the checkpoint. On failure, `failure()` records the reason and clears `orchestration_passed` (`:385`); finalization rechecks retained bytes without rewriting children and publishes `state="finished"` (`:511–564`). The CLI returns 1 for this failed orchestration (`:587`). A completed native child can therefore truthfully leave `native_execution="run"` while the supervisor remains failed.
+
+2. **Writer completion does not require success.** `p06_qualified_warm_hosted.writers_finished` (`ci/project/p06_qualified_warm_hosted.py:449–482`) requires explicit process-start observations and complete outer cleanup, a finished supervisor, and finished reports/complete command cleanup for started children. Preparation has its existing schema-specific exception. It intentionally does not require a passing outcome. Missing, unfinished, malformed, or unresolved started-child records fail closed. Known unstarted children need no fabricated report.
+
+3. **Observed execution cannot restore success.** `observed_native_execution` (`:485–495`) accepts only the matching supervisor contract, revision, finished state, and the bounded execution enum. Hosted closeout invokes it only after selected-source stability and writer completion (`:649–656`). This changes the execution observation, not `native_success`. That flag is set only after the successful supervisor stage and successful native receipt checks (`:627–636`). The recovered failure therefore selects `partial` (`:665`) and final hosted outcome remains `fail` even when packaging and encryption succeed (`:686`).
+
+4. **Partial packaging preserves evidence without promotion.** `ci/project/p06_qualified_warm_pack.py:398` requires the caller's writer-finished assertion. In partial mode, `_writer_observations` preserves unresolved observations and leaves both cleanup verification and hard writer exclusion false (`:254–256`); it does not demand a passing supervisor. All selected bytes go under `partial-attempt/` in `partial-attempt.PRIVATE.zip` (`:483–484`). The packaging receipt explicitly sets `partial_attempt=true`, `complete_replay_original_created=false`, `retained_code_executed=false`, and all frozen false claims to false (`:508–518`). Its `outcome="pass"` means local byte-retention success only. Direct success packaging rejects the failed supervisor (`:259–264`). Source identities are rechecked before publication (`:505–506`).
+
+## Existing corroborating assertions
+
+`ci/project/test_p06_checkpoint_run_recovery.py:97–166` checks a real-file synthetic fsync fault preserves the prior checkpoint, removes its owned temporary, publishes exactly one later failure report, preserves child report/log bytes, leaves claims false, and changes hosted writer observation from false to true. The completed-child case also retains `native_execution="run"` and complete child counts while supervisor counts remain unaccepted. Hosted failed-attempt routing is covered in source by `test_p06_qualified_warm_hosted.py:413`; partial preservation/false claims by `test_p06_qualified_warm_pack.py:309–355`.
+
+## Remaining limits
+
+Eligibility requires successful final publication and observed cleanup. A surviving foreign temporary, unsuccessful owned-temp cleanup, repeated interruption, missing/unfinished child report, unresolved monitor cleanup, source changes, or ordinary inventory/output failure can still prevent retention. These are existing fail-closed limits, not an ownership leak introduced by this recovery. Receipt observations do not exclude malicious concurrent writers or establish operating-system process absence. No actual warm execution, native replay, performance result, or phase acceptance was established by this review.

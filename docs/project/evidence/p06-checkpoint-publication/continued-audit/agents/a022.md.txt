@@ -1,0 +1,60 @@
+# Agent022 producer checkpoint test review
+
+## Scope and result
+
+Read-only review of `ci/project/test_p06_checkpoint_input_recovery.py` and
+`ci/project/test_p06_checkpoint_prepare_build.py` at
+`93bb3f0342eff0b469a0da06cb067916af7c539e`, under the root `AGENTS.md`.
+No blocking defect found in these two modules. No tests or probes were run,
+and no repository files were edited. The checkout already contained the
+untracked `docs/project/p06-checkpoint-publication-audit.md`.
+
+## Nonblocking assertion gap
+
+`test_p06_checkpoint_input_recovery.py:92–94` checks only fields that are
+present and whose current value has exactly Boolean type. Consequently, a
+required false-claim field disappearing from the result, or changing from
+`False` to a non-Boolean value such as `"true"` or `1`, escapes this assertion.
+The preparation/build module uses the stronger explicit approach at
+lines 83–84: enumerate the required false-claim names and require each value
+to be `False`. Applying the same explicit contract check to acquisition
+would close this recovery-test coverage gap. This is not evidence that the
+producer currently emits an incorrect claim.
+
+## Evidence reviewed
+
+- **Real writer and fsync fault:** Both helpers capture the original JSON
+  writer and forward to it. Their fsync callbacks compare the open
+  descriptor's device/inode with the actual temporary file, inspect the
+  pending document, and raise the exact injected exception. Assertions
+  require one injection, the identical exception object, unchanged
+  previously published bytes, and temporary-file cleanup. Preparation/build
+  additionally compare the final on-disk JSON with the returned report.
+- **No hidden retry:** Acquisition checks the exact command sequence,
+  observed arguments, launch count, absent active-command log, preserved
+  earlier logs, and one recovery write. Preparation checks provision and
+  other observer call counts. Build checks zero launches before the command
+  checkpoint and exactly one launch after it, retaining that command's
+  original result and log.
+- **Execution interpretation:** Preparation explicitly remains `not_run`.
+  The builder's launched command is an explicitly synthetic host command,
+  so the hosted observer's `not_run` assertion after that command is
+  consistent; `process_started=True` alone does not imply native execution.
+  These modules do not establish `run` or `unknown` coverage, and do not
+  claim to do so.
+- **Synthetic scope:** Build launch behavior writes a clearly synthetic
+  log and returns a fabricated host-command result. Acquisition observes
+  its fixture's mocked runner; the reported network-acquisition flag follows
+  modeled fetch calls, while URL downloads and archive files are forbidden
+  by assertions. No direct subprocess or network launcher is introduced in
+  either reviewed file. Imported fixture implementations were outside this
+  two-file review.
+- **Cleanup:** Patches use context managers; manually initialized fixture
+  instances invoke `doCleanups()` from `finally`, including setup failure.
+  Acquisition also registers the reused fixture's class cleanup. The helper
+  does not call `tearDown()`, so its suitability depends on the imported
+  fixtures retaining their cleanup registration convention; no concrete
+  leak is demonstrated in the reviewed files.
+
+These are synthetic host-side recovery tests, not native execution or full
+governance qualification evidence.

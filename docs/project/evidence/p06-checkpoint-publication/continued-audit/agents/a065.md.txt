@@ -1,0 +1,104 @@
+# A065 — automatic Warm Workspace workflow scope
+
+## Result
+
+No concrete supported-contract integration blocker found. This was read-only
+source inspection at local commit `9f369a579ca764800b22eedd15e09795f09615da`.
+No CI status was queried, no workflow was dispatched, and no tests, builds,
+native execution, replay commands, repository edits, commits or pushes ran.
+
+## What an eventual successful automatic run establishes
+
+The `P06 Warm Workspace` workflow is master-push/PR/path triggered and also has
+manual dispatch, selecting Ubuntu 22.04, pinned CPython 3.12.14, SimX and both
+formats. It verifies the provider SHA through P04 preparation, then invokes
+`p06_warm_execute.py run`; its artifact upload runs with `if: always()`
+(`.github/workflows/p06-warm-workspace.yml:3–71,81–96,125–145,174–207`).
+
+The ordinary v1 experiment runs **24 fresh processes, 792 launches and 25,344
+checked FP32 words**: FP16 then BF16, six ordered pairs per format, with one
+excluded warm-up pair and five measured pairs. Each process has one prime and
+32 serial operations. The primary measured population is **20 processes, 640
+operations and 20,480 words**. Reference and reusable-buffer policies share the
+same executable/kernel per format. The raw verifier checks exact output words,
+dispatch, operation/owner completion, allocation/release accounting, ordered
+snapshots and the reported counter boundaries. The 320-byte tensor peak is
+requested A/B/D payload, not physical-device capacity or host RSS
+(`p06_warm_execute.py:3–11,42–75,279–295,368–440`; `p06_warm_records.py:85–209`;
+`docs/designs/warm_workspace_benchmark_v1.md:47–105,107–146`).
+
+Source snapshots bind the clean checkout, imported local helpers and selected
+source/configuration bodies. Build and process qualification IDs bind contract,
+fixtures, original compiler records, generated/effective headers, tools,
+identified dependency inputs, artifacts and complete sampling plan. Source,
+tools, dependencies and products are checked around execution; raw logs and
+retained source/build/snapshot bytes are checked at finalization
+(`p06_warm_execute.py:77–102,183–241,265–301,368–424,446–498`). Dependency inputs
+are identified reused libraries; this runner does not establish their fresh
+compilation provenance (`p06_warm_execute.py:70–73`).
+
+## Why this does not close the qualified warm experiment
+
+The automatic route deliberately remains `p06-warm-workspace-v1`. Its runner
+always leaves acceptance/performance/phase claims false and hypothesis
+`not_evaluated`. Its separate analyzer **unconditionally returns blocked full
+hypothesis qualification**, independent of favorable conditional host-time or
+reported-counter statistics. The historical high-half finding cannot be removed
+by relabeling a source revision or asserting a later repair
+(`p06_warm_execute.py:143–149,524–536`; `p06_warm_analyze.py:38–47,71–84,237–259`).
+
+The separate `P06 Qualified Warm` workflow is manual-only on trusted master. It
+requires private control delivery, an explicit public age recipient, the exact
+revision's full governance success, fresh dependency evidence, original and
+extended counter proofs, diagnostic/control originals, and the explicit
+qualified producer/reader. It reuses the same numeric population, but adds the
+per-process counter/lifetime proof and admission obligations. Matching the
+24/792/25,344 totals alone therefore cannot make an ordinary automatic warm run
+a qualified warm execution or performance acceptance
+(`.github/workflows/p06-qualified-warm.yml:3–20,35–64`;
+`docs/designs/qualified_warm_workspace_v1.md:5–13,37–57,59–81`).
+
+## Failure, publication and launcher boundaries
+
+The producer checkpoints a planned command before `run_bounded`; a failed
+prelaunch write stops before invoking that child. Command success requires an
+actual started process, exit 0, complete cleanup and a bound unchanged log.
+Processes enter the completed population only after raw-output and stability
+verification. Counts sum the actually verified operation records; a failed or
+partial population cannot become `full_matrix_completed`. Failure is retained
+without sample replacement or retry, with final source/tool/dependency/log and
+resource checks (`p06_warm_execute.py:116–121,171–213,388–498`). The unchanged
+15 GiB disk and 4 GiB memory admission still applies (`:255–264`).
+
+The shared-writer repair applies directly to this producer's report and snapshot
+publication and to P04 preparation (`p06_warm_execute.py:25,161–168`;
+`p04_ci_prepare.py:200`). It enables a later existing final write after cleanup
+of an owned failed temporary; it does not retry native work. The initial write
+at `p06_warm_execute.py:253` still precedes its protected execution block and
+all native work. Persistent/repeated publication faults or that initial failure
+can still prevent a final report; this audit makes no universal durable-closeout
+claim.
+
+Native calls go directly to `ai_warm_workspace` through `run_bounded`; this
+workflow never invokes `vortex_ai.launch` (`p06_warm_execute.py:202–203,403–407`).
+Its green status would not prove the new installed launcher's PID-directed
+SIGTERM handling or native cancellation/cleanup.
+
+## Inspected identities
+
+All ten files below match the inspected commit. Only the shared writer differs
+from explicit base `8580904` among this inspected set. These are source hashes,
+not execution evidence.
+
+| Path | SHA-256 |
+| --- | --- |
+| `.github/workflows/p06-warm-workspace.yml` | `26f4be747d1d6fcb828532281dcea6dfff60469ea73460e03b5b1ac53a66668b` |
+| `.github/workflows/p06-qualified-warm.yml` | `261efa4bcf9c2ca7a9bca8a25dcb03eefd70848426a4c6c61ca55b68a14a7b2e` |
+| `ci/project/p06_warm_execute.py` | `61c6caa04e8bb2a28d7f2e7b73cf41baa43abaeb8330882d7ab219bfe33d2f6a` |
+| `ci/project/p06_warm_records.py` | `28d7e2c1553fc0929a106bc24a62fa2d612e415449ee0e9ac84ad582289381e7` |
+| `ci/project/p06_warm_analyze.py` | `ac273f587f759900d16ad41c7c63c2d2b10ca0864d5018f8403572f75e5a3e88` |
+| `ci/project/p06_warm_contract.json` | `893d85401b1d5f7757d82cb7c743a89b36264fe19c7d08c239b7f216b7a8cbbd` |
+| `ci/project/p04_ci_prepare.py` | `b0eeaf430387b685be039276891d3c49f93ef4513142e8aad262c23e5037c3ab` |
+| `ci/project/p02_matrix.py` | `c7544854b1fda853fad7c382e6e51605e812f5a377128fa6198f4da8662d7432` |
+| `docs/designs/warm_workspace_benchmark_v1.md` | `91e4657c8e4c8eca3eb0b959b1bbc0430d2991cdd65e30f4d45b3da12b4e37c2` |
+| `docs/designs/qualified_warm_workspace_v1.md` | `979936604fe95572804243ab5b9ad2b524aa0fcdcf9d066450e70dfc841257a6` |

@@ -1,0 +1,117 @@
+# A062 — Native Counter Lifetime workflow scope
+
+## Result and inspected source
+
+**No concrete supported-contract blocker found.** This is a read-only release
+scope audit, not a report that a new workflow has passed. No CI status was queried,
+and no tests, builds, native programs, commits or pushes were executed.
+
+The selected source is `9f369a579ca764800b22eedd15e09795f09615da`. At the final
+identity check, all 11 recorded workflow, runner, contract, reader and helper
+files matched that commit; the working tree was clean. Only
+`ci/project/p02_matrix.py` differed from explicit base
+`858090410a992756808256ace90d36b9b3b88dd3` within that inspected set. The companion
+`a062-native-lifetime-identities.json` records exact byte lengths and SHA-256
+values.
+
+## What a successful workflow establishes
+
+`.github/workflows/p06-native-lifetime.yml` selects one Ubuntu 22.04 job,
+CPython 3.12.14, at most two build jobs and one simulation worker. It checks the
+15 GiB disk and 4 GiB available-memory admission values, prepares the exact
+requested checkout, invokes the managed lifetime runner serially, and then runs
+the separate pending-read accessor probe. The runner entry point explicitly
+selects `lifetime=True`; it does not select dependency admission, complete
+counter qualification or qualified-warm execution
+(`ci/project/p06_native_lifetime_execute.py:23–24`;
+`ci/project/p06_managed_preflight_execute.py:214–248`).
+
+The fixed managed population is **four seed-free RV64 SimX processes**: two
+formats, FP16 and BF16, crossed with the `per_operation` and
+`reusable_single_tile` policies. Together they contain **132 launches and 4,224
+checked words**. Each process has 33 run-boundary observations. The lifetime
+reader first validates the complete original managed transcript, then requires
+its additional, identity-bound lifetime witness; a favorable sidecar cannot
+replace a failed or incomplete parent transcript
+(`ci/project/p06_native_lifetime_records.py:138–168`).
+
+The additional reader requires observed zero pending balances at construction,
+both sides of every run, MPM read and cache-flush read, all four snapshots, and
+the final pre-destruction boundary. It verifies sequential run ordinals, exact
+reset-generation progression, successful real-call completion without an
+exception, monotonic selected counters, clock continuity around flushes,
+unchanged snapshot observations and consistency with the parent disposal
+record. Trace overflow must be false. The final pre-destruction state must match
+the terminal snapshot; the contract permits only live-platform observation
+after actual destruction, not reads of destroyed processor storage
+(`ci/project/p06_native_lifetime_records.py:37–135`;
+`docs/designs/managed_counter_lifetime_v1.md`, “Teardown and failures”).
+
+The subsequent pending-read probe reuses the verified completed managed build.
+Its positive control observes real nonzero pending traffic and a final zero,
+with read-only accessor observations. A separate probe compiled with the
+always-zero accessor must fail at the specified behavioral assertion. This
+negative control changes the probe translation unit, not the admitted model
+storage or measurement products. Its processes are separate from the four
+managed processes and their 132 launches
+(`ci/project/p06_pending_probe.py:35–49,135–181,353–364`).
+
+## Failures, nonstarts and retained identity
+
+The producer rechecks imported helper bytes, selected source, compiler/tool
+identities and dependency payloads before and after each command. Native build
+products are hashed immediately before execution and again afterward; selected
+source, dependencies, generated inputs, compiler records, logs and binary
+payloads are retained. Finalization repeats the source/tool/dependency and
+artifact checks and rehashes retained evidence. Pass flags are computed after
+that finalization and require the complete declared counts
+(`ci/project/p06_managed_preflight_execute.py:99–106,358–430,496–549,717–744,753–845`).
+
+A command cannot start before its launch-intent checkpoint succeeds. A failed
+prelaunch write records a confirmed nonstart and restores the prior native
+execution disposition. Once supervision might have entered native work, absent
+start evidence remains `unknown`; it is not relabeled `not_run`. Command success
+requires a real zero exit, a positive start observation, completed cleanup, no
+reason and a bound original log. Final source or artifact changes invalidate
+the attempt while preserving the original first reason. Only successfully
+validated process observations contribute to completed counts
+(`ci/project/p06_managed_preflight_execute.py:164–194,324–334,389–430,818–845`).
+
+These are inspected enforcement paths. A green lifetime workflow does **not**
+mean it injected every failure, nonstart, teardown exception or interrupted
+report write. The directed host hook/reader/runner tests address those cases
+separately; their test bodies were inspected only where relevant and were not
+executed by this audit. The workflow uses `set -euo pipefail`, and its evidence
+upload uses `if: always()`, so retaining a partial attempt does not turn it into
+a passing native result.
+
+Pinned cache identities and stable selected dependency payloads are checked,
+but this route expressly leaves **fresh dependency source-to-loaded-binary
+compilation provenance unresolved**. The stronger dependency-admission branch
+of the shared runner is not enabled by this workflow. Tool/selected-library
+inventory is also not a complete inventory of all system headers or system
+libraries. The contract keeps all seven qualification, warm-readiness,
+warm-execution and acceptance claims false; observed boundaries do not discharge
+the all-40-component lifetime argument, independent complete counter
+qualification, absolute no-wrap bounds, warm performance acceptance, processor
+RTL or physical hardware qualification
+(`ci/project/p06_native_lifetime_contract.py:57–66`;
+`ci/project/p06_managed_preflight_execute.py:68–80`).
+
+## Relation to this continuation
+
+The new shared checkpoint writer is used by this producer's report and snapshot
+publication and by P04 preparation. Its existing loaded-helper/source inventory
+includes the changed helper, so it remains bound to the actual executed source
+(`ci/project/p06_managed_preflight_execute.py:85–106,312–322`). No new project
+module was added to that producer by the repair.
+
+This workflow invokes the compiled `ai_counter_preflight` directly through
+`run_bounded`; it never invokes `vortex_ai.launch`. Its CLI has its own scoped
+SIGTERM-to-KeyboardInterrupt handler, but an ordinary green workflow does not
+demonstrate termination of a native operation. It cannot establish the new
+installed Python launcher's SIGTERM forwarding or native cleanup behavior. The
+new inert-child lifecycle regressions and a source-matched installed-package
+workflow retain their separate, narrower claims
+(`ci/project/p06_managed_preflight_execute.py:717–730`;
+`ci/project/p06_native_lifetime_execute.py:43–51`).

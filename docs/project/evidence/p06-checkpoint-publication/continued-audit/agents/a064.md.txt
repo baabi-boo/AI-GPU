@@ -1,0 +1,41 @@
+# A064 — Serial Workspace workflow scope
+
+## Result and source
+
+**No concrete supported-contract workflow integration or source-binding blocker found.** This is a read-only interpretation of the successful-result requirements, not a CI status observation or a new correctness result. Inspected source is `9f369a579ca764800b22eedd15e09795f09615da`; all nine recorded files match that commit. Of those files, only the shared `ci/project/p02_matrix.py` writer differs from explicit base `858090410a992756808256ace90d36b9b3b88dd3`. `a064-serial-workspace.json` records exact identities and the clean worktree observation.
+
+## What successful workflow jobs establish
+
+`.github/workflows/p06-workspace.yml` selects four fresh backend/format jobs: SimX and native processor rtlsim, each in FP16/BF16. Every job invokes `p06_workspace_execute.py` for one selected variant, running `per_operation` and `reusable_single_tile` in separate native processes. Each process performs the frozen four-call changed-input and alternating-poison sequence at `(M,N,K)=(8,4,8)` against independent P02 output words.
+
+| Scope | Processes | Native launches | Exact FP32 words |
+|---|---:|---:|---:|
+| One policy process | 1 | 4 | 128 |
+| One backend/format job | 2 | 8 | 256 |
+| All four jobs | 8 | 32 | 1,024 |
+
+These are the exact populations in `p06_workspace_contract.json` and `p06_workspace_execute.py`'s plan/completion checks. A selected job deliberately records `full_matrix_completed=false`; a single green job cannot be reported as the complete matrix.
+
+The native records require exact output bits and successful submit/wait/close results. The allocation observer and validators reconcile **12 tensor-buffer creates/releases per default-policy process versus 3 per resident-policy process**: 60 complete tensor-buffer lifetimes across the full matrix. Resident buffers retain disjoint addresses/extents through all four calls, and each call rewrites both inputs and the output poison. Records check competing-context, live-operation and waited-but-unclosed rejection, owner-close observations, healthy resubmission after operation close, unsupported resident-shape rejection, and successful final teardown/repeated close. See `p06_workspace_records.py::_operation`, `_buffer`, `_lifetimes`, `verify_output`, and serial workspace contract sections 4–5.
+
+The **320-byte** peak is requested A/B/D payload, not allocator overhead, device-wide memory use or host RSS. The observer counts device/tensor-buffer calls; it does not independently count native queue/event/enqueue calls. Absence of hidden enqueue work in rejected calls also depends on reviewed guards and separately scoped host fault tests. Simulator memory accounting and release deltas do not establish physical memory reclamation or device recovery. The normal native smoke does not replace the broader injected host-failure coverage required by the runtime contract.
+
+## Source, build and original evidence boundaries
+
+The workflow pins Linux CPython 3.12.14, checks preparation against `GITHUB_SHA`, and retains workflow/job/interpreter identities. The runner requires clean source; binds all loaded local helpers; hashes source, tool and dependency inputs; retains source/configuration/compiler records; independently reproduces generated headers; and checks the frozen profile, kernel and independent fixture header. Each native process receives a qualification identity covering its exact source, policy, cases, build artifacts, compiler records, tools and dependencies. Those inputs and retained outputs are rechecked before/after processes and in finalization. Native programs execute directly through `run_bounded`, with bounded build/native time and unchanged resource checks.
+
+Failed and interrupted attempts remain failed or blocked, preserve observed process/command records and raw logs, and do not contribute to verified passing-process totals. Artifact upload uses `if: always()`. Upload presence alone is not a successful native result.
+
+Independent `p06_workspace_replay.py` reads original archives as data, reconstructs records and bindings, and never executes retained helpers, binaries or absolute paths. `replay_matrix` requires exactly four distinct variants with compatible source/tree, dependency, tool and hosted-run identities before producing the 8/32/1,024 aggregate. This separate original reconciliation is not performed merely by observing a green workflow. Replay explicitly reports `native_execution=not_run` and adds no launches.
+
+## Effect of this continuation and claim limits
+
+The runner imports the repaired writer as `p02_matrix` and uses it for report/snapshot publication; its loaded-helper inventory binds the changed bytes. P04 preparation uses the same helper. The correction allows existing finalization to publish after a recoverable owned-temporary failure without replaying native commands. It does not alter native result fields, fixtures, numerical comparison or lifetime predicates. Persistent publication failure remains possible.
+
+This workflow invokes `ai_workspace` directly and does not invoke `vortex_ai.launch`. Its success cannot establish the new installed launcher's SIGTERM behavior or native cancellation cleanup.
+
+All execution and replay records explicitly deny performance/phase acceptance. The smoke includes no priming or measured warm batch, no claimed speedup and no physical FPGA/silicon result. It remains separate from the unstarted qualified warm **24-process / 792-launch / 25,344-word** experiment and does not close P06-A02/A03 or vendor P01-A03. Processor rtlsim bypasses the AFU and retains inherited integer DPI helpers. Reused dependency products are identified inputs, not a fresh dependency-compilation provenance result.
+
+## Work performed
+
+Read source/contracts and recorded file hashes only. No test bodies, builds, native execution, replay commands, remote queries, repository edits, commits or pushes were performed.

@@ -1,0 +1,101 @@
+# A059 — installed-Python workflow scope
+
+## Result
+
+**No concrete workflow-scope or source-binding blocker found.** A successful,
+source-matched P05 Installed Python run exercises the revised launcher's normal
+installed execution path. It does not establish native cancellation behavior.
+This is a read-only code review, not a CI status observation or test execution.
+
+Inspected source commit: `9f369a579ca764800b22eedd15e09795f09615da`.
+
+## What a green workflow establishes
+
+- `.github/workflows/p05-python.yml:3–95` selects relevant changes on master,
+  includes `python/**` and `ci/project/**`, and independently runs FP16 and BF16
+  SimX jobs with fail-fast disabled. Both jobs are needed for the complete
+  declared copying-Python matrix. The environment is Ubuntu 22.04, CPython
+  3.12.14 and explicitly pinned build packages; this is not arbitrary-host
+  qualification (`:125–153`).
+- The preparation step passes the provider's `GITHUB_SHA` explicitly (`:179–193`).
+  `p04_ci_prepare.py:169–183` compares the checkout to that SHA before and after
+  tool relocation, then applies the unchanged clean-source gate. The P05 runner
+  independently snapshots the source and rejects dirty/blocked provenance
+  (`p05_execute.py:89–97,338–361`; `p02_matrix.py:215–222`).
+- The workflow first runs the ordinary P04 native reference and then P05 against
+  that exact native build/packet (`p05-python.yml:194–211`). P05 verifies that the
+  completed native packet is clean and passing, copies it byte-for-byte, and
+  reconciles the native artifact inventories and raw observations against the
+  current source and selected variant (`p05_execute.py:363–429`). A green status
+  is not obtained merely by finding an old report with a passing label.
+- P05 creates a bound sdist, rebuilds its wheel offline without the original
+  `VORTEX_AI_BUNDLE` override, creates a fresh copied-interpreter venv, installs
+  without indexes/dependencies/bytecode, and hashes installed files against the
+  wheel (`p05_execute.py:487–538`). These are actual build/install commands,
+  not metadata-only probes.
+- The installed matrix runs outside the checkout using the installed venv's
+  `python -I -B -m vortex_ai.launch --bundle ... -- p05_installed_check.py ...`
+  (`p05_execute.py:539–575`). Thus the new `_run_child` executes its ordinary
+  spawn/wait/return path. The checker verifies isolation, venv/package/compiled
+  extension locations, immutable build pins and verified loader environment
+  (`p05_installed_check.py:222–274`). The runner also rechecks package/interpreter
+  identities after execution and joins observations to independent native
+  comparisons (`p05_execute.py:563–590`).
+
+The checker requires six matmul runs and ten model runs per selected format,
+with 36 installed launches; independent comparison work contributes another
+36 launches per format (`p05_installed_check.py:521–588` and
+`p05_execute.py:581–589`). Both successful format jobs therefore cover 144
+combined native/installed launches. This is the existing bounded SimX copying
+API and fixed model scope. It is not the 24-process/792-launch qualified-warm
+experiment, general framework support, physical hardware or automatic new
+phase acceptance (`p05_execute.py:47–58`).
+
+## Provenance and failed results
+
+The runner hashes loaded helpers, source files, tool/dependency inventories,
+package prerequisites, native builds, bundle, sdist, wheel and installed bytes;
+its repeated `stable()` checks reject changed identities
+(`p05_execute.py:60–66,89–97,303–328`). It retains current source/checker/package
+bytes and actual commands/logs, then records final source/tool inventories.
+
+Every external command must pass, exit zero and report complete process cleanup
+before the runner continues (`p05_execute.py:290–301`). Errors become `fail` or
+`blocked`, interruption becomes `fail`, and finalization keeps partial/native
+artifacts instead of deleting them (`:591–619`). The CLI returns nonzero unless
+the final report is passing (`:658–666`). `acceptance_claimed` and
+`phase_complete` start false and are not promoted by this workflow (`:272–277`).
+The artifact upload runs with `always()`, includes hidden files, rejects a missing
+packet, and names the exact SHA/format/attempt (`p05-python.yml:212–221`).
+Uploaded failure evidence remains failure evidence; independent review/replay
+is separate from workflow success and retention.
+
+## Cancellation limits
+
+Neither the workflow nor the installed matrix injects PID-directed SIGTERM into
+the native checker. The checker's bounded failure cleanup (`p05_installed_check.py:
+591–640,678–709`) is not evidence that it ran during a signal termination.
+`baseline_process.py:103–128,226–301` controls whole child process groups for
+command limits/interruption, which is different from the revised launcher's
+single-PID forwarding path. A timeout/interruption is a failed command, not a
+passing native cancellation qualification. The new inert-child host regressions
+establish their recorded process-ownership behavior; they do not demonstrate
+draining a GPU/native operation, descendant supervision, or durable closeout
+after SIGKILL.
+
+## Inspected identities and execution statement
+
+All seven inspected files matched the selected committed bytes at the final
+read. No tests, builds, installations, native workloads, CI queries, repository
+edits, commits or pushes were performed. Only this report was written outside
+the repository.
+
+| File | SHA-256 |
+|---|---|
+| `.github/workflows/p05-python.yml` | `dc22f840b235d3abee1bac9b205392331ea684de1c1d03ab1ca3e6c91990f195` |
+| `ci/project/p04_ci_prepare.py` | `b0eeaf430387b685be039276891d3c49f93ef4513142e8aad262c23e5037c3ab` |
+| `ci/project/p05_execute.py` | `18f63ebd5bb04fbe9bcdf094d6d2464dbd8196ba3602d064f9b27ee87f9f7ef4` |
+| `ci/project/p05_installed_check.py` | `69d530bea385f2d0545cc677b8205585c42398f4ace2837b840b14d5cabfac5b` |
+| `ci/project/p05_execution_records.py` | `1f5c9f7d0e66de1537e952b9432e10543563c61eab164e1762416bae07fa7ffe` |
+| `ci/project/baseline_process.py` | `54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa` |
+| `python/vortex_ai/launch.py` | `01bdadc8469b50fc2b6e511684d37f1bc92d2f4030d3a0900481b8fb5173a128` |

@@ -1,0 +1,64 @@
+# A086 — Current-revision governance intake plan
+
+## Scope and observation
+
+Read-only source and provider-metadata review; no artifact download, archive inspection, replay, test body, native execution, repository edit or publication. Source inspected: `30b2e8ca69fba47646392c0cf6650cbb75155843`, tree `548b85370e3d13119730b5a30d1ec388d3e141a9`, at `/tmp/ai-gpu-2bfab0261c05/published-source`; `git status --porcelain=v1 --untracked-files=all` was empty. This is an intake plan, not a successful intake receipt.
+
+Authenticated connector observations on 2026-11-26 (before the 08:02:19 UTC clock observation) still showed the run and sole job **in progress**, `conclusion: null`; “Test governance tooling” was running and artifact retention was pending. No artifact ID, byte size, digest or expiry for this attempt was obtained. Query these only for completed intake and never copy the base artifact’s identity into the current record.
+
+## Exact expected provider binding
+
+| Field | Required identity or condition |
+| --- | --- |
+| Repository and head repository | `baabi-boo/AI-GPU`; both numeric IDs `1457409699` |
+| Workflow | `.github/workflows/project-governance.yml`; workflow ID `418772913`; active workflow state must be observed for hosted admission |
+| Run | `45775559523`, current `run_attempt: 1`, `event: push`, `head_branch: master` |
+| Revision | Full `30b2e8ca69fba47646392c0cf6650cbb75155843` everywhere |
+| Sole job | ID `139758253740`, name `governance`, same run, revision and attempt |
+| Completion | Run, job and every returned step completed successfully; each of the eight required step names occurs exactly once |
+| Exact artifact name | `project-governance-30b2e8ca69fba47646392c0cf6650cbb75155843-run45775559523-attempt1` |
+| Artifact identity | Exactly one matching name over the complete bounded run artifact population; positive numeric artifact ID; exact repository API detail and ZIP endpoints |
+| Artifact workflow binding | `workflow_run.id = 45775559523`; both repository IDs above; `head_branch = master`; full revision above; if `workflow_run.run_attempt` exists it must equal 1 |
+| Original byte identity | Independently provider-supplied `digest: sha256:<64 lowercase hex>`; integer `0 < size_in_bytes <= 268435456`; downloaded bytes must match both |
+| Lifetime | `expired: false`; parseable `created_at <= updated_at < expires_at`; expiry after intake time |
+
+The eight required steps are: Verify system Python 3.12; Inspect governance prerequisites; Validate project structure and evidence; Check published baseline packet consistency; Install pinned governance CMake; Prepare checked governance invocation environment; Test governance tooling; Retain complete governance packet. All other returned steps must also succeed.
+
+Use `/actions/runs/45775559523/attempts/1/jobs?per_page=100` for the pinned attempt. The connector’s jobs wrapper returns latest-attempt first-page jobs and must not silently establish an attempt-1 claim. Its artifact wrapper returns only the first page. The implemented artifact population check uses page size 100, maximum 1,000 entries, consistent total/counts, unique IDs, and an extra empty closing page. Missing, duplicate or changed populations fail.
+
+The workflow-detail endpoint was rejected by the connector’s public fetch allowlist in this review. Run metadata supplies the workflow ID/path, but does **not** establish the separate active-state observation. Do not claim the full hosted `verify_governance` path was executed here.
+
+## Required completion record
+
+1. Retain safe authenticated workflow/run/attempt-specific jobs/artifact-list/artifact-detail observations and their observation times. Preserve the canonical JSON SHA-256 values used for before/after equality (`sort_keys=True`, compact separators, finite values). Reread run, all artifact pages and artifact detail around transfer; all identities and observations must remain equal. After replay reobserve workflow, current run and pinned job records, then reread the run again. A change requires fresh admission; do not amend the selected identity to make old bytes pass.
+2. Retain the **unchanged complete original ZIP** outside the trusted checkout, with a manifest binding relative retained path, exact byte count and SHA-256 to provider artifact ID/name/run/attempt/revision. Compute file hashes before/after review and preserve a stable singly linked regular file with canonical absolute, nonsymlink paths. Never trim, extract/repack, repair or replace the original with selected members or a new download digest. Preserve failed/partial evidence with its actual scope. Do not retain tokens or signed storage URLs. The supported acquisition/receipt paths require Linux anonymous `O_TMPFILE` staging; unsupported staging fails closed.
+3. Select the clean exact published source independently: expected revision **30b2e8ca69fba47646392c0cf6650cbb75155843** and the inspected tree above. Keep output outside it. Record before/after HEAD, tree, full status, tracked inventory digest/count/bytes/modes and gitlink pins. The reader additionally rejects dirty/incomplete materialization, untracked/unbound Python/cache inputs, sparse/hidden index entries, replacement refs/grafts, executable filters and deferred object retrieval. Do not execute recorded producer paths or archived code. Trusted discovery imports the explicit source; it does not run test bodies.
+4. Select and identify the reviewed reader separately: full reader revision/root/tree/status, seven reader/helper byte snapshots and SHA-256 values below, equality to the chosen commit and stability before/after. If dirty, retain exact differences and explain scope; a clean reader is simpler. Record canonical invoked Python/resolved executable/version/hash, `/usr/bin/git` hash, argv, cwd, no-bytecode setting, start/end UTC, elapsed time, exit status, stdout/stderr and receipt digest. These identities describe this review, independently of the historical tool identities inside the ZIP. A root choice of a different reader revision must be recorded as such, not labeled 30b by tree similarity.
+5. Invoke the existing reader with the unchanged original, full expected revision, clean explicit source and **provider-selected** expected SHA-256. Use a fresh absent output path outside source; do not overwrite a prior receipt. Preserve successful or failed invocation records. The reader must reconcile exact 12-member grammar, all receipts/log joins, entire ordered events and fresh canonical discovery. Retained discovery anticipates **5,547 IDs**, ordered newline digest `0e8dbaad34266093f76db937eba670ce8f628ceb500998cb9094cdd2f12071fa`; exact order/identity equality is required, not merely this count. Record actual current successful subtests/events/duration from the completed original; base statistics are not current statistics.
+
+## Specific revision/attempt hazards and claim boundary
+
+- Base `858090410a992756808256ace90d36b9b3b88dd3`, run `45762183368`, artifact `15092372891` qualifies only that base. Its 5,515 IDs and digest cannot substitute for this source.
+- Local commit `9f369a579ca764800b22eedd15e09795f09615da` has the same tree but a different commit ID. Retained revision text, source HEAD and provider run must bind the API-published **30b** ID. Tree equality is insufficient.
+- A later audit-branch result has another revision and non-master head branch. It cannot qualify this master result or the manual native source.
+- A rerun increments the run attempt; an attempt-1 artifact may remain listed. If current provider attempt changes, reject attempt 1 and select the new exact completed run/attempt/job/name. API artifact attempt omission is supported only because exact name plus current successful run establishes the join; an explicit mismatching attempt is rejected.
+- “Retain complete governance packet” runs with `if: always()`. Artifact existence, an `OK` log line, successful focused 258 methods, or 5,547-ID collection alone does not establish strict full-suite success.
+- Local successful replay deliberately retains `provider_authenticated: false`, `retained_code_executed: false`, `tests_executed_by_replay: false`, and native/phase/performance acceptance false. Preserve independent provider evidence rather than changing these fields. Hosted admission redoes current provider-bound acquisition/replay and native source checks; this offline review is not a dispatch/admission substitute.
+
+## Source references and reader identity
+
+Reviewed source: `ci/project/p06_qualified_warm_hosted.py` (`verify_governance`, `_governance_job`, `_reobserve_governance`, `_governance_admission`); `ci/project/p06_governance_artifact.py` (`_run`, `_artifact`, `_population`, `_observe`, `download_artifact`); `ci/project/governance_replay.py` and six local helpers; `.github/workflows/project-governance.yml`; `docs/project/governance-artifact-replay.md`; `docs/designs/governance_artifact_replay_v1.md`; retained `validation/final-discovery.json` and base replay invocation for record-format precedent.
+
+Provider observations: `https://api.github.com/repos/baabi-boo/AI-GPU/actions/runs/45775559523` and its `/attempts/1/jobs?per_page=100` endpoint. No completed-success claim is made.
+
+| Reader file (under `ci/project/`) | Bytes | SHA-256 at reviewed published source |
+| --- | ---: | --- |
+| `governance_replay.py` | 15883 | `256a07bacab995253ae2716467e5912249d0c631b38aeb24c442d90a19574c66` |
+| `governance_replay_archive.py` | 12830 | `cf9f721c3e54282113b81b97b7269a34b1ad50720a46bcc09832e71bbf76f65a` |
+| `governance_replay_events.py` | 9710 | `743799138f8cab40dd44941650075c132071e47e801c7cb92649b0f9a1454195` |
+| `governance_replay_records.py` | 26503 | `561b2d64fa27f6704ef35b0959fd725ac41ede194d076b63b1cf5863918c9d44` |
+| `governance_replay_source.py` | 15570 | `8ffd8f69585f984a83f41e22ab87051602a9da3fc2e698561e52f9b6e39b1fea` |
+| `governance_replay_collect.py` | 17625 | `dbb04f76fb6632ac7e26de40113dff392ed15f5f497875e71fbde19ea283ecf9` |
+| `baseline_packet_io.py` | 14506 | `469583bc558ccb010af82259de38248d7a9a8283cd873a96726aa3c3e2aaa94c` |
+
+Report completed: 2026-11-26T08:04:10.808161+00:00.

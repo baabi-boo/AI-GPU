@@ -1,0 +1,107 @@
+# A097 — Audit documentation and metadata validation
+
+## Result and exact snapshot
+
+**Both existing metadata validators passed, with exit status 0 and empty
+stderr.** The source-read snapshot ran from
+`2026-11-26T08:18:59.802232+00:00` through
+`2026-11-26T08:19:02.604496+00:00` in
+`/tmp/ai-gpu-2bfab0261c05/audit`.
+
+HEAD was the published source
+`30b2e8ca69fba47646392c0cf6650cbb75155843`, tree
+`548b85370e3d13119730b5a30d1ec388d3e141a9`. The audited, uncommitted inputs were
+the handoff edit and continued-audit packet: **199 files / 3,866,704 bytes**,
+including the handoff document and **91 retained completed agent reports**.
+The packet already included the current-source original, completed independent
+replay records and independent provider reobservation. Later reports and
+root's final packaging are outside this snapshot.
+
+Root held the audit files unchanged while the validators ran. Before and after,
+HEAD, tree, full porcelain status, index bytes, file count, byte total,
+inventory digest and retained-report count all matched. The sorted inventory
+SHA-256 was
+`cfd5b688bc86143fa2dfc2fd0dac74a438c82cab3911e9b4a866b1a9f5bf453b`.
+The full before/after inventories and actual status are retained in the JSON.
+
+## Commands and observed scope
+
+Both commands ran concurrently as independent read-only checks from the audit
+source root. This follows the explicit source-root metadata exception in
+`AGENTS.md`; no GPU build tree was used.
+
+| Actual command | Exit | Elapsed seconds | Result |
+| --- | ---: | ---: | --- |
+| `python3 -B ci/project/check_project.py` | 0 | 2.596332 | Structure, metadata and applicable document-link validation passed |
+| `python3 -B ci/project/check_baseline_packets.py` | 0 | 0.281546 | Both existing published P01 baseline packets passed consistency validation |
+
+These are the existing commands named by the Project Governance workflow's
+“Validate project structure and evidence” and “Check published baseline packet
+consistency” steps, with `-B` added to prohibit bytecode writes. The actual
+Python executable was
+`/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3`,
+resolved to Python 3.12.14. Its SHA-256 was
+`fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7`.
+The invocation used a small explicitly recorded environment with
+`PYTHONDONTWRITEBYTECODE=1`; no inherited environment values were retained.
+
+The baseline checker reported published integrity verified for the `native`
+and `clean-build` packets. Its native-matrix-record consistency field was true
+for the native packet and false for the clean-build packet, where such records
+are not required. It retained `phase_complete: false`,
+`raw_log_bytes_verified: false` and
+`redaction_relationship_verified: false`. This is published evidence
+consistency, not fresh native execution or phase acceptance.
+
+Both validator files, the workflow, classifier, machine policy and normative
+review policy were independently byte-compared with immutable published base
+`30b2e8c`; all six matched. Their lengths and SHA-256 values are retained.
+No rule or gate was changed to obtain a pass.
+
+## Change-impact classification boundary
+
+The existing classifier does **not** support a complete uncommitted/untracked
+worktree diff. Its `classify` command requires `--base` and `--head`, resolves
+both to Git commit objects, and reads immutable object differences. Classifying
+`30b2e8c..HEAD` now would classify an empty commit diff and omit the pending
+packet. I did not create a commit, write an alternate index, alter the real
+index or claim that empty result as audit classification.
+
+All pending changed paths fall under `docs/project/**`; the unchanged policy's
+`prose` path rule maps them to R0. They do not match its higher normative-docs
+paths. This is a **path-rule observation only**, not a completed per-diff
+detector/evidence classification or CI result. Once root has the exact local
+audit commit, run the unchanged classifier and policy extracted from immutable
+`30b2e8c`, with this exact base and the actual new commit as head:
+
+```text
+python3 -B <immutable-base-ci/change_impact.py> \
+  --repo /tmp/ai-gpu-2bfab0261c05/audit \
+  --policy <immutable-base-change-impact.yaml> \
+  classify --base 30b2e8ca69fba47646392c0cf6650cbb75155843 \
+  --head <exact-audit-commit> --event push --format json
+```
+
+The placeholder paths and head above describe a required later command;
+they are not represented as executed. The immutable classifier and machine
+policy hashes observed here are respectively
+`bd2ef579de90b14b7ab4cd5ef2f6b7c911753e154c4201aaf0f0d0b25a460779`
+and
+`489d1018c790bb6c383b774b119223889bb508be6c63db654d5c6c80520d0333`.
+R0 has no class-mandated approval but still requires its CI evidence; these
+local metadata passes do not substitute for future audit-branch CI.
+
+## Final packaging and limits
+
+After root completes the 100-report ledger and any remaining active Markdown,
+rerun the project validator on those final inputs and retain the exact source
+scope. The present result remains attached to the stable 91-report snapshot;
+do not relabel it as a validation of later files. No full unittest suite,
+canonical discovery, native workload, build, network request or hosted admission
+was executed here. No source, existing evidence, Git object, index or ref was
+modified.
+
+Retained scratch artifacts are `a097-audit-validation.json`, the read-only
+driver `a097-audit-validation.py`, and the separate original stdout/stderr logs
+for both validators. The two stderr originals are empty. Source reads ended
+before root was notified that packet editing could resume.

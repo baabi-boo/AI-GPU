@@ -1,0 +1,99 @@
+# A073 — main CI coverage at the published revision
+
+## Result and source scope
+
+No change-specific main-CI coverage blocker was found. This read-only review
+uses published revision `30b2e8ca69fba47646392c0cf6650cbb75155843`, whose tree
+matches the locally reviewed checkpoint/launcher continuation. All seven
+recorded CI/policy sources match that commit and are unchanged from base
+`858090410a992756808256ace90d36b9b3b88dd3`. HEAD stayed at the published revision
+and the checkout remained clean. `a073-main-ci-identities.json` retains the
+source identities and static path-intersection result.
+
+The independent immutable-base classification is R1. Under
+`docs/review/code-review-policy.md` section 2, that class requires author review
+and the change's own tests, with no class-mandated approval. No RTL/model/config
+or other protected execution surface changed, so this diff does not itself
+trigger new Beacon, model-parity, ABI or golden-data obligations. Those gates
+remain available to the normal catalog policy; no thresholds or cases changed.
+
+## How main CI selects work
+
+The `change-impact` job is advisory: it reads the classifier and policy from the
+base revision, writes a summary, tolerates errors, and is not a dependency of
+other jobs. R1 is therefore a review classification, not a test-selection switch
+(`.github/workflows/ci.yml`, `change-impact` job).
+
+The separate `plan` job chooses catalog cells according to the event and
+toolchain-cache observation:
+
+| Condition | Initial or expanded selection |
+|---|---|
+| Push with a toolchain cache hit | SimX / smoke cells |
+| Pull request with a cache hit | SimX and processor rtlsim / smoke and full cells |
+| Push or PR with a toolchain cache miss | All ordinary catalog drivers and tiers |
+| Indeterminate push/PR diff with a restricted driver list | All ordinary drivers; existing tier choice remains |
+| Scheduled run | All ordinary drivers and tiers |
+| Manual dispatch | Explicit driver/tier inputs; the cache-miss override is not applied |
+
+Changed RTL/config paths can add matching rtlsim/xrtsim/opaesim drivers. Static
+inspection found zero intersections between the actual 97-path diff and
+`ci/testcase.py::_DRIVER_PATHS`. The actual cache-hit result was not queried, so
+this review does not assert which of the possible matrices this run selected.
+
+Tier filtering selects which cells exist. A selected cell subsequently runs its
+complete category/driver/XLEN marker group, not just the tier entries that caused
+the planner to select that cell. The planner computes dependencies and shards
+from those same complete groups. Thus “push defaults to smoke” does not mean
+every executed test is a smoke-tier case (`ci/testcase.py::cmd_matrix`,
+`cell_expr`; workflow `Plan matrix` and `Run cell` steps).
+
+“All” is bounded: the explicitly opt-in `fpga`, `asic` and `timing_gpu` tiers are
+excluded from ordinary matrix expansion. Their separate hardware/licensed/large
+resource workflows are not implicitly qualified by a main-CI success.
+
+## Execution and result interpretation
+
+The workflow creates separate 32-bit and 64-bit build trees, runs `configure`,
+builds software/tests, and transfers each build artifact to its selected cells.
+Cells execute generated build-tree scripts with the matching `VX_XLEN`, strict
+markers and any planned shard. Performance/model-parity shards cap independent
+Verilator C++ build jobs at two; that cap does not change simulated parameters
+or golden data. JUnit is retained even on failure. P04 model catalog cells add
+source-matched preparation and their own retained packet
+(`.github/workflows/ci.yml`, `build` and `tests` jobs).
+
+A green job cannot establish absent coverage. The `complete` job rejects a
+dependency result of `failure`; its condition alone does not reject `skipped`
+or `cancelled`, and it prints the actual tests result. An empty planned matrix
+intentionally skips setup/build/tests. Consequently, a successful `complete`
+job alone is not evidence that every catalog cell or test body ran. Whole-run
+job results and retained JUnit populations must support any concrete coverage
+claim. The existing harness also preserves explicit opt-in skips and non-strict
+`known_issue` expected failures, including tolerated XPASS; a green main-CI
+workflow is not a zero-skip, zero-expected-failure certificate
+(`ci/conftest.py::pytest_generate_tests`).
+
+The separate Project Governance workflow remains responsible for the complete,
+unfiltered, uninterrupted, zero-skip governance qualification and original
+replay required before native admission. Main CI does not substitute for that
+requirement, grant new phase acceptance, or establish physical FPGA/vendor
+integration/performance results (`AGENTS.md`; `docs/continuous_integration.md`).
+
+## Single provider observation
+
+At **2026-11-26 07:34:17 UTC**, the current main-CI run **45775559567** exposed
+five jobs, all bound to published SHA `30b2e8ca69fba47646392c0cf6650cbb75155843`:
+
+- `change-impact`, `plan` and `setup`: completed successfully.
+- `build (32)` and `build (64)`: in progress.
+- No test-cell or completion job was instantiated in that response yet.
+
+The endpoint was queried with `per_page=100`; `total_count=5`, so no further
+page existed at that observation. This is a time-scoped snapshot, not the final
+job population and not a passing-workflow claim. The retained observation is
+`a073-main-ci-observation.json`.
+
+No tests, planner commands, builds, native execution, repository edits, commits
+or pushes were performed. The only remote operation was the single read of
+this run's job names/statuses.

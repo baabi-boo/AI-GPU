@@ -1,0 +1,19 @@
+# Agent019 — P05 checkpoint consumer compatibility review
+
+## Result
+
+No concrete regression attributable to the owned-temporary cleanup and `O_PATH` directory-anchor writer change was identified in the reviewed P05 callsites.
+
+Reviewed checkout: `93bb3f0342eff0b469a0da06cb067916af7c539e`. Read the root `AGENTS.md`; no nested `ci/` AGENTS files were found. The only observed checkout change was the untracked `docs/project/p06-checkpoint-publication-audit.md`, which was left untouched. Consumer scope was `ci/project/p05_execute.py` and `ci/project/p05_torch_execute.py`; the old and current `_write_json` implementations were read to establish the changed contract.
+
+## Compatibility observations
+
+- **Directory setup:** P05 creates the output root and `snapshots` child before defining/invoking its writers (p05_execute.py:263–287). Its installed request directory exists before publication (541–552). Torch follows the same ordering (p05_torch_execute.py:547–577, 734–755). Its additional direct report write during `_verify_python_packet` (390) is reached from `execute` after output setup (682–683). None of these callsites requires the writer to create a parent directory. The `O_PATH` anchor does not add a directory-read requirement.
+- **Bytes and hashes:** `_json_bytes` remains sorted, two-space-indented JSON with `allow_nan=False`, a trailing newline, and the same encoding and size limit. Both snapshot helpers hash the final published path only after `_write_json` returns (p05_execute.py:285–288; p05_torch_execute.py:575–578). The installed requests still use that same serializer for both the live request and retained snapshot. Torch revalidates the original request as parsed JSON, alongside retained snapshot receipts (476–481), and observes its newly written live request (755). No writer-induced byte or digest mismatch was found.
+- **Permissions:** The new temporary is opened with `0o666` subject to umask, matching the previous `Path.open("xb")` creation mode. Atomic replacement still publishes that newly created file. Output/work roots and the installed request directory remain private (`0o700`) in both consumers. No caller depends on a changed mode or a temporary file surviving failure.
+- **Timeout and error closeout:** Each command appends one report row, checkpoints, calls `run_bounded` once, checkpoints its returned result, then validates outcome/cleanup (p05_execute.py:290–302; p05_torch_execute.py:580–591). The writer propagates the original write/publication failure. Existing catch/finally paths still mark failure and attempt the final report (p05_execute.py:591–618; p05_torch_execute.py:785–818). Owned-temporary cleanup permits that later report attempt after a transient pre-publication failure. A failed checkpoint does not invoke a launch retry.
+- **No duplicated launches:** Neither writer callsite nor the enclosing error/closeout branches replay a command. Torch's copied-packet validation checks prior observations and dispatch counts, preserving its zero-additional-launch treatment of copied evidence (p05_torch_execute.py:491–499, 539–542, 781–783). The extra direct report checkpoint before bundle validation introduces no process launch.
+
+## Verification boundary
+
+Static compatibility review only. No source edits, test suites, builds, native workloads, toolchain actions, commits, or pushes were performed. No concrete suspicion requiring a small executable reproducer arose. This review does not claim runtime qualification or broader filesystem-adversary guarantees.

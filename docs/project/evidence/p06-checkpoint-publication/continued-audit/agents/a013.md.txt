@@ -1,0 +1,63 @@
+# Agent 013 — checkpoint directory permissions
+
+## Implemented change
+
+Working tree based on `ba88572af0bea1e355af08038abcc1f62773a438`; original baseline
+is `858090410a992756808256ace90d36b9b3b88dd3`.
+
+Changed only these repository files:
+
+- `ci/project/p02_matrix.py`: open the directory anchor with Linux
+  `O_PATH | O_DIRECTORY` instead of `O_RDONLY | O_DIRECTORY`. A short comment
+  explains why directory listing permission is unnecessary.
+- `ci/project/test_checkpoint_directory_access.py`: two real-filesystem tests
+  cover initial creation and replacement in a mode-`0300` directory, and the
+  actual `p04_ci_prepare.prepare()` consumer writing its blocked receipt into
+  an existing mode-`0300` evidence directory.
+
+The production change leaves the file creation flags, inode identities,
+directory-relative operations, retained descriptors, ownership checks and
+cleanup paths unchanged. It adds no fallback, retry or permission changes.
+The tests check that mode `0300` remains unchanged during publication and
+restore the original mode in `finally`, including on test failures.
+
+## Regression reproduction
+
+On this Linux host running as unprivileged uid/gid `1000`, ran the new test
+module before changing the writer:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=ci/project python3 -m unittest -v test_checkpoint_directory_access
+```
+
+Exit `1`: both test methods encountered `PermissionError: [Errno 13]` at the
+old directory open. The direct test's two subtests each errored and its final
+file-inventory assertion failed because no checkpoint existed; the real P04
+consumer also errored. The mode-restoration cleanup completed.
+
+## Validation after change
+
+From `/tmp/ai-gpu-2bfab0261c05/repo`:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=ci/project python3 -m unittest -v test_checkpoint_write_failures test_checkpoint_ownership test_p06_checkpoint_run_recovery test_p06_checkpoint_input_recovery test_p06_checkpoint_prepare_build test_checkpoint_directory_access
+git diff --check
+```
+
+Both commands exited `0`. The focused unittest invocation ran **24 tests in
+1.692 seconds**, with zero failures, errors or skips. The P04 test observed the
+expected blocked receipt with reason `invalid source revision`,
+`native_execution: not_run`, and `tools_relocated: false`.
+
+Tested source SHA-256:
+
+- `ci/project/p02_matrix.py`:
+  `c7544854b1fda853fad7c382e6e51605e812f5a377128fa6198f4da8662d7432`
+- `ci/project/test_checkpoint_directory_access.py`:
+  `3fc9d9b3ccb7ffd6b0b1eef0580d0a720a07c0bef95db7f0ef64524da4f2a5e2`
+
+These are focused host development checks, not full governance qualification or
+native GPU evidence. Permission-regression sensitivity was established on this
+unprivileged host; a privileged root process can bypass discretionary read
+permissions. No broad governance, builds, native workloads, commits or pushes
+were run. Concurrent files owned by other agents were not modified.

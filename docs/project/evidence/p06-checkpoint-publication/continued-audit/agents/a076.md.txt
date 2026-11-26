@@ -1,0 +1,118 @@
+# A076 — Encrypted retention boundary review
+
+**No concrete supported-contract blocker found.** This is a read-only review
+of published source `30b2e8ca69fba47646392c0cf6650cbb75155843`. The nine recorded
+source/document/test files match that commit and are unchanged from base
+`858090410a992756808256ace90d36b9b3b88dd3`. The published-source checkout is clean.
+The accompanying `a076-encrypted-retention-identities.json` records byte lengths
+and SHA-256 values. No test bodies, encryption, decryption, restoration, native
+work, key generation, secret queries, uploads or source edits were performed.
+
+## Recipient and encryption scope
+
+`p06_qualified_warm_encrypt.py:82–104` accepts exactly one canonical lowercase
+X25519 `age1` public address. It checks the fixed alphabet/length, 32-byte
+encoding padding and Bech32 checksum. This is syntax/encoding validation,
+not proof that the intended reviewer controls the matching private identity.
+Hosted startup validates that address and performs an actual trusted-age
+recipient probe before native work (`p06_qualified_warm_hosted.py:592–603`).
+The guide requires the owner to verify the matching private identity outside
+Actions (`p06-hosted-warm-guide.md:114–119`). No private identity is an Actions
+input, and SSH/plugin/passphrase recipients are outside this route.
+
+The encryptor streams the selected private tree through the explicitly trusted
+age executable; it writes no intermediate plaintext tar. The encrypted tar
+includes a canonical manifest and the complete selected `private/` tree,
+including hidden regular files and empty directories. Framing/length checks
+catch accidental plaintext or an unexpected executable's output; they do not
+cryptographically authenticate an otherwise untrusted age binary
+(`p06_qualified_warm_encrypt.py:490–506, 625–666`). Input and output bounds and the
+retention reserve remain separate from native admission's 15 GiB disk gate.
+
+## Public output and release gate
+
+The public summary has exactly ten fields: `schema_version`, `contract_id`,
+`expected_revision`, `outcome`, `encryption_passed`, `file_count`,
+`directory_count`, `input_bytes`, `ciphertext_bytes`, and `ciphertext_sha256`
+(`p06_qualified_warm_encrypt.py:562–569`). These are retention identities and
+counts. They do not report native process/launch counts, completeness, replay
+qualification or performance acceptance, and expose no plaintext inventory or
+private diagnostic content.
+
+Before publication, the encryptor requires successful bounded age completion,
+completed process cleanup, stable selected inputs/tool identity, and a reread
+of the ciphertext. After the no-clobber public pair commits, it checks each
+named output's owned inode, regular-file status, exact byte count and SHA-256,
+including descriptor/named-path stability (`p06_qualified_warm_encrypt.py:517–559,
+658–704`). A committed pair can survive a subsequent interruption; its mere
+existence does not establish a successful encryption invocation or durable
+hosted delivery.
+
+The hosted gate independently requires exactly the two allowed public files,
+reconstructs the expected summary from the selected retention inventory,
+checks actual ciphertext size/hash, and requires exact equality with the
+encryption command's terminal summary (`p06_qualified_warm_hosted.py:430–446`).
+Only successful execution of that gate sets `encrypted_retention_ready`.
+The workflow's always-run upload step requires that output and enumerates only
+`qualified-warm-retention.tar.age` and `encryption-summary.json`
+(`p06_qualified_warm_hosted.py:675–687, 716–723`;
+`.github/workflows/p06-qualified-warm.yml:88–100`). A successful artifact upload
+must still be observed before claiming durable delivery.
+
+## Complete, partial and unresolved attempts
+
+`writers_finished` checks exact Boolean launch disposition, completed cleanup,
+finished acquisition/supervisor receipts and the started child-command
+receipts. Unknown starts, missing/unreadable/unfinished receipts or unresolved
+cleanup fail the observation and block packaging/encryption
+(`p06_qualified_warm_hosted.py:449–480, 649–679`). This is checked operational
+evidence, not an OS-level proof that every possible writer is absent.
+
+Complete native success selects `success` packaging; a finished failed attempt
+selects `partial`. Even failed packaging may leave selected private bytes that
+can be encrypted after all writers finish. Hosted overall success still
+requires native success **and** successful packaging **and** successful
+encryption. Therefore valid encrypted partial retention may upload while the
+attempt and job remain failed (`p06_qualified_warm_hosted.py:665–687`).
+
+The complete original has exactly the `dependency-build/` and `qualified-warm/`
+roots; the default complete reader rejects the partial layout. An explicitly
+selected partial subtree is subject to every original semantic check and
+cannot gain completeness merely through a prefix. Packaging failure may
+preserve only already-copied bytes; encryption cannot establish that every
+failure original was captured (`p06-hosted-warm-guide.md:239–301`).
+
+The sibling `public.PRIVATE/`, raw originals, plaintext logs, final private
+attempt receipt and other unselected runner-local inputs must stay private.
+Their presence on an ephemeral runner is not durable retention. The selected
+encrypted tree and the excluded private files are explicitly documented
+(`p06-hosted-warm-guide.md:288–301, 357–381`).
+
+## Required private restoration and independent native replay
+
+The reviewer first checks downloaded ciphertext identity and the actual
+execution revision, then decrypts privately with the matching held identity.
+Nonzero decryption exits can leave partial plaintext; that output is rejected
+as a usable archive. Successful age decryption alone is insufficient: the
+reviewer records a separate plaintext tar digest and uses trusted reader code
+to inspect the complete manifest/member inventory before restoration into a
+fresh absent private directory (`p06-hosted-warm-guide.md:399–507`).
+
+An optional encryption summary is only a consistency input to the plaintext
+reader. That reader does not re-read ciphertext or verify its relationship to
+plaintext. Its explicit output leaves `origin_authenticated`, native,
+performance and phase acceptance false and records no native execution
+(`p06_qualified_warm_retention.py:389–445`; restore false-claim constants at
+`p06_qualified_warm_restore.py:71–83`).
+
+A separate complete native original replay must then reconcile the original
+57 native command receipts, 24 process transcripts and all frozen source,
+dependency, prerequisite and numerical obligations. A valid complete replay can
+still have an unfavorable performance hypothesis. Retention, restoration and
+replay do not turn a failed or partial attempt into acceptance
+(`p06-hosted-warm-guide.md:729–758`).
+
+Existing recipient/publication/interruption/partial-retention and hosted
+writer/public-output tests were inspected for these boundaries, not run by
+this audit. No claim about actual native encryption, delivery or restoration
+follows from this source review.
