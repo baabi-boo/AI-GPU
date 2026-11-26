@@ -10,6 +10,47 @@ launches. The [qualification audit](p06-qualification-audit.md),
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
 scope and new validation. P06-A02/A03 remain open.
 
+**Checkpoint publication recovery is implemented; the qualified warm experiment
+remains unstarted.** The [current audit](p06-checkpoint-publication-audit.md),
+[publication contract](../designs/checkpoint_publication_v1.md) and
+[evidence packet](evidence/p06-checkpoint-publication/README.md) record cleanup
+of only the writer's own failed temporary, preservation of committed reports
+and first failures, and write/search-only directory compatibility. Existing
+failure finalization can now publish after recoverable mid-write errors without
+repeating child work. The Python launcher also forwards PID-directed `SIGTERM`
+to its direct child and waits for its actual exit, preserving environment checks,
+exit-status mapping and the previous signal handler. Historical P02/P05 source
+references retain their exact old bytes; no old execution is rebound to new code.
+
+The final combined invocation passed **258 unique tests and 752 subtests**,
+including all **32 new methods**, with zero failures, errors or skips. All 122
+recorded local source files remained byte-identical during that run; process-state
+observations were unchanged. Canonical discovery finds **5,547 unique IDs**:
+32 additions, no removals, and preserved relative order of all 5,515 base IDs.
+These are source-scoped development checks; discovery does not execute tests.
+
+The exact base `858090410a992756808256ace90d36b9b3b88dd3` has a successful strict
+[governance run 45762183368](https://github.com/baabi-boo/AI-GPU/actions/runs/45762183368)
+and independent original replay: **5,515 tests, 38,655 successful subtests and
+55,200 events**, with zero failures, errors or skips. The original SHA-256 is
+`21c1c6bda5e8513d99642dd12d5db8c52d4b2bcae8726119b12236e7708fc74e`.
+This qualifies that base only. Each later selected revision needs its own
+complete strict invocation and independent original replay before native work.
+
+Preserve the **69 measurement sources, 21 dependency descriptors**, proofs,
+goldens, resource thresholds and frozen **24-process, 792-launch, 25,344-word**
+population. The private control archive and public age recipient were not
+supplied to this continuation, and its temporary checkout does not meet the
+unchanged **15 GiB free-disk and 4 GiB available-memory** native admission gates.
+The next action remains one admitted complete warm attempt, encrypted complete
+or explicitly partial retention, independent native replay and the frozen
+performance decision. P06/P06-T01 remain `in_progress`; P06-A02/A03 remain open
+and P01 vendor integration remains blocked. Repeated interruption, unavailable
+ownership identity and persistent filesystem failure remain closeout limits.
+
+**Earlier closeout-reliability continuation (historical).** The following
+paragraphs retain that continuation's original source and evidence scope.
+
 **Closeout reliability fixes are implemented; the qualified warm experiment
 remains unstarted.** The [current audit](p06-closeout-reliability-audit.md) and
 [evidence packet](evidence/p06-closeout-reliability/README.md) record protected

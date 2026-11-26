@@ -9,6 +9,35 @@ remain unassigned until an actual owner is identified.
 
 ## Start here: P06-T01 explicit qualified warm route
 
+**Next actual development experiment:** one complete qualified warm attempt
+using the selected published revision's own strict governance and independent
+[original replay](governance-artifact-replay.md). The
+[checkpoint publication audit](p06-checkpoint-publication-audit.md) and
+[evidence packet](evidence/p06-checkpoint-publication/README.md) record the shared
+writer's mid-write recovery, preserved ownership and directory compatibility.
+The launcher also retains ownership through PID-directed `SIGTERM`. Final
+focused integration passed **258 tests / 752 subtests**; discovery finds **5,547
+unique IDs**, including 32 new methods. Focused checks and discovery do not
+qualify a complete changed revision.
+
+The starting revision `858090410a992756808256ace90d36b9b3b88dd3` now has a
+successful strict governance original and independent replay, covering **5,515
+tests, 38,655 subtests and 55,200 events**. Preserve that exact historical scope;
+it cannot qualify changed source.
+
+Verify exact private control delivery and the public age recipient, then use the
+[hosted route](p06-hosted-warm-guide.md) on a runner meeting the unchanged
+**15 GiB free-disk / 4 GiB available-memory** gates. Private execution inputs
+were not supplied to this continuation. Preserve all **69 measurement sources,
+21 dependency descriptors**, proofs, goldens and the **24-process, 792-launch,
+25,344-word** population. Keep the separate dependency/four-process prerequisites,
+encrypted complete or explicitly partial retention and independent complete
+native replay before the frozen performance decision. P06/P06-T01 remain
+`in_progress`, P06-A02/A03 remain open and P01 vendor integration remains blocked.
+
+**Earlier closeout-reliability handoff (historical).** The following text
+preserves that continuation's source, results and then-existing limitation.
+
 **Next actual development experiment:** one complete qualified warm attempt,
 after the selected published revision passes its own full strict governance and
 independent [governance-original admission](governance-artifact-replay.md).

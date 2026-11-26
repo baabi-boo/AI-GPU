@@ -1,0 +1,92 @@
+# Checkpoint publication and failure recovery audit
+
+## Development decision
+
+The audited starting revision is
+`858090410a992756808256ace90d36b9b3b88dd3`. The preceding closeout work correctly
+entered protected execution before initial report writes, but an interrupted
+temporary write could still prevent its existing finalization from saving the
+failure. This continuation repairs that shared publication boundary.
+
+The next native development experiment remains the complete qualified warm
+attempt: **24 processes, 792 launches and 25,344 checked FP32 words**. It has not
+been executed by this continuation. P06/P06-T01 remain `in_progress`, P06-A02/A03
+remain open, and P01 vendor integration remains blocked.
+
+## Reproduced defect
+
+The old shared writer exclusively created `<report>.tmp`, then wrote, flushed,
+synchronized and replaced the final report. A write, flush, synchronization or
+replacement error left the temporary entry behind. The caller's separate final
+failure write encountered that entry and raised `FileExistsError`.
+
+A synthetic qualified-warm supervisor reproduction reached this failure after
+all three child stages had completed. Its committed supervisor report remained
+`running` with unresolved native disposition, even though the completed child
+report was available. The hosted writer-completion observation therefore
+blocked packaging and encrypted retention. No native process was used in that
+reproduction.
+
+## Implemented behavior
+
+The [publication contract](../designs/checkpoint_publication_v1.md) defines the
+shared writer's behavior. It retains the parent-directory handle and the created
+temporary file's descriptor and inode identity through publication or cleanup.
+It removes only a still-owned temporary after failure, preserves the first
+exception through cleanup, and leaves the last committed report unchanged until
+atomic replacement succeeds. A later explicit finalization write can then
+publish the failed attempt without repeating child work.
+
+The existing encoding, trailing newline, 16 MiB bound, temporary filename and
+receipt schemas remain unchanged. Pre-existing or replaced temporary entries
+are not adopted. Cleanup is best effort; uncatchable termination, unavailable
+ownership identity, repeated interruption and persistent filesystem failure can
+still prevent final publication. Directory synchronization and a crash-recovery
+journal are outside this contract.
+
+Independent consumer review also identified a permission regression in the
+initial directory-handle implementation: a read-only directory open imposed a
+new read-permission requirement on write/search-only evidence directories.
+The correction uses the Linux directory path handle, retaining anchored
+operations without widening directory permissions. Its regression includes the
+actual P04 preparation consumer.
+
+## Verification scope
+
+The [evidence packet](evidence/p06-checkpoint-publication/README.md) retains
+independent reviews, negative controls against the explicit starting revision,
+focused integration results and source identities. The controls exercise real
+temporary files and descriptors. Producer integration uses synthetic child
+records, with no native or network execution.
+
+Checks cover mid-write failures with and without a prior report; exclusive
+collisions and foreign replacements; descriptor creation, cleanup and reuse;
+renamed directories; unchanged encoding and limits; supervisor, acquisition,
+preparation and builder finalization; and exact preservation of already
+observed child work. Failed publication remains a failed attempt. A completed
+synthetic child record does not become native or performance evidence.
+
+The shared helper is outside the frozen 69-file measurement projection. The
+measurement sources, 21 dependency descriptors, proofs, goldens, resource
+thresholds, sample population and performance predicates remain unchanged.
+Historical originals and their evidence scopes remain preserved.
+
+## Next bounded action
+
+Require the selected published revision's own complete strict governance result
+and independently reconciled original before native admission. Focused tests,
+an earlier revision's passing CI and read-only code review do not substitute
+for that requirement.
+
+Verify private delivery of the exact historical control archive and the public
+age recipient, then use a runner that actually meets the unchanged **15 GiB
+free-disk and 4 GiB available-memory** gates. A separate temporary checkout
+allowed this source work without deleting earlier workspaces; its capacity does
+not meet the native disk reserve. Private execution inputs were not supplied
+to this continuation.
+
+Preserve the dependency and four-process prerequisites, complete or explicitly
+partial encrypted retention, and independent complete native replay before the
+frozen performance decision. Follow the
+[qualified warm handoff](p06-qualified-warm-handoff.md) and
+[hosted operator guide](p06-hosted-warm-guide.md).

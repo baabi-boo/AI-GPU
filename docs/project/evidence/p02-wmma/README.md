@@ -1,6 +1,15 @@
 # P02 ordinary WMMA processor evidence
 
-**The original ordinary WMMA matrix and its corrected-host replay both pass.** The separate [canonical acceptance record](acceptance.json) records the independent P02-A02 decision; this packet does not close P02. [summary.json](summary.json) binds the completed results, two source identities, preserved failures and scope limits. Apply the [acceptance policy](../../acceptance.md) and [evidence contract](../README.md).
+**The original ordinary WMMA matrix and its corrected-host replay both pass.** The [acceptance record with the retained helper reference](acceptance-retained-source.json) preserves the independent P02-A02 decision; this packet does not close P02. [summary.json](summary.json) binds the completed results, two source identities, preserved failures and scope limits. Apply the [acceptance policy](../../acceptance.md) and [evidence contract](../README.md).
+
+The [original acceptance record](acceptance.json) remains byte-for-byte unchanged.
+After the live shared writer received a checkpoint-publication repair, the
+corrected record points its helper artifact to the
+[exact retained prior bytes](retained-source/p02_matrix.py.txt), keeping the same
+SHA-256. [Source-retention provenance](source-retention.json) binds the original
+record and retrieval. The original execution source, commands, exits, numerical
+scope and all existing artifact digests remain unchanged. This reference
+maintenance does not qualify the changed helper or add a native execution.
 
 ## Source and build identity
 

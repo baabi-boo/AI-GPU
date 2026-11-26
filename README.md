@@ -23,32 +23,39 @@ configuration; it does not establish a general PyTorch device backend or physica
 accelerator performance.
 
 **Current work: P06-T01 — execute the qualified warm-workspace experiment.**
-The [closeout reliability continuation](docs/project/p06-closeout-reliability-audit.md)
-and [evidence packet](docs/project/evidence/p06-closeout-reliability/README.md)
-cover protected first checkpoints, cooperative CLI cancellation, hosted
-nonstart and final-observation accounting, and encrypted-output verification.
+The [checkpoint publication continuation](docs/project/p06-checkpoint-publication-audit.md)
+and [evidence packet](docs/project/evidence/p06-checkpoint-publication/README.md)
+repair interrupted report writes that previously left an exclusive temporary
+file blocking final closeout. The shared writer now cleans only its own failed
+temporary, preserves the last committed report and original failure, and keeps
+write/search-only directory compatibility. Existing finalization can record
+failure without repeating child work. The installed Python launcher also forwards
+PID-directed `SIGTERM` to its direct child and reaps that child before returning,
+with existing exit-status and verified-environment behavior preserved.
+
+Final focused integration passed **258 tests and 752 subtests**, including all
+**32 new methods**, with zero failures, errors or skips and stable source/process
+state. Canonical discovery finds **5,547 unique test IDs**, exactly 32 additions and no
+removals from the independently replayed base. Discovery is not execution;
+these focused results do not replace the published revision's own strict
+qualification and original replay.
+
 The frozen experiment remains **unstarted: 24 processes, 792 launches and
-25,344 checked FP32 words**. The final focused integration passed **228 tests**,
-including all 44 new methods, with stable source identities and zero failures,
-errors or skips. Discovery collects **5,515 canonical test IDs**. These checks
-do not qualify the changed revision; its own strict governance result and
-independent original replay remain required.
+25,344 checked FP32 words**. All **69 frozen measurement sources, 21 dependency
+descriptors**, proofs, goldens, resource gates and performance predicates remain
+unchanged. P06-A02/A03 remain open and P01 vendor integration remains blocked.
+Cleanup remains best effort under repeated interruptions, unknown ownership or
+persistent filesystem failure; the change makes no crash-durability promise.
 
-Closeout still requires a functioning final write: a mid-write fault can leave
-the existing exclusive `report.json.tmp` or its stage-specific counterpart and
-prevent final report publication.
-No report retry or ownership weakening is introduced. Preserve all **69 frozen
-measurement sources, 21 dependency descriptors**, proofs, goldens and performance
-criteria. P06-A02/A03 remain open and P01 vendor integration remains blocked.
-
-Next, qualify the selected published revision, verify or configure the exact
-private control archive and public age recipient, and execute one complete
-attempt on a runner admitted by the unchanged **15 GiB free-disk and 4 GiB
-available-memory** gates. Those operational inputs were not supplied to this
-session; live provider secrets were not inspected. Retain complete or explicitly
-partial originals through encrypted delivery and independently replay a complete
-native original before the frozen performance decision. Follow the
+Next, qualify the selected published revision, verify the exact private control
+archive and public age recipient, and execute one complete attempt on a runner
+admitted by the unchanged **15 GiB free-disk and 4 GiB available-memory** gates.
+Those private inputs were not supplied to this continuation. Retain complete or
+explicitly partial originals through encrypted delivery and independently replay
+a complete native original before the frozen performance decision. Follow the
 [qualified warm handoff](docs/project/p06-qualified-warm-handoff.md).
+The [preceding closeout audit](docs/project/p06-closeout-reliability-audit.md)
+retains its historical results and the now-addressed temporary-file limitation.
 
 ### Earlier launch-readiness continuation (historical)
 
