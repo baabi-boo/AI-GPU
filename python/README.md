@@ -75,6 +75,16 @@ and all artifacts itself and checks loaded project-library paths. It retains
 the selected runtime for process life. Compatible system ELF libraries are
 still required; the launcher is not a process/filesystem sandbox.
 
+The launcher supervises its direct child until that child exits. A `SIGTERM`
+sent to the launcher PID is forwarded to the child, including a request received
+while child startup is completing. The launcher waits for the child's actual
+exit and returns its ordinary status, or `128 + signal` when a signal terminates
+the child. A child that handles or ignores `SIGTERM` continues until it chooses
+to exit; the launcher adds no execution deadline or forced escalation. This
+does not supervise descendant processes or provide cleanup after `SIGKILL`.
+The launcher entry point must run on Python's main thread, and restores the
+previous `SIGTERM` handler when it returns or fails.
+
 The hosted extension records
 `RUNPATH=/opt/hostedtoolcache/Python/3.12.14/x64/lib`; `libsimx.so` retains its
 original Ramulator search paths. The installed checks establish the named

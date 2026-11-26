@@ -6,8 +6,10 @@ from __future__ import annotations
 import argparse
 import os
 from pathlib import Path
+import signal
 import subprocess
 import sys
+import threading
 
 from . import _bundle
 
@@ -42,6 +44,41 @@ def verified_environment(bundle_root, *, environment=None):
     return environment
 
 
+def _run_child(command, *, env):
+    """Wait for the direct child while forwarding PID-directed SIGTERM."""
+    if threading.current_thread() is not threading.main_thread():
+        raise RuntimeError("the bundle launcher must run on the main thread")
+    child = None
+    terminate = False
+
+    def request_termination(signum, frame):
+        nonlocal terminate
+        terminate = True
+
+    previous = signal.signal(signal.SIGTERM, request_termination)
+    try:
+        child = subprocess.Popen(command, env=env)
+        while True:
+            if terminate:
+                terminate = False
+                child.send_signal(signal.SIGTERM)
+            try:
+                # Polling keeps signal handlers out of Popen's wait/reap state.
+                return child.wait(timeout=0.1)
+            except subprocess.TimeoutExpired:
+                pass
+    except BaseException:
+        if child is not None:
+            for cleanup in (child.kill, child.wait):
+                try:
+                    cleanup()
+                except BaseException:
+                    pass
+        raise
+    finally:
+        signal.signal(signal.SIGTERM, previous)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--bundle", required=True, help="directory matching this wheel's native pin")
@@ -56,12 +93,12 @@ def main(argv=None):
         if not script.is_file():
             raise _bundle.BundleError("the Python script must be a regular file")
         environment = verified_environment(args.bundle)
-        result = subprocess.run([sys.executable, "-I", "-B", str(script), *command[1:]],
-                                env=environment, check=False)
+        returncode = _run_child([sys.executable, "-I", "-B", str(script), *command[1:]],
+                               env=environment)
     except (_bundle.BundleError, ImportError, OSError, RuntimeError) as error:
         print("vortex_ai.launch: " + str(error), file=sys.stderr)
         return 2
-    return result.returncode if result.returncode >= 0 else 128 - result.returncode
+    return returncode if returncode >= 0 else 128 - returncode
 
 
 if __name__ == "__main__":

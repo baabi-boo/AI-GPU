@@ -75,8 +75,7 @@ class LauncherTestCase(unittest.TestCase):
         self.enterContext(mock.patch.object(sys, "stderr", self.stderr))
 
     def run_main(self, *, command=None, returncode=0):
-        result = subprocess.CompletedProcess([], returncode)
-        with mock.patch.object(self.launch.subprocess, "run", return_value=result) as start:
+        with mock.patch.object(self.launch, "_run_child", return_value=returncode) as start:
             code = self.launch.main(self.command if command is None else command)
         return code, start
 
@@ -222,13 +221,13 @@ class LauncherStartupTests(LauncherTestCase):
             for relative in bundle.ROLES.values():
                 self.assertIn(relative, events)
             events.append("child")
-            return subprocess.CompletedProcess(args[0], 0)
+            return 0
 
         self.native.build_info.side_effect = identity
         with mock.patch.object(bundle, "read_manifest", side_effect=read_manifest), \
                 mock.patch.object(bundle, "file_record", side_effect=file_record), \
                 mock.patch.object(bundle, "validate_files", side_effect=validate_files), \
-                mock.patch.object(self.launch.subprocess, "run", side_effect=start_child) as start:
+                mock.patch.object(self.launch, "_run_child", side_effect=start_child) as start:
             self.assertEqual(self.launch.main(self.command), 0)
         start.assert_called_once()
         self.assertEqual(events[:2], ["compiled-pin", "manifest"])
@@ -291,15 +290,14 @@ class LauncherStartupTests(LauncherTestCase):
         self.assertEqual(code, 7)
         call = start.call_args
         self.assertEqual(call.args[0], [sys.executable, "-I", "-B", str(self.script.resolve()), *args])
-        self.assertEqual(set(call.kwargs), {"env", "check"})
-        self.assertFalse(call.kwargs["check"])
+        self.assertEqual(set(call.kwargs), {"env"})
         self.assertEqual(call.kwargs["env"]["LD_LIBRARY_PATH"], str(self.fixture.root / "lib"))
 
     def test_missing_script_and_interpreter_modes_are_parser_errors(self):
         prefix = ["--bundle", str(self.fixture.root), "--"]
         for args in ([], ["-c", "print('not allowed')"], ["-m", "module"], ["-"], ["--version"]):
             with self.subTest(args=args):
-                with mock.patch.object(self.launch.subprocess, "run") as start:
+                with mock.patch.object(self.launch, "_run_child") as start:
                     with self.assertRaises(SystemExit) as error:
                         self.launch.main(prefix + args)
                 self.assertEqual(error.exception.code, 2)
@@ -331,13 +329,14 @@ class LauncherStartupTests(LauncherTestCase):
                 start.assert_called_once()
 
     def test_subprocess_start_error_returns_actionable_launcher_failure(self):
-        with mock.patch.object(self.launch.subprocess, "run", side_effect=OSError("cannot start Python")):
+        with mock.patch.object(self.launch.subprocess, "Popen", side_effect=OSError("cannot start Python")):
             self.assertEqual(self.launch.main(self.command), 2)
         self.assertIn("vortex_ai.launch: cannot start Python", self.stderr.getvalue())
 
     def test_real_child_gets_isolated_flags_scrubbed_environment_and_exact_exit_code(self):
         self.script.write_text(
-            "import json, os, sys\n"
+            "import json, os, signal, sys\n"
+            "signal.alarm(5)\n"
             "print(json.dumps({'argv': sys.argv[1:], 'isolated': sys.flags.isolated,\n"
             " 'ignore_environment': sys.flags.ignore_environment,\n"
             " 'no_bytecode': sys.flags.dont_write_bytecode,\n"
@@ -347,21 +346,22 @@ class LauncherStartupTests(LauncherTestCase):
             "raise SystemExit(37)\n", encoding="utf-8")
         os.environ.update(PYTHONPATH="/untrusted/python", PYTHONHOME="/untrusted/home",
                           VORTEX_AI_BUNDLE="/untrusted/build", KEEP="preserved")
-        real_run = subprocess.run
-        observed = []
+        real_popen = subprocess.Popen
+        stdout = self.enterContext(tempfile.TemporaryFile(mode="w+"))
+        stderr = self.enterContext(tempfile.TemporaryFile(mode="w+"))
 
-        def run_child(argv, **kwargs):
-            result = real_run(argv, **kwargs, capture_output=True, text=True, timeout=5)
-            observed.append(result)
-            return result
+        def start_child(argv, **kwargs):
+            return real_popen(argv, **kwargs, stdout=stdout, stderr=stderr)
 
         arguments = ["--request", "literal request", "--output", "literal output"]
-        with mock.patch.object(self.launch.subprocess, "run", side_effect=run_child) as start:
+        with mock.patch.object(self.launch.subprocess, "Popen", side_effect=start_child) as start:
             code = self.launch.main(self.command + arguments)
         self.assertEqual(code, 37)
         start.assert_called_once()
-        self.assertEqual(observed[0].stderr, "")
-        value = json.loads(observed[0].stdout)
+        stderr.seek(0)
+        self.assertEqual(stderr.read(), "")
+        stdout.seek(0)
+        value = json.loads(stdout.read())
         self.assertEqual(value["argv"], arguments)
         self.assertEqual((value["isolated"], value["ignore_environment"], value["no_bytecode"]), (1, 1, 1))
         self.assertFalse(value["native_imported"])
