@@ -99,20 +99,24 @@ def _read_regular(root, relative, *, limit, retain):
     path = _relative(root, relative)
     try:
         descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_CLOEXEC)
-        with os.fdopen(descriptor, "rb") as stream:
-            before = os.fstat(stream.fileno())
-            _require(stat.S_ISREG(before.st_mode) and 0 < before.st_size <= limit,
-                     "invalid file type or size: " + relative)
-            digest = hashlib.sha256()
-            count = 0
-            chunks = [] if retain else None
-            while chunk := stream.read(1024 * 1024):
-                count += len(chunk)
-                _require(count <= limit, "file grew beyond limit: " + relative)
-                digest.update(chunk)
-                if retain:
-                    chunks.append(chunk)
-            after = os.fstat(stream.fileno())
+        try:
+            # Keep descriptor ownership even if stream construction fails.
+            with os.fdopen(descriptor, "rb", closefd=False) as stream:
+                before = os.fstat(stream.fileno())
+                _require(stat.S_ISREG(before.st_mode) and 0 < before.st_size <= limit,
+                         "invalid file type or size: " + relative)
+                digest = hashlib.sha256()
+                count = 0
+                chunks = [] if retain else None
+                while chunk := stream.read(1024 * 1024):
+                    count += len(chunk)
+                    _require(count <= limit, "file grew beyond limit: " + relative)
+                    digest.update(chunk)
+                    if retain:
+                        chunks.append(chunk)
+                after = os.fstat(stream.fileno())
+        finally:
+            os.close(descriptor)
         current = path.stat()
     except OSError as error:
         raise BundleError("cannot read required file: " + relative) from error

@@ -88,19 +88,24 @@ def _consume(root, relative, *, limit, collect=False, sink=None):
     chunks = [] if collect else None
     digest = hashlib.sha256()
     count = 0
-    with os.fdopen(os.open(path, flags), "rb") as stream:
-        before = os.fstat(stream.fileno())
-        require(stat.S_ISREG(before.st_mode) and 0 <= before.st_size <= limit,
-                "required file is nonregular or oversized: " + relative)
-        while chunk := stream.read(1024 * 1024):
-            count += len(chunk)
-            require(count <= limit, "required file grew beyond its limit: " + relative)
-            digest.update(chunk)
-            if collect:
-                chunks.append(chunk)
-            if sink is not None:
-                sink.write(chunk)
-        after = os.fstat(stream.fileno())
+    descriptor = os.open(path, flags)
+    try:
+        # Keep descriptor ownership even if stream construction fails.
+        with os.fdopen(descriptor, "rb", closefd=False) as stream:
+            before = os.fstat(stream.fileno())
+            require(stat.S_ISREG(before.st_mode) and 0 <= before.st_size <= limit,
+                    "required file is nonregular or oversized: " + relative)
+            while chunk := stream.read(1024 * 1024):
+                count += len(chunk)
+                require(count <= limit, "required file grew beyond its limit: " + relative)
+                digest.update(chunk)
+                if collect:
+                    chunks.append(chunk)
+                if sink is not None:
+                    sink.write(chunk)
+            after = os.fstat(stream.fileno())
+    finally:
+        os.close(descriptor)
     current = _bundle._relative(root, relative).stat(follow_symlinks=False)
     require(_stamp(before) == _stamp(after) == _stamp(current) and count == before.st_size,
             "required file changed while reading: " + relative)

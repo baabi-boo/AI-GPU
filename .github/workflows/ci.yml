@@ -258,6 +258,8 @@ jobs:
       CELL: ${{ matrix.category }}-${{ matrix.driver }}-${{ matrix.xlen }}${{ matrix.shards && format('-{0}of{1}', matrix.shard, matrix.shards) || '' }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: Initialize model qualification workspace
         if: matrix.category == 'p04_mlp'
         run: |
@@ -391,8 +393,25 @@ jobs:
     if: always()
     steps:
       - name: Gate
+        shell: bash
+        env:
+          PLAN_RESULT: ${{ needs.plan.result }}
+          PLAN_RUN: ${{ needs.plan.outputs.run }}
+          SETUP_RESULT: ${{ needs.setup.result }}
+          BUILD_RESULT: ${{ needs.build.result }}
+          TESTS_RESULT: ${{ needs.tests.result }}
         run: |
-          if ${{ contains(needs.*.result, 'failure') }}; then
-            echo "A required job failed."; exit 1
-          fi
-          echo "CI complete (tests: ${{ needs.tests.result }})."
+          set -euo pipefail
+          case "$PLAN_RESULT:$PLAN_RUN:$SETUP_RESULT:$BUILD_RESULT:$TESTS_RESULT" in
+            success:true:success:success:success)
+              echo "CI complete (tests: success)."
+              ;;
+            success:false:skipped:skipped:skipped)
+              echo "CI complete (no test cells planned)."
+              ;;
+            *)
+              printf '::error::Unexpected CI results: plan=%s run=%s setup=%s build=%s tests=%s\n' \
+                "$PLAN_RESULT" "$PLAN_RUN" "$SETUP_RESULT" "$BUILD_RESULT" "$TESTS_RESULT"
+              exit 1
+              ;;
+          esac

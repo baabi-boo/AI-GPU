@@ -1,0 +1,57 @@
+{
+  "assignment": "a013",
+  "checks": [
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "ci/project/check_project.py"
+      ],
+      "elapsed_seconds": 2.612841791000392,
+      "exit_code": 0,
+      "log": "check-project.log"
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-B",
+        "ci/project/check_baseline_packets.py"
+      ],
+      "elapsed_seconds": 0.17009239800245268,
+      "exit_code": 0,
+      "log": "check-baseline-packets.log"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "elapsed_seconds": 0.011049705994082615,
+      "exit_code": 0,
+      "log": "git-diff-check.log"
+    }
+  ],
+  "cwd": "/tmp/ai-gpu-b4f42b8a9d4b/repo",
+  "ended_utc": "2026-11-26T09:06:22.150732+00:00",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "ci/project"
+  },
+  "head_after": "30b2e8ca69fba47646392c0cf6650cbb75155843",
+  "head_before": "30b2e8ca69fba47646392c0cf6650cbb75155843",
+  "outcome": "pass",
+  "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "resource_failure": false,
+  "schema_version": 1,
+  "scope": "One source-scoped sequential focused host suite and metadata checks; no strict governance or native execution.",
+  "source_changes_during_checks": [],
+  "source_snapshot_count": 12,
+  "started_utc": "2026-11-26T09:05:30.267375+00:00",
+  "suite_command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=ci/project python -B /tmp/ai-gpu-b4f42b8a9d4b/a013-run.py",
+  "test_result": "focused-result.json",
+  "tmp_free_final_bytes": 1676746752,
+  "tmp_free_minimum_observed_bytes": 1671655424,
+  "tmp_reserve_bytes": 1073741824,
+  "tmp_sampling": "Before and after each test, each reported subtest, and each metadata command."
+}

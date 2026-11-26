@@ -1,0 +1,102 @@
+{
+  "base_revision": "30b2e8ca69fba47646392c0cf6650cbb75155843",
+  "workflow_sha256": {
+    "base": "c151c36e48dcdb6161dc5006744a29189389508e4297d7ffa2eae4fb0a8bf576",
+    "current": "71e8cd441bcc27fee7517f1d829c2712a326e558bfbeea056c46ce3d318fa27f"
+  },
+  "cases": [
+    {
+      "case": "plan_cancelled",
+      "environment": {
+        "PLAN_RESULT": "cancelled",
+        "PLAN_RUN": "",
+        "SETUP_RESULT": "skipped",
+        "BUILD_RESULT": "skipped",
+        "TESTS_RESULT": "skipped"
+      },
+      "expected_success": false,
+      "runs": {
+        "base": {
+          "returncode": 0,
+          "stdout": "CI complete (tests: skipped).\n",
+          "stderr": ""
+        },
+        "current": {
+          "returncode": 1,
+          "stdout": "::error::Unexpected CI results: plan=cancelled run= setup=skipped build=skipped tests=skipped\n",
+          "stderr": ""
+        }
+      }
+    },
+    {
+      "case": "setup_cancelled",
+      "environment": {
+        "PLAN_RESULT": "success",
+        "PLAN_RUN": "true",
+        "SETUP_RESULT": "cancelled",
+        "BUILD_RESULT": "skipped",
+        "TESTS_RESULT": "skipped"
+      },
+      "expected_success": false,
+      "runs": {
+        "base": {
+          "returncode": 0,
+          "stdout": "CI complete (tests: skipped).\n",
+          "stderr": ""
+        },
+        "current": {
+          "returncode": 1,
+          "stdout": "::error::Unexpected CI results: plan=success run=true setup=cancelled build=skipped tests=skipped\n",
+          "stderr": ""
+        }
+      }
+    },
+    {
+      "case": "build_cancelled",
+      "environment": {
+        "PLAN_RESULT": "success",
+        "PLAN_RUN": "true",
+        "SETUP_RESULT": "success",
+        "BUILD_RESULT": "cancelled",
+        "TESTS_RESULT": "skipped"
+      },
+      "expected_success": false,
+      "runs": {
+        "base": {
+          "returncode": 0,
+          "stdout": "CI complete (tests: skipped).\n",
+          "stderr": ""
+        },
+        "current": {
+          "returncode": 1,
+          "stdout": "::error::Unexpected CI results: plan=success run=true setup=success build=cancelled tests=skipped\n",
+          "stderr": ""
+        }
+      }
+    },
+    {
+      "case": "tests_cancelled",
+      "environment": {
+        "PLAN_RESULT": "success",
+        "PLAN_RUN": "true",
+        "SETUP_RESULT": "success",
+        "BUILD_RESULT": "success",
+        "TESTS_RESULT": "cancelled"
+      },
+      "expected_success": false,
+      "runs": {
+        "base": {
+          "returncode": 0,
+          "stdout": "CI complete (tests: cancelled).\n",
+          "stderr": ""
+        },
+        "current": {
+          "returncode": 1,
+          "stdout": "::error::Unexpected CI results: plan=success run=true setup=success build=success tests=cancelled\n",
+          "stderr": ""
+        }
+      }
+    }
+  ],
+  "limitation": "Local shell reproduction; only the base gate's two GitHub expressions are substituted. No hosted scheduling or GPU execution."
+}

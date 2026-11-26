@@ -10,6 +10,27 @@ launches. The [qualification audit](p06-qualification-audit.md),
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
 scope and new validation. P06-A02/A03 remain open.
 
+**Host preparation and CI completion reliability are repaired.** The
+[current audit](p06-host-reliability-audit.md) and
+[evidence packet](evidence/p06-host-reliability/README.md) describe recursive
+checkout before dependency-cache restoration, a strict aggregate CI completion
+gate, and explicit descriptor ownership in both Python bundle readers. Local
+negative controls reproduce the original failures; focused host checks cover
+the repairs. The starting `30b2e8c` revision's 15 workflows and 43 main-CI jobs
+all completed successfully. Each changed published revision still requires its
+own CI and strict-governance original before native admission.
+
+The native qualified warm experiment remains unstarted. Its 69 measurement
+sources, 21 dependency descriptors, proofs, goldens and fixed 24-process,
+792-launch, 25,344-word population are unchanged. Private control delivery and
+the intended public age recipient were not supplied; the temporary development
+checkout does not meet the 15 GiB native disk reserve. Continue with the
+[qualified warm handoff](p06-qualified-warm-handoff.md) on an admitted runner,
+then retain and independently replay the original before performance evaluation.
+P06-A02/A03 and P01 vendor integration remain open.
+
+**Earlier checkpoint-publication continuation (historical).**
+
 **Checkpoint publication recovery is implemented; the qualified warm experiment
 remains unstarted.** The [current audit](p06-checkpoint-publication-audit.md),
 [publication contract](../designs/checkpoint_publication_v1.md) and

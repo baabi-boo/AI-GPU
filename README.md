@@ -23,6 +23,21 @@ configuration; it does not establish a general PyTorch device backend or physica
 accelerator performance.
 
 **Current work: P06-T01 — execute the qualified warm-workspace experiment.**
+The [host reliability continuation](docs/project/p06-host-reliability-audit.md)
+repairs two supporting paths: cached submodule metadata in CI and descriptor
+ownership during Python bundle verification and production. CI now also requires
+every planned prerequisite to succeed; cancellation or unexpected skipping can
+no longer produce a successful aggregate check. Independent host checks reproduce
+the original defects and exercise the repaired behavior. The
+[evidence packet](docs/project/evidence/p06-host-reliability/README.md) records
+their scope; these changes do not execute or accept the warm experiment.
+
+The frozen measurement sources, native population and resource/performance
+requirements are preserved. The next native action still requires the selected
+revision's own strict governance and original replay, verified private control
+delivery, the intended public age recipient and an adequately provisioned runner.
+
+**Earlier checkpoint-publication continuation (historical).**
 The [checkpoint publication continuation](docs/project/p06-checkpoint-publication-audit.md)
 and [evidence packet](docs/project/evidence/p06-checkpoint-publication/README.md)
 repair interrupted report writes that previously left an exclusive temporary

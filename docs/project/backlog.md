@@ -9,6 +9,19 @@ remain unassigned until an actual owner is identified.
 
 ## Start here: P06-T01 explicit qualified warm route
 
+The [host reliability continuation](p06-host-reliability-audit.md) repairs CI
+cache/checkout metadata, required-job completion semantics and Python
+bundle-reader descriptor ownership. These source and host checks do not change
+the next native task or close P06 acceptance. Require the selected published
+revision's own strict-governance original and independent replay, verified
+private control delivery, the intended public age recipient and the unchanged
+15 GiB disk / 4 GiB memory admission. Execute the frozen 24-process,
+792-launch, 25,344-word population once, retain complete or explicitly partial
+originals, and independently replay complete native evidence before evaluating
+the existing performance predicates.
+
+**Earlier checkpoint-publication handoff (historical).**
+
 **Next actual development experiment:** one complete qualified warm attempt
 using the selected published revision's own strict governance and independent
 [original replay](governance-artifact-replay.md). The
