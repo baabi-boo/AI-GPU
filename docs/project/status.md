@@ -10,6 +10,21 @@ launches. The [qualification audit](p06-qualification-audit.md),
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
 scope and new validation. P06-A02/A03 remain open.
 
+**Archive stream ownership is repaired and resident fault coverage is extended.**
+The [current audit](p06-archive-ownership-audit.md) and
+[evidence packet](evidence/p06-archive-ownership/README.md) record the private
+packer's input/output descriptor leaks, governance-reader cleanup failures,
+independent original-failure controls and host regressions. Resident-workspace
+tests now exercise all three post-create address-query failures for FP16/BF16,
+including successful reuse before explicit close of the failed operation.
+The native trace-ownership investigation remains a separately scoped follow-up;
+no frozen runtime or measurement source changed.
+
+The qualified warm experiment and its private-input, governance and capacity
+prerequisites remain unchanged. P06-A02/A03 and P01 vendor integration stay open.
+
+**Earlier host preparation and CI completion continuation (historical).**
+
 **Host preparation and CI completion reliability are repaired.** The
 [current audit](p06-host-reliability-audit.md) and
 [evidence packet](evidence/p06-host-reliability/README.md) describe recursive

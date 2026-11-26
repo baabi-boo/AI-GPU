@@ -94,6 +94,11 @@ class WorkspaceRuntimeHostTests(unittest.TestCase):
     def test_workspace_and_per_operation_addresses_are_validated_before_enqueue(self):
         self.matrix_group("address_validation")
 
+    def test_each_post_create_resident_address_failure_returns_lease_and_preserves_buffers(self):
+        for dtype in DTYPES:
+            with self.subTest(dtype=dtype):
+                self.group("resident_address_rollback", "reusable_single_tile", dtype)
+
     def test_every_partial_submission_preserves_primary_and_lease_until_drain(self):
         self.matrix_group("partial_rollback")
 

@@ -1,0 +1,91 @@
+test_body_error_survives_consuming_stream_close_error (test_governance_archive_input_ownership.GovernanceArchiveInputOwnershipTests.test_body_error_survives_consuming_stream_close_error) ... ERROR
+test_fdopen_error_survives_raw_close_error_and_parent_is_closed (test_governance_archive_input_ownership.GovernanceArchiveInputOwnershipTests.test_fdopen_error_survives_raw_close_error_and_parent_is_closed) ... ERROR
+test_fresh_parent_close_error_after_success_drains_other_descriptors (test_governance_archive_input_ownership.GovernanceArchiveInputOwnershipTests.test_fresh_parent_close_error_after_success_drains_other_descriptors) ... ok
+test_parent_close_error_after_success_preserves_reused_descriptor (test_governance_archive_input_ownership.GovernanceArchiveInputOwnershipTests.test_parent_close_error_after_success_preserves_reused_descriptor) ... ok
+test_raw_close_error_after_success_drains_other_descriptors (test_governance_archive_input_ownership.GovernanceArchiveInputOwnershipTests.test_raw_close_error_after_success_drains_other_descriptors) ... FAIL
+test_replaced_input_is_rejected_and_closes_descriptors (test_governance_archive_input_ownership.GovernanceArchiveInputOwnershipTests.test_replaced_input_is_rejected_and_closes_descriptors) ... ok
+test_stream_close_error_after_success_drains_descriptors (test_governance_archive_input_ownership.GovernanceArchiveInputOwnershipTests.test_stream_close_error_after_success_drains_descriptors) ... ok
+test_unchanged_input_reads_normally_and_closes_descriptors (test_governance_archive_input_ownership.GovernanceArchiveInputOwnershipTests.test_unchanged_input_reads_normally_and_closes_descriptors) ... ok
+test_validation_error_survives_fresh_parent_close_error (test_governance_archive_input_ownership.GovernanceArchiveInputOwnershipTests.test_validation_error_survives_fresh_parent_close_error) ... ERROR
+
+======================================================================
+ERROR: test_body_error_survives_consuming_stream_close_error (test_governance_archive_input_ownership.GovernanceArchiveInputOwnershipTests.test_body_error_survives_consuming_stream_close_error)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "git-show:81d7a35c:governance_replay_archive.py", line 103, in _input
+  File "/home/agent/ai-gpu-d7ec98164a68/repo/ci/project/test_governance_archive_input_ownership.py", line 151, in test_body_error_survives_consuming_stream_close_error
+    raise primary
+RuntimeError: injected body failure
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/agent/ai-gpu-d7ec98164a68/repo/ci/project/test_governance_archive_input_ownership.py", line 150, in test_body_error_survives_consuming_stream_close_error
+    with reader._input(self.path):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "git-show:81d7a35c:governance_replay_archive.py", line 101, in _input
+  File "/home/agent/ai-gpu-d7ec98164a68/repo/ci/project/test_governance_archive_input_ownership.py", line 59, in _stream_close
+    raise self.cleanup_error
+OSError: [Errno 5] injected cleanup failure
+
+======================================================================
+ERROR: test_fdopen_error_survives_raw_close_error_and_parent_is_closed (test_governance_archive_input_ownership.GovernanceArchiveInputOwnershipTests.test_fdopen_error_survives_raw_close_error_and_parent_is_closed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "git-show:81d7a35c:governance_replay_archive.py", line 101, in _input
+  File "/home/agent/ai-gpu-d7ec98164a68/repo/ci/project/test_governance_archive_input_ownership.py", line 49, in _fdopen
+    raise self.construction_error
+RuntimeError: injected fdopen construction failure
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/agent/ai-gpu-d7ec98164a68/repo/ci/project/test_governance_archive_input_ownership.py", line 141, in test_fdopen_error_survives_raw_close_error_and_parent_is_closed
+    with reader._input(self.path):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "git-show:81d7a35c:governance_replay_archive.py", line 115, in _input
+  File "/home/agent/ai-gpu-d7ec98164a68/repo/ci/project/test_governance_archive_input_ownership.py", line 77, in _close
+    raise self.cleanup_error
+OSError: [Errno 5] injected cleanup failure
+
+======================================================================
+ERROR: test_validation_error_survives_fresh_parent_close_error (test_governance_archive_input_ownership.GovernanceArchiveInputOwnershipTests.test_validation_error_survives_fresh_parent_close_error)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "git-show:81d7a35c:governance_replay_archive.py", line 106, in _input
+  File "git-show:81d7a35c:governance_replay_archive.py", line 37, in _require
+a009_baseline_archive.ArchiveError: archive changed while reading
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/agent/ai-gpu-d7ec98164a68/repo/ci/project/test_governance_archive_input_ownership.py", line 158, in test_validation_error_survives_fresh_parent_close_error
+    with reader._input(self.path) as (_, size):
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "git-show:81d7a35c:governance_replay_archive.py", line 112, in _input
+  File "/home/agent/ai-gpu-d7ec98164a68/repo/ci/project/test_governance_archive_input_ownership.py", line 77, in _close
+    raise self.cleanup_error
+OSError: [Errno 5] injected cleanup failure
+
+======================================================================
+FAIL: test_raw_close_error_after_success_drains_other_descriptors (test_governance_archive_input_ownership.GovernanceArchiveInputOwnershipTests.test_raw_close_error_after_success_drains_other_descriptors)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/agent/ai-gpu-d7ec98164a68/repo/ci/project/test_governance_archive_input_ownership.py", line 177, in test_raw_close_error_after_success_drains_other_descriptors
+    self._assert_success_cleanup_failure("raw")
+  File "/home/agent/ai-gpu-d7ec98164a68/repo/ci/project/test_governance_archive_input_ownership.py", line 164, in _assert_success_cleanup_failure
+    with self.assertRaises(OSError) as caught:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: OSError not raised
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.005s
+
+FAILED (failures=1, errors=3)

@@ -1,0 +1,148 @@
+{
+  "agent": "/root/a001_pending_trace",
+  "input_sha": "81d7a35c641f3a969c23c8e604f7468a4d88644a",
+  "frozen_count": 69,
+  "frozen_intersection": [
+    "sim/common/simobject.h",
+    "sim/simx/core.cpp",
+    "sim/simx/lsu_unit.cpp",
+    "sim/simx/processor.cpp",
+    "sw/runtime/simx/vortex.cpp"
+  ],
+  "source_sha256": {
+    "sim/common/simobject.h": "0e0369f5ea1ba85f5e461e03b85e9723bb47f0e118499ba2b21a7923594f7004",
+    "sim/common/simobject_functional.h": "0a62df63e18f340096bda900ccb858e00a3c2d54d7688c92737c5cca06210984",
+    "sim/simx/core.cpp": "f95003971a6052962b761b1ee8e815ead42f6a60fccf8157fa94c3ded3e44f31",
+    "sim/simx/dispatcher.cpp": "1a0e5acaee5fb3139a0f47aee9a1511bab05bc31b56c0f6f8ba42c5fd5544f1d",
+    "sim/simx/instr_trace.h": "09363774aef2cf0a19b1bf890d1329cbfa88ec452dbc6a78dbd05e31876fda6e",
+    "sim/simx/lsu_unit.cpp": "d1105256786bc7f2227d4c963a0b4368d84d480aba93fdf3188019ae466b30fb",
+    "sim/simx/processor.cpp": "ecc3e0e51ecbbdb6b97b04eccd7fc5427fb25f87e5162ef33484262ab8da869f",
+    "sim/simx/scheduler.cpp": "d62b9fab40133011a7293e994e0d57514212ed5f636e836ffb9fd468fbfa2056",
+    "sim/simx/sequencer.cpp": "6ec2242d7f8c4b0cefb3224323726745cebf00da310216f89888a621e07f65f7",
+    "sw/common/mempool.h": "f3a5ad6bca40e6dc9fffe9d8b2e99865dee02b52f603764cc221022d0c5f3143",
+    "sw/runtime/simx/vortex.cpp": "0d890c95fecb67da26d23ea4a0af10ac328dddf110cd2575baff3aa5d4c905cb"
+  },
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "/tmp/ai-gpu-d7ec98164a68/repo/ci/gen_config.py",
+        "--config",
+        "/tmp/ai-gpu-d7ec98164a68/repo/VX_config.toml",
+        "--output",
+        "/tmp/ai-gpu-d7ec98164a68/a001/build/VX_config.h",
+        "--format",
+        "cpp",
+        "--profile=p02-tfr",
+        "--xlen=64"
+      ],
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "/tmp/ai-gpu-d7ec98164a68/repo/ci/gen_config.py",
+        "--config",
+        "/tmp/ai-gpu-d7ec98164a68/repo/VX_types.toml",
+        "--output",
+        "/tmp/ai-gpu-d7ec98164a68/a001/build/VX_types.h",
+        "--format",
+        "cpp",
+        "--resolved"
+      ],
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "g++",
+        "-std=c++17",
+        "-O0",
+        "-g0",
+        "-pthread",
+        "-DNDEBUG",
+        "-DVX_CFG_XLEN=64",
+        "-DVX_CFG_XLEN_64",
+        "-fsanitize=undefined",
+        "-fno-sanitize-recover=undefined",
+        "-I/tmp/ai-gpu-d7ec98164a68/a001/build",
+        "-I/tmp/ai-gpu-d7ec98164a68/repo/sim/simx",
+        "-I/tmp/ai-gpu-d7ec98164a68/repo/sim/common",
+        "-I/tmp/ai-gpu-d7ec98164a68/repo/sw/common",
+        "/tmp/ai-gpu-d7ec98164a68/a001/probe.cpp",
+        "-o",
+        "/tmp/ai-gpu-d7ec98164a68/a001/build/probe-timing"
+      ],
+      "exit": 1,
+      "output": "In file included from /tmp/ai-gpu-d7ec98164a68/repo/sim/simx/types.h:42,\n                 from /tmp/ai-gpu-d7ec98164a68/repo/sim/simx/instr_trace.h:20,\n                 from /tmp/ai-gpu-d7ec98164a68/a001/probe.cpp:1:\n/tmp/ai-gpu-d7ec98164a68/repo/sim/common/simobject.h: In instantiation of 'std::shared_ptr<_Tp> vortex::SimPlatform::create_object(Args&& ...) [with Impl = RawTraceOwner; Args = {const char (&)[16]}]':\n/tmp/ai-gpu-d7ec98164a68/repo/sim/common/simobject.h:1054:55:   required from 'static vortex::SimObject<Impl>::Ptr vortex::SimObject<Impl>::Create(Args&& ...) [with Args = {const char (&)[16]}; Impl = RawTraceOwner; Ptr = std::shared_ptr<RawTraceOwner>]'\n 1054 |     return SimPlatform::instance().create_object<Impl>(std::forward<Args>(args)...);\n      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n/tmp/ai-gpu-d7ec98164a68/a001/probe.cpp:23:37:   required from here\n   23 |   auto owner = RawTraceOwner::Create(\"raw_trace_owner\");\n      |                ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~\n/tmp/ai-gpu-d7ec98164a68/repo/sim/common/simobject.h:1102:43: error: static assertion failed: on_tick() must be protected \u2014 only SimPlatform may call it\n 1102 |   static_assert(!is_on_tick_public<Impl>::value,\n      |                                           ^~~~~\n/tmp/ai-gpu-d7ec98164a68/repo/sim/common/simobject.h:1102:43: note: '!(bool)std::integral_constant<bool, true>::value' evaluates to false\n/tmp/ai-gpu-d7ec98164a68/repo/sim/common/simobject.h:1104:44: error: static assertion failed: on_reset() must be protected \u2014 only SimPlatform may call it\n 1104 |   static_assert(!is_on_reset_public<Impl>::value,\n      |                                            ^~~~~\n/tmp/ai-gpu-d7ec98164a68/repo/sim/common/simobject.h:1104:44: note: '!(bool)std::integral_constant<bool, true>::value' evaluates to false\n"
+    },
+    {
+      "argv": [
+        "g++",
+        "-std=c++17",
+        "-O0",
+        "-g0",
+        "-pthread",
+        "-DNDEBUG",
+        "-DVX_CFG_XLEN=64",
+        "-DVX_CFG_XLEN_64",
+        "-fsanitize=undefined",
+        "-fno-sanitize-recover=undefined",
+        "-I/tmp/ai-gpu-d7ec98164a68/a001/build",
+        "-I/tmp/ai-gpu-d7ec98164a68/repo/sim/simx",
+        "-I/tmp/ai-gpu-d7ec98164a68/repo/sim/common",
+        "-I/tmp/ai-gpu-d7ec98164a68/repo/sw/common",
+        "/tmp/ai-gpu-d7ec98164a68/a001/probe.cpp",
+        "-o",
+        "/tmp/ai-gpu-d7ec98164a68/a001/build/probe-timing"
+      ],
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "/tmp/ai-gpu-d7ec98164a68/a001/build/probe-timing"
+      ],
+      "exit": 0,
+      "output": "caught=1 inflight_before=65 inflight_after=0 retained_after_teardown=65 retained_after_explicit_cleanup=0\n"
+    },
+    {
+      "argv": [
+        "g++",
+        "-DSIMX_FUNCTIONAL",
+        "-std=c++17",
+        "-O0",
+        "-g0",
+        "-pthread",
+        "-DNDEBUG",
+        "-DVX_CFG_XLEN=64",
+        "-DVX_CFG_XLEN_64",
+        "-fsanitize=undefined",
+        "-fno-sanitize-recover=undefined",
+        "-I/tmp/ai-gpu-d7ec98164a68/a001/build",
+        "-I/tmp/ai-gpu-d7ec98164a68/repo/sim/simx",
+        "-I/tmp/ai-gpu-d7ec98164a68/repo/sim/common",
+        "-I/tmp/ai-gpu-d7ec98164a68/repo/sw/common",
+        "/tmp/ai-gpu-d7ec98164a68/a001/probe.cpp",
+        "-o",
+        "/tmp/ai-gpu-d7ec98164a68/a001/build/probe-functional"
+      ],
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "/tmp/ai-gpu-d7ec98164a68/a001/build/probe-functional"
+      ],
+      "exit": 0,
+      "output": "caught=1 inflight_before=65 inflight_after=0 retained_after_teardown=65 retained_after_explicit_cleanup=0\n"
+    }
+  ],
+  "frozen_source_mismatches": [],
+  "input_sources_stable": true,
+  "compiler_version": "g++ (Debian 14.2.0-19) 14.2.0",
+  "final_git_head": "81d7a35c641f3a969c23c8e604f7468a4d88644a",
+  "final_git_status": "",
+  "probe_sha256": "1c7b0cdae2e373ccbf9c141af481fa31ded44e78c8ece01b532cae25ab344faf"
+}

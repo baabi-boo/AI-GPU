@@ -88,7 +88,8 @@ def _directory(path):
 @contextmanager
 def _input(path):
     parent, identities = _directory(path.parent)
-    descriptor = None
+    descriptor = stream = fresh_parent = None
+    failed = False
     try:
         before = os.stat(path.name, dir_fd=parent, follow_symlinks=False)
         _require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1,
@@ -98,22 +99,31 @@ def _input(path):
         descriptor = os.open(path.name, _READ_FLAGS, dir_fd=parent)
         _require(_stamp(os.fstat(descriptor)) == _stamp(before),
                  "archive changed while opening")
-        with os.fdopen(descriptor, "rb") as stream:
-            descriptor = None
-            yield stream, before.st_size
-            fresh_parent, fresh_identities = _directory(path.parent)
-            try:
-                _require(fresh_identities == identities
-                         and _stamp(os.fstat(stream.fileno())) == _stamp(before)
-                         and _stamp(os.stat(path.name, dir_fd=fresh_parent,
-                                            follow_symlinks=False)) == _stamp(before),
-                         "archive changed while reading")
-            finally:
-                os.close(fresh_parent)
+        stream = os.fdopen(descriptor, "rb", closefd=False)
+        yield stream, before.st_size
+        fresh_parent, fresh_identities = _directory(path.parent)
+        _require(fresh_identities == identities
+                 and _stamp(os.fstat(stream.fileno())) == _stamp(before)
+                 and _stamp(os.stat(path.name, dir_fd=fresh_parent,
+                                    follow_symlinks=False)) == _stamp(before),
+                 "archive changed while reading")
+    except BaseException:
+        failed = True
+        raise
     finally:
-        if descriptor is not None:
-            os.close(descriptor)
-        os.close(parent)
+        failure = None
+        # A consuming close failure must not strand other owners or be retried.
+        for resource, close in ((stream, lambda value: value.close()),
+                                (descriptor, os.close), (fresh_parent, os.close),
+                                (parent, os.close)):
+            if resource is not None:
+                try:
+                    close(resource)
+                except BaseException as error:
+                    if failure is None:
+                        failure = error
+        if failure is not None and not failed:
+            raise failure
 
 
 def _read(stream, offset, size):

@@ -19,6 +19,7 @@ sensitive machine information. All outputs are PRIVATE; none is a public export.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 from dataclasses import dataclass
 import hashlib
 import json
@@ -117,11 +118,27 @@ class _File:
         return {"path": self.name, "sha256": self.sha256, "size_bytes": self.size_bytes}
 
 
+def _close_owned(stream, descriptor, parent, *, suppress):
+    failure = None
+    for resource, close in ((stream, lambda value: value.close()),
+                            (descriptor, os.close), (parent, os.close)):
+        if resource is not None:
+            try:
+                close(resource)
+            except BaseException as error:
+                if failure is None:
+                    failure = error
+    if failure is not None and not suppress:
+        raise failure
+
+
 def _read_file(path, *, maximum=None, expected=None, destination=None, contents=False,
                directory_fd=None):
     """Hash/copy the same single-link regular descriptor through a bounded read."""
     maximum = MAX_MEMBER_BYTES if maximum is None else maximum
     parent = _directory(path.parent) if directory_fd is None else os.dup(directory_fd)
+    descriptor = stream = None
+    failed = False
     try:
         before = os.stat(path.name, dir_fd=parent, follow_symlinks=False)
         require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1
@@ -132,17 +149,18 @@ def _read_file(path, *, maximum=None, expected=None, destination=None, contents=
         descriptor = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_CLOEXEC,
                              dir_fd=parent)
         digest, count, chunks = hashlib.sha256(), 0, []
-        with os.fdopen(descriptor, "rb") as stream:
-            require(_stamp(os.fstat(stream.fileno())) == stamp, "input changed before opening")
-            while chunk := stream.read(min(CHUNK_BYTES, maximum + 1 - count)):
-                count += len(chunk)
-                require(count <= maximum, "input grew beyond its byte bound")
-                digest.update(chunk)
-                if destination is not None:
-                    destination.write(chunk)
-                if contents:
-                    chunks.append(chunk)
-            require(_stamp(os.fstat(stream.fileno())) == stamp, "input changed during reading")
+        # Raw descriptor ownership survives interrupted stream construction.
+        stream = os.fdopen(descriptor, "rb", closefd=False)
+        require(_stamp(os.fstat(stream.fileno())) == stamp, "input changed before opening")
+        while chunk := stream.read(min(CHUNK_BYTES, maximum + 1 - count)):
+            count += len(chunk)
+            require(count <= maximum, "input grew beyond its byte bound")
+            digest.update(chunk)
+            if destination is not None:
+                destination.write(chunk)
+            if contents:
+                chunks.append(chunk)
+        require(_stamp(os.fstat(stream.fileno())) == stamp, "input changed during reading")
         require(count == before.st_size
                 and _stamp(os.stat(path.name, dir_fd=parent, follow_symlinks=False)) == stamp,
                 "source identity changed after reading")
@@ -151,8 +169,11 @@ def _read_file(path, *, maximum=None, expected=None, destination=None, contents=
             require((result.sha256, count) == (expected.sha256, expected.size_bytes),
                     "source bytes changed during packaging")
         return result, b"".join(chunks) if contents else None
+    except BaseException:
+        failed = True
+        raise
     finally:
-        os.close(parent)
+        _close_owned(stream, descriptor, parent, suppress=failed)
 
 
 def _inventory(selections):
@@ -332,14 +353,21 @@ class _BoundedOutput:
         return getattr(self.stream, name)
 
 
+@contextmanager
 def _exclusive(path, *, directory_fd=None):
     parent = _directory(path.parent) if directory_fd is None else os.dup(directory_fd)
+    descriptor = stream = None
+    failed = False
     try:
         descriptor = os.open(path.name, os.O_CREAT | os.O_EXCL | os.O_RDWR | os.O_NOFOLLOW | os.O_CLOEXEC,
                              0o600, dir_fd=parent)
+        stream = os.fdopen(descriptor, "w+b", closefd=False)
+        yield stream
+    except BaseException:
+        failed = True
+        raise
     finally:
-        os.close(parent)
-    return os.fdopen(descriptor, "w+b")
+        _close_owned(stream, descriptor, parent, suppress=failed)
 
 
 def _write_zip(path, members):

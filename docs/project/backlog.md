@@ -9,6 +9,14 @@ remain unassigned until an actual owner is identified.
 
 ## Start here: P06-T01 explicit qualified warm route
 
+The [archive ownership continuation](p06-archive-ownership-audit.md) fixes
+reproduced packer and governance-reader descriptor cleanup failures and adds
+host coverage for resident submission address errors. It preserves the frozen
+measurement sources and the qualified warm task below. Its native trace-ownership
+finding remains open: design complete ownership across trace copies, review
+the source-qualification implications, then validate exceptional native teardown
+before claiming that repair. A reduced host probe alone does not qualify it.
+
 The [host reliability continuation](p06-host-reliability-audit.md) repairs CI
 cache/checkout metadata, required-job completion semantics and descriptor
 ownership in Python bundle, encrypted-evidence and governance archive readers.

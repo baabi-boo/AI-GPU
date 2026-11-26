@@ -556,6 +556,58 @@ void address_validation(WorkspacePolicy policy, DType dtype) {
   }
 }
 
+void resident_address_rollback(WorkspacePolicy policy, DType dtype) {
+  check(resident(policy));
+  for (int ordinal = 1; ordinal <= 3; ++ordinal) {
+    auto owner = workspace_owner(policy, dtype);
+    const auto buffers = state.buffers;
+    const std::array<Buffer, 3> snapshots{*buffers[0], *buffers[1], *buffers[2]};
+    const int address_calls = state.calls["buffer_address"];
+    const int buffer_creations = audit.buffer_creations;
+    const int buffer_releases = audit.buffer_releases;
+    check(address_calls == 3 && buffer_creations == 3 && buffer_releases == 0);
+    state.fail_call = "buffer_address";
+    state.fail_at = state.calls["buffer_address"] + ordinal;
+    std::unique_ptr<MatmulOperation> operation;
+    const auto submitted = workspace_submit(owner.get(), &operation);
+    check(operation && submitted.validation == Status::success);
+    check(submitted.primary == VX_ERR_DEVICE_LOST && submitted.cleanup == VX_SUCCESS
+          && submitted.complete && operation->output_words().empty());
+    check(state.calls["buffer_address"] == address_calls + ordinal);
+    check(state.calls["enqueue"] == 0 && state.writes_observed == 0
+          && audit.launches_observed == 0);
+    const auto& trace = operation->trace();
+    check(trace.writes_enqueued == 0 && trace.launches_enqueued == 0
+          && trace.reads_enqueued == 0);
+    check_idle_buffers(policy);
+    check(state.calls["queue_create"] == 1 && audit.releases["queue"] == 1);
+    check(state.buffers == buffers && audit.buffer_creations == buffer_creations
+          && audit.buffer_releases == buffer_releases);
+    for (size_t i = 0; i != buffers.size(); ++i) {
+      check(buffers[i]->address == snapshots[i].address
+            && buffers[i]->bytes == snapshots[i].bytes);
+    }
+
+    state.fail_call.clear();
+    // The failed operation remains alive and has not been explicitly closed.
+    clean_operation(owner.get(), 2);
+    check_idle_buffers(policy);
+    check(state.buffers == buffers && audit.buffer_creations == buffer_creations
+          && audit.buffer_releases == buffer_releases);
+    const auto before = footprint();
+    for (int repeat = 0; repeat != 2; ++repeat) {
+      const auto closed = operation->close(0);
+      check(closed.validation == submitted.validation && closed.primary == submitted.primary
+            && closed.cleanup == submitted.cleanup && closed.complete);
+      check(operation->output_words().empty() && footprint() == before);
+    }
+    check(owner->close().ok());
+    check(audit.buffer_releases == buffer_creations);
+    no_resources();
+    reset_workspace();
+  }
+}
+
 void partial_rollback(WorkspacePolicy policy, DType dtype) {
   const std::vector<std::pair<std::string, int>> failures{
       {"queue_create", 1}, {"buffer_create", resident(policy) ? 0 : 3},
@@ -802,6 +854,8 @@ int main(int argc, char** argv) {
     setup_rollback(policy, dtype);
   } else if (group == "address_validation") {
     address_validation(policy, dtype);
+  } else if (group == "resident_address_rollback") {
+    resident_address_rollback(policy, dtype);
   } else if (group == "partial_rollback") {
     partial_rollback(policy, dtype);
   } else if (group == "completion_observation") {

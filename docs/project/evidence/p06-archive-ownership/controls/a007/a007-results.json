@@ -1,0 +1,34 @@
+{
+  "source_sha256": "79c75dc2e70c7d848d17527f669a1addf5c734941cff4314f8d591c32c9454b5",
+  "source_stable": true,
+  "cases": [
+    {
+      "case": "consuming_raw_close_after_fdopen_failure",
+      "raised_cleanup_error": true,
+      "primary_only_in_context": true,
+      "parent_leaked": true,
+      "recycled_descriptor": true,
+      "witness_survives": true,
+      "close_attempts": 1
+    },
+    {
+      "case": "consuming_stream_close_during_body_failure",
+      "raised_cleanup_error": true,
+      "primary_only_in_context": true,
+      "parent_closed": true,
+      "stream_closed": true,
+      "close_attempts": 1
+    },
+    {
+      "case": "fresh_parent_close_during_validation_failure",
+      "raised_cleanup_error": true,
+      "validation_only_in_context": true,
+      "context_message": "archive changed while reading",
+      "parent_closed": true,
+      "stream_closed": true,
+      "recycled_descriptor": true,
+      "witness_survives": true,
+      "close_attempts": 1
+    }
+  ]
+}
