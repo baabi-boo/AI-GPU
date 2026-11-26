@@ -10,6 +10,42 @@ launches. The [qualification audit](p06-qualification-audit.md),
 [analysis contract](../designs/native_baseline_analysis_v1.md) record the accepted
 scope and new validation. P06-A02/A03 remain open.
 
+**Closeout reliability fixes are implemented; the qualified warm experiment
+remains unstarted.** The [current audit](p06-closeout-reliability-audit.md) and
+[evidence packet](evidence/p06-closeout-reliability/README.md) record protected
+first checkpoints in the runner, input acquisition, preparation and builder;
+scoped CLI `SIGTERM` handling; hosted nonstart and final-observation accounting;
+and encryption descriptor cleanup and published-output verification.
+
+The audited base `43c93ce892f1f3f6c0555597da342709ec9f7e49` passed all 15
+workflows. Its strict governance original records **5,471 tests, 38,592 successful
+subtests and 55,005 events in 2,461.899321 seconds**, with independent replay
+completed at that base. Final focused integration passed **228 tests**, including
+all 44 new methods, with stable source identities and zero failures, errors or
+skips. Discovery collects **5,515 unique IDs**. Discovery is not execution, and
+focused checks do not qualify the changed revision. Its own strict governance
+and independent original replay remain required before native admission.
+
+First-write recovery requires a successful final write. The existing exclusive
+`report.json.tmp` or its stage-specific counterpart can remain after a mid-write
+fault and prevent final report publication. No report retry or ownership weakening is introduced; repeated
+interruptions and uncatchable kills are outside the durable-closeout claim.
+
+The next actual development experiment remains the unchanged **24-process,
+792-launch, 25,344-word** qualified warm attempt. Preserve all **69 measurement
+sources, 21 dependency descriptors**, proofs, goldens and performance predicates.
+Require the selected revision's own strict qualification and independent replay,
+exact private control delivery, the public age recipient and actual runner
+admission at **15 GiB free disk and 4 GiB available memory**. Those operational
+inputs were not supplied to this session; live provider secrets were not
+inspected. Preserve the dependency/four-process prerequisites, encrypted
+complete or explicitly partial retention and independent complete native replay
+before the frozen performance decision. P06/P06-T01 remain `in_progress`,
+P06-A02/A03 remain open and P01 vendor integration remains blocked.
+
+**Earlier launch-readiness continuation (historical).** The following
+paragraphs preserve that continuation's source and evidence scope.
+
 **Production launch-readiness fixes are implemented; the frozen qualified warm
 experiment remains unstarted.** The [launch-readiness audit](p06-launch-readiness-audit.md)
 and [evidence packet](evidence/p06-launch-readiness/README.md) record confirmed

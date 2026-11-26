@@ -397,8 +397,8 @@ def execute(args):
             require(_file(input_paths[name], MAX_INPUT_BYTES)[0] == previous,
                     "selected original input changed: " + name)
 
-    checkpoint()
     try:
+        checkpoint()
         require(type(args.expected_revision) is str and re.fullmatch(r"[0-9a-f]{40}", args.expected_revision),
                 "qualified warm execution requires an exact source revision")
         report["source_before"] = collect_source(source)

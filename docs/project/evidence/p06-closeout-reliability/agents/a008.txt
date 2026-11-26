@@ -1,0 +1,48 @@
+Assignment 8/100 - input-acquisition initial checkpoint closeout
+Base revision: 43c93ce892f1f3f6c0555597da342709ec9f7e49.
+
+Changed files:
+- ci/project/p06_qualified_warm_inputs.py: moved the initial save() from just
+  before the existing try into its first statement.
+- ci/project/test_p06_input_initial_closeout.py: two regressions using existing
+  input fixtures, one for OSError and one for KeyboardInterrupt.
+
+Before:
+Both regressions were run before the production edit and failed. Each injected
+one-shot initial receipt-write failure escaped acquire(); the receipt did not
+exist, monitor_calls was zero, and hosted.writers_finished returned false.
+The initial save() was outside the closeout exception boundary.
+
+After:
+The existing handler records a blocked result and the existing finally writes
+the finished receipt. Both tests confirm persisted/returned receipt equality,
+empty commands/parts/repositories, network_acquisition=false,
+native_execution=not_run, all boolean claims false, no launch or source/plan/
+resource probes, no archive/repository/workspace roots created, and
+hosted.writers_finished=true.
+
+Actual development checks (from the source root; the task-specific TMPDIR
+prefix is omitted here, and Python always used -B):
+1. python3 -B -m unittest discover -s ci/project -p test_p06_input_initial_closeout.py -v
+   Before edit: 2 tests, 2 failures, exit 1, 0.079 seconds.
+   After edit: 2 tests passed, exit 0, 0.086 seconds.
+2. PYTHONPATH=ci/project python3 -B -m unittest test_p06_input_initial_closeout test_p06_input_operational_failures test_p06_qualified_warm_inputs -v
+   39 tests passed, zero failures/errors/skips, exit 0, 3.378 seconds.
+3. git diff --check -- ci/project/p06_qualified_warm_inputs.py ci/project/test_p06_input_initial_closeout.py
+   Exit 0; no whitespace errors in the tracked diff.
+
+Scope:
+No network acquisition or native GPU execution. Fixtures used inert local
+inputs and mocked acquisition commands; existing operational tests also used
+bounded inert local Python processes. No supervisor, frozen measurement/source
+input, proof, population, resource gate, or acceptance flag changes. No commit
+or push. Full strict governance and independent review were outside this
+assignment; results establish focused source behavior only.
+
+Recovery:
+The regression test was copied exactly from the complete recorded apply_patch
+content, including its final newline, into an unattached UTF-8 blob. No known
+content uncertainty; direct comparison with the original file was impossible
+because the execution environment was unavailable. This concise report is a
+new recovery summary of the recorded results, not a byte-for-byte copy of the
+earlier report.

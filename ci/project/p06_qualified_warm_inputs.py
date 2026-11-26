@@ -279,8 +279,8 @@ def acquire(args):
                 "input acquisition command failed: " + identifier)
         return roots["output"] / row["log"]
 
-    save()
     try:
+        save()
         require(revision_valid, "an exact lowercase 40-character source revision is required")
         report["source_before"] = collect_source_isolated(roots["source"])
         base._source_ok({"checkout": report["source_before"]}, False)

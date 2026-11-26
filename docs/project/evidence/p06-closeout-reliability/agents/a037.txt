@@ -1,0 +1,8 @@
+Agent037 — read-only observation boundary review; no findings.
+HEAD: 43c93ce892f1f3f6c0555597da342709ec9f7e49
+Source: ci/project/p06_qualified_warm_hosted.py
+SHA256: 875e1e095253cbe38c6424adfdc324bdd88ee1152536a993ae6d03dba0992220
+
+Lines 449–495 and transitive _read/_file/path/JSON helpers only inspect bounded local receipts; no native launch, packaging/encryption execution, sample mutation, provider/network access, or report writing occurs within either observation. Lines 574–586 allow two calls only after KeyboardInterrupt; ordinary escaping exceptions terminate immediately. Every caught error clears native_success and orchestration_passed, records only its type, and returns False/unknown when exhausted. Native reconciliation is gated by stable sources and completed writers. Lines 648–656 snapshot prior validated native success, preserving its execution fact after writer interruption without restoring orchestration or permitting success packaging. Pack/encrypt and report writes remain outside the retry.
+
+Read relevant new interruption tests: retry bounds, ordinary errors, damaged nested receipts, unchanged snapshots, unknown launch, and partial delivery. No tests, network, or native execution performed; no source edits.

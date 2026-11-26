@@ -1,0 +1,9 @@
+Agent081; independent read-only review of a080, base 43c93ce892f1f3f6c0555597da342709ec9f7e49 plus edits.
+PASS: exact one-line setUp relocation into existing try; all original methods/assertions byte-identical. Existing setup registers TemporaryDirectory cleanup, then ExitStack.close before patch entry; finally now executes real LIFO cleanup after setup failure.
+Reviewed retained before/after probe: original setUp runs; two cleanup callbacks/twelve patch exits remain real. Automatic observations precede safeguard cleanup, reproduce all six leak states before, and verify restoration plus marker propagation after.
+Retained focused module passed 5/5; reviewer ran no tests/native/network.
+Remaining daemon-timeout F1 is unchanged: a fixture-isolation risk, not a demonstrated production failure.
+Final SHA256, ci/project/test_p06_hosted_prelaunch_emission.py:
+before edcfb759c05cf42ae38102f4bfcef3b89867fa763a5102108cb09fea231fa069
+after 9c6de0268be3eaaa2efd5271ca2dec383ac6f8bd8ed96e42c20fa3c6bae2406e
+All ten other a076 source hashes remain unchanged; no findings.

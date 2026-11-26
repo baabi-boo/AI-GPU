@@ -1,0 +1,5 @@
+Static review; no tests/native execution. HEAD 43c93ce892f1f3f6c0555597da342709ec9f7e49; dirty hosted implementation, untracked test.
+Hosted SHA256: 875e1e095253cbe38c6424adfdc324bdd88ee1152536a993ae6d03dba0992220
+Test SHA256: df80bdf105a1a5ce73a68dcbef3a42b8ff0c993aa219f75fba70be90accb4c06
+Assuming source closeout succeeds, validated native_success=True becomes native_reconciled=True. First writers_finished KeyboardInterrupt records writers-closeout failure and clears native_success/orchestration_passed. Retry returns True; writers_finished_observed=True. Captured native_reconciled prevents rereading/resetting native_execution, preserving run. Packaging selects partial; successful retention/encryption can complete, but outcome remains fail and CLI returns 1. Nothing restores native_success; qualification/counter/performance claims remain false. Matching test test_sigterm_during_writer_read_retains_native_truth_and_partial_delivery checks retained run, false claims, partial packaging, failed receipts, status 1, three reads and unchanged writer snapshots.
+Findings: none for this case.

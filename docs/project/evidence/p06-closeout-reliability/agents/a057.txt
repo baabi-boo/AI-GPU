@@ -1,0 +1,10 @@
+PASS: six sources below are byte-identical to 43c93ce.
+FP16→BF16 dense_boundaries: (M,N,K)=(8,4,8); A row-major/B column-major, packed 16-bit; D=32 FP32 words. 2 formats×6 pairs×2 policies=24 processes; ×33 operations=792 launches; ×32 words=25,344. Measured: 2×5×2×32=640 operations; ×32=20,480 words. Every output requires unsigned-32 equality/zero mismatches; no absolute/relative/ULP allowance. Historical P01 relative<0.01 (zero pairs accepted), attention absolute≤0.001+0.001|reference| remain unchanged.
+43+1 orchestration tests cannot establish native arithmetic, source-proof qualification, execution or performance. No tests run.
+SHA256:
+docs/designs/qualified_warm_workspace_v1.md 979936604fe95572804243ab5b9ad2b524aa0fcdcf9d066450e70dfc841257a6
+docs/designs/warm_workspace_benchmark_v1.md 91e4657c8e4c8eca3eb0b959b1bbc0430d2991cdd65e30f4d45b3da12b4e37c2
+docs/designs/tensor_numerics_v1.md 2d7d3f18728fe77dd96a7de0c05c9550f2c2446ef7bee4fb0740fe8d367a06a2
+ci/project/p06_warm_contract.json 893d85401b1d5f7757d82cb7c743a89b36264fe19c7d08c239b7f216b7a8cbbd
+ci/project/p06_qualified_warm_proof.json 172721c671ddaa79541dde9c37c154b5ab5a99b8abb0caabf2e07036dd429efb
+ci/project/fixtures/p02_layout_v1.json 0543f9f4208de3ff4743fe1894d97ccf3b8cca4707e9a26acd1f3dde884725b2

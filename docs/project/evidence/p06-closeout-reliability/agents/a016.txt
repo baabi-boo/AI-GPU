@@ -1,0 +1,28 @@
+Assignment 016/100 — independent review of initial receipt closeout
+
+Decision: No actionable findings in the two reviewed production hunks or their new tests.
+Base: 43c93ce892f1f3f6c0555597da342709ec9f7e49 plus the reviewed uncommitted changes. AGENTS.md and relevant project status, backlog, roadmap, acceptance and review policy were read. No repository files edited; no commit, push, broad suite, build, download, or native producer execution.
+
+Scope:
+- p06_qualified_warm_run.py: initial checkpoint moved inside existing try (around line 400).
+- p06_qualified_warm_inputs.py: initial save moved inside existing try (around line 282).
+- test_p06_initial_checkpoint_closeout.py and test_p06_input_initial_closeout.py, including the reused fixture setup/cleanup and hosted receipt readers.
+
+Review conclusions:
+1. A caught initial OSError or KeyboardInterrupt now reaches existing failure/finalization handling. With no stage/command appended or producer launched, outcome remains blocked and native_execution remains not_run. Original reason is retained; finished state is saved; completion/count/qualification claims remain absent or false. Supervisor final source observation remains bounded identity observation, not a native producer retry.
+2. Finalization makes one final receipt write. It does not retry acquisition or any selected producer. The final write is outside the catch boundary, so its own OSError/KeyboardInterrupt still propagates and cannot return a fabricated successful report. A missing receipt remains rejected by hosted writers_finished.
+3. The two production diffs do not change source admission, immutable inputs, budgets, process population, command ordering, resume guards, producer selection, or false-claim fields. Existing 15 GiB/4 GiB checks and 90-minute supervisor limit remain intact.
+4. Fixtures are offline and isolated: temporary directories, synthetic source identities/input bytes, mocked launches, explicit cleanup of patches/directories, and cleanup of reused acquisition class fixtures. Expected failure dispositions are asserted directly; retained JSON uses the real writer and is read back. Importing fixture modules does not add production imports of tests or re-execute their test classes.
+
+Verification:
+- From repository root: PYTHONPATH=ci/project python3 -B -m unittest -v test_p06_initial_checkpoint_closeout test_p06_input_initial_closeout
+  PASS: 4 tests in 0.134 s, zero failures/errors/skips.
+- In-memory targeted probe: for each of supervisor and acquisition, inject an initial OSError followed by either OSError or KeyboardInterrupt at final save. All 4 cases passed: the exact second exception propagated, precisely two writes were attempted (running then finished), no launch occurred, final in-memory disposition was blocked/not_run, and hosted closeout rejected the absent receipt.
+
+Coverage limit (non-blocking): The new regression tests cover one-shot faults before the real writer is invoked. Persistent/final-write failure was checked by the separate probe above, not added to these test files. An interruption after atomic-writer temporary-file creation can still prevent the final write; that failure remains visible rather than being claimed as retained closeout. This review does not establish native/performance acceptance or full strict governance qualification.
+
+Reviewed SHA-256 identities:
+5417b5b5b090953f93bbccc4514f1574aef26ca6737e4a6821a118c88df8610a  ci/project/p06_qualified_warm_run.py
+8685e1a6ef105c94cdb8891de5403babe9353fd56a0b69ab45b48a047f595b45  ci/project/p06_qualified_warm_inputs.py
+900fa4ba18ae1e570cf452433f0c249e33337276a0b90113424238acf1d39732  ci/project/test_p06_initial_checkpoint_closeout.py
+7e3fceaa0f38230da34e355e26b7d86c33ec7591db5e80e1b0a8798a457dfc98  ci/project/test_p06_input_initial_closeout.py

@@ -1,0 +1,115 @@
+Assignment 15/100 — local execution review compatibility diagnosis
+
+Scope
+-----
+Read AGENTS.md, project status/roadmap/backlog/acceptance/resource guidance,
+the consumer review module, its fixture module, and the execution helper.
+No repository code edits, downloads, builds, broad discovery, commits or pushes.
+Root held restoration edits until the clean-base run finished.
+
+Exact tested source
+-------------------
+43c93ce892f1f3f6c0555597da342709ec9f7e49
+git status --short was empty immediately before and after the test invocation.
+The actual preparation-wrapper restoration was not present during this run.
+
+Command (source-root working directory)
+---------------------------------------
+TMPDIR=/home/agent/ai-gpu-work-4c990083f078/tmp python3 -B -m unittest discover -s ci/project -p 'test_p06_dependency_local_execute_review.py' -v
+
+Clean-base result
+-----------------
+Exit 0; Ran 5 tests in 0.965s; OK.
+All four formerly reported failures passed:
+- test_changed_interpreter_stops_before_the_next_stage
+- test_child_report_hardlink_is_rejected_before_next_stage
+- test_native_stage_that_never_started_preserves_not_run
+- test_successful_child_with_incomplete_cleanup_stops_the_route
+The fresh-process parser test also passed.
+Exact stdout/stderr is retained in a015-base-test.log beside this report.
+No assertion errors were produced by the clean-base invocation.
+
+Restored-source reproduction authorized by root
+----------------------------------------------
+Root supplied the earlier failing invocation, which used `python -B`, and
+authorized a narrow alias comparison after restoring its source changes.
+The execution helper and the two consumer test files remained byte-for-byte
+unchanged from the base. The preparation wrapper was restored.
+
+Command:
+TMPDIR=/home/agent/ai-gpu-work-4c990083f078/tmp PYTHONPATH=ci/project python -B -m unittest -v test_p06_dependency_local_execute_review
+
+Exit 1; Ran 5 tests in 0.977s; FAILED (failures=4).
+Exact stdout/stderr: a015-python-alias-test.log.
+Every failure is the first outcome assertion:
+- changed_interpreter: review line 95, AssertionError: 'blocked' != 'fail'
+- child_report_hardlink: review line 106, AssertionError: 'blocked' != 'fail'
+- native_stage_never_started: review line 84, AssertionError: 'blocked' != 'fail'
+- successful_child_incomplete_cleanup: review line 70, AssertionError: 'blocked' != 'fail'
+The parser test passes.
+
+Same command with the matching alias:
+TMPDIR=/home/agent/ai-gpu-work-4c990083f078/tmp PYTHONPATH=ci/project python3 -B -m unittest -v test_p06_dependency_local_execute_review
+
+Exit 0; Ran 5 tests in 1.035s; OK.
+Exact stdout/stderr: a015-restored-python3-test.log.
+
+Import / execution boundary finding
+----------------------------------
+Neither test_p06_dependency_local_execute.py nor p06_dependency_local_execute.py
+imports p06_dependency_local_prepare. The four boundary tests patch execute's
+run_bounded and generate their child reports entirely through fixture.child.
+They do not launch or import the preparation wrapper.
+
+Only test_each_stage_argv_is_accepted_by_its_real_parser_in_a_fresh_process
+imports local_prepare, in a fresh subprocess while intercepting parse_args.
+That test passed in the prior run, this clean-base run, and both alias runs.
+
+The restored-source alias comparison reproduces and isolates the failure to
+the invoked Python alias. It does not identify a wrapper regression.
+
+Confirmed environment coupling
+------------------------------
+The execution fixture mocks version/platform to Linux CPython 3.12.14 but keeps
+the actual interpreter path from execute.interpreter_identity().
+At p06_dependency_local_execute.py:244-245 the route requires literal equality
+between shutil.which('python3', cleaned PATH) and that invoked interpreter path.
+p02_matrix.py:181-185 retains the invoked path separately from its resolved path.
+
+One additional synthetic fixture observation under `python -B` recorded:
+  sys_executable: .../dependencies/python/bin/python
+  resolved_executable: .../dependencies/python/bin/python3.12
+  selected_child_python3: .../dependencies/python/bin/python3
+  outcome: blocked
+  reason: local child Python selection differs from the executing interpreter
+  stage_count: 0
+  child_observation_count: 0
+  native_execution: not_run
+The same binary's invocation paths fail the literal selection equality before
+the fixture can exercise any of the four intended failure boundaries.
+
+Observed passing environment
+----------------------------
+sys.executable: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3
+resolved path: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12
+shutil.which('python3', interpreter-directory + ':/usr/bin:/bin'):
+  /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3
+CPython 3.12.14; temporary root has no symlink alias.
+
+Disposition
+-----------
+Use `python3 -B` for the development checks in this environment. Preserve the
+production interpreter-selection gate; do not relax it to make the alias pass.
+No repository change was made or is recommended from this diagnosis.
+These are focused development checks, not full strict governance qualification.
+
+Relevant restored-source SHA-256 identities
+------------------------------------------
+p06_dependency_local_execute.py:
+  b6651948b2ee4ce4fe99c94fac8ac7e86bfec8a8658f258b3ef76081104b3c79
+test_p06_dependency_local_execute.py:
+  19ca409195b633bceae7c55532732337e383187197cb3b316b6c996313a65d89
+test_p06_dependency_local_execute_review.py:
+  b14dcd65fc10afd961686826d9c6209cf35090696de642b47d00d1f68383331e
+p06_dependency_local_prepare.py:
+  89953e2d2f6b6425598fc58bc1c4b1f0cf5a9eefe03dfb898441eea3171ad900

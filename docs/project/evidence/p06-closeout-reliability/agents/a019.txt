@@ -1,0 +1,52 @@
+Assignment 019/100 — independent builder lifecycle review
+Reviewer: /root/a019_builder_review
+Date: 2026-11-26
+Repository: /home/agent/ai-gpu-work-4c990083f078/AI-GPU
+Base HEAD: 43c93ce892f1f3f6c0555597da342709ec9f7e49
+Reviewed tree: uncommitted working tree; this is not a qualification of HEAD or of a published revision.
+exactsourcehash (ci/project/p06_dependency_build.py SHA-256): 019a454e2f0e524e30ed8b2c2eebedf350298a457215c07c028cff2b72fd85e1
+Reviewed identity manifest SHA-256 (sorted compact JSON mapping plus LF): b349f204627b69f435f3c95db8b353f539dde7854ee891a21946186cb8e21c19
+
+Conclusion
+No blocking regression found in the reviewed change: moving the first self.save() from Builder.__init__ into the opening of Builder.execute() places recoverable initial receipt failures under the existing execution failure and finalization path. Constructor-only callers do not rely on an emitted report. Existing staging, child launch accounting, safety gates and receipt claims are unchanged. The new tests accurately establish the covered pre-write and post-publication fault cases. Do not broaden that evidence into a promise that arbitrary filesystem faults are recoverable; the partial-write limitation below remains.
+
+Scope and inspection
+- Read AGENTS.md and the current relevant status/roadmap/backlog, canonical P06 gate metadata, acceptance and independent review policy. Reviewed both changed production hunks and the full new test module.
+- Traced Builder construction, execute/fail/finally, command checkpoints, stage(), stage_file(), retained_inventory(), _main()/main(), the actual base._write_json implementation, hosted writers_finished()/observed_native_execution(), and the local/qualified stage specifications.
+- Production construction found: build(args) immediately returns Builder(args).execute(); CLI _main invokes build. Native/local orchestrators invoke that CLI. Repository-wide Python caller search found no production code depending on constructor-only receipt publication.
+- Direct constructor test consumers: failure-state fixtures; launch-failure fixtures; worker-thread execution; host-bin symlink admission rejection. The first two use explicit save/command/execute paths, worker-thread execution still works, and invalid host-bin rejection still occurs before output creation. object.__new__ fixtures do not depend on the removed constructor save.
+- The output directory and six empty packet subdirectories are still created by construction. Initial report material, None helper/reader/checkout attributes, and all empty command inventories are complete before execute starts. Hence final-stability and final-record inventory remain valid after the initial save fails.
+- save failure precedes checkout collection, tools, materialization, child launching and staging. fail records the initial reason once and conservatively leaves outcome blocked when the commands list is empty. Finalization emits finished with fresh_dependency_build_passed false and unchanged false claims/budget.
+- Hosted closeout requires the supervisor child report to be finished and its commands to be a list with known process status. A newly retained finished builder report with commands=[] satisfies that writer check without implying native execution. The test's not_run observation is from its explicitly prewritten supervisor report; it does not exercise the full hosted supervisor or establish a new native result.
+- Terminal self.save() remains outside a swallowing catch/retry loop. A second write failure escapes; it cannot produce a returned success report. A previously consumed initial interruption does not authorize retrying or hiding terminal interruption. _main converts terminal OSError/ValueError/RuntimeError to nonzero blocked CLI output; terminal KeyboardInterrupt unwinds to the enclosing caller with the SIGTERM handler restored by main's finally.
+
+Completed validation (source root; Python host fault checks only)
+Command:
+  PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=ci/project python3 -m unittest -v test_p06_builder_initial_closeout test_p06_dependency_failure_state test_p06_dependency_launch_failures test_p06_dependency_cancellation.DependencyCancellationTests.test_direct_builder_keeps_worker_thread_execution
+Result: PASS, 13 tests, 0 failures/errors/skips; unittest reported 0.123 seconds.
+  5 new initial-builder closeout tests; 4 existing failure-state tests; 3 existing launch-boundary tests; 1 direct constructor worker-thread test.
+
+Additional bounded inline probes (no repository edits)
+1. For both initial OSError and initial KeyboardInterrupt, inject a terminal KeyboardInterrupt from the second _write_json call. Result: terminal exception identity propagates; exactly two attempted writes; no collect_source/run_bounded call; original reason retained in memory; finished blocked state in memory. PASS.
+2. Inject OSError and KeyboardInterrupt separately from the real writer's os.fsync during the initial save. Result: initial report.json.tmp remains, final save raises FileExistsError opening that same temporary with xb, no report.json exists, and no collect_source/run_bounded call occurred. Original failure is preserved only in memory. This confirms the limitation below, not a passing durable-closeout case.
+
+Finding / limitation
+F1, high confidence, static-proof plus injected-host-fault reproduction; pre-existing shared atomic-writer behavior, not introduced by this move:
+  p02_matrix._write_json (lines 92-100) uses a fixed report.json.tmp opened exclusively and does not remove it when stream write/flush/fsync or replace fails. A recoverable one-time fault after temporary creation therefore prevents the builder's final save from publishing a finished receipt, because the temporary still exists. The new tests inject before any temporary is created or after full publication, so they do not cover this real in-writer failure boundary. The builder remains conservative: no command is launched, no pass is claimed, and hosted writer completion cannot be established without a finished report. Treat this as a follow-up/claim-scope limitation; the two-line move correctly handles the tested recoverable boundaries and does not worsen the pre-existing case.
+
+Other explicit limitations
+- Constructor canonicalization, mkdir/setup failures and interruption before entering execute are outside this change's managed scope.
+- A terminal receipt write can fail; neither the new tests nor this review guarantee durable output under persistent I/O failure or repeated interruption.
+- No native dependency compilation, GPU/kernel/RTL test, download, external service call, hosted execution, full governance run or acceptance/qualification was performed. Only small local Python child processes from existing fault tests ran.
+- Reviewed current hosted/runner files as supporting interfaces; this report does not independently approve all concurrent edits to them.
+- No source edits, commits, pushes or agents spawned. Only this requested report was created. Source identities below were checked unchanged at report creation.
+
+Source identities (SHA-256)
+019a454e2f0e524e30ed8b2c2eebedf350298a457215c07c028cff2b72fd85e1  ci/project/p06_dependency_build.py
+4ea8d5266cbfb1b5323aef35b2a34be7b7614cd1f16115812836a41cc4481686  ci/project/test_p06_builder_initial_closeout.py
+e65eca7ac42705f175c296165d9579389d7db8a2deb7542d6eded8337bc83c17  ci/project/p02_matrix.py
+875e1e095253cbe38c6424adfdc324bdd88ee1152536a993ae6d03dba0992220  ci/project/p06_qualified_warm_hosted.py
+5417b5b5b090953f93bbccc4514f1574aef26ca6737e4a6821a118c88df8610a  ci/project/p06_qualified_warm_run.py
+0c5563e35993be169bbc5593880a325aa9118d95d0bb442873f674609262f342  ci/project/test_p06_dependency_failure_state.py
+535e0926b259d21f83211da91646aae922673b7ae7e553ad9ef3b986a08ef97e  ci/project/test_p06_dependency_launch_failures.py
+6c67f7d8dd18ab38f74434ec661af07f224edb56293a4748bcbba582b918cbbb  ci/project/test_p06_dependency_cancellation.py

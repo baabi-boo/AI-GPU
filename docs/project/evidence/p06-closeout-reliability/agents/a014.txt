@@ -1,0 +1,68 @@
+Assignment a014/100 — independent hosted closeout review
+
+Disposition: no concrete findings in the reviewed diff. No source or test edits made.
+Reviewer: /root/a014_closeout_review; independent of the implementation.
+Evidence type: static-proof review of the exact changed hunks and supporting paths.
+Confidence: high within this bounded source/test scope; this is not execution or acceptance evidence.
+
+Reviewed identities
+- Repository: baabi-boo/AI-GPU
+- Base commit: 43c93ce892f1f3f6c0555597da342709ec9f7e49
+- ci/project/p06_qualified_warm_hosted.py SHA-256:
+  912c57bc1b73ee268e062ca76c45b8a0ba00d2ee41200f96b12cb4ffdb7faf14
+- ci/project/test_p06_hosted_closeout_interruptions.py SHA-256:
+  df80bdf105a1a5ce73a68dcbef3a42b8ff0c993aa219f75fba70be90accb4c06
+- New test Git blob: c1ce1e1e172751a88ad34f657d5d5e51d708c3a5
+
+Review basis
+Read AGENTS.md, the current status and backlog handoffs, ROADMAP.md, the relevant
+P01/P06 roadmap state, acceptance policy and code-review policy. Inspected both
+changed hosted-source hunks, the full new test module, existing hosted composition
+fixtures, writers_finished, observed_native_execution, xrt_signals.py and the
+bounded-process handler installation/restoration. Checked the hosted automation
+contract and failure/delivery matrix for the resulting claim scope.
+
+Conclusions
+1. Failure retention: closeout_observation catches Exception and KeyboardInterrupt,
+   revokes native_success and orchestration_passed before any retry, and retains
+   only the failure stage and exception type. A later successful observation does
+   not restore success. Packaging consequently selects partial mode and the final
+   outcome remains fail after any caught closeout error.
+2. Truthful execution status: native_reconciled snapshots the already reconciled
+   native result after source closeout and before writer observation. A subsequent
+   writer interruption cannot erase a previously validated run. An unreconciled,
+   potentially started supervisor becomes unknown; re-observation is allowed only
+   when sources are stable and writer completion is established. Confirmed run,
+   not_run and unknown remain distinct. Missing launch/cleanup observations do
+   not acquire a positive native claim.
+3. Bounds and side effects: each observer is invoked at most twice. An ordinary
+   exception stops immediately; only a first KeyboardInterrupt permits another
+   read. The only call sites are pure writer/native receipt observations. Native
+   producers, acquisition, packaging, encryption and final writes are not retried.
+4. Cancellation nesting: the helper installs no signal handler. The existing
+   hosted CLI decorator still owns cooperative SIGTERM outside run_bounded, and
+   run_bounded retains its nested child-cleanup and restoration ownership. The
+   new real-SIGTERM controls explicitly verify SIGTERM and SIGINT restoration.
+5. Delivery gates: unavailable writer evidence defaults to False and blocks both
+   packaging and encryption through their existing requirements. Unavailable
+   native disposition defaults to unknown and permits only partial retention when
+   writers are observed finished. No frozen population, resource gate, acceptance
+   field or native producer invocation is changed.
+
+Test-source assessment
+The new module covers real SIGTERM during both observation boundaries, exact
+maximum retry counts, ordinary exceptions without retry, second interrupts/errors,
+malformed/missing nested receipts, unknown launches and incomplete cleanup. It
+checks retained failure receipts, permissions, secret-free error records, partial
+packaging, unchanged producer call order and the provider output gate. These are
+source-review observations, not claims that this reviewer executed those tests.
+
+Verification and limitations
+No tests, broad suite, GPU/native workload, build, live provider operation or
+publication was run by this reviewer. Root reported the patch had prior focused
+testing; that execution evidence belongs to its own retained run. This review
+does not qualify a changed revision, native population, performance result or
+phase acceptance. Existing best-effort boundaries remain: final persistence is
+not retried, and SystemExit, uncatchable termination or interruption during failure
+handling can prevent durable closeout. No new finding is asserted from those
+unchanged documented limits.

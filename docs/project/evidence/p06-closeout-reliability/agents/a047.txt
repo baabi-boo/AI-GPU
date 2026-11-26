@@ -1,0 +1,6 @@
+Static only; tests not run.
+encrypt SHA256: 896f713d9acb5f05a9236c1d5ee5c931bad6be593b23065386d1f9f06dc23966
+tests SHA256: 33220df1d83eda8be52a8a9321cfe03a562232a1916169c395e4df7d06a9576b
+Finding: lines 697–703 verify directories before both new full reads, never afterward. Renaming/replacing output during hashing leaves descriptor-relative checks passing against the old directory. Add final directory verification; this narrows the newly enlarged observation window. Subsequent mutations remain inherently possible under the existing trusted-directory assumption.
+Reads/hashes bind to one descriptor; expected dev/inode, regular type, size, SHA256, stable mode/nlink/size/mtime/ctime, and final nonfollowing named-path stamp are checked. Link count need only remain stable. NOFOLLOW rejects symlinks; NONBLOCK prevents FIFO-open hangs before type rejection. Each chunk checks deadline/byte cap; regular-file I/O itself lacks preemptive bounds.
+Tests cover both files’ replacement, same-inode rewrite/restored mtime, removal at both unlink boundaries, and success; no mid-read directory replacement.

@@ -1,0 +1,6 @@
+a042 — static API review
+Base/HEAD: 43c93ce892f1f3f6c0555597da342709ec9f7e49; working tree reviewed.
+p06_dependency_build.py SHA256: 019a454e2f0e524e30ed8b2c2eebedf350298a457215c07c028cff2b72fd85e1.
+Call chain: p06_qualified_warm_run/p06_dependency_local_execute.stage_specs → CLI main → _main → build → Builder(args).execute(). Production Python search found no other Builder construction.
+
+No regression found. Constructor (198) still creates owned evidence directories but no longer writes report.json; execute (427) writes it first inside existing try/finally. Direct-constructor semantics therefore change without affecting existing production callers. First-write failures now return blocked reports when closeout succeeds, including cooperative interruption, instead of escaping construction; persistent write failure may still escape. No child producer starts before the successful initial save; command (288) additionally retains launch intent before run_bounded. Argument parser, report/stdout schemas, exit mapping, preparation checks, receipt validation, and product gates are unchanged. Static only; no tests/native/network.

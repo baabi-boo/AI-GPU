@@ -1,0 +1,93 @@
+Assignment a017 — encryption CLI cooperative SIGTERM closeout
+
+Disposition: CONFIRMED AND FIXED.
+Base HEAD: 43c93ce892f1f3f6c0555597da342709ec9f7e49, existing dirty worktree.
+Interpreter: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3; Python 3.12.14.
+All Python commands used python3 -B, and TMPDIR=/home/agent/ai-gpu-work-4c990083f078/tmp.
+
+Ownership
+Only ci/project/p06_qualified_warm_encrypt.py and NEW
+ci/project/test_p06_encrypt_sigterm_closeout.py were edited in the repository.
+Existing a009 _exclusive descriptor ownership, _verify_public_file and both
+post-private-cleanup verification calls were preserved exactly. The only
+production delta added here renames the old main to _main and adds the same
+inline stdlib SIGTERM wrapper shape used by p06_dependency_build.main. No
+additional imported helper or transitive source closure was introduced.
+
+Confirmed root cause
+The CLI inherited SIG_DFL for SIGTERM. Its age subprocess runs in a different
+process group (start_new_session=True). Sending SIGTERM only to the encrypt CLI
+therefore killed Python without reaching its BaseException cleanup/retention
+path, and the age leader plus its descendant remained running. Direct
+KeyboardInterrupt tests did not exercise this process-level default behavior.
+
+Bounded reproduction
+All input is synthetic. The test double emits exactly 51 bytes of partial,
+synthetic age-shaped ciphertext plus synthetic private stderr, starts one inert
+child, and has a 15-second self-bound. The test waits for observed retained
+bytes, then sends real SIGTERM only to the CLI. Readiness and CLI completion
+are each bounded at five seconds. Cleanup in the test's finally terminates the
+fixture group even when the pre-fix regression assertions fail. No real private
+evidence, network calls, age cryptography or native GPU work was used.
+
+Before production change
+Command:
+TMPDIR=/home/agent/ai-gpu-work-4c990083f078/tmp python3 -B -m unittest discover -s ci/project -p 'test_p06_encrypt_sigterm_closeout.py' -v
+7 tests ran in 0.714 seconds, 9 failures (four handler-scope subtests plus five
+real-signal subprocess cases), zero errors. The direct API worker-thread test
+passed. Raw CLI reproduction observed returncode=-15, empty stdout/stderr,
+no public failure summary, no private diagnostic, 51 retained partial bytes,
+age leader sleeping and descendant running before test cleanup.
+Log: reports/a017-before.txt
+Concrete observations: reports/a017-reproduction-before.json
+
+Fix behavior
+The CLI-only main wrapper translates SIGTERM into KeyboardInterrupt before
+argument parsing, and restores the enclosing SIGTERM handler in finally.
+Existing encryption closeout now runs, including process-group cleanup, public
+rollback before commit, private failure diagnostics and sanitized stdout.
+The direct encrypt_private_directory API is unchanged and still succeeds from
+a worker thread without mutating process signal handlers.
+
+After production change
+Same focused command: 7 tests PASS in 0.801 seconds, zero errors/skips.
+Raw CLI reproduction returns 1 with one sanitized failure JSON record and empty
+stderr. The private diagnostic records KeyboardInterrupt at encryption,
+cleanup_complete=true, publication_committed=false and
+plaintext_publication_authorized=false. Both age leader and descendant are
+gone before test cleanup; exact 51-byte partial ciphertext and private stderr
+remain. Input bytes are unchanged.
+Log: reports/a017-after.txt
+Concrete observations: reports/a017-reproduction-after.json
+
+Publication and handler boundary checks
+- SIGTERM immediately after the public ciphertext link preserves its private
+  last copy and emits the public sanitized failure summary.
+- SIGTERM immediately after the public pass-summary link withdraws the
+  uncommitted pass and public ciphertext while retaining private copies.
+- SIGTERM after private ciphertext unlink preserves the committed public
+  ciphertext/pass-summary pair, including its checked digest and length.
+- SIGTERM after private summary unlink preserves that committed last pair
+  when both private links are already absent.
+- Every isolated publication case reports KeyboardInterrupt privately, returns
+  sanitized CLI failure, and restores the previous SIGTERM handler.
+- In-process handler-scope checks cover successful execution, handled error,
+  KeyboardInterrupt and escaping SystemExit; the enclosing SIGTERM handler and
+  SIGINT handler are preserved.
+
+Focused regression command
+TMPDIR=/home/agent/ai-gpu-work-4c990083f078/tmp PYTHONPATH=ci/project python3 -B -m unittest -v test_p06_qualified_warm_encrypt test_p06_encrypt_operational_failures test_p06_encrypt_publication_review test_p06_encrypt_descriptor_closeout test_p06_encrypt_sigterm_closeout
+64 tests PASS in 4.487 seconds, zero failures/errors/skips.
+Log: reports/a017-regression.txt
+The source-tree git diff --check returned 0.
+
+Final owned source hashes
+ci/project/p06_qualified_warm_encrypt.py: 896f713d9acb5f05a9236c1d5ee5c931bad6be593b23065386d1f9f06dc23966
+ci/project/test_p06_encrypt_sigterm_closeout.py: 9436ce59e49b13f90092b287010d090095fcf5dbe7a4237874b20eff401044f7
+
+Scope and remaining limits
+This is local tooling evidence for one cooperative SIGTERM, not native,
+cryptographic, hardware, performance, or full-governance qualification. Existing
+abrupt-termination/repeated-interruption/storage-failure limitations are not
+changed. No builds, broad governance discovery, commits, pushes or agents were
+started. Independent review/publication remains with the parent task.

@@ -1,0 +1,19 @@
+Agent076; base 43c93ce892f1f3f6c0555597da342709ec9f7e49 plus edits. Read-only a027 adjudication; no tests/native/network.
+F1 high/static-proof: prelaunch _composition calls setUp outside try. Interrupted patch entry after patch.dict(clear=True) bypasses registered ExitStack cleanup, retaining global patches.
+F1 medium/reasoned-risk: control/encrypt join(3s/5s) failures can leave daemon work racing restored patches/tempdir removal under delayed I/O/scheduling. Control finally owns descriptors and _deadline rejects workers before opener; encrypt owns synthetic-child cleanup (2s deadline; TERM/KILL waits 1s each). Neither bounds stuck filesystem calls; “briefly” is unsupported. No native/network escape established.
+Withdraw handler defect: hosted.main's decorator restores SIGTERM in finally; run_cli lacks only defensive restoration if that guarantee regresses.
+A052 passed 228 with state restored; this does not qualify failure branches. No F2.
+SHA256 (repository-relative):
+ci/project/test_p06_hosted_prelaunch_emission.py edcfb759c05cf42ae38102f4bfcef3b89867fa763a5102108cb09fea231fa069
+ci/project/test_p06_hosted_closeout_interruptions.py df80bdf105a1a5ce73a68dcbef3a42b8ff0c993aa219f75fba70be90accb4c06
+ci/project/test_p06_control_sigterm_closeout.py dcd6e1650a8fc3a41416104c17d55758aa24d60aa4e3e020c65c988dd8be1766
+ci/project/test_p06_encrypt_sigterm_closeout.py 9436ce59e49b13f90092b287010d090095fcf5dbe7a4237874b20eff401044f7
+ci/project/test_p06_qualified_warm_hosted.py b8da768f4b6ad6396b46d70a036dda8712111d4fb7ededc899c17932a96dc1ab
+ci/project/test_p06_encrypt_operational_failures.py 5804c519149e3131c6183286c3c599d1b27f9849a4139d24765c311691169e88
+ci/project/test_p06_qualified_warm_encrypt.py 10a104f429e47584339e3bcc0cf77ed6bf3ad13b054b1233de7253c0d8323b4c
+ci/project/p06_qualified_warm_hosted.py 875e1e095253cbe38c6424adfdc324bdd88ee1152536a993ae6d03dba0992220
+ci/project/p06_qualified_warm_control.py c0368265402be85f4216d6a3b3f84de8c2cf98cea374593ae45b01854a4a2a5b
+ci/project/p06_qualified_warm_encrypt.py 95ac65f43e09752d4df6286acaf4e1ef79ff81b7528770ffda1dd8c471cda5e8
+ci/project/xrt_signals.py a9531608094a233e5336a35e9fa7ebd028aaa3fc6dd7d3ed0f6f4d3f83a94fb8
+../reports/a027.txt 6a9ea4b5afb54ab3789e83dd526473f7a725aa1d08fdc9269c36701363bd5a96
+../reports/a052-integration.json c6fb74ed01731a552afe758c4b23cb7a31e0edbd28a56acd9b437d496b596281

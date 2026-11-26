@@ -1,0 +1,145 @@
+{
+  "agent": "a064",
+  "status": "pass",
+  "checked_utc": "2026-11-26T04:47:38.729352+00:00",
+  "base_revision": "43c93ce892f1f3f6c0555597da342709ec9f7e49",
+  "scope": "Read-only final review hash rebinding after a049; no new code review, tests, network, native execution or acceptance claim.",
+  "reference_root": "docs/project/evidence/p06-closeout-reliability",
+  "initial_coverage": {
+    "record": "validation/a035-review-coverage.json",
+    "production_files": 7,
+    "hunks": 18
+  },
+  "final_production_files": 7,
+  "final_hunks": 18,
+  "uncovered_hunks": [],
+  "files": {
+    "ci/project/p06_dependency_build.py": {
+      "sha256": "019a454e2f0e524e30ed8b2c2eebedf350298a457215c07c028cff2b72fd85e1",
+      "a035_sha256": "019a454e2f0e524e30ed8b2c2eebedf350298a457215c07c028cff2b72fd85e1",
+      "a035_hunks": 2,
+      "independent_reviews": [
+        "agents/a019.txt"
+      ],
+      "a052_before_after_match": true,
+      "binding": "Unchanged from a035-covered source."
+    },
+    "ci/project/p06_dependency_local_prepare.py": {
+      "sha256": "89953e2d2f6b6425598fc58bc1c4b1f0cf5a9eefe03dfb898441eea3171ad900",
+      "a035_sha256": "89953e2d2f6b6425598fc58bc1c4b1f0cf5a9eefe03dfb898441eea3171ad900",
+      "a035_hunks": 4,
+      "independent_reviews": [
+        "agents/a018.txt"
+      ],
+      "a052_before_after_match": true,
+      "binding": "Unchanged from a035-covered source."
+    },
+    "ci/project/p06_qualified_warm_control.py": {
+      "sha256": "c0368265402be85f4216d6a3b3f84de8c2cf98cea374593ae45b01854a4a2a5b",
+      "a035_sha256": "c0368265402be85f4216d6a3b3f84de8c2cf98cea374593ae45b01854a4a2a5b",
+      "a035_hunks": 2,
+      "independent_reviews": [
+        "agents/a026.txt"
+      ],
+      "a052_before_after_match": true,
+      "binding": "Unchanged from a035-covered source."
+    },
+    "ci/project/p06_qualified_warm_encrypt.py": {
+      "sha256": "95ac65f43e09752d4df6286acaf4e1ef79ff81b7528770ffda1dd8c471cda5e8",
+      "a035_sha256": "896f713d9acb5f05a9236c1d5ee5c931bad6be593b23065386d1f9f06dc23966",
+      "a035_hunks": 5,
+      "independent_reviews": [
+        "agents/a013.txt",
+        "agents/a021.txt",
+        "agents/a051.txt"
+      ],
+      "a052_before_after_match": true,
+      "binding": "Original five hunks reconstructed byte-for-byte by removing only a049 final _verify_directories(directories) call; added line bound to a051.",
+      "reconstructed_a035_sha256": "896f713d9acb5f05a9236c1d5ee5c931bad6be593b23065386d1f9f06dc23966"
+    },
+    "ci/project/p06_qualified_warm_hosted.py": {
+      "sha256": "875e1e095253cbe38c6424adfdc324bdd88ee1152536a993ae6d03dba0992220",
+      "a035_sha256": "875e1e095253cbe38c6424adfdc324bdd88ee1152536a993ae6d03dba0992220",
+      "a035_hunks": 3,
+      "independent_reviews": [
+        "agents/a014.txt",
+        "agents/a020.txt"
+      ],
+      "a052_before_after_match": true,
+      "binding": "Unchanged from a035-covered source."
+    },
+    "ci/project/p06_qualified_warm_inputs.py": {
+      "sha256": "8685e1a6ef105c94cdb8891de5403babe9353fd56a0b69ab45b48a047f595b45",
+      "a035_sha256": "8685e1a6ef105c94cdb8891de5403babe9353fd56a0b69ab45b48a047f595b45",
+      "a035_hunks": 1,
+      "independent_reviews": [
+        "agents/a016.txt"
+      ],
+      "a052_before_after_match": true,
+      "binding": "Unchanged from a035-covered source."
+    },
+    "ci/project/p06_qualified_warm_run.py": {
+      "sha256": "5417b5b5b090953f93bbccc4514f1574aef26ca6737e4a6821a118c88df8610a",
+      "a035_sha256": "5417b5b5b090953f93bbccc4514f1574aef26ca6737e4a6821a118c88df8610a",
+      "a035_hunks": 1,
+      "independent_reviews": [
+        "agents/a016.txt"
+      ],
+      "a052_before_after_match": true,
+      "binding": "Unchanged from a035-covered source."
+    }
+  },
+  "a049_delta": {
+    "patch": "validation/a049-production.patch",
+    "production_lines_added": 1,
+    "production_lines_removed": 0,
+    "original_encryption_sha256": "896f713d9acb5f05a9236c1d5ee5c931bad6be593b23065386d1f9f06dc23966",
+    "final_encryption_sha256": "95ac65f43e09752d4df6286acaf4e1ef79ff81b7528770ffda1dd8c471cda5e8",
+    "independent_review": "agents/a051.txt",
+    "regression_path": "ci/project/test_p06_encrypt_final_directory.py",
+    "regression_sha256": "aeea7e4ae4000d6347ee6aea0a2c9c9a259e08445cafd8ac55e48c8bb14b2506"
+  },
+  "final_integration": {
+    "record": "validation/a052-integration.json",
+    "production_before_after_current_identical": true,
+    "executed_methods_recorded": 228,
+    "executed_by_a064": false
+  },
+  "checks": {
+    "a035_seven_files_eighteen_covered_hunks": true,
+    "six_files_match_a035": true,
+    "one_final_directory_check_anchor": true,
+    "encryption_old_review_exactly_reconstructed": true,
+    "a049_pre_post_hashes_match": true,
+    "a049_before_snapshot_exactly_reconstructed": true,
+    "a049_patch_is_entire_final_delta": true,
+    "a051_exact_final_production_and_test_hashes": true,
+    "a052_exact_production_path_set": true,
+    "a052_all_production_before_after_match_final": true,
+    "a052_encryption_regression_before_after_match_final": true,
+    "a052_recorded_success": true,
+    "base_revision_unchanged": true,
+    "no_additional_production_edits_beyond_final_integration": true,
+    "final_diff_eighteen_hunks": true,
+    "reviewer_packet_links_exist": true,
+    "input_packet_mirrors_match_reports": true,
+    "production_bytes_stable_during_binding": true
+  },
+  "input_sha256": {
+    "validation/a035-review-coverage.json": "c16f9fa5996a9ed745556b0527c518f6e6a278c84682d6362e0b0d5fd4e3eab6",
+    "validation/a049-production.patch": "9cb2e92c602184df87376ab272accbaf967cde2fe50d9b76953e5a1fd38bdff2",
+    "validation/a049-before.sha256": "394f4f51b64c7d3e84a5a9016264064ef3be715da43d66b14476f5908e1a102e",
+    "validation/a049-after.sha256": "982359b4c6af99063bca79a0c7c31677d5507c62a7c485d6cb37eec02a27d01d",
+    "validation/a049-encrypt-before.py": "896f713d9acb5f05a9236c1d5ee5c931bad6be593b23065386d1f9f06dc23966",
+    "agents/a051.txt": "c070db07f8d96e2dc9eda3aa1e72c75b85fefe1ccb20b16fe00b8c298403d7b1",
+    "validation/a052-integration.json": "c6fb74ed01731a552afe758c4b23cb7a31e0edbd28a56acd9b437d496b596281"
+  },
+  "retained_limits": [
+    "a013 reconstructed review summary; optional fdopen and public-read/deadline coverage gaps are not new tests.",
+    "a019 pre-existing F1: shared atomic writer may leave its exclusive temporary after an in-writer failure, preventing final receipt; fail-closed behavior remains.",
+    "Original a006/a013 reports are reconstructed and a011/a012 were proposals subsequently applied by root; later independent reviews bind actual current implementation.",
+    "Independent review coverage does not itself establish full governance/native/performance acceptance or maintainer approval.",
+    "Final directory check is one observation; subsequent concurrent pathname mutation is outside its claim.",
+    "No additional production edits means current changed production paths equal the final-integration seven-file set and all seven bytes match its before/after hashes."
+  ]
+}

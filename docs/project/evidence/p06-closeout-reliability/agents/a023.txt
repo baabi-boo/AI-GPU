@@ -1,0 +1,33 @@
+Assignment 23/100 — frozen P06 measurement invariants: PASS
+Observed UTC: 2026-11-26T04:12:35.042449+00:00
+Repository: /home/agent/ai-gpu-work-4c990083f078/AI-GPU
+Base and HEAD: 43c93ce892f1f3f6c0555597da342709ec9f7e49
+
+Read AGENTS.md and the project status, roadmap, backlog, acceptance policy, and frozen warm design/contracts. No gates or evidence classifications changed.
+
+All 69 unique measurement_sources named in ci/project/p06_qualified_warm_proof.json matched their stored SHA256 AND size_bytes; each file is also byte-identical to base. No mismatches.
+Canonical observed measurement-source inventory SHA256: 21ba69d11a9bdb91eab4abee75589710cd3dcc092895ec251350f4f4ce215d8b
+Total verified measurement-source bytes: 1303138
+Both proofs also match their code-pinned byte sizes, byte hashes, semantic hashes, and base; proof validation passed without native execution.
+
+Protected files below are byte-identical to base (SHA256; bytes; path):
+172721c671ddaa79541dde9c37c154b5ab5a99b8abb0caabf2e07036dd429efb  21505  ci/project/p06_qualified_warm_proof.json
+d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e  123781  ci/project/p06_counter_qualification_proof.json
+893d85401b1d5f7757d82cb7c743a89b36264fe19c7d08c239b7f216b7a8cbbd  25793  ci/project/p06_warm_contract.json
+d311c5fb77e651a93fde368f0e41d517f40199a3bd43e27c302d4d00888cc31e  19379  ci/project/p06_warm_contract.py
+f8984c8f286094e7853410c2a8c67bc9aecf81aea860b3ffaff0bcd2aebac112  8017  ci/project/p06_qualified_warm_contract.py
+d445b9447aefb4f2917f827105df9b5722c461f10f68629176f2dc2d2321fd0d  10828  ci/project/p06_counter_qualification_contract.py
+5028e4da131dd4759eef1a0bc920bd985550f747a6cf6612f07a8e7cc67faddb  14917  ci/project/p06_managed_preflight_contract.py
+ac273f587f759900d16ad41c7c63c2d2b10ca0864d5018f8403572f75e5a3e88  19568  ci/project/p06_warm_analyze.py
+7443625aefbefbdb749527c333ff13b4e9e1144ce256acee460247187acbc28f  5737  ci/project/p06_qualified_warm_analyze.py
+91e4657c8e4c8eca3eb0b959b1bbc0430d2991cdd65e30f4d45b3da12b4e37c2  23976  docs/designs/warm_workspace_benchmark_v1.md
+979936604fe95572804243ab5b9ad2b524aa0fcdcf9d066450e70dfc841257a6  7078  docs/designs/qualified_warm_workspace_v1.md
+
+Independent count derivation from the actual contract and reconstructed ordered plan:
+2 formats x 6 pairs x 2 policies = 24 fresh processes; 1 prime + 32 timed operations each = 33 launches/process; 24 x 33 = 792 launches; 792 x 32 output words = 25,344 checked words.
+2 formats x 5 measured pairs x 2 policies = 20 measured processes; 20 x 32 timed operations x 1 launch = 640 measured launches; 640 x 32 = 20,480 measured checked words. The 20 process lifetimes also contain 20 excluded prime launches. Four pair-zero processes and all 24 primes are excluded from measured criteria.
+The independently constructed ordered plan equals both the proof and qualified/warm process_plan output. Complete counts also equal six times the unchanged historical four-process prerequisite.
+
+Sampling/population and predicate implementations unchanged: five measured batch means per format/policy, each mean over 32 primary intervals; candidate median <= 95% reference, every measured pair host time <= reference and qualified modeled cycles <= reference, with both formats satisfying all predicates. Exact integer cross-product implementation preserved. No replacement, outlier removal or optional stopping.
+
+Scope/limitations: read-only byte/hash/size checks and small contract/count validation only. No unit/full-governance suite, build, native execution, archive replay, performance observation or provider check was run. Other working-tree files are under concurrent edits; this audit covers the listed protected inputs at the observation time, not qualification of the changed revision. P06/P06-T01 remain in_progress, P06-A02/A03 open, and P01 vendor integration blocked. Only this report was written.

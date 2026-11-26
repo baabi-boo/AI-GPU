@@ -1,0 +1,11 @@
+Static review; AGENTS.md read. HEAD 43c93ce892f1f3f6c0555597da342709ec9f7e49; dirty working tree.
+SHA256 hosted: 875e1e095253cbe38c6424adfdc324bdd88ee1152536a993ae6d03dba0992220
+SHA256 interruption tests: df80bdf105a1a5ce73a68dcbef3a42b8ff0c993aa219f75fba70be90accb4c06
+
+Truth table:
+- Writers Exception: one observation; False; packaging/encryption blocked before child launch; final fail; no encrypted-ready flag.
+- Writers KeyboardInterrupt then KeyboardInterrupt/Exception: two observations; identical blocked/fail/no-ready result.
+- Native Exception, or KeyboardInterrupt then KeyboardInterrupt/Exception, with writers complete: unknown native fact; partial packaging/encryption permitted; final fail; ready only if encryption succeeds.
+
+Evidence: hosted lines 574–586, 648–690, 721–723. Matching new tests inspect single/two-attempt bounds, absent packaging/encryption calls and output, unknown native facts, partial mode, failure receipts, and provider flag.
+Findings: none within assigned boundary. No tests, network, native execution, commits, or source edits.

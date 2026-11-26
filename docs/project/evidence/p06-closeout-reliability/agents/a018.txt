@@ -1,0 +1,19 @@
+Assignment 18/100 — independent preparation closeout review
+
+Source HEAD: 43c93ce892f1f3f6c0555597da342709ec9f7e49
+Reviewed working-tree files (SHA-256):
+  ci/project/p06_dependency_local_prepare.py: 89953e2d2f6b6425598fc58bc1c4b1f0cf5a9eefe03dfb898441eea3171ad900
+  ci/project/test_p06_preparation_initial_closeout.py: 60b4abd03780f80bed56a6f34a56dff0c316eed11b4cadc4f34e5783a75f72a5
+Tracked preparation diff SHA-256: e7ce433ea80f79285ec8b9ca1820fa70105a54b1673270d18e04cfaf7996c1de
+The new test is untracked; its complete bytes, not only git diff, were reviewed.
+
+Verdict: No blocking finding in the reviewed changes.
+
+Findings and evidence:
+- Initial save is now inside the existing try (prepare, lines 258–259). OSError and KeyboardInterrupt reach the established exception/finally closeout. provisioning_started is false until immediately before toolchain.provision, preserving blocked for known nonstarts and fail once provisioning is attempted. Budget, false claims, native_execution=not_run, receipt schema and source checks are unchanged. Closeout still depends on a writable final save; persistent I/O loss is not claimed as recoverable.
+- main wraps the unchanged prior body as _main, installs only SIGTERM, and restores the exact inherited handler in finally. The try includes installation, so an interruption delivered immediately after installation still restores the enclosing handler. Normal return, parser SystemExit and body exceptions also traverse finally. SIGINT is untouched.
+- F0 observation (high confidence, static-proof): main is a CLI entry and now requires Python's main thread because it calls signal.signal. No supported worker-thread main caller was found. The direct prepare(args) API does not install handlers and retains its previous thread-independent signal behavior. Production integration launches preparation as a CLI stage.
+- Source binding remains complete: existing dependency replay, native replay and control replay helper inventories already bind p06_dependency_local_prepare.py. The sole new runtime import is stdlib signal; no new project helper or inventory entry is required. Existing source hashes must naturally change with these bytes; this review grants no historical-proof or governance qualification.
+- The five new tests cover first-write OSError/KeyboardInterrupt, real subprocess SIGTERM at the initial checkpoint and during provisioning, and interruption during handler installation with restoration of a custom enclosing handler. They assert retained nonstart/failure classification, no invented native activity, no unintended initial provisioning, CLI status/summary, and SIGINT preservation.
+
+Validation scope: Static review only; no new test run. The parent reported 26 focused passes and is running integration checks. Prior consumer failures attributed separately to the python alias (report a015) were not repeated. No broad suites, downloads, builds, code edits, commits or pushes. This report does not establish native, performance, hardware or full-governance acceptance.

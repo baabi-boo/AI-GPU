@@ -1,0 +1,36 @@
+Assignment 12 recovery audit: dependency builder initial checkpoint
+
+Status: proposed fix and regressions only. Zero tests executed. The runtime became unavailable while adding the new test; local test-file completion is unknown. The production file was not changed by this agent. Root will apply the fix and obtain hosted CI validation. No native execution, downloads, commits, or reference updates were performed.
+
+Audited source
+HEAD: 43c93ce892f1f3f6c0555597da342709ec9f7e49
+ci/project/p06_dependency_build.py before SHA-256:
+8ffe7d048806eeb9f97fdda6dc3d9dc8f32ce90ce79ef12c7e58eb9edf4cc2b1
+
+Finding
+Builder.__init__ ends with self.save(), outside execute's exception/finalization boundary. An initial OSError or KeyboardInterrupt escapes build(args) before a finished receipt can be retained, despite no dependency command starting.
+
+Proposed two-line change
+1. Remove self.save() immediately after self.initial_checkout = None in Builder.__init__.
+2. Add self.save() as the first statement inside Builder.execute's existing try block.
+The first checkpoint remains before revision validation, source observation, tool inventory, materialization, or any command. Existing fail classification and final receipt's single attempt remain unchanged. No producer retry, budget, source gate, or acceptance change is proposed.
+
+Caller audit
+Repository-wide Builder( search found:
+- p06_dependency_build.build(args): immediately calls execute.
+- test_p06_dependency_failure_state fixture: uses in-memory report/fail/command/execute; no constructor-written receipt dependency.
+- test_p06_dependency_launch_failures fixture: command checkpoints intent; hosted inspection helper explicitly saves.
+- test_p06_dependency_local_admission symlink test: rejected during path validation before output creation; unaffected.
+- test_p06_dependency_cancellation worker-thread test: constructs then executes in worker; no immediate receipt dependency.
+object.__new__(Builder) method fixtures bypass construction and are unaffected.
+
+Proposed test artifact
+ci/project/test_p06_builder_initial_closeout.py
+Git blob: 18e1d82f578dd226ecb8537736829eb4c590d174
+UTF-8 bytes: 7199
+Five regressions call real build(args), using real checkpoint files and hosted nested writer inspection. They cover OSError/KeyboardInterrupt before and after initial publication, finished blocked nonstarts with false claims and no source/tool/materialization/child activity, and a final write failure propagating without retries.
+
+Verification
+Completed: source/caller/hosted-reader inspection, source hash, resource/tool availability inspection.
+Not run: before reproduction, after tests, diff validation, strict governance, native acceptance.
+CMake was not found; no installation attempted. Retain CMake integration omission unless CI supplies it.

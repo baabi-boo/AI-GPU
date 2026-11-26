@@ -1,6 +1,52 @@
 # Qualified warm-workspace handoff
 
-## Current launch-readiness continuation
+## Current closeout reliability continuation
+
+**Closeout reliability fixes are implemented; the next actual qualified warm
+experiment remains unstarted: 24 processes, 792 launches and 25,344 checked FP32
+words.** The [current audit](p06-closeout-reliability-audit.md) and
+[evidence packet](evidence/p06-closeout-reliability/README.md) describe protected
+first checkpoints, temporary CLI `SIGTERM` handlers, explicit hosted nonstarts,
+bounded pure final observations, and encryption descriptor cleanup and
+post-publication byte/identity verification. No native stage or performance
+sample is retried by these changes.
+
+Durable closeout still requires a functioning final report write. A mid-write
+fault can leave the existing exclusive `report.json.tmp` or its stage-specific
+counterpart and prevent the final save. The first-checkpoint correction does not
+repair that pre-existing writer
+limitation, retry report writes or relax ownership. Repeated interruptions and
+uncatchable kills are outside its durability claim.
+
+The base `43c93ce892f1f3f6c0555597da342709ec9f7e49` has passing strict
+governance and independent original replay at its recorded scope. Final focused
+integration passed **228 tests**, including all 44 new methods, with stable
+source identities and zero failures, errors or skips. Discovery collects
+**5,515 unique canonical IDs** without executing test bodies. These observations
+do not qualify the changed revision. Require the selected published revision's
+own complete, uninterrupted strict governance invocation with zero skips under
+the [checked environment](governance-runbook.md), followed by independent
+[governance-original replay](governance-artifact-replay.md), before admission.
+
+**Next bounded action:** qualify the selected published revision, verify or
+configure private delivery of the exact historical control archive and explicit
+public age recipient, then execute one complete admitted attempt. Keep the
+matching private identity outside Actions. Those operational inputs were not
+supplied to this session; live provider secrets were not inspected. Require
+actual runner admission at **15 GiB free disk and 4 GiB available memory**;
+observations do not reserve resources or establish hidden cgroup capacity.
+Follow the [hosted operator guide](p06-hosted-warm-guide.md) and
+[execution/replay runbook](evidence/p06-qualified-warm/runbook.md).
+
+Keep all **69 frozen measurement sources, 21 dependency descriptors**, proofs,
+goldens, sampling, numerical checks and performance predicates unchanged.
+Preserve the separate dependency/four-process prerequisites, encrypted complete
+or explicitly partial originals and independent complete native replay before
+the frozen performance decision. Synthetic closeout checks establish no
+performance result. P06/P06-T01 remain `in_progress`, P06-A02/A03 remain open
+and P01 vendor integration remains blocked.
+
+## Earlier launch-readiness continuation (historical)
 
 **Production launch-readiness fixes are implemented; the next actual qualified
 warm experiment remains unstarted: 24 processes, 792 launches and 25,344 checked

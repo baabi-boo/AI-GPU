@@ -1,0 +1,17 @@
+A035 — bounded independent review-coverage map
+
+All 18 current production hunks have independent review coverage:
+builder: 2, a012 proposal/root implementation -> a019;
+preparation: 4, a010 -> a018;
+control: 2, a022 -> a026;
+encryption: 3, a009 -> a013; 2, a017 -> a021;
+hosted: 2, a007 -> a014; 1, a011 proposal/root implementation -> a020;
+inputs: 1, a008 -> a016;
+supervisor: 1, a006 -> a016.
+Exact hunk matrix: a035.json.
+
+All seven current hashes match their latest scoped reviews and a025. Removing only hosted's later prelaunch hunk reconstructs a014's exact hash; removing only encryption's later wrapper reconstructs a013's exact hash. Earlier reviewed content is preserved. Sibling/packet a006–a026 reports match byte-for-byte.
+
+Checklist: fail-closed/nonstart receipts (a016/018/019/020); unresolved writers/partial retention (a014/020); descriptor, signal, process and publication ownership (a013/018/021/026); claim/budget/proof/source boundaries (a014/016/018/019/020/021/023–026).
+
+No uncovered hunk or unreviewed subsequent production edit found. Retain a019's pre-existing atomic-temporary-write F1 and a013's optional coverage gaps. This is coverage mapping, not qualification or acceptance. No tests, native/build/network actions, commits or push.

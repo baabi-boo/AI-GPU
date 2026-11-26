@@ -1,0 +1,102 @@
+Assignment 22/100 — qualified-warm control CLI SIGTERM closeout
+Status: confirmed gap fixed; focused development checks passed.
+Repository: /home/agent/ai-gpu-work-4c990083f078/AI-GPU
+Base HEAD: 43c93ce892f1f3f6c0555597da342709ec9f7e49
+Scope: source/host fault handling only; no native/performance acceptance.
+
+Owned repository changes
+- ci/project/p06_qualified_warm_control.py
+- ci/project/test_p06_control_sigterm_closeout.py (new)
+
+Diagnosis and before evidence
+acquire_control already catches KeyboardInterrupt and retains sanitized private receipts.
+The CLI main function did not translate SIGTERM to that cooperative path, unlike
+the existing p06_dependency_build.main wrapper. Both bounded isolated child
+processes exited from default SIGTERM with return code -15 instead of returning
+the sanitized non-success status 1:
+- first SIGTERM on the next synthetic response read after seven fixture bytes;
+- first SIGTERM during proof preflight, after creation of the private output.
+
+The two newly added regression tests failed before the production change.
+No real signed URL, network request, private archive, extraction, retained-code
+execution or native execution was used. Existing AZURE/BODY/Response test
+fixtures supplied only inert synthetic values. HTTPSConnection was mocked.
+Each child process had an 8-second timeout and a minimal environment.
+
+Change
+Renamed the existing CLI body to _main and wrapped it in main using the existing
+dependency_build pattern: save the enclosing SIGTERM handler, temporarily
+translate SIGTERM to KeyboardInterrupt, invoke _main, restore the handler in
+finally. No new import is needed because signal already serves the existing
+SIGALRM deadline. Acquisition, private receipt fields, pins, budgets, argument
+contract, helper inventory and frozen measurement inputs are unchanged.
+
+After evidence
+All four new tests passed:
+1. Actual first SIGTERM during synthetic transfer returns status 1 and a single
+   sanitized fail/interrupted summary matching the private receipt. Exactly
+   BODY[:7] remains, with matching byte count/hash and private permissions.
+   original_verified is false, native_execution is not_run and every retained
+   execution, qualification and dependency claim remains false. The real
+   transport context closes its synthetic response and connection; tracked
+   archive, receipt and directory descriptors are closed.
+2. Actual first SIGTERM before transfer retains a sanitized blocked/interrupted
+   receipt with absent original bytes, no transport request and no claims.
+3. The enclosing SIGTERM handler is restored on CLI success, sanitized argument
+   error, KeyboardInterrupt and SystemExit. SIGINT and SIGALRM are unchanged.
+   In the child transfer case, the SIGALRM deadline is cleared and the previous
+   alarm handler is restored after interruption.
+4. Direct acquire_control from a worker thread retains its preexisting blocked
+   timeout_unavailable result, emits no transfer request and changes no signal
+   handlers. The main-thread deadline requirement is not broadened.
+
+Eleven selected existing checks also passed, covering CLI help/argument redaction,
+untrusted URL rejection, exact synthetic intake success, KeyboardInterrupt
+retention, SIGALRM expiry/restoration, existing timer protection, worker rejection,
+terminal sanitization, transport-close errors and outer-close errors.
+
+Commands (all run from the repository root)
+Before, expected failure:
+TMPDIR=/home/agent/ai-gpu-work-4c990083f078/tmp/a022 PYTHONPATH=ci/project python3 -B -m unittest -v test_p06_control_sigterm_closeout.ControlSigtermCloseoutTests.test_sigterm_during_transfer_retains_partial_bytes_and_closes_resources test_p06_control_sigterm_closeout.ControlSigtermCloseoutTests.test_sigterm_before_transfer_retains_sanitized_blocked_receipt > /home/agent/ai-gpu-work-4c990083f078/reports/a022-before.log 2>&1
+Result: exit 1; 2 tests, 2 expected failures, each showing -15 != 1; 1.023 seconds.
+
+After, new coverage:
+TMPDIR=/home/agent/ai-gpu-work-4c990083f078/tmp/a022 PYTHONPATH=ci/project python3 -B -m unittest -v test_p06_control_sigterm_closeout > /home/agent/ai-gpu-work-4c990083f078/reports/a022-after.log 2>&1
+Result: exit 0; 4 tests passed, no skips; 1.037 seconds.
+
+Existing focused checks:
+TMPDIR=/home/agent/ai-gpu-work-4c990083f078/tmp/a022 PYTHONPATH=ci/project python3 -B -m unittest -v test_p06_qualified_warm_control.ControlContractTests.test_cli_accepts_no_url_pin_proof_or_budget_overrides_and_echoes_no_secret test_p06_qualified_warm_control.ControlContractTests.test_isolated_cli_help_imports_without_network test_p06_qualified_warm_control.ControlContractTests.test_isolated_cli_rejects_a_fake_private_url_without_leaking_it test_p06_qualified_warm_control.PrivateControlIntakeTests.test_success_retains_exact_bytes_with_private_unlinked_outputs_and_no_claims test_p06_qualified_warm_control.PrivateControlIntakeTests.test_interrupt_retains_the_actual_partial_archive test_p06_qualified_warm_control.PrivateControlIntakeTests.test_outer_deadline_stops_a_stalled_fake_reader_and_restores_alarm test_p06_qualified_warm_control.PrivateControlIntakeTests.test_existing_timer_blocks_instead_of_replacing_it test_p06_qualified_warm_control.PrivateControlIntakeTests.test_non_main_thread_deadline_is_rejected test_p06_qualified_warm_control.PrivateControlIntakeTests.test_terminal_exception_is_sanitized test_p06_control_closeout_review.ControlCloseoutReviewTests.test_transport_cleanup_preserves_partial_interruption test_p06_control_finalization.ControlFinalizationTests.test_primary_interruption_survives_both_outer_close_failures > /home/agent/ai-gpu-work-4c990083f078/reports/a022-focused.log 2>&1
+Result: exit 0; 11 tests passed, no skips; 0.488 seconds.
+
+Exact selected existing test IDs
+- test_p06_qualified_warm_control.ControlContractTests.test_cli_accepts_no_url_pin_proof_or_budget_overrides_and_echoes_no_secret
+- test_p06_qualified_warm_control.ControlContractTests.test_isolated_cli_help_imports_without_network
+- test_p06_qualified_warm_control.ControlContractTests.test_isolated_cli_rejects_a_fake_private_url_without_leaking_it
+- test_p06_qualified_warm_control.PrivateControlIntakeTests.test_success_retains_exact_bytes_with_private_unlinked_outputs_and_no_claims
+- test_p06_qualified_warm_control.PrivateControlIntakeTests.test_interrupt_retains_the_actual_partial_archive
+- test_p06_qualified_warm_control.PrivateControlIntakeTests.test_outer_deadline_stops_a_stalled_fake_reader_and_restores_alarm
+- test_p06_qualified_warm_control.PrivateControlIntakeTests.test_existing_timer_blocks_instead_of_replacing_it
+- test_p06_qualified_warm_control.PrivateControlIntakeTests.test_non_main_thread_deadline_is_rejected
+- test_p06_qualified_warm_control.PrivateControlIntakeTests.test_terminal_exception_is_sanitized
+- test_p06_control_closeout_review.ControlCloseoutReviewTests.test_transport_cleanup_preserves_partial_interruption
+- test_p06_control_finalization.ControlFinalizationTests.test_primary_interruption_survives_both_outer_close_failures
+
+Whitespace checks
+git diff --check -- ci/project/p06_qualified_warm_control.py
+Result: exit 0, no diagnostics.
+git diff --no-index --check /dev/null ci/project/test_p06_control_sigterm_closeout.py
+Result: no whitespace diagnostics; exit 1 is the ordinary no-index added-file
+difference status, not a test failure.
+
+Tested source identities
+43c93ce892f1f3f6c0555597da342709ec9f7e49
+c0368265402be85f4216d6a3b3f84de8c2cf98cea374593ae45b01854a4a2a5b  ci/project/p06_qualified_warm_control.py
+dcd6e1650a8fc3a41416104c17d55758aa24d60aa4e3e020c65c988dd8be1766  ci/project/test_p06_control_sigterm_closeout.py
+
+
+Limits and handoff
+These are focused development checks, not strict full governance qualification.
+No broad suite, downloads, build, native workload, secret lookup, commit, push or
+subagent spawn was performed. Other agents' files were left untouched.
+Independent review of these two files is handed back to the parent agent.
+

@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "scope": "source-scoped-development-review",
+  "findings": [
+    {
+      "id": "PUBLIC-DIRECTORY-READ-WINDOW",
+      "review": "agents/a047.txt",
+      "status": "resolved",
+      "implementation": "agents/a049.txt",
+      "independent_review": "agents/a051.txt",
+      "evidence": "validation/a049-before.log",
+      "note": "Final pathname identity check follows both public-file reads; committed and unrelated replacement bytes preserved. Mutation after final observation remains possible."
+    },
+    {
+      "id": "TARGET-SPECIFIC-JSON-TEMP-NAME",
+      "reviews": [
+        "agents/a043.txt",
+        "agents/a044.txt",
+        "agents/a063.txt"
+      ],
+      "status": "resolved",
+      "note": "All six current documents identify stage-specific exclusive JSON temporary names, with report.json.tmp only an example."
+    },
+    {
+      "id": "FIRST-CHECKPOINT-MID-WRITE-PERSISTENCE",
+      "reviews": [
+        "agents/a016.txt",
+        "agents/a019.txt",
+        "agents/a039.txt"
+      ],
+      "status": "known-pre-existing-limit",
+      "severity": "F1",
+      "note": "Existing exclusive JSON temporary may remain after mid-write failure; final save can fail. No final-write retry or ownership relaxation is introduced."
+    },
+    {
+      "id": "TEST-LATE-SETUP-CLEANUP",
+      "reviews": [
+        "agents/a027.txt",
+        "agents/a076.txt"
+      ],
+      "status": "resolved",
+      "severity": "F1",
+      "implementation": "agents/a080.txt",
+      "independent_review": "agents/a081.txt",
+      "evidence": "validation/a080-verification.json",
+      "note": "setUp moved inside existing try/finally; real setup marker proves registered cleanup before/after. Method IDs and assertions preserved."
+    },
+    {
+      "id": "TEST-DAEMON-WORKER-TIMEOUT",
+      "reviews": [
+        "agents/a027.txt",
+        "agents/a076.txt"
+      ],
+      "status": "nonblocking-follow-up",
+      "severity": "F1",
+      "evidence_type": "reasoned-risk",
+      "note": "Under delayed scheduling or filesystem operations, a worker can outlive the test join and fixture cleanup. Passing integration does not qualify this failure branch. No F2, production regression or native/network escape established."
+    },
+    {
+      "id": "TEST-DEFENSIVE-HANDLER-RESTORATION",
+      "reviews": [
+        "agents/a027.txt",
+        "agents/a076.txt"
+      ],
+      "status": "withdrawn-as-current-defect",
+      "note": "Production decorator restores the handler in finally. Additional test-side cleanup would be defense against a separate restoration regression."
+    },
+    {
+      "id": "PYTHON-ALIAS-LOCAL-EXECUTION",
+      "review": "agents/a015.txt",
+      "status": "resolved-in-invocation",
+      "note": "Literal python3 passes the existing exact-interpreter selection gate; python alias differs in selected pathname. The gate remains unchanged."
+    }
+  ]
+}

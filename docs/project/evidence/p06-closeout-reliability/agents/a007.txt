@@ -1,0 +1,28 @@
+# A007 hosted closeout interruption correction
+
+Base revision: 43c93ce892f1f3f6c0555597da342709ec9f7e49.
+Scope: ci/project/p06_qualified_warm_hosted.py and new ci/project/test_p06_hosted_closeout_interruptions.py.
+
+The hosted finally block previously called writers_finished and observed_native_execution outside closeout error guards. A SIGTERM converted by decorated main into KeyboardInterrupt could escape these reads and prevent final and partial retention receipts.
+
+The correction adds a bounded read-only observation guard. The first KeyboardInterrupt permits one re-observation; ordinary errors receive no retry, and a second failure ends observation conservatively. Errors record fixed failure entries and revoke native_success and orchestration_passed. Previously reconciled native execution remains observable. Confirmed finished writers permit partial packaging and encryption; unresolved writer accounting blocks both. Producer stages are never retried. Schema, resource gates, expected counts and qualification claims are unchanged. stage() was not modified in A007.
+
+Previously completed validation, using Python 3.12.14 with -B and the assigned temporary directory:
+- Before correction: 8 new tests, 17 failing cases, 3.904 seconds; every case lacked the final failure receipt.
+- After correction: all 8 new tests passed, 4.542 seconds.
+- Existing hosted, operational-failure, writer-receipt, cancellation and native-capacity suites: 66 tests passed, 13.145 seconds.
+- git diff --check passed.
+- No native qualified-warm experiment or full strict governance qualification was performed.
+
+The tests compose HostedCompositionTests without inheriting its tests. They cover real SIGTERM during writer and failed-native-disposition reads, unchanged calls and report bytes during pure re-observation, repeated interrupts, ordinary errors, unknown launches, incomplete cleanup, and missing or malformed nested receipts.
+
+Hosted source SHA-256 at A007 completion:
+912c57bc1b73ee268e062ca76c45b8a0ba00d2ee41200f96b12cb4ffdb7faf14
+
+Recovered test source: 13633 UTF-8 bytes, 246 lines.
+Original and recovered SHA-256:
+df80bdf105a1a5ce73a68dcbef3a42b8ff0c993aa219f75fba70be90accb4c06
+Unattached test blob:
+c1ce1e1e172751a88ad34f657d5d5e51d708c3a5
+
+Recovery used the retained complete patch text and confirmed its exact SHA-256. There is no remaining reconstruction uncertainty for the test bytes. The execution environment was unavailable during recovery, so validation was not rerun. Recovery created unattached blobs only; it created no commits and updated no refs. Independent integration and review remain with the coordinator.

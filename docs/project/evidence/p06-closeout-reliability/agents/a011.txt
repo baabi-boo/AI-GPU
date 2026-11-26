@@ -1,0 +1,22 @@
+Assignment a011: hosted prelaunch status emission
+
+Status: proposed change and static source audit only. This report is not executed test or native evidence.
+
+Static finding: stage() appends an unresolved stage row and emits its running status before entering the run_bounded try block. An emission OSError or KeyboardInterrupt therefore prevents launch but leaves process_started=None and cleanup_complete=False, blocking safe partial retention and making a native-supervisor nonstart unknown.
+
+Proposed production change, for root to apply: wrap only the running-status emission in an (Exception, KeyboardInterrupt) catch; mark process_started=False, cleanup_complete=True, outcome="blocked", exit_code=None, and reason=type(error).__name__, then rethrow into existing closeout. Do not retry emission or call the supervisor. Keep the run_bounded exception handler and a007 closeout changes unchanged.
+
+Proposed test file: ci/project/test_p06_hosted_prelaunch_emission.py
+Unattached UTF-8 test blob: 6c17e1ad86c0b5eea625bc4d4f89bacd5bc8220d
+Test length: 11404 bytes; 214 lines.
+Coverage proposed: five test methods with 21 parameter combinations covering early/native OSError, BrokenPipeError and KeyboardInterrupt; absent child; prior launch preservation; known not_run and false claims; safe partial retention; unresolved earlier writers; supervisor errors remaining unknown; completed-status errors preserving observed launches.
+
+Validation: No test command ran before the runtime outage. No local tests ran during blob recovery. The production patch was not applied by a011. The initial local test-file creation was pending when the runtime became unavailable. Root will apply the production patch and CI will validate it together with the new test and relevant existing hosted tests. No pass result is claimed.
+
+Observed starting HEAD: 43c93ce.
+Starting hosted working-tree SHA-256, including a007:
+912c57bc1b73ee268e062ca76c45b8a0ba00d2ee41200f96b12cb4ffdb7faf14
+Unchanged suffix beginning at "    def closeout_observation(" SHA-256:
+63b8328140e69b637923c960ff6622ca2ec68834074570d5d195b9d49c730ac2
+
+Recovery actions: created only unattached GitHub blobs; no commits or refs changed.

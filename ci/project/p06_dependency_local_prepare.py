@@ -11,6 +11,7 @@ import os
 from pathlib import Path, PurePosixPath
 import re
 import shutil
+import signal
 import sys
 import tarfile
 
@@ -254,8 +255,8 @@ def prepare(args):
     def save():
         base._write_json(target, report)
 
-    save()
     try:
+        save()
         require(type(args.expected_revision) is str and re.fullmatch(r"[0-9a-f]{40}", args.expected_revision),
                 "exact source revision required")
         archives = base._path(args.archive_root, existing=True)
@@ -329,7 +330,7 @@ def argument_parser():
     return parser
 
 
-def main(argv=None):
+def _main(argv=None):
     args = argument_parser().parse_args(argv)
     try:
         report = prepare(args)
@@ -339,6 +340,18 @@ def main(argv=None):
     except (OSError, ValueError, RuntimeError) as error:
         print(json.dumps({"outcome": "blocked", "execution_origin": "local", "reason": str(error)}, sort_keys=True))
         return 1
+
+
+def main(argv=None):
+    def interrupt(number, frame):
+        raise KeyboardInterrupt
+
+    previous = signal.getsignal(signal.SIGTERM)
+    try:
+        signal.signal(signal.SIGTERM, interrupt)
+        return _main(argv)
+    finally:
+        signal.signal(signal.SIGTERM, previous)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,10 @@
+--- before/ci/project/p06_qualified_warm_encrypt.py
++++ after/ci/project/p06_qualified_warm_encrypt.py
+@@ -700,6 +700,7 @@
+         raw_summary = _json_bytes(summary)
+         _verify_public_file(output_fd, SUMMARY_NAME, summary_identity, len(raw_summary),
+                             hashlib.sha256(raw_summary).hexdigest(), deadline)
++        _verify_directories(directories)
+         return summary
+     except BaseException as error:
+         cleanup_complete = _cleanup(process)

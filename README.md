@@ -23,6 +23,35 @@ configuration; it does not establish a general PyTorch device backend or physica
 accelerator performance.
 
 **Current work: P06-T01 — execute the qualified warm-workspace experiment.**
+The [closeout reliability continuation](docs/project/p06-closeout-reliability-audit.md)
+and [evidence packet](docs/project/evidence/p06-closeout-reliability/README.md)
+cover protected first checkpoints, cooperative CLI cancellation, hosted
+nonstart and final-observation accounting, and encrypted-output verification.
+The frozen experiment remains **unstarted: 24 processes, 792 launches and
+25,344 checked FP32 words**. The final focused integration passed **228 tests**,
+including all 44 new methods, with stable source identities and zero failures,
+errors or skips. Discovery collects **5,515 canonical test IDs**. These checks
+do not qualify the changed revision; its own strict governance result and
+independent original replay remain required.
+
+Closeout still requires a functioning final write: a mid-write fault can leave
+the existing exclusive `report.json.tmp` or its stage-specific counterpart and
+prevent final report publication.
+No report retry or ownership weakening is introduced. Preserve all **69 frozen
+measurement sources, 21 dependency descriptors**, proofs, goldens and performance
+criteria. P06-A02/A03 remain open and P01 vendor integration remains blocked.
+
+Next, qualify the selected published revision, verify or configure the exact
+private control archive and public age recipient, and execute one complete
+attempt on a runner admitted by the unchanged **15 GiB free-disk and 4 GiB
+available-memory** gates. Those operational inputs were not supplied to this
+session; live provider secrets were not inspected. Retain complete or explicitly
+partial originals through encrypted delivery and independently replay a complete
+native original before the frozen performance decision. Follow the
+[qualified warm handoff](docs/project/p06-qualified-warm-handoff.md).
+
+### Earlier launch-readiness continuation (historical)
+
 The frozen experiment remains **unstarted: 24 processes, 792 launches and
 25,344 checked FP32 words**. The
 [launch-readiness audit](docs/project/p06-launch-readiness-audit.md) and

@@ -1,0 +1,18 @@
+Assignment 20/100 — independent hosted prelaunch review
+HEAD: 43c93ce892f1f3f6c0555597da342709ec9f7e49
+Verdict: No blocking findings in the reviewed hunk and tests.
+
+The new handler surrounds only the running-status _emit before run_bounded (hosted lines 547–553). It records exception class only, confirmed process_started=False, cleanup_complete=True, blocked outcome and no exit code, then rethrows into existing failure closeout. No exception message, traceback or secret is newly retained or published.
+
+Completed prior stage rows remain untouched. Exceptions after monitor entry retain process_started=None and unresolved cleanup; terminal-status emission failures preserve completed monitor evidence. The native closeout predicate therefore distinguishes confirmed nonstart from possible actual launches.
+
+Partial packaging remains conditional on all prior/nested writers being resolved. A nonstarted native supervisor cannot erase an unresolved earlier acquisition writer. Existing a007 semantics are preserved: interrupted pure observations may retry once, cannot restart children, and invalidate success while preserving reconciled native scope.
+
+The new five tests cover four prelaunch positions across OSError/BrokenPipeError/KeyboardInterrupt, prior completed rows, nested unresolved writers, monitor exceptions, terminal emission failures, private receipt modes, class-only errors and conditional encrypted delivery.
+
+Validation: static review only; no redundant suite run. Parent reported 20 pre-fix failures and 10 post-fix passes including builder checks. No builds, downloads, code edits, commits or pushes; no native or governance qualification claimed.
+
+Sourcehash (SHA-256):
+ci/project/p06_qualified_warm_hosted.py: 875e1e095253cbe38c6424adfdc324bdd88ee1152536a993ae6d03dba0992220
+ci/project/test_p06_hosted_prelaunch_emission.py: edcfb759c05cf42ae38102f4bfcef3b89867fa763a5102108cb09fea231fa069
+ci/project/test_p06_hosted_closeout_interruptions.py: df80bdf105a1a5ce73a68dcbef3a42b8ff0c993aa219f75fba70be90accb4c06

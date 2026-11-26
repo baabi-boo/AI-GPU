@@ -10,6 +10,38 @@ remain unassigned until an actual owner is identified.
 ## Start here: P06-T01 explicit qualified warm route
 
 **Next actual development experiment:** one complete qualified warm attempt,
+after the selected published revision passes its own full strict governance and
+independent [governance-original admission](governance-artifact-replay.md).
+The [closeout reliability audit](p06-closeout-reliability-audit.md) and
+[evidence packet](evidence/p06-closeout-reliability/README.md) record protected
+first checkpoints, cooperative CLI cancellation, hosted closeout observations
+and encrypted-output checks. Final focused integration passed **228 tests**,
+including all 44 new methods, with stable source identities and zero failures,
+errors or skips. That selection and **5,515 discovered test IDs** do not replace
+the changed revision's own strict qualification and independent original replay.
+
+Verify or configure private delivery of the exact historical control archive
+and public age recipient, then use the
+[manual hosted route](p06-hosted-warm-guide.md) on an actual runner admitted by
+the unchanged **15 GiB free-disk and 4 GiB available-memory** gates. Those inputs
+were not supplied to this session; live provider secrets were not inspected.
+Preserve the **69 measurement sources, 21 dependency descriptors**, proofs,
+goldens and **24-process, 792-launch, 25,344-word** population. Keep the
+dependency/four-process prerequisites, encrypted complete or explicitly partial
+retention and independent complete native replay before the frozen performance
+decision. P06/P06-T01 remain `in_progress`, P06-A02/A03 remain open and P01
+vendor integration remains blocked.
+
+First-checkpoint recovery requires a possible final report write. The existing
+exclusive `report.json.tmp` or its stage-specific counterpart can remain after
+a mid-write fault and block that save; no report retry or ownership weakening
+is authorized by this correction.
+Repeated interruptions and uncatchable kills do not promise durable closeout.
+
+**Earlier launch-readiness handoff (historical).** The following text preserves
+that continuation's source and evidence scope.
+
+**Next actual development experiment:** one complete qualified warm attempt,
 after the selected published revision passes its own full strict governance
 and independent [governance-original admission](governance-artifact-replay.md).
 Verify or configure private delivery of the exact historical control archive

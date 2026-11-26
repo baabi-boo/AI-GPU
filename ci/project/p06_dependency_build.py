@@ -229,7 +229,6 @@ class Builder:
         self.helpers = None
         self.receipt_reader = None
         self.initial_checkout = None
-        self.save()
 
     def save(self):
         base._write_json(self.output / "report.json", self.report)
@@ -427,6 +426,7 @@ class Builder:
 
     def execute(self):
         try:
+            self.save()
             require(type(self.args.expected_revision) is str
                     and re.fullmatch(r"[0-9a-f]{40}", self.args.expected_revision), "exact expected revision required")
             self.initial_checkout = collect_source(self.source)

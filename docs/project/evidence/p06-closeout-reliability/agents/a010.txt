@@ -1,0 +1,89 @@
+A010 - Local preparation initial closeout and CLI SIGTERM recovery
+Base commit: 43c93ce892f1f3f6c0555597da342709ec9f7e49
+Original worktree: /home/agent/ai-gpu-work-4c990083f078/AI-GPU
+Original report destination: /home/agent/ai-gpu-work-4c990083f078/reports/a010.txt
+
+Owned changes:
+- ci/project/p06_dependency_local_prepare.py
+- NEW ci/project/test_p06_preparation_initial_closeout.py
+
+Implementation:
+Moved prepare()'s initial save() into its existing try/except/finally.
+Renamed the existing CLI parser/body to _main() and added the existing
+p06_dependency_build.main inline SIGTERM pattern: translate SIGTERM into
+KeyboardInterrupt and restore the previous SIGTERM handler in finally.
+The only added import is the standard-library signal module. No new
+project-local helper dependency or source inventory change was introduced.
+
+Reproductions before the production change:
+1. Initial OSError("initial receipt unavailable") and KeyboardInterrupt
+   escaped prepare(); both observed receipt_exists=False, provision_calls=0.
+   The initial two-test regression run failed both tests in 0.008 seconds.
+2. An isolated child receiving real SIGTERM at synthetic provisioning entry
+   exited -15 and retained only the prior checkpoint:
+   outcome=blocked, reason=null, failures=[], toolchain_receipt=null,
+   native_execution=not_run; source_before was present and tools did not exist.
+3. Both real-signal regressions failed before the fix with
+   AssertionError: -15 != 1 (2 failures in 0.395 seconds).
+
+Passing focused development check after the fix:
+TMPDIR=/home/agent/ai-gpu-work-4c990083f078/tmp PYTHONPATH=ci/project python -B -m unittest -v test_p06_preparation_initial_closeout test_p06_dependency_local_prepare
+
+Result: 26 tests passed in 0.784 seconds; no failures, errors, or skips.
+Five new tests cover initial OSError, initial KeyboardInterrupt, real SIGTERM
+at initial save, real SIGTERM at synthetic provisioning entry, and interruption
+during handler installation. Assertions preserve blocked/fail classification,
+false claims, native_execution=not_run, absent toolchain receipts, no actual
+tools directory, SIGINT preservation, and restoration of the enclosing SIGTERM
+handler. Existing preparation tests remain passing.
+An intermediate new-test harness error accessed call_count on the fixture's
+ROOT path; the observation was restricted to the six real mocks and an
+empty-stderr assertion was added before the successful 26-test run.
+
+git diff --check -- ci/project/p06_dependency_local_prepare.py passed.
+The AST import difference was exactly one stdlib import: signal.
+
+Incomplete additional consumer check:
+TMPDIR=/home/agent/ai-gpu-work-4c990083f078/tmp PYTHONPATH=ci/project python -B -m unittest -v test_p06_dependency_local_boundary_review test_p06_dependency_local_execute_review test_p06_dependency_replay test_p06_dependency_local_replay test_p06_cli_signal_setup
+
+The process exited 137 during local dependency replay. This run is INCOMPLETE;
+it is not a passing full suite, qualification, or evidence attributing a
+regression to this implementation. Output showed all 4 local-boundary tests,
+all 22 dependency-replay tests, and the fresh-process CLI parser test passing.
+Four local-execute-review tests reported FAIL:
+- test_p06_dependency_local_execute_review.LocalExecutionReviewTests.test_changed_interpreter_stops_before_the_next_stage
+- test_p06_dependency_local_execute_review.LocalExecutionReviewTests.test_child_report_hardlink_is_rejected_before_next_stage
+- test_p06_dependency_local_execute_review.LocalExecutionReviewTests.test_native_stage_that_never_started_preserves_not_run
+- test_p06_dependency_local_execute_review.LocalExecutionReviewTests.test_successful_child_with_incomplete_cleanup_stops_the_route
+
+Their assertion details and tracebacks did not flush before termination.
+Their causes remain UNDIAGNOSED; no attribution to baseline, environment, or
+this change is established. A narrow diagnostic already in progress then
+stalled and produced no reason before runtime failure:
+"exec-server transport disconnected; failed to resume exec-server session:
+recovery timed out after 45s".
+No further local tools or tests were used after the recovery instruction.
+
+Source-binding observation:
+Before and after the production edit, xrt_signals.py remained absent from
+dependency/native/control/local trusted reader inventories with counts
+56/60/65/68, native RUNNER_HELPERS (47), and SUBSTITUTION_HELPERS (49).
+It remained present in qualified-warm supervisor SOURCE_FILES (106).
+The inline stdlib-only handler avoids changing those project helper closures.
+
+Scope limits:
+This was a shared dirty worktree, not a claimed clean or qualified final
+revision. No actual provisioning, toolchain download, native execution, full
+strict governance, acceptance, commit, or ref update occurred in this task.
+No frozen measurement files, dependency descriptors, proofs, or gates were
+edited by this task. Independent aggregate preservation checks belong to root.
+
+Recovery:
+The original report file was not written before the runtime became unavailable.
+This concise report was reconstructed from the final handoff.
+The recovered test is an exact UTF-8 transcription of that handoff:
+Git blob a445a63874ac4ef32f170afd6d605e8cc2bb4021, 9275 bytes, 190 LF lines,
+with a trailing newline. No intentional byte changes were made during recovery.
+The original filesystem hash is unavailable, so identity to the pre-outage
+disk copy cannot be independently verified. The root agent has the production
+patch. Recovery blobs are unattached; this step creates no commit or ref.

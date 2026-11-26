@@ -1,0 +1,8 @@
+Independent a051 review: no F2/F3 findings (high confidence; static inspection and regression execution).
+Base: 43c93ce892f1f3f6c0555597da342709ec9f7e49 with existing working edits. Scope: a049's one-line production delta and new test module.
+Production SHA256: 95ac65f43e09752d4df6286acaf4e1ef79ff81b7528770ffda1dd8c471cda5e8
+Test SHA256: aeea7e4ae4000d6347ee6aea0a2c9c9a259e08445cafd8ac55e48c8bb14b2506
+The retained before snapshot matches a047's source hash. Reviewed a049-before.log (four EncryptionError-not-raised failures) and a049-after.log (pass).
+Independent command: python3 -B -m unittest discover -s ci/project -p 'test_p06_encrypt_final_directory.py' -v. Result: one method/four subcases passed in 0.145s; both hashes stable.
+The added directory check follows both public reads. Absent/replaced output paths raise public-output-changed; committed ciphertext/summary remain byte-identical in the displaced directory. Source and unrelated replacement contents remain intact. The failure path reports publication_committed=true, encryption_passed=false and plaintext_publication_authorized=false.
+No producer retry, cryptography, deadline, or cleanup-ownership changes. This is a final pathname observation, not exclusion of later concurrent mutations. Synthetic host evidence only; no native, network, or broad-suite execution by this reviewer.

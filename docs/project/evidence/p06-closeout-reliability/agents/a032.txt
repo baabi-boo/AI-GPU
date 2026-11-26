@@ -1,0 +1,12 @@
+agent032: PASS, 6/6 scoped controls; exit 0.
+Base HEAD: 43c93ce892f1f3f6c0555597da342709ec9f7e49 (dirty tree).
+Source: ci/project/p06_qualified_warm_encrypt.py
+SHA256: 896f713d9acb5f05a9236c1d5ee5c931bad6be593b23065386d1f9f06dc23966 (unchanged).
+Command, source root:
+TMPDIR=/home/agent/ai-gpu-work-4c990083f078/tmp python3 -B /home/agent/ai-gpu-work-4c990083f078/tmp/a032-fdopen-probe.py > /home/agent/ai-gpu-work-4c990083f078/reports/a032.raw.txt
+
+Both fdopen-only OSError/KeyboardInterrupt injections preserved exact exception identity, closed the actual allocated descriptor exactly once (profiled real close), yielded EBADF afterward, and preserved directory identity. Open, fchmod and close remained real.
+
+Four secondary combinations additionally wrapped close: consume the raw descriptor, open a different sentinel inode at its number, then raise OSError/KeyboardInterrupt. Every original exception survived; one cleanup close occurred; the reused descriptor remained writable; directory identity survived. Safe simulation: reuse occurs after cleanup consumes ownership, never inside fdopen. No artificial premature-close bug claimed. Raw rows’ raw_fd_closed:false denotes the reused number remaining open, not failure to consume the original descriptor.
+
+Temporary probe retained above. Limitations: injected host boundaries only; no natural failure, full encryption, qualification, native/network/full-suite execution, permanent edits, commits or push.

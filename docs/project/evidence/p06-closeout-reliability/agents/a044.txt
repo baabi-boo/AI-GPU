@@ -1,0 +1,6 @@
+agent044 — static initial-supervisor-checkpoint review against 43c93ce892f1f3f6c0555597da342709ec9f7e49.
+Runner SHA256: 5417b5b5b090953f93bbccc4514f1574aef26ca6737e4a6821a118c88df8610a.
+Tests SHA256: 900fa4ba18ae1e570cf452433f0c249e33337276a0b90113424238acf1d39732.
+The sole runner delta relocates checkpoint into try. OSError/KeyboardInterrupt before producer entry yields zero run_bounded calls, stages=[], native_execution=not_run, outcome=blocked, orchestration_passed=False, all FALSE_CLAIMS=False, completed_counts=null (also CLI terminal); expected_counts/budget remain frozen. inputs_before/after remain {}; this boundary does not modify prior input metadata or existing files. Existing tests/contracts/writer are unchanged.
+Two new tests assert finished receipt and hosted nonstart/writer reconciliation; inspected, not executed.
+Finding (P3): audit:61/handoff:15 name report.json.tmp; supervisor uses qualified-warm-run.json.tmp. Generic <target>.tmp wording is precise. Final-write feasibility limitation otherwise accurate. No functional finding; no tests/network/native/code edits.

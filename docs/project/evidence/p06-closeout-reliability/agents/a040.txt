@@ -1,0 +1,9 @@
+Findings: none in this flow. HEAD=43c93ce892f1f3f6c0555597da342709ec9f7e49; reviewed dirty tree; AGENTS.md read. No tests/network/native execution.
+
+Encrypt:690-727 retains committed public bytes after verification raises; :765-767 emits failed terminal JSON and exits 1. Baseline:288-316 records nonzero_exit/fail. Hosted:563-568 rejects that stage; :678-687 catches its error, leaving encrypted=False. Successful stage completion also requires verify_encryption_output (:430-445), including ciphertext integrity and exact terminal-summary equality, before encrypted=True. Only encryption_passed=True writes encrypted_retention_ready (:719-723); workflow:89 requires that output to upload the exact pair. Retained passed=True summary therefore cannot alone authorize upload; retained committed bytes do not establish successful delivery.
+
+SHA-256:
+ci/project/p06_qualified_warm_encrypt.py 896f713d9acb5f05a9236c1d5ee5c931bad6be593b23065386d1f9f06dc23966
+ci/project/baseline_process.py 54ae2d6756c47349f4cf33a91209addcff447de1618a35892e0ac3e344506daa
+ci/project/p06_qualified_warm_hosted.py 875e1e095253cbe38c6424adfdc324bdd88ee1152536a993ae6d03dba0992220
+.github/workflows/p06-qualified-warm.yml 261efa4bcf9c2ca7a9bca8a25dcb03eefd70848426a4c6c61ca55b68a14a7b2e

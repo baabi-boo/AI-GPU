@@ -185,8 +185,16 @@ def _reserve(fd, additional=0):
 def _exclusive(directory_fd, name):
     fd = os.open(name, os.O_CREAT | os.O_EXCL | os.O_RDWR | os.O_NOFOLLOW | os.O_CLOEXEC,
                  0o600, dir_fd=directory_fd)
-    os.fchmod(fd, 0o600)
-    return os.fdopen(fd, "w+b", buffering=0)
+    try:
+        os.fchmod(fd, 0o600)
+        return os.fdopen(fd, "w+b", buffering=0)
+    except BaseException:
+        try:
+            # A failed close can consume the fd; never retry its reused number.
+            os.close(fd)
+        except BaseException:
+            pass
+        raise
 
 
 def _json_bytes(document):
@@ -526,6 +534,31 @@ def _verify_cipher(stream, directory_fd, count, expected_digest, deadline):
     return before
 
 
+def _verify_public_file(directory_fd, name, identity, count, expected_digest, deadline):
+    _require(_owned(directory_fd, name, identity), "public-output-changed")
+    fd = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_CLOEXEC,
+                 dir_fd=directory_fd)
+    try:
+        before = _stamp(os.fstat(fd))
+        _require(before[:2] == identity and stat.S_ISREG(before[2]) and before[4] == count,
+                 "public-output-changed")
+        size, digest = 0, hashlib.sha256()
+        while True:
+            _check_time(deadline)
+            body = os.read(fd, CHUNK_BYTES)
+            if not body:
+                break
+            size += len(body)
+            _require(size <= count, "public-output-changed")
+            digest.update(body)
+        _require(size == count and digest.hexdigest() == expected_digest
+                 and _stamp(os.fstat(fd)) == before
+                 and _stamp(os.stat(name, dir_fd=directory_fd, follow_symlinks=False)) == before,
+                 "public-output-changed")
+    finally:
+        os.close(fd)
+
+
 def _summary(revision, *, passed=False, entries=None, cipher_bytes=0, cipher_digest=None):
     files = [entry for entry in (entries or {}).values() if not entry.directory]
     return {"schema_version": 1, "contract_id": CONTRACT_ID, "expected_revision": revision,
@@ -662,6 +695,12 @@ def encrypt_private_directory(*, input_dir, output_dir, recipient, age_binary="a
         _unlink_owned(private_fd, INCOMPLETE_NAME, cipher_identity)
         _unlink_owned(private_fd, PRIVATE_SUMMARY_NAME, summary_identity)
         _verify_directories(directories)
+        _verify_public_file(output_fd, CIPHERTEXT_NAME, cipher_identity,
+                            summary["ciphertext_bytes"], summary["ciphertext_sha256"], deadline)
+        raw_summary = _json_bytes(summary)
+        _verify_public_file(output_fd, SUMMARY_NAME, summary_identity, len(raw_summary),
+                            hashlib.sha256(raw_summary).hexdigest(), deadline)
+        _verify_directories(directories)
         return summary
     except BaseException as error:
         cleanup_complete = _cleanup(process)
@@ -714,7 +753,7 @@ def argument_parser():
     return parser
 
 
-def main(argv=None):
+def _main(argv=None):
     revision = None
     try:
         args = argument_parser().parse_args(argv)
@@ -727,6 +766,18 @@ def main(argv=None):
     except (Exception, KeyboardInterrupt):
         print(_json_bytes(_summary(revision)).decode("utf-8"), end="")
         return 1
+
+
+def main(argv=None):
+    def interrupt(number, frame):
+        raise KeyboardInterrupt
+
+    previous = signal.getsignal(signal.SIGTERM)
+    try:
+        signal.signal(signal.SIGTERM, interrupt)
+        return _main(argv)
+    finally:
+        signal.signal(signal.SIGTERM, previous)
 
 
 if __name__ == "__main__":

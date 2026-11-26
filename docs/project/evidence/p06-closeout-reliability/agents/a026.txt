@@ -1,0 +1,14 @@
+Agent 026 independent review; base 43c93ce892f1f3f6c0555597da342709ec9f7e49, uncommitted tree.
+
+Reviewed ci/project/p06_qualified_warm_control.py and ci/project/test_p06_control_sigterm_closeout.py.
+SHA-256, unchanged before/after execution:
+control: c0368265402be85f4216d6a3b3f84de8c2cf98cea374593ae45b01854a4a2a5b
+test: dcd6e1650a8fc3a41416104c17d55758aa24d60aa4e3e020c65c988dd8be1766
+
+Command from repository root:
+TMPDIR=/home/agent/ai-gpu-work-4c990083f078/tmp PYTHONPATH=ci/project python3 -B -m unittest -v test_p06_control_sigterm_closeout
+Result: exit 0; Ran 4 tests in 1.115s; OK.
+
+Findings: none within reviewed scope. SIGTERM conversion is confined to main(), with previous handler restored in finally across success, error, and SystemExit. SIGINT remains unchanged; transfer interruption clears ITIMER_REAL and restores SIGALRM. Tests exercise actual child SIGTERM during preflight and transfer, sanitized blocked/failed receipts, consumed URL environment, private permissions, bounded seven-byte partial retention, and closed response/connection/descriptors. Direct worker acquisition remains blocked by the main-thread deadline requirement without installing signals. The reviewed production diff changes only CLI wrapping; source-proof verification, governance requirements, resource budgets, and measurement/acceptance claims are not weakened.
+
+Only the focused module ran; no full-governance, native, build, or network qualification was performed. No production/test edits or commit/push.

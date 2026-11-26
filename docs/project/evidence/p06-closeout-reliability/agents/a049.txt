@@ -1,0 +1,11 @@
+a049 — final encryption directory identity
+Base: 43c93ce892f1f3f6c0555597da342709ec9f7e49 plus existing local changes.
+Owned changes: one added _verify_directories(directories) after both final public-file reads; new test_p06_encrypt_final_directory.py (one method, four subcases).
+Reproduction: move the output directory during an actual ciphertext/summary os.read, with either no replacement or an unrelated replacement directory. Both original public-file verifiers finish. Before fix: four failures (EncryptionError not raised); after: pass.
+Assertions preserve exact committed ciphertext/summary bytes and unrelated replacement contents, verify source bytes unchanged, and require private diagnostics with publication_committed=true and encryption_passed=false.
+Validation: python3 -B, dedicated TMPDIR; new module passed; six encryption modules passed 65 methods in 4.392s, zero failures/errors/skips. Source hashes remained stable; scoped git diff --check passed.
+Evidence: a049-before.log, a049-after.log, a049-focused.log; corresponding *-run.json; a049-before.sha256, a049-after.sha256, a049-focused-after.sha256; a049-production.patch. Pre-fix snapshot: ../tmp/a049/p06_qualified_warm_encrypt.before.py.
+Production SHA256 before: 896f713d9acb5f05a9236c1d5ee5c931bad6be593b23065386d1f9f06dc23966
+Production SHA256 after: 95ac65f43e09752d4df6286acaf4e1ef79ff81b7528770ffda1dd8c471cda5e8
+New-test SHA256: aeea7e4ae4000d6347ee6aea0a2c9c9a259e08445cafd8ac55e48c8bb14b2506
+No producer retry, native execution, network, frozen-input changes, commits or pushes. Final observations cannot prevent mutations after the last check. Independent reviewer a051 reported no F2/F3 findings.

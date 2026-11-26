@@ -525,7 +525,7 @@ def argument_parser():
     return parser
 
 
-def main(argv=None):
+def _main(argv=None):
     try:
         args = argument_parser().parse_args(argv)
         report = acquire_control(args.output_dir)
@@ -537,6 +537,18 @@ def main(argv=None):
                    "reason": _REASONS[code], "original_verified": False, "native_execution": "not_run"}
     print(json.dumps(summary, sort_keys=True))
     return 0 if summary["outcome"] == "pass" else 1
+
+
+def main(argv=None):
+    def interrupt(number, frame):
+        raise KeyboardInterrupt
+
+    previous = signal.getsignal(signal.SIGTERM)
+    try:
+        signal.signal(signal.SIGTERM, interrupt)
+        return _main(argv)
+    finally:
+        signal.signal(signal.SIGTERM, previous)
 
 
 if __name__ == "__main__":

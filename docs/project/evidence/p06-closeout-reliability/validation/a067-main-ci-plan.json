@@ -1,0 +1,648 @@
+{
+  "schema_version": 1,
+  "scope": "static-main-ci-matrix-audit; retained base provider metadata only",
+  "base_revision": "43c93ce892f1f3f6c0555597da342709ec9f7e49",
+  "retained_source": "docs/project/evidence/p06-closeout-reliability/validation/base-workflows.json",
+  "retained_source_sha256": "b82e4a6982459efaae44ed8547fa56a189acb5278529e8cbb50711875455fb10",
+  "retained_main_ci_run_id": 45707499876,
+  "retained_job_count": 43,
+  "retained_test_cell_count": 37,
+  "retained_non_test_jobs": [
+    "change-impact",
+    "plan",
+    "setup",
+    "build (32)",
+    "build (64)",
+    "complete"
+  ],
+  "retained_test_cell_names": [
+    "tests (cache, simx, 32)",
+    "tests (cache, simx, 64)",
+    "tests (config1, simx, 32)",
+    "tests (config1, simx, 64)",
+    "tests (config2, simx, 32)",
+    "tests (config2, simx, 64)",
+    "tests (debug, simx, 32)",
+    "tests (debug, simx, 64)",
+    "tests (dxa, simx, 32)",
+    "tests (dxa, simx, 64)",
+    "tests (graphics, simx, 32)",
+    "tests (graphics, simx, 64)",
+    "tests (graphics_parity, simx, 32)",
+    "tests (graphics_parity, simx, 64)",
+    "tests (isa, simx, 32)",
+    "tests (isa, simx, 64)",
+    "tests (p02_wgmma, simx, 64)",
+    "tests (p04_mlp, simx, 64)",
+    "tests (perf, simx, 32)",
+    "tests (raytracing, simx, 32)",
+    "tests (raytracing, simx, 64)",
+    "tests (regression, simx, 32)",
+    "tests (regression, simx, 64)",
+    "tests (sw, simx, 32)",
+    "tests (sw, simx, 64)",
+    "tests (tensor, simx, 32)",
+    "tests (tensor, simx, 64)",
+    "tests (tensor_mx, simx, 32)",
+    "tests (tensor_mx, simx, 64)",
+    "tests (tensor_sp, simx, 32)",
+    "tests (tensor_sp, simx, 64)",
+    "tests (tensor_wg, simx, 32)",
+    "tests (tensor_wg, simx, 64)",
+    "tests (vm, simx, 32)",
+    "tests (vm, simx, 64)",
+    "tests (vulkan, simx, 32)",
+    "tests (vulkan, simx, 64)"
+  ],
+  "retained_all_job_conclusions": "success",
+  "static_smoke_simx_cell_keys_match_retained": true,
+  "static_cell_keys_by_category": {
+    "cache": [
+      32,
+      64
+    ],
+    "config1": [
+      32,
+      64
+    ],
+    "config2": [
+      32,
+      64
+    ],
+    "debug": [
+      32,
+      64
+    ],
+    "dxa": [
+      32,
+      64
+    ],
+    "graphics": [
+      32,
+      64
+    ],
+    "graphics_parity": [
+      32,
+      64
+    ],
+    "isa": [
+      32,
+      64
+    ],
+    "p02_wgmma": [
+      64
+    ],
+    "p04_mlp": [
+      64
+    ],
+    "perf": [
+      32
+    ],
+    "raytracing": [
+      32,
+      64
+    ],
+    "regression": [
+      32,
+      64
+    ],
+    "sw": [
+      32,
+      64
+    ],
+    "tensor": [
+      32,
+      64
+    ],
+    "tensor_mx": [
+      32,
+      64
+    ],
+    "tensor_sp": [
+      32,
+      64
+    ],
+    "tensor_wg": [
+      32,
+      64
+    ],
+    "vm": [
+      32,
+      64
+    ],
+    "vulkan": [
+      32,
+      64
+    ]
+  },
+  "planning_explanation": [
+    "ci.yml push defaults are simx/smoke; pull_request defaults are simx,rtlsim/smoke,full.",
+    "A push or pull_request toolchain cache miss forces full driver/tier coverage; an indeterminate changed-from diff forces all drivers.",
+    "The current Python orchestration, added project tests, and documentation changes match no driver-escalation path in ci/testcase.py.",
+    "ci.yml invokes matrix without --changed-from, so category touches metadata does not suppress cells.",
+    "There are 17 categories at both XLEN 32 and 64, plus perf at 32 and p02_wgmma/p04_mlp at 64.",
+    "The retained base plan had no shards; unchanged planner, catalog, and runtime weights preserve that plan for the same inputs.",
+    "model_parity/perf_gate remain centralized RV32 rtlsim checks; logic_gate remains an RV32 rtlsim smoke cell. These were not cells of the retained SimX-only base run.",
+    "Dedicated opt-in FPGA/ASIC/timing_gpu workflows and gate baselines are unchanged."
+  ],
+  "protected_file_count": 99,
+  "protected_file_identities": [
+    {
+      "path": ".github/actions/setup-vortex/action.yml",
+      "sha256": "7bee72ce98f82d66aa2683fa543b8ea0bc799a65940d6ea30b5038937798772a",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/apptainer-ci.yml",
+      "sha256": "dcf4fd7d5e84b0d3f4000cd36a7f573eacccbe88e2f4dce0b3f3a0d7fa63ea36",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/asic_gate.yml",
+      "sha256": "52131b60089538e66a84afae9383a1574316e9980e5d33eceadfecc9d9c0b19e",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "c151c36e48dcdb6161dc5006744a29189389508e4297d7ffa2eae4fb0a8bf576",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/fpga_gate.yml",
+      "sha256": "92537a8133cbedff401f06110922cedaf0ac650f30a0cc97210ca5f9cbe2961a",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/logic_gate.yml",
+      "sha256": "d6e0962575ce0abfb1015fc1fc22e1f5ba8b7ade5a9dd59b3622930b3d07699c",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p04-model.yml",
+      "sha256": "6454942f5a9ce84b51edffe8bd95acd1618990b89082a31cf6465b9a8f5b2c23",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p05-python.yml",
+      "sha256": "dc22f840b235d3abee1bac9b205392331ea684de1c1d03ab1ca3e6c91990f195",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p05-torch.yml",
+      "sha256": "67db9d8ca9223b51ffe1165f08f3999eb1d93a849ca1c64a207a1c4b47ad9a26",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p06-baseline.yml",
+      "sha256": "acf95e7181e759cd0412170e69bff99949a44e68c1ff302b6811e0dbfed04661",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p06-checked-counters.yml",
+      "sha256": "3d96c976076c91dfda3cb0262506d48be6501ecd187eae1f217d42234a4de8f0",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p06-dependency-provenance.yml",
+      "sha256": "088f1b0f0286663a1de73b2784c63dceecd35764930ad90d35940e7575e25cf0",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p06-managed-preflight-replay.yml",
+      "sha256": "d46972c689c1b1551eba082a4d7bf1914b2ca82d56c28ed434b0e0702f3d31ae",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p06-managed-preflight.yml",
+      "sha256": "5e50a01c1d01926b390bfa5d227296b75ce40499c2e752c8fb0e0643a4d44c78",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p06-mpm-transport.yml",
+      "sha256": "127a38dc4cff8d6fc9aa3b5b070654c96c6a1cce7e337987771812350b08a4be",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p06-native-lifetime.yml",
+      "sha256": "f2c67efaf7704317ef642a32f64a1d97c3d370ae8862156f717611dae5170422",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p06-qualified-warm.yml",
+      "sha256": "261efa4bcf9c2ca7a9bca8a25dcb03eefd70848426a4c6c61ca55b68a14a7b2e",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p06-simulator-completion.yml",
+      "sha256": "233521df10f3b3c90035a533849a17e783a5977a705023609ef73d07ca21b65c",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p06-warm-workspace.yml",
+      "sha256": "26f4be747d1d6fcb828532281dcea6dfff60469ea73460e03b5b1ac53a66668b",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/p06-workspace.yml",
+      "sha256": "c5558b93f4b23df2a68a32e59bf665362a91b4dbcd83c21c4b62615f9291114f",
+      "unchanged_from_base": true
+    },
+    {
+      "path": ".github/workflows/project-governance.yml",
+      "sha256": "a32f1d42cede5262619aafa78eac3154c4b95b2592c358f57175a1da85ec65a0",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "VX_config.toml",
+      "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "VX_types.toml",
+      "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/asic_gate.py",
+      "sha256": "6ebbaae108d22054ae5ea5a6c471c90e6b5b45cde1f75961b1e36941dc76d777",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/perf/core.json",
+      "sha256": "2e0b69c0f92401bee05c2cda7ec79f2ec49e6dc17f711da546efdbd34382e182",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/perf/dxa.json",
+      "sha256": "648909a52e523874fe1008c76b6bb93d9b84583a28f2fba42782423c977280b7",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/perf/graphics.json",
+      "sha256": "752b2e428f01f4d1393ae91a10f561b1bfe9a2ed2b08f4116b9059cb2019397d",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/perf/raytracing.json",
+      "sha256": "e7190d40dd242e3947cc4f5e568573cd0f52a6e71f21b2bc412eadd75b68d260",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/perf/tensor.json",
+      "sha256": "74bfbe74c0165a4e1263ab58355700c03466f7ca2e982dc2bb25dfe084d17246",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/perf/tensor_mx.json",
+      "sha256": "005c317cdcb33245e7c73cfa8a4ae15b8092bd93520700fa9d67e95488852326",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/perf/tensor_sp.json",
+      "sha256": "10fa4e21a4e411cb6105708ee76c9cc56a67edcd422e6d3a7fd521a9ffe21c88",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/perf/tensor_wg.json",
+      "sha256": "c6c3fd75ed3befed6eaad836dff8ba85192b38eec8350939e441ae8d0978f073",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/core.json",
+      "sha256": "9d44a8cb4df9968fcba2f06068891ca64619b56b15263feb3369487bd6585788",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/dxa.json",
+      "sha256": "b704ffb416f1e117104b970e89a75d4e256c95ab1b5895451370bdaef99734b8",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/graphics.json",
+      "sha256": "99b4e2ffdc4c5ef52f01d3eecd5414d1a00d4100bb0ffd45d3a9bdf66e2994b3",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/tensor.json",
+      "sha256": "7c20e2fdeab2bc597641354c138d79a4e054c1b42a9e4856d88ff157a65ef969",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/beacon/vm.json",
+      "sha256": "74e984dd4e3f1aeb406046ba9ef58efecebc84d856e4bce2abd0a056c04dff00",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/core.json",
+      "sha256": "35c440089e5b5ea68ffb36c9d063237f2fbb2da7f8026519c969accafc452c0b",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/dxa.json",
+      "sha256": "7a6a523cbaf3f4dc1e8ba423262d6d26a6b1b2ff58e711e748b3167f4043ee7a",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/graphics.json",
+      "sha256": "bfb045d843d0d08e29ea0a507584d9a21e1afd50cc54f472781615a5c2a8aec7",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/mufu.json",
+      "sha256": "1f7a375f75ec05aa8885d19b2684aa74586dfa6fabbff9a34039c4796b56f567",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/tensor.json",
+      "sha256": "81b645180b72327c9bf44777f2914bc9b2378c9dabd87ab32f05d78e0d8f6f18",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/xilinx/vm.json",
+      "sha256": "aecb3717cec9d0b58e184718fdfcf2894d562f72f55b7bdb96b915e303d7600f",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/core.json",
+      "sha256": "3d73cbaee0c1b903340c9752b0079bc3073a4c3edfdffe579cdcbf99e5006bf3",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/dxa.json",
+      "sha256": "aa249a7f621768ac02f1d0f85ef4a5eea9d95d32fb6a566ca4adc599a43729aa",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/graphics.json",
+      "sha256": "1f43cf0ea627b32525f77fbdd0e2dc70eac6fc93a525d1d60200eb95be995370",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/mufu.json",
+      "sha256": "2b84aa5d1a201b1239755fd3ec4e147f7b3bc6f64041034ba4f413a61f16ffa9",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/tensor.json",
+      "sha256": "01cf957355f05b63dc98b19ca4a69899b0c26383ef86025a24513c1a07d4eadd",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/baselines/synthesis/yosys/vm.json",
+      "sha256": "9ce940cfcdef1bc0f8554de0da13231eda3125bc5a014e7596c83bf0a46372bc",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/conftest.py",
+      "sha256": "340bfceab9382d9a730fcddd470b34c1c83220b984745e2150cb9a7a2d50df06",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/fpga_gate.py",
+      "sha256": "6076518e4d71f4f17f7da334fde2b4b4ba3a6b9d3afb04da1287377248bf0445",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/logic_gate.py",
+      "sha256": "c15fff67c438c659697d6250d9a1a7076dd6027c2be0865668555cbe50b87efb",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/perf_baseline.py",
+      "sha256": "262bfee8273e03c95173908a16c75768861afc208c0dc475f0ef292361f4a03f",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/runtimes.json",
+      "sha256": "f47039120e9be4c6454fd3cb83122b969ee2433201513714d36e30363c0d261d",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/synth_gate.py",
+      "sha256": "ea4d9f64194fc81fc404de6743f278d2dcdf6f474e001aa6bfe48e2a63c479d7",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/test_runner.py",
+      "sha256": "ab20c24cd48c7863491386908059d5a3dee95db1bd281ca741045f2b754cf053",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcase.py",
+      "sha256": "7aa17b1fc104b2224dadb300f5d4c8e54c104963b8a9af734b9bf1ecf7e662d6",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/asic_gate.yaml",
+      "sha256": "642eb1360737c1594c01ec86991e3fee84cd664da31942e73a4db41c3fa29cce",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/cache.yaml",
+      "sha256": "4dbf91e06161f0d8c15c0271c513335cf2f8ffaabfe7e22f1030c7050e1887ec",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/config1.yaml",
+      "sha256": "c86fe991747cb7a07f514bc96fb6863fe97409fb010cc630407cdaa9ec5d4263",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/config2.yaml",
+      "sha256": "4ae631e5c0fb30f630de7b6f07b8daa54e0f59609062f55b7aa8985b3cd04841",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/core.yaml",
+      "sha256": "82c00040e8c16a90b730dafe87e221ba3136904a83c137545f16e5287ee93021",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/debug.yaml",
+      "sha256": "9928446e0493b1fbd7ed0470f7381a7cf64f791d3790e80a4b6ab12a71ae2f37",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/dxa.yaml",
+      "sha256": "f6986782f041a4f9dcf4b4c3381efc30d35c0cb92beb67184468af6dbfad385c",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/foldsim.yaml",
+      "sha256": "737d51b83a819387de69592656b3f00f351bfb01d1b177478fb6a3db3bd614cb",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/fpga_gate.yaml",
+      "sha256": "615aa45abe9979906639b227a04304e23527da4f50631bd5a33439c69b9e4c06",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/graphics.yaml",
+      "sha256": "770ac002c4d9eef3c272fc8bcf3d7111edb6fd2fa83e7edc160867f51248a95d",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/graphics_parity.yaml",
+      "sha256": "b856f845af72def9cff6451f4b3e1cfbe3c53055ba96938e3d218555d91a7837",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/integration/cupbop.yaml",
+      "sha256": "1808b83598b0f9df9b3ad15e4cfb10e3b39d39fcfa01789a970adfda08f784c6",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/integration/dtm.yaml",
+      "sha256": "8dbbc664216b69e5d51386ccf036215ce0ef2896db4e9dbb9bde2450726287b1",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/integration/gem5.yaml",
+      "sha256": "de745b87d04d1e7e831766c965fefef289e3b394708aef668bf8d6783d3f5780",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/integration/mpi.yaml",
+      "sha256": "9fb487e32c884d54289dc8d43ef580ce677d25f959a257998d848e77e52249a0",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/integration/sst.yaml",
+      "sha256": "2711e2eeb83c71767e93562e73c484ac3e8847dc6cca7490f89e15bcffdb42f9",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/isa/amo.yaml",
+      "sha256": "b3a65f48f5938c1c891d7e74514413aafd09ba51ed3e86c5f007739195b19431",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/isa/mufu.yaml",
+      "sha256": "6a117e916672a80041e2075508130a401fe06629855e4e3ec19f937980155f10",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/isa/riscv.yaml",
+      "sha256": "5cb62972f2e2735fd3d3030f0dc08596c83053717414518623adbcd0c4ede4fb",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/isa/rvc.yaml",
+      "sha256": "e088f9617cc4b3b6b6a1b48f33484de81db3b5b6384097370b3cebf3eca368cf",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/isa/zfhmin.yaml",
+      "sha256": "062743ecd454b78d4aaa34dbad1f75ba6eb4ef7d6e35fb256837781e0f8ea828",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/logic_gate.yaml",
+      "sha256": "f6191eba423394b3480c97cc5e48ba282314d5e6904549c3e65813eb563899fb",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/p02_wgmma.yaml",
+      "sha256": "48b7c375c3e907fc539229fe8e2b4f1e2001b7b31eba8befc3119a19d0a9c234",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/p04_mlp.yaml",
+      "sha256": "9afbf381c5185fa37977e45b87a692be334d4d6eb4eb062e1ad7c20fbffe11e6",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/perf.yaml",
+      "sha256": "b7c78af4b96587cad0c7ed2d6cddf585e8bd9d8d067fe66ec04e1beccb076b2a",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/raytracing.yaml",
+      "sha256": "72dba83890ce8ca89812b04d75f6031d8bd5253827028642b68c57dcc06d2730",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/regression.yaml",
+      "sha256": "c747bc258b8ed36a992bc90d2bdab79cb1856e96fc43562b9ae0e727dfd3562b",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/scope.yaml",
+      "sha256": "a7fe645bf5701807d7e08cdd98c62fadddd487e70d038af107233645c5ac186a",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/stress.yaml",
+      "sha256": "faa01057a00307fa832f5e46bb9a5ae90f5751294f1fc61056318fff51f4e62e",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/sw/hip.yaml",
+      "sha256": "dfc975846c5f7a2f2be7fdb56348fbba9396eaec59c6e0d174956ef7eef58221",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/sw/kernel.yaml",
+      "sha256": "63f919d562b24a74406263801b864e7178b75821472dbaaa697add635f7d1ebe",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/sw/opencl.yaml",
+      "sha256": "e7e6a7b5e355551ca617550a7478434a59cdfd9391b414caf19cc5de4545fe5b",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/sw/runtime.yaml",
+      "sha256": "926cb515e94f68b4f8b2a8567e633d109f41b95c3bc5883d13cb7a45077d7731",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/synthesis.yaml",
+      "sha256": "c155ef07cc49da2bdc3c790a5fe53276fb04b56fa6e8145e5e321943dd4f330a",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/tensor.yaml",
+      "sha256": "5ae8567109b68e7852be5ab66cb92af117983b80693fa5ea7762c82eb19dde61",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/tensor_mx.yaml",
+      "sha256": "7769e7c9eabdb86a05acd29899b598eab458a513cc432cb79414cc05129c9ef9",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/tensor_sp/tensor_sp.yaml",
+      "sha256": "0a1323fc3e2b41776ea8690bf291982a982703c591e6de29f16ffc8e7b8c38bd",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/tensor_sp/tensor_sp_mx.yaml",
+      "sha256": "e6ca643cf39104767081fb02fdeddcd1c5780d3720bbdff3cb3b466b6f4041f7",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/tensor_wg.yaml",
+      "sha256": "477d313b40f1fe5c54488098a7f3ad482ccf5d149919b88c834d04bd994155cd",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/unittest.yaml",
+      "sha256": "c774b8ea85abd91c93aec8bd7b98566c74b098df4b8e206325ad4ed7f0584b41",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/vm.yaml",
+      "sha256": "9c3d4db9ef2325ca9c9d063ff1453690ddebe3b7473b9b65c95ed5373ab1c0a2",
+      "unchanged_from_base": true
+    },
+    {
+      "path": "ci/testcases/vulkan.yaml",
+      "sha256": "72cd5b2dbbc46d9910d34aa524c2db5da3f86c92f36a92e306448298f7f914b0",
+      "unchanged_from_base": true
+    }
+  ],
+  "future_final_ci_results_observed": false,
+  "limitations": "No provider calls, dispatch, network, tests, native execution, planner execution, source edits, or commits. YAML was parsed as data only; future CI job count depends on event, cache, and diff inputs."
+}

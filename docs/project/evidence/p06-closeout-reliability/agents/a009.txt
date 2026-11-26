@@ -1,0 +1,49 @@
+a009 - Encryption descriptor ownership and publication closeout
+
+Base revision: 43c93ce892f1f3f6c0555597da342709ec9f7e49.
+Owned changes:
+- ci/project/p06_qualified_warm_encrypt.py
+- ci/project/test_p06_encrypt_descriptor_closeout.py (new)
+
+Completed changes:
+- _exclusive releases its raw descriptor once on setup failure, preserving the
+  original OSError or KeyboardInterrupt when a consuming close also raises.
+- After private-link cleanup, both public files are checked against recorded
+  inode identities, expected lengths and digests, with descriptor/named-path
+  stability during each bounded read. Replacement, removal and same-inode
+  content drift cannot return success.
+- Committed publication semantics remain intact: failure does not revoke the
+  last public copy or overwrite/delete unrelated replacements.
+- New tests compose the existing synthetic age fixture.
+
+Actual completed development checks before the environment outage:
+1. python3 -B -m unittest discover -s ci/project -p 'test_p06_encrypt_descriptor_closeout.py' -v
+   Before fix: 5 tests, 18 expected failures, zero errors or skips.
+   After fix: all 5 tests passed.
+   Final test module also ran against the unchanged helper from git show at
+   43c93ce, loaded in memory: 5 tests, 18 failures, zero errors or skips.
+2. PYTHONPATH=ci/project python3 -B -m unittest -v test_p06_encrypt_descriptor_closeout test_p06_qualified_warm_encrypt test_p06_encrypt_operational_failures test_p06_encrypt_publication_review test_p06_directory_cleanup_review
+   All 59 tests passed in 3.106 seconds, zero skips.
+3. git diff --check -- ci/project/p06_qualified_warm_encrypt.py ci/project/test_p06_encrypt_descriptor_closeout.py
+   Passed.
+
+Exact recovered source identities:
+ci/project/p06_qualified_warm_encrypt.py
+  UTF-8 bytes: 33262
+  Git blob: b77fff5b62ba374840b98215a4c140b1af0aeccc
+  SHA-256: 17a102493aab473fde19e237424f27305f321675a832ba8a258dd895ff0a3422
+ci/project/test_p06_encrypt_descriptor_closeout.py
+  UTF-8 bytes: 9735
+  Git blob: 17b743efb837b666337528f754ed7b5e4d78f723
+  SHA-256: 33220df1d83eda8be52a8a9321cfe03a562232a1916169c395e4df7d06a9576b
+
+Recovery used the retained exact patches and the connector-fetched base helper.
+Both recovered files' recomputed SHA-256 values exactly match the checksums
+recorded before the outage. No tests were rerun during connector-only recovery.
+No commits or refs were created or updated by this assignment.
+
+Scope: focused offline synthetic-fixture development evidence, not full strict
+governance, native execution, real age cryptographic verification, hardware or
+performance qualification. Observed checks do not fully exclude same-user
+concurrent changes, crashes or storage failures. Frozen inputs, proofs, goldens,
+gates, docs and other agents' files were not changed.

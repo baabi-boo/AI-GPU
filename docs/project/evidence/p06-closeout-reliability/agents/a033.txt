@@ -1,0 +1,9 @@
+a033: PASS — independent host-only failure controls.
+Base HEAD: 43c93ce892f1f3f6c0555597da342709ec9f7e49.
+Dirty encryption source SHA256: 896f713d9acb5f05a9236c1d5ee5c931bad6be593b23065386d1f9f06dc23966.
+Descriptor fixture SHA256: 33220df1d83eda8be52a8a9321cfe03a562232a1916169c395e4df7d06a9576b.
+Command: TMPDIR=../a033-tmp python3 -B ../a033-tmp/probe.py; exit 0, two full-caller probes.
+Injected EIO on the second final-public-ciphertext os.read, and monotonic==deadline at public verification. Both reached committed publication with both private links absent, propagated OSError/EncryptionError(runtime-limit), and recorded private failure diagnostics: publication_committed=true, encryption_passed=false, cleanup_complete=true, plaintext_publication_authorized=false.
+Committed ciphertext (10,440 bytes; SHA256 a3142e4ca1af8227fb6649ea0ce66a68144173b2dd9bf0d0c7800d119a13d6d6) and summary remained byte-for-byte. The public pass summary intentionally survives; the call raises. Source bytes unchanged; exact public pair, no plaintext exposure, exactly one synthetic-age launch, no rollback/unlink after injection.
+Helper fd closed once, followed by outer output/private/parent descriptors once each; all EBADF afterward. Pump pipes and selector closed.
+No permanent source/test edits. Probe/log: ../a033-tmp/probe.py and probe.log. Scope: synthetic orchestration, not cryptography/native/network/full-suite qualification; secondary cleanup failures and concurrent mutations untested.

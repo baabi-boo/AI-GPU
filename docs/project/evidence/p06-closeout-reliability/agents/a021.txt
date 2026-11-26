@@ -1,0 +1,15 @@
+Assignment a021 — independent scoped review
+
+Disposition: PASS; no blocking findings.
+Base HEAD: 43c93ce892f1f3f6c0555597da342709ec9f7e49.
+Scope: a017 main/_main SIGTERM wrapper and test_p06_encrypt_sigterm_closeout.py only. Prior descriptor/public-hash hunks remain outside this review (a013).
+
+The wrapper installs before parsing, translates SIGTERM into KeyboardInterrupt, and restores the enclosing handler in finally, including escaping SystemExit. SIGINT remains untouched. Existing nested encryption closeout receives the exception and performs bounded age process-group cleanup. Signal mutation stays in CLI main; encrypt_private_directory remains usable from a worker thread.
+
+The new real-signal tests check leader/descendant termination, exact partial ciphertext/private-stderr retention, unchanged source bytes, rollback before publication commit, and preservation of the committed last ciphertext/summary pair after private unlink. Public output is checked against the sanitized field allowlist and synthetic secrets; private diagnostics retain plaintext_publication_authorized=false.
+
+Inspected a017 reproduction artifacts: pre-fix exit -15 left both processes live; post-fix exit 1 retained 51 bytes and both processes were gone. Inspected the 64-test passing log; tests were not rerun. Single cooperative SIGTERM coverage does not expand existing abrupt/repeated-interruption guarantees.
+
+Reviewed SHA-256:
+ci/project/p06_qualified_warm_encrypt.py: 896f713d9acb5f05a9236c1d5ee5c931bad6be593b23065386d1f9f06dc23966
+ci/project/test_p06_encrypt_sigterm_closeout.py: 9436ce59e49b13f90092b287010d090095fcf5dbe7a4237874b20eff401044f7

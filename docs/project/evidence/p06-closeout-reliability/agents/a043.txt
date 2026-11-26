@@ -1,0 +1,5 @@
+agent043 — STATIC ownership review against 43c93ce892f1f3f6c0555597da342709ec9f7e49.
+p06_dependency_local_prepare.py SHA256: 89953e2d2f6b6425598fc58bc1c4b1f0cf5a9eefe03dfb898441eea3171ad900.
+Scope: changed checkpoint/SIGTERM wrapper and immediate checkpoint/provision callees only; no tests, probes, network, native execution, or code edits.
+Findings: no newly introduced ownership/deletion regression. Known pre-existing limitation: interruption during write/fsync leaves exclusive dependency-preparation.json.tmp; final save (259/318) raises FileExistsError, _main prints blocked, and no controlled receipt is committed (or an earlier checkpoint remains stale).
+Ownership: evidence.mkdir(exist_ok=True) precedes try, without creation tracking. Existing receipt/tools/products are rejected; provision mkdir/file writes are exclusive. No deletion occurs, preserving preexisting outputs/archives while leaving partial tool trees. The SIGTERM handler is restored in finally; pre-try interruptions lack a controlled receipt.

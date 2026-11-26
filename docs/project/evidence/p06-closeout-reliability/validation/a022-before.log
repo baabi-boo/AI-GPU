@@ -1,0 +1,27 @@
+test_sigterm_during_transfer_retains_partial_bytes_and_closes_resources (test_p06_control_sigterm_closeout.ControlSigtermCloseoutTests.test_sigterm_during_transfer_retains_partial_bytes_and_closes_resources) ... FAIL
+test_sigterm_before_transfer_retains_sanitized_blocked_receipt (test_p06_control_sigterm_closeout.ControlSigtermCloseoutTests.test_sigterm_before_transfer_retains_sanitized_blocked_receipt) ... FAIL
+
+======================================================================
+FAIL: test_sigterm_during_transfer_retains_partial_bytes_and_closes_resources (test_p06_control_sigterm_closeout.ControlSigtermCloseoutTests.test_sigterm_during_transfer_retains_partial_bytes_and_closes_resources)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/agent/ai-gpu-work-4c990083f078/AI-GPU/ci/project/test_p06_control_sigterm_closeout.py", line 170, in test_sigterm_during_transfer_retains_partial_bytes_and_closes_resources
+    self.check_signal("transfer")
+  File "/home/agent/ai-gpu-work-4c990083f078/AI-GPU/ci/project/test_p06_control_sigterm_closeout.py", line 123, in check_signal
+    self.assertEqual(result.returncode, 1,
+AssertionError: -15 != 1 : default SIGTERM exit bypassed private intake closeout
+
+======================================================================
+FAIL: test_sigterm_before_transfer_retains_sanitized_blocked_receipt (test_p06_control_sigterm_closeout.ControlSigtermCloseoutTests.test_sigterm_before_transfer_retains_sanitized_blocked_receipt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/agent/ai-gpu-work-4c990083f078/AI-GPU/ci/project/test_p06_control_sigterm_closeout.py", line 173, in test_sigterm_before_transfer_retains_sanitized_blocked_receipt
+    self.check_signal("preflight")
+  File "/home/agent/ai-gpu-work-4c990083f078/AI-GPU/ci/project/test_p06_control_sigterm_closeout.py", line 123, in check_signal
+    self.assertEqual(result.returncode, 1,
+AssertionError: -15 != 1 : default SIGTERM exit bypassed private intake closeout
+
+----------------------------------------------------------------------
+Ran 2 tests in 1.023s
+
+FAILED (failures=2)

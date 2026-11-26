@@ -544,7 +544,13 @@ def _execute(source, revision, attempt_root):
         child_environment.update(extra_environment or {})
         row = {"id": name, "argv": argv, "process_started": None, "cleanup_complete": False}
         record["stages"].append(row)
-        _emit(revision, name, "running")
+        try:
+            _emit(revision, name, "running")
+        except (Exception, KeyboardInterrupt) as error:
+            # Status emission precedes the only call that can start this child.
+            row.update(process_started=False, cleanup_complete=True, outcome="blocked",
+                       exit_code=None, reason=type(error).__name__)
+            raise
         try:
             row.update(run_bounded(argv, source, child_environment,
                        log or attempt / "hosted/logs" / (name + ".log"), timeout_seconds=timeout,
@@ -564,6 +570,20 @@ def _execute(source, revision, attempt_root):
 
     def cli(module, *arguments):
         return [sys.executable, "-B", str(source / "ci/project" / (module + ".py")), *map(str, arguments)]
+
+    def closeout_observation(name, observe, unavailable):
+        nonlocal native_success
+        for _ in range(2):
+            try:
+                return observe()
+            except (Exception, KeyboardInterrupt) as error:
+                native_success = False
+                record["orchestration_passed"] = False
+                record["failures"].append({"stage": name, "error_type": type(error).__name__})
+                # Only an interrupted pure observation may be attempted once more.
+                if not isinstance(error, KeyboardInterrupt):
+                    break
+        return unavailable
 
     try:
         record["selected_sources_before"] = selected_sources(source, attempt / "hosted/sources")
@@ -625,12 +645,15 @@ def _execute(source, revision, attempt_root):
             record["orchestration_passed"] = False
             record["failures"].append({"stage": "source-closeout", "error_type": type(error).__name__})
         record["state"] = "finished"
-        record["writers_finished_observed"] = writers_finished(attempt, record["stages"])
-        if not native_success and any(row["id"] == "native-supervisor" and row.get("process_started") is not False
-                                      for row in record["stages"]):
+        native_reconciled = native_success
+        record["writers_finished_observed"] = closeout_observation(
+            "writers-closeout", lambda: writers_finished(attempt, record["stages"]), False)
+        if not native_reconciled and any(row["id"] == "native-supervisor" and row.get("process_started") is not False
+                                        for row in record["stages"]):
             record["native_execution"] = "unknown"
             if record["selected_sources_stable"] and record["writers_finished_observed"]:
-                record["native_execution"] = observed_native_execution(attempt, revision)
+                record["native_execution"] = closeout_observation(
+                    "native-closeout", lambda: observed_native_execution(attempt, revision), "unknown")
         try:
             _write(attempt / "hosted/attempt-before-closeout.json", record)
             require(record["writers_finished_observed"], "writers_unresolved")

@@ -1,0 +1,19 @@
+Agent027 — registration/discovery audit; base 43c93ce892f1f3f6c0555597da342709ec9f7e49 plus current edits.
+
+Ran discovery only, from source root with python3 -B: unittest.TestLoader().discover("ci/project", pattern="test_*.py"), then governance_run.collect_test_ids(suite), matching governance_run.py’s canonical mechanism. Result: 5,514 IDs, all unique; zero loader errors. Existing population remains 5,471; additions total 43:
+
+test_p06_builder_initial_closeout.py: 5
+test_p06_control_sigterm_closeout.py: 4
+test_p06_encrypt_descriptor_closeout.py: 5
+test_p06_encrypt_sigterm_closeout.py: 7
+test_p06_hosted_closeout_interruptions.py: 8
+test_p06_hosted_prelaunch_emission.py: 5
+test_p06_initial_checkpoint_closeout.py: 2
+test_p06_input_initial_closeout.py: 2
+test_p06_preparation_initial_closeout.py: 5
+
+No new skips/expected-failure decorators, duplicate methods, imported TestCase aliases, or custom discovery hooks. Subtests do not increase canonical counts. Discovery preserved cwd, environment, SIGINT/SIGTERM/SIGALRM handlers and thread inventory.
+
+Fixtures generally use fresh temporary directories and scoped patches/cleanup; signal subprocesses are bounded. Low-priority isolation risks: hosted run_cli helpers assert handler restoration without independent finally restoration; hosted_prelaunch_emission._composition calls setUp before its cleanup try, allowing setup-failure leakage. Worker-thread timeout failures can leave daemon workers briefly active. No registration blocker found.
+
+No test bodies, native workloads or network operations executed; behavioral isolation remains unqualified by this audit. No source edits.

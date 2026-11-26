@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/home/agent/ai-gpu-work-4c990083f078/tmp/a085-integration-runner.py", line 392, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/agent/ai-gpu-work-4c990083f078/tmp/a085-integration-runner.py", line 204, in main
+    record['retained_receipt_hashes_before'] = retained_hashes(retained_paths)
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/agent/ai-gpu-work-4c990083f078/tmp/a085-integration-runner.py", line 107, in retained_hashes
+    return {str(path): {'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+                                                 ^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1019, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: '/home/agent/ai-gpu-work-4c990083f078/reports/a080-tmp'
