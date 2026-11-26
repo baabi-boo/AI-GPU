@@ -1,0 +1,419 @@
+{
+  "track": "Wave 11B Track E \u2014 Silicon-Grade Design Verification (SVA, Formal, Constrained-Random Coverage)",
+  "source_revision": "3f85bcc",
+  "overall_verdict": "PASS",
+  "tools": {
+    "yosys": "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+    "smtbmc_solver": "Z3 version 4.8.12 - 64 bit",
+    "verilator": "Verilator 5.050 2026-07-01 rev v5.050"
+  },
+  "sva_checkers": [
+    {
+      "file": "hw/dv/sva/VX_axi4_sva.sv",
+      "module": "VX_axi4_sva",
+      "concurrent_sva_count": 18,
+      "scope": "AXI4-Lite & AXI4-Full AW/W/B/AR/R valid/payload stability, burst encoding legality, single-beat WLAST, bounded stalls, and post-reset $isunknown checks",
+      "verilator_lint": "PASS",
+      "yosys_formal_smt2": "PASS_ELAB_SMT2",
+      "negative_control_verified": "Caught injected AWADDR mutation before AWREADY at line 366 (a_aw_payload_stable)"
+    },
+    {
+      "file": "hw/dv/sva/VX_tcu_handshake_sva.sv",
+      "module": "VX_tcu_handshake_sva",
+      "concurrent_sva_count": 10,
+      "scope": "TCU/FU req/rsp valid-ready stability, UUID/tag in-order FIFO conservation, inflight credit bounding, and bounded latency/stall watchdogs",
+      "verilator_lint": "PASS",
+      "yosys_formal_smt2": "PASS_ELAB_SMT2",
+      "negative_control_verified": "Caught injected spurious response underflow at line 218 (a_no_spurious_rsp)"
+    },
+    {
+      "file": "hw/dv/sva/VX_cdc_fifo_sva.sv",
+      "module": "VX_cdc_fifo_sva",
+      "concurrent_sva_count": 12,
+      "scope": "Gray-code 1-bit transition property, bin2gray/gray2bin consistency, no write-when-full, no read-when-empty, full/empty flag exactness, and occupancy conservation",
+      "verilator_lint": "PASS",
+      "yosys_formal_smt2": "PASS_IN_CDC_FORMAL",
+      "negative_control_verified": "Caught injected write-when-full at line 211 (a_w_no_write_when_full)"
+    }
+  ],
+  "formal_verification": {
+    "yosys_version": "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+    "solver": "z3",
+    "solver_version": "Z3 version 4.8.12 - 64 bit",
+    "overall_verdict": "PASS",
+    "proofs": [
+      {
+        "id": "dft_tap_k_induction",
+        "module": "VX_asic_dft_formal",
+        "mode": "k-induction",
+        "depth": 4,
+        "properties": [
+          "Exhaustive 16-state IEEE-1149.1 TAP 5-cycle TMS=1 return to TEST_LOGIC_RESET",
+          "TEST_LOGIC_RESET self-loop invariance under TMS=1",
+          "Reset-safe functional outputs (dft_scan_enable=0, dft_test_mode=0, mbist_run=0, pwr_clust_en=4'hF)"
+        ],
+        "yosys_command": "/home/antigravity/tools/yosys/bin/yosys -q -p read_verilog -sv -formal -DFORMAL_INDUCT_ONLY hw/asic/dft/VX_asic_dft_top.sv hw/dv/formal/VX_asic_dft_formal.sv;  prep -top VX_asic_dft_formal; flatten; memory_map; opt; clk2fflogic; opt_clean; write_smt2 -wires /home/antigravity/vortex_builds/dv_formal/dft_induct.smt2",
+        "yosys_returncode": 0,
+        "yosys_elapsed_sec": 0.119,
+        "smtbmc_command": "/home/antigravity/tools/yosys/bin/yosys-smtbmc -s z3 -i -t 4 --unroll --noprogress /home/antigravity/vortex_builds/dv_formal/dft_induct.smt2",
+        "smtbmc_returncode": 0,
+        "smtbmc_elapsed_sec": 0.52,
+        "steps_checked": 2,
+        "verdict": "PASS",
+        "log_tail": [
+          "##   0:00:00  Solver: z3",
+          "##   0:00:00  Trying induction in step 4..",
+          "##   0:00:00  Trying induction in step 3..",
+          "##   0:00:00  Temporal induction successful.",
+          "##   0:00:00  Status: PASSED"
+        ]
+      },
+      {
+        "id": "dft_tap_bmc",
+        "module": "VX_asic_dft_formal",
+        "mode": "BMC",
+        "depth": 20,
+        "properties": [
+          "Reachable 16-state JTAG TAP returns to TEST_LOGIC_RESET within 5 TMS=1 TCK cycles",
+          "IDCODE immutability and exact bit-serial TDO shift match 32'h1A16_B101",
+          "dft_scan_enable=0, dft_test_mode=0, mbist_run=0, pwr_clust_en=4'hF in TEST_LOGIC_RESET",
+          "TDO output-enable active strictly in SHIFT_DR / SHIFT_IR"
+        ],
+        "yosys_command": "/home/antigravity/tools/yosys/bin/yosys -q -p read_verilog -sv -formal  hw/asic/dft/VX_asic_dft_top.sv hw/dv/formal/VX_asic_dft_formal.sv;  prep -top VX_asic_dft_formal; flatten; memory_map; opt; clk2fflogic; opt_clean; write_smt2 -wires /home/antigravity/vortex_builds/dv_formal/dft_bmc.smt2",
+        "yosys_returncode": 0,
+        "yosys_elapsed_sec": 0.154,
+        "smtbmc_command": "/home/antigravity/tools/yosys/bin/yosys-smtbmc -s z3 -t 20 --unroll --noprogress /home/antigravity/vortex_builds/dv_formal/dft_bmc.smt2",
+        "smtbmc_returncode": 0,
+        "smtbmc_elapsed_sec": 19.199,
+        "steps_checked": 20,
+        "verdict": "PASS",
+        "log_tail": [
+          "##   0:00:06  Checking assertions in step 13..",
+          "##   0:00:07  Checking assertions in step 14..",
+          "##   0:00:08  Checking assertions in step 15..",
+          "##   0:00:09  Checking assertions in step 16..",
+          "##   0:00:10  Checking assertions in step 17..",
+          "##   0:00:13  Checking assertions in step 18..",
+          "##   0:00:14  Checking assertions in step 19..",
+          "##   0:00:19  Status: PASSED"
+        ]
+      },
+      {
+        "id": "cdc_fifo_k_induction",
+        "module": "VX_cdc_fifo_formal",
+        "mode": "k-induction",
+        "depth": 4,
+        "properties": [
+          "Exhaustive bijection gray2bin(bin2gray(x)) == x and bin2gray(gray2bin(x)) == x for all x",
+          "Consecutive Gray-code pointers differ by exactly 1 bit (Hamming distance == 1)",
+          "Gray full/empty flag equivalence to binary occupancy and mutual exclusion"
+        ],
+        "yosys_command": "/home/antigravity/tools/yosys/bin/yosys -q -p read_verilog -sv -formal -DFORMAL_INDUCT_ONLY hw/dv/sva/VX_cdc_fifo_sva.sv hw/dv/formal/VX_cdc_fifo_formal.sv; chparam -set ADDRW 3 VX_cdc_fifo_formal; chparam -set DATAW 8 VX_cdc_fifo_formal; prep -top VX_cdc_fifo_formal; flatten; memory_map; opt; clk2fflogic; opt_clean; write_smt2 -wires /home/antigravity/vortex_builds/dv_formal/cdc_induct.smt2",
+        "yosys_returncode": 0,
+        "yosys_elapsed_sec": 0.078,
+        "smtbmc_command": "/home/antigravity/tools/yosys/bin/yosys-smtbmc -s z3 -i -t 4 --unroll --noprogress /home/antigravity/vortex_builds/dv_formal/cdc_induct.smt2",
+        "smtbmc_returncode": 0,
+        "smtbmc_elapsed_sec": 0.179,
+        "steps_checked": 2,
+        "verdict": "PASS",
+        "log_tail": [
+          "##   0:00:00  Solver: z3",
+          "##   0:00:00  Trying induction in step 4..",
+          "##   0:00:00  Trying induction in step 3..",
+          "##   0:00:00  Temporal induction successful.",
+          "##   0:00:00  Status: PASSED"
+        ]
+      },
+      {
+        "id": "cdc_fifo_bmc",
+        "module": "VX_cdc_fifo_formal",
+        "mode": "BMC",
+        "depth": 12,
+        "properties": [
+          "Dual-clock async Gray-code CDC FIFO under arbitrary wclk/rclk phase/ratio",
+          "VX_cdc_fifo_sva zero violations (no write-when-full, no read-when-empty, 1-bit Gray steps)",
+          "Exact push/pop occupancy conservation and bit-exact head data integrity"
+        ],
+        "yosys_command": "/home/antigravity/tools/yosys/bin/yosys -q -p read_verilog -sv -formal  hw/dv/sva/VX_cdc_fifo_sva.sv hw/dv/formal/VX_cdc_fifo_formal.sv; chparam -set ADDRW 3 VX_cdc_fifo_formal; chparam -set DATAW 8 VX_cdc_fifo_formal; prep -top VX_cdc_fifo_formal; flatten; memory_map; opt; clk2fflogic; opt_clean; write_smt2 -wires /home/antigravity/vortex_builds/dv_formal/cdc_bmc.smt2",
+        "yosys_returncode": 0,
+        "yosys_elapsed_sec": 0.152,
+        "smtbmc_command": "/home/antigravity/tools/yosys/bin/yosys-smtbmc -s z3 -t 12 --unroll --noprogress /home/antigravity/vortex_builds/dv_formal/cdc_bmc.smt2",
+        "smtbmc_returncode": 0,
+        "smtbmc_elapsed_sec": 12.788,
+        "steps_checked": 12,
+        "verdict": "PASS",
+        "log_tail": [
+          "##   0:00:00  Checking assertions in step 5..",
+          "##   0:00:00  Checking assertions in step 6..",
+          "##   0:00:01  Checking assertions in step 7..",
+          "##   0:00:01  Checking assertions in step 8..",
+          "##   0:00:02  Checking assertions in step 9..",
+          "##   0:00:04  Checking assertions in step 10..",
+          "##   0:00:07  Checking assertions in step 11..",
+          "##   0:00:12  Status: PASSED"
+        ]
+      },
+      {
+        "id": "axi4_sva_compile_formal",
+        "module": "VX_axi4_sva",
+        "mode": "formal-smt2",
+        "depth": 4,
+        "properties": [
+          "Formal elaboration and SMT-LIBv2 extraction of VX_axi4_sva protocol monitors"
+        ],
+        "yosys_command": "/home/antigravity/tools/yosys/bin/yosys -q -p read_verilog -sv -formal  hw/dv/sva/VX_axi4_sva.sv;  prep -top VX_axi4_sva; flatten; memory_map; opt; clk2fflogic; opt_clean; write_smt2 -wires /home/antigravity/vortex_builds/dv_formal/axi4_sva_formal.smt2",
+        "yosys_returncode": 0,
+        "yosys_elapsed_sec": 0.095,
+        "smtbmc_command": null,
+        "smtbmc_returncode": 0,
+        "smtbmc_elapsed_sec": 0.0,
+        "verdict": "PASS_ELAB_SMT2"
+      },
+      {
+        "id": "tcu_handshake_sva_compile_formal",
+        "module": "VX_tcu_handshake_sva",
+        "mode": "formal-smt2",
+        "depth": 4,
+        "properties": [
+          "Formal elaboration and SMT-LIBv2 extraction of VX_tcu_handshake_sva monitors"
+        ],
+        "yosys_command": "/home/antigravity/tools/yosys/bin/yosys -q -p read_verilog -sv -formal  hw/dv/sva/VX_tcu_handshake_sva.sv;  prep -top VX_tcu_handshake_sva; flatten; memory_map; opt; clk2fflogic; opt_clean; write_smt2 -wires /home/antigravity/vortex_builds/dv_formal/tcu_handshake_sva_formal.smt2",
+        "yosys_returncode": 0,
+        "yosys_elapsed_sec": 1.621,
+        "smtbmc_command": null,
+        "smtbmc_returncode": 0,
+        "smtbmc_elapsed_sec": 0.0,
+        "verdict": "PASS_ELAB_SMT2"
+      }
+    ]
+  },
+  "constrained_random_simulation_and_coverage": {
+    "testbench": "hw/dv/coverage/tb_asic_soc.cpp",
+    "runner": "hw/dv/coverage/run_coverage.sh",
+    "bound_sva_instances": [
+      {
+        "instance": "u_axil_sva",
+        "module": "VX_axi4_sva",
+        "active_assertions": 18
+      },
+      {
+        "instance": "u_axi_m_sva",
+        "module": "VX_axi4_sva",
+        "active_assertions": 18
+      },
+      {
+        "instance": "u_cmd_cdc_sva",
+        "module": "VX_cdc_fifo_sva",
+        "active_assertions": 12
+      },
+      {
+        "instance": "u_rsp_cdc_sva",
+        "module": "VX_cdc_fifo_sva",
+        "active_assertions": 12
+      },
+      {
+        "instance": "u_tcu_sva",
+        "module": "VX_tcu_handshake_sva",
+        "active_assertions": 10
+      }
+    ],
+    "total_active_concurrent_sva": 70,
+    "clock_ratios_swept": [
+      {
+        "clk_axi_half_period": 5,
+        "clk_core_half_period": 3,
+        "tck_half_period": 19
+      },
+      {
+        "clk_axi_half_period": 3,
+        "clk_core_half_period": 11,
+        "tck_half_period": 19
+      },
+      {
+        "clk_axi_half_period": 7,
+        "clk_core_half_period": 11,
+        "tck_half_period": 19
+      }
+    ],
+    "simulation": {
+      "verdict": "PASS",
+      "seed": 1511464998,
+      "active_sva_assertions": 70,
+      "sva_failures": 0,
+      "sim_time_ticks": 374135,
+      "axi_cycles": 37532,
+      "core_cycles": 36618,
+      "tck_cycles": 9431,
+      "axil_reads": 4307,
+      "axil_writes": 2210,
+      "axil_slverrs": 270,
+      "csr_ops": 3148,
+      "sram_reads": 717,
+      "sram_writes": 461,
+      "cdc_doorbell_pushes": 298,
+      "cdc_doorbell_overflows": 1,
+      "kernel_direct_ops": 96,
+      "hbm_axi_writes": 99,
+      "hbm_axi_reads": 97,
+      "hbm_axi_err_injects": 2,
+      "jtag_tap_cycles": 457,
+      "jtag_idcode_checks": 2,
+      "jtag_bypass_checks": 1,
+      "jtag_scan_checks": 1,
+      "jtag_mbist_runs": 1,
+      "jtag_pwr_updates": 4,
+      "soft_resets": 2,
+      "irq_assertions": 114,
+      "irq_clears": 113,
+      "coverage_dat": "/home/antigravity/vortex_builds/dv_cov/coverage.dat"
+    },
+    "dut_rtl_verilator_coverage": {
+      "line": {
+        "pct": 96.9,
+        "covered": 123,
+        "total": 127
+      },
+      "toggle": {
+        "pct": 83.5,
+        "covered": 3230,
+        "total": 3868
+      },
+      "branch": {
+        "pct": 89.8,
+        "covered": 203,
+        "total": 226
+      }
+    },
+    "full_harness_verilator_coverage": {
+      "line": {
+        "pct": 68.0,
+        "covered": 132,
+        "total": 194
+      },
+      "toggle": {
+        "pct": 78.3,
+        "covered": 6265,
+        "total": 7998
+      },
+      "branch": {
+        "pct": 89.1,
+        "covered": 246,
+        "total": 276
+      }
+    },
+    "per_file_coverage": {
+      "VX_asic_dft_top.sv": {
+        "branch": {
+          "covered": 46,
+          "total": 48,
+          "pct": 95.83
+        },
+        "line": {
+          "covered": 56,
+          "total": 57,
+          "pct": 98.25
+        },
+        "toggle": {
+          "covered": 262,
+          "total": 292,
+          "pct": 89.73
+        },
+        "annotated_file": "/home/antigravity/vortex_builds/dv_cov/annotate_dut/VX_asic_dft_top.sv"
+      },
+      "VX_asic_soc_top.sv": {
+        "branch": {
+          "covered": 141,
+          "total": 162,
+          "pct": 87.04
+        },
+        "line": {
+          "covered": 64,
+          "total": 67,
+          "pct": 95.52
+        },
+        "toggle": {
+          "covered": 2554,
+          "total": 3156,
+          "pct": 80.93
+        },
+        "annotated_file": "/home/antigravity/vortex_builds/dv_cov/annotate_dut/VX_asic_soc_top.sv"
+      },
+      "VX_axi4_sva.sv": {
+        "branch": {
+          "covered": 25,
+          "total": 32,
+          "pct": 78.12
+        },
+        "line": {
+          "covered": 2,
+          "total": 38,
+          "pct": 5.26
+        },
+        "toggle": {
+          "covered": 1376,
+          "total": 2152,
+          "pct": 63.94
+        }
+      },
+      "VX_cdc_fifo_sva.sv": {
+        "branch": {
+          "covered": 4,
+          "total": 4,
+          "pct": 100.0
+        },
+        "line": {
+          "covered": 5,
+          "total": 17,
+          "pct": 29.41
+        },
+        "toggle": {
+          "covered": 155,
+          "total": 162,
+          "pct": 95.68
+        }
+      },
+      "VX_sram_1rw.sv": {
+        "branch": {
+          "covered": 16,
+          "total": 16,
+          "pct": 100.0
+        },
+        "line": {
+          "covered": 3,
+          "total": 3,
+          "pct": 100.0
+        },
+        "toggle": {
+          "covered": 414,
+          "total": 420,
+          "pct": 98.57
+        },
+        "annotated_file": "/home/antigravity/vortex_builds/dv_cov/annotate_dut/VX_sram_1rw.sv"
+      },
+      "VX_tcu_handshake_sva.sv": {
+        "branch": {
+          "covered": 14,
+          "total": 14,
+          "pct": 100.0
+        },
+        "line": {
+          "covered": 2,
+          "total": 12,
+          "pct": 16.67
+        },
+        "toggle": {
+          "covered": 580,
+          "total": 682,
+          "pct": 85.04
+        }
+      },
+      "tb_soc_wrap.sv": {
+        "toggle": {
+          "covered": 924,
+          "total": 1134,
+          "pct": 81.48
+        }
+      }
+    }
+  }
+}
