@@ -88,10 +88,134 @@ static uint32_t gather_merge_lanes(uint32_t fu) {
   return (lanes < VX_CFG_SIMD_WIDTH) ? lanes : 0;
 }
 
+namespace vortex {
+
+class TraceOwner {
+public:
+  explicit TraceOwner(PoolAllocator<instr_trace_t, 64>& pool)
+    : pool_(pool)
+  {}
+
+  ~TraceOwner() {
+    this->reclaim_all();
+  }
+
+  TraceOwner(const TraceOwner&) = delete;
+  TraceOwner& operator=(const TraceOwner&) = delete;
+  TraceOwner(TraceOwner&&) = delete;
+  TraceOwner& operator=(TraceOwner&&) = delete;
+
+  template <typename... Args>
+  instr_trace_t* create(Args&&... args) {
+    RawSlotGuard slot(pool_);
+    instr_trace_t* trace = new (slot.ptr) instr_trace_t(instr_trace_t::OwnerKey{}, std::forward<Args>(args)...);
+    this->link(trace);
+    slot.release();
+    return trace;
+  }
+
+  instr_trace_t* clone(const instr_trace_t& other) {
+    RawSlotGuard slot(pool_);
+    instr_trace_t* trace = new (slot.ptr) instr_trace_t(instr_trace_t::OwnerKey{}, other);
+    this->link(trace);
+    slot.release();
+    return trace;
+  }
+
+  void destroy(instr_trace_t* trace) noexcept {
+    if (trace == nullptr) {
+      return;
+    }
+    this->unlink(trace);
+    trace->~instr_trace_t();
+    pool_.deallocate(trace, 1);
+  }
+
+  void reclaim_all() noexcept {
+    while (head_ != nullptr) {
+      instr_trace_t* trace = head_;
+      this->unlink(trace);
+      trace->~instr_trace_t();
+      pool_.deallocate(trace, 1);
+    }
+  }
+
+  size_t live_count() const noexcept {
+    return live_count_;
+  }
+
+private:
+  struct RawSlotGuard {
+    PoolAllocator<instr_trace_t, 64>& pool;
+    instr_trace_t* ptr;
+
+    explicit RawSlotGuard(PoolAllocator<instr_trace_t, 64>& p)
+      : pool(p)
+      , ptr(p.allocate(1))
+    {}
+
+    ~RawSlotGuard() {
+      if (ptr != nullptr) {
+        pool.deallocate(ptr, 1);
+      }
+    }
+
+    RawSlotGuard(const RawSlotGuard&) = delete;
+    RawSlotGuard& operator=(const RawSlotGuard&) = delete;
+
+    void release() noexcept {
+      ptr = nullptr;
+    }
+  };
+
+  void link(instr_trace_t* trace) noexcept {
+    assert(!trace->owner_linked_);
+    trace->owner_prev_ = tail_;
+    trace->owner_next_ = nullptr;
+    if (tail_ != nullptr) {
+      tail_->owner_next_ = trace;
+    } else {
+      head_ = trace;
+    }
+    tail_ = trace;
+    trace->owner_linked_ = true;
+    ++live_count_;
+  }
+
+  void unlink(instr_trace_t* trace) noexcept {
+    assert(trace->owner_linked_);
+    if (trace->owner_prev_ != nullptr) {
+      trace->owner_prev_->owner_next_ = trace->owner_next_;
+    } else {
+      assert(head_ == trace);
+      head_ = trace->owner_next_;
+    }
+    if (trace->owner_next_ != nullptr) {
+      trace->owner_next_->owner_prev_ = trace->owner_prev_;
+    } else {
+      assert(tail_ == trace);
+      tail_ = trace->owner_prev_;
+    }
+    trace->owner_prev_ = nullptr;
+    trace->owner_next_ = nullptr;
+    trace->owner_linked_ = false;
+    assert(live_count_ > 0);
+    --live_count_;
+  }
+
+  PoolAllocator<instr_trace_t, 64>& pool_;
+  instr_trace_t* head_ = nullptr;
+  instr_trace_t* tail_ = nullptr;
+  size_t live_count_ = 0;
+};
+
+} // namespace vortex
+
 class Core::Impl {
 public:
   Impl(const SimContext& ctx, Core* simobject)
     : simobject_(simobject)
+    , trace_owner_(trace_pool_)
     , sequencers_(VX_CFG_NUM_WARPS)
     , mpm_class_(0)
     , ibuffers_(VX_CFG_NUM_WARPS)
@@ -458,6 +582,7 @@ public:
     std::fill(staged_since_.begin(), staged_since_.end(), 0);
     std::fill(head_staged_.begin(), head_staged_.end(), false);
 
+    trace_owner_.reclaim_all();
     pending_instrs_.clear();
     pending_ifetches_ = 0;
 
@@ -950,8 +1075,7 @@ public:
               // Macro trace never reaches commit (only micro-ops do),
               // so remove it from pending tracking and deallocate here.
               pending_instrs_.remove(trace);
-              trace->~instr_trace_t();
-              trace_pool_.deallocate(trace, 1);
+              trace_owner_.destroy(trace);
             }
             ibuffer->pop();
             if (!head_staged_.at(wid)) {
@@ -1215,8 +1339,7 @@ public:
       pending_instrs_.remove(trace);
     }
 
-    trace->~instr_trace_t();
-    trace_pool_.deallocate(trace, 1);
+    trace_owner_.destroy(trace);
   }
 
   // ----- Public-facing API (called from outer Core trampolines) -----
@@ -1371,16 +1494,32 @@ public:
 
 #endif
 
-  PoolAllocator<instr_trace_t, 64>& trace_pool() { return trace_pool_; }
+  instr_trace_t* create_trace(uint64_t uuid) {
+    return trace_owner_.create(uuid);
+  }
+  instr_trace_t* clone_trace(const instr_trace_t& other) {
+    return trace_owner_.clone(other);
+  }
+  void destroy_trace(instr_trace_t* trace) noexcept {
+    trace_owner_.destroy(trace);
+  }
+  size_t live_trace_count() const noexcept {
+    return trace_owner_.live_count();
+  }
 
 private:
   Core* simobject_;
+
+  // Pool allocators and TraceOwner outlive every pipeline container and
+  // sub-object that holds raw Instr/instr_trace_t pointers.
+  PoolAllocator<Instr, 64> instr_pool_;
+  PoolAllocator<instr_trace_t, 64> trace_pool_;
+  TraceOwner trace_owner_;
 
 #ifdef VX_CFG_EXT_TCU_ENABLE
   TcuUnit::Ptr tcu_unit_;
 #endif
 
-  PoolAllocator<Instr, 64> instr_pool_;
   Decoder::Ptr decoder_;
   std::vector<Sequencer::Ptr> sequencers_;
   uint32_t    mpm_class_;
@@ -1457,8 +1596,6 @@ private:
   std::vector<uint64_t> last_issue_;   // [wid] cycle of the warp's last issue
   std::vector<uint64_t> staged_since_; // [wid] cycle the last issued candidate was staged
   std::vector<bool>     head_staged_;  // [wid] the buffer head has left for staging
-
-  PoolAllocator<instr_trace_t, 64> trace_pool_;
 
 #ifdef VX_CFG_EXT_C_ENABLE
   // RVC fetch SimObject per frontend slice (per-warp halfword buffer + refetch
@@ -1642,8 +1779,20 @@ SimChannel<TlbRsp>& Core::tlb_fill_in(uint32_t which) {
 
 #endif
 
-PoolAllocator<instr_trace_t, 64>& Core::trace_pool() {
-  return impl_->trace_pool();
+instr_trace_t* Core::create_trace(uint64_t uuid) {
+  return impl_->create_trace(uuid);
+}
+
+instr_trace_t* Core::clone_trace(const instr_trace_t& other) {
+  return impl_->clone_trace(other);
+}
+
+void Core::destroy_trace(instr_trace_t* trace) noexcept {
+  impl_->destroy_trace(trace);
+}
+
+size_t Core::live_trace_count() const noexcept {
+  return impl_->live_trace_count();
 }
 
 #ifdef VX_CFG_VM_ENABLE

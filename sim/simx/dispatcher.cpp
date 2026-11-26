@@ -136,8 +136,7 @@ void Dispatcher::on_tick() {
 
       // issue partial trace
       if (start != end) {
-        auto trace_alloc = core_->trace_pool().allocate(1);
-        new_trace = new (trace_alloc) instr_trace_t(*trace);
+        new_trace = core_->clone_trace(*trace);
         block_pids_.at(b) = start + 1;
       } else {
         block_pids_.at(b) = -1; // mark block as processed

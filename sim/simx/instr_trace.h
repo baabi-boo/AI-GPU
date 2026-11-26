@@ -79,7 +79,13 @@ public:
   // Cycle the instruction entered its warp's instruction buffer.
   uint64_t ibuf_time;
 
-  instr_trace_t(uint64_t uuid)
+  struct OwnerKey {
+    friend class TraceOwner;
+  private:
+    OwnerKey() {}
+  };
+
+  instr_trace_t(OwnerKey, uint64_t uuid)
     : uuid(uuid)
     , cid(0)
     , wid(0)
@@ -92,7 +98,7 @@ public:
     , src_regs(NUM_SRC_REGS, {RegType::None, 0})
     , fu_type(FUType::ALU)
     , op_type({})
-     , src_data(NUM_SRC_REGS, std::vector<reg_data_t>(VX_CFG_NUM_THREADS))
+    , src_data(NUM_SRC_REGS, std::vector<reg_data_t>(VX_CFG_NUM_THREADS))
     , dst_data(VX_CFG_NUM_THREADS)
     , dst_bytesel(0xFF)
     , pid(-1)
@@ -107,7 +113,7 @@ public:
     , log_once_(false)
   {}
 
-  instr_trace_t(const instr_trace_t& rhs)
+  instr_trace_t(OwnerKey, const instr_trace_t& rhs)
     : uuid(rhs.uuid)
     , cid(rhs.cid)
     , wid(rhs.wid)
@@ -135,6 +141,9 @@ public:
     , ibuf_time(rhs.ibuf_time)
     , log_once_(false)
   {}
+
+  instr_trace_t(const instr_trace_t&) = delete;
+  instr_trace_t& operator=(const instr_trace_t&) = delete;
 
   ~instr_trace_t() {}
 
@@ -173,7 +182,12 @@ public:
   }
 
 private:
+  friend class TraceOwner;
+
   bool log_once_;
+  instr_trace_t* owner_prev_ = nullptr;
+  instr_trace_t* owner_next_ = nullptr;
+  bool owner_linked_ = false;
 };
 
 using TraceArbiter = TxArbiter<instr_trace_t*>;

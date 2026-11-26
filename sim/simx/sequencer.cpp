@@ -105,8 +105,7 @@ instr_trace_t* Sequencer::get(instr_trace_t* trace) {
     auto uop_instr = state_.gen_fn(*trace->instr_ptr, state_.uop_index);
 
     // Allocate micro-op trace and fill metadata (like decode does)
-    auto uop_trace = core_->trace_pool().allocate(1);
-    new (uop_trace) instr_trace_t(uop_instr->get_uuid());
+    auto uop_trace = core_->create_trace(uop_instr->get_uuid());
     uop_trace->cid       = trace->cid;
     uop_trace->wid       = trace->wid;
     uop_trace->PC        = trace->PC;

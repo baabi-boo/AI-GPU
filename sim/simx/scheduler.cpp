@@ -226,8 +226,7 @@ instr_trace_t* Scheduler::schedule(const WarpMask& warp_mask) {
 
     // Allocate trace with header (fetch reads instruction word into trace->code,
     // decode fills in the rest of the metadata).
-    trace = core_->trace_pool().allocate(1);
-    new (trace) instr_trace_t(uuid);
+    trace = core_->create_trace(uuid);
     trace->cid    = core_->id();
     trace->wid    = scheduled_warp;
     trace->cta_id = warp.cta_csrs.cta_id;

@@ -188,7 +188,10 @@ public:
 
   std::shared_ptr<SfuUnit> sfu_unit();
 
-  PoolAllocator<instr_trace_t, 64>& trace_pool();
+  instr_trace_t* create_trace(uint64_t uuid);
+  instr_trace_t* clone_trace(const instr_trace_t& other);
+  void destroy_trace(instr_trace_t* trace) noexcept;
+  size_t live_trace_count() const noexcept;
 
   const PerfStats& perf_stats() const;
   PerfStats& perf_stats();

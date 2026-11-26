@@ -433,8 +433,7 @@ void LsuUnit::process_response_step(uint32_t b) {
 		// as a writeback-less beat that carries no retirement, so a
 		// multi-fragment load holds the commit port for one cycle per
 		// fragment instead of retiring in a single beat.
-		auto beat_alloc = core_->trace_pool().allocate(1);
-		auto beat = new (beat_alloc) instr_trace_t(*trace);
+		auto beat = core_->clone_trace(*trace);
 		beat->wb = false;
 		beat->eop = false;
 		beat->rsp_tracked = true;
@@ -492,7 +491,7 @@ void LsuUnit::ingest_inputs(uint32_t b, bool queue_room, uint32_t reads_held) {
 		if (no_rsp_bufs_.at(b).full()) {
 			return;
 		}
-		auto copy = new (core_->trace_pool().allocate(1)) instr_trace_t(*trace);
+		auto copy = core_->clone_trace(*trace);
 		no_rsp_bufs_.at(b).send(trace, 1);
 		trace = copy;
 	}
@@ -830,8 +829,7 @@ void LsuUnit::process_request_step(uint32_t b) {
 		}
 		state.req_queue.pop();
 		if (is_write) {
-			trace->~instr_trace_t();
-			core_->trace_pool().deallocate(trace, 1);
+			core_->destroy_trace(trace);
 		}
 	}
 }
