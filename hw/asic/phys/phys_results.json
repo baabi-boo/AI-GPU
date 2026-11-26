@@ -1,0 +1,988 @@
+{
+  "schema_version": 1,
+  "artifact_id": "aigpu_phys_proof",
+  "evidence_level": "open_source_synth_pnr_gds",
+  "foundry_signoff": false,
+  "non_signoff_notice": "All synthesis, STA, placement, CTS, detailed routing, OpenRCX parasitic extraction, and GDSII streamout metrics in this record were produced by real open-source EDA runs (Yosys, OpenSTA, OpenROAD ORFS, KLayout) targeting academic/open PDKs (ASAP7 7nm RVT NLDM and Nangate45 45nm typical, with FakeRAM7_256x32 blackbox SRAM macro). Commercial foundry PDK/SRAM-compiler sign-off (DRC, LVS, multi-corner EM/IR, foundry tape-out) is NOT established by this packet (foundry_signoff=false).",
+  "generated_utc": "2026-11-26T23:08:01Z",
+  "external_build_root": "/home/antigravity/vortex_builds/phys_out",
+  "tools": {
+    "git_head": "0775c9a2b2d0ed79e9132dba8466ca5453fc74d8",
+    "yosys": {
+      "path": "/home/antigravity/tools/yosys/bin/yosys",
+      "version": "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+      "frontend": "read_slang"
+    },
+    "opensta": {
+      "path": "/home/antigravity/tools/sta/bin/sta",
+      "version": "3.1.0"
+    },
+    "openroad_orfs": {
+      "docker_image": "openroad/orfs:latest",
+      "image_id": "sha256:b7be8a1b7be792eface91b4df4a737bee93ec15136a77a03ed0bdf1416905510",
+      "klayout_python_version": "0.30.13",
+      "openroad_binary": "/OpenROAD-flow-scripts/tools/install/OpenROAD/bin/openroad"
+    }
+  },
+  "synthesis_and_sta": {
+    "vx_asic_dft_top_asap7": {
+      "id": "vx_asic_dft_top_asap7",
+      "module": "VX_asic_dft_top",
+      "description": "IEEE-1149.1 JTAG TAP, scan chain & MBIST controller",
+      "pdk": "asap7",
+      "liberty_files": [
+        "/home/antigravity/vortex_builds/build32_asic_gate/hw/syn/libs/asap7/lib/asap7_rvt_tt.lib"
+      ],
+      "yosys": {
+        "cell_count": 495,
+        "flip_flop_count": 100,
+        "standard_cell_area_um2": 68.86134,
+        "total_chip_area_um2": 68.86134,
+        "sequential_area_um2": 37.908,
+        "sequential_area_pct": 55.05,
+        "macro_instances": {},
+        "unique_cell_types": 53,
+        "yosys_runtime_s": 8.34,
+        "target_abc_period_ps": 1000
+      },
+      "opensta_post_synth": {
+        "wns_setup_ns": 0.0,
+        "tns_setup_ns": 0.0,
+        "worst_setup_slack_ns": 4.3819,
+        "worst_hold_slack_ns": -0.1115,
+        "clocks_min_period": {
+          "clk_axi": {
+            "period_min_ns": 0.0,
+            "fmax_mhz": null
+          },
+          "clk_core": {
+            "period_min_ns": 0.0,
+            "fmax_mhz": null
+          },
+          "clk_pcie": {
+            "period_min_ns": 0.0,
+            "fmax_mhz": null
+          },
+          "tck": {
+            "period_min_ns": 5.62,
+            "fmax_mhz": 177.83
+          }
+        },
+        "power_mw": {
+          "internal": 0.009086,
+          "switching": 0.015056,
+          "leakage": 4.1e-05,
+          "total": 0.024183,
+          "unit": "mW",
+          "assumption": "default_input_activity_0.1_duty_0.5_typical_corner"
+        },
+        "critical_paths_by_clock": {
+          "tck": {
+            "startpoint": "_885_ (rising edge-triggered flip-flop clocked by tck)",
+            "endpoint": "scan_out[0] (output port clocked by tck)",
+            "data_arrival_ns": 0.1181,
+            "data_required_ns": 4.5,
+            "slack_ns": 4.3819,
+            "status": "MET"
+          }
+        },
+        "opensta_runtime_s": 5.87
+      },
+      "achieved_fmax_mhz": 177.83,
+      "netlist_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_asic_dft_top_asap7/VX_asic_dft_top_asap7.v",
+      "netlist_sha256": "f33af9a910cafabb188c30579915c865ae61aa11d503860bb707327d2b384920",
+      "yosys_log_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_asic_dft_top_asap7/yosys.log",
+      "opensta_log_path": "/home/antigravity/vortex_builds/phys_out/sta/vx_asic_dft_top_asap7/sta.log"
+    },
+    "vx_asic_dft_top_nangate45": {
+      "id": "vx_asic_dft_top_nangate45",
+      "module": "VX_asic_dft_top",
+      "description": "IEEE-1149.1 JTAG TAP, scan chain & MBIST controller (Nangate45 reference)",
+      "pdk": "nangate45",
+      "liberty_files": [
+        "/home/antigravity/baabi-boo/AI-GPU/hw/syn/libs/NangateOpenCellLibrary_typical.lib"
+      ],
+      "yosys": {
+        "cell_count": 518,
+        "flip_flop_count": 100,
+        "standard_cell_area_um2": 1008.672,
+        "total_chip_area_um2": 1008.672,
+        "sequential_area_um2": 532.0,
+        "sequential_area_pct": 52.74,
+        "macro_instances": {},
+        "unique_cell_types": 42,
+        "yosys_runtime_s": 1.3,
+        "target_abc_period_ps": 2000
+      },
+      "opensta_post_synth": {
+        "wns_setup_ns": 0.0,
+        "tns_setup_ns": 0.0,
+        "worst_setup_slack_ns": 4.3615,
+        "worst_hold_slack_ns": -0.0981,
+        "clocks_min_period": {
+          "clk_axi": {
+            "period_min_ns": 0.0,
+            "fmax_mhz": null
+          },
+          "clk_core": {
+            "period_min_ns": 0.0,
+            "fmax_mhz": null
+          },
+          "clk_pcie": {
+            "period_min_ns": 0.0,
+            "fmax_mhz": null
+          },
+          "tck": {
+            "period_min_ns": 5.71,
+            "fmax_mhz": 175.05
+          }
+        },
+        "power_mw": {
+          "internal": 0.10805,
+          "switching": 0.05976,
+          "leakage": 0.018628,
+          "total": 0.18644,
+          "unit": "mW",
+          "assumption": "default_input_activity_0.1_duty_0.5_typical_corner"
+        },
+        "critical_paths_by_clock": {
+          "tck": {
+            "startpoint": "_0974_ (rising edge-triggered flip-flop clocked by tck)",
+            "endpoint": "scan_out[0] (output port clocked by tck)",
+            "data_arrival_ns": 0.1385,
+            "data_required_ns": 4.5,
+            "slack_ns": 4.3615,
+            "status": "MET"
+          }
+        },
+        "opensta_runtime_s": 1.01
+      },
+      "achieved_fmax_mhz": 175.05,
+      "netlist_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_asic_dft_top_nangate45/VX_asic_dft_top_nangate45.v",
+      "netlist_sha256": "f4d6f9824359883a2f40d86d44873b13c86f769bc6a1eeb3b58ed0d82ce72165",
+      "yosys_log_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_asic_dft_top_nangate45/yosys.log",
+      "opensta_log_path": "/home/antigravity/vortex_builds/phys_out/sta/vx_asic_dft_top_nangate45/sta.log"
+    },
+    "vx_asic_soc_top_asap7_fakeram7": {
+      "id": "vx_asic_soc_top_asap7_fakeram7",
+      "module": "VX_asic_soc_top",
+      "description": "Dual-clock CDC AXI4 SoC shell with hard fakeram7_256x32 boot SRAM macro",
+      "pdk": "asap7",
+      "liberty_files": [
+        "/home/antigravity/vortex_builds/build32_asic_gate/hw/syn/libs/asap7/lib/asap7_rvt_tt.lib",
+        "/home/antigravity/vortex_builds/phys_out/libs/fakeram7_256x32.lib"
+      ],
+      "yosys": {
+        "cell_count": 10632,
+        "flip_flop_count": 2076,
+        "standard_cell_area_um2": 1327.61106,
+        "total_chip_area_um2": 1671.59606,
+        "sequential_area_um2": 684.0936,
+        "sequential_area_pct": 40.92,
+        "macro_instances": {
+          "fakeram7_256x32": 1
+        },
+        "unique_cell_types": 75,
+        "yosys_runtime_s": 15.66,
+        "target_abc_period_ps": 500
+      },
+      "opensta_post_synth": {
+        "wns_setup_ns": -1.207,
+        "tns_setup_ns": -875.0251,
+        "worst_setup_slack_ns": -1.207,
+        "worst_hold_slack_ns": -0.1115,
+        "clocks_min_period": {
+          "clk_axi": {
+            "period_min_ns": 2.21,
+            "fmax_mhz": 453.11
+          },
+          "clk_core": {
+            "period_min_ns": 1.43,
+            "fmax_mhz": 697.18
+          },
+          "clk_pcie": {
+            "period_min_ns": 0.0,
+            "fmax_mhz": null
+          },
+          "tck": {
+            "period_min_ns": 5.63,
+            "fmax_mhz": 177.51
+          }
+        },
+        "power_mw": {
+          "internal": 5.9484,
+          "switching": 0.60937,
+          "leakage": 0.12994,
+          "total": 6.6877,
+          "unit": "mW",
+          "assumption": "default_input_activity_0.1_duty_0.5_typical_corner"
+        },
+        "critical_paths_by_clock": {
+          "clk_core": {
+            "startpoint": "_20088_ (rising edge-triggered flip-flop clocked by clk_core)",
+            "endpoint": "_18356_ (rising edge-triggered flip-flop clocked by clk_core)",
+            "data_arrival_ns": 1.3936,
+            "data_required_ns": 0.4593,
+            "slack_ns": -0.9344,
+            "status": "VIOLATED"
+          },
+          "clk_axi": {
+            "startpoint": "_20086_ (rising edge-triggered flip-flop clocked by clk_axi)",
+            "endpoint": "_19999_ (rising edge-triggered flip-flop clocked by clk_axi)",
+            "data_arrival_ns": 2.08,
+            "data_required_ns": 0.9377,
+            "slack_ns": -1.1423,
+            "status": "VIOLATED"
+          },
+          "tck": {
+            "startpoint": "_20001_ (rising edge-triggered flip-flop clocked by tck)",
+            "endpoint": "scan_out[0] (output port clocked by tck)",
+            "data_arrival_ns": 0.1181,
+            "data_required_ns": 4.5,
+            "slack_ns": 4.3819,
+            "status": "MET"
+          }
+        },
+        "opensta_runtime_s": 16.0
+      },
+      "achieved_fmax_mhz": 177.51,
+      "netlist_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_asic_soc_top_asap7_fakeram7/VX_asic_soc_top_asap7.v",
+      "netlist_sha256": "8a8832ebfc2c786342c02ea8f77923fc1ba45f12ec6d8187f20861755e1dc46a",
+      "yosys_log_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_asic_soc_top_asap7_fakeram7/yosys.log",
+      "opensta_log_path": "/home/antigravity/vortex_builds/phys_out/sta/vx_asic_soc_top_asap7_fakeram7/sta.log",
+      "opensta_post_synth_datapath_excl_async_reset_tree": {
+        "wns_setup_ns": 0.0,
+        "tns_setup_ns": 0.0,
+        "worst_setup_slack_ns": 0.0136,
+        "worst_hold_slack_ns": -0.1115,
+        "clocks_min_period": {
+          "clk_axi": {
+            "period_min_ns": 0.79,
+            "fmax_mhz": 1263.29
+          },
+          "clk_core": {
+            "period_min_ns": 0.49,
+            "fmax_mhz": 2055.81
+          },
+          "clk_pcie": {
+            "period_min_ns": 0.0,
+            "fmax_mhz": null
+          },
+          "tck": {
+            "period_min_ns": 5.63,
+            "fmax_mhz": 177.51
+          }
+        },
+        "power_mw": {
+          "internal": 5.9484,
+          "switching": 0.60937,
+          "leakage": 0.12994,
+          "total": 6.6877,
+          "unit": "mW",
+          "assumption": "default_input_activity_0.1_duty_0.5_typical_corner"
+        },
+        "critical_paths_by_clock": {
+          "clk_core": {
+            "startpoint": "_19431_ (rising edge-triggered flip-flop clocked by clk_core)",
+            "endpoint": "_18356_ (rising edge-triggered flip-flop clocked by clk_core)",
+            "data_arrival_ns": 0.4457,
+            "data_required_ns": 0.4593,
+            "slack_ns": 0.0136,
+            "status": "MET"
+          },
+          "clk_axi": {
+            "startpoint": "s_axil_awaddr[1] (input port clocked by clk_axi)",
+            "endpoint": "_19229_ (rising edge-triggered flip-flop clocked by clk_axi)",
+            "data_arrival_ns": 0.7329,
+            "data_required_ns": 0.9414,
+            "slack_ns": 0.2084,
+            "status": "MET"
+          },
+          "tck": {
+            "startpoint": "_20001_ (rising edge-triggered flip-flop clocked by tck)",
+            "endpoint": "scan_out[0] (output port clocked by tck)",
+            "data_arrival_ns": 0.1181,
+            "data_required_ns": 4.5,
+            "slack_ns": 4.3819,
+            "status": "MET"
+          }
+        },
+        "opensta_runtime_s": 18.56,
+        "opensta_log_path": "/home/antigravity/vortex_builds/phys_out/sta/vx_asic_soc_top_asap7_fakeram7/datapath_excl_reset_sync/sta.log"
+      }
+    },
+    "vx_asic_soc_top_asap7_behav_sram": {
+      "id": "vx_asic_soc_top_asap7_behav_sram",
+      "module": "VX_asic_soc_top",
+      "description": "Dual-clock CDC AXI4 SoC shell (all-flip-flop behavioral 1 KiB boot SRAM baseline)",
+      "pdk": "asap7",
+      "liberty_files": [
+        "/home/antigravity/vortex_builds/build32_asic_gate/hw/syn/libs/asap7/lib/asap7_rvt_tt.lib"
+      ],
+      "yosys": {
+        "cell_count": 49797,
+        "flip_flop_count": 10300,
+        "standard_cell_area_um2": 5950.44792,
+        "total_chip_area_um2": 5950.44792,
+        "sequential_area_um2": 3082.212,
+        "sequential_area_pct": 51.8,
+        "macro_instances": {},
+        "unique_cell_types": 64,
+        "yosys_runtime_s": 44.82,
+        "target_abc_period_ps": 500
+      },
+      "opensta_post_synth": {
+        "wns_setup_ns": -1.5397,
+        "tns_setup_ns": -922.3117,
+        "worst_setup_slack_ns": -1.5397,
+        "worst_hold_slack_ns": -0.1115,
+        "clocks_min_period": {
+          "clk_axi": {
+            "period_min_ns": 2.54,
+            "fmax_mhz": 393.75
+          },
+          "clk_core": {
+            "period_min_ns": 1.5,
+            "fmax_mhz": 666.52
+          },
+          "clk_pcie": {
+            "period_min_ns": 0.0,
+            "fmax_mhz": null
+          },
+          "tck": {
+            "period_min_ns": 5.62,
+            "fmax_mhz": 177.81
+          }
+        },
+        "power_mw": {
+          "internal": 14.439,
+          "switching": 2.3393,
+          "leakage": 0.004847,
+          "total": 16.783,
+          "unit": "mW",
+          "assumption": "default_input_activity_0.1_duty_0.5_typical_corner"
+        },
+        "critical_paths_by_clock": {
+          "clk_core": {
+            "startpoint": "_98429_ (rising edge-triggered flip-flop clocked by clk_core)",
+            "endpoint": "_96636_ (rising edge-triggered flip-flop clocked by clk_core)",
+            "data_arrival_ns": 1.4694,
+            "data_required_ns": 0.4691,
+            "slack_ns": -1.0003,
+            "status": "VIOLATED"
+          },
+          "clk_axi": {
+            "startpoint": "_98427_ (rising edge-triggered flip-flop clocked by clk_axi)",
+            "endpoint": "_97857_ (rising edge-triggered flip-flop clocked by clk_axi)",
+            "data_arrival_ns": 2.4771,
+            "data_required_ns": 0.9374,
+            "slack_ns": -1.5397,
+            "status": "VIOLATED"
+          },
+          "tck": {
+            "startpoint": "_98342_ (rising edge-triggered flip-flop clocked by tck)",
+            "endpoint": "scan_out[0] (output port clocked by tck)",
+            "data_arrival_ns": 0.1181,
+            "data_required_ns": 4.5,
+            "slack_ns": 4.3819,
+            "status": "MET"
+          }
+        },
+        "opensta_runtime_s": 63.59
+      },
+      "achieved_fmax_mhz": 177.81,
+      "netlist_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_asic_soc_top_asap7_behav_sram/VX_asic_soc_top_asap7.v",
+      "netlist_sha256": "30598ab61662ca89b3a745621287f3863ee85aebb728f181895cd124276535b2",
+      "yosys_log_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_asic_soc_top_asap7_behav_sram/yosys.log",
+      "opensta_log_path": "/home/antigravity/vortex_builds/phys_out/sta/vx_asic_soc_top_asap7_behav_sram/sta.log"
+    },
+    "vx_tcu_fedp_tfr_asap7_lat4": {
+      "id": "vx_tcu_fedp_tfr_asap7_lat4",
+      "module": "VX_tcu_fedp_tfr",
+      "description": "TFR FP16/BF16 Tensor-Core FEDP macro (N=2, NT=4, default LATENCY=4)",
+      "pdk": "asap7",
+      "liberty_files": [
+        "/home/antigravity/vortex_builds/build32_asic_gate/hw/syn/libs/asap7/lib/asap7_rvt_tt.lib"
+      ],
+      "yosys": {
+        "cell_count": 8031,
+        "flip_flop_count": 416,
+        "standard_cell_area_um2": 793.5165,
+        "total_chip_area_um2": 793.5165,
+        "sequential_area_um2": 121.3056,
+        "sequential_area_pct": 15.29,
+        "macro_instances": {},
+        "unique_cell_types": 77,
+        "yosys_runtime_s": 37.19,
+        "target_abc_period_ps": 800
+      },
+      "opensta_post_synth": {
+        "wns_setup_ns": 0.0,
+        "tns_setup_ns": 0.0,
+        "worst_setup_slack_ns": 0.067,
+        "worst_hold_slack_ns": -0.0012,
+        "clocks_min_period": {
+          "clk": {
+            "period_min_ns": 0.93,
+            "fmax_mhz": 1071.83
+          }
+        },
+        "power_mw": {
+          "internal": 0.9105,
+          "switching": 0.57486,
+          "leakage": 0.00056,
+          "total": 1.4859,
+          "unit": "mW",
+          "assumption": "default_input_activity_0.1_duty_0.5_typical_corner"
+        },
+        "critical_paths_by_clock": {
+          "clk": {
+            "startpoint": "_15585_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_15947_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.8669,
+            "data_required_ns": 0.9339,
+            "slack_ns": 0.067,
+            "status": "MET"
+          }
+        },
+        "opensta_runtime_s": 11.88
+      },
+      "achieved_fmax_mhz": 1071.83,
+      "netlist_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_tcu_fedp_tfr_asap7_lat4/VX_tcu_fedp_tfr_asap7.v",
+      "netlist_sha256": "c903a524412a547870b86ea7ac14e5bd0e3e8ec80b64969d7b316746a1cc0533",
+      "yosys_log_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_tcu_fedp_tfr_asap7_lat4/yosys.log",
+      "opensta_log_path": "/home/antigravity/vortex_builds/phys_out/sta/vx_tcu_fedp_tfr_asap7_lat4/sta.log"
+    },
+    "vx_tcu_fedp_tfr_asap7_lat5": {
+      "id": "vx_tcu_fedp_tfr_asap7_lat5",
+      "module": "VX_tcu_fedp_tfr",
+      "description": "TFR FP16/BF16 Tensor-Core FEDP macro (N=2, NT=4, LATENCY=5 pipelined)",
+      "pdk": "asap7",
+      "liberty_files": [
+        "/home/antigravity/vortex_builds/build32_asic_gate/hw/syn/libs/asap7/lib/asap7_rvt_tt.lib"
+      ],
+      "yosys": {
+        "cell_count": 8564,
+        "flip_flop_count": 594,
+        "standard_cell_area_um2": 871.53408,
+        "total_chip_area_um2": 871.53408,
+        "sequential_area_um2": 173.2104,
+        "sequential_area_pct": 19.87,
+        "macro_instances": {},
+        "unique_cell_types": 77,
+        "yosys_runtime_s": 36.73,
+        "target_abc_period_ps": 800
+      },
+      "opensta_post_synth": {
+        "wns_setup_ns": 0.0,
+        "tns_setup_ns": 0.0,
+        "worst_setup_slack_ns": 0.0653,
+        "worst_hold_slack_ns": -0.0012,
+        "clocks_min_period": {
+          "clk": {
+            "period_min_ns": 0.93,
+            "fmax_mhz": 1069.81
+          }
+        },
+        "power_mw": {
+          "internal": 1.1684,
+          "switching": 0.64118,
+          "leakage": 0.000631,
+          "total": 1.8102,
+          "unit": "mW",
+          "assumption": "default_input_activity_0.1_duty_0.5_typical_corner"
+        },
+        "critical_paths_by_clock": {
+          "clk": {
+            "startpoint": "_16878_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_16892_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.8687,
+            "data_required_ns": 0.9339,
+            "slack_ns": 0.0653,
+            "status": "MET"
+          }
+        },
+        "opensta_runtime_s": 11.6
+      },
+      "achieved_fmax_mhz": 1069.81,
+      "netlist_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_tcu_fedp_tfr_asap7_lat5/VX_tcu_fedp_tfr_asap7.v",
+      "netlist_sha256": "d91e59789d2bec53e325f68520e66376a60e1c2322a84909f64dc3165f9552be",
+      "yosys_log_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_tcu_fedp_tfr_asap7_lat5/yosys.log",
+      "opensta_log_path": "/home/antigravity/vortex_builds/phys_out/sta/vx_tcu_fedp_tfr_asap7_lat5/sta.log"
+    },
+    "vx_tcu_fedp_tfr_nangate45_lat4": {
+      "id": "vx_tcu_fedp_tfr_nangate45_lat4",
+      "module": "VX_tcu_fedp_tfr",
+      "description": "TFR FP16/BF16 Tensor-Core FEDP macro (Nangate45 reference, LATENCY=4)",
+      "pdk": "nangate45",
+      "liberty_files": [
+        "/home/antigravity/baabi-boo/AI-GPU/hw/syn/libs/NangateOpenCellLibrary_typical.lib"
+      ],
+      "yosys": {
+        "cell_count": 8739,
+        "flip_flop_count": 416,
+        "standard_cell_area_um2": 12187.854,
+        "total_chip_area_um2": 12187.854,
+        "sequential_area_um2": 1881.152,
+        "sequential_area_pct": 15.43,
+        "macro_instances": {},
+        "unique_cell_types": 62,
+        "yosys_runtime_s": 33.18,
+        "target_abc_period_ps": 2000
+      },
+      "opensta_post_synth": {
+        "wns_setup_ns": 0.0,
+        "tns_setup_ns": 0.0,
+        "worst_setup_slack_ns": 0.6658,
+        "worst_hold_slack_ns": 0.0162,
+        "clocks_min_period": {
+          "clk": {
+            "period_min_ns": 1.33,
+            "fmax_mhz": 749.52
+          }
+        },
+        "power_mw": {
+          "internal": 4.3742,
+          "switching": 2.463,
+          "leakage": 0.26769,
+          "total": 7.1048,
+          "unit": "mW",
+          "assumption": "default_input_activity_0.1_duty_0.5_typical_corner"
+        },
+        "critical_paths_by_clock": {
+          "clk": {
+            "startpoint": "_16955_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_17307_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.2365,
+            "data_required_ns": 1.9023,
+            "slack_ns": 0.6658,
+            "status": "MET"
+          }
+        },
+        "opensta_runtime_s": 3.27
+      },
+      "achieved_fmax_mhz": 749.52,
+      "netlist_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_tcu_fedp_tfr_nangate45_lat4/VX_tcu_fedp_tfr_nangate45.v",
+      "netlist_sha256": "b759616cc3e8d4c68ed528ba74134a8ebfa3f4423076bd7d31a8a7e6e8435f7a",
+      "yosys_log_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_tcu_fedp_tfr_nangate45_lat4/yosys.log",
+      "opensta_log_path": "/home/antigravity/vortex_builds/phys_out/sta/vx_tcu_fedp_tfr_nangate45_lat4/sta.log"
+    },
+    "vx_tcu_tfr_mul_f16_asap7": {
+      "id": "vx_tcu_tfr_mul_f16_asap7",
+      "module": "VX_tcu_tfr_mul_f16",
+      "description": "TFR FP16/BF16/TF32 Booth-Wallace product macro (PROD_REG=1, TCK=4)",
+      "pdk": "asap7",
+      "liberty_files": [
+        "/home/antigravity/vortex_builds/build32_asic_gate/hw/syn/libs/asap7/lib/asap7_rvt_tt.lib"
+      ],
+      "yosys": {
+        "cell_count": 3207,
+        "flip_flop_count": 93,
+        "standard_cell_area_um2": 327.71466,
+        "total_chip_area_um2": 327.71466,
+        "sequential_area_um2": 27.1188,
+        "sequential_area_pct": 8.28,
+        "macro_instances": {},
+        "unique_cell_types": 72,
+        "yosys_runtime_s": 22.59,
+        "target_abc_period_ps": 800
+      },
+      "opensta_post_synth": {
+        "wns_setup_ns": 0.0,
+        "tns_setup_ns": 0.0,
+        "worst_setup_slack_ns": 0.2141,
+        "worst_hold_slack_ns": 0.0008,
+        "clocks_min_period": {
+          "clk": {
+            "period_min_ns": 0.79,
+            "fmax_mhz": 1272.44
+          }
+        },
+        "power_mw": {
+          "internal": 0.15513,
+          "switching": 0.052961,
+          "leakage": 0.000262,
+          "total": 0.20835,
+          "unit": "mW",
+          "assumption": "default_input_activity_0.1_duty_0.5_typical_corner"
+        },
+        "critical_paths_by_clock": {
+          "clk": {
+            "startpoint": "fmt_f[1] (input port clocked by clk)",
+            "endpoint": "_6181_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.7353,
+            "data_required_ns": 0.9494,
+            "slack_ns": 0.2141,
+            "status": "MET"
+          }
+        },
+        "opensta_runtime_s": 7.66
+      },
+      "achieved_fmax_mhz": 1272.44,
+      "netlist_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_tcu_tfr_mul_f16_asap7/VX_tcu_tfr_mul_f16_asap7.v",
+      "netlist_sha256": "f1fbfa60cef2d9e01714f462a414897ec3381fc9f5b7a3c4b4144d94e6e11d24",
+      "yosys_log_path": "/home/antigravity/vortex_builds/phys_out/synth/vx_tcu_tfr_mul_f16_asap7/yosys.log",
+      "opensta_log_path": "/home/antigravity/vortex_builds/phys_out/sta/vx_tcu_tfr_mul_f16_asap7/sta.log"
+    }
+  },
+  "openroad_pnr_and_gds": {
+    "vx_asic_dft_top_asap7": {
+      "wns_setup_ns": 0.0,
+      "tns_setup_ns": 0.0,
+      "worst_setup_slack_ns": 4.267,
+      "worst_hold_slack_ns": 0.0264,
+      "clocks_min_period": {
+        "clk_axi": {
+          "period_min_ns": 0.0,
+          "fmax_mhz": null
+        },
+        "clk_core": {
+          "period_min_ns": 0.0,
+          "fmax_mhz": null
+        },
+        "clk_pcie": {
+          "period_min_ns": 0.0,
+          "fmax_mhz": null
+        },
+        "tck": {
+          "period_min_ns": 5.75,
+          "fmax_mhz": 173.94
+        }
+      },
+      "power_mw": {
+        "internal": 0.010456,
+        "switching": 0.009358,
+        "leakage": 0.000124,
+        "total": 0.019938,
+        "unit": "mW",
+        "assumption": "default_input_activity_0.1_duty_0.5_typical_corner"
+      },
+      "critical_paths_by_clock": {
+        "tck": {
+          "startpoint": "_888_ (rising edge-triggered flip-flop clocked by tck)",
+          "endpoint": "scan_out[3] (output port clocked by tck)",
+          "data_arrival_ns": 0.233,
+          "data_required_ns": 4.5,
+          "slack_ns": 4.267,
+          "status": "MET"
+        }
+      },
+      "design_area_um2": 110.0,
+      "utilization_pct": 62.0,
+      "total_wirelength_um": 2186,
+      "total_vias": 7279,
+      "wirelength_by_layer_um": {
+        "M2": 839,
+        "M3": 1026,
+        "M4": 228,
+        "M5": 92
+      },
+      "drt_drc_violation_count": 0,
+      "drt_last_reported_violations": 0,
+      "core_area_um2": 178.6,
+      "movable_area_um2": 107.63,
+      "fixed_area_um2": 2.86,
+      "dpl_utilization_pct": 61.9,
+      "post_route_stdcell_plus_macro_instances": 1060,
+      "post_route_tapcell_instances": 98,
+      "post_route_filler_decap_instances": 1529,
+      "pdn_specialnets_routed_nets": 2,
+      "pdn_specialnets_routed_segments": 780,
+      "placement_check_passed": true,
+      "pnr_runtime_s": 168.0,
+      "artifacts": {
+        "def_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_dft_top_asap7/VX_asic_dft_top.def",
+        "def_bytes": 526948,
+        "def_sha256": "785b040d51748aba3fce6c513fbd0677fa6429bd4e52c50208983e7bf1f80898",
+        "spef_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_dft_top_asap7/VX_asic_dft_top.spef",
+        "spef_bytes": 909816,
+        "pnr_netlist_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_dft_top_asap7/VX_asic_dft_top_pnr.v",
+        "grt_congestion_report": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_dft_top_asap7/grt_congestion.rpt",
+        "drt_drc_report": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_dft_top_asap7/drt_drc.rpt",
+        "gds_path": "/home/antigravity/vortex_builds/phys_out/gds/VX_asic_dft_top_asap7.gds",
+        "gds_bytes": 1046438,
+        "gds_sha256": "5860b695ec6023bf01f33dc37d463ed905861f0ada8dbf79637d6a60bdfd84de",
+        "klayout": {
+          "top_cell": "VX_asic_dft_top",
+          "gds_cell_count": 70,
+          "gds_layer_count": 32,
+          "die_width_um": 15.526,
+          "die_height_um": 15.526,
+          "die_area_um2": 241.0567
+        },
+        "log_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_dft_top_asap7/pnr.log"
+      },
+      "status": "complete"
+    },
+    "vx_asic_dft_top_nangate45": {
+      "wns_setup_ns": 0.0,
+      "tns_setup_ns": 0.0,
+      "worst_setup_slack_ns": 4.2246,
+      "worst_hold_slack_ns": 0.0259,
+      "clocks_min_period": {
+        "clk_axi": {
+          "period_min_ns": 0.0,
+          "fmax_mhz": null
+        },
+        "clk_core": {
+          "period_min_ns": 0.0,
+          "fmax_mhz": null
+        },
+        "clk_pcie": {
+          "period_min_ns": 0.0,
+          "fmax_mhz": null
+        },
+        "tck": {
+          "period_min_ns": 5.77,
+          "fmax_mhz": 173.35
+        }
+      },
+      "power_mw": {
+        "internal": 0.072972,
+        "switching": 0.053351,
+        "leakage": 0.022206,
+        "total": 0.14853,
+        "unit": "mW",
+        "assumption": "default_input_activity_0.1_duty_0.5_typical_corner"
+      },
+      "critical_paths_by_clock": {
+        "tck": {
+          "startpoint": "_0977_ (rising edge-triggered flip-flop clocked by tck)",
+          "endpoint": "scan_out[3] (output port clocked by tck)",
+          "data_arrival_ns": 0.2754,
+          "data_required_ns": 4.5,
+          "slack_ns": 4.2246,
+          "status": "MET"
+        }
+      },
+      "design_area_um2": 1122.0,
+      "utilization_pct": 46.0,
+      "total_wirelength_um": 6691,
+      "total_vias": 4156,
+      "wirelength_by_layer_um": {
+        "metal2": 2929,
+        "metal3": 2804,
+        "metal4": 532,
+        "metal5": 425
+      },
+      "drt_drc_violation_count": 0,
+      "drt_last_reported_violations": 0,
+      "core_area_um2": 2448.53,
+      "movable_area_um2": 1103.1,
+      "fixed_area_um2": 18.62,
+      "dpl_utilization_pct": 45.8,
+      "post_route_stdcell_plus_macro_instances": 603,
+      "post_route_tapcell_instances": 70,
+      "post_route_filler_decap_instances": 1110,
+      "pdn_specialnets_routed_nets": 2,
+      "pdn_specialnets_routed_segments": 162,
+      "placement_check_passed": true,
+      "pnr_runtime_s": 92.22,
+      "artifacts": {
+        "def_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_dft_top_nangate45/VX_asic_dft_top.def",
+        "def_bytes": 346515,
+        "def_sha256": "45928cdce0aa99d13615256e8f9d25076adec4486fd279cb9ea0a3ee9798549b",
+        "spef_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_dft_top_nangate45/VX_asic_dft_top.spef",
+        "spef_bytes": 569039,
+        "pnr_netlist_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_dft_top_nangate45/VX_asic_dft_top_pnr.v",
+        "grt_congestion_report": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_dft_top_nangate45/grt_congestion.rpt",
+        "drt_drc_report": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_dft_top_nangate45/drt_drc.rpt",
+        "gds_path": "/home/antigravity/vortex_builds/phys_out/gds/VX_asic_dft_top_nangate45.gds",
+        "gds_bytes": 598488,
+        "gds_sha256": "2d0693d1733de75cb0aefdc0541fad20026f308718e317505d00f3617b22fbeb",
+        "klayout": {
+          "top_cell": "VX_asic_dft_top",
+          "gds_cell_count": 57,
+          "gds_layer_count": 22,
+          "die_width_um": 58.215,
+          "die_height_um": 58.215,
+          "die_area_um2": 3388.9862
+        },
+        "log_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_dft_top_nangate45/pnr.log"
+      },
+      "status": "complete"
+    },
+    "vx_tcu_tfr_mul_f16_asap7": {
+      "wns_setup_ns": 0.0,
+      "tns_setup_ns": 0.0,
+      "worst_setup_slack_ns": 0.0737,
+      "worst_hold_slack_ns": 0.0294,
+      "clocks_min_period": {
+        "clk": {
+          "period_min_ns": 0.93,
+          "fmax_mhz": 1079.53
+        }
+      },
+      "power_mw": {
+        "internal": 0.1527,
+        "switching": 0.097759,
+        "leakage": 0.000304,
+        "total": 0.25077,
+        "unit": "mW",
+        "assumption": "default_input_activity_0.1_duty_0.5_typical_corner"
+      },
+      "critical_paths_by_clock": {
+        "clk": {
+          "startpoint": "fmt_f[3] (input port clocked by clk)",
+          "endpoint": "_6152_ (rising edge-triggered flip-flop clocked by clk)",
+          "data_arrival_ns": 0.9684,
+          "data_required_ns": 1.0421,
+          "slack_ns": 0.0737,
+          "status": "MET"
+        }
+      },
+      "design_area_um2": 348.0,
+      "utilization_pct": 43.0,
+      "total_wirelength_um": 12932,
+      "total_vias": 30684,
+      "wirelength_by_layer_um": {
+        "M2": 4865,
+        "M3": 5610,
+        "M4": 1592,
+        "M5": 842,
+        "M6": 20
+      },
+      "drt_drc_violation_count": 0,
+      "drt_last_reported_violations": 0,
+      "core_area_um2": 809.85,
+      "movable_area_um2": 340.79,
+      "fixed_area_um2": 7.67,
+      "dpl_utilization_pct": 43.0,
+      "post_route_stdcell_plus_macro_instances": 3379,
+      "post_route_tapcell_instances": 263,
+      "post_route_filler_decap_instances": 5843,
+      "pdn_specialnets_routed_nets": 2,
+      "pdn_specialnets_routed_segments": 2958,
+      "placement_check_passed": true,
+      "pnr_runtime_s": 432.99,
+      "artifacts": {
+        "def_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_tcu_tfr_mul_f16_asap7/VX_tcu_tfr_mul_f16.def",
+        "def_bytes": 2060823,
+        "def_sha256": "03841a1ad33a582935a9ee133dfa17be434c6547d81519f010641c9cca0590f9",
+        "spef_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_tcu_tfr_mul_f16_asap7/VX_tcu_tfr_mul_f16.spef",
+        "spef_bytes": 4225460,
+        "pnr_netlist_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_tcu_tfr_mul_f16_asap7/VX_tcu_tfr_mul_f16_pnr.v",
+        "grt_congestion_report": "/home/antigravity/vortex_builds/phys_out/pnr/vx_tcu_tfr_mul_f16_asap7/grt_congestion.rpt",
+        "drt_drc_report": "/home/antigravity/vortex_builds/phys_out/pnr/vx_tcu_tfr_mul_f16_asap7/drt_drc.rpt",
+        "gds_path": "/home/antigravity/vortex_builds/phys_out/gds/VX_tcu_tfr_mul_f16_asap7.gds",
+        "gds_bytes": 3137082,
+        "gds_sha256": "1b5b188b91b05bcb2d81694e84408f1c07f7ec0d1763384fae7623869f953eda",
+        "klayout": {
+          "top_cell": "VX_tcu_tfr_mul_f16",
+          "gds_cell_count": 90,
+          "gds_layer_count": 34,
+          "die_width_um": 30.636,
+          "die_height_um": 30.636,
+          "die_area_um2": 938.5645
+        },
+        "log_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_tcu_tfr_mul_f16_asap7/pnr.log"
+      },
+      "status": "complete"
+    },
+    "vx_asic_soc_top_asap7_fakeram7": {
+      "wns_setup_ns": -0.0085,
+      "tns_setup_ns": -0.0288,
+      "worst_setup_slack_ns": -0.0085,
+      "worst_hold_slack_ns": 0.0242,
+      "clocks_min_period": {
+        "clk_axi": {
+          "period_min_ns": 0.94,
+          "fmax_mhz": 1061.01
+        },
+        "clk_core": {
+          "period_min_ns": 0.51,
+          "fmax_mhz": 1966.66
+        },
+        "clk_pcie": {
+          "period_min_ns": 0.0,
+          "fmax_mhz": null
+        },
+        "tck": {
+          "period_min_ns": 5.75,
+          "fmax_mhz": 173.97
+        }
+      },
+      "power_mw": {
+        "internal": 7.1369,
+        "switching": 1.6128,
+        "leakage": 0.13082,
+        "total": 8.8805,
+        "unit": "mW",
+        "assumption": "default_input_activity_0.1_duty_0.5_typical_corner"
+      },
+      "critical_paths_by_clock": {
+        "clk_core": {
+          "startpoint": "_19445_ (rising edge-triggered flip-flop clocked by clk_core)",
+          "endpoint": "_19396_ (rising edge-triggered flip-flop clocked by clk_core)",
+          "data_arrival_ns": 0.6144,
+          "data_required_ns": 0.6059,
+          "slack_ns": -0.0085,
+          "status": "VIOLATED"
+        },
+        "clk_axi": {
+          "startpoint": "_19586_ (rising edge-triggered flip-flop clocked by clk_axi)",
+          "endpoint": "s_axil_wready (output port clocked by clk_axi)",
+          "data_arrival_ns": 0.5425,
+          "data_required_ns": 0.6,
+          "slack_ns": 0.0575,
+          "status": "MET"
+        },
+        "tck": {
+          "startpoint": "_20008_ (rising edge-triggered flip-flop clocked by tck)",
+          "endpoint": "scan_out[7] (output port clocked by tck)",
+          "data_arrival_ns": 0.2469,
+          "data_required_ns": 4.5,
+          "slack_ns": 4.2531,
+          "status": "MET"
+        }
+      },
+      "design_area_um2": 2131.0,
+      "utilization_pct": 37.0,
+      "total_wirelength_um": 64317,
+      "total_vias": 129741,
+      "wirelength_by_layer_um": {
+        "M2": 22739,
+        "M3": 28874,
+        "M4": 8589,
+        "M5": 2782,
+        "M6": 1331
+      },
+      "drt_drc_violation_count": 0,
+      "drt_last_reported_violations": 0,
+      "core_area_um2": 5739.85,
+      "movable_area_um2": 1743.9,
+      "fixed_area_um2": 387.34,
+      "dpl_utilization_pct": 37.1,
+      "post_route_stdcell_plus_macro_instances": 16403,
+      "post_route_tapcell_instances": 1242,
+      "post_route_filler_decap_instances": 32176,
+      "pdn_specialnets_routed_nets": 2,
+      "pdn_specialnets_routed_segments": 16866,
+      "placement_check_passed": true,
+      "pnr_runtime_s": 1148.62,
+      "artifacts": {
+        "def_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_soc_top_asap7_fakeram7/VX_asic_soc_top.def",
+        "def_bytes": 9859276,
+        "def_sha256": "4bc4a430a452104b90f9be97370edba9dda013d731a72824fe49961ac43c126b",
+        "spef_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_soc_top_asap7_fakeram7/VX_asic_soc_top.spef",
+        "spef_bytes": 18946176,
+        "pnr_netlist_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_soc_top_asap7_fakeram7/VX_asic_soc_top_pnr.v",
+        "grt_congestion_report": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_soc_top_asap7_fakeram7/grt_congestion.rpt",
+        "drt_drc_report": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_soc_top_asap7_fakeram7/drt_drc.rpt",
+        "gds_path": "/home/antigravity/vortex_builds/phys_out/gds/VX_asic_soc_top_asap7.gds",
+        "gds_bytes": 12662474,
+        "gds_sha256": "327d8145db121907313e8ce393fc9a13dc3772d0a2038b95741b9d956ca5246a",
+        "klayout": {
+          "top_cell": "VX_asic_soc_top",
+          "gds_cell_count": 103,
+          "gds_layer_count": 34,
+          "die_width_um": 80.0,
+          "die_height_um": 80.0,
+          "die_area_um2": 6400.0
+        },
+        "log_path": "/home/antigravity/vortex_builds/phys_out/pnr/vx_asic_soc_top_asap7_fakeram7/pnr.log"
+      },
+      "status": "complete"
+    }
+  }
+}

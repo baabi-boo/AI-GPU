@@ -1,6 +1,6 @@
 {
-  "track": "Wave 11B Track E \u2014 Silicon-Grade Design Verification (SVA, Formal, Constrained-Random Coverage)",
-  "source_revision": "3f85bcc",
+  "suite": "Silicon-Grade Design Verification (SVA, Formal, Constrained-Random Coverage)",
+  "source_revision": "0775c9a",
   "overall_verdict": "PASS",
   "tools": {
     "yosys": "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
@@ -12,10 +12,10 @@
       "file": "hw/dv/sva/VX_axi4_sva.sv",
       "module": "VX_axi4_sva",
       "concurrent_sva_count": 18,
-      "scope": "AXI4-Lite & AXI4-Full AW/W/B/AR/R valid/payload stability, burst encoding legality, single-beat WLAST, bounded stalls, and post-reset $isunknown checks",
+      "scope": "AXI4-Lite & AXI4-Full AW/W/B/AR/R valid/payload stability, burst encoding legality, single-beat WLAST (using captured awlen_q on aw_fire in formal mode), bounded stalls, and post-reset $isunknown checks",
       "verilator_lint": "PASS",
       "yosys_formal_smt2": "PASS_ELAB_SMT2",
-      "negative_control_verified": "Caught injected AWADDR mutation before AWREADY at line 366 (a_aw_payload_stable)"
+      "negative_control_verified": "Caught injected AWADDR mutation before AWREADY at line 381 (a_aw_payload_stable)"
     },
     {
       "file": "hw/dv/sva/VX_tcu_handshake_sva.sv",
@@ -48,24 +48,24 @@
         "mode": "k-induction",
         "depth": 4,
         "properties": [
-          "Exhaustive 16-state IEEE-1149.1 TAP 5-cycle TMS=1 return to TEST_LOGIC_RESET",
-          "TEST_LOGIC_RESET self-loop invariance under TMS=1",
-          "Reset-safe functional outputs (dft_scan_enable=0, dft_test_mode=0, mbist_run=0, pwr_clust_en=4'hF)"
+          "Exhaustive 16-state IEEE-1149.1 TAP 5-cycle TMS=1 return to TEST_LOGIC_RESET on dut.tap_state_q",
+          "1-step dut.tap_state_q transition equivalence against IEEE-1149.1 table",
+          "Reset-safe functional outputs and TDO output-enable polarity on VX_asic_dft_top"
         ],
-        "yosys_command": "/home/antigravity/tools/yosys/bin/yosys -q -p read_verilog -sv -formal -DFORMAL_INDUCT_ONLY hw/asic/dft/VX_asic_dft_top.sv hw/dv/formal/VX_asic_dft_formal.sv;  prep -top VX_asic_dft_formal; flatten; memory_map; opt; clk2fflogic; opt_clean; write_smt2 -wires /home/antigravity/vortex_builds/dv_formal/dft_induct.smt2",
+        "yosys_command": "/home/antigravity/tools/yosys/bin/yosys -q -p read_slang -DFORMAL -DFORMAL_INDUCT_ONLY --top VX_asic_dft_formal hw/asic/dft/VX_asic_dft_top.sv hw/dv/formal/VX_asic_dft_formal.sv;  prep -top VX_asic_dft_formal; flatten; memory_map; opt; clk2fflogic; opt_clean; write_smt2 -wires /home/antigravity/vortex_builds/dv_formal/dft_induct.smt2",
         "yosys_returncode": 0,
-        "yosys_elapsed_sec": 0.119,
+        "yosys_elapsed_sec": 0.787,
         "smtbmc_command": "/home/antigravity/tools/yosys/bin/yosys-smtbmc -s z3 -i -t 4 --unroll --noprogress /home/antigravity/vortex_builds/dv_formal/dft_induct.smt2",
         "smtbmc_returncode": 0,
-        "smtbmc_elapsed_sec": 0.52,
+        "smtbmc_elapsed_sec": 5.393,
         "steps_checked": 2,
         "verdict": "PASS",
         "log_tail": [
           "##   0:00:00  Solver: z3",
           "##   0:00:00  Trying induction in step 4..",
-          "##   0:00:00  Trying induction in step 3..",
-          "##   0:00:00  Temporal induction successful.",
-          "##   0:00:00  Status: PASSED"
+          "##   0:00:02  Trying induction in step 3..",
+          "##   0:00:04  Temporal induction successful.",
+          "##   0:00:04  Status: PASSED"
         ]
       },
       {
@@ -81,21 +81,21 @@
         ],
         "yosys_command": "/home/antigravity/tools/yosys/bin/yosys -q -p read_verilog -sv -formal  hw/asic/dft/VX_asic_dft_top.sv hw/dv/formal/VX_asic_dft_formal.sv;  prep -top VX_asic_dft_formal; flatten; memory_map; opt; clk2fflogic; opt_clean; write_smt2 -wires /home/antigravity/vortex_builds/dv_formal/dft_bmc.smt2",
         "yosys_returncode": 0,
-        "yosys_elapsed_sec": 0.154,
+        "yosys_elapsed_sec": 0.887,
         "smtbmc_command": "/home/antigravity/tools/yosys/bin/yosys-smtbmc -s z3 -t 20 --unroll --noprogress /home/antigravity/vortex_builds/dv_formal/dft_bmc.smt2",
         "smtbmc_returncode": 0,
-        "smtbmc_elapsed_sec": 19.199,
+        "smtbmc_elapsed_sec": 97.708,
         "steps_checked": 20,
         "verdict": "PASS",
         "log_tail": [
-          "##   0:00:06  Checking assertions in step 13..",
-          "##   0:00:07  Checking assertions in step 14..",
-          "##   0:00:08  Checking assertions in step 15..",
-          "##   0:00:09  Checking assertions in step 16..",
-          "##   0:00:10  Checking assertions in step 17..",
-          "##   0:00:13  Checking assertions in step 18..",
-          "##   0:00:14  Checking assertions in step 19..",
-          "##   0:00:19  Status: PASSED"
+          "##   0:00:16  Checking assertions in step 13..",
+          "##   0:00:18  Checking assertions in step 14..",
+          "##   0:00:20  Checking assertions in step 15..",
+          "##   0:00:34  Checking assertions in step 16..",
+          "##   0:00:43  Checking assertions in step 17..",
+          "##   0:01:00  Checking assertions in step 18..",
+          "##   0:01:05  Checking assertions in step 19..",
+          "##   0:01:36  Status: PASSED"
         ]
       },
       {
@@ -110,10 +110,10 @@
         ],
         "yosys_command": "/home/antigravity/tools/yosys/bin/yosys -q -p read_verilog -sv -formal -DFORMAL_INDUCT_ONLY hw/dv/sva/VX_cdc_fifo_sva.sv hw/dv/formal/VX_cdc_fifo_formal.sv; chparam -set ADDRW 3 VX_cdc_fifo_formal; chparam -set DATAW 8 VX_cdc_fifo_formal; prep -top VX_cdc_fifo_formal; flatten; memory_map; opt; clk2fflogic; opt_clean; write_smt2 -wires /home/antigravity/vortex_builds/dv_formal/cdc_induct.smt2",
         "yosys_returncode": 0,
-        "yosys_elapsed_sec": 0.078,
+        "yosys_elapsed_sec": 0.66,
         "smtbmc_command": "/home/antigravity/tools/yosys/bin/yosys-smtbmc -s z3 -i -t 4 --unroll --noprogress /home/antigravity/vortex_builds/dv_formal/cdc_induct.smt2",
         "smtbmc_returncode": 0,
-        "smtbmc_elapsed_sec": 0.179,
+        "smtbmc_elapsed_sec": 1.036,
         "steps_checked": 2,
         "verdict": "PASS",
         "log_tail": [
@@ -136,34 +136,34 @@
         ],
         "yosys_command": "/home/antigravity/tools/yosys/bin/yosys -q -p read_verilog -sv -formal  hw/dv/sva/VX_cdc_fifo_sva.sv hw/dv/formal/VX_cdc_fifo_formal.sv; chparam -set ADDRW 3 VX_cdc_fifo_formal; chparam -set DATAW 8 VX_cdc_fifo_formal; prep -top VX_cdc_fifo_formal; flatten; memory_map; opt; clk2fflogic; opt_clean; write_smt2 -wires /home/antigravity/vortex_builds/dv_formal/cdc_bmc.smt2",
         "yosys_returncode": 0,
-        "yosys_elapsed_sec": 0.152,
+        "yosys_elapsed_sec": 0.952,
         "smtbmc_command": "/home/antigravity/tools/yosys/bin/yosys-smtbmc -s z3 -t 12 --unroll --noprogress /home/antigravity/vortex_builds/dv_formal/cdc_bmc.smt2",
         "smtbmc_returncode": 0,
-        "smtbmc_elapsed_sec": 12.788,
+        "smtbmc_elapsed_sec": 57.331,
         "steps_checked": 12,
         "verdict": "PASS",
         "log_tail": [
-          "##   0:00:00  Checking assertions in step 5..",
-          "##   0:00:00  Checking assertions in step 6..",
-          "##   0:00:01  Checking assertions in step 7..",
-          "##   0:00:01  Checking assertions in step 8..",
-          "##   0:00:02  Checking assertions in step 9..",
-          "##   0:00:04  Checking assertions in step 10..",
-          "##   0:00:07  Checking assertions in step 11..",
-          "##   0:00:12  Status: PASSED"
+          "##   0:00:02  Checking assertions in step 5..",
+          "##   0:00:02  Checking assertions in step 6..",
+          "##   0:00:03  Checking assertions in step 7..",
+          "##   0:00:06  Checking assertions in step 8..",
+          "##   0:00:10  Checking assertions in step 9..",
+          "##   0:00:16  Checking assertions in step 10..",
+          "##   0:00:33  Checking assertions in step 11..",
+          "##   0:00:56  Status: PASSED"
         ]
       },
       {
         "id": "axi4_sva_compile_formal",
         "module": "VX_axi4_sva",
         "mode": "formal-smt2",
-        "depth": 4,
+        "depth": null,
         "properties": [
           "Formal elaboration and SMT-LIBv2 extraction of VX_axi4_sva protocol monitors"
         ],
         "yosys_command": "/home/antigravity/tools/yosys/bin/yosys -q -p read_verilog -sv -formal  hw/dv/sva/VX_axi4_sva.sv;  prep -top VX_axi4_sva; flatten; memory_map; opt; clk2fflogic; opt_clean; write_smt2 -wires /home/antigravity/vortex_builds/dv_formal/axi4_sva_formal.smt2",
         "yosys_returncode": 0,
-        "yosys_elapsed_sec": 0.095,
+        "yosys_elapsed_sec": 0.604,
         "smtbmc_command": null,
         "smtbmc_returncode": 0,
         "smtbmc_elapsed_sec": 0.0,
@@ -173,13 +173,13 @@
         "id": "tcu_handshake_sva_compile_formal",
         "module": "VX_tcu_handshake_sva",
         "mode": "formal-smt2",
-        "depth": 4,
+        "depth": null,
         "properties": [
           "Formal elaboration and SMT-LIBv2 extraction of VX_tcu_handshake_sva monitors"
         ],
         "yosys_command": "/home/antigravity/tools/yosys/bin/yosys -q -p read_verilog -sv -formal  hw/dv/sva/VX_tcu_handshake_sva.sv;  prep -top VX_tcu_handshake_sva; flatten; memory_map; opt; clk2fflogic; opt_clean; write_smt2 -wires /home/antigravity/vortex_builds/dv_formal/tcu_handshake_sva_formal.smt2",
         "yosys_returncode": 0,
-        "yosys_elapsed_sec": 1.621,
+        "yosys_elapsed_sec": 7.744,
         "smtbmc_command": null,
         "smtbmc_returncode": 0,
         "smtbmc_elapsed_sec": 0.0,
@@ -194,26 +194,31 @@
       {
         "instance": "u_axil_sva",
         "module": "VX_axi4_sva",
+        "binding": "Bound directly to VX_asic_soc_top s_axil_* interface",
         "active_assertions": 18
       },
       {
         "instance": "u_axi_m_sva",
         "module": "VX_axi4_sva",
+        "binding": "Bound directly to VX_asic_soc_top m_axi_* interface",
         "active_assertions": 18
       },
       {
         "instance": "u_cmd_cdc_sva",
         "module": "VX_cdc_fifo_sva",
+        "binding": "Bound directly to VX_asic_soc_top cmd CDC FIFO pointers and sync registers",
         "active_assertions": 12
       },
       {
         "instance": "u_rsp_cdc_sva",
         "module": "VX_cdc_fifo_sva",
+        "binding": "Bound directly to VX_asic_soc_top rsp CDC FIFO pointers and sync registers",
         "active_assertions": 12
       },
       {
         "instance": "u_tcu_sva",
         "module": "VX_tcu_handshake_sva",
+        "binding": "Testbench-driven handshake stimulus on clk_core (standalone protocol exercise until bound to a full core/TCU RTL bench)",
         "active_assertions": 10
       }
     ],
@@ -286,19 +291,19 @@
     },
     "full_harness_verilator_coverage": {
       "line": {
-        "pct": 68.0,
-        "covered": 132,
-        "total": 194
+        "pct": 68.4,
+        "covered": 134,
+        "total": 196
       },
       "toggle": {
-        "pct": 78.3,
-        "covered": 6265,
-        "total": 7998
+        "pct": 78.0,
+        "covered": 6269,
+        "total": 8034
       },
       "branch": {
-        "pct": 89.1,
-        "covered": 246,
-        "total": 276
+        "pct": 89.3,
+        "covered": 250,
+        "total": 280
       }
     },
     "per_file_coverage": {
@@ -340,19 +345,19 @@
       },
       "VX_axi4_sva.sv": {
         "branch": {
-          "covered": 25,
-          "total": 32,
-          "pct": 78.12
+          "covered": 29,
+          "total": 36,
+          "pct": 80.56
         },
         "line": {
-          "covered": 2,
-          "total": 38,
-          "pct": 5.26
+          "covered": 4,
+          "total": 40,
+          "pct": 10.0
         },
         "toggle": {
-          "covered": 1376,
-          "total": 2152,
-          "pct": 63.94
+          "covered": 1380,
+          "total": 2188,
+          "pct": 63.07
         }
       },
       "VX_cdc_fifo_sva.sv": {

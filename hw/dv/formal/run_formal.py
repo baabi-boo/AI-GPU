@@ -18,6 +18,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import subprocess
 import sys
 import time
@@ -70,7 +71,6 @@ def main():
 
     args.build_dir.mkdir(parents=True, exist_ok=True)
 
-    # Tool version provenance
     yosys_ver = subprocess.check_output([args.yosys, "-V"], text=True).strip()
     z3_ver = subprocess.check_output([args.solver, "--version"], text=True).strip()
 
@@ -81,8 +81,9 @@ def main():
             "id": "dft_tap_k_induction",
             "module": "VX_asic_dft_formal",
             "mode": "k-induction",
+            "frontend": "read_slang",
             "depth": args.induct_depth,
-            "defines": ["-DFORMAL_INDUCT_ONLY"],
+            "defines": ["-DFORMAL", "-DFORMAL_INDUCT_ONLY"],
             "sources": [
                 "hw/asic/dft/VX_asic_dft_top.sv",
                 "hw/dv/formal/VX_asic_dft_formal.sv",
@@ -91,15 +92,16 @@ def main():
             "smt2": args.build_dir / "dft_induct.smt2",
             "smtbmc_flags": ["-i", "-t", str(args.induct_depth), "--unroll", "--noprogress"],
             "properties": [
-                "Exhaustive 16-state IEEE-1149.1 TAP 5-cycle TMS=1 return to TEST_LOGIC_RESET",
-                "TEST_LOGIC_RESET self-loop invariance under TMS=1",
-                "Reset-safe functional outputs (dft_scan_enable=0, dft_test_mode=0, mbist_run=0, pwr_clust_en=4'hF)",
+                "Exhaustive 16-state IEEE-1149.1 TAP 5-cycle TMS=1 return to TEST_LOGIC_RESET on dut.tap_state_q",
+                "1-step dut.tap_state_q transition equivalence against IEEE-1149.1 table",
+                "Reset-safe functional outputs and TDO output-enable polarity on VX_asic_dft_top",
             ],
         },
         {
             "id": "dft_tap_bmc",
             "module": "VX_asic_dft_formal",
             "mode": "BMC",
+            "frontend": "read_verilog",
             "depth": args.dft_bmc_depth,
             "defines": [],
             "sources": [
@@ -120,6 +122,7 @@ def main():
             "id": "cdc_fifo_k_induction",
             "module": "VX_cdc_fifo_formal",
             "mode": "k-induction",
+            "frontend": "read_verilog",
             "depth": args.induct_depth,
             "defines": ["-DFORMAL_INDUCT_ONLY"],
             "sources": [
@@ -139,6 +142,7 @@ def main():
             "id": "cdc_fifo_bmc",
             "module": "VX_cdc_fifo_formal",
             "mode": "BMC",
+            "frontend": "read_verilog",
             "depth": args.cdc_bmc_depth,
             "defines": [],
             "sources": [
@@ -158,7 +162,8 @@ def main():
             "id": "axi4_sva_compile_formal",
             "module": "VX_axi4_sva",
             "mode": "formal-smt2",
-            "depth": args.induct_depth,
+            "frontend": "read_verilog",
+            "depth": None,
             "defines": [],
             "sources": [
                 "hw/dv/sva/VX_axi4_sva.sv",
@@ -174,7 +179,8 @@ def main():
             "id": "tcu_handshake_sva_compile_formal",
             "module": "VX_tcu_handshake_sva",
             "mode": "formal-smt2",
-            "depth": args.induct_depth,
+            "frontend": "read_verilog",
+            "depth": None,
             "defines": [],
             "sources": [
                 "hw/dv/sva/VX_tcu_handshake_sva.sv",
@@ -193,20 +199,27 @@ def main():
         chparam_cmds = " ".join(
             f"chparam -set {k} {v} {spec['module']};" for k, v in spec["chparams"]
         )
-        define_str = " ".join(spec["defines"])
+        define_str = " ".join(shlex.quote(d) for d in spec["defines"])
+        source_str = " ".join(shlex.quote(str(s)) for s in spec["sources"])
+        smt2_str = shlex.quote(str(spec["smt2"]))
+        top_str = shlex.quote(spec["module"])
+        if spec["frontend"] == "read_slang":
+            read_cmd = f"read_slang {define_str} --top {top_str} {source_str}"
+        else:
+            read_cmd = f"read_verilog -sv -formal {define_str} {source_str}"
         yosys_script = (
-            f"read_verilog -sv -formal {define_str} {' '.join(spec['sources'])}; "
+            f"{read_cmd}; "
             f"{chparam_cmds} "
-            f"prep -top {spec['module']}; "
+            f"prep -top {top_str}; "
             f"flatten; memory_map; opt; clk2fflogic; opt_clean; "
-            f"write_smt2 -wires {spec['smt2']}"
+            f"write_smt2 -wires {smt2_str}"
         )
         y_res = run_cmd([args.yosys, "-q", "-p", yosys_script], cwd=repo_root)
         entry = {
             "id": spec["id"],
             "module": spec["module"],
             "mode": spec["mode"],
-            "depth": spec["depth"],
+            "depth": None if spec["smtbmc_flags"] is None else spec["depth"],
             "properties": spec["properties"],
             "yosys_command": y_res["command"],
             "yosys_returncode": y_res["returncode"],

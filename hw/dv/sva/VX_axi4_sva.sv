@@ -112,6 +112,8 @@ module VX_axi4_sva #(
 
     // Outstanding beat / transaction counters & stall watchdogs
     reg [7:0]           wbeat_cnt_q;
+    reg [7:0]           awlen_q;
+    reg                 awlen_valid_q;
     reg [15:0]          aw_stall_cnt_q;
     reg [15:0]          w_stall_cnt_q;
     reg [15:0]          b_stall_cnt_q;
@@ -127,7 +129,11 @@ module VX_axi4_sva #(
     wire check_en = rst_n && prev_valid_q && prev_rst_n_q;
 
 `ifdef FORMAL
-    initial prev_valid_q = 1'b0;
+    initial begin
+        prev_valid_q  = 1'b0;
+        awlen_q       = 8'h00;
+        awlen_valid_q = 1'b0;
+    end
 `endif
 
     always @(posedge clk) begin
@@ -166,6 +172,8 @@ module VX_axi4_sva #(
             prev_rresp_q   <= 2'h0;
             prev_rlast_q   <= 1'b0;
             wbeat_cnt_q    <= 8'h00;
+            awlen_q        <= 8'h00;
+            awlen_valid_q  <= 1'b0;
             aw_stall_cnt_q <= 16'h0000;
             w_stall_cnt_q  <= 16'h0000;
             b_stall_cnt_q  <= 16'h0000;
@@ -210,6 +218,13 @@ module VX_axi4_sva #(
             prev_rdata_q   <= rdata;
             prev_rresp_q   <= rresp;
             prev_rlast_q   <= rlast;
+
+            if (aw_fire) begin
+                awlen_q       <= awlen;
+                awlen_valid_q <= 1'b1;
+            end else if (w_fire && wlast) begin
+                awlen_valid_q <= 1'b0;
+            end
 
             if (w_fire) begin
                 wbeat_cnt_q <= wlast ? 8'h00 : (wbeat_cnt_q + 8'h01);
@@ -286,8 +301,9 @@ module VX_axi4_sva #(
             if ((IS_FULL != 0) && arvalid) begin
                 assert (arburst != 2'b11);
             end
-            if ((IS_FULL != 0) && (awlen == 8'h00) && wvalid && (wbeat_cnt_q == 8'h00)) begin
-                // Single-beat write must assert WLAST when no prior burst beat is open
+            if ((IS_FULL != 0) && wvalid && (wbeat_cnt_q == 8'h00) &&
+                ((awvalid && (awlen == 8'h00)) || (awlen_valid_q && (awlen_q == 8'h00)))) begin
+                // Single-beat write must assert WLAST when AWLEN==0 (current or captured)
                 assert (wlast);
             end
             if (MAX_STALL != 16'd0) begin
@@ -455,6 +471,8 @@ module VX_axi4_sva #(
                         ar_fire,
                         r_fire,
                         wbeat_cnt_q,
+                        awlen_q,
+                        awlen_valid_q,
                         prev_awvalid_q,
                         prev_awready_q,
                         prev_awid_q,

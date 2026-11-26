@@ -13,17 +13,13 @@
 
 // Formal verification harness for VX_asic_dft_top (IEEE-1149.1 JTAG TAP + DFT).
 // Verified via Yosys + yosys-smtbmc + Z3:
-//   1. Unbounded k-induction (AND BMC) proof of IEEE-1149.1 5-cycle TMS=1 reset:
-//      from ANY of the 16 TAP states (proven inductively across all states without
-//      requiring reset history), 5 consecutive TMS=1 transitions reach
-//      TAP_TEST_LOGIC_RESET (4'h0) and remain locked there while TMS=1.
-//   2. IDCODE immutability: IDCODE value shifted out on TDO under IR_IDCODE (5'h01)
-//      always matches 32'h1A16_B101 bit-for-bit across full DUT BMC trajectories
-//      (including arbitrary SCAN_CTRL / MBIST_CTRL / PWR_CTRL mutations).
-//   3. Functional safety: in TEST_LOGIC_RESET, dft_scan_enable == 0 (when external
-//      scan_enable_pin == 0), dft_test_mode == 0 (when test_mode_pin == 0),
-//      dft_cg_override == 0, mbist_run == 0, mbist_retention_mode == 0,
-//      pwr_clust_en == 4'hF, pwr_clust_iso_en == 4'h0, pwr_clust_ret_en == 4'h0.
+//   1. Unbounded k-induction (with read_slang) bound directly to dut.tap_state_q
+//      and VX_asic_dft_top outputs:
+//      a) 1-step equivalence: dut.tap_state_q == next_tap_state(prev, tms) on every TCK
+//      b) 5-cycle TMS=1 return from ANY 4-bit dut.tap_state_q to TAP_TEST_LOGIC_RESET
+//      c) Reset and TEST_LOGIC_RESET safe functional outputs and TDO OE polarity
+//   2. Full dual-edge BMC directly on VX_asic_dft_top: reachable 5-cycle TMS=1 reset,
+//      IDCODE immutability (32'h1A16_B101 bit-serial on TDO), and functional safety.
 module VX_asic_dft_formal (
     input  wire        tck,
     input  wire        trst_n,
@@ -135,34 +131,124 @@ module VX_asic_dft_formal (
     wire [3:0] arb_any_state = {tdi, tms, scan_in[1:0]};
 
 `ifdef FORMAL_INDUCT_ONLY
-    // Unbounded k-induction mode verifying:
-    //   (a) Arbitrary 16-state 5-cycle TMS=1 return to TEST_LOGIC_RESET
-    //   (b) Immutable IDCODE_VAL == 32'h1A16_B101
-    //   (c) Safe TEST_LOGIC_RESET functional outputs right on reset/TCK
-    reg f_rst_done_q;
-    initial f_rst_done_q = 1'b0;
+    // Unbounded k-induction mode bound directly to dut.tap_state_q and DUT outputs.
+    reg        f_seen_tck_q = 1'b0;
+    reg [3:0]  f_prev_tap_state_q = TAP_TEST_LOGIC_RESET;
+    reg        f_prev_tms_q = 1'b0;
+    reg [2:0]  f_tms_ones_q = 3'd0;
+    reg        f_pos_tog_q = 1'b0;
+    reg        f_neg_tog_q = 1'b0;
+    reg        f_neg_seen_q = 1'b0;
 
-    always @(posedge tck) begin
-        f_rst_done_q <= 1'b1;
-        assume (trst_n);
-        assume (por_n);
-        assert (advance_5_tms1(arb_any_state) == TAP_TEST_LOGIC_RESET);
-        assert (next_tap_state(TAP_TEST_LOGIC_RESET, 1'b1) == TAP_TEST_LOGIC_RESET);
+    always @(posedge tck or negedge dut.tap_rst_n) begin
+        if (!dut.tap_rst_n) begin
+            f_seen_tck_q       <= 1'b0;
+            f_prev_tap_state_q <= TAP_TEST_LOGIC_RESET;
+            f_prev_tms_q       <= 1'b0;
+            f_tms_ones_q       <= 3'd0;
+            f_pos_tog_q        <= 1'b0;
+        end else begin
+            f_seen_tck_q       <= 1'b1;
+            f_prev_tap_state_q <= dut.tap_state_q;
+            f_prev_tms_q       <= tms;
+            f_pos_tog_q        <= ~f_pos_tog_q;
+            if (tms) begin
+                f_tms_ones_q <= (f_tms_ones_q < 3'd5) ? (f_tms_ones_q + 3'd1) : 3'd5;
+            end else begin
+                f_tms_ones_q <= 3'd0;
+            end
+        end
     end
 
-    always @($global_clock) begin
-        assert (advance_5_tms1(arb_any_state) == TAP_TEST_LOGIC_RESET);
+    always @(negedge tck or negedge dut.tap_rst_n) begin
+        if (!dut.tap_rst_n) begin
+            f_neg_tog_q  <= 1'b0;
+            f_neg_seen_q <= 1'b0;
+        end else begin
+            f_neg_tog_q  <= f_pos_tog_q;
+            f_neg_seen_q <= 1'b1;
+        end
+    end
+
+    // Negedge TCK updates tdo_oe_n_q and shadow control flops after posedge TCK changes tap_state_q.
+    wire f_after_negedge = f_neg_seen_q && (f_neg_tog_q == f_pos_tog_q) && !tck;
+
+    // Exact reachable state images after N consecutive TMS=1 steps from any 4-bit state.
+    wire f_in_1_tms1 = (dut.tap_state_q == TAP_TEST_LOGIC_RESET) ||
+                       (dut.tap_state_q == TAP_SELECT_DR_SCAN)   ||
+                       (dut.tap_state_q == TAP_SELECT_IR_SCAN)   ||
+                       (dut.tap_state_q == TAP_EXIT1_DR)         ||
+                       (dut.tap_state_q == TAP_EXIT2_DR)         ||
+                       (dut.tap_state_q == TAP_UPDATE_DR)        ||
+                       (dut.tap_state_q == TAP_EXIT1_IR)         ||
+                       (dut.tap_state_q == TAP_EXIT2_IR)         ||
+                       (dut.tap_state_q == TAP_UPDATE_IR);
+
+    wire f_in_2_tms1 = (dut.tap_state_q == TAP_TEST_LOGIC_RESET) ||
+                       (dut.tap_state_q == TAP_SELECT_DR_SCAN)   ||
+                       (dut.tap_state_q == TAP_SELECT_IR_SCAN)   ||
+                       (dut.tap_state_q == TAP_UPDATE_DR)        ||
+                       (dut.tap_state_q == TAP_UPDATE_IR);
+
+    wire f_in_3_tms1 = (dut.tap_state_q == TAP_TEST_LOGIC_RESET) ||
+                       (dut.tap_state_q == TAP_SELECT_DR_SCAN)   ||
+                       (dut.tap_state_q == TAP_SELECT_IR_SCAN);
+
+    wire f_in_4_tms1 = (dut.tap_state_q == TAP_TEST_LOGIC_RESET) ||
+                       (dut.tap_state_q == TAP_SELECT_IR_SCAN);
+
+    always @* begin
         if (!trst_n || !por_n) begin
+            assert (dut.tap_state_q == TAP_TEST_LOGIC_RESET);
             if (!scan_enable_pin && !test_mode_pin) begin
-                assert (dft_scan_enable == 1'b0);
-                assert (dft_test_mode   == 1'b0);
-                assert (dft_cg_override == 1'b0);
+                assert (dut.dft_scan_enable == 1'b0);
+                assert (dut.dft_test_mode   == 1'b0);
+                assert (dut.dft_cg_override == 1'b0);
             end
-            assert (mbist_run            == 1'b0);
-            assert (mbist_retention_mode == 1'b0);
-            assert (pwr_clust_en         == 4'hF);
-            assert (pwr_clust_iso_en     == 4'h0);
-            assert (pwr_clust_ret_en     == 4'h0);
+            assert (dut.mbist_run            == 1'b0);
+            assert (dut.mbist_retention_mode == 1'b0);
+            assert (dut.pwr_clust_en         == 4'hF);
+            assert (dut.pwr_clust_iso_en     == 4'h0);
+            assert (dut.pwr_clust_ret_en     == 4'h0);
+            assert (dut.tdo_oe_n             == 1'b1);
+        end
+
+        // (a) 1-step transition equivalence on actual dut.tap_state_q
+        if (f_seen_tck_q) begin
+            assert (dut.tap_state_q == next_tap_state(f_prev_tap_state_q, f_prev_tms_q));
+        end
+
+        // (b) Inductive 5-cycle TMS=1 reset proof on actual dut.tap_state_q from ANY 4-bit state
+        assert (f_tms_ones_q <= 3'd5);
+        if (f_tms_ones_q == 3'd1) assert (f_in_1_tms1);
+        if (f_tms_ones_q == 3'd2) assert (f_in_2_tms1);
+        if (f_tms_ones_q == 3'd3) assert (f_in_3_tms1);
+        if (f_tms_ones_q == 3'd4) assert (f_in_4_tms1);
+        if (f_tms_ones_q >= 3'd5) begin
+            assert (dut.tap_state_q == TAP_TEST_LOGIC_RESET);
+            assert (next_tap_state(dut.tap_state_q, 1'b1) == TAP_TEST_LOGIC_RESET);
+        end
+
+        assert (advance_5_tms1(arb_any_state) == TAP_TEST_LOGIC_RESET);
+        assert (next_tap_state(TAP_TEST_LOGIC_RESET, 1'b1) == TAP_TEST_LOGIC_RESET);
+
+        // (c) Safe functional outputs in TEST_LOGIC_RESET and TDO OE polarity after negedge TCK
+        if (f_after_negedge) begin
+            if (dut.tap_state_q == TAP_TEST_LOGIC_RESET) begin
+                // Constrain internal scan_ctrl_q directly so unconstrained pin toggles cannot hide dirty state across induction steps.
+                assert (dut.scan_ctrl_q == 8'h00);
+                if (!scan_enable_pin && !test_mode_pin) begin
+                    assert (dut.dft_scan_enable == 1'b0);
+                    assert (dut.dft_test_mode   == 1'b0);
+                    assert (dut.dft_cg_override == 1'b0);
+                end
+                assert (dut.mbist_run            == 1'b0);
+                assert (dut.mbist_retention_mode == 1'b0);
+                assert (dut.pwr_clust_en         == 4'hF);
+                assert (dut.pwr_clust_iso_en     == 4'h0);
+                assert (dut.pwr_clust_ret_en     == 4'h0);
+            end
+            assert (dut.tdo_oe_n == ~((dut.tap_state_q == TAP_SHIFT_DR) || (dut.tap_state_q == TAP_SHIFT_IR)));
         end
     end
 `else
