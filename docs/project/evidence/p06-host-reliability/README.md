@@ -4,6 +4,25 @@ This packet accompanies the [host reliability audit](../../p06-host-reliability-
 It covers source changes and host checks, not native warm-experiment execution,
 counter qualification, performance acceptance or phase completion.
 
+## Current continuation
+
+The [continued review](CONTINUATION.md), [100-assignment ledger](continuation-ledger.json)
+and [resumption handoff](RESUME.md) retain the completed continuation. All **100
+distinct requested agents** completed their assignments in bounded waves. The
+initial fourteen-assignment ledger below remains its unchanged historical subset.
+
+Published source **`81d7a35c641f3a969c23c8e604f7468a4d88644a`** passed Project
+Governance run **`45796540254`, attempt 1**. Its independently verified original
+and [replay receipt](governance-current/README.md) reconcile **5,575 tests, 39,419
+successful subtests and 56,144 events**. These are recorded original execution
+counts; local replay ran no test bodies. At the retained post-replay observation,
+**14 of 15 workflows had succeeded and main CI remained queued**. This separate
+audit branch preserves the code revision as the qualification subject.
+
+The [inherited native trace-ownership finding](CONTINUATION.md#open-native-ownership-finding)
+remains open. Native warm execution and phase/performance acceptance remain
+unstarted and unclaimed.
+
 ## Retained development result
 
 The single [combined focused invocation](a013-validation/receipt.json) passed

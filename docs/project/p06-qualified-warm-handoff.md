@@ -1,6 +1,16 @@
 # Qualified warm-workspace handoff
 
-## Current closeout reliability continuation
+## Earlier closeout reliability continuation (historical)
+
+The following paragraphs preserve this continuation's original source, results
+and then-existing writer limitation. The later
+[checkpoint-publication audit](p06-checkpoint-publication-audit.md) and
+[current status](status.md) record the repair: cleanup of only a still-owned
+failed temporary permits a later explicit failure-finalization write after
+recoverable publication errors, without retrying child work. Cleanup remains
+best effort; repeated interruption, uncatchable termination, unavailable
+ownership identity and persistent filesystem failure can still prevent final
+publication.
 
 **Closeout reliability fixes are implemented; the next actual qualified warm
 experiment remains unstarted: 24 processes, 792 launches and 25,344 checked FP32

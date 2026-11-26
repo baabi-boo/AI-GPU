@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "findings": [
+    {
+      "report": "reports/a048.md",
+      "candidate": "Hosted preparation metadata permits minimal or contradictory optional fields",
+      "candidate_classification": "F2 proposed by A048",
+      "independent_review": "reports/a050.md",
+      "disposition": "Not confirmed as F2; historically specified hosted success projection is explicitly preserved. No producer failure or downstream product/phase acceptance bypass established.",
+      "followup": "Clarify the nested hosted preparation projection before a separately reviewed schema/compatibility change.",
+      "source_changed": false
+    },
+    {
+      "report": "reports/a058.md",
+      "candidate": "Live environment snapshot does not attest every active process environment field",
+      "candidate_classification": "F1 documentation/hardening follow-up",
+      "independent_review": "reports/a061.md",
+      "disposition": "F1 confirmed, no compliant-launch or provider-bound gate breach established; exact env -i invocation is a separate mandatory qualifying precondition.",
+      "followup": "Clarify the environment_stable field or add separately reviewed mapping checks without treating them as process-start isolation.",
+      "source_changed": false
+    },
+    {
+      "report": "reports/a071.md",
+      "candidate": "Pending native instruction trace is not reclaimed after bounded-RAM first-fetch fault",
+      "independent_review": "reports/a073.md",
+      "severity": "F2",
+      "confidence": "high; static proof",
+      "status": "open; outside the implemented host ownership repairs",
+      "source_revision": "81d7a35c641f3a969c23c8e604f7468a4d88644a",
+      "inherited_from_session_base": true,
+      "runtime_reproduction": false,
+      "scope_review": "reports/a074.md",
+      "verification_plan": "reports/a076.md",
+      "disposition": "Preserve frozen native inputs and narrower historical observations. Coordinate a successor source/proof contract, exact ownership controls and source-matched native validation before repair publication. This finding is not waived or claimed fixed.",
+      "source_changed": false
+    },
+    {
+      "report": "reports/a077.md",
+      "candidate": "Qualified-warm handoff labels historical writer failure as current",
+      "independent_review": "reports/a078.md",
+      "severity": "F1",
+      "status": "corrected in audit documentation branch",
+      "source_changed": false
+    }
+  ]
+}

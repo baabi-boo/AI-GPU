@@ -1,0 +1,17 @@
+# A078 — Qualified-warm handoff historical-scope correction
+
+Prepared a documentation-only replacement for `docs/project/p06-qualified-warm-handoff.md` from audit HEAD `f6f6a0b329af7e60b37638281f9ad7161458c4b9`. The code/CI subject remains clean master `81d7a35c641f3a969c23c8e604f7468a4d88644a`. Neither worktree was edited. Root owns integration of the full corrected file at `/tmp/ai-gpu-b4f42b8a9d4b/a078-handoff.md`.
+
+## Exact proposed correction
+
+Rename the first heading from “Current closeout reliability continuation” to “Earlier closeout reliability continuation (historical)” and insert this scope note immediately below it:
+
+> The following paragraphs preserve this continuation's original source, results and then-existing writer limitation. The later [checkpoint-publication audit](../audit/docs/project/p06-checkpoint-publication-audit.md) and [current status](../audit/docs/project/status.md) record the repair: cleanup of only a still-owned failed temporary permits a later explicit failure-finalization write after recoverable publication errors, without retrying child work. Cleanup remains best effort; repeated interruption, uncatchable termination, unavailable ownership identity and persistent filesystem failure can still prevent final publication.
+
+The handoff uses its own relative links, `p06-checkpoint-publication-audit.md` and `status.md`. Its original paragraphs, historical counts, hashes, resource requirements and phase claims remain byte-for-byte unchanged.
+
+## Inspection and verification
+
+Read the agent brief, `AGENTS.md`, A077, the qualified-warm handoff, checkpoint-publication audit/contract, current status and relevant roadmap/backlog/acceptance guidance. Inspected `ci/project/p02_matrix.py::_write_json` at the code subject: cleanup checks the created device/inode identity before unlinking and retains the original exception. This agrees with the documented recoverable-error repair and best-effort limits.
+
+Read-only Git identity/status checks found both worktrees clean before preparation. Local link checks resolve both added destinations. A byte comparison reversing only the heading/note substitution exactly reproduces the original handoff; the unified diff contains one small hunk (11 insertions, one deletion). No source, tests, frozen evidence, phase states or acceptance claims were changed. No tests, builds, native execution, provider inspection or qualification were run. The native experiment remains unstarted, and this editorial correction supplies no new execution evidence.
