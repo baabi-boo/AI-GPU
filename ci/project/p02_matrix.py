@@ -92,12 +92,57 @@ def _json_bytes(value):
 def _write_json(path, value):
     body = _json_bytes(value)
     require(len(body) <= 16 * MIB, "JSON checkpoint exceeds 16 MiB")
-    temporary = path.with_name(path.name + ".tmp")
-    with temporary.open("xb") as stream:
-        stream.write(body)
+    temporary = path.name + ".tmp"
+    directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+    descriptor = None
+    identity = None
+    stream = None
+    committed = False
+    error = None
+    try:
+        descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL,
+                             0o666, dir_fd=directory)
+        created = os.fstat(descriptor)
+        identity = (created.st_dev, created.st_ino)
+        # Keep descriptor ownership here, including when wrapping or closing fails.
+        stream = os.fdopen(descriptor, "wb", closefd=False)
+        require(stream.write(body) == len(body), "incomplete JSON checkpoint write")
         stream.flush()
-        os.fsync(stream.fileno())
-    os.replace(temporary, path)
+        os.fsync(descriptor)
+        closing, stream = stream, None
+        closing.close()
+        current = os.stat(temporary, dir_fd=directory, follow_symlinks=False)
+        require((current.st_dev, current.st_ino) == identity,
+                "JSON checkpoint temporary ownership changed")
+        os.replace(temporary, path.name, src_dir_fd=directory, dst_dir_fd=directory)
+        committed = True
+    except BaseException as exc:
+        error = exc
+    finally:
+        if stream is not None:
+            try:
+                stream.close()
+            except BaseException as exc:
+                if error is None:
+                    error = exc
+        if not committed and identity is not None:
+            try:
+                # Hold the descriptor through cleanup so its inode cannot be reused.
+                current = os.stat(temporary, dir_fd=directory, follow_symlinks=False)
+                if (current.st_dev, current.st_ino) == identity:
+                    os.unlink(temporary, dir_fd=directory)
+            except BaseException:
+                # Cleanup is best effort; retain the original checkpoint failure.
+                pass
+        for owned in (descriptor, directory):
+            if owned is not None:
+                try:
+                    os.close(owned)
+                except BaseException as exc:
+                    if error is None:
+                        error = exc
+    if error is not None:
+        raise error
 
 
 def _path(value, *, existing=False):
