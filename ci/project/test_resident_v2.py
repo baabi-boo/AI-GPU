@@ -18,7 +18,7 @@ if str(PYTHON_DIR) not in sys.path:
     sys.path.insert(0, str(PYTHON_DIR))
 
 from vortex_ai import _api  # noqa: E402
-from vortex_ai import resident_v2 as rv2  # noqa: E402
+from aigpu_sdk import resident_v2 as rv2  # noqa: E402
 
 
 def _f32_bytes(vals):

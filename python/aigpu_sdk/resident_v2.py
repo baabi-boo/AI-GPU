@@ -11,7 +11,7 @@ import sys
 import threading
 import weakref
 
-from . import _api
+from vortex_ai import _api
 
 
 RESIDENT_V2_API = 1
@@ -104,14 +104,14 @@ def torch_available():
 def _reject_autograd_object(value, torch_mod=None):
     # Reject reverse-mode or forward-mode autograd tracking even under no_grad().
     if getattr(value, "requires_grad", False):
-        raise ValueError("vortex_ai.resident_v2 rejects tensors with requires_grad=True")
+        raise ValueError("aigpu_sdk.resident_v2 rejects tensors with requires_grad=True")
     if getattr(value, "grad_fn", None) is not None:
-        raise ValueError("vortex_ai.resident_v2 rejects tensors attached to an autograd graph")
+        raise ValueError("aigpu_sdk.resident_v2 rejects tensors attached to an autograd graph")
     if torch_mod is not None:
         with torch_mod.inference_mode(False):
             tangent = torch_mod.autograd.forward_ad.unpack_dual(value).tangent
         if tangent is not None:
-            raise ValueError("vortex_ai.resident_v2 rejects forward-AD dual tensors")
+            raise ValueError("aigpu_sdk.resident_v2 rejects forward-AD dual tensors")
 
 
 def pack_f32_sequence(values):
