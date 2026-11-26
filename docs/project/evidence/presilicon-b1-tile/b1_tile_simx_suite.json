@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "artifact_id": "aigpu_b1_tile_simx_suite",
+  "evidence_level": "simulated",
+  "foundry_signoff": false,
+  "silicon_measured": false,
+  "fpga_measured": false,
+  "profile": "aigpu-b1-tile",
+  "topology": "1 cluster x 4 RV64 AI-only cores, 8W x 8T, IW=2, 256 KiB L2, TFR TCU + WGMMA/FP8/MXFP4/NVFP4/2:4 Sparsity + DXA + MUFU",
+  "scope_note": "Executed on SimX cycle-accurate architectural simulator (simulated evidence level; not 4-core rtlsim and not physical silicon).",
+  "summary": {
+    "total_workloads": 8,
+    "passed_workloads": 8
+  },
+  "workloads": {
+    "fp8_sgemm_tcu": {
+      "cmd": "./ci/blackbox.sh --driver=simx --app=sgemm_tcu --args=-k32",
+      "env_overrides": {
+        "CONFIGS": "-DITYPE=fp8 -DOTYPE=fp32"
+      },
+      "returncode": 0,
+      "passed": true,
+      "instrs": 8768,
+      "cycles": 5559,
+      "ipc": 1.577,
+      "tail": [
+        "[iter 0] verify result",
+        "[iter 0] match (0 errors)",
+        "cleanup",
+        "PERF: instrs=8768, cycles=5559, IPC=1.577",
+        "PASSED!",
+        "make: Leaving directory '/home/antigravity/vortex_builds/build64_b1tile/tests/regression/sgemm_tcu'"
+      ]
+    },
+    "mxfp4_sgemm_tcu_mx": {
+      "cmd": "./ci/blackbox.sh --driver=simx --app=sgemm_tcu_mx --args=-k64",
+      "env_overrides": {
+        "CONFIGS": "-DITYPE=mxfp4 -DOTYPE=fp32"
+      },
+      "returncode": 0,
+      "passed": true,
+      "instrs": 2368,
+      "cycles": 1918,
+      "ipc": 1.235,
+      "tail": [
+        "output data type: fp32 (id=0)",
+        "WMMA Tile Dimension: M=8, N=8, K(logical)=64, K(storage)=32",
+        "Elapsed time: 49 ms",
+        "PERF: instrs=2368, cycles=1918, IPC=1.235",
+        "PASSED!",
+        "make: Leaving directory '/home/antigravity/vortex_builds/build64_b1tile/tests/regression/sgemm_tcu_mx'"
+      ]
+    },
+    "nvfp4_sgemm_tcu_mx": {
+      "cmd": "./ci/blackbox.sh --driver=simx --app=sgemm_tcu_mx --args=-k64",
+      "env_overrides": {
+        "CONFIGS": "-DITYPE=nvfp4 -DOTYPE=fp32"
+      },
+      "returncode": 0,
+      "passed": true,
+      "instrs": 2368,
+      "cycles": 1918,
+      "ipc": 1.235,
+      "tail": [
+        "output data type: fp32 (id=0)",
+        "WMMA Tile Dimension: M=8, N=8, K(logical)=64, K(storage)=32",
+        "Elapsed time: 54 ms",
+        "PERF: instrs=2368, cycles=1918, IPC=1.235",
+        "PASSED!",
+        "make: Leaving directory '/home/antigravity/vortex_builds/build64_b1tile/tests/regression/sgemm_tcu_mx'"
+      ]
+    },
+    "wgmma_fp16": {
+      "cmd": "./ci/blackbox.sh --driver=simx --app=sgemm_tcu_wg --args=-n32",
+      "env_overrides": {
+        "CONFIGS": "-DITYPE=fp16 -DOTYPE=fp32"
+      },
+      "returncode": 0,
+      "passed": true,
+      "instrs": 6520,
+      "cycles": 9113,
+      "ipc": 0.715,
+      "tail": [
+        "verify result",
+        "reference drift: max=2 ULP, bound=8 ULP (K=16)",
+        "cleanup",
+        "PERF: instrs=6520, cycles=9113, IPC=0.715",
+        "PASSED!",
+        "make: Leaving directory '/home/antigravity/vortex_builds/build64_b1tile/tests/regression/sgemm_tcu_wg'"
+      ]
+    },
+    "wgmma_2_4_sparse": {
+      "cmd": "./ci/blackbox.sh --driver=simx --app=sgemm_tcu_wg_sp --args=-n32",
+      "env_overrides": {
+        "CONFIGS": "-DITYPE=fp16 -DOTYPE=fp32"
+      },
+      "returncode": 0,
+      "passed": true,
+      "instrs": 26528,
+      "cycles": 38650,
+      "ipc": 0.686,
+      "tail": [
+        "verify result",
+        "reference drift: max=5 ULP, bound=12 ULP (K=64)",
+        "cleanup",
+        "PERF: instrs=26528, cycles=38650, IPC=0.686",
+        "PASSED!",
+        "make: Leaving directory '/home/antigravity/vortex_builds/build64_b1tile/tests/regression/sgemm_tcu_wg_sp'"
+      ]
+    },
+    "dxa_copy": {
+      "cmd": "./ci/blackbox.sh --driver=simx --app=dxa_copy",
+      "env_overrides": {},
+      "returncode": 0,
+      "passed": true,
+      "instrs": 8832,
+      "cycles": 6094,
+      "ipc": 1.449,
+      "tail": [
+        "tiles: 4 4",
+        "total_elems: 1024, groups: 64",
+        "start",
+        "PASSED",
+        "PERF: instrs=8832, cycles=6094, IPC=1.449",
+        "make: Leaving directory '/home/antigravity/vortex_builds/build64_b1tile/tests/regression/dxa_copy'"
+      ]
+    },
+    "wgmma_dxa": {
+      "cmd": "./ci/blackbox.sh --driver=simx --app=sgemm_tcu_wg_dxa --args=-n32",
+      "env_overrides": {
+        "CONFIGS": "-DITYPE=fp16 -DOTYPE=fp32"
+      },
+      "returncode": 0,
+      "passed": true,
+      "instrs": 11440,
+      "cycles": 18665,
+      "ipc": 0.613,
+      "tail": [
+        "Elapsed time: 361 ms",
+        "verify result",
+        "reference drift: max=7 ULP, bound=12 ULP (K=64)",
+        "PERF: instrs=11440, cycles=18665, IPC=0.613",
+        "PASSED!",
+        "make: Leaving directory '/home/antigravity/vortex_builds/build64_b1tile/tests/regression/sgemm_tcu_wg_dxa'"
+      ]
+    },
+    "amo_coherence": {
+      "cmd": "./ci/blackbox.sh --driver=simx --app=amo --args=-n2",
+      "env_overrides": {},
+      "returncode": 0,
+      "passed": true,
+      "instrs": 116191,
+      "cycles": 956868,
+      "ipc": 0.121,
+      "tail": [
+        "Test14: lrsc_lmem",
+        "Test14-lrsc_lmem PASSED",
+        "Test15: amo_ops_lmem",
+        "Test15-amo_ops_lmem PASSED",
+        "PERF: instrs=116191, cycles=956868, IPC=0.121",
+        "make: Leaving directory '/home/antigravity/vortex_builds/build64_b1tile/tests/regression/amo'"
+      ]
+    }
+  }
+}

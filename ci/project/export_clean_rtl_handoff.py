@@ -231,7 +231,7 @@ def _scan_text_content(rel_posix: str, data: bytes, suffix: str) -> tuple[str, l
                         detail=f"Line {line_no} matched forbidden pattern '{rule_name}'",
                     )
                 )
-    lic_class, lic_violations = _classify_license(rel_posix, text[:2500], suffix)
+    lic_class, lic_violations = _classify_license(rel_posix, text, suffix)
     violations.extend(lic_violations)
     return lic_class, violations
 

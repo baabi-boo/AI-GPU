@@ -23,13 +23,14 @@ Measured pre-silicon repository inputs read directly on disk:
   2. `hw/asic/sram/sram_macro_manifest.json` for exact logical SRAM arrays and
      bit counts partitioned by port type (`1rw` vs `1r1w`).
   3. `hw/asic/phys/phys_results.json` for real Yosys 0.69 / OpenSTA 3.1.0 /
-     OpenROAD ORFS ASAP7 measured areas, post-route Fmax (`1071.28 MHz` on
+     OpenROAD ORFS ASAP7 measured areas, post-route Fmax (`1079.53 MHz` on
      `VX_tcu_tfr_mul_f16`), post-route cell/power inflation ratios, and shell
      metrics (`VX_asic_dft_top`, `VX_tcu_tfr_mul_f16`, `VX_tcu_fedp_tfr`,
      `VX_asic_soc_top`).
   4. `ci/baselines/synthesis/yosys/*.json` and `ci/baselines/synthesis/beacon/*.json`
-     for real Yosys ASAP7 macro-unit standard-cell areas and Beacon LUT/FF/DSP
-     reference context.
+     for real Yosys ASAP7 macro-unit standard-cell areas (`yosys/tensor.json`
+     records `tcu` at `xlen=32` with `catalog.mk` `tcu_CFG` 16T/16W `configs=""`,
+     and `tensor` at 8T/8W) and Beacon LUT/FF/DSP reference context.
 
 Strict Honesty Contract (ADR-006):
   - Every output payload carries:

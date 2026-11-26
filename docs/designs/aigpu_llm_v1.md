@@ -77,7 +77,7 @@ step logits `[vocab_size]` read back to host after each forward pass:
    - Final `OP_RMSNORM_FP32` (`norm`) -> `OP_GEMV_FP32` (`lm_head`)
    - D2H read of the final token's `[vocab_size]` logits and greedy `argmax`.
 
-Each forward pass executes `2 * 13 + 2 = 28` kernel launches (`140` total device
+Each forward pass executes `2 * 16 + 2 = 34` kernel launches (`170` total device
 kernel launches across 1 prefill pass at positions `0..3` plus 4 autoregressive
 decode passes at positions `4..7`).
 

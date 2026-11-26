@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "artifact_id": "aigpu_rtl_ai_and_xrtsim_evidence",
+  "evidence_level": "rtl_verified",
+  "foundry_signoff": false,
+  "silicon_measured": false,
+  "fpga_measured": false,
+  "scope_note": "Native RV64 AI/LLM suites executed on build64_p02tfr (1-core RV64 p02-tfr native TFR rtlsim + SimX parity); full-AFU xrtsim demo executed on build64 (default 1-core RV64 AFU RTL). Vendor XRT hw_emu (P01-A03) and 4-core aigpu-b1-tile rtlsim are explicitly NOT claimed here.",
+  "full_afu_xrtsim_build64_demo": {
+    "profile": "default-rv64-afu",
+    "driver": "xrt (local vendor-free xrtsim)",
+    "result": {
+      "cmd": "./ci/blackbox.sh --driver=xrt --app=demo",
+      "env_overrides": {},
+      "returncode": 0,
+      "passed": true,
+      "instrs": 2460,
+      "cycles": 6386,
+      "ipc": 0.385,
+      "tail": [
+        "wait for completion",
+        "verify result",
+        "cleanup",
+        "PERF: instrs=2460, cycles=6386, IPC=0.385",
+        "PASSED!",
+        "make: Leaving directory '/home/antigravity/vortex_builds/build64/tests/regression/demo'"
+      ]
+    }
+  },
+  "native_p02_tfr_rtlsim_ai_workloads": [
+    {
+      "id": "ai_mlp_fused",
+      "commit": "786f0ee",
+      "profile": "p02-tfr (1-core RV64, native TFR)",
+      "retired_instrs_simx": 3946,
+      "retired_instrs_rtlsim": 3946,
+      "cycles_simx": 12628,
+      "cycles_rtlsim": 12573,
+      "cycle_parity_pct": 0.44,
+      "bf16_rtlsim_cycles": 10078,
+      "bf16_speedup_vs_p06_a01_18189": 1.8,
+      "mismatches": 0,
+      "acceptance_record": "docs/project/evidence/p06-fused-optimization/acceptance-optimization.json"
+    },
+    {
+      "id": "ai_ops_v2",
+      "commit": "cc459f8",
+      "profile": "p02-tfr (1-core RV64, native TFR)",
+      "opcodes_verified": 10,
+      "retired_instrs_simx": 40030,
+      "retired_instrs_rtlsim": 40030,
+      "cycles_simx": 159046,
+      "cycles_rtlsim": 158597,
+      "cycle_parity_pct": 0.28,
+      "mismatches": 0
+    },
+    {
+      "id": "ai_transformer_v2",
+      "commit": "3f12943",
+      "profile": "p02-tfr (1-core RV64, native TFR)",
+      "retired_instrs_simx": 83263,
+      "retired_instrs_rtlsim": 83263,
+      "cycle_parity_pct": 0.41,
+      "max_abs_err": 0.000135,
+      "mismatches": 0,
+      "elements_checked": 128
+    },
+    {
+      "id": "ai_llm_ops_v3",
+      "commit": "296feeb",
+      "profile": "p02-tfr (1-core RV64, native TFR)",
+      "cases_verified": 11,
+      "opcodes_verified": 8,
+      "retired_instrs_simx": 409824,
+      "retired_instrs_rtlsim": 409824,
+      "cycles_simx": 1854142,
+      "cycles_rtlsim": 1853620,
+      "cycle_parity_pct": 0.028,
+      "max_abs_err": 2.78e-07,
+      "mismatches": 0,
+      "elements_checked": 3312
+    },
+    {
+      "id": "aigpu_llm_2layer_llama_safetensors",
+      "commit": "a041e71",
+      "profile": "p02-tfr (1-core RV64, native TFR)",
+      "safetensors_count": 21,
+      "native_gpu_launches": 170,
+      "intermediate_host_bytes": 0,
+      "prefill_token_exact": 25,
+      "decode_tokens_exact": [
+        3,
+        12,
+        8,
+        31
+      ],
+      "retired_instrs_simx": 820178,
+      "retired_instrs_rtlsim": 820178,
+      "cycles_simx": 2772330,
+      "cycles_rtlsim": 2763450,
+      "cycle_parity_pct": 0.32,
+      "max_abs_err": 4.66e-07,
+      "mismatches": 0
+    }
+  ]
+}
