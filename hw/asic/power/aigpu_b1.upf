@@ -1,0 +1,193 @@
+# Copyright (c) 2018-2026 Georgia Tech Vortex & AI-GPU Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# =============================================================================
+# AI-GPU B1 IEEE-1801 UPF 2.1 Power Intent Specification
+# =============================================================================
+# Multi-voltage / power-gated power architecture for aigpu-b1:
+#   - PD_AON         : Always-on SoC control domain (VDD_AON, 0.75 V nominal)
+#                      Contains AXI4-Lite CSR bank, boot/scratchpad SRAM, reset
+#                      & CDC synchronizers, HBM/NoC bridge, and IEEE-1149.1
+#                      JTAG / DFT / power controller (`u_dft`).
+#   - PD_CLUSTER_0..3: Four independently switchable compute cluster domains
+#                      (VDD_CLUST nominal 0.75 V / overdrive 0.85 V), each
+#                      encompassing 16 RV64X cores, 16x128 KiB LMEM banks,
+#                      TCU tensor buffers, and 16 MiB L2 cache slice.
+#
+# Switch, isolation, and SRAM retention control pins align with
+# `VX_asic_soc_top` and `VX_asic_dft_top`:
+#   - Power switch enable : pwr_clust_en[0..3]     (active-high ON)
+#   - Isolation clamp-0   : pwr_clust_iso_en[0..3] (active-high ISOLATE)
+#   - SRAM retention      : pwr_clust_ret_en[0..3] (active-high SAVE/RESTORE)
+
+upf_version 2.1
+
+# -----------------------------------------------------------------------------
+# 1. Supply Nets, Ports, and Supply Sets
+# -----------------------------------------------------------------------------
+create_supply_port VDD_AON   -direction in
+create_supply_port VDD_CLUST -direction in
+create_supply_port VSS       -direction in
+
+create_supply_net VDD_AON
+create_supply_net VDD_CLUST
+create_supply_net VSS
+
+connect_supply_net VDD_AON   -ports VDD_AON
+connect_supply_net VDD_CLUST -ports VDD_CLUST
+connect_supply_net VSS       -ports VSS
+
+# Switched virtual rails for the four compute clusters
+create_supply_net VDD_CLUST_0
+create_supply_net VDD_CLUST_1
+create_supply_net VDD_CLUST_2
+create_supply_net VDD_CLUST_3
+
+# Supply sets
+create_supply_set SS_AON       -function {power VDD_AON}     -function {ground VSS}
+create_supply_set SS_CLUST_IN  -function {power VDD_CLUST}   -function {ground VSS}
+create_supply_set SS_CLUST_0   -function {power VDD_CLUST_0} -function {ground VSS}
+create_supply_set SS_CLUST_1   -function {power VDD_CLUST_1} -function {ground VSS}
+create_supply_set SS_CLUST_2   -function {power VDD_CLUST_2} -function {ground VSS}
+create_supply_set SS_CLUST_3   -function {power VDD_CLUST_3} -function {ground VSS}
+
+# -----------------------------------------------------------------------------
+# 2. Power Domains
+# -----------------------------------------------------------------------------
+# Always-on top domain covers SoC control, AXI4-Lite CSRs, JTAG/DFT, CDC FIFOs
+create_power_domain PD_AON \
+    -include_scope \
+    -supply [list primary SS_AON]
+
+# Four switchable compute cluster domains (bound to cluster hierarchy paths
+# in full-chip assembly; standalone SoC shell binds equivalent pwr_clust_* pins)
+create_power_domain PD_CLUSTER_0 \
+    -elements {g_clusters[0].u_cluster} \
+    -supply [list primary SS_CLUST_0] \
+    -supply [list retention SS_AON]
+
+create_power_domain PD_CLUSTER_1 \
+    -elements {g_clusters[1].u_cluster} \
+    -supply [list primary SS_CLUST_1] \
+    -supply [list retention SS_AON]
+
+create_power_domain PD_CLUSTER_2 \
+    -elements {g_clusters[2].u_cluster} \
+    -supply [list primary SS_CLUST_2] \
+    -supply [list retention SS_AON]
+
+create_power_domain PD_CLUSTER_3 \
+    -elements {g_clusters[3].u_cluster} \
+    -supply [list primary SS_CLUST_3] \
+    -supply [list retention SS_AON]
+
+# -----------------------------------------------------------------------------
+# 3. Header Power Switches (PD_CLUSTER_0..3)
+# -----------------------------------------------------------------------------
+for {set idx 0} {$idx < 4} {incr idx} {
+    create_power_switch PSW_CLUSTER_${idx} \
+        -domain PD_CLUSTER_${idx} \
+        -input_supply_port  [list vdd_in VDD_CLUST] \
+        -output_supply_port [list vdd_out VDD_CLUST_${idx}] \
+        -control_port       [list nsleep pwr_clust_en[${idx}]] \
+        -ack_port           [list nsleep_ack pwr_clust_ack_${idx}] \
+        -on_state           [list ON  vdd_in {nsleep}] \
+        -off_state          [list OFF {!nsleep}]
+}
+
+# -----------------------------------------------------------------------------
+# 4. Output Clamp-0 Isolation Cells (PD_CLUSTER_0..3 -> PD_AON / Neighbors)
+# -----------------------------------------------------------------------------
+for {set idx 0} {$idx < 4} {incr idx} {
+    set_isolation ISO_CLUST_${idx}_OUT \
+        -domain PD_CLUSTER_${idx} \
+        -isolation_supply_set SS_AON \
+        -clamp_value 0 \
+        -applies_to outputs \
+        -isolation_signal pwr_clust_iso_en[${idx}] \
+        -isolation_sense high \
+        -location parent
+}
+
+# -----------------------------------------------------------------------------
+# 5. Level Shifters (DVFS Voltage Crossings Between VDD_AON and VDD_CLUST)
+# -----------------------------------------------------------------------------
+for {set idx 0} {$idx < 4} {incr idx} {
+    # AON -> Cluster inputs (shifted in destination cluster before isolation/logic)
+    set_level_shifter LS_AON_TO_CLUST_${idx} \
+        -domain PD_CLUSTER_${idx} \
+        -applies_to inputs \
+        -rule both \
+        -threshold 0.05 \
+        -location self
+
+    # Cluster -> AON outputs (shifted at parent / AON boundary alongside clamp-0)
+    set_level_shifter LS_CLUST_${idx}_TO_AON \
+        -domain PD_CLUSTER_${idx} \
+        -applies_to outputs \
+        -rule both \
+        -threshold 0.05 \
+        -location parent
+}
+
+# -----------------------------------------------------------------------------
+# 6. SRAM Macro Periphery-Off / Array-Retention Strategy
+# -----------------------------------------------------------------------------
+# Targets L2 tag/data/dirty, I-Cache/D-Cache, Local Memory, RF, and TCU SRAM
+# wrappers (`VX_sram_1rw` / `VX_sram_1r1w` / `VX_sram_2rw`) inside each cluster.
+for {set idx 0} {$idx < 4} {incr idx} {
+    set_retention RET_CLUST_${idx}_SRAM \
+        -domain PD_CLUSTER_${idx} \
+        -retention_supply_set SS_AON \
+        -save_signal    [list pwr_clust_ret_en[${idx}] posedge] \
+        -restore_signal [list pwr_clust_ret_en[${idx}] negedge] \
+        -parameters     {RET_PURPOSE sram_array_retention}
+}
+
+# Always-on boot/scratchpad SRAM in PD_AON supports light-sleep standby via `ret`
+set_retention RET_AON_BOOT_SRAM \
+    -domain PD_AON \
+    -retention_supply_set SS_AON \
+    -elements {u_boot_sram} \
+    -save_signal    {mbist_ret_sync2_q posedge} \
+    -restore_signal {mbist_ret_sync2_q negedge}
+
+# -----------------------------------------------------------------------------
+# 7. Supply Power States & Legal Power State Table (PST)
+# -----------------------------------------------------------------------------
+add_power_state SS_AON \
+    -state ON_NOM  {-supply_expr {power == `{FULL_ON, 0.75} && ground == `{FULL_ON, 0.00}}}
+
+add_power_state SS_CLUST_IN \
+    -state ON_NOM  {-supply_expr {power == `{FULL_ON, 0.75} && ground == `{FULL_ON, 0.00}}} \
+    -state ON_ODV  {-supply_expr {power == `{FULL_ON, 0.85} && ground == `{FULL_ON, 0.00}}}
+
+for {set idx 0} {$idx < 4} {incr idx} {
+    add_power_state SS_CLUST_${idx} \
+        -state ON_NOM {-supply_expr {power == `{FULL_ON, 0.75} && ground == `{FULL_ON, 0.00}}} \
+        -state ON_ODV {-supply_expr {power == `{FULL_ON, 0.85} && ground == `{FULL_ON, 0.00}}} \
+        -state OFF    {-supply_expr {power == `{OFF}           && ground == `{FULL_ON, 0.00}}}
+}
+
+# System-level legal operating modes:
+#   ALL_ON     : Full 64-core nominal compute (all 4 clusters active @ 0.75 V)
+#   BOOST_ODV  : Overdrive 2.0 GHz burst (all 4 clusters active @ 0.85 V)
+#   TILE_HALF  : Clusters 0-1 active, Clusters 2-3 power-gated w/ clamp-0 isolation
+#   SINGLE_TILE: Cluster 0 active (16 cores), Clusters 1-3 power-gated
+#   DEEP_SLEEP : All 4 compute clusters power-gated; PD_AON CSR/JTAG/retention alive
+create_pst PST_AIGPU_B1 -supplies {VDD_AON VDD_CLUST VDD_CLUST_0 VDD_CLUST_1 VDD_CLUST_2 VDD_CLUST_3 VSS}
+add_pst_state ALL_ON      -pst PST_AIGPU_B1 -state {ON_NOM ON_NOM ON_NOM ON_NOM ON_NOM ON_NOM FULL_ON}
+add_pst_state BOOST_ODV   -pst PST_AIGPU_B1 -state {ON_NOM ON_ODV ON_ODV ON_ODV ON_ODV ON_ODV FULL_ON}
+add_pst_state TILE_HALF   -pst PST_AIGPU_B1 -state {ON_NOM ON_NOM ON_NOM ON_NOM OFF    OFF    FULL_ON}
+add_pst_state SINGLE_TILE -pst PST_AIGPU_B1 -state {ON_NOM ON_NOM ON_NOM OFF    OFF    OFF    FULL_ON}
+add_pst_state DEEP_SLEEP  -pst PST_AIGPU_B1 -state {ON_NOM ON_NOM OFF    OFF    OFF    OFF    FULL_ON}
