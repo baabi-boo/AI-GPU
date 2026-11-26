@@ -266,19 +266,20 @@ class _VerifiedReader:
         path = root / entry.name
         self.entry, self.deadline, self.count = entry, deadline, 0
         self.digest = hashlib.sha256()
-        self.parent, _ = _directory(path.parent)
         self.name = path.name
-        self.stream = None
+        self.stream = self.fd = self.parent = None
         try:
+            self.parent, _ = _directory(path.parent)
             before = os.stat(self.name, dir_fd=self.parent, follow_symlinks=False)
             _require(_stamp(before) == entry.identity and stat.S_ISREG(before.st_mode)
                      and before.st_nlink == 1, "source-changed")
-            fd = os.open(self.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_CLOEXEC,
-                         dir_fd=self.parent)
-            self.stream = os.fdopen(fd, "rb", buffering=0)
-            _require(_stamp(os.fstat(fd)) == entry.identity, "source-changed")
+            self.fd = os.open(self.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_CLOEXEC,
+                              dir_fd=self.parent)
+            # Keep sole descriptor ownership even if stream construction fails.
+            self.stream = os.fdopen(self.fd, "rb", buffering=0, closefd=False)
+            _require(_stamp(os.fstat(self.fd)) == entry.identity, "source-changed")
         except BaseException:
-            self.close()
+            self.close(suppress=True)
             raise
 
     def read(self, size=-1):
@@ -301,10 +302,21 @@ class _VerifiedReader:
         _require(self.entry.sha256 is None or digest == self.entry.sha256, "source-changed")
         return digest
 
-    def close(self):
-        if self.stream is not None:
-            self.stream.close()
-        os.close(self.parent)
+    def close(self, *, suppress=False):
+        resources = ((self.stream, lambda stream: stream.close()),
+                     (self.fd, os.close), (self.parent, os.close))
+        # A failed close may consume its descriptor; never retry its reused number.
+        self.stream = self.fd = self.parent = None
+        failure = None
+        for resource, close in resources:
+            if resource is not None:
+                try:
+                    close(resource)
+                except BaseException as error:
+                    if failure is None:
+                        failure = error
+        if failure is not None and not suppress:
+            raise failure
 
 
 def _inventory(root, deadline):
@@ -345,12 +357,14 @@ def _inventory(root, deadline):
             _require(byte_count <= MAX_INPUT_BYTES, "input-byte-limit")
             entry = _Entry(name, False, identity, info.st_size)
             reader = _VerifiedReader(root, entry, deadline)
+            completed = False
             try:
                 while reader.read():
                     pass
                 entries[name] = _Entry(name, False, identity, info.st_size, reader.verify())
+                completed = True
             finally:
-                reader.close()
+                reader.close(suppress=not completed)
 
     fd, _ = _directory(root)
     try:
@@ -650,11 +664,13 @@ def encrypt_private_directory(*, input_dir, output_dir, recipient, age_binary="a
                         archive.addfile(info)
                     else:
                         reader = _VerifiedReader(source, entry, deadline)
+                        completed = False
                         try:
                             archive.addfile(info, reader)
                             reader.verify()
+                            completed = True
                         finally:
-                            reader.close()
+                            reader.close(suppress=not completed)
             pump.finish()
             cleanup_complete = _cleanup(process)
             _require(cleanup_complete, "cleanup-unresolved")

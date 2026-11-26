@@ -24,8 +24,9 @@ accelerator performance.
 
 **Current work: P06-T01 — execute the qualified warm-workspace experiment.**
 The [host reliability continuation](docs/project/p06-host-reliability-audit.md)
-repairs two supporting paths: cached submodule metadata in CI and descriptor
-ownership during Python bundle verification and production. CI now also requires
+repairs cached submodule metadata in CI and descriptor ownership during Python
+bundle verification, production, encrypted-evidence reading and governance
+archive traversal. CI now also requires
 every planned prerequisite to succeed; cancellation or unexpected skipping can
 no longer produce a successful aggregate check. Independent host checks reproduce
 the original defects and exercise the repaired behavior. The

@@ -1,0 +1,1735 @@
+{
+  "active_acceptance_paths": [
+    "docs/project/evidence/p01-build.json",
+    "docs/project/evidence/p01-native.json",
+    "docs/project/evidence/p01-xrt-blocked.json",
+    "docs/project/evidence/p02-numerics/acceptance.json",
+    "docs/project/evidence/p02-wgmma/processor/acceptance.json",
+    "docs/project/evidence/p02-wmma/acceptance-retained-source.json",
+    "docs/project/evidence/p03-managed-matmul/acceptance-lifecycle.json",
+    "docs/project/evidence/p03-managed-matmul/acceptance-numerics.json",
+    "docs/project/evidence/p03-operators/acceptance.json",
+    "docs/project/evidence/p04-executor/acceptance-dispatch.json",
+    "docs/project/evidence/p04-executor/acceptance-numerics.json",
+    "docs/project/evidence/p04-fixture/acceptance.json",
+    "docs/project/evidence/p05-torch-replay/acceptance-compatibility.json",
+    "docs/project/evidence/p05-torch-replay/acceptance-torch.json",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/a01-retained-binding.json",
+    "docs/project/evidence/p06-serial-workspace/p06-a01-retained-baseline.json",
+    "docs/project/evidence/setup-accepted.json",
+    "docs/project/evidence/setup-validation.json"
+  ],
+  "base_revision": "30b2e8ca69fba47646392c0cf6650cbb75155843",
+  "baseline_golden_paths": [
+    "ci/baselines/perf/core.json",
+    "ci/baselines/perf/dxa.json",
+    "ci/baselines/perf/graphics.json",
+    "ci/baselines/perf/raytracing.json",
+    "ci/baselines/perf/tensor.json",
+    "ci/baselines/perf/tensor_mx.json",
+    "ci/baselines/perf/tensor_sp.json",
+    "ci/baselines/perf/tensor_wg.json",
+    "ci/baselines/synthesis/beacon/core.json",
+    "ci/baselines/synthesis/beacon/dxa.json",
+    "ci/baselines/synthesis/beacon/graphics.json",
+    "ci/baselines/synthesis/beacon/tensor.json",
+    "ci/baselines/synthesis/beacon/vm.json",
+    "ci/baselines/synthesis/xilinx/core.json",
+    "ci/baselines/synthesis/xilinx/dxa.json",
+    "ci/baselines/synthesis/xilinx/graphics.json",
+    "ci/baselines/synthesis/xilinx/mufu.json",
+    "ci/baselines/synthesis/xilinx/tensor.json",
+    "ci/baselines/synthesis/xilinx/vm.json",
+    "ci/baselines/synthesis/yosys/core.json",
+    "ci/baselines/synthesis/yosys/dxa.json",
+    "ci/baselines/synthesis/yosys/graphics.json",
+    "ci/baselines/synthesis/yosys/mufu.json",
+    "ci/baselines/synthesis/yosys/tensor.json",
+    "ci/baselines/synthesis/yosys/vm.json"
+  ],
+  "checks": {
+    "active_acceptances_18": true,
+    "all_measurement_sizes_and_hashes_match": true,
+    "baseline_goldens_25": true,
+    "baseline_goldens_unchanged": true,
+    "both_proof_bytes_unchanged": true,
+    "dependency_descriptors_21_unique": true,
+    "dependency_descriptors_unchanged": true,
+    "dependency_revision_and_graph_unchanged": true,
+    "measurement_count_69_unique": true,
+    "original_acceptances_unchanged": true,
+    "protected_svg_bytes_unchanged": true,
+    "protected_svg_matches_pin": true,
+    "readme_exact_embed_preserved": true,
+    "roadmap_unchanged": true
+  },
+  "dependency_records": [
+    {
+      "git_blob": "d324fbe12ed4ba061abab975b62f907d56a18a50",
+      "path": "src/addr_mapper/addr_mapper.h",
+      "sha256": "ba7705cc29b0359c719a75ccb2169684db1f30f56cfba7a97f367ec0fd2d03bc",
+      "size_bytes": 633
+    },
+    {
+      "git_blob": "3792f08e45de4fa5fd7e749cec35632cc6b240e3",
+      "path": "src/addr_mapper/impl/linear_mappers.cpp",
+      "sha256": "dc4ccf6aaac17dde42215dc0ef140ae9d89b89f0bd7c50e38180300834251597",
+      "size_bytes": 4516
+    },
+    {
+      "git_blob": "1a7643ac1c931b92294f751aa1566df7586abbfa",
+      "path": "src/base/base.h",
+      "sha256": "3319ae542abea98b0eeb7928447058c1e1e2c8255a6c0d6a12979e83fe5c9d15",
+      "size_bytes": 12276
+    },
+    {
+      "git_blob": "2e3fe8b62740e957da8063b61963cf509e83f552",
+      "path": "src/base/factory.cpp",
+      "sha256": "c83810cee12ca83877372ce9e6556d897ce2721347debe4656afdb152b6fbd5a",
+      "size_bytes": 5730
+    },
+    {
+      "git_blob": "c1d8f864f0fc2b35116d1841a80460ac1d3ff543",
+      "path": "src/base/stats.cpp",
+      "sha256": "063c16db3f7817b061ca58e3bdcb513a17ee2146facaedfd5b12fa98d014da02",
+      "size_bytes": 269
+    },
+    {
+      "git_blob": "3b6afa6bf6d83d20016461e37ba7c9ff4f7ab772",
+      "path": "src/base/stats.h",
+      "sha256": "5892927523c7e1784a7c5179704f1c0e87a3ebb01815e9f47470abe560ba5cea",
+      "size_bytes": 2690
+    },
+    {
+      "git_blob": "823c827ea33c4211db71ffdd928fea53aaa8ee18",
+      "path": "src/dram/dram.h",
+      "sha256": "ff12c7b1fc2e03bdf06964bea0c95ac934afd21f5d276db0d0125fc9e9e004db",
+      "size_bytes": 6928
+    },
+    {
+      "git_blob": "39c4a65e45d223cf8e8e03e886a7a82cf90c76c1",
+      "path": "src/dram/impl/HBM2.cpp",
+      "sha256": "0f67e6147ebf36c188345fb22c851802624b3343aa3067b75c0b0fff82a6a97e",
+      "size_bytes": 19064
+    },
+    {
+      "git_blob": "ccbd9a6a08e0336ca0ae66f2f9cecc6c9584fcda",
+      "path": "src/dram_controller/controller.h",
+      "sha256": "d29a1e825aa809b7e95e37a2cb25a8b3a2de1b593cb9e21e9e19609be8e3aa08",
+      "size_bytes": 1483
+    },
+    {
+      "git_blob": "388a564a740745fd755db8abe92361570e33279e",
+      "path": "src/dram_controller/impl/generic_dram_controller.cpp",
+      "sha256": "a7842d66c56e90eb11efe3d886e9e31f7d24c711e16defe38d459d4ab8774a68",
+      "size_bytes": 15480
+    },
+    {
+      "git_blob": "155ccabcd410a188a6b6e7c249e3977231c6b674",
+      "path": "src/dram_controller/impl/plugin/trace_recorder.cpp",
+      "sha256": "9917313ba7a8532a011a89dcc4498c1a1f9681a272c990b01d153491ffd85dea",
+      "size_bytes": 1979
+    },
+    {
+      "git_blob": "cf27477993951702c8ebc928378950608d2982f9",
+      "path": "src/dram_controller/impl/refresh/all_bank_refresh.cpp",
+      "sha256": "5ad610a8620f086277eba58a39d36bf57de51856262b87fc555b2bfc67af8cbe",
+      "size_bytes": 1642
+    },
+    {
+      "git_blob": "36a94d962064d6ab5edeb1ec18b9d6d653df0dab",
+      "path": "src/dram_controller/impl/rowpolicy/basic_rowpolicies.cpp",
+      "sha256": "8c2127128faeac28a76fe5f000762541d83bf64f71640c392a9ab3e351b52ec8",
+      "size_bytes": 4168
+    },
+    {
+      "git_blob": "2d0b389171ce80db608d1e70b4acc705019e7ef3",
+      "path": "src/dram_controller/impl/scheduler/generic_scheduler.cpp",
+      "sha256": "85239e4a321538bc76965bafbe36b5737ffb1318d58e3ef7135ebdeac9d2a87a",
+      "size_bytes": 1586
+    },
+    {
+      "git_blob": "4d21be2cb9b9827b722cb1cde3b44dfb40bb478f",
+      "path": "src/dram_controller/refresh.h",
+      "sha256": "1901efe332e7f47e1d2460c5592b9e7833307028e90112cf0c5d6aacbbc3cf47",
+      "size_bytes": 434
+    },
+    {
+      "git_blob": "7ab1dcce1445301382fe3175681addd758cf8c21",
+      "path": "src/dram_controller/rowpolicy.h",
+      "sha256": "afb8067e9a0f4673371ae8c0954cc63ff75515b09758e06e567bbffcf09414e9",
+      "size_bytes": 521
+    },
+    {
+      "git_blob": "50b9703117e5e48e64b0cbe007b186006e5911fe",
+      "path": "src/dram_controller/scheduler.h",
+      "sha256": "875a966db1c219a7676b5bdaf6d008720c302d2e525b3390a9bd2020145e98be",
+      "size_bytes": 624
+    },
+    {
+      "git_blob": "a1855bbf9fac3e172f46866fc0dc2f1d52a74298",
+      "path": "src/frontend/frontend.h",
+      "sha256": "526df2d4095234419709aae87ab9a931a4a2f73eb9eb83a2d5f1505ffb971d22",
+      "size_bytes": 1882
+    },
+    {
+      "git_blob": "1fdde713e0c2192f6ab75e4269714298f391f04f",
+      "path": "src/frontend/impl/external_wrapper/gem5_frontend.cpp",
+      "sha256": "4768775d1a3b81daba53124f5302edf5ec5d38bc008c2091343e30d1e71b7e26",
+      "size_bytes": 689
+    },
+    {
+      "git_blob": "a7cce15d64c44b15366a92e107980e03d8c9d193",
+      "path": "src/memory_system/impl/generic_DRAM_system.cpp",
+      "sha256": "d70ce69afa4c10927f4fcc977877562da7940190c6d72516acaf4727df2ec1e3",
+      "size_bytes": 2729
+    },
+    {
+      "git_blob": "beaf83cb71c042800adc375f8125bd39751e1080",
+      "path": "src/memory_system/memory_system.h",
+      "sha256": "260af74ac066a8083b6933cfaf6427ff68fdfdac92dfb3f47351369b497cd279",
+      "size_bytes": 2030
+    }
+  ],
+  "dependency_records_count": 21,
+  "measurements": [
+    {
+      "actual": {
+        "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+        "size_bytes": 30127
+      },
+      "expected": {
+        "sha256": "a1c49de52a0373b5f74706528d46bea1181c54f7769dd03994e033c7ddd710bf",
+        "size_bytes": 30127
+      },
+      "matches_frozen": true,
+      "path": "VX_config.toml"
+    },
+    {
+      "actual": {
+        "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+        "size_bytes": 36543
+      },
+      "expected": {
+        "sha256": "f8eb0b3343f66ebe0a3c9030c8c9150c13638e7c23744b00b2fcf8ce005d5f23",
+        "size_bytes": 36543
+      },
+      "matches_frozen": true,
+      "path": "VX_types.toml"
+    },
+    {
+      "actual": {
+        "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+        "size_bytes": 60839
+      },
+      "expected": {
+        "sha256": "b710a1b80c89d327adf079e61aec9f5d4f950d89342b633b6b00871e50abe165",
+        "size_bytes": 60839
+      },
+      "matches_frozen": true,
+      "path": "ci/gen_config.py"
+    },
+    {
+      "actual": {
+        "sha256": "780086070739b6d3586f9b3695ad4dc31d209a7817cf1af3651160a9fe6e1376",
+        "size_bytes": 31500
+      },
+      "expected": {
+        "sha256": "780086070739b6d3586f9b3695ad4dc31d209a7817cf1af3651160a9fe6e1376",
+        "size_bytes": 31500
+      },
+      "matches_frozen": true,
+      "path": "ci/project/p06_contract.py"
+    },
+    {
+      "actual": {
+        "sha256": "645cdad95c31a959a36c795c37b2b7e4c0202f19c53093aa9067cda3ef23a0be",
+        "size_bytes": 11438
+      },
+      "expected": {
+        "sha256": "645cdad95c31a959a36c795c37b2b7e4c0202f19c53093aa9067cda3ef23a0be",
+        "size_bytes": 11438
+      },
+      "matches_frozen": true,
+      "path": "configure"
+    },
+    {
+      "actual": {
+        "sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+        "size_bytes": 4081
+      },
+      "expected": {
+        "sha256": "79a551bd7ba51b5aa4b221eeb9c8f68b0f3078e6282ce71a1f28e9bc4593a102",
+        "size_bytes": 4081
+      },
+      "matches_frozen": true,
+      "path": "profiles/p02-tfr.json"
+    },
+    {
+      "actual": {
+        "sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+        "size_bytes": 170
+      },
+      "expected": {
+        "sha256": "086294bb98d1f5ac2324ffbf5fc66a377bc2f63d2b73f321f6351c9a7e2ecf0b",
+        "size_bytes": 170
+      },
+      "matches_frozen": true,
+      "path": "sim/common.mk"
+    },
+    {
+      "actual": {
+        "sha256": "c7090583f8dd1774d71755dc96f11845ff4d96340e51451643ec1ab16b14dd42",
+        "size_bytes": 27823
+      },
+      "expected": {
+        "sha256": "c7090583f8dd1774d71755dc96f11845ff4d96340e51451643ec1ab16b14dd42",
+        "size_bytes": 27823
+      },
+      "matches_frozen": true,
+      "path": "sim/common/cmd_processor.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "8efce8fe5ff166cc0742b3846dc37ae5dd93463a10e71c154959d4b2daacda11",
+        "size_bytes": 12851
+      },
+      "expected": {
+        "sha256": "8efce8fe5ff166cc0742b3846dc37ae5dd93463a10e71c154959d4b2daacda11",
+        "size_bytes": 12851
+      },
+      "matches_frozen": true,
+      "path": "sim/common/cmd_processor.h"
+    },
+    {
+      "actual": {
+        "sha256": "aaf02d73ca7801d93c0fa010c4682e8e0476e7a55fa0104d4e48587f55dc40f1",
+        "size_bytes": 14483
+      },
+      "expected": {
+        "sha256": "aaf02d73ca7801d93c0fa010c4682e8e0476e7a55fa0104d4e48587f55dc40f1",
+        "size_bytes": 14483
+      },
+      "matches_frozen": true,
+      "path": "sim/common/dram_sim.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "8245f87d313387bdc7bc8eb8244395aade8c78c3aa8ace7df85543094f2839ac",
+        "size_bytes": 1988
+      },
+      "expected": {
+        "sha256": "8245f87d313387bdc7bc8eb8244395aade8c78c3aa8ace7df85543094f2839ac",
+        "size_bytes": 1988
+      },
+      "matches_frozen": true,
+      "path": "sim/common/dram_sim.h"
+    },
+    {
+      "actual": {
+        "sha256": "2dc21e7ccb04e773b091f209652107bac673edbc6d6640cfca0418ad89a73cba",
+        "size_bytes": 23576
+      },
+      "expected": {
+        "sha256": "2dc21e7ccb04e773b091f209652107bac673edbc6d6640cfca0418ad89a73cba",
+        "size_bytes": 23576
+      },
+      "matches_frozen": true,
+      "path": "sim/common/mem.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "c6fb3dc152b641edac6d1d373f7b7425d038a902b3ef2899d39f5aab00baf152",
+        "size_bytes": 9109
+      },
+      "expected": {
+        "sha256": "c6fb3dc152b641edac6d1d373f7b7425d038a902b3ef2899d39f5aab00baf152",
+        "size_bytes": 9109
+      },
+      "matches_frozen": true,
+      "path": "sim/common/mem.h"
+    },
+    {
+      "actual": {
+        "sha256": "8635c832c9fc4ad60cf3bf21665a5bc22a6d3500b1f5c012dd056fb4c6907417",
+        "size_bytes": 3979
+      },
+      "expected": {
+        "sha256": "8635c832c9fc4ad60cf3bf21665a5bc22a6d3500b1f5c012dd056fb4c6907417",
+        "size_bytes": 3979
+      },
+      "matches_frozen": true,
+      "path": "sim/common/perf_counter.h"
+    },
+    {
+      "actual": {
+        "sha256": "0e0369f5ea1ba85f5e461e03b85e9723bb47f0e118499ba2b21a7923594f7004",
+        "size_bytes": 49004
+      },
+      "expected": {
+        "sha256": "0e0369f5ea1ba85f5e461e03b85e9723bb47f0e118499ba2b21a7923594f7004",
+        "size_bytes": 49004
+      },
+      "matches_frozen": true,
+      "path": "sim/common/simobject.h"
+    },
+    {
+      "actual": {
+        "sha256": "c719966647f32fef5421dd798a89d3eeddccd692e7c61046e5744b7a8e722403",
+        "size_bytes": 10608
+      },
+      "expected": {
+        "sha256": "c719966647f32fef5421dd798a89d3eeddccd692e7c61046e5744b7a8e722403",
+        "size_bytes": 10608
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/Makefile"
+    },
+    {
+      "actual": {
+        "sha256": "5080bbe88f3c6612258932953ada6d7ac983617bbba56806f37d3ab488b9ae99",
+        "size_bytes": 2365
+      },
+      "expected": {
+        "sha256": "5080bbe88f3c6612258932953ada6d7ac983617bbba56806f37d3ab488b9ae99",
+        "size_bytes": 2365
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/checked_counters.mk"
+    },
+    {
+      "actual": {
+        "sha256": "caf8ed6865e91d7f6b1cc7392ef1e5c2c410f13535a31236cbf7da7f80a39a6c",
+        "size_bytes": 31886
+      },
+      "expected": {
+        "sha256": "caf8ed6865e91d7f6b1cc7392ef1e5c2c410f13535a31236cbf7da7f80a39a6c",
+        "size_bytes": 31886
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/cluster.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "d7d9a69db704475a698b2ae652874250dc866f4d3eacf8a07f7c65e55e180113",
+        "size_bytes": 9231
+      },
+      "expected": {
+        "sha256": "d7d9a69db704475a698b2ae652874250dc866f4d3eacf8a07f7c65e55e180113",
+        "size_bytes": 9231
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/constants.h"
+    },
+    {
+      "actual": {
+        "sha256": "f95003971a6052962b761b1ee8e815ead42f6a60fccf8157fa94c3ded3e44f31",
+        "size_bytes": 65344
+      },
+      "expected": {
+        "sha256": "f95003971a6052962b761b1ee8e815ead42f6a60fccf8157fa94c3ded3e44f31",
+        "size_bytes": 65344
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/core.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "642af0adfae25333fc822289293a0d10273f58c8b1442a4acad63fad5a2f8609",
+        "size_bytes": 5800
+      },
+      "expected": {
+        "sha256": "642af0adfae25333fc822289293a0d10273f58c8b1442a4acad63fad5a2f8609",
+        "size_bytes": 5800
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/core.h"
+    },
+    {
+      "actual": {
+        "sha256": "c35bd6a80120f76c9cf65076c736aaf577329285a74aac8c11c03f0ce829fc3d",
+        "size_bytes": 19085
+      },
+      "expected": {
+        "sha256": "c35bd6a80120f76c9cf65076c736aaf577329285a74aac8c11c03f0ce829fc3d",
+        "size_bytes": 19085
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/csr_unit.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "d1105256786bc7f2227d4c963a0b4368d84d480aba93fdf3188019ae466b30fb",
+        "size_bytes": 32227
+      },
+      "expected": {
+        "sha256": "d1105256786bc7f2227d4c963a0b4368d84d480aba93fdf3188019ae466b30fb",
+        "size_bytes": 32227
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/lsu_unit.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "c8eacd73616bb9f82533bbe45ba8a317524717948de08d73ecdb78dfb0c4a53d",
+        "size_bytes": 137410
+      },
+      "expected": {
+        "sha256": "c8eacd73616bb9f82533bbe45ba8a317524717948de08d73ecdb78dfb0c4a53d",
+        "size_bytes": 137410
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/mem/cache.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "839637e7738c774b02f1f556da86a4c716215696a70dd384d9e413ad6943653b",
+        "size_bytes": 4452
+      },
+      "expected": {
+        "sha256": "839637e7738c774b02f1f556da86a4c716215696a70dd384d9e413ad6943653b",
+        "size_bytes": 4452
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/mem/cache.h"
+    },
+    {
+      "actual": {
+        "sha256": "ad5e592d87234764df3186c8fdd9dbfc18b2a7dbdfdb207ba2cc6071d4e3fa44",
+        "size_bytes": 3697
+      },
+      "expected": {
+        "sha256": "ad5e592d87234764df3186c8fdd9dbfc18b2a7dbdfdb207ba2cc6071d4e3fa44",
+        "size_bytes": 3697
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/mem/cache_cluster.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "07aa27331d6ef604a432b99e70df12b7853787d4151cc1517092d76406cd4d33",
+        "size_bytes": 21068
+      },
+      "expected": {
+        "sha256": "07aa27331d6ef604a432b99e70df12b7853787d4151cc1517092d76406cd4d33",
+        "size_bytes": 21068
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/mem/local_mem.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "708446110e56f8cce88f50bcbca8fb8e1ff741a4019e16b4c9fda48d86f67635",
+        "size_bytes": 2652
+      },
+      "expected": {
+        "sha256": "708446110e56f8cce88f50bcbca8fb8e1ff741a4019e16b4c9fda48d86f67635",
+        "size_bytes": 2652
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/mem/local_mem.h"
+    },
+    {
+      "actual": {
+        "sha256": "9fcf09145f6fee29c5f5494fff155f2c0fa90e5f984893cb756c31d75b155a88",
+        "size_bytes": 10432
+      },
+      "expected": {
+        "sha256": "9fcf09145f6fee29c5f5494fff155f2c0fa90e5f984893cb756c31d75b155a88",
+        "size_bytes": 10432
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/mem/mem_coalescer.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "3368578b678a354eb5a876d1121351cd22987c729514fcfb7bfe4d86795961c7",
+        "size_bytes": 2407
+      },
+      "expected": {
+        "sha256": "3368578b678a354eb5a876d1121351cd22987c729514fcfb7bfe4d86795961c7",
+        "size_bytes": 2407
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/mem/mem_coalescer.h"
+    },
+    {
+      "actual": {
+        "sha256": "4d73809cd63a0c768115c5de0205989f6f941446895de1831587002fc94ed474",
+        "size_bytes": 5976
+      },
+      "expected": {
+        "sha256": "4d73809cd63a0c768115c5de0205989f6f941446895de1831587002fc94ed474",
+        "size_bytes": 5976
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/mem/memory.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "8cdd7e1945842b3f58f64bcb3fad1fd3e61555cbc82d9063996e53453a71301a",
+        "size_bytes": 2042
+      },
+      "expected": {
+        "sha256": "8cdd7e1945842b3f58f64bcb3fad1fd3e61555cbc82d9063996e53453a71301a",
+        "size_bytes": 2042
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/mem/memory.h"
+    },
+    {
+      "actual": {
+        "sha256": "ecc3e0e51ecbbdb6b97b04eccd7fc5427fb25f87e5162ef33484262ab8da869f",
+        "size_bytes": 21493
+      },
+      "expected": {
+        "sha256": "ecc3e0e51ecbbdb6b97b04eccd7fc5427fb25f87e5162ef33484262ab8da869f",
+        "size_bytes": 21493
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/processor.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "af83a0fdb8d81ccf903dacc5957edb4933974229c28443c6fee7af1114c6083e",
+        "size_bytes": 2588
+      },
+      "expected": {
+        "sha256": "af83a0fdb8d81ccf903dacc5957edb4933974229c28443c6fee7af1114c6083e",
+        "size_bytes": 2588
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/processor.h"
+    },
+    {
+      "actual": {
+        "sha256": "99f91bd1a19c32849f68c72311bbd271aa1f85543bff07184eeb2ecbd200f6e6",
+        "size_bytes": 4473
+      },
+      "expected": {
+        "sha256": "99f91bd1a19c32849f68c72311bbd271aa1f85543bff07184eeb2ecbd200f6e6",
+        "size_bytes": 4473
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/processor_impl.h"
+    },
+    {
+      "actual": {
+        "sha256": "e30e63d3523411bad58eb49c8526aabe032bed584c8d044b677c18906cf844d4",
+        "size_bytes": 26124
+      },
+      "expected": {
+        "sha256": "e30e63d3523411bad58eb49c8526aabe032bed584c8d044b677c18906cf844d4",
+        "size_bytes": 26124
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/socket.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "eb20f6c16dd0915bebf39a0f85f7c11ee28a0ed681418385205b898f4b557463",
+        "size_bytes": 7231
+      },
+      "expected": {
+        "sha256": "eb20f6c16dd0915bebf39a0f85f7c11ee28a0ed681418385205b898f4b557463",
+        "size_bytes": 7231
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/tcu/tcu_tbuf.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "8b05c6d23de3d5fb5423d7ce93d1d1a1395a4d474856371281ed943abe8c2be3",
+        "size_bytes": 2667
+      },
+      "expected": {
+        "sha256": "8b05c6d23de3d5fb5423d7ce93d1d1a1395a4d474856371281ed943abe8c2be3",
+        "size_bytes": 2667
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/tcu/tcu_tbuf.h"
+    },
+    {
+      "actual": {
+        "sha256": "b48d0e7fe5145292ad354168d3fe73b0bcdbbb508335656ce6fe07608af8fb5b",
+        "size_bytes": 75472
+      },
+      "expected": {
+        "sha256": "b48d0e7fe5145292ad354168d3fe73b0bcdbbb508335656ce6fe07608af8fb5b",
+        "size_bytes": 75472
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/tcu/tcu_unit.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "8546c4db53cc938c9a91ddcab002fa020195d39b93f9e35de3c21d9ecee28cb8",
+        "size_bytes": 4561
+      },
+      "expected": {
+        "sha256": "8546c4db53cc938c9a91ddcab002fa020195d39b93f9e35de3c21d9ecee28cb8",
+        "size_bytes": 4561
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/tcu/tcu_unit.h"
+    },
+    {
+      "actual": {
+        "sha256": "c09d02ca868b9b7fd28142c4c5aa922b9500975feddaf92695d220a5be6bd546",
+        "size_bytes": 54373
+      },
+      "expected": {
+        "sha256": "c09d02ca868b9b7fd28142c4c5aa922b9500975feddaf92695d220a5be6bd546",
+        "size_bytes": 54373
+      },
+      "matches_frozen": true,
+      "path": "sim/simx/types.h"
+    },
+    {
+      "actual": {
+        "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+        "size_bytes": 4342
+      },
+      "expected": {
+        "sha256": "732bd11a5002a4486ffe89b75f082f199f4bd2436c984ddaaae63d0748f02147",
+        "size_bytes": 4342
+      },
+      "matches_frozen": true,
+      "path": "sw/common/ai_matmul_args.h"
+    },
+    {
+      "actual": {
+        "sha256": "8b2eb9a819506227808537612672c08a574230736f13f840a9d83bbd35675680",
+        "size_bytes": 2675
+      },
+      "expected": {
+        "sha256": "8b2eb9a819506227808537612672c08a574230736f13f840a9d83bbd35675680",
+        "size_bytes": 2675
+      },
+      "matches_frozen": true,
+      "path": "sw/common/ai_matmul_profile.h"
+    },
+    {
+      "actual": {
+        "sha256": "ad3b6107f0eef91ec676412bc795ab70cd1c9f31647b2cea854de6234fe71d3e",
+        "size_bytes": 1565
+      },
+      "expected": {
+        "sha256": "ad3b6107f0eef91ec676412bc795ab70cd1c9f31647b2cea854de6234fe71d3e",
+        "size_bytes": 1565
+      },
+      "matches_frozen": true,
+      "path": "sw/kernel/ai/matmul.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+        "size_bytes": 10833
+      },
+      "expected": {
+        "sha256": "0accd8d6a977b61f66035ced218b2fb95cf88287b7dec6f6286f361c3371b5ff",
+        "size_bytes": 10833
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/ai/contract.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+        "size_bytes": 3285
+      },
+      "expected": {
+        "sha256": "7d6194824706b1a256c4810b131340af3f5e8e45ccb81313546507b914c33d5b",
+        "size_bytes": 3285
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/ai/contract.h"
+    },
+    {
+      "actual": {
+        "sha256": "f55365110aed41cfaa290b69da8d91d9fa0ae04063dda591b94ae6ca626cf675",
+        "size_bytes": 22983
+      },
+      "expected": {
+        "sha256": "f55365110aed41cfaa290b69da8d91d9fa0ae04063dda591b94ae6ca626cf675",
+        "size_bytes": 22983
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/ai/runtime.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "aa76760f2e25c1969b86e08dacf7823c9b441dc82ef2c65f803bdc80ee9f657e",
+        "size_bytes": 3719
+      },
+      "expected": {
+        "sha256": "aa76760f2e25c1969b86e08dacf7823c9b441dc82ef2c65f803bdc80ee9f657e",
+        "size_bytes": 3719
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/ai/runtime.h"
+    },
+    {
+      "actual": {
+        "sha256": "a9f63b2a896c5e512f7c592c758618ea88b774c9dac4bca29e847e2e3719a24e",
+        "size_bytes": 2383
+      },
+      "expected": {
+        "sha256": "a9f63b2a896c5e512f7c592c758618ea88b774c9dac4bca29e847e2e3719a24e",
+        "size_bytes": 2383
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/common/async_run.h"
+    },
+    {
+      "actual": {
+        "sha256": "e0f4c550a7591f723d6cf18e43302fd1955a56e2c2ecc53e0f5eb037482c1366",
+        "size_bytes": 6787
+      },
+      "expected": {
+        "sha256": "e0f4c550a7591f723d6cf18e43302fd1955a56e2c2ecc53e0f5eb037482c1366",
+        "size_bytes": 6787
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/common/buffer.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "2105743e37226644faf52b4766738b85dd1de687af614fd548723bf08fee9a0d",
+        "size_bytes": 4532
+      },
+      "expected": {
+        "sha256": "2105743e37226644faf52b4766738b85dd1de687af614fd548723bf08fee9a0d",
+        "size_bytes": 4532
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/common/callbacks.h"
+    },
+    {
+      "actual": {
+        "sha256": "13852934ab10776964fd2a68036ac8876303a60d2a3f3fce415186a3a13d10f2",
+        "size_bytes": 3813
+      },
+      "expected": {
+        "sha256": "13852934ab10776964fd2a68036ac8876303a60d2a3f3fce415186a3a13d10f2",
+        "size_bytes": 3813
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/common/callbacks.inc"
+    },
+    {
+      "actual": {
+        "sha256": "9b32e38a9bbc0460a7f2af522fd5efdc96e1c06e359e28c5151285557f89d90a",
+        "size_bytes": 66201
+      },
+      "expected": {
+        "sha256": "9b32e38a9bbc0460a7f2af522fd5efdc96e1c06e359e28c5151285557f89d90a",
+        "size_bytes": 66201
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/common/device.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "5d2efe2ba92801d3dbb1e836b077e7d966bc9a6b2beb8d29c50f89ce4ee67f06",
+        "size_bytes": 13216
+      },
+      "expected": {
+        "sha256": "5d2efe2ba92801d3dbb1e836b077e7d966bc9a6b2beb8d29c50f89ce4ee67f06",
+        "size_bytes": 13216
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/common/module.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "fa6945cf379ae184d4e3edca5fcbc147d11f725e5ad3574ff3f89a16167099b3",
+        "size_bytes": 43664
+      },
+      "expected": {
+        "sha256": "fa6945cf379ae184d4e3edca5fcbc147d11f725e5ad3574ff3f89a16167099b3",
+        "size_bytes": 43664
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/common/perf.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "1d785262d128de3ffbf1feb32cc2b32f6457a6644df6ef9a04d4e8b4d45c962e",
+        "size_bytes": 64122
+      },
+      "expected": {
+        "sha256": "1d785262d128de3ffbf1feb32cc2b32f6457a6644df6ef9a04d4e8b4d45c962e",
+        "size_bytes": 64122
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/common/queue.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "3997d6ecca442eb04cf1df3129d0b90a9c0ec66015c798fc4d4510b93dd1f9ce",
+        "size_bytes": 44458
+      },
+      "expected": {
+        "sha256": "3997d6ecca442eb04cf1df3129d0b90a9c0ec66015c798fc4d4510b93dd1f9ce",
+        "size_bytes": 44458
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/common/vortex2_internal.h"
+    },
+    {
+      "actual": {
+        "sha256": "9738cdf35a7344d6a974b4d78f7b02d3c1e7ce87cfe68ef668b03c8eb1832614",
+        "size_bytes": 27464
+      },
+      "expected": {
+        "sha256": "9738cdf35a7344d6a974b4d78f7b02d3c1e7ce87cfe68ef668b03c8eb1832614",
+        "size_bytes": 27464
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/include/vortex2.h"
+    },
+    {
+      "actual": {
+        "sha256": "0d890c95fecb67da26d23ea4a0af10ac328dddf110cd2575baff3aa5d4c905cb",
+        "size_bytes": 7552
+      },
+      "expected": {
+        "sha256": "0d890c95fecb67da26d23ea4a0af10ac328dddf110cd2575baff3aa5d4c905cb",
+        "size_bytes": 7552
+      },
+      "matches_frozen": true,
+      "path": "sw/runtime/simx/vortex.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "ef71a80f2624159cac03e42a60c8b3671489ee1ae89e4e9bd27941a143047acf",
+        "size_bytes": 6002
+      },
+      "expected": {
+        "sha256": "ef71a80f2624159cac03e42a60c8b3671489ee1ae89e4e9bd27941a143047acf",
+        "size_bytes": 6002
+      },
+      "matches_frozen": true,
+      "path": "tests/regression/ai_bench_common/counters.h"
+    },
+    {
+      "actual": {
+        "sha256": "1fefa29e176fff3ce05f1a606aebabc434f83fbaba6704afc14b9728c50f4bd2",
+        "size_bytes": 1330
+      },
+      "expected": {
+        "sha256": "1fefa29e176fff3ce05f1a606aebabc434f83fbaba6704afc14b9728c50f4bd2",
+        "size_bytes": 1330
+      },
+      "matches_frozen": true,
+      "path": "tests/regression/ai_counter_preflight/Makefile"
+    },
+    {
+      "actual": {
+        "sha256": "d71ba6fe3f653a19e42aea6d52c605e9d41d92f99fc1aa8ef1448fc03e72a326",
+        "size_bytes": 858
+      },
+      "expected": {
+        "sha256": "d71ba6fe3f653a19e42aea6d52c605e9d41d92f99fc1aa8ef1448fc03e72a326",
+        "size_bytes": 858
+      },
+      "matches_frozen": true,
+      "path": "tests/regression/ai_counter_preflight/backend.mk"
+    },
+    {
+      "actual": {
+        "sha256": "4d53b1b35b2468fce76ec659ecf66c2b62e88ebe36fa37c1c0f51c03c9673715",
+        "size_bytes": 108
+      },
+      "expected": {
+        "sha256": "4d53b1b35b2468fce76ec659ecf66c2b62e88ebe36fa37c1c0f51c03c9673715",
+        "size_bytes": 108
+      },
+      "matches_frozen": true,
+      "path": "tests/regression/ai_counter_preflight/dependency_model.mk"
+    },
+    {
+      "actual": {
+        "sha256": "7744cfbb48b6dda21acda4db582fcf4f4b7a519670525d0df887b7296739c7e4",
+        "size_bytes": 15094
+      },
+      "expected": {
+        "sha256": "7744cfbb48b6dda21acda4db582fcf4f4b7a519670525d0df887b7296739c7e4",
+        "size_bytes": 15094
+      },
+      "matches_frozen": true,
+      "path": "tests/regression/ai_counter_preflight/hooks.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "1fba0275808ec30e42dced1c69fb8b47d1d78dd0ecfc13391f9e0d93bbaf0ccc",
+        "size_bytes": 3046
+      },
+      "expected": {
+        "sha256": "1fba0275808ec30e42dced1c69fb8b47d1d78dd0ecfc13391f9e0d93bbaf0ccc",
+        "size_bytes": 3046
+      },
+      "matches_frozen": true,
+      "path": "tests/regression/ai_counter_preflight/hooks.h"
+    },
+    {
+      "actual": {
+        "sha256": "721da20bffa4aed127dd5694af7263f37010164e5d836d13e5348afa48c3fe02",
+        "size_bytes": 27523
+      },
+      "expected": {
+        "sha256": "721da20bffa4aed127dd5694af7263f37010164e5d836d13e5348afa48c3fe02",
+        "size_bytes": 27523
+      },
+      "matches_frozen": true,
+      "path": "tests/regression/ai_counter_preflight/main.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "0bec5ac729b3aa6c5ffcf7ff95084d84e4d47d54e470d21e234d00aa16556ce0",
+        "size_bytes": 20984
+      },
+      "expected": {
+        "sha256": "0bec5ac729b3aa6c5ffcf7ff95084d84e4d47d54e470d21e234d00aa16556ce0",
+        "size_bytes": 20984
+      },
+      "matches_frozen": true,
+      "path": "tests/regression/ai_warm_workspace/main.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "ac12eddcbfb2cf04981a8b8a945134ce763b93cd881fe5da549d28b7ed02021c",
+        "size_bytes": 9647
+      },
+      "expected": {
+        "sha256": "ac12eddcbfb2cf04981a8b8a945134ce763b93cd881fe5da549d28b7ed02021c",
+        "size_bytes": 9647
+      },
+      "matches_frozen": true,
+      "path": "tests/regression/ai_warm_workspace/observer.cpp"
+    },
+    {
+      "actual": {
+        "sha256": "7c5236827536b9faf286f6cbfb3e13459b7f43aa895207213125cc67299d488e",
+        "size_bytes": 1777
+      },
+      "expected": {
+        "sha256": "7c5236827536b9faf286f6cbfb3e13459b7f43aa895207213125cc67299d488e",
+        "size_bytes": 1777
+      },
+      "matches_frozen": true,
+      "path": "tests/regression/ai_warm_workspace/observer.h"
+    }
+  ],
+  "original_acceptance_paths": [
+    "docs/project/evidence/governance-readiness/a01-retained-binding.json",
+    "docs/project/evidence/p01-build.json",
+    "docs/project/evidence/p01-native.json",
+    "docs/project/evidence/p01-xrt-blocked.json",
+    "docs/project/evidence/p01-xrt-merge/merge-verification.json",
+    "docs/project/evidence/p01-xrt-tooling/verification.json",
+    "docs/project/evidence/p02-numerics/acceptance.json",
+    "docs/project/evidence/p02-wgmma/processor/acceptance.json",
+    "docs/project/evidence/p02-wmma/acceptance-retained-source.json",
+    "docs/project/evidence/p02-wmma/acceptance.json",
+    "docs/project/evidence/p03-managed-matmul/acceptance-lifecycle.json",
+    "docs/project/evidence/p03-managed-matmul/acceptance-numerics.json",
+    "docs/project/evidence/p03-operators/acceptance.json",
+    "docs/project/evidence/p03-operators/acceptance.original.json",
+    "docs/project/evidence/p04-executor/acceptance-dispatch.json",
+    "docs/project/evidence/p04-executor/acceptance-numerics.json",
+    "docs/project/evidence/p04-fixture/acceptance.json",
+    "docs/project/evidence/p05-python/acceptance-binding.json",
+    "docs/project/evidence/p05-python/development/qualification/w09_a2/schema-validation.json",
+    "docs/project/evidence/p05-torch-replay/acceptance-compatibility.json",
+    "docs/project/evidence/p05-torch-replay/acceptance-torch.json",
+    "docs/project/evidence/p05-torch/a01-retained-binding.json",
+    "docs/project/evidence/p05-torch/development/drafts/a01-retained-binding.json",
+    "docs/project/evidence/p06-baseline/acceptance.json",
+    "docs/project/evidence/p06-baseline/reviews/acceptance-review.json",
+    "docs/project/evidence/p06-checkpoint-publication/launcher/a01-retained-binding.json",
+    "docs/project/evidence/p06-serial-workspace/a01-retained-binding.json",
+    "docs/project/evidence/p06-serial-workspace/p06-a01-retained-baseline.json",
+    "docs/project/evidence/report.example.json",
+    "docs/project/evidence/setup-accepted.json",
+    "docs/project/evidence/setup-delivery.json",
+    "docs/project/evidence/setup-validation.json"
+  ],
+  "outcome": "pass",
+  "proofs": {
+    "ci/project/p06_counter_qualification_proof.json": {
+      "base": {
+        "sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e",
+        "size_bytes": 123781
+      },
+      "current": {
+        "sha256": "d12718e9b182a3c93eab346901b380031516d556dd823017a63831d4a0304b4e",
+        "size_bytes": 123781
+      },
+      "unchanged_from_base": true
+    },
+    "ci/project/p06_qualified_warm_proof.json": {
+      "base": {
+        "sha256": "172721c671ddaa79541dde9c37c154b5ab5a99b8abb0caabf2e07036dd429efb",
+        "size_bytes": 21505
+      },
+      "current": {
+        "sha256": "172721c671ddaa79541dde9c37c154b5ab5a99b8abb0caabf2e07036dd429efb",
+        "size_bytes": 21505
+      },
+      "unchanged_from_base": true
+    }
+  },
+  "protected_identities": {
+    "ci/baselines/perf/core.json": {
+      "base": {
+        "sha256": "2e0b69c0f92401bee05c2cda7ec79f2ec49e6dc17f711da546efdbd34382e182",
+        "size_bytes": 4110
+      },
+      "current": {
+        "sha256": "2e0b69c0f92401bee05c2cda7ec79f2ec49e6dc17f711da546efdbd34382e182",
+        "size_bytes": 4110
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/perf/dxa.json": {
+      "base": {
+        "sha256": "648909a52e523874fe1008c76b6bb93d9b84583a28f2fba42782423c977280b7",
+        "size_bytes": 3851
+      },
+      "current": {
+        "sha256": "648909a52e523874fe1008c76b6bb93d9b84583a28f2fba42782423c977280b7",
+        "size_bytes": 3851
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/perf/graphics.json": {
+      "base": {
+        "sha256": "752b2e428f01f4d1393ae91a10f561b1bfe9a2ed2b08f4116b9059cb2019397d",
+        "size_bytes": 3119
+      },
+      "current": {
+        "sha256": "752b2e428f01f4d1393ae91a10f561b1bfe9a2ed2b08f4116b9059cb2019397d",
+        "size_bytes": 3119
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/perf/raytracing.json": {
+      "base": {
+        "sha256": "e7190d40dd242e3947cc4f5e568573cd0f52a6e71f21b2bc412eadd75b68d260",
+        "size_bytes": 906
+      },
+      "current": {
+        "sha256": "e7190d40dd242e3947cc4f5e568573cd0f52a6e71f21b2bc412eadd75b68d260",
+        "size_bytes": 906
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/perf/tensor.json": {
+      "base": {
+        "sha256": "74bfbe74c0165a4e1263ab58355700c03466f7ca2e982dc2bb25dfe084d17246",
+        "size_bytes": 1995
+      },
+      "current": {
+        "sha256": "74bfbe74c0165a4e1263ab58355700c03466f7ca2e982dc2bb25dfe084d17246",
+        "size_bytes": 1995
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/perf/tensor_mx.json": {
+      "base": {
+        "sha256": "005c317cdcb33245e7c73cfa8a4ae15b8092bd93520700fa9d67e95488852326",
+        "size_bytes": 396
+      },
+      "current": {
+        "sha256": "005c317cdcb33245e7c73cfa8a4ae15b8092bd93520700fa9d67e95488852326",
+        "size_bytes": 396
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/perf/tensor_sp.json": {
+      "base": {
+        "sha256": "10fa4e21a4e411cb6105708ee76c9cc56a67edcd422e6d3a7fd521a9ffe21c88",
+        "size_bytes": 337
+      },
+      "current": {
+        "sha256": "10fa4e21a4e411cb6105708ee76c9cc56a67edcd422e6d3a7fd521a9ffe21c88",
+        "size_bytes": 337
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/perf/tensor_wg.json": {
+      "base": {
+        "sha256": "c6c3fd75ed3befed6eaad836dff8ba85192b38eec8350939e441ae8d0978f073",
+        "size_bytes": 1536
+      },
+      "current": {
+        "sha256": "c6c3fd75ed3befed6eaad836dff8ba85192b38eec8350939e441ae8d0978f073",
+        "size_bytes": 1536
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/beacon/core.json": {
+      "base": {
+        "sha256": "9d44a8cb4df9968fcba2f06068891ca64619b56b15263feb3369487bd6585788",
+        "size_bytes": 28970
+      },
+      "current": {
+        "sha256": "9d44a8cb4df9968fcba2f06068891ca64619b56b15263feb3369487bd6585788",
+        "size_bytes": 28970
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/beacon/dxa.json": {
+      "base": {
+        "sha256": "b704ffb416f1e117104b970e89a75d4e256c95ab1b5895451370bdaef99734b8",
+        "size_bytes": 2328
+      },
+      "current": {
+        "sha256": "b704ffb416f1e117104b970e89a75d4e256c95ab1b5895451370bdaef99734b8",
+        "size_bytes": 2328
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/beacon/graphics.json": {
+      "base": {
+        "sha256": "99b4e2ffdc4c5ef52f01d3eecd5414d1a00d4100bb0ffd45d3a9bdf66e2994b3",
+        "size_bytes": 30678
+      },
+      "current": {
+        "sha256": "99b4e2ffdc4c5ef52f01d3eecd5414d1a00d4100bb0ffd45d3a9bdf66e2994b3",
+        "size_bytes": 30678
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/beacon/tensor.json": {
+      "base": {
+        "sha256": "7c20e2fdeab2bc597641354c138d79a4e054c1b42a9e4856d88ff157a65ef969",
+        "size_bytes": 12461
+      },
+      "current": {
+        "sha256": "7c20e2fdeab2bc597641354c138d79a4e054c1b42a9e4856d88ff157a65ef969",
+        "size_bytes": 12461
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/beacon/vm.json": {
+      "base": {
+        "sha256": "74e984dd4e3f1aeb406046ba9ef58efecebc84d856e4bce2abd0a056c04dff00",
+        "size_bytes": 8367
+      },
+      "current": {
+        "sha256": "74e984dd4e3f1aeb406046ba9ef58efecebc84d856e4bce2abd0a056c04dff00",
+        "size_bytes": 8367
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/xilinx/core.json": {
+      "base": {
+        "sha256": "35c440089e5b5ea68ffb36c9d063237f2fbb2da7f8026519c969accafc452c0b",
+        "size_bytes": 31559
+      },
+      "current": {
+        "sha256": "35c440089e5b5ea68ffb36c9d063237f2fbb2da7f8026519c969accafc452c0b",
+        "size_bytes": 31559
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/xilinx/dxa.json": {
+      "base": {
+        "sha256": "7a6a523cbaf3f4dc1e8ba423262d6d26a6b1b2ff58e711e748b3167f4043ee7a",
+        "size_bytes": 5735
+      },
+      "current": {
+        "sha256": "7a6a523cbaf3f4dc1e8ba423262d6d26a6b1b2ff58e711e748b3167f4043ee7a",
+        "size_bytes": 5735
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/xilinx/graphics.json": {
+      "base": {
+        "sha256": "bfb045d843d0d08e29ea0a507584d9a21e1afd50cc54f472781615a5c2a8aec7",
+        "size_bytes": 31793
+      },
+      "current": {
+        "sha256": "bfb045d843d0d08e29ea0a507584d9a21e1afd50cc54f472781615a5c2a8aec7",
+        "size_bytes": 31793
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/xilinx/mufu.json": {
+      "base": {
+        "sha256": "1f7a375f75ec05aa8885d19b2684aa74586dfa6fabbff9a34039c4796b56f567",
+        "size_bytes": 5693
+      },
+      "current": {
+        "sha256": "1f7a375f75ec05aa8885d19b2684aa74586dfa6fabbff9a34039c4796b56f567",
+        "size_bytes": 5693
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/xilinx/tensor.json": {
+      "base": {
+        "sha256": "81b645180b72327c9bf44777f2914bc9b2378c9dabd87ab32f05d78e0d8f6f18",
+        "size_bytes": 15655
+      },
+      "current": {
+        "sha256": "81b645180b72327c9bf44777f2914bc9b2378c9dabd87ab32f05d78e0d8f6f18",
+        "size_bytes": 15655
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/xilinx/vm.json": {
+      "base": {
+        "sha256": "aecb3717cec9d0b58e184718fdfcf2894d562f72f55b7bdb96b915e303d7600f",
+        "size_bytes": 6057
+      },
+      "current": {
+        "sha256": "aecb3717cec9d0b58e184718fdfcf2894d562f72f55b7bdb96b915e303d7600f",
+        "size_bytes": 6057
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/yosys/core.json": {
+      "base": {
+        "sha256": "3d73cbaee0c1b903340c9752b0079bc3073a4c3edfdffe579cdcbf99e5006bf3",
+        "size_bytes": 2373
+      },
+      "current": {
+        "sha256": "3d73cbaee0c1b903340c9752b0079bc3073a4c3edfdffe579cdcbf99e5006bf3",
+        "size_bytes": 2373
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/yosys/dxa.json": {
+      "base": {
+        "sha256": "aa249a7f621768ac02f1d0f85ef4a5eea9d95d32fb6a566ca4adc599a43729aa",
+        "size_bytes": 549
+      },
+      "current": {
+        "sha256": "aa249a7f621768ac02f1d0f85ef4a5eea9d95d32fb6a566ca4adc599a43729aa",
+        "size_bytes": 549
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/yosys/graphics.json": {
+      "base": {
+        "sha256": "1f43cf0ea627b32525f77fbdd0e2dc70eac6fc93a525d1d60200eb95be995370",
+        "size_bytes": 2841
+      },
+      "current": {
+        "sha256": "1f43cf0ea627b32525f77fbdd0e2dc70eac6fc93a525d1d60200eb95be995370",
+        "size_bytes": 2841
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/yosys/mufu.json": {
+      "base": {
+        "sha256": "2b84aa5d1a201b1239755fd3ec4e147f7b3bc6f64041034ba4f413a61f16ffa9",
+        "size_bytes": 548
+      },
+      "current": {
+        "sha256": "2b84aa5d1a201b1239755fd3ec4e147f7b3bc6f64041034ba4f413a61f16ffa9",
+        "size_bytes": 548
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/yosys/tensor.json": {
+      "base": {
+        "sha256": "01cf957355f05b63dc98b19ca4a69899b0c26383ef86025a24513c1a07d4eadd",
+        "size_bytes": 1154
+      },
+      "current": {
+        "sha256": "01cf957355f05b63dc98b19ca4a69899b0c26383ef86025a24513c1a07d4eadd",
+        "size_bytes": 1154
+      },
+      "unchanged_from_base": true
+    },
+    "ci/baselines/synthesis/yosys/vm.json": {
+      "base": {
+        "sha256": "9ce940cfcdef1bc0f8554de0da13231eda3125bc5a014e7596c83bf0a46372bc",
+        "size_bytes": 599
+      },
+      "current": {
+        "sha256": "9ce940cfcdef1bc0f8554de0da13231eda3125bc5a014e7596c83bf0a46372bc",
+        "size_bytes": 599
+      },
+      "unchanged_from_base": true
+    },
+    "docs/assets/img/vortex_framework_stack.svg": {
+      "base": {
+        "sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+        "size_bytes": 48225
+      },
+      "current": {
+        "sha256": "db123c71024f85f379c2504c7465c03ee9df8959a5d17fc3d3e94a94a1cd3aa4",
+        "size_bytes": 48225
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/governance-readiness/a01-retained-binding.json": {
+      "base": {
+        "sha256": "d015566195b25e387f6f0593310e3bf3037a3a7511c4f91e083a23ad72200f39",
+        "size_bytes": 26412
+      },
+      "current": {
+        "sha256": "d015566195b25e387f6f0593310e3bf3037a3a7511c4f91e083a23ad72200f39",
+        "size_bytes": 26412
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p01-build.json": {
+      "base": {
+        "sha256": "7c31c2c58fce7e3f9fe2229f9dcc4d1ede8aa2c1ee7afb4b9714a67ef9ae38a0",
+        "size_bytes": 14472
+      },
+      "current": {
+        "sha256": "7c31c2c58fce7e3f9fe2229f9dcc4d1ede8aa2c1ee7afb4b9714a67ef9ae38a0",
+        "size_bytes": 14472
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p01-native.json": {
+      "base": {
+        "sha256": "7cf5ae93704e22fa9172ac2eb8dd93275ab312a1dc39e689d907f8e08b38b026",
+        "size_bytes": 14190
+      },
+      "current": {
+        "sha256": "7cf5ae93704e22fa9172ac2eb8dd93275ab312a1dc39e689d907f8e08b38b026",
+        "size_bytes": 14190
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p01-xrt-blocked.json": {
+      "base": {
+        "sha256": "c480d1eb390a237b5e33c55b2115f3a43e997207a9122c319264671284e82551",
+        "size_bytes": 13336
+      },
+      "current": {
+        "sha256": "c480d1eb390a237b5e33c55b2115f3a43e997207a9122c319264671284e82551",
+        "size_bytes": 13336
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p01-xrt-merge/merge-verification.json": {
+      "base": {
+        "sha256": "25ea7af25c1987e06205918a705e4dacfcf269dd759563fd66454ea102f5f1c6",
+        "size_bytes": 16830
+      },
+      "current": {
+        "sha256": "25ea7af25c1987e06205918a705e4dacfcf269dd759563fd66454ea102f5f1c6",
+        "size_bytes": 16830
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p01-xrt-tooling/verification.json": {
+      "base": {
+        "sha256": "e2a3c44fedd1920824f930a18e96200d1d028f016f50169bcf613b900d27e677",
+        "size_bytes": 46172
+      },
+      "current": {
+        "sha256": "e2a3c44fedd1920824f930a18e96200d1d028f016f50169bcf613b900d27e677",
+        "size_bytes": 46172
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p02-numerics/acceptance.json": {
+      "base": {
+        "sha256": "5cfa9e078bd42b5aa8100b8996675ed1bf34d9133320baaed7437545dd3b72fb",
+        "size_bytes": 21992
+      },
+      "current": {
+        "sha256": "5cfa9e078bd42b5aa8100b8996675ed1bf34d9133320baaed7437545dd3b72fb",
+        "size_bytes": 21992
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p02-wgmma/processor/acceptance.json": {
+      "base": {
+        "sha256": "5aa45a3e6bd1920167874e97bbb75a91738c2a32933f39c1d638786ee381f92f",
+        "size_bytes": 72999
+      },
+      "current": {
+        "sha256": "5aa45a3e6bd1920167874e97bbb75a91738c2a32933f39c1d638786ee381f92f",
+        "size_bytes": 72999
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p02-wmma/acceptance-retained-source.json": {
+      "base": {
+        "sha256": "faaf218966a7106b93b50cfc25c4ec38f0e500c7c2a6c1733a93f314b413909f",
+        "size_bytes": 17936
+      },
+      "current": {
+        "sha256": "faaf218966a7106b93b50cfc25c4ec38f0e500c7c2a6c1733a93f314b413909f",
+        "size_bytes": 17936
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p02-wmma/acceptance.json": {
+      "base": {
+        "sha256": "364f49da0eb495ffcd2ea9ff5a402396eab531db3422819a972ccb2f7be9396a",
+        "size_bytes": 17015
+      },
+      "current": {
+        "sha256": "364f49da0eb495ffcd2ea9ff5a402396eab531db3422819a972ccb2f7be9396a",
+        "size_bytes": 17015
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p03-managed-matmul/acceptance-lifecycle.json": {
+      "base": {
+        "sha256": "5bcedb8c6db3c81a9ca87fc654548ae7e01e860733ae1c1813c246442022abf9",
+        "size_bytes": 5684
+      },
+      "current": {
+        "sha256": "5bcedb8c6db3c81a9ca87fc654548ae7e01e860733ae1c1813c246442022abf9",
+        "size_bytes": 5684
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p03-managed-matmul/acceptance-numerics.json": {
+      "base": {
+        "sha256": "400da6d933c4cd6d21506f0000626c4aa1324e305026890c435cc2ced2575ef4",
+        "size_bytes": 5126
+      },
+      "current": {
+        "sha256": "400da6d933c4cd6d21506f0000626c4aa1324e305026890c435cc2ced2575ef4",
+        "size_bytes": 5126
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p03-operators/acceptance.json": {
+      "base": {
+        "sha256": "6cac806e58f0de5cded827fc9f272c7d3cb189584013722d917a75352b812dcc",
+        "size_bytes": 10024
+      },
+      "current": {
+        "sha256": "6cac806e58f0de5cded827fc9f272c7d3cb189584013722d917a75352b812dcc",
+        "size_bytes": 10024
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p03-operators/acceptance.original.json": {
+      "base": {
+        "sha256": "281ec293e83344ca67a4876a78e492048032ae6345fca220c383b449046aca40",
+        "size_bytes": 9696
+      },
+      "current": {
+        "sha256": "281ec293e83344ca67a4876a78e492048032ae6345fca220c383b449046aca40",
+        "size_bytes": 9696
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p04-executor/acceptance-dispatch.json": {
+      "base": {
+        "sha256": "96b377c36de40d463fb4c2e04609388011aaef3e340d816836f5a3f5dadd1018",
+        "size_bytes": 14719
+      },
+      "current": {
+        "sha256": "96b377c36de40d463fb4c2e04609388011aaef3e340d816836f5a3f5dadd1018",
+        "size_bytes": 14719
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p04-executor/acceptance-numerics.json": {
+      "base": {
+        "sha256": "890b6eaa5ce8d44f3a9d975d747e1ac09caff0a66782ac8cc7c3b174678f375a",
+        "size_bytes": 14098
+      },
+      "current": {
+        "sha256": "890b6eaa5ce8d44f3a9d975d747e1ac09caff0a66782ac8cc7c3b174678f375a",
+        "size_bytes": 14098
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p04-fixture/acceptance.json": {
+      "base": {
+        "sha256": "c1b0055aef8ceef1a8fe900cb8630d900686bdff8fec14e37a66b583bcad6838",
+        "size_bytes": 15127
+      },
+      "current": {
+        "sha256": "c1b0055aef8ceef1a8fe900cb8630d900686bdff8fec14e37a66b583bcad6838",
+        "size_bytes": 15127
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p05-python/acceptance-binding.json": {
+      "base": {
+        "sha256": "1896bae3b59273f51448b554b965dc7d98d6beafcd446527c41c878a32c740c5",
+        "size_bytes": 24130
+      },
+      "current": {
+        "sha256": "1896bae3b59273f51448b554b965dc7d98d6beafcd446527c41c878a32c740c5",
+        "size_bytes": 24130
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p05-python/development/qualification/w09_a2/schema-validation.json": {
+      "base": {
+        "sha256": "5cf9f43c8fbcca78057f273ad9bf1c8ebd824e58bbdd9d0a9792db03353224aa",
+        "size_bytes": 500
+      },
+      "current": {
+        "sha256": "5cf9f43c8fbcca78057f273ad9bf1c8ebd824e58bbdd9d0a9792db03353224aa",
+        "size_bytes": 500
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p05-torch-replay/acceptance-compatibility.json": {
+      "base": {
+        "sha256": "ba8ae92ef2522e5251889c8cb830f1d10dbfee5ddaf7cdbccb905e89d5778308",
+        "size_bytes": 12733
+      },
+      "current": {
+        "sha256": "ba8ae92ef2522e5251889c8cb830f1d10dbfee5ddaf7cdbccb905e89d5778308",
+        "size_bytes": 12733
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p05-torch-replay/acceptance-torch.json": {
+      "base": {
+        "sha256": "20b65657ca4af335a86a229560a7d5b5bacb22514c4a2d39e24bdb547fa7b22c",
+        "size_bytes": 12999
+      },
+      "current": {
+        "sha256": "20b65657ca4af335a86a229560a7d5b5bacb22514c4a2d39e24bdb547fa7b22c",
+        "size_bytes": 12999
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p05-torch/a01-retained-binding.json": {
+      "base": {
+        "sha256": "afe748b3bd33dea30ee78777a5e34314cd28f151875327a80dbd33f3b7ecc367",
+        "size_bytes": 24551
+      },
+      "current": {
+        "sha256": "afe748b3bd33dea30ee78777a5e34314cd28f151875327a80dbd33f3b7ecc367",
+        "size_bytes": 24551
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p05-torch/development/drafts/a01-retained-binding.json": {
+      "base": {
+        "sha256": "f5c7c0a04c7524561042e86b778d4f03fb119cba3b516d5fe2050324b74ea012",
+        "size_bytes": 24495
+      },
+      "current": {
+        "sha256": "f5c7c0a04c7524561042e86b778d4f03fb119cba3b516d5fe2050324b74ea012",
+        "size_bytes": 24495
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p06-baseline/acceptance.json": {
+      "base": {
+        "sha256": "aced72e481acfea91677c50e8cc4c7245011e7d9208c52b18b83bc0bb4fa7293",
+        "size_bytes": 9840
+      },
+      "current": {
+        "sha256": "aced72e481acfea91677c50e8cc4c7245011e7d9208c52b18b83bc0bb4fa7293",
+        "size_bytes": 9840
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p06-baseline/reviews/acceptance-review.json": {
+      "base": {
+        "sha256": "cdc01ad08629b8044ebb4ca3254cb55a139bc7ff5fa19110ff40afab285a1f6b",
+        "size_bytes": 25291
+      },
+      "current": {
+        "sha256": "cdc01ad08629b8044ebb4ca3254cb55a139bc7ff5fa19110ff40afab285a1f6b",
+        "size_bytes": 25291
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p06-checkpoint-publication/launcher/a01-retained-binding.json": {
+      "base": {
+        "sha256": "a5e8954c42f8a69673fa57e047ad154cf85b7b3be5d0e1953d46232bf57c2a10",
+        "size_bytes": 27423
+      },
+      "current": {
+        "sha256": "a5e8954c42f8a69673fa57e047ad154cf85b7b3be5d0e1953d46232bf57c2a10",
+        "size_bytes": 27423
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p06-serial-workspace/a01-retained-binding.json": {
+      "base": {
+        "sha256": "9de532f05b99fa36a1b42822170aa720795fb8a9ca2f823b0daf06556928a85f",
+        "size_bytes": 25476
+      },
+      "current": {
+        "sha256": "9de532f05b99fa36a1b42822170aa720795fb8a9ca2f823b0daf06556928a85f",
+        "size_bytes": 25476
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/p06-serial-workspace/p06-a01-retained-baseline.json": {
+      "base": {
+        "sha256": "9d2991f2346886a7ba0a15f51d3a980d7c1da2225920ebc1b3e45329d91efc02",
+        "size_bytes": 9966
+      },
+      "current": {
+        "sha256": "9d2991f2346886a7ba0a15f51d3a980d7c1da2225920ebc1b3e45329d91efc02",
+        "size_bytes": 9966
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/report.example.json": {
+      "base": {
+        "sha256": "5226cdf5953e3e9150fc1cc64c6323d38b4039954b1bb12be0638f1a55bd13e4",
+        "size_bytes": 1035
+      },
+      "current": {
+        "sha256": "5226cdf5953e3e9150fc1cc64c6323d38b4039954b1bb12be0638f1a55bd13e4",
+        "size_bytes": 1035
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/setup-accepted.json": {
+      "base": {
+        "sha256": "1879f316e4f9aa0dd68ab98ecaf354859d9935260e832c61c820fcf8ee87ba69",
+        "size_bytes": 2371
+      },
+      "current": {
+        "sha256": "1879f316e4f9aa0dd68ab98ecaf354859d9935260e832c61c820fcf8ee87ba69",
+        "size_bytes": 2371
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/setup-delivery.json": {
+      "base": {
+        "sha256": "cf11de50c74000b98989fa0fe164895f658cbc2ad9d200c6c610465fe584ef78",
+        "size_bytes": 1639
+      },
+      "current": {
+        "sha256": "cf11de50c74000b98989fa0fe164895f658cbc2ad9d200c6c610465fe584ef78",
+        "size_bytes": 1639
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/evidence/setup-validation.json": {
+      "base": {
+        "sha256": "a5d4f47850b49434e164162ee3f5bb7a7fb625e0d59f738c9b25376cab3f40fa",
+        "size_bytes": 4671
+      },
+      "current": {
+        "sha256": "a5d4f47850b49434e164162ee3f5bb7a7fb625e0d59f738c9b25376cab3f40fa",
+        "size_bytes": 4671
+      },
+      "unchanged_from_base": true
+    },
+    "docs/project/roadmap.json": {
+      "base": {
+        "sha256": "42ab3303e6eaa6ad4dd0af44b2d0db916651b180d7f927ec6295ee12ef196de5",
+        "size_bytes": 21411
+      },
+      "current": {
+        "sha256": "42ab3303e6eaa6ad4dd0af44b2d0db916651b180d7f927ec6295ee12ef196de5",
+        "size_bytes": 21411
+      },
+      "unchanged_from_base": true
+    }
+  }
+}

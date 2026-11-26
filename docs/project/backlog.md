@@ -10,8 +10,9 @@ remain unassigned until an actual owner is identified.
 ## Start here: P06-T01 explicit qualified warm route
 
 The [host reliability continuation](p06-host-reliability-audit.md) repairs CI
-cache/checkout metadata, required-job completion semantics and Python
-bundle-reader descriptor ownership. These source and host checks do not change
+cache/checkout metadata, required-job completion semantics and descriptor
+ownership in Python bundle, encrypted-evidence and governance archive readers.
+These source and host checks do not change
 the next native task or close P06 acceptance. Require the selected published
 revision's own strict-governance original and independent replay, verified
 private control delivery, the intended public age recipient and the unchanged

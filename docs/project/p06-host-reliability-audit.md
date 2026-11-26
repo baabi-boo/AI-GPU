@@ -9,7 +9,7 @@ The two long SimX regressions completed with 44 RV64 and 54 RV32 cases passing.
 Their successful job logs nevertheless exposed a checkout-cleanup error, which
 the source audit reproduced using small local Git repositories.
 
-The implementation addresses three concrete host-side defects:
+The implementation addresses five concrete host-side defects:
 
 1. **Cached submodule metadata.** Main-CI test cells and Apptainer smoke restored
    a `third_party` cache containing submodule gitfiles without first creating
@@ -35,6 +35,22 @@ The implementation addresses three concrete host-side defects:
    with `closefd=False`. Bounds, hashes, same-handle checks, exception conversion,
    sink behavior, manifest schemas and supported numerical operations remain
    unchanged.
+4. **Encrypted-evidence reader ownership.** A later independent review found
+   the same raw-descriptor leak in the qualified warm encryption helper's
+   verified source reader. Both ordinary failure and cancellation during stream
+   construction left the source descriptor open. The repair keeps explicit
+   ownership while wrapping the source stream and drains owned resources on
+   construction and read failures. The helper's bounded read, source identity,
+   digest and encrypted publication contracts remain unchanged. The
+   [follow-up evidence](evidence/p06-host-reliability/encrypt-reader-ownership/README.md)
+   records the reproduction, regression checks and independent review.
+5. **Governance archive directory ownership.** The archive reader opened the
+   root directory before entering its cleanup region. Failure during the first
+   identity check could therefore leak that descriptor. The initial check now
+   runs within the existing ownership region, with cleanup preserving the
+   original failure. ZIP parsing, bounds and source/archive identity rules are
+   unchanged. The [directory ownership packet](evidence/p06-host-reliability/governance-directory-ownership/README.md)
+   records the injected fault and its focused regression checks.
 
 ## Verification and limits
 
@@ -44,7 +60,7 @@ observations. Development checks exercise local Git repositories, actual Bash
 gate execution, real file descriptors and subprocess-isolated Python audit hooks.
 They do not use a native GPU or substitute for full strict governance.
 
-Neither changed Python reader is one of the 69 frozen measurement sources.
+The changed readers and traversal helper are outside the 69 frozen measurement sources.
 Those source bytes, the 21 dependency descriptors, proofs, golden data, accepted
 historical records and the frozen warm population remain unchanged. The active
 P05-A01 acceptance already refers to retained historical bundle-reader source;

@@ -14,7 +14,9 @@ scope and new validation. P06-A02/A03 remain open.
 [current audit](p06-host-reliability-audit.md) and
 [evidence packet](evidence/p06-host-reliability/README.md) describe recursive
 checkout before dependency-cache restoration, a strict aggregate CI completion
-gate, and explicit descriptor ownership in both Python bundle readers. Local
+gate, and explicit descriptor ownership in both Python bundle readers and the
+encrypted-evidence reader, plus protected directory ownership during governance
+archive traversal. Local
 negative controls reproduce the original failures; focused host checks cover
 the repairs. The starting `30b2e8c` revision's 15 workflows and 43 main-CI jobs
 all completed successfully. Each changed published revision still requires its

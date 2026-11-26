@@ -69,8 +69,8 @@ def _stamp(info):
 
 def _directory(path):
     descriptor = os.open("/", _DIRECTORY_FLAGS)
-    identities = [_stamp(os.fstat(descriptor))[:2]]
     try:
+        identities = [_stamp(os.fstat(descriptor))[:2]]
         for part in path.parts[1:]:
             child = os.open(part, _DIRECTORY_FLAGS, dir_fd=descriptor)
             previous, descriptor = descriptor, child
@@ -78,7 +78,10 @@ def _directory(path):
             identities.append(_stamp(os.fstat(descriptor))[:2])
         return descriptor, identities
     except BaseException:
-        os.close(descriptor)
+        try:
+            os.close(descriptor)
+        except BaseException:
+            pass
         raise
 
 

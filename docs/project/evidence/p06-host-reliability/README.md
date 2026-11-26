@@ -29,6 +29,20 @@ the original failures in lossless gzip storage; its [identity record](reports/a0
 aggregate gate. The real cache-topology reproduction is also an executable
 regression in `ci/project/test_ci_submodule_checkout.py`.
 
+## Encryption-reader follow-up
+
+A continuing independent review found a matching raw-descriptor leak in the
+encrypted-evidence source reader and a cleanup failure that could hide the
+original read error. The [follow-up packet](encrypt-reader-ownership/README.md)
+retains its original source, reproductions, focused regressions and independent
+review. This later repair has its own source identities and does not extend the
+initial 131-test result to changed code.
+
+The [governance directory follow-up](governance-directory-ownership/README.md)
+also repairs a reproduced descriptor leak during the archive reader's initial
+directory identity check. Its source-bound focused checks and independent
+review are retained separately from the encryption-reader result.
+
 ## Reproduced failures
 
 - Restoring cached submodule gitfiles into an ordinary checkout leaves their
