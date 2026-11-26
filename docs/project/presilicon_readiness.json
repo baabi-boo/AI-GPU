@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "adr": "ADR-006",
+  "target_architecture": "aigpu-b1",
+  "target_silicon_class": "aigpu-b1 64-core datacenter AI-only SoC",
+  "rtl_slice_profile": "aigpu-b1-tile",
+  "rtl_slice_description": "4-core RTL-verifiable compute tile",
+  "allowed_evidence_levels": [
+    "source_present",
+    "simulated",
+    "rtl_verified"
+  ],
+  "forbidden_evidence_levels": [
+    "fpga_measured",
+    "silicon_measured"
+  ],
+  "physical_gates_unwaived": true,
+  "roadmap_reference": {
+    "path": "docs/project/roadmap.json",
+    "preserved_states": {
+      "P01": {
+        "status": "blocked",
+        "blocked_acceptance_ids": [
+          "P01-A03"
+        ],
+        "note": "Vendor XRT hw_emu remains blocked without waiver; physical FPGA gates require full P01 closure."
+      },
+      "P07": {
+        "status": "not_started",
+        "note": "Physical FPGA prototype requires real board measurements (fpga_measured) and P01 closure."
+      },
+      "P08": {
+        "status": "not_started",
+        "note": "Reliability and release hardening requires physical FPGA soak and P07 closure."
+      },
+      "P09": {
+        "status": "not_started",
+        "note": "Training and multi-device research requires P08 closure and physical hardware."
+      },
+      "P10": {
+        "status": "not_started",
+        "note": "ASIC feasibility and human go/no-go approval require P08 closure, qualified IP/PDK quotes, and explicit human authorization."
+      },
+      "P11": {
+        "status": "not_started",
+        "note": "Funded silicon realization and bring-up require P10 closure, foundry manufacturing sign-off, and silicon_measured lab validation."
+      }
+    }
+  },
+  "tracks": [
+    {
+      "id": "TRACK-A",
+      "title": "Architecture & Profile Freeze (aigpu-b1 & aigpu-b1-tile)",
+      "status": "not_started",
+      "required_evidence_level": "source_present",
+      "deliverables": [
+        "Frozen machine-readable target architecture contract for aigpu-b1 (64-core datacenter AI-only SoC: RV64 ISA, AI-only block pruning, TFR/WGMMA tensor units, L1/L2/L3 cache hierarchy, memory-channel and host-interface topology).",
+        "Pinned aigpu-b1-tile (4-core RTL-verifiable compute tile) configuration profile with deterministic macro resolution and zero graphics/raytracing block drift.",
+        "Explicit area/memory/bandwidth budget envelope separating simulation assumptions from unacquired commercial PHY/controller/PDK dependencies."
+      ],
+      "acceptance_criteria": [
+        "Profile and configuration resolution pass offline checks with deterministic hash and zero VX_CFG_*_ENABLE=0 macro traps.",
+        "aigpu-b1 (64-core SoC) vs. aigpu-b1-tile (4-core tile) scaling boundaries are explicitly documented and machine-checked."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "TRACK-B",
+      "title": "Compute Tile RTL & Native Datapath Verification (aigpu-b1-tile)",
+      "status": "in_progress",
+      "required_evidence_level": "rtl_verified",
+      "deliverables": [
+        "Native RTL compute-tile verification for aigpu-b1-tile (4-core tile) covering RV64 SIMT cores, native TFR FP16/BF16->FP32 WMMA/WGMMA datapaths, STD scalar FPU, and local shared memory.",
+        "SimX-to-RTL cycle and retired-instruction parity regression across core, native AI operator v2, and fused inference kernels with zero DPI substitution.",
+        "Targeted RTL fault, backpressure, barrier, and warp-group metadata-ordering unit and full-processor tests."
+      ],
+      "acceptance_criteria": [
+        "All declared compute-tile workloads pass native rtlsim with zero numerical mismatches against frozen references and zero DPI arithmetic substitution.",
+        "Applicable model_parity checks satisfy exact retired-instruction match and bounded cycle agreement between SimX and RTL."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "TRACK-C",
+      "title": "Memory Hierarchy, Coherence & NoC Pre-Silicon Verification",
+      "status": "not_started",
+      "required_evidence_level": "rtl_verified",
+      "deliverables": [
+        "4-core compute-tile L1/L2 coherence, atomic memory operation (AMO), DXA async copy/multicast, and memory-fabric protocol verification.",
+        "Multi-cluster / 64-core SoC NoC and memory-controller behavioral simulation model (aigpu-b1) separating RTL-verified tile behavior from simulated SoC fabric estimates.",
+        "Deadlock/livelock stress, outstanding-transaction drain, reset/recovery, and address-boundary tests in RTL simulation."
+      ],
+      "acceptance_criteria": [
+        "Coherence, AMO, and DXA stress suites pass native rtlsim on aigpu-b1-tile without dropped, duplicated, or corrupted memory transactions.",
+        "AXI/memory-fabric protocol assertions and reset-drain checks report zero violations."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "TRACK-D",
+      "title": "Pre-Silicon Physical Readiness, SRAM Mapping, DFT & CDC Prep",
+      "status": "not_started",
+      "required_evidence_level": "rtl_verified",
+      "deliverables": [
+        "Clean Verilator lint, Yosys/OpenSTA ASAP7 pre-layout synthesis estimates, and Beacon logic-depth/area baselines for aigpu-b1-tile.",
+        "Complete SRAM instance audit and ram_fold.py verification distinguishing real macro candidates from flip-flop arrays (explicitly non-sign-off).",
+        "Structural CDC/RDC audit, reset synchronization checklist, and scan/MBIST/JTAG RTL wrapper readiness package."
+      ],
+      "acceptance_criteria": [
+        "aigpu-b1-tile RTL passes static lint and open-source synthesis/logic-depth gates without unreviewed depth/area regressions.",
+        "All predictive ASAP7/Beacon/black-box SRAM metrics remain explicitly labelled as non-sign-off pre-silicon estimates."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "TRACK-E",
+      "title": "Software, Runtime, Compiler & AI Workload Stack Hardening",
+      "status": "not_started",
+      "required_evidence_level": "simulated",
+      "deliverables": [
+        "Pinned RV64 toolchain/compiler-record validation and native v2 operator + Tiny-MLP/Tiny-Transformer workloads targeting aigpu-b1-tile.",
+        "Resident workspace, runtime lifetime/error-injection, and Python/PyTorch custom-op bridge regression across serialized and error boundaries.",
+        "Deterministic performance-counter and roofline baseline suite cleanly separating SimX/RTL cycle measurements from physical hardware claims."
+      ],
+      "acceptance_criteria": [
+        "End-to-end AI inference workloads pass native execution and host-binding negative tests on pinned aigpu-b1-tile configuration.",
+        "Compiler-record and runtime-resource accounting checks pass with zero silent CPU fallback."
+      ],
+      "evidence": []
+    },
+    {
+      "id": "TRACK-F",
+      "title": "Pre-Silicon Sign-Off Dossier & P10/P07 Handoff Package",
+      "status": "not_started",
+      "required_evidence_level": "source_present",
+      "deliverables": [
+        "Consolidated pre-silicon readiness dossier linking verified evidence hashes from TRACK-A through TRACK-E with exact source commits and configurations.",
+        "Gap register explicitly enumerating all remaining physical FPGA (P01-A03, P07, P08) and commercial ASIC (ODR-007, ODR-008, P10, P11) prerequisites.",
+        "Machine-validated handoff manifest preserving roadmap.json blockers and non-waiver invariants."
+      ],
+      "acceptance_criteria": [
+        "All TRACK-A through TRACK-E evidence passes offline checksum, commit, and level checks with zero fpga_measured or silicon_measured claims.",
+        "P01-A03 remains blocked and P07-P11 remain unwaived until physical hardware and human go/no-go approval are obtained."
+      ],
+      "evidence": []
+    }
+  ]
+}

@@ -183,6 +183,75 @@ separate actual execution, intermediate comparison, resource lifetime and
 host/transfer accounting obligations for P04-A02/A03. P01-A03 vendor `hw_emu`
 remains blocked and required before P07 completion.
 
+## ADR-006 — Staged Pre-Silicon Tapeout Readiness Tracks A–F
+
+**Status:** user-directed pre-silicon engineering sequencing decision,
+2026-11-26. This authorizes a parallel, machine-validated pre-silicon readiness
+ledger ([`presilicon_readiness.json`](presilicon_readiness.json)) alongside
+[roadmap.json](roadmap.json). It is **not** a hardware acceptance waiver,
+foundry sign-off, commercial IP license, spending authorization, or physical
+hardware/silicon evidence.
+
+**Problem:** in [roadmap.json](roadmap.json), `P01-A03` (vendor XRT `hw_emu`)
+is legitimately `blocked` due to missing commercial Vitis/Vivado/XRT host
+infrastructure, and `P07`–`P11` are legitimately `not_started` awaiting physical
+FPGA hardware, human go/no-go approval, and fabricated silicon. That physical
+and commercial boundary must remain unwaived and unaltered. At the same time,
+substantial pre-silicon engineering, RTL architecture definition, RTL
+verification, open-source/synthetic physical-design preparation, and software/ISA
+hardening for the target AI silicon class can advance honestly in parallel if
+tracked under strict evidence ceilings that never claim physical FPGA or
+manufactured silicon proof.
+
+**Decision:**
+
+1. **Preserve [roadmap.json](roadmap.json) honesty without modification or
+   waiver:** `P01` remains `blocked` on `P01-A03` (vendor XRT `hw_emu`), and
+   `P07`–`P11` remain `not_started` (physical FPGA prototype, reliability
+   hardening, research, human go/no-go approval, and funded silicon
+   realization). No pre-silicon track alters phase statuses, phase
+   dependencies, or physical acceptance criteria in [roadmap.json](roadmap.json).
+2. **Authorize a parallel, machine-validated pre-silicon tapeout readiness
+   ledger:** establish [`presilicon_readiness.json`](presilicon_readiness.json),
+   validated offline by [`ci/project/check_presilicon.py`](../../ci/project/check_presilicon.py),
+   tracking six bounded pre-silicon tracks (`TRACK-A` through `TRACK-F`)
+   spanning architecture & profile freeze, compute-tile RTL & datapath
+   verification, memory/interconnect/NoC & coherence verification, pre-silicon
+   PPA/DFT/CDC/physical-readiness preparation, software/runtime/compiler
+   hardening, and pre-silicon sign-off dossier & handoff packaging.
+3. **Strict evidence-level ceiling (`source_present`, `simulated`,
+   `rtl_verified` only):** every track and evidence entry in the pre-silicon
+   ledger is strictly bounded to `source_present`, `simulated`, and
+   `rtl_verified`. Claims of `fpga_measured` or `silicon_measured` are
+   unconditionally rejected by the pre-silicon validator, and every evidence
+   entry must resolve to an existing repository artifact with matching SHA-256
+   checksum, valid commit hash, and compatible evidence level.
+4. **Target silicon class and RTL verification slice:** record the target
+   datacenter AI-only SoC architecture (`aigpu-b1`, 64-core datacenter AI-only
+   SoC) paired with a bounded 4-core RTL-verifiable compute tile profile
+   (`aigpu-b1-tile`, 4-core RTL-verifiable compute tile) so RTL simulation,
+   open-source synthesis, and protocol/coherence checks execute within bounded
+   compute and memory budgets without misrepresenting tile simulation as full
+   64-core SoC or physical silicon closure.
+
+**Alternatives considered:** (1) relax `P01-A03` or `P07`–`P11` gates in
+[roadmap.json](roadmap.json) to `in_progress`/`complete` before physical FPGA
+and human go/no-go approval exist; (2) track pre-silicon readiness only in
+unvalidated prose. Option (1) would violate [ADR-002](decisions.md#adr-002--evidence-labels-and-exact-execution-scope),
+[ADR-003](decisions.md#adr-003--physical-fpga-proof-before-funded-asic-realization),
+and [acceptance policy](acceptance.md); option (2) lacks hash-checked,
+machine-enforced separation between pre-silicon evidence and physical/tapeout
+sign-off.
+
+**Consequences and evidence boundary:** `physical_gates_unwaived` remains
+`true`. `aigpu-b1` (64-core datacenter AI-only SoC) and `aigpu-b1-tile` (4-core
+RTL-verifiable compute tile) define engineering targets and verification scopes
+only; they do not approve `ODR-007`/`ODR-008`, select commercial foundries,
+PDKs, memory PHYs, or PCIe IP, or authorize any spending or tapeout commitment.
+Physical FPGA measurements (`P07`–`P09`), human go/no-go authorization (`P10`),
+and foundry manufacturing sign-off/silicon bring-up (`P11`) remain governed
+exclusively by [roadmap.json](roadmap.json).
+
 ## Open decisions
 
 All entries below are **unresolved**. Owner columns identify accountable roles,
