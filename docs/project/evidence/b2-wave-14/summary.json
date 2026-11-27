@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "adr": "ADR-007",
+  "wave_id": "W14",
+  "status": "in_progress",
+  "evidence_level": "rtl_verified",
+  "foundry_signoff": false,
+  "fpga_measured": false,
+  "silicon_measured": false,
+  "physical_gates_unwaived": true,
+  "preserved_blockers": {
+    "P01-A03": "blocked",
+    "P07-P11": "not_started"
+  },
+  "generated_utc": "2026-11-27T16:36:54Z",
+  "source_commit": "0a0077f0c1cbbd2e5de77b9743aeca89dba1ea77",
+  "reviewer": "pending_stage3_pro_review",
+  "gates": {
+    "verilator_lint_clean": {
+      "outcome": "pass",
+      "evidence_level": "rtl_verified",
+      "artifact": "docs/project/evidence/b2-wave-14/lint_results.json",
+      "detail": "python3 hw/dv/tcu_v2/sim/run_dv.py --lint-only --target all passed 7/7 RTL targets (8/8 total entries incl. golden_selftest) with 0 warnings under Verilator 5.050 (--assert -Wall --x-initial unique --x-assign unique): fp4_fp6_fedp, fp8_bf16_fedp, systolic_array, sparse_wgmma, tmem_subsystem, cluster_slice, epilogue_and_sva."
+    },
+    "rtlsim_unit_pass": {
+      "outcome": "pass",
+      "evidence_level": "rtl_verified",
+      "artifact": "docs/project/evidence/b2-wave-14/sim_results.json",
+      "detail": "All 8/8 Verilator C++20 simulations passed on fresh post-fix binaries: golden_selftest ([tb_tcu_v2_golden_selftest] PASS: all reference invariants verified); fp4_fp6_fedp ([tb_fp4_fp6_fedp] PASS: checked=2137 vectors in 3056 cycles); fp8_bf16_fedp ([tb_fp8_bf16_fedp] PASS: checked=2041 vectors in 3348 cycles); systolic_array ([tb_systolic_array] PASS: checked=21 tiles in 636 cycles); sparse_wgmma ([tb_sparse_wgmma] PASS: tests=17 cycles=1641); tmem_subsystem ([tb_tmem_subsystem] PASS: checks=26 cycles=241 ce=1 ue=1); cluster_slice ([tb_cluster_slice] PASS: tests=2 cycles=661); epilogue_and_sva ([tb_epilogue_and_sva] PASS: checks=14 cycles=1295 (0 SVA assertion failures))."
+    },
+    "sva_zero_failures": {
+      "outcome": "pass",
+      "evidence_level": "rtl_verified",
+      "artifact": "docs/project/evidence/b2-wave-14/sim_results.json",
+      "detail": "epilogue_and_sva (VX_tcu_v2_cluster_sva_wrap with -DASSERTIONS) passed: [tb_epilogue_and_sva] PASS: checks=14 cycles=1295 (0 SVA assertion failures) across VX_tcu_v2_sva_monitors and VX_tmem_sva_monitors."
+    },
+    "yosys_z3_formal_pass": {
+      "outcome": "pass",
+      "evidence_level": "rtl_verified",
+      "artifact": "docs/project/evidence/b2-wave-14/formal_results.json",
+      "detail": "All 6 formal harnesses and 6 leaf Yosys synthesis smokes passed non-vacuously under Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0) + Z3 version 4.8.12 - 64 bit: formal_fp4_fp6_equiv (assert=PASS 20.461s, cover=PASS 8/8 18.098s); formal_fp8_bf16_props (assert=PASS 15.964s, cover=PASS 15/15 3.681s); formal_tmem_swizzle_ecc (assert=PASS 6.106s, cover=PASS 8/8 4.643s); formal_sparse_legality (assert=PASS 17.364s, cover=PASS 8/8 67.624s); formal_wgmma_handshake (assert=PASS 12.349s, cover=PASS 7/7 44.317s); formal_tmem_arb_alloc (assert=PASS 12.051s, cover=PASS 10/10 50.147s); 6/6 leaf synth smokes (synth -top ...; check -assert; stat) PASS."
+    },
+    "pro_rtl_review": {
+      "outcome": "not_run",
+      "evidence_level": "source_present",
+      "detail": "Pending Stage 3 independent Pro RTL review, challenger, and auditor signoff."
+    }
+  },
+  "loc_metrics": {
+    "base_commit": "96424fa",
+    "committed_production_loc": 8812,
+    "committed_verification_test_loc": 3164,
+    "working_tree_production_delta": 31058,
+    "working_tree_verification_delta": 11752,
+    "net_production_loc": 39870,
+    "net_verification_test_loc": 14916,
+    "wave_net_production_loc": 31058,
+    "wave_net_test_loc": 11752,
+    "production_loc_by_bucket": {
+      "rtl_silicon": 31058,
+      "simx": 0,
+      "compiler": 0,
+      "kernels": 0,
+      "driver_runtime": 0,
+      "frameworks_tools": 0,
+      "bootstrap": 8812
+    },
+    "anti_bloat_warnings": [],
+    "frozen_path_violations": [],
+    "pinned_sha256_verified": 30,
+    "pinned_sha256_total": 30,
+    "clean_ip_scanned_files": 101,
+    "clean_ip_violations": 0
+  },
+  "notes": "Wave 14 Cycle 2B complete (pending Stage 3 independent Pro RTL review): 80 production RTL files under hw/rtl/tcu/v2 and hw/rtl/tmem (31,058 prod LOC) and 21 verification/formal files under hw/dv/tcu_v2 (11,752 test LOC); 7/7 RTL Verilator lint targets PASS (0 warnings), 8/8 fresh Verilator simulations + active SVA PASS (0 mismatches, 0 SVA failures), 6/6 formal assertion+cover proofs (56/56 cover points) PASS, and 6/6 leaf Yosys synth smokes PASS. Clean-IP 101/101 files, 0 violations; 30/30 pinned SHA-256 verified; 0 ownership warnings."
+}
