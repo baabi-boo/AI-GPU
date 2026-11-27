@@ -1,0 +1,161 @@
+{
+  "adr": "ADR-007",
+  "evidence_level": "rtl_verified",
+  "foundry_signoff": false,
+  "fpga_measured": false,
+  "gates": {
+    "b2_roofline_and_ppa_tests_pass": {
+      "detail": "python3 -m unittest discover -s ci/project -p 'test_b2_*.py' -v: 122 tests ran, 122 OK, 0 skips/failures; b2_arch_spec.py --check-contracts PASS; b2_roofline_compare.py --json exit 0; b2_ppa_model.py --node n4p_est --json exit 0.",
+      "evidence_level": "simulated",
+      "outcome": "pass"
+    },
+    "check_project_pass": {
+      "detail": "check_project.py PASS; ci/check_sw_sim_boundary.sh OK; core governance unittest suite (10 modules) 183 tests ran, 183 OK; b2_wave_gates.py --precommit-audit --wave W13 --strict-wave-ownership PASS (0 frozen violations, 30/30 pinned SHA-256 verified, 0 anti-bloat warnings, 439 clean-IP files scanned with 0 violations).",
+      "evidence_level": "source_present",
+      "outcome": "pass"
+    },
+    "pro_independent_review": {
+      "detail": "Cycle 2 post-remediation independent reviews complete: w13_rev1_c2 (APPROVE, F0-F3=0), w13_rev2_c2 (APPROVE, F0-F3=0), w13_challenger_c2 (CONFIRMED, 111/111 adversarial probes), w13_auditor_c2 (CLEAN).",
+      "evidence_level": "rtl_verified",
+      "outcome": "pass"
+    },
+    "profile_check_pass": {
+      "detail": "ci/profile_check.py --metrics=peak passed with +0.0% error on all 5 profiles: aigpu-b2 (128 cores, 16384 fp32_lanes, 128 MiB L2, 512 TCU blocks, 4000 GB/s), aigpu-b2-dual (256 cores, 32768 fp32_lanes, 256 MiB L2, 1024 TCU blocks, 8000 GB/s), aigpu-b2-tile (4 cores, 64 fp32_lanes, 8 TCU blocks, 460 GB/s), aigpu-b1, and aigpu-b1-tile.",
+      "evidence_level": "source_present",
+      "outcome": "pass"
+    },
+    "toolchain_install_verified": {
+      "artifact": "docs/project/evidence/b2-wave-13/toolchain_inventory.json",
+      "detail": "b2_toolchain_verify.py --check-all --json exited 0 (ok=true, 0 failing_checks); all 8 local/prebuilt tools verified with clean ldd (verilator 5.050, yosys 0.69, yosys-smtbmc, OpenSTA 3.1.0, circt-verilog LLVM 24.0.0git, riscv64-unknown-elf-gcc 12.2.0, clang 20.1.8, z3 4.8.12); Docker openroad/orfs:latest probe ok=true (OpenROAD + klayout 0.30.13 after sourcing /OpenROAD-flow-scripts/env.sh); build64_b2 configured=true, simx_built=true, rtlsim_built=true (under sw/runtime/); preflight simulation & asic PASS; SimX 4-core aigpu-b2-tile demo (19680 instrs / 34220 cycles) & sgemm_tcu (4896 instrs / 2955 cycles) PASSED; rtlsim 1-core RV64 p02-tfr demo (2460 instrs / 6404 cycles) & sgemm_tcu (3008 instrs / 5731 cycles) PASSED.",
+      "evidence_level": "rtl_verified",
+      "outcome": "pass"
+    }
+  },
+  "generated_utc": "2026-11-27T04:05:23Z",
+  "loc_metrics": {
+    "anti_bloat_warnings": [],
+    "base_commit": "96424fa",
+    "clean_ip_scanned_files": 439,
+    "clean_ip_violations": 0,
+    "committed_production_loc": 262,
+    "frozen_path_violations": [],
+    "net_production_loc": 8812,
+    "net_verification_test_loc": 3164,
+    "pinned_sha256_total": 30,
+    "pinned_sha256_verified": 30,
+    "production_loc_by_bucket": {
+      "bootstrap": 8812,
+      "compiler": 0,
+      "driver_runtime": 0,
+      "frameworks_tools": 0,
+      "kernels": 0,
+      "rtl_silicon": 0,
+      "simx": 0
+    },
+    "wave_net_production_loc": 8550,
+    "wave_net_test_loc": 3105,
+    "working_tree_production_delta": 8550
+  },
+  "notes": "Wave 13 Stage 3/4 Cycle 2 verified complete: 4-core aigpu-b2-tile SimX smoke (demo & sgemm_tcu), 1-core RV64 p02-tfr rtlsim smoke (demo & sgemm_tcu), 5/5 profile_check peak validations, 122/122 test_b2_*.py, 183/183 core governance tests, 111/111 challenger adversarial probes, check_project.py, and pre-commit audit (8,812 net prod LOC [+8,550 W13], 3,164 net test LOC [+3,105 W13], 0 bloat/frozen/clean-IP violations). Full 4-core tile rtlsim elaboration is bounded by 14.06 GB virtual memory OOM on this 7.77 GiB RAM + 8 GiB swap VM.",
+  "physical_gates_unwaived": true,
+  "preserved_blockers": {
+    "P01-A03": "blocked",
+    "P07-P11": "not_started"
+  },
+  "profile_checks": {
+    "build_dir": "/home/antigravity/vortex_builds/build64_b2",
+    "driver": "simx",
+    "metrics": "peak",
+    "profiles": {
+      "aigpu-b1": {
+        "max_rel_error_pct": 0.0,
+        "metrics": {
+          "clock_mhz": 2000,
+          "dram_bandwidth_gbs": 4000,
+          "dram_peak_bytes_per_cycle": 2000,
+          "fp32_lanes": 8192
+        },
+        "verdict": "ok"
+      },
+      "aigpu-b1-tile": {
+        "max_rel_error_pct": 0.0,
+        "metrics": {
+          "clock_mhz": 400,
+          "dram_bandwidth_gbs": 460,
+          "dram_peak_bytes_per_cycle": 1150,
+          "fp32_lanes": 64
+        },
+        "verdict": "ok"
+      },
+      "aigpu-b2": {
+        "max_rel_error_pct": 0.0,
+        "metrics": {
+          "clock_mhz": 2000,
+          "dram_bandwidth_gbs": 4000,
+          "dram_peak_bytes_per_cycle": 2000,
+          "fp32_lanes": 16384,
+          "l2_size_mib": 128,
+          "num_cores": 128,
+          "tcu_blocks_total": 512
+        },
+        "verdict": "ok"
+      },
+      "aigpu-b2-dual": {
+        "max_rel_error_pct": 0.0,
+        "metrics": {
+          "clock_mhz": 2000,
+          "dram_bandwidth_gbs": 8000,
+          "dram_peak_bytes_per_cycle": 4000,
+          "fp32_lanes": 32768,
+          "l2_size_mib": 256,
+          "num_cores": 256,
+          "tcu_blocks_total": 1024
+        },
+        "verdict": "ok"
+      },
+      "aigpu-b2-tile": {
+        "max_rel_error_pct": 0.0,
+        "metrics": {
+          "clock_mhz": 400,
+          "dram_bandwidth_gbs": 460,
+          "dram_peak_bytes_per_cycle": 1150,
+          "fp32_lanes": 64,
+          "num_cores": 4,
+          "tcu_blocks_total": 8
+        },
+        "verdict": "ok"
+      }
+    },
+    "tolerance": 0.1
+  },
+  "reviewer": "w13_rev1_c2 (APPROVE, F0-F3=0), w13_rev2_c2 (APPROVE, F0-F3=0), w13_challenger_c2 (CONFIRMED, 111/111), w13_auditor_c2 (CLEAN)",
+  "schema_version": 1,
+  "silicon_measured": false,
+  "source_commit": "605b628a5958921b2ee4ad0068286c150d4fdf8a",
+  "status": "complete",
+  "toolchain_inventory_ref": "docs/project/evidence/b2-wave-13/toolchain_inventory.json",
+  "unit_test_suites": {
+    "b2_suite": {
+      "command": "python3 -m unittest discover -s ci/project -p 'test_b2_*.py' -v",
+      "failed": 0,
+      "passed": 122,
+      "ran": 122,
+      "skipped": 0
+    },
+    "challenger_adversarial_probes": {
+      "command": "w13_challenger_c2 adversarial probe suite",
+      "failed": 0,
+      "passed": 111,
+      "ran": 111,
+      "skipped": 0
+    },
+    "core_governance_suite": {
+      "command": "PYTHONPATH=ci/project python3 -m unittest test_check_project test_check_presilicon test_repository_contract test_b2_program_tracker test_aigpu_ppa_model test_b1_roofline_compare test_ai_profile test_p06_contract test_p06_warm_contract test_export_clean_rtl_handoff",
+      "failed": 0,
+      "passed": 183,
+      "ran": 183,
+      "skipped": 0
+    }
+  },
+  "wave_id": "W13"
+}

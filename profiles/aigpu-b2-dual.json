@@ -1,0 +1,39 @@
+{
+  "name": "aigpu-b2-dual",
+  "extends": "aigpu-b2",
+  "description": "Pre-silicon target architecture profile: AI-GPU B2 Dual-Die CoWoS-L / UCIe 2.0 unified coherent 256-core datacenter AI GPU (2 x aigpu-b2 dies = 16 clusters x 16 RV64X cores, 256 MiB unified L2, 8.0 TB/s HBM3E; NOT measured physical silicon).",
+  "xlen": 64,
+  "chip": {
+    "VX_CFG_NUM_CLUSTERS": 16,
+    "VX_CFG_NUM_CORES": 16,
+    "VX_CFG_L2_ENABLE": true,
+    "VX_CFG_L2_SIZE": 268435456,
+    "VX_CFG_L2_NUM_WAYS": 16,
+    "VX_CFG_L2_NUM_BANKS": 128,
+    "VX_CFG_L2_MSHR_SIZE": 192
+  },
+  "platform": {
+    "VX_CFG_PLATFORM_CLOCK_RATE": 2000,
+    "VX_CFG_PLATFORM_MEMORY_PEAK_BW": 8000000,
+    "VX_CFG_PLATFORM_MEMORY_TYPE": "HBM3",
+    "VX_CFG_PLATFORM_MEMORY_NUM_BANKS": 128,
+    "VX_CFG_PLATFORM_MEMORY_DATA_RATE": 3906
+  },
+  "reference": {
+    "fp32_lanes": 32768,
+    "dram_bandwidth_gbs": 8000,
+    "dram_peak_bytes_per_cycle": 4000,
+    "clock_mhz": 2000,
+    "num_cores": 256,
+    "l2_size_mib": 256,
+    "tcu_blocks_total": 1024
+  },
+  "sources": {
+    "evidence_status": "PRE-SILICON TARGET ARCHITECTURE PROFILE ONLY: not measured physical silicon, not physical FPGA hardware, and not full-package foundry sign-off. Models a dual-die CoWoS-L coherent logical GPU unifying two aigpu-b2 dies over UCIe 2.0 D2D.",
+    "extends": "Inherits core RV64X + TFR/WGMMA FEDP2K PE_RATIO=1 + DXA + MUFU configuration from profiles/aigpu-b2.json.",
+    "NUM_CLUSTERS, NUM_CORES": "16 clusters x 16 cores per cluster = 256 cores across 2 coherent dies (2 x ~780 mm^2 CoWoS-L package) connected via 10 TB/s bidirectional UCIe 2.0 coherent D2D link and 64 MiB aggregate TMEM (32 MiB/die).",
+    "L2_SIZE, L2_NUM_BANKS": "256 MiB unified coherent L2/SLC (268435456 B across 16 distributed MOESI directory slices, 16 ways, 128 banks) with 256B-interleaved dual-die address hashing.",
+    "PLATFORM_CLOCK_RATE, PLATFORM_MEMORY_PEAK_BW, PLATFORM_MEMORY_TYPE, PLATFORM_MEMORY_NUM_BANKS, PLATFORM_MEMORY_DATA_RATE": "Pre-silicon architectural target: modeled 2000 MHz core clock and 16-stack HBM3E 8,000 GB/s (8000000 MB/s) aggregate bandwidth modeled on Vortex's HBM3 enum across 128 power-of-two 128-bit pseudo-channels at 3906 MT/s; B2 TFRv2 architectural target is 2,304 TFLOPS FP16 / 4,608 TFLOPS FP8 / 9,216 TOPS FP4 dense (2x with 2:4 sparsity).",
+    "reference": "Modeled analytical pre-silicon target figures (fp32_lanes=32768, dram_bandwidth_gbs=8000, dram_peak_bytes_per_cycle=4000, clock_mhz=2000, num_cores=256, l2_size_mib=256, tcu_blocks_total=1024) checked by ci/profile_check.py --metrics=peak. Explicitly NOT physical silicon measurements."
+  }
+}
