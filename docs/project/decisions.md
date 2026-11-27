@@ -252,6 +252,74 @@ Physical FPGA measurements (`P07`–`P09`), human go/no-go authorization (`P10`)
 and foundry manufacturing sign-off/silicon bring-up (`P11`) remain governed
 exclusively by [roadmap.json](roadmap.json).
 
+## ADR-007 — Reticle-Class Blackwell-Competing `aigpu-b2` Commercial Pre-Silicon & Full-Stack Program
+
+**Status:** user-approved program charter, 2026-11-26 (resolved via interactive
+`/grill-me` specification). Authorizes Waves 13–32 on dedicated integration
+branch `feat/aigpu-b2-commercial` with a target of `>=500,000` net new non-test
+production lines of code (anti-bloat, live-verified) tracked in
+[`b2_program_ledger.json`](b2_program_ledger.json) and
+[`b2-commercial-master-plan.md`](b2-commercial-master-plan.md). It is **not** a
+hardware acceptance waiver, commercial foundry sign-off, IP license, or spending
+authorization.
+
+**Problem:** ADR-006 (`aigpu-b1` / `aigpu-b1-tile`) closed pre-silicon Tracks
+A–F (`96424fa`), establishing a 64-core `131 TFLOPS` FP16 / `524 TOPS` FP4
+dense baseline (`244.4 mm²` N4P estimate) with a standalone SoC shell and
+prototype Python SDK. However, competing credibly at the Blackwell architecture
+tier (NVIDIA B200 single-die `1,125 TFLOPS` FP16 / `4,500 TOPS` FP4 dense,
+dual-die `2,250 TFLOPS` FP16 / `9,000 TOPS` FP4 & `8 TB/s` HBM3E) requires:
+(1) reticle-class 5th-gen `tcgen05`-class Tensor Core density with dedicated
+on-core Tensor Memory (`TMEM`) and hardware microscaling; (2) full-chip SoC
+integration across a coherent 2D Mesh NoC, distributed L2/SLC directory, UCIe
+2.0 die-to-die coherent link layer, HBM3E multi-channel controller/scheduler,
+Hardware Decompression Engine, GigaThread Command Processor + MIG, PCIe Gen6
+DMA/IOMMU/SR-IOV, RAS/ECC scrubbing, and Confidential Computing hooks; and
+(3) a complete Apache-2.0 commercial software stack (MLIR-style compiler +
+Triton-like DSL/autotuner, CUTLASS/FlashAttention-3/4/MoE/FP4 kernel libraries,
+Linux DRM/KFD driver, async stream/graph/VMM runtime, `aigpuCCL` collectives,
+PyTorch `PrivateUse1`/Inductor + training/autograd, vLLM-class LLM serving, and
+Nsight-class profiler/debugger).
+
+**Decision:**
+
+1. **Additive `aigpu-b2` architecture family alongside preserved `aigpu-b1`:**
+   Introduce `aigpu-b2` (reticle-class single die targeting `>=1,100 TFLOPS`
+   FP16 / `>=4,500 TOPS` FP4 dense), `aigpu-b2-dual` (dual-die CoWoS/UCIe
+   unified GPU targeting `>=2,200 TFLOPS` FP16 / `>=9,000 TOPS` FP4 & `8 TB/s`
+   HBM3E), and `aigpu-b2-tile` (RTL-verifiable compute tile slice) while
+   preserving `aigpu-b1`/`aigpu-b1-tile`, frozen P05 `python/vortex_ai/` (23
+   files), and protected `docs/assets/img/vortex_framework_stack.svg`.
+2. **Balanced full-stack production engineering (`>=500,000` net new non-test
+   production LOC vs. `96424fa`):** Allocate engineering across silicon
+   RTL/ASIC/PnR (`~150K` LOC), cycle-accurate SimX lockstep models (`~75K` LOC),
+   compiler/DSL/autotuner (`~90K` LOC), CUTLASS/FlashAttention/MoE/quant
+   kernels (`~80K` LOC), Linux DRM/KFD driver + async runtime + `aigpuCCL`
+   (`~65K` LOC), and PyTorch/vLLM/training/profiler/debugger (`~55K` LOC) plus
+   program tooling (`~10K` LOC), with `>=120K` LOC of DV/formal/SVA/tests
+   tracked separately on top. Generated artifacts, vendored blobs, and
+   synthetic padding are explicitly excluded by
+   [`ci/project/b2_program_tracker.py`](../../ci/project/b2_program_tracker.py).
+3. **Orchestration, verification, and Git landing contract:** Run wave-by-wave
+   on `feat/aigpu-b2-commercial` using 1 Lead Project Manager and Independent
+   Reviewers on `pro` (`inherit`) with parallel disjoint-ownership Implementers
+   on `flash`. Every wave must pass live compilation/verification (Vortex
+   SimX/Verilator, Yosys+Z3 formal, bounded OpenROAD/OpenSTA/KLayout, Python/ML
+   suites, and `python3 ci/project/check_project.py`) plus independent `pro`
+   review before pushing and updating the draft PR to `master`.
+4. **Unwaived evidence honesty (ADR-002 / ADR-006 preserved):** Every artifact
+   remains strictly within `source_present`, `simulated`, and `rtl_verified`
+   (plus `open_source_synth_pnr_gds` with `foundry_signoff: false`). `P01-A03`
+   remains `blocked` and `P07`–`P11` remain `not_started` and unwaived until
+   physical FPGA hardware, written foundry/IP quotes (`ODR-007`/`ODR-008`),
+   human go/no-go approval, and measured silicon exist.
+
+**Consequences and evidence boundary:** Produces a commercial-grade, clean
+Apache-2.0 pre-silicon GPU RTL + verification + full AI software stack ready
+for investor technical diligence, FPGA bring-up (`P07`), and commercial
+foundry/ASIC design-house engagement (`P10`/`P11`), without fabricating
+physical measurements or foundry sign-off.
+
 ## Open decisions
 
 All entries below are **unresolved**. Owner columns identify accountable roles,
