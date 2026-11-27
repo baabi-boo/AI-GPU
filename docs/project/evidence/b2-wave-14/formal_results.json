@@ -1,0 +1,502 @@
+{
+  "schema_version": 1,
+  "wave_id": "W14",
+  "timestamp_utc": "2026-11-27T16:26:13.256685+00:00",
+  "yosys_version": "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+  "solver": "z3",
+  "solver_version": "Z3 version 4.8.12 - 64 bit",
+  "build_dir": "/home/antigravity/vortex_builds/w14_formal",
+  "elab_only": false,
+  "overall_verdict": "PASS",
+  "formal_harnesses": [
+    {
+      "harness_id": "formal_fp4_fp6_equiv",
+      "top_module": "VX_tcu_v2_formal_fp4_fp6_equiv",
+      "bmc_depth": 2,
+      "params": {
+        "LANES": 8
+      },
+      "properties": [
+        "FP4/FP6 sign-bit negation symmetry across active lanes",
+        "Zero detection iff lane masked or magnitude bits are zero",
+        "No Inf/NaN emitted for FP4 or FP6 element unpackers",
+        "UE8M0 0xFF -> is_nan; E4M3 0x7F/0xFF -> is_nan",
+        "Scale NaN dominates combined MX block scale and subnormal normalization invariants"
+      ],
+      "rtl_fixes_applied": [
+        "VX_tcu_v2_fp4_unpack.sv: wrapped 2D packed signed exponent comparisons in $signed(...)",
+        "VX_tcu_v2_fp6_e2m3_unpack.sv: wrapped 2D packed signed exponent comparisons in $signed(...)",
+        "VX_tcu_v2_fp6_e3m2_unpack.sv: wrapped 2D packed signed exponent comparisons in $signed(...)"
+      ],
+      "yosys_returncode": 0,
+      "yosys_elapsed_sec": 20.461,
+      "maxsteps": 2,
+      "assertion_solver": "yosys sat -set-assumes -prove-asserts -verify -seq 2",
+      "assertion_verdict": "PASS",
+      "assertion_elapsed_sec": 20.461,
+      "bmc": {
+        "command": "/home/antigravity/tools/yosys/bin/yosys -p 'read_slang -D FORMAL -D SYNTHESIS -I hw/rtl -I hw/rtl/tcu/v2 -I hw/rtl/tmem -G LANES=8 --top VX_tcu_v2_formal_fp4_fp6_equiv hw/rtl/tcu/v2/VX_tcu_v2_pkg.sv hw/rtl/tcu/v2/arith/VX_tcu_v2_fp4_unpack.sv hw/rtl/tcu/v2/arith/VX_tcu_v2_fp6_e2m3_unpack.sv hw/rtl/tcu/v2/arith/VX_tcu_v2_fp6_e3m2_unpack.sv hw/rtl/tcu/v2/arith/VX_tcu_v2_mx_scale_decode.sv hw/rtl/tcu/v2/arith/VX_tcu_v2_mx_block_align.sv hw/dv/tcu_v2/formal/formal_fp4_fp6_equiv.sv; prep -top VX_tcu_v2_formal_fp4_fp6_equiv; flatten; memory_map; async2sync; dffunmap; chformal -cover -remove; sat -set-assumes -prove-asserts -verify -seq 2'",
+        "returncode": 0,
+        "elapsed_sec": 20.461,
+        "timed_out": false,
+        "status": "PASS",
+        "log_tail": [
+          "                | $$  | $$    | $$$$$       | $$  | $$   ",
+          "                | $$  | $$    | $$__/       | $$  | $$   ",
+          "                | $$/$$ $$    | $$          | $$  | $$   ",
+          "                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$",
+          "                 \\____ $$$|__/|________/|__/|_______/|__/",
+          "                       \\__/                              ",
+          "",
+          "End of script. Logfile hash: 5a9800c679, time: 20.42s, user: 20.15s, system: 0.27s, MEM: 242.27 MB peak",
+          "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+          "Time spent: 87% 1x sat (17 sec), 3% 8x opt_expr (0 sec), ..."
+        ]
+      },
+      "cover_solver": "yosys sat -set-assumes -set-at 2 EN=1,A=1 -seq 2 (8 covers)",
+      "cover_verdict": "PASS",
+      "cover_elapsed_sec": 18.098,
+      "cover": {
+        "command": "/home/antigravity/tools/yosys/bin/yosys -p 'read_slang -D FORMAL -D SYNTHESIS -I hw/rtl -I hw/rtl/tcu/v2 -I hw/rtl/tmem -G LANES=8 --top VX_tcu_v2_formal_fp4_fp6_equiv hw/rtl/tcu/v2/VX_tcu_v2_pkg.sv hw/rtl/tcu/v2/arith/VX_tcu_v2_fp4_unpack.sv hw/rtl/tcu/v2/arith/VX_tcu_v2_fp6_e2m3_unpack.sv hw/rtl/tcu/v2/arith/VX_tcu_v2_fp6_e3m2_unpack.sv hw/rtl/tcu/v2/arith/VX_tcu_v2_mx_scale_decode.sv hw/rtl/tcu/v2/arith/VX_tcu_v2_mx_block_align.sv hw/dv/tcu_v2/formal/formal_fp4_fp6_equiv.sv; prep -top VX_tcu_v2_formal_fp4_fp6_equiv; flatten; memory_map; async2sync; dffunmap; chformal -assert -remove; chformal -cover -remove; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$28068 1 -set-at 2 $auto$async2sync.cc:116:execute$28072 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$28074 1 -set-at 2 $auto$async2sync.cc:116:execute$28078 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$28080 1 -set-at 2 $auto$async2sync.cc:116:execute$28084 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$28086 1 -set-at 2 $auto$async2sync.cc:116:execute$28090 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$28092 1 -set-at 2 $auto$async2sync.cc:116:execute$28096 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$28098 1 -set-at 2 $auto$async2sync.cc:116:execute$28102 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$28104 1 -set-at 2 $auto$async2sync.cc:116:execute$28108 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$28110 1 -set-at 2 $auto$async2sync.cc:116:execute$28114 1 -seq 2'",
+        "returncode": 0,
+        "elapsed_sec": 18.098,
+        "timed_out": false,
+        "covers_total": 8,
+        "covers_reached": 8,
+        "status": "PASS",
+        "log_tail": [
+          "     2 \\sym_fmt_a                                          23        17         10111",
+          "     2 \\sym_fmt_b                                          23        17         10111",
+          "     2 \\sym_scale_a_raw                                     4         4      00000100",
+          "     2 \\sym_scale_b_raw                                     4         4      00000100",
+          "     2 \\sym_scale_fmt_a                                     0         0            00",
+          "     2 \\sym_scale_fmt_b                                     2         2            10",
+          "",
+          "End of script. Logfile hash: c1765e40b1, time: 15.59s, user: 15.41s, system: 0.22s, MEM: 241.45 MB peak",
+          "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+          "Time spent: 84% 8x sat (13 sec), 4% 8x opt_expr (0 sec), ..."
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "harness_id": "formal_fp8_bf16_props",
+      "top_module": "VX_tcu_v2_formal_fp8_bf16_props",
+      "bmc_depth": 2,
+      "params": {
+        "LANES": 1
+      },
+      "properties": [
+        "FP8 E4M3FN never produces is_inf; 0x7F/0xFF always produce is_nan",
+        "FP8 E5M2 Inf/NaN mutual exclusion and canonical FP32 upcast",
+        "FP exception unit NaN dominance, 0*Inf -> NaN + NV (EXC_ZERO_X_INF=4'd3), (+Inf)+(-Inf) -> NaN + NV (EXC_INF_CANCEL=4'd8)",
+        "INT8 dot-acc 36-bit exactness and saturation clamp bounds [INT32_MIN, INT32_MAX]"
+      ],
+      "rtl_fixes_applied": [
+        "VX_tcu_v2_fp_exception_unit.sv: sets canonical qNaN + NV on 0*Inf (EXC_ZERO_X_INF=4'd3) and (+Inf)+(-Inf) (EXC_INF_CANCEL=4'd8) ahead of qNaN causes, and preserves +0.0 sign on positive tiny underflow in RM_RDN"
+      ],
+      "yosys_returncode": 0,
+      "yosys_elapsed_sec": 15.964,
+      "maxsteps": 2,
+      "assertion_solver": "yosys sat -set-assumes -prove-asserts -verify -seq 2",
+      "assertion_verdict": "PASS",
+      "assertion_elapsed_sec": 15.964,
+      "bmc": {
+        "command": "/home/antigravity/tools/yosys/bin/yosys -p 'read_slang -D FORMAL -D SYNTHESIS -I hw/rtl -I hw/rtl/tcu/v2 -I hw/rtl/tmem -G LANES=1 --top VX_tcu_v2_formal_fp8_bf16_props hw/rtl/tcu/v2/VX_tcu_v2_pkg.sv hw/rtl/tcu/v2/fp8_bf16/VX_tcu_v2_fp8_e4m3_unpack.sv hw/rtl/tcu/v2/fp8_bf16/VX_tcu_v2_fp8_e5m2_unpack.sv hw/rtl/tcu/v2/fp8_bf16/VX_tcu_v2_bf16_fp16_unpack.sv hw/rtl/tcu/v2/fp8_bf16/VX_tcu_v2_int8_dot_acc.sv hw/rtl/tcu/v2/fp8_bf16/VX_tcu_v2_fp_exception_unit.sv hw/dv/tcu_v2/formal/formal_fp8_bf16_props.sv; prep -top VX_tcu_v2_formal_fp8_bf16_props; flatten; memory_map; async2sync; dffunmap; chformal -cover -remove; sat -set-assumes -prove-asserts -verify -seq 2'",
+        "returncode": 0,
+        "elapsed_sec": 15.964,
+        "timed_out": false,
+        "status": "PASS",
+        "log_tail": [
+          "                | $$  | $$    | $$$$$       | $$  | $$   ",
+          "                | $$  | $$    | $$__/       | $$  | $$   ",
+          "                | $$/$$ $$    | $$          | $$  | $$   ",
+          "                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$",
+          "                 \\____ $$$|__/|________/|__/|_______/|__/",
+          "                       \\__/                              ",
+          "",
+          "End of script. Logfile hash: 7936d6867f, time: 15.95s, user: 15.77s, system: 0.06s, MEM: 68.07 MB peak",
+          "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+          "Time spent: 98% 1x sat (15 sec), 0% 6x opt_clean (0 sec), ..."
+        ]
+      },
+      "cover_solver": "yosys sat -set-assumes -set-at 2 EN=1,A=1 -seq 2 (15 covers)",
+      "cover_verdict": "PASS",
+      "cover_elapsed_sec": 3.681,
+      "cover": {
+        "command": "/home/antigravity/tools/yosys/bin/yosys -p 'read_slang -D FORMAL -D SYNTHESIS -I hw/rtl -I hw/rtl/tcu/v2 -I hw/rtl/tmem -G LANES=1 --top VX_tcu_v2_formal_fp8_bf16_props hw/rtl/tcu/v2/VX_tcu_v2_pkg.sv hw/rtl/tcu/v2/fp8_bf16/VX_tcu_v2_fp8_e4m3_unpack.sv hw/rtl/tcu/v2/fp8_bf16/VX_tcu_v2_fp8_e5m2_unpack.sv hw/rtl/tcu/v2/fp8_bf16/VX_tcu_v2_bf16_fp16_unpack.sv hw/rtl/tcu/v2/fp8_bf16/VX_tcu_v2_int8_dot_acc.sv hw/rtl/tcu/v2/fp8_bf16/VX_tcu_v2_fp_exception_unit.sv hw/dv/tcu_v2/formal/formal_fp8_bf16_props.sv; prep -top VX_tcu_v2_formal_fp8_bf16_props; flatten; memory_map; async2sync; dffunmap; chformal -assert -remove; chformal -cover -remove; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1899 1 -set-at 2 $auto$async2sync.cc:116:execute$1903 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1905 1 -set-at 2 $auto$async2sync.cc:116:execute$1909 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1911 1 -set-at 2 $auto$async2sync.cc:116:execute$1915 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1917 1 -set-at 2 $auto$async2sync.cc:116:execute$1921 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1923 1 -set-at 2 $auto$async2sync.cc:116:execute$1927 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1929 1 -set-at 2 $auto$async2sync.cc:116:execute$1933 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1935 1 -set-at 2 $auto$async2sync.cc:116:execute$1939 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1941 1 -set-at 2 $auto$async2sync.cc:116:execute$1945 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1947 1 -set-at 2 $auto$async2sync.cc:116:execute$1951 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1953 1 -set-at 2 $auto$async2sync.cc:116:execute$1957 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1959 1 -set-at 2 $auto$async2sync.cc:116:execute$1963 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1965 1 -set-at 2 $auto$async2sync.cc:116:execute$1969 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1971 1 -set-at 2 $auto$async2sync.cc:116:execute$1975 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1977 1 -set-at 2 $auto$async2sync.cc:116:execute$1981 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$1983 1 -set-at 2 $auto$async2sync.cc:116:execute$1987 1 -seq 2'",
+        "returncode": 0,
+        "elapsed_sec": 3.681,
+        "timed_out": false,
+        "covers_total": 15,
+        "covers_reached": 15,
+        "status": "PASS",
+        "log_tail": [
+          "     2 \\sym_prod_sign                                      1         1             1",
+          "     2 \\sym_prod_snan                                      0         0             0",
+          "     2 \\sym_prod_zero                                      0         0             0",
+          "     2 \\sym_rm                                             0         0           000",
+          "     2 \\sym_scale_any_nan                                  0         0             0",
+          "     2 \\sym_scale_zero_inf_nv                              0         0             0",
+          "",
+          "End of script. Logfile hash: f8defcdfcc, time: 3.41s, user: 3.32s, system: 0.07s, MEM: 63.34 MB peak",
+          "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+          "Time spent: 93% 15x sat (3 sec), 1% 6x opt_clean (0 sec), ..."
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "harness_id": "formal_tmem_swizzle_ecc",
+      "top_module": "VX_tmem_formal_swizzle_ecc",
+      "bmc_depth": 2,
+      "params": {},
+      "properties": [
+        "Swizzle bijection: distinct col_a[4:0] != col_b[4:0] map to distinct banks for any row/mode",
+        "Full (row, col) -> (bank_id, word_addr, half_sel) physical coordinate bijection",
+        "SECDED(72,64): 0-bit flip -> ce=0, ue=0, data_out==data_in",
+        "SECDED(72,64): any 1-bit flip in [0..71] -> ce=1, ue=0, data_out==data_in",
+        "SECDED(72,64): any distinct 2-bit flip (b1 != b2) in [0..71] -> ue=1, ce=0"
+      ],
+      "rtl_fixes_applied": [],
+      "yosys_returncode": 0,
+      "yosys_elapsed_sec": 6.106,
+      "maxsteps": 2,
+      "assertion_solver": "yosys sat -set-assumes -prove-asserts -verify -seq 2",
+      "assertion_verdict": "PASS",
+      "assertion_elapsed_sec": 6.106,
+      "bmc": {
+        "command": "/home/antigravity/tools/yosys/bin/yosys -p 'read_slang -D FORMAL -D SYNTHESIS -I hw/rtl -I hw/rtl/tcu/v2 -I hw/rtl/tmem  --top VX_tmem_formal_swizzle_ecc hw/rtl/tmem/VX_tmem_pkg.sv hw/rtl/tmem/banks/VX_tmem_swizzle_addr.sv hw/rtl/tmem/banks/VX_tmem_ecc_enc.sv hw/rtl/tmem/banks/VX_tmem_ecc_dec.sv hw/dv/tcu_v2/formal/formal_tmem_swizzle_ecc.sv; prep -top VX_tmem_formal_swizzle_ecc; flatten; memory_map; async2sync; dffunmap; chformal -cover -remove; sat -set-assumes -prove-asserts -verify -seq 2'",
+        "returncode": 0,
+        "elapsed_sec": 6.106,
+        "timed_out": false,
+        "status": "PASS",
+        "log_tail": [
+          "                | $$  | $$    | $$$$$       | $$  | $$   ",
+          "                | $$  | $$    | $$__/       | $$  | $$   ",
+          "                | $$/$$ $$    | $$          | $$  | $$   ",
+          "                |  $$$$$$/ /$$| $$$$$$$$ /$$| $$$$$$$//$$",
+          "                 \\____ $$$|__/|________/|__/|_______/|__/",
+          "                       \\__/                              ",
+          "",
+          "End of script. Logfile hash: 0eb7a13abf, time: 6.09s, user: 5.98s, system: 0.11s, MEM: 83.88 MB peak",
+          "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+          "Time spent: 79% 1x sat (4 sec), 4% 8x opt_expr (0 sec), ..."
+        ]
+      },
+      "cover_solver": "yosys sat -set-assumes -set-at 2 EN=1,A=1 -seq 2 (8 covers)",
+      "cover_verdict": "PASS",
+      "cover_elapsed_sec": 4.643,
+      "cover": {
+        "command": "/home/antigravity/tools/yosys/bin/yosys -p 'read_slang -D FORMAL -D SYNTHESIS -I hw/rtl -I hw/rtl/tcu/v2 -I hw/rtl/tmem  --top VX_tmem_formal_swizzle_ecc hw/rtl/tmem/VX_tmem_pkg.sv hw/rtl/tmem/banks/VX_tmem_swizzle_addr.sv hw/rtl/tmem/banks/VX_tmem_ecc_enc.sv hw/rtl/tmem/banks/VX_tmem_ecc_dec.sv hw/dv/tcu_v2/formal/formal_tmem_swizzle_ecc.sv; prep -top VX_tmem_formal_swizzle_ecc; flatten; memory_map; async2sync; dffunmap; chformal -assert -remove; chformal -cover -remove; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$8194 1 -set-at 2 $auto$async2sync.cc:116:execute$8198 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$8200 1 -set-at 2 $auto$async2sync.cc:116:execute$8204 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$8206 1 -set-at 2 $auto$async2sync.cc:116:execute$8210 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$8212 1 -set-at 2 $auto$async2sync.cc:116:execute$8216 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$8218 1 -set-at 2 $auto$async2sync.cc:116:execute$8222 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$8224 1 -set-at 2 $auto$async2sync.cc:116:execute$8228 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$8230 1 -set-at 2 $auto$async2sync.cc:116:execute$8234 1 -seq 2; sat -set-assumes -set-at 2 $auto$async2sync.cc:107:execute$8236 1 -set-at 2 $auto$async2sync.cc:116:execute$8240 1 -seq 2'",
+        "returncode": 0,
+        "elapsed_sec": 4.643,
+        "timed_out": false,
+        "covers_total": 8,
+        "covers_reached": 8,
+        "status": "PASS",
+        "log_tail": [
+          "  ---- ----------------------------------------- ----------- --------- -------------",
+          "     2 $auto$async2sync.cc:107:execute$8236                1         1             1",
+          "     2 $auto$async2sync.cc:116:execute$8240                1         1             1",
+          "     2 \\sym_err_bit_1                                     76        4c       1001100",
+          "     2 \\sym_err_bit_2                                     79        4f       1001111",
+          "     2 \\sym_err_mode                                       0         0            00",
+          "",
+          "End of script. Logfile hash: 946a1398b9, time: 3.39s, user: 3.34s, system: 0.06s, MEM: 69.73 MB peak",
+          "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+          "Time spent: 63% 8x sat (2 sec), 9% 2x read_slang (0 sec), ..."
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "harness_id": "formal_sparse_legality",
+      "top_module": "VX_tcu_v2_formal_sparse_legality",
+      "bmc_depth": 8,
+      "params": {
+        "ARRAY_M": 1,
+        "ARRAY_K": 2
+      },
+      "properties": [
+        "Validator accepts iff idx0 < idx1 across every active group and format is sparse-legal",
+        "Compressor always produces metadata accepted by validator",
+        "For any 4-element FP16 or FP4 8-nibble group with <= 2 non-zeros, compressor -> selector recovers non-zeros in ascending order"
+      ],
+      "rtl_fixes_applied": [],
+      "yosys_returncode": 0,
+      "yosys_elapsed_sec": 17.364,
+      "maxsteps": 8,
+      "assertion_solver": "yosys sat -tempinduct-baseonly -maxsteps 8 -set-assumes -prove-asserts -verify",
+      "assertion_verdict": "PASS",
+      "assertion_elapsed_sec": 17.364,
+      "bmc": {
+        "command": "/home/antigravity/tools/yosys/bin/yosys -p 'read_slang -D FORMAL -D SYNTHESIS -I hw/rtl -I hw/rtl/tcu/v2 -I hw/rtl/tmem -G ARRAY_M=1 -G ARRAY_K=2 --top VX_tcu_v2_formal_sparse_legality hw/rtl/tcu/v2/VX_tcu_v2_pkg.sv hw/rtl/tcu/v2/ctrl/VX_tcu_v2_sparse_validator.sv hw/rtl/tcu/v2/ctrl/VX_tcu_v2_sparse_selector.sv hw/rtl/tcu/v2/ctrl/VX_tcu_v2_sparse_compressor.sv hw/dv/tcu_v2/formal/formal_sparse_legality.sv; prep -top VX_tcu_v2_formal_sparse_legality; flatten; memory_map; async2sync; dffunmap; chformal -cover -remove; sat -tempinduct-baseonly -maxsteps 8 -set-assumes -prove-asserts -verify'",
+        "returncode": 0,
+        "elapsed_sec": 17.364,
+        "timed_out": false,
+        "status": "PASS",
+        "log_tail": [
+          "Import proof for assert: $auto$async2sync.cc:116:execute$15556 when $auto$async2sync.cc:107:execute$15552.",
+          "",
+          "[base case 8] Solving problem with 1413925 variables and 3954026 clauses..",
+          "Base case for induction length 8 proven.",
+          "",
+          "Reached maximum number of time steps -> proved base case for 8 steps: SUCCESS!",
+          "",
+          "End of script. Logfile hash: 09b1d9bce2, time: 17.29s, user: 16.63s, system: 0.66s, MEM: 885.89 MB peak",
+          "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+          "Time spent: 88% 1x sat (15 sec), 2% 7x opt_expr (0 sec), ..."
+        ]
+      },
+      "cover_solver": "yosys sat -set-assumes -set-at 6 EN=1,A=1 -seq 6 (8 covers)",
+      "cover_verdict": "PASS",
+      "cover_elapsed_sec": 67.624,
+      "cover": {
+        "command": "/home/antigravity/tools/yosys/bin/yosys -p 'read_slang -D FORMAL -D SYNTHESIS -I hw/rtl -I hw/rtl/tcu/v2 -I hw/rtl/tmem -G ARRAY_M=1 -G ARRAY_K=2 --top VX_tcu_v2_formal_sparse_legality hw/rtl/tcu/v2/VX_tcu_v2_pkg.sv hw/rtl/tcu/v2/ctrl/VX_tcu_v2_sparse_validator.sv hw/rtl/tcu/v2/ctrl/VX_tcu_v2_sparse_selector.sv hw/rtl/tcu/v2/ctrl/VX_tcu_v2_sparse_compressor.sv hw/dv/tcu_v2/formal/formal_sparse_legality.sv; prep -top VX_tcu_v2_formal_sparse_legality; flatten; memory_map; async2sync; dffunmap; chformal -assert -remove; chformal -cover -remove; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$16158 1 -set-at 6 $auto$async2sync.cc:116:execute$16162 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$16164 1 -set-at 6 $auto$async2sync.cc:116:execute$16168 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$16170 1 -set-at 6 $auto$async2sync.cc:116:execute$16174 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$16176 1 -set-at 6 $auto$async2sync.cc:116:execute$16180 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$16182 1 -set-at 6 $auto$async2sync.cc:116:execute$16186 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$16188 1 -set-at 6 $auto$async2sync.cc:116:execute$16192 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$16146 1 -set-at 6 $auto$async2sync.cc:116:execute$16150 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$16152 1 -set-at 6 $auto$async2sync.cc:116:execute$16156 1 -seq 6'",
+        "returncode": 0,
+        "elapsed_sec": 67.624,
+        "timed_out": false,
+        "covers_total": 8,
+        "covers_reached": 8,
+        "status": "PASS",
+        "log_tail": [
+          "     6 \\sym_val_a_tile                                      --        --    0001000100010001000100010001000000010001000000010001000100010100",
+          "     6 \\sym_val_fault_clear                                  0         0                                                                   0",
+          "     6 \\sym_val_fmt                                         19        13                                                               10011",
+          "     6 \\sym_val_meta                                -286379202  eeee333e                                    11101110111011100011001100111110",
+          "     6 \\sym_val_sparse_en                                    0         0                                                                   0",
+          "     6 \\sym_val_valid                                        0         0                                                                   0",
+          "",
+          "End of script. Logfile hash: d52cbfb9e0, time: 65.58s, user: 64.02s, system: 1.26s, MEM: 875.77 MB peak",
+          "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+          "Time spent: 96% 8x sat (63 sec), 0% 7x opt_expr (0 sec), ..."
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "harness_id": "formal_wgmma_handshake",
+      "top_module": "VX_tcu_v2_formal_wgmma_handshake",
+      "bmc_depth": 6,
+      "params": {
+        "DESC_DEPTH": 2,
+        "NUM_BARRIERS": 2
+      },
+      "properties": [
+        "FIFO count conservation (0 <= occupancy <= DEPTH) and exact empty/full flags",
+        "Illegal descriptors rejected cleanly without corrupting queue state",
+        "Barrier phase toggles iff arrivals and expected tx counts reach zero; OOB barrier_id safely rejected",
+        "2-CTA peer sync never deadlocks or corrupts phase on paired arrival"
+      ],
+      "rtl_fixes_applied": [],
+      "yosys_returncode": 0,
+      "yosys_elapsed_sec": 12.349,
+      "maxsteps": 6,
+      "assertion_solver": "yosys sat -tempinduct-baseonly -maxsteps 6 -set-assumes -prove-asserts -verify",
+      "assertion_verdict": "PASS",
+      "assertion_elapsed_sec": 12.349,
+      "bmc": {
+        "command": "/home/antigravity/tools/yosys/bin/yosys -p 'read_slang -D FORMAL -D SYNTHESIS -I hw/rtl -I hw/rtl/tcu/v2 -I hw/rtl/tmem -G DESC_DEPTH=2 -G NUM_BARRIERS=2 --top VX_tcu_v2_formal_wgmma_handshake hw/rtl/tcu/v2/VX_tcu_v2_pkg.sv hw/rtl/tcu/v2/ctrl/VX_tcu_v2_wgmma_desc_q.sv hw/rtl/tcu/v2/ctrl/VX_tcu_v2_barrier_unit.sv hw/rtl/tcu/v2/ctrl/VX_tcu_v2_cta_pair_sync.sv hw/dv/tcu_v2/formal/formal_wgmma_handshake.sv; prep -top VX_tcu_v2_formal_wgmma_handshake; flatten; memory_map; async2sync; dffunmap; chformal -cover -remove; sat -tempinduct-baseonly -maxsteps 6 -set-assumes -prove-asserts -verify'",
+        "returncode": 0,
+        "elapsed_sec": 12.349,
+        "timed_out": false,
+        "status": "PASS",
+        "log_tail": [
+          "Import proof for assert: $auto$async2sync.cc:116:execute$5652 when $auto$async2sync.cc:107:execute$5648.",
+          "",
+          "[base case 6] Solving problem with 1110237 variables and 3024504 clauses..",
+          "Base case for induction length 6 proven.",
+          "",
+          "Reached maximum number of time steps -> proved base case for 6 steps: SUCCESS!",
+          "",
+          "End of script. Logfile hash: 4f0c584708, time: 12.29s, user: 11.69s, system: 0.50s, MEM: 657.14 MB peak",
+          "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+          "Time spent: 91% 1x sat (11 sec), 2% 6x opt_clean (0 sec), ..."
+        ]
+      },
+      "cover_solver": "yosys sat -set-assumes -set-at 6 EN=1,A=1 -seq 6 (7 covers)",
+      "cover_verdict": "PASS",
+      "cover_elapsed_sec": 44.317,
+      "cover": {
+        "command": "/home/antigravity/tools/yosys/bin/yosys -p 'read_slang -D FORMAL -D SYNTHESIS -I hw/rtl -I hw/rtl/tcu/v2 -I hw/rtl/tmem -G DESC_DEPTH=2 -G NUM_BARRIERS=2 --top VX_tcu_v2_formal_wgmma_handshake hw/rtl/tcu/v2/VX_tcu_v2_pkg.sv hw/rtl/tcu/v2/ctrl/VX_tcu_v2_wgmma_desc_q.sv hw/rtl/tcu/v2/ctrl/VX_tcu_v2_barrier_unit.sv hw/rtl/tcu/v2/ctrl/VX_tcu_v2_cta_pair_sync.sv hw/dv/tcu_v2/formal/formal_wgmma_handshake.sv; prep -top VX_tcu_v2_formal_wgmma_handshake; flatten; memory_map; async2sync; dffunmap; chformal -assert -remove; chformal -cover -remove; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$5858 1 -set-at 6 $auto$async2sync.cc:116:execute$5862 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$5864 1 -set-at 6 $auto$async2sync.cc:116:execute$5868 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$5870 1 -set-at 6 $auto$async2sync.cc:116:execute$5874 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$5834 1 -set-at 6 $auto$async2sync.cc:116:execute$5838 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$5840 1 -set-at 6 $auto$async2sync.cc:116:execute$5844 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$5846 1 -set-at 6 $auto$async2sync.cc:116:execute$5850 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$5852 1 -set-at 6 $auto$async2sync.cc:116:execute$5856 1 -seq 6'",
+        "returncode": 0,
+        "elapsed_sec": 44.317,
+        "timed_out": false,
+        "covers_total": 7,
+        "covers_reached": 7,
+        "status": "PASS",
+        "log_tail": [
+          "     6 \\reset                                              0         0                                                                   0",
+          "     6 \\sym_bar_cmd_count                                  1         1                                                    0000000000000001",
+          "     6 \\sym_bar_cmd_id [1:0]                               0         0                                                                  00",
+          "     6 \\sym_bar_cmd_op                                     5         5                                                                 101",
+          "     6 \\sym_bar_cmd_phase                                  0         0                                                                   0",
+          "     6 \\sym_bar_cmd_valid                                  1         1                                                                   1",
+          "",
+          "End of script. Logfile hash: 334449a510, time: 43.15s, user: 41.81s, system: 1.09s, MEM: 866.43 MB peak",
+          "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+          "Time spent: 97% 7x sat (41 sec), 0% 6x opt_clean (0 sec), ..."
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "harness_id": "formal_tmem_arb_alloc",
+      "top_module": "VX_tmem_formal_arb_alloc",
+      "bmc_depth": 6,
+      "params": {
+        "LANES": 2,
+        "MAX_REGIONS": 4,
+        "TRACK_DEPTH": 4
+      },
+      "properties": [
+        "Allocator never issues overlapping column granules; total granules <= 16",
+        "Granted allocations satisfy col_offset % 32 == 0 and power-of-two num_columns >= 32",
+        "Out-of-range region_id, misaligned, bad-size, or OOM requests rejected without corrupting state",
+        "Arbiter grants at most one client per shared port ($onehot0)",
+        "Hazard unit blocks conflicting RAW/WAR/WAW operations and fences"
+      ],
+      "rtl_fixes_applied": [
+        "VX_tmem_allocator.sv: added req_id_in_range and target_id_in_range (< MAX_REGIONS) bounds checks so out-of-range region IDs never mutate granule_bitmap without updating region_table"
+      ],
+      "yosys_returncode": 0,
+      "yosys_elapsed_sec": 12.051,
+      "maxsteps": 6,
+      "assertion_solver": "yosys sat -tempinduct-baseonly -maxsteps 6 -set-assumes -prove-asserts -verify",
+      "assertion_verdict": "PASS",
+      "assertion_elapsed_sec": 12.051,
+      "bmc": {
+        "command": "/home/antigravity/tools/yosys/bin/yosys -p 'read_slang -D FORMAL -D SYNTHESIS -I hw/rtl -I hw/rtl/tcu/v2 -I hw/rtl/tmem -G LANES=2 -G MAX_REGIONS=4 -G TRACK_DEPTH=4 --top VX_tmem_formal_arb_alloc hw/rtl/tmem/VX_tmem_pkg.sv hw/rtl/tmem/ctrl/VX_tmem_allocator.sv hw/rtl/tmem/ctrl/VX_tmem_arbiter.sv hw/rtl/tmem/ctrl/VX_tmem_hazard_unit.sv hw/dv/tcu_v2/formal/formal_tmem_arb_alloc.sv; prep -top VX_tmem_formal_arb_alloc; flatten; memory_map; async2sync; dffunmap; chformal -cover -remove; sat -tempinduct-baseonly -maxsteps 6 -set-assumes -prove-asserts -verify'",
+        "returncode": 0,
+        "elapsed_sec": 12.051,
+        "timed_out": false,
+        "status": "PASS",
+        "log_tail": [
+          "Import proof for assert: $auto$async2sync.cc:116:execute$8645 when $auto$async2sync.cc:107:execute$8641.",
+          "",
+          "[base case 6] Solving problem with 713170 variables and 1956900 clauses..",
+          "Base case for induction length 6 proven.",
+          "",
+          "Reached maximum number of time steps -> proved base case for 6 steps: SUCCESS!",
+          "",
+          "End of script. Logfile hash: b7d34d2d17, time: 12.00s, user: 11.64s, system: 0.33s, MEM: 457.85 MB peak",
+          "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+          "Time spent: 89% 1x sat (10 sec), 2% 6x opt_clean (0 sec), ..."
+        ]
+      },
+      "cover_solver": "yosys sat -set-assumes -set-at 6 EN=1,A=1 -seq 6 (10 covers)",
+      "cover_verdict": "PASS",
+      "cover_elapsed_sec": 50.147,
+      "cover": {
+        "command": "/home/antigravity/tools/yosys/bin/yosys -p 'read_slang -D FORMAL -D SYNTHESIS -I hw/rtl -I hw/rtl/tcu/v2 -I hw/rtl/tmem -G LANES=2 -G MAX_REGIONS=4 -G TRACK_DEPTH=4 --top VX_tmem_formal_arb_alloc hw/rtl/tmem/VX_tmem_pkg.sv hw/rtl/tmem/ctrl/VX_tmem_allocator.sv hw/rtl/tmem/ctrl/VX_tmem_arbiter.sv hw/rtl/tmem/ctrl/VX_tmem_hazard_unit.sv hw/dv/tcu_v2/formal/formal_tmem_arb_alloc.sv; prep -top VX_tmem_formal_arb_alloc; flatten; memory_map; async2sync; dffunmap; chformal -assert -remove; chformal -cover -remove; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$9121 1 -set-at 6 $auto$async2sync.cc:116:execute$9125 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$9067 1 -set-at 6 $auto$async2sync.cc:116:execute$9071 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$9073 1 -set-at 6 $auto$async2sync.cc:116:execute$9077 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$9079 1 -set-at 6 $auto$async2sync.cc:116:execute$9083 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$9085 1 -set-at 6 $auto$async2sync.cc:116:execute$9089 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$9091 1 -set-at 6 $auto$async2sync.cc:116:execute$9095 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$9097 1 -set-at 6 $auto$async2sync.cc:116:execute$9101 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$9103 1 -set-at 6 $auto$async2sync.cc:116:execute$9107 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$9109 1 -set-at 6 $auto$async2sync.cc:116:execute$9113 1 -seq 6; sat -set-assumes -set-at 6 $auto$async2sync.cc:107:execute$9115 1 -set-at 6 $auto$async2sync.cc:116:execute$9119 1 -seq 6'",
+        "returncode": 0,
+        "elapsed_sec": 50.147,
+        "timed_out": false,
+        "covers_total": 10,
+        "covers_reached": 10,
+        "status": "PASS",
+        "log_tail": [
+          "     6 \\sym_haz_st_col                                      0         0                               000000000",
+          "     6 \\sym_haz_st_commit                                   0         0                                       0",
+          "     6 \\sym_haz_st_ctag                                   255        ff                                11111111",
+          "     6 \\sym_haz_st_reg                                      0         0                                    0000",
+          "     6 \\sym_haz_st_tag                                      0         0                                00000000",
+          "     6 \\sym_haz_st_valid                                    0         0                                       0",
+          "",
+          "End of script. Logfile hash: a8ec6f40c6, time: 48.88s, user: 48.12s, system: 0.57s, MEM: 580.28 MB peak",
+          "Yosys 0.69 (git sha1 9f75ca1f9, Release, GNU /usr/bin/c++ 11.4.0)",
+          "Time spent: 97% 10x sat (47 sec), 0% 6x opt_clean (0 sec), ..."
+        ]
+      },
+      "verdict": "PASS"
+    }
+  ],
+  "synth_smoke": [
+    {
+      "module": "VX_tcu_v2_fp4_unpack",
+      "params": {},
+      "command": "read_slang -D SYNTHESIS -I hw/rtl -I hw/rtl/libs -I hw/rtl/tcu/v2 -I hw/rtl/tmem  --top VX_tcu_v2_fp4_unpack hw/rtl/tcu/v2/VX_tcu_v2_pkg.sv hw/rtl/tcu/v2/arith/VX_tcu_v2_fp4_unpack.sv; synth -top VX_tcu_v2_fp4_unpack; check -assert; stat",
+      "verdict": "PASS",
+      "returncode": 0,
+      "elapsed_sec": 1.348,
+      "stats": {
+        "wires": 883,
+        "wire_bits": 2698,
+        "cells": 910
+      }
+    },
+    {
+      "module": "VX_tcu_v2_fp8_e4m3_unpack",
+      "params": {},
+      "command": "read_slang -D SYNTHESIS -I hw/rtl -I hw/rtl/libs -I hw/rtl/tcu/v2 -I hw/rtl/tmem  --top VX_tcu_v2_fp8_e4m3_unpack hw/rtl/tcu/v2/VX_tcu_v2_pkg.sv hw/rtl/tcu/v2/fp8_bf16/VX_tcu_v2_fp8_e4m3_unpack.sv; synth -top VX_tcu_v2_fp8_e4m3_unpack; check -assert; stat",
+      "verdict": "PASS",
+      "returncode": 0,
+      "elapsed_sec": 1.01,
+      "stats": {
+        "wires": 1163,
+        "wire_bits": 4337,
+        "cells": 1178
+      }
+    },
+    {
+      "module": "VX_tcu_v2_int8_dot_acc",
+      "params": {},
+      "command": "read_slang -D SYNTHESIS -I hw/rtl -I hw/rtl/libs -I hw/rtl/tcu/v2 -I hw/rtl/tmem  --top VX_tcu_v2_int8_dot_acc hw/rtl/tcu/v2/VX_tcu_v2_pkg.sv hw/rtl/tcu/v2/fp8_bf16/VX_tcu_v2_int8_dot_acc.sv; synth -top VX_tcu_v2_int8_dot_acc; check -assert; stat",
+      "verdict": "PASS",
+      "returncode": 0,
+      "elapsed_sec": 2.511,
+      "stats": {
+        "wires": 4212,
+        "wire_bits": 5883,
+        "cells": 4607
+      }
+    },
+    {
+      "module": "VX_tcu_v2_sparse_validator",
+      "params": {
+        "ARRAY_M": 2,
+        "ARRAY_K": 4
+      },
+      "command": "read_slang -D SYNTHESIS -I hw/rtl -I hw/rtl/libs -I hw/rtl/tcu/v2 -I hw/rtl/tmem -G ARRAY_M=2 -G ARRAY_K=4 --top VX_tcu_v2_sparse_validator hw/rtl/tcu/v2/VX_tcu_v2_pkg.sv hw/rtl/tcu/v2/ctrl/VX_tcu_v2_sparse_validator.sv; synth -top VX_tcu_v2_sparse_validator; check -assert; stat",
+      "verdict": "PASS",
+      "returncode": 0,
+      "elapsed_sec": 3.239,
+      "stats": {
+        "wires": 2969,
+        "wire_bits": 4148,
+        "cells": 3108
+      }
+    },
+    {
+      "module": "VX_tcu_v2_wgmma_desc_q",
+      "params": {
+        "DEPTH": 4
+      },
+      "command": "read_slang -D SYNTHESIS -I hw/rtl -I hw/rtl/libs -I hw/rtl/tcu/v2 -I hw/rtl/tmem -G DEPTH=4 --top VX_tcu_v2_wgmma_desc_q hw/rtl/tcu/v2/VX_tcu_v2_pkg.sv hw/rtl/tcu/v2/ctrl/VX_tcu_v2_wgmma_desc_q.sv; synth -top VX_tcu_v2_wgmma_desc_q; check -assert; stat",
+      "verdict": "PASS",
+      "returncode": 0,
+      "elapsed_sec": 0.977,
+      "stats": {
+        "wires": 689,
+        "wire_bits": 2646,
+        "cells": 1984
+      }
+    },
+    {
+      "module": "VX_tmem_allocator",
+      "params": {
+        "MAX_REGIONS": 4
+      },
+      "command": "read_slang -D SYNTHESIS -I hw/rtl -I hw/rtl/libs -I hw/rtl/tcu/v2 -I hw/rtl/tmem -G MAX_REGIONS=4 --top VX_tmem_allocator hw/rtl/tmem/VX_tmem_pkg.sv hw/rtl/tmem/ctrl/VX_tmem_allocator.sv; synth -top VX_tmem_allocator; check -assert; stat",
+      "verdict": "PASS",
+      "returncode": 0,
+      "elapsed_sec": 4.129,
+      "stats": {
+        "wires": 3336,
+        "wire_bits": 4748,
+        "cells": 3922
+      }
+    }
+  ]
+}

@@ -18,6 +18,9 @@
 #   fp32_lanes                   FP32 FMA lanes of the whole chip (clock-free peak)
 #   dram_bandwidth_gbs, dram_peak_bytes_per_cycle
 #                                peak DRAM bandwidth
+#   num_cores                    total logical cores across all clusters
+#   l2_size_mib                  L2 cache capacity in MiB (when L2 is enabled)
+#   tcu_blocks_total             total TCU blocks across all cores
 #   l1_hit_cycles, l2_hit_cycles, dram_cycles
 #                                pointer-chase load-to-use latency (one core)
 #   stream_cycles {"<n>MiB": c}  vecadd with n MiB per buffer (whole chip)
@@ -162,6 +165,12 @@ def peak_metrics(cfg, reference):
         out["dram_peak_bytes_per_cycle"] = cfg["VX_CFG_PLATFORM_MEMORY_PEAK_BW"] / clock_mhz
     if "clock_mhz" in reference:
         out["clock_mhz"] = clock_mhz
+    if "num_cores" in reference:
+        out["num_cores"] = cores
+    if "l2_size_mib" in reference:
+        out["l2_size_mib"] = (cfg["VX_CFG_L2_SIZE"] / (1024 * 1024)) if cfg.get("VX_CFG_L2_ENABLED") else 0
+    if "tcu_blocks_total" in reference:
+        out["tcu_blocks_total"] = (cores * cfg["VX_CFG_NUM_TCU_BLOCKS"]) if cfg.get("VX_CFG_EXT_TCU_ENABLED") else 0
     return out
 
 

@@ -1,0 +1,431 @@
+{
+  "schema_version": 1,
+  "adr": "ADR-007",
+  "program_name": "aigpu-b2-commercial-presilicon",
+  "base_commit": "96424fa",
+  "integration_branch": "feat/aigpu-b2-commercial",
+  "target_min_production_loc": 500000,
+  "planned_production_loc": 525000,
+  "planned_verification_loc": 130000,
+  "orchestration": {
+    "pm_model_tier": "pro",
+    "reviewer_model_tier": "pro",
+    "implementer_model_tier": "flash",
+    "disjoint_ownership_required": true,
+    "independent_review_required_per_wave": true
+  },
+  "evidence_boundary": {
+    "allowed_levels": [
+      "source_present",
+      "simulated",
+      "rtl_verified",
+      "open_source_synth_pnr_gds"
+    ],
+    "forbidden_levels": [
+      "fpga_measured",
+      "silicon_measured"
+    ],
+    "foundry_signoff": false,
+    "physical_gates_unwaived": true,
+    "preserved_frozen_paths": [
+      "docs/assets/img/vortex_framework_stack.svg",
+      "python/vortex_ai"
+    ]
+  },
+  "waves": [
+    {
+      "id": "W13",
+      "title": "Toolchain/EDA Bootstrap & aigpu-b2 Architecture Profiles",
+      "pillar": "bootstrap",
+      "status": "complete",
+      "target_prod_loc": 5000,
+      "target_test_loc": 2500,
+      "actual_prod_loc": 8550,
+      "actual_test_loc": 3105,
+      "evidence_record": "docs/project/evidence/b2-wave-13/summary.json",
+      "reviewer": "w13_rev1_c2, w13_rev2_c2, w13_challenger_c2, w13_auditor_c2",
+      "owned_paths": [
+        "profiles/aigpu-b2.json",
+        "profiles/aigpu-b2-dual.json",
+        "profiles/aigpu-b2-tile.json",
+        "ci/project/b2_arch_spec.py",
+        "ci/project/test_b2_arch_spec.py",
+        "ci/project/b2_roofline_compare.py",
+        "ci/project/test_b2_roofline_compare.py",
+        "ci/project/b2_ppa_model.py",
+        "ci/project/test_b2_ppa_model.py",
+        "ci/project/b2_toolchain_verify.py",
+        "ci/project/test_b2_toolchain_verify.py",
+        "ci/project/b2_wave_gates.py",
+        "ci/project/test_b2_wave_gates.py",
+        "ci/profile_check.py",
+        "docs/project/evidence/b2-wave-13"
+      ],
+      "required_gates": [
+        "toolchain_install_verified",
+        "profile_check_pass",
+        "b2_roofline_and_ppa_tests_pass",
+        "check_project_pass",
+        "pro_independent_review"
+      ]
+    },
+    {
+      "id": "W14",
+      "title": "Pillar 1 RTL: 5th-Gen TFRv2/tcgen05 Tensor Core & Dedicated TMEM",
+      "pillar": "rtl_silicon",
+      "status": "in_progress",
+      "target_prod_loc": 28000,
+      "target_test_loc": 10000,
+      "owned_paths": [
+        "hw/rtl/tcu/v2",
+        "hw/rtl/tmem",
+        "hw/dv/tcu_v2",
+        "docs/project/evidence/b2-wave-14"
+      ],
+      "required_gates": [
+        "verilator_lint_clean",
+        "rtlsim_unit_pass",
+        "sva_zero_failures",
+        "yosys_z3_formal_pass",
+        "pro_rtl_review"
+      ]
+    },
+    {
+      "id": "W15",
+      "title": "Pillar 2 RTL: Coherent 2D Mesh NoC, L2/SLC Directory & UCIe 2.0 D2D",
+      "pillar": "rtl_silicon",
+      "status": "not_started",
+      "target_prod_loc": 30000,
+      "target_test_loc": 10000,
+      "owned_paths": [
+        "hw/rtl/noc",
+        "hw/rtl/coherence",
+        "hw/rtl/ucie",
+        "hw/dv/noc_coherence"
+      ],
+      "required_gates": [
+        "verilator_lint_clean",
+        "dual_die_mesh_stress_pass",
+        "sva_zero_failures",
+        "yosys_z3_formal_pass",
+        "pro_rtl_review"
+      ]
+    },
+    {
+      "id": "W16",
+      "title": "Pillar 3 RTL: HBM3E Controller/Scheduler, Decompression Engine & 5D DXA Multicast",
+      "pillar": "rtl_silicon",
+      "status": "not_started",
+      "target_prod_loc": 28000,
+      "target_test_loc": 8000,
+      "owned_paths": [
+        "hw/rtl/hbm3e",
+        "hw/rtl/de",
+        "hw/rtl/dxa/v2",
+        "hw/dv/hbm_de"
+      ],
+      "required_gates": [
+        "verilator_lint_clean",
+        "rtlsim_unit_pass",
+        "sva_zero_failures",
+        "yosys_synth_clean",
+        "pro_rtl_review"
+      ]
+    },
+    {
+      "id": "W17",
+      "title": "Pillar 4 RTL: GigaThread CP, MIG Isolation, PCIe Gen6 DMA/IOMMU/SR-IOV & B2 SoC Top",
+      "pillar": "rtl_silicon",
+      "status": "not_started",
+      "target_prod_loc": 34000,
+      "target_test_loc": 10000,
+      "owned_paths": [
+        "hw/rtl/cp_b2",
+        "hw/rtl/mig",
+        "hw/rtl/pcie",
+        "hw/asic/soc/b2",
+        "hw/dv/soc_b2"
+      ],
+      "required_gates": [
+        "verilator_lint_clean",
+        "soc_b2_integration_sim_pass",
+        "sva_zero_failures",
+        "yosys_z3_formal_pass",
+        "pro_rtl_review"
+      ]
+    },
+    {
+      "id": "W18",
+      "title": "Pillar 5 RTL & ASIC Collateral: RAS/ECC, DVFS/PMU, Confidential Computing & B2 SDC/UPF/PnR",
+      "pillar": "rtl_silicon",
+      "status": "not_started",
+      "target_prod_loc": 30000,
+      "target_test_loc": 7000,
+      "owned_paths": [
+        "hw/rtl/ras",
+        "hw/rtl/pmu",
+        "hw/rtl/sec",
+        "hw/asic/b2",
+        "hw/dv/ras_sec"
+      ],
+      "required_gates": [
+        "verilator_lint_clean",
+        "sva_zero_failures",
+        "yosys_opensta_clean",
+        "openroad_macro_pnr_pass",
+        "pro_rtl_review"
+      ]
+    },
+    {
+      "id": "W19",
+      "title": "Cycle-Accurate SimX Lockstep Models for Complete aigpu-b2 Architecture",
+      "pillar": "simx",
+      "status": "not_started",
+      "target_prod_loc": 75000,
+      "target_test_loc": 15000,
+      "owned_paths": [
+        "sim/simx/b2",
+        "sim/common/b2",
+        "tests/unittest/simx_b2"
+      ],
+      "required_gates": [
+        "simx_b2_build_pass",
+        "simx_rtl_model_parity_pass",
+        "cardinal_rule_simx_review",
+        "pro_simx_review"
+      ]
+    },
+    {
+      "id": "W20",
+      "title": "aigpu-cc Multi-Level SSA IR, Fusion, Polyhedral Tiling & TMEM/LMEM Swizzling",
+      "pillar": "compiler",
+      "status": "not_started",
+      "target_prod_loc": 30000,
+      "target_test_loc": 7000,
+      "owned_paths": [
+        "compiler/aigpu_cc/ir",
+        "compiler/aigpu_cc/passes",
+        "tests/compiler/ir"
+      ],
+      "required_gates": [
+        "compiler_build_pass",
+        "ir_passes_unit_pass",
+        "pro_code_review"
+      ]
+    },
+    {
+      "id": "W21",
+      "title": "aigpu-cc Warp Specialization, Async DXA+TMEM Pipelining, RegAlloc & RV64X Codegen",
+      "pillar": "compiler",
+      "status": "not_started",
+      "target_prod_loc": 32000,
+      "target_test_loc": 7000,
+      "owned_paths": [
+        "compiler/aigpu_cc/codegen",
+        "compiler/aigpu_cc/regalloc",
+        "compiler/aigpu_cc/elf",
+        "tests/compiler/codegen"
+      ],
+      "required_gates": [
+        "compiler_build_pass",
+        "codegen_simx_exec_pass",
+        "pro_code_review"
+      ]
+    },
+    {
+      "id": "W22",
+      "title": "Triton-Like Python Tensor DSL (@aigpu.jit) & Persistent-Kernel Autotuner",
+      "pillar": "compiler",
+      "status": "not_started",
+      "target_prod_loc": 28000,
+      "target_test_loc": 6000,
+      "owned_paths": [
+        "python/aigpu_triton",
+        "tests/python/triton"
+      ],
+      "required_gates": [
+        "pytest_zero_skips",
+        "dsl_end_to_end_simx_pass",
+        "pro_code_review"
+      ]
+    },
+    {
+      "id": "W23",
+      "title": "aigpuBLAS: CUTLASS-Class Multi-Precision Dense & 2:4 Sparse GEMM Library",
+      "pillar": "kernels",
+      "status": "not_started",
+      "target_prod_loc": 32000,
+      "target_test_loc": 7000,
+      "owned_paths": [
+        "sw/libs/aigpu_blas",
+        "tests/libs/aigpu_blas"
+      ],
+      "required_gates": [
+        "blas_numeric_reference_pass",
+        "fp4_fp8_bf16_sparse_simx_pass",
+        "pro_code_review"
+      ]
+    },
+    {
+      "id": "W24",
+      "title": "aigpuFlash: FlashAttention-3/4, GQA/MLA & PagedAttention Forward/Backward Kernels",
+      "pillar": "kernels",
+      "status": "not_started",
+      "target_prod_loc": 24000,
+      "target_test_loc": 6000,
+      "owned_paths": [
+        "sw/libs/aigpu_flash",
+        "tests/libs/aigpu_flash"
+      ],
+      "required_gates": [
+        "flash_fwd_bwd_numeric_pass",
+        "paged_and_mla_simx_pass",
+        "pro_code_review"
+      ]
+    },
+    {
+      "id": "W25",
+      "title": "aigpuMoE, aigpuDNN & aigpuQuant: MoE Routing/Grouped GEMM, Norms, Optimizers & Quantizers",
+      "pillar": "kernels",
+      "status": "not_started",
+      "target_prod_loc": 24000,
+      "target_test_loc": 5000,
+      "owned_paths": [
+        "sw/libs/aigpu_moe",
+        "sw/libs/aigpu_dnn",
+        "sw/libs/aigpu_quant",
+        "tests/libs/aigpu_moe_dnn"
+      ],
+      "required_gates": [
+        "moe_dnn_quant_numeric_pass",
+        "adamw_grad_check_pass",
+        "pro_code_review"
+      ]
+    },
+    {
+      "id": "W26",
+      "title": "aigpu-drm: Linux DRM/KFD-Style Kernel Driver, HMM/IOMMU & MIG/RAS UAPI",
+      "pillar": "driver_runtime",
+      "status": "not_started",
+      "target_prod_loc": 26000,
+      "target_test_loc": 6000,
+      "owned_paths": [
+        "sw/driver/aigpu_drm",
+        "tests/driver/aigpu_drm"
+      ],
+      "required_gates": [
+        "driver_compile_and_harness_pass",
+        "fault_and_mig_isolation_pass",
+        "pro_code_review"
+      ]
+    },
+    {
+      "id": "W27",
+      "title": "libaigpu: Async Streams, Events, CUDA-Graph-Class DAG Capture/Replay & VMM Runtime",
+      "pillar": "driver_runtime",
+      "status": "not_started",
+      "target_prod_loc": 22000,
+      "target_test_loc": 5000,
+      "owned_paths": [
+        "sw/runtime_b2",
+        "tests/runtime_b2"
+      ],
+      "required_gates": [
+        "runtime_stream_graph_vmm_pass",
+        "leak_and_error_lifecycle_pass",
+        "pro_code_review"
+      ]
+    },
+    {
+      "id": "W28",
+      "title": "aigpuCCL: Multi-Die/Multi-GPU Ring, Tree & Hierarchical UCIe Collectives",
+      "pillar": "driver_runtime",
+      "status": "not_started",
+      "target_prod_loc": 17000,
+      "target_test_loc": 4000,
+      "owned_paths": [
+        "sw/ccl",
+        "tests/ccl"
+      ],
+      "required_gates": [
+        "ccl_allreduce_alltoall_pass",
+        "multi_die_simx_topology_pass",
+        "pro_code_review"
+      ]
+    },
+    {
+      "id": "W29",
+      "title": "PyTorch PrivateUse1 Backend, torch.compile Inductor & Distributed Training",
+      "pillar": "frameworks_tools",
+      "status": "not_started",
+      "target_prod_loc": 20000,
+      "target_test_loc": 5000,
+      "owned_paths": [
+        "python/aigpu_torch",
+        "tests/python/aigpu_torch"
+      ],
+      "required_gates": [
+        "pytorch_privateuse1_tests_pass",
+        "training_backward_convergence_pass",
+        "p05_frozen_vortex_ai_untouched",
+        "pro_code_review"
+      ]
+    },
+    {
+      "id": "W30",
+      "title": "aigpu_serve: vLLM/SGLang-Class Continuous-Batching & PagedAttention LLM Serving Engine",
+      "pillar": "frameworks_tools",
+      "status": "not_started",
+      "target_prod_loc": 20000,
+      "target_test_loc": 4000,
+      "owned_paths": [
+        "python/aigpu_serve",
+        "tests/python/aigpu_serve"
+      ],
+      "required_gates": [
+        "llama_qwen_moe_serving_pass",
+        "prefix_cache_and_speculative_pass",
+        "pro_code_review"
+      ]
+    },
+    {
+      "id": "W31",
+      "title": "Nsight-Class Profiler (aigpu-prof) & Kernel Debugger/Sanitizer (aigpu-dbg)",
+      "pillar": "frameworks_tools",
+      "status": "not_started",
+      "target_prod_loc": 15000,
+      "target_test_loc": 3000,
+      "owned_paths": [
+        "tools/aigpu_prof",
+        "tools/aigpu_dbg",
+        "tests/tools"
+      ],
+      "required_gates": [
+        "profiler_roofline_trace_pass",
+        "debugger_sanitizer_pass",
+        "pro_code_review"
+      ]
+    },
+    {
+      "id": "W32",
+      "title": "Hierarchical OpenROAD 0-DRC GDSII, Full-Stack Qualification & Investor/Foundry Data Room",
+      "pillar": "qualification_dataroom",
+      "status": "not_started",
+      "target_prod_loc": 5000,
+      "target_test_loc": 2500,
+      "owned_paths": [
+        "tools/dashboard",
+        "docs/dataroom",
+        "docs/project/b2_program_ledger.json"
+      ],
+      "required_gates": [
+        "b2_500k_prod_loc_verified",
+        "openroad_0_drc_b2_macros_pass",
+        "clean_rtl_export_0_violations",
+        "end_to_end_llm_train_serve_ccl_pass",
+        "check_project_pass",
+        "pro_final_signoff_review"
+      ]
+    }
+  ]
+}
